@@ -449,6 +449,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
+                                "",
+                                "",
+                                "Change phone number",
+                                "Change username",
+                                "Change bio",
                                 null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Check for app updates" : null,
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
@@ -482,6 +487,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 9) {
                                 ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                             } else if (which == 10) {
+                                presentFragment(new ChangePhoneActivity());
+                            } else if (which == 11) {
+                                presentFragment(new ChangeUsernameActivity());
+                            } else if (which == 12) {
+                                presentFragment(new ChangeBioActivity());
+                            } else if (which == 15) {
                                 MessagesStorage.getInstance(currentAccount).readAllDialogs();
                             }
                         });
