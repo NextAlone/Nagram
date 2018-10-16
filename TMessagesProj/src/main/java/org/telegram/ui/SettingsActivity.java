@@ -216,10 +216,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         rowCount = 0;
         overscrollRow = rowCount++;
-        numberSectionRow = rowCount++;
-        numberRow = rowCount++;
-        usernameRow = rowCount++;
-        bioRow = rowCount++;
+        numberSectionRow = -1;
+        numberRow = -1;
+        usernameRow = -1;
+        bioRow = -1;
         settingsSectionRow = rowCount++;
         settingsSectionRow2 = rowCount++;
         notificationRow = rowCount++;
