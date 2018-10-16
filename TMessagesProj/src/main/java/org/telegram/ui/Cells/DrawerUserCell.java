@@ -88,7 +88,7 @@ public class DrawerUserCell extends FrameLayout {
             return;
         }
         avatarDrawable.setInfo(user);
-        textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+        textView.setText("...");
         imageView.getImageReceiver().setCurrentAccount(account);
         imageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
         checkBox.setVisibility(account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
