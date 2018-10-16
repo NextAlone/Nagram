@@ -1798,6 +1798,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (folderId == 0) {
                 actionBar.setSupportsHolidayImage(true);
             }
+            actionBar.setTitle("Fork Client");
         }
         if (!onlySelect) {
             actionBar.setAddToContainer(false);
