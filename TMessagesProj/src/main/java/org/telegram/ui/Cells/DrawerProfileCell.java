@@ -75,7 +75,7 @@ public class DrawerProfileCell extends FrameLayout {
         nameTextView.setSingleLine(true);
         nameTextView.setGravity(Gravity.LEFT);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
-        addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 28));
+        // addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 28));
 
         phoneTextView = new TextView(context);
         phoneTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
@@ -83,12 +83,12 @@ public class DrawerProfileCell extends FrameLayout {
         phoneTextView.setMaxLines(1);
         phoneTextView.setSingleLine(true);
         phoneTextView.setGravity(Gravity.LEFT);
-        addView(phoneTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 9));
+        // addView(phoneTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 9));
 
         arrowView = new ImageView(context);
         arrowView.setScaleType(ImageView.ScaleType.CENTER);
         arrowView.setContentDescription(accountsShowed ? LocaleController.getString("AccDescrHideAccounts", R.string.AccDescrHideAccounts) : LocaleController.getString("AccDescrShowAccounts", R.string.AccDescrShowAccounts));
-        addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
+        //addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
 
         if (Theme.getEventType() == 0) {
             snowflakesEffect = new SnowflakesEffect();
