@@ -946,6 +946,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 }
             }
+            actionBar.setTitle("Fork Client");
             actionBar.setSupportsHolidayImage(true);
         }
         actionBar.setTitleActionRunnable(() -> {
