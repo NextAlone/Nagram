@@ -549,6 +549,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 9) {
                                 ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                             } else if (which == 10) {
+                                presentFragment(new ChangePhoneActivity());
+                            } else if (which == 11) {
+                                presentFragment(new ChangeUsernameActivity());
+                            } else if (which == 12) {
+                                presentFragment(new ChangeBioActivity());
+                            } else if (which == 15) {
                                 MessagesStorage.getInstance(currentAccount).readAllDialogs(-1);
                             } else if (which == 11) {
                                 SharedConfig.togglePauseMusicOnRecord();
@@ -798,10 +804,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private void updateRows() {
         rowCount = 0;
         emptyRow = rowCount++;
-        numberSectionRow = rowCount++;
-        numberRow = rowCount++;
-        usernameRow = rowCount++;
-        bioRow = rowCount++;
+        numberSectionRow = -1;
+        numberRow = -1;
+        usernameRow = -1;
+        bioRow = -1;
         settingsSectionRow = rowCount++;
         settingsSectionRow2 = rowCount++;
         notificationRow = rowCount++;
