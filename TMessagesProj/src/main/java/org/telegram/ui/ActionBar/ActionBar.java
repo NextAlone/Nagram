@@ -871,6 +871,9 @@ public class ActionBar extends FrameLayout {
             return;
         }
         CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : lastTitle;
+        if (titleId == org.telegram.messenger.R.string.ConnectingToProxy) {
+            textToSet = "...";
+        }
         if (textToSet != null && titleTextView == null) {
             createTitleTextView();
         }
