@@ -42,7 +42,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
-    defaultConfig.applicationId = "org.telegram.messenger"
+    defaultConfig.applicationId = "org.forkclient.messenger"
 
     sourceSets.main.jniLibs.srcDirs = ['./jni/']
 
@@ -295,7 +295,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionName "5.10.0"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
