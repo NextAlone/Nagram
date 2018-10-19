@@ -96,6 +96,9 @@ public class ForwardingMessagesParams {
 
             if (header != null) {
                 message.fwd_from = header;
+                if (message.fwd_from.date == 0) {
+                    message.fwd_from.date = (int)(System.currentTimeMillis() / 1000);
+                }
                 message.flags |= TLRPC.MESSAGE_FLAG_FWD;
             }
             message.dialog_id = newDialogId;

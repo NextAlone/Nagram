@@ -10904,6 +10904,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         if (drawForwardedName && messageObject.needDrawForwarded() && (currentPosition == null || currentPosition.minY == 0)) {
+
+            // Time and date of forwarded messages.
+            java.util.Date dateOfFwdMsg = new java.util.Date((long)messageObject.messageOwner.fwd_from.date * 1000); 
+            String timeOfFwdMsg = "Date: " + new java.text.SimpleDateFormat("dd.MM.yyyy' 'HH:mm:ss").format(dateOfFwdMsg);
+
             if (messageObject.messageOwner.fwd_from.from_name != null) {
                 currentForwardName = messageObject.messageOwner.fwd_from.from_name;
             }
@@ -10958,9 +10963,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     lastLine = Emoji.replaceEmoji(lastLine, Theme.chat_forwardNamePaint.getFontMetricsInt(), AndroidUtilities.dp(14), false);
                 } catch (Exception ignore) {};
                 try {
-                    forwardedNameLayout[1] = new StaticLayout(lastLine, Theme.chat_forwardNamePaint, forwardedNameWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    lastLine = TextUtils.ellipsize(AndroidUtilities.replaceTags(forwardedString), Theme.chat_forwardNamePaint, forwardedNameWidth, TextUtils.TruncateAt.END);
                     forwardedNameLayout[0] = new StaticLayout(lastLine, Theme.chat_forwardNamePaint, forwardedNameWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    lastLine = TextUtils.ellipsize(timeOfFwdMsg, Theme.chat_forwardNamePaint, forwardedNameWidth, TextUtils.TruncateAt.END);
+                    forwardedNameLayout[1] = new StaticLayout(lastLine, Theme.chat_forwardNamePaint, forwardedNameWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     forwardedNameWidth = Math.max((int) Math.ceil(forwardedNameLayout[0].getLineWidth(0)), (int) Math.ceil(forwardedNameLayout[1].getLineWidth(0)));
                     if (hasPsaHint) {
                         forwardedNameWidth += AndroidUtilities.dp(36);
