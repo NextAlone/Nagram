@@ -1577,15 +1577,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (!inScheduleMode) {
             headerItem = menu.addItem(0, R.drawable.ic_ab_other);
             headerItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-            if (currentUser != null) {
-                headerItem.addSubItem(call, R.drawable.msg_callback, LocaleController.getString("Call", R.string.Call));
-                TLRPC.UserFull userFull = getMessagesController().getUserFull(currentUser.id);
-                if (userFull != null && userFull.phone_calls_available) {
-                    headerItem.showSubItem(call);
-                } else {
-                    headerItem.hideSubItem(call);
-                }
-            }
 
             editTextItem = menu.addItem(0, R.drawable.ic_ab_other);
             editTextItem.setTag(null);
@@ -1655,6 +1646,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 headerItem.addSubItem(bot_settings, R.drawable.menu_settings, LocaleController.getString("BotSettings", R.string.BotSettings));
                 headerItem.addSubItem(bot_help, R.drawable.menu_help, LocaleController.getString("BotHelp", R.string.BotHelp));
                 updateBotButtons();
+            }
+
+            if (currentUser != null) {
+                headerItem.addSubItem(call, R.drawable.msg_callback, LocaleController.getString("Call", R.string.Call));
+                TLRPC.UserFull userFull = getMessagesController().getUserFull(currentUser.id);
+                if (userFull != null && userFull.phone_calls_available) {
+                    headerItem.showSubItem(call);
+                } else {
+                    headerItem.hideSubItem(call);
+                }
             }
         }
 
@@ -8957,7 +8958,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (id == NotificationCenter.messagesDidLoad) {
             int guid = (Integer) args[10];
             if (guid == classGuid) {
-            	setItemAnimationsEnabled(false);
+                setItemAnimationsEnabled(false);
                 if (!openAnimationEnded) {
                     getNotificationCenter().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.scheduledMessagesUpdated,
                             NotificationCenter.closeChats, NotificationCenter.botKeyboardDidLoad, NotificationCenter.userInfoDidLoad, NotificationCenter.needDeleteDialog/*, NotificationCenter.botInfoDidLoad*/});
