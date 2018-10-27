@@ -104,6 +104,8 @@ public class SharedConfig {
 
     public static int distanceSystemType;
 
+    public static boolean hideTitleDialog = false;
+
     static {
         loadConfig();
     }
@@ -270,6 +272,8 @@ public class SharedConfig {
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
+
+            hideTitleDialog = preferences.getBoolean("hideTitle", false);
 
             configLoaded = true;
         }
