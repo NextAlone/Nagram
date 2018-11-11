@@ -7673,6 +7673,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 emojiView.hideSearchKeyboard();
             }
             setStickersExpanded(false, true, false);
+
+            // If this sticker was sent from Sticker Suggestion -> View Pack,
+            // Then don't sendMessage().
+            if (Emoji.isValidEmoji(messageEditText.getText().toString())) {
+                messageEditText.setText("");
+            }
+            sendMessage();
             SendMessagesHelper.getInstance(currentAccount).sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, sendAnimationData, notify, scheduleDate);
             if (delegate != null) {
                 delegate.onMessageSend(null, true, scheduleDate);
