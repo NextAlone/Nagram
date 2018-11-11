@@ -404,6 +404,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private boolean allowStickers;
     private boolean allowGifs;
 
+    private boolean skipDotAtEnd = false;
+
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
 
@@ -2807,6 +2809,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         sendMessageInternal(false, 0);
                     }
                 });
+                cell.setLongClickable(true);
+                cell.setOnLongClickListener(v -> {
+                    skipDotAtEnd = true;
+                    return cell.performClick();
+                });
             }
             sendPopupLayout.setupRadialSelectors(Theme.getColor(Theme.key_dialogButtonSelector));
 
@@ -3830,7 +3837,45 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         setEditingMessageObject(null, false);
     }
 
+    private String processDottedString(
+            String textMessageString,
+            ArrayList<TLRPC.MessageEntity> entities) {
+        if (skipDotAtEnd) {
+            skipDotAtEnd = false;
+            return textMessageString;
+        }
+        boolean endsWithRichText = false;
+        if (entities != null) {
+            TLRPC.MessageEntity last = entities.get(entities.size() - 1);
+            if (last instanceof TLRPC.TL_messageEntityCode
+                || last instanceof TLRPC.TL_messageEntityUrl
+                || last instanceof TLRPC.TL_messageEntityEmail) {
+                endsWithRichText = last.offset + last.length == textMessageString.length();
+            }
+        }
+
+        if (textMessageString.endsWith("...")) {
+            textMessageString = textMessageString.replace("...", "…");
+        }
+        if (!textMessageString.endsWith(".")
+            && !textMessageString.endsWith("!")
+            && !textMessageString.endsWith("…")
+            && !textMessageString.endsWith("?")
+            && !textMessageString.endsWith("+")
+            && !textMessageString.endsWith("=)")
+            && !textMessageString.endsWith("=(")
+            && !textMessageString.endsWith(".)")
+            && !endsWithRichText
+            && !textMessageString.startsWith("/")) {
+            textMessageString += ".";
+        }
+        return textMessageString;
+    }
+
     public boolean processSendingText(CharSequence text, boolean notify, int scheduleDate) {
+        final boolean isOwner = UserConfig.getInstance(currentAccount).clientUserId == 
+            org.telegram.messenger.BuildVars.USER_ID_OWNER;
+
         text = AndroidUtilities.getTrimmedString(text);
         boolean supportsNewEntities = supportsSendingNewEntities();
         int maxLength = accountInstance.getMessagesController().maxMessageLength;
@@ -3877,7 +3922,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 CharSequence[] message = new CharSequence[]{AndroidUtilities.getTrimmedString(text.subSequence(start, end))};
                 ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(message, supportsNewEntities);
-                SendMessagesHelper.getInstance(currentAccount).sendMessage(message[0].toString(), dialog_id, replyingMessageObject, getThreadMessage(), messageWebPage, messageWebPageSearch, entities, null, null, notify, scheduleDate);
+
+                final String textMessageString = isOwner
+                    ? processDottedString(message[0].toString(), entities)
+                    : message[0].toString();
+
+                SendMessagesHelper.getInstance(currentAccount).sendMessage(textMessageString, dialog_id, replyingMessageObject, getThreadMessage(), messageWebPage, messageWebPageSearch, entities, null, null, notify, scheduleDate);
+                
                 start = end + 1;
             } while (end != text.length());
             return true;
