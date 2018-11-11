@@ -4040,6 +4040,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             emojiView.hideSearchKeyboard();
         }
         setStickersExpanded(false, true, false);
+        sendMessage();
         SendMessagesHelper.getInstance(currentAccount).sendSticker(sticker, dialog_id, replyingMessageObject, parent);
         if (delegate != null) {
             delegate.onMessageSend(null);
