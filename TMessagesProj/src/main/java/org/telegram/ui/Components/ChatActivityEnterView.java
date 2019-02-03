@@ -6102,8 +6102,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                     if (gif instanceof TLRPC.Document) {
                         TLRPC.Document document = (TLRPC.Document) gif;
-                        SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, notify, scheduleDate);
+                        SendMessagesHelper.getInstance(currentAccount).sendGifWithCaption(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, notify, scheduleDate, messageEditText.getText().toString());
                         MediaDataController.getInstance(currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000));
+                        messageEditText.setText("");
                         if ((int) dialog_id == 0) {
                             accountInstance.getMessagesController().saveGif(parent, document);
                         }
