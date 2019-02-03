@@ -35,6 +35,10 @@ dependencies {
     implementation files('libs/libgsaverification-client.aar')
 }
 
+def getStringForConfig(String s) {
+    return "\"" + s + "\""
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.2'
@@ -66,18 +70,35 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file("config/release.keystore")
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
-        }
+        def github = System.getenv("GITHUB_REPOSITORY")
+        if (github != null && github != "") {
+            debug {
+                storeFile file("config/release.keystore")
+                storePassword System.getenv("KEYSTORE_PASS")
+                keyAlias System.getenv("ALIAS_NAME")
+                keyPassword System.getenv("ALIAS_PASS")
+            }
 
-        release {
-            storeFile file("config/release.keystore")
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
+            release {
+                storeFile file("config/release.keystore")
+                storePassword System.getenv("KEYSTORE_PASS")
+                keyAlias System.getenv("ALIAS_NAME")
+                keyPassword System.getenv("ALIAS_PASS")
+            }
+        } else {
+            debug {
+                storeFile file("config/release.keystore")
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+
+            release {
+                storeFile file("config/release.keystore")
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
         }
     }
 
@@ -308,6 +329,8 @@ android {
         }
     }
 
+    defaultConfig.versionCode = defaultConfig.versionCode * 10
+
     variantFilter { variant ->
         def names = variant.flavors*.name
         if (variant.buildType.name != "release" && !names.contains("afat")) {
@@ -320,7 +343,17 @@ android {
         targetSdkVersion 28
         versionName "5.15.0"
 
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+        //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
+        buildConfigField 'int', 'APP_ID', System.getenv("APP_ID")
+        buildConfigField 'String', 'APP_HASH', getStringForConfig(System.getenv("APP_HASH"))
+        buildConfigField 'String', 'HOCKEY_APP_HASH', getStringForConfig(System.getenv("HOCKEY_APP_HASH"))
+        buildConfigField 'int', 'USER_ID_OWNER', System.getenv("USER_ID_OWNER")
+
+		vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+
+        def additional_build = System.getenv("ADDITIONAL_BUILD_NUMBER") as String
+        defaultConfig.versionCode = defaultConfig.versionCode + additional_build.toInteger()
+        buildConfigField 'int', 'ADDITIONAL_BUILD_NUMBER', additional_build
 
         externalNativeBuild {
             ndkBuild {
@@ -333,4 +366,3 @@ android {
     }
 }
 
-apply plugin: 'com.google.gms.google-services'
