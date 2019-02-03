@@ -1,0 +1,51 @@
+name: Fork Client
+
+on: [push]
+
+jobs:
+  linux:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Prepare additional build number.
+        env:
+          ADDITIONAL_BUILD: ${{ secrets.ADDITIONAL_BUILD_NUMBER }}
+        run: |
+          result=$((ADDITIONAL_BUILD / 10000))
+          echo "ADDITIONAL_BUILD_NUMBER = $result should be betweetn 0 and 10!"
+          echo "ADDITIONAL_BUILD_NUMBER=$result" >> $GITHUB_ENV
+      - name: Add language.
+        env:
+          URL_LANG: ${{ secrets.URL_LANG }}
+        run: |
+          wget -q -O strings.xml $URL_LANG
+          ls
+          lang_code=$(grep 'LanguageCode' strings.xml | awk -F">" '{print $2}' | awk -F"<" '{print $1}')
+          folder=TMessagesProj/src/main/res/values-$lang_code
+          mkdir $folder
+          mv strings.xml $folder/strings.xml
+      - name: Build.
+        env:
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
+          ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_HASH: ${{ secrets.APP_HASH }}
+          HOCKEY_APP_HASH: ${{ secrets.HOCKEY_APP_HASH }}
+          USER_ID_OWNER: ${{ secrets.USER_ID_OWNER }}
+        run: |
+          echo $ADDITIONAL_BUILD_NUMBER
+          sudo apt update
+          sudo apt install openjdk-8-jdk openjdk-11-jre
+          ./gradlew assembleAfatDebug
+          grep BUILD_VERSION_STRING TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java | cut -d'"' -f 2 > ver.txt
+          mkdir artifact
+          mv TMessagesProj/build/outputs/apk/afat/debug/app.apk artifact/ForkClient_$(cat ver.txt).apk
+      - uses: actions/upload-artifact@master
+        name: Upload artifact.
+        with:
+          name: ForkClient
+          path: artifact/
