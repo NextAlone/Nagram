@@ -52,6 +52,8 @@ public class ForkSettingsActivity extends BaseFragment {
     private int sectionRow1;
 
     private int squareAvatarsRow;
+    private int inappCameraRow;
+
     private int pinOrderRow;
 
     @Override
@@ -62,6 +64,7 @@ public class ForkSettingsActivity extends BaseFragment {
         
         sectionRow1 = rowCount++;
         squareAvatarsRow = rowCount++;
+        inappCameraRow = rowCount++;
         pinOrderRow = rowCount++;
 
         return true;
@@ -113,6 +116,11 @@ public class ForkSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(!squareAvatars);
                 }
+            } else if (position == inappCameraRow) {
+                SharedConfig.toggleInappCamera();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(SharedConfig.inappCamera);
+                }
             } else if (position == pinOrderRow) {
                 presentFragment(new PinsOrderActivity());
             }
@@ -156,7 +164,13 @@ public class ForkSettingsActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     if (position == squareAvatarsRow) {
-                        textCell.setTextAndCheck("Square Avatars", preferences.getBoolean("squareAvatars", true), true);
+                        String t = LocaleController.getString("SquareAvatars", R.string.SquareAvatars);
+                        String info = LocaleController.getString("SquareAvatarsInfo", R.string.SquareAvatarsInfo);
+                        textCell.setTextAndValueAndCheck(t, info, preferences.getBoolean("squareAvatars", true), false, false);
+                    } else if (position == inappCameraRow) {
+                        String t = LocaleController.getString("InAppCamera", R.string.InAppCamera);
+                        String info = LocaleController.getString("InAppCameraInfo", R.string.InAppCameraInfo);
+                        textCell.setTextAndValueAndCheck(t, info, preferences.getBoolean("inappCamera", true), false, false);
                     }
                     break;
                 }
@@ -174,6 +188,7 @@ public class ForkSettingsActivity extends BaseFragment {
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
             boolean fork = position == squareAvatarsRow
+                        || position == inappCameraRow;
                         || position == pinOrderRow;
             return fork;
         }
@@ -216,7 +231,9 @@ public class ForkSettingsActivity extends BaseFragment {
                 return 1;
             } else if (0 == 1) {
                 return 2;
-            } else if (position == squareAvatarsRow || position == pinOrderRow) {
+            } else if (position == squareAvatarsRow 
+                || position == inappCameraRow 
+                || position == pinOrderRow) {
                 return 3;
             } else if (position == sectionRow1) {
                 return 4;
