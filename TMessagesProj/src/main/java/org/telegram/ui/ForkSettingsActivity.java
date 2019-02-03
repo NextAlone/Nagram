@@ -54,6 +54,7 @@ public class ForkSettingsActivity extends BaseFragment {
     private int squareAvatarsRow;
     private int inappCameraRow;
     private int photoHasStickerRow;
+    private int unmutedOnTopRow;
 
     private int pinOrderRow;
 
@@ -67,6 +68,7 @@ public class ForkSettingsActivity extends BaseFragment {
         squareAvatarsRow = rowCount++;
         inappCameraRow = rowCount++;
         photoHasStickerRow = rowCount++;
+        unmutedOnTopRow = rowCount++;
 
         pinOrderRow = rowCount++;
 
@@ -129,6 +131,9 @@ public class ForkSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.hasSticker);
                 }
+            } else if (position == unmutedOnTopRow) {
+                toggleGlobalMainSetting("unmutedOnTop", view, false);
+                MessagesController.getInstance(currentAccount).sortDialogs(null);
             } else if (position == pinOrderRow) {
                 presentFragment(new PinsOrderActivity());
             }
@@ -183,6 +188,10 @@ public class ForkSettingsActivity extends BaseFragment {
                         String t = LocaleController.getString("PhotoHasSticker", R.string.PhotoHasSticker);
                         String info = LocaleController.getString("PhotoHasStickerInfo", R.string.PhotoHasStickerInfo);
                         textCell.setTextAndValueAndCheck(t, info, preferences.getBoolean("photoHasSticker", false), true, false);
+                    } else if (position == unmutedOnTopRow) {
+                        String t = LocaleController.getString("UnmutedOnTop", R.string.UnmutedOnTop);
+                        String info = LocaleController.getString("UnmutedOnTopInfo", R.string.UnmutedOnTopInfo);
+                        textCell.setTextAndValueAndCheck(t, info, preferences.getBoolean("unmutedOnTop", false), true, false);
                     }
                     break;
                 }
@@ -202,6 +211,7 @@ public class ForkSettingsActivity extends BaseFragment {
             boolean fork = position == squareAvatarsRow
                         || position == inappCameraRow
                         || position == photoHasStickerRow
+
                         || position == pinOrderRow;
             return fork;
         }
@@ -244,10 +254,10 @@ public class ForkSettingsActivity extends BaseFragment {
                 return 1;
             } else if (0 == 1) {
                 return 2;
-            } else if (position == squareAvatarsRow 
-                || position == inappCameraRow 
-                || position == photoHasStickerRow 
-                || position == pinOrderRow) {
+            } else if (position == squareAvatarsRow
+                || position == inappCameraRow
+                || position == unmutedOnTopRow
+                || position == photoHasStickerRow) {
                 return 3;
             } else if (position == sectionRow1) {
                 return 4;
