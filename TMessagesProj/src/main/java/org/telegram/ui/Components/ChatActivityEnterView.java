@@ -7414,8 +7414,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                     if (gif instanceof TLRPC.Document) {
                         TLRPC.Document document = (TLRPC.Document) gif;
-                        SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, null, notify, scheduleDate);
+                        SendMessagesHelper.getInstance(currentAccount).sendGifWithCaption(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, null, notify, scheduleDate, messageEditText.getText().toString());
                         MediaDataController.getInstance(currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000), true);
+                        messageEditText.setText("");
                         if (DialogObject.isEncryptedDialog(dialog_id)) {
                             accountInstance.getMessagesController().saveGif(parent, document);
                         }
