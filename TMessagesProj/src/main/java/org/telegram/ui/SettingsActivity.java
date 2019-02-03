@@ -1825,7 +1825,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
                     } else if (position == forkRow) {
-                        textCell.setTextAndIcon("Fork Settings", R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle), R.drawable.menu_fork, true);
                     } else if (position == helpRow) {
                         textCell.setTextAndIcon(LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, false);
                     }
