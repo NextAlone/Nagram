@@ -7747,11 +7747,13 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     newTaskId = taskId;
                 }
 
-                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
-                    if (newTaskId != 0) {
-                        MessagesStorage.getInstance(currentAccount).removePendingTask(newTaskId);
-                    }
-                });
+                if (mainPreferences.getBoolean("syncPins", true)) {
+                    ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
+                        if (newTaskId != 0) {
+                            MessagesStorage.getInstance(currentAccount).removePendingTask(newTaskId);
+                        }
+                    });
+                }
             }
         }
         MessagesStorage.getInstance(currentAccount).setDialogPinned(did, dialog.pinnedNum);
@@ -7759,6 +7761,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public void loadPinnedDialogs(final int folderId, final long newDialogId, final ArrayList<Long> order) {
+        if (!mainPreferences.getBoolean("syncPins", true)) {
+            return;
+        }
         if (loadingPinnedDialogs.indexOfKey(folderId) >= 0 || UserConfig.getInstance(currentAccount).isPinnedDialogsLoaded(folderId)) {
             return;
         }
