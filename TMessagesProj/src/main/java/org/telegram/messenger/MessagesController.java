@@ -595,6 +595,8 @@ public class MessagesController extends BaseController implements NotificationCe
     };
 
     private final Comparator<TLRPC.Dialog> dialogComparator = (dialog1, dialog2) -> {
+        boolean unmutedPrimary = getGlobalMainSettings().getBoolean("unmutedOnTop", false);
+
         if (dialog1 instanceof TLRPC.TL_dialogFolder && !(dialog2 instanceof TLRPC.TL_dialogFolder)) {
             return -1;
         } else if (!(dialog1 instanceof TLRPC.TL_dialogFolder) && dialog2 instanceof TLRPC.TL_dialogFolder) {
@@ -615,6 +617,31 @@ public class MessagesController extends BaseController implements NotificationCe
         final MediaDataController mediaDataController = getMediaDataController();
         final long date1 = DialogObject.getLastMessageOrDraftDate(dialog1, mediaDataController.getDraft(dialog1.id, 0));
         final long date2 = DialogObject.getLastMessageOrDraftDate(dialog2, mediaDataController.getDraft(dialog2.id, 0));
+
+        if (unmutedPrimary) {
+            boolean mute1 = isDialogMuted(dialog1.id);
+            boolean mute2 = isDialogMuted(dialog2.id);
+            boolean unread1 = dialog1.unread_count > 0;
+            boolean unread2 = dialog2.unread_count > 0;
+
+            boolean newMention1 = unread1 && !mute1;
+            boolean newMention2 = unread2 && !mute2;
+
+            if (!newMention1 && newMention2) {
+                return 1;
+            } else if (newMention1 && !newMention2) {
+                return -1;
+            } else if (newMention1 && newMention2) {
+                if (date1 < date2) {
+                    return 1;
+                } else if (date1 > date2) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+
         if (date1 < date2) {
             return 1;
         } else if (date1 > date2) {
@@ -6851,6 +6878,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }));
             }
+            sortDialogs(null);
         }
         if (!getUserConfig().notificationsSignUpSettingsLoaded) {
             loadSignUpNotificationsSettings();
@@ -7878,6 +7906,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (updated) {
             getNotificationCenter().postNotificationName(NotificationCenter.notificationsSettingsUpdated);
         }
+        sortDialogs(null);
     }
 
     private void applyDialogsNotificationsSettings(ArrayList<TLRPC.Dialog> dialogs) {
@@ -7921,6 +7950,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (editor != null) {
             editor.commit();
         }
+        sortDialogs(null);
     }
 
     public void reloadMentionsCountForChannel(TLRPC.InputPeer peer, final long taskId) {
@@ -12974,6 +13004,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             }
                             getMessagesStorage().updateMutedDialogsFiltersCounters();
                         }
+                        sortDialogs(null);
                     } else if (baseUpdate instanceof TLRPC.TL_updateChannel) {
                         final TLRPC.TL_updateChannel update = (TLRPC.TL_updateChannel) baseUpdate;
                         TLRPC.Dialog dialog = dialogs_dict.get(-(long) update.channel_id);
