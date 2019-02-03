@@ -1,0 +1,29 @@
+language: android
+jdk: openjdk8
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+    - build-tools-28.0.3
+    - android-28
+    - sys-img-armeabi-v7a-android-28
+    - extra-android-m2repository
+
+# Configurations to set up Android NDK
+before_install:
+    - echo y | sdkmanager "ndk-bundle"
+
+script: 
+    - ./gradlew assembleAfatDebug
+    - .travis/check.sh
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: ${TRAVIS_BUILD_DIR}/TMessagesProj/build/outputs/apk/afat/debug/TMessagesProj-afat-debug.apk
+  skip_cleanup: true
+  draft: true
+  on:
+    all_branches: true
