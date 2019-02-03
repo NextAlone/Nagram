@@ -113,6 +113,7 @@ public class SharedConfig {
     public static int distanceSystemType;
 
     public static boolean hideTitleDialog = false;
+    public static boolean hasSticker = false;;
 
     static {
         loadConfig();
@@ -288,6 +289,7 @@ public class SharedConfig {
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
 
             hideTitleDialog = preferences.getBoolean("hideTitle", false);
+            hasSticker = preferences.getBoolean("photoHasSticker", false);
 
             configLoaded = true;
         }
@@ -774,6 +776,14 @@ public class SharedConfig {
         editor.putInt("distanceSystemType", distanceSystemType);
         editor.commit();
         LocaleController.resetImperialSystemType();
+    }
+
+    public static void toggleHasSticker() {
+        hasSticker = !hasSticker;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("photoHasSticker", hasSticker);
+        editor.commit();
     }
 
     public static void loadProxyList() {
