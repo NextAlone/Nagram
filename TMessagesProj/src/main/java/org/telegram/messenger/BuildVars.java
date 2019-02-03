@@ -13,19 +13,22 @@ import android.content.SharedPreferences;
 
 public class BuildVars {
 
-    public static boolean DEBUG_VERSION = false;
+    public static boolean DEBUG_VERSION = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean LOGS_ENABLED = false;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = false;
     public static int BUILD_VERSION = 1591;
-    public static String BUILD_VERSION_STRING = "5.6.0";
-    public static int APP_ID = 0; //obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id
-    public static String APP_HASH = ""; //obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id
-    public static String HOCKEY_APP_HASH = "your-hockeyapp-api-key-here";
-    public static String HOCKEY_APP_HASH_DEBUG = "your-hockeyapp-api-key-here";
-    public static String SMS_HASH = ""; //https://developers.google.com/identity/sms-retriever/overview
+    public static String BUILD_VERSION_STRING = "5.6.1";
     public static String PLAYSTORE_APP_URL = "";
+    public static String SMS_HASH = ""; //https://developers.google.com/identity/sms-retriever/overview
+
+    // Private vars.
+    public static int APP_ID = BuildConfig.APP_ID; //obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id
+    public static String APP_HASH = BuildConfig.APP_HASH; //obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id
+    public static String HOCKEY_APP_HASH = BuildConfig.HOCKEY_APP_HASH;
+    public static String HOCKEY_APP_HASH_DEBUG = BuildConfig.HOCKEY_APP_HASH;
+    public static int USER_ID_OWNER = BuildConfig.USER_ID_OWNER;
 
     static {
         if (ApplicationLoader.applicationContext != null) {
