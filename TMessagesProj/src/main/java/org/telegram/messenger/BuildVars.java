@@ -32,7 +32,18 @@ public class BuildVars {
     static {
         if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
+            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", false);
         }
+
+        BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
+        APP_ID = BuildConfig.APP_ID;
+        APP_HASH = BuildConfig.APP_HASH;
+        PLAYSTORE_APP_URL = "";
+        SMS_HASH = "";
+        DEBUG_VERSION = true;
+        CHECK_UPDATES = true;
+        BUILD_VERSION *= 10;
+        BUILD_VERSION += BuildConfig.ADDITIONAL_BUILD_NUMBER;
     }
+    public static int USER_ID_OWNER = BuildConfig.USER_ID_OWNER;
 }
