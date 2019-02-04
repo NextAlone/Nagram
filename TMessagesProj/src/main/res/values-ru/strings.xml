@@ -24,8 +24,6 @@
     <string name="InAppCameraInfo">Во вложениях</string>
     <string name="SyncPins">Синх. закреплённых диалогов</string>
     <string name="SyncPinsInfo">В откл. режиме даёт безлимитное количество закреплённых диалогов</string>
-    <string name="ReverseOrderPins">Обратный порядок</string>
-    <string name="ReverseOrderPinsInfo">Закреплённых диалогов</string>
     <string name="UnmutedOnTop">Сообщения с увед. находятся сверху</string>
     <string name="UnmutedOnTopInfo">Сообщения будут под закреплёнными диалогами</string>
     <string name="PhotoHasSticker">Отправлять инфо о стикере в фото</string>

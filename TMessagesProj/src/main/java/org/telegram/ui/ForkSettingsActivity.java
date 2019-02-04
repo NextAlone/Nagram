@@ -82,7 +82,7 @@ public class ForkSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle("Fork Settings");
+        actionBar.setTitle(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
