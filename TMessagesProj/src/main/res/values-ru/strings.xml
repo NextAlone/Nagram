@@ -16,6 +16,7 @@
     <string name="RemoveFromHideMode">Убрать из Скрытого Режима</string>
     <string name="AddToHideMode">Добавить в Скрытый Режим</string>
     <string name="PinOrderInfo">Здесь Вы можете изменить локальный порядок закреплённых диалогов.</string>
+    <string name="GoToFirstMessage">К началу</string>
     <!--fork settings view-->
     <string name="ForkSettingsTitle">Настройки Fork Client</string>
     <string name="SquareAvatars">Квадратные аватарки</string>
