@@ -752,6 +752,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int bot_settings = 31;
     private final static int call = 32;
     private final static int hideTitle = 33;
+    private final static int goToFirstMessage = 34;
 
     private final static int attach_photo = 0;
     private final static int attach_gallery = 1;
@@ -1491,6 +1492,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     preferences.edit().putBoolean("hideTitle", SharedConfig.hideTitleDialog).commit();
+                } else if (id == goToFirstMessage) {
+                    // This is timestamp of launch date of the Telegram.
+                    // August 2013.
+                    jumpToDate(1375350800);
                 }
             }
         });
@@ -1714,6 +1719,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 hideTitleString = LocaleController.getString("HideTitle", R.string.HideTitle);
             }
             hideTitleItem = headerItem.addSubItem(hideTitle, R.drawable.hide_title, hideTitleString);
+
+            headerItem.addSubItem(goToFirstMessage, R.drawable.to_first, LocaleController.getString("GoToFirstMessage", R.string.GoToFirstMessage));
 
             if (currentUser != null) {
                 headerItem.addSubItem(call, R.drawable.msg_callback, LocaleController.getString("Call", R.string.Call));
