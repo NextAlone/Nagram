@@ -2243,11 +2243,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ArrayList<TLRPC.MessageEntity> entities = DataQuery.getInstance(currentAccount).getEntities(message);
                 String textMessageString = message[0].toString();
 
-                boolean endsWithMono = false;
+                boolean endsWithRichText = false;
                 if (entities != null) {
                     TLRPC.MessageEntity last = entities.get(entities.size() - 1);
-                    if (last instanceof TLRPC.TL_messageEntityCode) {
-                        endsWithMono = last.offset + last.length == textMessageString.length();
+                    if (last instanceof TLRPC.TL_messageEntityCode
+                        || last instanceof TLRPC.TL_messageEntityUrl
+                        || last instanceof TLRPC.TL_messageEntityEmail) {
+                        endsWithRichText = last.offset + last.length == textMessageString.length();
                     }
                 }
 
@@ -2261,8 +2263,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         && !textMessageString.endsWith("…")
                         && !textMessageString.endsWith("?")
                         && !textMessageString.endsWith("+")
+                        && !textMessageString.endsWith("=)")
+                        && !textMessageString.endsWith("=(")
+                        && !textMessageString.endsWith(".)")
                         && !skipDot
-                        && !endsWithMono
+                        && !endsWithRichText
                         && !textMessageString.startsWith("/")) {
                         textMessageString += ".";
                     }
@@ -3509,6 +3514,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             emojiView.hideSearchKeyboard();
         }
         setStickersExpanded(false, true, false);
+
+        // If this sticker was sent from Sticker Suggestion -> View Pack,
+        // Then don't sendMessage().
+        if (Emoji.isValidEmoji(messageEditText.getText().toString())) {
+            messageEditText.setText("");
+        }
         sendMessage();
         SendMessagesHelper.getInstance(currentAccount).sendSticker(sticker, dialog_id, replyingMessageObject, parent);
         if (delegate != null) {
