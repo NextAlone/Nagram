@@ -569,8 +569,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         } else {
             textureOverlayView.setImageResource(R.drawable.icplaceholder);
         }
+        android.content.SharedPreferences preferences = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+
         cameraReady = false;
-        isFrontface = true;
+        isFrontface = !(preferences.getBoolean("rearVideoMessages", false));
         selectedCamera = null;
         recordedTime = 0;
         progress = 0;
