@@ -3132,19 +3132,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         floatingButtonContainer = new FrameLayout(context);
         floatingButtonContainer.setVisibility(onlySelect && initialDialogsType != 10 || folderId != 0 ? View.GONE : View.VISIBLE);
-        contentView.addView(floatingButtonContainer, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 4 : 0, 0, LocaleController.isRTL ? 0 : 4, 0));
-        floatingButtonContainer.setOnClickListener(v -> {
-            if (initialDialogsType == 10) {
-                if (delegate == null || selectedDialogs.isEmpty()) {
-                    return;
-                }
-                delegate.didSelectDialogs(DialogsActivity.this, selectedDialogs, null, false);
-            } else {
-                Bundle args = new Bundle();
-                args.putBoolean("destroyAfterSelect", true);
-                presentFragment(new ContactsActivity(args));
-            }
-        });
+        // contentView.addView(floatingButtonContainer, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 4 : 0, 0, LocaleController.isRTL ? 0 : 4, 0));
+        // floatingButtonContainer.setOnClickListener(v -> {
+        //     if (initialDialogsType == 10) {
+        //         if (delegate == null || selectedDialogs.isEmpty()) {
+        //             return;
+        //         }
+        //         delegate.didSelectDialogs(DialogsActivity.this, selectedDialogs, null, false);
+        //     } else {
+        //         Bundle args = new Bundle();
+        //         args.putBoolean("destroyAfterSelect", true);
+        //         presentFragment(new ContactsActivity(args));
+        //     }
+        // });
 
         floatingButton = new RLottieImageView(context);
         floatingButton.setScaleType(ImageView.ScaleType.CENTER);
