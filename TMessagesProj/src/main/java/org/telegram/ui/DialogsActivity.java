@@ -1465,6 +1465,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         floatingButtonContainer.setContentDescription(LocaleController.getString("NewMessageTitle", R.string.NewMessageTitle));
         floatingButtonContainer.addView(floatingButton, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60), (Build.VERSION.SDK_INT >= 21 ? 56 : 60), Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
+        hideFloatingButton(true);
 
         /*unreadFloatingButtonContainer = new FrameLayout(context);
         if (onlySelect) {
@@ -3015,6 +3016,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (floatingHidden == hide) {
             return;
         }
+        hide = true;
         floatingHidden = hide;
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(ObjectAnimator.ofFloat(floatingButtonContainer, View.TRANSLATION_Y,  (floatingHidden ? AndroidUtilities.dp(100) : -additionalFloatingTranslation))/*,
