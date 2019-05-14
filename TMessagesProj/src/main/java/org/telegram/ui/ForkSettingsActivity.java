@@ -6,29 +6,23 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
@@ -37,11 +31,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.RecyclerListView;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ForkSettingsActivity extends BaseFragment {
 
@@ -55,8 +45,6 @@ public class ForkSettingsActivity extends BaseFragment {
     private int inappCameraRow;
     private int photoHasStickerRow;
     private int unmutedOnTopRow;
-
-    private int pinOrderRow;
 
     private int emptyRow;
 
@@ -73,8 +61,7 @@ public class ForkSettingsActivity extends BaseFragment {
         unmutedOnTopRow = rowCount++;
 
         emptyRow = rowCount++;
-        sectionRow2 = rowCount++;
-        pinOrderRow = rowCount++;
+        syncPinsRow = rowCount++;
 
         return true;
     }
@@ -138,8 +125,6 @@ public class ForkSettingsActivity extends BaseFragment {
             } else if (position == unmutedOnTopRow) {
                 toggleGlobalMainSetting("unmutedOnTop", view, false);
                 MessagesController.getInstance(currentAccount).sortDialogs(null);
-            } else if (position == pinOrderRow) {
-                presentFragment(new PinsOrderActivity());
             }
         });
 
@@ -172,9 +157,6 @@ public class ForkSettingsActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    if (position == pinOrderRow) {
-                        textCell.setText(LocaleController.getString("PinDialogsOrder", R.string.PinDialogsOrder), true);
-                    }
                     break;
                 }
                 case 3: {
@@ -214,9 +196,7 @@ public class ForkSettingsActivity extends BaseFragment {
             int position = holder.getAdapterPosition();
             boolean fork = position == squareAvatarsRow
                         || position == inappCameraRow
-                        || position == photoHasStickerRow
-
-                        || position == pinOrderRow;
+                        || position == photoHasStickerRow;
             return fork;
         }
 
