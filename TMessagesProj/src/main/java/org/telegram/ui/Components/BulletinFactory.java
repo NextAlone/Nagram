@@ -219,8 +219,22 @@ public final class BulletinFactory {
                 text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 1));
                 mute = true;
                 break;
+            case NotificationsController.SETTING_MUTE_3_HOURS:
+                text = LocaleController.formatString(
+                    "NotificationsMutedForHint",
+                    R.string.NotificationsMutedForHint,
+                    LocaleController.formatPluralString("Hours", 3));
+                mute = true;
+                break;
             case NotificationsController.SETTING_MUTE_8_HOURS:
                 text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 8));
+                mute = true;
+                break;
+            case NotificationsController.SETTING_MUTE_1_DAY:
+                text = LocaleController.formatString(
+                    "NotificationsMutedForHint",
+                    R.string.NotificationsMutedForHint,
+                    LocaleController.formatPluralString("Days", 1));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_2_DAYS:
