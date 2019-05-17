@@ -403,12 +403,19 @@ public class GroupCreateUserCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        final boolean squareAvatars = MessagesController.getGlobalMainSettings().getBoolean("squareAvatars", false);
         super.onDraw(canvas);
         if (checkBoxType == 2 && (isChecked || checkProgress > 0.0f)) {
             paint.setColor(Theme.getColor(Theme.key_checkboxSquareBackground));
             float cx = avatarImageView.getLeft() + avatarImageView.getMeasuredWidth() / 2;
             float cy = avatarImageView.getTop() + avatarImageView.getMeasuredHeight() / 2;
-            canvas.drawCircle(cx, cy, AndroidUtilities.dp(18) + AndroidUtilities.dp(4) * checkProgress, paint);
+
+            final float dp = AndroidUtilities.dp(18) + AndroidUtilities.dp(4) * checkProgress;
+            if (squareAvatars) {
+                canvas.drawRect(cx - dp, cy - dp, cx + dp, cy + dp, paint);
+            } else {
+                canvas.drawCircle(cx, cy, dp, paint);
+            }
         }
         if (drawDivider) {
             int start = AndroidUtilities.dp(LocaleController.isRTL ? 0 : 72 + padding);
