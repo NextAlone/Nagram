@@ -3539,10 +3539,12 @@ public class NotificationsController {
     }
 
     public static final int SETTING_MUTE_HOUR = 0;
-    public static final int SETTING_MUTE_8_HOURS = 1;
-    public static final int SETTING_MUTE_2_DAYS = 2;
-    public static final int SETTING_MUTE_FOREVER = 3;
-    public static final int SETTING_MUTE_UNMUTE = 4;
+    public static final int SETTING_MUTE_3_HOURS = 1;
+    public static final int SETTING_MUTE_8_HOURS = 2;
+    public static final int SETTING_MUTE_1_DAY = 3;
+    public static final int SETTING_MUTE_2_DAYS = 4;
+    public static final int SETTING_MUTE_FOREVER = 5;
+    public static final int SETTING_MUTE_UNMUTE = 6;
 
     public void setDialogNotificationsSettings(long dialog_id, int setting) {
         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
@@ -3565,6 +3567,10 @@ public class NotificationsController {
                 untilTime += 60 * 60;
             } else if (setting == SETTING_MUTE_8_HOURS) {
                 untilTime += 60 * 60 * 8;
+            } else if (setting == SETTING_MUTE_3_HOURS) {
+                untilTime += 60 * 60 * 3;
+            } else if (setting == SETTING_MUTE_1_DAY) {
+                untilTime += 60 * 60 * 24;
             } else if (setting == SETTING_MUTE_2_DAYS) {
                 untilTime += 60 * 60 * 48;
             } else if (setting == SETTING_MUTE_FOREVER) {
