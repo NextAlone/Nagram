@@ -9,6 +9,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -188,10 +189,20 @@ public class ShareDialogCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        final boolean squareAvatars = preferences.getBoolean("squareAvatars", false);
+
         int cx = imageView.getLeft() + imageView.getMeasuredWidth() / 2;
         int cy = imageView.getTop() + imageView.getMeasuredHeight() / 2;
         Theme.checkboxSquare_checkPaint.setColor(Theme.getColor(Theme.key_dialogRoundCheckBox));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (checkBox.getProgress() * 255));
-        canvas.drawCircle(cx, cy, AndroidUtilities.dp(currentType == TYPE_CREATE ? 24 : 28), Theme.checkboxSquare_checkPaint);
+
+        final int dp = AndroidUtilities.dp(currentType == TYPE_CREATE ? 24 : 28);
+
+        if (squareAvatars) {
+            canvas.drawRect(cx - dp, cy - dp, cx + dp, cy + dp, Theme.checkboxSquare_checkPaint);
+        } else {
+            canvas.drawCircle(cx, cy, dp, Theme.checkboxSquare_checkPaint);
+        }
     }
 }
