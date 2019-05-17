@@ -76,10 +76,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ShareAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
+    private int sizeButton = 46;
+
     private FrameLayout frameLayout;
     private FrameLayout frameLayout2;
     private EditTextEmoji commentTextView;
     private FrameLayout writeButtonContainer;
+    private FrameLayout anonymButtonContainer;
+    private FrameLayout nonTextButtonContainer;
     private View selectedCountView;
     private TextView pickerBottomLayout;
     private AnimatorSet animatorSet;
@@ -652,13 +656,26 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         editText.setSingleLine(true);
         frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 0, 84, 0));
 
+        Runnable withSendingText = () -> {
+            for (int a = 0; a < selectedDialogs.size(); a++) {
+                long key = selectedDialogs.keyAt(a);
+                if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, true, null, null, null);
+                }
+                SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText, key, null, null, true, null, null, null);
+            }
+        };
+
+        int size = 50;
+        int offset = 12;
+
         writeButtonContainer = new FrameLayout(context);
         writeButtonContainer.setVisibility(View.INVISIBLE);
         writeButtonContainer.setScaleX(0.2f);
         writeButtonContainer.setScaleY(0.2f);
         writeButtonContainer.setAlpha(0.0f);
         writeButtonContainer.setContentDescription(LocaleController.getString("Send", R.string.Send));
-        containerView.addView(writeButtonContainer, LayoutHelper.createFrame(60, 60, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 10));
+        containerView.addView(writeButtonContainer, LayoutHelper.createFrame(size, size, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, offset, 10));
         writeButtonContainer.setOnClickListener(v -> {
             if (sendingMessageObjects != null) {
                 for (int a = 0; a < selectedDialogs.size(); a++) {
@@ -669,40 +686,76 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key);
                 }
             } else if (sendingText != null) {
+                withSendingText.run();
+            }
+            dismiss();
+        });
+
+        writeButtonContainer.addView(createButton(R.drawable.attach_send, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
+
+        // ANONYM FORWARD BUTTON.
+        anonymButtonContainer = new FrameLayout(context);
+        anonymButtonContainer.setVisibility(View.INVISIBLE);
+        anonymButtonContainer.setScaleX(0.2f);
+        anonymButtonContainer.setScaleY(0.2f);
+        anonymButtonContainer.setAlpha(0.0f);
+        anonymButtonContainer.setContentDescription(LocaleController.getString("Send", R.string.Send));
+        containerView.addView(anonymButtonContainer, LayoutHelper.createFrame(size, size, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, size + offset * 2, 10));
+        anonymButtonContainer.setOnClickListener(v -> {
+            if (sendingMessageObjects != null) {
                 for (int a = 0; a < selectedDialogs.size(); a++) {
                     long key = selectedDialogs.keyAt(a);
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, true, null, null, null);
                     }
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText, key, null, null, true, null, null, null);
+                    for (MessageObject msg : sendingMessageObjects) {
+                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(msg, key);
+                    }
                 }
+            } else if (sendingText != null) {
+                withSendingText.run();
             }
             dismiss();
         });
 
-        ImageView writeButton = new ImageView(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Theme.key_dialogFloatingButtonPressed));
-        if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
-            CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
-            combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
-            drawable = combinedDrawable;
-        }
-        writeButton.setBackgroundDrawable(drawable);
-        writeButton.setImageResource(R.drawable.attach_send);
-        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
-        writeButton.setScaleType(ImageView.ScaleType.CENTER);
-        if (Build.VERSION.SDK_INT >= 21) {
-            writeButton.setOutlineProvider(new ViewOutlineProvider() {
-                @SuppressLint("NewApi")
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+        anonymButtonContainer.addView(createButton(R.drawable.anon_forward, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
+        
+        // ANONYM FORWARD WITHOUT TEXT BUTTON.
+        nonTextButtonContainer = new FrameLayout(context);
+        nonTextButtonContainer.setVisibility(View.INVISIBLE);
+        nonTextButtonContainer.setScaleX(0.2f);
+        nonTextButtonContainer.setScaleY(0.2f);
+        nonTextButtonContainer.setAlpha(0.0f);
+        nonTextButtonContainer.setContentDescription(LocaleController.getString("Send", R.string.Send));
+        containerView.addView(nonTextButtonContainer, LayoutHelper.createFrame(size, size, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, size * 2 + offset * 3, 10));
+        nonTextButtonContainer.setOnClickListener(v -> {
+            if (sendingMessageObjects != null) {
+                for (int a = 0; a < selectedDialogs.size(); a++) {
+                    long key = selectedDialogs.keyAt(a);
+
+                    if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
+                        sendingMessageObjects.get(0).messageOwner.message = commentTextView.getText().toString();
+                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(sendingMessageObjects.get(0), key);
+                        sendingMessageObjects.remove(0);
+                    }
+
+                    for (MessageObject msg : sendingMessageObjects) {
+                        if (msg.messageOwner.media != null) {
+                            if (msg.messageOwner.media.photo instanceof TLRPC.TL_photo
+                            || msg.messageOwner.media.document instanceof TLRPC.TL_document) {
+                                msg.messageOwner.message = "";
+                            }
+                        }
+                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(msg, key);
+                    }
                 }
-            });
-        }
-        writeButtonContainer.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
+            } else if (sendingText != null) {
+                withSendingText.run();
+            }
+            dismiss();
+        });
+
+        nonTextButtonContainer.addView(createButton(R.drawable.nontext_forward, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
 
         textPaint.setTextSize(AndroidUtilities.dp(12));
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -743,6 +796,32 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         if (listAdapter.dialogs.isEmpty()) {
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.dialogsNeedReload);
         }
+    }
+
+    private ImageView createButton(int resId, Context context) {
+        ImageView writeButton = new ImageView(context);
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(sizeButton), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Theme.key_dialogFloatingButtonPressed));
+        if (Build.VERSION.SDK_INT < 21) {
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
+            combinedDrawable.setIconSize(AndroidUtilities.dp(sizeButton), AndroidUtilities.dp(sizeButton));
+            drawable = combinedDrawable;
+        }
+        writeButton.setBackgroundDrawable(drawable);
+        writeButton.setImageResource(resId);
+        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
+        writeButton.setScaleType(ImageView.ScaleType.CENTER);
+        if (Build.VERSION.SDK_INT >= 21) {
+            writeButton.setOutlineProvider(new ViewOutlineProvider() {
+                @SuppressLint("NewApi")
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setOval(0, 0, AndroidUtilities.dp(sizeButton), AndroidUtilities.dp(sizeButton));
+                }
+            });
+        }
+        return writeButton;
     }
 
     private int getCurrentTop() {
@@ -878,6 +957,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         if (show) {
             frameLayout2.setVisibility(View.VISIBLE);
             writeButtonContainer.setVisibility(View.VISIBLE);
+            anonymButtonContainer.setVisibility(View.VISIBLE);
+            nonTextButtonContainer.setVisibility(View.VISIBLE);
         }
         animatorSet = new AnimatorSet();
         ArrayList<Animator> animators = new ArrayList<>();
@@ -885,6 +966,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         animators.add(ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_X, show ? 1.0f : 0.2f));
         animators.add(ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_Y, show ? 1.0f : 0.2f));
         animators.add(ObjectAnimator.ofFloat(writeButtonContainer, View.ALPHA, show ? 1.0f : 0.0f));
+        animators.add(ObjectAnimator.ofFloat(anonymButtonContainer, View.SCALE_X, show ? 1.0f : 0.2f));
+        animators.add(ObjectAnimator.ofFloat(anonymButtonContainer, View.SCALE_Y, show ? 1.0f : 0.2f));
+        animators.add(ObjectAnimator.ofFloat(anonymButtonContainer, View.ALPHA, show ? 1.0f : 0.0f));
+        animators.add(ObjectAnimator.ofFloat(nonTextButtonContainer, View.SCALE_X, show ? 1.0f : 0.2f));
+        animators.add(ObjectAnimator.ofFloat(nonTextButtonContainer, View.SCALE_Y, show ? 1.0f : 0.2f));
+        animators.add(ObjectAnimator.ofFloat(nonTextButtonContainer, View.ALPHA, show ? 1.0f : 0.0f));
         animators.add(ObjectAnimator.ofFloat(selectedCountView, View.SCALE_X, show ? 1.0f : 0.2f));
         animators.add(ObjectAnimator.ofFloat(selectedCountView, View.SCALE_Y, show ? 1.0f : 0.2f));
         animators.add(ObjectAnimator.ofFloat(selectedCountView, View.ALPHA, show ? 1.0f : 0.0f));
@@ -902,6 +989,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     if (!show) {
                         frameLayout2.setVisibility(View.INVISIBLE);
                         writeButtonContainer.setVisibility(View.INVISIBLE);
+                        anonymButtonContainer.setVisibility(View.INVISIBLE);
+                        nonTextButtonContainer.setVisibility(View.INVISIBLE);
                     }
                     animatorSet = null;
                 }
@@ -1036,7 +1125,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 case 1:
                 default: {
                     view = new View(context);
-                    view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(56)));
+                    view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(sizeButton)));
                     break;
                 }
             }
@@ -1368,7 +1457,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 case 1:
                 default: {
                     view = new View(context);
-                    view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(56)));
+                    view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(sizeButton)));
                     break;
                 }
             }
