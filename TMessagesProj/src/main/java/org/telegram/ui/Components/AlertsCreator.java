@@ -2894,7 +2894,9 @@ public class AlertsCreator {
         builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications), true);
         CharSequence[] items = new CharSequence[]{
                 LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 3)),
                 LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 24)),
                 LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
                 LocaleController.getString("MuteDisable", R.string.MuteDisable)
         };
@@ -2903,8 +2905,12 @@ public class AlertsCreator {
                     if (i == 0) {
                         setting = NotificationsController.SETTING_MUTE_HOUR;
                     } else if (i == 1) {
-                        setting = NotificationsController.SETTING_MUTE_8_HOURS;
+                        setting = NotificationsController.SETTING_MUTE_3_HOURS;
                     } else if (i == 2) {
+                        setting = NotificationsController.SETTING_MUTE_8_HOURS;
+                    } else if (i == 3) {
+                        setting = NotificationsController.SETTING_MUTE_1_DAY;
+                    } else if (i == 4) {
                         setting = NotificationsController.SETTING_MUTE_2_DAYS;
                     } else {
                         setting = NotificationsController.SETTING_MUTE_FOREVER;
