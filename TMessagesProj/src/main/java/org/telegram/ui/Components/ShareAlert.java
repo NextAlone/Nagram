@@ -652,9 +652,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
         commentTextView.onResume();
         EditTextBoldCursor editText = commentTextView.getEditText();
-        editText.setMaxLines(1);
-        editText.setSingleLine(true);
-        frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 0, 84, 0));
+        editText.setMaxLines(2);
+        editText.setSingleLine(false);
+        frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 0, 200, 0));
 
         Runnable withSendingText = () -> {
             for (int a = 0; a < selectedDialogs.size(); a++) {

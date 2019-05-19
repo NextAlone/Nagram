@@ -9,7 +9,7 @@
     <string name="ContinueOnThisLanguage">Continue in English</string>
     <!--signin view-->
     <!--FORK CLIENT-->
-    <string name="AnonymousForward">Переслать анонимно</string>
+    <string name="FastForward">Скинуть</string>
     <string name="DateForward">Дата</string>
     <string name="ShowTitle">Показать заголовок</string>
     <string name="HideTitle">Скрыть заголовок</string>
