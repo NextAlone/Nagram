@@ -5450,7 +5450,7 @@
     <string name="PremiumPreviewNoAdsDescription2">Remove ads such as this one by subscribing to Telegram Premium.</string>
     <string name="FeaturedStickersPremium">Trending Premium Stickers</string>
     <!--FORK CLIENT-->
-    <string name="AnonymousForward">Anonymous Forward</string>
+    <string name="FastForward">Fast Forward</string>
     <string name="DateForward">Date</string>
     <string name="ShowTitle">Show title</string>
     <string name="HideTitle">Hide title</string>

@@ -497,7 +497,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             isNeedToSkipAnon = true;
         }
 
-        if (channel) {
+        if (channel && messages.size() == 1) {
             loadingLink = true;
             TLRPC.TL_channels_exportMessageLink req = new TLRPC.TL_channels_exportMessageLink();
             req.id = messages.get(0).getId();
@@ -1284,7 +1284,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
         commentTextView.onResume();
         commentTextView.setPadding(0, 0, AndroidUtilities.dp(84), 0);
-        frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT));
+        frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 0, 0, isNeedToSkipAnon ? 84 : 200, 0));
         frameLayout2.setClipChildren(false);
         frameLayout2.setClipToPadding(false);
         commentTextView.setClipChildren(false);
