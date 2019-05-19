@@ -1313,9 +1313,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     createDeleteMessagesAlert(null, null);
-                } else if (id == forward || id == forward_anonym) {
-                    IS_ANONYMOUS_FORWARD = id == forward_anonym;
+                } else if (id == forward) {
+                    // IS_ANONYMOUS_FORWARD = id == forward_anonym;
                     openForward();
+                } else if (id == forward_anonym) {
+                    ArrayList<MessageObject> messages = new ArrayList<MessageObject>();
+                    for (int a = 1; a >= 0; a--) {
+                        ArrayList<Integer> ids = new ArrayList<>();
+                        for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                            ids.add(selectedMessagesIds[a].keyAt(b));
+                        }
+                        Collections.sort(ids);
+                        for (int b = 0; b < ids.size(); b++) {
+                            Integer i = ids.get(b);
+                            MessageObject messageObject = selectedMessagesIds[a].get(i);
+                            if (messageObject != null) {
+                                messages.add(messageObject);
+                            }
+                        }
+                        selectedMessagesCanCopyIds[a].clear();
+                        selectedMessagesCanStarIds[a].clear();
+                        selectedMessagesIds[a].clear();
+                    }
+                    hideActionMode();
+                    updatePinnedMessageView(true);
+                    updateVisibleRows();
+                    showDialog(new ShareAlert(getParentActivity(), messages, "", ChatObject.isChannel(currentChat), null, true));
                 } else if (id == chat_enc_timer) {
                     if (getParentActivity() == null) {
                         return;
@@ -13881,7 +13904,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(2);
                             icons.add(R.drawable.msg_forward);
-                            items.add(LocaleController.getString("AnonymousForward", R.string.AnonymousForward));
+                            items.add(LocaleController.getString("FastForward", R.string.FastForward));
                             options.add(202);
                             icons.add(R.drawable.ic_ab_forward_anonym);
                         }
@@ -14407,23 +14430,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 Bundle args = new Bundle();
                 args.putBoolean("onlySelect", true);
                 args.putInt("dialogsType", 3);
+                args.putInt("messagesCount", forwardingMessageGroup == null ? 1 : forwardingMessageGroup.messages.size());
+                args.putInt("hasPoll", forwardingMessage.isPoll() ? (forwardingMessage.isPublicPoll() ? 2 : 1) : 0);
                 DialogsActivity fragment = new DialogsActivity(args);
                 fragment.setDelegate(this);
                 presentFragment(fragment);
                 break;
             }
             case 202: {
-                IS_ANONYMOUS_FORWARD = true;
-                forwardingMessage = selectedObject;
-                forwardingMessageGroup = selectedObjectGroup;
-                Bundle args = new Bundle();
-                args.putBoolean("onlySelect", true);
-                args.putInt("dialogsType", 3);
-                args.putInt("messagesCount", forwardingMessageGroup == null ? 1 : forwardingMessageGroup.messages.size());
-                args.putInt("hasPoll", forwardingMessage.isPoll() ? (forwardingMessage.isPublicPoll() ? 2 : 1) : 0);
-                DialogsActivity fragment = new DialogsActivity(args);
-                fragment.setDelegate(this);
-                presentFragment(fragment);
+                ArrayList<MessageObject> messages = new ArrayList<MessageObject>();
+                if (selectedObjectGroup != null) {
+                    messages = selectedObjectGroup.messages;
+                } else {
+                    messages.add(selectedObject);
+                }
+                showDialog(new ShareAlert(getParentActivity(), messages, "", ChatObject.isChannel(currentChat), null, true));
                 break;
             }
             case 3: {
