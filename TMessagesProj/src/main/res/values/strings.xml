@@ -3597,7 +3597,7 @@
     <string name="RemindDayYearAt">\'Remind on\' MMM d yyyy \'at\' HH:mm</string>
     <string name="formatDateScheduleDay">EEE MMM d</string>
     <!--FORK CLIENT-->
-    <string name="AnonymousForward">Anonymous Forward</string>
+    <string name="FastForward">Fast Forward</string>
     <string name="DateForward">Date</string>
     <string name="ShowTitle">Show title</string>
     <string name="HideTitle">Hide title</string>
