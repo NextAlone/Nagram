@@ -50,6 +50,8 @@ public class ForkSettingsActivity extends BaseFragment {
     private int emptyRow;
     private int syncPinsRow;
 
+    private int bigEmojiRow;
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -62,9 +64,11 @@ public class ForkSettingsActivity extends BaseFragment {
         photoHasStickerRow = rowCount++;
         unmutedOnTopRow = rowCount++;
         rearVideoMessages = rowCount++;
-
+        bigEmojiRow = rowCount++;
+        
         emptyRow = rowCount++;
         syncPinsRow = rowCount++;
+
 
         return true;
     }
@@ -144,6 +148,8 @@ public class ForkSettingsActivity extends BaseFragment {
                 toggleGlobalMainSetting("rearVideoMessages", view, false);
             } else if (position == syncPinsRow) {
                 toggleGlobalMainSetting("syncPins", view, true);
+            } else if (position == bigEmojiRow) {
+                SharedConfig.allowBigEmoji = toggleGlobalMainSetting("allowBigEmoji", view, true);
             }
         });
 
@@ -204,6 +210,9 @@ public class ForkSettingsActivity extends BaseFragment {
                         String t = LocaleController.getString("SyncPins", R.string.SyncPins);
                         String info = LocaleController.getString("SyncPinsInfo", R.string.SyncPinsInfo);
                         textCell.setTextAndValueAndCheck(t, info, preferences.getBoolean("syncPins", true), true, false);
+                    } else if (position == bigEmojiRow) {
+                        String t = LocaleController.getString("BigEmoji", R.string.BigEmoji);
+                        textCell.setTextAndCheck(t, preferences.getBoolean("allowBigEmoji", true), false);
                     }
                     break;
                 }
@@ -225,6 +234,7 @@ public class ForkSettingsActivity extends BaseFragment {
                         || position == unmutedOnTopRow
                         || position == rearVideoMessages
                         || position == syncPinsRow
+                        || position == bigEmojiRow
                         || position == photoHasStickerRow;
             return fork;
         }
@@ -271,6 +281,7 @@ public class ForkSettingsActivity extends BaseFragment {
                 || position == inappCameraRow
                 || position == unmutedOnTopRow
                 || position == syncPinsRow
+                || position == bigEmojiRow
                 || position == rearVideoMessages
                 || position == photoHasStickerRow) {
                 return 3;
