@@ -31,5 +31,5 @@
     <string name="PhotoHasStickerInfo">При использовании стикеров на фотографии</string>
     <string name="PinDialogsOrder">Порядок закреп. диалогов</string>
     <string name="RearVideoMessages">Задняя камера в видео сообщениях</string>
-    
+    <string name="BigEmoji">Отображать большие эмодзи</string>
 </resources>
