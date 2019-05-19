@@ -253,7 +253,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 1591
+    defaultConfig.versionCode = 15952
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -287,7 +287,7 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionName "5.6.1"
+        versionName "5.6.1.0"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
         buildConfigField 'int', 'APP_ID', System.getenv("APP_ID")
