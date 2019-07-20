@@ -1,22 +1,16 @@
 MY_LOCAL_PATH := $(call my-dir)
 LOCAL_PATH := $(MY_LOCAL_PATH)
 
-include $(CLEAR_VARS)
-
 LOCAL_MODULE    := avutil 
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    FFMPEG_INCLUDE_PATH := $(LOCAL_PATH)/ffmpeg/build/armv7-a/include
-    LOCAL_SRC_FILES := ./ffmpeg/build/armv7-a/lib/libavutil.a
+    LOCAL_SRC_FILES := ./ffmpeg/armv7-a/libavutil.a
 else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    FFMPEG_INCLUDE_PATH := $(LOCAL_PATH)/ffmpeg/build/arm64-v8a/include
-    LOCAL_SRC_FILES := ./ffmpeg/build/arm64-v8a/lib/libavutil.a
+    LOCAL_SRC_FILES := ./ffmpeg/arm64/libavutil.a
 else ifeq ($(TARGET_ARCH_ABI),x86)
-    FFMPEG_INCLUDE_PATH := $(LOCAL_PATH)/ffmpeg/build/i686/include
-    LOCAL_SRC_FILES := ./ffmpeg/build/i686/lib/libavutil.a
+    LOCAL_SRC_FILES := ./ffmpeg/i686/libavutil.a
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    FFMPEG_INCLUDE_PATH := $(LOCAL_PATH)/ffmpeg/build/x86_64/include
-    LOCAL_SRC_FILES := ./ffmpeg/build/x86_64/lib/libavutil.a
+    LOCAL_SRC_FILES := ./ffmpeg/x86_64/libavutil.a
 endif
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -26,13 +20,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := avformat
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/armv7-a/lib/libavformat.a
+    LOCAL_SRC_FILES := ./ffmpeg/armv7-a/libavformat.a
 else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/arm64-v8a/lib/libavformat.a
+    LOCAL_SRC_FILES := ./ffmpeg/arm64/libavformat.a
 else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_SRC_FILES := ./ffmpeg/build/i686/lib/libavformat.a
+    LOCAL_SRC_FILES := ./ffmpeg/i686/libavformat.a
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_SRC_FILES := ./ffmpeg/build/x86_64/lib/libavformat.a
+    LOCAL_SRC_FILES := ./ffmpeg/x86_64/libavformat.a
 endif
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -42,13 +36,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := avcodec
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/armv7-a/lib/libavcodec.a
+    LOCAL_SRC_FILES := ./ffmpeg/armv7-a/libavcodec.a
 else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/arm64-v8a/lib/libavcodec.a
+    LOCAL_SRC_FILES := ./ffmpeg/arm64/libavcodec.a
 else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_SRC_FILES := ./ffmpeg/build/i686/lib/libavcodec.a
+    LOCAL_SRC_FILES := ./ffmpeg/i686/libavcodec.a
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_SRC_FILES := ./ffmpeg/build/x86_64/lib/libavcodec.a
+    LOCAL_SRC_FILES := ./ffmpeg/x86_64/libavcodec.a
 endif
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -58,29 +52,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := avresample
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/armv7-a/lib/libavresample.a
+    LOCAL_SRC_FILES := ./ffmpeg/armv7-a/libavresample.a
 else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/arm64-v8a/lib/libavresample.a
+    LOCAL_SRC_FILES := ./ffmpeg/arm64/libavresample.a
 else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_SRC_FILES := ./ffmpeg/build/i686/lib/libavresample.a
+    LOCAL_SRC_FILES := ./ffmpeg/i686/libavresample.a
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_SRC_FILES := ./ffmpeg/build/x86_64/lib/libavresample.a
-endif
-
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE    := swresample
-
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/armv7-a/lib/libswresample.a
-else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/arm64-v8a/lib/libswresample.a
-else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_SRC_FILES := ./ffmpeg/build/i686/lib/libswresample.a
-else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_SRC_FILES := ./ffmpeg/build/x86_64/lib/libswresample.a
+    LOCAL_SRC_FILES := ./ffmpeg/x86_64/libavresample.a
 endif
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -90,13 +68,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := swscale
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/armv7-a/lib/libswscale.a
+    LOCAL_SRC_FILES := ./ffmpeg/armv7-a/libswscale.a
 else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_SRC_FILES := ./ffmpeg/build/arm64-v8a/lib/libswscale.a
+    LOCAL_SRC_FILES := ./ffmpeg/arm64/libswscale.a
 else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_SRC_FILES := ./ffmpeg/build/i686/lib/libswscale.a
+    LOCAL_SRC_FILES := ./ffmpeg/i686/libswscale.a
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_SRC_FILES := ./ffmpeg/build/x86_64/lib/libswscale.a
+    LOCAL_SRC_FILES := ./ffmpeg/x86_64/libswscale.a
 endif
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -106,13 +84,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := crypto
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_SRC_FILES := ./boringssl/build/armeabi-v7a/crypto/libcrypto.a
+    LOCAL_SRC_FILES := ./boringssl/lib/libcrypto_armeabi-v7a.a
 else ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_SRC_FILES := ./boringssl/build/arm64-v8a/crypto/libcrypto.a
+    LOCAL_SRC_FILES := ./boringssl/lib/libcrypto_arm64-v8a.a
 else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_SRC_FILES := ./boringssl/build/x86/crypto/libcrypto.a
+    LOCAL_SRC_FILES := ./boringssl/lib/libcrypto_x86.a
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_SRC_FILES := ./boringssl/build/x86_64/crypto/libcrypto.a
+    LOCAL_SRC_FILES := ./boringssl/lib/libcrypto_x86_64.a
 endif
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -163,9 +141,86 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
-include $(LOCAL_PATH)/libwebp/Android.mk
+LOCAL_CFLAGS := -Wall -DANDROID -DHAVE_MALLOC_H -DHAVE_PTHREAD -DWEBP_USE_THREAD -finline-functions -ffast-math -ffunction-sections -fdata-sections -Os
+LOCAL_C_INCLUDES += ./jni/libwebp/src
+LOCAL_ARM_MODE := arm
+LOCAL_STATIC_LIBRARIES := cpufeatures
+LOCAL_MODULE := webp
 
-LOCAL_PATH := $(MY_LOCAL_PATH)
+ifneq ($(findstring armeabi-v7a, $(TARGET_ARCH_ABI)),)
+  NEON := c.neon
+else
+  NEON := c
+endif
+
+LOCAL_SRC_FILES := \
+./libwebp/dec/alpha.c \
+./libwebp/dec/buffer.c \
+./libwebp/dec/frame.c \
+./libwebp/dec/idec.c \
+./libwebp/dec/io.c \
+./libwebp/dec/quant.c \
+./libwebp/dec/tree.c \
+./libwebp/dec/vp8.c \
+./libwebp/dec/vp8l.c \
+./libwebp/dec/webp.c \
+./libwebp/dsp/alpha_processing.c \
+./libwebp/dsp/alpha_processing_sse2.c \
+./libwebp/dsp/cpu.c \
+./libwebp/dsp/dec.c \
+./libwebp/dsp/dec_clip_tables.c \
+./libwebp/dsp/dec_mips32.c \
+./libwebp/dsp/dec_neon.$(NEON) \
+./libwebp/dsp/dec_sse2.c \
+./libwebp/dsp/enc.c \
+./libwebp/dsp/enc_avx2.c \
+./libwebp/dsp/enc_mips32.c \
+./libwebp/dsp/enc_neon.$(NEON) \
+./libwebp/dsp/enc_sse2.c \
+./libwebp/dsp/lossless.c \
+./libwebp/dsp/lossless_mips32.c \
+./libwebp/dsp/lossless_neon.$(NEON) \
+./libwebp/dsp/lossless_sse2.c \
+./libwebp/dsp/upsampling.c \
+./libwebp/dsp/upsampling_neon.$(NEON) \
+./libwebp/dsp/upsampling_sse2.c \
+./libwebp/dsp/yuv.c \
+./libwebp/dsp/yuv_mips32.c \
+./libwebp/dsp/yuv_sse2.c \
+./libwebp/enc/alpha.c \
+./libwebp/enc/analysis.c \
+./libwebp/enc/backward_references.c \
+./libwebp/enc/config.c \
+./libwebp/enc/cost.c \
+./libwebp/enc/filter.c \
+./libwebp/enc/frame.c \
+./libwebp/enc/histogram.c \
+./libwebp/enc/iterator.c \
+./libwebp/enc/picture.c \
+./libwebp/enc/picture_csp.c \
+./libwebp/enc/picture_psnr.c \
+./libwebp/enc/picture_rescale.c \
+./libwebp/enc/picture_tools.c \
+./libwebp/enc/quant.c \
+./libwebp/enc/syntax.c \
+./libwebp/enc/token.c \
+./libwebp/enc/tree.c \
+./libwebp/enc/vp8l.c \
+./libwebp/enc/webpenc.c \
+./libwebp/utils/bit_reader.c \
+./libwebp/utils/bit_writer.c \
+./libwebp/utils/color_cache.c \
+./libwebp/utils/filters.c \
+./libwebp/utils/huffman.c \
+./libwebp/utils/huffman_encode.c \
+./libwebp/utils/quant_levels.c \
+./libwebp/utils/quant_levels_dec.c \
+./libwebp/utils/random.c \
+./libwebp/utils/rescaler.c \
+./libwebp/utils/thread.c \
+./libwebp/utils/utils.c
+
+include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
@@ -507,7 +562,7 @@ $(LOCAL_PATH)/opus/ \
 $(LOCAL_PATH)/opus/opusfile \
 $(LOCAL_PATH)/libyuv/include \
 $(LOCAL_PATH)/boringssl/include \
-$(FFMPEG_INCLUDE_PATH) \
+$(LOCAL_PATH)/ffmpeg/include \
 $(LOCAL_PATH)/emoji \
 $(LOCAL_PATH)/exoplayer/include \
 $(LOCAL_PATH)/exoplayer/libFLAC/include \
@@ -587,42 +642,5 @@ LOCAL_SRC_FILES     += \
 ./secureid_ocr.cpp
 
 include $(BUILD_SHARED_LIBRARY)
-
-########################################################
-## shadowsocks-libev local
-########################################################
-
-include $(CLEAR_VARS)
-
-SHADOWSOCKS_SOURCES := local.c \
-	cache.c udprelay.c utils.c netutils.c json.c jconf.c \
-	acl.c http.c tls.c rule.c \
-	crypto.c aead.c stream.c base64.c \
-	plugin.c ppbloom.c \
-	android.c
-
-LOCAL_MODULE    := ss-local
-LOCAL_SRC_FILES := $(addprefix shadowsocks-libev/src/, $(SHADOWSOCKS_SOURCES))
-LOCAL_CFLAGS    := -Wall -fno-strict-aliasing -DMODULE_LOCAL \
-					-DUSE_CRYPTO_MBEDTLS -DHAVE_CONFIG_H \
-					-DCONNECT_IN_PROGRESS=EINPROGRESS \
-					-I$(LOCAL_PATH)/include/shadowsocks-libev \
-					-I$(LOCAL_PATH)/include \
-					-I$(LOCAL_PATH)/libancillary \
-					-I$(LOCAL_PATH)/mbedtls/include  \
-					-I$(LOCAL_PATH)/pcre \
-					-I$(LOCAL_PATH)/libsodium/src/libsodium/include \
-					-I$(LOCAL_PATH)/libsodium/src/libsodium/include/sodium \
-					-I$(LOCAL_PATH)/shadowsocks-libev/libcork/include \
-					-I$(LOCAL_PATH)/shadowsocks-libev/libipset/include \
-					-I$(LOCAL_PATH)/shadowsocks-libev/libbloom \
-					-I$(LOCAL_PATH)/libev
-
-LOCAL_STATIC_LIBRARIES := libev libmbedtls libipset libcork libbloom \
-	libsodium libancillary libpcre
-
-LOCAL_LDLIBS := -llog
-
-include $(BUILD_SHARED_EXECUTABLE)
 
 $(call import-module,android/cpufeatures)
