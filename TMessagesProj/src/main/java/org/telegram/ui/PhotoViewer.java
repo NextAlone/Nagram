@@ -10954,6 +10954,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             nameTextView.setText("");
             dateTextView.setText("");
+
+            // Show date time for avatars.
+            boolean isIndexInvalid = (switchingToIndex < 0 || switchingToIndex >= avatarsArr.size());
+            if (!avatarsArr.isEmpty() && !isIndexInvalid) {
+                long date = (long) avatarsArr.get(switchingToIndex).date * 1000;
+                if (date > 10000) {
+                    String dateString = LocaleController.formatString(
+                        "formatDateAtTime",
+                        R.string.formatDateAtTime,
+                        LocaleController.getInstance().formatterYear.format(new Date(date)),
+                        LocaleController.getInstance().formatterDay.format(new Date(date)));
+                    dateTextView.setText(dateString);
+                }
+            }
+
             if (canEditAvatar && !avatarsArr.isEmpty()) {
                 menuItem.showSubItem(gallery_menu_edit_avatar);
                 boolean currentSet = isCurrentAvatarSet();
