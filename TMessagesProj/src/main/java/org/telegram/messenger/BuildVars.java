@@ -18,8 +18,8 @@ public class BuildVars {
     public static boolean LOGS_ENABLED = false;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = false;
-    public static int BUILD_VERSION = 1684;
-    public static String BUILD_VERSION_STRING = "5.10.0";
+    public static int BUILD_VERSION = 16841;
+    public static String BUILD_VERSION_STRING = "5.10.0.0";
     public static String PLAYSTORE_APP_URL = "";
     public static String SMS_HASH = ""; //https://developers.google.com/identity/sms-retriever/overview
 
