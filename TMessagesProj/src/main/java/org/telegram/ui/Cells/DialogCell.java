@@ -1961,9 +1961,17 @@ public class DialogCell extends BaseCell {
             Theme.dialogs_scamDrawable.draw(canvas);
         }
 
+        // 11 + 12 = 23 = height of item.
+        // We move drawCount up to half its height
+        // and move dialogs_reorderDrawable down
+        // so that everything could fit and would not have to hide the drawCount.
+        final boolean isCount = (drawCount || drawMention);
+        final int newTop = countTop - (int)(AndroidUtilities.dp(11) * reorderIconProgress);
+        final int newPinTop = isCount ? (pinTop + (int)(AndroidUtilities.dp(12) * reorderIconProgress)) : pinTop;
+
         if (drawReorder || reorderIconProgress != 0) {
             Theme.dialogs_reorderDrawable.setAlpha((int) (reorderIconProgress * 255));
-            setDrawableBounds(Theme.dialogs_reorderDrawable, pinLeft, pinTop);
+            setDrawableBounds(Theme.dialogs_reorderDrawable, pinLeft, newPinTop);
             Theme.dialogs_reorderDrawable.draw(canvas);
         }
         if (drawError) {
@@ -1972,39 +1980,31 @@ public class DialogCell extends BaseCell {
             canvas.drawRoundRect(rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, Theme.dialogs_errorPaint);
             setDrawableBounds(Theme.dialogs_errorDrawable, errorLeft + AndroidUtilities.dp(5.5f), errorTop + AndroidUtilities.dp(5));
             Theme.dialogs_errorDrawable.draw(canvas);
-        } else if (drawCount || drawMention) {
+        } else if (isCount) {
             if (drawCount) {
                 Paint paint = dialogMuted || currentDialogFolderId != 0 ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint;
-                paint.setAlpha((int) ((1.0f - reorderIconProgress) * 255));
-                Theme.dialogs_countTextPaint.setAlpha((int) ((1.0f - reorderIconProgress) * 255));
 
                 int x = countLeft - AndroidUtilities.dp(5.5f);
-                rect.set(x, countTop, x + countWidth + AndroidUtilities.dp(11), countTop + AndroidUtilities.dp(23));
+                rect.set(x, newTop, x + countWidth + AndroidUtilities.dp(11), newTop + AndroidUtilities.dp(23));
                 canvas.drawRoundRect(rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, paint);
                 if (countLayout != null) {
                     canvas.save();
-                    canvas.translate(countLeft, countTop + AndroidUtilities.dp(4));
+                    canvas.translate(countLeft, newTop + AndroidUtilities.dp(4));
                     countLayout.draw(canvas);
                     canvas.restore();
                 }
             }
             if (drawMention) {
-                Theme.dialogs_countPaint.setAlpha((int) ((1.0f - reorderIconProgress) * 255));
-
                 int x = mentionLeft - AndroidUtilities.dp(5.5f);
-                rect.set(x, countTop, x + mentionWidth + AndroidUtilities.dp(11), countTop + AndroidUtilities.dp(23));
+                rect.set(x, newTop, x + mentionWidth + AndroidUtilities.dp(11), newTop + AndroidUtilities.dp(23));
                 Paint paint = dialogMuted && folderId != 0 ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint;
                 canvas.drawRoundRect(rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, paint);
                 if (mentionLayout != null) {
-                    Theme.dialogs_countTextPaint.setAlpha((int) ((1.0f - reorderIconProgress) * 255));
-
                     canvas.save();
-                    canvas.translate(mentionLeft, countTop + AndroidUtilities.dp(4));
+                    canvas.translate(mentionLeft, newTop + AndroidUtilities.dp(4));
                     mentionLayout.draw(canvas);
                     canvas.restore();
                 } else {
-                    Theme.dialogs_mentionDrawable.setAlpha((int) ((1.0f - reorderIconProgress) * 255));
-
                     setDrawableBounds(Theme.dialogs_mentionDrawable, mentionLeft - AndroidUtilities.dp(2), countTop + AndroidUtilities.dp(3.2f), AndroidUtilities.dp(16), AndroidUtilities.dp(16));
                     Theme.dialogs_mentionDrawable.draw(canvas);
                 }
