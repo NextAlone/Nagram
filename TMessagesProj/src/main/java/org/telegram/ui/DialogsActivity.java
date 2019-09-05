@@ -2685,8 +2685,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     newPinnedCount++;
                 }
             }
+
+            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            boolean syncPins = preferences.getBoolean("syncPins", true);
+
             int maxPinnedCount;
-            if (folderId != 0) {
+            if (folderId != 0 || !syncPins) {
                 maxPinnedCount = getMessagesController().maxFolderPinnedDialogsCount;
             } else {
                 maxPinnedCount = getMessagesController().maxPinnedDialogsCount;
