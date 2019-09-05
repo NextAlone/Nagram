@@ -22,6 +22,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -89,7 +90,11 @@ public class DrawerUserCell extends FrameLayout {
             return;
         }
         avatarDrawable.setInfo(user);
-        textView.setText("...");
+        if (SharedConfig.hideSensitiveData()) {
+            textView.setText("...");
+        } else {
+            textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+        }
         imageView.getImageReceiver().setCurrentAccount(account);
         imageView.setForUserOrChat(user, avatarDrawable);
         checkBox.setVisibility(account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
