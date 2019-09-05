@@ -86,6 +86,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -3477,7 +3478,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
             onlineTextOverride = LocaleController.getString("Updating", R.string.Updating);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnectingToProxy) {
-            onlineTextOverride = "...";
+            onlineTextOverride = SharedConfig.hideSensitiveData()
+                ? "..."
+                : LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
         } else {
             onlineTextOverride = null;
         }
