@@ -61,7 +61,12 @@ public class SimpleAvatarView extends View {
         super.onDraw(canvas);
 
         selectPaint.setColor(Theme.getColor(Theme.key_dialogTextBlue));
+        if (org.telegram.messenger.MessagesController.getGlobalMainSettings().getBoolean("squareAvatars", false)) {
+        final float w = selectPaint.getStrokeWidth();
+        canvas.drawRect(w, w, getWidth() - w, getHeight() - w, selectPaint);
+        } else {
         canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, Math.min(getWidth(), getHeight()) / 2f - selectPaint.getStrokeWidth(), selectPaint);
+        }
         if (!isAvatarHidden) {
             float pad = selectPaint.getStrokeWidth() * 2.5f * selectProgress;
             avatarImage.setImageCoords(pad, pad, getWidth() - pad * 2, getHeight() - pad * 2);
