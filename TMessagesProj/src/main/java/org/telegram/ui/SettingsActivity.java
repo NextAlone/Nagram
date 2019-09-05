@@ -277,11 +277,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
 
         rowCount = 0;
-        emptyRow = rowCount++;
-        numberSectionRow = -1;
-        numberRow = -1;
-        usernameRow = -1;
-        bioRow = -1;
+        if (SharedConfig.hideSensitiveData()) {
+            emptyRow = -1;
+            numberSectionRow = -1;
+            numberRow = -1;
+            usernameRow = -1;
+            bioRow = -1;
+        } else {
+            emptyRow = rowCount++;
+            numberSectionRow = rowCount++;
+            numberRow = rowCount++;
+            usernameRow = rowCount++;
+            bioRow = rowCount++;
+        }
         settingsSectionRow = rowCount++;
         settingsSectionRow2 = rowCount++;
         notificationRow = rowCount++;
