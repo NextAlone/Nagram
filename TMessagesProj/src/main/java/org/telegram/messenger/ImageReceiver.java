@@ -1457,6 +1457,12 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void setRoundRadius(int[] value) {
+        android.content.SharedPreferences preferences
+            = MessagesController.getGlobalMainSettings();
+        if (preferences.getBoolean("squareAvatars", false)) {
+            java.util.Arrays.fill(value, 0);
+        }
+
         boolean changed = false;
         for (int a = 0; a < roundRadius.length; a++) {
             if (roundRadius[a] != value[a]) {

@@ -196,6 +196,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private String currentBio;
 
+    private int forkHeaderRow;
+    private int forkSectionCell;
+    private int forkRow;
+
     private final static int edit_name = 1;
     private final static int logout = 2;
     private final static int search_button = 3;
@@ -451,6 +455,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 presentFragment(new FiltersSetupActivity());
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
+            } else if (position == forkRow) {
+                presentFragment(new ForkSettingsActivity());
             } else if (position == questionRow) {
                 showDialog(AlertsCreator.createSupportAlert(SettingsActivity.this));
             } else if (position == faqRow) {
@@ -827,6 +833,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         devicesRow = rowCount++;
         languageRow = rowCount++;
         devicesSectionRow = rowCount++;
+        forkHeaderRow = rowCount++;
+        forkRow = rowCount++;
+        forkSectionCell = rowCount++;
         helpHeaderRow = rowCount++;
         questionRow = rowCount++;
         faqRow = rowCount++;
@@ -2203,6 +2212,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
+                    } else if (position == forkRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle), R.drawable.menu_fork, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
@@ -2224,6 +2235,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (position == forkHeaderRow) {
+                        headerCell.setText("Fork Client");
+                    }
+
                     if (position == settingsSectionRow2) {
                         headerCell.setText(LocaleController.getString("SETTINGS", R.string.SETTINGS));
                     } else if (position == numberSectionRow) {
@@ -2280,7 +2295,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     position == versionRow || position == dataRow || position == chatRow ||
                     position == questionRow || position == devicesRow || position == filtersRow ||
                     position == faqRow || position == policyRow || position == sendLogsRow ||
-                    position == clearLogsRow || position == switchBackendRow;
+                    position == clearLogsRow || position == switchBackendRow || position == forkRow;
         }
 
         @Override
@@ -2358,6 +2373,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         @Override
         public int getItemViewType(int position) {
+            if (position == forkSectionCell) {
+                return 1;
+            } else if (position == forkHeaderRow) {
+                return 4;
+            } else if (position == forkRow) {
+                return 2;
+            }
             if (position == emptyRow) {
                 return 0;
             } else if (position == settingsSectionRow || position == devicesSectionRow || position == helpSectionCell) {
