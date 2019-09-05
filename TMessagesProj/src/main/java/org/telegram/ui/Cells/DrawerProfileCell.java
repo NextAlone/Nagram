@@ -37,6 +37,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
@@ -73,16 +74,26 @@ public class DrawerProfileCell extends FrameLayout {
     public DrawerProfileCell(Context context) {
         super(context);
 
+        if (!SharedConfig.hideSensitiveData()) {
+            avatarSize = 64;
+            heightOfcell = 148;
+        }
+
         shadowView = new ImageView(context);
         shadowView.setVisibility(INVISIBLE);
         shadowView.setScaleType(ImageView.ScaleType.FIT_XY);
         shadowView.setImageResource(R.drawable.bottom_shadow);
         addView(shadowView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 70, Gravity.LEFT | Gravity.BOTTOM));
 
+
+
         avatarImageView = new BackupImageView(context);
         avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32));
-        addView(avatarImageView, LayoutHelper.createFrame(avatarSize, avatarSize, Gravity.LEFT | Gravity.BOTTOM, heightOfcell - avatarSize - 2, 0, 0, (heightOfcell - avatarSize) / 2));
-
+        if (!SharedConfig.hideSensitiveData()) {
+            addView(avatarImageView, LayoutHelper.createFrame(64, 64, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 0, 67));
+        } else {
+            addView(avatarImageView, LayoutHelper.createFrame(avatarSize, avatarSize, Gravity.LEFT | Gravity.BOTTOM, heightOfcell - avatarSize - 2, 0, 0, (heightOfcell - avatarSize) / 2));
+        }
         nameTextView = new TextView(context);
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -91,7 +102,6 @@ public class DrawerProfileCell extends FrameLayout {
         nameTextView.setSingleLine(true);
         nameTextView.setGravity(Gravity.LEFT);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
-        // addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 28));
 
         phoneTextView = new TextView(context);
         phoneTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
@@ -99,7 +109,11 @@ public class DrawerProfileCell extends FrameLayout {
         phoneTextView.setMaxLines(1);
         phoneTextView.setSingleLine(true);
         phoneTextView.setGravity(Gravity.LEFT);
-        // addView(phoneTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 9));
+
+        if (!SharedConfig.hideSensitiveData()) {
+            addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 28));
+            addView(phoneTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 9));
+        }
 
         arrowView = new ImageView(context);
         arrowView.setScaleType(ImageView.ScaleType.CENTER);
