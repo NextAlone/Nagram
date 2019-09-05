@@ -27,6 +27,8 @@ import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 
+import android.content.SharedPreferences;
+
 public class ImageReceiver implements NotificationCenter.NotificationCenterDelegate {
 
     public interface ImageReceiverDelegate {
@@ -1412,7 +1414,16 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setRoundRadius(int value) {
         if (roundRadius != value) {
-            roundRadius = value;
+            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            final boolean squareAvatars = preferences.getBoolean("squareAvatars", false);
+            roundRadius = squareAvatars
+                ? 0
+                : value;
+            if (!squareAvatars) {
+                roundRadius = value;
+            } else {
+                roundRadius = 0;
+            }
             if (currentImageDrawable != null && imageShader == null) {
                 updateDrawableRadius(currentImageDrawable);
             }
