@@ -388,6 +388,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int transitionIndex;
     private TLRPC.Document preloadedSticker;
 
+    private int forkHeaderRow;
+    private int forkSectionCell;
+    private int forkRow;
+
     private final Property<ProfileActivity, Float> HEADER_SHADOW = new AnimationProperties.FloatProperty<ProfileActivity>("headerShadow") {
         @Override
         public void setValue(ProfileActivity object, float value) {
@@ -2356,6 +2360,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 presentFragment(new FiltersSetupActivity());
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
+            } else if (position == forkRow) {
+                presentFragment(new ForkSettingsActivity());
             } else if (position == questionRow) {
                 showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this));
             } else if (position == faqRow) {
@@ -4779,6 +4785,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         membersSectionRow = -1;
         sharedMediaRow = -1;
 
+        forkHeaderRow = forkRow = forkCheckUpdateRow = forkSectionCell = -1;
+
         unblockRow = -1;
         joinRow = -1;
         lastSectionRow = -1;
@@ -4821,6 +4829,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 devicesRow = rowCount++;
                 languageRow = rowCount++;
                 devicesSectionRow = rowCount++;
+                forkHeaderRow = rowCount++;
+                forkRow = rowCount++;
+                forkSectionCell = rowCount++;
                 helpHeaderRow = rowCount++;
                 questionRow = rowCount++;
                 faqRow = rowCount++;
@@ -6104,6 +6115,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             switch (holder.getItemViewType()) {
                 case 1:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (position == forkHeaderRow) {
+                        headerCell.setText("Fork Client");
+                    }
                     if (position == infoHeaderRow) {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup && channelInfoRow != -1) {
                             headerCell.setText(LocaleController.getString("ReportChatDescription", R.string.ReportChatDescription));
@@ -6270,6 +6284,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
+                    } else if (position == forkRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle), R.drawable.menu_fork, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
@@ -6408,6 +6424,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         position == versionRow || position == dataRow || position == chatRow ||
                         position == questionRow || position == devicesRow || position == filtersRow ||
                         position == faqRow || position == policyRow || position == sendLogsRow ||
+                        position == forkRow ||
                         position == clearLogsRow || position == switchBackendRow || position == setAvatarRow;
             }
             int type = holder.getItemViewType();
@@ -6421,6 +6438,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override
         public int getItemViewType(int position) {
+            if (position == forkSectionCell) {
+                return 7;
+            } else if (position == forkHeaderRow) {
+                return 1;
+            } else if (position == forkRow) {
+                return 4;
+            }
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
                     position == numberSectionRow || position == helpHeaderRow || position == debugHeaderRow) {
                 return 1;
