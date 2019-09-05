@@ -47,8 +47,13 @@ public class SenderSelectView extends View {
     private boolean scaleOut;
     private boolean scaleIn;
 
+    private int round = 16;
+
     public SenderSelectView(Context context) {
         super(context);
+        if (org.telegram.messenger.MessagesController.getGlobalMainSettings().getBoolean("squareAvatars", false)) {
+            round = 0;
+        }
         avatarImage.setRoundRadius(AndroidUtilities.dp(28));
         menuPaint.setStrokeWidth(AndroidUtilities.dp(2));
         menuPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -60,7 +65,7 @@ public class SenderSelectView extends View {
     private void updateColors() {
         backgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
         menuPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoicePressed));
-        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16), Color.TRANSPARENT, Theme.getColor(Theme.key_windowBackgroundWhite));
+        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(round), Color.TRANSPARENT, Theme.getColor(Theme.key_windowBackgroundWhite));
         selectorDrawable.setCallback(this);
     }
 
@@ -103,7 +108,12 @@ public class SenderSelectView extends View {
 
         int alpha = (int) (menuProgress * 0xFF);
         backgroundPaint.setAlpha(alpha);
+        if (round != 0) {
         canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, Math.min(getWidth(), getHeight()) / 2f, backgroundPaint);
+        } else {
+        AndroidUtilities.rectTmp.set(0, 0, getWidth(), getHeight());
+        canvas.drawRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(round), AndroidUtilities.dp(round), backgroundPaint);
+        }
 
         canvas.save();
         menuPaint.setAlpha(alpha);

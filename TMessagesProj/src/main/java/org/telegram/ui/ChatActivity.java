@@ -21417,7 +21417,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(OPTION_FORWARD);
                             icons.add(R.drawable.msg_forward);
-                            items.add("Anonymous Forward");
+                            items.add(LocaleController.getString("AnonymousForward", R.string.AnonymousForward));
                             options.add(202);
                             icons.add(R.drawable.ic_ab_forward_anonym);
                         }
