@@ -188,6 +188,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private String currentBio;
 
+    private int forkRow;
+
     private final static int edit_name = 1;
     private final static int logout = 2;
     private final static int search_button = 3;
@@ -287,6 +289,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         dataRow = rowCount++;
         chatRow = rowCount++;
         devicesRow = rowCount++;
+        forkRow = rowCount++;
         languageRow = rowCount++;
         helpRow = rowCount++;
         versionRow = rowCount++;
@@ -455,6 +458,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC));
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
+            } else if (position == forkRow) {
+                presentFragment(new ForkSettingsActivity());
             } else if (position == helpRow) {
                 showHelpAlert();
             } else if (position == languageRow) {
@@ -2225,6 +2230,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
+                    } else if (position == forkRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle), R.drawable.menu_fork, true);
                     } else if (position == helpRow) {
                         textCell.setTextAndIcon(LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, false);
                     } else if (position == devicesRow) {
@@ -2283,7 +2290,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             return position == notificationRow || position == numberRow || position == privacyRow ||
                     position == languageRow || position == usernameRow || position == bioRow ||
                     position == versionRow || position == dataRow || position == chatRow ||
-                    position == helpRow || position == devicesRow;
+                    position == helpRow || position == devicesRow || position == forkRow;
         }
 
         @Override
@@ -2367,7 +2374,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 return 1;
             } else if (position == notificationRow || position == privacyRow || position == languageRow ||
                     position == dataRow || position == chatRow || position == helpRow ||
-                    position == devicesRow) {
+                    position == devicesRow || position == forkRow) {
                 return 2;
             } else if (position == versionRow) {
                 return 5;
