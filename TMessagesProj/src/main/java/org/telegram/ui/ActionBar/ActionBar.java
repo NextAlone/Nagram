@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SnowflakesEffect;
@@ -871,7 +872,8 @@ public class ActionBar extends FrameLayout {
             return;
         }
         CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : lastTitle;
-        if (titleId == org.telegram.messenger.R.string.ConnectingToProxy) {
+        if (titleId == org.telegram.messenger.R.string.ConnectingToProxy
+            && (SharedConfig.hideSensitiveData())) {
             textToSet = "...";
         }
         if (textToSet != null && titleTextView == null) {
