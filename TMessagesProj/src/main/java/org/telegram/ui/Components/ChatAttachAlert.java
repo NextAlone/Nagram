@@ -1164,7 +1164,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, type, false, photoViewerProvider, chatActivity);
                 AndroidUtilities.hideKeyboard(baseFragment.getFragmentView().findFocus());
             } else {
-                if (SharedConfig.inappCamera) {
+                if (SharedConfig.inappCamera
+                    && !MessagesController.getGlobalMainSettings().getBoolean("systemCamera", false)) {
                     openCamera(true);
                 } else {
                     if (delegate != null) {
