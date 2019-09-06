@@ -2845,6 +2845,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == addMemberRow) {
                 openAddMember();
             } else if (position == usernameRow) {
+                if (!processCopyUsername())
                 processOnClickOrPress(position, view);
             } else if (position == locationRow) {
                 if (chatInfo.location instanceof TLRPC.TL_channelLocation) {
@@ -4052,40 +4053,50 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         presentFragment(fragment);
     }
 
-    private boolean processOnClickOrPress(final int position, final View view) {
-        if (position == usernameRow || position == setUsernameRow) {
-            final String username;
-            if (userId != 0) {
-                final TLRPC.User user = getMessagesController().getUser(userId);
-                if (user == null || user.username == null) {
-                    return false;
-                }
-                username = user.username;
-            } else if (chatId != 0) {
-                final TLRPC.Chat chat = getMessagesController().getChat(chatId);
-                if (chat == null || chat.username == null) {
-                    return false;
-                }
-                username = chat.username;
-            } else {
+    private boolean processCopyUsername() {
+        final String username;
+        if (userId != 0) {
+            final TLRPC.User user = getMessagesController().getUser(userId);
+            if (user == null || user.username == null) {
                 return false;
             }
-            try {
-                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                String text;
-                if (userId != 0) {
-                    text = "@" + username;
-                    BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("UsernameCopied", R.string.UsernameCopied), resourcesProvider).show();
-                } else {
-                    text = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/" + username;
-                    BulletinFactory.of(this).createCopyLinkBulletin(LocaleController.getString("LinkCopied", R.string.LinkCopied), resourcesProvider).show();
-                }
-                android.content.ClipData clip = android.content.ClipData.newPlainText("label", text);
-                clipboard.setPrimaryClip(clip);
-            } catch (Exception e) {
-                FileLog.e(e);
+            username = user.username;
+        } else if (chatId != 0) {
+            final TLRPC.Chat chat = getMessagesController().getChat(chatId);
+            if (chat == null || chat.username == null) {
+                return false;
             }
-            return true;
+            username = chat.username;
+        } else {
+            return false;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+            if (i == 0) {
+                try {
+                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                    String text;
+                    if (userId != 0) {
+                        text = "@" + username;
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("UsernameCopied", R.string.UsernameCopied), resourcesProvider).show();
+                    } else {
+                        text = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/" + username;
+                        BulletinFactory.of(this).createCopyLinkBulletin(LocaleController.getString("LinkCopied", R.string.LinkCopied), resourcesProvider).show();
+                    }
+                    android.content.ClipData clip = android.content.ClipData.newPlainText("label", text);
+                    clipboard.setPrimaryClip(clip);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+        }); 
+        showDialog(builder.create());
+        return true;
+    }
+
+    private boolean processOnClickOrPress(final int position, final View view) {
+        if (position == usernameRow || position == setUsernameRow) {
+            processCopyUsername();
         } else if (position == phoneRow || position == numberRow) {
             final TLRPC.User user = getMessagesController().getUser(userId);
             if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null) {
