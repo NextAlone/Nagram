@@ -1809,6 +1809,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == addMemberRow) {
                 openAddMember();
             } else if (position == usernameRow) {
+                if (!processCopyUsername())
                 if (currentChat != null) {
                     try {
                         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -2410,39 +2411,37 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         presentFragment(fragment);
     }
 
-    private boolean processOnClickOrPress(final int position) {
-        if (position == usernameRow) {
-            final String username;
-            if (user_id != 0) {
-                final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(user_id);
-                if (user == null || user.username == null) {
-                    return false;
-                }
-                username = user.username;
-            } else if (chat_id != 0) {
-                final TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(chat_id);
-                if (chat == null || chat.username == null) {
-                    return false;
-                }
-                username = chat.username;
-            } else {
+    private boolean processCopyUsername() {
+        final String username;
+        if (user_id != 0) {
+            final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(user_id);
+            if (user == null || user.username == null) {
                 return false;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
-                if (i == 0) {
-                    try {
-                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        android.content.ClipData clip = android.content.ClipData.newPlainText("label", "@" + username);
-                        clipboard.setPrimaryClip(clip);
-                        Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                }
-            });
-            showDialog(builder.create());
-            return true;
+            username = user.username;
+        } else if (chat_id != 0) {
+            final TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(chat_id);
+            if (chat == null || chat.username == null) {
+                return false;
+            }
+            username = chat.username;
+        } else {
+            return false;
+        }
+        try {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("label", "@" + username);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return true;
+    }
+
+    private boolean processOnClickOrPress(final int position) {
+        if (position == usernameRow) {
+            processCopyUsername();
         } else if (position == phoneRow) {
             final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(user_id);
             if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null) {
