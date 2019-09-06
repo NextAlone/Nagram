@@ -692,7 +692,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     PhotoViewer.getInstance().setCaption(parentAlert.getCommentTextView().getText());
                 }
             } else {
-                if (SharedConfig.inappCamera) {
+                if (SharedConfig.inappCamera
+                    && !org.telegram.messenger.MessagesController.getGlobalMainSettings().getBoolean("systemCamera", false)) {
                     openCamera(true);
                 } else {
                     if (parentAlert.delegate != null) {
