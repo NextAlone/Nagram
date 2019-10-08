@@ -4169,7 +4169,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     TLRPC.User user = (TLRPC.User) object;
                     if (user != null) {
-                        if (user.username != null) {
+                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                        final boolean mentionByName = !user.bot && preferences.getBoolean("mentionByName", false);
+                        if (user.username != null && !mentionByName) {
                             chatActivityEnterView.replaceWithText(start, len, "@" + user.username + " ", false);
                         } else {
                             String name = UserObject.getFirstName(user, false);
