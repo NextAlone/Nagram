@@ -1130,6 +1130,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.dialogsNeedReload);
     }
 
+    interface SortArchived {
+        void sort(boolean archived);
+    }
+
     private class ShareDialogsAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context context;
@@ -1152,9 +1156,16 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 dialogsMap.put(dialog.id, dialog);
             }
             ArrayList<TLRPC.Dialog> allDialogs = MessagesController.getInstance(currentAccount).getAllDialogs();
+
+            SortArchived sortArchived = (boolean archived) -> {
+
             for (int a = 0; a < allDialogs.size(); a++) {
                 TLRPC.Dialog dialog = allDialogs.get(a);
                 if (!(dialog instanceof TLRPC.TL_dialog)) {
+                    continue;
+                }
+                // Archived and unarchived dialogs should not be mixed up.
+                if ((dialog.folder_id == 0) == archived) {
                     continue;
                 }
                 int lower_id = (int) dialog.id;
@@ -1175,6 +1186,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     }
                 }
             }
+
+            };
+            sortArchived.sort(false);
+            sortArchived.sort(true);
             notifyDataSetChanged();
         }
 
