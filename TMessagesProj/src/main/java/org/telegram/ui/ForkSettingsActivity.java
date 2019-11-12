@@ -55,6 +55,7 @@ public class ForkSettingsActivity extends BaseFragment {
     private int rearVideoMessages;
     private int replaceForward;
     private int mentionByName;
+    private int hideBottomButton;
 
     private ArrayList<Integer> emptyRows = new ArrayList<Integer>();
     private int syncPinsRow;
@@ -95,6 +96,7 @@ public class ForkSettingsActivity extends BaseFragment {
         rearVideoMessages = rowCount++;
         replaceForward = rowCount++;
         mentionByName = rowCount++;
+        hideBottomButton = SharedConfig.isUserOwner() ? rowCount++ : -1;
     
         emptyRows.add(rowCount++);
         sectionRows.add(rowCount++);
@@ -193,6 +195,8 @@ public class ForkSettingsActivity extends BaseFragment {
                 toggleGlobalMainSetting("replaceForward", view, true);
             } else if (position == mentionByName) {
                 toggleGlobalMainSetting("mentionByName", view, false);
+            } else if (position == hideBottomButton) {
+                toggleGlobalMainSetting("hideBottomButton", view, false);
             } else if (position == syncPinsRow) {
                 toggleGlobalMainSetting("syncPins", view, true);
             } else if (position == hideSensitiveDataRow) {
@@ -264,6 +268,9 @@ public class ForkSettingsActivity extends BaseFragment {
                     } else if (position == mentionByName) {
                         String t = LocaleController.getString("MentionByName", R.string.MentionByName);
                         textCell.setTextAndCheck(t, preferences.getBoolean("mentionByName", false), false);
+                    } else if (position == hideBottomButton) {
+                        String t = LocaleController.getString("HideBottomButton", R.string.HideBottomButton);
+                        textCell.setTextAndCheck(t, preferences.getBoolean("hideBottomButton", false), false);
                     } else if (position == syncPinsRow) {
                         String t = LocaleController.getString("SyncPins", R.string.SyncPins);
                         String info = LocaleController.getString("SyncPinsInfo", R.string.SyncPinsInfo);
@@ -298,6 +305,7 @@ public class ForkSettingsActivity extends BaseFragment {
                         || position == rearVideoMessages
                         || position == replaceForward
                         || position == mentionByName
+                        || position == hideBottomButton
                         || position == syncPinsRow
                         || position == photoHasStickerRow;
             return fork;
@@ -350,6 +358,7 @@ public class ForkSettingsActivity extends BaseFragment {
                 || position == rearVideoMessages
                 || position == replaceForward
                 || position == mentionByName
+                || position == hideBottomButton
                 || position == photoHasStickerRow) {
                 return 3;
             } else if (sectionRows.contains(position)) {
