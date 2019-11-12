@@ -6698,6 +6698,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (getParentActivity() == null) {
                 return;
             }
+            if (MessagesController.getGlobalMainSettings().getBoolean("hideBottomButton", false)) {
+                return;
+            }
             if (chatMode == MODE_PINNED) {
                 finishFragment();
                 chatActivityDelegate.onUnpin(true, bottomOverlayChatText.getTag() == null);
@@ -15877,6 +15880,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", R.string.DeleteThisChat));
             }
+        }
+        if (MessagesController.getGlobalMainSettings().getBoolean("hideBottomButton", false)) {
+            bottomOverlayChatText.setText("");
         }
 
         if (inPreviewMode) {
