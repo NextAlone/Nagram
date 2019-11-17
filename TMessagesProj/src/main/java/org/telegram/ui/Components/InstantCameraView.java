@@ -185,10 +185,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     "uniform float alpha;\n" +
                     "uniform samplerExternalOES sTexture;\n" +
                     "void main() {\n" +
-                    "   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n" +
-                    "   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n" +
-                    "   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n" +
-                    "   gl_FragColor = vec4(color * alpha, alpha);\n" +
+                    "   gl_FragColor = vec4(texture2D(sTexture, vTextureCoord).rgb * alpha, alpha);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SCREEN_SHADER =
