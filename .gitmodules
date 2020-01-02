@@ -4,6 +4,9 @@
 [submodule "TMessagesProj/jni/ffmpeg"]
 	path = TMessagesProj/jni/ffmpeg
 	url = https://github.com/FFmpeg/FFmpeg
+[submodule "TMessagesProj/jni/boringssl"]
+	path = TMessagesProj/jni/boringssl
+	url = https://github.com/google/boringssl
 [submodule "ss-libev/src/main/jni/shadowsocks-libev"]
 	path = ss-libev/src/main/jni/shadowsocks-libev
 	url = https://github.com/shadowsocks/shadowsocks-libev
