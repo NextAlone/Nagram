@@ -1447,6 +1447,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 ((DialogCell) view).startOutAnimation();
                                 parentPage.archivePullViewState = ARCHIVE_ITEM_STATE_SHOWED;
+
+                                if (MessagesController.getGlobalMainSettings().getBoolean("openArchiveOnPull", true)) {
+                                    AndroidUtilities.runOnUIThread(() -> {
+                                        // Open the folder.
+                                        // Delay was taken from PullForegroundDrawable::startOutAnimation().
+                                        Bundle args = new Bundle();
+                                        args.putInt("folderId", 1); // 1 is the ID of the archive folder.
+                                        presentFragment(new DialogsActivity(args));
+                                    }, 200);
+                                }
                             }
                         }
 
