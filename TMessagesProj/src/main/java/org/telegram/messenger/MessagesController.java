@@ -805,6 +805,7 @@ public class MessagesController extends BaseController implements NotificationCe
         animatedEmojisZoom = mainPreferences.getFloat("animatedEmojisZoom", 0.625f);
         qrLoginCamera = mainPreferences.getBoolean("qrLoginCamera", false);
         saveGifsWithStickers = mainPreferences.getBoolean("saveGifsWithStickers", false);
+        youtubePipType = "inapp";
         filtersEnabled = mainPreferences.getBoolean("filtersEnabled", false);
         showFiltersTooltip = mainPreferences.getBoolean("showFiltersTooltip", false);
         autoarchiveAvailable = mainPreferences.getBoolean("autoarchiveAvailable", false);
