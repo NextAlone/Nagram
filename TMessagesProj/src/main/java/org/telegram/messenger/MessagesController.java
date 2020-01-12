@@ -553,6 +553,7 @@ public class MessagesController extends BaseController implements NotificationCe
         suggestedLangCode = mainPreferences.getString("suggestedLangCode", "en");
         animatedEmojisZoom = mainPreferences.getFloat("animatedEmojisZoom", 0.625f);
         qrLoginCamera = mainPreferences.getBoolean("qrLoginCamera", false);
+        youtubePipType = "inapp";
         filtersEnabled = mainPreferences.getBoolean("filtersEnabled", false);
         showFiltersTooltip = mainPreferences.getBoolean("showFiltersTooltip", false);
     }
