@@ -744,6 +744,7 @@ public class EmbedBottomSheet extends BottomSheet {
             }
 
             boolean inAppOnly = isYouTube && "inapp".equals(MessagesController.getInstance(currentAccount).youtubePipType);
+            inAppOnly = true;
             if (!inAppOnly && !checkInlinePermissions()) {
                 return;
             }
@@ -968,7 +969,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 videoView.getTextureImageView().setVisibility(View.INVISIBLE);
             }
             if (currentYoutubeId != null && "disabled".equals(MessagesController.getInstance(currentAccount).youtubePipType)) {
-                pipButton.setVisibility(View.GONE);
+                //pipButton.setVisibility(View.GONE);
             }
         }
 
