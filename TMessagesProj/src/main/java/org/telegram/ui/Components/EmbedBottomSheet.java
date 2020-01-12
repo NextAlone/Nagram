@@ -729,6 +729,7 @@ public class EmbedBottomSheet extends BottomSheet {
         imageButtonsContainer.addView(pipButton, LayoutHelper.createFrame(48, 48, Gravity.TOP | Gravity.LEFT, 0, 0, 4, 0));
         pipButton.setOnClickListener(v -> {
             boolean inAppOnly = isYouTube && "inapp".equals(MessagesController.getInstance(currentAccount).youtubePipType);
+            inAppOnly = true;
             if (!inAppOnly && !checkInlinePermissions()) {
                 return;
             }
@@ -948,7 +949,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 videoView.getTextureImageView().setVisibility(View.INVISIBLE);
             }
             if (currentYoutubeId != null && "disabled".equals(MessagesController.getInstance(currentAccount).youtubePipType)) {
-                pipButton.setVisibility(View.GONE);
+                //pipButton.setVisibility(View.GONE);
             }
         }
 
