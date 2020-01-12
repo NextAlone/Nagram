@@ -221,16 +221,6 @@ public class ApplicationLoader extends Application {
             enabled = preferences.getBoolean("pushService", true);
         } else {
             enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", true);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("pushService", enabled);
-            editor.putBoolean("pushConnection", enabled);
-            editor.apply();
-            SharedPreferences preferencesCA = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
-            SharedPreferences.Editor editorCA = preferencesCA.edit();
-            editorCA.putBoolean("pushConnection", enabled);
-            editorCA.putBoolean("pushService", enabled);
-            editorCA.apply();
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).setPushConnectionEnabled(true);
         }
         if (enabled) {
             try {
