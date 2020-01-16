@@ -156,6 +156,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView, NotificationCenter.NotificationCenterDelegate {
 
+    public static float MAX_STICKER_SIZE = 14.0f;
     public boolean clipToGroupBounds;
 
     public RadialProgress2 getRadialProgress() {
@@ -5526,11 +5527,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     float maxHeight;
                     int maxWidth;
-                    if (AndroidUtilities.isTablet()) {
-                        maxHeight = maxWidth = (int) (AndroidUtilities.getMinTabletSide() * 0.4f);
-                    } else {
-                        maxHeight = maxWidth = (int) (Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * 0.5f);
-                    }
+                    float size = MessagesController.getGlobalMainSettings().getFloat("stickerSize", MAX_STICKER_SIZE) - MAX_STICKER_SIZE;
+                    maxHeight = maxWidth = AndroidUtilities.isTablet()
+                        ? (int) (AndroidUtilities.getMinTabletSide() * (0.4f + size / 40))
+                        : (int) (Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + size / 30));
                     String filter;
                     if (messageObject.isAnimatedEmoji() || messageObject.isDice()) {
                         float zoom = MessagesController.getInstance(currentAccount).animatedEmojisZoom;
