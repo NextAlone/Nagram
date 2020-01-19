@@ -546,6 +546,7 @@ public class AndroidUtilities {
 
     public static boolean isGoogleMapsInstalled(final BaseFragment fragment) {
         return true;
+<<<<<<< HEAD
         /*try {
             ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo("com.google.android.apps.maps", 0);
             return true;
@@ -567,6 +568,8 @@ public class AndroidUtilities {
             fragment.showDialog(builder.create());
             return false;
         }*/
+=======
+>>>>>>> e45f1329... [TF][MAPS] replace Google Maps with OSMDroid
     }
 
     public static int[] toIntArray(List<Integer> integers) {
