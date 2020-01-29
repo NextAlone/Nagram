@@ -137,6 +137,8 @@ import java.util.Locale;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView {
 
+    public static float MAX_STICKER_SIZE = 14.0f;
+
     public interface ChatMessageCellDelegate {
         default void didPressUserAvatar(ChatMessageCell cell, TLRPC.User user, float touchX, float touchY) {
         }
@@ -4754,11 +4756,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     float maxHeight;
                     float maxWidth;
-                    if (AndroidUtilities.isTablet()) {
-                        maxHeight = maxWidth = AndroidUtilities.getMinTabletSide() * 0.4f;
-                    } else {
-                        maxHeight = maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * 0.5f;
-                    }
+                    float size = MessagesController.getGlobalMainSettings().getFloat("stickerSize", MAX_STICKER_SIZE) - MAX_STICKER_SIZE;
+                    maxHeight = maxWidth = AndroidUtilities.isTablet()
+                        ? AndroidUtilities.getMinTabletSide() * (0.4f + size / 40)
+                        : Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * (0.5f + size / 30);
                     String filter;
                     if (messageObject.isAnimatedEmoji() || messageObject.isDice()) {
                         float zoom = MessagesController.getInstance(currentAccount).animatedEmojisZoom;
