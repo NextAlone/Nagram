@@ -270,7 +270,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             lastMediaCount[a] = Math.max(mediaMergeCount[a], 0);
                         }
                         if (did == dialogId && lastMediaCount[a] != 0 && lastLoadMediaCount[a] != mediaCount[a]) {
-                            parentFragment.getMediaDataController().loadMedia(did, lastLoadMediaCount[a] == -1 ? 30 : 20, 0, a, 2, parentFragment.getClassGuid());
+                            parentFragment.getMediaDataController().loadMedia(did, lastLoadMediaCount[a] == -1 ? 30 : 20, 0, a, 2, parentFragment.getClassGuid(), skipPhotos);
                             lastLoadMediaCount[a] = mediaCount[a];
                         }
                     }
@@ -637,6 +637,16 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     private VelocityTracker velocityTracker;
 
     private boolean isActionModeShowed;
+
+    private static boolean skipPhotos = false;
+
+    public void reloadFirstTab(boolean skipPhotosValue) {
+        skipPhotos = skipPhotosValue;
+
+        sharedMediaData[0] = new SharedMediaData();
+        sharedMediaData[0].max_id[0] = ((int) dialog_id) == 0 ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        switchToCurrentSelectedMode(false);
+    }
 
     public SharedMediaLayout(Context context, long did, SharedMediaPreloader preloader, int commonGroupsCount, ArrayList<Integer> sortedUsers, TLRPC.ChatFull chatInfo, ProfileActivity parent) {
         super(context);
@@ -1377,10 +1387,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
                 if (!sharedMediaData[mediaPage.selectedType].endReached[0]) {
                     sharedMediaData[mediaPage.selectedType].loading = true;
-                    profileActivity.getMediaDataController().loadMedia(dialog_id, 50, sharedMediaData[mediaPage.selectedType].max_id[0], type, 1, profileActivity.getClassGuid());
+                    profileActivity.getMediaDataController().loadMedia(dialog_id, 50, sharedMediaData[mediaPage.selectedType].max_id[0], type, 1, profileActivity.getClassGuid(), skipPhotos);
                 } else if (mergeDialogId != 0 && !sharedMediaData[mediaPage.selectedType].endReached[1]) {
                     sharedMediaData[mediaPage.selectedType].loading = true;
-                    profileActivity.getMediaDataController().loadMedia(mergeDialogId, 50, sharedMediaData[mediaPage.selectedType].max_id[1], type, 1, profileActivity.getClassGuid());
+                    profileActivity.getMediaDataController().loadMedia(mergeDialogId, 50, sharedMediaData[mediaPage.selectedType].max_id[1], type, 1, profileActivity.getClassGuid(), skipPhotos);
                 }
             }
             if (mediaPages[0].listView == recyclerView && (mediaPages[0].selectedType == 0 || mediaPages[0].selectedType == 5) && firstVisibleItem != RecyclerView.NO_POSITION) {
@@ -1956,7 +1966,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 sharedMediaData[type].endReached[loadIndex] = (Boolean) args[5];
                 if (loadIndex == 0 && sharedMediaData[type].endReached[loadIndex] && mergeDialogId != 0) {
                     sharedMediaData[type].loading = true;
-                    profileActivity.getMediaDataController().loadMedia(mergeDialogId, 50, sharedMediaData[type].max_id[1], type, 1, profileActivity.getClassGuid());
+                    profileActivity.getMediaDataController().loadMedia(mergeDialogId, 50, sharedMediaData[type].max_id[1], type, 1, profileActivity.getClassGuid(), skipPhotos);
                 }
                 if (adapter != null) {
                     for (int a = 0; a < mediaPages.length; a++) {
@@ -2649,7 +2659,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             } else {
                 if (!sharedMediaData[mediaPages[a].selectedType].loading && !sharedMediaData[mediaPages[a].selectedType].endReached[0] && sharedMediaData[mediaPages[a].selectedType].messages.isEmpty()) {
                     sharedMediaData[mediaPages[a].selectedType].loading = true;
-                    profileActivity.getMediaDataController().loadMedia(dialog_id, 50, 0, mediaPages[a].selectedType, 1, profileActivity.getClassGuid());
+                    profileActivity.getMediaDataController().loadMedia(dialog_id, 50, 0, mediaPages[a].selectedType, 1, profileActivity.getClassGuid(), skipPhotos);
                 }
                 if (sharedMediaData[mediaPages[a].selectedType].loading && sharedMediaData[mediaPages[a].selectedType].messages.isEmpty()) {
                     mediaPages[a].progressView.setVisibility(View.VISIBLE);
