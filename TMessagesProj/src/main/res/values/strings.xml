@@ -5480,4 +5480,5 @@
     <string name="HideBottomButton">Hide Bottom Button</string>
     <string name="OpenArchiveOnPull">Open Archive on Pulldown</string>
     <string name="StickerSize">Sticker Size</string>
+    <string name="DisableFlipPhotos">Disable Flip Photos by Tapping</string>
 </resources>
