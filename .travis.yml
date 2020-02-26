@@ -4,8 +4,8 @@ jdk:
   - openjdk8
 android:
   components:
-    - build-tools-28.0.3
-    - android-28
+    - build-tools-29.0.2
+    - android-29
 addons:
   apt_packages:
     - ninja-build
@@ -19,7 +19,6 @@ before_script:
   - export NDK=$ANDROID_HOME/ndk-bundle
   - export NINJA_PATH=/usr/bin/ninja
   - export PATH=`echo $ANDROID_HOME/cmake/*/bin`:$PATH
-  - echo -e "APP_ID = ${APP_ID}\nAPP_HASH = ${APP_HASH}" > API_KEYS
 script:
   # If some stage fails, exit inmediatly
   - set -e
@@ -32,9 +31,3 @@ script:
   - "cd ../.."
   # Build
   - "./gradlew assembleAfatRelease"
-
-after_success:
-  - "./gradlew test"
-
-after_script:
-  - "rm API_KEYS"
