@@ -55,6 +55,8 @@ import java.util.concurrent.CountDownLatch;
 import kotlin.collections.ArraysKt;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.FilterPopup;
+import androidx.core.app.NotificationManagerCompat;
+
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.ThreadUtil;
@@ -1707,11 +1709,11 @@ public class MessagesController extends BaseController implements NotificationCe
         DialogsActivity.dialogsLoaded[currentAccount] = false;
 
         SharedPreferences.Editor editor = notificationsPreferences.edit();
-        editor.clear().apply();
+        editor.clear().commit();
         editor = emojiPreferences.edit();
-        editor.putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).apply();
+        editor.putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
         editor = mainPreferences.edit();
-        editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").remove("themehint").apply();
+        editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").remove("themehint").commit();
 
         lastScheduledServerQueryTime.clear();
         reloadingWebpages.clear();
@@ -1742,9 +1744,6 @@ public class MessagesController extends BaseController implements NotificationCe
         dialogsUsersOnly.clear();
         dialogMessagesByIds.clear();
         dialogMessagesByRandomIds.clear();
-
-        FilterPopup.getInstance(currentAccount).cleanup();
-
         channelAdmins.clear();
         loadingChannelAdmins.clear();
         users.clear();
@@ -11866,9 +11865,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 dialogsUsersOnly.remove(dialog);
                 dialogsForward.remove(dialog);
-
-                FilterPopup.getInstance(currentAccount).remove(dialog);
-
                 dialogs_dict.remove(dialog.id);
                 dialogs_read_inbox_max.remove(dialog.id);
                 dialogs_read_outbox_max.remove(dialog.id);
@@ -12005,7 +12001,6 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void sortDialogs(SparseArray<TLRPC.Chat> chatsDict) {
-        FilterPopup.getInstance(currentAccount).cleanup();
         dialogsServerOnly.clear();
         dialogsCanAddUsers.clear();
         dialogsChannelsOnly.clear();
@@ -12125,7 +12120,6 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC.Dialog d = allDialogs.get(a);
             int high_id = (int) (d.id >> 32);
             int lower_id = (int) d.id;
-            FilterPopup.getInstance(currentAccount).sortDialogs(d, high_id, lower_id);
             if (d instanceof TLRPC.TL_dialog) {
                 MessageObject messageObject = dialogMessage.get(d.id);
                 if (messageObject != null && messageObject.messageOwner.date < dialogsLoadedTillDate) {

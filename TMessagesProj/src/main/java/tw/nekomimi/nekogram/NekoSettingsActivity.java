@@ -20,11 +20,33 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import org.telegram.messenger.*;
+
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.*;
-import org.telegram.ui.Cells.*;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.EmptyCell;
+import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.NotificationsCheckCell;
+import org.telegram.ui.Cells.RadioColorCell;
+import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Cells.TextCheckCell;
+import org.telegram.ui.Cells.TextDetailSettingsCell;
+import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -53,11 +75,6 @@ public class NekoSettingsActivity extends BaseFragment {
     private int sortMenuRow;
     private int filterMenuRow;
     private int dialogs2Row;
-
-    private int dialogsFilterRow;
-    private int openFilterByActionBarRow;
-    private int openFilterByFabRow;
-    private int dialogsFilter2Row;
 
     private int chatRow;
     private int inappCameraRow;
@@ -137,17 +154,9 @@ public class NekoSettingsActivity extends BaseFragment {
 
         listView = new RecyclerListView(context);
         listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean supportsPredictiveItemAnimations() {
-                return false;
-            }
-        });
-        listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
-        listView.setAdapter(listAdapter);
-        listView.setItemAnimator(null);
-        listView.setLayoutAnimation(null);
+        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
+        listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == ipv6Row) {
                 NekoConfig.toggleIPv6();
@@ -520,16 +529,6 @@ public class NekoSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.openArchiveOnPull);
                 }
-            } else if (position == openFilterByActionBarRow) {
-                NekoConfig.toggleOpenFilterByActionBar();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.openFilterByActionBar);
-                }
-            } else if (position == openFilterByFabRow) {
-                NekoConfig.toggleOpenFilterByFab();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.openFilterByFab);
-                }
             } else if (position == hideKeyboardOnChatScrollRow) {
                 NekoConfig.toggleHideKeyboardOnChatScroll();
                 if (view instanceof TextCheckCell) {
@@ -546,12 +545,12 @@ public class NekoSettingsActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableSystemAccount);
                 }
             } else if (position == avatarAsDrawerBackgroundRow) {
-            NekoConfig.toggleAvatarAsDrawerBackground();
-            NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(NekoConfig.avatarAsDrawerBackground);
+                NekoConfig.toggleAvatarAsDrawerBackground();
+                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.avatarAsDrawerBackground);
+                }
             }
-        }
 
         });
 
@@ -572,18 +571,13 @@ public class NekoSettingsActivity extends BaseFragment {
 
         connectionRow = rowCount++;
         ipv6Row = rowCount++;
-        disableProxyWhenVpnEnabledRow = rowCount ++;
+        disableProxyWhenVpnEnabledRow = rowCount++;
         connection2Row = rowCount++;
 
         dialogsRow = rowCount++;
         sortMenuRow = rowCount++;
         filterMenuRow = rowCount++;
         dialogs2Row = rowCount++;
-
-        dialogsFilterRow = rowCount++;
-        openFilterByActionBarRow = rowCount++;
-        openFilterByFabRow = rowCount++;
-        dialogsFilter2Row = rowCount++;
 
         chatRow = rowCount++;
         inappCameraRow = rowCount++;
@@ -592,7 +586,7 @@ public class NekoSettingsActivity extends BaseFragment {
         ignoreBlockedRow = rowCount++;
         hideProxySponsorChannelRow = rowCount++;
         saveCacheToSdcardRow = rowCount++;
-        skipOpenLinkConfiirm = rowCount ++;
+        skipOpenLinkConfiirm = rowCount++;
         pauseMusicOnRecordRow = rowCount++;
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
@@ -1302,10 +1296,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedPinnedDialogs", R.string.UnlimitedPinnedDialogs), LocaleController.getString("UnlimitedPinnedDialogsAbout", R.string.UnlimitedPinnedDialogsAbout), NekoConfig.unlimitedPinnedDialogs, true, deleteAccountRow != -1);
                     } else if (position == openArchiveOnPullRow) {
                         textCell.setTextAndCheck(LocaleController.getString("OpenArchiveOnPull", R.string.OpenArchiveOnPull), NekoConfig.openArchiveOnPull, true);
-                    } else if (position == openFilterByActionBarRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("TapOnActionBar", R.string.TapOnActionBar), NekoConfig.openFilterByActionBar, true);
-                    } else if (position == openFilterByFabRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("TapOnFab", R.string.TapOnFab), NekoConfig.openFilterByFab, false);
                     } else if (position == hideKeyboardOnChatScrollRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HideKeyboardOnChatScroll", R.string.HideKeyboardOnChatScroll), NekoConfig.hideKeyboardOnChatScroll, true);
                     } else if (position == disableSystemAccountRow) {
@@ -1327,10 +1317,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
                     } else if (position == experimentRow) {
                         headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
-                    } else if (position == dialogsFilterRow) {
-                        headerCell.setText(LocaleController.getString("OpenDialogsFilterBy", R.string.OpenDialogsFilterBy));
-                    } else if (position == dialogsRow) {
-                        headerCell.setText(LocaleController.getString("DialogsSettings", R.string.DialogsSettings));
                     } else if (position == privacyRow) {
                         headerCell.setText(LocaleController.getString("PrivacyTitle", R.string.PrivacyTitle));
                     }
@@ -1358,8 +1344,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
-                    position == openFilterByActionBarRow || position == openFilterByFabRow || position == hideKeyboardOnChatScrollRow ||
-                    position == sortMenuRow || position == filterMenuRow || position == disableSystemAccountRow  || position == avatarAsDrawerBackgroundRow;
+                    position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == filterMenuRow || position == disableSystemAccountRow  || position == avatarAsDrawerBackgroundRow;
         }
 
         @Override
@@ -1401,8 +1386,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == connection2Row || position == chat2Row || position == experiment2Row || position == dialogs2Row || position == dialogsFilter2Row
-                    || position == privacy2Row) {
+            if (position == connection2Row || position == chat2Row || position == experiment2Row|| position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
                     position == filterMenuRow || position == sortMenuRow ||
@@ -1415,11 +1399,10 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == saveCacheToSdcardRow || position == unlimitedFavedStickersRow || position == skipOpenLinkConfiirm ||
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
-                    position == openFilterByActionBarRow || position == openFilterByFabRow || position == hideKeyboardOnChatScrollRow ||
-                    position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow) {
+                    position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow) {
                 return 3;
             } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow ||
-                    position == dialogsRow || position == dialogsFilterRow || position == privacyRow) {
+                    position == dialogsRow || position == privacyRow) {
                 return 4;
             } else if (position == needRestartRow) {
                 return 7;

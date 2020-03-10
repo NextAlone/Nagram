@@ -30,7 +30,6 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -38,7 +37,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
@@ -152,7 +150,6 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
