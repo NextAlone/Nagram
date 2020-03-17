@@ -1071,6 +1071,34 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         undoStore.unregisterUndo(entityView.getUUID());
     }
 
+    private TextView resetRotationEntity(EntityView entityView) {
+        if (entityView == null) {
+            return null;
+        }
+        float degrees = 0.0f;
+        final float r = entityView.getRotation();
+        if (r % 90.0f == 0) {
+            degrees = r + 90.0f;
+        }
+        if (degrees >= 360) {
+            degrees -= 360;
+        }
+        final float finalDegrees = degrees;
+
+        TextView rotationView = createMenuViewItem();
+        rotationView.setText((int)degrees + "°");
+        rotationView.setOnClickListener(v -> {
+            editedTextRotation = finalDegrees;
+            entityView.setRotation(editedTextRotation);
+
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss(true);
+            }
+        });
+
+        return rotationView;
+    }
+
     private void duplicateSelectedEntity() {
         if (currentEntityView == null) {
             return;
@@ -1272,6 +1300,18 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
+    private TextView createMenuViewItem() {
+        TextView view = new TextView(getContext());
+        view.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubmenuItem));
+        view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        view.setGravity(Gravity.CENTER_VERTICAL);
+        view.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(14), 0);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        view.setTag(0);
+        view.setWidth(AndroidUtilities.dp(200));
+        return view;
+    }
+
     private int[] pos = new int[2];
     private int[] getCenterLocationInWindow(View view) {
         view.getLocationInWindow(pos);
@@ -1297,15 +1337,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
         showPopup(() -> {
             LinearLayout parent = new LinearLayout(getContext());
-            parent.setOrientation(LinearLayout.HORIZONTAL);
+            parent.setMinimumWidth(AndroidUtilities.dp(200));
+            parent.setOrientation(LinearLayout.VERTICAL);
 
-            TextView deleteView = new TextView(getContext());
-            deleteView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubmenuItem));
-            deleteView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            deleteView.setGravity(Gravity.CENTER_VERTICAL);
-            deleteView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(14), 0);
-            deleteView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            deleteView.setTag(0);
+            TextView deleteView = createMenuViewItem();
             deleteView.setText(LocaleController.getString("PaintDelete", R.string.PaintDelete));
             deleteView.setOnClickListener(v -> {
                 removeEntity(entityView);
@@ -1317,13 +1352,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             parent.addView(deleteView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 48));
 
             if (entityView instanceof TextPaintView) {
-                TextView editView = new TextView(getContext());
-                editView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubmenuItem));
-                editView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                editView.setGravity(Gravity.CENTER_VERTICAL);
-                editView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
-                editView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                editView.setTag(1);
+                TextView editView = createMenuViewItem();
                 editView.setText(LocaleController.getString("PaintEdit", R.string.PaintEdit));
                 editView.setOnClickListener(v -> {
                     editSelectedTextEntity();
@@ -1335,13 +1364,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 parent.addView(editView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 48));
             }
 
-            TextView duplicateView = new TextView(getContext());
-            duplicateView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubmenuItem));
-            duplicateView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            duplicateView.setGravity(Gravity.CENTER_VERTICAL);
-            duplicateView.setPadding(AndroidUtilities.dp(14), 0, AndroidUtilities.dp(16), 0);
-            duplicateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            duplicateView.setTag(2);
+            TextView duplicateView = createMenuViewItem();
             duplicateView.setText(LocaleController.getString("PaintDuplicate", R.string.PaintDuplicate));
             duplicateView.setOnClickListener(v -> {
                 duplicateSelectedEntity();
@@ -1351,6 +1374,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 }
             });
             parent.addView(duplicateView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 48));
+
+            parent.addView(
+                resetRotationEntity(entityView),
+                LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 48));
 
             popupLayout.addView(parent);
 
