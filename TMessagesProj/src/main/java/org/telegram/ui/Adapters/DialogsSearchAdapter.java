@@ -474,6 +474,33 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         });
     }
 
+    public int getRecentItemPosition(int i) {
+        if (isRecentSearchDisplayed()) {
+            int offset = (!MediaDataController.getInstance(currentAccount).hints.isEmpty() ? 2 : 0);
+            if (i > offset && i - 1 - offset < recentSearchObjects.size()) {
+                return i - 1 - offset;
+            }
+        }
+        return -1;
+    }
+
+    public void clearRecentSearchPosition(int position) {
+        long did = recentSearchObjects.get(position).did;
+        recentSearchObjects.remove(position);
+        recentSearchObjectsById.remove(did);
+        notifyDataSetChanged();
+        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+            try {
+                SQLitePreparedStatement state = MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("DELETE FROM search_recent WHERE did=?");
+                state.bindLong(1, did);
+                state.step();
+                state.dispose();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
     public void addHashtagsFromMessage(CharSequence message) {
         searchAdapterHelper.addHashtagsFromMessage(message);
     }

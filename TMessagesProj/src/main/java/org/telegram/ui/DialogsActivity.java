@@ -2546,22 +2546,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
         if (adapter == dialogsSearchAdapter) {
-            Object item = dialogsSearchAdapter.getItem(position);
-            /*if (item instanceof String || dialogsSearchAdapter.isRecentSearchDisplayed()) {
+            int recentPosition = dialogsSearchAdapter.getRecentItemPosition(position);
+            if (recentPosition != -1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
-                    if (dialogsSearchAdapter.isRecentSearchDisplayed()) {
-                        dialogsSearchAdapter.clearRecentSearch();
-                    } else {
-                        dialogsSearchAdapter.clearRecentHashtags();
-                    }
-                });
+                builder.setTitle(LocaleController.getString("DeleteThisChat", R.string.DeleteThisChat));
+                builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete).toUpperCase(), (dialogInterface, i) -> dialogsSearchAdapter.clearRecentSearchPosition(recentPosition));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                showDialog(builder.create());
+                AlertDialog dialog = builder.create();
+                showDialog(dialog);
+                TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                if (button != null) {
+                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                }
                 return true;
-            }*/
+            }
             return false;
         }
         final TLRPC.Dialog dialog;
