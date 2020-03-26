@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.*;
@@ -83,6 +84,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int transparentStatusBarRow;
     private int forceTabletRow;
     private int openArchiveOnPullRow;
+    private int avatarAsDrawerBackgroundRow;
     private int eventTypeRow;
     private int newYearRow;
     private int actionBarDecorationRow;
@@ -546,7 +548,13 @@ public class NekoSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableSystemAccount);
                 }
+            } else if (position == avatarAsDrawerBackgroundRow) {
+            NekoConfig.toggleAvatarAsDrawerBackground();
+            NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(NekoConfig.avatarAsDrawerBackground);
             }
+        }
 
         });
 
@@ -604,6 +612,7 @@ public class NekoSettingsActivity extends BaseFragment {
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
         forceTabletRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
+        avatarAsDrawerBackgroundRow = rowCount++;
         nameOrderRow = rowCount++;
         eventTypeRow = NekoXConfig.developerMode ? rowCount++ : -1;
         newYearRow = NekoXConfig.developerMode ? rowCount++ : -1;
@@ -803,6 +812,11 @@ public class NekoSettingsActivity extends BaseFragment {
                         break;
                     }
                     case 5: {
+                        NekoConfig.toggleShowMessageDetails();
+                        textCell.setChecked(NekoConfig.showMessageDetails);
+                        break;
+                    }
+                    case 6: {
                         NekoConfig.toggleShowTranslate();
                         textCell.setChecked(NekoConfig.showTranslate);
                         break;
@@ -1253,19 +1267,12 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
-
                     if (position == ipv6Row) {
                         textCell.setTextAndCheck(LocaleController.getString("IPv6", R.string.IPv6), NekoConfig.useIPv6, false);
-                    } else if (position == disableProxyWhenVpnEnabledRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableProxyWhenVpnEnabled", R.string.DisableProxyWhenVpnEnabled), NekoXConfig.disableProxyWhenVpnEnabled, true);
                     } else if (position == hidePhoneRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, true);
-                    } else if (position == disableUndoRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableUndo", R.string.DisableUndo), NekoXConfig.disableUndo, true);
                     } else if (position == inappCameraRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera), SharedConfig.inappCamera, true);
-                    } else if (position == disableChatActionRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableChatAction", R.string.DisableChatAction), NekoXConfig.disableChatAction, true);
                     } else if (position == transparentStatusBarRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), NekoConfig.transparentStatusBar, true);
                     } else if (position == hideProxySponsorChannelRow) {
@@ -1307,6 +1314,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("HideKeyboardOnChatScroll", R.string.HideKeyboardOnChatScroll), NekoConfig.hideKeyboardOnChatScroll, true);
                     } else if (position == disableSystemAccountRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableSystemAccount", R.string.DisableSystemAccount), NekoXConfig.disableSystemAccount, true);
+                    } else if (position == avatarAsDrawerBackgroundRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UseAvatarAsDrawerBackground", R.string.UseAvatarAsDrawerBackground), NekoConfig.avatarAsDrawerBackground, true);
                     }
 
 
@@ -1354,7 +1363,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == openFilterByActionBarRow || position == openFilterByFabRow || position == hideKeyboardOnChatScrollRow ||
-                    position == sortMenuRow || position == filterMenuRow || position == disableSystemAccountRow;
+                    position == sortMenuRow || position == filterMenuRow || position == disableSystemAccountRow  || position == avatarAsDrawerBackgroundRow;
         }
 
         @Override
@@ -1410,7 +1419,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == openFilterByActionBarRow || position == openFilterByFabRow || position == hideKeyboardOnChatScrollRow ||
-                    position == disableSystemAccountRow) {
+                    position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow) {
                 return 3;
             } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow ||
                     position == dialogsRow || position == dialogsFilterRow || position == privacyRow) {
