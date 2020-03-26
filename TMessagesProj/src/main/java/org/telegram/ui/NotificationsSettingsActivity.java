@@ -9,6 +9,7 @@
 package org.telegram.ui;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.FileLog;
@@ -59,7 +61,9 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -572,12 +576,35 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 }
             } else if (position == notificationsServiceRow) {
-                SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                enabled = preferences.getBoolean("pushService", getMessagesController().keepAliveService);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("pushService", !enabled);
-                editor.commit();
-                ApplicationLoader.startPushService();
+                if (XiaomiUtilities.isMIUI() && !XiaomiUtilities.isCustomPermissionGranted(XiaomiUtilities.OP_AUTO_START)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Telegram");
+                    builder.setMessage(LocaleController.getString("MIUIPermissionNote",R.string.MIUIPermissionNote));
+                    builder.setPositiveButton(LocaleController.getString("OK",R.string.OK),(_x,_y) -> {
+
+                        getParentActivity().startActivity(XiaomiUtilities.getPermissionManagerIntent());
+
+                    });
+                    builder.setNegativeButton(LocaleController.getString("Cancel",R.string.Cancel),null);
+                    builder.show();
+                    return;
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    if (openNotificationListenSettings()) {
+                        if (isNotificationListenerEnabled()) {
+                            AlertsCreator.showSimpleToast(null, LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
+                        } else {
+                            AlertsCreator.showSimpleToast(null, LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
+                        }
+                    }
+                } else {
+                    SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+                    enabled = preferences.getBoolean("pushService", getMessagesController().keepAliveService);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("pushService", !enabled);
+                    editor.commit();
+                    ApplicationLoader.startPushService();
+                }
             } else if (position == callsVibrateRow) {
                 if (getParentActivity() == null) {
                     return;
@@ -626,6 +653,40 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         });
 
         return fragmentView;
+    }
+
+    public boolean isNotificationListenerEnabled() {
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(getParentActivity());
+        if (packageNames.contains(getParentActivity().getPackageName())) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean openNotificationListenSettings() {
+        try {
+            Intent intent;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+            } else {
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            }
+            getParentActivity().startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            try {
+                Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.Settings$NotificationAccessSettingsActivity");
+                intent.setComponent(cn);
+                intent.putExtra(":settings:show_fragment", "NotificationAccessSettings");
+                getParentActivity().startActivity(intent);
+                return true;
+            } catch (Exception ex) {
+                AlertsCreator.showSimpleToast(this,"Open NotificationAccessSettings Error");
+            }
+        }
+        return false;
     }
 
     @Override
@@ -821,7 +882,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == androidAutoAlertRow) {
                         checkCell.setTextAndCheck("Android Auto", preferences.getBoolean("EnableAutoNotifications", false), true);
                     } else if (position == notificationsServiceRow) {
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? isNotificationListenerEnabled() : preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
                     } else if (position == notificationsServiceConnectionRow) {
                         checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", getMessagesController().backgroundConnection), true, true);
                     } else if (position == badgeNumberShowRow) {
@@ -1022,4 +1083,5 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 new ThemeDescription(listView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteLinkText),
         };
     }
+
 }

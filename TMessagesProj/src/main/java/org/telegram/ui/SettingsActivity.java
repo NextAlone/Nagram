@@ -131,6 +131,7 @@ import java.util.zip.ZipOutputStream;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoSettingsActivity;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -283,7 +284,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         rowCount = 0;
         emptyRow = rowCount++;
         numberSectionRow = rowCount++;
-        if(!NekoConfig.hidePhone){
+        if (!NekoConfig.hidePhone) {
             numberRow = rowCount++;
         }
         usernameRow = rowCount++;
@@ -453,31 +454,44 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         listView.setItemAnimator(null);
         listView.setLayoutAnimation(null);
         listView.setClipToPadding(false);
-        listView.setOnItemClickListener((view, position) -> {
-            if (position == notificationRow) {
-                presentFragment(new NotificationsSettingsActivity());
-            } else if (position == privacyRow) {
-                presentFragment(new PrivacySettingsActivity());
-            } else if (position == dataRow) {
-                presentFragment(new DataSettingsActivity());
-            } else if (position == chatRow) {
-                presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC));
-            } else if (position == devicesRow) {
-                presentFragment(new SessionsActivity(0));
-            } else if (position == nekoRow) {
-                presentFragment(new NekoSettingsActivity());
-            } else if (position == helpRow) {
-                showHelpAlert();
-            } else if (position == languageRow) {
-                presentFragment(new LanguageSelectActivity());
-            } else if (position == usernameRow) {
-                presentFragment(new ChangeUsernameActivity());
-            } else if (position == bioRow) {
-                if (userInfo != null) {
-                    presentFragment(new ChangeBioActivity());
+        listView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() {
+
+            private int pressCount = 0;
+
+            @Override
+            public void onItemClick(View view, int position) {
+
+                if (position == notificationRow) {
+                    presentFragment(new NotificationsSettingsActivity());
+                } else if (position == privacyRow) {
+                    presentFragment(new PrivacySettingsActivity());
+                } else if (position == dataRow) {
+                    presentFragment(new DataSettingsActivity());
+                } else if (position == chatRow) {
+                    presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC));
+                } else if (position == devicesRow) {
+                    presentFragment(new SessionsActivity(0));
+                } else if (position == nekoRow) {
+                    presentFragment(new NekoSettingsActivity());
+                } else if (position == helpRow) {
+                    showHelpAlert();
+                } else if (position == languageRow) {
+                    presentFragment(new LanguageSelectActivity());
+                } else if (position == usernameRow) {
+                    presentFragment(new ChangeUsernameActivity());
+                } else if (position == bioRow) {
+                    if (userInfo != null) {
+                        presentFragment(new ChangeBioActivity());
+                    }
+                } else if (position == numberRow) {
+                    presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
+                } else if (position == versionRow) {
+                    pressCount++;
+                    if (pressCount == 8) {
+                        NekoXConfig.developerModeEntrance = true;
+                        Toast.makeText(getParentActivity(), "¯\\_(ツ)_/¯", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            } else if (position == numberRow) {
-                presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
             }
         });
 
@@ -503,10 +517,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
                                 null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? "Check for app updates" : null,
+                                null,
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
                                 SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
-                                BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null
+                                BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
+                                NekoXConfig.developerModeEntrance ? (NekoXConfig.developerMode ? LocaleController.getString("DisableDeveloperMode", R.string.DisableDeveloperMode) : LocaleController.getString("EnableDeveloperMode", R.string.EnableDeveloperMode)) : null
+
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -521,6 +537,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 MessagesController.getInstance(currentAccount).forceResetDialogs();
                             } else if (which == 4) {
                                 BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
+                                BuildVars.DEBUG_VERSION = BuildVars.LOGS_ENABLED;
+                                BuildVars.DEBUG_PRIVATE_VERSION = BuildVars.LOGS_ENABLED;
                                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
                                 sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
                             } else if (which == 5) {
@@ -536,7 +554,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 8) {
                                 SharedConfig.toggleRoundCamera16to9();
                             } else if (which == 9) {
-                                ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                             } else if (which == 10) {
                                 MessagesStorage.getInstance(currentAccount).readAllDialogs(-1);
                             } else if (which == 11) {
@@ -546,6 +563,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 if (SharedConfig.smoothKeyboard && getParentActivity() != null) {
                                     getParentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                                 }
+                            } else if (which == 13) {
+                                NekoXConfig.toggleDeveloperMode();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1347,8 +1366,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 float scale = 1.0f + 0.12f * diff;
                 nameTextView.setScaleX(scale);
                 nameTextView.setScaleY(scale);
-                idTextView.setTranslationX( -21 * AndroidUtilities.density * diff);
-                idTextView.setTranslationY( (float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float)Math.floor(22 * AndroidUtilities.density) * diff);
+                idTextView.setTranslationX(-21 * AndroidUtilities.density * diff);
+                idTextView.setTranslationY((float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float) Math.floor(22 * AndroidUtilities.density) * diff);
                 if (diff > 0.85 && !searchMode) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {

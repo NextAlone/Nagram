@@ -45,6 +45,9 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -57,12 +60,18 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
+import tw.nekomimi.nekogram.utils.HttpUtil;
+import tw.nekomimi.nekogram.utils.ThreadUtil;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -74,6 +83,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -445,139 +455,45 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     protected String downloadUrlContent(AsyncTask parentTask, String url, HashMap<String, String> headers, boolean tryGzip) {
-        boolean canRetry = true;
-        InputStream httpConnectionStream = null;
-        boolean done = false;
-        StringBuilder result = null;
-        URLConnection httpConnection = null;
-        try {
-            URL downloadUrl = new URL(url);
-            httpConnection = downloadUrl.openConnection();
-            httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
-            if (tryGzip) {
-                httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
-            }
-            httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
-            httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-            if (headers != null) {
-                for (HashMap.Entry<String, String> entry : headers.entrySet()) {
-                    httpConnection.addRequestProperty(entry.getKey(), entry.getValue());
-                }
-            }
-            httpConnection.setConnectTimeout(5000);
-            httpConnection.setReadTimeout(5000);
-            if (httpConnection instanceof HttpURLConnection) {
-                HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
-                httpURLConnection.setInstanceFollowRedirects(true);
-                int status = httpURLConnection.getResponseCode();
-                if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER) {
-                    String newUrl = httpURLConnection.getHeaderField("Location");
-                    String cookies = httpURLConnection.getHeaderField("Set-Cookie");
-                    downloadUrl = new URL(newUrl);
-                    httpConnection = downloadUrl.openConnection();
-                    httpConnection.setRequestProperty("Cookie", cookies);
-                    httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
-                    if (tryGzip) {
-                        httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
-                    }
-                    httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
-                    httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                    httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                    if (headers != null) {
-                        for (HashMap.Entry<String, String> entry : headers.entrySet()) {
-                            httpConnection.addRequestProperty(entry.getKey(), entry.getValue());
-                        }
-                    }
-                }
-            }
-            httpConnection.connect();
-            if (tryGzip) {
-                try {
-                    httpConnectionStream = new GZIPInputStream(httpConnection.getInputStream());
-                } catch (Exception e) {
-                    try {
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                    } catch (Exception ignore) {
 
-                    }
-                    httpConnection = downloadUrl.openConnection();
-                    httpConnection.connect();
-                    httpConnectionStream = httpConnection.getInputStream();
-                }
-            } else {
-                httpConnectionStream = httpConnection.getInputStream();
-            }
-        } catch (Throwable e) {
-            if (e instanceof SocketTimeoutException) {
-                if (ApplicationLoader.isNetworkOnline()) {
-                    canRetry = false;
-                }
-            } else if (e instanceof UnknownHostException) {
-                canRetry = false;
-            } else if (e instanceof SocketException) {
-                if (e.getMessage() != null && e.getMessage().contains("ECONNRESET")) {
-                    canRetry = false;
-                }
-            } else if (e instanceof FileNotFoundException) {
-                canRetry = false;
-            }
-            FileLog.e(e);
+        OkHttpClient client = HttpUtil.getOkhttpClientWithCurrProxy().newBuilder()
+                .followRedirects(true)
+                .followSslRedirects(true)
+                .build();
+
+        Request.Builder request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)")
+                .header("Accept-Language", "en-us,en;q=0.5")
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                .header("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+
+            request.addHeader(header.getKey(),header.getValue());
+
         }
 
-        if (canRetry) {
+        if (tryGzip) {
+
+            request.addHeader("Accept-Encoding", "gzip, deflate");
+
+        }
+
+        int count = 0;
+
+        do {
             try {
-                if (httpConnection instanceof HttpURLConnection) {
-                    int code = ((HttpURLConnection) httpConnection).getResponseCode();
-                    if (code != HttpURLConnection.HTTP_OK && code != HttpURLConnection.HTTP_ACCEPTED && code != HttpURLConnection.HTTP_NOT_MODIFIED) {
-                        //canRetry = false;
-                    }
-                }
+                return client.newCall(request.build()).execute().body().string();
             } catch (Exception e) {
                 FileLog.e(e);
             }
+            count ++;
+            ThreadUtil.sleep(1000);
+        } while (count < 3);
 
-            if (httpConnectionStream != null) {
-                try {
-                    byte[] data = new byte[1024 * 32];
-                    while (true) {
-                        if (parentTask.isCancelled()) {
-                            break;
-                        }
-                        try {
-                            int read = httpConnectionStream.read(data);
-                            if (read > 0) {
-                                if (result == null) {
-                                    result = new StringBuilder();
-                                }
-                                result.append(new String(data, 0, read, StandardCharsets.UTF_8));
-                            } else if (read == -1) {
-                                done = true;
-                                break;
-                            } else {
-                                break;
-                            }
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                            break;
-                        }
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-            }
+        return null;
 
-            try {
-                if (httpConnectionStream != null) {
-                    httpConnectionStream.close();
-                }
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-        }
-        return done ? result.toString() : null;
     }
 
     private class YoutubeVideoTask extends AsyncTask<Void, Void, String[]> {

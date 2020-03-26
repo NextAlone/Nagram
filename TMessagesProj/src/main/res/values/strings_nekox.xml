@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="NekoXProxy">NekoX Public Proxy</string>
+    <string name="PublicPrefix">[ Public ]</string>
+    <string name="NekoXProxyInfo">It may take tens of seconds to load the NekoX Public built-in proxy :)</string>
+
+    <string name="DisableChatAction">Don\'t send my input status</string>
+    <string name="FakeScreenshot">Pretend screenshot</string>
+    <string name="SaveCacheToSdcard">Save cache to sdcard*</string>
+
+    <string name="NotificationsUnread">Unread</string>
+    <string name="NotificationsUnmutedAndUnread">Unmuted &amp; Unread</string>
+
+    <string name="DialogsSettings">Dialogs Settings</string>
+    <string name="SortMenu">Dialog Sort Settings</string>
+    <string name="SortByUnread">Sort By Unread</string>
+    <string name="SortByUnmuted">Sort By Unmuted</string>
+    <string name="SortByUser">Sort By User</string>
+    <string name="SortByContacts">Sort By Contacts</string>
+
+    <string name="NekoXPushService">NekoX Push Service</string>
+    <string name="EnablePushAlert">Please enable "NekoX Push Service"</string>
+    <string name="DisablePushAlert">Please disable "NekoX Push Service"</string>
+
+    <string name="MIUIPermissionNote">For MIUI users, please enable auto-start permission for NekoX to receive notifications normally.</string>
+
+    <string name="DisableUndo">Disable Undo</string>
+    <string name="DisableSystemAccount">Disable System Account</string>
+    <string name="FilterMenu">Dialogs Filter Menu</string>
+
+    <string name="DisableProxyWhenVpnEnabled">Disable proxy when VPN enabled</string>
+    <string name="SkipOpenLinkConfirm">Skip open link confirm</string>
+
+    <string name="DeleteAllInChat">Delete all in chat</string>
+    <string name="DeleteAllInChatAlert">Warning! This will **delete all messages** in this chat for **all** participants.</string>
+
+    <string name="UnblockAll">Unblock All</string>
+    <string name="UnblockAllWarn">Are you sure you want to unblock **all users and bots**?</string>
+    <string name="BlockedListEmpty">You haven\'t blocked anyone :)</string>
+
+    <string name="ProxyTypeVmess">Vmess Proxy</string>
+    <string name="AddProxySocks5">Add Socks5 Proxy</string>
+    <string name="AddProxyTelegram">Add MTProto Proxy</string>
+    <string name="AddProxyVmess">Add Vmess Proxy</string>
+    <string name="AddProxySS">Add Shadowsocks Proxy</string>
+    <string name="AddProxySSR">Add ShadowsocksR Proxy</string>
+
+    <string name="EditProxy">Edit Proxy</string>
+    <string name="ShareProxy">Share Proxy</string>
+    <string name="ProxyDelete">Delete Proxy</string>
+
+    <string name="ProxyInfoVmess">Vmess Proxy Settings</string>
+    <string name="VmessUserId">User Id</string>
+    <string name="VmessAlterId">Alter Id</string>
+    <string name="VmessSecurity">Security</string>
+    <string name="VmessNetwork">Network</string>
+    <string name="VmessHeadType">Head Type</string>
+    <string name="VmessRequestHost">Request Host / QUIC Security</string>
+    <string name="VmessPath">Path / QUIC Key</string>
+    <string name="VmessTls">Use TLS</string>
+
+    <string name="ProxyInfoSS">Shadowsocks Proxy Settings</string>
+    <string name="SSPassword">Password</string>
+    <string name="SSMethod">Encrypt Method</string>
+
+    <string name="ProxyInfoSSR">ShadowsocksR Proxy Settings</string>
+    <string name="SSRProtocol">Protocol</string>
+    <string name="SSRProtocolParams">Protocol Params</string>
+    <string name="SSRObfs">Obfs</string>
+    <string name="SSRObfsParam">Obfs Param</string>
+
+    <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
+
+    <string name="ImportProxyFromClipboard">Import From Clipboard</string>
+    <string name="BrokenLink">Unknown / Broken Link</string>
+
+    <string name="ShareQRCode">QR Code</string>
+    <string name="ScanQRCode">Scan QR Code</string>
+
+    <string name="NoQrFound">No QR Code found</string>
+
+    <string name="EnableDeveloperMode">Enable Developer Mode</string>
+    <string name="DisableDeveloperMode">Disable Developer Mode</string>
+    <string name="DeveloperSettings">Developer Settings</string>
+
+    <string name="DisableFlagSecure">Disable Flag Secure</string>
+    <string name="DisableScreenshotDetection">Disable Screenshot Detection</string>
+
+    <string name="LoginSettings">Login Settings</string>
+    <string name="ShowTestBackend">Show Test Backend</string>
+    <string name="ShowBotLogin">Show Bot Login</string>
+
+
+</resources>

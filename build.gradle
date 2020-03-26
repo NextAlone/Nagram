@@ -6,9 +6,18 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71"
+        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
     }
 }
-repositories {
-    google()
+
+allprojects {
+    repositories {
+        // The order in which you list these repositories matter.
+        jcenter()
+        mavenCentral()
+        google()
+    }
 }

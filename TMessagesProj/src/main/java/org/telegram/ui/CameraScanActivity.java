@@ -90,6 +90,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     //private BarcodeDetector visionQrReader;
 
     private boolean needGalleryButton;
+    private  boolean any;
 
     private int currentType;
 
@@ -126,6 +127,62 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     }
                 };
                 fragment.needGalleryButton = gallery;
+                actionBarLayout[0].addFragmentToStack(fragment);
+                actionBarLayout[0].showLastFragment();
+                actionBarLayout[0].setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
+                fragment.setDelegate(delegate);
+                containerView = actionBarLayout[0];
+                setApplyBottomPadding(false);
+                setApplyBottomPadding(false);
+                setOnDismissListener(dialog -> fragment.onFragmentDestroy());
+            }
+
+            @Override
+            protected boolean canDismissWithSwipe() {
+                return false;
+            }
+
+            @Override
+            public void onBackPressed() {
+                if (actionBarLayout[0] == null || actionBarLayout[0].fragmentsStack.size() <= 1) {
+                    super.onBackPressed();
+                } else {
+                    actionBarLayout[0].onBackPressed();
+                }
+            }
+
+            @Override
+            public void dismiss() {
+                super.dismiss();
+                actionBarLayout[0] = null;
+            }
+        };
+
+        bottomSheet.show();
+        return actionBarLayout;
+    }
+
+    public static ActionBarLayout[] showAsSheet(BaseFragment parentFragment, CameraScanActivityDelegate delegate) {
+        if (parentFragment == null || parentFragment.getParentActivity() == null) {
+            return null;
+        }
+        ActionBarLayout[] actionBarLayout = new ActionBarLayout[]{new ActionBarLayout(parentFragment.getParentActivity())};
+        BottomSheet bottomSheet = new BottomSheet(parentFragment.getParentActivity(), false) {
+            {
+                actionBarLayout[0].init(new ArrayList<>());
+                CameraScanActivity fragment = new CameraScanActivity(TYPE_QR) {
+                    @Override
+                    public void finishFragment() {
+                        dismiss();
+                    }
+
+                    @Override
+                    public void removeSelfFromStack() {
+                        dismiss();
+                    }
+                };
+                fragment.needGalleryButton = true;
+                fragment.any = true;
                 actionBarLayout[0].addFragmentToStack(fragment);
                 actionBarLayout[0].showLastFragment();
                 actionBarLayout[0].setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
@@ -540,7 +597,11 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     private void showErrorAlert() {
-        AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("WalletQRCode", R.string.WalletQRCode), LocaleController.getString("WalletScanImageNotFound", R.string.WalletScanImageNotFound)).show();
+        if (any) {
+            AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("WalletQRCode", R.string.WalletQRCode), LocaleController.getString("NoQrFound", R.string.NoQrFound)).show();
+        } else {
+            AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("WalletQRCode", R.string.WalletQRCode), LocaleController.getString("WalletScanImageNotFound", R.string.WalletScanImageNotFound)).show();
+        }
     }
 
     private void onNoQrFound(boolean alert) {
@@ -649,6 +710,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 onNoQrFound(bitmap != null);
                 return null;
             }
+            if (any) return text;
             if (needGalleryButton) {
                 if (!text.startsWith("ton://transfer/")) {
                     onNoWalletFound(bitmap != null);

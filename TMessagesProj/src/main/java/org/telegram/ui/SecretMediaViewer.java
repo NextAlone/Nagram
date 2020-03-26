@@ -65,6 +65,8 @@ import org.telegram.ui.Components.VideoPlayer;
 import java.io.File;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoXConfig;
+
 public class SecretMediaViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     private class FrameLayoutDrawer extends FrameLayout {
@@ -735,7 +737,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         } else {
             windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         }
-        windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
+        if (!NekoXConfig.disableFlagSecure) {
+            windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
+        }
         centerImage.setParentView(containerView);
         centerImage.setForceCrossfade(true);
     }

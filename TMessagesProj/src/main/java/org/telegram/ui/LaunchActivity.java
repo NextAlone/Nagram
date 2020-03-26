@@ -15,17 +15,15 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Canvas;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,43 +48,51 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.v2ray.ang.V2RayConfig;
+import com.v2ray.ang.dto.V2rayConfig;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.LocationController;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserObject;
-import org.telegram.messenger.Utilities;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
-import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -100,10 +106,8 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SharingLocationsAlert;
 import org.telegram.ui.Components.SideMenultItemAnimator;
 import org.telegram.ui.Components.StickersAlert;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
-import org.telegram.ui.Components.UpdateAppAlertDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -111,11 +115,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import tw.nekomimi.nekogram.NekoSettingsActivity;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.NekoXSettingActivity;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
@@ -244,7 +247,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     Uri uri = intent.getData();
                     if (uri != null) {
                         String url = uri.toString().toLowerCase();
-                        isProxy = url.startsWith("tg:proxy") || url.startsWith("tg://proxy") || url.startsWith("tg:socks") || url.startsWith("tg://socks");
+                        isProxy = url.startsWith("tg:proxy") || url.startsWith("tg://proxy") || url.startsWith("tg:socks") || url.startsWith("tg://socks") ||
+                                url.startsWith(V2RayConfig.VMESS_PROTOCOL) ||
+                                url.startsWith(V2RayConfig.VMESS1_PROTOCOL) ||
+                                url.startsWith(V2RayConfig.SS_PROTOCOL) ||
+                                url.startsWith(V2RayConfig.SSR_PROTOCOL)
+                        ;
                     }
                 }
             }
@@ -1594,6 +1602,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                 open_settings = 2;
                                             } else if (url.contains("devices")) {
                                                 open_settings = 3;
+                                            } else if (url.contains("nekox")) {
+                                                open_settings = 5;
                                             } else if (url.contains("neko")) {
                                                 open_settings = 4;
                                             }
@@ -1799,6 +1809,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         fragment = new SessionsActivity(0);
                     } else if (open_settings == 4) {
                         fragment = new NekoSettingsActivity();
+                    } else if (open_settings == 5) {
+                        if (NekoXConfig.developerMode) {
+                            fragment = new NekoXSettingActivity();
+                        } else {
+                            fragment = new NekoSettingsActivity();
+                        }
                     } else {
                         fragment = null;
                     }
@@ -2468,49 +2484,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
-    public void checkAppUpdate(boolean force) {
-        if (!force && BuildVars.DEBUG_VERSION || !force && !BuildVars.CHECK_UPDATES) {
-            return;
-        }
-        if (!force && Math.abs(System.currentTimeMillis() - UserConfig.getInstance(0).lastUpdateCheckTime) < 24 * 60 * 60 * 1000) {
-            return;
-        }
-        TLRPC.TL_help_getAppUpdate req = new TLRPC.TL_help_getAppUpdate();
-        try {
-            req.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-        } catch (Exception ignore) {
-
-        }
-        if (req.source == null) {
-            req.source = "";
-        }
-        final int accountNum = currentAccount;
-        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
-            UserConfig.getInstance(0).lastUpdateCheckTime = System.currentTimeMillis();
-            UserConfig.getInstance(0).saveConfig(false);
-            if (response instanceof TLRPC.TL_help_appUpdate) {
-                final TLRPC.TL_help_appUpdate res = (TLRPC.TL_help_appUpdate) response;
-                AndroidUtilities.runOnUIThread(() -> {
-                    if (res.can_not_skip) {
-                        UserConfig.getInstance(0).pendingAppUpdate = res;
-                        UserConfig.getInstance(0).pendingAppUpdateBuildVersion = BuildVars.BUILD_VERSION;
-                        try {
-                            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-                            UserConfig.getInstance(0).pendingAppUpdateInstallTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                            UserConfig.getInstance(0).pendingAppUpdateInstallTime = 0;
-                        }
-                        UserConfig.getInstance(0).saveConfig(false);
-                        showUpdateActivity(accountNum, res, false);
-                    } else {
-                        (new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum)).show();
-                    }
-                });
-            }
-        });
-    }
-
     public AlertDialog showAlertDialog(AlertDialog.Builder builder) {
         try {
             if (visibleDialog != null) {
@@ -2534,12 +2507,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         }
                         localeDialog = null;
                     } else if (visibleDialog == proxyErrorDialog) {
-                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                        SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
-                        editor.putBoolean("proxy_enabled", false);
-                        editor.putBoolean("proxy_enabled_calls", false);
-                        editor.commit();
-                        ConnectionsManager.setProxySettings(false, "", 1080, "", "", "");
+                        SharedConfig.setProxyEnable(false);
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
                         proxyErrorDialog = null;
                     }
@@ -2865,7 +2833,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             ApplicationLoader.mainInterfacePausedStageQueueTime = 0;
         });
         onPasscodePause();
-        actionBarLayout.onPause();
+        if (actionBarLayout != null) {
+            actionBarLayout.onPause();
+        }
         if (AndroidUtilities.isTablet()) {
             rightActionBarLayout.onPause();
             layersActionBarLayout.onPause();
@@ -2976,6 +2946,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         AndroidUtilities.checkForUpdates(this);
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
+        if (NekoXConfig.disableProxyWhenVpnEnabled && SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
+            SharedConfig.setProxyEnable(false);
+        }
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
         }
@@ -2991,7 +2964,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else if (UserConfig.getInstance(0).pendingAppUpdate != null) {
             showUpdateActivity(UserConfig.selectedAccount, UserConfig.getInstance(0).pendingAppUpdate, true);
         }
-        checkAppUpdate(false);
     }
 
     @Override
@@ -3714,7 +3686,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     @Override
     public void onBackPressed() {
-        if (passcodeView.getVisibility() == View.VISIBLE) {
+        if (passcodeView != null && passcodeView.getVisibility() == View.VISIBLE) {
             finish();
             return;
         }

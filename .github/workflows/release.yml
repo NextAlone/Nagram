@@ -1,0 +1,77 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  releaseBuild:
+    name: Release Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Setup ghr
+        run: |
+          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
+          tar xvzf ghr.tar.gz; rm ghr.tar.gz
+          sudo mv ghr*linux_amd64/ghr /usr/local/bin; rm -rf ghr*linux_amd64
+      - name: assembleRelease
+        run: |
+          git submodule update --init --recursive
+          sudo bash <<EOF
+            export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+            ./gradlew assembleRelease \
+                      assembleReleaseNoGcm \
+                      assembleLegacyRelease \
+                      assembleLegacyReleaseNoGcm
+          EOF
+          echo ::set-env name=AAB_FILE::$(find TMessagesProj/build/outputs/bundle -name "*.aab")
+      - name: Upload apks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY: ${{ secrets.GPG_KEY }}
+        run: |
+          mkdir apks; find . -name "*.apk" -exec mv {} apks \;
+
+          ghr -b "${{ github.event.head_commit.message }}" \
+            -n "${{ github.ref }}" "${{ github.ref }}" apks/
+
+          cd apks
+
+          gpg --import <<EOF
+          $GPG_KEY
+          EOF
+
+          echo "DA55ACBFDDA40853BFC5496ECD109927C34A63C4"  > $HOME/.gnupg/sshcontrol
+
+          export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+          gpgconf --launch gpg-agent
+
+          git config --global user.name "世界"
+          git config --global user.email "i@nekox.me"
+          git config --global user.signingkey "DA55ACBFDDA40853BFC5496ECD109927C34A63C4"
+          git config --global commit.gpgsign true
+
+          git init
+
+          git remote add github git@github.com:NekogramX/NekoX-Resources.git
+          git remote add gitlab git@gitlab.com:NekohaSekai/nekox-resources.git
+          git remote add gitee  git@gitee.com:nekoshizuku/nekox-resources.git
+
+          git add . --all
+          git commit -m "${{ github.event.head_commit.message }}"
+
+          git push github master -f
+          git push gitlab master -f
+
+          git checkout -b release
+          git push gitee  release -f
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
+          packageName: nekox.messenger
+          releaseFile: ${{ env.AAB_FILE }}
+          track: production

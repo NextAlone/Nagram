@@ -119,6 +119,7 @@ import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.SecretMediaViewer;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1563,53 +1564,55 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (pressedBotButton != -1) {
                 BotButton button = botButtons.get(pressedBotButton);
                 Gson gson = new Gson();
-                if (!TextUtils.isEmpty(button.button.url)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("CopyLink", R.string.CopyLink), LocaleController.getString("CopyDetails", R.string.CopyDetails)}, (dialogInterface, i) -> {
-                        if (i == 0) {
-                            try {
-                                AndroidUtilities.addToClipboard(button.button.text);
-                                Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                FileLog.e(e);
+                if (button.button != null) {
+                    if (!TextUtils.isEmpty(button.button.url)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("CopyLink", R.string.CopyLink), LocaleController.getString("CopyDetails", R.string.CopyDetails)}, (dialogInterface, i) -> {
+                            if (i == 0) {
+                                try {
+                                    AndroidUtilities.addToClipboard(button.button.text);
+                                    Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    FileLog.e(e);
+                                }
+                            } else if (i == 1) {
+                                try {
+                                    AndroidUtilities.addToClipboard(button.button.url);
+                                    Toast.makeText(getContext(), LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    FileLog.e(e);
+                                }
+                            } else if (i == 2) {
+                                try {
+                                    AndroidUtilities.addToClipboard(gson.toJson(button.button));
+                                    Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    FileLog.e(e);
+                                }
                             }
-                        } else if (i == 1) {
-                            try {
-                                AndroidUtilities.addToClipboard(button.button.url);
-                                Toast.makeText(getContext(), LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                FileLog.e(e);
+                        });
+                        builder.show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("CopyDetails", R.string.CopyDetails)}, (dialogInterface, i) -> {
+                            if (i == 0) {
+                                try {
+                                    AndroidUtilities.addToClipboard(button.button.text);
+                                    AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
+                                } catch (Exception e) {
+                                    FileLog.e(e);
+                                }
+                            } else if (i == 1) {
+                                try {
+                                    AndroidUtilities.addToClipboard(gson.toJson(button.button));
+                                    AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
+                                } catch (Exception e) {
+                                    FileLog.e(e);
+                                }
                             }
-                        } else if (i == 2) {
-                            try {
-                                AndroidUtilities.addToClipboard(gson.toJson(button.button));
-                                Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        }
-                    });
-                    builder.show();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("CopyDetails", R.string.CopyDetails)}, (dialogInterface, i) -> {
-                        if (i == 0) {
-                            try {
-                                AndroidUtilities.addToClipboard(button.button.text);
-                                Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        } else if (i == 1) {
-                            try {
-                                AndroidUtilities.addToClipboard(gson.toJson(button.button));
-                                Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        }
-                    });
-                    builder.show();
+                        });
+                        builder.show();
+                    }
                 }
                 pressedBotButton = -1;
                 invalidate();
@@ -9345,7 +9348,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         } else {
                             imageW = 0;
                         }
-                        if (drawLoadingProgress && loadingProgressLayout != null){
+                        if (drawLoadingProgress && loadingProgressLayout != null) {
                             imageW = 0;
                             infoW = (int) loadingProgressLayout.getLineWidth(0);
                         } else {
@@ -10127,7 +10130,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 AccessibilityNodeInfo info = AccessibilityNodeInfo.obtain(ChatMessageCell.this);
                 onInitializeAccessibilityNodeInfo(info);
                 StringBuilder sb = new StringBuilder();
-                if (isChat && currentUser!=null && !currentMessageObject.isOut()) {
+                if (isChat && currentUser != null && !currentMessageObject.isOut()) {
                     sb.append(UserObject.getUserName(currentUser));
                     sb.append('\n');
                 }
@@ -10137,10 +10140,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (currentMessageObject.isMusic()) {
                     sb.append("\n");
                     sb.append(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, currentMessageObject.getMusicAuthor(), currentMessageObject.getMusicTitle()));
-                } else if (currentMessageObject.isVoice() || currentMessageObject.isRoundVideo()){
+                } else if (currentMessageObject.isVoice() || currentMessageObject.isRoundVideo()) {
                     sb.append(", ");
                     sb.append(LocaleController.formatCallDuration(currentMessageObject.getDuration()));
-                    if (currentMessageObject.isContentUnread()){
+                    if (currentMessageObject.isContentUnread()) {
                         sb.append(", ");
                         sb.append(LocaleController.getString("AccDescrMsgNotPlayed", R.string.AccDescrMsgNotPlayed));
                     }

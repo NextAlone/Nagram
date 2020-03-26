@@ -71,7 +71,11 @@ public class NotificationsService extends Service {
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
         if (preferences.getBoolean("pushService", true)) {
             Intent intent = new Intent("org.telegram.start");
-            sendBroadcast(intent);
+            try {
+                sendBroadcast(intent);
+            } catch (Exception ex) {
+                // 辣鷄miui 就你事最多.jpg
+            }
         }
     }
 }

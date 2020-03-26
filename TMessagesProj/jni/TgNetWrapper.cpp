@@ -322,7 +322,7 @@ class Delegate : public ConnectiosManagerDelegate {
     }
 };
 
-void onHostNameResolved(JNIEnv *env, jclass c, jstring host, jlong address, jstring ip) {
+void onHostNameResolved(JNIEnv *env, jclass c, jstring host, jlong address, jstring ip,jboolean ipv6) {
     const char *ipStr = env->GetStringUTFChars(ip, 0);
     const char *hostStr = env->GetStringUTFChars(host, 0);
     std::string i = std::string(ipStr);
@@ -334,7 +334,7 @@ void onHostNameResolved(JNIEnv *env, jclass c, jstring host, jlong address, jstr
         env->ReleaseStringUTFChars(host, hostStr);
     }
     ConnectionSocket *socket = (ConnectionSocket *) (intptr_t) address;
-    socket->onHostNameResolved(h, i, false);
+    socket->onHostNameResolved(h, i, ipv6);
 }
 
 void setLangCode(JNIEnv *env, jclass c, jint instanceNum, jstring langCode) {
@@ -445,7 +445,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_setJava", "(Z)V", (void *) setJava},
         {"native_applyDnsConfig", "(IJLjava/lang/String;I)V", (void *) applyDnsConfig},
         {"native_checkProxy", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/telegram/tgnet/RequestTimeDelegate;)J", (void *) checkProxy},
-        {"native_onHostNameResolved", "(Ljava/lang/String;JLjava/lang/String;)V", (void *) onHostNameResolved}
+        {"native_onHostNameResolved", "(Ljava/lang/String;JLjava/lang/String;Z)V", (void *) onHostNameResolved}
 };
 
 inline int registerNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodsCount) {

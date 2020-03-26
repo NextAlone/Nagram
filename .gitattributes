@@ -1,0 +1,25 @@
+* text=auto
+
+*.txt         text eol=lf
+*.xml         text eol=lf
+*.json        text eol=lf
+*.java        text eol=lf
+*.kt        text eol=lf
+*.c        text eol=lf
+*.h        text eol=lf
+*.cpp        text eol=lf
+*.py        text eol=lf
+*.mk        text eol=lf
+*.pro        text eol=lf
+*.properties  text eol=lf
+*.conf        text eol=lf
+*.awk  text eol=lf
+*.sed  text eol=lf
+*.sh   text eol=lf
+
+*.attheme  text eol=lf
+
+*.png  binary
+*.jpg  binary
+
+*.p12  binary

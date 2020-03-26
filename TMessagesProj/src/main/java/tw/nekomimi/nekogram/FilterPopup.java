@@ -130,6 +130,26 @@ public class FilterPopup extends BaseController {
         return dialogs;
     }
 
+    private ArrayList<TLRPC.Dialog> filterUnreadDialogs(ArrayList<TLRPC.Dialog> allDialogs) {
+        ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>();
+        for (TLRPC.Dialog dialog : allDialogs) {
+            if (dialog instanceof TLRPC.TL_dialogFolder) continue;
+            if (dialog.unread_count == 0) continue;
+            dialogs.add(dialog);
+        }
+        return dialogs;
+    }
+
+    private ArrayList<TLRPC.Dialog> filterContacts(ArrayList<TLRPC.Dialog> allDialogs) {
+        ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>();
+        for (TLRPC.Dialog dialog : allDialogs) {
+            if (getContactsController().isContact((int) dialog.id)) {
+                dialogs.add(dialog);
+            }
+        }
+        return dialogs;
+    }
+
     public ArrayList<TLRPC.Dialog> getDialogs(int type, int folderId) {
         ArrayList<TLRPC.Dialog> allDialogs = new ArrayList<>(getMessagesController().getDialogs(folderId));
         ArrayList<TLRPC.Dialog> folders = new ArrayList<>();
@@ -153,6 +173,22 @@ public class FilterPopup extends BaseController {
                 }
                 allDialogs.retainAll(filterUnmutedDialogs(allDialogs));
                 break;
+            case DialogType.Unread:
+                for (int i = 0; i < folders.size(); i++) {
+                    folderDialogs.get(i).retainAll(filterUnreadDialogs(folderDialogs.get(i)));
+                    if (!folderDialogs.get(i).isEmpty())
+                        dialogs.add(folders.get(i));
+                }
+                allDialogs.retainAll(filterUnreadDialogs(allDialogs));
+                break;
+            case DialogType.UnmutedAndUnread:
+                for (int i = 0; i < folders.size(); i++) {
+                    folderDialogs.get(i).retainAll(filterUnmutedDialogs(filterUnreadDialogs(folderDialogs.get(i))));
+                    if (!folderDialogs.get(i).isEmpty())
+                        dialogs.add(folders.get(i));
+                }
+                allDialogs.retainAll(filterUnmutedDialogs(filterUnreadDialogs(allDialogs)));
+                break;
             case DialogType.Users:
                 for (int i = 0; i < folders.size(); i++) {
                     folderDialogs.get(i).retainAll(dialogsUsers);
@@ -160,6 +196,14 @@ public class FilterPopup extends BaseController {
                         dialogs.add(folders.get(i));
                 }
                 allDialogs.retainAll(dialogsUsers);
+                break;
+            case DialogType.Contacts:
+                for (int i = 0; i < folders.size(); i++) {
+                    folderDialogs.get(i).retainAll(filterContacts(dialogsUsers));
+                    if (!folderDialogs.get(i).isEmpty())
+                        dialogs.add(folders.get(i));
+                }
+                allDialogs.retainAll(filterContacts(dialogsUsers));
                 break;
             case DialogType.Groups:
                 for (int i = 0; i < folders.size(); i++) {
@@ -232,15 +276,23 @@ public class FilterPopup extends BaseController {
 
         ArrayList<TLRPC.Dialog> temp = new ArrayList<>(allDialogs);
         temp.retainAll(dialogsUsers);
-        if (!temp.isEmpty()) {
+        if (!temp.isEmpty() && NekoXConfig.filterUsers) {
             items.add(LocaleController.getString("Users", R.string.Users));
             options.add(DialogType.Users);
             unreadCounts.add(getDialogsUnreadCount(temp));
         }
 
         temp = new ArrayList<>(allDialogs);
+        temp.retainAll(filterContacts(dialogsUsers));
+        if (!temp.isEmpty() && NekoXConfig.filterContacts) {
+            items.add(LocaleController.getString("Contacts", R.string.Contacts));
+            options.add(DialogType.Contacts);
+            unreadCounts.add(getDialogsUnreadCount(temp));
+        }
+
+        temp = new ArrayList<>(allDialogs);
         temp.retainAll(dialogsGroups);
-        if (!temp.isEmpty()) {
+        if (!temp.isEmpty() && NekoXConfig.filterGroups) {
             items.add(LocaleController.getString("Groups", R.string.Groups));
             options.add(DialogType.Groups);
             unreadCounts.add(getDialogsUnreadCount(temp));
@@ -248,7 +300,7 @@ public class FilterPopup extends BaseController {
 
         temp = new ArrayList<>(allDialogs);
         temp.retainAll(dialogsChannels);
-        if (!temp.isEmpty()) {
+        if (!temp.isEmpty() && NekoXConfig.filterChannels) {
             items.add(LocaleController.getString("Channels", R.string.Channels));
             options.add(DialogType.Channels);
             unreadCounts.add(getDialogsUnreadCount(temp));
@@ -256,7 +308,7 @@ public class FilterPopup extends BaseController {
 
         temp = new ArrayList<>(allDialogs);
         temp.retainAll(dialogsBots);
-        if (!temp.isEmpty()) {
+        if (!temp.isEmpty() && NekoXConfig.filterBots) {
             items.add(LocaleController.getString("Bots", R.string.Bots));
             options.add(DialogType.Bots);
             unreadCounts.add(getDialogsUnreadCount(temp));
@@ -264,7 +316,7 @@ public class FilterPopup extends BaseController {
 
         temp = new ArrayList<>(allDialogs);
         temp.retainAll(dialogsAdmin);
-        if (!temp.isEmpty()) {
+        if (!temp.isEmpty() && NekoXConfig.filterAdmins) {
             items.add(LocaleController.getString("Admins", R.string.Admins));
             options.add(DialogType.Admin);
             unreadCounts.add(getDialogsUnreadCount(temp));
@@ -272,9 +324,25 @@ public class FilterPopup extends BaseController {
 
         temp = new ArrayList<>(allDialogs);
         temp.retainAll(filterUnmutedDialogs(allDialogs));
-        if (!temp.isEmpty()) {
+        if (!temp.isEmpty() && NekoXConfig.filterUnmuted) {
             items.add(LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted));
             options.add(DialogType.Unmuted);
+            unreadCounts.add(getDialogsUnreadCount(temp));
+        }
+
+        temp = new ArrayList<>(allDialogs);
+        temp.retainAll(filterUnreadDialogs(allDialogs));
+        if (!temp.isEmpty() && NekoXConfig.filterUnread) {
+            items.add(LocaleController.getString("NotificationsUnread", R.string.NotificationsUnread));
+            options.add(DialogType.Unread);
+            unreadCounts.add(getDialogsUnreadCount(temp));
+        }
+
+        temp = new ArrayList<>(allDialogs);
+        temp.retainAll(filterUnmutedDialogs(filterUnreadDialogs(allDialogs)));
+        if (!temp.isEmpty() && NekoXConfig.filterUnmutedAndUnread) {
+            items.add(LocaleController.getString("NotificationsUnmutedAndUnread", R.string.NotificationsUnmutedAndUnread));
+            options.add(DialogType.UnmutedAndUnread);
             unreadCounts.add(getDialogsUnreadCount(temp));
         }
 
@@ -383,7 +451,9 @@ public class FilterPopup extends BaseController {
                 }
                 scrimPopupWindow = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    dialogsActivity.getParentActivity().getWindow().getDecorView().setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_AUTO);
+                    try {
+                        dialogsActivity.getParentActivity().getWindow().getDecorView().setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_AUTO);
+                    } catch (NullPointerException ignored) {}
                 }
             }
         };
@@ -416,9 +486,13 @@ public class FilterPopup extends BaseController {
         public static final int Bots = 10;
         public static final int Admin = 11;
         public static final int Unmuted = 12;
+        public static final int Unread = 13;
+        public static final int UnmutedAndUnread = 14;
+        public static final int Contacts = 15;
+
 
         public static boolean isDialogsType(int dialogsType) {
-            return dialogsType == 0 || (dialogsType >= 7 && dialogsType <= 12);
+            return dialogsType == 0 || (dialogsType >= 7 && dialogsType <= 15);
         }
     }
 }

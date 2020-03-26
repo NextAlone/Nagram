@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -69,24 +68,25 @@ import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SRPHelper;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -104,6 +104,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
 
@@ -118,7 +119,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment {
@@ -149,12 +150,15 @@ public class LoginActivity extends BaseFragment {
     private FrameLayout floatingButtonContainer;
     private RadialProgressView floatingProgressView;
     private int progressRequestId;
-    private boolean[] doneButtonVisible = new boolean[] {true, false};
+    private boolean[] doneButtonVisible = new boolean[]{true, false};
 
     private static final int DONE_TYPE_FLOATING = 0;
     private static final int DONE_TYPE_ACTION = 1;
 
     private final static int done_button = 1;
+
+    private ActionBarMenuItem proxyItem;
+    private ProxyDrawable proxyDrawable;
 
     private class ProgressView extends View {
 
@@ -256,6 +260,10 @@ public class LoginActivity extends BaseFragment {
                         finishFragment();
                     }
                 } else if (id == 2) {
+                    presentFragment(new ProxyListActivity());
+                } else if (id == 3) {
+                    presentFragment(new LanguageSelectActivity());
+                } else if (id == 4) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle(LocaleController.getString("BotLogin", R.string.BotLogin));
 
@@ -291,10 +299,10 @@ public class LoginActivity extends BaseFragment {
                         }
 
                         ConnectionsManager.getInstance(currentAccount).cleanup(false);
-                        final TLRPC.TL_auth_importBotAuthorization req = new TLRPC.TL_auth_importBotAuthorization ();
+                        final TLRPC.TL_auth_importBotAuthorization req = new TLRPC.TL_auth_importBotAuthorization();
 
-                        req.api_hash = BuildVars.APP_HASH;
-                        req.api_id = BuildVars.APP_ID;
+                        req.api_hash = BuildConfig.APP_HASH;
+                        req.api_id = BuildConfig.APP_ID;
                         req.bot_auth_token = token;
                         req.flags = 0;
                         int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -357,7 +365,19 @@ public class LoginActivity extends BaseFragment {
         doneButtonVisible[DONE_TYPE_ACTION] = false;
 
         ActionBarMenu menu = actionBar.createMenu();
-        menu.addItem(2, R.drawable.list_bot);
+
+        proxyItem = menu.addItem(2, R.drawable.proxy_on);
+        proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
+
+
+        menu.addItem(3, R.drawable.ic_translate);
+
+        if (NekoXConfig.showBotLogin) {
+
+            menu.addItem(4, R.drawable.list_bot);
+
+        }
+
         actionBar.setAllowOverlayTitle(true);
         doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
         doneProgressView = new ContextProgressView(context, 1);
@@ -902,7 +922,7 @@ public class LoginActivity extends BaseFragment {
             views[currentViewNum].onNextPressed();
         }
     }
-    
+
     private void showEditDoneProgress(final boolean show, boolean animated) {
         if (doneItemAnimation != null) {
             doneItemAnimation.cancel();
@@ -1537,7 +1557,7 @@ public class LoginActivity extends BaseFragment {
                 });
             }
 
-            if (NekoConfig.showHiddenFeature) {
+            if (NekoXConfig.showTestBackend) {
                 testBackendCell = new CheckBoxCell(context, 2);
                 testBackendCell.setText(LocaleController.getString("TestBackend", R.string.TestBackend), "", ConnectionsManager.native_isTestBackend(currentAccount) != 0, false);
                 addView(testBackendCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
@@ -1780,18 +1800,13 @@ public class LoginActivity extends BaseFragment {
 
             ConnectionsManager.getInstance(currentAccount).cleanup(false);
             final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
-            req.api_hash = BuildVars.APP_HASH;
-            req.api_id = BuildVars.APP_ID;
+            req.api_hash = BuildConfig.APP_HASH;
+            req.api_id = BuildConfig.APP_ID;
             req.phone_number = phone;
             req.settings = new TLRPC.TL_codeSettings();
             req.settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
             req.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            if (req.settings.allow_app_hash) {
-                preferences.edit().putString("sms_hash", BuildVars.SMS_HASH).commit();
-            } else {
-                preferences.edit().remove("sms_hash").commit();
-            }
             if (req.settings.allow_flashcall) {
                 try {
                     String number = tm.getLine1Number();
@@ -2420,23 +2435,7 @@ public class LoginActivity extends BaseFragment {
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
 
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-                String hash = preferences.getString("sms_hash", null);
-                String savedCode = null;
-                if (!TextUtils.isEmpty(hash)) {
-                    savedCode = preferences.getString("sms_hash_code", null);
-                    if (savedCode != null && savedCode.contains(hash + "|")) {
-                        savedCode = savedCode.substring(savedCode.indexOf('|') + 1);
-                    } else {
-                        savedCode = null;
-                    }
-                }
-                if (savedCode != null) {
-                    codeField[0].setText(savedCode);
-                    onNextPressed();
-                } else {
-                    createTimer();
-                }
+                createTimer();
             } else if (currentType == 4 && nextType == 2) {
                 timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
@@ -4109,7 +4108,7 @@ public class LoginActivity extends BaseFragment {
 
     @Override
     public ThemeDescription[] getThemeDescriptions() {
-        for (int a = 0;a < views.length; a++) {
+        for (int a = 0; a < views.length; a++) {
             if (views[a] == null) {
                 return new ThemeDescription[0];
             }

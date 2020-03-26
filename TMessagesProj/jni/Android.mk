@@ -580,4 +580,41 @@ LOCAL_SRC_FILES     += \
 
 include $(BUILD_SHARED_LIBRARY)
 
+########################################################
+## shadowsocks-libev local
+########################################################
+
+include $(CLEAR_VARS)
+
+SHADOWSOCKS_SOURCES := local.c \
+	cache.c udprelay.c utils.c netutils.c json.c jconf.c \
+	acl.c http.c tls.c rule.c \
+	crypto.c aead.c stream.c base64.c \
+	plugin.c ppbloom.c \
+	android.c
+
+LOCAL_MODULE    := ss-local
+LOCAL_SRC_FILES := $(addprefix shadowsocks-libev/src/, $(SHADOWSOCKS_SOURCES))
+LOCAL_CFLAGS    := -Wall -fno-strict-aliasing -DMODULE_LOCAL \
+					-DUSE_CRYPTO_MBEDTLS -DHAVE_CONFIG_H \
+					-DCONNECT_IN_PROGRESS=EINPROGRESS \
+					-I$(LOCAL_PATH)/include/shadowsocks-libev \
+					-I$(LOCAL_PATH)/include \
+					-I$(LOCAL_PATH)/libancillary \
+					-I$(LOCAL_PATH)/mbedtls/include  \
+					-I$(LOCAL_PATH)/pcre \
+					-I$(LOCAL_PATH)/libsodium/src/libsodium/include \
+					-I$(LOCAL_PATH)/libsodium/src/libsodium/include/sodium \
+					-I$(LOCAL_PATH)/shadowsocks-libev/libcork/include \
+					-I$(LOCAL_PATH)/shadowsocks-libev/libipset/include \
+					-I$(LOCAL_PATH)/shadowsocks-libev/libbloom \
+					-I$(LOCAL_PATH)/libev
+
+LOCAL_STATIC_LIBRARIES := libev libmbedtls libipset libcork libbloom \
+	libsodium libancillary libpcre
+
+LOCAL_LDLIBS := -llog
+
+include $(BUILD_SHARED_EXECUTABLE)
+
 $(call import-module,android/cpufeatures)

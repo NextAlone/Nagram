@@ -40,6 +40,8 @@ import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -105,8 +107,8 @@ public class BottomSheet extends Dialog {
     protected int backgroundPaddingTop;
     protected int backgroundPaddingLeft;
 
-    private boolean applyTopPadding = true;
-    private boolean applyBottomPadding = true;
+    private boolean applyTopPadding = false;
+    private boolean applyBottomPadding = false;
 
     private ArrayList<BottomSheetCell> itemViews = new ArrayList<>();
 
@@ -491,9 +493,8 @@ public class BottomSheet extends Dialog {
         public BottomSheetCell(Context context, int type) {
             super(context);
 
-            setBackground(null);
-            setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            //setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
+            setBackground(Theme.getSelectorDrawable(false));
+            setPadding(0, 0, AndroidUtilities.dp(16), 0);
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -576,7 +577,7 @@ public class BottomSheet extends Dialog {
         touchSlop = vc.getScaledTouchSlop();
 
         Rect padding = new Rect();
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
         shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
@@ -644,13 +645,12 @@ public class BottomSheet extends Dialog {
         containerView.setVisibility(View.INVISIBLE);
         container.addView(containerView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
 
-        int topOffset = 0;
         if (title != null) {
             titleView = new TextView(getContext());
-            titleView.setLines(1);
-            titleView.setSingleLine(true);
             titleView.setText(title);
             if (bigTitle) {
+                titleView.setSingleLine(true);
+                titleView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
                 titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                 titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -660,30 +660,31 @@ public class BottomSheet extends Dialog {
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 titleView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), AndroidUtilities.dp(8));
             }
-            titleView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             titleView.setGravity(Gravity.CENTER_VERTICAL);
-            containerView.addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48));
+            containerView.addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             titleView.setOnTouchListener((v, event) -> true);
-            topOffset += 48;
         }
         if (customView != null) {
             if (customView.getParent() != null) {
                 ViewGroup viewGroup = (ViewGroup) customView.getParent();
                 viewGroup.removeView(customView);
             }
-            containerView.addView(customView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, topOffset, 0, 0));
+            containerView.addView(customView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
         } else {
             if (items != null) {
-                FrameLayout rowLayout = null;
-                int lastRowLayoutNum = 0;
+                FrameLayout rootView = new ScrollView(getContext());
+                LinearLayout rowView = new LinearLayout(getContext());
+                rowView.setOrientation(LinearLayout.VERTICAL);
+                rootView.addView(rowView,new ScrollView.LayoutParams(-1,-1));
+                containerView.addView(rootView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+
                 for (int a = 0; a < items.length; a++) {
                     if (items[a] == null) {
                         continue;
                     }
                     BottomSheetCell cell = new BottomSheetCell(getContext(), 0);
                     cell.setTextAndIcon(items[a], itemIcons != null ? itemIcons[a] : 0, bigTitle);
-                    containerView.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP, 0, topOffset, 0, 0));
-                    topOffset += 48;
+                    rowView.addView(cell,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
                     cell.setTag(a);
                     cell.setOnClickListener(v -> dismissWithButtonClick((Integer) v.getTag()));
                     itemViews.add(cell);
@@ -773,7 +774,7 @@ public class BottomSheet extends Dialog {
                     startAnimationRunnable = null;
                     startOpenAnimation();
                 }
-            }, 150);
+            });
         } else {
             startOpenAnimation();
         }
@@ -810,6 +811,7 @@ public class BottomSheet extends Dialog {
     public void setTitle(CharSequence value, boolean big) {
         title = value;
         bigTitle = big;
+        setApplyTopPadding(true);
     }
 
     public void setApplyTopPadding(boolean value) {
@@ -865,7 +867,6 @@ public class BottomSheet extends Dialog {
                     ObjectAnimator.ofFloat(containerView, View.TRANSLATION_Y, 0),
                     ObjectAnimator.ofInt(backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, dimBehind ? 51 : 0));
             currentSheetAnimation.setDuration(400);
-            currentSheetAnimation.setStartDelay(20);
             currentSheetAnimation.setInterpolator(openInterpolator);
             currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
                 @Override

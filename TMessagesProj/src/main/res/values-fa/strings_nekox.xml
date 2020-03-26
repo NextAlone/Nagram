@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="NekoXProxy">پروکسی عمومی نکوX</string>
+    <string name="PublicPrefix">(عمومی)</string>
+    <string name="NekoXProxyInfo">ممکن است ده ها ثانیه برای بارگیری پروکسی داخلی نکوX طول بکشد</string>
+    <string name="DisableChatAction">وضعیت مرا ارسال نکن</string>
+    <string name="FakeScreenshot">تصویر قبل</string>
+    <string name="EnableDeveloperMode">فعالسازی توسعه دهنده</string>
+    <string name="DisableDeveloperMode">غیرفعال‌سازی مد توسعه دهنده</string>
+    <string name="DeveloperSettings">تنظیمات توسعه دهنده</string>
+    <string name="DisableFlagSecure">غیرفعال‌سازی پرچم امنیتی</string>
+    <string name="DisableScreenshotDetection">عدم شناسایی اسکرین‌شات</string>
+</resources>

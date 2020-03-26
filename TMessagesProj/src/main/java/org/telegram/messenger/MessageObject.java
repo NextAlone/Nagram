@@ -3133,7 +3133,7 @@ public class MessageObject {
                 hasEntities = !messageOwner.entities.isEmpty();
             }
 
-            boolean useManualParse = !hasEntities && (
+            boolean useManualParse = true;/*!hasEntities && (
                     eventId != 0 ||
                             messageOwner.media instanceof TLRPC.TL_messageMediaPhoto_old ||
                             messageOwner.media instanceof TLRPC.TL_messageMediaPhoto_layer68 ||
@@ -3142,7 +3142,7 @@ public class MessageObject {
                             messageOwner.media instanceof TLRPC.TL_messageMediaDocument_layer68 ||
                             messageOwner.media instanceof TLRPC.TL_messageMediaDocument_layer74 ||
                             isOut() && messageOwner.send_state != MESSAGE_SEND_STATE_SENT ||
-                            messageOwner.id < 0);
+                            messageOwner.id < 0);*/
 
             if (useManualParse) {
                 if (containsUrls(caption)) {
@@ -3686,7 +3686,7 @@ public class MessageObject {
             hasEntities = !messageOwner.entities.isEmpty();
         }
 
-        boolean useManualParse = !hasEntities && (
+        boolean useManualParse = true;/*!hasEntities && (
                 eventId != 0 ||
                 messageOwner instanceof TLRPC.TL_message_old ||
                 messageOwner instanceof TLRPC.TL_message_old2 ||
@@ -3697,7 +3697,7 @@ public class MessageObject {
                 messageOwner instanceof TLRPC.TL_message_secret ||
                 messageOwner.media instanceof TLRPC.TL_messageMediaInvoice ||
                 isOut() && messageOwner.send_state != MESSAGE_SEND_STATE_SENT ||
-                messageOwner.id < 0 || messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported);
+                messageOwner.id < 0 || messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported);*/
 
         if (useManualParse) {
             addLinks(isOutOwner(), messageText, true, true);

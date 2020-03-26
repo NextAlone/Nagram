@@ -118,16 +118,16 @@ public class DrawerProfileCell extends FrameLayout {
             if (Theme.getTheme(dayThemeName) == null) {
                 dayThemeName = "Blue";
             }
-            String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
+            String nightThemeName = preferences.getString("lastDarkTheme", "Night");
             if (Theme.getTheme(nightThemeName) == null) {
-                nightThemeName = "Dark Blue";
+                nightThemeName = "Night";
             }
             Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
             if (dayThemeName.equals(nightThemeName)) {
                 if (themeInfo.isDark()) {
                     dayThemeName = "Blue";
                 } else {
-                    nightThemeName = "Dark Blue";
+                    nightThemeName = "Night";
                 }
             }
 
@@ -263,6 +263,10 @@ public class DrawerProfileCell extends FrameLayout {
         nameTextView.setText(UserObject.getUserName(user));
         if (!NekoConfig.hidePhone) {
             phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+        } else if (!TextUtils.isEmpty(user.username)) {
+            phoneTextView.setText("@" + user.username);
+        } else {
+            phoneTextView.setText(LocaleController.getString("MobileHidden",R.string.MobileHidden));
         }
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));

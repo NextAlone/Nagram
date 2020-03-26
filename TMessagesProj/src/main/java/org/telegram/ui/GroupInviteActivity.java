@@ -16,13 +16,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -38,8 +41,7 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class GroupInviteActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -56,6 +58,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     private int copyLinkRow;
     private int revokeLinkRow;
     private int shareLinkRow;
+    private int shareQrCodeRow;
     private int shadowRow;
     private int rowCount;
 
@@ -78,6 +81,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         copyLinkRow = rowCount++;
         revokeLinkRow = rowCount++;
         shareLinkRow = rowCount++;
+        shareQrCodeRow = rowCount++;
         shadowRow = rowCount++;
 
         return true;
@@ -146,6 +150,11 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
+            } else if (position == shareQrCodeRow) {
+                if (invite == null) {
+                    return;
+                }
+                ProxyUtil.showQrDialog(getParentActivity(),invite.link);
             } else if (position == revokeLinkRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
@@ -214,7 +223,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
-        
+
         private Context mContext;
 
         public ListAdapter(Context context) {
@@ -224,7 +233,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == revokeLinkRow || position == copyLinkRow || position == shareLinkRow || position == linkRow;
+            return position == revokeLinkRow || position == copyLinkRow || position == shareLinkRow || position == shareQrCodeRow || position == linkRow;
         }
 
         @Override
@@ -261,6 +270,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                         textCell.setText(LocaleController.getString("CopyLink", R.string.CopyLink), true);
                     } else if (position == shareLinkRow) {
                         textCell.setText(LocaleController.getString("ShareLink", R.string.ShareLink), false);
+                    } else if (position == shareQrCodeRow) {
+                        textCell.setText(LocaleController.getString("ShareQRCode", R.string.ShareQRCode), false);
                     } else if (position == revokeLinkRow) {
                         textCell.setText(LocaleController.getString("RevokeLink", R.string.RevokeLink), true);
                     }
@@ -289,7 +300,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
 
         @Override
         public int getItemViewType(int position) {
-            if (position == copyLinkRow || position == shareLinkRow || position == revokeLinkRow) {
+            if (position == copyLinkRow || position == shareLinkRow || position == shareQrCodeRow || position == revokeLinkRow) {
                 return 0;
             } else if (position == shadowRow || position == linkInfoRow) {
                 return 1;

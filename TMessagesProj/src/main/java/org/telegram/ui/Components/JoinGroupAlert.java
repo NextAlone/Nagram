@@ -61,7 +61,7 @@ public class JoinGroupAlert extends BottomSheet {
         int participants_count;
 
         BackupImageView avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(AndroidUtilities.dp(35));
+        //avatarImageView.setRoundRadius(AndroidUtilities.dp(35));
         linearLayout.addView(avatarImageView, LayoutHelper.createLinear(70, 70, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 29, 0, 0));
 
         if (invite.chat != null) {

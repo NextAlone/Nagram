@@ -33,7 +33,11 @@ import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
 
+import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.ZipUtil;
 
 public class ApplicationLoader extends Application {
 
@@ -69,7 +73,7 @@ public class ApplicationLoader extends Application {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return new File("/data/data/org.telegram.messenger/files");
+        return new File("/data/data/" + BuildConfig.APPLICATION_ID + "/files");
     }
 
     public static void postInitApplication() {
@@ -78,6 +82,20 @@ public class ApplicationLoader extends Application {
         }
 
         applicationInited = true;
+
+        if (!new File(applicationContext.getFilesDir(), "unoffical_base_classic_zh_cn.xml").isFile()) {
+
+            try {
+
+                ZipUtil.unzip(applicationContext.getAssets().open("languages.zip"), applicationContext.getFilesDir());
+
+            } catch (Exception e) {
+
+                FileLog.e("load languages error", e);
+
+            }
+
+        }
 
         try {
             LocaleController.getInstance();
@@ -145,7 +163,30 @@ public class ApplicationLoader extends Application {
             }
         }
 
+        if (ProxyUtil.isVPNEnabled()) {
+
+            if (NekoXConfig.disableProxyWhenVpnEnabled) {
+
+                SharedConfig.setProxyEnable(false);
+
+            }
+
+        } else if (MessagesController.getGlobalMainSettings().getBoolean("first_open", true)) {
+
+            MessagesController.getGlobalMainSettings().edit().putBoolean("first_open", false).apply();
+
+            if (!UserConfig.getInstance(0).isClientActivated()) {
+
+                SharedConfig.setCurrentProxy(SharedConfig.proxyList.get(0));
+
+            }
+
+        }
+
         ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
+        if (ExternalGcm.INSTANCE != null) {
+            ExternalGcm.INSTANCE.initPlayServices();
+        }
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app initied");
         }
@@ -185,6 +226,9 @@ public class ApplicationLoader extends Application {
     }
 
     public static void startPushService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return; // USE NOTIF LISTENER
+        }
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
         boolean enabled;
         if (preferences.contains("pushService")) {

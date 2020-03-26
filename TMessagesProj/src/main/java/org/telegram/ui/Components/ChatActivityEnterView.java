@@ -116,6 +116,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
@@ -4115,7 +4116,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             parentFragment.showDialog(builder.create());
-        } else if (button instanceof TLRPC.TL_keyboardButtonCallback || button instanceof TLRPC.TL_keyboardButtonGame || button instanceof TLRPC.TL_keyboardButtonBuy || button instanceof TLRPC.TL_keyboardButtonUrlAuth) {
+        } else if (button instanceof TLRPC.TL_keyboardButtonBuy) {
+            AlertUtil.showToast("Please use offical Telegram application to create payments");
+        } else if (button instanceof TLRPC.TL_keyboardButtonCallback || button instanceof TLRPC.TL_keyboardButtonGame || button instanceof TLRPC.TL_keyboardButtonUrlAuth) {
             SendMessagesHelper.getInstance(currentAccount).sendCallback(true, messageObject, button, parentFragment);
         } else if (button instanceof TLRPC.TL_keyboardButtonSwitchInline) {
             if (parentFragment.processSwitchButton((TLRPC.TL_keyboardButtonSwitchInline) button)) {

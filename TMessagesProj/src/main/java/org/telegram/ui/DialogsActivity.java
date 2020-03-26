@@ -142,9 +142,10 @@ import java.util.Date;
 import tw.nekomimi.nekogram.FilterPopup;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    
+
     private DialogsRecyclerView listView;
     private RecyclerListView searchListView;
     private LinearLayoutManager layoutManager;
@@ -155,6 +156,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private RadialProgressView progressView;
     private ActionBarMenuItem passcodeItem;
     private ActionBarMenuItem proxyItem;
+    private ActionBarMenuItem scanItem;
     private ProxyDrawable proxyDrawable;
     private ImageView floatingButton;
     private FrameLayout floatingButtonContainer;
@@ -217,7 +219,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private AlertDialog permissionDialog;
     private boolean askAboutContacts = true;
 
-    private boolean proxyItemVisisble;
+    private boolean proxyItemVisisble = true;
     private boolean closeSearchFieldOnHide;
     private long searchDialogId;
     private TLObject searchObject;
@@ -257,7 +259,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private int canUnmuteCount;
     private int canClearCacheCount;
     private int canReportSpamCount;
-    
+
     private int folderId;
 
     private final static int pin = 100;
@@ -947,7 +949,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         if (FilterPopup.DialogType.isDialogsType(dialogsType)) {
             askAboutContacts = MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
-            SharedConfig.loadProxyList();
         }
 
         if (searchString == null) {
@@ -1048,6 +1049,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updatePasscodeButton();
             updateProxyButton(false);
         }
+
+        scanItem = menu.addItem(3, R.drawable.wallet_qr);
+        scanItem.setContentDescription(LocaleController.getString("ScanQRCode", R.string.ScanQRCode));
+        scanItem.setVisibility(View.GONE);
+
         final ActionBarMenuItem item = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
@@ -1057,6 +1063,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (proxyItem != null && proxyItemVisisble) {
                     proxyItem.setVisibility(View.GONE);
+                    scanItem.setVisibility(View.VISIBLE);
                 }
                 if (listView != null) {
                     if (searchString != null) {
@@ -1079,6 +1086,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (proxyItem != null && proxyItemVisisble) {
                     proxyItem.setVisibility(View.VISIBLE);
+                    scanItem.setVisibility(View.GONE);
                 }
                 if (searchString != null) {
                     finishFragment();
@@ -1212,6 +1220,26 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     updatePasscodeButton();
                 } else if (id == 2) {
                     presentFragment(new ProxyListActivity());
+                } else if (id == 3) {
+
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
+                            return;
+                        }
+                    }
+
+                    CameraScanActivity.showAsSheet(DialogsActivity.this, new CameraScanActivity.CameraScanActivityDelegate() {
+
+                        @Override
+                        public void didFindQr(String text) {
+
+                            ProxyUtil.showLinkAlert(getParentActivity(),text);
+
+                        }
+                    });
+
+
                 } else if (id >= 10 && id < 10 + UserConfig.MAX_ACCOUNT_COUNT) {
                     if (getParentActivity() == null) {
                         return;
@@ -3336,6 +3364,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (proxyDrawable == null) {
             return;
         }
+        /*
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         String proxyAddress = preferences.getString("proxy_ip", "");
         boolean proxyEnabled;
@@ -3343,12 +3372,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (!actionBar.isSearchFieldVisible()) {
                 proxyItem.setVisibility(View.VISIBLE);
             }
-            proxyDrawable.setConnected(proxyEnabled, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
-            proxyItemVisisble = true;
+
+         */
+        proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
+           /* proxyItemVisisble = true;
         } else {
-            proxyItem.setVisibility(View.GONE);
+           // proxyItem.setVisibility(View.GONE);
             proxyItemVisisble = false;
         }
+
+            */
     }
 
     private void updateSelectedCount() {
@@ -3493,6 +3526,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             case FilterPopup.DialogType.Users:
                 title = LocaleController.getString("Users", R.string.Users);
                 break;
+            case FilterPopup.DialogType.Contacts:
+                title = LocaleController.getString("Contacts", R.string.Contacts);
+                break;
             case FilterPopup.DialogType.Groups:
                 title = LocaleController.getString("Groups", R.string.Groups);
                 break;
@@ -3507,6 +3543,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 break;
             case FilterPopup.DialogType.Unmuted:
                 title = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+                break;
+            case FilterPopup.DialogType.Unread:
+                title = LocaleController.getString("NotificationsUnread", R.string.NotificationsUnread);
+                break;
+            case FilterPopup.DialogType.UnmutedAndUnread:
+                title = LocaleController.getString("NotificationsUnmutedAndUnread", R.string.NotificationsUnmutedAndUnread);
                 break;
             default:
                 if (folderId != 0) {

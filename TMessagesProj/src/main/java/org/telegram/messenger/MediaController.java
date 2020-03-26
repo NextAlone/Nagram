@@ -85,6 +85,8 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import tw.nekomimi.nekogram.NekoXConfig;
+
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
     private native int startRecord(String path);
@@ -1077,7 +1079,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    private void checkScreenshots(ArrayList<Long> dates) {
+    public void checkScreenshots(ArrayList<Long> dates) {
         if (dates == null || dates.isEmpty() || lastChatEnterTime == 0 || (lastUser == null && !(lastSecretChat instanceof TLRPC.TL_encryptedChat))) {
             return;
         }
@@ -1096,13 +1098,17 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
             }
         }
-        if (send) {
+        if (send && !NekoXConfig.disableScreenshotDetection) {
             if (lastSecretChat != null) {
                 SecretChatHelper.getInstance(lastChatAccount).sendScreenshotMessage(lastSecretChat, lastChatVisibleMessages, null);
             } else {
                 SendMessagesHelper.getInstance(lastChatAccount).sendScreenshotMessage(lastUser, lastMessageId, null);
             }
         }
+    }
+
+    public ArrayList<Long> getLastVisibleMessageIds() {
+        return lastChatVisibleMessages;
     }
 
     public void setLastVisibleMessageIds(int account, long enterTime, long leaveTime, TLRPC.User user, TLRPC.EncryptedChat encryptedChat, ArrayList<Long> visibleMessages, int visibleMessage) {

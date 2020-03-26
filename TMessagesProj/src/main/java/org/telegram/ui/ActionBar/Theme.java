@@ -1854,7 +1854,7 @@ public class Theme {
         }
     };
 
-    public static int DEFALT_THEME_ACCENT_ID = 99;
+    public static int DEFALT_THEME_ACCENT_ID = 0;
     public static int selectedAutoNightType = AUTO_NIGHT_TYPE_NONE;
     public static boolean autoNightScheduleByLocation;
     public static float autoNightBrighnessThreshold = 0.25f;
@@ -3701,11 +3701,10 @@ public class Theme {
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
-        themeInfo.assetName = "bluebubbles.attheme";
-        themeInfo.previewBackgroundColor = 0xff95beec;
-        themeInfo.previewInColor = 0xffffffff;
-        themeInfo.previewOutColor = 0xffd0e6ff;
-        themeInfo.firstAccentIsDefault = true;
+        themeInfo.assetName = "indigo.attheme";
+        themeInfo.previewBackgroundColor = -657931;
+        themeInfo.previewInColor = Color.parseColor("#c0ffffff");
+        themeInfo.previewOutColor = Color.parseColor("#3f51b5");
         themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
         themeInfo.sortIndex = 1;
         themeInfo.setAccentColorOptions(
@@ -3715,7 +3714,7 @@ public class Theme {
                 new int[]    { 0x00000000,                     0xFFDFE2A0,                    0xFFE2B991,                    0xFFD7C1E9,                    0xFFDCD1C0,                    0xFFEFB576,                    0xFFC0A2D1, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
                 new int[]    { 0x00000000,                     0xFFC1E1A3,                    0xFFEBE2BA,                    0xFFE8CDD6,                    0xFFE0DFC6,                    0xFFECE771,                    0xFFDECCDE, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
                 new int[]    {         99,                              9,                            10,                            11,                            12,                            13,                            14,          0,          1,          2,          3,          4,          5,          6,          7,          8 },
-                new String[] {         "",  "p-pXcflrmFIBAAAAvXYQk-mCwZU", "JqSUrO0-mFIBAAAAWwTvLzoWGQI", "O-wmAfBPSFADAAAA4zINVfD_bro", "RepJ5uE_SVABAAAAr4d0YhgB850", "-Xc-np9y2VMCAAAARKr0yNNPYW0", "dhf9pceaQVACAAAAbzdVo4SCiZA",         "",         "",         "",         "",         "",         "",         "",         "",         "" },
+                new String[] {         "",                             "",                            "",                             "",                           "",                            "", "",         "",         "",         "",         "",         "",         "",         "",         "",         "" },
                 new int[]    {          0,                            180,                            45,                             0,                            45,                           180,                             0,          0,          0,          0,          0,          0,          0,          0,          0,          0 },
                 new int[]    {          0,                             52,                            46,                            57,                            45,                            64,                            52,          0,          0,          0,          0,          0,          0,          0,          0,          0 }
                 );

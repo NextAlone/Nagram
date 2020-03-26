@@ -55,6 +55,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.utils.ProxyUtil;
+
 public class ChatEditTypeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private EditTextBoldCursor usernameTextView;
@@ -77,6 +79,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private TextSettingsCell copyCell;
     private TextSettingsCell revokeCell;
     private TextSettingsCell shareCell;
+    private TextSettingsCell shareQRCell;
     private ShadowSectionCell sectionCell2;
     private TextInfoPrivacyCell infoCell;
     private TextSettingsCell textCell;
@@ -405,6 +408,17 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             } catch (Exception e) {
                 FileLog.e(e);
             }
+        });
+
+        shareQRCell = new TextSettingsCell(context);
+        shareQRCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        shareQRCell.setText(LocaleController.getString("ShareQRCode", R.string.ShareQRCode), false);
+        privateContainer.addView(shareQRCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        shareQRCell.setOnClickListener(v -> {
+            if (invite == null) {
+                return;
+            }
+            ProxyUtil.showQrDialog(getParentActivity(),invite.link);
         });
 
         checkTextView = new TextInfoPrivacyCell(context);
@@ -799,6 +813,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
                 new ThemeDescription(shareCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText),
                 new ThemeDescription(shareCell, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector),
+
+                new ThemeDescription(shareQRCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText),
+                new ThemeDescription(shareQRCell, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector),
 
                 new ThemeDescription(adminnedChannelsLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText),
                 new ThemeDescription(adminnedChannelsLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText),

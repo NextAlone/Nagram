@@ -92,8 +92,8 @@ public class SessionCell extends FrameLayout {
         detailTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         detailTextView.setLines(1);
         detailTextView.setMaxLines(1);
-        detailTextView.setSingleLine(true);
-        detailTextView.setEllipsize(TextUtils.TruncateAt.END);
+        //detailTextView.setSingleLine(true);
+        //detailTextView.setEllipsize(TextUtils.TruncateAt.END);
         detailTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(detailTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 21, 36, 21, 0));
 

@@ -1,1 +1,3 @@
+include ':ssr-libev'
+include ':ss-libev'
 include ':TMessagesProj'

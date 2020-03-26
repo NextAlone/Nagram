@@ -1,37 +1,47 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    mavenCentral()
-    google()
-    jcenter()
-}
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 configurations {
     compile.exclude module: 'support-v4'
 }
 
 dependencies {
-    implementation 'androidx.core:core:1.1.0-beta01'
+
+    implementation 'androidx.core:core:1.3.0-alpha02'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
 
-    compileOnly 'org.checkerframework:checker-qual:2.5.2'
-    compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
-    implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
-    implementation 'com.stripe:stripe-android:2.0.2'
+    compileOnly 'org.checkerframework:checker-qual:3.2.0'
+    compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
+    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.osmdroid:osmdroid-android:6.1.5'
+    implementation 'org.osmdroid:osmdroid-android:6.1.6'
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.71"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
+
+    def okHttpVersion = '4.4.1'
+
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
+
+    implementation files('libs/libv2ray.aar')
+
+    releaseImplementation 'com.google.firebase:firebase-messaging:20.1.3'
+    releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
+
 }
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '29.0.2'
-    //ndkVersion "20.0.5594570"
+    buildToolsVersion '29.0.3'
+    ndkVersion "21.0.6113669"
 
-    defaultConfig.applicationId = "tw.nekomimi.nekogram"
-
-    sourceSets.main.jniLibs.srcDirs = ['./jni/']
+    defaultConfig.applicationId = "nekox.messenger"
 
     externalNativeBuild {
         ndkBuild {
@@ -45,6 +55,17 @@ android {
         disable 'BlockedPrivateApi'
     }
 
+    packagingOptions {
+
+        exclude '/fabric/**'
+        exclude '/kotlin/**'
+        exclude '/META-INF/*.version'
+        exclude '/META-INF/*.kotlin_module'
+        exclude '/builddef.lst'
+        exclude '/*.txt'
+
+    }
+
     dexOptions {
         jumboMode = true
     }
@@ -54,247 +75,187 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    signingConfigs {
+        def keystorePwd = null
+        def alias = null
+        def pwd = null
+        Properties properties;
+
+        if (project.rootProject.file('local.properties').exists()) {
+            properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        } else {
+            def base64 = System.getenv("LOCAL_PROPERTIES")
+            if (base64 != null && !base64.isBlank()) {
+                properties = new Properties()
+                properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
+            }
+        }
+
+        if (properties != null) {
+            keystorePwd = properties.getProperty("KEYSTORE_PASS")
+            alias = properties.getProperty("ALIAS_NAME")
+            pwd = properties.getProperty("ALIAS_PASS")
+        }
+
+        keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
+        alias = alias ?: System.getenv("ALIAS_NAME")
+        pwd = pwd ?: System.getenv("ALIAS_PASS")
+
+        release {
+
+            storeFile project.file('release.keystore')
+            storePassword keystorePwd
+            keyAlias alias
+            keyPassword pwd
+        }
+
+        debug {
+            storeFile project.file('debug.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
             jniDebuggable true
-            applicationIdSuffix ".beta"
+            signingConfig signingConfigs.debug
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        /*debugAsan {
-            debuggable true
-            jniDebuggable true
-            applicationIdSuffix ".beta"
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            packagingOptions {
-                doNotStrip "**.so"
-            }
-
-            sourceSets {
-                main {
-                    jniLibs {
-                        srcDir {
-                            'jniLibs'
-                        }
-                    }
-                    resources {
-                        srcDir {
-                            'jniRes'
-                        }
-                    }
-                }
-            }
-        }*/
-
-        debugMultidex {
-            initWith debug
-            minifyEnabled false
+            shrinkResources true
             multiDexEnabled true
-            dependencies {
-                implementation 'com.android.support:multidex:1.0.3'
-            }
-            manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        HA {
+        releaseNoGcm {
+            initWith debug
             debuggable false
             jniDebuggable false
-            applicationIdSuffix ".beta"
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
 
         release {
-            debuggable false
-            jniDebuggable false
-            minifyEnabled true
-            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            multiDexEnabled true
-            dependencies {
-                implementation 'com.android.support:multidex:1.0.3'
-            }
-            manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
+            initWith releaseNoGcm
+        }
+
+        foss {
+            initWith release
         }
     }
 
+    sourceSets.main {
+        java.srcDirs = ['src/main/java', 'src/multidex/java']
+    }
+
     sourceSets.debug {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
+        jniLibs.srcDir 'src/main/libs'
+        jni.srcDirs = []
     }
 
-    /*sourceSets.debugAsan {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
-    }*/
-
-    sourceSets.debugMultidex {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
-        java.srcDirs = ['src/multidex/java']
-    }
-
-    sourceSets.HA {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
+    sourceSets.releaseNoGcm {
+        jniLibs.srcDir 'src/main/libs'
+        jni.srcDirs = []
     }
 
     sourceSets.release {
-        manifest.srcFile 'config/release/AndroidManifest.xml'
-        java.srcDirs = ['src/multidex/java']
+        jniLibs.srcDir 'src/main/libs'
+        jni.srcDirs = []
+        java.srcDirs = ['/src/gservcies/java']
+        manifest.srcFile '/src/gservcies/AndroidManifest.xml'
     }
+
+    sourceSets.foss {
+        jni.srcDirs = ['./jni/']
+    }
+
+    flavorDimensions "version"
+
+    splits {
+
+        abi {
+
+            enable true
+
+            reset()
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+
+            universalApk true
+
+        }
+
+    }
+
+    defaultConfig.versionCode = 2
 
     flavorDimensions "minApi"
 
     productFlavors {
-        armv7 {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-            ext {
-                abiVersionCode = 1
-            }
-        }
-        x86 {
-            ndk {
-                abiFilters "x86"
-            }
-            ext {
-                abiVersionCode = 2
-            }
-        }
-        armv7_SDK23 {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 3
-            }
-        }
-        x86_SDK23 {
-            ndk {
-                abiFilters "x86"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 4
-            }
-        }
-        arm64 {
-            ndk {
-                abiFilters "arm64-v8a"
-            }
-            ext {
-                abiVersionCode = 5
-            }
-        }
-        x64 {
-            ndk {
-                abiFilters "x86_64"
-            }
-            ext {
-                abiVersionCode = 6
-            }
-        }
-        arm64_SDK23 {
-            ndk {
-                abiFilters "arm64-v8a"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            /*sourceSets.debugAsan {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }*/
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 7
-            }
-        }
-        x64_SDK23 {
-            ndk {
-                abiFilters "x86_64"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 8
-            }
-        }
         afat {
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
+            sourceSets.main {
+                java.srcDirs = ['src/main/java', 'src/multidex/java']
             }
-            /*sourceSets.debugAsan {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }*/
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
+            dependencies {
+                implementation 'com.android.support:multidex:1.0.3'
             }
-            ext {
-                abiVersionCode = 9
-            }
-        }
-    }
-
-    defaultConfig.versionCode = 10 * 1875
-
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            output.getProcessManifestProvider().get().doLast {
-                def abiVersion = variant.productFlavors.get(0).abiVersionCode
-
-                def outputDir = manifestOutputDirectory
-                File directory
-                if (outputDir instanceof File) {
-                    directory = outputDir
-                } else {
-                    directory = outputDir.get().asFile
-                }
-
-                String manifestPath = directory.toString() + "/AndroidManifest.xml"
-                def manifestContent = file(manifestPath).getText()
-
-                manifestContent = manifestContent.replace(String.format('android:versionCode="%d"', defaultConfig.versionCode), String.format('android:versionCode="%s"', defaultConfig.versionCode + abiVersion))
-                file(manifestPath).write(manifestContent)
+            multiDexEnabled true
+            manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
+            dependencies {
+                //implementation project(path: ':ss-libev', configuration: 'default')
+                implementation files('libs/ss-libev-release.aar')
+                implementation files('libs/ssr-libev-release.aar')
             }
         }
-    }
 
-    variantFilter { variant ->
-        def names = variant.flavors*.name
-        if (variant.buildType.name != "release" && !names.contains("afat")) {
-            setIgnore(true)
+        legacy {
+            versionNameSuffix '-legacy'
+            sourceSets.main {
+                java.srcDirs = ['src/main/java', 'src/multidex/java']
+            }
+            dependencies {
+                implementation 'com.android.support:multidex:1.0.3'
+            }
+            multiDexEnabled true
+            manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
+        }
+
+        minApi21 {
+            minSdkVersion 21
+            versionNameSuffix '-minApi21'
+            dependencies {
+                //implementation project(path: ':ss-libev', configuration: 'default')
+                implementation files('libs/ss-libev-release.aar')
+                implementation files('libs/ssr-libev-release.aar')
+            }
         }
     }
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
-        versionName "5.15.0.3"
+        targetSdkVersion 29
+        versionName "5.15.0.28"
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+
+        def appId = null
+        def appHash = null
+
+        //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
+
+        if (project.rootProject.file('local.properties').exists()) {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID")
+            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH")
+        }
+
+        buildConfigField 'int', 'APP_ID', appId != null ? appId : "1391584"
+        buildConfigField 'String', 'APP_HASH', "\"" + (appHash != null ? appHash : "355c91550b0d658cfb7ff89dcf91a08c") + "\""
 
         externalNativeBuild {
             ndkBuild {
@@ -303,6 +264,30 @@ android {
             }
         }
 
-        manifestPlaceholders = [applicationClassName: "ApplicationLoader"]
+        manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
+
     }
+
+    tasks.all { task ->
+        if (((task.name.endsWith('Ndk') || task.name.startsWith('generateJsonModel') || task.name.startsWith('externalNativeBuild'))) && !task.name.contains("Foss")) {
+            task.enabled = false
+        }
+    }
+
+}
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+
+    tasks.all { task ->
+        if (((task.name.contains('Crashlytics'))) && !task.name.endsWith("Release")) {
+            task.enabled = false
+        }
+        if (((task.name.endsWith('GoogleServices'))) && !task.name.endsWith("ReleaseGoogleServices")) {
+            task.enabled = false
+        }
+    }
+
 }

@@ -117,6 +117,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import tw.nekomimi.nekogram.NekoXConfig;
+
 public class ChannelAdminLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     protected TLRPC.Chat currentChat;
@@ -1836,7 +1838,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public void showOpenUrlAlert(final String url, boolean ask) {
-        if (Browser.isInternalUrl(url, null) || !ask) {
+        if (Browser.isInternalUrl(url, null) || !ask || NekoXConfig.skipOpenLinkConfirm) {
             Browser.openUrl(getParentActivity(), url, true);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());

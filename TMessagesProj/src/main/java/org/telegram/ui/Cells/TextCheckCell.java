@@ -14,7 +14,10 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.TypedValue;
@@ -25,6 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
@@ -118,7 +122,22 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
+        setTextAndCheckAndIcon(text,checked,divider,-1);
+    }
+
+    public void setTextAndCheckAndIcon(String text, boolean checked, boolean divider,int resId) {
         textView.setText(text);
+        if (resId != -1) {
+            try {
+                Drawable drawable = getResources().getDrawable(resId).mutate();
+                if (drawable != null) {
+                    drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), PorterDuff.Mode.MULTIPLY));
+                }
+                textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+        }
         isMultiline = false;
         checkBox.setChecked(checked, false);
         needDivider = divider;

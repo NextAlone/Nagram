@@ -26,7 +26,7 @@ public class FileLog {
     private File tonlibFile = null;
     private boolean initied;
 
-    private final static String tag = "tmessages";
+    private final static String tag = BuildConfig.APPLICATION_ID;
 
     private static volatile FileLog Instance = null;
     public static FileLog getInstance() {
