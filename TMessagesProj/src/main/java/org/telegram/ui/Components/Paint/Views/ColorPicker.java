@@ -264,7 +264,7 @@ public class ColorPicker extends FrameLayout {
             if (interacting && delegate != null) {
                 delegate.onFinishedColorPicking();
 
-                getContext().getSharedPreferences("paint", Activity.MODE_PRIVATE).edit().putFloat("last_color_location", location).commit();
+                getContext().getSharedPreferences("paint", Activity.MODE_PRIVATE).edit().putFloat("last_color_location", location).apply();
             }
             interacting = false;
             wasChangingWeight = changingWeight;

@@ -10,12 +10,13 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
-public class ShadowSectionCell extends View {
+public class ShadowSectionCell extends LinearLayout {
 
     private int size;
 
@@ -25,12 +26,7 @@ public class ShadowSectionCell extends View {
 
     public ShadowSectionCell(Context context, int s) {
         super(context);
-        setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-        size = s;
+        setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(size), MeasureSpec.EXACTLY));
-    }
 }

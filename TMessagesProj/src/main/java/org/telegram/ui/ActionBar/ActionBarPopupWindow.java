@@ -94,7 +94,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
 
-            backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
+            backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
             setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
 
             setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));

@@ -1272,7 +1272,7 @@ public class VoIPActivity extends Activity implements VoIPService.StateListener,
                                     setEmojiTooltipVisible(false);
                                 }
                             }, 5000);
-                            MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", count + 1).commit();
+                            MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", count + 1).apply();
                         }
                     }
                     if (prevState != VoIPService.STATE_ESTABLISHED && prevState != VoIPService.STATE_RECONNECTING) {

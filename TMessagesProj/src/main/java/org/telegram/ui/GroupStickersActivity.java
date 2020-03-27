@@ -483,7 +483,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         if (selectedStickerSet == null) {
             req.stickerset = new TLRPC.TL_inputStickerSetEmpty();
         } else {
-            MessagesController.getEmojiSettings(currentAccount).edit().remove("group_hide_stickers_" + info.id).commit();
+            MessagesController.getEmojiSettings(currentAccount).edit().remove("group_hide_stickers_" + info.id).apply();
             req.stickerset = new TLRPC.TL_inputStickerSetID();
             req.stickerset.id = selectedStickerSet.set.id;
             req.stickerset.access_hash = selectedStickerSet.set.access_hash;

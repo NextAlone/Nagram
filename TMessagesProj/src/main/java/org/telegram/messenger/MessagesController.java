@@ -607,7 +607,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }
                 if (changed) {
-                    editor.commit();
+                    editor.apply();
                 }
                 if (keelAliveChanged) {
                     ApplicationLoader.startPushService();
@@ -747,7 +747,7 @@ public class MessagesController extends BaseController implements NotificationCe
             editor.putString("dcDomainName2", dcDomainName);
             editor.putInt("webFileDatacenterId", webFileDatacenterId);
             editor.putString("suggestedLangCode", suggestedLangCode);
-            editor.commit();
+            editor.apply();
 
             LocaleController.getInstance().checkUpdateForCurrentRemoteLocale(currentAccount, config.lang_pack_version, config.base_lang_pack_version);
             getNotificationCenter().postNotificationName(NotificationCenter.configLoaded);
@@ -1175,11 +1175,11 @@ public class MessagesController extends BaseController implements NotificationCe
         DialogsActivity.dialogsLoaded[currentAccount] = false;
 
         SharedPreferences.Editor editor = notificationsPreferences.edit();
-        editor.clear().commit();
+        editor.clear().apply();
         editor = emojiPreferences.edit();
-        editor.putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
+        editor.putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).apply();
         editor = mainPreferences.edit();
-        editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").remove("themehint").commit();
+        editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").remove("themehint").apply();
 
         lastScheduledServerQueryTime.clear();
         reloadingWebpages.clear();
@@ -1646,7 +1646,7 @@ public class MessagesController extends BaseController implements NotificationCe
             return;
         }
         installReferer = referer;
-        mainPreferences.edit().putString("installReferer", referer).commit();
+        mainPreferences.edit().putString("installReferer", referer).apply();
     }
 
     public void putEncryptedChat(TLRPC.EncryptedChat encryptedChat, boolean fromCache) {
@@ -2109,7 +2109,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         editor.putInt("dialog_bar_vis3" + dialogId, 3);
-        editor.commit();
+        editor.apply();
         if ((int) dialogId != 0) {
             TLRPC.TL_messages_hidePeerSettingsBar req = new TLRPC.TL_messages_hidePeerSettingsBar();
             if (currentUser != null) {
@@ -2129,7 +2129,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         editor.putInt("dialog_bar_vis3" + dialogId, 3);
-        editor.commit();
+        editor.apply();
         if ((int) dialogId == 0) {
             if (currentEncryptedChat == null || currentEncryptedChat.access_hash == 0) {
                 return;
@@ -2175,7 +2175,7 @@ public class MessagesController extends BaseController implements NotificationCe
         editor.putBoolean("dialog_bar_block" + dialogId, settings.block_contact);
         editor.putBoolean("dialog_bar_exception" + dialogId, settings.need_contacts_exception);
         editor.putBoolean("dialog_bar_location" + dialogId, settings.report_geo);
-        editor.commit();
+        editor.apply();
         getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialogId);
     }
 
@@ -3737,7 +3737,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 nextTosCheckTime = getConnectionsManager().getCurrentTime() + 60 * 60;
             }
-            notificationsPreferences.edit().putInt("nextTosCheckTime", nextTosCheckTime).commit();
+            notificationsPreferences.edit().putInt("nextTosCheckTime", nextTosCheckTime).apply();
         });
     }
 
@@ -3809,7 +3809,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     proxyDialogId = did;
                     proxyDialogAddress = proxyAddress + proxySecret;
-                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).putString("proxyDialogAddress", proxyDialogAddress).commit();
+                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).putString("proxyDialogAddress", proxyDialogAddress).apply();
                     nextProxyInfoCheckTime = res.expires;
                     if (!noDialog) {
                         AndroidUtilities.runOnUIThread(() -> {
@@ -3958,7 +3958,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 if (noDialog) {
                     proxyDialogId = 0;
-                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").commit();
+                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").apply();
                     checkingProxyInfoRequestId = 0;
                     checkingProxyInfo = false;
                     AndroidUtilities.runOnUIThread(this::removeProxyDialog);
@@ -3970,7 +3970,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (removeCurrent != 0) {
             proxyDialogId = 0;
             proxyDialogAddress = null;
-            getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").commit();
+            getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").apply();
             nextProxyInfoCheckTime = getConnectionsManager().getCurrentTime() + 60 * 60;
             if (removeCurrent == 2) {
                 checkingProxyInfo = false;
@@ -4599,7 +4599,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (error == null) {
                 AndroidUtilities.runOnUIThread(() -> {
                     /*installReferer = null;
-                    mainPreferences.edit().remove("installReferer").commit();*/
+                    mainPreferences.edit().remove("installReferer").apply();*/
 
                     TLRPC.TL_help_recentMeUrls res = (TLRPC.TL_help_recentMeUrls) response;
                     putUsers(res.users, false);
@@ -4885,7 +4885,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     editor1.putInt("EnableGroup2", Integer.MAX_VALUE);
                     editor1.putInt("EnableChannel2", Integer.MAX_VALUE);
                 }
-                editor1.remove("EnableGroup").commit();
+                editor1.remove("EnableGroup").apply();
             }
             if (preferences.contains("EnableAll")) {
                 boolean enabled = preferences.getBoolean("EnableAll", true);
@@ -4895,10 +4895,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (!enabled) {
                     editor1.putInt("EnableAll2", Integer.MAX_VALUE);
                 }
-                editor1.remove("EnableAll").commit();
+                editor1.remove("EnableAll").apply();
             }
             if (editor1 != null) {
-                editor1.commit();
+                editor1.apply();
             }
 
             loadingNotificationSettings = 3;
@@ -4960,7 +4960,7 @@ public class MessagesController extends BaseController implements NotificationCe
                                 editor.putInt("EnableChannel2", notify_settings.mute_until);
                             }
                         }
-                        editor.commit();
+                        editor.apply();
                         if (loadingNotificationSettings == 0) {
                             getUserConfig().notificationsSettingsLoaded = true;
                             getUserConfig().saveConfig(false);
@@ -4983,7 +4983,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 SharedPreferences.Editor editor = notificationsPreferences.edit();
                 enableJoined = response instanceof TLRPC.TL_boolFalse;
                 editor.putBoolean("EnableContactJoined", enableJoined);
-                editor.commit();
+                editor.apply();
                 getUserConfig().notificationsSignUpSettingsLoaded = true;
                 getUserConfig().saveConfig(false);
             }));
@@ -5975,7 +5975,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             getMessagesStorage().setDialogFlags(dialog_id, 0);
         }
-        editor.commit();
+        editor.apply();
         if (updated) {
             getNotificationCenter().postNotificationName(NotificationCenter.notificationsSettingsUpdated);
         }
@@ -6020,7 +6020,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         if (editor != null) {
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -10699,10 +10699,10 @@ public class MessagesController extends BaseController implements NotificationCe
                         getMediaDataController().addNewStickerSet(update.stickerset);
                     } else if (baseUpdate instanceof TLRPC.TL_updateSavedGifs) {
                         SharedPreferences.Editor editor2 = emojiPreferences.edit();
-                        editor2.putLong("lastGifLoadTime", 0).commit();
+                        editor2.putLong("lastGifLoadTime", 0).apply();
                     } else if (baseUpdate instanceof TLRPC.TL_updateRecentStickers) {
                         SharedPreferences.Editor editor2 = emojiPreferences.edit();
-                        editor2.putLong("lastStickersLoadTime", 0).commit();
+                        editor2.putLong("lastStickersLoadTime", 0).apply();
                     } else if (baseUpdate instanceof TLRPC.TL_updateDraftMessage) {
                         TLRPC.TL_updateDraftMessage update = (TLRPC.TL_updateDraftMessage) baseUpdate;
                         forceDialogsUpdate = true;
@@ -10847,7 +10847,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }
                 if (editor != null) {
-                    editor.commit();
+                    editor.apply();
                     getNotificationCenter().postNotificationName(NotificationCenter.notificationsSettingsUpdated);
                 }
                 getMessagesStorage().updateUsers(dbUsersStatus, true, true, true);
@@ -10994,7 +10994,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             editor.remove("diditemo" + key);
                         }
                     }
-                    editor.commit();
+                    editor.apply();
                 }
                 if (markAsReadMessagesOutboxFinal != null) {
                     for (int b = 0, size = markAsReadMessagesOutboxFinal.size(); b < size; b++) {

@@ -198,7 +198,7 @@ public class VoIPService extends VoIPBaseService{
 				if(error==null){
 					String data=((TLRPC.TL_dataJSON) response).data;
 					VoIPServerConfig.setConfig(data);
-					preferences.edit().putString("voip_server_config", data).commit();
+					preferences.edit().putString("voip_server_config", data).apply();
 				}
 			}
 		});
@@ -981,7 +981,7 @@ public class VoIPService extends VoIPBaseService{
 				if(oldest!=null)
 					hashes.remove(oldest);
 			}
-			nprefs.edit().putStringSet("calls_access_hashes", hashes).commit();
+			nprefs.edit().putStringSet("calls_access_hashes", hashes).apply();
 			final SharedPreferences preferences = MessagesController.getGlobalMainSettings();
 			controller.setConfig(MessagesController.getInstance(currentAccount).callPacketTimeout / 1000.0, MessagesController.getInstance(currentAccount).callConnectTimeout / 1000.0,
 					convertDataSavingMode(preferences.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault())), call.id);

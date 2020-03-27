@@ -43,7 +43,7 @@ class VmessLoader {
 
         fun parseVmess1Link(server: String): VmessBean {
 
-            val lnk = server.substringAfter(VMESS1_PROTOCOL).toHttpUrl()
+            val lnk = ("https://" + server.substringAfter(VMESS1_PROTOCOL)).toHttpUrl()
 
             val bean = VmessBean()
 

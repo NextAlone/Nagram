@@ -260,7 +260,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             long crashed_time = preferences.getLong("intro_crashed_time", 0);
             boolean fromIntro = intent.getBooleanExtra("fromIntro", false);
             if (fromIntro) {
-                preferences.edit().putLong("intro_crashed_time", 0).commit();
+                preferences.edit().putLong("intro_crashed_time", 0).apply();
             }
             if (!isProxy && Math.abs(crashed_time - System.currentTimeMillis()) >= 60 * 2 * 1000 && intent != null && !fromIntro) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", MODE_PRIVATE);
@@ -548,7 +548,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         presentFragment(new ChannelCreateActivity(args));
                     } else {
                         presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANNEL_CREATE));
-                        preferences.edit().putBoolean("channel_intro", true).commit();
+                        preferences.edit().putBoolean("channel_intro", true).apply();
                     }
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 6) {
@@ -3352,7 +3352,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         freeSpace = statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
                     }
                     if (freeSpace < 1024 * 1024 * 100) {
-                        preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
+                        preferences.edit().putLong("last_space_check", System.currentTimeMillis()).apply();
                         AndroidUtilities.runOnUIThread(() -> {
                             try {
                                 AlertsCreator.createFreeSpaceDialog(LaunchActivity.this).show();
@@ -3419,7 +3419,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             });
             localeDialog = showAlertDialog(builder);
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-            preferences.edit().putString("language_showed2", systemLang).commit();
+            preferences.edit().putString("language_showed2", systemLang).apply();
         } catch (Exception e) {
             FileLog.e(e);
         }

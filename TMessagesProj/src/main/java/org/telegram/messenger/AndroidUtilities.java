@@ -2648,25 +2648,25 @@ public class AndroidUtilities {
                             password = data.getQueryParameter("pass");
                             secret = data.getQueryParameter("secret");
                         }
-                    } else if (scheme.equals("vmess")) {
+                    } else if (scheme.equals("vmess") || scheme.equals("vmess1")) {
                         try {
                             showVmessAlert(activity, new SharedConfig.VmessProxy(data.toString()));
                         } catch (Exception ex) {
-                            AlertUtil.showToast(LocaleController.getString("BrokenLink",R.string.BrokenLink));
+                            AlertUtil.showToast(LocaleController.getString("BrokenLink",R.string.BrokenLink) + ": " + ex.getMessage());
                         }
                         return true;
                     } else if (scheme.equals("ss")) {
                         try {
                             showShadowsocksAlert(activity, new SharedConfig.ShadowsocksProxy(data.toString()));
                         } catch (Exception ex) {
-                            AlertUtil.showToast(LocaleController.getString("BrokenLink",R.string.BrokenLink));
+                            AlertUtil.showToast(LocaleController.getString("BrokenLink",R.string.BrokenLink) + ": " + ex.getMessage());
                         }
                         return true;
                     } else if (scheme.equals("ssr")) {
                         try {
                             showShadowsocksRAlert(activity, new SharedConfig.ShadowsocksRProxy(data.toString()));
                         } catch (Exception ex) {
-                            AlertUtil.showToast(LocaleController.getString("BrokenLink",R.string.BrokenLink));
+                            AlertUtil.showToast(LocaleController.getString("BrokenLink",R.string.BrokenLink) + ": " + ex.getMessage());
                         }
                         return true;
                     }

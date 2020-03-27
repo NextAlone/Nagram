@@ -1270,11 +1270,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     if (id == clear_history) {
                                         if (chatInfo != null && chatInfo.pinned_msg_id != 0) {
                                             SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
+                                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
                                             updatePinnedMessageView(true);
                                         } else if (userInfo != null && userInfo.pinned_msg_id != 0) {
                                             SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
+                                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
                                             updatePinnedMessageView(true);
                                         }
                                         getMessagesController().deleteDialog(dialog_id, 1, param);
@@ -1413,7 +1413,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 } else if (id == show_pinned) {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                    preferences.edit().putInt("pin_" + dialog_id, 0).commit();
+                    preferences.edit().putInt("pin_" + dialog_id, 0).apply();
                     updatePinnedMessageView(true);
                 } else if (id == fake_screenshot) {
                     getSecretChatHelper().sendScreenshotMessage(currentEncryptedChat, getMediaController().getLastVisibleMessageIds(), null);
@@ -3377,9 +3377,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     builder.setNeutralButton(LocaleController.getString("Hide", R.string.Hide), (dialogInterface, i) -> {
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                         if (chatInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
+                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
                         } else if (userInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
+                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
                         }
                         updatePinnedMessageView(true);
                     });
@@ -3387,9 +3387,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     if (chatInfo != null) {
-                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
+                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
                     } else if (userInfo != null) {
-                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
+                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
                     }
                     updatePinnedMessageView(true);
                 }
@@ -3878,7 +3878,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 builder.setMessage(LocaleController.getString("SecretChatContextBotAlert", R.string.SecretChatContextBotAlert));
                                 builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                 showDialog(builder.create());
-                                preferences.edit().putBoolean("secretbot", true).commit();
+                                preferences.edit().putBoolean("secretbot", true).apply();
                             }
                         }
                         mentionContainer.setVisibility(View.VISIBLE);
@@ -4981,7 +4981,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                         if (hasReportSpam() && reportSpamButton.getTag(R.id.object_tag) != null) {
                             SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                            preferences.edit().putInt("dialog_bar_vis3" + dialog_id, 3).commit();
+                            preferences.edit().putInt("dialog_bar_vis3" + dialog_id, 3).apply();
                             getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialog_id);
                         }
                     } else {
@@ -6231,7 +6231,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (preferences.getBoolean("gifhint", false)) {
             return;
         }
-        preferences.edit().putBoolean("gifhint", true).commit();
+        preferences.edit().putBoolean("gifhint", true).apply();
 
         if (getParentActivity() == null || fragmentView == null || gifHintTextView != null) {
             return;
@@ -6959,7 +6959,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
                         messagesController.secretWebpagePreview = 1;
-                        MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", getMessagesController().secretWebpagePreview).commit();
+                        MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", getMessagesController().secretWebpagePreview).apply();
                         foundUrls = null;
                         searchLinks(charSequence, force);
                     });
@@ -6968,7 +6968,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     showDialog(builder.create());
 
                     messagesController.secretWebpagePreview = 0;
-                    MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", messagesController.secretWebpagePreview).commit();
+                    MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", messagesController.secretWebpagePreview).apply();
                 });
                 return;
             }
@@ -7410,7 +7410,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (replyingMessageObject != null && replyingMessageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyKeyboardForceReply) {
                 SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-                preferences.edit().putInt("answered_" + dialog_id, replyingMessageObject.getId()).commit();
+                preferences.edit().putInt("answered_" + dialog_id, replyingMessageObject.getId()).apply();
             }
             if (foundWebPage != null) {
                 foundWebPage = null;
@@ -7884,7 +7884,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 editor.putInt("notify2_" + dialog_id, 2);
                 flags = 1;
                 getMessagesStorage().setDialogFlags(dialog_id, flags);
-                editor.commit();
+                editor.apply();
                 TLRPC.Dialog dialog = getMessagesController().dialogs_dict.get(dialog_id);
                 if (dialog != null) {
                     dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
@@ -7900,7 +7900,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("notify2_" + dialog_id, 0);
             getMessagesStorage().setDialogFlags(dialog_id, 0);
-            editor.commit();
+            editor.apply();
             TLRPC.Dialog dialog = getMessagesController().dialogs_dict.get(dialog_id);
             if (dialog != null) {
                 dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
@@ -11656,7 +11656,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (preferences.getBoolean("themehint", false)) {
                 return;
             }
-            preferences.edit().putBoolean("themehint", true).commit();
+            preferences.edit().putBoolean("themehint", true).apply();
             boolean deleteTheme = (Boolean) args[2];
             undoView.showWithAction(0, UndoView.ACTION_THEME_CHANGED, null, () -> {
                 if (themeAccent != null) {
@@ -12127,7 +12127,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (showCount < 3) {
                     if (Utilities.random.nextFloat() <= 0.2f) {
                         showVoiceHint(false, chatActivityEnterView.isInVideoMode());
-                        preferences.edit().putInt(key, ++showCount).commit();
+                        preferences.edit().putInt(key, ++showCount).apply();
                     }
                 }
             }
@@ -12944,7 +12944,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (getMessagesController().isProxyDialog(dialog_id, true)) {
                 SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
                 if (preferences.getLong("proxychannel", 0) != dialog_id) {
-                    preferences.edit().putLong("proxychannel", dialog_id).commit();
+                    preferences.edit().putLong("proxychannel", dialog_id).apply();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setMessage(LocaleController.getString("UseProxySponsorInfo", R.string.UseProxySponsorInfo));
@@ -13142,7 +13142,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     editor.remove("diditem" + dialog_id);
                     editor.remove("diditemo" + dialog_id);
                 }
-                editor.commit();
+                editor.apply();
             }
 
             if (currentUser != null) {
@@ -15569,7 +15569,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             builder.setMessage(LocaleController.formatString("BotPermissionGameAlert", R.string.BotPermissionGameAlert, name));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
                 showOpenGameAlert(game, messageObject, urlStr, false, uid);
-                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("askgame_" + uid, false).commit();
+                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("askgame_" + uid, false).apply();
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             showDialog(builder.create());

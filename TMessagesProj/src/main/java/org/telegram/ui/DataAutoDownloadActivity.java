@@ -211,7 +211,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             }
             SharedPreferences.Editor editor = MessagesController.getMainSettings(currentAccount).edit();
             editor.putInt(key2, currentPresetNum);
-            editor.commit();
+            editor.apply();
             DownloadController.getInstance(currentAccount).checkAutodownloadSettings();
             for (int a = 0; a < 3; a++) {
                 RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(photosRow + a);
@@ -395,7 +395,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 } else {
                     DownloadController.getInstance(currentAccount).currentRoamingPreset = currentPresetNum;
                 }
-                editor.commit();
+                editor.apply();
 
                 cell.setChecked(!checked);
                 DownloadController.getInstance(currentAccount).checkAutodownloadSettings();
@@ -471,7 +471,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                     } else {
                         DownloadController.getInstance(currentAccount).currentRoamingPreset = currentPresetNum;
                     }
-                    editor.commit();
+                    editor.apply();
 
                     cell.setChecked(!checked);
                     RecyclerView.ViewHolder holder = listView.findContainingViewHolder(view);
@@ -700,7 +700,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                         } else {
                             DownloadController.getInstance(currentAccount).currentRoamingPreset = currentPresetNum;
                         }
-                        editor.commit();
+                        editor.apply();
                         builder.getDismissRunnable().run();
 
                         RecyclerView.ViewHolder holder = listView.findContainingViewHolder(view);

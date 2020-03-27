@@ -1263,7 +1263,9 @@ public class NekoSettingsActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
                     if (position == ipv6Row) {
-                        textCell.setTextAndCheck(LocaleController.getString("IPv6", R.string.IPv6), NekoConfig.useIPv6, false);
+                        textCell.setTextAndCheck(LocaleController.getString("IPv6", R.string.IPv6), NekoConfig.useIPv6, true);
+                    } else if (position == disableProxyWhenVpnEnabledRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableProxyWhenVpnEnabled", R.string.DisableProxyWhenVpnEnabled), NekoXConfig.disableProxyWhenVpnEnabled, false);
                     } else if (position == hidePhoneRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, true);
                     } else if (position == inappCameraRow) {
@@ -1276,6 +1278,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("SaveCacheToSdcard", R.string.SaveCacheToSdcard), NekoConfig.saveCacheToSdcard, true);
                     } else if (position == skipOpenLinkConfiirm) {
                         textCell.setTextAndCheck(LocaleController.getString("SkipOpenLinkConfirm", R.string.SkipOpenLinkConfirm), NekoXConfig.skipOpenLinkConfirm, true);
+                    } else if (position == disableChatActionRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableChatAction", R.string.DisableChatAction), NekoXConfig.disableChatAction, true);
                     } else if (position == useSystemEmojiRow) {
                         textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), SharedConfig.useSystemEmoji, true);
                     } else if (position == typefaceRow) {

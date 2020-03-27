@@ -53,6 +53,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -1876,7 +1877,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             TLRPC.Chat chat = chatActivity.getCurrentChat();
             TLRPC.User user = chatActivity.getCurrentUser();
             if (user != null || ChatObject.isChannel(chat) && chat.megagroup || !ChatObject.isChannel(chat)) {
-                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + chatActivity.getDialogId(), !notify).commit();
+                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + chatActivity.getDialogId(), !notify).apply();
             }
         }
         applyCaption();
@@ -3047,16 +3048,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int finalWidth = itemSize - cameraViewOffsetX;
             int finalHeight = itemSize - cameraViewOffsetY - cameraViewOffsetBottomY;
 
-            FrameLayout.LayoutParams layoutParams;
+            ViewGroup.LayoutParams layoutParams;
             if (!cameraOpened) {
                 cameraView.setClipTop(cameraViewOffsetY);
                 cameraView.setClipBottom(cameraViewOffsetBottomY);
-                layoutParams = (FrameLayout.LayoutParams) cameraView.getLayoutParams();
+                layoutParams = (ViewGroup.LayoutParams) cameraView.getLayoutParams();
                 if (layoutParams.height != finalHeight || layoutParams.width != finalWidth) {
                     layoutParams.width = finalWidth;
                     layoutParams.height = finalHeight;
                     cameraView.setLayoutParams(layoutParams);
-                    final FrameLayout.LayoutParams layoutParamsFinal = layoutParams;
+                    final ViewGroup.LayoutParams layoutParamsFinal = layoutParams;
                     AndroidUtilities.runOnUIThread(() -> {
                         if (cameraView != null) {
                             cameraView.setLayoutParams(layoutParamsFinal);
@@ -3065,12 +3066,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
             }
 
-            layoutParams = (FrameLayout.LayoutParams) cameraIcon.getLayoutParams();
+            layoutParams = (ViewGroup.LayoutParams) cameraIcon.getLayoutParams();
             if (layoutParams.height != finalHeight || layoutParams.width != finalWidth) {
                 layoutParams.width = finalWidth;
                 layoutParams.height = finalHeight;
                 cameraIcon.setLayoutParams(layoutParams);
-                final FrameLayout.LayoutParams layoutParamsFinal = layoutParams;
+                final ViewGroup.LayoutParams layoutParamsFinal = layoutParams;
                 AndroidUtilities.runOnUIThread(() -> {
                     if (cameraIcon != null) {
                         cameraIcon.setLayoutParams(layoutParamsFinal);
@@ -3105,7 +3106,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 cameraView.setClipToOutline(true);
             }
             cameraView.setContentDescription(LocaleController.getString("AccDescrInstantCamera", R.string.AccDescrInstantCamera));
-            container.addView(cameraView, 1, new FrameLayout.LayoutParams(itemSize, itemSize));
+            container.addView(cameraView, 1, new LinearLayout.LayoutParams(itemSize, itemSize));
             cameraView.setDelegate(new CameraView.CameraViewDelegate() {
                 @Override
                 public void onCameraCreated(Camera camera) {
@@ -3183,7 +3184,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 cameraIcon.setWillNotDraw(false);
                 cameraIcon.setClipChildren(true);
             }
-            container.addView(cameraIcon, 2, new FrameLayout.LayoutParams(itemSize, itemSize));
+            container.addView(cameraIcon, 2, new LinearLayout.LayoutParams(itemSize, itemSize));
 
             cameraView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
             cameraView.setEnabled(mediaEnabled);

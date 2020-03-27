@@ -745,7 +745,7 @@ public class LocaleController {
             }
         }
         editor.putString("unofficial", stringBuilder.toString());
-        editor.commit();
+        editor.apply();
     }
 
     public boolean deleteLanguage(LocaleInfo localeInfo, int currentAccount) {
@@ -952,7 +952,7 @@ public class LocaleController {
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("language", localeInfo.getKey());
-                editor.commit();
+                editor.apply();
             }
             if (pathToFile == null) {
                 localeValues.clear();
@@ -1862,7 +1862,7 @@ public class LocaleController {
                             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("language", localeInfo.getKey());
-                            editor.commit();
+                            editor.apply();
                         }
                         if (newLocale != null) {
                             localeValues = valuesToSet;

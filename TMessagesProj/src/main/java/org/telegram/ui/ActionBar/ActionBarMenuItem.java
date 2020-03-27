@@ -396,7 +396,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void redrawPopup(int color) {
-        if (popupLayout != null && popupLayout.getBackgroundColor() != color) {
+        if (popupLayout != null) {
             popupLayout.setBackgroundColor(color);
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupLayout.invalidate();

@@ -1682,7 +1682,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             editor.putInt("notify2_" + did, 0);
                         }
                         MessagesStorage.getInstance(currentAccount).setDialogFlags(did, 0);
-                        editor.commit();
+                        editor.apply();
                         TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(did);
                         if (dialog != null) {
                             dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
@@ -1702,7 +1702,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         NotificationsController.getInstance(currentAccount).removeNotificationsForDialog(did);
                         MessagesStorage.getInstance(currentAccount).setDialogFlags(did, flags);
-                        editor.commit();
+                        editor.apply();
                         TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(did);
                         if (dialog != null) {
                             dialog.notify_settings = new TLRPC.TL_peerNotifySettings();

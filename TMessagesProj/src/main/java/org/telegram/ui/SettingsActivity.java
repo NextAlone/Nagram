@@ -540,14 +540,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 BuildVars.DEBUG_VERSION = BuildVars.LOGS_ENABLED;
                                 BuildVars.DEBUG_PRIVATE_VERSION = BuildVars.LOGS_ENABLED;
                                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
+                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
                             } else if (which == 5) {
                                 NekoConfig.toggleResidentNotification();
                             } else if (which == 6) {
                                 MessagesStorage.getInstance(currentAccount).clearSentMedia();
                                 SharedConfig.setNoSoundHintShowed(false);
                                 SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
-                                editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").commit();
+                                editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").apply();
                                 SharedConfig.textSelectionHintShows = 0;
                             } else if (which == 7) {
                                 VoIPHelper.showCallDebugSettings(getParentActivity());
@@ -2135,12 +2135,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 toSave.add(o.toString());
             }
-            MessagesController.getGlobalMainSettings().edit().putStringSet("settingsSearchRecent2", toSave).commit();
+            MessagesController.getGlobalMainSettings().edit().putStringSet("settingsSearchRecent2", toSave).apply();
         }
 
         public void clearRecent() {
             recentSearches.clear();
-            MessagesController.getGlobalMainSettings().edit().remove("settingsSearchRecent2").commit();
+            MessagesController.getGlobalMainSettings().edit().remove("settingsSearchRecent2").apply();
             notifyDataSetChanged();
         }
 

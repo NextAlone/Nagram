@@ -392,7 +392,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     return;
                 }
                 lastSelectedDialog = did;
-                MessagesController.getNotificationsSettings(currentAccount).edit().putInt("auto_lastSelectedDialog", did).commit();
+                MessagesController.getNotificationsSettings(currentAccount).edit().putInt("auto_lastSelectedDialog", did).apply();
                 MediaController.getInstance().setPlaylist(arrayList, arrayList.get(id), false);
                 mediaSession.setQueue(arrayList1);
                 if (did > 0) {

@@ -85,7 +85,7 @@ public class TestActivity extends BaseFragment {
         super.onFragmentDestroy();
         if (encryptedString != null) {
             SharedPreferences preferences = MessagesController.getMainSettings(UserConfig.selectedAccount);
-            preferences.edit().remove("test_enc").commit();
+            preferences.edit().remove("test_enc").apply();
         }
     }
 
@@ -216,7 +216,7 @@ public class TestActivity extends BaseFragment {
             String str = encode(codeField.getText().toString());
             if (str != null) {
                 SharedPreferences preferences = MessagesController.getMainSettings(UserConfig.selectedAccount);
-                preferences.edit().putString("test_enc", str).commit();
+                preferences.edit().putString("test_enc", str).apply();
                 Toast.makeText(getParentActivity(), "String encoded", Toast.LENGTH_SHORT).show();
                 finishFragment();
             }

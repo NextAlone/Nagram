@@ -378,7 +378,7 @@ public class ConnectionsManager extends BaseController {
 
     public void switchBackend() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        preferences.edit().remove("language_showed2").commit();
+        preferences.edit().remove("language_showed2").apply();
         native_switchBackend(currentAccount);
     }
 
