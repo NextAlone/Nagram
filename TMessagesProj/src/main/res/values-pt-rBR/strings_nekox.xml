@@ -33,6 +33,7 @@
     <string name="AddProxyTelegram">Adicionar Proxy MTProto</string>
     <string name="AddProxyVmess">Adicionar Proxy Vmess</string>
     <string name="AddProxySS">Adicionar Shadowsocks Proxy</string>
+    <string name="AddProxySSR">Adicionar ShadowsocksR Proxy</string>
     <string name="EditProxy">Editar Proxy</string>
     <string name="ShareProxy">Compartilhar Proxy</string>
     <string name="ProxyDelete">Excluir proxy</string>
@@ -48,6 +49,11 @@
     <string name="ProxyInfoSS">Configurações do Proxy Shadowsocks</string>
     <string name="SSPassword">Senha</string>
     <string name="SSMethod">Método de criptografia</string>
+    <string name="ProxyInfoSSR">Configurações do proxy ShadowsocksR</string>
+    <string name="SSRProtocol">Protocolo</string>
+    <string name="SSRProtocolParams">Parâmetros de protocolo</string>
+    <string name="SSRObfs">Obfs</string>
+    <string name="SSRObfsParam">Obfs Param</string>
     <string name="MinApi21Required">Desculpe, você precisa pelo menos do Android 5 (API21).</string>
     <string name="ImportProxyFromClipboard">Importar da área de transferência</string>
     <string name="BrokenLink">Link desconhecido / quebrado</string>
