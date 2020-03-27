@@ -44,7 +44,7 @@ If you don't use NekoX's APP_ID and APP_HASH, you need to register a physical fi
 
 OK, a version without firebase cloud messaging and precompiled native libraries, maybe this makes you feel more free, or your phone does not have Google services.
 
-To compile the foss version, please refer to [this script](.github/workflows/release.yml).
+To compile the foss version, please refer to [this script](.github/workflows/foss.yml).
 
 ### Build Variants
 

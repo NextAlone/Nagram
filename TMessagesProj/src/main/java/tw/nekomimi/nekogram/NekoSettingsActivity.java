@@ -812,11 +812,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         break;
                     }
                     case 5: {
-                        NekoConfig.toggleShowMessageDetails();
-                        textCell.setChecked(NekoConfig.showMessageDetails);
-                        break;
-                    }
-                    case 6: {
                         NekoConfig.toggleShowTranslate();
                         textCell.setChecked(NekoConfig.showTranslate);
                         break;

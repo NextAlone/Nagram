@@ -22,7 +22,7 @@ jobs:
         run: |
           git submodule update --init --recursive
 
-          cd TMessagesProj/libs
+          cd TMessagesProj/
 
           go env -w GOPATH=$HOME/go
           export GOPATH=$HOME/go
@@ -37,6 +37,8 @@ jobs:
           go get github.com/2dust/AndroidLibV2rayLite
 
           gomobile init
+
+          rm libv2ray.aar
           env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
 
           cd ../jni
@@ -67,10 +69,6 @@ jobs:
         with:
           name: NekoX-Foss
           path: "TMessagesProj/build/outputs/apk/afat/foss"
-      - uses: actions/upload-artifact@master
-        with:
-          name: Native Binaries
-          path: "TMessagesProj/build/intermediates/ndkBuild/afatFoss/obj/local"
       - uses: actions/upload-artifact@master
         with:
           name: V2ray Library
