@@ -50,7 +50,7 @@ To compile the foss version, please refer to [this script](.github/workflows/fos
 
 Available variant list:
 
-`Afat`, `Legacy`, `MinApi21`
+`Afat`, `MinApi21`
 
 
 ## Localization

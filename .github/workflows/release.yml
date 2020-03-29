@@ -30,7 +30,6 @@ jobs:
           sudo bash <<EOF
 
             export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-            export GPG_KEY="${{ secrets.GPG_KEY }}"
 
             mkdir apks; find . -name "*.apk" -exec mv {} apks \;
 
@@ -39,9 +38,9 @@ jobs:
 
             cd apks
 
-            gpg --import <<EOF
-            $GPG_KEY
-          EOF
+            gpg --import <<EOF_B
+            ${{ secrets.GPG_KEY }}
+          EOF_B
 
             echo "DA55ACBFDDA40853BFC5496ECD109927C34A63C4"  > $HOME/.gnupg/sshcontrol
 
@@ -55,7 +54,6 @@ jobs:
 
             git init
 
-            git remote add github git@github.com:NekogramX/NekoX-Resources.git
             git remote add gitlab git@gitlab.com:NekohaSekai/nekox-resources.git
             git remote add gitee  git@gitee.com:nekoshizuku/nekox-resources.git
 
