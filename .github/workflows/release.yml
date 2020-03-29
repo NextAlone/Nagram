@@ -26,21 +26,22 @@ jobs:
             ./gradlew TMessagesPro:assembleRelease TMessagesProj:assembleReleaseNoGcm TMessagesProj:bundleAfatRelease
           EOF
       - name: Upload apks
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY: ${{ secrets.GPG_KEY }}
         run: |
           sudo bash <<EOF
+
+            export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+            export GPG_KEY="${{ secrets.GPG_KEY }}"
+
             mkdir apks; find . -name "*.apk" -exec mv {} apks \;
 
-            ghr -b "${{ github.event.head_commit.message }}" \
+            ghr -replace -b "${{ github.event.head_commit.message }}" \
               -n "${{ github.ref }}" "${{ github.ref }}" apks/
 
             cd apks
 
             gpg --import <<EOF
             $GPG_KEY
-            EOF
+          EOF
 
             echo "DA55ACBFDDA40853BFC5496ECD109927C34A63C4"  > $HOME/.gnupg/sshcontrol
 

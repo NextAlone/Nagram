@@ -21,6 +21,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import androidx.annotation.Keep;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.ScrollerCompat;
+
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +54,7 @@ public class ActionBarPopupWindow extends PopupWindow {
     private AnimatorSet windowAnimatorSet;
     private boolean animationEnabled = allowAnimation;
     private int dismissAnimationDuration = 150;
+
     static {
         Field f = null;
         try {
@@ -92,6 +96,10 @@ public class ActionBarPopupWindow extends PopupWindow {
         protected Drawable backgroundDrawable;
 
         public ActionBarPopupWindowLayout(Context context) {
+            this(context,false);
+        }
+
+        public ActionBarPopupWindowLayout(Context context, boolean verticalScrollBarEnabled) {
             super(context);
 
             backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
@@ -102,7 +110,7 @@ public class ActionBarPopupWindow extends PopupWindow {
 
             try {
                 scrollView = new ScrollView(context);
-                scrollView.setVerticalScrollBarEnabled(false);
+                scrollView.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
                 addView(scrollView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
             } catch (Throwable e) {
                 FileLog.e(e);
@@ -111,7 +119,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             if (scrollView != null) {
-                scrollView.addView(linearLayout, new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                scrollView.addView(linearLayout, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             } else {
                 addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
             }

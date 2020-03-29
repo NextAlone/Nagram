@@ -351,11 +351,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog1.id) &&
                         ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog2.id))
                     if (NekoXConfig.sortByUnmuted) {
-                        if (isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
+                        if (!isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
                             return 1;
-                        } else if (!isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
+                        } else if (isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                             return -1;
-                        } else if (isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
+                        } else if (!isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                             if (NekoXConfig.sortByUser) {
                                 if (!is1user && is2user) {
                                     return 1;
@@ -11576,7 +11576,7 @@ public class MessagesController extends BaseController implements NotificationCe
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.setMessage(reason);
         fragment.showDialog(builder.create());

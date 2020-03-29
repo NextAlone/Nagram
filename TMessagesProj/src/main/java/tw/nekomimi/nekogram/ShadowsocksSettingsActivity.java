@@ -26,9 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.v2ray.ang.V2RayConfig;
-import com.v2ray.ang.dto.AngConfig;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -37,10 +34,8 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -49,6 +44,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.utils.PopupBuilder;
 
 public class ShadowsocksSettingsActivity extends BaseFragment {
 
@@ -284,13 +280,9 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
         methodField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(methodSet,(d,i) -> {
-
-                methodField.getValueTextView().setText(methodSet[i]);
-
-            });
+            select.setItems(methodSet, methodField.getValueTextView()::setText);
 
             select.show();
 

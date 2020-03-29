@@ -446,7 +446,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		if (getParentActivity() == null)
 			return;
 		new AlertDialog.Builder(getParentActivity())
-				.setTitle(LocaleController.getString("AppName", R.string.AppName))
+				.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
 				.setMessage(LocaleController.getString("ConfirmDeleteCallLog", R.string.ConfirmDeleteCallLog))
 				.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialog, which) -> {
 					ArrayList<Integer> ids = new ArrayList<>();

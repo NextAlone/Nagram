@@ -22,7 +22,7 @@ jobs:
         run: |
           git submodule update --init --recursive
 
-          cd TMessagesProj/
+          cd TMessagesProj/libs
 
           go env -w GOPATH=$HOME/go
           export GOPATH=$HOME/go
@@ -53,8 +53,6 @@ jobs:
           ./patch_boringssl.sh
           ./build_boringssl.sh
 
-        env:
-          GPG_KEY: ${{ secrets.GPG_KEY }}
       - name: assemble
         run: |
           sudo bash <<EOF

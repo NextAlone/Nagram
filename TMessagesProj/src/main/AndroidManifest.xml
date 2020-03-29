@@ -82,7 +82,7 @@
         android:allowBackup="false"
         android:networkSecurityConfig="@xml/network_security_config"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"
-        android:label="@string/Nekogram"
+        android:label="@string/NekoX"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
         android:largeHeap="true"

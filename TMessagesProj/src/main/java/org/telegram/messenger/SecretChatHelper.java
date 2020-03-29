@@ -1953,7 +1953,7 @@ public class SecretChatHelper extends BaseController {
                                     FileLog.e(e);
                                 }
                                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                                 builder.setMessage(LocaleController.getString("CreateEncryptedChatError", R.string.CreateEncryptedChatError));
                                 builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                 builder.show().setCanceledOnTouchOutside(true);

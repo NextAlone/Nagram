@@ -118,7 +118,7 @@ public class NekoConfig {
             hidePhone = preferences.getBoolean("hidePhone", true);
             ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
             forceTablet = preferences.getBoolean("forceTablet", false);
-            typeface = preferences.getInt("typeface", Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 1 : 0);
+            typeface = preferences.getInt("typeface", 0);
             nameOrder = preferences.getInt("nameOrder", 1);
             mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
             transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);

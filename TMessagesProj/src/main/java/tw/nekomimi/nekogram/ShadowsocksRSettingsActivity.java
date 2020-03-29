@@ -34,7 +34,6 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -45,6 +44,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.utils.PopupBuilder;
 
 public class ShadowsocksRSettingsActivity extends BaseFragment {
 
@@ -302,13 +302,9 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
         methodField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(ShadowsocksRLoader.Companion.getMethods(),(d,i) -> {
-
-                methodField.getValueTextView().setText(ShadowsocksRLoader.Companion.getMethods()[i]);
-
-            });
+            select.setItems(methodSet, methodField.getValueTextView()::setText);
 
             select.show();
 
@@ -324,13 +320,9 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
         protocolField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(ShadowsocksRLoader.Companion.getProtocols(),(d,i) -> {
-
-                protocolField.getValueTextView().setText(ShadowsocksRLoader.Companion.getProtocols()[i]);
-
-            });
+            select.setItems(ShadowsocksRLoader.Companion.getProtocols(), protocolField.getValueTextView()::setText);
 
             select.show();
 
@@ -348,13 +340,9 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
         obfsField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(ShadowsocksRLoader.Companion.getObfses(),(d,i) -> {
-
-                obfsField.getValueTextView().setText(ShadowsocksRLoader.Companion.getObfses()[i]);
-
-            });
+            select.setItems(ShadowsocksRLoader.Companion.getObfses(), obfsField.getValueTextView()::setText);
 
             select.show();
 

@@ -144,7 +144,7 @@ public class VoIPHelper {
 	public static void permissionDenied(final Activity activity, final Runnable onFinish) {
 		if (!activity.shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
 			AlertDialog dlg = new AlertDialog.Builder(activity)
-					.setTitle(LocaleController.getString("AppName", R.string.AppName))
+					.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
 					.setMessage(LocaleController.getString("VoipNeedMicPermission", R.string.VoipNeedMicPermission))
 					.setPositiveButton(LocaleController.getString("OK", R.string.OK), null)
 					.setNegativeButton(LocaleController.getString("Settings", R.string.Settings), (dialog, which) -> {

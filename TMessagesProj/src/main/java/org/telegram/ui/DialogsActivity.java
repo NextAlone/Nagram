@@ -2154,7 +2154,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         showDialog(permissionDialog = builder.create());
                     } else if (hasNotStoragePermission && activity.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                         builder.setMessage(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                         showDialog(permissionDialog = builder.create());
@@ -2171,7 +2171,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             showDialog(new AlertDialog.Builder(getParentActivity())
-                    .setTitle(LocaleController.getString("AppName", R.string.AppName))
+                    .setTitle(LocaleController.getString("NekoX", R.string.NekoX))
                     .setMessage(LocaleController.getString("PermissionXiaomiLockscreen", R.string.PermissionXiaomiLockscreen))
                     .setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                         Intent intent = XiaomiUtilities.getPermissionManagerIntent();
@@ -2577,7 +2577,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             Object item = dialogsSearchAdapter.getItem(position);
             /*if (item instanceof String || dialogsSearchAdapter.isRecentSearchDisplayed()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                 builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
                 builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
                     if (dialogsSearchAdapter.isRecentSearchDisplayed()) {
@@ -3554,13 +3554,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (folderId != 0) {
                     title = LocaleController.getString("ArchivedChats", R.string.ArchivedChats);
                 } else {
-                    title = LocaleController.getString("Nekogram", R.string.Nekogram);
+                    title = LocaleController.getString("NekoX", R.string.NekoX);
                 }
         }
-        if (FilterPopup.getInstance(currentAccount).getTotalUnreadCount() == 0) {
-            return LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
-        }
-        return LocaleController.getString("NekogramEmojiDialogsUnread", R.string.NekogramEmojiDialogsUnread) + " " + title;
+        return title;
     }
 
     @Override

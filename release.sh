@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-git branch -D release
-git checkout -b release
-git push origin release -f
-git checkout master
+git tag -d "$1"
+git tag "$1"
+git push origin ":$1"
+git push origin "$1"

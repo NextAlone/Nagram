@@ -13,16 +13,13 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,20 +37,18 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
-import kotlin.NumbersKt;
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.utils.PopupBuilder;
 
 public class VmessSettingsActivity extends BaseFragment {
 
@@ -333,13 +328,9 @@ public class VmessSettingsActivity extends BaseFragment {
 
         securityField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(securitySet,(d,i) -> {
-
-                securityField.getValueTextView().setText(securitySet[i]);
-
-            });
+            select.setItems(securitySet, securityField.getValueTextView()::setText);
 
             select.show();
 
@@ -355,13 +346,9 @@ public class VmessSettingsActivity extends BaseFragment {
 
         networkField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(networkSet,(d,i) -> {
-
-                networkField.getValueTextView().setText(networkSet[i]);
-
-            });
+            select.setItems(networkSet, networkField.getValueTextView()::setText);
 
             select.show();
 
@@ -377,13 +364,9 @@ public class VmessSettingsActivity extends BaseFragment {
 
         headTypeField.setOnClickListener((v) -> {
 
-            BottomSheet.Builder select = new BottomSheet.Builder(context);
+            PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(headTypeSet,(d,i) -> {
-
-                headTypeField.getValueTextView().setText(headTypeSet[i]);
-
-            });
+            select.setItems(headTypeSet, headTypeField.getValueTextView()::setText);
 
             select.show();
 

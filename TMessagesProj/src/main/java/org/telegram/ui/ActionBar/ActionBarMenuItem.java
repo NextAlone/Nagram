@@ -9,7 +9,9 @@
 package org.telegram.ui.ActionBar;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -18,8 +20,10 @@ import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.ActionMode;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -37,12 +41,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Components.CloseProgressDrawable2;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
+
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class ActionBarMenuItem extends FrameLayout {
 
@@ -120,6 +127,18 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean animateClear = true;
     private boolean clearsTextOnSearchCollapse = true;
     private boolean measurePopup = true;
+
+    @Override
+    public boolean isVerticalScrollBarEnabled() {
+        return verticalScrollBarEnabled;
+    }
+
+    @Override
+    public void setVerticalScrollBarEnabled(boolean verticalScrollBarEnabled) {
+        this.verticalScrollBarEnabled = verticalScrollBarEnabled;
+    }
+
+    private boolean verticalScrollBarEnabled;
 
     public ActionBarMenuItem(Context context, ActionBarMenu menu, int backgroundColor, int iconColor) {
         this(context, menu, backgroundColor, iconColor, false);
@@ -264,7 +283,7 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         rect = new Rect();
         location = new int[2];
-        popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
+        popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), verticalScrollBarEnabled);
         popupLayout.setOnTouchListener((v, event) -> {
             if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                 if (popupWindow != null && popupWindow.isShowing()) {
@@ -442,6 +461,16 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setMenuYOffset(int offset) {
         yOffset = offset;
+    }
+
+    private View anchor;
+
+    public View getAnchor() {
+        return anchor;
+    }
+
+    public void setAnchor(View anchor) {
+        this.anchor = anchor;
     }
 
     public void toggleSubMenu() {
@@ -922,8 +951,23 @@ public class ActionBarMenuItem extends FrameLayout {
 
     private void updateOrShowPopup(boolean show, boolean update) {
         int offsetY;
-
-        if (parentMenu != null) {
+        if (anchor != null) {
+            float scaleY = anchor.getScaleY();
+            offsetY = -(int) (anchor.getMeasuredHeight() * scaleY - anchor.getTranslationY() / scaleY) + additionalYOffset;
+            int height = AndroidUtilities.displayMetrics.heightPixels;
+            int[] location = new int[2];
+            anchor.getLocationOnScreen(location);
+            int y = location[1];
+            if (height - y < popupLayout.getMeasuredHeight() + offsetY) {
+                if (height - (height - y) >= popupLayout.getMeasuredHeight()) {
+                    offsetY -= popupLayout.getMeasuredHeight();
+                } else if (popupLayout.getMeasuredHeight() > height) {
+                    offsetY -= scaleY;
+                } else {
+                    offsetY -= popupLayout.getMeasuredHeight() / 2;
+                }
+            }
+        } else if (parentMenu != null) {
             offsetY = -parentMenu.parentActionBar.getMeasuredHeight() + parentMenu.getTop() + parentMenu.getPaddingTop() - (int) parentMenu.parentActionBar.getTranslationY();
         } else {
             float scaleY = getScaleY();
@@ -935,7 +979,33 @@ public class ActionBarMenuItem extends FrameLayout {
             popupLayout.scrollToTop();
         }
 
-        if (parentMenu != null) {
+        if (anchor != null) {
+            if (subMenuOpenSide == 0) {
+                if (anchor.getParent() != null) {
+                    View parent = (View) anchor.getParent();
+                    if (show) {
+                        popupWindow.showAsDropDown(parent, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY);
+                    }
+                    if (update) {
+                        popupWindow.update(parent, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY, -1, -1);
+                    }
+                }
+            } else if (subMenuOpenSide == 1) {
+                if (show) {
+                    popupWindow.showAsDropDown(anchor, -AndroidUtilities.dp(8) + additionalXOffset, offsetY);
+                }
+                if (update) {
+                    popupWindow.update(anchor, -AndroidUtilities.dp(8) + additionalXOffset, offsetY, -1, -1);
+                }
+            } else {
+                if (show) {
+                    popupWindow.showAsDropDown(anchor, anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY);
+                }
+                if (update) {
+                    popupWindow.update(anchor, anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY, -1, -1);
+                }
+            }
+        } else if (parentMenu != null) {
             View parent = parentMenu.parentActionBar;
             if (subMenuOpenSide == 0) {
                 if (SharedConfig.smoothKeyboard) {
