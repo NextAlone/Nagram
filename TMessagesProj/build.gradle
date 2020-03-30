@@ -17,6 +17,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation 'androidx.interpolator:interpolator:1.0.0'
     implementation 'androidx.core:core:1.1.0-beta01'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
