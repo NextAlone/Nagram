@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
@@ -33,6 +32,7 @@ import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
 
+@SuppressLint("RtlHardcoded")
 public class NekoSettingsActivity extends BaseFragment {
 
     private RecyclerListView listView;
@@ -221,12 +221,9 @@ public class NekoSettingsActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(NekoXConfig.skipOpenLinkConfirm);
                 }
             } else if (position == useSystemEmojiRow) {
-                SharedConfig.useSystemEmoji = !SharedConfig.useSystemEmoji;
-                SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
-                editor.putBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
-                editor.apply();
+                NekoConfig.toggleUseSystemEmoji();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.useSystemEmoji);
+                    ((TextCheckCell) view).setChecked(NekoConfig.useSystemEmoji);
                 }
             } else if (position == typefaceRow) {
                 NekoConfig.toggleTypeface();
@@ -781,7 +778,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 }
             }
             textCell.setTag(a);
-            textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            textCell.setBackground(Theme.getSelectorDrawable(false));
             linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             textCell.setOnClickListener(v2 -> {
                 Integer tag = (Integer) v2.getTag();
@@ -1061,7 +1058,7 @@ public class NekoSettingsActivity extends BaseFragment {
         optionsButton.setLongClickEnabled(false);
         optionsButton.setSubMenuOpenSide(2);
         optionsButton.setIcon(R.drawable.ic_ab_other);
-        optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_player_actionBarSelector), 1));
+        optionsButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_player_actionBarSelector), 1));
         optionsButton.addSubItem(1, R.drawable.msg_reset, LocaleController.getString("Reset", R.string.Reset));
         optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
         optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
@@ -1158,9 +1155,9 @@ public class NekoSettingsActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 1: {
                     if (position == experiment2Row) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -1281,7 +1278,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     } else if (position == disableChatActionRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableChatAction", R.string.DisableChatAction), NekoXConfig.disableChatAction, true);
                     } else if (position == useSystemEmojiRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), SharedConfig.useSystemEmoji, true);
+                        textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), NekoConfig.useSystemEmoji, true);
                     } else if (position == typefaceRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TypefaceUseDefault", R.string.TypefaceUseDefault), NekoConfig.typeface == 1, true);
                     } else if (position == ignoreBlockedRow) {
@@ -1394,9 +1391,10 @@ public class NekoSettingsActivity extends BaseFragment {
                     break;
                 case 7:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
+            //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }

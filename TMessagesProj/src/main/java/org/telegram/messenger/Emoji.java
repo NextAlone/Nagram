@@ -8,8 +8,6 @@
 
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,6 +33,8 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class Emoji {
 
