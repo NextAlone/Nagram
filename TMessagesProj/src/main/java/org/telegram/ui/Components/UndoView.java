@@ -89,6 +89,8 @@ public class UndoView extends FrameLayout {
     public final static int ACTION_QUIZ_CORRECT = 13;
     public final static int ACTION_QUIZ_INCORRECT = 14;
     public final static int ACTION_FILTERS_AVAILABLE = 15;
+    public final static int ACTION_DICE_INFO = 16;
+    public final static int ACTION_DICE_NO_SEND_INFO = 17;
 
     public UndoView(Context context) {
         super(context);
@@ -273,6 +275,12 @@ public class UndoView extends FrameLayout {
         lastUpdateTime = SystemClock.elapsedRealtime();
         undoTextView.setText(LocaleController.getString("Undo", R.string.Undo).toUpperCase());
         undoImageView.setVisibility(VISIBLE);
+        infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+
+        infoTextView.setGravity(Gravity.LEFT | Gravity.TOP);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
+        layoutParams.height = LayoutHelper.WRAP_CONTENT;
+        layoutParams.bottomMargin = 0;
 
         if (isTooltipAction()) {
             CharSequence infoText;
@@ -334,7 +342,6 @@ public class UndoView extends FrameLayout {
             leftImageView.setAnimation(icon, size, size);
 
             if (subInfoText != null) {
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
                 layoutParams.leftMargin = AndroidUtilities.dp(58);
                 layoutParams.topMargin = AndroidUtilities.dp(6);
                 layoutParams.rightMargin = 0;
@@ -345,7 +352,6 @@ public class UndoView extends FrameLayout {
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 infoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             } else {
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
                 layoutParams.leftMargin = AndroidUtilities.dp(58);
                 layoutParams.topMargin = AndroidUtilities.dp(13);
                 layoutParams.rightMargin = 0;
@@ -365,7 +371,6 @@ public class UndoView extends FrameLayout {
             infoTextView.setText(LocaleController.getString("AuthAnotherClientOk", R.string.AuthAnotherClientOk));
             leftImageView.setAnimation(R.raw.contact_check, 36, 36);
 
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.topMargin = AndroidUtilities.dp(6);
             subinfoTextView.setText(authorization.app_name);
@@ -387,7 +392,6 @@ public class UndoView extends FrameLayout {
             leftImageView.setAnimation(R.raw.filter_new, 36, 36);
             int margin = (int) Math.ceil(undoTextView.getPaint().measureText(undoTextView.getText().toString())) + AndroidUtilities.dp(26);
 
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.rightMargin = margin;
             layoutParams.topMargin = AndroidUtilities.dp(6);
@@ -414,13 +418,38 @@ public class UndoView extends FrameLayout {
 
             leftImageView.setProgress(0);
             leftImageView.playAnimation();
-        } else if (currentAction == ACTION_THEME_CHANGED) {
-            TLRPC.TL_authorization authorization = (TLRPC.TL_authorization) infoObject;
+        } else if (currentAction == ACTION_DICE_INFO || currentAction == ACTION_DICE_NO_SEND_INFO) {
+            timeLeft = 4000;
+            infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            infoTextView.setGravity(Gravity.CENTER_VERTICAL);
+            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DiceInfo2", R.string.DiceInfo2)));
+            undoTextView.setText(LocaleController.getString("SendDice", R.string.SendDice));
+            leftImageView.setImageResource(R.drawable.dice);
+            int margin;
+            if (currentAction == ACTION_DICE_INFO) {
+                margin = (int) Math.ceil(undoTextView.getPaint().measureText(undoTextView.getText().toString())) + AndroidUtilities.dp(26);
+                undoTextView.setVisibility(VISIBLE);
+                undoTextView.setTextColor(Theme.getColor(Theme.key_undo_cancelColor));
+                undoImageView.setVisibility(GONE);
+                undoButton.setVisibility(VISIBLE);
+            } else {
+                margin = 0;
+                undoTextView.setVisibility(GONE);
+                undoButton.setVisibility(GONE);
+            }
 
+            layoutParams.leftMargin = AndroidUtilities.dp(58);
+            layoutParams.rightMargin = margin;
+            layoutParams.topMargin = 0;
+            layoutParams.bottomMargin = AndroidUtilities.dp(1);
+            layoutParams.height = TableLayout.LayoutParams.MATCH_PARENT;
+
+            subinfoTextView.setVisibility(GONE);
+            leftImageView.setVisibility(VISIBLE);
+        } else if (currentAction == ACTION_THEME_CHANGED) {
             infoTextView.setText(LocaleController.getString("ColorThemeChanged", R.string.ColorThemeChanged));
             leftImageView.setImageResource(R.drawable.toast_pallete);
 
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.rightMargin = AndroidUtilities.dp(48);
             layoutParams.topMargin = AndroidUtilities.dp(6);
@@ -451,7 +480,6 @@ public class UndoView extends FrameLayout {
                 infoTextView.setText(LocaleController.getString("ChatsArchived", R.string.ChatsArchived));
             }
 
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.topMargin = AndroidUtilities.dp(13);
             layoutParams.rightMargin = 0;
@@ -466,7 +494,6 @@ public class UndoView extends FrameLayout {
             leftImageView.setProgress(0);
             leftImageView.playAnimation();
         } else {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) infoTextView.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(45);
             layoutParams.topMargin = AndroidUtilities.dp(13);
             layoutParams.rightMargin = 0;
@@ -515,7 +542,7 @@ public class UndoView extends FrameLayout {
                 width = AndroidUtilities.displaySize.x;
             }
             measureChildWithMargins(infoTextView, MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), 0, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), 0);
-            undoViewHeight = infoTextView.getMeasuredHeight() + AndroidUtilities.dp(28);
+            undoViewHeight = infoTextView.getMeasuredHeight() + AndroidUtilities.dp(currentAction == ACTION_DICE_INFO ? 14 : 28);
         }
 
         if (getVisibility() != VISIBLE) {
