@@ -241,7 +241,7 @@ public class AlertsCreator {
             } else if (error.text.startsWith("FLOOD_WAIT")) {
                 showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
             } else if (error.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
-                showSimpleAlert(fragment, LocaleController.formatString("ChangePhoneNumberOccupied", R.string.ChangePhoneNumberOccupied, (String) args[0]));
+                showSimpleAlert(fragment, LocaleController.formatString("ChangePhoneNumberOccupied", R.string.ChangePhoneNumberOccupied, args[0]));
             } else {
                 showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
             }
@@ -1028,9 +1028,11 @@ public class AlertsCreator {
 
         if (user != null) {
             if (user.id == selfUserId) {
-                avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED_SMALL);
+                avatarDrawable.setSmallSize(true);
+                avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else {
+                avatarDrawable.setSmallSize(false);
                 avatarDrawable.setInfo(user);
                 imageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
             }
@@ -1755,7 +1757,11 @@ public class AlertsCreator {
                 break;
             case "CHAT_ADMIN_BAN_REQUIRED":
             case "USER_KICKED":
-                builder.setMessage(LocaleController.getString("AddAdminErrorBlacklisted", R.string.AddAdminErrorBlacklisted));
+                if (request instanceof TLRPC.TL_channels_inviteToChannel) {
+                    builder.setMessage(LocaleController.getString("AddUserErrorBlacklisted", R.string.AddUserErrorBlacklisted));
+                } else {
+                    builder.setMessage(LocaleController.getString("AddAdminErrorBlacklisted", R.string.AddAdminErrorBlacklisted));
+                }
                 break;
             case "CHAT_ADMIN_INVITE_REQUIRED":
                 builder.setMessage(LocaleController.getString("AddAdminErrorNotAMember", R.string.AddAdminErrorNotAMember));

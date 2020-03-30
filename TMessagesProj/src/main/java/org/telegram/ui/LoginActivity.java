@@ -587,7 +587,7 @@ public class LoginActivity extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        AndroidUtilities.removeAdjustResize(getParentActivity(), classGuid);
+        AndroidUtilities.removeAdjustResize(getParentActivity(), classGuid, true);
         if (newAccount) {
             ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
         }
@@ -599,7 +599,7 @@ public class LoginActivity extends BaseFragment {
         if (newAccount) {
             ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         }
-        AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
+        AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid, true);
         try {
             if (currentViewNum >= 1 && currentViewNum <= 4 && views[currentViewNum] instanceof LoginActivitySmsView) {
                 int time = ((LoginActivitySmsView) views[currentViewNum]).openTime;

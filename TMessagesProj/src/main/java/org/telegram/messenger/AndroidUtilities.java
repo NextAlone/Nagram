@@ -19,6 +19,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -114,6 +115,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -526,7 +528,11 @@ public class AndroidUtilities {
     }
 
     public static void requestAdjustResize(Activity activity, int classGuid) {
-        if (activity == null || isTablet() || SharedConfig.smoothKeyboard) {
+        requestAdjustResize(activity, classGuid, false);
+    }
+
+    public static void requestAdjustResize(Activity activity, int classGuid, boolean allowWithSmoothKeyboard) {
+        if (activity == null || isTablet() || SharedConfig.smoothKeyboard && !allowWithSmoothKeyboard) {
             return;
         }
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -543,11 +549,28 @@ public class AndroidUtilities {
     }
 
     public static void removeAdjustResize(Activity activity, int classGuid) {
-        if (activity == null || isTablet() || SharedConfig.smoothKeyboard) {
+        removeAdjustResize(activity, classGuid, false);
+    }
+
+    public static void removeAdjustResize(Activity activity, int classGuid, boolean allowWithSmoothKeyboard) {
+        if (activity == null || isTablet() || SharedConfig.smoothKeyboard && !allowWithSmoothKeyboard) {
             return;
         }
         if (adjustOwnerClassGuid == classGuid) {
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        }
+    }
+
+    public static void createEmptyFile(File f) {
+        try {
+            if (f.exists()) {
+                return;
+            }
+            FileWriter writer = new FileWriter(f);
+            writer.flush();
+            writer.close();
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
     }
 
@@ -2434,7 +2457,7 @@ public class AndroidUtilities {
         }
     }
 
-    public static void openForView(MessageObject message, final Activity activity) {
+    public static boolean openForView(MessageObject message, final Activity activity) {
         File f = null;
         String fileName = message.getFileName();
         if (message.messageOwner.attachPath != null && message.messageOwner.attachPath.length() != 0) {
@@ -2474,7 +2497,7 @@ public class AndroidUtilities {
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
-                return;
+                return true;
             }
             if (Build.VERSION.SDK_INT >= 24) {
                 intent.setDataAndType(FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".provider", f), realMimeType != null ? realMimeType : "text/plain");
@@ -2495,7 +2518,9 @@ public class AndroidUtilities {
             } else {
                 activity.startActivityForResult(intent, 500);
             }
+            return true;
         }
+        return false;
     }
 
     public static void openForView(TLObject media, Activity activity) {

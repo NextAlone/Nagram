@@ -95,7 +95,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.ChatActivityEnterView;
-import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
@@ -156,6 +156,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     private AlertDialog visibleDialog;
     private AlertDialog proxyErrorDialog;
     private RecyclerListView sideMenu;
+    private SideMenultItemAnimator itemAnimator;
 
     private AlertDialog localeDialog;
     private boolean loadingLocaleDialog;
@@ -492,16 +493,29 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             drawerLayoutContainer.addView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
 
-        sideMenu = new RecyclerListView(this);
-        sideMenu.setItemAnimator(new SideMenultItemAnimator(sideMenu));
+        sideMenu = new RecyclerListView(this) {
+            @Override
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                int restore = -1;
+                if (itemAnimator != null && itemAnimator.isRunning() && itemAnimator.isAnimatingChild(child)) {
+                    restore = canvas.save();
+                    canvas.clipRect(0, itemAnimator.getAnimationClipTop(), getMeasuredWidth(), getMeasuredHeight());
+                }
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                if (restore >= 0) {
+                    canvas.restoreToCount(restore);
+                    invalidate();
+                    invalidateViews();
+                }
+                return result;
+            }
+        };
+        itemAnimator = new SideMenultItemAnimator(sideMenu);
+        sideMenu.setItemAnimator(itemAnimator);
         sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
         sideMenu.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         sideMenu.setAllowItemsInteractionDuringAnimation(false);
-        sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, sideMenu.getItemAnimator()));
-
-        ItemTouchHelper drawerItemTouchHelper = new ItemTouchHelper(new DrawerItemTouchHelperCallback());
-        drawerItemTouchHelper.attachToRecyclerView(sideMenu);
-
+        sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, itemAnimator));
         drawerLayoutContainer.setDrawerLayout(sideMenu);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
         Point screenSize = AndroidUtilities.getRealScreenSize();
@@ -510,7 +524,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         sideMenu.setLayoutParams(layoutParams);
         sideMenu.setOnItemClickListener((view, position) -> {
             if (position == 0) {
-                drawerLayoutAdapter.setAccountsShowed(!drawerLayoutAdapter.isAccountsShowed(), true);
+                drawerLayoutAdapter.setAccountsShown(!drawerLayoutAdapter.isAccountsShown(), true);
             } else if (view instanceof DrawerUserCell) {
                 switchToAccount(((DrawerUserCell) view).getAccountNumber(), true);
                 drawerLayoutContainer.closeDrawer(false);
@@ -588,6 +602,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         checkCurrentAccount();
+        updateCurrentConnectionState(currentAccount);
 
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
 
@@ -791,6 +806,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (UserConfig.getInstance(account).unacceptedTermsOfService != null) {
             showTosActivity(account, UserConfig.getInstance(account).unacceptedTermsOfService);
         }
+        updateCurrentConnectionState(currentAccount);
     }
 
     private void switchToAvailableAccountOrLogout() {
@@ -847,6 +863,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.needShowPlayServicesAlert);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.dialogFiltersUpdated);
         }
         currentAccount = UserConfig.selectedAccount;
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.appDidLogout);
@@ -859,7 +876,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.needShowPlayServicesAlert);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
-        updateCurrentConnectionState(currentAccount);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.dialogFiltersUpdated);
     }
 
     private void checkLayout() {
@@ -1603,10 +1620,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                 open_settings = 2;
                                             } else if (url.contains("devices")) {
                                                 open_settings = 3;
-                                            } else if (url.contains("nekox")) {
-                                                open_settings = 5;
-                                            } else if (url.contains("neko")) {
+                                            } else if (url.contains("folders")) {
                                                 open_settings = 4;
+                                            } else if (url.contains("neko")) {
+                                                open_settings = 5;
+                                            } else if (url.contains("nekox")) {
+                                                open_settings = 6;
                                             }
                                         } else if (url.startsWith("tg:meow") || url.startsWith("tg://meow") || url.startsWith("tg:nya") || url.startsWith("tg://nya") || url.startsWith("tg:miao") || url.startsWith("tg://miao")) {
                                             try {
@@ -1820,8 +1839,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     } else if (open_settings == 3) {
                         fragment = new SessionsActivity(0);
                     } else if (open_settings == 4) {
-                        fragment = new NekoSettingsActivity();
+                        fragment = new FiltersSetupActivity();
                     } else if (open_settings == 5) {
+                        fragment = new NekoSettingsActivity();
+                    } else if (open_settings == 6) {
                         if (NekoXConfig.developerMode) {
                             fragment = new NekoXSettingActivity();
                         } else {
@@ -2222,6 +2243,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else if (message != null) {
             Bundle args = new Bundle();
             args.putBoolean("onlySelect", true);
+            args.putInt("dialogsType", 3);
             DialogsActivity fragment = new DialogsActivity(args);
             fragment.setDelegate((fragment13, dids, m, param) -> {
                 long did = dids.get(0);
@@ -2856,7 +2878,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             passcodeView.onPause();
         }
         ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
-        AndroidUtilities.unregisterUpdates();
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onPause();
         }
@@ -2954,8 +2975,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             passcodeView.onResume();
         }
-        AndroidUtilities.checkForCrashes(this);
-        AndroidUtilities.checkForUpdates(this);
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
         if (NekoXConfig.disableProxyWhenVpnEnabled && SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
@@ -3190,7 +3209,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
                     Animator anim = ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius);
                     anim.setDuration(400);
-                    anim.setInterpolator(CubicBezierInterpolator.EASE_IN_OUT_QUAD);
+                    anim.setInterpolator(Easings.easeInOutQuad);
                     anim.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {

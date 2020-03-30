@@ -18,11 +18,12 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class UserConfig extends BaseController {
 
     public static int selectedAccount;
-    public final static int MAX_ACCOUNT_COUNT = 8;
+    public final static int MAX_ACCOUNT_COUNT = 3;
 
     private final Object sync = new Object();
     private boolean configLoaded;
@@ -47,6 +48,7 @@ public class UserConfig extends BaseController {
     public int migrateOffsetChatId = -1;
     public int migrateOffsetChannelId = -1;
     public long migrateOffsetAccess = -1;
+    public boolean filtersLoaded;
 
     public int sharingMyLocationUntil;
     public int lastMyLocationShareTime;
@@ -63,7 +65,6 @@ public class UserConfig extends BaseController {
     public long pendingAppUpdateInstallTime;
     public long lastUpdateCheckTime;
     public long autoDownloadConfigLoadTime;
-    public boolean isBot;
 
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
@@ -148,7 +149,7 @@ public class UserConfig extends BaseController {
                 editor.putBoolean("hasValidDialogLoadIds", hasValidDialogLoadIds);
                 editor.putInt("sharingMyLocationUntil", sharingMyLocationUntil);
                 editor.putInt("lastMyLocationShareTime", lastMyLocationShareTime);
-                editor.putBoolean("isBot", isBot);
+                editor.putBoolean("filtersLoaded", filtersLoaded);
                 if (tonEncryptedData != null) {
                     editor.putString("tonEncryptedData", tonEncryptedData);
                     editor.putString("tonPublicKey", tonPublicKey);
@@ -230,7 +231,7 @@ public class UserConfig extends BaseController {
                     editor.remove("user");
                 }
 
-                editor.apply();
+                editor.commit();
                 if (oldFile != null) {
                     oldFile.delete();
                 }
@@ -299,13 +300,13 @@ public class UserConfig extends BaseController {
             notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
             autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
             hasValidDialogLoadIds = preferences.contains("2dialogsLoadOffsetId") || preferences.getBoolean("hasValidDialogLoadIds", false);
-            isBot = preferences.getBoolean("isBot",false);
             tonEncryptedData = preferences.getString("tonEncryptedData", null);
             tonPublicKey = preferences.getString("tonPublicKey", null);
             tonKeyName = preferences.getString("tonKeyName", "walletKey" + currentAccount);
             tonCreationFinished = preferences.getBoolean("tonCreationFinished", true);
             sharingMyLocationUntil = preferences.getInt("sharingMyLocationUntil", 0);
             lastMyLocationShareTime = preferences.getInt("lastMyLocationShareTime", 0);
+            filtersLoaded = preferences.getBoolean("filtersLoaded", false);
             String salt = preferences.getString("tonPasscodeSalt", null);
             if (salt != null) {
                 try {
@@ -420,15 +421,11 @@ public class UserConfig extends BaseController {
     public void resetSavedPassword() {
         savedPasswordTime = 0;
         if (savedPasswordHash != null) {
-            for (int a = 0; a < savedPasswordHash.length; a++) {
-                savedPasswordHash[a] = 0;
-            }
+            Arrays.fill(savedPasswordHash, (byte) 0);
             savedPasswordHash = null;
         }
         if (savedSaltedPassword != null) {
-            for (int a = 0; a < savedSaltedPassword.length; a++) {
-                savedSaltedPassword[a] = 0;
-            }
+            Arrays.fill(savedSaltedPassword, (byte) 0);
             savedSaltedPassword = null;
         }
     }
@@ -454,7 +451,7 @@ public class UserConfig extends BaseController {
     }
 
     public void clearConfig() {
-        getPreferences().edit().clear().apply();
+        getPreferences().edit().clear().commit();
         clearTonConfig();
 
         sharingMyLocationUntil = 0;
@@ -482,12 +479,12 @@ public class UserConfig extends BaseController {
         unreadDialogsLoaded = true;
         hasValidDialogLoadIds = true;
         unacceptedTermsOfService = null;
+        filtersLoaded = false;
         pendingAppUpdate = null;
         hasSecureData = false;
         loginTime = (int) (System.currentTimeMillis() / 1000);
         lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000) - 23 * 60 * 60;
         lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000) - 25 * 60 * 60;
-        isBot = false;
         resetSavedPassword();
         boolean hasActivated = false;
         for (int a = 0; a < MAX_ACCOUNT_COUNT; a++) {
@@ -507,7 +504,7 @@ public class UserConfig extends BaseController {
     }
 
     public void setPinnedDialogsLoaded(int folderId, boolean loaded) {
-        getPreferences().edit().putBoolean("2pinnedDialogsLoaded" + folderId, loaded).apply();
+        getPreferences().edit().putBoolean("2pinnedDialogsLoaded" + folderId, loaded).commit();
     }
 
     public static final int i_dialogsLoadOffsetId = 0;
@@ -523,7 +520,7 @@ public class UserConfig extends BaseController {
     }
 
     public void setTotalDialogsCount(int folderId, int totalDialogsLoadCount) {
-        getPreferences().edit().putInt("2totalDialogsLoadCount" + (folderId == 0 ? "" : folderId), totalDialogsLoadCount).apply();
+        getPreferences().edit().putInt("2totalDialogsLoadCount" + (folderId == 0 ? "" : folderId), totalDialogsLoadCount).commit();
     }
 
     public int[] getDialogLoadOffsets(int folderId) {
@@ -546,6 +543,6 @@ public class UserConfig extends BaseController {
         editor.putInt("2dialogsLoadOffsetChannelId" + (folderId == 0 ? "" : folderId), dialogsLoadOffsetChannelId);
         editor.putLong("2dialogsLoadOffsetAccess" + (folderId == 0 ? "" : folderId), dialogsLoadOffsetAccess);
         editor.putBoolean("hasValidDialogLoadIds", true);
-        editor.apply();
+        editor.commit();
     }
 }

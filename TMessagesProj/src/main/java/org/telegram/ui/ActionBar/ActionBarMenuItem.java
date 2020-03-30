@@ -127,6 +127,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean animateClear = true;
     private boolean clearsTextOnSearchCollapse = true;
     private boolean measurePopup = true;
+    private boolean forceSmoothKeyboard;
 
     @Override
     public boolean isVerticalScrollBarEnabled() {
@@ -275,6 +276,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setLayoutInScreen(boolean value) {
         layoutInScreen = value;
+    }
+
+    public void setForceSmoothKeyboard(boolean value) {
+        forceSmoothKeyboard = value;
     }
 
     private void createPopupLayout() {
@@ -951,6 +956,7 @@ public class ActionBarMenuItem extends FrameLayout {
 
     private void updateOrShowPopup(boolean show, boolean update) {
         int offsetY;
+
         if (anchor != null) {
             float scaleY = anchor.getScaleY();
             offsetY = -(int) (anchor.getMeasuredHeight() * scaleY - anchor.getTranslationY() / scaleY) + additionalYOffset;
@@ -968,7 +974,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         } else if (parentMenu != null) {
-            offsetY = -parentMenu.parentActionBar.getMeasuredHeight() + parentMenu.getTop() + parentMenu.getPaddingTop() - (int) parentMenu.parentActionBar.getTranslationY();
+            offsetY = -parentMenu.parentActionBar.getMeasuredHeight() + parentMenu.getTop() + parentMenu.getPaddingTop()/* - (int) parentMenu.parentActionBar.getTranslationY()*/;
         } else {
             float scaleY = getScaleY();
             offsetY = -(int) (getMeasuredHeight() * scaleY - (subMenuOpenSide != 2 ? getTranslationY() : 0) / scaleY) + additionalYOffset;
@@ -1026,7 +1032,11 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             } else {
                 if (show) {
-                    popupWindow.showAsDropDown(parent, getLeft() - AndroidUtilities.dp(8) + (int) getTranslationX(), offsetY);
+                    if (forceSmoothKeyboard) {
+                        popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP, getLeft() - AndroidUtilities.dp(8) + (int) getTranslationX(), offsetY);
+                    } else {
+                        popupWindow.showAsDropDown(parent, getLeft() - AndroidUtilities.dp(8) + (int) getTranslationX(), offsetY);
+                    }
                 }
                 if (update) {
                     popupWindow.update(parent, getLeft() - AndroidUtilities.dp(8) + (int) getTranslationX(), offsetY, -1, -1);

@@ -790,7 +790,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-    private class CounterView extends View {
+    private static class CounterView extends View {
 
         private StaticLayout staticLayout;
         private TextPaint textPaint;
@@ -1056,6 +1056,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         public boolean isEvent;
         public ClippingImageView animatingImageView;
         public int animatingImageViewYOffset;
+        public boolean allowTakeAnimation = true;
     }
 
     public static class EmptyPhotoViewerProvider implements PhotoViewerProvider {
@@ -1379,9 +1380,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else if (child == cameraItem || child == pickerView || child == pickerViewSendButton || child == captionTextView || muteItem.getVisibility() == VISIBLE && child == bottomLayout) {
                 int paddingBottom = getKeyboardHeight() <= AndroidUtilities.dp(20) && !AndroidUtilities.isInMultiwindow ? captionEditText.getEmojiPadding() : 0;
                 if (captionEditText.isPopupShowing() || AndroidUtilities.usingHardwareInput && captionEditText.getTag() != null || getKeyboardHeight() > AndroidUtilities.dp(80) || paddingBottom != 0) {
-                    if (BuildVars.DEBUG_VERSION) {
-                        FileLog.d("keyboard height = " + getKeyboardHeight() + " padding = " + paddingBottom);
-                    }
                     bottomTouchEnabled = false;
                     return false;
                 } else {
@@ -2202,7 +2200,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         disableShowCheck = true;
                         Bundle args2 = new Bundle();
                         args2.putLong("dialog_id", currentDialogId);
-                        MediaActivity mediaActivity = new MediaActivity(args2, new int[]{-1, -1, -1, -1, -1}, null, sharedMediaType);
+                        MediaActivity mediaActivity = new MediaActivity(args2, new int[]{-1, -1, -1, -1, -1, -1}, null, sharedMediaType);
                         if (parentChatActivity != null) {
                             mediaActivity.setChatInfo(parentChatActivity.getCurrentChatInfo());
                         }
@@ -2454,8 +2452,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     onSharePressed();
                 } else if (id == gallery_menu_openin) {
                     try {
-                        AndroidUtilities.openForView(currentMessageObject, parentActivity);
-                        closePhoto(false, false);
+                        if (AndroidUtilities.openForView(currentMessageObject, parentActivity)) {
+                            closePhoto(false, false);
+                        } else {
+                            showDownloadAlert();
+                        }
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -2490,8 +2491,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             @Override
             public boolean canOpenMenu() {
                 if (currentMessageObject != null) {
-                    File f = FileLoader.getPathToMessage(currentMessageObject.messageOwner);
-                    return f.exists();
+                    return true;
                 } else if (currentFileLocation != null) {
                     File f = FileLoader.getPathToAttach(getFileLocation(currentFileLocation), avatarsDialogId != 0 || isEvent);
                     return f.exists();
@@ -3234,7 +3234,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         gestureDetector.setIsLongpressEnabled(false);
         setDoubleTapEnabled(true);
 
-        ImageReceiver.ImageReceiverDelegate imageReceiverDelegate = (imageReceiver, set, thumb) -> {
+        ImageReceiver.ImageReceiverDelegate imageReceiverDelegate = (imageReceiver, set, thumb, memCache) -> {
             if (imageReceiver == centerImage && set && !thumb && (currentEditMode == 1 || sendPhotoType == SELECT_TYPE_AVATAR) && photoCropView != null) {
                 Bitmap bitmap = imageReceiver.getBitmap();
                 if (bitmap != null) {
@@ -4728,7 +4728,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (currentEditMode == 1) {
                     float scaleX = photoCropView.getRectSizeX() / (float) getContainerViewWidth();
                     float scaleY = photoCropView.getRectSizeY() / (float) getContainerViewHeight();
-                    scale = scaleX > scaleY ? scaleX : scaleY;
+                    scale = Math.max(scaleX, scaleY);
                     translationX = photoCropView.getRectX() + photoCropView.getRectSizeX() / 2 - getContainerViewWidth() / 2;
                     translationY = photoCropView.getRectY() + photoCropView.getRectSizeY() / 2 - getContainerViewHeight() / 2;
                     zoomAnimation = true;
@@ -4800,8 +4800,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
                 float newScaleX = (float) getContainerViewWidth(0) / (float) bitmapWidth;
                 float newScaleY = (float) getContainerViewHeight(0) / (float) bitmapHeight;
-                float scale = scaleX > scaleY ? scaleY : scaleX;
-                float newScale = newScaleX > newScaleY ? newScaleY : newScaleX;
+                float scale = Math.min(scaleX, scaleY);
+                float newScale = Math.min(newScaleX, newScaleY);
 
                 if (sendPhotoType == SELECT_TYPE_AVATAR) {
                     setCropTranslations(true);
@@ -4970,13 +4970,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
                         float newScaleX = (float) getContainerViewWidth(1) / (float) bitmapWidth;
                         float newScaleY = (float) getContainerViewHeight(1) / (float) bitmapHeight;
-                        float scale = scaleX > scaleY ? scaleY : scaleX;
-                        float newScale = newScaleX > newScaleY ? newScaleY : newScaleX;
+                        float scale = Math.min(scaleX, scaleY);
+                        float newScale = Math.min(newScaleX, newScaleY);
                         if (sendPhotoType == SELECT_TYPE_AVATAR) {
                             float minSide = Math.min(getContainerViewWidth(1), getContainerViewHeight(1));
                             newScaleX = minSide / (float) bitmapWidth;
                             newScaleY = minSide / (float) bitmapHeight;
-                            newScale = newScaleX > newScaleY ? newScaleX : newScaleY;
+                            newScale = Math.max(newScaleX, newScaleY);
                         }
 
                         animateToScale = newScale / scale;
@@ -5121,8 +5121,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
                         float newScaleX = (float) getContainerViewWidth(2) / (float) bitmapWidth;
                         float newScaleY = (float) getContainerViewHeight(2) / (float) bitmapHeight;
-                        float scale = scaleX > scaleY ? scaleY : scaleX;
-                        float newScale = newScaleX > newScaleY ? newScaleY : newScaleX;
+                        float scale = Math.min(scaleX, scaleY);
+                        float newScale = Math.min(newScaleX, newScaleY);
 
                         animateToScale = newScale / scale;
                         animateToX = getLeftInset() / 2 - getRightInset() / 2;
@@ -5230,8 +5230,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
                         float newScaleX = (float) getContainerViewWidth(3) / (float) bitmapWidth;
                         float newScaleY = (float) getContainerViewHeight(3) / (float) bitmapHeight;
-                        float scale = scaleX > scaleY ? scaleY : scaleX;
-                        float newScale = newScaleX > newScaleY ? newScaleY : newScaleX;
+                        float scale = Math.min(scaleX, scaleY);
+                        float newScale = Math.min(newScaleX, newScaleY);
 
                         animateToScale = newScale / scale;
                         animateToX = getLeftInset() / 2 - getRightInset() / 2;
@@ -5577,16 +5577,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
             } else if (message.messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) {
                 return ImageLocation.getForWebFile(WebFile.createWithWebDocument(((TLRPC.TL_messageMediaInvoice) message.messageOwner.media).photo));
-            } else if (message.getDocument() != null && MessageObject.isDocumentHasThumb(message.getDocument())) {
+            } else if (message.getDocument() != null) {
                 TLRPC.Document document = message.getDocument();
-                TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-                if (size != null) {
-                    size[0] = thumb.size;
-                    if (size[0] == 0) {
-                        size[0] = -1;
+                if (sharedMediaType == MediaDataController.MEDIA_GIF) {
+                    return ImageLocation.getForDocument(document);
+                } else if (MessageObject.isDocumentHasThumb(message.getDocument())) {
+                    TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+                    if (size != null) {
+                        size[0] = thumb.size;
+                        if (size[0] == 0) {
+                            size[0] = -1;
+                        }
                     }
+                    return ImageLocation.getForDocument(thumb, document);
                 }
-                return ImageLocation.getForDocument(thumb, document);
             }
         }
         return null;
@@ -5835,6 +5839,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (messageObject.canPreviewDocument()) {
                 sharedMediaType = MediaDataController.MEDIA_FILE;
                 allMediaItem.setText(LocaleController.getString("ShowAllFiles", R.string.ShowAllFiles));
+            } else if (messageObject.isGif()) {
+                sharedMediaType = MediaDataController.MEDIA_GIF;
+                allMediaItem.setText(LocaleController.getString("ShowAllGIFs", R.string.ShowAllGIFs));
             }
             if (slideshowMessageId == 0) {
                 imagesArr.add(messageObject);
@@ -5896,6 +5903,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (openingObject.canPreviewDocument()) {
                     sharedMediaType = MediaDataController.MEDIA_FILE;
                     allMediaItem.setText(LocaleController.getString("ShowAllFiles", R.string.ShowAllFiles));
+                } else if (openingObject.isGif()) {
+                    sharedMediaType = MediaDataController.MEDIA_GIF;
+                    allMediaItem.setText(LocaleController.getString("ShowAllGIFs", R.string.ShowAllGIFs));
                 }
             } else {
                 totalImagesCount = imagesArr.size();
@@ -7216,12 +7226,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         float scaleX = (float) getContainerViewWidth() / (float) bitmapWidth;
         float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
-        float scaleFinal = scaleX > scaleY ? scaleY : scaleX;
+        float scaleFinal = Math.min(scaleX, scaleY);
 
         float minSide = Math.min(getContainerViewWidth(1), getContainerViewHeight(1));
         float newScaleX = minSide / (float) bitmapWidth;
         float newScaleY = minSide / (float) bitmapHeight;
-        float newScale = newScaleX > newScaleY ? newScaleX : newScaleY;
+        float newScale = Math.max(newScaleX, newScaleY);
 
         if (animated) {
             animationStartTime = System.currentTimeMillis();
@@ -7359,7 +7369,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             disableShowCheck = true;
             animationInProgress = 1;
             if (messageObject != null) {
-                currentAnimation = object.imageReceiver.getAnimation();
+                currentAnimation = object.allowTakeAnimation ? object.imageReceiver.getAnimation() : null;
                 if (currentAnimation != null) {
                     if (messageObject.isVideo()) {
                         object.imageReceiver.setAllowStartAnimation(false);
@@ -7463,7 +7473,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     } else {
                         scaleX = (float) windowView.getMeasuredWidth() / layoutParams.width;
                         scaleY = (float) (AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) / layoutParams.height;
-                        scale = scaleX > scaleY ? scaleY : scaleX;
+                        scale = Math.min(scaleX, scaleY);
                         yPos = ((AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - (layoutParams.height * scale)) / 2.0f;
                         xPos = (windowView.getMeasuredWidth() - layoutParams.width * scale) / 2.0f;
                     }
@@ -7725,7 +7735,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                     }
                 }
-                animation.seekTo(videoPlayer.getCurrentPosition(), !FileLoader.getInstance(currentMessageObject.currentAccount).isLoadingVideo(currentMessageObject.getDocument(), true));
+                if (currentMessageObject != null) {
+                    animation.seekTo(videoPlayer.getCurrentPosition(), !FileLoader.getInstance(currentMessageObject.currentAccount).isLoadingVideo(currentMessageObject.getDocument(), true));
+                }
                 object.imageReceiver.setAllowStartAnimation(true);
                 object.imageReceiver.startAnimation();
             }
@@ -7794,7 +7806,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                 float scaleX = (float) windowView.getMeasuredWidth() / layoutParams.width;
                 float scaleY = (float) (AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) / layoutParams.height;
-                float scale2 = scaleX > scaleY ? scaleY : scaleX;
+                float scale2 = Math.min(scaleX, scaleY);
                 float width = layoutParams.width * scale * scale2;
                 float height = layoutParams.height * scale * scale2;
                 float xPos = (windowView.getMeasuredWidth() - width) / 2.0f;
@@ -8602,7 +8614,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                 float scaleX = (float) getContainerViewWidth() / (float) bitmapWidth;
                 float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
-                float scale = scaleX > scaleY ? scaleY : scaleX;
+                float scale = Math.min(scaleX, scaleY);
                 int width = (int) (bitmapWidth * scale);
                 int height = (int) (bitmapHeight * scale);
 
@@ -8650,7 +8662,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             float scaleX = (float) getContainerViewWidth() / (float) bitmapWidth;
             float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
-            float scale = scaleX > scaleY ? scaleY : scaleX;
+            float scale = Math.min(scaleX, scaleY);
             int width = (int) (bitmapWidth * scale);
             int height = (int) (bitmapHeight * scale);
 
@@ -8662,7 +8674,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (drawTextureView) {
                 scaleX = (float) canvas.getWidth() / (float) bitmapWidth;
                 scaleY = (float) canvas.getHeight() / (float) bitmapHeight;
-                scale = scaleX > scaleY ? scaleY : scaleX;
+                scale = Math.min(scaleX, scaleY);
                 height = (int) (bitmapHeight * scale);
                 if (!videoCrossfadeStarted && textureUploaded) {
                     videoCrossfadeStarted = true;
@@ -8744,7 +8756,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                 float scaleX = (float) getContainerViewWidth() / (float) bitmapWidth;
                 float scaleY = (float) getContainerViewHeight() / (float) bitmapHeight;
-                float scale = scaleX > scaleY ? scaleY : scaleX;
+                float scale = Math.min(scaleX, scaleY);
                 int width = (int) (bitmapWidth * scale);
                 int height = (int) (bitmapHeight * scale);
 
@@ -8901,7 +8913,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public boolean onDown(MotionEvent e) {
         if (!doubleTap && checkImageView.getVisibility() != View.VISIBLE && !drawPressedDrawable[0] && !drawPressedDrawable[1]) {
             float x = e.getX();
-            int side = NekoConfig.disablePhotoSideAction ? 0 : containerView.getMeasuredWidth() / 6;
+            int side = Math.min(135, containerView.getMeasuredWidth() / 8);
             if (x < side) {
                 if (leftImage.hasImageSet()) {
                     drawPressedDrawable[0] = true;
@@ -8921,9 +8933,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public boolean canDoubleTap(MotionEvent e) {
         if (checkImageView.getVisibility() != View.VISIBLE && !drawPressedDrawable[0] && !drawPressedDrawable[1]) {
             float x = e.getX();
-            int side = NekoConfig.disablePhotoSideAction ? 0 : containerView.getMeasuredWidth() / 6;
+            int side = Math.min(135, containerView.getMeasuredWidth() / 8);
             if (x < side || x > containerView.getMeasuredWidth() - side) {
-                return currentMessageObject == null || currentMessageObject.isVideo() && (SystemClock.elapsedRealtime() - lastPhotoSetTime) >= 500;
+                return currentMessageObject == null || currentMessageObject.isVideo() && (SystemClock.elapsedRealtime() - lastPhotoSetTime) >= 500 && canDoubleTapSeekVideo(e);
             }
         }
         return true;
@@ -8979,7 +8991,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         float x = e.getX();
         if (checkImageView.getVisibility() != View.VISIBLE) {
-            int side = NekoConfig.disablePhotoSideAction ? 0 : containerView.getMeasuredWidth() / 6;
+            int side = Math.min(135, containerView.getMeasuredWidth() / 8);
             if (x < side) {
                 if (leftImage.hasImageSet()) {
                     switchToNextIndex(-1, true);
@@ -9042,14 +9054,27 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return true;
     }
 
+    private boolean canDoubleTapSeekVideo(MotionEvent e) {
+        if (videoPlayer == null) {
+            return false;
+        }
+        int width = getContainerViewWidth();
+        float x = e.getX();
+        boolean forward = x >= width / 3 * 2;
+        long current = videoPlayer.getCurrentPosition();
+        long total = videoPlayer.getDuration();
+        return current != C.TIME_UNSET && total > 15 * 1000 && (!forward || total - current > 10000);
+    }
+
     @Override
     public boolean onDoubleTap(MotionEvent e) {
         if (videoPlayer != null && videoPlayerControlFrameLayout.getVisibility() == View.VISIBLE) {
             long current = videoPlayer.getCurrentPosition();
             long total = videoPlayer.getDuration();
-            if (total >= 0 && current >= 0 && total != C.TIME_UNSET && current != C.TIME_UNSET) {
-                int width = getContainerViewWidth();
-                float x = e.getX();
+            float x = e.getX();
+            int width = getContainerViewWidth();
+            boolean forward = x >= width / 3 * 2;
+            if (canDoubleTapSeekVideo(e)) {
                 long old = current;
                 if (x >= width / 3 * 2) {
                     current += 10000;
