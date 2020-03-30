@@ -86,4 +86,7 @@
     <string name="TapOnActionBar">Toque na barra no título \"Nekogram\"</string>
     <string name="TapOnFab">Toque no botão do lápis</string>
     <string name="HideKeyboardOnChatScroll">Ocultar teclado na rolagem do chat</string>
+    <string name="UserRestrictionsSendStickers2">Enviar Stickers</string>
+    <string name="UserRestrictionsSendGifs">Enviar GIFs</string>
+    <string name="UseAvatarAsDrawerBackground">Use o avatar como fundo da gaveta</string>
 </resources>

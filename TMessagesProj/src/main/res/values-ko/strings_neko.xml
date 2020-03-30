@@ -86,4 +86,7 @@
     <string name="TapOnActionBar">제목 표시 줄을 누르기</string>
     <string name="TapOnFab">연필 버튼 누르기</string>
     <string name="HideKeyboardOnChatScroll">대화창 스크롤시 키보드 숨기기</string>
+    <string name="UserRestrictionsSendStickers2">스티커 보내기</string>
+    <string name="UserRestrictionsSendGifs">GIF 보내기</string>
+    <string name="UseAvatarAsDrawerBackground">아바타를 서랍 배경으로 사용</string>
 </resources>

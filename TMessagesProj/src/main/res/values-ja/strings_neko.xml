@@ -84,4 +84,6 @@
     <string name="TapOnActionBar">タイトルバーをタップ</string>
     <string name="TapOnFab">鉛筆ボタンをタップ</string>
     <string name="HideKeyboardOnChatScroll">チャットスクロールでキーボードを非表示にする</string>
+    <string name="UserRestrictionsSendStickers2">ステッカーの送信</string>
+    <string name="UserRestrictionsSendGifs">GIFの送信</string>
 </resources>

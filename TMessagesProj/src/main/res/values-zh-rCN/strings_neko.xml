@@ -86,4 +86,7 @@
     <string name="TapOnActionBar">点按标题栏</string>
     <string name="TapOnFab">点按铅笔按钮</string>
     <string name="HideKeyboardOnChatScroll">当滚动浏览对话时隐藏键盘</string>
+    <string name="UserRestrictionsSendStickers2">发送贴纸</string>
+    <string name="UserRestrictionsSendGifs">发送 GIF</string>
+    <string name="UseAvatarAsDrawerBackground">使用头像作为抽屉背景</string>
 </resources>

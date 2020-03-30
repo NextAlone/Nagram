@@ -69,11 +69,11 @@
     <string name="TranslateFailed">翻譯伺服器錯誤</string>
     <string name="TranslationProvider">翻譯源</string>
     <string name="ProviderGoogleTranslate">Google 翻譯</string>
-    <string name="ProviderGoogleTranslateWeb">Google 翻譯 (Web)</string>
+    <string name="ProviderGoogleTranslateWeb">Google 翻譯 (網頁版)</string>
     <string name="ProviderGoogleTranslateCN">Google 中國翻譯</string>
-    <string name="ProviderGoogleTranslateCNWeb">Google 中國翻譯 (Web)</string>
-    <string name="ProviderBaiduFanyiWeb">百度翻譯 (Web)</string>
-    <string name="TranslateApiUnsupported">您選擇的翻譯源不支援您的語言</string>
+    <string name="ProviderGoogleTranslateCNWeb">Google 中國翻譯 (網頁版)</string>
+    <string name="ProviderBaiduFanyiWeb">百度翻譯 (網頁版)</string>
+    <string name="TranslateApiUnsupported">您選擇的翻譯來源不支援您的語言</string>
     <string name="ProviderLingocloud">彩雲小譯</string>
     <string name="UndoTranslate">撤銷翻譯</string>
     <string name="CopyDetails">複製詳細資訊</string>
@@ -86,4 +86,7 @@
     <string name="TapOnActionBar">點按標題欄</string>
     <string name="TapOnFab">點按鉛筆按鈕</string>
     <string name="HideKeyboardOnChatScroll">當滾動瀏覽對話時隱藏鍵盤</string>
+    <string name="UserRestrictionsSendStickers2">傳送貼圖</string>
+    <string name="UserRestrictionsSendGifs">發送動圖</string>
+    <string name="UseAvatarAsDrawerBackground">使用頭像作為程式集背景</string>
 </resources>
