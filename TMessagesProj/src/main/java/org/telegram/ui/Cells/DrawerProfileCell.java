@@ -48,12 +48,9 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.SnowflakesEffect;
 
-import tw.nekomimi.nekogram.NekoConfig;
-
 public class DrawerProfileCell extends FrameLayout {
 
     private BackupImageView avatarImageView;
-    private BackupImageView avatarBackgroundView;
     private TextView nameTextView;
     private TextView phoneTextView;
     private ImageView shadowView;
@@ -70,10 +67,6 @@ public class DrawerProfileCell extends FrameLayout {
 
     public DrawerProfileCell(Context context) {
         super(context);
-
-        avatarBackgroundView = new BackupImageView(context);
-        avatarBackgroundView.setVisibility(INVISIBLE);
-        addView(avatarBackgroundView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
         shadowView = new ImageView(context);
         shadowView.setVisibility(INVISIBLE);
@@ -123,16 +116,16 @@ public class DrawerProfileCell extends FrameLayout {
             if (Theme.getTheme(dayThemeName) == null) {
                 dayThemeName = "Blue";
             }
-            String nightThemeName = preferences.getString("lastDarkTheme", "Night");
+            String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
             if (Theme.getTheme(nightThemeName) == null) {
-                nightThemeName = "Night";
+                nightThemeName = "Dark Blue";
             }
             Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
             if (dayThemeName.equals(nightThemeName)) {
                 if (themeInfo.isDark()) {
                     dayThemeName = "Blue";
                 } else {
-                    nightThemeName = "Night";
+                    nightThemeName = "Dark Blue";
                 }
             }
 
@@ -188,7 +181,8 @@ public class DrawerProfileCell extends FrameLayout {
         boolean useImageBackground = !backgroundKey.equals(Theme.key_chats_menuTopBackground) && Theme.isCustomTheme() && !Theme.isPatternWallpaper() && backgroundDrawable != null && !(backgroundDrawable instanceof ColorDrawable) && !(backgroundDrawable instanceof GradientDrawable);
         boolean drawCatsShadow = false;
         int color;
-        if (!NekoConfig.avatarAsDrawerBackground && !useImageBackground && Theme.hasThemeKey(Theme.key_chats_menuTopShadowCats)) {
+        int darkBackColor = 0;
+        if (!useImageBackground && Theme.hasThemeKey(Theme.key_chats_menuTopShadowCats)) {
             color = Theme.getColor(Theme.key_chats_menuTopShadowCats);
             drawCatsShadow = true;
         } else {
@@ -208,7 +202,7 @@ public class DrawerProfileCell extends FrameLayout {
             darkThemeView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
-        if ((NekoConfig.avatarAsDrawerBackground) || useImageBackground) {
+        if (useImageBackground) {
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             if (shadowView.getVisibility() != VISIBLE) {
                 shadowView.setVisibility(VISIBLE);
@@ -266,24 +260,10 @@ public class DrawerProfileCell extends FrameLayout {
         accountsShowed = accounts;
         setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
-        if (!NekoConfig.hidePhone) {
-            phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
-        } else if (!TextUtils.isEmpty(user.username)) {
-            phoneTextView.setText("@" + user.username);
-        } else {
-            phoneTextView.setText(LocaleController.getString("MobileHidden",R.string.MobileHidden));
-        }
+        phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
-        if (NekoConfig.avatarAsDrawerBackground && ImageLocation.isUserHasPhoto(user)) {
-            avatarBackgroundView.setImage(ImageLocation.getForUser(user, true), "512_512", avatarDrawable, user);
-            avatarBackgroundView.setVisibility(VISIBLE);
-            avatarImageView.setVisibility(INVISIBLE);
-        } else {
-            avatarBackgroundView.setVisibility(INVISIBLE);
-            avatarImageView.setVisibility(VISIBLE);
-        }
 
         applyBackground(true);
     }
