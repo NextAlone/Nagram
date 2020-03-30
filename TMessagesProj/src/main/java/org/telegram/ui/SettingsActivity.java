@@ -198,7 +198,16 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int clearLogsRow;
     private int switchBackendRow;
     private int nekoRow;
-    private int helpRow;
+    private int devicesSectionRow;
+    private int helpHeaderRow;
+    private int questionRow;
+    private int faqRow;
+    private int policyRow;
+    private int helpSectionCell;
+    private int debugHeaderRow;
+    private int sendLogsRow;
+    private int clearLogsRow;
+    private int switchBackendRow;
     private int versionRow;
     private int rowCount;
 
@@ -823,7 +832,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         rowCount = 0;
         emptyRow = rowCount++;
         numberSectionRow = rowCount++;
-        numberRow = rowCount++;
+        if (!NekoConfig.hidePhone) {
+            numberRow = rowCount++;
+        }
         usernameRow = rowCount++;
         bioRow = rowCount++;
         settingsSectionRow = rowCount++;
@@ -838,7 +849,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             filtersRow = -1;
         }
         devicesRow = rowCount++;
-        nekoRow = rowCount ++;
+        nekoRow = rowCount++;
         languageRow = rowCount++;
         devicesSectionRow = rowCount++;
         helpHeaderRow = rowCount++;
@@ -2340,9 +2351,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             return position == notificationRow || position == numberRow || position == privacyRow ||
                     position == languageRow || position == usernameRow || position == bioRow ||
                     position == versionRow || position == dataRow || position == chatRow ||
-                    position == questionRow || position == devicesRow || position == nekoRow || position == filtersRow ||
+                    position == questionRow || position == devicesRow || position == filtersRow ||
                     position == faqRow || position == policyRow || position == sendLogsRow ||
-                    position == clearLogsRow || position == switchBackendRow;
+                    position == clearLogsRow || position == switchBackendRow || position == nekoRow;
         }
 
         @Override
@@ -2399,9 +2410,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 return 1;
             } else if (position == notificationRow || position == privacyRow || position == languageRow ||
                     position == dataRow || position == chatRow || position == questionRow ||
-                    position == devicesRow || position == nekoRow || position == filtersRow || position == faqRow ||
+                    position == devicesRow || position == filtersRow || position == faqRow ||
                     position == policyRow || position == sendLogsRow || position == clearLogsRow ||
-                    position == switchBackendRow) {
+                    position == switchBackendRow || position == nekoRow) {
                 return 2;
             } else if (position == versionRow) {
                 return 5;

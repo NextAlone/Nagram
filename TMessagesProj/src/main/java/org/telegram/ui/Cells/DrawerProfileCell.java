@@ -184,7 +184,7 @@ public class DrawerProfileCell extends FrameLayout {
         boolean drawCatsShadow = false;
         int color;
         int darkBackColor = 0;
-        if (!useImageBackground && Theme.hasThemeKey(Theme.key_chats_menuTopShadowCats)) {
+        if (!NekoConfig.avatarAsDrawerBackground && !useImageBackground && Theme.hasThemeKey(Theme.key_chats_menuTopShadowCats)) {
             color = Theme.getColor(Theme.key_chats_menuTopShadowCats);
             drawCatsShadow = true;
         } else {

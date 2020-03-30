@@ -1950,11 +1950,34 @@ public class AndroidUtilities {
         }
     }*/
 
-    public static void checkForCrashes(Activity context) { }
+    public static void startAppCenter(Activity context) {
+        /*try {
+            if (BuildVars.DEBUG_VERSION) {
+                Distribute.setEnabledForDebuggableBuild(true);
+                AppCenter.start(context.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
+            } else {
+                AppCenter.start(context.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Crashes.class);
+            }
+            AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }*/
+    }
 
-    public static void checkForUpdates(Activity context) { }
-
-    public static void unregisterUpdates() { }
+    private static long lastUpdateCheckTime;
+    public static void checkForUpdates() {
+        /*try {
+            if (BuildVars.DEBUG_VERSION) {
+                if (SystemClock.elapsedRealtime() - lastUpdateCheckTime < 60 * 60 * 1000) {
+                    return;
+                }
+                lastUpdateCheckTime = SystemClock.elapsedRealtime();
+                Distribute.checkForUpdate();
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }*/
+    }
 
     public static void addToClipboard(CharSequence str) {
         try {

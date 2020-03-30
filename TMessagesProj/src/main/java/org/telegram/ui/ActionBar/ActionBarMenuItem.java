@@ -129,6 +129,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean measurePopup = true;
     private boolean forceSmoothKeyboard;
 
+
     @Override
     public boolean isVerticalScrollBarEnabled() {
         return verticalScrollBarEnabled;

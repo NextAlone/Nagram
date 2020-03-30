@@ -57,6 +57,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ContextLinkCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
 
     private final static int DOCUMENT_ATTACH_TYPE_NONE = 0;

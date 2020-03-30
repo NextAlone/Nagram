@@ -12,14 +12,13 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
 
-public class ShadowSectionCell extends LinearLayout {
+public class ShadowSectionCell extends View {
 
     private int size;
 
@@ -29,7 +28,8 @@ public class ShadowSectionCell extends LinearLayout {
 
     public ShadowSectionCell(Context context, int s) {
         super(context);
-        setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+        setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+        size = s;
     }
 
     public ShadowSectionCell(Context context, int s, int backgroundColor) {
@@ -42,4 +42,8 @@ public class ShadowSectionCell extends LinearLayout {
         size = s;
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(size), MeasureSpec.EXACTLY));
+    }
 }

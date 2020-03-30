@@ -12108,8 +12108,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
             Collections.sort(allDialogs, dialogComparator);
 
-        }
-        isLeftProxyChannel = true;
+        }        isLeftProxyChannel = true;
         if (proxyDialog != null && proxyDialog.id < 0) {
             TLRPC.Chat chat = getChat(-(int) proxyDialog.id);
             if (chat != null && !chat.left) {

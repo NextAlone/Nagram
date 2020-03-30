@@ -149,6 +149,7 @@ public class UserConfig extends BaseController {
                 editor.putBoolean("hasValidDialogLoadIds", hasValidDialogLoadIds);
                 editor.putInt("sharingMyLocationUntil", sharingMyLocationUntil);
                 editor.putInt("lastMyLocationShareTime", lastMyLocationShareTime);
+                editor.putBoolean("isBot", isBot);
                 editor.putBoolean("filtersLoaded", filtersLoaded);
                 if (tonEncryptedData != null) {
                     editor.putString("tonEncryptedData", tonEncryptedData);
