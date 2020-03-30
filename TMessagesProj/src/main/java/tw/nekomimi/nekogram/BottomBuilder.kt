@@ -1,13 +1,9 @@
 package tw.nekomimi.nekogram
 
 import android.content.Context
-import android.content.DialogInterface
-import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import org.telegram.messenger.AndroidUtilities
-import org.telegram.messenger.LocaleController
-import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BottomSheet
 import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.Cells.CheckBoxCell

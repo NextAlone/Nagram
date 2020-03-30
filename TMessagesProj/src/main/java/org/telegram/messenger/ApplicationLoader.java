@@ -41,15 +41,15 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.database.DbPref;
 import tw.nekomimi.nekogram.database.NitritesKt;
+import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
 
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
-    public static volatile Context applicationContext; {
-        applicationContext = this;
-    }
+    public static volatile Context applicationContext; { applicationContext = this; }
+
     public static volatile NetworkInfo currentNetworkInfo;
     public static volatile boolean unableGetCurrentNetwork;
     public static volatile Handler applicationHandler;
@@ -65,22 +65,31 @@ public class ApplicationLoader extends Application {
 
     public static boolean hasPlayServices;
 
-    public static File getFilesDirFixed() {
-        for (int a = 0; a < 10; a++) {
-            File path = ApplicationLoader.applicationContext.getFilesDir();
+    @SuppressLint("SdCardPath")
+    public static File getDataDirFixed() {
+        try {
+            File path = applicationContext.getFilesDir();
             if (path != null) {
-                return path;
+                return path.getParentFile();
             }
+        } catch (Exception ignored) {
         }
         try {
             ApplicationInfo info = applicationContext.getApplicationInfo();
-            File path = new File(info.dataDir, "files");
-            path.mkdirs();
-            return path;
-        } catch (Exception e) {
-            FileLog.e(e);
+            return new File(info.dataDir);
+        } catch (Exception ignored) {
         }
-        return new File("/data/data/" + BuildConfig.APPLICATION_ID + "/files");
+        return new File("/data/data/" + BuildConfig.APPLICATION_ID + "/");
+    }
+
+    public static File getFilesDirFixed() {
+
+        File filesDir = new File(getDataDirFixed(), "files");
+
+        FileUtil.initDir(filesDir);
+
+        return filesDir;
+
     }
 
     public static void postInitApplication() {
@@ -193,64 +202,6 @@ public class ApplicationLoader extends Application {
 
     public ApplicationLoader() {
         super();
-    }
-
-    public static Nitrite databaseMain = NitritesKt.mkDatabase("shared_preferences");
-
-    public static SharedPreferences metadata;
-    public static boolean allowMigrate;
-
-    public static HashMap<String,DbPref> prefCache = new HashMap<>();
-
-    @Override
-    public SharedPreferences getSharedPreferences(String name, int mode) {
-
-        if (prefCache.containsKey(name)) return prefCache.get(name);
-
-        synchronized (prefCache) {
-
-            if (prefCache.containsKey(name)) return prefCache.get(name);
-
-            DbPref pref = NitritesKt.openSharedPreference(databaseMain, name);
-
-            if (pref.isEmpty()) {
-
-                if (metadata == null) {
-
-                    metadata = NitritesKt.openMainSharedPreference("metadata");
-
-                    allowMigrate = metadata.getBoolean("allow_migrate", true);
-
-                    if (allowMigrate) {
-
-                        metadata.edit().putBoolean("allow_migrate", false).apply();
-
-                    }
-
-                }
-
-                if (allowMigrate) {
-
-                    SharedPreferences legacyPref = super.getSharedPreferences(name, mode);
-
-                    if (!legacyPref.getAll().isEmpty()) {
-
-                        pref.edit().putAll(legacyPref.getAll()).commit();
-
-                    }
-
-                    legacyPref.edit().clear().apply();
-
-                }
-
-            }
-
-            prefCache.put(name,pref);
-
-            return pref;
-
-        }
-
     }
 
     @Override

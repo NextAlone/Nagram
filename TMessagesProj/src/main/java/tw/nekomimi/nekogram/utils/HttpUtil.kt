@@ -2,7 +2,6 @@ package tw.nekomimi.nekogram.utils
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.internal.http2.Header
 import org.telegram.messenger.SharedConfig
 import java.net.InetSocketAddress
 import java.net.Proxy

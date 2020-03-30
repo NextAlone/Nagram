@@ -1,9 +1,7 @@
 package tw.nekomimi.nekogram;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;

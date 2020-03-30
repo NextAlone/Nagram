@@ -1,7 +1,6 @@
 package tw.nekomimi.nekogram
 
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
-import com.v2ray.ang.dto.AngConfig
 import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull

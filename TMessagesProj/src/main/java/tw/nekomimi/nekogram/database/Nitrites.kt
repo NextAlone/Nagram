@@ -1,19 +1,38 @@
 package tw.nekomimi.nekogram.database
 
-import android.content.SharedPreferences
 import org.dizitart.no2.Nitrite
 import org.telegram.messenger.ApplicationLoader
-import tw.nekomimi.nekogram.translator.TranslateDb
+import tw.nekomimi.nekogram.utils.FileUtil
+import java.io.File
 
-fun mkDatabase(name: String) = Nitrite.builder().compressed()
-        .filePath("${ApplicationLoader.applicationContext.filesDir.parentFile!!.apply { 
-            mkdirs()
-        }}/databases/$name.db")
-        .openOrCreate(name, "nya")
+@JvmOverloads
+fun mkDatabase(name: String): Nitrite {
 
-fun mkCacheDatabase(name: String) = Nitrite.builder().compressed()
-        .filePath("${ApplicationLoader.applicationContext.cacheDir}/$name.db")
-        .openOrCreate(name, "nya")
+    val dir = File("${ApplicationLoader.getDataDirFixed()}/databases")
+
+    FileUtil.initDir(dir)
+
+    return Nitrite.builder().compressed()
+            .filePath("$dir/$name.db")
+            .openOrCreate(name, "nya")!!
+
+}
+
+@JvmOverloads
+fun mkCacheDatabase(name: String) : Nitrite {
+
+    val dir = File("${ApplicationLoader.getDataDirFixed()}/cache")
+
+    FileUtil.initDir(dir)
+
+    return Nitrite.builder().compressed()
+            .filePath("$dir/$name.db")
+            .openOrCreate(name, "nya")!!
+
+}
 
 fun Nitrite.openSharedPreference(name: String) = DbPref(getCollection(name))
-fun openMainSharedPreference(name: String) = ApplicationLoader.databaseMain.openSharedPreference(name)
+
+val mainSharedPreferencesDatabase = mkDatabase("shared_preferences")
+
+fun openMainSharedPreference(name: String) = mainSharedPreferencesDatabase.openSharedPreference(name)

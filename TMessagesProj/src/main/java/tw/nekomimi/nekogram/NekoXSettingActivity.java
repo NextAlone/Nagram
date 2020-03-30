@@ -1,6 +1,5 @@
 package tw.nekomimi.nekogram;
 
-import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;

@@ -1,7 +1,5 @@
 package tw.nekomimi.nekogram;
 
-import org.telegram.messenger.FileLog;
-
 public class ExternalGcm {
 
     public static Interface INSTANCE; static {

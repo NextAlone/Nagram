@@ -4089,6 +4089,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         proc.setOnCancelListener((it) -> {
 
+            adapter[0].trans = false;
+
             cancel.set(true);
 
             transPool.shutdown();
@@ -4133,6 +4135,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         boolean finaL = taskCount.decrementAndGet() == 0;
                         if (errorCount.incrementAndGet() > 3 || finaL) {
                             UIUtil.runOnUIThread(dialog::dismiss);
+                            adapter[0].trans = false;
                             AlertUtil.showSimpleAlert(parentActivity, e.getMessage());
                             cancel.set(true);
                             transPool.shutdown();

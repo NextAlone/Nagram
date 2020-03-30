@@ -26,7 +26,6 @@ import android.os.SystemClock
 import android.system.ErrnoException
 import android.system.Os
 import android.system.OsConstants
-import android.util.Log
 import androidx.annotation.MainThread
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel

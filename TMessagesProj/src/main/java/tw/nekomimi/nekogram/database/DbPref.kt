@@ -38,7 +38,7 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
         connection.find().forEach {
             allValues[it.get("key", String::class.java)] = it["value"]
         }
-        return all
+        return allValues
     }
 
     override fun getLong(key: String, defValue: Long) = getAs(key, defValue)

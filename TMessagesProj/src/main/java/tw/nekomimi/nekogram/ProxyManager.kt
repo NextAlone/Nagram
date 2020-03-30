@@ -68,7 +68,7 @@ object ProxyManager {
 
     }
 
-    fun mkNewPort(): Int {
+    private fun mkNewPort(): Int {
 
         val random = Random(System.currentTimeMillis())
 

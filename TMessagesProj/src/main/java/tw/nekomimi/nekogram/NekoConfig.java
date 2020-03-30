@@ -2,7 +2,6 @@ package tw.nekomimi.nekogram;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -13,7 +12,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.SharedConfig;
 
-import java.util.Locale;
+import tw.nekomimi.nekogram.database.NitritesKt;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -67,7 +66,7 @@ public class NekoConfig {
     public static void saveConfig() {
         synchronized (sync) {
             try {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfing", Context.MODE_PRIVATE);
+                SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekoconfing");
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("useIPv6", useIPv6);
                 editor.putBoolean("hidePhone", hidePhone);
@@ -170,7 +169,6 @@ public class NekoConfig {
         editor.putBoolean("showReport", showReport);
         editor.apply();
     }
-
 
     public static void toggleShowViewHistory() {
         showViewHistory = !showViewHistory;
