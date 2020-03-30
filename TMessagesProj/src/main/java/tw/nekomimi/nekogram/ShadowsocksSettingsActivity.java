@@ -199,8 +199,6 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
                         SharedConfig.setProxyEnable(false);
                     }
 
-                    SharedConfig.saveProxyList();
-
                     finishFragment();
 
                 }

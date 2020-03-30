@@ -228,8 +228,6 @@ public class VmessSettingsActivity extends BaseFragment {
                         SharedConfig.setProxyEnable(false);
                     }
 
-                    SharedConfig.saveProxyList();
-
                     finishFragment();
 
                 }

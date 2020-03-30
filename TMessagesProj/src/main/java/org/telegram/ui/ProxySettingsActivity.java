@@ -227,7 +227,6 @@ public class ProxySettingsActivity extends BaseFragment {
                     } else {
                         SharedConfig.setProxyEnable(false);
                     }
-                    SharedConfig.saveProxyList();
                     if (addingNewProxy || SharedConfig.currentProxy == currentProxyInfo) {
                         editor.putString("proxy_ip", currentProxyInfo.address);
                         editor.putString("proxy_pass", currentProxyInfo.password);

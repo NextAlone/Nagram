@@ -43,6 +43,7 @@ import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
@@ -1051,31 +1052,35 @@ public class SharedConfig {
 
     public static void setProxyEnable(boolean enable) {
 
-        proxyEnabled = enable;
+        UIUtil.runOnUIThread(() -> {
 
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            proxyEnabled = enable;
 
-        preferences.edit().putBoolean("proxy_enabled", enable).apply();
+            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
 
-        ProxyInfo info = currentProxy;
+            preferences.edit().putBoolean("proxy_enabled", enable).apply();
 
-        if (info == null) {
+            ProxyInfo info = currentProxy;
 
-            info = new ProxyInfo();
+            if (info == null) {
 
-        }
+                info = new ProxyInfo();
 
-        if (enable && info instanceof ExternalSocks5Proxy) {
+            }
 
-            ((ExternalSocks5Proxy) info).start();
+            if (enable && info instanceof ExternalSocks5Proxy) {
 
-        } else if (!enable && info instanceof ExternalSocks5Proxy) {
+                ((ExternalSocks5Proxy) info).start();
 
-            ((ExternalSocks5Proxy) info).stop();
+            } else if (!enable && info instanceof ExternalSocks5Proxy) {
 
-        }
+                ((ExternalSocks5Proxy) info).stop();
 
-        ConnectionsManager.setProxySettings(enable, info.address, info.port, info.username, info.password, info.secret);
+            }
+
+            ConnectionsManager.setProxySettings(enable, info.address, info.port, info.username, info.password, info.secret);
+
+        });
 
     }
 
@@ -1084,6 +1089,8 @@ public class SharedConfig {
         currentProxy = info;
 
         setProxyEnable(true);
+
+        saveProxyList();
 
     }
 
@@ -1248,31 +1255,35 @@ public class SharedConfig {
     }
 
     public static void saveProxyList() {
-        JSONArray proxyArray = new JSONArray();
-        for (ProxyInfo info : proxyList) {
-            try {
-                JSONObject obj = info.toJson();
-                if (info == currentProxy) {
-                    obj.put("current", true);
-                    if (info.isInternal) {
-                        obj.put("internal",true);
+        UIUtil.runOnIoDispatcher(() -> {
+
+            JSONArray proxyArray = new JSONArray();
+            for (ProxyInfo info : proxyList) {
+                try {
+                    JSONObject obj = info.toJson();
+                    if (info == currentProxy) {
+                        obj.put("current", true);
+                        if (info.isInternal) {
+                            obj.put("internal",true);
+                        }
+                    } else if (info.isInternal) {
+                        continue;
                     }
-                } else if (info.isInternal) {
-                    continue;
+                    proxyArray.put(obj);
+                } catch (JSONException e) {
+                    FileLog.e(e);
                 }
-                proxyArray.put(obj);
+            }
+
+            File proxyListFile = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "nekox/proxy_list.json");
+
+            try {
+                FileUtil.writeUtf8String(proxyArray.toString(4),proxyListFile);
             } catch (JSONException e) {
                 FileLog.e(e);
             }
-        }
 
-        File proxyListFile = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "nekox/proxy_list.json");
-
-        try {
-            FileUtil.writeUtf8String(proxyArray.toString(4),proxyListFile);
-        } catch (JSONException e) {
-            FileLog.e(e);
-        }
+        });
     }
 
     public static ProxyInfo addProxy(ProxyInfo proxyInfo) {

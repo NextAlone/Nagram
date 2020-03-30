@@ -3,8 +3,13 @@ package tw.nekomimi.nekogram.utils
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.dnsoverhttps.DnsOverHttps
 import org.telegram.tgnet.ConnectionsManager
+import org.xbill.DNS.DohResolver
+import org.xbill.DNS.Lookup
+import org.xbill.DNS.TXTRecord
+import org.xbill.DNS.Type
 import java.net.InetAddress
 import java.util.*
+import kotlin.collections.ArrayList
 
 open class DnsFactory {
 
@@ -23,6 +28,7 @@ open class DnsFactory {
     }
 
     val providers = LinkedList<DnsOverHttps>()
+    val dnsJavaProviders  = LinkedList<DohResolver>()
 
     fun addProvider(url: String) {
 
@@ -47,6 +53,42 @@ open class DnsFactory {
         }
 
         return arrayOf()
+
+    }
+
+    fun getTxts(domain: String) : ArrayList<String> {
+
+        val results = ArrayList<String>()
+
+        dnsJavaProviders.forEach {
+
+            runCatching {
+
+                val lookup = Lookup(domain, Type.TXT)
+
+                lookup.setResolver(it)
+
+                lookup.run()
+
+                if (lookup.result == Lookup.SUCCESSFUL) {
+
+                    lookup.answers.forEach {
+
+                        (it as TXTRecord).strings.forEach {
+
+                            results.add(it)
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return results
 
     }
 

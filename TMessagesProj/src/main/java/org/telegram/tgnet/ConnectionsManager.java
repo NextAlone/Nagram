@@ -825,104 +825,30 @@ public class ConnectionsManager extends BaseController {
         }
 
         protected NativeByteBuffer doInBackground(Void... voids) {
-            ByteArrayOutputStream outbuf = null;
-            InputStream httpConnectionStream = null;
-            for (int i = 0; i < 5; i++) {
-                try {
-                    String dohUrl;
-                    if (i == 0) {
-                        dohUrl = "https://mozilla.cloudflare-dns.com/dns-query";
-                    } else if (i == 1) {
-                        dohUrl = "https://cloudflare-dns.com/dns-query";
-                    } else if (i == 2) {
-                        dohUrl = "https://dns.google/dns-query";
-                    } else if (i == 3) {
-                        dohUrl = "https://dns.twnic.tw/dns-query";
-                    } else {
-                        dohUrl = "https://dns.adguard.com/dns-query";
-                    }
-                    String domain = native_isTestBackend(currentAccount) != 0 ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
-                    int len = Utilities.random.nextInt(116) + 13;
-                    final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-                    StringBuilder padding = new StringBuilder(len);
-                    for (int a = 0; a < len; a++) {
-                        padding.append(characters.charAt(Utilities.random.nextInt(characters.length())));
+            String domain = native_isTestBackend(currentAccount) != 0 ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
+            try {
+                ArrayList<String> arrayList = DnsFactory.Companion.getTxts(domain);
+                Collections.sort(arrayList, (o1, o2) -> {
+                    int l1 = o1.length();
+                    int l2 = o2.length();
+                    if (l1 > l2) {
+                        return -1;
+                    } else if (l1 < l2) {
+                        return 1;
                     }
-                    URL downloadUrl = new URL(dohUrl + "?name=" + domain + "&type=ANY&random_padding=" + padding);
-                    URLConnection httpConnection = downloadUrl.openConnection();
-                    httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
-                    httpConnection.setConnectTimeout(5000);
-                    httpConnection.setReadTimeout(5000);
-                    httpConnection.connect();
-                    httpConnectionStream = httpConnection.getInputStream();
-                    responseDate = (int) (httpConnection.getDate() / 1000);
-
-                    outbuf = new ByteArrayOutputStream();
-
-                    byte[] data = new byte[1024 * 32];
-                    while (true) {
-                        if (isCancelled()) {
-                            break;
-                        }
-                        int read = httpConnectionStream.read(data);
-                        if (read > 0) {
-                            outbuf.write(data, 0, read);
-                        } else if (read == -1) {
-                            break;
-                        } else {
-                            break;
-                        }
-                    }
-
-                    JSONObject jsonObject = new JSONObject(new String(outbuf.toByteArray()));
-                    JSONArray array = jsonObject.getJSONArray("Answer");
-                    len = array.length();
-                    ArrayList<String> arrayList = new ArrayList<>(len);
-                    for (int a = 0; a < len; a++) {
-                        JSONObject object = array.getJSONObject(a);
-                        int type = object.getInt("type");
-                        if (type != 16) {
-                            continue;
-                        }
-                        arrayList.add(object.getString("data"));
-                    }
-                    Collections.sort(arrayList, (o1, o2) -> {
-                        int l1 = o1.length();
-                        int l2 = o2.length();
-                        if (l1 > l2) {
-                            return -1;
-                        } else if (l1 < l2) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                    StringBuilder builder = new StringBuilder();
-                    for (int a = 0; a < arrayList.size(); a++) {
-                        builder.append(arrayList.get(a).replace("\"", ""));
-                    }
-                    byte[] bytes = Base64.decode(builder.toString(), Base64.DEFAULT);
-                    NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
-                    buffer.writeBytes(bytes);
-                    return buffer;
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                } finally {
-                    try {
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                    }
-                    try {
-                        if (outbuf != null) {
-                            outbuf.close();
-                        }
-                    } catch (Exception ignore) {
-
-                    }
+                    return 0;
+                });
+                StringBuilder builder = new StringBuilder();
+                for (int a = 0; a < arrayList.size(); a++) {
+                    builder.append(arrayList.get(a).replace("\"", ""));
                 }
+                byte[] bytes = Base64.decode(builder.toString(), Base64.DEFAULT);
+                NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
+                buffer.writeBytes(bytes);
+                return buffer;
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
             return null;
         }

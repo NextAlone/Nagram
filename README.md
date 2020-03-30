@@ -12,7 +12,7 @@ NekogramX is an UNOFFICIAL app that uses Telegram's API.
 
 Telegram API manuals: https://core.telegram.org/api
 
-MTproto protocol manuals: https://core.telegram.org/mtproto
+MTProto protocol manuals: https://core.telegram.org/mtproto
 
 ## Compilation Guide
 
