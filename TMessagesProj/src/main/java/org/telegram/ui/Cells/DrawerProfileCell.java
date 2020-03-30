@@ -208,7 +208,7 @@ public class DrawerProfileCell extends FrameLayout {
             darkThemeView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
-        if (NekoConfig.avatarAsDrawerBackground || useImageBackground) {
+        if ((NekoConfig.avatarAsDrawerBackground) || useImageBackground) {
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             if (shadowView.getVisibility() != VISIBLE) {
                 shadowView.setVisibility(VISIBLE);
@@ -276,7 +276,7 @@ public class DrawerProfileCell extends FrameLayout {
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
-        if (NekoConfig.avatarAsDrawerBackground) {
+        if (NekoConfig.avatarAsDrawerBackground && ImageLocation.isUserHasPhoto(user)) {
             avatarBackgroundView.setImage(ImageLocation.getForUser(user, true), "512_512", avatarDrawable, user);
             avatarBackgroundView.setVisibility(VISIBLE);
             avatarImageView.setVisibility(INVISIBLE);

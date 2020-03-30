@@ -10,6 +10,8 @@ object FileUtil {
     @JvmStatic
     fun writeUtf8String(text: String, save: File) {
 
+        save.parentFile?.mkdirs()
+
         if (save.isDirectory) save.deleteRecursively()
 
         if (!save.isFile) save.createNewFile()

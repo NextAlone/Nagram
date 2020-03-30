@@ -291,6 +291,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         addItem.addSubItem(menu_add_import_from_clipboard, LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard)).setOnClickListener((v) -> ProxyUtil.importFromClipboard(context));
         addItem.addSubItem(menu_add_scan_qr, LocaleController.getString("ScanQRCode", R.string.ScanQRCode)).setOnClickListener((v) -> {
 
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
+                    return;
+                }
+            }
+
             CameraScanActivity.showAsSheet(this, new CameraScanActivity.CameraScanActivityDelegate() {
 
                 @Override

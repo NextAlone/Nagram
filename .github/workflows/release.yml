@@ -21,51 +21,20 @@ jobs:
           sudo mv ghr*linux_amd64/ghr /usr/local/bin; rm -rf ghr*linux_amd64
       - name: assembleRelease
         run: |
-          sudo bash <<EOF
-            export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-            ./gradlew TMessagesPro:assembleRelease TMessagesProj:assembleReleaseNoGcm TMessagesProj:bundleAfatRelease
-          EOF
+          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          ./gradlew TMessagesPro:assembleRelease \
+                    TMessagesProj:assembleReleaseNoGcm \
+                    TMessagesProj:bundleAfatRelease
       - name: Upload apks
         run: |
-          sudo bash <<EOF
-
-            export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-
-            mkdir apks; find . -name "*.apk" -exec mv {} apks \;
-
-            ghr -replace -b "${{ github.event.head_commit.message }}" \
-              -n "${{ github.ref }}" "${{ github.ref }}" apks/
-
-            cd apks
-
-            gpg --import <<EOF_B
-            ${{ secrets.GPG_KEY }}
-          EOF_B
-
-            echo "DA55ACBFDDA40853BFC5496ECD109927C34A63C4"  > $HOME/.gnupg/sshcontrol
-
-            export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-            gpgconf --launch gpg-agent
-
-            git config --global user.name "世界"
-            git config --global user.email "i@nekox.me"
-            git config --global user.signingkey "DA55ACBFDDA40853BFC5496ECD109927C34A63C4"
-            git config --global commit.gpgsign true
-
-            git init
-
-            git remote add gitlab git@gitlab.com:NekohaSekai/nekox-resources.git
-            git remote add gitee  git@gitee.com:nekoshizuku/nekox-resources.git
-
-            git add . --all
-            git commit -m "${{ github.event.head_commit.message }}"
-
-            git push github master -f
-            git push gitlab master -f
-
-            git checkout -b release
-            git push gitee  release -f
-          EOF
+          sudo apt install -y rename
+          export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          mkdir apks; find . -name "*.apk" -exec mv {} apks \;
+          rename "s/TMessagesProj/NekoX/" apks/*
+          ref="${{ github.ref }}"
+          ref=${ref/"refs/tags/"/}
+          msg="${{ github.event.head_commit.message }}"
+          ghr -delete -n "$ref" -b "$msg" "$ref" apks/
       - uses: r0adkll/upload-google-play@master
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
