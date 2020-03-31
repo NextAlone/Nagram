@@ -240,39 +240,88 @@ public class NekoXConfig {
 
         mkFilter(LocaleController.getString("NotificationsUsers", R.string.FilterNameUsers),
                 LocaleController.getString("FilterNameUsersDescription", R.string.FilterNameUsersDescription),
-                MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED);
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
+                (it) -> {
+
+                    it.contacts = true;
+                    it.non_contacts = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameContacts", R.string.FilterNameContacts),
                 LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameContactsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_CONTACTS);
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS,
+                (it) -> {
+
+                    it.contacts = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameGroups", R.string.FilterNameGroups),
                 LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameGroupsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_GROUPS);
+                MessagesController.DIALOG_FILTER_FLAG_GROUPS,
+                (it) -> {
+
+                    it.groups = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameChannels", R.string.FilterNameChannels),
                 LocaleController.getString("FilterNameChannelsDescription", R.string.FilterNameChannelsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_CHANNELS);
+                MessagesController.DIALOG_FILTER_FLAG_CHANNELS,
+                (it) -> {
+
+                    it.broadcasts = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameBots", R.string.FilterNameBots),
                 LocaleController.getString("FilterNameBotsDescription", R.string.FilterNameBotsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_BOTS);
+                MessagesController.DIALOG_FILTER_FLAG_BOTS,
+                (it) -> {
+
+                    it.bots = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameUnmuted", R.string.FilterNameUnmuted),
                 LocaleController.getString("FilterNameUnmutedDescription", R.string.FilterNameUnmutedDescription),
-                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED);
+                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED,
+                (it) -> {
+
+                    it.exclude_muted = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameUnread", R.string.FilterNameUnread),
                 LocaleController.getString("FilterNameUnreadDescription", R.string.FilterNameUnreadDescription),
-                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ);
+                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
+                (it) -> {
+
+                    it.exclude_read = true;
+
+                });
 
         mkFilter(LocaleController.getString("FilterNameUnmutedAndUnread", R.string.FilterNameUnmutedAndUnread),
                 LocaleController.getString("FilterNameUnmutedAndUnreadDescription", R.string.FilterNameUnmutedAndUnreadDescription),
-                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ);
+                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
+                (it) -> {
+
+                    it.exclude_muted = true;
+                    it.exclude_read = true;
+
+                });
 
     }
 
-    private static void mkFilter(String name, String description, int flag) {
+    @FunctionalInterface
+    interface FilterBuilder {
+
+        void apply(TLRPC.TL_dialogFilter filter);
+
+    }
+
+    private static void mkFilter(String name, String description, int flag,FilterBuilder builder) {
 
         TLRPC.TL_dialogFilterSuggested suggestedFilter = new TLRPC.TL_dialogFilterSuggested();
 
@@ -282,6 +331,8 @@ public class NekoXConfig {
 
         suggestedFilter.filter.title = name;
         suggestedFilter.filter.flags = flag;
+
+        builder.apply(suggestedFilter.filter);
 
         internalFilters.add(suggestedFilter);
 
