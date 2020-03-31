@@ -13,6 +13,7 @@ dependencies {
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
+    implementation "androidx.interpolator:interpolator:1.0.0"
 
     compileOnly 'org.checkerframework:checker-qual:3.2.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
@@ -130,8 +131,7 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
-            minifyEnabled true
-            shrinkResources true
+
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -140,6 +140,8 @@ android {
             initWith debug
             debuggable false
             jniDebuggable false
+            minifyEnabled true
+            shrinkResources true
             signingConfig signingConfigs.release
         }
 

@@ -434,7 +434,7 @@ public class FilterPopup extends BaseController {
                 badge.setVisibility(View.VISIBLE);
             final int i = a;
             cell2.setOnClickListener(v1 -> {
-                dialogsActivity.updateDialogsType(options.get(i));
+               // dialogsActivity.updateDialogsType(options.get(i));
                 if (scrimPopupWindow != null) {
                     scrimPopupWindow.dismiss();
                 }

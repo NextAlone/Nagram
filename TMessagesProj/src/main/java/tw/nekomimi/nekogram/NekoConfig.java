@@ -450,5 +450,3 @@ public class NekoConfig {
         editor.commit();
     }
 }
-
-}

@@ -34,6 +34,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.telegram.ui.ActionBar.Theme;
+
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class Emoji {

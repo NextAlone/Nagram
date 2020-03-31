@@ -2824,7 +2824,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             zoomControlHideRunnable = null;
         }
         if (animated) {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) cameraView.getLayoutParams();
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) cameraView.getLayoutParams();
             animateCameraValues[0] = layoutParams.topMargin = (int) cameraView.getTranslationY();
             cameraView.setLayoutParams(layoutParams);
             cameraView.setTranslationY(0);
@@ -2926,7 +2926,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             cameraView.setTranslationX(0);
             cameraView.setTranslationY(0);
         }
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) cameraView.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) cameraView.getLayoutParams();
         layoutParams.width = (int) (startWidth + (endWidth - startWidth) * value);
         layoutParams.height = (int) (startHeight + (endHeight - startHeight) * value);
         if (value != 0) {

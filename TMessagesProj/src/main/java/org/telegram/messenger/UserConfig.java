@@ -79,6 +79,7 @@ public class UserConfig extends BaseController {
     public int tonBadPasscodeTries;
     public String tonKeyName;
     public boolean tonCreationFinished;
+    public boolean isBot;
 
     private static volatile UserConfig[] Instance = new UserConfig[UserConfig.MAX_ACCOUNT_COUNT];
     public static UserConfig getInstance(int num) {

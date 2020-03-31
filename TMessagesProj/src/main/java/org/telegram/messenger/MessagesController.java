@@ -52,7 +52,13 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
+import kotlin.collections.ArraysKt;
+import tw.nekomimi.nekogram.ExternalGcm;
+import tw.nekomimi.nekogram.FilterPopup;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.ThreadUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 

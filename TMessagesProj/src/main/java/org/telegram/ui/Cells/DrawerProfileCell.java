@@ -34,23 +34,26 @@ import android.widget.Toast;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserObject;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.SnowflakesEffect;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class DrawerProfileCell extends FrameLayout {
 
     private BackupImageView avatarImageView;
+    private BackupImageView avatarBackgroundView;
     private TextView nameTextView;
     private TextView phoneTextView;
     private ImageView shadowView;
@@ -69,6 +72,10 @@ public class DrawerProfileCell extends FrameLayout {
 
     public DrawerProfileCell(Context context) {
         super(context);
+
+        avatarBackgroundView = new BackupImageView(context);
+        avatarBackgroundView.setVisibility(INVISIBLE);
+        addView(avatarBackgroundView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
         shadowView = new ImageView(context);
         shadowView.setVisibility(INVISIBLE);
@@ -232,7 +239,7 @@ public class DrawerProfileCell extends FrameLayout {
                 darkBackColor = (Theme.getServiceMessageColor() & 0x00ffffff) | 0x50000000;
             }
         } else {
-            int visibility = drawCatsShadow? VISIBLE : INVISIBLE;
+            int visibility = drawCatsShadow ? VISIBLE : INVISIBLE;
             if (shadowView.getVisibility() != visibility) {
                 shadowView.setVisibility(visibility);
             }
@@ -277,10 +284,24 @@ public class DrawerProfileCell extends FrameLayout {
         accountsShown = accounts;
         setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
-        phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+        if (!NekoConfig.hidePhone) {
+            phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+        } else if (!TextUtils.isEmpty(user.username)) {
+            phoneTextView.setText("@" + user.username);
+        } else {
+            phoneTextView.setText(LocaleController.getString("MobileHidden",R.string.MobileHidden));
+        }
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
+        if (NekoConfig.avatarAsDrawerBackground) {
+            avatarBackgroundView.setImage(ImageLocation.getForUser(user, true), "512_512", avatarDrawable, user);
+            avatarBackgroundView.setVisibility(VISIBLE);
+            avatarImageView.setVisibility(INVISIBLE);
+        } else {
+            avatarBackgroundView.setVisibility(INVISIBLE);
+            avatarImageView.setVisibility(VISIBLE);
+        }
 
         applyBackground(true);
     }

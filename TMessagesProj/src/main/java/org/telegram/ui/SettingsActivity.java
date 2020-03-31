@@ -198,16 +198,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int clearLogsRow;
     private int switchBackendRow;
     private int nekoRow;
-    private int devicesSectionRow;
-    private int helpHeaderRow;
-    private int questionRow;
-    private int faqRow;
-    private int policyRow;
-    private int helpSectionCell;
-    private int debugHeaderRow;
-    private int sendLogsRow;
-    private int clearLogsRow;
-    private int switchBackendRow;
     private int versionRow;
     private int rowCount;
 
