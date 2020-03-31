@@ -20,7 +20,9 @@
     <string name="FilterNameUnmuted">未靜音</string>
     <string name="FilterNameUnmutedDescription">僅來自未靜音的聊天的消息</string>
     <string name="FilterNameUnread2">未讀</string>
+    <string name="FilterNameUnreadDescription">僅未讀的消息</string>
     <string name="FilterNameUnmutedAndUnread">未讀且可通知</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">僅來自未靜音的聊天的未讀消息</string>
     <string name="DialogsSettings">對話設定</string>
     <string name="SortMenu">排序設定</string>
     <string name="SortByUnread">未讀優先排序</string>
