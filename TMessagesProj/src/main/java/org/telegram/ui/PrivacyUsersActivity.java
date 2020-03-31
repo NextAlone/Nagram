@@ -65,6 +65,12 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     private boolean isAlwaysShare;
 
     private PrivacyActivityDelegate delegate;
+    
+    private int currentType;
+    
+    public static final int TYPE_PRIVACY = 0;
+    public static final int TYPE_BLOCKED = 1;
+    public static final int TYPE_FILTER = 2;
 
     private int currentType;
 
