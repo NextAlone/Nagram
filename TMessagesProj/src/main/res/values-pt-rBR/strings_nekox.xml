@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="RemoveTitleEmoji">Remover emoji no título</string>
     <string name="NekoXProxy">NekoX Público Proxy</string>
     <string name="PublicPrefix">[ Público ]</string>
     <string name="NekoXProxyInfo">Pode levar dezenas de segundos para carregar o proxy interno do NekoX Público :)</string>
     <string name="DisableChatAction">Não enviar meu status de entrada</string>
     <string name="FakeScreenshot">Pré-visualizar imagem</string>
     <string name="SaveCacheToSdcard">Salvar cache em sdcard*</string>
+    <string name="FilterNameUsers">usuários</string>
+    <string name="FilterNameUsersDescription">Apenas mensagens de conversas privadas</string>
+    <string name="FilterNameContacts">Contatos</string>
     <string name="FilterNameUnread2">Não lida</string>
     <string name="FilterNameUnmutedAndUnread">Não silenciado &amp; Não Lido</string>
     <string name="DialogsSettings">Configurações de diálogo</string>
