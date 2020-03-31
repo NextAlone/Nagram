@@ -285,27 +285,58 @@ public class NekoXConfig {
 
         mkFilter(LocaleController.getString("FilterNameUnmuted", R.string.FilterNameUnmuted),
                 LocaleController.getString("FilterNameUnmutedDescription", R.string.FilterNameUnmutedDescription),
-                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED,
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_GROUPS |
+                        MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
+                        MessagesController.DIALOG_FILTER_FLAG_BOTS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED,
                 (it) -> {
 
+                    it.contacts = true;
+                    it.non_contacts = true;
+                    it.groups = true;
+                    it.broadcasts = true;
+                    it.bots = true;
                     it.exclude_muted = true;
 
                 });
 
         mkFilter(LocaleController.getString("FilterNameUnread2", R.string.FilterNameUnread2),
                 LocaleController.getString("FilterNameUnreadDescription", R.string.FilterNameUnreadDescription),
-                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_GROUPS |
+                        MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
+                        MessagesController.DIALOG_FILTER_FLAG_BOTS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
                 (it) -> {
 
+                    it.contacts = true;
+                    it.non_contacts = true;
+                    it.groups = true;
+                    it.broadcasts = true;
+                    it.bots = true;
                     it.exclude_read = true;
 
                 });
 
         mkFilter(LocaleController.getString("FilterNameUnmutedAndUnread", R.string.FilterNameUnmutedAndUnread),
                 LocaleController.getString("FilterNameUnmutedAndUnreadDescription", R.string.FilterNameUnmutedAndUnreadDescription),
-                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_GROUPS |
+                        MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
+                        MessagesController.DIALOG_FILTER_FLAG_BOTS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
                 (it) -> {
 
+                    it.contacts = true;
+                    it.non_contacts = true;
+                    it.groups = true;
+                    it.broadcasts = true;
+                    it.bots = true;
                     it.exclude_muted = true;
                     it.exclude_read = true;
 
@@ -339,7 +370,7 @@ public class NekoXConfig {
 
         internalFilters.add(suggestedFilter);
 
-        currId ++;
+        currId++;
 
     }
 

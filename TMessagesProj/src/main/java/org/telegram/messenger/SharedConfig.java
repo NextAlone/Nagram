@@ -1050,7 +1050,9 @@ public class SharedConfig {
 
     public static boolean proxyEnabled;
 
-    public static VmessProxy publicProxy; static {
+    public static VmessProxy publicProxy;
+
+    static {
 
         publicProxy = new VmessProxy(VmessLoader.getPublic());
         publicProxy.isInternal = true;
@@ -1065,7 +1067,7 @@ public class SharedConfig {
 
         boolean proxyEnabledValue = preferences.getBoolean("proxy_enabled", false);
 
-        if (currentProxy == null) {
+        if (proxyEnabledValue && currentProxy == null) {
 
             currentProxy = publicProxy;
 
@@ -1158,24 +1160,21 @@ public class SharedConfig {
 
                     }
 
-                    if (!proxyObj.optBoolean("internal",false)) {
+                    if (proxyObj.optBoolean("internal", false)) continue;
 
-                        proxyList.add(info);
+                    proxyList.add(info);
 
-                        if (proxyObj.optBoolean("current", false)) {
+                    if (proxyObj.optBoolean("current", false)) {
 
-                            currentProxy = publicProxy;
+                        currentProxy = info;
 
-                            if (info instanceof ExternalSocks5Proxy) {
+                        if (info instanceof ExternalSocks5Proxy) {
 
-                                ((ExternalSocks5Proxy) info).start();
-
-                            }
+                            ((ExternalSocks5Proxy) info).start();
 
                         }
 
                     }
-
 
                 }
 
@@ -1291,7 +1290,7 @@ public class SharedConfig {
                     if (info == currentProxy) {
                         obj.put("current", true);
                         if (info.isInternal) {
-                            obj.put("internal",true);
+                            obj.put("internal", true);
                         }
                     } else if (info.isInternal) {
                         continue;
@@ -1305,7 +1304,7 @@ public class SharedConfig {
             File proxyListFile = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "nekox/proxy_list.json");
 
             try {
-                FileUtil.writeUtf8String(proxyArray.toString(4),proxyListFile);
+                FileUtil.writeUtf8String(proxyArray.toString(4), proxyListFile);
             } catch (JSONException e) {
                 FileLog.e(e);
             }
