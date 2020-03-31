@@ -6,6 +6,7 @@
     <string name="DisableChatAction">Não enviar meu status de entrada</string>
     <string name="FakeScreenshot">Pré-visualizar imagem</string>
     <string name="SaveCacheToSdcard">Salvar cache em sdcard*</string>
+    <string name="FilterNameUnmutedAndUnread">Não silenciado &amp; Não Lido</string>
     <string name="DialogsSettings">Configurações de diálogo</string>
     <string name="SortMenu">Configurações de diálogo</string>
     <string name="SortByUnread">Classificar por não lidas</string>
