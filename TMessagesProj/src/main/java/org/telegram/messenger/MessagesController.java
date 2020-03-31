@@ -319,16 +319,16 @@ public class MessagesController extends BaseController implements NotificationCe
         public TLRPC.SendMessageAction action;
     }
 
-    public static int DIALOG_FILTER_FLAG_CONTACTS           = 0x00000001;
-    public static int DIALOG_FILTER_FLAG_NON_CONTACTS       = 0x00000002;
-    public static int DIALOG_FILTER_FLAG_GROUPS             = 0x00000004;
-    public static int DIALOG_FILTER_FLAG_CHANNELS           = 0x00000008;
-    public static int DIALOG_FILTER_FLAG_BOTS               = 0x00000010;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_MUTED      = 0x00000020;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_READ       = 0x00000040;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED   = 0x00000080;
-    public static int DIALOG_FILTER_FLAG_ONLY_ARCHIVED      = 0x00000100;
-    public static int DIALOG_FILTER_FLAG_ALL_CHATS          = DIALOG_FILTER_FLAG_CONTACTS | DIALOG_FILTER_FLAG_NON_CONTACTS | DIALOG_FILTER_FLAG_GROUPS | DIALOG_FILTER_FLAG_CHANNELS | DIALOG_FILTER_FLAG_BOTS;
+    public static int DIALOG_FILTER_FLAG_CONTACTS = 0x00000001;
+    public static int DIALOG_FILTER_FLAG_NON_CONTACTS = 0x00000002;
+    public static int DIALOG_FILTER_FLAG_GROUPS = 0x00000004;
+    public static int DIALOG_FILTER_FLAG_CHANNELS = 0x00000008;
+    public static int DIALOG_FILTER_FLAG_BOTS = 0x00000010;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_MUTED = 0x00000020;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_READ = 0x00000040;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED = 0x00000080;
+    public static int DIALOG_FILTER_FLAG_ONLY_ARCHIVED = 0x00000100;
+    public static int DIALOG_FILTER_FLAG_ALL_CHATS = DIALOG_FILTER_FLAG_CONTACTS | DIALOG_FILTER_FLAG_NON_CONTACTS | DIALOG_FILTER_FLAG_GROUPS | DIALOG_FILTER_FLAG_CHANNELS | DIALOG_FILTER_FLAG_BOTS;
 
 
     public static class DialogFilter {
@@ -345,36 +345,6 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private DialogFilter sortingDialogFilter;
-    private final Comparator<TLRPC.Dialog> dialogDateComparator = (dialog1, dialog2) -> {
-        int pinnedNum1 = sortingDialogFilter.pinnedDialogs.get(dialog1.id, Integer.MIN_VALUE);
-        int pinnedNum2 = sortingDialogFilter.pinnedDialogs.get(dialog2.id, Integer.MIN_VALUE);
-        if (dialog1 instanceof TLRPC.TL_dialogFolder && !(dialog2 instanceof TLRPC.TL_dialogFolder)) {
-            return -1;
-        } else if (!(dialog1 instanceof TLRPC.TL_dialogFolder) && dialog2 instanceof TLRPC.TL_dialogFolder) {
-            return 1;
-        } else if (pinnedNum1 == Integer.MIN_VALUE && pinnedNum2 != Integer.MIN_VALUE) {
-            return 1;
-        } else if (pinnedNum1 != Integer.MIN_VALUE && pinnedNum2 == Integer.MIN_VALUE) {
-            return -1;
-        } else if (pinnedNum1 != Integer.MIN_VALUE && pinnedNum2 != Integer.MIN_VALUE) {
-            if (pinnedNum1 > pinnedNum2) {
-                return 1;
-            } else if (pinnedNum1 < pinnedNum2) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-        final MediaDataController mediaDataController = getMediaDataController();
-        final long date1 = DialogObject.getLastMessageOrDraftDate(dialog1, mediaDataController.getDraft(dialog1.id));
-        final long date2 = DialogObject.getLastMessageOrDraftDate(dialog2, mediaDataController.getDraft(dialog2.id));
-        if (date1 < date2) {
-            return 1;
-        } else if (date1 > date2) {
-            return -1;
-        }
-        return 0;
-    };
 
     private final Comparator<TLRPC.Dialog> dialogComparator = (dialog1, dialog2) -> {
         if (dialog1 instanceof TLRPC.TL_dialogFolder && !(dialog2 instanceof TLRPC.TL_dialogFolder)) {
@@ -961,6 +931,8 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         loadingSuggestedFilters = true;
 
+        /*
+
         TLRPC.TL_messages_getSuggestedDialogFilters req = new TLRPC.TL_messages_getSuggestedDialogFilters();
         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             loadingSuggestedFilters = false;
@@ -973,6 +945,14 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             getNotificationCenter().postNotificationName(NotificationCenter.suggestedFiltersLoaded);
         }));
+
+         */
+
+        suggestedFilters.clear();
+        suggestedFilters.addAll(NekoXConfig.internalFilters);
+        loadingSuggestedFilters = false;
+        getNotificationCenter().postNotificationName(NotificationCenter.suggestedFiltersLoaded);
+
     }
 
     public void loadRemoteFilters(boolean force) {
@@ -985,11 +965,11 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         TLRPC.TL_messages_getDialogFilters req = new TLRPC.TL_messages_getDialogFilters();
         getConnectionsManager().sendRequest(req, (response, error) -> {
-           if (response instanceof TLRPC.Vector) {
-               getMessagesStorage().checkLoadedRemoteFilters((TLRPC.Vector) response);
-           } else {
-               AndroidUtilities.runOnUIThread(() -> loadingRemoteFilters = false);
-           }
+            if (response instanceof TLRPC.Vector) {
+                getMessagesStorage().checkLoadedRemoteFilters((TLRPC.Vector) response);
+            } else {
+                AndroidUtilities.runOnUIThread(() -> loadingRemoteFilters = false);
+            }
         });
     }
 
@@ -3159,7 +3139,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
         if (blockedCopy.size() == 0) return;
 
-        for (int index = 0;index < blockedCopy.size();index ++) {
+        for (int index = 0; index < blockedCopy.size(); index++) {
 
             TLRPC.TL_contacts_unblock req = new TLRPC.TL_contacts_unblock();
             int user_id = blockedCopy.keyAt(index);
@@ -12039,7 +12019,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     continue;
                 }
                 sortingDialogFilter = selectedDialogFilter[b];
-                Collections.sort(allDialogs, dialogDateComparator);
+                Collections.sort(allDialogs, dialogComparator);
                 ArrayList<TLRPC.Dialog> dialogsByFilter = selectedDialogFilter[b].dialogs;
 
                 for (int a = 0, N = allDialogs.size(); a < N; a++) {
@@ -12121,7 +12101,8 @@ public class MessagesController extends BaseController implements NotificationCe
 
             Collections.sort(allDialogs, dialogComparator);
 
-        }        isLeftProxyChannel = true;
+        }
+        isLeftProxyChannel = true;
         if (proxyDialog != null && proxyDialog.id < 0) {
             TLRPC.Chat chat = getChat(-(int) proxyDialog.id);
             if (chat != null && !chat.left) {

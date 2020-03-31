@@ -4,6 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
+import org.telegram.tgnet.TLRPC;
+
+import java.util.LinkedList;
+import java.util.function.Function;
 
 public class NekoXConfig {
 
@@ -224,6 +231,59 @@ public class NekoXConfig {
     public static void toggleRemoveTitleEmoji() {
 
         preferences.edit().putBoolean("remove_title_emoji", removeTitleEmoji = !removeTitleEmoji).apply();
+
+    }
+
+    public static LinkedList<TLRPC.TL_dialogFilterSuggested> internalFilters = new LinkedList<>();
+
+    static {
+
+        mkFilter(LocaleController.getString("NotificationsUsers", R.string.FilterNameUsers),
+                LocaleController.getString("FilterNameUsersDescription", R.string.FilterNameUsersDescription),
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED);
+
+        mkFilter(LocaleController.getString("FilterNameContacts", R.string.FilterNameContacts),
+                LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameContactsDescription),
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS);
+
+        mkFilter(LocaleController.getString("FilterNameGroups", R.string.FilterNameGroups),
+                LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameGroupsDescription),
+                MessagesController.DIALOG_FILTER_FLAG_GROUPS);
+
+        mkFilter(LocaleController.getString("FilterNameChannels", R.string.FilterNameChannels),
+                LocaleController.getString("FilterNameChannelsDescription", R.string.FilterNameChannelsDescription),
+                MessagesController.DIALOG_FILTER_FLAG_CHANNELS);
+
+        mkFilter(LocaleController.getString("FilterNameBots", R.string.FilterNameBots),
+                LocaleController.getString("FilterNameBotsDescription", R.string.FilterNameBotsDescription),
+                MessagesController.DIALOG_FILTER_FLAG_BOTS);
+
+        mkFilter(LocaleController.getString("FilterNameUnmuted", R.string.FilterNameUnmuted),
+                LocaleController.getString("FilterNameUnmutedDescription", R.string.FilterNameUnmutedDescription),
+                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED);
+
+        mkFilter(LocaleController.getString("FilterNameUnread", R.string.FilterNameUnread),
+                LocaleController.getString("FilterNameUnreadDescription", R.string.FilterNameUnreadDescription),
+                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ);
+
+        mkFilter(LocaleController.getString("FilterNameUnmutedAndUnread", R.string.FilterNameUnmutedAndUnread),
+                LocaleController.getString("FilterNameUnmutedAndUnreadDescription", R.string.FilterNameUnmutedAndUnreadDescription),
+                MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ);
+
+    }
+
+    private static void mkFilter(String name, String description, int flag) {
+
+        TLRPC.TL_dialogFilterSuggested suggestedFilter = new TLRPC.TL_dialogFilterSuggested();
+
+        suggestedFilter.description = description != null ? description : "Nya ~";
+
+        suggestedFilter.filter = new TLRPC.TL_dialogFilter();
+
+        suggestedFilter.filter.title = name;
+        suggestedFilter.filter.flags = flag;
+
+        internalFilters.add(suggestedFilter);
 
     }
 

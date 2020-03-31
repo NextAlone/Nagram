@@ -13,8 +13,30 @@
     <string name="FakeScreenshot">Pretend screenshot</string>
     <string name="SaveCacheToSdcard">Save cache to sdcard*</string>
 
-    <string name="NotificationsUnread">Unread</string>
-    <string name="NotificationsUnmutedAndUnread">Unmuted &amp; Unread</string>
+    <string name="FilterNameUsers">Users</string>
+    <string name="FilterNameUsersDescription">Only messages from private chats</string>
+
+    <string name="FilterNameContacts">Contacts</string>
+    <string name="FilterNameContactsDescription">Only messages from saved users</string>
+
+    <string name="FilterNameGroups">Groups</string>
+    <string name="FilterNameGroupsDescription">Only messages from group chats</string>
+
+    <string name="FilterNameChannels">Channels</string>
+    <string name="FilterNameChannelsDescription">Only messages from channels</string>
+
+    <string name="FilterNameBots">Bots</string>
+    <string name="FilterNameBotsDescription">Only messages from bots</string>
+
+    <string name="FilterNameUnmuted">Unmuted</string>
+    <string name="FilterNameUnmutedDescription">Only messages from unmuted chats</string>
+
+    <string name="FilterNameUnread2">Unread</string>
+    <string name="FilterNameUnreadDescription">Only unread messages</string>
+
+    <string name="FilterNameUnmutedAndUnread">Unmuted &amp; Unread</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">Only unread messages from unmuted chats</string>
+
 
     <string name="DialogsSettings">Dialogs Settings</string>
     <string name="SortMenu">Dialog Sort Settings</string>
