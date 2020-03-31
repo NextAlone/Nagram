@@ -2,9 +2,7 @@ package tw.nekomimi.nekogram.utils
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
@@ -17,7 +15,6 @@ import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
-import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
@@ -144,7 +141,7 @@ object ProxyUtil {
                         line.startsWith(VMESS_PROTOCOL) ||
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL))  {
+                        line.startsWith(SSR_PROTOCOL)) {
 
                     exists = true
 
@@ -295,7 +292,18 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun showQrDialog(ctx: Activity, text: String) {
+    fun getOwnerActivity(ctx: Context): Activity {
+
+        if (ctx is Activity) return ctx
+
+        if (ctx is ContextWrapper) return getOwnerActivity(ctx.baseContext)
+
+        error("unable cast ${ctx.javaClass.name} to activity")
+
+    }
+
+    @JvmStatic
+    fun showQrDialog(ctx: Context, text: String) {
 
         val code = createQRCode(text)
 
@@ -326,7 +334,7 @@ object ProxyUtil {
 
                                 if (Build.VERSION.SDK_INT >= 23 && ctx.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                                    ctx.requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 4)
+                                    getOwnerActivity(ctx).requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 4)
 
                                     return@setItems
 

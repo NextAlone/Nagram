@@ -662,7 +662,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 FileLog.e(e);
             }
         } else if (id == 3) {
-            ProxyUtil.showQrDialog((Activity) getContext(),stickersUrl);
+            ProxyUtil.showQrDialog(getContext(),stickersUrl);
         }
     }
 
