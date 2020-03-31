@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="RemoveTitleEmoji">移除标题中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
     <string name="PublicPrefix">[ 公共 ]</string>
     <string name="NekoXProxyInfo">这可能需要几十秒的时间来加载 NekoX 公共代理 :)</string>
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
     <string name="SaveCacheToSdcard">保存缓存到内部存储*</string>
-    <string name="NotificationsUnread">未读</string>
-    <string name="NotificationsUnmutedAndUnread">未读且允许通知</string>
+    <string name="FilterNameUsers">用户</string>
+    <string name="FilterNameUsersDescription">仅来自私聊的消息</string>
+    <string name="FilterNameContacts">联系人</string>
+    <string name="FilterNameContactsDescription">仅来自通讯录用户的消息</string>
+    <string name="FilterNameGroups">群組</string>
+    <string name="FilterNameGroupsDescription">仅来自群聊的消息</string>
+    <string name="FilterNameChannels">频道</string>
+    <string name="FilterNameChannelsDescription">仅来自频道的消息</string>
+    <string name="FilterNameBots">机器人</string>
+    <string name="FilterNameBotsDescription">仅来自机器人的消息</string>
+    <string name="FilterNameUnmuted">未静音</string>
+    <string name="FilterNameUnmutedDescription">仅来自未静音聊天的消息</string>
+    <string name="FilterNameUnread2">未读</string>
+    <string name="FilterNameUnreadDescription">仅未读的消息</string>
+    <string name="FilterNameUnmutedAndUnread">未读且允许通知</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">仅来自未静音聊天的未读消息</string>
     <string name="DialogsSettings">对话设置</string>
     <string name="SortMenu">排序设置</string>
     <string name="SortByUnread">未读优先排序</string>
@@ -68,4 +83,5 @@
     <string name="LoginSettings">登录设置</string>
     <string name="ShowTestBackend">显示连接到测试后端</string>
     <string name="ShowBotLogin">显示机器人秘钥登录</string>
+    <string name="NekoXFaq">NekoX 常见问题</string>
 </resources>
