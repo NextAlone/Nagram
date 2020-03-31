@@ -21,12 +21,6 @@
     <string name="AddToSavedMessages">Salva messaggio</string>
     <string name="CreateMention">Crea menzione</string>
     <string name="ForceTabletMode">Forza modalità tablet</string>
-    <string name="All">Tutte le chats</string>
-    <string name="Users">Utenti</string>
-    <string name="Groups">Gruppi</string>
-    <string name="Channels">Canali</string>
-    <string name="Bots">Bots</string>
-    <string name="Admins">Amministratore</string>
     <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Barra di stato trasparente</string>
     <string name="EnableResidentNotification">Mostra notifica persistente</string>
@@ -82,9 +76,6 @@
     <string name="UnlimitedPinnedDialogs">Chat fissate illimitate</string>
     <string name="UnlimitedPinnedDialogsAbout">Fissa chat illimitate disattivando la loro sincronizzazione.</string>
     <string name="OpenArchiveOnPull">Apri l\'archivio tirando giù</string>
-    <string name="OpenDialogsFilterBy">Apri il filtro chat</string>
-    <string name="TapOnActionBar">Tocco sulla barra del titolo</string>
-    <string name="TapOnFab">Tocco sul pulsante della matita</string>
     <string name="HideKeyboardOnChatScroll">Nascondi la tastiera quando scorri la chat</string>
     <string name="UserRestrictionsSendStickers2">Inviare Sticker</string>
     <string name="UserRestrictionsSendGifs">Inviare GIF</string>

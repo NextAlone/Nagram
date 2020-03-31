@@ -21,12 +21,6 @@
     <string name="AddToSavedMessages">Salvar mensagem</string>
     <string name="CreateMention">Criar Menção</string>
     <string name="ForceTabletMode">Forçar modo tablet*</string>
-    <string name="All">Todos</string>
-    <string name="Users">Usuários</string>
-    <string name="Groups">Grupos</string>
-    <string name="Channels">Canais</string>
-    <string name="Bots">Bots</string>
-    <string name="Admins">Administrando</string>
     <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Barra de status transparente</string>
     <string name="EnableResidentNotification">Mostrar notificação de residente</string>
@@ -82,9 +76,6 @@
     <string name="UnlimitedPinnedDialogs">Chats fixados ilimitados</string>
     <string name="UnlimitedPinnedDialogsAbout">Fixar chats ilimitados desativar a sincronização.</string>
     <string name="OpenArchiveOnPull">Abrir chats arquivados ao puxar para baixo</string>
-    <string name="OpenDialogsFilterBy">Abrir filtro de chats por</string>
-    <string name="TapOnActionBar">Toque na barra no título \"Nekogram\"</string>
-    <string name="TapOnFab">Toque no botão do lápis</string>
     <string name="HideKeyboardOnChatScroll">Ocultar teclado na rolagem do chat</string>
     <string name="UserRestrictionsSendStickers2">Enviar Stickers</string>
     <string name="UserRestrictionsSendGifs">Enviar GIFs</string>
