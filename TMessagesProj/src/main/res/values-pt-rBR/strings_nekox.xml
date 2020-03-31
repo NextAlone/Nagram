@@ -10,8 +10,19 @@
     <string name="FilterNameUsers">usuários</string>
     <string name="FilterNameUsersDescription">Apenas mensagens de conversas privadas</string>
     <string name="FilterNameContacts">Contatos</string>
+    <string name="FilterNameContactsDescription">Somente mensagens de usuários salvos</string>
+    <string name="FilterNameGroups">Grupos</string>
+    <string name="FilterNameGroupsDescription">Apenas mensagens de conversas em grupo</string>
+    <string name="FilterNameChannels">Canais</string>
+    <string name="FilterNameChannelsDescription">Somente mensagens de canais</string>
+    <string name="FilterNameBots">Bots</string>
+    <string name="FilterNameBotsDescription">Somente mensagens de bots</string>
+    <string name="FilterNameUnmuted">Desmutar</string>
+    <string name="FilterNameUnmutedDescription">Apenas mensagens de bate-papos não mutados</string>
     <string name="FilterNameUnread2">Não lida</string>
+    <string name="FilterNameUnreadDescription">Somente mensagens não lidas</string>
     <string name="FilterNameUnmutedAndUnread">Não silenciado &amp; Não Lido</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">Apenas mensagens não lidas de bate-papos não mutados</string>
     <string name="DialogsSettings">Configurações de diálogo</string>
     <string name="SortMenu">Configurações de diálogo</string>
     <string name="SortByUnread">Classificar por não lidas</string>
@@ -72,4 +83,5 @@
     <string name="LoginSettings">Configurações de login</string>
     <string name="ShowTestBackend">Mostrar back-end de teste</string>
     <string name="ShowBotLogin">Mostrar Login do Bot</string>
+    <string name="NekoXFaq">NekoX FAQ</string>
 </resources>
