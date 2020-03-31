@@ -3,6 +3,8 @@
 
     <string name="NekoX" translatable="false">Nekogram X</string>
 
+    <string name="RemoveTitleEmoji">Remove emoji in title</string>
+
     <string name="NekoXProxy">NekoX Public Proxy</string>
     <string name="PublicPrefix">[ Public ]</string>
     <string name="NekoXProxyInfo">It may take tens of seconds to load the NekoX Public built-in proxy :)</string>

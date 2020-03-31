@@ -101,6 +101,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int forceTabletRow;
     private int openArchiveOnPullRow;
     private int avatarAsDrawerBackgroundRow;
+    private int removeTitleEmojiRow;
     private int eventTypeRow;
     private int newYearRow;
     private int actionBarDecorationRow;
@@ -547,6 +548,12 @@ public class NekoSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.avatarAsDrawerBackground);
                 }
+            } else if (position == removeTitleEmojiRow) {
+                NekoXConfig.toggleRemoveTitleEmoji();
+                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoXConfig.removeTitleEmoji);
+                }
             }
 
         });
@@ -600,6 +607,7 @@ public class NekoSettingsActivity extends BaseFragment {
         forceTabletRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
+        removeTitleEmojiRow = rowCount++;
         nameOrderRow = rowCount++;
         eventTypeRow = NekoXConfig.developerMode ? rowCount++ : -1;
         newYearRow = NekoXConfig.developerMode ? rowCount++ : -1;
@@ -1181,8 +1189,9 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DisableSystemAccount", R.string.DisableSystemAccount), NekoXConfig.disableSystemAccount, true);
                     } else if (position == avatarAsDrawerBackgroundRow) {
                         textCell.setTextAndCheck(LocaleController.getString("UseAvatarAsDrawerBackground", R.string.UseAvatarAsDrawerBackground), NekoConfig.avatarAsDrawerBackground, true);
+                    } else if (position == removeTitleEmojiRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("RemoveTitleEmoji", R.string.RemoveTitleEmoji), NekoXConfig.removeTitleEmoji, true);
                     }
-
 
                     break;
                 }
@@ -1225,7 +1234,8 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
-                    position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow;
+                    position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
+                    position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow;
         }
 
         @Override
@@ -1267,7 +1277,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == connection2Row || position == dialogs2Row|| position == chat2Row || position == experiment2Row || position == privacy2Row) {
+            if (position == connection2Row || position == dialogs2Row || position == chat2Row || position == experiment2Row || position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
                     position == sortMenuRow ||
@@ -1280,7 +1290,8 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == saveCacheToSdcardRow || position == unlimitedFavedStickersRow || position == skipOpenLinkConfiirm ||
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
-                    position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow) {
+                    position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||
+                    position == removeTitleEmojiRow) {
                 return 3;
             } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;

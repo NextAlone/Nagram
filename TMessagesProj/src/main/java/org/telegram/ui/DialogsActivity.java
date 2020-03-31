@@ -153,6 +153,7 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -189,7 +190,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean passcodeItemVisible;
     private ActionBarMenuItem proxyItem;
     private ActionBarMenuItem scanItem;
-    private boolean proxyItemVisible;
     private ActionBarMenuItem searchItem;
     private ActionBarMenuItem doneItem;
     private ProxyDrawable proxyDrawable;
@@ -1553,7 +1553,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (switchItem != null) {
                     switchItem.setVisibility(View.GONE);
                 }
-                if (proxyItem != null && proxyItemVisible) {
+                if (proxyItem != null) {
                     proxyItem.setVisibility(View.GONE);
                     scanItem.setVisibility(View.VISIBLE);
                 }
@@ -1575,7 +1575,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (switchItem != null) {
                     switchItem.setVisibility(View.VISIBLE);
                 }
-                if (proxyItem != null && proxyItemVisible) {
+                if (proxyItem != null) {
                     proxyItem.setVisibility(View.VISIBLE);
                     scanItem.setVisibility(View.GONE);
                 }
@@ -1642,11 +1642,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (folderId != 0) {
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
             } else {
-                if (BuildVars.DEBUG_VERSION) {
-                    actionBar.setTitle("Telegram Beta");
-                } else {
-                    actionBar.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
-                }
+                actionBar.setTitle(getNekoTitle(LocaleController.getString("NekoX", R.string.NekoX)));
             }
             if (folderId == 0) {
                 actionBar.setSupportsHolidayImage(true);
@@ -4869,16 +4865,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         String proxyAddress = preferences.getString("proxy_ip", "");
         boolean proxyEnabled;
-        if ((proxyEnabled = preferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(proxyAddress)) || getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty()) {
-            if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
-                proxyItem.setVisibility(View.VISIBLE);
-            }
-            proxyItemVisible = true;
-            proxyDrawable.setConnected(proxyEnabled, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
-        } else {
-            proxyItemVisible = false;
-            proxyItem.setVisibility(View.GONE);
+        if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
+            proxyItem.setVisibility(View.VISIBLE);
         }
+        proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
     }
 
     private AnimatorSet doneItemAnimator;
@@ -4905,7 +4895,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (searchItem != null) {
                 searchItem.setVisibility(View.VISIBLE);
             }
-            if (proxyItem != null && proxyItemVisible) {
+            if (proxyItem != null) {
                 proxyItem.setVisibility(View.VISIBLE);
             }
             if (passcodeItem != null && passcodeItemVisible) {
@@ -4914,9 +4904,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         ArrayList<Animator> arrayList = new ArrayList<>();
         arrayList.add(ObjectAnimator.ofFloat(doneItem, View.ALPHA, show ? 1.0f : 0.0f));
-        if (proxyItemVisible) {
-            arrayList.add(ObjectAnimator.ofFloat(proxyItem, View.ALPHA, show ? 0.0f : 1.0f));
-        }
+        arrayList.add(ObjectAnimator.ofFloat(proxyItem, View.ALPHA, show ? 0.0f : 1.0f));
         if (passcodeItemVisible) {
             arrayList.add(ObjectAnimator.ofFloat(passcodeItem, View.ALPHA, show ? 0.0f : 1.0f));
         }
@@ -4930,7 +4918,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (searchItem != null) {
                         searchItem.setVisibility(View.INVISIBLE);
                     }
-                    if (proxyItem != null && proxyItemVisible) {
+                    if (proxyItem != null) {
                         proxyItem.setVisibility(View.INVISIBLE);
                     }
                     if (passcodeItem != null && passcodeItemVisible) {
@@ -5093,7 +5081,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private String getNekoTitle(String title) {
-        return LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
+
+        if (!NekoXConfig.removeTitleEmoji) {
+
+            title = LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
+
+        }
+
+        return title;
+
         //if (FilterPopup.getInstance(currentAccount).getTotalUnreadCount() == 0) {
         //    return LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
         //}
