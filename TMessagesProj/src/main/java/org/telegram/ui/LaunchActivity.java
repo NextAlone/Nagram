@@ -577,7 +577,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     presentFragment(fragment);
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 9) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
+                    Browser.openUrl(LaunchActivity.this, NekoXConfig.FAQ_URL);
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
                     presentFragment(new CallLogActivity());

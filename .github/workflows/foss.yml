@@ -42,10 +42,10 @@ jobs:
           env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
 
           cd ../jni
-          retry=0
-          until [ $retry -ge 114514 ]; do
+
+          wgile :
+          do
              sudo apt-get install -y ninja-build && break
-             retry=$[$retry+1]
              sleep 5
           done
 

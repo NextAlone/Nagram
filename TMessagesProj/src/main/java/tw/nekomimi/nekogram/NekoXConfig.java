@@ -8,6 +8,7 @@ import org.telegram.messenger.ApplicationLoader;
 public class NekoXConfig {
 
     public static int[] DEVELOPER_IDS = {896711046, 1121722278, 899300686, 339984997};
+    public static String FAQ_URL = "https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31";
 
     private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Context.MODE_PRIVATE);
 
@@ -57,10 +58,10 @@ public class NekoXConfig {
         showTestBackend = preferences.getBoolean("show_test_backend", false);
         showBotLogin = preferences.getBoolean("show_bot_login", false);
 
-        sortByUnread = preferences.getBoolean("sort_by_unread", true);
-        sortByUnmuted = preferences.getBoolean("sort_by_unmuted", false);
-        sortByUser = preferences.getBoolean("sort_by_user", false);
-        sortByContacts = preferences.getBoolean("sort_by_contacts", false);
+        sortByUnread = preferences.getBoolean("sort_by_unread", false);
+        sortByUnmuted = preferences.getBoolean("sort_by_unmuted", true);
+        sortByUser = preferences.getBoolean("sort_by_user", true);
+        sortByContacts = preferences.getBoolean("sort_by_contacts", true);
 
         disableUndo = preferences.getBoolean("disable_undo", true);
 

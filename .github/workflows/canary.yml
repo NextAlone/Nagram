@@ -22,8 +22,7 @@ jobs:
             ./gradlew assembleMinApi21Release
           EOF
           echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*arm64-v8a*.apk")
-      - uses: NekogramX/nekox-build-script@master
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          RELEASE_CHANNEL:  ${{ secrets.RELEASE_CHANNEL }}
-          CANARY_CHANNEL:  ${{ secrets.CANARY_CHANNEL }}
+      - uses: actions/upload-artifact@v1
+        with:
+          name: NekoX Canary
+          path: ${{ env.APK_FILE }}

@@ -3050,7 +3050,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         parentActivity = activity;
 
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE);
-        selectedFont = sharedPreferences.getInt("font_type", 0);
+        selectedFont = sharedPreferences.getInt("font_type", 1);
         createPaint(false);
         backgroundPaint = new Paint();
 
