@@ -2100,6 +2100,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (viewPages[0].selectedType == id) {
                         return;
                     }
+                    ArrayList<MessagesController.DialogFilter> dialogFilters = getMessagesController().dialogFilters;
+                    if (id != Integer.MAX_VALUE && (id < 0 || id >= dialogFilters.size())) {
+                        return;
+                    }
                     if (parentLayout != null) {
                         parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(id == filterTabsView.getFirstTabId());
                     }
@@ -2143,9 +2147,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 public int getTabCounter(int tabId) {
                     if (tabId == Integer.MAX_VALUE) {
                         return getMessagesStorage().getMainUnreadCount();
-                    } else {
-                        return getMessagesController().dialogFilters.get(tabId).unreadCount;
                     }
+                    ArrayList<MessagesController.DialogFilter> dialogFilters = getMessagesController().dialogFilters;
+                    if (tabId < 0 || tabId >= dialogFilters.size()) {
+                        return 0;
+                    }
+                    return getMessagesController().dialogFilters.get(tabId).unreadCount;
                 }
 
                 @Override
@@ -3530,7 +3537,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !tabsAnimationInProgress && !filterTabsView.isAnimatingIndicator() && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE && !startedTracking) {
             filterTabsView.selectFirstTab();
             return false;
-        } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !filterTabsView.isAnimatingIndicator() && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE && !startedTracking) {
+        } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !tabsAnimationInProgress && !filterTabsView.isAnimatingIndicator() && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE && !startedTracking) {
             filterTabsView.selectFirstTab();
             return false;
         } else if (commentView != null && commentView.isPopupShowing()) {
