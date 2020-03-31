@@ -6,8 +6,8 @@
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
     <string name="SaveCacheToSdcard">保存缓存到内部存储*</string>
-    <string name="NotificationsUnread">未读</string>
-    <string name="NotificationsUnmutedAndUnread">未读且允许通知</string>
+    <string name="FilterNameUnread">未读</string>
+    <string name="FilterNameUnmutedAndUnread">未读且允许通知</string>
     <string name="DialogsSettings">对话设置</string>
     <string name="SortMenu">排序设置</string>
     <string name="SortByUnread">未读优先排序</string>
