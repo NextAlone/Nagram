@@ -90,7 +90,6 @@ public class NekoConfig {
                 editor.putBoolean("disablePhotoSideAction", disablePhotoSideAction);
                 editor.putBoolean("hideKeyboardOnChatScroll", hideKeyboardOnChatScroll);
                 editor.putBoolean("openArchiveOnPull", openArchiveOnPull);
-                editor.putBoolean("showHiddenFeature", showHiddenFeature);
                 // editor.putBoolean("showHiddenFeature", showHiddenFeature);
                 editor.putBoolean("avatarAsDrawerBackground", avatarAsDrawerBackground);
                 editor.putBoolean("useSystemEmoji", useSystemEmoji);

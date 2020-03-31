@@ -73,7 +73,6 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int dialogsRow;
     private int sortMenuRow;
-    private int filterMenuRow;
     private int dialogs2Row;
 
     private int chatRow;
@@ -536,8 +535,6 @@ public class NekoSettingsActivity extends BaseFragment {
                 }
             } else if (position == sortMenuRow) {
                 showSortMenuAlert();
-            } else if (position == filterMenuRow) {
-                showFilterMenuAlert();
             } else if (position == disableSystemAccountRow) {
                 NekoXConfig.toggleDisableSystemAccount();
                 getContactsController().deleteUnknownAppAccounts();
@@ -576,7 +573,6 @@ public class NekoSettingsActivity extends BaseFragment {
 
         dialogsRow = rowCount++;
         sortMenuRow = rowCount++;
-        filterMenuRow = rowCount++;
         dialogs2Row = rowCount++;
 
         chatRow = rowCount++;
@@ -825,121 +821,6 @@ public class NekoSettingsActivity extends BaseFragment {
                     case 9: {
                         NekoConfig.toggleShowMessageDetails();
                         textCell.setChecked(NekoConfig.showMessageDetails);
-                        break;
-                    }
-                }
-            });
-        }
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        builder.setView(linearLayout);
-        showDialog(builder.create());
-    }
-
-    private void showFilterMenuAlert() {
-        if (getParentActivity() == null) {
-            return;
-        }
-        Context context = getParentActivity();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("FilterMenu", R.string.FilterMenu));
-
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
-        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-
-        int count = 9;
-        for (int a = 0; a < count; a++) {
-            TextCheckCell textCell = new TextCheckCell(context);
-            switch (a) {
-                case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("Users", R.string.Users), NekoXConfig.filterUsers, false);
-                    break;
-                }
-                case 1: {
-                    textCell.setTextAndCheck(LocaleController.getString("Contacts", R.string.Contacts), NekoXConfig.filterContacts, false);
-                    break;
-                }
-                case 2: {
-                    textCell.setTextAndCheck(LocaleController.getString("Groups", R.string.Groups), NekoXConfig.filterGroups, false);
-                    break;
-                }
-                case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("Channels", R.string.Channels), NekoXConfig.filterChannels, false);
-                    break;
-                }
-                case 4: {
-                    textCell.setTextAndCheck(LocaleController.getString("Bots", R.string.Bots), NekoXConfig.filterBots, false);
-                    break;
-                }
-                case 5: {
-                    textCell.setTextAndCheck(LocaleController.getString("Admins", R.string.Admins), NekoXConfig.filterAdmins, false);
-                    break;
-                }
-                case 6: {
-                    textCell.setTextAndCheck(LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted), NekoXConfig.filterUnmuted, false);
-                    break;
-                }
-                case 7: {
-                    textCell.setTextAndCheck(LocaleController.getString("NotificationsUnread", R.string.NotificationsUnread), NekoXConfig.filterUnread, false);
-                    break;
-                }
-                case 8: {
-                    textCell.setTextAndCheck(LocaleController.getString("NotificationsUnmutedAndUnread", R.string.NotificationsUnmutedAndUnread), NekoXConfig.filterUnmutedAndUnread, false);
-                    break;
-                }
-            }
-            textCell.setTag(a);
-            textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            textCell.setOnClickListener(v2 -> {
-                Integer tag = (Integer) v2.getTag();
-                switch (tag) {
-                    case 0: {
-                        NekoXConfig.toggleFilterUsers();
-                        textCell.setChecked(NekoXConfig.filterUsers);
-                        break;
-                    }
-                    case 1: {
-                        NekoXConfig.toggleFilterContacts();
-                        textCell.setChecked(NekoXConfig.filterContacts);
-                        break;
-                    }
-                    case 2: {
-                        NekoXConfig.toggleFilterGroups();
-                        textCell.setChecked(NekoXConfig.filterGroups);
-                        break;
-                    }
-                    case 3: {
-                        NekoXConfig.toggleFilterChannels();
-                        textCell.setChecked(NekoXConfig.filterChannels);
-                        break;
-                    }
-                    case 4: {
-                        NekoXConfig.toggleFilterBots();
-                        textCell.setChecked(NekoXConfig.filterBots);
-                        break;
-                    }
-                    case 5: {
-                        NekoXConfig.toggleFilterAdmins();
-                        textCell.setChecked(NekoXConfig.filterAdmins);
-                        break;
-                    }
-                    case 6: {
-                        NekoXConfig.toggleFilterUnmuted();
-                        textCell.setChecked(NekoXConfig.filterUnmuted);
-                        break;
-                    }
-                    case 7: {
-                        NekoXConfig.toggleDisableFilterUnread();
-                        textCell.setChecked(NekoXConfig.filterUnread);
-                        break;
-                    }
-                    case 8: {
-                        NekoXConfig.toggleFilterUnmutedAndUnread();
-                        textCell.setChecked(NekoXConfig.filterUnmutedAndUnread);
                         break;
                     }
                 }
@@ -1218,8 +1099,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("MessageMenu", R.string.MessageMenu), true);
                     } else if (position == sortMenuRow) {
                         textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
-                    } else if (position == filterMenuRow) {
-                        textCell.setText(LocaleController.getString("FilterMenu", R.string.FilterMenu), false);
                     } else if (position == deleteAccountRow) {
                         textCell.setText(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), false);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
@@ -1317,6 +1196,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
                     } else if (position == experimentRow) {
                         headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
+                    } else if (position == dialogsRow) {
+                        headerCell.setText(LocaleController.getString("DialogsSettings", R.string.DialogsSettings));
                     } else if (position == privacyRow) {
                         headerCell.setText(LocaleController.getString("PrivacyTitle", R.string.PrivacyTitle));
                     }
@@ -1344,7 +1225,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
-                    position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == filterMenuRow || position == disableSystemAccountRow  || position == avatarAsDrawerBackgroundRow;
+                    position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow;
         }
 
         @Override
@@ -1386,10 +1267,10 @@ public class NekoSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == connection2Row || position == chat2Row || position == experiment2Row|| position == privacy2Row) {
+            if (position == connection2Row || position == dialogs2Row|| position == chat2Row || position == experiment2Row || position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
-                    position == filterMenuRow || position == sortMenuRow ||
+                    position == sortMenuRow ||
                     position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
                 return 2;
             } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||
@@ -1401,8 +1282,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow) {
                 return 3;
-            } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow ||
-                    position == dialogsRow || position == privacyRow) {
+            } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;
             } else if (position == needRestartRow) {
                 return 7;

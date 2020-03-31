@@ -43,6 +43,7 @@ public class NekoXConfig {
     public static boolean disableProxyWhenVpnEnabled;
     public static boolean skipOpenLinkConfirm;
 
+    public static boolean removeTitleEmoji;
 
     static {
 
@@ -76,6 +77,8 @@ public class NekoXConfig {
         disableSystemAccount = preferences.getBoolean("disable_system_account", false);
         disableProxyWhenVpnEnabled = preferences.getBoolean("disable_proxy_when_vpn_enabled", false);
         skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
+
+        removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
 
     }
 
@@ -215,6 +218,13 @@ public class NekoXConfig {
 
         preferences.edit().putBoolean("skip_open_link_confirm", skipOpenLinkConfirm = !skipOpenLinkConfirm).apply();
 
+    }
+
+    public static void toggleRemoveTitleEmoji() {
+
+        preferences.edit().putBoolean("remove_title_emoji", removeTitleEmoji = !removeTitleEmoji).apply();
 
     }
+
+
 }
