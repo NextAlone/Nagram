@@ -348,7 +348,7 @@ public class Browser {
 
             }
             return true;
-        } else if ("tg".equals(uri.getScheme()) || "vmess".equals(uri.getScheme()) || "ss".equals(uri.getScheme()) || "ssr".equals(uri.getScheme())) {
+        } else if ("tg".equals(uri.getScheme()) || "vmess".equals(uri.getScheme()) || "vmesss1".equals(uri.getScheme()) || "ss".equals(uri.getScheme()) || "ssr".equals(uri.getScheme())) {
             return true;
         } else if ("telegram.dog".equals(host)) {
             String path = uri.getPath();

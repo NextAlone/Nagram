@@ -538,7 +538,11 @@ public class NekoSettingsActivity extends BaseFragment {
                 showSortMenuAlert();
             } else if (position == disableSystemAccountRow) {
                 NekoXConfig.toggleDisableSystemAccount();
-                getContactsController().deleteUnknownAppAccounts();
+                if (NekoXConfig.disableSystemAccount) {
+                    getContactsController().deleteUnknownAppAccounts();
+                } else {
+                    getContactsController().checkAppAccount();
+                }
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableSystemAccount);
                 }

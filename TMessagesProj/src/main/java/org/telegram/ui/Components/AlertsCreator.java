@@ -2230,7 +2230,7 @@ public class AlertsCreator {
                         selected[0] = preferences.getInt("priority_channel", 1);
                     }
                 }
-                editor.apply();
+                editor.commit();
                 builder.getDismissRunnable().run();
                 if (onSelect != null) {
                     onSelect.run();
@@ -2283,7 +2283,7 @@ public class AlertsCreator {
                 } else {
                     editor.putInt("popupChannel", selected[0]);
                 }
-                editor.apply();
+                editor.commit();
                 builder.getDismissRunnable().run();
                 if (onSelect != null) {
                     onSelect.run();
@@ -2597,7 +2597,7 @@ public class AlertsCreator {
                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     cell.setTag(a);
                     if (a == 0) {
-                        cell.setText(LocaleController.getString("ChangePermissions", R.string.ChangePermissions), "", false, false);
+                        cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), "", false, false);
                     } else if (a == 1) {
                         cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", false, false);
                     } else if (a == 2) {
@@ -2743,6 +2743,9 @@ public class AlertsCreator {
                 }
             }
             if (userFinal != null) {
+                if (checks[0]) {
+                    MessagesController.getInstance(currentAccount).deleteUserFromChat(chat.id, userFinal, chatInfo);
+                }
                 if (checks[1]) {
                     TLRPC.TL_channels_reportSpam req = new TLRPC.TL_channels_reportSpam();
                     req.channel = MessagesController.getInputChannel(chat);
@@ -2755,40 +2758,6 @@ public class AlertsCreator {
                 if (checks[2]) {
                     MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat, userFinal, 0);
                 }
-                if (checks[0]) {
-
-                    for (int a = 0; a < chatInfo.participants.participants.size(); a++) {
-
-                        TLRPC.ChatParticipant participant = chatInfo.participants.participants.get(a);
-
-                        if (participant.user_id != userFinal.id || participant.user_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
-
-                            continue;
-
-                        }
-
-                        final TLRPC.ChannelParticipant channelParticipant;
-
-                        if (ChatObject.isChannel(chat)) {
-                            channelParticipant = ((TLRPC.TL_chatChannelParticipant) participant).channelParticipant;
-                        } else {
-                            channelParticipant = null;
-                        }
-
-                        TLRPC.User u = MessagesController.getInstance(currentAccount).getUser(participant.user_id);
-
-                        if (channelParticipant != null) {
-                            openRightsEdit(fragment,chatInfo,chat, u.id, participant, channelParticipant.admin_rights, channelParticipant.banned_rights, channelParticipant.rank);
-                        } else {
-                            openRightsEdit(fragment,chatInfo,chat, u.id, participant, null, null, "");
-                        }
-
-                    }
-
-                    //MessagesController.getInstance(currentAccount).deleteUserFromChat(chat.id, userFinal, chatInfo);
-
-                }
-
             }
             if (onDelete != null) {
                 onDelete.run();
@@ -2838,44 +2807,6 @@ public class AlertsCreator {
         if (button != null) {
             button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
         }
-    }
-
-    private static void openRightsEdit(BaseFragment f, TLRPC.ChatFull chatInfo, TLRPC.Chat currentChat, int user_id, TLRPC.ChatParticipant participant, TLRPC.TL_chatAdminRights adminRights, TLRPC.TL_chatBannedRights bannedRights, String rank) {
-        ChatRightsEditActivity fragment = new ChatRightsEditActivity(user_id, currentChat.id, adminRights, currentChat.default_banned_rights, bannedRights, rank, 1, true, false);
-        fragment.setDelegate(new ChatRightsEditActivity.ChatRightsEditActivityDelegate() {
-            @Override
-            public void didChangeOwner(TLRPC.User user) {
-            }
-
-            @Override
-            public void didSetRights(int rights, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBanned, String rank) {
-                if (rights == 0) {
-                    if (currentChat.megagroup && chatInfo != null && chatInfo.participants != null) {
-                        for (int a = 0; a < chatInfo.participants.participants.size(); a++) {
-                            TLRPC.ChannelParticipant p = ((TLRPC.TL_chatChannelParticipant) chatInfo.participants.participants.get(a)).channelParticipant;
-                            if (p.user_id == participant.user_id) {
-                                if (chatInfo != null) {
-                                    chatInfo.participants_count--;
-                                }
-                                chatInfo.participants.participants.remove(a);
-                                break;
-                            }
-                        }
-                        if (chatInfo != null && chatInfo.participants != null) {
-                            for (int a = 0; a < chatInfo.participants.participants.size(); a++) {
-                                TLRPC.ChatParticipant p = chatInfo.participants.participants.get(a);
-                                if (p.user_id == participant.user_id) {
-                                    chatInfo.participants.participants.remove(a);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-        });
-        f.presentFragment(fragment);
     }
 
     public static void createThemeCreateDialog(BaseFragment fragment, int type, Theme.ThemeInfo switchToTheme, Theme.ThemeAccent switchToAccent) {

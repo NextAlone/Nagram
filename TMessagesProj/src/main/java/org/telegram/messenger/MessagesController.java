@@ -319,16 +319,16 @@ public class MessagesController extends BaseController implements NotificationCe
         public TLRPC.SendMessageAction action;
     }
 
-    public static int DIALOG_FILTER_FLAG_CONTACTS = 0x00000001;
-    public static int DIALOG_FILTER_FLAG_NON_CONTACTS = 0x00000002;
-    public static int DIALOG_FILTER_FLAG_GROUPS = 0x00000004;
-    public static int DIALOG_FILTER_FLAG_CHANNELS = 0x00000008;
-    public static int DIALOG_FILTER_FLAG_BOTS = 0x00000010;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_MUTED = 0x00000020;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_READ = 0x00000040;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED = 0x00000080;
-    public static int DIALOG_FILTER_FLAG_ONLY_ARCHIVED = 0x00000100;
-    public static int DIALOG_FILTER_FLAG_ALL_CHATS = DIALOG_FILTER_FLAG_CONTACTS | DIALOG_FILTER_FLAG_NON_CONTACTS | DIALOG_FILTER_FLAG_GROUPS | DIALOG_FILTER_FLAG_CHANNELS | DIALOG_FILTER_FLAG_BOTS;
+    public static int DIALOG_FILTER_FLAG_CONTACTS           = 0x00000001;
+    public static int DIALOG_FILTER_FLAG_NON_CONTACTS       = 0x00000002;
+    public static int DIALOG_FILTER_FLAG_GROUPS             = 0x00000004;
+    public static int DIALOG_FILTER_FLAG_CHANNELS           = 0x00000008;
+    public static int DIALOG_FILTER_FLAG_BOTS               = 0x00000010;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_MUTED      = 0x00000020;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_READ       = 0x00000040;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED   = 0x00000080;
+    public static int DIALOG_FILTER_FLAG_ONLY_ARCHIVED      = 0x00000100;
+    public static int DIALOG_FILTER_FLAG_ALL_CHATS          = DIALOG_FILTER_FLAG_CONTACTS | DIALOG_FILTER_FLAG_NON_CONTACTS | DIALOG_FILTER_FLAG_GROUPS | DIALOG_FILTER_FLAG_CHANNELS | DIALOG_FILTER_FLAG_BOTS;
 
 
     public static class DialogFilter {
@@ -1109,7 +1109,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }
                 if (changed) {
-                    editor.apply();
+                    editor.commit();
                 }
                 if (keelAliveChanged) {
                     ApplicationLoader.startPushService();
@@ -1249,7 +1249,7 @@ public class MessagesController extends BaseController implements NotificationCe
             editor.putString("dcDomainName2", dcDomainName);
             editor.putInt("webFileDatacenterId", webFileDatacenterId);
             editor.putString("suggestedLangCode", suggestedLangCode);
-            editor.apply();
+            editor.commit();
 
             LocaleController.getInstance().checkUpdateForCurrentRemoteLocale(currentAccount, config.lang_pack_version, config.base_lang_pack_version);
             getNotificationCenter().postNotificationName(NotificationCenter.configLoaded);
@@ -1975,7 +1975,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         oldUser.photo = user.photo;
                         oldUser.flags |= 32;
                     } else {
-                        oldUser.flags = oldUser.flags & ~32;
+                        oldUser.flags = oldUser.flags &~ 32;
                         oldUser.photo = null;
                     }
                 }
@@ -2009,7 +2009,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     user.photo = oldUser.photo;
                     user.flags |= 32;
                 } else {
-                    user.flags = user.flags & ~32;
+                    user.flags = user.flags &~ 32;
                     user.photo = null;
                 }
                 users.put(user.id, user);
@@ -2073,7 +2073,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         oldChat.username = chat.username;
                         oldChat.flags |= 64;
                     } else {
-                        oldChat.flags = oldChat.flags & ~64;
+                        oldChat.flags = oldChat.flags &~ 64;
                         oldChat.username = null;
                     }
                     if (chat.participants_count != 0) {

@@ -190,7 +190,8 @@ public class EditTextBoldCursor extends EditText {
                 mShowCursorField = editorClass.getDeclaredField("mShowCursor");
                 mShowCursorField.setAccessible(true);
             }
-        } catch (Throwable ignored) {
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
         try {
             gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[] {0xff54a1db, 0xff54a1db});

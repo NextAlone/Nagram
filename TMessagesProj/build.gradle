@@ -173,8 +173,8 @@ android {
     sourceSets.release {
         jniLibs.srcDir 'src/main/libs'
         jni.srcDirs = []
-        java.srcDirs = ['/src/gservcies/java']
-        manifest.srcFile '/src/gservcies/AndroidManifest.xml'
+        java.srcDirs = ['src/gservcies/java']
+        manifest.srcFile 'src/gservcies/AndroidManifest.xml'
     }
 
     sourceSets.foss {

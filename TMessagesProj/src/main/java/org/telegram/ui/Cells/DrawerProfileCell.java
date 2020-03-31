@@ -239,7 +239,7 @@ public class DrawerProfileCell extends FrameLayout {
                 darkBackColor = (Theme.getServiceMessageColor() & 0x00ffffff) | 0x50000000;
             }
         } else {
-            int visibility = drawCatsShadow ? VISIBLE : INVISIBLE;
+            int visibility = drawCatsShadow? VISIBLE : INVISIBLE;
             if (shadowView.getVisibility() != visibility) {
                 shadowView.setVisibility(visibility);
             }

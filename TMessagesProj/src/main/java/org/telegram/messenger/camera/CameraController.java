@@ -219,7 +219,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                                 serializedData.writeInt32(size.mHeight);
                             }
                         }
-                        preferences.edit().putString("cameraCache", Base64.encodeToString(serializedData.toByteArray(), Base64.DEFAULT)).apply();
+                        preferences.edit().putString("cameraCache", Base64.encodeToString(serializedData.toByteArray(), Base64.DEFAULT)).commit();
                         serializedData.cleanup();
                     }
                     cameraInfos = result;

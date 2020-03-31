@@ -320,6 +320,8 @@ public class NekoXConfig {
 
     }
 
+    private static int currId = 10;
+
     private static void mkFilter(String name, String description, int flag, FilterBuilder builder) {
 
         TLRPC.TL_dialogFilterSuggested suggestedFilter = new TLRPC.TL_dialogFilterSuggested();
@@ -328,12 +330,16 @@ public class NekoXConfig {
 
         suggestedFilter.filter = new TLRPC.TL_dialogFilter();
 
+        suggestedFilter.filter.id = currId;
+
         suggestedFilter.filter.title = name;
         suggestedFilter.filter.flags = flag;
 
         builder.apply(suggestedFilter.filter);
 
         internalFilters.add(suggestedFilter);
+
+        currId ++;
 
     }
 

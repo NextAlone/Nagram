@@ -225,7 +225,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             if (viewHolder.getItemViewType() == 4 && target.getItemViewType() == 4 &&
                     viewHolder.getAdapterPosition() != target.getAdapterPosition()) {
-             //   drawerLayoutAdapter.swapAccountPosition(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                drawerLayoutAdapter.swapAccountPosition(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
             }
             return false;

@@ -1115,9 +1115,9 @@ public class SharedConfig {
 
         currentProxy = info;
 
-        setProxyEnable(true);
-
         saveProxyList();
+
+        setProxyEnable(true);
 
     }
 

@@ -214,7 +214,7 @@ public class NotificationsController extends BaseController {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             }
             OTHER_NOTIFICATIONS_CHANNEL = "Other" + Utilities.random.nextLong();
-            preferences.edit().putString("OtherKey", OTHER_NOTIFICATIONS_CHANNEL).apply();
+            preferences.edit().putString("OtherKey", OTHER_NOTIFICATIONS_CHANNEL).commit();
         }
         if (notificationChannel == null) {
             notificationChannel = new NotificationChannel(OTHER_NOTIFICATIONS_CHANNEL, "Other", NotificationManager.IMPORTANCE_DEFAULT);
@@ -253,7 +253,7 @@ public class NotificationsController extends BaseController {
             SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
-            editor.apply();
+            editor.commit();
 
             if (Build.VERSION.SDK_INT >= 26) {
                 try {
@@ -2266,7 +2266,7 @@ public class NotificationsController extends BaseController {
                 String key = "org.telegram.key" + dialogId;
                 String channelId = preferences.getString(key, null);
                 if (channelId != null) {
-                    preferences.edit().remove(key).remove(key + "_s").apply();
+                    preferences.edit().remove(key).remove(key + "_s").commit();
                     systemNotificationManager.deleteNotificationChannel(channelId);
                 }
             } catch (Exception e) {
@@ -2294,7 +2294,7 @@ public class NotificationsController extends BaseController {
                         editor.remove(key);
                     }
                 }
-                editor.apply();
+                editor.commit();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -2411,7 +2411,7 @@ public class NotificationsController extends BaseController {
         newSettingsHash = Utilities.MD5(newSettings.toString());
         if (channelId != null && !settings.equals(newSettingsHash)) {
             if (edited) {
-                preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).apply();
+                preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).commit();
             } else {
                 systemNotificationManager.deleteNotificationChannel(channelId);
                 channelId = null;

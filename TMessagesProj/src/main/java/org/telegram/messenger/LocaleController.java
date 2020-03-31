@@ -9,7 +9,6 @@
 package org.telegram.messenger;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +44,6 @@ import java.util.TimeZone;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.IoUtil;
 
 public class LocaleController {
 
@@ -158,7 +156,7 @@ public class LocaleController {
 
         public File getPathToFile() {
 
-            File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(),"languages");
+            File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(), "languages");
 
             FileUtil.initDir(baseDir);
 
@@ -172,7 +170,7 @@ public class LocaleController {
 
         public File getPathToBaseFile() {
             if (isUnofficial()) {
-                File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(),"languages");
+                File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(), "languages");
                 FileUtil.initDir(baseDir);
                 return new File(baseDir, "unofficial_base_" + shortName + ".xml");
             }
@@ -228,6 +226,7 @@ public class LocaleController {
     private ArrayList<LocaleInfo> otherLanguages = new ArrayList<>();
 
     private static volatile LocaleController Instance = null;
+
     public static LocaleController getInstance() {
         LocaleController localInstance = Instance;
         if (localInstance == null) {
@@ -1764,7 +1763,7 @@ public class LocaleController {
                     return getString("WithinAWeek", R.string.WithinAWeek);
                 } else if (user.status.expires == -102) {
                     return getString("WithinAMonth", R.string.WithinAMonth);
-                }  else {
+                } else {
                     return formatDateOnline(user.status.expires);
                 }
             }

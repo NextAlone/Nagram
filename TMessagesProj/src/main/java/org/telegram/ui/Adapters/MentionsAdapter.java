@@ -269,7 +269,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                         buttonClicked[0] = true;
                         if (foundContextBotFinal != null) {
                             SharedPreferences preferences1 = MessagesController.getNotificationsSettings(currentAccount);
-                            preferences1.edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).apply();
+                            preferences1.edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
                             checkLocationPermissionsOrStart();
                         }
                     });
