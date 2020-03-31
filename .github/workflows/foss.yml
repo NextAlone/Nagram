@@ -43,7 +43,7 @@ jobs:
 
           cd ../jni
 
-          wgile :
+          while :
           do
              sudo apt-get install -y ninja-build && break
              sleep 5
