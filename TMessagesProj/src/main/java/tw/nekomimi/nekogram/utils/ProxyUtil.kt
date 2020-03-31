@@ -2,7 +2,10 @@ package tw.nekomimi.nekogram.utils
 
 import android.Manifest
 import android.app.Activity
-import android.content.*
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
@@ -306,6 +309,8 @@ object ProxyUtil {
     fun showQrDialog(ctx: Context, text: String) {
 
         val code = createQRCode(text)
+
+        ctx.setTheme(R.style.Theme_TMessages)
 
         android.app.AlertDialog.Builder(ctx).setView(LinearLayout(ctx).apply {
 

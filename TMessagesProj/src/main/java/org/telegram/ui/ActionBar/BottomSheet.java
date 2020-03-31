@@ -539,9 +539,10 @@ public class BottomSheet extends Dialog {
             if (icon != 0) {
                 imageView.setImageResource(icon);
                 imageView.setVisibility(VISIBLE);
+                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, 0, 0);
             } else {
                 imageView.setVisibility(GONE);
-                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, AndroidUtilities.dp(bigTitle ? 21 : 16), 0);
+                textView.setPadding(0, 0, 0, 0);
             }
         }
     }
