@@ -83,20 +83,6 @@ public class ApplicationLoader extends Application {
 
         applicationInited = true;
 
-        if (!new File(applicationContext.getFilesDir(), "unoffical_base_classic_zh_cn.xml").isFile()) {
-
-            try {
-
-                ZipUtil.unzip(applicationContext.getAssets().open("languages.zip"), applicationContext.getFilesDir());
-
-            } catch (Exception e) {
-
-                FileLog.e("load languages error", e);
-
-            }
-
-        }
-
         try {
             LocaleController.getInstance();
         } catch (Exception e) {

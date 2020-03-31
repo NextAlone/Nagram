@@ -9,17 +9,20 @@
 package org.telegram.messenger;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
 
+import org.telegram.messenger.support.ArrayUtils;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -30,6 +33,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +44,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.IoUtil;
 
 public class LocaleController {
 
@@ -151,17 +157,24 @@ public class LocaleController {
         }
 
         public File getPathToFile() {
+
+            File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(),"languages");
+
+            FileUtil.initDir(baseDir);
+
             if (isRemote()) {
-                return new File(ApplicationLoader.getFilesDirFixed(), "remote_" + shortName + ".xml");
+                return new File(baseDir, "remote_" + shortName + ".xml");
             } else if (isUnofficial()) {
-                return new File(ApplicationLoader.getFilesDirFixed(), "unofficial_" + shortName + ".xml");
+                return new File(baseDir, "unofficial_" + shortName + ".xml");
             }
             return !TextUtils.isEmpty(pathToFile) ? new File(pathToFile) : null;
         }
 
         public File getPathToBaseFile() {
             if (isUnofficial()) {
-                return new File(ApplicationLoader.getFilesDirFixed(), "unofficial_base_" + shortName + ".xml");
+                File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(),"languages");
+                FileUtil.initDir(baseDir);
+                return new File(baseDir, "unofficial_base_" + shortName + ".xml");
             }
             return null;
         }
@@ -921,6 +934,7 @@ public class LocaleController {
                 saveOtherLanguages();
             }
         }
+        loadPrebuiltLocaleFile(localeInfo);
         if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (force || !pathToFile.exists() || hasBase && !pathToBaseFile.exists())) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
@@ -2023,6 +2037,47 @@ public class LocaleController {
                         AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
+            }
+        }
+    }
+
+    private static String[] prebuilt;
+
+    private void loadPrebuiltLocaleFile(LocaleInfo localeInfo) {
+
+        if (prebuilt == null) {
+
+            try {
+                AssetManager assets = ApplicationLoader.applicationContext.getAssets();
+                prebuilt = assets.list("languages");
+            } catch (IOException e) {
+                FileLog.e(e);
+                return;
+            }
+
+        }
+
+        if (prebuilt == null) {
+
+            FileLog.w("empty prebuilt languages list");
+
+            return;
+
+        }
+
+        File pathToFile = localeInfo.getPathToFile();
+        File pathToBaseFile = localeInfo.getPathToBaseFile();
+
+        if (!pathToFile.isFile() || (pathToBaseFile != null && !pathToBaseFile.isFile())) {
+            try {
+                if (pathToBaseFile != null && !pathToBaseFile.isFile() && ArrayUtils.contains(prebuilt, pathToBaseFile.getName())) {
+                    FileUtil.saveAsset("languages/" + pathToBaseFile.getName(), pathToBaseFile);
+                }
+                if (!pathToFile.isFile() && ArrayUtils.contains(prebuilt, pathToFile.getName())) {
+                    FileUtil.saveAsset("languages/" + pathToFile.getName(), pathToFile);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
             }
         }
     }

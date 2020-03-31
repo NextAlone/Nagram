@@ -10,7 +10,6 @@ import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.LinkedList;
-import java.util.function.Function;
 
 public class NekoXConfig {
 
@@ -293,7 +292,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameUnread", R.string.FilterNameUnread),
+        mkFilter(LocaleController.getString("FilterNameUnread2", R.string.FilterNameUnread2),
                 LocaleController.getString("FilterNameUnreadDescription", R.string.FilterNameUnreadDescription),
                 MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
                 (it) -> {
@@ -321,7 +320,7 @@ public class NekoXConfig {
 
     }
 
-    private static void mkFilter(String name, String description, int flag,FilterBuilder builder) {
+    private static void mkFilter(String name, String description, int flag, FilterBuilder builder) {
 
         TLRPC.TL_dialogFilterSuggested suggestedFilter = new TLRPC.TL_dialogFilterSuggested();
 
