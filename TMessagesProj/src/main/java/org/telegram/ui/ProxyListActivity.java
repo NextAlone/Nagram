@@ -76,6 +76,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import kotlin.text.StringsKt;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
@@ -234,6 +235,15 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         }
     }
 
+    public ProxyListActivity() {
+    }
+
+    private String alert;
+
+    public ProxyListActivity(String alert) {
+        this.alert = alert;
+    }
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -249,6 +259,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         useProxyForCalls = preferences.getBoolean("proxy_enabled_calls", false);
 
         updateRows(true);
+
+        if (!StringsKt.isBlank(alert)) {
+            AlertUtil.showSimpleAlert(getParentActivity(),alert);
+        }
 
         return true;
     }
@@ -276,113 +290,129 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int menu_import_json = 13;
     private int menu_delete_all = 14;
 
-    private void processProxyList(ArrayList<String> files) {
+    public void processProxyList(ArrayList<String> files) {
 
         for (String proxyListFilePath : files) {
 
             File proxyListFile = new File(proxyListFilePath);
 
-            try {
+            processProxyListFile(getParentActivity(),proxyListFile);
 
-                if (proxyListFile.length() > 2 * 1024 * 1024L) {
+        }
 
-                    throw new IllegalArgumentException("file too large.");
+    }
 
-                }
+    public static String processProxyListFile(Context ctx,File proxyListFile) {
 
-                JSONObject proxyRootObject = new JSONObject(FileUtil.readUtf8String(proxyListFile));
+        try {
 
-                if (proxyRootObject.isNull("nekox_proxy_list_verion")) {
+            if (proxyListFile.length() > 2 * 1024 * 1024L) {
 
-                    throw new IllegalArgumentException("not a nekox proxy list file.");
-
-                }
-
-                int version = proxyRootObject.getInt("nekox_proxy_list_verion");
-
-                if (version == 1) {
-
-                    if (proxyRootObject.isNull("proxies")) {
-
-                        throw new IllegalArgumentException("proxies array not found.");
-
-                    }
-
-                    JSONArray proxyArray = proxyRootObject.getJSONArray("proxies");
-
-                    if (proxyArray.length() == 0) {
-
-                        throw new IllegalArgumentException("Empty proxy list.");
-
-                    }
-
-                    for (int index = 0; index < proxyArray.length(); index++) {
-
-                        String proxyUrl = proxyArray.getString(index);
-
-                        LinkedList<String> imported = new LinkedList<>();
-                        LinkedHashMap<String, String> errors = new LinkedHashMap<>();
-
-                        try {
-
-                            imported.add(ProxyUtil.importInBackground(proxyUrl).getTitle());
-
-                        } catch (Exception ex) {
-
-                            errors.put(proxyUrl, ex.getMessage());
-
-                        }
-
-                        StringBuilder status = new StringBuilder();
-
-                        if (!imported.isEmpty()) {
-
-                            status.append(LocaleController.getString("ImportedProxies", R.string.ImportedProxies));
-
-                            for (String success : imported) {
-
-                                status.append("\n").append(success);
-
-                            }
-
-
-                            if (!errors.isEmpty()) {
-
-                                status.append("\n\n");
-
-                            }
-
-                        }
-
-                        if (!errors.isEmpty()) {
-
-                            status.append(LocaleController.getString("", R.string.ErrorsInImport));
-
-                            for (Map.Entry<String, String> error : errors.entrySet()) {
-
-                                status.append("\n").append(error.getKey()).append(": ").append(error.getValue());
-
-                            }
-
-                        }
-
-                        AlertUtil.showSimpleAlert(getParentActivity(), status.toString());
-
-                    }
-
-                } else {
-
-                    throw new IllegalArgumentException("invalid proxy list version " + version + ".");
-
-                }
-
-            } catch (Exception e) {
-
-                AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidProxyFile", R.string.InvalidProxyFile) + proxyListFilePath + "\n\n" + e.getMessage());
+                throw new IllegalArgumentException("file too large.");
 
             }
 
+            JSONObject proxyRootObject = new JSONObject(FileUtil.readUtf8String(proxyListFile));
+
+            if (proxyRootObject.isNull("nekox_proxy_list_verion")) {
+
+                throw new IllegalArgumentException("not a nekox proxy list file.");
+
+            }
+
+            int version = proxyRootObject.getInt("nekox_proxy_list_verion");
+
+            if (version == 1) {
+
+                if (proxyRootObject.isNull("proxies")) {
+
+                    throw new IllegalArgumentException("proxies array not found.");
+
+                }
+
+                JSONArray proxyArray = proxyRootObject.getJSONArray("proxies");
+
+                if (proxyArray.length() == 0) {
+
+                    throw new IllegalArgumentException("Empty proxy list.");
+
+                }
+
+                for (int index = 0; index < proxyArray.length(); index++) {
+
+                    String proxyUrl = proxyArray.getString(index);
+
+                    LinkedList<String> imported = new LinkedList<>();
+                    LinkedHashMap<String, String> errors = new LinkedHashMap<>();
+
+                    try {
+
+                        imported.add(ProxyUtil.importInBackground(proxyUrl).getTitle());
+
+                    } catch (Exception ex) {
+
+                        errors.put(proxyUrl, ex.getMessage());
+
+                    }
+
+                    StringBuilder status = new StringBuilder();
+
+                    if (!imported.isEmpty()) {
+
+                        status.append(LocaleController.getString("ImportedProxies", R.string.ImportedProxies));
+
+                        for (String success : imported) {
+
+                            status.append("\n").append(success);
+
+                        }
+
+
+                        if (!errors.isEmpty()) {
+
+                            status.append("\n\n");
+
+                        }
+
+                    }
+
+                    if (!errors.isEmpty()) {
+
+                        status.append(LocaleController.getString("", R.string.ErrorsInImport));
+
+                        for (Map.Entry<String, String> error : errors.entrySet()) {
+
+                            status.append("\n").append(error.getKey()).append(": ").append(error.getValue());
+
+                        }
+
+                    }
+
+                    if (imported.isEmpty()) {
+
+                        AlertUtil.showSimpleAlert(ctx,status.toString());
+
+                    } else {
+
+                        return status.toString();
+
+                    }
+
+                }
+
+            } else {
+
+                throw new IllegalArgumentException("invalid proxy list version " + version + ".");
+
+            }
+
+        } catch (Exception e) {
+
+            AlertUtil.showSimpleAlert(ctx, LocaleController.getString("InvalidProxyFile", R.string.InvalidProxyFile) + proxyListFile.getPath() + "\n\n" + e.getMessage());
+
         }
+
+        return null;
 
     }
 
@@ -406,10 +436,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     SharedConfig.saveProxyList();
                     updateRows(true);
                 } else if (id == menu_export_json) {
-                    if (SharedConfig.proxyList.isEmpty()) {
-                        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("NoProxy", R.string.NoProxy));
-                        return;
-                    }
+
                     File cacheFile = new File(ApplicationLoader.applicationContext.getExternalCacheDir(), "NekoX-Proxy-List-" + new Date().toLocaleString() + ".json");
 
                     try {
@@ -426,6 +453,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                             proxyArray.put(info.toUrl());
 
+                        }
+
+                        if (proxyArray.length() == 0) {
+                            AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("NoProxy", R.string.NoProxy));
+                            return;
                         }
 
                         listRoot.put("proxies", proxyArray);

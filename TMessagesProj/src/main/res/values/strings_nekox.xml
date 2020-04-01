@@ -102,7 +102,8 @@
     <string name="ReorderByPing">Reorder servers by ping</string>
     <string name="ExportProxies">Export servers to file</string>
     <string name="ImportProxies">Import servers from file</string>
-    <string name="SendProxyListTo">Do you want to send proxy list to **%1$s**?</string>
+<string name="ImportProxyList">Import proxy servers</string>
+    <string name="ImportProxyListConfirm">Are you sure you want to **import proxy servers**?</string>
 
     <string name="InvalidProxyFile">Invalid proxy list file: </string>
     <string name="ImportedProxies">Imported proxy servers: </string>

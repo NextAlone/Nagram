@@ -32,7 +32,7 @@ object AlertUtil {
         builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
         builder.setMessage(text)
 
-        builder.setPositiveButton(LocaleController.getString("Ok", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
 
         builder.show()
 
