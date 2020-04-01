@@ -134,19 +134,25 @@ class ShadowsocksRLoader {
 
                 runCatching {
 
-                    bean.obfs_param = Utils.decode(httpUrl.queryParameter("obfsparam")!!)
+                    bean.obfs_param = Utils.decodeUrlSafe(httpUrl.queryParameter("obfsparam")!!)
 
                 }
 
                 runCatching {
 
-                    bean.protocol_param = Utils.decode(httpUrl.queryParameter("protoparam")!!)
+                    bean.protocol_param = Utils.decodeUrlSafe(httpUrl.queryParameter("protoparam")!!)
 
                 }
 
                 runCatching {
 
-                    bean.remarks = Utils.decode(httpUrl.queryParameter("remarks")!!)
+                    val remarks = httpUrl.queryParameter("remarks")
+
+                    if (remarks?.isNotBlank() == true) {
+
+                        bean.remarks = Utils.decodeUrlSafe(remarks)
+
+                    }
 
                 }
 
@@ -163,7 +169,7 @@ class ShadowsocksRLoader {
                     Base64.encodeToString("%s".format(Locale.ENGLISH, password).toByteArray(), flags),
                     Base64.encodeToString("%s".format(Locale.ENGLISH, obfs_param).toByteArray(), flags),
                     Base64.encodeToString("%s".format(Locale.ENGLISH, protocol_param).toByteArray(), flags),
-                    Base64.encodeToString("%s".format(Locale.ENGLISH, remarks ?: "Exported From NekoX").toByteArray(), flags)).toByteArray(), flags)
+                    Base64.encodeToString("%s".format(Locale.ENGLISH, remarks ?: "").toByteArray(), flags)).toByteArray(), flags)
         }
 
     }
