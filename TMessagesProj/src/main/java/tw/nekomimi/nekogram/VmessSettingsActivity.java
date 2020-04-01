@@ -47,8 +47,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
-import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class VmessSettingsActivity extends BaseFragment {
 
@@ -174,7 +174,7 @@ public class VmessSettingsActivity extends BaseFragment {
                         return;
                     }
 
-                    if (StringsKt.isBlank(ipField.getText())) {
+                    if (StrUtil.isBlank(ipField.getText())) {
 
                         ipField.requestFocus();
                         AndroidUtilities.showKeyboard(ipField);
@@ -183,7 +183,7 @@ public class VmessSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StringsKt.isBlank(portField.getText())) {
+                    if (StrUtil.isBlank(portField.getText())) {
 
                         portField.requestFocus();
                         AndroidUtilities.showKeyboard(portField);
@@ -192,7 +192,7 @@ public class VmessSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StringsKt.isBlank(userIdField.getText())) {
+                    if (StrUtil.isBlank(userIdField.getText())) {
 
                         userIdField.requestFocus();
                         AndroidUtilities.showKeyboard(userIdField);
@@ -201,7 +201,7 @@ public class VmessSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StringsKt.isBlank(alterIdField.getText())) {
+                    if (StrUtil.isBlank(alterIdField.getText())) {
 
                         alterIdField.requestFocus();
                         AndroidUtilities.showKeyboard(alterIdField);
@@ -386,7 +386,7 @@ public class VmessSettingsActivity extends BaseFragment {
         container = new FrameLayout(context);
         useTlsField = new TextCheckCell(context);
         useTlsField.setBackground(Theme.getSelectorDrawable(false));
-        useTlsField.setTextAndCheck(LocaleController.getString("VmessTls", R.string.VmessTls), !StringsKt.isBlank(currentBean.getStreamSecurity()), false);
+        useTlsField.setTextAndCheck(LocaleController.getString("VmessTls", R.string.VmessTls), !StrUtil.isBlank(currentBean.getStreamSecurity()), false);
         container.addView(useTlsField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
         useTlsField.setOnClickListener((v) -> useTlsField.setChecked(!useTlsField.isChecked()));

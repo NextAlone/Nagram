@@ -43,8 +43,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
-import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class ShadowsocksSettingsActivity extends BaseFragment {
 
@@ -160,7 +160,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
                         return;
                     }
 
-                    if (StringsKt.isBlank(ipField.getText())) {
+                    if (StrUtil.isBlank(ipField.getText())) {
 
                         ipField.requestFocus();
                         AndroidUtilities.showKeyboard(ipField);
@@ -169,7 +169,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StringsKt.isBlank(portField.getText())) {
+                    if (StrUtil.isBlank(portField.getText())) {
 
                         portField.requestFocus();
                         AndroidUtilities.showKeyboard(portField);
@@ -178,7 +178,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StringsKt.isBlank(passwordField.getText())) {
+                    if (StrUtil.isBlank(passwordField.getText())) {
 
                         passwordField.requestFocus();
                         AndroidUtilities.showKeyboard(passwordField);

@@ -42,6 +42,7 @@ import tw.nekomimi.nekogram.ProxyManager;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
@@ -184,7 +185,7 @@ public class SharedConfig {
 
         public String getTitle() {
 
-            if (StringsKt.isBlank(remarks)) {
+            if (StrUtil.isBlank(remarks)) {
 
                 return  "[MTProto] " + address + ":" + port;
 
@@ -202,7 +203,7 @@ public class SharedConfig {
 
         public void setRemarks(String remarks) {
             this.remarks = remarks;
-            if (StringsKt.isBlank(remarks)) {
+            if (StrUtil.isBlank(remarks)) {
                 remarks = null;
             }
         }
@@ -211,12 +212,12 @@ public class SharedConfig {
 
         public String toUrl() {
 
-            HttpUrl.Builder builder = HttpUrl.parse(StringsKt.isBlank(secret) ?
+            HttpUrl.Builder builder = HttpUrl.parse(StrUtil.isBlank(secret) ?
                     "https://t.me/socks" : "https://t.me/proxy").newBuilder()
                     .addQueryParameter("address", address)
                     .addQueryParameter("port", port + "");
 
-            if (!StringsKt.isBlank(secret)) {
+            if (!StrUtil.isBlank(secret)) {
 
                 builder.addQueryParameter("secret", secret);
 
@@ -227,7 +228,7 @@ public class SharedConfig {
 
             }
 
-            if (!StringsKt.isBlank(remarks)) {
+            if (!StrUtil.isBlank(remarks)) {
 
                 builder.fragment(remarks);
 
@@ -253,7 +254,7 @@ public class SharedConfig {
 
             JSONObject obj = new JSONObject();
 
-            if (!StringsKt.isBlank(remarks)) {
+            if (!StrUtil.isBlank(remarks)) {
                 obj.put("remarks", remarks);
             }
 
@@ -263,7 +264,7 @@ public class SharedConfig {
 
             obj.put("address", address);
             obj.put("port", port);
-            if (StringsKt.isBlank(secret)) {
+            if (StrUtil.isBlank(secret)) {
                 obj.put("type", "socks5");
                 if (!username.isEmpty()) {
                     obj.put("username", username);
@@ -298,7 +299,7 @@ public class SharedConfig {
 
                     info.remarks = obj.optString("remarks");
 
-                    if (StringsKt.isBlank(info.remarks)) info.remarks = null;
+                    if (StrUtil.isBlank(info.remarks)) info.remarks = null;
 
                     info.group = obj.optInt("group", 0);
 
@@ -316,7 +317,7 @@ public class SharedConfig {
 
                     info.remarks = obj.optString("remarks");
 
-                    if (StringsKt.isBlank(info.remarks)) info.remarks = null;
+                    if (StrUtil.isBlank(info.remarks)) info.remarks = null;
 
                     info.group = obj.optInt("group", 0);
 
@@ -414,7 +415,7 @@ public class SharedConfig {
         @Override
         public String getTitle() {
 
-            if (StringsKt.isBlank(getRemarks())) {
+            if (StrUtil.isBlank(getRemarks())) {
 
                 return  "[Vmess] " + bean.getAddress() + ":" + bean.getPort();
 
@@ -499,7 +500,7 @@ public class SharedConfig {
         @Override
         public String getTitle() {
 
-            if (StringsKt.isBlank(getRemarks())) {
+            if (StrUtil.isBlank(getRemarks())) {
 
                 return  "[SS] " + bean.getHost() + ":" + bean.getRemotePort();
 
@@ -585,7 +586,7 @@ public class SharedConfig {
         @Override
         public String getTitle() {
 
-            if (StringsKt.isBlank(getRemarks())) {
+            if (StrUtil.isBlank(getRemarks())) {
 
                 return  "[SSR] " + bean.getHost() + ":" + bean.getRemotePort();
 

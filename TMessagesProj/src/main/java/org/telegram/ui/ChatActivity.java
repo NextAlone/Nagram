@@ -9,16 +9,36 @@
 package org.telegram.ui;
 
 import android.Manifest;
-import android.animation.*;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.*;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.*;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -37,15 +57,35 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
-import android.util.*;
-import android.view.*;
+import android.util.LongSparseArray;
+import android.util.Property;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.TextureView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.*;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManagerFixed;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -118,6 +158,7 @@ import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AnimationProperties;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurBehindDrawable;
 import org.telegram.ui.Components.Bulletin;
@@ -151,7 +192,6 @@ import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.Size;
-import org.telegram.ui.Components.*;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TextStyleSpan;
@@ -163,15 +203,6 @@ import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
-
-import kotlin.text.StringsKt;
-import tw.nekomimi.nekogram.MessageDetailsActivity;
-import tw.nekomimi.nekogram.MessageHelper;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.translator.TranslateBottomSheet;
-import tw.nekomimi.nekogram.translator.Translator;
-import tw.nekomimi.nekogram.utils.AlertUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -185,6 +216,15 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import tw.nekomimi.nekogram.MessageDetailsActivity;
+import tw.nekomimi.nekogram.MessageHelper;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.translator.TranslateBottomSheet;
+import tw.nekomimi.nekogram.translator.Translator;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate {
@@ -14924,15 +14964,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                             showDialog(builder.create());
                         }
-                    } else if (locFile.getName().toLowerCase().endsWith("json")) {
+                    } else if (locFile.getName().toLowerCase().endsWith(".nekox.json")) {
 
                         File finalLocFile = locFile;
                         AlertUtil.showConfirm(getParentActivity(),
                                 LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
                                 LocaleController.getString("ImportProxyList", R.string.ImportProxyListConfirm),
-                                LocaleController.getString("OK", R.string.OK), false, (d,v) -> {
+                                LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
                                     String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
-                                    if (!StringsKt.isBlank(status)) {
+                                    if (!StrUtil.isBlank(status)) {
                                         presentFragment(new ProxyListActivity(status));
                                     }
                                 });
@@ -15134,7 +15174,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (response != null) {
                         TLRPC.TL_exportedMessageLink exportedMessageLink = (TLRPC.TL_exportedMessageLink) response;
                         try {
-                            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("label", exportedMessageLink.link);
                             clipboard.setPrimaryClip(clip);
                             if (exportedMessageLink.link.contains("/c/")) {
@@ -15465,6 +15505,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }, null);
                 break;
             }
+            default:
+                throw new IllegalStateException("Unexpected value: " + option);
         }
         selectedObject = null;
         selectedObjectGroup = null;
@@ -16724,20 +16766,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 presentFragment(fragment);
                             }
                         } else if (message.type == 9 || message.type == 0) {
+                            File locFile = null;
+                            if (message.messageOwner.attachPath != null && message.messageOwner.attachPath.length() != 0) {
+                                File f = new File(message.messageOwner.attachPath);
+                                if (f.exists()) {
+                                    locFile = f;
+                                }
+                            }
+                            if (locFile == null) {
+                                File f = FileLoader.getPathToMessage(message.messageOwner);
+                                if (f.exists()) {
+                                    locFile = f;
+                                }
+                            }
                             if (message.getDocumentName().toLowerCase().endsWith("attheme")) {
-                                File locFile = null;
-                                if (message.messageOwner.attachPath != null && message.messageOwner.attachPath.length() != 0) {
-                                    File f = new File(message.messageOwner.attachPath);
-                                    if (f.exists()) {
-                                        locFile = f;
-                                    }
-                                }
-                                if (locFile == null) {
-                                    File f = FileLoader.getPathToMessage(message.messageOwner);
-                                    if (f.exists()) {
-                                        locFile = f;
-                                    }
-                                }
                                 Theme.ThemeInfo themeInfo = Theme.applyThemeFile(locFile, message.getDocumentName(), null, true);
                                 if (themeInfo != null) {
                                     presentFragment(new ThemePreviewActivity(themeInfo));
@@ -16745,22 +16787,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 } else {
                                     scrollToPositionOnRecreate = -1;
                                 }
-                            }
-                            boolean handled = false;
-                            if (message.canPreviewDocument()) {
-                                PhotoViewer.getInstance().setParentActivity(getParentActivity());
-                                PhotoViewer.getInstance().openPhoto(message, message.type != 0 ? dialog_id : 0, message.type != 0 ? mergeDialogId : 0, photoViewerProvider);
-                                handled = true;
-                            }
-                            if (!handled) {
-                                try {
-                                    AndroidUtilities.openForView(message, getParentActivity());
-                                } catch (Exception e) {
-                                    FileLog.e(e);
-                                    alertUserOpenError(message);
+                                boolean handled = false;
+                                if (message.canPreviewDocument()) {
+                                    PhotoViewer.getInstance().setParentActivity(getParentActivity());
+                                    PhotoViewer.getInstance().openPhoto(message, message.type != 0 ? dialog_id : 0, message.type != 0 ? mergeDialogId : 0, photoViewerProvider);
+                                    handled = true;
                                 }
+                                if (!handled) {
+                                    try {
+                                        AndroidUtilities.openForView(message, getParentActivity());
+                                    } catch (Exception e) {
+                                        FileLog.e(e);
+                                        alertUserOpenError(message);
+                                    }
+                                }
+                            } else if (message.getDocumentName().toLowerCase().endsWith(".nekox.json")) {
+
+                                File finalLocFile = locFile;
+                                AlertUtil.showConfirm(getParentActivity(),
+                                        LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
+                                        LocaleController.getString("ImportProxyList", R.string.ImportProxyListConfirm),
+                                        LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                            String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
+                                            if (!StrUtil.isBlank(status)) {
+                                                presentFragment(new ProxyListActivity(status));
+                                            }
+                                        });
+
                             }
                         }
+
                     }
 
                     @Override
@@ -16803,7 +16859,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     @Override
-                    public TextSelectionHelper.ChatListTextSelectionHelper getTextSelectionHelper() {
+                    public TextSelectionHelper.ChatListTextSelectionHelper getTextSelectionHelper
+                            () {
                         return textSelectionHelper;
                     }
 
