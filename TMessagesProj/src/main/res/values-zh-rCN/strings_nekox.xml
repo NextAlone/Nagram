@@ -23,6 +23,7 @@
     <string name="FilterNameUnreadDescription">仅未读的消息</string>
     <string name="FilterNameUnmutedAndUnread">未读且允许通知</string>
     <string name="FilterNameUnmutedAndUnreadDescription">仅来自未静音聊天的未读消息</string>
+    <string name="IgnoreMutedCount">忽略文件夹标签中静音的未读计数</string>
     <string name="DialogsSettings">对话设置</string>
     <string name="SortMenu">排序设置</string>
     <string name="SortByUnread">未读优先排序</string>
@@ -69,6 +70,19 @@
     <string name="SSRProtocolParams">协议参数</string>
     <string name="SSRObfs">混淆</string>
     <string name="SSRObfsParam">混淆参数</string>
+    <string name="ProxyRemarks">别名</string>
+    <string name="RetestPing">重新测试所有 Ping 值</string>
+    <string name="ReorderByPing">基于 Ping 值重新排序</string>
+    <string name="ExportProxies">导出服务器列表到文件</string>
+    <string name="ImportProxies">从文件导入服务器列表</string>
+    <string name="ImportProxyList">导入代理服务器列表</string>
+    <string name="ImportProxyListConfirm">您确定要**导入代理服务器列表**吗？</string>
+    <string name="InvalidProxyFile">无效的代理列表文件： </string>
+    <string name="ImportedProxies">已导入的代理服务器： </string>
+    <string name="ErrorsInImport">导入错误： </string>
+    <string name="NoProxy">您还没有添加任何代理服务器.</string>
+    <string name="DeleteAllProxies">删除所有服务器</string>
+    <string name="DeleteAllProxiesAlert">警告！这将**删除所有代理服务器**。</string>
     <string name="MinApi21Required">抱歉，您至少需要 Android 5 (API21)。</string>
     <string name="ImportProxyFromClipboard">从剪贴板导入</string>
     <string name="BrokenLink">未知或损坏的链接</string>
