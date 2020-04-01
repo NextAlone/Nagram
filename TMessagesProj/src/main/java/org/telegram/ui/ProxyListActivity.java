@@ -343,7 +343,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                     showDialog(builder.create());
 
-
                 }
 
             });

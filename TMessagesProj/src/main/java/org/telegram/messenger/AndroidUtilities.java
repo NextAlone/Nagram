@@ -2792,7 +2792,7 @@ public class AndroidUtilities {
             } else if (a == 4) {
                 text = password;
                 detail = LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword);
-            } else if (a == 5) {
+            } else {
                 text = LocaleController.getString("Checking", R.string.Checking);
                 detail = LocaleController.getString("Checking", R.string.Checking);
             }

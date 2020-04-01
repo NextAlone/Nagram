@@ -1769,9 +1769,6 @@ public class MessagesStorage extends BaseController {
                     int idx2 = muted ? 1 : 0;
                     if (muted) {
                         mutedDialogs.put(user.id, true);
-                        if (NekoXConfig.ignoreMutedCount) {
-                            continue;
-                        }
                     }
                     if (user.bot) {
                         bots[idx1][idx2]++;
@@ -1805,9 +1802,6 @@ public class MessagesStorage extends BaseController {
                         int idx2 = muted ? 1 : 0;
                         if (muted) {
                             mutedDialogs.put(user.id, true);
-                            if (NekoXConfig.ignoreMutedCount) {
-                                continue;
-                            }
                         }
                         if (user.self || user.contact) {
                             contacts[idx1][idx2]++;
@@ -1833,9 +1827,6 @@ public class MessagesStorage extends BaseController {
                     int idx2 = muted && dialogsWithMentions.indexOfKey(-chat.id) < 0 ? 1 : 0;
                     if (muted) {
                         mutedDialogs.put(-chat.id, true);
-                        if (NekoXConfig.ignoreMutedCount) {
-                            continue;
-                        }
                     }
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
                         channels[idx1][idx2]++;
@@ -1863,6 +1854,9 @@ public class MessagesStorage extends BaseController {
                         continue;
                     }
                     flags = filter.flags;
+                    if ((flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                        flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
+                    }
                 } else {
                     filter = null;
                     flags = MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS;

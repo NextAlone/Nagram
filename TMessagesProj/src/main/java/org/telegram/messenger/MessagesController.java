@@ -319,16 +319,16 @@ public class MessagesController extends BaseController implements NotificationCe
         public TLRPC.SendMessageAction action;
     }
 
-    public static int DIALOG_FILTER_FLAG_CONTACTS           = 0x00000001;
-    public static int DIALOG_FILTER_FLAG_NON_CONTACTS       = 0x00000002;
-    public static int DIALOG_FILTER_FLAG_GROUPS             = 0x00000004;
-    public static int DIALOG_FILTER_FLAG_CHANNELS           = 0x00000008;
-    public static int DIALOG_FILTER_FLAG_BOTS               = 0x00000010;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_MUTED      = 0x00000020;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_READ       = 0x00000040;
-    public static int DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED   = 0x00000080;
-    public static int DIALOG_FILTER_FLAG_ONLY_ARCHIVED      = 0x00000100;
-    public static int DIALOG_FILTER_FLAG_ALL_CHATS          = DIALOG_FILTER_FLAG_CONTACTS | DIALOG_FILTER_FLAG_NON_CONTACTS | DIALOG_FILTER_FLAG_GROUPS | DIALOG_FILTER_FLAG_CHANNELS | DIALOG_FILTER_FLAG_BOTS;
+    public static int DIALOG_FILTER_FLAG_CONTACTS = 0x00000001;
+    public static int DIALOG_FILTER_FLAG_NON_CONTACTS = 0x00000002;
+    public static int DIALOG_FILTER_FLAG_GROUPS = 0x00000004;
+    public static int DIALOG_FILTER_FLAG_CHANNELS = 0x00000008;
+    public static int DIALOG_FILTER_FLAG_BOTS = 0x00000010;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_MUTED = 0x00000020;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_READ = 0x00000040;
+    public static int DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED = 0x00000080;
+    public static int DIALOG_FILTER_FLAG_ONLY_ARCHIVED = 0x00000100;
+    public static int DIALOG_FILTER_FLAG_ALL_CHATS = DIALOG_FILTER_FLAG_CONTACTS | DIALOG_FILTER_FLAG_NON_CONTACTS | DIALOG_FILTER_FLAG_GROUPS | DIALOG_FILTER_FLAG_CHANNELS | DIALOG_FILTER_FLAG_BOTS;
 
 
     public static class DialogFilter {
@@ -374,46 +374,36 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0) {
-                if (is2user && !ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog1.id) &&
-                        ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog2.id)
-                ) {
-                    return 1;
-                } else if (is1user && ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog1.id) &&
-                        !ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog2.id)) {
-                    return -1;
-                } else if (is1user && is2user &&
-                        ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog1.id) &&
-                        ArraysKt.contains(NekoXConfig.DEVELOPER_IDS, (int) dialog2.id))
-                    if (NekoXConfig.sortByUnmuted) {
-                        if (!isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
-                            return 1;
-                        } else if (isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
-                            return -1;
-                        } else if (!isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
-                            if (NekoXConfig.sortByUser) {
-                                if (!is1user && is2user) {
-                                    return 1;
-                                } else if (is1user && !is2user) {
-                                    return -1;
-                                } else if (is1user && is2user) {
-                                    if (NekoXConfig.sortByContacts) {
-                                        boolean is1contact = is1user && getContactsController().isContact((int) dialog1.id);
-                                        boolean is2contact = is2user && getContactsController().isContact((int) dialog2.id);
-                                        if (!is1contact && is2contact) {
-                                            return 1;
-                                        } else if (is1contact && !is2contact) {
-                                            return -1;
-                                        }
+                if (NekoXConfig.sortByUnmuted) {
+                    if (isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
+                        return 1;
+                    } else if (!isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
+                        return -1;
+                    } else if (!isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
+                        if (NekoXConfig.sortByUser) {
+                            if (!is1user && is2user) {
+                                return 1;
+                            } else if (is1user && !is2user) {
+                                return -1;
+                            } else if (is1user && is2user) {
+                                if (NekoXConfig.sortByContacts) {
+                                    boolean is1contact = is1user && getContactsController().isContact((int) dialog1.id);
+                                    boolean is2contact = is2user && getContactsController().isContact((int) dialog2.id);
+                                    if (!is1contact && is2contact) {
+                                        return 1;
+                                    } else if (is1contact && !is2contact) {
+                                        return -1;
                                     }
                                 }
                             }
                         }
                     }
+                }
             }
         } else if (NekoXConfig.sortByUnmuted) {
-            if (dialog1.unread_count == 0 && dialog2.unread_count > 0 && !isDialogMuted(dialog2.id)) {
+            if (dialog1.unread_count == 0 && dialog2.unread_count > 0 && isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                 return 1;
-            } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0 && !isDialogMuted(dialog1.id)) {
+            } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0 && !isDialogMuted(dialog1.id)&& isDialogMuted(dialog2.id)) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0 && !isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                 if (NekoXConfig.sortByUser) {
@@ -1975,7 +1965,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         oldUser.photo = user.photo;
                         oldUser.flags |= 32;
                     } else {
-                        oldUser.flags = oldUser.flags &~ 32;
+                        oldUser.flags = oldUser.flags & ~32;
                         oldUser.photo = null;
                     }
                 }
@@ -2009,7 +1999,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     user.photo = oldUser.photo;
                     user.flags |= 32;
                 } else {
-                    user.flags = user.flags &~ 32;
+                    user.flags = user.flags & ~32;
                     user.photo = null;
                 }
                 users.put(user.id, user);
@@ -2073,7 +2063,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         oldChat.username = chat.username;
                         oldChat.flags |= 64;
                     } else {
-                        oldChat.flags = oldChat.flags &~ 64;
+                        oldChat.flags = oldChat.flags & ~64;
                         oldChat.username = null;
                     }
                     if (chat.participants_count != 0) {
