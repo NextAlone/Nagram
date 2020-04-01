@@ -59,7 +59,11 @@ public class FilterTabsView extends FrameLayout {
         void onPageSelected(int page, boolean forward);
         void onPageScrolled(float progress);
         void onSamePageSelected();
-        int getTabCounter(int tabId);
+
+        default int getTabCounter(int tabId) {
+            return 0;
+        }
+
         boolean didSelectTab(TabView tabView, boolean selected);
         boolean isTabMenuVisible();
         void onDeletePressed(int id);

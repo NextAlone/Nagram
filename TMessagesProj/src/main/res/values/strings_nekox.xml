@@ -37,6 +37,7 @@
     <string name="FilterNameUnmutedAndUnread">Unmuted &amp; Unread</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Only unread messages from unmuted chats</string>
 
+    <string name="IgnoreMutedCount">Ignore muted unread count</string>
 
     <string name="DialogsSettings">Dialogs Settings</string>
     <string name="SortMenu">Dialog Sort Settings</string>

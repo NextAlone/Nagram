@@ -46,6 +46,8 @@ public class NekoXConfig {
     public static boolean filterUnread;
     public static boolean filterUnmutedAndUnread;
 
+    public static boolean ignoreMutedCount;
+
     public static boolean disableSystemAccount;
     public static boolean disableProxyWhenVpnEnabled;
     public static boolean skipOpenLinkConfirm;
@@ -86,6 +88,7 @@ public class NekoXConfig {
         skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
 
         removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
+        ignoreMutedCount = preferences.getBoolean("ignore_muted_count",true);
 
     }
 
@@ -230,6 +233,12 @@ public class NekoXConfig {
     public static void toggleRemoveTitleEmoji() {
 
         preferences.edit().putBoolean("remove_title_emoji", removeTitleEmoji = !removeTitleEmoji).apply();
+
+    }
+
+    public static void toggleIgnoredMutedCount() {
+
+        preferences.edit().putBoolean("ignore_muted_count", ignoreMutedCount = !ignoreMutedCount).apply();
 
     }
 

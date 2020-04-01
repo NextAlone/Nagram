@@ -77,6 +77,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int chatRow;
     private int inappCameraRow;
+    private int ignoreMutedCountRow;
     private int disableChatActionRow;
     private int useSystemEmojiRow;
     private int ignoreBlockedRow;
@@ -187,6 +188,11 @@ public class NekoSettingsActivity extends BaseFragment {
                 SharedConfig.toggleInappCamera();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.inappCamera);
+                }
+            } else if (position == ignoreMutedCountRow) {
+                NekoXConfig.toggleIgnoredMutedCount();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoXConfig.ignoreMutedCount);
                 }
             } else if (position == disableChatActionRow) {
                 NekoXConfig.toggleDisableChatAction();
@@ -588,6 +594,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         chatRow = rowCount++;
         inappCameraRow = rowCount++;
+        ignoreMutedCountRow = rowCount ++;
         disableChatActionRow = rowCount++;
         useSystemEmojiRow = rowCount++;
         ignoreBlockedRow = rowCount++;
@@ -1150,8 +1157,12 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DisableProxyWhenVpnEnabled", R.string.DisableProxyWhenVpnEnabled), NekoXConfig.disableProxyWhenVpnEnabled, false);
                     } else if (position == hidePhoneRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, true);
+                    } else if (position == disableUndoRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableUndo", R.string.DisableUndo), NekoXConfig.disableUndo, true);
                     } else if (position == inappCameraRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera), SharedConfig.inappCamera, true);
+                    } else if (position == ignoreMutedCountRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("IgnoreMutedCount", R.string.IgnoreMutedCount), NekoXConfig.ignoreMutedCount, true);
                     } else if (position == transparentStatusBarRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), NekoConfig.transparentStatusBar, true);
                     } else if (position == hideProxySponsorChannelRow) {
@@ -1239,7 +1250,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
-                    position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow;
+                    position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow;
         }
 
         @Override
@@ -1295,7 +1306,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||
-                    position == removeTitleEmojiRow) {
+                    position == removeTitleEmojiRow || position == ignoreMutedCountRow) {
                 return 3;
             } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;

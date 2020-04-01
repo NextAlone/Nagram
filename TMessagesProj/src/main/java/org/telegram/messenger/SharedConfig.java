@@ -189,7 +189,7 @@ public class SharedConfig {
                     obj.put("password", password);
                 }
             } else {
-                obj.put("type", "socks5");
+                obj.put("type", "mtproto");
                 obj.put("secret", secret);
             }
 

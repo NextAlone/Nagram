@@ -39,6 +39,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import androidx.annotation.UiThread;
 
+import tw.nekomimi.nekogram.NekoXConfig;
+
 public class MessagesStorage extends BaseController {
 
     public interface IntCallback {
@@ -3820,6 +3822,9 @@ public class MessagesStorage extends BaseController {
                 }
                 unreadCount = filter.pendingUnreadCount;
                 flags = filter.flags;
+                if (NekoXConfig.ignoreMutedCount && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                    flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
+                }
             } else {
                 filter = null;
                 flags = MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS;
