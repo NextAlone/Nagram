@@ -88,6 +88,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int callsRow;
     private int callsDetailRow;
 
+    private ActionBarMenuItem otherItem;
+
     public class TextDetailProxyCell extends FrameLayout {
 
         private TextView textView;
@@ -249,6 +251,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int menu_add_input_ssr = 8;
     private int menu_add_import_from_clipboard = 5;
     private int menu_add_scan_qr = 6;
+    private int menu_other = 9;
+    private int menu_retest_ping = 10;
 
     @Override
     public View createView(Context context) {
@@ -263,6 +267,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             public void onItemClick(int id) {
                 if (id == -1) {
                     finishFragment();
+                } else if (id == menu_retest_ping) {
+                    checkProxyList(true);
                 }
             }
         });
@@ -354,6 +360,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             addItem.addSubItem(menu_add_input_ssr, LocaleController.getString("AddProxySSR", R.string.AddProxySSR)).setOnClickListener((v) -> presentFragment(new ShadowsocksRSettingsActivity()));
 
         }
+
+        otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
+        otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        otherItem.addSubItem(menu_retest_ping, LocaleController.getString("RetestPing", R.string.RetestPing));
 
         listAdapter = new ListAdapter(context);
 
@@ -675,19 +685,21 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 listAdapter.notifyItemRangeRemoved(proxyDetailRow + 1, 2);
             }
         }
-        checkProxyList();
+        checkProxyList(false);
         if (notify && listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
     }
 
-    private void checkProxyList() {
+    private void checkProxyList(boolean force) {
         for (int a = 0, count = SharedConfig.proxyList.size(); a < count; a++) {
             final SharedConfig.ProxyInfo proxyInfo = SharedConfig.proxyList.get(a);
-            if (proxyInfo.checking || SystemClock.elapsedRealtime() - proxyInfo.availableCheckTime < 2 * 60 * 1000L) {
+            if (proxyInfo.checking || (SystemClock.elapsedRealtime() - proxyInfo.availableCheckTime < 2 * 60 * 1000L && !force)) {
                 continue;
             }
             proxyInfo.checking = true;
+
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, proxyInfo);
 
             if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && proxyInfo != SharedConfig.currentProxy) {
                 ((SharedConfig.ExternalSocks5Proxy) proxyInfo).start();

@@ -98,6 +98,7 @@
     <string name="SSRObfsParam">Obfs Param</string>
 
     <string name="ProxyRemarks">Remarks</string>
+    <string name="RetestPing">Retest ping for all servers</string>
 
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
 

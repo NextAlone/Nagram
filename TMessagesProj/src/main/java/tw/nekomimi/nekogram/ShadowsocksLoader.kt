@@ -126,7 +126,7 @@ class ShadowsocksLoader {
 
                     }
 
-                    val methodAndPswd = Utils.decode(link.username)
+                    val methodAndPswd = Utils.decodeUrlSafe(link.username)
 
                     return Bean(
                             link.host,
