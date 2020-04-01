@@ -242,21 +242,16 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
-            /*if (MessagesController.getInstance().useSystemEmoji) {
-                //textPaint.setTextSize(getBounds().width());
-                canvas.drawText(EmojiData.data[info.page][info.emojiIndex], getBounds().left, getBounds().bottom, textPaint);
-                return;
-            }*/
-            if (SharedConfig.useSystemEmoji) {
-                String emoji = EmojiData.data[info.page][info.emojiIndex];
-                if (EmojiData.emojiToFE0FMap.containsKey(emoji.charAt(0))) {
-                    emoji = emoji.substring(0, 1) + "\uFE0F" + emoji.substring(1);
+            Rect b;
+            if (fullSize) {
+                b = getDrawRect();
+            } else {
+                b = getBounds();
                 }
-                textPaint.setColor(Theme.getColor(Theme.key_chat_emojiPanelIcon));
-                textPaint.setTextSize(getBounds().width() * 4.0f);
-                textPaint.setTextSize(getBounds().width() * 0.7f * 4.0f * Math.min(0.3f, getBounds().width() / textPaint.measureText(emoji)));
-                textPaint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText(emoji, getBounds().left + getBounds().width() / 2.0f, getBounds().bottom - getBounds().height() / 5.0f, textPaint);
+            if (NekoConfig.useSystemEmoji) {
+                String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
+                textPaint.setTextSize(b.height() * 0.8f);
+                canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
                 return;
             }
             if (emojiBmp[info.page][info.page2] == null) {
@@ -272,12 +267,6 @@ public class Emoji {
                 return;
             }
 
-            Rect b;
-            if (fullSize) {
-                b = getDrawRect();
-            } else {
-                b = getBounds();
-            }
 
             //if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
             canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
@@ -457,7 +446,6 @@ public class Emoji {
                     if (emojiOnly != null) {
                         emojiOnly[0]++;
                     }
-                    if (!SharedConfig.useSystemEmoji) {
                         CharSequence code = emojiCode.subSequence(0, emojiCode.length());
                         drawable = Emoji.getEmojiDrawable(code);
                         if (drawable != null) {
@@ -465,7 +453,6 @@ public class Emoji {
                             s.setSpan(span, startIndex, startIndex + startLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             emojiCount++;
                         }
-                    }
                     startLength = 0;
                     startIndex = -1;
                     emojiCode.setLength(0);
@@ -586,12 +573,12 @@ public class Emoji {
             stringBuilder.append("=");
             stringBuilder.append(entry.getValue());
         }
-        preferences.edit().putString("emojis2", stringBuilder.toString()).apply();
+        preferences.edit().putString("emojis2", stringBuilder.toString()).commit();
     }
 
     public static void clearRecentEmoji() {
         SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
-        preferences.edit().putBoolean("filled_default", true).apply();
+        preferences.edit().putBoolean("filled_default", true).commit();
         emojiUseHistory.clear();
         recentEmoji.clear();
         saveRecentEmoji();
@@ -628,7 +615,7 @@ public class Emoji {
                         }
                     }
                 }
-                preferences.edit().remove("emojis").apply();
+                preferences.edit().remove("emojis").commit();
                 saveRecentEmoji();
             } else {
                 str = preferences.getString("emojis2", "");
@@ -652,7 +639,7 @@ public class Emoji {
                     for (int i = 0; i < newRecent.length; i++) {
                         emojiUseHistory.put(newRecent[i], newRecent.length - i);
                     }
-                    preferences.edit().putBoolean("filled_default", true).apply();
+                    preferences.edit().putBoolean("filled_default", true).commit();
                     saveRecentEmoji();
                 }
             }
@@ -687,6 +674,6 @@ public class Emoji {
             stringBuilder.append("=");
             stringBuilder.append(entry.getValue());
         }
-        preferences.edit().putString("color", stringBuilder.toString()).apply();
+        preferences.edit().putString("color", stringBuilder.toString()).commit();
     }
 }

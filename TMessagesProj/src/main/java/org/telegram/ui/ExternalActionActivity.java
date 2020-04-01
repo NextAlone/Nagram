@@ -49,6 +49,8 @@ import org.telegram.ui.Components.PasscodeView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoXConfig;
+
 public class ExternalActionActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
 
     private boolean finished;
@@ -76,7 +78,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTheme(R.style.Theme_TMessages);
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
-        if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
+        if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture && !NekoXConfig.disableFlagSecure) {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {

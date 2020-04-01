@@ -318,7 +318,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
         });
 
-        if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
+        if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture && !NekoXConfig.disableFlagSecure) {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
@@ -3131,7 +3131,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         } else if (id == NotificationCenter.didSetPasscode) {
-            if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
+            if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture && !NekoXConfig.disableFlagSecure) {
                 try {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 } catch (Exception e) {

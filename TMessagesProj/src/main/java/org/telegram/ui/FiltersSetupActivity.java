@@ -372,10 +372,6 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         updateRows(true);
         getMessagesController().loadRemoteFilters(true);
         getNotificationCenter().addObserver(this, NotificationCenter.dialogFiltersUpdated);
-        getNotificationCenter().addObserver(this, NotificationCenter.suggestedFiltersLoaded);
-        if (getMessagesController().suggestedFilters.isEmpty()) {
-            getMessagesController().loadSuggestedFilters();
-        }
         return super.onFragmentCreate();
     }
 
@@ -491,6 +487,10 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 return;
             }
             updateRows(true);
+            getNotificationCenter().addObserver(this, NotificationCenter.suggestedFiltersLoaded);
+            if (getMessagesController().suggestedFilters.isEmpty()) {
+                getMessagesController().loadSuggestedFilters();
+            }
         } else if (id == NotificationCenter.suggestedFiltersLoaded) {
             updateRows(true);
         }

@@ -403,7 +403,7 @@ public class MessagesController extends BaseController implements NotificationCe
         } else if (NekoXConfig.sortByUnmuted) {
             if (dialog1.unread_count == 0 && dialog2.unread_count > 0 && isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                 return 1;
-            } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0 && !isDialogMuted(dialog1.id)&& isDialogMuted(dialog2.id)) {
+            } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0 && !isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0 && !isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                 if (NekoXConfig.sortByUser) {
@@ -939,7 +939,19 @@ public class MessagesController extends BaseController implements NotificationCe
          */
 
         suggestedFilters.clear();
-        suggestedFilters.addAll(NekoXConfig.internalFilters);
+
+        s:for (TLRPC.TL_dialogFilterSuggested suggested : NekoXConfig.internalFilters) {
+
+            for (DialogFilter filter : dialogFilters) {
+
+                if (suggested.filter.flags == filter.flags) continue s;
+
+            }
+
+            suggestedFilters.add(suggested);
+
+        }
+
         loadingSuggestedFilters = false;
         getNotificationCenter().postNotificationName(NotificationCenter.suggestedFiltersLoaded);
 
@@ -957,6 +969,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (response instanceof TLRPC.Vector) {
                 getMessagesStorage().checkLoadedRemoteFilters((TLRPC.Vector) response);
+
             } else {
                 AndroidUtilities.runOnUIThread(() -> loadingRemoteFilters = false);
             }

@@ -140,6 +140,7 @@ import java.util.regex.Pattern;
 
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
@@ -3434,7 +3435,7 @@ public class AndroidUtilities {
         if (parentFragment == null || parentFragment.getParentActivity() == null) {
             return;
         }
-        if (set) {
+        if (set && !NekoXConfig.disableFlagSecure) {
             try {
                 parentFragment.getParentActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 flagSecureFragment = new WeakReference<>(parentFragment);

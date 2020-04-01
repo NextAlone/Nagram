@@ -88,7 +88,7 @@ public class NekoXConfig {
         skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
 
         removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
-        ignoreMutedCount = preferences.getBoolean("ignore_muted_count",true);
+        ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
 
     }
 
@@ -248,47 +248,58 @@ public class NekoXConfig {
 
         mkFilter(LocaleController.getString("NotificationsUsers", R.string.FilterNameUsers),
                 LocaleController.getString("FilterNameUsersDescription", R.string.FilterNameUsersDescription),
-                MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.contacts = true;
                     it.non_contacts = true;
+                    it.exclude_archived = true;
 
                 });
 
         mkFilter(LocaleController.getString("FilterNameContacts", R.string.FilterNameContacts),
                 LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameContactsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_CONTACTS,
+                MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.contacts = true;
+                    it.exclude_archived = true;
 
                 });
 
         mkFilter(LocaleController.getString("FilterNameGroups", R.string.FilterNameGroups),
                 LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameGroupsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_GROUPS,
+                MessagesController.DIALOG_FILTER_FLAG_GROUPS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.groups = true;
+                    it.exclude_archived = true;
 
                 });
 
         mkFilter(LocaleController.getString("FilterNameChannels", R.string.FilterNameChannels),
                 LocaleController.getString("FilterNameChannelsDescription", R.string.FilterNameChannelsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_CHANNELS,
+                MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.broadcasts = true;
+                    it.exclude_archived = true;
 
                 });
 
         mkFilter(LocaleController.getString("FilterNameBots", R.string.FilterNameBots),
                 LocaleController.getString("FilterNameBotsDescription", R.string.FilterNameBotsDescription),
-                MessagesController.DIALOG_FILTER_FLAG_BOTS,
+                MessagesController.DIALOG_FILTER_FLAG_BOTS |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.bots = true;
+                    it.exclude_archived = true;
 
                 });
 
@@ -299,7 +310,8 @@ public class NekoXConfig {
                         MessagesController.DIALOG_FILTER_FLAG_GROUPS |
                         MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
                         MessagesController.DIALOG_FILTER_FLAG_BOTS |
-                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED,
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.contacts = true;
@@ -308,6 +320,7 @@ public class NekoXConfig {
                     it.broadcasts = true;
                     it.bots = true;
                     it.exclude_muted = true;
+                    it.exclude_archived = true;
 
                 });
 
@@ -318,7 +331,8 @@ public class NekoXConfig {
                         MessagesController.DIALOG_FILTER_FLAG_GROUPS |
                         MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
                         MessagesController.DIALOG_FILTER_FLAG_BOTS |
-                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.contacts = true;
@@ -327,6 +341,7 @@ public class NekoXConfig {
                     it.broadcasts = true;
                     it.bots = true;
                     it.exclude_read = true;
+                    it.exclude_archived = true;
 
                 });
 
@@ -338,7 +353,8 @@ public class NekoXConfig {
                         MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
                         MessagesController.DIALOG_FILTER_FLAG_BOTS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED |
-                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ,
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ |
+                        MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
 
                     it.contacts = true;
@@ -348,6 +364,7 @@ public class NekoXConfig {
                     it.bots = true;
                     it.exclude_muted = true;
                     it.exclude_read = true;
+                    it.exclude_archived = true;
 
                 });
 
@@ -382,6 +399,5 @@ public class NekoXConfig {
         currId++;
 
     }
-
 
 }
