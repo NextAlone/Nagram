@@ -496,7 +496,6 @@ public class BottomSheet extends Dialog {
             setOrientation(LinearLayout.HORIZONTAL);
 
             setBackground(Theme.getSelectorDrawable(false));
-            setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
 
             super.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
 
@@ -539,10 +538,10 @@ public class BottomSheet extends Dialog {
             if (icon != 0) {
                 imageView.setImageResource(icon);
                 imageView.setVisibility(VISIBLE);
-                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, 0, 0);
+                textView.setPadding(0, 0, 0, 0);
             } else {
                 imageView.setVisibility(GONE);
-                textView.setPadding(0, 0, 0, 0);
+                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, 0, 0);
             }
         }
     }

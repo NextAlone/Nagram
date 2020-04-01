@@ -224,47 +224,7 @@ object ProxyUtil {
     @JvmStatic
     fun shareProxy(ctx: Activity, info: SharedConfig.ProxyInfo, type: Int) {
 
-        val url = if (info is SharedConfig.VmessProxy) {
-
-            info.bean.toString()
-
-        } else if (info is SharedConfig.ShadowsocksProxy) {
-
-            info.bean.toString()
-
-        } else if (info is SharedConfig.ShadowsocksRProxy) {
-
-            info.bean.toString()
-
-        } else {
-
-            val httpUrl = (if (info.secret.isEmpty()) {
-
-                "https://t.me/socks"
-
-            } else {
-
-                "https://t.me/proxy"
-
-            }).toHttpUrlOrNull()!!.newBuilder()
-
-            httpUrl.addQueryParameter("server", info.address)
-            httpUrl.addQueryParameter("port", info.port.toString())
-
-            if (info.secret.isNotBlank()) {
-
-                httpUrl.addQueryParameter("secret", info.secret)
-
-            } else {
-
-                httpUrl.addQueryParameter("user", info.username)
-                httpUrl.addQueryParameter("pass", info.password)
-
-            }
-
-            httpUrl.build().toString()
-
-        }
+        val url = info.toUrl();
 
         if (type == 1) {
 

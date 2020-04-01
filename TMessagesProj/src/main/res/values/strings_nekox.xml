@@ -97,6 +97,8 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
 
+    <string name="ProxyRemarks">Remarks</string>
+
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
 
     <string name="ImportProxyFromClipboard">Import From Clipboard</string>

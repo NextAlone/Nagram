@@ -51,6 +51,7 @@ class VmessLoader {
             bean.address = lnk.host
             bean.port = lnk.port
             bean.id = lnk.username
+            bean.remarks = lnk.fragment ?: ""
 
             lnk.queryParameterNames.forEach {
 

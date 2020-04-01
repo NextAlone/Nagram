@@ -54,6 +54,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
     private EditTextBoldCursor portField;
     private EditTextBoldCursor passwordField;
     private TextSettingsCell methodField;
+    private EditTextBoldCursor remarksField;
 
     private ScrollView scrollView;
     private LinearLayout linearLayout2;
@@ -190,6 +191,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
                     currentBean.setRemotePort(Utilities.parseInt(portField.getText().toString()));
                     currentBean.setPassword(passwordField.getText().toString());
                     currentBean.setMethod(methodField.getValueTextView().getText().toString());
+                    currentBean.setRemarks(remarksField.getText().toString());
 
                     if (currentProxyInfo == null) {
                         currentProxyInfo = new SharedConfig.ShadowsocksProxy(currentBean);
@@ -231,9 +233,9 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
         }
         linearLayout2.addView(inputFieldsContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        inputFields =  new EditTextBoldCursor[6];
+        inputFields =  new EditTextBoldCursor[4];
 
-        for (int a = 0; a < 3; a++) {
+        for (int a = 0; a < 4; a++) {
             FrameLayout container = new FrameLayout(context);
             EditTextBoldCursor cursor = mkCursor();
             inputFields[a] = cursor;
@@ -256,6 +258,12 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("SSPassword", R.string.SSPassword));
                     cursor.setText(currentBean.getPassword());
+                    break;
+                case 3:
+                    remarksField = cursor;
+                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    cursor.setHintText(LocaleController.getString("ProxyRemarks", R.string.ProxyRemarks));
+                    cursor.setText(currentBean.getRemarks());
                     break;
             }
             cursor.setSelection(cursor.length());
@@ -287,6 +295,8 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
         });
 
         inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+
+        inputFieldsContainer.addView((View) remarksField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         bottomCell = new TextInfoPrivacyCell(context);
         bottomCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));

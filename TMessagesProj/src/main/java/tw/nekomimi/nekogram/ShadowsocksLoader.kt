@@ -1,17 +1,13 @@
 package tw.nekomimi.nekogram
 
-import android.util.Base64
-import android.util.LongSparseArray
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import org.json.JSONArray
 import org.json.JSONObject
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import java.io.File
-import java.io.FileDescriptor
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
@@ -21,7 +17,7 @@ class ShadowsocksLoader {
     var port by Delegates.notNull<Int>()
     var shadowsocksProcess: GuardedProcessPool? = null
 
-    fun initConfig(bean: Bean,port: Int) {
+    fun initConfig(bean: Bean, port: Int) {
 
         this.bean = bean
         this.port = port
@@ -32,7 +28,7 @@ class ShadowsocksLoader {
 
         stop()
 
-        val cacheCfg = File(ApplicationLoader.applicationContext.cacheDir,"ss_cfg_${bean.hash}.json")
+        val cacheCfg = File(ApplicationLoader.applicationContext.cacheDir, "ss_cfg_${bean.hash}.json")
 
         cacheCfg.writeText(bean.toJson().toString())
 
@@ -43,7 +39,7 @@ class ShadowsocksLoader {
         }.apply {
 
             start(listOf("${ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir}/libss-local.so",
-                    "-b","127.0.0.1",
+                    "-b", "127.0.0.1",
                     "-t", "600",
                     "-c", cacheCfg.path,
                     "-l", port.toString()))
@@ -78,7 +74,8 @@ class ShadowsocksLoader {
             var host: String = "",
             var remotePort: Int = 443,
             var password: String = "",
-            var method: String = "aes-256-cfb"
+            var method: String = "aes-256-cfb",
+            var remarks: String? = null
     ) {
 
         /*
@@ -95,7 +92,7 @@ class ShadowsocksLoader {
             put("server", host)
             put("server_port", remotePort)
             put("password", password)
-            put("remarks", "nekox-cache")
+            put("remarks", remarks ?: "Proxy From NekoX")
             put("route", "all")
             put("remote_dns", "8.8.8.8:53")
             put("ipv6", true)
@@ -114,7 +111,8 @@ class ShadowsocksLoader {
 
                     // ss-android style
 
-                    val link = url.replace(SS_PROTOCOL,"https://").toHttpUrlOrNull() ?: error("invalid ss-android link $url")
+                    val link = url.replace(SS_PROTOCOL, "https://").toHttpUrlOrNull()
+                            ?: error("invalid ss-android link $url")
 
                     if (link.password.isNotBlank()) {
 
@@ -122,7 +120,8 @@ class ShadowsocksLoader {
                                 link.host,
                                 link.port,
                                 link.password,
-                                link.username
+                                link.username,
+                                link.fragment
                         )
 
                     }
@@ -133,7 +132,8 @@ class ShadowsocksLoader {
                             link.host,
                             link.port,
                             methodAndPswd.substringAfter(":"),
-                            methodAndPswd.substringBefore(":")
+                            methodAndPswd.substringBefore(":"),
+                            link.fragment
                     )
 
                 } else {
@@ -144,13 +144,15 @@ class ShadowsocksLoader {
 
                     if (v2Url.contains("#")) v2Url = v2Url.substringBefore("#")
 
-                    val link = ("https://" + Utils.decode(v2Url.substringAfter(SS_PROTOCOL))).toHttpUrlOrNull() ?: error("invalid v2rayNG link $url")
+                    val link = ("https://" + Utils.decode(v2Url.substringAfter(SS_PROTOCOL))).toHttpUrlOrNull()
+                            ?: error("invalid v2rayNG link $url")
 
                     return Bean(
                             link.host,
                             link.port,
                             link.password,
-                            link.username
+                            link.username,
+                            link.fragment
                     )
 
                 }
@@ -161,7 +163,11 @@ class ShadowsocksLoader {
 
         override fun toString(): String {
 
-           return "ss://" + Utils.encode("$method:$password") + "@$host:$remotePort"
+            var url = "ss://" + Utils.encode("$method:$password") + "@$host:$remotePort"
+
+            if (remarks?.isNotBlank() == true) url += "#" + Utils.urlEncode(remarks!!)
+
+            return url
 
         }
 

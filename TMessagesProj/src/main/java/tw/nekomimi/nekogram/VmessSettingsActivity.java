@@ -64,6 +64,7 @@ public class VmessSettingsActivity extends BaseFragment {
     private EditTextBoldCursor requestHostField;
     private EditTextBoldCursor pathField;
     private TextCheckCell useTlsField;
+    private EditTextBoldCursor remarksField;
 
     private ScrollView scrollView;
     private LinearLayout linearLayout2;
@@ -219,6 +220,7 @@ public class VmessSettingsActivity extends BaseFragment {
                     currentBean.setRequestHost(requestHostField.getText().toString());
                     currentBean.setPath(pathField.getText().toString());
                     currentBean.setStreamSecurity(useTlsField.isChecked() ? "tls" : "");
+                    currentBean.setRemarks(remarksField.getText().toString());
 
                     if (currentProxyInfo == null) {
                         currentProxyInfo = new SharedConfig.VmessProxy(currentBean);
@@ -260,9 +262,9 @@ public class VmessSettingsActivity extends BaseFragment {
         }
         linearLayout2.addView(inputFieldsContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        inputFields =  new EditTextBoldCursor[6];
+        inputFields =  new EditTextBoldCursor[7];
 
-        for (int a = 0; a < 6; a++) {
+        for (int a = 0; a < 7; a++) {
             FrameLayout container = new FrameLayout(context);
             EditTextBoldCursor cursor = mkCursor();
             inputFields[a] = cursor;
@@ -303,6 +305,12 @@ public class VmessSettingsActivity extends BaseFragment {
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("VmessPath", R.string.VmessPath));
                     cursor.setText(currentBean.getPath());
+                    break;
+                case 6:
+                    remarksField = cursor;
+                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    cursor.setHintText(LocaleController.getString("ProxyRemarks", R.string.ProxyRemarks));
+                    cursor.setText(currentBean.getRemarks());
                     break;
             }
             cursor.setSelection(cursor.length());
@@ -384,6 +392,8 @@ public class VmessSettingsActivity extends BaseFragment {
         useTlsField.setOnClickListener((v) -> useTlsField.setChecked(!useTlsField.isChecked()));
 
         inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+
+        inputFieldsContainer.addView((View) remarksField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         bottomCell = new TextInfoPrivacyCell(context);
         bottomCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));

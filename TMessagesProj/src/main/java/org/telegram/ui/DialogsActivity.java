@@ -3160,6 +3160,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
+        if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
+            filterTabsView.checkTabsCounter();
+        }
     }
 
     @Override

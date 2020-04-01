@@ -131,27 +131,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         @SuppressLint("SetTextI18n")
         public void setProxy(SharedConfig.ProxyInfo proxyInfo) {
-            String server;
-            int port;
-            if (proxyInfo instanceof SharedConfig.VmessProxy) {
-                server = "[ Vmess ] " + ((SharedConfig.VmessProxy) proxyInfo).bean.getAddress();
-                port = ((SharedConfig.VmessProxy) proxyInfo).bean.getPort();
-            } else if (proxyInfo instanceof SharedConfig.ShadowsocksProxy) {
-                server = "[ SS ] " + ((SharedConfig.ShadowsocksProxy) proxyInfo).bean.getHost();
-                port = ((SharedConfig.ShadowsocksProxy) proxyInfo).bean.getRemotePort();
-            } else if (proxyInfo instanceof SharedConfig.ShadowsocksRProxy) {
-                server = "[ SSR ] " + ((SharedConfig.ShadowsocksRProxy) proxyInfo).bean.getHost();
-                port = ((SharedConfig.ShadowsocksRProxy) proxyInfo).bean.getRemotePort();
-            } else {
-                server = proxyInfo.address;
-                port = proxyInfo.port;
-            }
-            if (proxyInfo.isInternal && proxyInfo.descripton == null) {
+            if (proxyInfo.isInternal) {
                 textView.setText(LocaleController.formatString("NekoXProxy", R.string.NekoXProxy));
-            } else if (proxyInfo.isInternal) {
-                textView.setText(LocaleController.formatString("PublicPrefix", R.string.PublicPrefix) + " " + server + ":" + port);
             } else {
-                textView.setText(server + ":" + port);
+                textView.setText(proxyInfo.getTitle());
             }
             currentInfo = proxyInfo;
         }

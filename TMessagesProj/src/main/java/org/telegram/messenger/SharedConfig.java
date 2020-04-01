@@ -10,10 +10,8 @@ package org.telegram.messenger;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Proxy;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -36,13 +34,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import kotlin.text.StringsKt;
+import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ProxyManager;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
@@ -133,6 +132,8 @@ public class SharedConfig {
 
     public static class ProxyInfo {
 
+        public int group;
+
         public String address;
         public int port;
         public String username;
@@ -175,12 +176,89 @@ public class SharedConfig {
             }
         }
 
+
+        public String getTitle() {
+
+            if (StringsKt.isBlank(remarks)) {
+
+                return  "[MTProto] " + address + ":" + port;
+
+            } else {
+
+                return  "[MTProto] " + remarks;
+
+            }
+
+        }
+
+        public String getRemarks() {
+            return remarks;
+        }
+
+        public void setRemarks(String remarks) {
+            this.remarks = remarks;
+            if (StringsKt.isBlank(remarks)) {
+                remarks = null;
+            }
+        }
+
+        private String remarks;
+
+        public String toUrl() {
+
+            HttpUrl.Builder builder = HttpUrl.parse(StringsKt.isBlank(secret) ?
+                    "https://t.me/socks" : "https://t.me/proxy").newBuilder()
+                    .addQueryParameter("address", address)
+                    .addQueryParameter("port", port + "");
+
+            if (!StringsKt.isBlank(secret)) {
+
+                builder.addQueryParameter("secret", secret);
+
+            } else {
+
+                builder.addQueryParameter("user", username)
+                        .addQueryParameter("pass", password);
+
+            }
+
+            if (!StringsKt.isBlank(remarks)) {
+
+                builder.fragment(remarks);
+
+            }
+
+            return builder.toString();
+
+        }
+
+        public static ProxyInfo fromUrl(String url) {
+
+            HttpUrl lnk = HttpUrl.parse(url);
+
+            return new ProxyInfo(lnk.queryParameter("server"),
+                    Utilities.parseInt(lnk.queryParameter("port")),
+                    lnk.queryParameter("user"),
+                    lnk.queryParameter("pass"),
+                    lnk.queryParameter("secret"));
+
+        }
+
         public JSONObject toJson() throws JSONException {
 
             JSONObject obj = new JSONObject();
+
+            if (!StringsKt.isBlank(remarks)) {
+                obj.put("remarks", remarks);
+            }
+
+            if (group != 0) {
+                obj.put("group", group);
+            }
+
             obj.put("address", address);
             obj.put("port", port);
-            if (secret.isEmpty()) {
+            if (StringsKt.isBlank(secret)) {
                 obj.put("type", "socks5");
                 if (!username.isEmpty()) {
                     obj.put("username", username);
@@ -207,10 +285,17 @@ public class SharedConfig {
 
                     info = new ProxyInfo();
 
+                    info.group = obj.optInt("group", 0);
                     info.address = obj.optString("address", "");
                     info.port = obj.optInt("port", 443);
                     info.username = obj.optString("username", "");
                     info.password = obj.optString("password", "");
+
+                    info.remarks = obj.optString("remarks");
+
+                    if (StringsKt.isBlank(info.remarks)) info.remarks = null;
+
+                    info.group = obj.optInt("group", 0);
 
                     break;
 
@@ -223,6 +308,12 @@ public class SharedConfig {
                     info.address = obj.optString("address", "");
                     info.port = obj.optInt("port", 443);
                     info.secret = obj.optString("secret", "");
+
+                    info.remarks = obj.optString("remarks");
+
+                    if (StringsKt.isBlank(info.remarks)) info.remarks = null;
+
+                    info.group = obj.optInt("group", 0);
 
                     break;
 
@@ -282,6 +373,18 @@ public class SharedConfig {
         public abstract void stop();
 
         @Override
+        public abstract String getTitle();
+
+        @Override
+        public abstract String toUrl();
+
+        @Override
+        public abstract String getRemarks();
+
+        @Override
+        public abstract void setRemarks(String remarks);
+
+        @Override
         public abstract JSONObject toJson() throws JSONException;
 
     }
@@ -300,6 +403,21 @@ public class SharedConfig {
         public VmessProxy(AngConfig.VmessBean bean) {
 
             this.bean = bean;
+
+        }
+
+        @Override
+        public String getTitle() {
+
+            if (StringsKt.isBlank(getRemarks())) {
+
+                return  "[Vmess] " + bean.getAddress() + ":" + bean.getPort();
+
+            } else {
+
+                return  "[Vmess] " + getRemarks();
+
+            }
 
         }
 
@@ -330,11 +448,26 @@ public class SharedConfig {
         }
 
         @Override
+        public String toUrl() {
+            return bean.toString();
+        }
+
+        @Override
+        public String getRemarks() {
+            return bean.getRemarks();
+        }
+
+        @Override
+        public void setRemarks(String remarks) {
+            bean.setRemarks(remarks);
+        }
+
+        @Override
         public JSONObject toJson() throws JSONException {
 
             JSONObject obj = new JSONObject();
             obj.put("type", "vmess");
-            obj.put("link", bean.toString());
+            obj.put("link", toUrl());
             return obj;
 
         }
@@ -355,6 +488,21 @@ public class SharedConfig {
         public ShadowsocksProxy(ShadowsocksLoader.Bean bean) {
 
             this.bean = bean;
+
+        }
+
+        @Override
+        public String getTitle() {
+
+            if (StringsKt.isBlank(getRemarks())) {
+
+                return  "[SS] " + bean.getHost() + ":" + bean.getRemotePort();
+
+            } else {
+
+                return  "[SS] " + getRemarks();
+
+            }
 
         }
 
@@ -385,11 +533,27 @@ public class SharedConfig {
         }
 
         @Override
+        public String toUrl() {
+            return bean.toString();
+        }
+
+
+        @Override
+        public String getRemarks() {
+            return bean.getRemarks();
+        }
+
+        @Override
+        public void setRemarks(String remarks) {
+            bean.setRemarks(remarks);
+        }
+
+        @Override
         public JSONObject toJson() throws JSONException {
 
             JSONObject obj = new JSONObject();
             obj.put("type", "shadowsocks");
-            obj.put("link", bean.toString());
+            obj.put("link", toUrl());
             return obj;
 
         }
@@ -412,6 +576,22 @@ public class SharedConfig {
             this.bean = bean;
 
         }
+
+        @Override
+        public String getTitle() {
+
+            if (StringsKt.isBlank(getRemarks())) {
+
+                return  "[SSR] " + bean.getHost() + ":" + bean.getRemotePort();
+
+            } else {
+
+                return  "[SSR] " + getRemarks();
+
+            }
+
+        }
+
 
         @Override
         public void start() {
@@ -440,11 +620,26 @@ public class SharedConfig {
         }
 
         @Override
+        public String toUrl() {
+            return bean.toString();
+        }
+
+        @Override
+        public String getRemarks() {
+            return bean.getRemarks();
+        }
+
+        @Override
+        public void setRemarks(String remarks) {
+            bean.setRemarks(remarks);
+        }
+
+        @Override
         public JSONObject toJson() throws JSONException {
 
             JSONObject obj = new JSONObject();
             obj.put("type", "shadowsocksr");
-            obj.put("link", bean.toString());
+            obj.put("link", toUrl());
             return obj;
 
         }

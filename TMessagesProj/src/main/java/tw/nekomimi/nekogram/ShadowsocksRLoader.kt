@@ -81,7 +81,8 @@ class ShadowsocksRLoader {
             var protocol_param: String = "",
             var obfs: String = "plain",
             var obfs_param: String = "",
-            var method: String = "aes-256-cfb"
+            var method: String = "aes-256-cfb",
+            var remarks: String? = null
     ) {
 
         val hash = (host + remotePort + password + protocol + obfs + method).hashCode()
@@ -105,7 +106,7 @@ class ShadowsocksRLoader {
             put("protocol_param", protocol_param)
             put("obfs", obfs)
             put("obfs_param", obfs_param)
-            put("remarks", "nekox-cache")
+            put("remarks", remarks)
             put("route", "all")
             put("remote_dns", "8.8.8.8:53")
             put("ipv6", true)
@@ -143,6 +144,12 @@ class ShadowsocksRLoader {
 
                 }
 
+                runCatching {
+
+                    bean.remarks = Utils.decode(httpUrl.queryParameter("remarks")!!)
+
+                }
+
                 return bean
 
             }
@@ -156,7 +163,7 @@ class ShadowsocksRLoader {
                     Base64.encodeToString("%s".format(Locale.ENGLISH, password).toByteArray(), flags),
                     Base64.encodeToString("%s".format(Locale.ENGLISH, obfs_param).toByteArray(), flags),
                     Base64.encodeToString("%s".format(Locale.ENGLISH, protocol_param).toByteArray(), flags),
-                    Base64.encodeToString("Exported From NekogramX".format(Locale.ENGLISH, protocol_param).toByteArray(), flags)).toByteArray(), flags)
+                    Base64.encodeToString("%s".format(Locale.ENGLISH, remarks ?: "Exported From NekoX").toByteArray(), flags)).toByteArray(), flags)
         }
 
     }

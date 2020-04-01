@@ -1624,10 +1624,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                 open_settings = 3;
                                             } else if (url.contains("folders")) {
                                                 open_settings = 4;
-                                            } else if (url.contains("neko")) {
-                                                open_settings = 5;
                                             } else if (url.contains("nekox")) {
                                                 open_settings = 6;
+                                            } else if (url.contains("neko")) {
+                                                open_settings = 5;
                                             }
                                         } else if (url.startsWith("tg:meow") || url.startsWith("tg://meow") || url.startsWith("tg:nya") || url.startsWith("tg://nya") || url.startsWith("tg:miao") || url.startsWith("tg://miao")) {
                                             try {
