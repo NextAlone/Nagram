@@ -21,7 +21,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -507,7 +506,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     });
                     presentFragment(fragment);
                 } else if (id == menu_delete_all) {
-                    AlertUtil.showComfirm(getParentActivity(),
+                    AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("DeleteAllProxies", R.string.DeleteAllProxies),
                             LocaleController.getString("DeleteAllProxies", R.string.DeleteAllProxiesAlert),
                             LocaleController.getString("Delete", R.string.Delete),

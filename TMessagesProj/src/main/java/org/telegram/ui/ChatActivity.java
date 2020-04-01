@@ -45,16 +45,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.*;
 
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.*;
 
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.GridLayoutManagerFixed;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
-import androidx.recyclerview.widget.RecyclerView;
-
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManagerFixed;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -77,9 +68,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.*;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -98,8 +87,6 @@ import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.*;
-import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -116,8 +103,6 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.MentionsAdapter;
 import org.telegram.ui.Adapters.MessagesSearchAdapter;
 import org.telegram.ui.Adapters.StickersAdapter;
-import org.telegram.ui.Cells.BotHelpCell;
-import org.telegram.ui.Cells.*;
 import org.telegram.ui.Cells.BotHelpCell;
 import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ChatActionCell;
@@ -187,7 +172,6 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.translator.TranslateBottomSheet;
 import tw.nekomimi.nekogram.translator.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14943,7 +14927,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else if (locFile.getName().toLowerCase().endsWith("json")) {
 
                         File finalLocFile = locFile;
-                        AlertUtil.showComfirm(getParentActivity(),
+                        AlertUtil.showConfirm(getParentActivity(),
                                 LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
                                 LocaleController.getString("ImportProxyList", R.string.ImportProxyListConfirm),
                                 LocaleController.getString("OK", R.string.OK), false, (d,v) -> {

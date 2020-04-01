@@ -21,8 +21,7 @@ import tw.nekomimi.nekogram.MessageHelper
 object AlertUtil {
 
     @JvmStatic
-    fun showToast(text: String) = Toast.makeText(ApplicationLoader.applicationContext, text.takeIf { it.isNotBlank() }
-            ?: "喵 !", Toast.LENGTH_LONG).show()
+    fun showToast(text: String) = Toast.makeText(ApplicationLoader.applicationContext, text.takeIf { it.isNotBlank() } ?: "喵 !", Toast.LENGTH_LONG).show()
 
     @JvmStatic
     fun showSimpleAlert(ctx: Context, text: String) {
@@ -39,7 +38,7 @@ object AlertUtil {
     }
 
     @JvmStatic
-    fun showComfirm(ctx: Context, title: String, text: String, button: String,red: Boolean = false, listener: DialogInterface.OnClickListener) {
+    fun showConfirm(ctx: Context, title: String, text: String, button: String, red: Boolean = false, listener: DialogInterface.OnClickListener) {
 
         val builder = AlertDialog.Builder(ctx)
 

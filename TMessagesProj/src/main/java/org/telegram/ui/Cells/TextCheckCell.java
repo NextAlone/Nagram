@@ -81,11 +81,7 @@ public class TextCheckCell extends FrameLayout {
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setLines(1);
-        textView.setMaxLines(1);
-        textView.setSingleLine(true);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 70 : padding, 0, LocaleController.isRTL ? padding : 70, 0));
 
         valueTextView = new TextView(context);
@@ -122,22 +118,7 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
-        setTextAndCheckAndIcon(text,checked,divider,-1);
-    }
-
-    public void setTextAndCheckAndIcon(String text, boolean checked, boolean divider,int resId) {
         textView.setText(text);
-        if (resId != -1) {
-            try {
-                Drawable drawable = getResources().getDrawable(resId).mutate();
-                if (drawable != null) {
-                    drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), PorterDuff.Mode.MULTIPLY));
-                }
-                textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-        }
         isMultiline = false;
         checkBox.setChecked(checked, false);
         needDivider = divider;
