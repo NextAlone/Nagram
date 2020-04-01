@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="CancelPasswordQuestion">您确定要放弃两步验证设置吗？</string>
+<string name="SearchForPeople">搜索用户</string>
 <string name="BadgeNumberUnread">统计未读消息</string>
 <string name="PaymentPasswordTitle">密码</string>
 <string name="TapToDownload">点击下载</string>
@@ -51,6 +52,7 @@
 <string name="UpdatedMinutes_few"></string>
 <string name="Points_zero"></string>
 <string name="Years_many"></string>
+<string name="AreYouSureSecretChatTitle">私密对话</string>
 <string name="Satellite">卫星图像</string>
 <string name="SharedMedia">分享的媒体文件</string>
 <string name="PaymentTransactionMessage">您确定要为 %3$s 向机器人 %2$s 转账 %1$s 吗？</string>
@@ -82,6 +84,7 @@
 <string name="Photos_one"></string>
 <string name="RestoreEmailTroubleText">如果您无法访问您的电子邮箱，您剩下的选择就只有回忆起您的密码或重置您的帐号。</string>
 <string name="NoBlockedGroup2">被管理员移除的用户不能通过邀请链接再次加入群组。</string>
+<string name="AddStickersCount">添加 %1$s</string>
 <string name="ChangeRecoveryEmail">更改密码恢复电子邮箱</string>
 <string name="PasswordHint">密码提示</string>
 <string name="Red">红色</string>
@@ -105,6 +108,7 @@
 <string name="SendMessageTitle">发送消息</string>
 <string name="UpdatedMinutes_zero"></string>
 <string name="LinkPreview">链接预览</string>
+<string name="Start">开启</string>
 <string name="SyncContactsInfoOn">此设备上的联系人信息将被添加到您的帐号。</string>
 <string name="EventLogAdded">un1 添加了“un2”</string>
 <string name="ForwardedFile_other">%1$d 个转发的文件</string>
@@ -143,15 +147,19 @@
 <string name="DeleteAndExit">删除并退出群组</string>
 <string name="PassportLanguage_KO">韩语</string>
 <string name="formatterBannedUntil12H">yyyy年M月d日 ah:mm</string>
+<string name="ArchiveHiddenInfo">向下滑动查看归档。</string>
 <string name="CallNotAvailable">抱歉，“**%1$s**”不接受呼叫。</string>
 <string name="PassportLanguage_KM">高棉语</string>
 <string name="BackgroundSearchColor">颜色：</string>
 <string name="LastSeenContactsPlus">我的联系人 (+%1$d)</string>
 <string name="PassportAuthorize">授权</string>
 <string name="ResetAutomaticMediaDownloadAlert">您确定要重置自动下载设置吗？</string>
+<string name="ArchiveHidden">归档已被隐藏。</string>
+<string name="CommonGroups_one"></string>
 <string name="PassportLanguage_NE">尼泊尔语</string>
 <string name="MegaUsernameHelp">所有人都可以与其他人分享此链接，并使用 Telegram 的搜索功能找到您的群组。</string>
 <string name="Directions">方向</string>
+<string name="UsersCount_zero"></string>
 <string name="PassportNameLatin">名字（拉丁字母）</string>
 <string name="VoipQuickRepliesExplain">拒接 Telegram 通话时，您可以使用以上的模板答复，也可以根据喜好来更改它们。</string>
 <string name="Points_other">%1$d</string>
@@ -163,6 +171,7 @@
 <string name="PaymentShippingEmailPlaceholder">电子邮箱</string>
 <string name="Abort">终止</string>
 <string name="AnonymousPoll">匿名投票</string>
+<string name="SharedMediaTab2">媒体</string>
 <string name="DeleteProxy">删除代理？</string>
 <string name="download_telegram_text">您需要 Telegram 才能登录到 **%s**。要现在安装吗？</string>
 <string name="SetAsAdmin">设为管理员</string>
@@ -189,6 +198,7 @@
 <string name="RateCallSilentLocal">我无法听到对方的声音</string>
 <string name="ChannelAdminsInfo">您可以添加管理员帮助您管理频道。长按可删除管理员。</string>
 <string name="PassportLanguage_MS">马来西亚语</string>
+<string name="StopShowingMe">停止可见我</string>
 <string name="DeleteMessagesTitle">删除  %1$s</string>
 <string name="CalculatingSize">正在计算…</string>
 <string name="PassportLanguage_MN">蒙古语</string>
@@ -200,6 +210,7 @@
 <string name="AutomaticMediaDownload">自动下载媒体文件</string>
 <string name="AreYouSure">您确定吗？</string>
 <string name="CallBack">回拨</string>
+<string name="Links_zero"></string>
 <string name="ChangePublicLimitReached">抱歉，您保留了太多公共用户名。您可以撤消其中一个较旧群组或频道的链接，也可以创建一个私人链接。</string>
 <string name="BotStop">停用机器人</string>
 <string name="PassportMidnameCountry">中间名（%1$s）</string>
@@ -211,6 +222,7 @@
 <string name="AutoDownloadTypes">媒体文件类型</string>
 <string name="VoipErrorUnknown">暂时无法呼叫</string>
 <string name="VoipUseLessData">节省通话时的数据流量</string>
+<string name="CommonGroups_many"></string>
 <string name="ActionBotDocuments">%1$s 收到了文件：%2$s</string>
 <string name="VoipOngoingAlert">您现在正在和“**%1$s**”通话。您想要挂断此通话然后和“**%2$s**”进行新的通话？</string>
 <string name="ActionCreateGroup">un1 创建了该群组</string>
@@ -232,6 +244,7 @@
 <string name="BannedPhoneNumber">此手机号码已被封禁。</string>
 <string name="Hours_one"></string>
 <string name="EditThemeColors">编辑颜色</string>
+<string name="MilesAway">相距%1$s米</string>
 <string name="SendSelectedLocation">发送选中的位置</string>
 <string name="ShareYouPhoneNumberTitle">是否分享您的手机号码？</string>
 <string name="RateCallDropped">通话意外中断</string>
@@ -281,6 +294,7 @@
 <string name="P2PNobody">不允许任何人</string>
 <string name="PassportLanguage_TH">泰语</string>
 <string name="NoCallLog">您还没有通话过。</string>
+<string name="DiscussionUnlinkChannel">退出频道</string>
 <string name="UserRestrictionsNoSend">无权发送信息</string>
 <string name="UserRestrictionsApplyChanges">应用更改？</string>
 <string name="ResendCodeInfo">验证码已发送到您的电子邮箱</string>
@@ -289,6 +303,7 @@
 <string name="NewBroadcastList">新建群发列表</string>
 <string name="CallMessageOutgoingMissed">挂断</string>
 <string name="ResetNotificationsText">重置所有通知策略为默认值</string>
+<string name="PrivacyPhone">手机号码</string>
 <string name="AppNameBeta">Telegram</string>
 <string name="MessageLifetimeChanged">%1$s 已将阅后即焚计时器设定为 %2$s</string>
 <string name="AutoNightUpdateLocationInfo">计算日落/日出时间需要对您的粗略位置进行一次性检测。请注意，此位置仅会存储在您目前的设备上。
@@ -300,6 +315,7 @@
 <string name="ResetAllNotifications">重置所有通知策略</string>
 <string name="PassportLanguage_SL">斯洛文尼亚语</string>
 <string name="PassportLanguage_SK">斯洛伐克语</string>
+<string name="DeleteMessagesOption">取消发送消息</string>
 <string name="UserRestrictionsDuration">时限</string>
 <string name="AutoDownloadOnMobileDataInfo">如果您在使用移动数据时想自动下载媒体文件，请将其开启。</string>
 <string name="NotificationsPriorityUrgent">紧急</string>
@@ -316,9 +332,11 @@
 请不要接听，Telegram 将会自动处理接下来的事情。</string>
 <string name="Users_zero"></string>
 <string name="NewMessages_few"></string>
+<string name="UnpinMessageAlertTitle">取消此消息置顶</string>
 <string name="ResetAccountStatus">在这段时间后，您将能重置您的帐号：</string>
 <string name="AreYouSureDeleteThisChatSavedMessages">您确定要清空收藏夹内的消息吗？</string>
 <string name="BackgroundColorSinglePreviewLine1">点击”设定“以应用背景。</string>
+<string name="BackgroundColorSinglePreviewLine2">敬请欣赏</string>
 <string name="Page5Message">**Telegram** 不论消息或是媒体文件
 都无大小限制</string>
 <string name="YourEmailSuccessText">您用于两步验证的恢复邮箱现在已激活。</string>
@@ -348,8 +366,10 @@
 <string name="messages_other">%1$d 条消息</string>
 <string name="LocalVideoCache">视频</string>
 <string name="UsernameInvalidLong">用户名不能超过 32 个字符。</string>
+<string name="ChatListDefault">两行</string>
 <string name="EventLogOriginalCaption">原说明</string>
 <string name="ChannelRestrictedUsers">受限用户</string>
+<string name="EditAdminChannelTransfer">转让频道</string>
 <string name="GifCaption">GIF 动态图说明</string>
 <string name="AutoDownloadOnAllChats">在所有对话中开启</string>
 <string name="English">英语</string>
@@ -358,11 +378,14 @@
 <string name="EnableAnimations">启用动画效果</string>
 <string name="FontSizePreviewLine1">你们这群小屁孩就知道电子音乐！你们应该听听经典摇滚，比如哈塞尔霍夫！</string>
 <string name="SecondsBold_two"></string>
+<string name="CameraPermissionText">点击以允许访问相机</string>
 <string name="PassportCity">城市</string>
 <string name="Seconds_few"></string>
 <string name="PassportLanguage_UZ">乌兹别克斯坦语</string>
 <string name="StickersAndMasks">表情和装饰</string>
 <string name="DistanceUnitsAutomatic">自动</string>
+<string name="UsersCountTitle_two"></string>
+<string name="UsersCount_other">%1$d 用户</string>
 <string name="DistanceUnits">距离单位</string>
 <string name="AreYouSureDeleteThisChatWithGroup">您确定要删除 **%1$s** 的对话吗？</string>
 <string name="Members_zero"></string>
@@ -379,6 +402,7 @@
 <string name="DebugSendLogs">发送日志</string>
 <string name="Files_other">%1$d 个文件</string>
 <string name="PassportPostcode">邮政编码</string>
+<string name="PollExpand">展开</string>
 <string name="InviteToGroupByLink">通过链接邀请他人加入群组</string>
 <string name="Months_zero"></string>
 <string name="UserBioEmpty">&lt; 空 &gt;</string>
@@ -398,6 +422,7 @@
 <string name="Exception_two"></string>
 <string name="ResetChatBackgroundsAlert">您确定要重置所有聊天背景吗？</string>
 <string name="ConnectingToProxyTapToDisable">点击此处禁用代理…</string>
+<string name="RemindDayYearAt">yyyy MMM d HH:mm '提醒我'</string>
 <string name="AreYouSureClearHistoryChannel">确定删除此频道中所有缓存的消息和媒体文件？</string>
 <string name="AccDescrCameraFlashAuto">闪光灯，自动</string>
 <string name="ReplyToGroup">回复给 %1$s</string>
@@ -406,6 +431,7 @@
 <string name="PassportAddAddressUploadInfo">为了确认您的住址，请各上传一张所需文件（全部页面）的扫描件或照片。</string>
 <string name="ShareYouLocationInline">机器人需要在您每次向其发送请求时获取您的位置信息，以便提供基于位置的查询结果。</string>
 <string name="Exception_other">%1$d个例外</string>
+<string name="Links_few"></string>
 <string name="ChannelMessageFew">%1$s 发送了 %2$s </string>
 <string name="MapPreviewProviderNobody">无</string>
 <string name="PassportEmailCode">验证码</string>
@@ -450,6 +476,7 @@
 <string name="PaymentShippingSaveInfo">您可以保存您的配送信息以便在未来使用。</string>
 <string name="GroupName">群组名称</string>
 <string name="ConvertGroup">升级为超级群组</string>
+<string name="ChatListExpanded">三行</string>
 <string name="MegaPrivate">私密群组</string>
 <string name="PassportAddAgreementInfo">上传一份租约的扫描件。</string>
 <string name="VoipOfflineOpenSettings">设置</string>
@@ -467,6 +494,7 @@
 <string name="QuickReplyDefault3">我将稍后回电话。</string>
 <string name="QuickReplyDefault1">我现在不方便接电话，有什么事吗？</string>
 <string name="DebugMenuReloadContacts">重载通讯录</string>
+<string name="BlockUserMessage">你是否想要阻止 **%1$s** 在Telegram上给你发消息和打电话？</string>
 <string name="DaysBold_other">**%1$d** 天</string>
 <string name="Search">搜索</string>
 <string name="ErrorOccurred">发生错误。</string>
@@ -486,6 +514,7 @@
 <string name="PaymentTransactionReview">交易检查</string>
 <string name="NotificationMessageGroupMap">%1$s 发送了一个位置信息到群组«%2$s»</string>
 <string name="AreYouSureUnblockContact">您确定要将此联系人移出黑名单吗？</string>
+<string name="SelectContacts">选择联系人</string>
 <string name="ShowNearbyPlaces">向上拖动查看周边区域</string>
 <string name="AreYouSureShareMyContactInfo">您确定要分享您的手机号码？</string>
 <string name="VoipCallEnded">通话结束</string>
@@ -512,6 +541,7 @@
 <string name="NotificationActionPinnedVoiceChannel">%1$s 置顶了一条语音消息</string>
 <string name="TurnPasswordOffPassport">警告！所有存储在 Telegram 通行证里的数据都将丢失！</string>
 <string name="VoipOfflineTitle">离线</string>
+<string name="DiscussionUnlinkGroup">退出该群</string>
 <string name="LanguageSame">你已经在使用这个语言包（**%1$s**）。你随时可以在设置更改你的语言包。</string>
 <string name="TelegramVersion">Telegram Android 客户端 %1$s</string>
 <string name="AttachLiveLocationIsSharing">%1$s - 正在与 %2$s 共享</string>
@@ -524,6 +554,7 @@
 <string name="InvalidCode">验证码无效</string>
 <string name="CustomHelp">注意：对于您不愿意分享最后上线时间的对象，他们最后的上线时间您将也无法看到。取而代之的是大致的上线时间（如：最近、一周内、一个月内）。</string>
 <string name="UseProxySecret">密钥</string>
+<string name="ChatsNearbyHeader">附近的群</string>
 <string name="ActionBotDocumentUtilityBill">水电气费账单</string>
 <string name="MusicInfo">发送音频文件</string>
 <string name="ForwardedVideo_two"></string>
@@ -535,6 +566,7 @@
 <string name="VoipExchangingKeys">正在交换加密密钥</string>
 <string name="NotificationMessagePoll">%1$s 给您发送了一项投票</string>
 <string name="ChannelPermissions">权限</string>
+<string name="Unarchive">取消归档</string>
 <string name="MoreInfo">更多信息</string>
 <string name="InstantView">即时预览</string>
 <string name="ThemeArcticBlue">北极蓝</string>
@@ -676,6 +708,8 @@
 
 此致，
 Telegram 团队</string>
+<string name="NearbyCreateGroup">创建附近的群</string>
+<string name="BlockUserAlert">您想要阻止 %1$s 在Telegram上给您发消息和打电话吗？</string>
 <string name="PaymentShippingAddress1Placeholder">地址行 1（街道）</string>
 <string name="ForwardedFile_zero"></string>
 <string name="ChannelNotifyMembersInfoOn">消息发布后订阅者会收到通知</string>
@@ -702,6 +736,7 @@ Telegram 团队</string>
 <string name="Weeks_two"></string>
 <string name="items_few"></string>
 <string name="AreYouSureDeletePhoto">您确定要删除此图片吗？</string>
+<string name="MusicFiles_few"></string>
 <string name="ResetAccountInfo">因为帐号（**%1$s**）处于活跃状态且正被两步验证密码保护；出于安全考虑，我们将把删除帐号的进程推迟一周。
 
 您可以随时撤销这一进程。</string>
@@ -712,6 +747,7 @@ Telegram 团队</string>
 比任何应用都快。</string>
 <string name="DeleteContact">删除联系人信息</string>
 <string name="PaymentNoShippingMethod">抱歉，无法配送到您的地址。</string>
+<string name="GroupContacts">群组内的联系人</string>
 <string name="AccountAlreadyLoggedIn">该帐号已在此应用中登录。</string>
 <string name="AreYouSureDeleteGIF">您确定要删除此 GIF 动态图吗？</string>
 <string name="DeleteSingleMessagesTitle">删除消息</string>
@@ -739,12 +775,14 @@ Telegram 团队</string>
 <string name="ChromeCustomTabsInfo">在应用内打开外部链接</string>
 <string name="PassportMale">男</string>
 <string name="EventLogChangedGroupLink">un1 更换了群组链接：</string>
+<string name="SlowmodeSeconds">%1$d 秒</string>
 <string name="CacheEmpty">已清空</string>
 <string name="NotificationEditedGroupName">%1$s 重命名了群组«%2$s»</string>
 <string name="items_one"></string>
 <string name="PassportEmailVerifyInfo">请输入我们刚刚向 %1$s 发送的验证码。</string>
 <string name="PassportFrontSide">正面</string>
 <string name="PrivacyForwardsEverybody">链接到您的帐户</string>
+<string name="ReportUnrelatedGroup">举报无关群组</string>
 <string name="LastSeenTitle">谁可以看到您最后上线的时间？</string>
 <string name="TelegramContacts_many"></string>
 <string name="UsernameInvalidStartNumber">抱歉，用户名不能以数字开头。</string>
@@ -785,6 +823,7 @@ Telegram 团队</string>
 <string name="ChangePhoneHelp">我们将会向您的新手机号码发送一条带有验证码的短信。</string>
 <string name="UseLessDataOnMobile">仅在使用移动数据时</string>
 <string name="ClearButton">清空</string>
+<string name="ShowVotes_many"></string>
 <string name="ChannelLeaveAlert">您确定要退出此频道吗？</string>
 <string name="EnterNewFirstPasscode">请输入一个锁定码</string>
 <string name="SortLastName">姓氏</string>
@@ -819,6 +858,7 @@ Telegram 团队</string>
 <string name="ResetMyAccount">重置我的帐号</string>
 <string name="Years_few"></string>
 <string name="AutoDownloadFilesOn">文件</string>
+<string name="SlowmodeMinutes">%1$d 分钟</string>
 <string name="GroupSettingsTitle">群组设置</string>
 <string name="ActionBotDocumentPassport">护照</string>
 <string name="SavedMessagesInfo">转发到此以保存</string>
@@ -827,6 +867,7 @@ Telegram 团队</string>
 <string name="PassportAddAgreement">添加租约信息</string>
 <string name="ForwardTo">转发到…</string>
 <string name="PrivacyTitle">隐私</string>
+<string name="AccReleaseForArchive">释放归档</string>
 <string name="ForwardedMusic_zero"></string>
 <string name="Regular">常规</string>
 <string name="PhoneCopied">已复制手机号码到剪贴板</string>
@@ -848,11 +889,14 @@ Telegram 团队</string>
 <string name="AddStickersInstalled">新的表情包已添加</string>
 <string name="AttachSticker">表情</string>
 <string name="FingerprintHelp">请按下手指</string>
+<string name="AreYouSureBlockContact2">请确认是否屏蔽**%1$s**？</string>
 <string name="formatterBannedUntil24H">yyyy年M月d日 HH:mm</string>
 <string name="EditAdminEditMessages">编辑其他用户的消息</string>
 <string name="PassportNoDocumentsAdd">添加文件</string>
 <string name="ThemePreview">主题预览</string>
 <string name="FromChats_few"></string>
+<string name="DiscussChannel">频道</string>
+<string name="Discussion">讨论</string>
 <string name="UseProxyUsername">用户名</string>
 <string name="ClearMediaCache">清理缓存</string>
 <string name="AutoDownloadFiles">文件</string>
@@ -876,12 +920,14 @@ Telegram 团队</string>
 <string name="ActionBotDocumentInternalPassport">户口本（Internal Passport）</string>
 <string name="NotificationsPriorityLow">低</string>
 <string name="VibrationDisabled">禁用</string>
+<string name="SlowmodeHours">%1$d 小时</string>
 <string name="Files_many"></string>
 <string name="NewMessages_one"></string>
 <string name="PassportResidence">居住地</string>
 <string name="ChannelAddException">添加例外</string>
 <string name="ForwardedPhoto_zero"></string>
 <string name="AndMoreTyping_zero"></string>
+<string name="TypeLocationGroupEdit">点击以添加永久链接</string>
 <string name="CallAgain">再次呼叫</string>
 <string name="LinkInfo">任何已安装 Telegram 的用户都将可以通过此链接加入您的群组。</string>
 <string name="ReportChatSpam">垃圾信息</string>
@@ -901,6 +947,7 @@ Telegram 团队</string>
 
 您可以打开特定对话的资料页，通过「通知」选项为其自定义通知策略。</string>
 <string name="Photos_zero"></string>
+<string name="UsersCountTitle_other">%1$d 用户</string>
 <string name="ActionPinnedContact">un1 置顶了一个联系人信息</string>
 <string name="DistanceUnitsMiles">英里</string>
 <string name="Vote_zero"></string>
@@ -919,6 +966,7 @@ Telegram 团队</string>
 <string name="MegaDeleteAlert">且慢！解散此群组将会移除所有成员，并且会丢失所有消息记录。确定要解散此群组？</string>
 <string name="DisappearingGif">阅后即焚 GIF 动态图</string>
 <string name="StickersRemoved">表情包已移除</string>
+<string name="AreYouSureDeleteFewChats">你是否确定删除选中的对话？</string>
 <string name="SearchImages">查找图片</string>
 <string name="NotificationMessageMusic">%1$s 给您发送了一首音乐</string>
 <string name="P2PEverybodyMinus">所有人 (-%1$d)</string>
@@ -931,6 +979,8 @@ Telegram 团队</string>
 <string name="HideAboveTheList">隐藏于列表上方</string>
 <string name="PaymentWarning">警告</string>
 <string name="RemoveFromListText">长按删除用户。</string>
+<string name="MusicFiles_many"></string>
+<string name="CopyCardNumber">复制</string>
 <string name="ProxyConnections">代理连接</string>
 <string name="AreYouSureLogout">您确定要退出吗？
 
@@ -946,6 +996,7 @@ Telegram 团队</string>
 <string name="NewChannel">新建频道</string>
 <string name="VoipBusy">线路正忙</string>
 <string name="DisappearingPhoto">阅后即焚图片</string>
+<string name="EditAdminGroupTransfer">转让群组</string>
 <string name="TurnPasswordOffQuestion">您确定要删除您的密码吗？</string>
 <string name="NotificationMessageAudio">%1$s 给您发送了一条语音消息</string>
 <string name="PassportScanPassportInfo">在机器识别区内扫描您的护照或身份证以自动填写个人信息。</string>
@@ -977,8 +1028,10 @@ Telegram 团队</string>
 <string name="VoipInCallBrandingWithName">有人正在呼叫 %s</string>
 <string name="UseProxyTelegram">MTProto</string>
 <string name="NotificationMessagePhoto">%1$s 给您发送了一张图片</string>
+<string name="MusicFiles_two"></string>
 <string name="PhoneHome">家庭</string>
 <string name="WhenRoaming">漫游时</string>
+<string name="UsersCount_two"></string>
 <string name="ChangePermissions">更改权限</string>
 <string name="NotificationGroupAddMember">%1$s 邀请了 %3$s 加入群组«%2$s»</string>
 <string name="PhotoCaption">图片说明</string>
@@ -989,6 +1042,7 @@ Telegram 团队</string>
 <string name="NotificationMessageGroupInvoice">%1$s 给群组«%2$s»发送了一张面额为 %3$s 的发票</string>
 <string name="ForwardedAudio_zero"></string>
 <string name="ChatYourSelfName">您</string>
+<string name="DiscussionInfo">添加一个群组聊天以便讨论</string>
 <string name="Italic">斜体</string>
 <string name="formatterMonthName">LLLL</string>
 <string name="Chats_many"></string>
@@ -1009,6 +1063,7 @@ Telegram 团队</string>
 <string name="MapPreviewProviderGoogle">Google</string>
 <string name="LiveLocationAlertPrivate">选择“%1$s”在多长时间内可看到您的精确位置信息。</string>
 <string name="LocationUpdated">已更新</string>
+<string name="EventLogPromotedRemovedTitle">标题</string>
 <string name="ChannelJoinTo">您确定要关注频道«%1$s»吗？</string>
 <string name="SendLiveLocationInfo">在您移动时实时更新</string>
 <string name="RateCallEcho">我听到了自己的回声</string>
@@ -1036,10 +1091,12 @@ Telegram 团队</string>
 <string name="Save">保存</string>
 <string name="UseProxyForCalls">对通话启用代理</string>
 <string name="Months_few"></string>
+<string name="PublicPoll">投票</string>
 <string name="Hours_many"></string>
 <string name="DeleteAll">删除所有</string>
 <string name="ReportChatOther">其它</string>
 <string name="NotificationsPriority">优先级</string>
+<string name="UsersCountTitle_many"></string>
 <string name="AttachMediaRestrictedForever">该群组的管理员限制了您在此发送媒体文件。</string>
 <string name="EventLogEditedMediaCaption">un1 更换媒体文件并修改说明：</string>
 <string name="LoadingFullImage">正在加载完整图片…</string>
@@ -1071,6 +1128,7 @@ Telegram 团队</string>
 <string name="WhenConnectedOnWiFi">接入 Wi-Fi 时</string>
 <string name="ChannelLinkTitle">永久链接</string>
 <string name="NoVotes">无人投票</string>
+<string name="AnonymousQuizPoll">匿名问卷</string>
 <string name="EditCantEditPermissions">您不能编辑该权限。</string>
 <string name="Caption">说明</string>
 <string name="Decline">拒绝</string>
@@ -1120,6 +1178,7 @@ Telegram 团队</string>
 <string name="AttachDestructingVideo">阅后即焚视频</string>
 <string name="Subscribers_zero"></string>
 <string name="ChannelDiscuss">讨论</string>
+<string name="CommonGroups_few"></string>
 <string name="LowDiskSpaceTitle">注意</string>
 <string name="AutoDownloadPreloadMusicInfo">当您在听音乐时预加载下一曲。</string>
 <string name="NotificationMessageGroupLiveLocation">%1$s 共享了实时位置信息到《%2$s》群组</string>
@@ -1129,15 +1188,18 @@ Telegram 团队</string>
 <string name="PaymentCardSavePaymentInformation">保存付款信息</string>
 <string name="AutoNightBrightness">亮度阈值</string>
 <string name="DeleteLocalizationText">您是否确定删除%1$s语音包？</string>
+<string name="DiscussionLinkGroup">关联群组</string>
 <string name="NoBlockedChannel2">被管理员移除的用户不能通过邀请链接返回频道。</string>
 <string name="RateCallSilentRemote">对方無法听到我的声音</string>
 <string name="NotificationEditedGroupPhoto">%1$s 更改了群组«%2$s»的头像</string>
 <string name="NotificationMessageNoText">%1$s 给您发送了一条消息</string>
+<string name="PollCantForwardSecretChat">抱歉无法</string>
 <string name="PassportDeleteInfo">删除</string>
 <string name="MarkAllAsRead">全部标记为已读</string>
 <string name="IsSendingGame">%1$s 正在玩游戏…</string>
 <string name="AddAnOptionInfoMax">您添加的选项数量已经达到上限。</string>
 <string name="NotificationsOff">关闭</string>
+<string name="PeopleNearbyHeader">附近的人</string>
 <string name="Teal">青色</string>
 <string name="HoursBold_few"></string>
 <string name="AutoLockInfo">在离开一段时间后需要重新输入锁定码进行验证。</string>
@@ -1151,6 +1213,7 @@ Telegram 团队</string>
 <string name="AutodownloadChannels">频道</string>
 <string name="FirstName">名字（必填）</string>
 <string name="EncryptedDescription4">不允许转发消息</string>
+<string name="MessageScheduledVoteResults">消息发布之后可以查看投票结果</string>
 <string name="SyncContactsOn">此设备上的联系人信息将被添加到此帐号。</string>
 <string name="AreYouSureWebSessions">是否取消所有网站的授权？</string>
 <string name="VoipQuickReplies">来电拒接消息模板</string>
@@ -1187,6 +1250,7 @@ Telegram 团队</string>
 <string name="AccessError">访问出错</string>
 <string name="BotStatusCantRead">不可存取消息</string>
 <string name="RevokeAlert">您确定要废除此邀请链接吗？一旦废除，其他人将不能通过此链接加入此群组。</string>
+<string name="Answer_other">%1$d答案</string>
 <string name="Days_one"></string>
 <string name="NotificationMessageText">%1$s：%2$s</string>
 <string name="SelectImage">选择图片</string>
@@ -1196,9 +1260,12 @@ Telegram 团队</string>
 <string name="ChangePhoneNumberOccupied">手机号码（%1$s）已经和一个 Telegram 帐号绑定。请先删除该帐号再迁移到此新号码。</string>
 <string name="ActionBotDocumentDriverLicence">驾驶证</string>
 <string name="AndMoreTypingGroup_few"></string>
+<string name="ResetAutomaticMediaDownloadAlertTitle">重置设定</string>
 <string name="PaymentShippingInfo">配送信息</string>
+<string name="Answer_zero"></string>
 <string name="PassportReverseSide">反面</string>
 <string name="RemovedUser_other">%1$d 个被移除的用户</string>
+<string name="ScamMessage">诈骗</string>
 <string name="CompatibilityChat">%1$s 正在使用旧版 Telegram，因此阅后即焚图片会以兼容模式显示。
 
 当 %2$s 更新 Telegram 后，若阅后即焚计时为 1 分钟或以内，对方可“点按以观看”；对方截屏时，您也会收到通知。</string>
@@ -1206,7 +1273,9 @@ Telegram 团队</string>
 <string name="NotificationMessageLiveLocation">%1$s 与您共享了实时位置信息</string>
 <string name="InviteToTelegram">邀请使用 TELEGRAM</string>
 <string name="MessageLifetimePhoto">如果您设定一个定时器，该图片将在阅后一定时间内自毁。</string>
+<string name="MusicFiles_one"></string>
 <string name="ChannelTypeHeader">频道类型</string>
+<string name="NewQuiz">新调查</string>
 <string name="NotificationsPriorityMax">最高</string>
 <string name="InvalidFirstName">不符合规范的名字</string>
 <string name="MetersAway">米以外</string>
@@ -1266,6 +1335,7 @@ Telegram 团队</string>
 <string name="ChooseYourLanguage">选择您的语言</string>
 <string name="ForwardedMessageCount_other">%1$d 条转发的消息</string>
 <string name="AttachVideo">视频</string>
+<string name="PeopleNearbyInfo2">与附近的人交换联系方式并查找新伙伴</string>
 <string name="DeleteThemeAlert">您确定要删除此主题吗？</string>
 <string name="PassportPhoneUseSameInfo">使用当前 Telegram 账号绑定的手机号。</string>
 <string name="UserRestrictionsNoChangeInfo">无权修改群组信息</string>
@@ -1275,6 +1345,7 @@ Telegram 团队</string>
 <string name="NotificationsTurnOff">关闭</string>
 <string name="EnterGroupNamePlaceholder">输入群组名称</string>
 <string name="ArchivedStickers">已归档表情</string>
+<string name="PleaseEnterCurrentPasswordTransfer">请输入密码完成转让。</string>
 <string name="AreYouSureDeleteVideoTitle">删除视频</string>
 <string name="GifsTab">动图</string>
 <string name="PassportMainPage">文件主页</string>
@@ -1314,6 +1385,7 @@ Telegram 团队</string>
 <string name="ChannelAddToGroup">添加到群组</string>
 <string name="AutoDownloadMedium">中</string>
 <string name="Recipient_other">%1$d 个接收者</string>
+<string name="NowInContacts">已经将%1$s保存在通讯录中</string>
 <string name="NotificationActionPinnedGifChannel">%1$s 置顶了一张 GIF 动态图</string>
 <string name="EventLogRestrictedInviteUsers">添加用户</string>
 <string name="NoChatsContactsHelp">点击右下角的铅笔按钮即可开始发送消息
@@ -1331,11 +1403,14 @@ Telegram 团队</string>
 <string name="StickersName">表情和装饰</string>
 <string name="DeleteBanUser">封禁用户</string>
 <string name="DeleteAccountIfAwayFor2">自动删除账号</string>
+<string name="BlockUsers">屏蔽</string>
 <string name="ChannelAdmin">管理员</string>
 <string name="PassportPersonalDetailsInfo">填写个人信息</string>
 <string name="PaymentPhoneEmailToProvider">电话号码和电子邮箱地址将作为付款信息发送给 %1$s。</string>
 <string name="PrivacyFloodControlError">抱歉，请求过于频繁。现在暂时无法修改隐私设置，请稍后再试。</string>
+<string name="MusicFiles_other">%1$d 音乐文件</string>
 <string name="CancelEmailQuestion">您确定要放弃恢复密码邮箱设置吗？</string>
+<string name="EventLogChangedOwnership">转让所有权给 %1$s</string>
 <string name="NoMediaSecret">此对话中共享的所有图片和视频都会在这里显示。</string>
 <string name="Channels_two"></string>
 <string name="PaymentWarningText">无论是 Telegram 还是 %1$s 都无法获取您的信用卡信息。信用卡信息将仅由支付平台 %2$s 处理。
@@ -1379,6 +1454,7 @@ Telegram 团队</string>
 <string name="NoOtherSessionsInfo">您可以从其它的手机、平板和桌面设备用同样的手机号码登录到 Telegram。所有数据将被实时同步。</string>
 <string name="ChatArchived">对话已归档。</string>
 <string name="PassportState">州/地区</string>
+<string name="Answer_few"></string>
 <string name="ChatsException_two"></string>
 <string name="ActionAddUserSelfMega">un1 加入了此群组</string>
 <string name="NotificationsCustom">自定义</string>
@@ -1415,6 +1491,7 @@ Telegram 团队</string>
 <string name="EnableProxyAlert2">您可以稍后在「设置 - 数据和存储」中修改您的代理服务器。</string>
 <string name="ActionPinnedPhoto">un1 置顶了一张图片</string>
 <string name="ChannelMessageContact">%1$s 发送了一个联系人信息</string>
+<string name="DebugMenuDisableSmoothKeyboard">禁用滑行输入</string>
 <string name="ResetAccountButton">重置帐号</string>
 <string name="FromChats_one"></string>
 <string name="Change">更改</string>
@@ -1423,6 +1500,7 @@ Telegram 团队</string>
 <string name="Days_other">%1$d 天</string>
 <string name="RecordingRound">正在录制视频消息…</string>
 <string name="IsRecordingRound">%1$s 正在录制视频消息…</string>
+<string name="ChannelOtherSubscribers">其他订阅者</string>
 <string name="AlwaysShareWithPlaceholder">选择可以看见您上线时间的用户…</string>
 <string name="EditAdminPinMessages">置顶消息</string>
 <string name="EventLogEmptySearch">**未找到操作记录**
@@ -1432,6 +1510,7 @@ Telegram 团队</string>
 <string name="ChannelBlockedUsers">被移除的用户</string>
 <string name="Channels_many"></string>
 <string name="ActionChannelChangedTitle">频道名称已更改为«un2»</string>
+<string name="ShowVotes_two"></string>
 <string name="EventLogRestrictedSendMedia">发送媒体文件</string>
 <string name="AlwaysShowPopup">总是弹出对话框</string>
 <string name="Delete">删除</string>
@@ -1450,6 +1529,7 @@ Telegram 团队</string>
 <string name="NewMessages_two"></string>
 <string name="ChannelAddAdmin">添加管理员</string>
 <string name="ColorRed">红色</string>
+<string name="EventLogStopQuiz">un1 停止了投票:</string>
 <string name="AreYouSureClearHistory">您确定要清空历史记录吗？</string>
 <string name="AttachDestructingPhoto">阅后即焚图片</string>
 <string name="ChannelMegaJoined">您加入了此群组</string>
@@ -1470,9 +1550,12 @@ Telegram 团队</string>
 <string name="RepeatNotificationsNever">从不</string>
 <string name="AutoDownloadPreloadVideo">预先载入较大的视频</string>
 <string name="ChannelAddedBy">un1 邀请您关注此频道</string>
+<string name="NetworkUsageWiFiTab">Wi-Fi</string>
 <string name="NoOtherWebSessionsInfo">您可以在支持的网站上使用 Telegram 登录。</string>
 <string name="EventLogDefaultPermissions">更改了默认权限</string>
 <string name="NewThemePreviewLine3">东京现在是早晨 😎</string>
+<string name="ImagesTab2">图片</string>
+<string name="DeleteTheseChats">删除对话</string>
 <string name="SetAdditionalPasswordInfo">您可以设置一个密码。当登陆到新设备时，它将作为输入短信验证码后的附加验证。</string>
 <string name="VoipRingtoneInfo">您可以自定义该联系人在 Telegram 上呼叫您时的铃声。</string>
 <string name="SlowmodeInfoSelected">成员每 %1$s 只能发送一条消息。</string>
@@ -1493,8 +1576,10 @@ Telegram 团队</string>
 <string name="items_two"></string>
 <string name="PinToTopLimitReached">抱歉，您最多只能将 %1$s 个置顶。</string>
 <string name="June">六月</string>
+<string name="BlockUserContactsTitle">联系人</string>
 <string name="PaymentEmailToProvider">电子邮箱地址将作为付款信息发送给 %1$s。</string>
 <string name="UserRestrictionsEmbedLinks">嵌入链接预览</string>
+<string name="QuizAnswers">问卷答案</string>
 <string name="HoursBold_zero"></string>
 <string name="SetAdminsTitle">管理员</string>
 <string name="NotificationMessageFew">%1$s 发送给您 %2$s</string>
@@ -1514,7 +1599,9 @@ Telegram 团队</string>
 <string name="MasksRemoved">装饰已被移除</string>
 <string name="StopLoading">停止加载吗？</string>
 <string name="PrivacyP2P">在通话中使用端对端连接</string>
+<string name="EditAdminTransferAlertText3">请稍后再试。</string>
 <string name="PassportSurnameLatin">姓氏（拉丁字母）</string>
+<string name="ActionPinnedQuiz">un1 置顶了一个问卷</string>
 <string name="ChoosePhoto">选择图片</string>
 <string name="NotificationActionPinnedStickerEmojiChannel">%1$s 置顶了一个 %2$s 表情</string>
 <string name="VibrationDefault">默认</string>
@@ -1546,11 +1633,13 @@ Telegram 团队</string>
 <string name="InstantViewNightMode">暗色主题将会在夜间自动启用</string>
 <string name="NotificationActionPinnedInvoiceChannel">%1$s 置顶了一张发票</string>
 <string name="NotificationMessageGroupGame">%1$s 邀请您加入群组«%2$s»来玩 %3$s</string>
+<string name="Links_other">%1$d 链接</string>
 <string name="SearchMembers">搜索成员</string>
 <string name="VoipRequesting">正在请求</string>
 <string name="ReEnterYourPasscode">请再次输入新的锁定码</string>
 <string name="StickersHide">归档</string>
 <string name="IsSendingVideo">%1$s 正在发送视频…</string>
+<string name="PeopleNearbyGps">开启</string>
 <string name="ApplyTheme">应用</string>
 <string name="SoftUserLimitAlert">在创建完成群组，并将其升级为超级群组后，您将能添加更多用户。</string>
 <string name="PermissionNoAudioVideo">Telegram 需要访问您的麦克风来录制视频。</string>
@@ -1565,7 +1654,9 @@ Telegram 团队</string>
 <string name="EncryptedChatStartedIncoming">您已加入了私密对话。</string>
 <string name="Page3Message">**Telegram** 永久免费，无广告
 不收取任何费用。</string>
+<string name="ChannelBots">机器人</string>
 <string name="Gallery">相册</string>
+<string name="UsersCount_many"></string>
 <string name="ShareLocation">位置信息</string>
 <string name="BytesSent">已发送字节</string>
 <string name="ContactJob">工作</string>
@@ -1583,6 +1674,7 @@ Telegram 团队</string>
 <string name="ForwardedLocation_many"></string>
 <string name="PinnedMessages">置顶消息</string>
 <string name="MegaLeaveAlertWithName">您确定要退出 **%1$s** 吗？</string>
+<string name="MakeMyselfVisibleTitle">显示个人资料</string>
 <string name="LocalDatabaseClear">是否清空缓存的消息记录？</string>
 <string name="EditAdminAddUsersViaLink">通过链接邀请用户</string>
 <string name="IsSendingFile">%1$s 正在发送文件…</string>
@@ -1599,14 +1691,17 @@ Telegram 团队</string>
 <string name="BotShare">分享</string>
 <string name="AreYouSureClearHistoryWithUser">您确定要清空与 **%1$s** 的消息记录吗？</string>
 <string name="PaymentPhoneToProvider">电话号码将作为付款信息发送给 %1$s。</string>
+<string name="ChannelContacts">该频道的联系人</string>
 <string name="KickFromSupergroup">限制用户权限</string>
 <string name="SharedMusicTab">音频</string>
 <string name="White">白色</string>
 <string name="DebugClearLogs">清空日志</string>
 <string name="Username">用户名</string>
+<string name="DeleteMessagesOptionAlso">同时删除为%1$s</string>
 <string name="PassportDocumentNumber">文件号码</string>
 <string name="DocumentsTitle">分享的文件</string>
 <string name="NotificationsNewException">新建例外</string>
+<string name="CommonGroups_zero"></string>
 <string name="EventLogFilterChannelInfo">频道信息</string>
 <string name="EventLogPromotedChangeChannelInfo">修改频道信息</string>
 <string name="Members_two"></string>
@@ -1642,6 +1737,7 @@ Telegram 团队</string>
 <string name="EventLogInfoDetail">此列表包含了在过去 48 小时内群组成员/管理员执行的所有操作。</string>
 <string name="Weeks_few"></string>
 <string name="EventLogRestrictedSendMessages">发送消息</string>
+<string name="ReportUserLocation">举报</string>
 <string name="LinkInvalidStartNumberMega">用户名不能以数字开头。</string>
 <string name="SettingsSearchFaq">常见问题</string>
 <string name="SortBy">排序</string>
@@ -1655,6 +1751,7 @@ Telegram 团队</string>
 <string name="PaymentPasswordInfo">请创建一个用于保护您的付款信息的密码。您需要在登录时输入此密码。</string>
 <string name="Members_other">%1$d 位成员</string>
 <string name="OnlineCount_few"></string>
+<string name="UsersCount_one"></string>
 <string name="AddAdminErrorBlacklisted">抱歉，您无法将这位用户设为管理员。因为该用户在群组的黑名单中，并且您也无法解除其封禁。</string>
 <string name="MegaAdminsInfo">您可以添加管理员帮助您管理群组。长按可删除管理员。</string>
 <string name="PinnedPoll">置顶投票</string>
@@ -1672,6 +1769,7 @@ Telegram 团队</string>
 <string name="UserRestrictionsSendStickers">发送表情和 GIF 动态图</string>
 <string name="NotificationMessageSDPhoto">%1$s 给您发送了一张阅后即焚图片</string>
 <string name="PassportProvidedInformation">已提供信息</string>
+<string name="ThemeNight">黑夜</string>
 <string name="PassportAddPassport">添加护照信息</string>
 <string name="NoResult">未找到相关信息</string>
 <string name="Users_many"></string>
@@ -1688,6 +1786,8 @@ Telegram 团队</string>
 <string name="CreateNewThemeHelp">点按调色板图标来查看每个屏幕上元素的列表并修改它们。</string>
 <string name="ForwardedLocation_few"></string>
 <string name="InstantViewReference">参考</string>
+<string name="NoVotesQuiz">无人回答</string>
+<string name="ReportSpamUser">屏蔽用户</string>
 <string name="Invisible">隐身</string>
 <string name="Reset">重置</string>
 <string name="AbortEmail">放弃恢复密码邮箱设置</string>
@@ -1707,6 +1807,8 @@ Telegram 团队</string>
 <string name="MegaPrivateInfo">私密群组只能通过群成员的邀请，或邀请链接加入。</string>
 <string name="EventLogPromotedAddUsers">添加用户</string>
 <string name="AddAnotherAccount">添加其他帐户</string>
+<string name="ChatList">预览聊天列表</string>
+<string name="BubbleRadius">消息角</string>
 <string name="HoursBold_other">**%1$d** 小时</string>
 <string name="Recipient_zero"></string>
 <string name="PassportFrontSideInfo">上传一份文件正面的照片</string>
@@ -1721,6 +1823,7 @@ Telegram 团队</string>
 <string name="CallMessageOutgoing">拨出</string>
 <string name="NotificationActionPinnedGeoLiveChannel">%1$s 置顶了一个实时位置信息</string>
 <string name="SharedPlace">地点</string>
+<string name="Links_many"></string>
 <string name="NotificationMessageGroupSticker">%1$s 发送了一个表情到群组«%2$s»</string>
 <string name="Passcode">密码锁</string>
 <string name="ArchivedMasksAlertInfo">您的一些旧装饰包已经被归档。您可以在「装饰」设置里重新激活它们。</string>
@@ -1735,6 +1838,8 @@ Telegram 团队</string>
 <string name="Updating">正在刷新…</string>
 <string name="ChannelMessageNoText">%1$s 发送了一条消息</string>
 <string name="Members_many"></string>
+<string name="BlockUserTitle">屏蔽 %1$s</string>
+<string name="QuizWrongAnswer">错误答案！</string>
 <string name="LowDiskSpaceNeverRemove">永不删除</string>
 <string name="NotificationsOn">开启</string>
 <string name="PassportAddBill">添加水电气费账单信息</string>
@@ -1747,6 +1852,7 @@ Telegram 团队</string>
 <string name="ThemeResetToDefaultsTitle">重置</string>
 <string name="MarkAsRead">标记为已读</string>
 <string name="ExternalStorage">外部存储器</string>
+<string name="QuizWrongAnswerInfo">您错过了正确选项。</string>
 <string name="OK">确定</string>
 <string name="AndMoreTypingGroup_one"></string>
 <string name="ChannelCantOpenBanned">非常抱歉，您已被禁止在公开群组中发言。</string>
@@ -1759,10 +1865,13 @@ Telegram 团队</string>
 <string name="EventLogLeftChannel">un1 已退出频道</string>
 <string name="BackgroundColorPreviewLine1">向左或向右滑动可查看更多颜色。</string>
 <string name="Of">%1$d / %2$d</string>
+<string name="KMetersAway2">相距 %1$s 千米</string>
 <string name="DescriptionInfo">您可以给您的频道添加一段简介。</string>
 <string name="CreateNewTheme">创建新主题</string>
 <string name="Invite">邀请</string>
 <string name="HoldToVideo">长按以录制视频，点按切换为录制语音模式。</string>
+<string name="DiscussionCreateGroup">创建新群组</string>
+<string name="QuizWellDoneInfo">您选择了正确答案。</string>
 <string name="EventLog">近期操作</string>
 <string name="NotificationsDefaultOn">默认（开启）</string>
 <string name="NotificationActionPinnedSticker">%1$s 在群组«%2$s»置顶了一个表情</string>
@@ -1775,11 +1884,13 @@ Telegram 团队</string>
 <string name="ActionBotDocumentPhone">手机号码</string>
 <string name="ChannelMessageRound">%1$s 发送了一条视频消息</string>
 <string name="ErrorSendRestrictedStickers">抱歉，此群组的管理员限制了您发送表情。</string>
+<string name="SharedVoiceTab2">语音消息</string>
 <string name="EditMessageMedia">点击以编辑媒体文件</string>
 <string name="AutodownloadSizeLimitUpTo">上限为 %1$s</string>
 <string name="WithinAWeek">最近一周内曾上线</string>
 <string name="AutoplayMedia">自动播放媒体文件</string>
 <string name="NeverShareWithPlaceholder">选择无法看见您上线时间的用户…</string>
+<string name="ChannelOtherMembers">其他成员</string>
 <string name="AutodownloadContacts">联系人</string>
 <string name="CancelAccountReset">撤销帐号重置请求</string>
 <string name="PassportAddInternalPassportInfo">上传一份经过认证的户口本（Internal Passport）英语翻译扫描件。</string>
@@ -1789,6 +1900,7 @@ Telegram 团队</string>
 <string name="PasswordAsHintError">密码提示必须与密码本身不同</string>
 <string name="PassportDeleteScanAlert">您确定要删除此扫描件吗？</string>
 <string name="ForwardedSticker_other">%1$d 个转发的表情</string>
+<string name="PeopleNearby">附近的人</string>
 <string name="NotificationGroupAddSelf">%1$s 回到了群组«%2$s»</string>
 <string name="LanguageUnsupportedError">没有这种语言。</string>
 <string name="PhoneMain">主要</string>
@@ -1806,6 +1918,8 @@ Telegram 团队</string>
 <string name="Open">打开</string>
 <string name="YourName">您的姓名</string>
 <string name="UseProxySettings">使用代理</string>
+<string name="PollMultiple">多项选择</string>
+<string name="QuizPoll">调查</string>
 <string name="EventLogEditedChannelDescription">un1 修改了频道简介：</string>
 <string name="NotificationsDefaultOff">默认（关闭）</string>
 <string name="InAppSounds">应用内提示音</string>
@@ -1842,6 +1956,7 @@ Telegram 团队</string>
 <string name="ResetNotificationsAlertTitle">重置所有通知</string>
 <string name="CallViaTelegram">Telegram 通话</string>
 <string name="AddToContacts">添加到通讯录</string>
+<string name="Answer_one"></string>
 <string name="EventLogRemovedGroupLink">un1 移除了群组链接</string>
 <string name="Days_two"></string>
 <string name="SmartNotificationsDetail">%2$s 内提醒 %1$s</string>
@@ -1887,8 +2002,10 @@ Telegram 团队</string>
 <string name="ShareYouLocationInfo">此操作会把您当前的位置信息发送给机器人。</string>
 <string name="EditContact">编辑联系人信息</string>
 <string name="ForwardedRound_one"></string>
+<string name="ArchivePinned">归档已被置顶。</string>
 <string name="AccurateTo">精确到 %1$s</string>
 <string name="TapHereGifs">点击这里访问保存的 GIF 动态图</string>
+<string name="PeopleNearbyInfo">邀请附近的朋友打开此页面来交换手机号码</string>
 <string name="FileUploadLimit">文件大小不能超过 %1$s</string>
 <string name="AutoplayGifs">自动播放 GIF 动态图</string>
 <string name="DeleteAccountTitle">自动删除帐号</string>
@@ -1921,16 +2038,19 @@ Telegram 团队</string>
 <string name="PaymentCheckoutPay">支付 %1$s</string>
 <string name="AddToFavorites">添加到收藏</string>
 <string name="Option_two"></string>
+<string name="Links_two"></string>
 <string name="EditAdminGroupDeleteMessages">删除消息</string>
 <string name="JumpToDate">跳转到此日期</string>
 <string name="AddExceptions">添加例外</string>
 <string name="EventLogFilterGroupInfo">群组信息</string>
 <string name="NoAudioFound">查询无结果</string>
+<string name="ClearRecentHistory">清除历史</string>
 <string name="ForwardedVideo_other">%1$d 段转发的视频</string>
 <string name="Recipient_one"></string>
 <string name="UseProxySponsor">代理赞助商</string>
 <string name="AutoDownloadOnRoamingDataInfo">如果您在使用漫游时想自动下载媒体文件，请将其开启。</string>
 <string name="NotMounted">未挂载存储器</string>
+<string name="TooManyCommunities">社区太多</string>
 <string name="NotificationActionPinnedNoText">%1$s 在群组«%2$s»置顶了一条消息</string>
 <string name="GlobalSendMessageRestricted">此群组不允许发送消息。</string>
 <string name="formatterBannedUntilThisYear24H">M月d日 HH:mm</string>
@@ -1946,6 +2066,7 @@ Telegram 团队</string>
 <string name="PaymentCheckoutMethod">支付方式</string>
 <string name="ActionPinnedVoice">un1 置顶了一条语音消息</string>
 <string name="AutoDownloadHigh">高</string>
+<string name="SharedMediaTabFull2">分享的媒体</string>
 <string name="AreYouSureClearDrafts">您确定要删除所有云草稿吗？</string>
 <string name="SendLocation">发送我当前的位置信息</string>
 <string name="UpdateApp">升级应用</string>
@@ -1968,6 +2089,7 @@ Telegram 团队</string>
 <string name="CreateLink">创建链接</string>
 <string name="AreYouSureDeleteFewMessages">您确定要清空这些消息吗？</string>
 <string name="EventLogRestrictedReadMessages">查看消息</string>
+<string name="SendMessageLocation">发送</string>
 <string name="NoPopup">不弹出</string>
 <string name="AutoDownloadPhotosTitle">自动下载图片</string>
 <string name="PhoneWork">工作</string>
@@ -1997,10 +2119,12 @@ Telegram 团队</string>
 <string name="NotificationMessageGroupNoText">%1$s 发送了一条消息到群组«%2$s»</string>
 <string name="Unavailable">不可用</string>
 <string name="Channels_one"></string>
+<string name="ShowVotes_one"></string>
 <string name="UserRestrictionsUntilForever">永远</string>
 <string name="NoChatsHelp">要开始对话
 请点击右下角的铅笔按钮。</string>
 <string name="PassportAddressInfo">上传您的地址证明</string>
+<string name="StopQuiz">结束调查</string>
 <string name="Meters_many"></string>
 <string name="NetworkUsageWiFi">WI-FI</string>
 <string name="EditedMessage">已编辑</string>
@@ -2069,6 +2193,7 @@ Telegram 团队</string>
 <string name="DebugMenuEnableCamera">启用应用内相机</string>
 <string name="VoipOutgoingCall">Telegram 通话进行中</string>
 <string name="ActionChannelRemovedPhoto">频道头像已被移除</string>
+<string name="TypeLocationGroup">链接</string>
 <string name="EnterChannelName">频道名称</string>
 <string name="InviteTextNum_two"></string>
 <string name="Users_other">%1$d 位用户</string>
@@ -2083,6 +2208,8 @@ Telegram 团队</string>
 <string name="Page5Title">强大</string>
 <string name="ReportChatChild">虐待儿童</string>
 <string name="CurvesAll">全部颜色</string>
+<string name="SharedLinksTab2">链接</string>
+<string name="ShowVotes_zero"></string>
 <string name="Stop">停止</string>
 <string name="EditAdminCantEdit">您无法修改此管理员的权限。</string>
 <string name="ChannelMessageMap">%1$s 发送了一个位置</string>
@@ -2095,10 +2222,12 @@ Telegram 团队</string>
 <string name="HistoryCleared">历史记录已被清空</string>
 <string name="AccDescrCameraFlashOn">闪光灯，开启</string>
 <string name="EventLogOriginalMessages">原消息</string>
+<string name="UsersCount_few"></string>
 <string name="PaymentSuccessfullyPaidNoItem">您已成功向“%2$s”转账 %1$s</string>
 <string name="ChannelPublicEmptyUsername">请为您的公开频道设置一条链接，以便他人能通过搜索找到此频道并分享给他人。
 
 如果您对此不感兴趣，我们建议您创建一个私密频道。</string>
+<string name="EventLogPromotedTitle">标题：%1$s</string>
 <string name="ColorPickerReset">重置</string>
 <string name="NewThemePreviewReply">早上好！👋</string>
 <string name="OptionHint">选项</string>
@@ -2109,6 +2238,7 @@ Telegram 团队</string>
 <string name="PassportDeleteDocumentAlert">您确定要删除此文件吗？</string>
 <string name="P2PContacts">我的联系人</string>
 <string name="EventLogPromotedAddAdmins">添加管理员</string>
+<string name="SharedGroupsTab2">群组</string>
 <string name="Disable">禁用</string>
 <string name="MapPreviewProviderTelegram">Telegram</string>
 <string name="SendLiveLocationFor8h">8 小时</string>
@@ -2133,9 +2263,12 @@ Telegram 团队</string>
 <string name="GroupAddMembers">添加成员</string>
 <string name="FromYou">您</string>
 <string name="NotificationsAndSounds">通知和声音</string>
+<string name="PollSubmitVotes">提交投票</string>
 <string name="ForwardedMusic_many"></string>
 <string name="EditAdminPromotedBy">由 %1$s 设为管理员</string>
 <string name="PassportUseLatinOnly">只能使用拉丁字母。</string>
+<string name="NotificationActionPinnedQuizChannel2">%1$s 置顶了问卷 "%2$s"</string>
+<string name="ShowVotes_few"></string>
 <string name="OnlyIfSilent">仅静音模式</string>
 <string name="GalleryInfo">发送原图</string>
 <string name="PaymentConfirmationMessage">您曾保存过您的银行卡（%1$s）的信息。要使用此卡支付，请输入您的两步验证密码。</string>
@@ -2185,6 +2318,7 @@ Telegram 团队</string>
 <string name="YourEmailSkip">跳过</string>
 <string name="DeleteThisGroup">删除此群组</string>
 <string name="CreateGroupError">抱歉，根据其中一些用户的隐私设置，您无法与这些人建立群组。</string>
+<string name="BlockUserChatsTitle">对话</string>
 <string name="TosUpdateDecline">我们对此感到非常抱歉，但是这意味着我们必须在此离别了。与其它软件不同，我们不会利用您的个人数据来进行广告定位或其它商业目的。Telegram 储存的所有文件都是为了给您创造一个功能丰富的云服务体验。您可以在「隐私和安全」设置里调整我们使用您数据的方式（例如：删除已同步的联系人）。
 
 但若您完全无法接受 Telegram 的云数据政策，我们将无法为您提供服务。您现在可以销毁您的帐号，或者再等一等，在完全确定无法接受我们的云数据政策之后再选择销毁帐号。</string>
@@ -2199,6 +2333,7 @@ Telegram 团队</string>
 <string name="GroupDescription3">公开链接，例如：t.me/title</string>
 <string name="NotificationMessageGif">%1$s 给您发送了一张 GIF 动态图</string>
 <string name="ChannelLeaveAlertWithName">您确定要退出 **%1$s** 吗？</string>
+<string name="DebugMenuEnableSmoothKeyboard">启用滑行输入</string>
 <string name="GroupDescription4">具备不同权限的管理员</string>
 <string name="ChannelAddTo">添加“%1$s”到此频道？</string>
 <string name="GroupDescription1">成员上限为 20 万人</string>
@@ -2211,7 +2346,10 @@ Telegram 团队</string>
 <string name="StickersRemove">移除</string>
 <string name="FontSize">字体大小</string>
 <string name="AttachGifRestricted">该群组的管理员限制您在这里发送 GIF 直到 %1$s</string>
+<string name="EditAdminTransferReadyAlertText"> **%1$s** 转让给 **%2$s**之后，您将失去群主身份。</string>
+<string name="ShowVotes_other">查看更多 (%1$d)</string>
 <string name="ClearSearchAlert">您确定要清空搜索历史记录吗?</string>
+<string name="LeaveChats">离开 %1$s</string>
 <string name="FinalResults">最终结果</string>
 <string name="PassportSDK_OpenGooglePlay">打开 Play 商店</string>
 <string name="ThemeDay">日光白</string>
@@ -2240,7 +2378,9 @@ Telegram 团队</string>
 <string name="OpenInExternalApp">使用其它应用打开…</string>
 <string name="ShareMyContactInfo">分享我的联系信息</string>
 <string name="PassportNameCountry">名字（%1$s）</string>
+<string name="CardNumberCopied">卡号已复制到剪切板</string>
 <string name="RoamingUsage">漫游流量使用情况</string>
+<string name="RemindTodayAt">今天 HH:mm 提醒我</string>
 <string name="Streaming">在线播放</string>
 <string name="AttachContact">联系人</string>
 <string name="NoStickers">暂无表情</string>
@@ -2250,6 +2390,7 @@ Telegram 团队</string>
 <string name="AreYouSureClearHistoryWithSecretUser">您确定要清空与 **%1$s** 私密对话的历史记录？</string>
 <string name="AccDescrInstantCamera">切换到摄像模式</string>
 <string name="PaymentCheckoutName">姓名</string>
+<string name="CommonGroups_two"></string>
 <string name="ChangePasscodeInfo">当您设置好一个锁定码后，聊天列表上方会出现一个锁形图标。点击它来锁定或解锁 Telegram 应用。
 
 注意：如果您忘记了锁定码，您将只能卸载然后重新安装 Telegram。而此操作将导致您丢失所有的私密对话记录。</string>
@@ -2258,7 +2399,7 @@ Telegram 团队</string>
 <string name="Months_two"></string>
 <string name="RemovedUser_many"></string>
 <string name="SecretWebPage">链接预览</string>
-<string name="AreYouSureShareMyContactInfoUser">您确定要将您的手机号码（%1$s）分享给 **%2$s** 吗？</string>
+<string name="AreYouSureShareMyContactInfoUser">您是否确定将您的手机号码（%1$s）分享给 **%2$s** 吗？</string>
 <string name="InviteLink">邀请链接</string>
 <string name="Purple">紫色</string>
 <string name="EncryptionRejected">私密对话已关闭</string>
@@ -2269,6 +2410,7 @@ Telegram 团队</string>
 <string name="WhoCanAddMembers">谁可以邀请成员？</string>
 <string name="ThemeResetToDefaultsText">您确定要重置文本大小和颜色设置吗？</string>
 <string name="InvalidLastName">不符合规范的姓氏</string>
+<string name="CommonGroups_other">%1$d 共同群组</string>
 <string name="ChannelDeleteAlert">且慢！删除此频道将会移除所有关注者并且会丢失所有消息。确定要删除此频道？</string>
 <string name="DeleteThemeTitle">删除主题</string>
 <string name="MessageNotifications">消息通知</string>
@@ -2277,7 +2419,9 @@ Telegram 团队</string>
 <string name="TelegramContacts_two"></string>
 <string name="GroupStickersInfo">您可以选择一套表情包，以供群成员在群里一起聊天时能够用到。</string>
 <string name="ChannelInviteViaLink">通过链接邀请</string>
+<string name="UsersCountTitle_zero"></string>
 <string name="ActionBotDocumentAddress">地址</string>
+<string name="EventLogToggledSlowmodeOn">un1 将慢速模式的时间改为 %1$s</string>
 <string name="StopPoll">终止投票</string>
 <string name="CustomP2PInfo">无论上述设置如何，通话中的端对端连接都会或者不会对这些用户启用。</string>
 <string name="SettingsFaqSearchTitle">常见问题</string>
@@ -2311,9 +2455,11 @@ Telegram 团队</string>
 <string name="PaintEdit">编辑</string>
 <string name="GroupType">群组类型</string>
 <string name="Yellow">黄色</string>
+<string name="EventLogChangedLinkedChannel">un1 将 un2 关联到本群组。</string>
 <string name="PassportPhoneInfo">请输入手机号码</string>
 <string name="Chats_zero"></string>
 <string name="ActionPinnedText">un1 置顶了«%1$s»</string>
+<string name="AreYouSureDeleteSingleMessage">你确认是否删除这条消息？</string>
 <string name="ChannelBroadcast">广播</string>
 <string name="ChannelDeleteInfo">您将会丢失此频道的所有消息。</string>
 <string name="OtherLoginCode">您的登录验证码是**%1$s**。在您尝试登录 Telegram 应用程序时输入它。 
@@ -2339,7 +2485,9 @@ Telegram 团队</string>
 <string name="ChatsException_many"></string>
 <string name="LastSeenContactsMinusPlus">我的联系人 (-%1$d, +%2$d)</string>
 <string name="ResetMyAccountWarning">警告</string>
+<string name="SharedMusicTab2">音乐</string>
 <string name="ChannelBlacklist">被移除的用户</string>
+<string name="MusicFiles_zero"></string>
 <string name="NotificationMessageGroupRound">%1$s 发送了一条视频消息到群组«%2$s»</string>
 <string name="AnimatedStickers">动态贴纸</string>
 <string name="formatterMonthYear2">LLLL yyyy</string>
@@ -2354,6 +2502,7 @@ Telegram 团队</string>
 <string name="MobileUsage">移动流量使用情况</string>
 <string name="LocalDatabase">本地数据库</string>
 <string name="NotificationActionPinnedNoTextChannel">%1$s 置顶了一条消息</string>
+<string name="LinkedChannel">已关联的频道</string>
 <string name="YesterdayAt">于昨天</string>
 <string name="ChannelType">频道类型</string>
 <string name="PassportAddPassportInfo">上传一份经过认证的护照英语翻译扫描件。</string>
@@ -2376,10 +2525,14 @@ Telegram 团队</string>
 <string name="BotUnblock">重新启用</string>
 <string name="PaymentCardName">姓名</string>
 <string name="TodayAt">于</string>
+<string name="UserRestrictionsCustom">自定义</string>
+<string name="ArchiveHintText1">收到新消息时，已开启通知的对话将自动取消归档</string>
+<string name="ArchiveHintText2">当有新信息时，将静音对话移到归档中</string>
 <string name="UserRestrictionsInviteUsers">添加用户</string>
 <string name="CloseEditor">关闭编辑器</string>
 <string name="ChatGallery">相册</string>
 <string name="CallMessageIncomingDeclined">拒接</string>
+<string name="DiscussionUnlink">取消关联</string>
 <string name="IsTypingGroup">%1$s 正在输入…</string>
 <string name="ChannelUserCantAdmin">抱歉，此频道的管理员数量已达上限。</string>
 <string name="ColorWhite">白色</string>
@@ -2404,6 +2557,7 @@ Telegram 团队</string>
 <string name="DeleteChatUser">删除对话</string>
 <string name="ForwardedAudio_many"></string>
 <string name="ChooseStickerSetMy">您可以通过机器人 @stickers 创建您自己的表情包。</string>
+<string name="MessageNotFound">消息不存在</string>
 <string name="StopLiveLocationAlertToUser">您确定要停止与 %1$s 共享您的实时位置信息吗？</string>
 <string name="Photos_many"></string>
 <string name="PermissionNoLocation">Telegram 需要使用定位服务才能获取您的位置信息并分享给您的朋友。</string>
@@ -2412,6 +2566,7 @@ Telegram 团队</string>
 <string name="InstallGoogleMaps">要安装 Google 地图吗？</string>
 <string name="Vote_few"></string>
 <string name="PassportAddIdentityCardInfo">上传一份经过认证的身份证英语翻译扫描件。</string>
+<string name="SetReminder">设置提醒</string>
 <string name="Groups_one"></string>
 <string name="SecondsBold_one"></string>
 <string name="NoChats">暂无对话…</string>
@@ -2424,6 +2579,7 @@ Telegram 团队</string>
 <string name="Seconds_zero"></string>
 <string name="PhoneMobile">手机</string>
 <string name="ChatHistoryHiddenInfo">新成员不能查看他们加入前的消息。</string>
+<string name="UsersCountTitle_one"></string>
 <string name="SelectAccount">选择帐号</string>
 <string name="YourEmailAlmostThere">快完成了！</string>
 <string name="TelegramPassportDeleteTitle">删除Telegram 护照</string>
@@ -2444,6 +2600,7 @@ Telegram 团队</string>
 <string name="NotificationsLed">LED 指示灯</string>
 <string name="Weeks_one"></string>
 <string name="EditAdminDeleteMessages">删除其他用户的消息</string>
+<string name="NetworkUsageRoamingTab">漫游</string>
 <string name="NoGroupsInCommon">还没有共同加入的群组</string>
 <string name="UpdateTelegram">升级 Telegram</string>
 <string name="Subscribers_many"></string>
@@ -2484,6 +2641,7 @@ Telegram 团队</string>
 <string name="AttachGame">游戏</string>
 <string name="PassportLanguage_AZ">阿塞拜疆语</string>
 <string name="EventLogChannelRestricted">封禁了“%1$s”</string>
+<string name="PollQuiz">问卷模式</string>
 <string name="ChannelSignMessagesInfo">在管理员发送的消息后附上他们的名字。</string>
 <string name="NetworkUsageSince">自 %1$s 的网络使用情况</string>
 <string name="ActionBotDocumentIdentity">个人信息</string>
@@ -2518,6 +2676,7 @@ Telegram 团队</string>
 <string name="ChannelSilentBroadcast">静默广播</string>
 <string name="TosAgeTitle">年龄验证</string>
 <string name="RateCallDistorted">声音失真</string>
+<string name="Answer_two"></string>
 <string name="PrivacyPolicyAndTerms">隐私政策与服务协议</string>
 <string name="CantPlayVideo">应用无法播放此视频，要尝试使用外部播放器播放吗？</string>
 <string name="UnpinFromTop">取消置顶</string>
@@ -2537,6 +2696,7 @@ Telegram 团队</string>
 <string name="SecretLinkPreviewAlert">您要启用私密对话中的链接预览功能吗？注意，所有的链接预览均在 Telegram 的服务器上生成。</string>
 <string name="PassportEmail">电子邮箱</string>
 <string name="Terminate">结束</string>
+<string name="UsersCountTitle_few"></string>
 <string name="formatterStats24H">yyyy年M月d日 HH:mm</string>
 <string name="ChannelNotifyMembersInfoOff">消息发布后订阅者会收到无声通知</string>
 <string name="Crop">裁剪</string>
@@ -2569,12 +2729,14 @@ Telegram 团队</string>
 <string name="Page1Message">世界上**最快的**聊天工具
 **免费**又**安全**。</string>
 <string name="ClearFewChatsTitle">清除 %1$s</string>
+<string name="DiscussionLinkGroupAlertHistory">聊天记录将设置为新成员可见。</string>
 <string name="NoSharedAudio">在此对话中分享音乐，并在您所有的设备上访问。</string>
 <string name="General">通用</string>
 <string name="Bold">粗体</string>
 <string name="SetUrlInUse">抱歉，此链接被占用了。</string>
 <string name="ColorThemeChanged">多彩主题已修改。</string>
 <string name="PassportDeletePersonalAlert">您确定要删除个人信息吗？</string>
+<string name="SharedFilesTab2">文件</string>
 <string name="ApplyLocalizationFile">使用本地化文件</string>
 <string name="PaymentShippingAddress">配送地址</string>
 <string name="ActionKickUserYou">un1 已将您移除</string>
@@ -2583,6 +2745,7 @@ Telegram 团队</string>
 <string name="NotificationMessageGroupMusic">%1$s 发送了一首音乐到《%2$s》群组</string>
 <string name="EncryptionKey">加密密钥</string>
 <string name="RecentlyViewedHide">隐藏</string>
+<string name="BlockUserMultiTitle">屏蔽用户</string>
 <string name="chatFullDate">yyyy年M月d日</string>
 <string name="PleaseStreamDownload">请等待视频下载完毕。</string>
 <string name="Proxy">代理</string>
@@ -2596,6 +2759,7 @@ Telegram 团队</string>
 <string name="ForwardedVideo_one"></string>
 <string name="LeaveMegaMenu">退出群组</string>
 <string name="GlobalAttachInlineRestricted">在此群租禁止通过机器人发送资料。</string>
+<string name="PollSelectOption">请先选一个选项</string>
 <string name="TextSizeHeader">消息文本大小</string>
 <string name="Saturation">饱和</string>
 <string name="PhoneNumberChange">更改手机号码</string>
@@ -2607,6 +2771,7 @@ Telegram 团队</string>
 <string name="SystemRoot">系统根目录</string>
 <string name="PassportNoDocuments">您还没有任何文件</string>
 <string name="UseProxyTelegramError">您正在使用的代理没有被正确配置并因此被禁用。请搜寻其它代理。</string>
+<string name="Answer_many"></string>
 <string name="NotificationsEnableCustom">启用自定义通知策略</string>
 <string name="PassportSDK_Cancel">取消</string>
 <string name="ShareContact">分享</string>
@@ -2616,6 +2781,7 @@ Telegram 团队</string>
 <string name="AutoDownloadMaxFileSize">文件大小限制</string>
 <string name="Subscribers_few"></string>
 <string name="ChatsException_few"></string>
+<string name="RemindDayAt">MMM d HH:mm '提醒我'</string>
 <string name="NotificationsForPrivateChats">私密对话通知</string>
 <string name="TerminateAllWebSessions">取消所有网站的授权</string>
 <string name="Account">帐号</string>
@@ -2626,6 +2792,7 @@ Telegram 团队</string>
 <string name="TimeToEdit">%1$s</string>
 <string name="AutoDownloadOnUpToFor">最大 %1$s（%2$s）</string>
 <string name="ActionYouChangedPhoto">您更换了群组头像</string>
+<string name="RemoveStickersCount">移除 %1$s</string>
 <string name="AttachPhoto">图片</string>
 <string name="NotificationsForChats">对话通知</string>
 <string name="Orange">橙色</string>
@@ -2642,6 +2809,7 @@ Telegram 团队</string>
 <string name="NotificationsImportance">优先级</string>
 <string name="UnreadMessages">未读消息</string>
 <string name="UseProxyAddress">服务器</string>
+<string name="ChatArchivedInfo">向左滑动即可隐藏档案。</string>
 <string name="LanguageUnknownTitle">数据不足</string>
 <string name="DiscardVoiceMessageAction">确定</string>
 <string name="Mono">等宽</string>
@@ -2655,6 +2823,7 @@ Telegram 团队</string>
 <string name="ReportChatViolence">暴力</string>
 <string name="Next">下一步</string>
 <string name="AddToStickers">添加到表情库</string>
+<string name="EventLogToggledSlowmodeOff">un1 关闭了慢速模式</string>
 <string name="ScreenCaptureInfo">启用后，您将可以对 Telegram 进行截图，但您的聊天内容会在后台应用列表中展现，即使您启用了锁定码。
 
 您或许需要重新启动应用以使此更改生效。</string>
@@ -2693,6 +2862,7 @@ Telegram 团队</string>
 
 **注意：** 所有拥有您旧号码且未被您拉黑的 Telegram 联系人会获得您的**新号码**。</string>
 <string name="EditCantEditPermissionsPublic">公开群组不具有此权限。</string>
+<string name="Links_one"></string>
 <string name="PassportIdentityInternalPassport">上传一份户口本（Internal Passport）的扫描件</string>
 <string name="PassportLanguage_IS">冰岛语</string>
 <string name="ColorSepia">褐色</string>
@@ -2727,6 +2897,7 @@ Telegram 团队</string>
 <string name="PassportLanguage_DA">丹麦语</string>
 <string name="NoStickersFound">没有符合条件的表情包</string>
 <string name="ShowInChat">在对话中查看</string>
+<string name="FootsAway">相距%1$s英尺</string>
 <string name="ChannelMessageDocument">%1$s 发送了一个文件</string>
 <string name="EventLogEditedGroupDescription">un1 编辑了群组简介：</string>
 <string name="PaymentInvoice">发票</string>
@@ -2762,6 +2933,7 @@ Telegram 团队</string>
 <string name="PassportLanguage_ES">西班牙语</string>
 <string name="PermissionContacts">为了能让您跨设备联系好友，您的联系人信息将会被即时同步到高度加密的 Telegram 云服务器上。</string>
 <string name="PaymentCardTitle">付款卡</string>
+<string name="ChatSetThisLocation">选择此位置</string>
 <string name="VoipNeedMicPermission">Telegram 需要访问您的麦克风来拨打电话。</string>
 <string name="ChooseFromGallery">从相册中选择</string>
 <string name="OtherWebSessions">已授权网站</string>

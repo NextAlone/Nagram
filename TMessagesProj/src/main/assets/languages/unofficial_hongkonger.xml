@@ -27,6 +27,7 @@
 <string name="UpdatedMinutes_few"></string>
 <string name="FontSizePreviewName">蕭叔叔</string>
 <string name="AreYouSureSecretChatTitle">Secret Chat</string>
+<string name="FilterInclude">包括嘅對話</string>
 <string name="Chats_other">%1$d 個對話</string>
 <string name="HistoryClearedUndo">已經洗晒啲對話紀錄</string>
 <string name="InviteTextNum_few"></string>
@@ -50,6 +51,7 @@
 <string name="NewMessages_zero"></string>
 <string name="AreTyping">打緊字</string>
 <string name="ColorCyan">青色</string>
+<string name="StickerSets_many"></string>
 <string name="PasscodePassword">字符密碼</string>
 <string name="Add">新增</string>
 <string name="ForwardedLocation_zero"></string>
@@ -154,11 +156,13 @@
 <string name="ShareYouPhoneNumberTitle">分享您的電話號碼？</string>
 <string name="ShowNotificationsFor">顯示通知</string>
 <string name="NotificationsDeleteAllExceptionTitle">Delete 成份例外名單</string>
+<string name="SendDice">傳送</string>
 <string name="SetUrlInvalidStartNumber">唔好意思，連結唔可以用數字開始</string>
 <string name="UseLessDataAlways">永遠</string>
 <string name="PrivacyBotsInfo">你用咗 Telegram 登入嘅網站。</string>
 <string name="SortedByLastSeen">依最後上線時間排序</string>
 <string name="MapPreviewProviderYandex">Yandex</string>
+<string name="RemovedFromRecent">貼圖已經喺最近入面刪除</string>
 <string name="IsRecordingAudio">%1$s 錄緊口訊…</string>
 <string name="Agree">同意</string>
 <string name="OtherSessions">已登入的裝置</string>
@@ -169,22 +173,27 @@
 <string name="CallText">我哋會喺 %1$d:%2$02d 後打畀你</string>
 <string name="ActionAddUserYou">un1 帶咗你入嚟</string>
 <string name="ContactSupport">聯絡支援</string>
+<string name="FilterReorder">重新排序</string>
 <string name="PollTapToSelect">選擇正確嘅答案</string>
 <string name="ThemeNameInvalid">唔好意思，主題名無效。</string>
 <string name="SetAdditionalPassword">設定額外嘅密碼</string>
+<string name="Shares_one"></string>
 <string name="AutoNightLocation">跟返呢度嘅日落同日出時間</string>
+<string name="FilterBots">機械人</string>
 <string name="IncorrectTheme">個 theme 唔啱</string>
 <string name="VoipFailed">接通唔到</string>
 <string name="Theme">佈景主題</string>
-<string name="EmailPasswordConfirmText3">要完成兩步驗證設定，請 check 吓你嘅 %1$s（唔好唔記得垃圾郵件夾）同輸入我哋啱啱 send 咗畀你嘅驗證碼。</string>
-<string name="EmailPasswordConfirmText2">要完成兩步驗證設定，請 check 吓你嘅 e-mail（唔好唔記得垃圾郵件夾）同輸入我哋啱啱 send 咗畀你嘅驗證碼。</string>
+<string name="EmailPasswordConfirmText3">要完成兩步驗證設定，請 check 吓你嘅 %1$s（唔好唔記得垃圾郵件夾）同輸入我哋啱啱 send 畀你嘅驗證碼。</string>
+<string name="EmailPasswordConfirmText2">要完成兩步驗證設定，請 check 吓你嘅 e-mail（唔好唔記得垃圾郵件夾）同輸入我哋啱啱 send 畀你嘅驗證碼。</string>
 <string name="PassportLanguage_TK">土庫曼語</string>
 <string name="PassportLanguage_TH">泰文</string>
 <string name="ResendCodeInfo">已經 send 咗個 code 去你嘅 e-mail。</string>
 <string name="CallMessageOutgoingMissed">撥號已取消</string>
 <string name="AppNameBeta">Telegram Beta</string>
+<string name="FilterNoChatsToDisplayInfo">暫時未有對話屬於呢個資料夾</string>
 <string name="MessageLifetimeChanged">%1$s 將閱後即焚定時器校咗去 %2$s</string>
 <string name="PassportLanguage_TR">土耳其文</string>
+<string name="FollowersChartTitle">追隨者</string>
 <string name="PassportLanguage_SL">斯洛文尼亞文</string>
 <string name="PassportLanguage_SK">斯洛伐克文</string>
 <string name="SendMessagesToText">你真係要 send 呢個 message 畀 **%1$s**？</string>
@@ -196,7 +205,9 @@
 <string name="StickersShare">分享</string>
 <string name="Subscribers_one"></string>
 <string name="SoundDefault">預設</string>
+<string name="FilterDeleteItem">刪除</string>
 <string name="Users_zero"></string>
+<string name="LoopAnimatedStickersInfo">動態貼圖將會喺對話入面一路 loop。</string>
 <string name="NewMessages_few"></string>
 <string name="BackgroundColorSinglePreviewLine1">撳「設為背景」嚟選用呢個背景</string>
 <string name="BackgroundColorSinglePreviewLine2">慢慢欣賞！</string>
@@ -219,6 +230,7 @@
 <string name="SupportStatus">支援</string>
 <string name="NotificationsExceptions">自訂通知</string>
 <string name="Stickers_many"></string>
+<string name="FilterAvailableTitle">對話資料夾</string>
 <string name="MinutesBold_many"></string>
 <string name="PassportLanguage_UK">烏克蘭文</string>
 <string name="SetUrlInvalidShort">連結最少要有 5 個字</string>
@@ -242,6 +254,7 @@
 <string name="AreYouSureDeleteThisChatWithGroup">你真係要 delete【%1$s】？</string>
 <string name="Members_zero"></string>
 <string name="NewThemePreviewReply2">早晨！</string>
+<string name="FilterExcludeMuted">排除已靜音的</string>
 <string name="Edit">修改</string>
 <string name="AccDescrProfilePicture">個人資料相片</string>
 <string name="PermissionStorage">Telegram 需要存取你嘅儲存裝置，等你可以 send 同埋 save 相、片、口訊同埋其他媒體。</string>
@@ -249,6 +262,7 @@
 <string name="ChannelMute">唔收通知</string>
 <string name="CreateNewContact">建立新聯絡人</string>
 <string name="SendingGame">玩緊 game…</string>
+<string name="Shares_other">%1$s 次分享</string>
 <string name="EditAdminBanUsers">封鎖用户</string>
 <string name="Code">驗證碼</string>
 <string name="AutoNightSystemDefault">系統預設</string>
@@ -307,6 +321,7 @@
 <string name="EventLogGroupJoined">un1 加入咗群組</string>
 <string name="NotificationMessageGroupText">%1$s 喺【%2$s】：%3$s</string>
 <string name="AreYouSureUnblockContact">你真係唔再 block 佢？</string>
+<string name="FilterAddChats">新增對話</string>
 <string name="VoipCallEnded">通話結束</string>
 <string name="YouWereKicked">你已被移出群組</string>
 <string name="ForwardedMessage">轉發訊息</string>
@@ -314,6 +329,7 @@
 <string name="StopLiveLocationAlertToUserText">你真係要停止同 **%1$s** 分享你嘅實時位置？</string>
 <string name="Disconnect">終止連線</string>
 <string name="GlobalSearch">全域搜尋</string>
+<string name="FiltersSetup">設定</string>
 <string name="EventLogPromotedPostMessages">發帖</string>
 <string name="GroupSettingsChangedAlert">你喺 group 入面改咗啲 settings，要即時生效？</string>
 <string name="NoAudioFoundInfo">你嘅音樂庫入面冇同 **%1$s** 一樣嘅。</string>
@@ -337,10 +353,12 @@
 <string name="Support">求救</string>
 <string name="VoipExchangingKeys">交換緊加密密鑰</string>
 <string name="InstantView">即時檢視</string>
+<string name="IVInteractionsChartTitle">IV 互動</string>
 <string name="DeleteMega">刪除群組</string>
 <string name="TextSelectionHit">撳實**單字**，然後郁個 cursor 揀埋其他字嚟 copy。</string>
 <string name="AccDescrPageDown">轉到底部</string>
 <string name="ActionYouChangedTitle">你已經將 group 名改做【un2】</string>
+<string name="MasksArchivedInfo">%1$s 已經移去存檔。</string>
 <string name="MinutesBold_one"></string>
 <string name="PaymentCardExpireDate">MM/YY</string>
 <string name="ThemePreviewSongTitle">Symphony No. 5</string>
@@ -362,6 +380,7 @@
 <string name="LastSeenContacts">我嘅聯絡人</string>
 <string name="NotificationActionPinnedQuiz2">%1$s 喺群組 %2$s 入面置頂咗提問「%3$s」</string>
 <string name="UserBio">個人簡介</string>
+<string name="FilterRead">已讀</string>
 <string name="NotificationGroupKickMember">%1$s 喺【%2$s】趕走咗 %3$s</string>
 <string name="PrivacyAddAnException">Add 用户或者 group 入嚟</string>
 <string name="NotificationActionPinnedText">%1$s 喺【%3$s】置頂咗「%2$s」</string>
@@ -381,6 +400,7 @@
 <string name="ForwardedContact_two"></string>
 <string name="AutoDownloadCustom">自訂</string>
 <string name="FeaturedStickersInfo">呢啲都係近期喺 Telegram 受歡迎嘅 stickers；你亦可以用 @sticker 機械人整自己設計嘅 Sticker Set。</string>
+<string name="FilterChats">對話</string>
 <string name="August">8月</string>
 <string name="Copy">複製</string>
 <string name="PassportNoPolicy">您正在將您的文件直接傳送給 %1$s，並允許其所屬的 @%2$s 向您傳送訊息。</string>
@@ -447,10 +467,12 @@ Telegram 團隊</string>
 <string name="PassportEmailVerifyInfo">請輸入我哋啱啱 send 咗去 %1$s 嘅 code。</string>
 <string name="AccDescrContactSorting">更改排序</string>
 <string name="ThemePreviewTitle">賴哈特</string>
+<string name="RecentPosts">最近嘅發佈內容</string>
 <string name="LastSeenTitle">邊個可以睇倒你上次 online 係幾時？</string>
 <string name="TelegramContacts_many"></string>
 <string name="UsernameInvalidStartNumber">唔好意思，用户名唔可以用數字開始</string>
 <string name="UsbActive">USB 傳輸功能啟動</string>
+<string name="Shares_few"></string>
 <string name="ChannelDeleteFromList">從此清單中刪除</string>
 <string name="ColorDark">深色</string>
 <string name="ShareTelegram">分享 Telegram…</string>
@@ -501,6 +523,7 @@ Group 入面嘅 member 將會同時喺呢個 channel 度睇倒發佈咗嘅 messa
 <string name="Devices">裝置</string>
 <string name="AreYouSureDeletePhotoTitle">刪除相片</string>
 <string name="SettingsRecent">最近搜尋</string>
+<string name="NewFollowersBySourceChartTitle">按來源顯示新的追隨者</string>
 <string name="PassportResidentialAddress">住址</string>
 <string name="Months_other">%1$d 個月</string>
 <string name="ForwardedSticker_one"></string>
@@ -513,6 +536,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AccDescrPlayerSpeed">2X 播放</string>
 <string name="AddStickersInstalled">已新增貼圖</string>
 <string name="AreYouSureBlockContact2">你真係要 block **%1$s**？</string>
+<string name="ShowAllGIFs">顯示全部 GIF</string>
 <string name="PassportNoDocumentsAdd">新增證件</string>
 <string name="ThemePreview">Theme Preview</string>
 <string name="DiscussChannel">頻道</string>
@@ -532,6 +556,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="VibrationDisabled">唔用</string>
 <string name="NoPlacesFoundInfo">你嘅附近冇同 **%1$s** 類似嘅地點。</string>
 <string name="Files_many"></string>
+<string name="FilterShowMoreChats_one"></string>
 <string name="NewMessages_one"></string>
 <string name="PassportResidence">住址</string>
 <string name="ForwardedPhoto_zero"></string>
@@ -542,6 +567,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="MegaLeaveAlert">你真係要喺呢個 group 走人？</string>
 <string name="BytesReceived">收到的流量</string>
 <string name="NotificationsLedInfo">LED 係一個喺部機度用嚟提示新訊息嘅通知閃燈。</string>
+<string name="FilterRemoveExclusionUserText">你真係要喺始終排除嘅對話入面刪除「%1$s」？</string>
 <string name="P2PEnabledWith">邊個同你通話嗰陣可以用點對點傳輸？</string>
 <string name="PassportCountry">國家</string>
 <string name="SearchFriends">揾聯絡人</string>
@@ -569,10 +595,11 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Page4Title">安全可靠</string>
 <string name="ChooseStickerSetNotFoundInfo">試多次或者喺下面個 list 度揀</string>
 <string name="VoipBusy">打唔通</string>
+<string name="FilterNonContact">非聯絡人</string>
 <string name="EditAdminGroupTransfer">轉移群組擁有權</string>
 <string name="TurnPasswordOffQuestion">你真係唔要兩步驗證？</string>
 <string name="PinMessage">置頂</string>
-<string name="UseDifferentThemeInfo">您還可以使用現有的自訂主題作為主題的基礎。</string>
+<string name="UseDifferentThemeInfo">你仲可以使用現有嘅自訂主題作為主題嘅基礎。</string>
 <string name="EmailPasswordConfirmText">請按照以下步驟嚟完成兩步驗證設定：
 
 1. Check 吓你嘅電子郵箱（唔好唔記得 check 埋垃圾郵件資料夾）
@@ -589,11 +616,13 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="DeleteTheme">刪除主題</string>
 <string name="UseProxyTelegram">MTProto 代理</string>
 <string name="PhoneHome">住家</string>
+<string name="NotificationsChartTitle">通知</string>
 <string name="ChangePermissions">修改權限</string>
 <string name="PhotoCaption">相片說明</string>
 <string name="AddToExistingContact">加到現有嘅聯絡人</string>
 <string name="NotificationMessageGroupInvoice">%1$s send 咗張有關 %3$s 嘅發票去【%2$s】</string>
 <string name="Italic">斜體</string>
+<string name="PinFolderLimitReached">唔好意思，你唔可以再將其他對話置頂。</string>
 <string name="ForwardedMusic_other">Forward %1$d 首音樂</string>
 <string name="EventLogStopPoll">un1 叫停咗民調：</string>
 <string name="NoMedia">你可以喺 login 咗嘅機度，揾返呢個
@@ -602,9 +631,11 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="SendGifPreview">傳送 GIF</string>
 <string name="MessagePreview">訊息預覽</string>
 <string name="TintShadows">陰影</string>
+<string name="FilterExcludeArchived">排除已封存的</string>
 <string name="PassportMidname">中間名</string>
 <string name="LocationUpdated">已 update</string>
 <string name="ChannelJoinTo">你要追蹤【%1$s】？</string>
+<string name="AddMasksInstalledInfo">%1$s 已經加咗去你嘅面具。</string>
 <string name="SetPasscode">設定密碼</string>
 <string name="ContactsPermissionAlertNotNow">遲啲先</string>
 <string name="SharedAudioFiles">音樂</string>
@@ -626,6 +657,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ChannelAdministrator">管理員</string>
 <string name="RecentFiles">最近嘅檔案</string>
 <string name="ContactJobTitle">職位</string>
+<string name="FilterMuted">已靜音</string>
 <string name="AccActionRecordVideo">錄影</string>
 <string name="YourEmailAlmostThereText">請 check 吓你嘅電郵信箱（唔好唔記得 check 埋垃圾郵件資料夾），嚟搞掂兩步驗證設定。</string>
 <string name="NearbyCreateGroupInfo2">如果你開咗同呢度無關係嘅 group，你可能會俾系統阻止再開同位置相關嘅 group。</string>
@@ -644,6 +676,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Decline">拒絕</string>
 <string name="RestorePasswordNoEmailTitle">唔好意思</string>
 <string name="SetRecoveryEmail">設定備援電郵信箱</string>
+<string name="DiceInfo">Send 🎲 嘅 emoji 去是但一個對話嚟等 Telegram 畀一個隨機數字。</string>
 <string name="PassportNoDocumentsInfo">你可以新增你嘅手機號碼、電郵地址、身份證明文件或住址。</string>
 <string name="RepeatNotifications">重複通知</string>
 <string name="SecretWebPageInfo">Link preview 將會喺 Telegram server 入面搞。我哋唔會儲存 link 嘅有關資料。</string>
@@ -715,8 +748,9 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="NotificationMessageText">%1$s：%2$s</string>
 <string name="SelectImage">選擇圖片</string>
 <string name="EmailCopied">已複製電子郵件到剪貼簿</string>
+<string name="DiceInfo2">傳送 **:dice:** emoji 去是但一個對話嚟擲骰。</string>
 <string name="DiscussionUnlinkChannelAlert">你真係要將 **%1$s** 同呢個 channel 解除綁定？</string>
-<string name="PreviewFeedback">寫寫有關對呢個預覽嘅意見</string>
+<string name="PreviewFeedback">報告有關呢個預覽嘅錯誤</string>
 <string name="AccDescrEditing">編輯</string>
 <string name="AndMoreTypingGroup_few"></string>
 <string name="ResetAutomaticMediaDownloadAlertTitle">重設設定</string>
@@ -764,12 +798,14 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="UserRestrictionsNoChangeInfo">唔可以修改資訊</string>
 <string name="NotificationMessageGameScored">%1$s 喺【%2$s】入面攞倒 %3$s 分</string>
 <string name="ArchivedStickers">封存的貼圖</string>
+<string name="FilterAvailableText">開啟*設定 &gt; 資料夾*將你嘅對話整理到資料夾入面。</string>
 <string name="PasswordEmailInvalid">E-mail address 唔啱！請 check 吓啱唔啱然後再試過。</string>
 <string name="SetAdmins">設定 admin</string>
 <string name="LoopAnimatedStickers">循環播放動態貼圖</string>
 <string name="AutoNightDisabled">唔用</string>
 <string name="AccDescrShowAccounts">顯示帳户</string>
 <string name="NotificationMessageForwardFew">%1$s forward 咗 %2$s 畀你</string>
+<string name="FilterAddException">新增例外</string>
 <string name="AccDescrChanSilentOn">靜默傳送</string>
 <string name="UserRestrictionsApplyChangesText">你已經改咗呢個用户喺【%1$s】嘅權限，要即時生效？</string>
 <string name="formatterBannedUntilThisYear12H">M月d日ah:mm</string>
@@ -793,6 +829,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="TerminateWebSessionText">你真係要終止同 %1$s 嘅連線？</string>
 <string name="UserRestrictionsChangeInfo">修改群組資訊</string>
 <string name="LastSeenEverybody">所有人</string>
+<string name="FilterRemoveInclusionTitle">移除例外</string>
 <string name="SearchGifs">搜尋 GIF</string>
 <string name="AccDescrForwarding">轉發來自</string>
 <string name="BlockUsers">封鎖用户</string>
@@ -817,6 +854,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="PaymentCardInfo">付款資料</string>
 <string name="PrivacyForwardsTitle">Forward 你嘅 message 嗰陣，邊個可以加一條指去你嘅 account 嘅 link？</string>
 <string name="PinMessageAlertChat">你真係要喺對話入面將呢個 message 置頂？</string>
+<string name="FilterShowMoreChats_few"></string>
 <string name="PassportState">州／地區</string>
 <string name="ChatsException_two"></string>
 <string name="EditAdminRankInfo">將會向成員顯示自訂頭銜而唔係「%1$s」。</string>
@@ -829,8 +867,10 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="VoipRinging">響緊</string>
 <string name="AutoLockDisabled">唔用</string>
 <string name="SetAdminsAllInfo">所有成員都可以加新成員、置頂訊息、改 group 名同相。</string>
+<string name="Shares_zero"></string>
 <string name="EventLogRemovedLocation">un1 移除咗群組位置</string>
 <string name="formatterMonthYear">yyyy年M月</string>
+<string name="StickerSets_other">%1$s 套貼圖包</string>
 <string name="UpdateAppAlert">唔好意思，你用緊嘅 Telegram 版本處理唔到呢個操作，麻煩你 update Telegram。</string>
 <string name="ChangePhoneNumberInfo">將你嘅帳户、對話同媒體過去新號碼。</string>
 <string name="TerminateWebSessionInfo">撳一下嚟登出 Telegram。</string>
@@ -877,7 +917,8 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Points_many"></string>
 <string name="MembersCountSelected_other">已選擇 %1$d/%2$d</string>
 <string name="AllowReadCallLog">請准許 Telegram 存取通話紀錄，等我哋自動幫你輸入驗證碼。</string>
-<string name="PinToTopLimitReached">唔好意思，你最多只可以置頂 %1$s。如果你想將對話清單整理一下，可以試吓封存一啲對話 —「對話存檔」可以將無限嘅對話置頂。</string>
+<string name="PinToTopLimitReached">唔好意思，你最多只可以置頂 %1$s。如果想幫對話清單整理一下，可以試吓封存一啲對話 —「對話存檔」可以將無限嘅對話置頂。</string>
+<string name="FilterRemoveChats">移除對話</string>
 <string name="June">6月</string>
 <string name="BlockUserContactsTitle">聯絡人</string>
 <string name="HoursBold_zero"></string>
@@ -899,6 +940,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="UnhideFromTop">置頂</string>
 <string name="ChatsUnmute">取消靜音</string>
 <string name="NotificationActionPinnedRound">%1$s 喺【%2$s】置頂咗段 clip</string>
+<string name="FilterShowMoreChats_zero"></string>
 <string name="PaymentFailed">唔好意思，付款被拒。</string>
 <string name="PaymentShippingName">全名</string>
 <string name="NeverAllow">點都唔畀</string>
@@ -912,6 +954,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="EditName">改名</string>
 <string name="AccDescrShowKeyboard">顯示鍵盤</string>
 <string name="SearchMembers">揾成員</string>
+<string name="MasksRemovedInfo">%1$s 已經再唔係你嘅面具</string>
 <string name="VoipRequesting">要求緊</string>
 <string name="ApplyTheme">套用</string>
 <string name="SoftUserLimitAlert">開咗 group 之後，你可以加入更多用户，同埋升做 Supergroup。</string>
@@ -926,6 +969,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ShareLocation">位置</string>
 <string name="BytesSent">送出的流量</string>
 <string name="ShareFile">分享</string>
+<string name="FilterRemoveExclusionTitle">移除例外</string>
 <string name="PermissionXiaomiLockscreen">請批許 Telegram 顯示喺鎖定螢幕上面，令通話功能可以正常運作。</string>
 <string name="PollResults">民調結果</string>
 <string name="ForwardedContact_few"></string>
@@ -946,8 +990,9 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="PaymentPhoneToProvider">系統會將你嘅電話號碼傳畀 %1$s 作為結算資料。</string>
 <string name="KickFromSupergroup">限制用户</string>
 <string name="SharedMusicTab">音樂</string>
+<string name="Views_many"></string>
 <string name="ChatsSelectedClear_zero"></string>
-<string name="DebugClearLogs">Delete 日誌</string>
+<string name="DebugClearLogs">清除日誌</string>
 <string name="PassportDocumentNumber">證件號碼</string>
 <string name="DocumentsTitle">共享嘅檔案</string>
 <string name="NotificationsNewException">新增例外</string>
@@ -989,14 +1034,18 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="BlurLinear">線性</string>
 <string name="ChatBackground">背景牆紙</string>
 <string name="PassportPhoneUseSame">用 %1$s</string>
+<string name="DeleteStickerSetsAlertTitle">刪除 %1$s</string>
 <string name="SetUrlPlaceholder">連結</string>
+<string name="FilterUnread">未讀</string>
 <string name="DebugMenuImportContacts">匯入聯絡人</string>
 <string name="VoipWaiting">等緊</string>
 <string name="NotificationMessageSDPhoto">%1$s send 咗張限時相片畀你</string>
 <string name="PassportProvidedInformation">提供嘅資訊</string>
 <string name="PassportAddPassport">新增護照</string>
+<string name="GIFs_many"></string>
 <string name="AuthAnotherClientNotFound">揾唔倒驗證令牌</string>
 <string name="PassportEmailUploadInfo">注意：你將會喺你提供嘅電郵地址度收到一封包含驗證碼嘅郵件。</string>
+<string name="CreateNewFilter">建立資料夾</string>
 <string name="ForwardedLocation_few"></string>
 <string name="InstantViewReference">參考</string>
 <string name="ReportSpamUser">封鎖用户</string>
@@ -1006,6 +1055,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="PassportAddTranslationTemporaryRegistrationInfo">Upload 已驗證翻譯嘅臨時 reg. 掃描。</string>
 <string name="ChangeWallpaperToColor">你真係要將對話背景牆紙改做純色背景？</string>
 <string name="ScheduleMessage">排定訊息</string>
+<string name="StickerSets_zero"></string>
 <string name="SendByEnter">按 Enter 鍵送出訊息</string>
 <string name="MegaPrivateInfo">只有俾人 invite 或者經 invite link 嘅用户先可以入私人 group。</string>
 <string name="AddAnotherAccount">加入其他帳户</string>
@@ -1015,6 +1065,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Recipient_zero"></string>
 <string name="QuizInfo">提問模式只可以有一個正確答案；用户無法撤回答案。</string>
 <string name="IncorrectLocalization">語言配置檔案有問題</string>
+<string name="StickersRemovedInfo">%1$s 已經再唔係你嘅貼圖</string>
 <string name="NumberUnknown">唔知手機號碼</string>
 <string name="SyncContactsOff">呢部機嘅 contacts 將唔會加去呢個 account</string>
 <string name="CallMessageOutgoing">打出</string>
@@ -1042,6 +1093,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AndMoreTypingGroup_one"></string>
 <string name="ChannelCantOpenBanned">好可惜，你已經被禁止加入公開 group。</string>
 <string name="ThemeNotSupported">唔好意思，呢個顏色主題仲未 support 你部機。</string>
+<string name="FilterExcludeRead">排除已讀</string>
 <string name="EnterListName">輸入列表名</string>
 <string name="RemovedUser_one"></string>
 <string name="UserRestrictionsDisabled">喺 group 嘅權限入面，已經 set 咗所有成員都唔用呢個選項。</string>
@@ -1063,7 +1115,9 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="EditMessageMedia">撳一下編輯媒體</string>
 <string name="ChannelOtherMembers">其他成員</string>
 <string name="AutodownloadContacts">聯絡人</string>
+<string name="FilterChannels">頻道</string>
 <string name="PrivacyForwardsNobody">冇指向你嘅帳户嘅連結</string>
+<string name="Views_one"></string>
 <string name="PrivacyProfilePhotoTitle">邊個可以睇倒你嘅 profile pic？</string>
 <string name="ForwardedSticker_other">Forward %1$d 張 stickers</string>
 <string name="LanguageUnsupportedError">唔好意思，冇呢種語言。</string>
@@ -1084,6 +1138,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="OneResult">1 個結果</string>
 <string name="SearchStickersHint">揾貼圖包</string>
 <string name="AlwaysShareWith">幾時都畀佢知</string>
+<string name="FilterArchived">已封存</string>
 <string name="PaymentShippingStatePlaceholder">州／省</string>
 <string name="EmojiSuggestions">表情符號建議</string>
 <string name="RestoreEmailSent">我哋已經 send 咗一組備援驗證碼去你畀我地嘅 e-mail：
@@ -1106,6 +1161,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="TypePublic">公開</string>
 <string name="NotificationHiddenName">Telegram</string>
 <string name="OpenInBrowser">開喺…</string>
+<string name="ChannelVerifiedWarning">警告</string>
 <string name="LanguageUnofficial">唔係官方語言</string>
 <string name="SearchImagesInfo">搜尋網頁</string>
 <string name="AccActionPause">暫停</string>
@@ -1143,6 +1199,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="FloodWait">試咗太多次喇，請你遲啲再試過。</string>
 <string name="LinkInvalid">唔好意思，呢條 link 唔 work</string>
 <string name="WithinAMonth">呢個月有 online</string>
+<string name="ZoomOut">縮小</string>
 <string name="PublicPollCantForward">唔好意思，唔可以將記名民調 forward 去 channel。</string>
 <string name="NoEmojiFound">揾唔倒 emoji</string>
 <string name="WhoCanAddMembersAllMembers">係人都得</string>
@@ -1167,6 +1224,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="MasksCount_two"></string>
 <string name="ChatCamera">影相</string>
 <string name="SharedMediaTabFull2">共享的媒體</string>
+<string name="FilterSecretChats">私密聊天</string>
 <string name="SendLocation">傳送我而家嘅位置</string>
 <string name="UpdateApp">更新程式</string>
 <string name="LocalDocumentCache">文件</string>
@@ -1176,6 +1234,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="UpdatedMinutes_many"></string>
 <string name="UsernameInUse">唔好意思，呢個用户名已經俾其他人用咗</string>
 <string name="AccActionPlay">播放</string>
+<string name="ArchiveStickersAlertMessage">你真係要封存揀咗嘅貼紙包？</string>
 <string name="ReportSpam">舉報垃圾訊息</string>
 <string name="BackgroundPreview">背景預覽</string>
 <string name="AccDescrCancelEdit">取消編輯</string>
@@ -1201,6 +1260,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="BlockedUsers">黑名單</string>
 <string name="NotificationMessageGroupNoText">%1$s send 咗個 message 去【%2$s】</string>
 <string name="Channels_one"></string>
+<string name="Filters">資料夾</string>
 <string name="ShowVotes_one"></string>
 <string name="UserRestrictionsUntilForever">永遠</string>
 <string name="PassportAddressInfo">Upload 地址證明</string>
@@ -1220,6 +1280,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ChannelMessageStickerEmoji">%1$s post 咗張 %2$s sticker</string>
 <string name="ForwardedFile_many"></string>
 <string name="PollAnonymous">匿名投票</string>
+<string name="SharedGIFsTab2">GIF</string>
 <string name="SendingFile">Send 緊個 file…</string>
 <string name="P2PEverybody">所有人</string>
 <string name="VoipPeerOutdated"><![CDATA[<b>]]>%1$s<![CDATA[</b>]]> 嘅 Telegram 版唔支援語音通話，佢要 update 咗之後先可以同你通話。</string>
@@ -1237,6 +1298,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AttachStickersRestrictedForever">Admin 唔准你 send sticker。</string>
 <string name="NotificationHiddenChatName">Telegram</string>
 <string name="EventLogFilterPinnedMessages">置頂訊息</string>
+<string name="FilterRecommended">建議資料夾</string>
 <string name="SaveTheme">Save theme</string>
 <string name="PrivacyBots">機械人同網站</string>
 <string name="From">來自</string>
@@ -1321,6 +1383,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="CountOfResults_two"></string>
 <string name="PasteFromClipboard">喺剪貼簿貼上</string>
 <string name="YourEmailSkip">略過</string>
+<string name="StickersReorder">重新排序</string>
 <string name="AccActionTakePicture">影相</string>
 <string name="BlockUserChatsTitle">對話</string>
 <string name="PrivacyCallsP2PTitle">點對點傳輸通話</string>
@@ -1338,6 +1401,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="GroupDescription1">最多 200,000 個 member</string>
 <string name="GroupDescription2">永久嘅對話紀錄</string>
 <string name="SettingsNoRecent">冇最近嘅搜尋</string>
+<string name="ArchiveStickerSetsAlertTitle">封存 %1$s</string>
 <string name="MakeMyselfVisible">將我設為可見</string>
 <string name="MessageScheduledReminderNotification">📅 提醒</string>
 <string name="StickersRemove">移除</string>
@@ -1373,7 +1437,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Schedule">排程</string>
 <string name="WhoCanAddMembers">邊個可以帶人入嚟？</string>
 <string name="InvalidLastName">唔好意思，唔用得呢個姓</string>
-<string name="ChannelDeleteAlert">等等！Delete 呢個 channel 將會趕走所有成員，所有 posts 都會 delete 晒。你真係要 delete 咗佢？</string>
+<string name="ChannelDeleteAlert">等等！Delete 呢個 channel 將會趕走所有粉絲，所有 posts 都會 delete 晒。你真係要 delete 咗佢？</string>
 <string name="DeleteThemeTitle">刪除佈景主題</string>
 <string name="MessageNotifications">訊息通知</string>
 <string name="PaintDuplicate">複本</string>
@@ -1393,7 +1457,9 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Undo">復原</string>
 <string name="PassportSurnameCountry">姓（%1$s）</string>
 <string name="BotRestart">開返機械人</string>
+<string name="TodayAtFormattedWithToday">今日 %1$s</string>
 <string name="CountOfResults_zero"></string>
+<string name="FilterAllChatsShort">所有</string>
 <string name="Yellow">黃色</string>
 <string name="ActionPinnedText">un1 置頂咗「%1$s」</string>
 <string name="ChannelBroadcast">發帖</string>
@@ -1401,6 +1467,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Map">地圖</string>
 <string name="May">5月</string>
 <string name="Cancel">取消</string>
+<string name="FilterAlwaysShow">包括對話</string>
 <string name="AutoNightModeOff">閂咗自動夜間模式</string>
 <string name="ActionBotDocumentEmail">電郵地址</string>
 <string name="BlockedUsersCount_one"></string>
@@ -1416,6 +1483,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="NotificationMessageGroupRound">%1$s send 咗段 clip 去【%2$s】</string>
 <string name="ChatDeletedUndo">對話已刪除</string>
 <string name="ExternalFolderInfo">瀏覽外部儲存</string>
+<string name="Shares_two"></string>
 <string name="EnterCurrentPasscode">輸入你而家嘅密碼</string>
 <string name="MobileUsage">流動數據用量</string>
 <string name="NearbyVenue">或者揀一個地點</string>
@@ -1449,7 +1517,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AccDescrMsgNotPlayed">未播放</string>
 <string name="SendTodayAt">喺今日 HH:mm 送出</string>
 <string name="ForwardedAudio_many"></string>
-<string name="ChooseStickerSetMy">你可以用 @sticker 機械人整自己設計嘅貼圖包。</string>
+<string name="ChooseStickerSetMy">你可以用 @stickers 機械人整自己設計嘅貼圖包。</string>
 <string name="StopLiveLocationAlertToUser">你真係要停止同 %1$s share 你嘅實時位置？</string>
 <string name="PermissionNoLocation">Telegram 需要存取你嘅位置，等你可以同朋友 share。</string>
 <string name="ActionAddUserSelf">un1 返入嚟</string>
@@ -1482,6 +1550,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 
 佈景主題將會 base on 你而家揀咗嘅佈景主題同背景圖片。</string>
 <string name="AudioAutodownload">口訊</string>
+<string name="StickerSets_two"></string>
 <string name="Archive">封存</string>
 <string name="EditAdminDeleteMessages">刪除其他人嘅訊息</string>
 <string name="NetworkUsageRoamingTab">漫遊</string>
@@ -1557,6 +1626,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="BlockUsersMessage">你要禁止 **%1$s** send message 畀你同埋用 Telegram 打畀你？</string>
 <string name="AccDescrReplying">回覆至</string>
 <string name="NotificationsChannels">頻道</string>
+<string name="FilterRemoveExclusionText">你真係要喺始終排除嘅對話入面移除「%1$s」？</string>
 <string name="EnableProxyAlert">你真係用呢個網絡代理？</string>
 <string name="YourPasswordSuccessText">你嘅兩步驗證已經生效。</string>
 <string name="ChangePasscode">改密碼</string>
@@ -1622,6 +1692,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="UsernameInvalidShort">Username 最少要有 5 個字</string>
 <string name="GettingLinkInfo">攞緊連結資料…</string>
 <string name="PassportTwoDocuments">%1$s 或者 %2$s</string>
+<string name="FilterDiscardNewSave">建立</string>
 <string name="ReportChatViolence">暴力</string>
 <string name="Emoji1">表情與人物</string>
 <string name="ScreenCaptureInfo">如果閂咗佢，你就唔可以喺程式入面做 screen cap，但對話內容亦唔會喺程式切換器入面 show 出嚟。</string>
@@ -1634,11 +1705,13 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="NotificationsExceptionsAlert">留意返，**%1$s**已經被列為例外，係唔會受呢個更改影響到嘅。</string>
 <string name="VoipConnecting">駁緊</string>
 <string name="CreateTheme">建立佈景主題</string>
+<string name="FilterAllChats">所有對話</string>
 <string name="AllowFillNumber">唔該俾 Telegram 聽電話，等我哋可以自動確認你嘅手機號碼。</string>
 <string name="PaymentBillingAddress">帳單地址</string>
 <string name="AddStickersNotFound">揾唔到 sticker</string>
 <string name="Photos_few"></string>
 <string name="LowDiskSpaceTitle2">移除媒體</string>
+<string name="FilterChatTypes">對話種類</string>
 <string name="LastSeenDate">上次 online</string>
 <string name="AttachMusic">音樂</string>
 <string name="UserRestrictionsNoSendPolls">唔可以發起民意調查</string>
@@ -1665,7 +1738,8 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="NewMessages_many"></string>
 <string name="NobodyLikesSpam2">唔好意思，你暫時只可以將互相為聯絡人嘅用户加去 group。</string>
 <string name="NobodyLikesSpam3">唔好意思，你暫時唔可以喺公開 group send message。</string>
-<string name="NobodyLikesSpam1">唔好意思，目前你只能 send message 畀互相為聯絡人嘅用户。</string>
+<string name="NobodyLikesSpam1">唔好意思，你暫時只可以 send message 畀向互為聯絡人嘅用户。</string>
+<string name="FilterNonContacts">非聯絡人</string>
 <string name="Media_few"></string>
 <string name="PassportInfoUrl">https://telegram.org/faq#passport</string>
 <string name="UsernameAvailable">%1$s 冇人用緊</string>
@@ -1708,14 +1782,17 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ConnectingConnectProxy">駁去呢個 proxy</string>
 <string name="SaveToDownloads">儲到下載資料夾</string>
 <string name="DeleteGif">Delete GIF？</string>
+<string name="StickersReorderHint">移動貼圖嚟重新排序。</string>
 <string name="AutoNightUpdateLocation">更新位置</string>
 <string name="SmartNotificationsInfo">%2$s內 %1$d 次</string>
 <string name="EventLogInfoTitle">咩係最近操作？</string>
 <string name="EventLogEditedChannelPhoto">un1 轉咗頻道相片</string>
 <string name="NotificationMessageGroupDocument">%1$s send 咗個 file 去【%2$s】</string>
 <string name="NotificationMessageVideo">%1$s send 咗條片畀你</string>
+<string name="FilterNew">建立資料夾</string>
 <string name="SearchForPeople">揾人…</string>
 <string name="BadgeNumberUnread">統計未讀訊息數量</string>
+<string name="FilterDiscardTitle">套用更改？</string>
 <string name="TapToDownload">撳一下 download</string>
 <string name="SelectContact">揀 contact</string>
 <string name="AttachVideoExpired">條片已經過咗期</string>
@@ -1750,10 +1827,14 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Satellite">衞星</string>
 <string name="SharedMedia">共享嘅媒體</string>
 <string name="PaymentTransactionMessage">您確定要為 %3$s 將 %1$s 轉給 %2$s 機器人嗎？</string>
+<string name="DialogPin">置頂</string>
 <string name="ShareYouLocationUnableManually">手動選擇</string>
+<string name="GIFs_two"></string>
+<string name="FilterRemoveExclusionChatText">你真係要喺始終排除嘅對話入面移除「%1$s」？</string>
 <string name="ChatsSelectedClear_many"></string>
 <string name="NotificationActionPinnedPhotoChannel">%1$s 置頂咗張相</string>
 <string name="RecordingAudio">錄緊口訊…</string>
+<string name="AddUserErrorBlacklisted">唔好意思，你唔可以新增呢個用户，因為佢仲喺黑名單入面，而你唔可以幫佢解除封鎖。</string>
 <string name="TypePrivateGroup">私人</string>
 <string name="UnbanText">撳實用户嚟解除封鎖</string>
 <string name="ThemeInstallCount_one"></string>
@@ -1792,10 +1873,14 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="OpenInEditor">喺編輯器打開</string>
 <string name="ForwardedSticker_zero"></string>
 <string name="YouLeft">你由呢個 group 走咗</string>
+<string name="FilterNeverShow">排除對話</string>
+<string name="Views_zero"></string>
 <string name="DeleteAndExit">離開及刪除群組</string>
 <string name="DeleteBackground_two"></string>
 <string name="formatterBannedUntil12H">yyyy年M月d日ah:mm</string>
-<string name="CallNotAvailable">唔好意思，<![CDATA[<b>]]>%1$s<![CDATA[</b>]]> 唔聽電話。</string>
+<string name="InteractionsChartTitle">互動</string>
+<string name="CallNotAvailable">唔好意思，因為 %1$s 嘅私隱設定，你唔可以打畀佢。</string>
+<string name="FilterShowMoreChats_many"></string>
 <string name="BackgroundSearchColor">顏色：</string>
 <string name="LastSeenContactsPlus">我嘅聯絡人（+%1$d）</string>
 <string name="PassportAuthorize">批准</string>
@@ -1820,6 +1905,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AutoDownloadPm">私人對話</string>
 <string name="ArchivedChats">對話存檔</string>
 <string name="ChatYourSelfDescription3">喺邊部機都可以睇倒呢個對話</string>
+<string name="DeleteStickersAlertMessage">你真係要刪除揀咗嘅貼圖包？</string>
 <string name="ChatYourSelfDescription4">利用搜尋可以好快咁揾嘢</string>
 <string name="ChatYourSelfDescription1">Forward message 去呢度嚟留底</string>
 <string name="ChatYourSelfDescription2">Send 媒體同 file 嚟做 backup</string>
@@ -1841,11 +1927,13 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="VoipOngoingAlert">你而家同緊 **%1$s** 講電話。你想唔想收咗線先，然後再同 **%2$s** 講電話？</string>
 <string name="LogOutInfo">Logout 係會 close 晒呢部機嘅全部 Secret Chat。</string>
 <string name="AddOneMemberAlertTitle">新增成員</string>
+<string name="FilterEditAll">修改資料夾</string>
 <string name="AreYouSureDeleteSingleMessageMega">你真係要幫所有人 delete 呢個 message？</string>
 <string name="TelegramContacts_one"></string>
 <string name="AddMembersAlertTitle">新增 %1$s</string>
 <string name="items_other">%1$d 個項目</string>
 <string name="Videos_few"></string>
+<string name="GrowthChartTitle">成長</string>
 <string name="LiveLocationContext">實時位置</string>
 <string name="AccDescrSearchByUser">由用户篩選</string>
 <string name="OnlineCount_many"></string>
@@ -1860,6 +1948,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="NotificationActionPinnedPollChannel">%1$s 置頂咗個民調</string>
 <string name="Times_other">%1$d 次</string>
 <string name="ProfileJoinGroup">加入群組</string>
+<string name="GIFs_zero"></string>
 <string name="DaysBold_few"></string>
 <string name="SharedFilesTab">檔案</string>
 <string name="Events">事件</string>
@@ -1899,6 +1988,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="DeleteMessagesOption">取消傳送我的訊息</string>
 <string name="AutoDownloadOnMobileDataInfo">如果你要喺用緊流動數據嗰陣自動 download 媒體，請開咗佢。</string>
 <string name="SendContactToGroup">Send 個 contact去【%1$s】？</string>
+<string name="LoadingStats">載入統計資料中…</string>
 <string name="SlowModeHint">已經開咗冷靜模式。你要喺 %1$s 之後先可以 send 下一個 message。</string>
 <string name="WhoCanCallMe">邊個可以打畀你？</string>
 <string name="SentCallCode">我哋已經打緊電話去你嘅手機 **%1$s**。
@@ -1907,6 +1997,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="UnpinMessageAlertTitle">取消置頂</string>
 <string name="ResetAccountStatus">你可以喺以下時間之後 reset account︰</string>
 <string name="AreYouSureDeleteThisChatSavedMessages">你真係要刪除**我的收藏**？</string>
+<string name="FilterNameUnread">未讀</string>
 <string name="Option_many"></string>
 <string name="PrivacyPaymentsClear">清除航運同付款資料</string>
 <string name="Page2Title">傳送快速</string>
@@ -1914,6 +2005,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ChannelSettingsChangedAlert">你喺 channel 入面改咗啲 settings，要即時生效？</string>
 <string name="ServiceNotifications">服務通知</string>
 <string name="Years_other">%1$d 年</string>
+<string name="StickerSets_one"></string>
 <string name="MakeMyselfVisibleInfo">附近嘅用户將可以睇倒你嘅 profile 同埋 send message 畀你。咁樣可以幫你揾倒新朋友，但同時可能會引起太多關注。你可以隨時停止分享你嘅 profile。
 
 其他人係唔會睇到你嘅手機號碼。</string>
@@ -1933,8 +2025,9 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="VideosSelected_zero"></string>
 <string name="AlwaysShareWithTitle">幾時都畀佢知</string>
 <string name="TelegramPassport">Telegram 護照</string>
+<string name="FilterNoChats">冇對話</string>
 <string name="SharingYouAndOtherName">你同 %1$s</string>
-<string name="DebugSendLogs">Send 日誌</string>
+<string name="DebugSendLogs">傳送日誌</string>
 <string name="Files_other">%1$d 個檔案</string>
 <string name="PollExpand">展開</string>
 <string name="InviteToGroupByLink">用 link 請其他人入 group</string>
@@ -1942,7 +2035,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Months_zero"></string>
 <string name="UserBioEmpty">空白</string>
 <string name="ForwardedVideo_zero"></string>
-<string name="PrivacyForwardsMessageLine">李智能，您哋幾時開始換身份證？</string>
+<string name="PrivacyForwardsMessageLine">李智能，你哋幾時開始換身份證？</string>
 <string name="Seconds_other">%1$d 秒</string>
 <string name="ChannelMessageSticker">%1$s post 咗張 sticker</string>
 <string name="VoipOffline">你 offline 咗，請上返網先開始通話。</string>
@@ -1965,7 +2058,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ShortMessageLifetimeForever">關閉</string>
 <string name="Connecting">連線中…</string>
 <string name="ChatHistoryVisibleInfo">新成員可以睇返加入前嘅舊訊息。</string>
-<string name="PaymentPasswordEmailInfo">請輸入有效嘅電郵地址，呢個係唔記得密碼嗰陣嘅唯一解決方法。</string>
+<string name="PaymentPasswordEmailInfo">請輸入有效嘅電郵地址，呢個係唔記得密碼嗰陣嘅唯一解決途徑。</string>
 <string name="AreYouSureClearHistoryCacheFewChats">喺揀咗嘅對話入面 delete 所有快取文字內容同媒體？</string>
 <string name="DiscussionLinkGroupPublicAlert">你真係要將 **%1$s** set 做 **%2$s** 嘅討論群組？</string>
 <string name="DaysBold_one"></string>
@@ -1977,6 +2070,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ChannelSettingsTitle">頻道設定</string>
 <string name="AutoNightThemeOff">關閉</string>
 <string name="NotificationsOther">其他</string>
+<string name="FilterContacts">聯絡人</string>
 <string name="UnofficialApp">非官方程式</string>
 <string name="PaymentShippingSaveInfo">你可以儲存航運資料留返下次用。</string>
 <string name="GroupName">Group 名</string>
@@ -1994,6 +2088,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AutoDownloadOnWiFiData">連接到 Wi-Fi 時</string>
 <string name="AddMutual">加 contacts 去 channel</string>
 <string name="SuggestContactsInfo">搜尋結果會優先顯示你成日揾嘅人，等你可以快啲揾佢哋出嚟。</string>
+<string name="Views_other">%1$s 次閱覽</string>
 <string name="PassportSelectBithdayDate">選擇出生日期</string>
 <string name="EventLogPromotedChangeGroupInfo">改咗群組資訊</string>
 <string name="PassportNativeHeaderLang">你喺 %1$s 入面嘅名</string>
@@ -2037,12 +2132,13 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="ChannelPermissions">權限</string>
 <string name="Unarchive">取消封存</string>
 <string name="MoreInfo">其他資料</string>
+<string name="ClearSearchSingleAlertTitle">搜尋紀錄</string>
 <string name="ThemeArcticBlue">北極藍</string>
 <string name="DebugMenuEnableLogs">啟用日誌</string>
 <string name="LargeEmoji">大型 Emoji</string>
-<string name="TosDeclineDeleteAccount">警告！呢個操作將會永久刪除你嘅 Telegram 帳户同埋全部喺 Telegram 雲端儲存嘅數據，並且無得還原。
+<string name="TosDeclineDeleteAccount">警告！呢個操作將會永久 delete 你嘅 Telegram account 同埋全部喺 Telegram 雲端儲存嘅 data，而且無得還原。
 
-重要：你可以而家取消先，然後喺刪除帳户之前匯出你嘅數據，而唔係全部無晒。要咁做，請喺最新版本嘅 Telegram 桌面版，去設定入面揀「匯出 Telegram 資料」。</string>
+重要：你可以而家 cancel 先，然後喺 delete account 之前匯出你嘅 data，就唔會無晒啲資料。要咁做，請喺最新版本嘅 Telegram 桌面版，去設定 &gt; 進階 &gt; 匯出 Telegram 資料。 </string>
 <string name="SecondsBold_zero"></string>
 <string name="ActionChannelChangedPhoto">轉咗 channel 相</string>
 <string name="NotificationActionPinnedFile">%1$s 喺【%2$s】置頂咗個 file</string>
@@ -2058,6 +2154,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="AuthAnotherClient">使用 QR Code 登入</string>
 <string name="VideoMessagesAutodownload">短片</string>
 <string name="NotificationMessageStickerEmoji">%1$s send 咗張 %2$s sticker 畀你</string>
+<string name="StickersArchivedInfo">%1$s 已經移去存檔。</string>
 <string name="CountOfResults_few"></string>
 <string name="VoipHangingUp">收緊線</string>
 <string name="MessageScheduleEditTime">改期</string>
@@ -2105,6 +2202,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="MessageScheduleSend">現在傳送</string>
 <string name="Update">更新</string>
 <string name="AccDescrIVTitle">標題</string>
+<string name="DialogUnpin">取消置頂</string>
 <string name="ImportContacts">匯入聯絡人</string>
 <string name="MembersCountSelected_many"></string>
 <string name="ArchiveHintHeader3">置頂咗嘅對話</string>
@@ -2126,6 +2224,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="DirectShareInfo">喺手機分享選單入面顯示最近嘅聊天對象</string>
 <string name="LanguageTitle">更改語言？</string>
 <string name="TelegramPassportDelete">刪除 Telegram 護照</string>
+<string name="StickersBotInfo">歡迎設計師使用我哋嘅 @stickers 機械人嚟入佢地創作嘅貼圖包。</string>
 <string name="Times_zero"></string>
 <string name="ConfirmDeleteCallLog">你真係要喺通話紀錄入面 delete 呢個 item？</string>
 <string name="AutoDownloadVideos">影片</string>
@@ -2138,8 +2237,9 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="StopLiveLocationAlertAllText">你真係要停止分享你嘅實時位置？</string>
 <string name="ChatsSelectedClear_other">%1$d 個對話</string>
 <string name="ChannelNotifyMembersInfoOn">當你發帖嗰陣粉絲將會收到通知</string>
-<string name="YourEmailInfo">請輸入有效嘅電郵，呢個係你唔記得咗密碼嗰陣，還原帳户嘅唯一方法。</string>
+<string name="YourEmailInfo">請輸入有效嘅電郵地址，呢個係唔記得密碼嗰陣嘅唯一解決途徑。</string>
 <string name="YourPasswordSuccess">成功！</string>
+<string name="NoSharedGifSecret">喺呢個對話入面 share 過嘅 GIF\n都會放晒喺度。</string>
 <string name="AreYouSureSessionTitle">登出裝置</string>
 <string name="AddSubscriber">加新粉絲</string>
 <string name="NotificationGroupFew">%1$s send 咗 %3$s 去【%2$s】</string>
@@ -2173,6 +2273,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="LedColor">LED 顏色</string>
 <string name="PassportUploadAdditinalDocument">上載其他掃描</string>
 <string name="Photos_two"></string>
+<string name="FilterExclude">排除嘅對話</string>
 <string name="ChromeCustomTabsInfo">喺程式入面開啟外部連結</string>
 <string name="PassportMale">男</string>
 <string name="EventLogChangedGroupLink">un1 改咗群組連結</string>
@@ -2198,7 +2299,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Chats_few"></string>
 <string name="Subscribers_two"></string>
 <string name="AskAQuestion">提出疑問</string>
-<string name="ChannelUserAddLimit">唔好意思，你只能將頭 200 個成員加入去 channel，但如果係經 channel 嘅 invite link，就唔會有人數限制。</string>
+<string name="ChannelUserAddLimit">唔好意思，你只能將頭 200 個成員加去 channel，但如果係經 invite link 就唔會有人數限制。</string>
 <string name="ChangePhoneHelp">我哋會 send 一個附有驗證碼嘅 SMS 去你嘅新手機號碼。</string>
 <string name="UseLessDataOnMobile">只限用緊流動網絡時</string>
 <string name="ShowVotes_many"></string>
@@ -2207,6 +2308,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="Times_few"></string>
 <string name="DeleteFewChatsTitle">刪除 %1$s</string>
 <string name="TelegramContacts_few"></string>
+<string name="FilterIncludeInfo">選擇要出現喺呢個 folder 嘅對話同對話種類。</string>
 <string name="Hours_other">%1$d 個鐘</string>
 <string name="ActionCreateMega">開咗 group</string>
 <string name="Times_many"></string>
@@ -2231,6 +2333,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 
 你可以用 a-z、0-9 同底線。
 最少要有 5 個字。</string>
+<string name="FilterAddingChatsInfo">我們而家幫你整緊呢個 folder，請等一等…</string>
 <string name="ForwardTo">轉發去…</string>
 <string name="PrivacyTitle">私隱</string>
 <string name="Regular">標準</string>
@@ -2266,6 +2369,7 @@ Channel 入面嘅粉絲將會同時喺呢個 group 入面睇倒 post 出嚟嘅 m
 <string name="PassportUploadMaxReached">你唔可以上載多過 %1$s 個檔案。</string>
 <string name="SlowmodeHours">%1$dh</string>
 <string name="ChannelAddException">新增例外名單</string>
+<string name="Views_few"></string>
 <string name="AndMoreTyping_zero"></string>
 <string name="LinkInfo">所有裝咗 Telegram 嘅用户都可以用呢條 link 入你嘅 group。</string>
 <string name="ReportChatSpam">垃圾訊息</string>
@@ -2334,6 +2438,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="AndOther_zero"></string>
 <string name="AutodownloadSizeLimit">大小限制</string>
 <string name="ForwardedAudio_zero"></string>
+<string name="LanguagesChartTitle">語言</string>
 <string name="ChatYourSelfName">你</string>
 <string name="DiscussionInfo">加一個討論群組俾大家發表意見。</string>
 <string name="InternalFolderInfo">瀏覽檔案系統</string>
@@ -2346,6 +2451,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="ArchivedMasksInfo">你可以收藏最多 200 個面具。
 當你再加其他面具嗰陣，冇用過嘅面具將會自動封存。</string>
 <string name="Minutes_zero"></string>
+<string name="SlideUpToLock">向上拉嚟鎖定錄製</string>
 <string name="MapPreviewProviderGoogle">Google</string>
 <string name="LiveLocationAlertPrivate">選擇 %1$s 會睇倒你嘅位置嘅時間。</string>
 <string name="EventLogPromotedRemovedTitle">職稱</string>
@@ -2368,6 +2474,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="PublicPoll">記名投票</string>
 <string name="Hours_many"></string>
 <string name="Videos_many"></string>
+<string name="ViewsBySourceChartTitle">按來源檢視</string>
 <string name="AuthAnotherClientInfo2">用 Telegram 桌面版攞 QR code</string>
 <string name="AuthAnotherClientInfo3">Scan the QR code to connect your account.</string>
 <string name="DeleteAll">刪除所有</string>
@@ -2434,6 +2541,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="DiscussionLinkGroup">綁定群組</string>
 <string name="NoBlockedChannel2">俾 admin 趕走咗嘅用户唔可以再用 invite link 返入 channel。</string>
 <string name="RateCallSilentRemote">對方聽唔倒我講嘢</string>
+<string name="LoadingStatsDescription">我哋而家整緊圖表，請等一等。</string>
 <string name="PassportDeleteInfo">刪除</string>
 <string name="ScheduleWhenOnline">當 %1$s online 嗰陣送出</string>
 <string name="MarkAllAsRead">將全部標記做已讀</string>
@@ -2460,13 +2568,16 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="NoSharedVoiceSecret">喺呢個對話入面 share 過嘅口訊
 都會放晒喺度。</string>
 <string name="ArchivePinnedInfo">將對話存檔向左拉就可以收埋佢。</string>
+<string name="StickerSets_few"></string>
 <string name="LiveLocations">實時位置</string>
 <string name="RegisterText">輸入你嘅姓名</string>
 <string name="_tg_open_google_play">開啟 Google Play</string>
 <string name="AccessError">攞唔到料</string>
 <string name="RevokeAlert">你真係要撤換呢條 link？如果你真係咁做，就冇人可以再用佢嚟入 group。</string>
 <string name="Days_one"></string>
+<string name="FilterNameHint">資料夾名稱</string>
 <string name="SearchEmojiHint">揾 emoji</string>
+<string name="MasksArchived">面具已封存</string>
 <string name="SharedMediaTab">媒體</string>
 <string name="ChangePhoneNumberOccupied">號碼 %1$s 已經綁定咗去另一個 Telegram account 度。喺轉去新號碼之前，請 delete 嗰個 account 先。</string>
 <string name="ActionBotDocumentDriverLicence">駕駛執照</string>
@@ -2526,6 +2637,8 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="ForwardedPoll_two"></string>
 <string name="PleaseEnterCurrentPasswordTransfer">請輸入你嘅密碼嚟完成轉移。</string>
 <string name="AreYouSureDeleteVideoTitle">刪除影片</string>
+<string name="CreateNewFilterInfo">幫特定對話放入唔同嘅資料夾，
+對話清單會整齊啲，用起嚟亦方便啲。</string>
 <string name="GifsTab">GIF</string>
 <string name="PassportMainPage">主頁</string>
 <string name="BadgeNumber">未讀訊息數量提示</string>
@@ -2571,8 +2684,9 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="ChannelAdmin">管理員</string>
 <string name="PaymentPhoneEmailToProvider">系統會將你嘅電話同電郵傳畀 %1$s 作為結算資料。</string>
 <string name="PrivacyFloodControlError">唔好意思，已發出太多要求，所以而家改唔到私隱設定，麻煩遲啲再試。</string>
+<string name="GIFs_other">%1$d 張 GIF</string>
 <string name="EventLogChangedOwnership">已經將擁有權轉咗畀 %1$s</string>
-<string name="NoMediaSecret">喺呢個對話入面 share 過嘅相片同影片都會放晒喺度。</string>
+<string name="NoMediaSecret">喺呢個對話入面 share 過嘅相片同影片\n都會放晒喺度。</string>
 <string name="AccActionDownload">下載</string>
 <string name="PaymentWarningText">Telegram 和 %1$s 都不能存取您的信用卡資訊，信用卡細節只能由付款系統 %2$s 處理。
 
@@ -2613,6 +2727,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="LocalDatabaseClearText">你真係要清除快取入面嘅文字訊息？</string>
 <string name="PassportNativeHeader">你個名</string>
 <string name="AccDescrShutter">快門</string>
+<string name="FilterContact">聯絡人</string>
 <string name="TerminateSessionQuestion">喺呢部機度登出？</string>
 <string name="MarkAsUnread">標記為未讀</string>
 <string name="NotificationMessageContact">%1$s 同你 share 咗個聯絡人</string>
@@ -2638,6 +2753,8 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="Channels_many"></string>
 <string name="ActionChannelChangedTitle">Channel 名已經改做【un2】</string>
 <string name="EventLogRestrictedSendMedia">傳送媒體</string>
+<string name="FilterEdit">修改資料夾</string>
+<string name="FilterDiscardAlert">你已經 edit 咗呢個 folder，要 apply？</string>
 <string name="PaymentReceipt">收據</string>
 <string name="ActionBotDocumentPassportRegistration">護照申請書</string>
 <string name="NoAudioFilesInfo">你嘅音樂庫係無嘢嘅。</string>
@@ -2670,6 +2787,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="EventLogDefaultPermissions">改咗預設權限</string>
 <string name="NewThemePreviewLine3">*東京*而家係朝早 😎</string>
 <string name="DeleteTheseChats">刪除對話</string>
+<string name="StickersArchived">貼圖已封存</string>
 <string name="SlowmodeInfoSelected">成員要每隔 %1$s先 send 倒一個 message。</string>
 <string name="UserBioDetail">你可以自我介紹一下</string>
 <string name="Meters_one"></string>
@@ -2684,6 +2802,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="UserRestrictionsEmbedLinks">嵌入連結</string>
 <string name="QuizAnswers">提問答案</string>
 <string name="ChannelMessageAlbum">%1$s post 咗本 album</string>
+<string name="ClearSearchRemove">移除</string>
 <string name="SetAdminsTitle">管理員</string>
 <string name="ChatsArchived">對話已封存</string>
 <string name="PassportAddInternalPassport">新增內部護照</string>
@@ -2708,6 +2827,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="AutoDownloadVideosTitle">自動下載影片及 GIF</string>
 <string name="ChatHistoryHidden">睇唔倒</string>
 <string name="TapToChange">撳一下修改</string>
+<string name="FilterNoChatsToDisplay">揾唔倒對話</string>
 <string name="ChannelAlertText">Channel 係一個向大眾發佈帖文嘅新工具。</string>
 <string name="SetPasscodeInfo">用密碼鎖定個 app，其他人就用唔到佢。</string>
 <string name="VoipOfflineAirplaneTitle">飛航模式</string>
@@ -2732,6 +2852,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="ContactJob">工作</string>
 <string name="AccDescrRepeatOff">重覆，關閉</string>
 <string name="PassportPhone">手機號碼</string>
+<string name="FilterShowMoreChats_two"></string>
 <string name="PaymentPasswordEmailTitle">復原用嘅電郵信箱</string>
 <string name="MasksCount_one"></string>
 <string name="AskAQuestionInfo">留意返，Telegram 嘅技術支援係由義工提供。我哋會盡快覆返你，但都可能要啲時間。
@@ -2845,7 +2966,9 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="MessageScheduledBotAction">呢個操作將會喺訊息發佈之後用倒</string>
 <string name="OnlineCount_zero"></string>
 <string name="LanguageUnknownCustomAlert">唔好意思，呢個自訂語言【%1$s】入面係冇 Telegram Android 版嘅資料。</string>
+<string name="FilterDelete">移除資料夾</string>
 <string name="EditAdminTransferChangeOwner">更改擁有人</string>
+<string name="NoGIFs">冇 GIF</string>
 <string name="KMetersAway2">%1$s 公里外</string>
 <string name="CreateNewTheme">建立新佈景主題</string>
 <string name="Invite">邀請</string>
@@ -2918,12 +3041,13 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="NoRecentSearches">冇最近搜尋</string>
 <string name="Long">長</string>
 <string name="ChannelDelete">永久刪除頻道</string>
-<string name="MessageScheduledOn">安排喺 %1$s</string>
+<string name="MessageScheduledOn">安排咗喺 %1$s</string>
 <string name="OpenFile">開啟檔案</string>
 <string name="NotificationActionPinnedInvoice">%1$s 喺【%2$s】置頂咗張 invoice</string>
 <string name="SentAppCode">我哋已經將個 code send 咗去你第二部機嘅 **Telegram** 度。</string>
 <string name="NotificationActionPinnedGameChannel">%1$s 置頂咗隻 game</string>
 <string name="ThemePreviewDialog7">Nick</string>
+<string name="FilterRemoveInclusionUserText">你真係要喺始終包括嘅對話入面移除「%1$s」？</string>
 <string name="ThemePreviewDialog8">唐雅娜</string>
 <string name="SendingGif">Send 緊 GIF…</string>
 <string name="BotHelp">說明</string>
@@ -3013,16 +3137,19 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="PermissionNoCamera">Telegram 需要相機存取權，等你可以影相同錄影。</string>
 <string name="InviteTextNum_many"></string>
 <string name="SetTimer">設定閱後即焚定時器</string>
-<string name="CallsDataUsage">通話</string>
+<string name="CallsDataUsage">通話設定</string>
 <string name="NotificationsForGroups">群組通知</string>
 <string name="EventLogOriginalCaptionEmpty">空白</string>
+<string name="PinToTopLimitReached2">唔好意思，對話清單只可以將最多 %1$s置頂；「對話資料夾」同「對話存檔」就可以畀多啲對話置頂。</string>
 <string name="EventLogRestrictedPinMessages">置頂訊息</string>
 <string name="NotificationActionPinnedPoll2">%1$s 喺【%2$s】入面置頂咗一個民調「%3$s」</string>
 <string name="UseProxySponsorInfo">呢個 channel 係由你用緊嘅 proxy 顯示。要喺對話頁面度 delete 呢個 channel，請喺 Telegram 嘅設定入面閂咗嗰個 proxy。</string>
+<string name="FiltersSetupPinAlert">設定資料夾</string>
 <string name="ChatYourSelfTitle">你嘅雲端儲存</string>
 <string name="AppName">Telegram</string>
 <string name="ColorPickerBackground">背景</string>
 <string name="CropImage">裁剪圖片</string>
+<string name="FilterRemoveInclusionChatText">你真係要喺始終包括嘅對話入面移除「%1$s」？</string>
 <string name="NoBlockedChannel">俾人 block 咗嘅用户會被趕出 channel，如果要再入 channel，只可以由 admin 帶佢返嚟，唔可以用 invite link。</string>
 <string name="FavoriteStickers">我的最愛</string>
 <string name="EventLogFilterLeavingMembers">成員離開</string>
@@ -3043,6 +3170,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="InviteTextNum_two"></string>
 <string name="AccDescrBotCommands">機械人指令</string>
 <string name="FeaturedStickers">近期熱門貼圖</string>
+<string name="FilterDiscardNewTitle">建立資料夾？</string>
 <string name="EventLogEditedGroupPhoto">un1 轉咗群組相片</string>
 <string name="AccDescrPhotoViewer">相片檢視器</string>
 <string name="AndMoreTyping_two"></string>
@@ -3085,6 +3213,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="GalleryInfo">傳送唔壓縮嘅原圖</string>
 <string name="SendMessagesToGroup">Send 個 message 去【%1$s】？</string>
 <string name="DiscussionChannelHelp2">你喺 channel 入面發表嘅所有嘢都會轉發去呢個 group。</string>
+<string name="FilterEditItem">修改</string>
 <string name="NotificationMessageGroupStickerEmoji">%1$s send 咗張 %3$s sticker 去【%2$s】</string>
 <string name="TelegramPassportCreatePassword">建立密碼</string>
 <string name="VoipIncoming">來電</string>
@@ -3097,6 +3226,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="Statistics">統計</string>
 <string name="ThemeInstallCount_two"></string>
 <string name="PrivacyDeleteCloudDrafts">刪除所有雲端草稿</string>
+<string name="GIFs_one"></string>
 <string name="ConnectingToProxyEnable">駁去 proxy</string>
 <string name="Page4Message">Telegram 令你嘅 messages 保持安全
 唔會俾 hackers 入侵</string>
@@ -3135,7 +3265,9 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="YourEmailSkipWarning">警告</string>
 <string name="formatDateAtTime">%1$s %2$s</string>
 <string name="AreYouSureSecretChat">你真係要開始 Secret Chat？</string>
+<string name="FilterExcludeInfo">選擇唔要出現喺呢個 folder 嘅對話同對話種類。</string>
 <string name="TypePrivate">私人</string>
+<string name="FilterAddingChats">加緊對話入去</string>
 <string name="PrivacyForwards">轉發訊息</string>
 <string name="NoHandleAppInstalled">你冇任何程式可以處理 '%1$s' 嘅檔案類型，唔該先安裝一個以繼續</string>
 <string name="NotificationsPrioritySettings">同設定一樣</string>
@@ -3197,6 +3329,8 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="EventLogChangedLinkedChannel">un1 已經將呢個 group 綁定去 un2</string>
 <string name="PassportPhoneInfo">輸入你嘅手機號碼</string>
 <string name="Chats_zero"></string>
+<string name="FilterRemoveInclusionText">你真係要喺始終包括嘅對話入面移除「%1$s」？</string>
+<string name="FilterShowMoreChats_other">顯示另外 %1$d 個對話</string>
 <string name="AreYouSureDeleteSingleMessage">你真係要 delete 呢個 message？</string>
 <string name="Voice_zero"></string>
 <string name="PrivacyPhoneTitle">邊個可以睇倒你嘅手機號碼？</string>
@@ -3261,6 +3395,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="DeleteChatUser">刪除對話</string>
 <string name="ChatsSelectedClearCache_many"></string>
 <string name="MessageNotFound">揾唔倒訊息</string>
+<string name="FilterDeleteAlert">你真係要移除呢個 folder？咁係唔會 delete 你嘅對話。</string>
 <string name="Photos_many"></string>
 <string name="PrivacyForwardsContacts">只有以下設定准嗰陣</string>
 <string name="SortFirstName">名</string>
@@ -3268,7 +3403,9 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="InstallGoogleMaps">要安裝 Google 地圖？</string>
 <string name="PassportAddIdentityCardInfo">Upload 已驗證翻譯嘅身份證掃描。</string>
 <string name="SetReminder">設定提醒</string>
+<string name="SettingsDebug">除錯</string>
 <string name="NoChats">歡迎加入 Telegram</string>
+<string name="AddStickersInstalledInfo">%1$s 已經加咗去你嘅貼圖。</string>
 <string name="BlockedEmpty">沒有</string>
 <string name="EditAdmin">管理員權限</string>
 <string name="ChatHistoryHiddenInfo">新成員睇唔返加入前嘅舊訊息。</string>
@@ -3284,6 +3421,8 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="NewThemeTitle">新主題</string>
 <string name="AccDescrSearchPrev">上一個搜尋結果</string>
 <string name="PrivacyClearShipping">航運資料</string>
+<string name="FilterDiscardNewAlert">你仲未完成建立資料夾。而家建立？</string>
+<string name="ClearSearchSingleUserAlertText">你真係要喺搜尋紀錄入面刪除「%1$s」？</string>
 <string name="AndMoreTypingGroup_two"></string>
 <string name="AttachGif">GIF</string>
 <string name="TelegramFaqUrl">https://telegram.org/faq</string>
@@ -3296,6 +3435,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="NoMessages">未有訊息</string>
 <string name="AddMember">帶人入嚟</string>
 <string name="GpsDisabledAlert">你個 GPS 好似無開到，麻煩開返佢，因為要用嚟存取位置有關嘅功能。</string>
+<string name="Views_two"></string>
 <string name="LedDisabled">唔用</string>
 <string name="NotificationActionPinnedContactChannel">%1$s 置頂咗個 contact</string>
 <string name="PassportUploadNotImage">你只可以上載圖片檔案。</string>
@@ -3340,11 +3480,12 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="Videos_one"></string>
 <string name="TooManyCommunitiesHintCreate">唔好意思，你已經 join 咗太多 group 同 channel，你要 quit 咗一啲先可以再開新嘅。</string>
 <string name="ActionYouLeftUser">你由呢個 group 走咗</string>
+<string name="PreviewFeedback2">排版錯誤？</string>
 <string name="chatDate">M月d日 EEEE</string>
 <string name="EditAdminTransferChannelToast">**%1$s** 而家係 channel 嘅擁有人。</string>
 <string name="UsersCountTitle_few"></string>
 <string name="formatterStats24H">yyyy年M月d日 HH:mm</string>
-<string name="ChannelNotifyMembersInfoOff">當你發帖嗰陣粉絲只會收到無聲通知</string>
+<string name="ChannelNotifyMembersInfoOff">粉絲只會收到無聲通知</string>
 <string name="Shadows">陰影</string>
 <string name="ThemeResetToDefaults">重設到預設</string>
 <string name="SetUrlInvalidLong">連結唔可以多過 64 個字</string>
@@ -3403,6 +3544,8 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="TerminateAllWebSessions">從所有網站登出</string>
 <string name="Account">帳户</string>
 <string name="Times_two"></string>
+<string name="FilterNameNonMuted">未靜音的</string>
+<string name="TopHoursChartTitle">每小時觀看次數（UTC）</string>
 <string name="AutoDownloadOnUpToFor">%2$s最多 %1$s</string>
 <string name="AttachPhoto">相片</string>
 <string name="NotificationsForChats">訊息通知</string>
@@ -3457,17 +3600,20 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="PassportLanguage_ID">印尼文</string>
 <string name="WaitingForNetwork">上唔倒網…</string>
 <string name="PhoneNumberChange2">更改手機號碼</string>
+<string name="ClearSearchSingleChatAlertText">你真係要喺搜尋紀錄入面刪除「%1$s」？</string>
 <string name="PassportLanguage_CS">捷克文</string>
 <string name="ActionPinnedPoll">un1 置頂咗個民調</string>
 <string name="PassportLanguage_DE">德文</string>
 <string name="ReportSpamTitle">舉報垃圾訊息</string>
 <string name="ThemeSetUrlHelp">你可以用 a-z、0-9 同底線。
 最少要有 5 個字。</string>
+<string name="Shares_many"></string>
 <string name="PassportLanguage_DA">丹麥文</string>
 <string name="ShowInChat">喺對話入面顯示</string>
 <string name="FootsAway">%1$s 呎外</string>
 <string name="PaymentInvoice">發票</string>
 <string name="GroupUserCantAdmin">唔好意思，admin 人數已到咗上限。</string>
+<string name="GIFs_few"></string>
 <string name="PassportLanguage_BN">孟加拉文</string>
 <string name="AddPeopleNearby">尋找附近的人</string>
 <string name="PassportScanPassport">掃描你嘅護照</string>
@@ -3483,6 +3629,7 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="PassportLanguage_ET">愛沙尼亞文</string>
 <string name="UserRestrictionsNoInviteUsers">唔可以加新用户</string>
 <string name="PassportLanguage_ES">西班牙文</string>
+<string name="FilterGroups">群組</string>
 <string name="ChatSetThisLocation">設定這個位置</string>
 <string name="ChooseFromGallery">從媒體庫上載</string>
 <string name="OtherWebSessions">已連接嘅網站</string>
@@ -3510,4 +3657,5 @@ Logout 之後，所有喺呢部機嘅 Secret Chat 都會冇晒。</string>
 <string name="BackgroundPattern">圖案</string>
 <string name="EmpryUsersPlaceholder">新增用户</string>
 <string name="BackgroundColor">顏色</string>
+<string name="DeleteFromRecent">喺最近入面刪除</string>
 </resources>

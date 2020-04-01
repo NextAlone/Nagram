@@ -2526,6 +2526,7 @@ Telegram 团队</string>
 <string name="PaymentCardName">姓名</string>
 <string name="TodayAt">于</string>
 <string name="UserRestrictionsCustom">自定义</string>
+<string name="ArchiveHintText1">收到新消息时，已开启通知的对话将自动取消归档</string>
 <string name="ArchiveHintText2">当有新信息时，将静音对话移到归档中</string>
 <string name="UserRestrictionsInviteUsers">添加用户</string>
 <string name="CloseEditor">关闭编辑器</string>

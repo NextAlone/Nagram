@@ -9,7 +9,7 @@
 %1$sが確認できておりません。</string>
 <string name="PaymentConfirmationNewCard">別のカードを使う</string>
 <string name="ConnectingToProxyDisable">無効</string>
-<string name="PassportAddressNoUploadInfo">住所を入力してください</string>
+<string name="PassportAddressNoUploadInfo">住所を入力します</string>
 <string name="MinutesBold_few"></string>
 <string name="EventLogRestrictedSendStickers">ステッカーとGIFの送信</string>
 <string name="PassportLanguage_PL">Polish</string>
@@ -28,12 +28,13 @@
 <string name="UpdatedMinutes_few"></string>
 <string name="FontSizePreviewName">Bob Harris</string>
 <string name="AreYouSureSecretChatTitle">秘密のチャット</string>
+<string name="FilterInclude">含めるチャット</string>
 <string name="Chats_other">%1$d</string>
 <string name="HistoryClearedUndo">履歴を消去しました</string>
 <string name="InviteTextNum_few"></string>
 <string name="NotificationActionPinnedGeo">%1$sが%2$sで地図を留めました</string>
 <string name="GroupEmptyTitle1">グループを作成しました</string>
-<string name="PassportIdentityPassport">パスポートの写しを送信する</string>
+<string name="PassportIdentityPassport">パスポートの写しを送信します</string>
 <string name="PassportLanguage_RU">Russian</string>
 <string name="PassportLanguage_RO">Romanian</string>
 <string name="GroupEmptyTitle2">このグループで可能な内容：</string>
@@ -51,9 +52,11 @@
 <string name="NewMessages_zero"></string>
 <string name="AreTyping">が入力中</string>
 <string name="ColorCyan">水色</string>
+<string name="StickerSets_many"></string>
 <string name="PasscodePassword">パスワード</string>
 <string name="Add">追加する</string>
 <string name="ForwardedLocation_zero"></string>
+<string name="PassportPersonal">個人の詳細</string>
 <string name="EditAdminTransferSetPassword">パスワード</string>
 <string name="NotificationInvitedToGroup">%1$sが%2$sに招待しました</string>
 <string name="SyncContactsInfoOn">電話帳の中の電話番号を継続的に同期します。</string>
@@ -112,6 +115,7 @@ Telegramに招待しますか？</string>
 <string name="AccDescrReceivedDate">受信 %s</string>
 <string name="AnonymousPoll">投票中</string>
 <string name="SharedMediaTab2">メディア</string>
+<string name="download_telegram_text">**%s** にログインする為に、Telegramが必要です。インストールをはじめてもよろしいですか？</string>
 <string name="SetAsAdmin">許可を設定する</string>
 <string name="PasswordCode">コード</string>
 <string name="PassportLanguage_NL">Dutch</string>
@@ -167,11 +171,13 @@ Telegramに招待しますか？</string>
 <string name="ShareYouPhoneNumberTitle">電話番号を教えますか？</string>
 <string name="ShowNotificationsFor">通知の適用相手</string>
 <string name="NotificationsDeleteAllExceptionTitle">すべての例外を削除</string>
+<string name="SendDice">送信</string>
 <string name="SetUrlInvalidStartNumber">リンクの先頭は数字にはできません。</string>
 <string name="UseLessDataAlways">いつも</string>
 <string name="PrivacyBotsInfo">Telegramでログインしたサービスの情報です。</string>
 <string name="SortedByLastSeen">時間順</string>
 <string name="MapPreviewProviderYandex">Yandex</string>
+<string name="RemovedFromRecent">ステッカーが削除されました</string>
 <string name="IsRecordingAudio">%1$sが録音中</string>
 <string name="Agree">同意する</string>
 <string name="OtherSessions">その他の接続</string>
@@ -182,10 +188,13 @@ Telegramに招待しますか？</string>
 <string name="CallText">Telegramが発信するまで %1$d:%2$02d</string>
 <string name="ActionAddUserYou">un1が追加しました</string>
 <string name="ContactSupport">利用サポート</string>
+<string name="FilterReorder">タブを並べ替える</string>
 <string name="PollTapToSelect">ここを押した項目が正解になります</string>
 <string name="ThemeNameInvalid">不正なテーマ名です。</string>
 <string name="SetAdditionalPassword">パスワードを設定する</string>
+<string name="Shares_one"></string>
 <string name="AutoNightLocation">夕暮れから夜明けまで</string>
+<string name="FilterBots">ボット</string>
 <string name="IncorrectTheme">テーマファイルがおかしくなっています</string>
 <string name="VoipFailed">接続失敗</string>
 <string name="Theme">テーマ</string>
@@ -196,8 +205,10 @@ Telegramに招待しますか？</string>
 <string name="ResendCodeInfo">認証コードをメールアドレスに送信しました。</string>
 <string name="CallMessageOutgoingMissed">発信中止</string>
 <string name="AppNameBeta">Telegram</string>
+<string name="FilterNoChatsToDisplayInfo">このフォルダにチャットはありません。</string>
 <string name="MessageLifetimeChanged">%1$sがタイマーを%2$sにしました</string>
 <string name="PassportLanguage_TR">Turkish</string>
+<string name="FollowersChartTitle">フォロワー</string>
 <string name="PassportLanguage_SL">Slovenian</string>
 <string name="PassportLanguage_SK">Slovak</string>
 <string name="SendMessagesToText">このメッセージを**%1$s**に送信しますか？</string>
@@ -209,7 +220,10 @@ Telegramに招待しますか？</string>
 <string name="StickersShare">共有する</string>
 <string name="Subscribers_one"></string>
 <string name="SoundDefault">標準</string>
+<string name="FilterDeleteItem">削除</string>
 <string name="Users_zero"></string>
+<string name="LoopAnimatedStickersInfo">アニメーションは
+繰り返し再生されます。</string>
 <string name="NewMessages_few"></string>
 <string name="BackgroundColorSinglePreviewLine1">設定すると背景が変わります。</string>
 <string name="BackgroundColorSinglePreviewLine2">設定をお楽しみください。</string>
@@ -230,6 +244,7 @@ Telegramに招待しますか？</string>
 <string name="SupportStatus">サポート</string>
 <string name="NotificationsExceptions">例外</string>
 <string name="Stickers_many"></string>
+<string name="FilterAvailableTitle">チャットのフォルダ</string>
 <string name="MinutesBold_many"></string>
 <string name="PassportLanguage_UK">Ukrainian</string>
 <string name="SetUrlInvalidShort">リンクには半角5文字以上が必要です。</string>
@@ -253,6 +268,7 @@ Telegramに招待しますか？</string>
 <string name="AreYouSureDeleteThisChatWithGroup">%1$sを削除しますか？</string>
 <string name="Members_zero"></string>
 <string name="NewThemePreviewReply2">Good morning</string>
+<string name="FilterExcludeMuted">ミュートした内容を除外</string>
 <string name="Edit">編集</string>
 <string name="AccDescrProfilePicture">自己紹介写真</string>
 <string name="PermissionStorage">写真やビデオ、音楽などの送信や保存のために、
@@ -261,6 +277,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="ChannelMute">ミュートを設定する</string>
 <string name="CreateNewContact">新しい連絡先</string>
 <string name="SendingGame">ゲーム中です</string>
+<string name="Shares_other">%1$s 共有</string>
 <string name="EditAdminBanUsers">登録相手の削除</string>
 <string name="Code">コード</string>
 <string name="AutoNightSystemDefault">システムの標準</string>
@@ -282,6 +299,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 どこからでもアクセスできます。</string>
 <string name="PermissionNoAudio">Telegramにマイクへのアクセスを許可する事で音声が送信できるようになります。</string>
 <string name="PollOptions">項目</string>
+<string name="PassportAddTranslationBillInfo">公共料金領収書の英語翻訳謄本の写しを送信します。</string>
 <string name="UserRestrictionsNoPinMessages">固定なし</string>
 <string name="ChannelAddMembers">読者を追加する</string>
 <string name="PeopleNearbyAllowAccess">アクセスを許可する</string>
@@ -319,6 +337,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="EventLogGroupJoined">un1が参加しました</string>
 <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
 <string name="AreYouSureUnblockContact">本当にブロックを解除しますか？</string>
+<string name="FilterAddChats">含める対象を追加</string>
 <string name="VoipCallEnded">通話終了</string>
 <string name="YouWereKicked">除外されました</string>
 <string name="ForwardedMessage">転送メッセージ</string>
@@ -326,6 +345,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="StopLiveLocationAlertToUserText">**%1$s**との現在地の共有を終了しますか？</string>
 <string name="Disconnect">切断する</string>
 <string name="GlobalSearch">検索結果</string>
+<string name="FiltersSetup">セットアップ</string>
 <string name="EventLogPromotedPostMessages">メッセージの投稿</string>
 <string name="GroupSettingsChangedAlert">変更した設定を適用しますか？</string>
 <string name="NoAudioFoundInfo">**%1$s**はありませんでした。</string>
@@ -342,7 +362,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="PopupEnabled">有効</string>
 <string name="InvalidCode">不正なコードです</string>
 <string name="ChatsNearbyHeader">近くのグループ</string>
-<string name="ActionBotDocumentUtilityBill">電気・ガス・水道料金などの請求書</string>
+<string name="ActionBotDocumentUtilityBill">公共料金の領収書</string>
 <string name="MusicInfo">音楽を送信</string>
 <string name="ForwardedVideo_two"></string>
 <string name="ChannelPublicEmptyUsernameTitle">リンクを選択</string>
@@ -351,10 +371,12 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="Support">サポート</string>
 <string name="VoipExchangingKeys">暗号鍵を交換しています</string>
 <string name="InstantView">続きを表示する</string>
+<string name="IVInteractionsChartTitle">相互</string>
 <string name="DeleteMega">解散する</string>
 <string name="TextSelectionHit">単語を押したままカーソルを移動して、コピーする文章を選択します。</string>
 <string name="AccDescrPageDown">最後まで下がる</string>
 <string name="ActionYouChangedTitle">「un2」に改名しました</string>
+<string name="MasksArchivedInfo">%1$sを保管しました。</string>
 <string name="MinutesBold_one"></string>
 <string name="PaymentCardExpireDate">MM/YY</string>
 <string name="ThemePreviewSongTitle">True Survivor</string>
@@ -377,6 +399,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="LastSeenContacts">連絡先のみ</string>
 <string name="NotificationActionPinnedQuiz2">%1$sが"%3$s"を%2$sで留めました</string>
 <string name="UserBio">自己紹介</string>
+<string name="FilterRead">既読</string>
 <string name="NotificationGroupKickMember">%1$sが%3$sを%2$sから削除しました</string>
 <string name="PrivacyAddAnException">利用者かグループを追加</string>
 <string name="NotificationActionPinnedText">%1$sが"%2$s"を%3$sで留めました</string>
@@ -399,6 +422,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="ForwardedContact_two"></string>
 <string name="AutoDownloadCustom">カスタム</string>
 <string name="FeaturedStickersInfo">@stickersを用いて作る事も可能です。</string>
+<string name="FilterChats">チャット</string>
 <string name="August">8月</string>
 <string name="Copy">コピー</string>
 <string name="PassportNoPolicy">ドキュメントを直接%1$sに送信し、@%2$sからメッセージを送信できるようにします。</string>
@@ -445,6 +469,7 @@ Telegramチーム</string>
 この内容は中止も可能です。</string>
 <string name="AccDescrPasscodeLock">ロックする</string>
 <string name="CreateNewThemeMenu">新しいテーマ</string>
+<string name="TelegramPassportDeleteAlert">Telegram Passportを削除しても宜しいですか？</string>
 <string name="SentCallOnly">認証コードを送信するため**%1$s**に発信しています。</string>
 <string name="DeleteContact">連絡先を削除する</string>
 <string name="AccountAlreadyLoggedIn">登録済みのアカウントです。</string>
@@ -465,12 +490,15 @@ Telegramチーム</string>
 <string name="items_one"></string>
 <string name="DiscussionChannelGroupSetHelp">**%1$s**へのリンクは
 すべての読者の画面下に表示されます。</string>
+<string name="PassportEmailVerifyInfo">%1$s に送られた認証コードを入力して下さい。</string>
 <string name="AccDescrContactSorting">順番を並べ替える</string>
 <string name="ThemePreviewTitle">Reinhardt</string>
+<string name="RecentPosts">最近の投稿</string>
 <string name="LastSeenTitle">誰に既読を表示しますか？</string>
 <string name="TelegramContacts_many"></string>
 <string name="UsernameInvalidStartNumber">ユーザー名の先頭は数字にはできません。</string>
 <string name="UsbActive">USB転送可</string>
+<string name="Shares_few"></string>
 <string name="ChannelDeleteFromList">この相手を削除する</string>
 <string name="ColorDark">暗</string>
 <string name="ShareTelegram">Telegramを共有</string>
@@ -523,6 +551,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="Devices">端末の設定</string>
 <string name="AreYouSureDeletePhotoTitle">写真を削除</string>
 <string name="SettingsRecent">最近の検索内容</string>
+<string name="NewFollowersBySourceChartTitle">ソース別の新しいフォロワー</string>
 <string name="PassportResidentialAddress">住所</string>
 <string name="Months_other">%1$dヶ月</string>
 <string name="ForwardedSticker_one"></string>
@@ -537,6 +566,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="AccDescrPlayerSpeed">2倍 プレイバック</string>
 <string name="AddStickersInstalled">ステッカーを追加しました</string>
 <string name="AreYouSureBlockContact2">本当に**%1$s**をブロックしますか？</string>
+<string name="ShowAllGIFs">すべてのGIFを表示</string>
 <string name="PassportNoDocumentsAdd">ドキュメントを追加する</string>
 <string name="ThemePreview">テーマプレビュー</string>
 <string name="DiscussChannel">チャンネル</string>
@@ -556,6 +586,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="VibrationDisabled">無効</string>
 <string name="NoPlacesFoundInfo">%1$sはあなたの近くにいません。</string>
 <string name="Files_many"></string>
+<string name="FilterShowMoreChats_one"></string>
 <string name="NewMessages_one"></string>
 <string name="PassportResidence">お住まいの場所</string>
 <string name="ForwardedPhoto_zero"></string>
@@ -566,6 +597,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="MegaLeaveAlert">グループを退出しますか？</string>
 <string name="BytesReceived">受信バイト</string>
 <string name="NotificationsLedInfo">通知を知らせる光の色が指定できます。</string>
+<string name="FilterRemoveExclusionUserText">「%1$s」を項目から削除しますか？</string>
 <string name="P2PEnabledWith">P2Pを誰に許可しますか？</string>
 <string name="PassportCountry">国</string>
 <string name="SearchFriends">連絡先を検索する</string>
@@ -593,6 +625,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="Page4Title">安全</string>
 <string name="ChooseStickerSetNotFoundInfo">やり直すかリストからお選びください</string>
 <string name="VoipBusy">応答不可</string>
+<string name="FilterNonContact">連絡先以外</string>
 <string name="EditAdminGroupTransfer">グループの所有権を譲渡する</string>
 <string name="TurnPasswordOffQuestion">パスワードを無効にしますか？</string>
 <string name="PinMessage">固定</string>
@@ -603,7 +636,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 2.受信したメールのリンクをクリック。</string>
 <string name="UserRestrictionsSendPolls">投票の送信</string>
 <string name="PassportStreet2">通り</string>
-<string name="PassportStreet1">番地以降</string>
+<string name="PassportStreet1">番地</string>
 <string name="AccActionEnterSelectionMode">選択モードに入る</string>
 <string name="StopLiveLocationAlertToGroupText">**%1$s**との現在地の共有を終了しますか？</string>
 <string name="NotificationContactNewPhoto">%1$s が自己紹介の写真を更新しました</string>
@@ -612,11 +645,13 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="DeleteTheme">テーマを削除</string>
 <string name="UseProxyTelegram">MTProto</string>
 <string name="PhoneHome">自宅</string>
+<string name="NotificationsChartTitle">通知</string>
 <string name="ChangePermissions">制限を設定する</string>
 <string name="PhotoCaption">写真の説明文</string>
 <string name="AddToExistingContact">既存の連絡先に追加する</string>
 <string name="NotificationMessageGroupInvoice">%1$sが%2$sに%3$sを請求しました</string>
 <string name="Italic">斜体</string>
+<string name="PinFolderLimitReached">これ以上チャットを固定する事はできません。</string>
 <string name="ForwardedMusic_other">転送された音楽 %1$d</string>
 <string name="EventLogStopPoll">un1が締め切りました：</string>
 <string name="NoMedia">共有した写真やビデオは
@@ -625,9 +660,11 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="SendGifPreview">GIFを送信する</string>
 <string name="MessagePreview">内容の一部を表示</string>
 <string name="TintShadows">影</string>
+<string name="FilterExcludeArchived">保管した内容を除外</string>
 <string name="PassportMidname">ミドルネーム</string>
 <string name="LocationUpdated">更新</string>
 <string name="ChannelJoinTo">「%1$s」を登録しますか？</string>
+<string name="AddMasksInstalledInfo">%1$sをマスクに追加しました。</string>
 <string name="SetPasscode">暗証番号を設定する</string>
 <string name="ContactsPermissionAlertNotNow">許可しない</string>
 <string name="SharedAudioFiles">音楽</string>
@@ -650,6 +687,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="ChannelAdministrator">管理人</string>
 <string name="RecentFiles">最近使用したファイル</string>
 <string name="ContactJobTitle">役職</string>
+<string name="FilterMuted">ミュート</string>
 <string name="AccActionRecordVideo">ビデオを録画</string>
 <string name="YourEmailAlmostThereText">2段階認証に必要なメールを送信しました。本文のリンクをクリックしてください。届いていなければ迷惑メールとして受信しているかもしれません。</string>
 <string name="NearbyCreateGroupInfo2">この地域とは無関係のグループを
@@ -671,6 +709,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="Decline">拒否する</string>
 <string name="RestorePasswordNoEmailTitle">すみません</string>
 <string name="SetRecoveryEmail">回復用のメールアドレスを設定する</string>
+<string name="DiceInfo">Telegramで数値をランダムに取得するには、チャットに🎲の絵文字を送信します。</string>
 <string name="PassportNoDocumentsInfo">あなたの電話番号、メールアドレス、身分証明、住所を保存して使用する事ができます。</string>
 <string name="RepeatNotifications">通知の繰り返し時間</string>
 <string name="SecretWebPageInfo">プレビューはTelegramのサーバーで作られますが
@@ -745,8 +784,9 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="NotificationMessageText">%1$s: %2$s</string>
 <string name="SelectImage">画像を選択する</string>
 <string name="EmailCopied">メールアドレスをコピーしました</string>
+<string name="DiceInfo2">**サイコロ**の絵文字は送ると回転します。</string>
 <string name="DiscussionUnlinkChannelAlert">本当に**%1$s**のリンクをこのチャンネルから外しますか？</string>
-<string name="PreviewFeedback">感想を残す</string>
+<string name="PreviewFeedback">バグを報告する</string>
 <string name="AccDescrEditing">編集</string>
 <string name="AndMoreTypingGroup_few"></string>
 <string name="ResetAutomaticMediaDownloadAlertTitle">設定を初期化する</string>
@@ -771,6 +811,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="YouCreatedBroadcastList">同時送信リストを作成しました</string>
 <string name="AndMoreTypingGroup_other">%1$sと他%2$d人が入力中</string>
 <string name="ForwardedContact_zero"></string>
+<string name="PassportDeleteAddressAlert">住所情報を削除してもよろしいですか？</string>
 <string name="SendingPhoto">写真を送信中</string>
 <string name="DeclineDeactivate">同意しない</string>
 <string name="EventLogRestrictedSendPolls">投票の送信</string>
@@ -794,12 +835,14 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="UserRestrictionsNoChangeInfo">情報を変更できません</string>
 <string name="NotificationMessageGameScored">%1$sが%2$sで%3$sのスコアを出しました</string>
 <string name="ArchivedStickers">保管したステッカー</string>
+<string name="FilterAvailableText">*設定 &gt; フォルダ*を開き、チャットをフォルダに保管します。</string>
 <string name="PasswordEmailInvalid">不正なメールアドレスです</string>
 <string name="SetAdmins">管理許可を設定する</string>
 <string name="LoopAnimatedStickers">繰り返し再生する</string>
 <string name="AutoNightDisabled">使用しない</string>
 <string name="AccDescrShowAccounts">アカウントを表示する</string>
 <string name="NotificationMessageForwardFew">%1$sが%2$sを転送しました</string>
+<string name="FilterAddException">例外を追加</string>
 <string name="AccDescrChanSilentOn">通知せずに送信する</string>
 <string name="UserRestrictionsApplyChangesText">変更した%1$sを適用しますか？</string>
 <string name="formatterBannedUntilThisYear12H">MMM dd日 a h:mm</string>
@@ -823,6 +866,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="TerminateWebSessionText">%1$sとの接続を終了しますか？</string>
 <string name="UserRestrictionsChangeInfo">設定情報の編集</string>
 <string name="LastSeenEverybody">誰でも</string>
+<string name="FilterRemoveInclusionTitle">項目から削除</string>
 <string name="SearchGifs">GIF検索</string>
 <string name="AccDescrForwarding">転送元</string>
 <string name="BlockUsers">ブロックする</string>
@@ -849,6 +893,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="PaymentCardInfo">決済情報</string>
 <string name="PrivacyForwardsTitle">誰にアカウントへのリンクを許可しますか？</string>
 <string name="PinMessageAlertChat">本当に上部に固定しますか？</string>
+<string name="FilterShowMoreChats_few"></string>
 <string name="PassportState">都道府県</string>
 <string name="ChatsException_two"></string>
 <string name="EditAdminRankInfo">設定した内容は%1$sの代わりに表示されます。</string>
@@ -861,8 +906,10 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="VoipRinging">呼び出し中</string>
 <string name="AutoLockDisabled">無効</string>
 <string name="SetAdminsAllInfo">全員に招待とグループ編集の権限を与えます。</string>
+<string name="Shares_zero"></string>
 <string name="EventLogRemovedLocation">un1が地域グループを削除</string>
 <string name="formatterMonthYear">yyyy'年' MMMM</string>
+<string name="StickerSets_other">%1$s ステッカー</string>
 <string name="UpdateAppAlert">古いアプリのためリクエストを処理できません。Telegramを更新してください。</string>
 <string name="ChangePhoneNumberInfo">内容はそのままに電話番号を変更します。</string>
 <string name="TerminateWebSessionInfo">終了を希望する場合はその相手を押します。</string>
@@ -911,7 +958,10 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="Points_many"></string>
 <string name="MembersCountSelected_other">%1$d / %2$d を選択</string>
 <string name="AllowReadCallLog">コードを自動的に入力することができるようTelegramに通話記録の読み込みを許可してください。</string>
-<string name="PinToTopLimitReached">固定は%1$s個までとなっております。</string>
+<string name="PinToTopLimitReached">この画面では%1$s個まで固定できます。
+
+チャットフォルダと保管庫には、より多くのチャットを固定できます。</string>
+<string name="FilterRemoveChats">含めない対象を追加</string>
 <string name="June">6月</string>
 <string name="BlockUserContactsTitle">連絡先</string>
 <string name="HoursBold_zero"></string>
@@ -933,6 +983,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="UnhideFromTop">留める</string>
 <string name="ChatsUnmute">ミュート解除</string>
 <string name="NotificationActionPinnedRound">%1$sが%2$sでビデオメッセージを留めました</string>
+<string name="FilterShowMoreChats_zero"></string>
 <string name="PaymentFailed">この決済は拒否されました。</string>
 <string name="PaymentShippingName">名前</string>
 <string name="NeverAllow">許可しない</string>
@@ -946,8 +997,9 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="EditName">名前を編集</string>
 <string name="AccDescrShowKeyboard">キーボードを開く</string>
 <string name="SearchMembers">検索する</string>
+<string name="MasksRemovedInfo">%1$sはマスクに含まれなくなりました。</string>
 <string name="VoipRequesting">接続中</string>
-<string name="ApplyTheme">適用する</string>
+<string name="ApplyTheme">適用</string>
 <string name="SoftUserLimitAlert">グループにより多くの相手を登録したい場合はスーパーグループに変更してください。</string>
 <string name="EventLogPromotedPinMessages">メッセージの固定</string>
 <string name="ChannelPublicInfo">検索の結果から誰でも自由に登録できます。</string>
@@ -960,6 +1012,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="ShareLocation">位置情報</string>
 <string name="BytesSent">送信バイト</string>
 <string name="ShareFile">共有する</string>
+<string name="FilterRemoveExclusionTitle">項目から削除</string>
 <string name="PermissionXiaomiLockscreen">通話が機能するよう、Telegramをロック画面に表示してください。</string>
 <string name="PollResults">投票結果</string>
 <string name="ForwardedContact_few"></string>
@@ -981,6 +1034,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="PaymentPhoneToProvider">電話番号は決済情報として %1$s に送られます。</string>
 <string name="KickFromSupergroup">行動を制限する</string>
 <string name="SharedMusicTab">音楽</string>
+<string name="Views_many"></string>
 <string name="ChatsSelectedClear_zero"></string>
 <string name="DebugClearLogs">ログを削除する</string>
 <string name="PassportDocumentNumber">旅券番号</string>
@@ -1028,22 +1082,28 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="BlurLinear">リニア</string>
 <string name="ChatBackground">背景を編集</string>
 <string name="PassportPhoneUseSame">%1$s を使用</string>
+<string name="DeleteStickerSetsAlertTitle">削除 %1$s</string>
 <string name="SetUrlPlaceholder">リンク</string>
+<string name="FilterUnread">未読</string>
 <string name="DebugMenuImportContacts">連絡先を取り込む</string>
 <string name="VoipWaiting">待機中</string>
 <string name="NotificationMessageSDPhoto">%1$sが消える写真を送信</string>
 <string name="PassportProvidedInformation">登録した個人情報</string>
 <string name="PassportAddPassport">パスポートを追加</string>
+<string name="GIFs_many"></string>
 <string name="AuthAnotherClientNotFound">認証のトークンが見つかりません。</string>
 <string name="PassportEmailUploadInfo">入力したメールアドレスに確認コードが届きます。</string>
+<string name="CreateNewFilter">フォルダを作成</string>
 <string name="ForwardedLocation_few"></string>
 <string name="InstantViewReference">参照</string>
 <string name="ReportSpamUser">相手をブロック</string>
 <string name="Reset">初期化</string>
 <string name="NetworkUsageMobileTab">モバイル</string>
 <string name="PopupDisabled">無効</string>
+<string name="PassportAddTranslationTemporaryRegistrationInfo">臨時登録書の英語翻訳謄本の写しを送信する。</string>
 <string name="ChangeWallpaperToColor">この色を壁紙にしますか？</string>
 <string name="ScheduleMessage">送信を予約する</string>
+<string name="StickerSets_zero"></string>
 <string name="SendByEnter">改行キーを押して送信する</string>
 <string name="MegaPrivateInfo">招待リンクを知る相手だけが登録できます。</string>
 <string name="AddAnotherAccount">アカウントを追加する</string>
@@ -1053,6 +1113,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="Recipient_zero"></string>
 <string name="QuizInfo">クイズの正解は1つにしてください。</string>
 <string name="IncorrectLocalization">言語ファイルが壊れています</string>
+<string name="StickersRemovedInfo">%1$sはステッカーに含まれなくなりました。</string>
 <string name="NumberUnknown">不明</string>
 <string name="SyncContactsOff">同期設定を無効にしました</string>
 <string name="CallMessageOutgoing">音声発信</string>
@@ -1078,6 +1139,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="AndMoreTypingGroup_one"></string>
 <string name="ChannelCantOpenBanned">残念ながら公開グループへの参加が禁止されています。</string>
 <string name="ThemeNotSupported">このテーマはあなたの端末では設定できません。</string>
+<string name="FilterExcludeRead">既読を除外</string>
 <string name="EnterListName">リスト名を入れてください</string>
 <string name="RemovedUser_one"></string>
 <string name="UserRestrictionsDisabled">制限はグループ全体に適用されます。</string>
@@ -1099,7 +1161,9 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="EditMessageMedia">押すとメディアが差し替えられます</string>
 <string name="ChannelOtherMembers">その他の参加者</string>
 <string name="AutodownloadContacts">電話番号を交換した相手</string>
+<string name="FilterChannels">チャンネル</string>
 <string name="PrivacyForwardsNobody">ここのリンクは作らない</string>
+<string name="Views_one"></string>
 <string name="PrivacyProfilePhotoTitle">誰に自己紹介の写真を見せますか？</string>
 <string name="ForwardedSticker_other">転送されたステッカー %1$d</string>
 <string name="LanguageUnsupportedError">その言語はありません。</string>
@@ -1120,6 +1184,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="OneResult">1件</string>
 <string name="SearchStickersHint">ステッカーを検索</string>
 <string name="AlwaysShareWith">許可する</string>
+<string name="FilterArchived">保管</string>
 <string name="PaymentShippingStatePlaceholder">都道府県</string>
 <string name="EmojiSuggestions">絵文字の提案</string>
 <string name="RestoreEmailSent">回復用のコードを
@@ -1141,6 +1206,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="TypePublic">公開</string>
 <string name="NotificationHiddenName">Telegram</string>
 <string name="OpenInBrowser">アプリを選択</string>
+<string name="ChannelVerifiedWarning">警告</string>
 <string name="LanguageUnofficial">非公式ファイル</string>
 <string name="SearchImagesInfo">検索</string>
 <string name="AccActionPause">一時停止</string>
@@ -1180,6 +1246,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 のちほどやり直してください。</string>
 <string name="LinkInvalid">使えない組み合わせが含まれています。</string>
 <string name="WithinAMonth">既読 1ヶ月以内</string>
+<string name="ZoomOut">ズームアウト</string>
 <string name="PublicPollCantForward">公開投票はチャンネルには転送できません。</string>
 <string name="NoEmojiFound">絵文字が見つかりません</string>
 <string name="WhoCanAddMembersAllMembers">すべて</string>
@@ -1205,6 +1272,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="MasksCount_two"></string>
 <string name="ChatCamera">カメラ</string>
 <string name="SharedMediaTabFull2">共有したメディア</string>
+<string name="FilterSecretChats">秘密のチャット</string>
 <string name="SendLocation">位置情報を送信する</string>
 <string name="UpdateApp">更新する</string>
 <string name="LocalDocumentCache">ドキュメント</string>
@@ -1214,6 +1282,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="UpdatedMinutes_many"></string>
 <string name="UsernameInUse">このユーザー名は使われています。</string>
 <string name="AccActionPlay">再生</string>
+<string name="ArchiveStickersAlertMessage">選択したステッカーを保管しますか？</string>
 <string name="ReportSpam">迷惑行為を報告する</string>
 <string name="BackgroundPreview">表示を試しています</string>
 <string name="AccDescrCancelEdit">編集を中止する</string>
@@ -1239,6 +1308,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="BlockedUsers">ブロックリスト</string>
 <string name="NotificationMessageGroupNoText">%1$sが%2$sにメッセージを送信</string>
 <string name="Channels_one"></string>
+<string name="Filters">フォルダの設定</string>
 <string name="ShowVotes_one"></string>
 <string name="UserRestrictionsUntilForever">ずっと</string>
 <string name="PassportAddressInfo"></string>
@@ -1248,14 +1318,17 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="TotalDataUsage">合計</string>
 <string name="MegaDeleteInfo">グループのメッセージはすべて削除されます。</string>
 <string name="NotificationsPriorityHigh">積極的</string>
+<string name="PassportAddTemporaryRegistrationInfo">臨時登録書の写しを送信する。</string>
 <string name="UserRestrictionsUntil">制限する期間</string>
 <string name="ContactJoined">連絡先によるTelegramの開始</string>
 <string name="UploadItems">アップロード %1$s</string>
+<string name="PassportPolicy">*%1$s のプライバシーポリシー* に同意して、@%2$s がメッセージを送る事を承認します。</string>
 <string name="EncryptedChatStartedOutgoing">%sが入りました</string>
 <string name="NewThemePreviewName">Bob Harris</string>
 <string name="ChannelMessageStickerEmoji">%1$sが%2$sを投稿しました</string>
 <string name="ForwardedFile_many"></string>
 <string name="PollAnonymous">匿名投票</string>
+<string name="SharedGIFsTab2">GIF</string>
 <string name="SendingFile">ファイルを送信中</string>
 <string name="P2PEverybody">誰でも</string>
 <string name="VoipPeerOutdated">**%1$s**のTelegramは通話に対応できない物が使われています。相手にTelegramの更新を依頼してください。</string>
@@ -1263,6 +1336,9 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="PassportBirthdate">生年月日</string>
 <string name="NotificationMessageScheduled">📅 あなた: %1$s</string>
 <string name="VideosSelected_many"></string>
+<string name="PassportNameCheckAlert">下記の名前を確認して下さい：
+
+%1$s %2$s %3$s</string>
 <string name="VoipDeclineCall">拒否</string>
 <string name="DeleteForAll">すべての画面で削除する</string>
 <string name="Message">メッセージ</string>
@@ -1271,12 +1347,13 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 あなたのステッカー投稿を制限しています。</string>
 <string name="NotificationHiddenChatName">Telegram</string>
 <string name="EventLogFilterPinnedMessages">メッセージの固定</string>
+<string name="FilterRecommended">推奨フォルダ</string>
 <string name="SaveTheme">テーマを保存する</string>
 <string name="PrivacyBots">ボットとウェブサイト</string>
 <string name="From">送信</string>
 <string name="NotificationsServiceConnectionInfo">負担の小さいわずかな通信を行い
 新着通知をより確実に受信します。</string>
-<string name="PassportReverseSideInfo">書類の裏面の写真をアップロードしてください</string>
+<string name="PassportReverseSideInfo">書類の裏面の写真を送信してください</string>
 <string name="AutoDownloadLow">低</string>
 <string name="VideosSelected_few"></string>
 <string name="MembersCountSelected_zero"></string>
@@ -1354,6 +1431,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="Days_zero"></string>
 <string name="PassportSelfie">顔写真</string>
 <string name="DeleteAccountHelp">あなたがこの期間内に一度でも接続しなかった場合、このアカウントはすべてのグループ、メッセージ、連絡先と一緒に削除されます。</string>
+<string name="ActionBotDocumentTemporaryRegistration">臨時登録書</string>
 <string name="RestoreEmailSentTitle">回復用のコード</string>
 <string name="OpenGroup">グループを開く</string>
 <string name="SetUrlInvalid">このリンクは使えません。</string>
@@ -1362,6 +1440,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="CountOfResults_two"></string>
 <string name="PasteFromClipboard">クリップボードからコピーする</string>
 <string name="YourEmailSkip">省略</string>
+<string name="StickersReorder">並べ替える</string>
 <string name="AccActionTakePicture">写真を撮影</string>
 <string name="BlockUserChatsTitle">チャット</string>
 <string name="PrivacyCallsP2PTitle">Peer to Peer</string>
@@ -1380,6 +1459,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="GroupDescription1">20万人まで入れます</string>
 <string name="GroupDescription2">チャット履歴が見られます</string>
 <string name="SettingsNoRecent">最近の検索内容はありません</string>
+<string name="ArchiveStickerSetsAlertTitle">保管 %1$s</string>
 <string name="MakeMyselfVisible">自分の事を公開する</string>
 <string name="MessageScheduledReminderNotification">📅 予約</string>
 <string name="StickersRemove">削除する</string>
@@ -1413,7 +1493,7 @@ Telegramを使ってみませんか？
 <string name="NoStickers">ステッカーはありません</string>
 <string name="ContactNotRegistered">%1$sは使用しておりません。
 Telegramに招待しますか？</string>
-<string name="PassportAddBankInfo">銀行取引明細書の写しをアップロード</string>
+<string name="PassportAddBankInfo">銀行明細書の写しを送信します。</string>
 <string name="CommonGroups_two"></string>
 <string name="AreYouSureShareMyContactInfoUser">本当に%1$sの番号を
 **%2$s**に教えますか？</string>
@@ -1440,7 +1520,9 @@ Telegramに招待しますか？</string>
 <string name="Undo">元に戻す</string>
 <string name="PassportSurnameCountry">名字 (%1$s)</string>
 <string name="BotRestart">ボットを再開</string>
+<string name="TodayAtFormattedWithToday">本日 %1$s</string>
 <string name="CountOfResults_zero"></string>
+<string name="FilterAllChatsShort">すべて</string>
 <string name="Yellow">黄色</string>
 <string name="ActionPinnedText">un1が"%1$s"を留めました</string>
 <string name="ChannelBroadcast">公開する</string>
@@ -1448,6 +1530,7 @@ Telegramに招待しますか？</string>
 <string name="Map">地図</string>
 <string name="May">5月</string>
 <string name="Cancel">キャンセル</string>
+<string name="FilterAlwaysShow">このチャットを含める</string>
 <string name="AutoNightModeOff">夜間モードは無効です</string>
 <string name="ActionBotDocumentEmail">メールアドレス</string>
 <string name="BlockedUsersCount_one"></string>
@@ -1463,12 +1546,14 @@ Telegramに招待しますか？</string>
 <string name="NotificationMessageGroupRound">%1$sが%2$sにビデオメッセージを送信</string>
 <string name="ChatDeletedUndo">削除しました</string>
 <string name="ExternalFolderInfo">外部ストレージを表示する</string>
+<string name="Shares_two"></string>
 <string name="EnterCurrentPasscode">現在の暗証番号をどうぞ</string>
 <string name="MobileUsage">モバイルの使用状況</string>
 <string name="NearbyVenue">または異なる場所を選択</string>
 <string name="LocalDatabase">キャッシュデータ</string>
 <string name="NotificationActionPinnedNoTextChannel">%1$sがメッセージを留めました</string>
 <string name="LinkedChannel">連携したチャンネル</string>
+<string name="PassportAddPassportInfo">パスポートの英語翻訳謄本の写しを送信する。</string>
 <string name="UserRestrictionsBy">%1$sが制限</string>
 <string name="Minutes_few"></string>
 <string name="ClearSearchAlertTitle">検索履歴を消去</string>
@@ -1535,13 +1620,16 @@ Telegramに招待しますか？</string>
 
 現在のテーマは選択している内容と壁紙に基づいています。</string>
 <string name="AudioAutodownload">音声</string>
+<string name="StickerSets_two"></string>
 <string name="Archive">保管する</string>
 <string name="EditAdminDeleteMessages">メッセージの削除</string>
 <string name="NetworkUsageRoamingTab">ローミング</string>
 <string name="NoGroupsInCommon">グループはありません</string>
 <string name="Subscribers_many"></string>
+<string name="PassportAddDriverLicenceInfo">運転免許の英語翻訳謄本の写しを送信する。</string>
 <string name="PassportSelectExpiredDate">有効期限を選択</string>
 <string name="SlowmodeOff">無効</string>
+<string name="PassportTranslation">翻訳</string>
 <string name="ViewContact">連絡先を表示する</string>
 <string name="InAppVibrate">バイブレーションを使用する</string>
 <string name="PaymentShippingAddress2Placeholder">住所2（番地）</string>
@@ -1565,6 +1653,7 @@ Telegramに招待しますか？</string>
 <string name="SendContactToGroupText">この連絡先を**%1$s**に送信しますか？</string>
 <string name="FilesDataUsage">ファイル</string>
 <string name="AndOther_one"></string>
+<string name="PleaseLoginPassport">Telegram Passportを使用するために、Telegramのアカウントにログインして下さい。</string>
 <string name="InternalStorage">内部ストレージ</string>
 <string name="Loading">取得中…</string>
 <string name="Unban">解除する</string>
@@ -1607,6 +1696,7 @@ Telegramに招待しますか？</string>
 <string name="BlockUsersMessage">**%1$s**をブロックしますか？</string>
 <string name="AccDescrReplying">返信先</string>
 <string name="NotificationsChannels">チャンネル</string>
+<string name="FilterRemoveExclusionText">「%1$s」を項目から削除しますか？</string>
 <string name="EnableProxyAlert">本当にこのプロキシを有効にしますか？</string>
 <string name="YourPasswordSuccessText">2段階認証のパスワードを設定しました。</string>
 <string name="ChangePasscode">暗証番号を変更する</string>
@@ -1620,7 +1710,7 @@ Telegramに招待しますか？</string>
 <string name="SetUrlInUse">このリンクはすでに使われています。</string>
 <string name="ColorThemeChanged">カラーテーマを変更しました</string>
 <string name="PrivacyExceptions">例外</string>
-<string name="PassportDeletePersonalAlert">本当に個人情報を削除してもよろしいですか？</string>
+<string name="PassportDeletePersonalAlert">本当に個人情報を削除しますか？</string>
 <string name="PaymentShippingAddress">配送先</string>
 <string name="AccDescrStickerSet">ステッカー集</string>
 <string name="InAppPreview">プレビューを表示する</string>
@@ -1670,6 +1760,7 @@ Telegramに招待しますか？</string>
 <string name="UsernameInvalidShort">ユーザー名には半角5文字以上が必要です。</string>
 <string name="GettingLinkInfo">リンク情報を取得…</string>
 <string name="PassportTwoDocuments">%1$s か %2$s</string>
+<string name="FilterDiscardNewSave">作成</string>
 <string name="ReportChatViolence">暴力的</string>
 <string name="Emoji1">人と表情</string>
 <string name="ScreenCaptureInfo">無効にすると画面の撮影ができなくなり
@@ -1683,12 +1774,14 @@ Telegramに招待しますか？</string>
 <string name="NotificationsExceptionsAlert">**%1$s**は例外としており、変更の影響を受けない事に注意してください。</string>
 <string name="VoipConnecting">接続中</string>
 <string name="CreateTheme">作成する</string>
+<string name="FilterAllChats">すべて</string>
 <string name="AllowFillNumber">認証コードの送信のために
 Telegramに通話を許可してください。</string>
 <string name="PaymentBillingAddress">請求先住所</string>
 <string name="AddStickersNotFound">ステッカーが見つかりません</string>
 <string name="Photos_few"></string>
 <string name="LowDiskSpaceTitle2">すぐに消去する</string>
+<string name="FilterChatTypes">形式</string>
 <string name="LastSeenDate">既読 </string>
 <string name="AttachMusic">音楽</string>
 <string name="UserRestrictionsNoSendPolls">投票なし</string>
@@ -1696,6 +1789,7 @@ Telegramに通話を許可してください。</string>
 <string name="YourEmailCodeInfo">%1$sで受信した認証コードを入力してください。</string>
 <string name="NotificationsDeleteAllException">すべての例外を削除</string>
 <string name="EditCantEditPermissionsPublic">公開グループでは変更できません</string>
+<string name="PassportIdentityInternalPassport">パスポートの写真を送信します</string>
 <string name="ColorSepia">セピア</string>
 <string name="TermsOfService">利用規約</string>
 <string name="AreYouSureDeleteAndExit">本当に解散してしまいますか？</string>
@@ -1717,6 +1811,7 @@ Telegramに通話を許可してください。</string>
 <string name="NobodyLikesSpam2">連絡先を交換した相手だけがこのグループに追加できます。</string>
 <string name="NobodyLikesSpam3">このグループの管理人はあなたの投稿を制限しています。</string>
 <string name="NobodyLikesSpam1">メッセージの送信は連絡先を交換した相手のみ可能です。</string>
+<string name="FilterNonContacts">連絡先以外</string>
 <string name="Media_few"></string>
 <string name="PassportInfoUrl">https://telegram.org/faq#passport</string>
 <string name="UsernameAvailable">%1$sは使用可能です。</string>
@@ -1730,6 +1825,7 @@ Telegramに通話を許可してください。</string>
 <string name="CropReset">リセット</string>
 <string name="AccDescrChangeProfilePicture">自己紹介の写真を編集する</string>
 <string name="EventLogChannelUnrestricted">%1$sを削除</string>
+<string name="PassportPhoneUploadInfo">注意：入力した電話番号へ認証コードが送られます。</string>
 <string name="PaintDelete">削除</string>
 <string name="LanguageCustom">カスタム</string>
 <string name="ExportTheme">出力する</string>
@@ -1759,19 +1855,23 @@ Telegramを使ってみませんか？
 <string name="ConnectingConnectProxy">接続する</string>
 <string name="SaveToDownloads">ダウンロード</string>
 <string name="DeleteGif">このGIFを削除しますか？</string>
+<string name="StickersReorderHint">ステッカーを並べ替えます。</string>
 <string name="AutoNightUpdateLocation">場所</string>
 <string name="SmartNotificationsInfo">%2$sに%1$d回</string>
 <string name="EventLogInfoTitle">これは何ですか？</string>
 <string name="EventLogEditedChannelPhoto">un1がチャンネル画像を設定しました</string>
 <string name="NotificationMessageGroupDocument">%1$sが%2$sにファイルを送信</string>
 <string name="NotificationMessageVideo">%1$sがビデオを送信</string>
+<string name="FilterNew">フォルダを作成</string>
 <string name="SearchForPeople">検索する</string>
 <string name="BadgeNumberUnread">未読件数を数える</string>
+<string name="FilterDiscardTitle">変更を適用しますか？</string>
 <string name="TapToDownload">押すとダウンロードできます</string>
 <string name="SelectContact">選択してください</string>
 <string name="AttachVideoExpired">ビデオが消えました</string>
 <string name="PrivacyPayments">決済</string>
 <string name="AutodownloadGroupChats">グループ</string>
+<string name="PassportDeleteDocumentAddress">住所情報を削除</string>
 <string name="NoRecentGIFs">GIFはありません</string>
 <string name="HoursBold_many"></string>
 <string name="AccDescrUserOptions">ユーザー設定</string>
@@ -1801,10 +1901,14 @@ Telegramを使ってみませんか？
 <string name="Satellite">衛星</string>
 <string name="SharedMedia">共有したメディア</string>
 <string name="PaymentTransactionMessage">%1$sを%3$sのための%2$sのボットに転送しますか？</string>
+<string name="DialogPin">留める</string>
 <string name="ShareYouLocationUnableManually">自分で選択する</string>
+<string name="GIFs_two"></string>
+<string name="FilterRemoveExclusionChatText">「%1$s」を項目から削除しますか？</string>
 <string name="ChatsSelectedClear_many"></string>
 <string name="NotificationActionPinnedPhotoChannel">%1$sが写真を留めました</string>
 <string name="RecordingAudio">録音しています</string>
+<string name="AddUserErrorBlacklisted">この相手は制限された相手に含まれており、制限を解除できないため、追加できません。</string>
 <string name="TypePrivateGroup">非公開</string>
 <string name="UnbanText">長押しすると相手を解除できます。</string>
 <string name="ThemeInstallCount_one"></string>
@@ -1851,11 +1955,15 @@ Telegramを使ってみませんか？
 <string name="OpenInEditor">編集する</string>
 <string name="ForwardedSticker_zero"></string>
 <string name="YouLeft">グループを退出しました</string>
+<string name="FilterNeverShow">このチャットを含めない</string>
+<string name="Views_zero"></string>
 <string name="DeleteAndExit">グループを退出</string>
 <string name="DeleteBackground_two"></string>
 <string name="formatterBannedUntil12H">yyyy年MMMdd日 h:mm a</string>
+<string name="InteractionsChartTitle">相互</string>
 <string name="CallNotAvailable">%1$sは
 通話を受け付けていません。</string>
+<string name="FilterShowMoreChats_many"></string>
 <string name="BackgroundSearchColor">色:</string>
 <string name="LastSeenContactsPlus">連絡先 (+%1$d)</string>
 <string name="PassportAuthorize">許可する</string>
@@ -1884,6 +1992,7 @@ Telegramを使ってみませんか？
 <string name="AutoDownloadPm">秘密のチャット</string>
 <string name="ArchivedChats">保管したチャット</string>
 <string name="ChatYourSelfDescription3">さまざまな機器での内容表示</string>
+<string name="DeleteStickersAlertMessage">選択したステッカーを削除しますか？</string>
 <string name="ChatYourSelfDescription4">すばやい検索からの内容表示</string>
 <string name="ChatYourSelfDescription1">転送した内容をひとまとめに</string>
 <string name="ChatYourSelfDescription2">送信したファイルをひとまとめに</string>
@@ -1906,11 +2015,13 @@ Telegramを使ってみませんか？
 %2$sとの通話をはじめますか？</string>
 <string name="LogOutInfo">ログアウトすると秘密のチャットが消滅します。</string>
 <string name="AddOneMemberAlertTitle">追加する</string>
+<string name="FilterEditAll">フォルダを編集</string>
 <string name="AreYouSureDeleteSingleMessageMega">すべての画面で削除しますか？</string>
 <string name="TelegramContacts_one"></string>
 <string name="AddMembersAlertTitle">%1$sを追加</string>
 <string name="items_other">%1$d件のアイテム</string>
 <string name="Videos_few"></string>
+<string name="GrowthChartTitle">発展</string>
 <string name="LiveLocationContext">現在地</string>
 <string name="AccDescrSearchByUser">相手で絞り込む</string>
 <string name="OnlineCount_many"></string>
@@ -1925,6 +2036,7 @@ Telegramを使ってみませんか？
 <string name="NotificationActionPinnedPollChannel">%1$sが投票を留めました</string>
 <string name="Times_other">%1$d回</string>
 <string name="ProfileJoinGroup">参加する</string>
+<string name="GIFs_zero"></string>
 <string name="DaysBold_few"></string>
 <string name="SharedFilesTab">ファイル</string>
 <string name="Events">できごとの通知</string>
@@ -1934,6 +2046,7 @@ Telegramを使ってみませんか？
 <string name="NoFilesInfo">フォルダは空です。</string>
 <string name="EventLogPromotedDeleteMessages">メッセージの削除</string>
 <string name="DebugMenuResetDialogs">チャットをリセットする</string>
+<string name="PassportAddTranslationPassportRegistrationInfo">パスポートの登録ページの英語翻訳謄本の写しを送信する。</string>
 <string name="ChannelPrivateInfo">招待リンクを知る相手だけが登録できます。</string>
 <string name="NewTheme">カラーテーマの作成</string>
 <string name="KeepMedia">キャッシュの保存期間</string>
@@ -1964,6 +2077,7 @@ Telegramを使ってみませんか？
 <string name="DeleteMessagesOption">他の画面でも削除する</string>
 <string name="AutoDownloadOnMobileDataInfo">有効にする場合は丸を押してください。</string>
 <string name="SendContactToGroup">%1$sに電話番号を教えますか？</string>
+<string name="LoadingStats">取得中…</string>
 <string name="SlowModeHint">スローモードが有効です。次のメッセージは%1$s後から送信可能になります。</string>
 <string name="WhoCanCallMe">誰に通話を許可しますか？</string>
 <string name="SentCallCode">**%1$s**に発信しました。
@@ -1973,6 +2087,7 @@ Telegramはすべてを自動で処理します。</string>
 <string name="UnpinMessageAlertTitle">ピンを外す</string>
 <string name="ResetAccountStatus">アカウントの初期化まで：</string>
 <string name="AreYouSureDeleteThisChatSavedMessages">保存用メッセージを削除しますか？</string>
+<string name="FilterNameUnread">未読</string>
 <string name="Option_many"></string>
 <string name="PrivacyPaymentsClear">配送情報と決済情報を消去</string>
 <string name="Page2Title">高速</string>
@@ -1981,6 +2096,7 @@ Telegramはすべてを自動で処理します。</string>
 <string name="ServiceNotifications">Telegramからのお知らせ</string>
 <string name="Years_other">%1$d年</string>
 <string name="ResetAccount">アカウントの初期化</string>
+<string name="StickerSets_one"></string>
 <string name="MakeMyselfVisibleInfo">公開されたあなたの事を近くの相手が発見してメッセージを送信する事が許可できます。
 
 これは新しい相手を見つけるのに役立ちますが、いらない注意を引く事にもなります。
@@ -2003,6 +2119,7 @@ Telegramはすべてを自動で処理します。</string>
 <string name="VideosSelected_zero"></string>
 <string name="AlwaysShareWithTitle">許可する</string>
 <string name="TelegramPassport">Telegram Passport</string>
+<string name="FilterNoChats">チャットなし</string>
 <string name="SharingYouAndOtherName">%1$sと共有中</string>
 <string name="DebugSendLogs">ログを送信する</string>
 <string name="Files_other">%1$dファイル</string>
@@ -2048,10 +2165,12 @@ Telegramはすべてを自動で処理します。</string>
 <string name="ChannelSettingsTitle">チャンネル設定</string>
 <string name="AutoNightThemeOff">オフ</string>
 <string name="NotificationsOther">その他</string>
+<string name="FilterContacts">連絡先</string>
 <string name="UnofficialApp">非公式アプリ</string>
 <string name="PaymentShippingSaveInfo">配送情報を保存する事ができます。</string>
 <string name="GroupName">グループ名</string>
 <string name="MegaPrivate">非公開グループ</string>
+<string name="PassportAddAgreementInfo">借家契約書の写しを送信する。</string>
 <string name="SyncContactsInfoOff">電話帳の中の電話番号を継続的に同期したい場合は有効にします。</string>
 <string name="LastSeen">既読</string>
 <string name="QuickReplyDefault4">今は話せません。あとで電話ください。</string>
@@ -2064,6 +2183,7 @@ Telegramはすべてを自動で処理します。</string>
 <string name="AutoDownloadOnWiFiData">Wi-Fi</string>
 <string name="AddMutual">相手を選んでください</string>
 <string name="SuggestContactsInfo">やりとりする相手を優先して表示します。</string>
+<string name="Views_other">%1$s 表示</string>
 <string name="PassportSelectBithdayDate">生年月日を選択してください</string>
 <string name="EventLogPromotedChangeGroupInfo">グループ情報の編集</string>
 <string name="PassportNativeHeaderLang">あなたの%1$sでのお名前</string>
@@ -2109,13 +2229,16 @@ Telegramはすべてを自動で処理します。</string>
 <string name="ChannelPermissions">許可と制限</string>
 <string name="Unarchive">もどす</string>
 <string name="MoreInfo">詳細情報</string>
+<string name="ClearSearchSingleAlertTitle">検索履歴</string>
 <string name="ThemeArcticBlue">白</string>
 <string name="DebugMenuEnableLogs">ログを有効にする</string>
 <string name="LargeEmoji">絵文字を大きくする</string>
 <string name="TosDeclineDeleteAccount">Telegramに保存されているデータと
 Telegramのアカウントを元に戻す事はできません。
 
-重要：アカウントの削除を中止してからデータを出力する事ができます。（Telegram Desktopを開いて、[設定] &gt; [Telegramのデータを出力する]から行います）。</string>
+重要：アカウントの削除を中止してからデータを出力する事ができます。
+
+（Telegram Desktopを開いて、[設定] &gt; [Telegramのデータを出力する]から行います）。</string>
 <string name="SecondsBold_zero"></string>
 <string name="ActionChannelChangedPhoto">チャンネル写真を変更しました</string>
 <string name="NotificationActionPinnedFile">%1$sが%2$sでファイルを留めました</string>
@@ -2131,6 +2254,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="AuthAnotherClient">QRコードを読み取る</string>
 <string name="VideoMessagesAutodownload">ビデオメッセージ</string>
 <string name="NotificationMessageStickerEmoji">%1$sが%2$sを送信</string>
+<string name="StickersArchivedInfo">%1$sを保管しました。</string>
 <string name="CountOfResults_few"></string>
 <string name="VoipHangingUp">終了中</string>
 <string name="MessageScheduleEditTime">予定を直す</string>
@@ -2169,6 +2293,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="AddAnOption">項目を追加する</string>
 <string name="NotificationMessagePoll2">%1$sが%2$sの投票を送信</string>
 <string name="GlobalAttachGifRestricted">GIFは許可されていません。</string>
+<string name="PassportDeleteDocumentPersonal">個人の詳細を削除</string>
 <string name="AreYouSureDeleteThisChatWithUser">%1$sを削除しますか？</string>
 <string name="OnlyWhenScreenOn">画面が点いている時のみ</string>
 <string name="ChatsSelectedClearCache_other">%1$d件のチャット</string>
@@ -2182,6 +2307,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="MessageScheduleSend">送信する</string>
 <string name="Update">更新</string>
 <string name="AccDescrIVTitle">タイトル</string>
+<string name="DialogUnpin">ピンを外す</string>
 <string name="ImportContacts">連絡情報を取り込む</string>
 <string name="MembersCountSelected_many"></string>
 <string name="ArchiveHintHeader3">留めたチャット</string>
@@ -2203,6 +2329,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="DirectShareInfo">チャットをAndroidの共有対象にします</string>
 <string name="LanguageTitle">言語を変更しますか？</string>
 <string name="TelegramPassportDelete">Telegram Passportを削除する</string>
+<string name="StickersBotInfo">@stickers によるステッカーの作成を歓迎します。</string>
 <string name="Times_zero"></string>
 <string name="ConfirmDeleteCallLog">通話履歴から削除しますか？</string>
 <string name="AutoDownloadVideos">ビデオ</string>
@@ -2217,6 +2344,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="ChannelNotifyMembersInfoOn">通知を送ります</string>
 <string name="YourEmailInfo">パスワードを忘れた場合に使用するあなたのメールアドレスを入力してください。</string>
 <string name="YourPasswordSuccess">完了しました！</string>
+<string name="NoSharedGifSecret">このチャットのGIFはここに表示されます。</string>
 <string name="AreYouSureSessionTitle">接続を終了する</string>
 <string name="AddSubscriber">読者を追加する</string>
 <string name="NotificationGroupFew">%1$sが%2$sに%3$sを送信</string>
@@ -2246,6 +2374,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="LedColor">LEDの色</string>
 <string name="PassportUploadAdditinalDocument">追加書類をアップロードしてください</string>
 <string name="Photos_two"></string>
+<string name="FilterExclude">含めないチャット</string>
 <string name="ChromeCustomTabsInfo">URLをTelegramの中で開きます</string>
 <string name="PassportMale">男性</string>
 <string name="EventLogChangedGroupLink">un1がリンクを変更しました</string>
@@ -2281,6 +2410,8 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="Times_few"></string>
 <string name="DeleteFewChatsTitle">%1$sを削除する</string>
 <string name="TelegramContacts_few"></string>
+<string name="FilterIncludeInfo">このフォルダに含めるチャットと
+その種類を選択します。</string>
 <string name="Hours_other">%1$d時間</string>
 <string name="ActionCreateMega">グループを作成しました</string>
 <string name="Times_many"></string>
@@ -2306,6 +2437,7 @@ Telegramのアカウントを元に戻す事はできません。
 リンクにはa-z、0-9までの英数字と
 アンダースコアが使用可能です。
 リンクには最低5文字以上が必要です。</string>
+<string name="FilterAddingChatsInfo">このフォルダに追加されるまでしばらくお待ちください…</string>
 <string name="ForwardTo">転送</string>
 <string name="PrivacyTitle">プライバシー</string>
 <string name="Regular">通常</string>
@@ -2317,7 +2449,7 @@ https://telegram.org/update</string>
 <string name="ChooseStickerSetPlaceholder">stickerset</string>
 <string name="KeepMediaForever">ずっと</string>
 <string name="LinkAvailable">%1$sは使用可能です。</string>
-<string name="PassportIdentityDriverLicence">運転免許証の写真をアップロードしてください</string>
+<string name="PassportIdentityDriverLicence">運転免許証の写真を送信します</string>
 <string name="PassportRequestPasswordInfo">暗号化されたデータを元に戻すには
 Telegramのパスワードが必要です。</string>
 <string name="AutoLockInTime">%1$s</string>
@@ -2342,9 +2474,11 @@ Telegramのパスワードが必要です。</string>
 <string name="MessageLifetimeYouRemoved">タイマーを無効にしました</string>
 <string name="ThemeDark">紺</string>
 <string name="InChatSound">メッセージの音声を再生する</string>
+<string name="PassportUploadMaxReached">%1$s 以上を投稿出来ません。</string>
 <string name="Language">言語</string>
 <string name="SlowmodeHours">%1$d時間</string>
 <string name="ChannelAddException">例外を追加する</string>
+<string name="Views_few"></string>
 <string name="AndMoreTyping_zero"></string>
 <string name="LinkInfo">Telegramの利用者をこのリンクで招待できます。</string>
 <string name="ReportChatSpam">迷惑行為</string>
@@ -2395,6 +2529,7 @@ Telegramはあなたが所有するすべての端末から利用できます。
 <string name="AbortPassword">2段階認証の設定を中止する</string>
 <string name="NotificationGroupAddSelfMega">%1$sが%2$sに登録しました</string>
 <string name="AreYouSureBlockContact">この相手をブロックしますか？</string>
+<string name="PassportAddTranslationUploadInfo">選択した書類の英語翻訳謄本の写しを送信する。</string>
 <string name="Folder">フォルダ</string>
 <string name="PassportInfo">Telegram PassportとはTelegramに個人情報を登録するだけで身分証明が必要なウェブサイトやサービスへのログインが簡単になるサービスです。
 
@@ -2414,6 +2549,7 @@ Telegramはあなたが所有するすべての端末から利用できます。
 <string name="AndOther_zero"></string>
 <string name="AutodownloadSizeLimit">ファイルサイズの上限</string>
 <string name="ForwardedAudio_zero"></string>
+<string name="LanguagesChartTitle">言語</string>
 <string name="ChatYourSelfName">あなた</string>
 <string name="DiscussionInfo">語り合うためのグループを追加します。</string>
 <string name="InternalFolderInfo">ファイルシステムを表示</string>
@@ -2426,6 +2562,7 @@ Telegramはあなたが所有するすべての端末から利用できます。
 <string name="ArchivedMasksInfo">マスクは最大200セットまで使えます。
 上限を越えると未使用の物から保管されます。</string>
 <string name="Minutes_zero"></string>
+<string name="SlideUpToLock">上にスライドすると録音を固定します</string>
 <string name="MapPreviewProviderGoogle">Google</string>
 <string name="LiveLocationAlertPrivate">%1$sがあなたの位置を確認できる時間を選択します。</string>
 <string name="EventLogPromotedRemovedTitle">題名</string>
@@ -2448,6 +2585,7 @@ Telegramはあなたが所有するすべての端末から利用できます。
 <string name="PublicPoll">投票</string>
 <string name="Hours_many"></string>
 <string name="Videos_many"></string>
+<string name="ViewsBySourceChartTitle">ソース別の表示</string>
 <string name="AuthAnotherClientInfo2">Telegram Desktopを起動して
 QRコードを表示します。</string>
 <string name="AuthAnotherClientInfo3">QRコードを読み取って接続します。</string>
@@ -2516,6 +2654,7 @@ Telegram Desktopをダウンロード。</string>
 <string name="NoBlockedChannel2">制限中の相手に招待リンクを使用しても
 その制限は解除できません</string>
 <string name="RateCallSilentRemote">相手に声が届きませんでした</string>
+<string name="LoadingStatsDescription">グラフを生成しています。しばらくお待ちください。</string>
 <string name="PassportDeleteInfo">削除</string>
 <string name="ScheduleWhenOnline">%1$sがオンラインの時に送信</string>
 <string name="MarkAllAsRead">すべて既読にする</string>
@@ -2542,13 +2681,16 @@ Telegram Desktopをダウンロード。</string>
 <string name="AddToExceptions">例外を追加</string>
 <string name="NoSharedVoiceSecret">音声はここに表示されます。</string>
 <string name="ArchivePinnedInfo">再度左に押し込むと非表示にします。</string>
+<string name="StickerSets_few"></string>
 <string name="LiveLocations">現在地</string>
 <string name="RegisterText">氏名を入力してください</string>
 <string name="_tg_open_google_play">Google Playを開く</string>
 <string name="AccessError">アクセスエラー</string>
 <string name="RevokeAlert">作り直すと現在のリンクは機能しなくなります。</string>
 <string name="Days_one"></string>
+<string name="FilterNameHint">フォルダ名</string>
 <string name="SearchEmojiHint">絵文字を検索する</string>
+<string name="MasksArchived">マスクを収納しました。</string>
 <string name="SharedMediaTab">メディア</string>
 <string name="ChangePhoneNumberOccupied">%1$sはTelegramで使用されています。その設定を変更してから使用してください。</string>
 <string name="ActionBotDocumentDriverLicence">運転免許証</string>
@@ -2610,6 +2752,7 @@ Telegram Desktopをダウンロード。</string>
 <string name="ForwardedPoll_two"></string>
 <string name="PleaseEnterCurrentPasswordTransfer">譲渡するためにパスワードを入力してください。</string>
 <string name="AreYouSureDeleteVideoTitle">ビデオを削除</string>
+<string name="CreateNewFilterInfo">チャット用のさまざまなフォルダを作成し、それらをすばやく切り替えます。</string>
 <string name="GifsTab">GIF</string>
 <string name="PassportMainPage">メインページ</string>
 <string name="BadgeNumber">バッジ表示</string>
@@ -2659,6 +2802,7 @@ Telegram Desktopをダウンロード。</string>
 <string name="ChannelAdmin">管理人</string>
 <string name="PaymentPhoneEmailToProvider">電話番号とメールアドレスは決済情報として %1$s に送られます。</string>
 <string name="PrivacyFloodControlError">多くのリクエストが集中してプライバシーの設定変更ができません。今しばらくお待ちください。</string>
+<string name="GIFs_other">%1$d GIF</string>
 <string name="EventLogChangedOwnership">所有権を%1$sに譲渡</string>
 <string name="NoMediaSecret">写真とビデオは
 ここに表示されます。</string>
@@ -2703,6 +2847,7 @@ Telegram Desktopをダウンロード。</string>
 <string name="LocalDatabaseClearText">キャッシュを消去しますか？</string>
 <string name="PassportNativeHeader">あなたの名前</string>
 <string name="AccDescrShutter">シャッター</string>
+<string name="FilterContact">連絡先</string>
 <string name="TerminateSessionQuestion">この接続を終了しますか？</string>
 <string name="MarkAsUnread">未読にする</string>
 <string name="NotificationMessageContact">%1$sと電話番号を共有</string>
@@ -2727,6 +2872,8 @@ Telegram Desktopをダウンロード。</string>
 <string name="Channels_many"></string>
 <string name="ActionChannelChangedTitle">「un2」に改名しました</string>
 <string name="EventLogRestrictedSendMedia">メディアの送信</string>
+<string name="FilterEdit">編集</string>
+<string name="FilterDiscardAlert">このフォルダを編集しました。変更を適用しますか？</string>
 <string name="PaymentReceipt">領収書</string>
 <string name="ActionBotDocumentPassportRegistration">パスポートの登録</string>
 <string name="NoAudioFilesInfo">ライブラリに音楽がありません。</string>
@@ -2760,6 +2907,7 @@ Telegram Desktopをダウンロード。</string>
 <string name="EventLogDefaultPermissions">全体への制限を変更</string>
 <string name="NewThemePreviewLine3">It's morning in *Tokyo* 😎</string>
 <string name="DeleteTheseChats">チャットを削除</string>
+<string name="StickersArchived">ステッカーを収納しました。</string>
 <string name="SlowmodeInfoSelected">新しいメッセージの送信を%1$s後からにします。</string>
 <string name="UserBioDetail">自己紹介を開いた人に表示されます。</string>
 <string name="Meters_one"></string>
@@ -2775,9 +2923,10 @@ Telegramに通話を許可してください。</string>
 <string name="UserRestrictionsEmbedLinks">リンクの送信</string>
 <string name="QuizAnswers">解答</string>
 <string name="ChannelMessageAlbum">%1$sがアルバムを投稿しました</string>
+<string name="ClearSearchRemove">消去</string>
 <string name="SetAdminsTitle">管理人の設定</string>
 <string name="ChatsArchived">保管しました</string>
-<string name="PassportAddInternalPassport">インターナルパスポートを追加</string>
+<string name="PassportAddInternalPassport">パスポートを追加する</string>
 <string name="Stickers_two"></string>
 <string name="TerminateWebSessionsTitle">ウェブとの切断</string>
 <string name="AreYouSureDeleteVideo">このビデオを削除しますか？</string>
@@ -2797,6 +2946,7 @@ Telegramに通話を許可してください。</string>
 <string name="AutoDownloadVideosTitle">ビデオとGIFの自動ダウンロード</string>
 <string name="ChatHistoryHidden">見せない</string>
 <string name="TapToChange">ここを押して編集</string>
+<string name="FilterNoChatsToDisplay">チャットはありません</string>
 <string name="ChannelAlertText">チャンネルとはあなたのメッセージを登録した人にお見せするものです。</string>
 <string name="SetPasscodeInfo">勝手に見られないように鍵を設定します。</string>
 <string name="VoipOfflineAirplaneTitle">機内モード</string>
@@ -2821,6 +2971,7 @@ Telegramに通話を許可してください。</string>
 <string name="ContactJob">仕事</string>
 <string name="AccDescrRepeatOff">繰り返し,オフ</string>
 <string name="PassportPhone">電話番号</string>
+<string name="FilterShowMoreChats_two"></string>
 <string name="PaymentPasswordEmailTitle">回復用のメールアドレス</string>
 <string name="MasksCount_one"></string>
 <string name="AskAQuestionInfo">Telegramはボランティアがサポートしています。可能な限り迅速に回答しますが、その前に<![CDATA[<a href="https://telegram.org/faq#general">Telegramに関する質問</a>]]>を見てください。<![CDATA[<a href="https://telegram.org/faq#troubleshooting">ヒントや答え</a>]]>があるかもしれません。</string>
@@ -2916,7 +3067,7 @@ Telegramに通話を許可してください。</string>
 <string name="ChatHistoryHiddenInfo2">100件より前の内容は表示しません。</string>
 <string name="EventLogPromotedAddUsers">新しい相手の追加</string>
 <string name="BubbleRadius">吹き出しの丸み</string>
-<string name="PassportFrontSideInfo">書類の表紙をアップロードしてください</string>
+<string name="PassportFrontSideInfo">書類の表面の写真を送信してください</string>
 <string name="Years_one"></string>
 <string name="EventLogEditedMessages">un1がメッセージを編集しました：</string>
 <string name="PassportIdentityDocumentInfo">パスポートもしくはその他のIDの写しを送信</string>
@@ -2940,7 +3091,9 @@ Telegramに通話を許可してください。</string>
 <string name="MessageScheduledBotAction">この操作は、メッセージが公開されると実行可能になります。</string>
 <string name="OnlineCount_zero"></string>
 <string name="LanguageUnknownCustomAlert">申し訳ございませんが、この翻訳（**%1$s**）にはAndroid用のデータは含まれておりません。</string>
+<string name="FilterDelete">フォルダを削除</string>
 <string name="EditAdminTransferChangeOwner">所有者の変更</string>
+<string name="NoGIFs">GIFなし</string>
 <string name="KMetersAway2">%1$sキロ先</string>
 <string name="CreateNewTheme">新しいテーマ</string>
 <string name="Invite">招待する</string>
@@ -2960,6 +3113,7 @@ Telegramに通話を許可してください。</string>
 <string name="AutoplayMedia">メディアの自動再生</string>
 <string name="NeverShareWithPlaceholder">許可しない</string>
 <string name="CancelAccountReset">初期化を中止する</string>
+<string name="PassportAddInternalPassportInfo">国内パスポートの英語翻訳謄本の写しを送信する。</string>
 <string name="AndOther_two"></string>
 <string name="SmartNotifications">スマート通知</string>
 <string name="MediaSelected_zero"></string>
@@ -3005,6 +3159,7 @@ Telegramに通話を許可してください。</string>
 <string name="ShareYouLocationUnable">位置情報が把握できません</string>
 <string name="NoMailInstalled">sms@stel.comへ問題の内容を送信してください。</string>
 <string name="ChannelMembers">参加者</string>
+<string name="PassportAddPassportRegistrationInfo">パスポート登録ページの写しを送信する。</string>
 <string name="ThemePreviewDialog5">Old Pirates</string>
 <string name="ThemePreviewDialog6">Kate Bright</string>
 <string name="ThemePreviewDialog3">Mike Apple</string>
@@ -3022,6 +3177,7 @@ Telegramに通話を許可してください。</string>
 <string name="SentAppCode">その他の**Telegram**に認証コードを送信しました。</string>
 <string name="NotificationActionPinnedGameChannel">%1$sがゲームを留めました</string>
 <string name="ThemePreviewDialog7">Nick K</string>
+<string name="FilterRemoveInclusionUserText">「%1$s」を項目から削除しますか？</string>
 <string name="ThemePreviewDialog8">Adler Toberg</string>
 <string name="SendingGif">GIFを送信中</string>
 <string name="BotHelp">ヘルプ</string>
@@ -3075,6 +3231,7 @@ Telegramに通話を許可してください。</string>
 <string name="AreYouSureClearDrafts">すべての下書きを削除しますか？</string>
 <string name="CallMessageIncoming">音声着信</string>
 <string name="RevokeAlertNewLink">リンクを作り直しました。</string>
+<string name="PassportNativeInfo">住んでいる国 (%1$s) の言語での名前です。</string>
 <string name="AccDescrChanSilentOff">通知の送信</string>
 <string name="AutoDownloadMedia">自動でダウンロードする</string>
 <string name="AccDescrIVHeading">見出し</string>
@@ -3115,19 +3272,22 @@ Telegramに通話を許可してください。</string>
 カメラへのアクセス許可を求めています。</string>
 <string name="InviteTextNum_many"></string>
 <string name="SetTimer">タイマーを設定する</string>
-<string name="CallsDataUsage">通話</string>
+<string name="CallsDataUsage">通話設定</string>
 <string name="NotificationsForGroups">グループ通知</string>
 <string name="EventLogOriginalCaptionEmpty">なし</string>
+<string name="PinToTopLimitReached2">%1$sのみを固定できます。チャットフォルダと保管庫には、より多くのチャットを固定できます。</string>
 <string name="EventLogRestrictedPinMessages">メッセージの固定</string>
 <string name="NotificationActionPinnedPoll2">%1$sが%2$sで%3$sの投票を留めました</string>
 <string name="UseProxySponsorInfo">このチャンネルはプロキシを
 有効にした事で表示されます。
 一覧から削除するには
 プロキシを無効にしてください。</string>
+<string name="FiltersSetupPinAlert">フォルダをセットアップ</string>
 <string name="ChatYourSelfTitle">あなた専用ストレージの使い方</string>
 <string name="AppName">Telegram</string>
 <string name="ColorPickerBackground">背景色</string>
 <string name="CropImage">画像を切り取る</string>
+<string name="FilterRemoveInclusionChatText">「%1$s」を項目から削除しますか？</string>
 <string name="NoBlockedChannel">相手の行動を制限します。管理人が許可した行動だけを実行させる事ができます。制限された相手は招待リンクが使えなくなります。</string>
 <string name="FavoriteStickers">お気に入り</string>
 <string name="EventLogFilterLeavingMembers">自らによる退出</string>
@@ -3146,6 +3306,7 @@ Telegramに通話を許可してください。</string>
 <string name="InviteTextNum_two"></string>
 <string name="AccDescrBotCommands">ボットへの命令</string>
 <string name="FeaturedStickers">注目のステッカー</string>
+<string name="FilterDiscardNewTitle">フォルダを作成しますか？</string>
 <string name="EventLogEditedGroupPhoto">un1がグループ画像を設定しました</string>
 <string name="AccDescrPhotoViewer">写真ビューアー</string>
 <string name="AndMoreTyping_two"></string>
@@ -3190,6 +3351,7 @@ Telegramに通話を許可してください。</string>
 メッセージを送信しますか？</string>
 <string name="DiscussionChannelHelp2">このチャンネルに投稿した内容は
 すべてこのグループに転送されます。</string>
+<string name="FilterEditItem">編集</string>
 <string name="NotificationMessageGroupStickerEmoji">%1$sが%3$sを%2$sに送信</string>
 <string name="TelegramPassportCreatePassword">パスワードを作成する</string>
 <string name="VoipIncoming">着信</string>
@@ -3203,6 +3365,7 @@ Telegramに通話を許可してください。</string>
 <string name="Statistics">統計</string>
 <string name="ThemeInstallCount_two"></string>
 <string name="PrivacyDeleteCloudDrafts">すべての下書きを削除</string>
+<string name="GIFs_one"></string>
 <string name="ConnectingToProxyEnable">有効</string>
 <string name="Page4Message">**Telegram**は侵入者から
 あなたのメッセージを守ります。</string>
@@ -3249,7 +3412,10 @@ Telegramに通話を許可してください。</string>
 <string name="YourEmailSkipWarning">注意</string>
 <string name="formatDateAtTime">%1$s %2$s</string>
 <string name="AreYouSureSecretChat">秘密のチャットをはじめますか？</string>
+<string name="FilterExcludeInfo">このフォルダに含めないチャットと
+その種類を選択します。</string>
 <string name="TypePrivate">非公開</string>
+<string name="FilterAddingChats">チャットを追加</string>
 <string name="PrivacyForwards">メッセージ転送</string>
 <string name="NoHandleAppInstalled">'%1$s'を処理できるアプリがありません。インストールしてください</string>
 <string name="NotificationsPrioritySettings">設定どおり</string>
@@ -3315,6 +3481,8 @@ Telegramに通話を許可してください。</string>
 <string name="EventLogChangedLinkedChannel">un1がグループとの連携をun2に実行</string>
 <string name="PassportPhoneInfo">電話番号を入力してください</string>
 <string name="Chats_zero"></string>
+<string name="FilterRemoveInclusionText">「%1$s」を項目から削除しますか？</string>
+<string name="FilterShowMoreChats_other">%1$d をさらに表示</string>
 <string name="AreYouSureDeleteSingleMessage">このメッセージを削除しますか？</string>
 <string name="Voice_zero"></string>
 <string name="PrivacyPhoneTitle">誰と電話番号でつながりますか？</string>
@@ -3362,6 +3530,7 @@ Telegramに通話を許可してください。</string>
 <string name="ChooseStickerSet">選択する</string>
 <string name="EventLogRemovedLinkedGroup">un1が連携したグループun2を削除</string>
 <string name="NotificationsServiceConnection">バックグラウンド接続</string>
+<string name="PassportAddTranslationAgreementInfo">借家契約書の英語翻訳謄本の写しを送信する。</string>
 <string name="PermissionNoLocationPosition">Telegramによる位置情報へのアクセスを許可してください。</string>
 <string name="EventLogFilterNewMembers">新しい相手の追加</string>
 <string name="ChannelMessageVideo">%1$sがビデオを投稿しました</string>
@@ -3378,13 +3547,17 @@ Telegramに通話を許可してください。</string>
 <string name="DeleteChatUser">削除する</string>
 <string name="ChatsSelectedClearCache_many"></string>
 <string name="MessageNotFound">メッセージはありません</string>
+<string name="FilterDeleteAlert">このフォルダを削除しますか？フォルダの中のチャットは削除されません。</string>
 <string name="Photos_many"></string>
 <string name="PrivacyForwardsContacts">許可した相手にはリンクを作る</string>
 <string name="SortFirstName">名前</string>
 <string name="SendWithoutSound">通知せずに送る</string>
 <string name="InstallGoogleMaps">Googleマップをインストールしますか？</string>
+<string name="PassportAddIdentityCardInfo">身分証明書の英語翻訳謄本の写しを送信する。</string>
 <string name="SetReminder">送信を予約する</string>
+<string name="SettingsDebug">デバッグ</string>
 <string name="NoChats">Telegramへようこそ</string>
+<string name="AddStickersInstalledInfo">%1$sをステッカーに追加しました。</string>
 <string name="BlockedEmpty">なし</string>
 <string name="EditAdmin">管理人権限</string>
 <string name="ChatHistoryHiddenInfo">以前の内容は表示しません。</string>
@@ -3400,6 +3573,8 @@ Telegramに通話を許可してください。</string>
 <string name="NewThemeTitle">新しいテーマ</string>
 <string name="AccDescrSearchPrev">前の検索結果</string>
 <string name="PrivacyClearShipping">配送情報</string>
+<string name="FilterDiscardNewAlert">フォルダの作成は完了していません。今すぐに作成しますか？</string>
+<string name="ClearSearchSingleUserAlertText">「%1$s」を検索履歴から消去しますか？</string>
 <string name="AndMoreTypingGroup_two"></string>
 <string name="AttachGif">GIF</string>
 <string name="TelegramFaqUrl">https://telegram.org/faq</string>
@@ -3412,8 +3587,10 @@ Telegramに通話を許可してください。</string>
 <string name="NoMessages">メッセージはありません</string>
 <string name="AddMember">参加者を追加する</string>
 <string name="GpsDisabledAlert">GPSが無効です。位置情報を取得するためにもGPSを有効にしてください。</string>
+<string name="Views_two"></string>
 <string name="LedDisabled">無効</string>
 <string name="NotificationActionPinnedContactChannel">%1$sが連絡先を留めました</string>
+<string name="PassportUploadNotImage">画像ファイルのみ投稿出来ます。</string>
 <string name="DeleteAndStop">削除して終了する</string>
 <string name="MasksCount_many"></string>
 <string name="UseProxyInfo">SOCKS 5 プロキシ設定</string>
@@ -3465,6 +3642,7 @@ Telegramに通話を許可してください。</string>
 
 新しく作成する前にいくつかを退出してください。</string>
 <string name="ActionYouLeftUser">グループを退出しました</string>
+<string name="PreviewFeedback2">間違ったレイアウト？</string>
 <string name="chatDate">MMMMd'日'</string>
 <string name="EditAdminTransferChannelToast">%1$sがチャンネルの新しい所有者になりました。</string>
 <string name="UsersCountTitle_few"></string>
@@ -3480,7 +3658,8 @@ Telegramに通話を許可してください。</string>
 <string name="Gray">灰色</string>
 <string name="ShareYouLocationTitle">位置情報を共有しますか？</string>
 <string name="PassportDeleteDocument">この内容を削除する</string>
-<string name="SelectFromGallery">ギャラリーから選択する</string>
+<string name="SelectFromGallery">ギャラリーから選ぶ</string>
+<string name="PassportAddTranslationBankInfo">銀行明細書の英語翻訳謄本の写しを送信します。</string>
 <string name="SendMessageRestricted">このグループの管理人は%1$sまで
 あなたの書き込みを制限しています。</string>
 <string name="ShareSendTo">送信</string>
@@ -3528,6 +3707,8 @@ Telegramに通話を許可してください。</string>
 <string name="TerminateAllWebSessions">すべての接続を終了する</string>
 <string name="Account">アカウント</string>
 <string name="Times_two"></string>
+<string name="FilterNameNonMuted">ミュートなし</string>
+<string name="TopHoursChartTitle">時間ごとの表示</string>
 <string name="AutoDownloadOnUpToFor">%1$sまで %2$s</string>
 <string name="AttachPhoto">写真</string>
 <string name="NotificationsForChats">通知の編集</string>
@@ -3546,6 +3727,7 @@ Telegramに通話を許可してください。</string>
 
 制限された相手でなければチャンネルの招待リンクを使用する事で再登録を呼びかける事ができます。</string>
 <string name="Channels_zero"></string>
+<string name="PassportIdentityID">身分証明書の写しを送信する</string>
 <string name="EventLogChangedLinkedGroup">un1がこのチャンネルに連携したグループun2を作成</string>
 <string name="PassportLanguage_FR">French</string>
 <string name="AccDescrPasscodeUnlock">ロック解除する</string>
@@ -3586,6 +3768,7 @@ Telegramに通話を許可してください。</string>
 <string name="PassportLanguage_ID">Indonesian</string>
 <string name="WaitingForNetwork">接続中…</string>
 <string name="PhoneNumberChange2">電話番号を変更する</string>
+<string name="ClearSearchSingleChatAlertText">「%1$s」を検索履歴から消去しますか？</string>
 <string name="PassportLanguage_CS">Czech</string>
 <string name="ActionPinnedPoll">un1が投票を留めました</string>
 <string name="PassportLanguage_DE">German</string>
@@ -3593,11 +3776,13 @@ Telegramに通話を許可してください。</string>
 <string name="ThemeSetUrlHelp">リンクにはa-z、0-9までの英数字と
 アンダースコアが使用可能です。
 リンクには最低5文字以上が必要です。</string>
+<string name="Shares_many"></string>
 <string name="PassportLanguage_DA">Danish</string>
 <string name="ShowInChat">チャットで開く</string>
 <string name="FootsAway">%1$sフィート先</string>
 <string name="PaymentInvoice">ご請求</string>
 <string name="GroupUserCantAdmin">管理人をこれ以上追加できません。</string>
+<string name="GIFs_few"></string>
 <string name="PassportLanguage_BN">Bangla</string>
 <string name="AddPeopleNearby">近くにいる人を追加する</string>
 <string name="PassportScanPassport">パスポートの写真を撮ってください</string>
@@ -3613,6 +3798,7 @@ Telegramに通話を許可してください。</string>
 <string name="PassportLanguage_ET">Estonian</string>
 <string name="UserRestrictionsNoInviteUsers">追加できません</string>
 <string name="PassportLanguage_ES">Spanish</string>
+<string name="FilterGroups">グループ</string>
 <string name="ChatSetThisLocation">この位置情報を設定する</string>
 <string name="ChooseFromGallery">ギャラリーから選ぶ</string>
 <string name="OtherWebSessions">ログインしたサービス</string>
@@ -3642,4 +3828,5 @@ Telegramに通話を許可してください。</string>
 <string name="BackgroundPattern">パターン</string>
 <string name="EmpryUsersPlaceholder">相手を追加する</string>
 <string name="BackgroundColor">色</string>
+<string name="DeleteFromRecent">最近の内容から削除</string>
 </resources>
