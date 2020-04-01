@@ -220,6 +220,52 @@ object ProxyUtil {
 
     }
 
+    @JvmStatic
+    fun importInBackground(link: String): SharedConfig.ProxyInfo {
+
+        val info = runCatching {
+
+            if (link.startsWith(VMESS_PROTOCOL) || link.startsWith(VMESS1_PROTOCOL)) {
+
+                SharedConfig.VmessProxy(link)
+
+            } else if (link.startsWith(SS_PROTOCOL)) {
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                    error(LocaleController.getString("MinApi21Required", R.string.MinApi21Required))
+
+                }
+
+                 SharedConfig.ShadowsocksProxy(link)
+
+            } else if (link.startsWith(SSR_PROTOCOL)) {
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                    error(LocaleController.getString("MinApi21Required", R.string.MinApi21Required))
+
+                }
+
+                SharedConfig.ShadowsocksRProxy(link)
+
+            } else {
+
+                SharedConfig.ProxyInfo.fromUrl(link)
+
+            }
+
+        }.getOrThrow()
+
+        if (SharedConfig.addProxy(info) != info) {
+
+            error("proxy already exists")
+
+        }
+
+        return info
+
+    }
 
     @JvmStatic
     fun shareProxy(ctx: Activity, info: SharedConfig.ProxyInfo, type: Int) {

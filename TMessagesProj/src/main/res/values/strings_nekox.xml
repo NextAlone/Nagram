@@ -99,6 +99,17 @@
 
     <string name="ProxyRemarks">Remarks</string>
     <string name="RetestPing">Retest ping for all servers</string>
+    <string name="ReorderByPing">Reorder servers by ping</string>
+    <string name="ExportProxies">Export servers to file</string>
+    <string name="ImportProxies">Import servers from file</string>
+    <string name="SendProxyListTo">Do you want to send proxy list to **%1$s**?</string>
+
+    <string name="InvalidProxyFile">Invalid proxy list file: </string>
+    <string name="ImportedProxies">Imported proxy servers: </string>
+    <string name="ErrorsInImport">Import errors: </string>
+    <string name="NoProxy">You haven\'t added any proxy servers.</string>
+    <string name="DeleteAllProxies">Delete all servers</string>
+    <string name="DeleteAllProxiesAlert">Warning! This will **delete all proxies**.</string>
 
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
 

@@ -153,6 +153,12 @@ public class DocumentSelectActivity extends BaseFragment {
     private boolean canSelectOnlyImageFiles;
     private boolean allowMusic;
 
+    public void setAllowPhoto(boolean allowPhoto) {
+        this.allowPhoto = allowPhoto;
+    }
+
+    private boolean allowPhoto = true;
+
     private boolean searching;
     private boolean searchWas;
 
@@ -1328,12 +1334,16 @@ public class DocumentSelectActivity extends BaseFragment {
             FileLog.e(e);
         }
 
-        fs = new ListItem();
-        fs.title = LocaleController.getString("Gallery", R.string.Gallery);
-        fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
-        fs.icon = R.drawable.files_gallery;
-        fs.file = null;
-        items.add(fs);
+        if (allowPhoto) {
+
+            fs = new ListItem();
+            fs.title = LocaleController.getString("Gallery", R.string.Gallery);
+            fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
+            fs.icon = R.drawable.files_gallery;
+            fs.file = null;
+            items.add(fs);
+
+        }
 
         if (allowMusic) {
             fs = new ListItem();

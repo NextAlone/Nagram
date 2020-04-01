@@ -130,7 +130,7 @@ public class SharedConfig {
         loadConfig();
     }
 
-    public static class ProxyInfo {
+    public static class ProxyInfo implements Comparable<ProxyInfo> {
 
         public int group;
 
@@ -145,6 +145,11 @@ public class SharedConfig {
         public boolean checking;
         public boolean available;
         public long availableCheckTime;
+
+        @Override
+        public int compareTo(ProxyInfo info) {
+            return (int) (info.ping - ping);
+        }
 
         public boolean isInternal = false;
         public String descripton;
@@ -1532,6 +1537,18 @@ public class SharedConfig {
         }
         proxyList.remove(proxyInfo);
         saveProxyList();
+    }
+
+    public static void deleteAllProxy() {
+
+        proxyListLoaded = false;
+
+        proxyList.clear();
+
+        saveProxyList();
+
+        loadProxyList();
+
     }
 
     public static void checkSaveToGalleryFiles() {

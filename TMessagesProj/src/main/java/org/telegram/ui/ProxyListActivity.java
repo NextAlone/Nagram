@@ -12,16 +12,18 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -30,16 +32,23 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -58,12 +67,21 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
 import tw.nekomimi.nekogram.VmessSettingsActivity;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -253,6 +271,120 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int menu_add_scan_qr = 6;
     private int menu_other = 9;
     private int menu_retest_ping = 10;
+    private int menu_reorder_by_ping = 11;
+    private int menu_export_json = 12;
+    private int menu_import_json = 13;
+    private int menu_delete_all = 14;
+
+    private void processProxyList(ArrayList<String> files) {
+
+        for (String proxyListFilePath : files) {
+
+            File proxyListFile = new File(proxyListFilePath);
+
+            try {
+
+                if (proxyListFile.length() > 2 * 1024 * 1024L) {
+
+                    throw new IllegalArgumentException("file too large.");
+
+                }
+
+                JSONObject proxyRootObject = new JSONObject(FileUtil.readUtf8String(proxyListFile));
+
+                if (proxyRootObject.isNull("nekox_proxy_list_verion")) {
+
+                    throw new IllegalArgumentException("not a nekox proxy list file.");
+
+                }
+
+                int version = proxyRootObject.getInt("nekox_proxy_list_verion");
+
+                if (version == 1) {
+
+                    if (proxyRootObject.isNull("proxies")) {
+
+                        throw new IllegalArgumentException("proxies array not found.");
+
+                    }
+
+                    JSONArray proxyArray = proxyRootObject.getJSONArray("proxies");
+
+                    if (proxyArray.length() == 0) {
+
+                        throw new IllegalArgumentException("Empty proxy list.");
+
+                    }
+
+                    for (int index = 0; index < proxyArray.length(); index++) {
+
+                        String proxyUrl = proxyArray.getString(index);
+
+                        LinkedList<String> imported = new LinkedList<>();
+                        LinkedHashMap<String, String> errors = new LinkedHashMap<>();
+
+                        try {
+
+                            imported.add(ProxyUtil.importInBackground(proxyUrl).getTitle());
+
+                        } catch (Exception ex) {
+
+                            errors.put(proxyUrl, ex.getMessage());
+
+                        }
+
+                        StringBuilder status = new StringBuilder();
+
+                        if (!imported.isEmpty()) {
+
+                            status.append(LocaleController.getString("ImportedProxies", R.string.ImportedProxies));
+
+                            for (String success : imported) {
+
+                                status.append("\n").append(success);
+
+                            }
+
+
+                            if (!errors.isEmpty()) {
+
+                                status.append("\n\n");
+
+                            }
+
+                        }
+
+                        if (!errors.isEmpty()) {
+
+                            status.append(LocaleController.getString("", R.string.ErrorsInImport));
+
+                            for (Map.Entry<String, String> error : errors.entrySet()) {
+
+                                status.append("\n").append(error.getKey()).append(": ").append(error.getValue());
+
+                            }
+
+                        }
+
+                        AlertUtil.showSimpleAlert(getParentActivity(), status.toString());
+
+                    }
+
+                } else {
+
+                    throw new IllegalArgumentException("invalid proxy list version " + version + ".");
+
+                }
+
+            } catch (Exception e) {
+
+                AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidProxyFile", R.string.InvalidProxyFile) + proxyListFilePath + "\n\n" + e.getMessage());
+
+            }
+
+        }
+
+    }
 
     @Override
     public View createView(Context context) {
@@ -269,6 +401,88 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     finishFragment();
                 } else if (id == menu_retest_ping) {
                     checkProxyList(true);
+                } else if (id == menu_reorder_by_ping) {
+                    SharedConfig.proxyList = new LinkedList<>(new TreeSet<>(SharedConfig.proxyList));
+                    SharedConfig.saveProxyList();
+                    updateRows(true);
+                } else if (id == menu_export_json) {
+                    if (SharedConfig.proxyList.isEmpty()) {
+                        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("NoProxy", R.string.NoProxy));
+                        return;
+                    }
+                    File cacheFile = new File(ApplicationLoader.applicationContext.getExternalCacheDir(), "NekoX-Proxy-List-" + new Date().toLocaleString() + ".json");
+
+                    try {
+
+                        JSONObject listRoot = new JSONObject();
+
+                        listRoot.put("nekox_proxy_list_verion", 1);
+
+                        JSONArray proxyArray = new JSONArray();
+
+                        for (SharedConfig.ProxyInfo info : SharedConfig.proxyList) {
+
+                            if (info.isInternal) continue;
+
+                            proxyArray.put(info.toUrl());
+
+                        }
+
+                        listRoot.put("proxies", proxyArray);
+
+                        FileUtil.writeUtf8String(listRoot.toString(4), cacheFile);
+                    } catch (JSONException e) {
+                    }
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("*/*");
+                    if (Build.VERSION.SDK_INT >= 24) {
+                        try {
+                            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), BuildConfig.APPLICATION_ID + ".provider", cacheFile));
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (Exception ignore) {
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(cacheFile));
+                        }
+                    } else {
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(cacheFile));
+                    }
+                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                } else if (id == menu_import_json) {
+                    if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        try {
+                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                        } catch (Throwable ignore) {
+                        }
+                        return;
+                    }
+                    DocumentSelectActivity fragment = new DocumentSelectActivity(false);
+                    fragment.setMaxSelectedFiles(-1);
+                    fragment.setAllowPhoto(false);
+                    fragment.setDelegate(new DocumentSelectActivity.DocumentSelectActivityDelegate() {
+
+                        @Override
+                        public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
+                            activity.finishFragment();
+                            processProxyList(files);
+                        }
+
+                        @Override
+                        public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) {
+                        }
+
+                        @Override
+                        public void startDocumentSelectActivity() {
+                        }
+                    });
+                    presentFragment(fragment);
+                } else if (id == menu_delete_all) {
+                    AlertUtil.showComfirm(getParentActivity(),
+                            LocaleController.getString("DeleteAllProxies", R.string.DeleteAllProxies),
+                            LocaleController.getString("DeleteAllProxies", R.string.DeleteAllProxiesAlert),
+                            LocaleController.getString("Delete", R.string.Delete),
+                            true, (d, v) -> {
+                                SharedConfig.deleteAllProxy();
+                                updateRows(true);
+                            });
                 }
             }
         });
@@ -363,6 +577,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
         otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         otherItem.addSubItem(menu_retest_ping, LocaleController.getString("RetestPing", R.string.RetestPing));
+        otherItem.addSubItem(menu_reorder_by_ping, LocaleController.getString("ReorderByPing", R.string.ReorderByPing));
+        otherItem.addSubItem(menu_export_json, LocaleController.getString("ExportProxies", R.string.ExportProxies));
+        otherItem.addSubItem(menu_import_json, LocaleController.getString("ImportProxies", R.string.ImportProxies));
+        otherItem.addSubItem(menu_delete_all, LocaleController.getString("DeleteAllProxies", R.string.DeleteAllProxies));
 
         listAdapter = new ListAdapter(context);
 
@@ -697,7 +915,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 continue;
             }
             proxyInfo.checking = true;
-
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, proxyInfo);
 
             if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && proxyInfo != SharedConfig.currentProxy) {
