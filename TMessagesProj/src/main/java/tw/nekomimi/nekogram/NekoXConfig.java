@@ -53,6 +53,7 @@ public class NekoXConfig {
     public static boolean skipOpenLinkConfirm;
 
     public static boolean removeTitleEmoji;
+    public static boolean hidePublicProxy;
 
     static {
 
@@ -89,6 +90,7 @@ public class NekoXConfig {
 
         removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
+        hidePublicProxy = preferences.getBoolean("hide_public_proxy",false);
 
     }
 
@@ -239,6 +241,12 @@ public class NekoXConfig {
     public static void toggleIgnoredMutedCount() {
 
         preferences.edit().putBoolean("ignore_muted_count", ignoreMutedCount = !ignoreMutedCount).apply();
+
+    }
+
+    public static void toggleHidePublicProxy() {
+
+        preferences.edit().putBoolean("hide_public_proxy", hidePublicProxy = !hidePublicProxy).apply();
 
     }
 

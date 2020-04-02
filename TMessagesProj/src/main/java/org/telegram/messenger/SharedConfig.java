@@ -39,6 +39,7 @@ import java.util.LinkedList;
 
 import kotlin.text.StringsKt;
 import okhttp3.HttpUrl;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ProxyManager;
@@ -153,7 +154,17 @@ public class SharedConfig {
 
         @Override
         public int compareTo(ProxyInfo info) {
-            return (int) (info.ping - ping);
+
+            if (available && !info.available) {
+                return -1;
+            } else if (!available && info.available) {
+                return 1;
+            } else if (available && info.available) {
+                return (int) (ping - info.ping);
+            } else {
+                return hashCode() + "".compareTo(info.hashCode() + "");
+            }
+
         }
 
         public boolean isInternal;
@@ -191,11 +202,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(remarks)) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto] ") + address + ":" + port;
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto]") + " " + address + ":" + port;
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto] ") + remarks;
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto]") + " " + remarks;
 
             }
 
@@ -368,18 +379,13 @@ public class SharedConfig {
         @Override
         public int hashCode() {
 
-            return (address + port).hashCode();
+            return (address + port + username + password + secret).hashCode();
 
         }
 
         @Override
         public boolean equals(@Nullable Object obj) {
-            return super.equals(obj) || (
-                    obj != null &&
-                            obj.getClass().equals(ProxyInfo.class) &&
-                            address.equals(((ProxyInfo) obj).address) &&
-                            port == ((ProxyInfo) obj).port
-            );
+            return super.equals(obj) || (obj instanceof ProxyInfo && hashCode() == obj.hashCode());
         }
     }
 
@@ -439,11 +445,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[Vmess] ") + bean.getAddress() + ":" + bean.getPort();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[Vmess]") + " " + bean.getAddress() + ":" + bean.getPort();
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[Vmess] ") + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[Vmess]") + " " + getRemarks();
 
             }
 
@@ -541,11 +547,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SS] ") + bean.getHost() + ":" + bean.getRemotePort();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SS]") + " " + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SS] ") + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SS]") + " " + getRemarks();
 
             }
 
@@ -646,11 +652,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SSR] ") + bean.getHost() + ":" + bean.getRemotePort();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SSR]") + " " + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SSR] ") + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SSR]") + " " + getRemarks();
 
             }
 
@@ -1418,11 +1424,15 @@ public class SharedConfig {
 
         int current = MessagesController.getGlobalMainSettings().getInt("curent_proxy", 0);
 
-        proxyList.add(publicProxy);
+        if (!NekoXConfig.hidePublicProxy) {
+
+            proxyList.add(publicProxy);
+
+        }
 
         File remoteProxyListFile = ProxyUtil.cacheFile;
 
-        if (remoteProxyListFile.isFile()) {
+        if (remoteProxyListFile.isFile() && !NekoXConfig.hidePublicProxy) {
 
             try {
 

@@ -9,6 +9,8 @@
     <string name="PublicPrefix">[ Public ]</string>
     <string name="NekoXProxyInfo">It may take tens of seconds to load the NekoX Public built-in proxy :)</string>
 
+    <string name="HidePublicProxyList">Hide public proxy list</string>
+
     <string name="DisableChatAction">Don\'t send my input status</string>
     <string name="FakeScreenshot">Pretend screenshot</string>
     <string name="SaveCacheToSdcard">Save cache to sdcard*</string>
