@@ -153,7 +153,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         @SuppressLint("SetTextI18n")
         public void setProxy(SharedConfig.ProxyInfo proxyInfo) {
-            if (proxyInfo.isInternal) {
+            if (proxyInfo.isInternal && !proxyInfo.isPublic) {
                 textView.setText(LocaleController.formatString("NekoXProxy", R.string.NekoXProxy));
             } else {
                 textView.setText(proxyInfo.getTitle());
@@ -1008,9 +1008,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
             if (time == -1) {
                 if (repeat > 0) {
-                    UIUtil.runOnIoDispatcher(() -> {
-                        checkSingleProxy(proxyInfo, repeat - 1);
-                    });
+                    checkSingleProxy(proxyInfo, repeat - 1);
                 } else {
                     proxyInfo.checking = false;
                     proxyInfo.available = false;

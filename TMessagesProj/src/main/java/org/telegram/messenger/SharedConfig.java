@@ -156,8 +156,8 @@ public class SharedConfig {
             return (int) (info.ping - ping);
         }
 
-        public boolean isInternal = false;
-        public String descripton;
+        public boolean isInternal;
+        public boolean isPublic;
 
         public ProxyInfo() {
             address = "";
@@ -191,11 +191,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(remarks)) {
 
-                return "[MTProto] " + address + ":" + port;
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[MTProto] ") + address + ":" + port;
 
             } else {
 
-                return "[MTProto] " + remarks;
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[MTProto] ") + remarks;
 
             }
 
@@ -439,11 +439,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return "[Vmess] " + bean.getAddress() + ":" + bean.getPort();
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[Vmess] ") + bean.getAddress() + ":" + bean.getPort();
 
             } else {
 
-                return "[Vmess] " + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[Vmess] ") + getRemarks();
 
             }
 
@@ -541,11 +541,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return "[SS] " + bean.getHost() + ":" + bean.getRemotePort();
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SS] ") + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return "[SS] " + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SS] ") + getRemarks();
 
             }
 
@@ -646,11 +646,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return "[SSR] " + bean.getHost() + ":" + bean.getRemotePort();
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SSR] ") + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return "[SSR] " + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SSR] ") + getRemarks();
 
             }
 
@@ -1457,6 +1457,7 @@ public class SharedConfig {
                     }
 
                     info.isInternal = true;
+                    info.isPublic = true;
 
                     proxyList.add(info);
 
