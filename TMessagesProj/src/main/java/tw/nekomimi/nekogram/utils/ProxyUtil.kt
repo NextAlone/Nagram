@@ -76,7 +76,7 @@ object ProxyUtil {
 
             }
 
-        }.recover {
+        }.recoverCatching {
 
             // 从 GITHUB PAGES 读取
 
@@ -90,7 +90,7 @@ object ProxyUtil {
 
             }
 
-        }.recover {
+        }.recoverCatching {
 
             // 从 GITLAB 读取
 
@@ -104,7 +104,7 @@ object ProxyUtil {
 
             }
 
-        }.recover {
+        }.recoverCatching {
 
             // 从 GITHUB 主站 读取
 
