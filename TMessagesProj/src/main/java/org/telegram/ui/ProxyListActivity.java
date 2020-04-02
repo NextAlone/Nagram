@@ -10,7 +10,6 @@ package org.telegram.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -83,7 +82,6 @@ import tw.nekomimi.nekogram.VmessSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -537,15 +535,15 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                                 updateRows(true);
                             });
                 } else if (id == menu_delete_unavailable) {
-                        AlertUtil.showConfirm(getParentActivity(),
-                                LocaleController.getString("DeleteUnavailableServer", R.string.DeleteUnavailableServer),
-                                LocaleController.getString("DeleteUnavailableServerConfirm", R.string.DeleteUnavailableServerConfirm),
-                                LocaleController.getString("Delete", R.string.Delete),
-                                true, (d, v) -> {
-                                    SharedConfig.deleteUnavailableProxy();
-                                    updateRows(true);
-                                });
-                    }
+                    AlertUtil.showConfirm(getParentActivity(),
+                            LocaleController.getString("DeleteUnavailableServer", R.string.DeleteUnavailableServer),
+                            LocaleController.getString("DeleteUnavailableServerConfirm", R.string.DeleteUnavailableServerConfirm),
+                            LocaleController.getString("Delete", R.string.Delete),
+                            true, (d, v) -> {
+                                SharedConfig.deleteUnavailableProxy();
+                                updateRows(true);
+                            });
+                }
             }
         });
 
@@ -1013,6 +1011,17 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     proxyInfo.checking = false;
                     proxyInfo.available = false;
                     proxyInfo.ping = 0;
+
+                    if (proxyInfo.isPublic) {
+
+                        if (SharedConfig.currentProxy != proxyInfo) {
+
+                            SharedConfig.proxyList.remove(proxyInfo);
+
+                        }
+
+                    }
+
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, proxyInfo);
                 }
             } else {

@@ -191,11 +191,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(remarks)) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[MTProto] ") + address + ":" + port;
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto] ") + address + ":" + port;
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[MTProto] ") + remarks;
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto] ") + remarks;
 
             }
 
@@ -439,11 +439,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[Vmess] ") + bean.getAddress() + ":" + bean.getPort();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[Vmess] ") + bean.getAddress() + ":" + bean.getPort();
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[Vmess] ") + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[Vmess] ") + getRemarks();
 
             }
 
@@ -541,11 +541,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SS] ") + bean.getHost() + ":" + bean.getRemotePort();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SS] ") + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SS] ") + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SS] ") + getRemarks();
 
             }
 
@@ -646,11 +646,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SSR] ") + bean.getHost() + ":" + bean.getRemotePort();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SSR] ") + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix",R.string.PublicPrefix) : "[SSR] ") + getRemarks();
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[SSR] ") + getRemarks();
 
             }
 
@@ -1358,7 +1358,7 @@ public class SharedConfig {
 
     public static void setProxyEnable(boolean enable) {
 
-        UIUtil.runOnUIThread(() -> {
+        UIUtil.runOnIoDispatcher(() -> {
 
             proxyEnabled = enable;
 
@@ -1634,20 +1634,18 @@ public class SharedConfig {
         UIUtil.runOnIoDispatcher(() -> {
 
             JSONArray proxyArray = new JSONArray();
-            for (ProxyInfo info : proxyList) {
-                try {
-                    JSONObject obj = info.toJson();
-                    if (info == currentProxy) {
-                        obj.put("current", true);
+
+            synchronized (sync) {
+                for (ProxyInfo info : new LinkedList<>(proxyList)) {
+                    try {
+                        JSONObject obj = info.toJson();
                         if (info.isInternal) {
-                            obj.put("internal", true);
+                            continue;
                         }
-                    } else if (info.isInternal) {
-                        continue;
+                        proxyArray.put(obj);
+                    } catch (JSONException e) {
+                        FileLog.e(e);
                     }
-                    proxyArray.put(obj);
-                } catch (JSONException e) {
-                    FileLog.e(e);
                 }
             }
 
@@ -1663,11 +1661,13 @@ public class SharedConfig {
     }
 
     public static ProxyInfo addProxy(ProxyInfo proxyInfo) {
-        int count = proxyList.size();
-        for (int a = 0; a < count; a++) {
-            ProxyInfo info = proxyList.get(a);
-            if (info.equals(proxyInfo)) {
-                return info;
+        synchronized (sync) {
+            int count = proxyList.size();
+            for (int a = 0; a < count; a++) {
+                ProxyInfo info = proxyList.get(a);
+                if (info.equals(proxyInfo)) {
+                    return info;
+                }
             }
         }
         proxyList.add(proxyInfo);
@@ -1676,6 +1676,7 @@ public class SharedConfig {
     }
 
     public static void deleteProxy(ProxyInfo proxyInfo) {
+
         if (currentProxy == proxyInfo) {
             currentProxy = null;
             if (proxyEnabled) {
