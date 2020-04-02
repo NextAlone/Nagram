@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
 
+import androidx.annotation.Nullable;
+
 import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
 
@@ -27,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.ui.ProxyListActivity;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -42,6 +45,7 @@ import tw.nekomimi.nekogram.ProxyManager;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -187,11 +191,11 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(remarks)) {
 
-                return  "[MTProto] " + address + ":" + port;
+                return "[MTProto] " + address + ":" + port;
 
             } else {
 
-                return  "[MTProto] " + remarks;
+                return "[MTProto] " + remarks;
 
             }
 
@@ -361,6 +365,22 @@ public class SharedConfig {
 
         }
 
+        @Override
+        public int hashCode() {
+
+            return (address + port).hashCode();
+
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            return super.equals(obj) || (
+                    obj != null &&
+                            obj.getClass().equals(ProxyInfo.class) &&
+                            address.equals(((ProxyInfo) obj).address) &&
+                            port == ((ProxyInfo) obj).port
+            );
+        }
     }
 
     public abstract static class ExternalSocks5Proxy extends ProxyInfo {
@@ -373,6 +393,8 @@ public class SharedConfig {
             secret = "";
 
         }
+
+        public abstract boolean isStarted();
 
         public abstract void start();
 
@@ -417,13 +439,20 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return  "[Vmess] " + bean.getAddress() + ":" + bean.getPort();
+                return "[Vmess] " + bean.getAddress() + ":" + bean.getPort();
 
             } else {
 
-                return  "[Vmess] " + getRemarks();
+                return "[Vmess] " + getRemarks();
 
             }
+
+        }
+
+        @Override
+        public boolean isStarted() {
+
+            return loader != null;
 
         }
 
@@ -478,6 +507,16 @@ public class SharedConfig {
 
         }
 
+        @Override
+        public int hashCode() {
+            return (bean.getAddress() + bean.getPort() + bean.getId() + bean.getNetwork() + bean.getPath()).hashCode();
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            return super.equals(obj) || (obj instanceof VmessProxy && bean.equals(((VmessProxy) obj).bean));
+        }
+
     }
 
     public static class ShadowsocksProxy extends ExternalSocks5Proxy {
@@ -502,13 +541,20 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return  "[SS] " + bean.getHost() + ":" + bean.getRemotePort();
+                return "[SS] " + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return  "[SS] " + getRemarks();
+                return "[SS] " + getRemarks();
 
             }
+
+        }
+
+        @Override
+        public boolean isStarted() {
+
+            return loader != null;
 
         }
 
@@ -564,6 +610,18 @@ public class SharedConfig {
 
         }
 
+        @Override
+        public int hashCode() {
+
+            return (bean.getHost() + bean.getRemotePort() + bean.getMethod()).hashCode();
+
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            return super.equals(obj) || (obj instanceof ShadowsocksProxy && bean.equals(((ShadowsocksProxy) obj).bean));
+        }
+
     }
 
     public static class ShadowsocksRProxy extends ExternalSocks5Proxy {
@@ -588,16 +646,22 @@ public class SharedConfig {
 
             if (StrUtil.isBlank(getRemarks())) {
 
-                return  "[SSR] " + bean.getHost() + ":" + bean.getRemotePort();
+                return "[SSR] " + bean.getHost() + ":" + bean.getRemotePort();
 
             } else {
 
-                return  "[SSR] " + getRemarks();
+                return "[SSR] " + getRemarks();
 
             }
 
         }
 
+        @Override
+        public boolean isStarted() {
+
+            return loader != null;
+
+        }
 
         @Override
         public void start() {
@@ -648,6 +712,18 @@ public class SharedConfig {
             obj.put("link", toUrl());
             return obj;
 
+        }
+
+        @Override
+        public int hashCode() {
+
+            return (bean.getHost() + bean.getRemotePort() + bean.getMethod() + bean.getProtocol() + bean.getProtocol_param() + bean.getObfs() + bean.getObfs_param()).hashCode();
+
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            return super.equals(obj) || (obj instanceof ShadowsocksRProxy && bean.equals(((ShadowsocksRProxy) obj).bean));
         }
 
     }
@@ -1318,10 +1394,17 @@ public class SharedConfig {
 
         currentProxy = info;
 
+        MessagesController.getGlobalMainSettings().edit().putInt("current_proxy", info.hashCode()).apply();
+
         saveProxyList();
 
         setProxyEnable(true);
 
+    }
+
+    public static void reloadProxyList() {
+        proxyListLoaded = false;
+        loadProxyList();
     }
 
     public static void loadProxyList() {
@@ -1333,7 +1416,71 @@ public class SharedConfig {
         proxyList.clear();
         currentProxy = null;
 
+        int current = MessagesController.getGlobalMainSettings().getInt("curent_proxy", 0);
+
         proxyList.add(publicProxy);
+
+        File remoteProxyListFile = ProxyUtil.cacheFile;
+
+        if (remoteProxyListFile.isFile()) {
+
+            try {
+
+                JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(remoteProxyListFile));
+
+                for (int a = 0; a < proxyArray.length(); a++) {
+
+                    JSONObject proxyObj = proxyArray.getJSONObject(a);
+
+                    ProxyInfo info;
+
+                    try {
+
+                        if (!proxyObj.isNull("proxy")) {
+
+                            // old remote protocol
+
+                            info = parseProxyInfo(proxyObj.getString("proxy"));
+
+                        } else {
+
+                            info = ProxyInfo.fromJson(proxyObj);
+
+                        }
+
+                    } catch (Exception ex) {
+
+                        FileLog.e("load proxy failed", ex);
+
+                        continue;
+
+                    }
+
+                    info.isInternal = true;
+
+                    proxyList.add(info);
+
+                    if (info.hashCode() == current) {
+
+                        currentProxy = info;
+
+                        if (info instanceof ExternalSocks5Proxy) {
+
+                            ((ExternalSocks5Proxy) info).start();
+
+                        }
+
+                    }
+
+                }
+
+            } catch (Exception ex) {
+
+                FileLog.e("invalid proxy list json format", ex);
+
+            }
+
+        }
 
         File proxyListFile = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "nekox/proxy_list.json");
 
@@ -1361,11 +1508,12 @@ public class SharedConfig {
 
                     }
 
-                    if (proxyObj.optBoolean("internal", false)) continue;
+                    if (!proxyObj.isNull("internal")) continue;
+                    if (info.getTitle().toLowerCase().contains("nekox.me")) continue;
 
                     proxyList.add(info);
 
-                    if (proxyObj.optBoolean("current", false)) {
+                    if (info.hashCode() == current) {
 
                         currentProxy = info;
 
@@ -1517,11 +1665,8 @@ public class SharedConfig {
         int count = proxyList.size();
         for (int a = 0; a < count; a++) {
             ProxyInfo info = proxyList.get(a);
-            try {
-                if (info.toJson().equals(proxyInfo.toJson())) {
-                    return info;
-                }
-            } catch (JSONException e) {
+            if (info.equals(proxyInfo)) {
+                return info;
             }
         }
         proxyList.add(proxyInfo);
@@ -1542,9 +1687,37 @@ public class SharedConfig {
 
     public static void deleteAllProxy() {
 
+        setProxyEnable(false);
+
         proxyListLoaded = false;
 
         proxyList.clear();
+
+        saveProxyList();
+
+        loadProxyList();
+
+    }
+
+    public static void deleteUnavailableProxy() {
+
+        setProxyEnable(false);
+
+        proxyListLoaded = false;
+
+        Iterator<ProxyInfo> iter = proxyList.iterator();
+
+        while (iter.hasNext()) {
+
+            ProxyInfo info = iter.next();
+
+            if (!info.checking && !info.available && info.availableCheckTime != 0) {
+
+                iter.remove();
+
+            }
+
+        }
 
         saveProxyList();
 

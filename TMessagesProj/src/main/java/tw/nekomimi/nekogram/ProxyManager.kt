@@ -14,7 +14,7 @@ object ProxyManager {
     @JvmStatic
     fun getPortForBean(bean: AngConfig.VmessBean): Int {
 
-        val hash = (bean.address + bean.port + bean.path).hashCode().toString()
+        val hash = (bean.address + bean.port + bean.id + bean.network + bean.path).hashCode().toString()
 
         var port = pref.getInt(hash, -1)
 

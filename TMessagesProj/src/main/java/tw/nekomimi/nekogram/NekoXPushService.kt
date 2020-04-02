@@ -1,7 +1,6 @@
 package tw.nekomimi.nekogram
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,6 +11,7 @@ import android.service.notification.NotificationListenerService
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.KeepAliveJob
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.LaunchActivity
@@ -23,6 +23,7 @@ class NekoXPushService : NotificationListenerService() {
     override fun onCreate() {
         super.onCreate()
         ApplicationLoader.postInitApplication()
+        KeepAliveJob.startJob()
         if (NekoConfig.residentNotification) {
             val activityIntent = Intent(this, LaunchActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0)

@@ -28,6 +28,17 @@ data class AngConfig(
                          var configVersion: Int = 2,
                          var testResult: String = "") {
 
+        override fun equals(other: Any?): Boolean {
+            return super.equals(other) || (other is VmessBean &&
+                    address == other.address &&
+                    port == other.port &&
+                    id == other.id &&
+                    network == other.network &&
+                    headerType == other.headerType &&
+                    requestHost == other.requestHost &&
+                    path == other.path)
+        }
+
         override fun toString(): String {
 
             if (configType == V2RayConfig.EConfigType.Vmess) {
@@ -52,7 +63,7 @@ data class AngConfig(
 
                 val remark = "#" + Utils.urlEncode(remarks)
 
-                val url = String.format("%s:%s@%s:%s",security, id, address, port)
+                val url = String.format("%s:%s@%s:%s", security, id, address, port)
 
                 return SS_PROTOCOL + Base64.encodeToString(url.toByteArray(charset("UTF-8")), Base64.NO_WRAP) + remark
 

@@ -38,15 +38,6 @@ object Utils {
      * base64 decode
      */
     fun decode(text: String): String {
-        try {
-            return Base64.decode(text, Base64.NO_WRAP).toString(charset("UTF-8"))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return ""
-        }
-    }
-
-    fun decodeUrlSafe(text: String): String {
         val flags = Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP
         try {
             return Base64.decode(text, flags).toString(charset("UTF-8"))

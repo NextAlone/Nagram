@@ -35,8 +35,8 @@ import java.util.*
 
 object ProxyUtil {
 
-    @JvmStatic
-    val cacheFile = File(ApplicationLoader.applicationContext.filesDir.parent, "nekox/proxy_list.json")
+    @JvmField
+    val cacheFile = File(ApplicationLoader.applicationContext.filesDir.parentFile, "nekox/remote_proxy_list.json")
 
     @JvmStatic
     fun isVPNEnabled(): Boolean {
@@ -214,7 +214,7 @@ object ProxyUtil {
 
             FileLog.e(it)
 
-            AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
+            AlertUtil.showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
 
         }
 
@@ -257,9 +257,9 @@ object ProxyUtil {
 
         }.getOrThrow()
 
-        if (SharedConfig.addProxy(info) != info) {
+        if (!(SharedConfig.addProxy(info) === info)) {
 
-            error("proxy already exists")
+            error("already exists")
 
         }
 

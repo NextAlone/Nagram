@@ -102,15 +102,17 @@
     <string name="ReorderByPing">Reorder servers by ping</string>
     <string name="ExportProxies">Export servers to file</string>
     <string name="ImportProxies">Import servers from file</string>
-<string name="ImportProxyList">Import proxy servers</string>
+    <string name="ImportProxyList">Import proxy servers</string>
     <string name="ImportProxyListConfirm">Are you sure you want to **import proxy servers**?</string>
 
     <string name="InvalidProxyFile">Invalid proxy list file: </string>
     <string name="ImportedProxies">Imported proxy servers: </string>
     <string name="ErrorsInImport">Import errors: </string>
     <string name="NoProxy">You haven\'t added any proxy servers.</string>
-    <string name="DeleteAllProxies">Delete all servers</string>
-    <string name="DeleteAllProxiesAlert">Warning! This will **delete all proxies**.</string>
+    <string name="DeleteAllServer">Delete all servers</string>
+    <string name="DeleteUnavailableServer">Delete unavailable servers</string>
+    <string name="DeleteAllServerConfirm">Are you sure you want to **delete all servers**?</string>
+    <string name="DeleteUnavailableServerConfirm">Are you sure you want to **delete unavailable servers**?</string>
 
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
 

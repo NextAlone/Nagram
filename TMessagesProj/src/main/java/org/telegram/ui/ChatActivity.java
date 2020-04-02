@@ -14964,7 +14964,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                             showDialog(builder.create());
                         }
-                    } else if (locFile.getName().toLowerCase().endsWith(".nekox.json")) {
+                    } else if (locFile.getName().toLowerCase().endsWith(".json")) {
 
                         File finalLocFile = locFile;
                         AlertUtil.showConfirm(getParentActivity(),

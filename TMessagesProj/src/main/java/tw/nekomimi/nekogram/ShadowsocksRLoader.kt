@@ -87,6 +87,10 @@ class ShadowsocksRLoader {
 
         val hash = (host + remotePort + password + protocol + obfs + method).hashCode()
 
+        override fun equals(other: Any?): Boolean {
+            return super.equals(other) || (other is Bean && hash == other.hash)
+        }
+
         /*
         init {
 
@@ -134,13 +138,13 @@ class ShadowsocksRLoader {
 
                 runCatching {
 
-                    bean.obfs_param = Utils.decodeUrlSafe(httpUrl.queryParameter("obfsparam")!!)
+                    bean.obfs_param = Utils.decode(httpUrl.queryParameter("obfsparam")!!)
 
                 }
 
                 runCatching {
 
-                    bean.protocol_param = Utils.decodeUrlSafe(httpUrl.queryParameter("protoparam")!!)
+                    bean.protocol_param = Utils.decode(httpUrl.queryParameter("protoparam")!!)
 
                 }
 
@@ -150,7 +154,7 @@ class ShadowsocksRLoader {
 
                     if (remarks?.isNotBlank() == true) {
 
-                        bean.remarks = Utils.decodeUrlSafe(remarks)
+                        bean.remarks = Utils.decode(remarks)
 
                     }
 

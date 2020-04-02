@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram
 
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
+import com.v2ray.ang.dto.AngConfig
 import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -77,6 +78,9 @@ class ShadowsocksLoader {
             var method: String = "aes-256-cfb",
             var remarks: String? = null
     ) {
+        override fun equals(other: Any?): Boolean {
+            return super.equals(other) || (other is Bean && hash == other.hash)
+        }
 
         /*
         init {
@@ -126,7 +130,7 @@ class ShadowsocksLoader {
 
                     }
 
-                    val methodAndPswd = Utils.decodeUrlSafe(link.username)
+                    val methodAndPswd = Utils.decode(link.username)
 
                     return Bean(
                             link.host,

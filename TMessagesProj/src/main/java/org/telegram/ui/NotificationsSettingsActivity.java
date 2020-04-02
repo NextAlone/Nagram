@@ -67,6 +67,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import tw.nekomimi.nekogram.utils.AlertUtil;
+
 public class NotificationsSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     public static class NotificationException {
@@ -580,7 +582,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             } else if (position == notificationsServiceRow) {
                 if (XiaomiUtilities.isMIUI() && !XiaomiUtilities.isCustomPermissionGranted(XiaomiUtilities.OP_AUTO_START)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Telegram");
+                    builder.setTitle(LocaleController.getString("NekoX",R.string.NekoX));
                     builder.setMessage(LocaleController.getString("MIUIPermissionNote",R.string.MIUIPermissionNote));
                     builder.setPositiveButton(LocaleController.getString("OK",R.string.OK),(_x,_y) -> {
 
@@ -594,9 +596,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     if (openNotificationListenSettings()) {
                         if (isNotificationListenerEnabled()) {
-                            AlertsCreator.showSimpleToast(null, LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
+                            AlertUtil.showToast( LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
                         } else {
-                            AlertsCreator.showSimpleToast(null, LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
+                            AlertUtil.showToast(LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
                         }
                     }
                 } else {
@@ -993,7 +995,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("OnlyIfSilent", R.string.OnlyIfSilent), true);
                         }
                     } else if (position == repeatRow) {
-                        int minutes = preferences.getInt("repeat_messages", 60);
+                        int minutes = preferences.getInt("repeat_messages", 5);
                         String value;
                         if (minutes == 0) {
                             value = LocaleController.getString("RepeatNotificationsNever", R.string.RepeatNotificationsNever);

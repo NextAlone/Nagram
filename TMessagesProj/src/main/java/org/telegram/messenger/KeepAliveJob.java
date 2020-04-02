@@ -21,23 +21,20 @@ public class KeepAliveJob extends JobIntentService {
     private static final Object sync = new Object();
 
     public static void startJob() {
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                if (startingJob || countDownLatch != null) {
-                    return;
+        Utilities.globalQueue.postRunnable(() -> {
+            if (startingJob || countDownLatch != null) {
+                return;
+            }
+            try {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("starting keep-alive job");
                 }
-                try {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("starting keep-alive job");
-                    }
-                    synchronized (sync) {
-                        startingJob = true;
-                    }
-                    enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
-                } catch (Exception ignore) {
+                synchronized (sync) {
+                    startingJob = true;
+                }
+                enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
+            } catch (Exception ignore) {
 
-                }
             }
         });
     }
