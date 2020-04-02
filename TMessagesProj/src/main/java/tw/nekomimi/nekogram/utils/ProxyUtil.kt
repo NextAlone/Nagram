@@ -26,6 +26,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONArray
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
+import org.telegram.tgnet.TLRPC
 import org.telegram.ui.ActionBar.BottomSheet
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -132,7 +133,7 @@ object ProxyUtil {
         val clip = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         var exists = false
-
+        
         clip.primaryClip?.getItemAt(0)?.text?.split('\n')?.map { it.split(" ") }?.forEach {
 
             it.forEach { line ->

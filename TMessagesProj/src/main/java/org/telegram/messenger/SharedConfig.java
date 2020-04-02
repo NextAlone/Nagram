@@ -257,7 +257,7 @@ public class SharedConfig {
 
             HttpUrl lnk = HttpUrl.parse(url);
 
-            return new ProxyInfo(lnk.queryParameter("server"),
+            return new ProxyInfo(lnk.queryParameter("address"),
                     Utilities.parseInt(lnk.queryParameter("port")),
                     lnk.queryParameter("user"),
                     lnk.queryParameter("pass"),
@@ -1396,11 +1396,13 @@ public class SharedConfig {
 
     }
 
-    public static void setCurrentProxy(ProxyInfo info) {
+    public static void setCurrentProxy(@Nullable ProxyInfo info) {
 
         currentProxy = info;
 
-        MessagesController.getGlobalMainSettings().edit().putInt("current_proxy", info.hashCode()).apply();
+        MessagesController.getGlobalMainSettings().edit()
+                .putInt("current_proxy", info == null ? 0 : info.hashCode())
+                .apply();
 
         saveProxyList();
 
@@ -1422,7 +1424,7 @@ public class SharedConfig {
         proxyList.clear();
         currentProxy = null;
 
-        int current = MessagesController.getGlobalMainSettings().getInt("curent_proxy", 0);
+        int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
         if (!NekoXConfig.hidePublicProxy) {
 
@@ -1704,32 +1706,6 @@ public class SharedConfig {
         proxyListLoaded = false;
 
         proxyList.clear();
-
-        saveProxyList();
-
-        loadProxyList();
-
-    }
-
-    public static void deleteUnavailableProxy() {
-
-        setProxyEnable(false);
-
-        proxyListLoaded = false;
-
-        Iterator<ProxyInfo> iter = proxyList.iterator();
-
-        while (iter.hasNext()) {
-
-            ProxyInfo info = iter.next();
-
-            if (!info.checking && !info.available && info.availableCheckTime != 0) {
-
-                iter.remove();
-
-            }
-
-        }
 
         saveProxyList();
 
