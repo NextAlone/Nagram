@@ -4,6 +4,7 @@
     <string name="NekoXProxy">NekoX 公共代理</string>
     <string name="PublicPrefix">[ 公共 ]</string>
     <string name="NekoXProxyInfo">这可能需要几十秒的时间来加载 NekoX 公共代理 :)</string>
+    <string name="HidePublicProxyList">隐藏公共代理列表</string>
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
     <string name="SaveCacheToSdcard">保存缓存到内部存储*</string>
