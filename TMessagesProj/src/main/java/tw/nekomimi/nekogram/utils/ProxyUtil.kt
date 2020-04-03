@@ -81,7 +81,7 @@ object ProxyUtil {
 
             // 从 GITHUB PAGES 读取
 
-            val list = JSONArray(HttpUtil.get("https://nekogramx.github.io/ProxyList/proxy_list.json")).toString()
+            val list = JSONArray(HttpUtil.get("https://nekox-dev.github.io/ProxyList/proxy_list.json")).toString()
 
             if (!cacheFile.isFile || list != cacheFile.readText()) {
 
@@ -109,7 +109,7 @@ object ProxyUtil {
 
             // 从 GITHUB 主站 读取
 
-            val master = HttpUtil.getByteArray("https://github.com/NekogramX/ProxyList/archive/master.zip")
+            val master = HttpUtil.getByteArray("https://github.com/NekoX-Dev/ProxyList/archive/master.zip")
 
             val list = JSONArray(String(ZipUtil.read(ByteArrayInputStream(master), "ProxyList-master/proxy_list.json"))).toString()
 
@@ -133,7 +133,7 @@ object ProxyUtil {
         val clip = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         var exists = false
-        
+
         clip.primaryClip?.getItemAt(0)?.text?.split('\n')?.map { it.split(" ") }?.forEach {
 
             it.forEach { line ->
@@ -238,7 +238,7 @@ object ProxyUtil {
 
                 }
 
-                 SharedConfig.ShadowsocksProxy(link)
+                SharedConfig.ShadowsocksProxy(link)
 
             } else if (link.startsWith(SSR_PROTOCOL)) {
 
@@ -424,15 +424,23 @@ object ProxyUtil {
         bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
         val source = RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray)
 
-        val result = qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)))
+        try {
 
-        if (result == null || result.text.isBlank()) {
+            val result = qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)))
 
-            AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
+            if (result == null || result.text.isBlank()) {
 
-        } else {
+                AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
 
-            showLinkAlert(ctx, result.text)
+            } else {
+
+                showLinkAlert(ctx, result.text)
+
+            }
+
+        } catch (ex: NoSuchMethodError) {
+
+            AlertUtil.showSimpleAlert(ctx, "很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
 
         }
 

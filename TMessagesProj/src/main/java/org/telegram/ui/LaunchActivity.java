@@ -2869,16 +2869,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             ApplicationLoader.mainInterfacePausedStageQueueTime = 0;
         });
         onPasscodePause();
-        if (actionBarLayout != null) {
-            actionBarLayout.onPause();
-        }
-        if (AndroidUtilities.isTablet()) {
-            rightActionBarLayout.onPause();
-            layersActionBarLayout.onPause();
-        }
-        if (passcodeView != null) {
-            passcodeView.onPause();
-        }
+        try {
+            if (actionBarLayout != null) {
+                actionBarLayout.onPause();
+            }
+            if (AndroidUtilities.isTablet()) {
+                rightActionBarLayout.onPause();
+                layersActionBarLayout.onPause();
+            }
+            if (passcodeView != null) {
+                passcodeView.onPause();
+            }
+        } catch (Exception ignored) {}
         ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onPause();
@@ -3719,34 +3721,36 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     @Override
     public void onBackPressed() {
-        if (passcodeView != null && passcodeView.getVisibility() == View.VISIBLE) {
-            finish();
-            return;
-        }
-        if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
-            SecretMediaViewer.getInstance().closePhoto(true, false);
-        } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
-            PhotoViewer.getInstance().closePhoto(true, false);
-        } else if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
-            ArticleViewer.getInstance().close(true, false);
-        } else if (drawerLayoutContainer.isDrawerOpened()) {
-            drawerLayoutContainer.closeDrawer(false);
-        } else if (AndroidUtilities.isTablet()) {
-            if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
-                layersActionBarLayout.onBackPressed();
-            } else {
-                boolean cancel = false;
-                if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
-                    BaseFragment lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
-                    cancel = !lastFragment.onBackPressed();
-                }
-                if (!cancel) {
-                    actionBarLayout.onBackPressed();
-                }
+        try {
+            if (passcodeView != null && passcodeView.getVisibility() == View.VISIBLE) {
+                finish();
+                return;
             }
-        } else {
-            actionBarLayout.onBackPressed();
-        }
+            if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
+                SecretMediaViewer.getInstance().closePhoto(true, false);
+            } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
+                PhotoViewer.getInstance().closePhoto(true, false);
+            } else if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
+                ArticleViewer.getInstance().close(true, false);
+            } else if (drawerLayoutContainer.isDrawerOpened()) {
+                drawerLayoutContainer.closeDrawer(false);
+            } else if (AndroidUtilities.isTablet()) {
+                if (layersActionBarLayout != null && layersActionBarLayout.getVisibility() == View.VISIBLE) {
+                    layersActionBarLayout.onBackPressed();
+                } else if (rightActionBarLayout != null) {
+                    boolean cancel = false;
+                    if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
+                        BaseFragment lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                        cancel = !lastFragment.onBackPressed();
+                    }
+                    if (!cancel) {
+                        actionBarLayout.onBackPressed();
+                    }
+                }
+            } else {
+                actionBarLayout.onBackPressed();
+            }
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -3881,7 +3885,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
             ArticleViewer.getInstance().close(false, true);
         }
-        if (AndroidUtilities.isTablet()) {
+        if (AndroidUtilities.isTablet() && layersActionBarLayout != null) {
             drawerLayoutContainer.setAllowOpenDrawer(!(fragment instanceof LoginActivity || fragment instanceof CountrySelectActivity) && layersActionBarLayout.getVisibility() != View.VISIBLE, true);
             if (fragment instanceof DialogsActivity) {
                 DialogsActivity dialogsActivity = (DialogsActivity) fragment;

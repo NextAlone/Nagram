@@ -8,6 +8,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
+import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
@@ -40,12 +41,20 @@ class ShadowsocksRLoader {
 
         }.apply {
 
-            start(listOf("${ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir}/libssr-local.so",
-                    "-b", "127.0.0.1",
-                    "--host", bean.host,
-                    "-t", "600",
-                    "-c", cacheCfg.path,
-                    "-l", port.toString()))
+            runCatching {
+
+                start(listOf(FileUtil.extLib("ssr-local").path,
+                        "-b", "127.0.0.1",
+                        "--host", bean.host,
+                        "-t", "600",
+                        "-c", cacheCfg.path,
+                        "-l", port.toString()))
+
+            }.onFailure {
+
+                FileLog.e(it)
+
+            }
 
         }
 

@@ -184,6 +184,7 @@ import org.telegram.ui.Components.WebPlayerView;
 import java.io.File;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -10902,12 +10903,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     spannableAuthor = null;
                     spans = null;
                 }
-                if (currentBlock.published_date != 0 && !TextUtils.isEmpty(author)) {
-                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000), author);
-                } else if (!TextUtils.isEmpty(author)) {
-                    text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, author);
-                } else {
-                    text = LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000);
+                try {
+                    if (currentBlock.published_date != 0 && !TextUtils.isEmpty(author)) {
+                        text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000), author);
+                    } else if (!TextUtils.isEmpty(author)) {
+                        text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, author);
+                    } else {
+                        text = LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000);
+                    }
+                } catch (Exception e) {
+                    text = new Date((long) currentBlock.published_date * 1000).toLocaleString();
                 }
                 try {
                     if (spans != null && spans.length > 0) {

@@ -649,7 +649,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         } else if (id == NotificationCenter.themeAccentListUpdated) {
             if (listAdapter != null && themeAccentListRow != -1) {
-                listAdapter.notifyItemChanged(themeAccentListRow, new Object());
+                try {
+                    listView.stopScroll();
+                    listAdapter.notifyItemChanged(themeAccentListRow, new Object());
+                } catch (Exception ignored) {}
             }
         } else if (id == NotificationCenter.themeListUpdated) {
             updateRows(true);

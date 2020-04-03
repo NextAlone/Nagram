@@ -365,7 +365,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 			sheet.show();
 			ViewGroup container=sheet.getSheetContainer();
 			for(int i=0;i<container.getChildCount();i++){
-				BottomSheet.BottomSheetCell cell=(BottomSheet.BottomSheetCell) container.getChildAt(i);
+				View child = container.getChildAt(i);
+				if (!(child instanceof BottomSheet.BottomSheetCell)) continue;
+				BottomSheet.BottomSheetCell cell=(BottomSheet.BottomSheetCell) child;
 				cell.setTextColor(0xFFFFFFFF);
 			}
 			return;

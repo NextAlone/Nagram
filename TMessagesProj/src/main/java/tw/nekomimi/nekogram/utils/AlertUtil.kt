@@ -26,7 +26,7 @@ object AlertUtil {
     @JvmStatic
     fun showSimpleAlert(ctx: Context, text: String) {
 
-        val builder = AlertDialog.Builder(ctx)
+        val builder = AlertDialog.Builder(ctx ?: ApplicationLoader.applicationContext)
 
         builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
         builder.setMessage(text)

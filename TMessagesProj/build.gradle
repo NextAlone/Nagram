@@ -49,6 +49,41 @@ android {
 
     defaultConfig.applicationId = "nekox.messenger"
 
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 29
+
+        versionName "6.0.1.7"
+        versionCode = 11
+
+        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+
+        def appId = null
+        def appHash = null
+
+        //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
+
+        if (project.rootProject.file('local.properties').exists()) {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID")
+            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH")
+        }
+
+        buildConfigField 'int', 'APP_ID', appId != null ? appId : "1391584"
+        buildConfigField 'String', 'APP_HASH', "\"" + (appHash != null ? appHash : "355c91550b0d658cfb7ff89dcf91a08c") + "\""
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+
+        manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
+
+    }
+
     externalNativeBuild {
         ndkBuild {
             path "jni/Android.mk"
@@ -225,41 +260,6 @@ android {
             minSdkVersion 21
             versionNameSuffix '-minApi21'
         }
-    }
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
-
-        versionName "6.0.1.6"
-        versionCode = 10
-
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
-
-        def appId = null
-        def appHash = null
-
-        //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
-
-        if (project.rootProject.file('local.properties').exists()) {
-            Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID")
-            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH")
-        }
-
-        buildConfigField 'int', 'APP_ID', appId != null ? appId : "1391584"
-        buildConfigField 'String', 'APP_HASH', "\"" + (appHash != null ? appHash : "355c91550b0d658cfb7ff89dcf91a08c") + "\""
-
-        externalNativeBuild {
-            ndkBuild {
-                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8"
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            }
-        }
-
-        manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
-
     }
 
     tasks.all { task ->

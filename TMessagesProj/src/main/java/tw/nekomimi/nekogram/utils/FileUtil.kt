@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.utils
 
 import org.telegram.messenger.ApplicationLoader
 import java.io.File
+import java.io.FileInputStream
 
 object FileUtil {
 
@@ -14,14 +15,11 @@ object FileUtil {
 
             if (dir.isFile) dir.deleteRecursively()
 
-            runCatching {
+            if (!dir.mkdirs() && !dir.isDirectory) {
 
-                if (!dir.mkdir()) {
-                    error("unable to create dir ${dir.path}")
+                error("unable to create dir ${dir.path}")
 
-                }
-
-            }.getOrThrow()
+            }
 
         }
 
@@ -38,15 +36,11 @@ object FileUtil {
 
             if (!file.isFile) {
 
-                runCatching {
+                if (!file.createNewFile() && !file.isFile) {
 
-                    if (!file.createNewFile()) {
+                    error("unable to create file ${file.path}")
 
-                        error("unable to create file ${file.path}")
-
-                    }
-
-                }.getOrThrow()
+                }
 
             }
 
@@ -67,13 +61,56 @@ object FileUtil {
     }
 
     @JvmStatic
-    fun saveAsset(path: String,saveTo: File) {
+    fun saveAsset(path: String, saveTo: File) {
 
         val assets = ApplicationLoader.applicationContext.assets
 
         saveTo.outputStream().use {
 
             IoUtil.copy(assets.open(path), it)
+
+        }
+
+    }
+
+    @JvmStatic
+    fun extLib(name: String): File {
+
+        val execFile = File(ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir, "lib$name.so")
+
+        if (!execFile.isFile) {
+
+            val abi = when (execFile.parentFile!!.name) {
+
+                "arm64", "aarch64" -> "arm64-v8a"
+                "x86", "i386", "i486", "i586", "i686" -> "x86"
+                "x86_64", "amd64" -> "x86_64"
+                else -> "armeabi-v7a"
+
+            }
+
+            saveNonAsset("lib/$abi/${execFile.name}", execFile);
+
+        }
+
+        if (!execFile.canExecute()) {
+
+            execFile.setExecutable(true)
+
+        }
+
+        return execFile
+
+    }
+
+    @JvmStatic
+    fun saveNonAsset(path: String, saveTo: File) {
+
+        val assets = ApplicationLoader.applicationContext.assets
+
+        saveTo.outputStream().use {
+
+            IoUtil.copy(FileInputStream(assets.openNonAssetFd(path).fileDescriptor), it)
 
         }
 
