@@ -4,6 +4,7 @@
     <string name="NekoXProxy">NekoX Público Proxy</string>
     <string name="PublicPrefix">[ Público ]</string>
     <string name="NekoXProxyInfo">Pode levar dezenas de segundos para carregar o proxy interno do NekoX Público :)</string>
+    <string name="HidePublicProxyList">Ocultar lista de proxy público</string>
     <string name="DisableChatAction">Não enviar meu status de entrada</string>
     <string name="FakeScreenshot">Pré-visualizar imagem</string>
     <string name="SaveCacheToSdcard">Salvar cache em sdcard*</string>
@@ -23,6 +24,7 @@
     <string name="FilterNameUnreadDescription">Somente mensagens não lidas</string>
     <string name="FilterNameUnmutedAndUnread">Não silenciado &amp; Não Lido</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Apenas mensagens não lidas de bate-papos não mutados</string>
+    <string name="IgnoreMutedCount">Ignorar contagem não lida silenciada na guia pasta</string>
     <string name="DialogsSettings">Configurações de diálogo</string>
     <string name="SortMenu">Configurações de diálogo</string>
     <string name="SortByUnread">Classificar por não lidas</string>
@@ -69,6 +71,21 @@
     <string name="SSRProtocolParams">Parâmetros de protocolo</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyRemarks">Observações</string>
+    <string name="RetestPing">Teste novamente o ping para todos os servidores</string>
+    <string name="ReorderByPing">Reordenar servidores por ping</string>
+    <string name="ExportProxies">Exportar servidores para arquivo</string>
+    <string name="ImportProxies">Importar servidores do arquivo</string>
+    <string name="ImportProxyList">Importar servidores proxy</string>
+    <string name="ImportProxyListConfirm">Tem certeza de que deseja **importar servidores proxy**?</string>
+    <string name="InvalidProxyFile">Arquivo de lista de proxy inválido: </string>
+    <string name="ImportedProxies">Servidores proxy importados: </string>
+    <string name="ErrorsInImport">Erros de importação: </string>
+    <string name="NoProxy">Você não adicionou nenhum servidor proxy.</string>
+    <string name="DeleteAllServer">Excluir todos os servidores</string>
+    <string name="DeleteUnavailableServer">Excluir servidores indisponíveis</string>
+    <string name="DeleteAllServerConfirm">Tem certeza de que deseja **excluir todos os servidores**?</string>
+    <string name="DeleteUnavailableServerConfirm">Tem certeza de que deseja **excluir servidores indisponíveis**?</string>
     <string name="MinApi21Required">Desculpe, você precisa pelo menos do Android 5 (API21).</string>
     <string name="ImportProxyFromClipboard">Importar da área de transferência</string>
     <string name="BrokenLink">Link desconhecido / quebrado</string>
