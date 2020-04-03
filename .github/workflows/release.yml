@@ -41,3 +41,4 @@ jobs:
           packageName: nekox.messenger
           releaseFile: "TMessagesProj/build/outputs/bundle/afatRelease/TMessagesProj-afat-release.aab"
           track: production
+        if: "!startsWith(github.event.head_commit.message, '!!')"

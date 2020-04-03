@@ -1,12 +1,12 @@
 # NekoX
-![Logo](https://raw.githubusercontent.com/NekogramX/NekoX/master/TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher.png)  
+![Logo](https://raw.githubusercontent.com/NekoX-Dev/NekoX/master/TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher.png)  
 
-NekogramX is an UNOFFICIAL app that uses Telegram's API.
+NekoX-Dev is an UNOFFICIAL app that uses Telegram's API.
 
 - Google play store: (unavailable now)
-- Update news : https://t.me/NekogramX
+- Update news : https://t.me/NekoX-Dev
 - Feedback: https://t.me/NekoXChat
-- Feedback: https://github.com/NekogramX/NekoX/issues
+- Feedback: https://github.com/NekoX-Dev/NekoX/issues
 
 ## API, Protocol documentation
 
@@ -75,7 +75,7 @@ As for the specialized strings, we use Crowdin to translate Nekogram. Join proje
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars3.githubusercontent.com/u/56506714?s=460&v=4" width="80px;"/><br /><sub>世界</sub>](https://github.com/nekohasekai)<br />[💻](https://github.com/NekogramX/NekoX/commits?author=nekohasekai "Code") | [<img src="https://avatars2.githubusercontent.com/u/42698724?s=460&v=4" width="80px;"/><br /><sub>猫耳逆变器</sub>](https://github.com/NekoInverter)<br />[💻](https://github.com/NekogramX/NekoX/commits?author=NekoInverter "Code") | [<img src="https://avatars1.githubusercontent.com/u/18373361?s=460&v=4" width="80px;"/><br /><sub>梨子</sub>](https://github.com/rikakomoe)<br />[💻](https://github.com/NekogramX/NekoX/commits?author=rikakomoe "Code") | [<img src="https://i.loli.net/2020/01/17/e9Z5zkG7lNwUBPE.jpg" width="80px;"/><br /><sub>呆瓜</sub>](https://t.me/Duang)<br /> [🎨](#design-duang "Design") |
+| [<img src="https://avatars3.githubusercontent.com/u/56506714?s=460&v=4" width="80px;"/><br /><sub>世界</sub>](https://github.com/nekohasekai)<br />[💻](https://github.com/NekoX-Dev/NekoX/commits?author=nekohasekai "Code") | [<img src="https://avatars2.githubusercontent.com/u/42698724?s=460&v=4" width="80px;"/><br /><sub>猫耳逆变器</sub>](https://github.com/NekoInverter)<br />[💻](https://github.com/NekoX-Dev/NekoX/commits?author=NekoInverter "Code") | [<img src="https://avatars1.githubusercontent.com/u/18373361?s=460&v=4" width="80px;"/><br /><sub>梨子</sub>](https://github.com/rikakomoe)<br />[💻](https://github.com/NekoX-Dev/NekoX/commits?author=rikakomoe "Code") | [<img src="https://i.loli.net/2020/01/17/e9Z5zkG7lNwUBPE.jpg" width="80px;"/><br /><sub>呆瓜</sub>](https://t.me/Duang)<br /> [🎨](#design-duang "Design") |
 | :---: | :---: | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
