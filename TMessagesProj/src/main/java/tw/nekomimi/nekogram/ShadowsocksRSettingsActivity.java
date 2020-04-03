@@ -76,8 +76,6 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
     private static final int done_button = 1;
 
-    private static String[] methodSet = ShadowsocksLoader.Companion.getMethods();
-
     public class TypeCell extends FrameLayout {
 
         private TextView textView;
@@ -311,7 +309,7 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(methodSet, methodField.getValueTextView()::setText);
+            select.setItems(ShadowsocksRLoader.Companion.getMethods(), methodField.getValueTextView()::setText);
 
             select.show();
 
