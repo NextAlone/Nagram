@@ -9,8 +9,11 @@ import android.os.Build;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.SharedConfig;
+
+import java.util.Locale;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -271,6 +274,8 @@ public class NekoConfig {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("nameOrder", nameOrder);
         editor.apply();
+
+        LocaleController.getInstance().recreateFormatters();
     }
 
     public static void setMapPreviewProvider(int provider) {

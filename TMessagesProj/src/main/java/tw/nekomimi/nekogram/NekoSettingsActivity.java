@@ -272,7 +272,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         LocaleController.getString("FirstLast", R.string.FirstLast),
                         LocaleController.getString("FirstLast", R.string.FirstLast)
                 }, (i) -> {
-                    NekoConfig.setNameOrder(i);
+                    NekoConfig.setNameOrder(i + 1);
                     listAdapter.notifyItemChanged(mapPreviewRow);
                 });
 
