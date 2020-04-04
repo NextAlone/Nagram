@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
+import com.v2ray.ang.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -245,7 +246,7 @@ public class SharedConfig {
 
             if (!StrUtil.isBlank(remarks)) {
 
-                builder.fragment(remarks);
+                builder.fragment(Utils.INSTANCE.urlEncode(remarks));
 
             }
 

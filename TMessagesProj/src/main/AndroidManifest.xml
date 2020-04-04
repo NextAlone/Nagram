@@ -210,15 +210,6 @@
             android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity
-            android:name=".GoogleVoiceClientActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.voicesearch.SEND_MESSAGE_TO_CONTACTS" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="org.telegram.ui.VoIPActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:excludeFromRecents="true"

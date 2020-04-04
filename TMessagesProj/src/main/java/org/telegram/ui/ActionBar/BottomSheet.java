@@ -507,16 +507,17 @@ public class BottomSheet extends Dialog {
             textView = new TextView(context);
             textView.setLines(1);
             textView.setSingleLine(true);
-            textView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
             textView.setPadding(AndroidUtilities.dp(16),0,0,0);
             if (type == 0) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                textView.setGravity(Gravity.CENTER_VERTICAL);
             } else if (type == 1) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setGravity(Gravity.CENTER);
             }
             addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
         }

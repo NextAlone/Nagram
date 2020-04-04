@@ -39,6 +39,31 @@ class PopupBuilder(anchor: View) : ActionBarMenuItem(anchor.context, null, Theme
 
     }
 
+    @FunctionalInterface
+    interface IndexedItemListener {
+
+        fun onClick(item: Int)
+
+    }
+
+    fun setItemsIndexed(items: Array<CharSequence>, listener: IndexedItemListener) {
+
+        removeAllSubItems()
+
+        items.forEachIndexed { i, v ->
+
+            addSubItem(i, v)
+
+        }
+
+        setDelegate {
+
+            listener.onClick(it)
+
+        }
+
+    }
+
     fun show() {
 
         toggleSubMenu()

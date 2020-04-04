@@ -336,8 +336,7 @@ public class ContactsController extends BaseController {
                 if (!found) {
                     try {
                         am.removeAccount(accounts[a], null, null);
-                    } catch (Exception ignore) {
-
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -352,8 +351,7 @@ public class ContactsController extends BaseController {
                     TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                     systemAccount = new Account(formatName(user.first_name,user.last_name), BuildConfig.APPLICATION_ID);
                     am.addAccountExplicitly(systemAccount, "", null);
-                } catch (Exception ignore) {
-
+                } catch (Exception ignored) {
                 }
             }
         }

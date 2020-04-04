@@ -500,7 +500,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                     } else {
                         headerCell.setText(LocaleController.getString("AutoDownloadFilesTitle", R.string.AutoDownloadFilesTitle));
                     }
-                    linearLayout.addView(headerCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                    linearLayout.addView(headerCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
                     final MaxFileSizeCell[] sizeCell = new MaxFileSizeCell[1];
                     final TextCheckCell[] checkCell = new TextCheckCell[1];
