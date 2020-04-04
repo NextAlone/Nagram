@@ -46,9 +46,15 @@ class ShadowsocksLoader {
                         "-b", "127.0.0.1",
                         "-t", "600",
                         "-c", cacheCfg.path,
-                        "-l", port.toString()))
+                        "-l", port.toString())) {
+
+                    cacheCfg.delete()
+
+                }
 
             }.onFailure {
+
+                cacheCfg.delete()
 
                 FileLog.e(it)
 

@@ -48,9 +48,15 @@ class ShadowsocksRLoader {
                         "--host", bean.host,
                         "-t", "600",
                         "-c", cacheCfg.path,
-                        "-l", port.toString()))
+                        "-l", port.toString())) {
+
+                    cacheCfg.delete()
+
+                }
 
             }.onFailure {
+
+                cacheCfg.delete()
 
                 FileLog.e(it)
 
