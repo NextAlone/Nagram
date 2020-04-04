@@ -10,7 +10,6 @@ package org.telegram.ui.ActionBar;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -26,9 +25,6 @@ public class ActionBarMenu extends LinearLayout {
         super(context);
         setOrientation(LinearLayout.HORIZONTAL);
         parentActionBar = layer;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            setLayoutDirection(LAYOUT_DIRECTION_LTR);
-        }
     }
 
     public ActionBarMenu(Context context) {

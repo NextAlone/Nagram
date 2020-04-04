@@ -8774,7 +8774,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         return 10;
                                     } else if (mime.endsWith("/xml")) {
                                         return 5;
-                                    } else if (mime.endsWith("/json")) {
+                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox.json"))) {
                                         return 21;
                                     } else if (!messageObject.isNewGif() && mime.endsWith("/mp4") || mime.endsWith("/png") || mime.endsWith("/jpg") || mime.endsWith("/jpeg")) {
                                         return 6;

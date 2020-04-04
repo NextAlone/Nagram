@@ -105,15 +105,8 @@ class ShadowsocksLoader {
             put("server", host)
             put("server_port", remotePort)
             put("password", password)
-            put("remarks", remarks ?: "Proxy From NekoX")
-            put("route", "all")
-            put("remote_dns", "8.8.8.8:53")
+            put("method",method)
             put("ipv6", true)
-            put("metered", false)
-            put("proxy_apps", JSONObject().apply {
-                put("enabled", false)
-            })
-            put("udpdns", false)
         }
 
         companion object {
