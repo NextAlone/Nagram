@@ -10912,7 +10912,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         text = LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000);
                     }
                 } catch (Exception e) {
-                    text = new Date((long) currentBlock.published_date * 1000).toLocaleString();
+                    FileLog.e(e);
+                    text = "Nya ~";
                 }
                 try {
                     if (spans != null && spans.length > 0) {

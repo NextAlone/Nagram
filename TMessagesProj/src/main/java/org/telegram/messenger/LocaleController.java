@@ -237,6 +237,7 @@ public class LocaleController {
                 }
             }
         }
+        if (localInstance.formatterDay == null || localInstance.chatFullDate == null) localInstance.recreateFormatters();
         return localInstance;
     }
 
@@ -2067,12 +2068,12 @@ public class LocaleController {
         File pathToFile = localeInfo.getPathToFile();
         File pathToBaseFile = localeInfo.getPathToBaseFile();
 
-        if (!pathToFile.isFile() || (pathToBaseFile != null && !pathToBaseFile.isFile())) {
+        if ((pathToFile != null && !pathToFile.isFile()) || (pathToBaseFile != null && !pathToBaseFile.isFile())) {
             try {
                 if (pathToBaseFile != null && !pathToBaseFile.isFile() && ArrayUtils.contains(prebuilt, pathToBaseFile.getName())) {
                     FileUtil.saveAsset("languages/" + pathToBaseFile.getName(), pathToBaseFile);
                 }
-                if (!pathToFile.isFile() && ArrayUtils.contains(prebuilt, pathToFile.getName())) {
+                if (pathToFile != null && !pathToFile.isFile() && ArrayUtils.contains(prebuilt, pathToFile.getName())) {
                     FileUtil.saveAsset("languages/" + pathToFile.getName(), pathToFile);
                 }
             } catch (Exception e) {

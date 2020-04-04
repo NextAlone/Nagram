@@ -338,13 +338,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             JSONObject proxyRootObject = new JSONObject(FileUtil.readUtf8String(proxyListFile));
 
-            if (proxyRootObject.isNull("nekox_proxy_list_verion")) {
-
-                throw new IllegalArgumentException("not a nekox proxy list file.");
-
-            }
-
-            int version = proxyRootObject.getInt("nekox_proxy_list_verion");
+            int version = proxyRootObject.optInt("nekox_proxy_list_version", 1);
 
             if (version == 1) {
 
@@ -466,7 +460,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                         JSONObject listRoot = new JSONObject();
 
-                        listRoot.put("nekox_proxy_list_verion", 1);
+                        listRoot.put("nekox_proxy_list_version", 1);
 
                         JSONArray proxyArray = new JSONArray();
 
@@ -511,12 +505,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     }
                     getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
                 } else if (id == menu_import_json) {
-                    if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        try {
+                    try {
+                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
                             getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
-                        } catch (Throwable ignore) {
+                            return;
                         }
-                        return;
+                    } catch (Throwable ignore) {
                     }
                     DocumentSelectActivity fragment = new DocumentSelectActivity(false);
                     fragment.setMaxSelectedFiles(-1);

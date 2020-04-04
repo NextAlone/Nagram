@@ -13,7 +13,6 @@ import java.util.LinkedList;
 
 public class NekoXConfig {
 
-    public static int[] DEVELOPER_IDS = {896711046, 1121722278, 899300686, 339984997};
     public static String FAQ_URL = "https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31";
 
     private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Context.MODE_PRIVATE);

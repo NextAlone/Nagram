@@ -469,9 +469,11 @@ public class SharedConfig {
 
             port = ProxyManager.getPortForBean(bean);
 
-            loader = new VmessLoader();
+            VmessLoader loader = new VmessLoader();
             loader.initConfig(bean, port);
             loader.start();
+
+            this.loader = loader;
 
         }
 
@@ -480,9 +482,11 @@ public class SharedConfig {
 
             if (loader != null) {
 
+                VmessLoader loader = this.loader;
+
                 loader.stop();
 
-                loader = null;
+                this.loader = null;
 
             }
 
@@ -571,9 +575,11 @@ public class SharedConfig {
 
             port = ProxyManager.getPortForBean(bean);
 
-            loader = new ShadowsocksLoader();
+            ShadowsocksLoader loader = new ShadowsocksLoader();
             loader.initConfig(bean, port);
             loader.start();
+
+            this.loader = loader;
 
         }
 
@@ -582,9 +588,11 @@ public class SharedConfig {
 
             if (loader != null) {
 
+                ShadowsocksLoader loader = this.loader;
+
                 loader.stop();
 
-                loader = null;
+                this.loader = null;
 
             }
 
@@ -676,9 +684,11 @@ public class SharedConfig {
 
             port = ProxyManager.getPortForBean(bean);
 
-            loader = new ShadowsocksRLoader();
+            ShadowsocksRLoader loader = new ShadowsocksRLoader();
             loader.initConfig(bean, port);
             loader.start();
+
+            this.loader = loader;
 
         }
 
@@ -687,9 +697,11 @@ public class SharedConfig {
 
             if (loader != null) {
 
-                loader.stop();
+                ShadowsocksRLoader loader = this.loader;
 
-                loader = null;
+                this.loader = null;
+
+                loader.stop();
 
             }
 

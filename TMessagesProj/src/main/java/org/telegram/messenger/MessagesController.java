@@ -393,11 +393,19 @@ public class MessagesController extends BaseController implements NotificationCe
                                         return 1;
                                     } else if (is1contact && !is2contact) {
                                         return -1;
+                                    } else {
+                                        return 0;
                                     }
+                                } else {
+                                    return 0;
                                 }
                             }
+                        } else {
+                            return 0;
                         }
                     }
+                } else {
+                    return 0;
                 }
             }
         } else if (NekoXConfig.sortByUnmuted) {
@@ -419,9 +427,15 @@ public class MessagesController extends BaseController implements NotificationCe
                                 return 1;
                             } else if (is1contact && !is2contact) {
                                 return -1;
+                            } else {
+                                return 0;
                             }
+                        } else {
+                            return 0;
                         }
                     }
+                } else {
+                    return 0;
                 }
             }
         }
@@ -12022,7 +12036,30 @@ public class MessagesController extends BaseController implements NotificationCe
                     continue;
                 }
                 sortingDialogFilter = selectedDialogFilter[b];
-                Collections.sort(allDialogs, dialogComparator);
+
+                try {
+
+                    Collections.sort(allDialogs, dialogComparator);
+
+                } catch (Exception e) {
+
+                    NekoXConfig.sortByUnread = false;
+                    NekoXConfig.sortByUnmuted = false;
+                    NekoXConfig.sortByUser = false;
+                    NekoXConfig.sortByContacts = false;
+
+                    try {
+
+                        Collections.sort(allDialogs, dialogComparator);
+
+                    } catch (Exception ex) {
+
+                        FileLog.e(ex);
+
+                    }
+
+                }
+
                 ArrayList<TLRPC.Dialog> dialogsByFilter = selectedDialogFilter[b].dialogs;
 
                 for (int a = 0, N = allDialogs.size(); a < N; a++) {
@@ -12095,14 +12132,20 @@ public class MessagesController extends BaseController implements NotificationCe
 
         } catch (Exception e) {
 
-            FileLog.e(e);
-
             NekoXConfig.sortByUnread = false;
             NekoXConfig.sortByUnmuted = false;
             NekoXConfig.sortByUser = false;
             NekoXConfig.sortByContacts = false;
 
-            Collections.sort(allDialogs, dialogComparator);
+            try {
+
+                Collections.sort(allDialogs, dialogComparator);
+
+            } catch (Exception ex) {
+
+                FileLog.e(ex);
+
+            }
 
         }
         isLeftProxyChannel = true;

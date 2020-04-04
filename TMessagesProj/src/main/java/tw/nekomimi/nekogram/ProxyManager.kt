@@ -18,7 +18,7 @@ object ProxyManager {
 
         var port = pref.getInt(hash, -1)
 
-        if (!isPorxyAvilable(port)) {
+        if (!isProxyAvailable(port)) {
 
             port = mkNewPort()
 
@@ -37,7 +37,7 @@ object ProxyManager {
 
         var port = pref.getInt(hash, -1)
 
-        if (!isPorxyAvilable(port)) {
+        if (!isProxyAvailable(port)) {
 
             port = mkNewPort()
 
@@ -56,7 +56,7 @@ object ProxyManager {
 
         var port = pref.getInt(hash, -1)
 
-        if (!isPorxyAvilable(port)) {
+        if (!isProxyAvailable(port)) {
 
             port = mkNewPort()
 
@@ -78,13 +78,14 @@ object ProxyManager {
 
             port = random.nextInt(2048, 32768)
 
-        } while (!isPorxyAvilable(port))
+        } while (!isProxyAvailable(port))
 
         return port
 
     }
 
-    fun isPorxyAvilable(port: Int): Boolean {
+    @JvmStatic
+    fun isProxyAvailable(port: Int): Boolean {
 
         if (port !in 2048..32767) return false
 
