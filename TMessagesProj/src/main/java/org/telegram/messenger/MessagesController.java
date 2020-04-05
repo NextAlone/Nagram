@@ -4329,7 +4329,7 @@ public class MessagesController extends BaseController implements NotificationCe
             removeCurrent = 1;
         }
         lastCheckProxyId++;
-        if (!NekoConfig.hideProxySponsorChannel && (SharedConfig.currentProxy == null || !SharedConfig.currentProxy.isInternal) && enabled && !TextUtils.isEmpty(proxyAddress) && !TextUtils.isEmpty(proxySecret)) {
+        if (!NekoConfig.hideProxySponsorChannel && (SharedConfig.currentProxy == null || !SharedConfig.currentProxy.isPublic) && enabled && !TextUtils.isEmpty(proxyAddress) && !TextUtils.isEmpty(proxySecret)) {
             checkingProxyInfo = true;
             int checkProxyId = lastCheckProxyId;
             TLRPC.TL_help_getProxyData req = new TLRPC.TL_help_getProxyData();

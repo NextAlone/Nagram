@@ -300,7 +300,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int joinRow;
     private int lastSectionRow;
 
-
     private final Property<ProfileActivity, Float> HEADER_SHADOW = new AnimationProperties.FloatProperty<ProfileActivity>("headerShadow") {
         @Override
         public void setValue(ProfileActivity object, float value) {
@@ -2063,7 +2062,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             frameLayout.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.RIGHT | Gravity.TOP, 0, 0, 16, 0));
             writeButton.setOnClickListener(v -> {
-                if (playProfileAnimation != 0 && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity) {
+                if (playProfileAnimation != 0 && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity && !AndroidUtilities.isTablet()) {
                     finishFragment();
                 } else {
                     TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(user_id);

@@ -270,7 +270,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 builder.setItemsIndexed(new String[]{
                         LocaleController.getString("FirstLast", R.string.FirstLast),
-                        LocaleController.getString("FirstLast", R.string.FirstLast)
+                        LocaleController.getString("LastFirst", R.string.LastFirst)
                 }, (i) -> {
                     NekoConfig.setNameOrder(i + 1);
                     listAdapter.notifyItemChanged(mapPreviewRow);
@@ -298,8 +298,8 @@ public class NekoSettingsActivity extends BaseFragment {
                 PopupBuilder builder = new PopupBuilder(view);
 
                 builder.setItemsIndexed(new String[]{
+                        LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
                         LocaleController.getString("Snowflakes", R.string.Snowflakes),
-                        LocaleController.getString("Christmas", R.string.Christmas),
                         LocaleController.getString("Fireworks", R.string.Fireworks)
                 }, (i) -> {
 

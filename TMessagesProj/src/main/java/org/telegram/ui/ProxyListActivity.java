@@ -155,11 +155,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         @SuppressLint("SetTextI18n")
         public void setProxy(SharedConfig.ProxyInfo proxyInfo) {
-            if (proxyInfo.isInternal && !proxyInfo.isPublic) {
-                textView.setText(LocaleController.formatString("NekoXProxy", R.string.NekoXProxy));
-            } else {
-                textView.setText(proxyInfo.getTitle());
-            }
+            textView.setText(proxyInfo.getTitle());
             currentInfo = proxyInfo;
         }
 
@@ -470,7 +466,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                                 if (!info.isPublic) continue;
 
-                            } else if (info.isInternal) {
+                            } else if (info.isPublic) {
 
                                 continue;
 
@@ -752,11 +748,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 builder.setItems(new String[]{
 
-                        info.isInternal ? null : LocaleController.getString("EditProxy", R.string.EditProxy),
-                        info.isInternal ? null : LocaleController.getString("ShareProxy", R.string.ShareProxy),
-                        info.isInternal ? null : LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                        info.isInternal ? null : LocaleController.getString("CopyLink", R.string.CopyLink),
-                        info.isInternal ? null : LocaleController.getString("ProxyDelete", R.string.ProxyDelete),
+                        info.isPublic ? null : LocaleController.getString("EditProxy", R.string.EditProxy),
+                        info.isPublic ? null : LocaleController.getString("ShareProxy", R.string.ShareProxy),
+                        info.isPublic ? null : LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
+                        info.isPublic ? null : LocaleController.getString("CopyLink", R.string.CopyLink),
+                        info.isPublic ? null : LocaleController.getString("ProxyDelete", R.string.ProxyDelete),
                         LocaleController.getString("Cancel", R.string.Cancel)
 
                 }, new int[]{
@@ -1020,7 +1016,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         for (SharedConfig.ProxyInfo info : new LinkedList<>(SharedConfig.proxyList)) {
 
-            if (info.isInternal) continue;
+            if (info.isPublic) continue;
 
             checkSingleProxy(info, 1, () -> {
 

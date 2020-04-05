@@ -2,29 +2,29 @@ package tw.nekomimi.nekogram.utils
 
 import android.content.Context
 import android.content.DialogInterface
-import android.text.TextUtils
-import android.util.TypedValue
-import android.view.Gravity
-import android.view.View
-import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
-import org.telegram.messenger.*
+import org.telegram.messenger.AndroidUtilities
+import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ActionBar.Theme
-import org.telegram.ui.ChatActivity
-import org.telegram.ui.Components.AvatarDrawable
-import org.telegram.ui.Components.BackupImageView
-import org.telegram.ui.Components.LayoutHelper
-import tw.nekomimi.nekogram.MessageHelper
 
 object AlertUtil {
 
     @JvmStatic
-    fun showToast(text: String) = Toast.makeText(ApplicationLoader.applicationContext, text.takeIf { it.isNotBlank() } ?: "喵 !", Toast.LENGTH_LONG).show()
+    fun showToast(text: String) = UIUtil.runOnUIThread( Runnable {
+        Toast.makeText(
+                ApplicationLoader.applicationContext,
+                text.takeIf { it.isNotBlank() }
+                        ?: "喵 !",
+                Toast.LENGTH_LONG
+        ).show()
+    })
 
     @JvmStatic
-    fun showSimpleAlert(ctx: Context, text: String) {
+    fun showSimpleAlert(ctx: Context?, text: String) {
 
         val builder = AlertDialog.Builder(ctx ?: ApplicationLoader.applicationContext)
 
@@ -33,7 +33,7 @@ object AlertUtil {
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
 
-        builder.show()
+        UIUtil.runOnUIThread(Runnable { builder.show() })
 
     }
 

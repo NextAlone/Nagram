@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +26,26 @@ abstract public class Translator {
             translateCallBack.onUnsupported();
         } else {
             translator.startTask(query, toLang, translateCallBack);
+        }
+    }
+
+    public static String translateSync(String query) throws IOException {
+        Locale locale = LocaleController.getInstance().currentLocale;
+        String toLang;
+        if (NekoConfig.translationProvider != 3 && locale.getLanguage().equals("zh") && (locale.getCountry().toUpperCase().equals("CN") || locale.getCountry().toUpperCase().equals("TW"))) {
+            toLang = locale.getLanguage() + "-" + locale.getCountry().toUpperCase();
+        } else {
+            toLang = locale.getLanguage();
+        }
+        Translator translator = NekoConfig.translationProvider == 3 ? LingoTranslator.getInstance() : GoogleWebTranslator.getInstance();
+        if (!translator.getTargetLanguages().contains(toLang)) {
+            throw new IOException(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported));
+        } else {
+            try {
+                return translator.translate(query, toLang);
+            } catch (Exception ex) {
+                throw new IOException(LocaleController.getString("TranslateFailed", R.string.TranslateFailed));
+            }
         }
     }
 

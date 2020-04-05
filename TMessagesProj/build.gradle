@@ -32,6 +32,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
     implementation 'dnsjava:dnsjava:3.0.2'
+    implementation 'org.dizitart:nitrite:3.4.1'
 
     implementation files('libs/libv2ray.aar')
     implementation files('libs/ss-libev-release.aar')

@@ -168,7 +168,6 @@ public class SharedConfig {
 
         }
 
-        public boolean isInternal;
         public boolean isPublic;
 
         public ProxyInfo() {
@@ -1346,15 +1345,6 @@ public class SharedConfig {
 
     public static boolean proxyEnabled;
 
-    public static VmessProxy publicProxy;
-
-    static {
-
-        publicProxy = new VmessProxy(VmessLoader.getPublic());
-        publicProxy.isInternal = true;
-
-    }
-
     static {
 
         loadProxyList();
@@ -1363,13 +1353,7 @@ public class SharedConfig {
 
         boolean proxyEnabledValue = preferences.getBoolean("proxy_enabled", false);
 
-        if (proxyEnabledValue && currentProxy == null) {
-
-            currentProxy = publicProxy;
-
-            publicProxy.start();
-
-        }
+        if (proxyEnabledValue && currentProxy == null) proxyEnabledValue = false;
 
         proxyEnabled = proxyEnabledValue;
 
@@ -1439,12 +1423,6 @@ public class SharedConfig {
 
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
-        if (!NekoXConfig.hidePublicProxy) {
-
-            proxyList.add(publicProxy);
-
-        }
-
         File remoteProxyListFile = ProxyUtil.cacheFile;
 
         if (remoteProxyListFile.isFile() && !NekoXConfig.hidePublicProxy) {
@@ -1481,7 +1459,6 @@ public class SharedConfig {
 
                     }
 
-                    info.isInternal = true;
                     info.isPublic = true;
 
                     proxyList.add(info);
@@ -1664,7 +1641,7 @@ public class SharedConfig {
                 for (ProxyInfo info : new LinkedList<>(proxyList)) {
                     try {
                         JSONObject obj = info.toJson();
-                        if (info.isInternal) {
+                        if (info.isPublic) {
                             continue;
                         }
                         proxyArray.put(obj);
