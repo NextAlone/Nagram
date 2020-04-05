@@ -981,15 +981,15 @@ public class ActionBarMenuItem extends FrameLayout {
 
         if (anchor != null) {
             if (subMenuOpenSide == 0) {
-                if (anchor.getParent() != null) {
-                    View parent = (View) anchor.getParent();
+                //if (anchor.getParent() != null) {
+                    //View parent = (View) anchor.getParent();
                     if (show) {
-                        popupWindow.showAsDropDown(parent, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY);
+                        popupWindow.showAsDropDown(anchor, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY);
                     }
                     if (update) {
-                        popupWindow.update(parent, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY, -1, -1);
+                        popupWindow.update(anchor, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY, -1, -1);
                     }
-                }
+                //}
             } else if (subMenuOpenSide == 1) {
                 if (show) {
                     popupWindow.showAsDropDown(anchor, -AndroidUtilities.dp(8) + additionalXOffset, offsetY);
