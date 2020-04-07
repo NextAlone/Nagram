@@ -47,7 +47,9 @@ import tw.nekomimi.nekogram.utils.ZipUtil;
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
-    public static volatile Context applicationContext;
+    public static volatile Context applicationContext; {
+        applicationContext = this;
+    }
     public static volatile NetworkInfo currentNetworkInfo;
     public static volatile boolean unableGetCurrentNetwork;
     public static volatile Handler applicationHandler;
@@ -193,7 +195,7 @@ public class ApplicationLoader extends Application {
         super();
     }
 
-    public static Nitrite databaseMain;
+    public static Nitrite databaseMain = NitritesKt.mkDatabase("shared_preferences");
 
     public static SharedPreferences metadata;
     public static boolean allowMigrate;
@@ -254,17 +256,15 @@ public class ApplicationLoader extends Application {
     @Override
     public void onCreate() {
         try {
-            applicationContext = (ApplicationLoader) getApplicationContext();
+            applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
         }
 
         super.onCreate();
 
         if (applicationContext == null) {
-            applicationContext = (ApplicationLoader) getApplicationContext();
+            applicationContext = getApplicationContext();
         }
-
-        databaseMain = NitritesKt.mkDatabase("shared_preferences");
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
         ConnectionsManager.native_setJava(false);
