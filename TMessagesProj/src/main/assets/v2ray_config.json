@@ -1,4 +1,11 @@
 {
+  "dns": {
+    "servers": [
+      "https+local://mozilla.cloudflare-dns.com/dns-query",
+      "https+local://dns.google/dns-query",
+      "https+local://dns.adguard.com/dns-query"
+    ]
+  },
   "inbounds": [{
     "tag": "socks-in",
     "listen": "127.0.0.1",

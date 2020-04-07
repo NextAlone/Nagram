@@ -154,6 +154,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -1407,7 +1408,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         if (initialDialogsType == 0) {
             askAboutContacts = MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
-            SharedConfig.loadProxyList();
         }
 
         if (searchString == null) {
@@ -2900,6 +2900,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         updateFilterTabs(false);
+
+        PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
 
         return fragmentView;
     }

@@ -17,7 +17,10 @@ import libv2ray.V2RayVPNServiceSupportsSet
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import java.lang.IllegalArgumentException
+import java.util.*
 import kotlin.concurrent.thread
 
 class VmessLoader {
@@ -38,6 +41,8 @@ class VmessLoader {
             streamSecurity = "tls"
             requestHost = "nekox.me"
             path = "/internet"
+
+            remarks = LocaleController.getString("NekoXProxy", R.string.NekoXProxy)
 
         }
 

@@ -4,6 +4,7 @@ import org.dizitart.no2.Document;
 import org.dizitart.no2.IndexType;
 import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
+import org.dizitart.no2.objects.Id;
 import org.dizitart.no2.objects.Index;
 import org.dizitart.no2.objects.Indices;
 
@@ -12,6 +13,7 @@ import org.dizitart.no2.objects.Indices;
 })
 public class TransItem implements Mappable {
 
+    @Id
     public String text;
     public String trans;
 

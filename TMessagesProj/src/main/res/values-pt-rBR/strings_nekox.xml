@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="UseOfficalId">Disfarçada como aplicativo oficial</string>
+    <string name="UseOfficalIdNotice">Faça login usando o ID do aplicativo oficial. Se não conseguir se registrar ou fazer login, isso pode ajudar. \n\nNota: o fcm não funcionará se você estiver usando a versão de lançamento.</string>
     <string name="RemoveTitleEmoji">Remover emoji no título</string>
     <string name="NekoXProxy">NekoX Público Proxy</string>
     <string name="PublicPrefix">[ Público ]</string>

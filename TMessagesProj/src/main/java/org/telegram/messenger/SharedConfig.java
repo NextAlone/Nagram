@@ -26,6 +26,7 @@ import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
 import com.v2ray.ang.util.Utils;
 
+import org.checkerframework.checker.index.qual.PolyUpperBound;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1422,6 +1423,19 @@ public class SharedConfig {
         currentProxy = null;
 
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
+
+        VmessProxy publicProxy = new VmessProxy(VmessLoader.getPublic());
+        publicProxy.isPublic = true;
+        proxyList.add(publicProxy);
+
+        if (publicProxy.hashCode() == current) {
+
+            currentProxy = publicProxy;
+
+            publicProxy.start();
+
+        }
+
 
         File remoteProxyListFile = ProxyUtil.cacheFile;
 

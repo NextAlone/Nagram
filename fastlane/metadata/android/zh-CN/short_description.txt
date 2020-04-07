@@ -1,1 +1,0 @@
-Nekogram 是一个非官方的 Telegram 客户端。

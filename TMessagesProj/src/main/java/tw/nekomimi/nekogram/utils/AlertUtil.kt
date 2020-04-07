@@ -14,7 +14,7 @@ import org.telegram.ui.ActionBar.Theme
 object AlertUtil {
 
     @JvmStatic
-    fun showToast(text: String) = UIUtil.runOnUIThread( Runnable {
+    fun showToast(text: String) = UIUtil.runOnUIThread(Runnable {
         Toast.makeText(
                 ApplicationLoader.applicationContext,
                 text.takeIf { it.isNotBlank() }
@@ -24,7 +24,7 @@ object AlertUtil {
     })
 
     @JvmStatic
-    fun showSimpleAlert(ctx: Context?, text: String) {
+    fun showSimpleAlert(ctx: Context?, text: String) = UIUtil.runOnUIThread(Runnable {
 
         val builder = AlertDialog.Builder(ctx ?: ApplicationLoader.applicationContext)
 
@@ -33,12 +33,12 @@ object AlertUtil {
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
 
-        UIUtil.runOnUIThread(Runnable { builder.show() })
+        builder.show()
 
-    }
+    })
 
     @JvmStatic
-    fun showConfirm(ctx: Context, title: String, text: String, button: String, red: Boolean = false, listener: DialogInterface.OnClickListener) {
+    fun showConfirm(ctx: Context, title: String, text: String, button: String, red: Boolean = false, listener: DialogInterface.OnClickListener) = UIUtil.runOnUIThread(Runnable {
 
         val builder = AlertDialog.Builder(ctx)
 
@@ -56,6 +56,6 @@ object AlertUtil {
 
         }
 
-    }
+    })
 
 }

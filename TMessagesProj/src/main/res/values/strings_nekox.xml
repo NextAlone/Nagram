@@ -3,6 +3,17 @@
 
     <string name="NekoX" translatable="false">Nekogram X</string>
 
+    <string name="UseOfficalId">Disguised as official app</string>
+    <string name="UseOfficalIdNotice">Log in using the official App Id, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
+
+    <string name="PrivacyNotice">Privacy warning</string>
+    <string name="PrivacyNoticePhoneVisible">It is detected that your mobile phone number is visible to anyone, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
+    <string name="PrivacyNoticeAddByPhone">It is detected that you are not turned off the \"Allow find me through phone number\" Setting, which may cause a government-controlled hacker to find your true identity, please turn it off!</string>
+    <string name="PrivacyNoticeP2p">It is detected that you have not turned off the \"Allow P2p calls\" Setting, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
+
+    <string name="ApplySuggestion">OK, Apply it</string>
+    <string name="DoNotRemindAgain">Don\'t remind again</string>
+
     <string name="RemoveTitleEmoji">Remove emoji in title</string>
 
     <string name="NekoXProxy">NekoX Public Proxy</string>

@@ -27,15 +27,20 @@ import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import org.dizitart.no2.Nitrite;
+import org.dizitart.no2.NitriteCollection;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
+import java.util.HashMap;
 
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.database.DbPref;
+import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
 
@@ -188,19 +193,78 @@ public class ApplicationLoader extends Application {
         super();
     }
 
+    public static Nitrite databaseMain;
+
+    public static SharedPreferences metadata;
+    public static boolean allowMigrate;
+
+    public static HashMap<String,DbPref> prefCache = new HashMap<>();
+
+    @Override
+    public SharedPreferences getSharedPreferences(String name, int mode) {
+
+        if (prefCache.containsKey(name)) return prefCache.get(name);
+
+        synchronized (prefCache) {
+
+            if (prefCache.containsKey(name)) return prefCache.get(name);
+
+            DbPref pref = NitritesKt.openSharedPreference(databaseMain, name);
+
+            if (pref.isEmpty()) {
+
+                if (metadata == null) {
+
+                    metadata = NitritesKt.openMainSharedPreference("metadata");
+
+                    allowMigrate = metadata.getBoolean("allow_migrate", true);
+
+                    if (allowMigrate) {
+
+                        metadata.edit().putBoolean("allow_migrate", false).apply();
+
+                    }
+
+                }
+
+                if (allowMigrate) {
+
+                    SharedPreferences legacyPref = super.getSharedPreferences(name, mode);
+
+                    if (!legacyPref.getAll().isEmpty()) {
+
+                        pref.edit().putAll(legacyPref.getAll()).commit();
+
+                    }
+
+                    legacyPref.edit().clear().apply();
+
+                }
+
+            }
+
+            prefCache.put(name,pref);
+
+            return pref;
+
+        }
+
+    }
+
     @Override
     public void onCreate() {
         try {
-            applicationContext = getApplicationContext();
+            applicationContext = (ApplicationLoader) getApplicationContext();
         } catch (Throwable ignore) {
-
         }
 
         super.onCreate();
 
         if (applicationContext == null) {
-            applicationContext = getApplicationContext();
+            applicationContext = (ApplicationLoader) getApplicationContext();
         }
+
+        databaseMain = NitritesKt.mkDatabase("shared_preferences");
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
         ConnectionsManager.native_setJava(false);
@@ -209,6 +273,12 @@ public class ApplicationLoader extends Application {
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
     }
 
     public static void startPushService() {
@@ -236,7 +306,7 @@ public class ApplicationLoader extends Application {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
 
             PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
-            AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
             alarm.cancel(pintent);
         }
     }

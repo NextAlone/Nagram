@@ -44,6 +44,8 @@ import java.util.TimerTask;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.translator.TranslateDb;
+
 public class LanguageSelectActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listAdapter;
@@ -152,6 +154,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             if (localeInfo != null) {
                 LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, currentAccount);
                 parentLayout.rebuildAllFragmentViews(false, false);
+                TranslateDb.clear();
             }
             finishFragment();
         });

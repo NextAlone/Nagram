@@ -38,6 +38,24 @@
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleOutputBuffer { *; }
 
+-keep class org.diztart.no2.** { *; }
+-keep class org.slf4j.** { *; }
+-keep class org.h2.** { *; }
+-keep class org.objenesis.** { *; }
+-keep class com.fasterxml.jackson.** { *; }
+
+-keepnames class * implements java.io.Serializable
+
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
 # Use -keep to explicitly keep any other classes shrinking would remove
 # -dontoptimize
 -dontobfuscate

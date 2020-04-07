@@ -13,6 +13,7 @@ import java.util.Locale;
 import tw.nekomimi.nekogram.NekoConfig;
 
 abstract public class Translator {
+
     public static void translate(String query, TranslateCallBack translateCallBack) {
         Locale locale = LocaleController.getInstance().currentLocale;
         String toLang;
@@ -42,7 +43,11 @@ abstract public class Translator {
             throw new IOException(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported));
         } else {
             try {
-                return translator.translate(query, toLang);
+                String result = translator.translate(query, toLang);
+                if (result == null) {
+                    throw new RuntimeException();
+                }
+                return result;
             } catch (Exception ex) {
                 throw new IOException(LocaleController.getString("TranslateFailed", R.string.TranslateFailed));
             }

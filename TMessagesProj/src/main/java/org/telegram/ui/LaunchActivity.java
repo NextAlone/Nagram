@@ -24,6 +24,7 @@ import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,7 +54,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.v2ray.ang.V2RayConfig;
-import com.v2ray.ang.dto.V2rayConfig;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -65,7 +65,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
@@ -108,7 +107,6 @@ import org.telegram.ui.Components.SideMenultItemAnimator;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
-import org.telegram.ui.Components.URLSpanUserMention;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -121,6 +119,7 @@ import java.util.regex.Pattern;
 import tw.nekomimi.nekogram.NekoSettingsActivity;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
+import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
@@ -771,6 +770,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void switchToAccount(int account, boolean removeAll) {
+        switchToAccount(account, removeAll, false);
+    }
+
+    public void switchToAccount(int account, boolean removeAll, boolean afterLogin) {
         if (account == UserConfig.selectedAccount) {
             return;
         }
@@ -811,6 +814,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         if (UserConfig.getInstance(account).unacceptedTermsOfService != null) {
             showTosActivity(account, UserConfig.getInstance(account).unacceptedTermsOfService);
+        }
+        if (afterLogin) {
+            PrivacyUtil.postCheckAll(this,account);
         }
         updateCurrentConnectionState(currentAccount);
     }
@@ -1125,15 +1131,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             if (!TextUtils.isEmpty(text)) {
                                 Matcher m = locationRegex.matcher(text);
                                 if (m.find()) {
-                                    String lines[] = text.split("\\n");
+                                    String[] lines = text.split("\\n");
                                     String venueTitle = null;
                                     String venueAddress = null;
-                                    if (lines[0].equals("My Position")){
+                                    if (lines[0].equals("My Position")) {
                                         // Use normal GeoPoint message (user position)
-                                    }
-                                    else if(!lines[0].contains("geo:")){
+                                    } else if (!lines[0].contains("geo:")) {
                                         venueTitle = lines[0];
-                                        if(!lines[1].contains("geo:")){
+                                        if (!lines[1].contains("geo:")) {
                                             venueAddress = lines[1];
                                         }
                                     }
@@ -2911,7 +2916,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (passcodeView != null) {
                 passcodeView.onPause();
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onPause();
@@ -3781,7 +3787,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             } else {
                 actionBarLayout.onBackPressed();
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override

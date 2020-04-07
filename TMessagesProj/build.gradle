@@ -54,8 +54,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
 
-        versionName "6.0.1.9"
-        versionCode = 13
+        versionName "6.0.1.10"
+        versionCode = 14
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
@@ -125,7 +125,7 @@ android {
         def keystorePwd = null
         def alias = null
         def pwd = null
-        Properties properties;
+        Properties properties
 
         if (project.rootProject.file('local.properties').exists()) {
             properties = new Properties()
@@ -193,22 +193,19 @@ android {
     }
 
     sourceSets.main {
-        java.srcDirs = ['src/main/java', 'src/multidex/java']
+        jni.srcDirs = []
     }
 
     sourceSets.debug {
         jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = []
     }
 
     sourceSets.releaseNoGcm {
         jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = []
     }
 
     sourceSets.release {
         jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = []
         java.srcDirs = ['src/gservcies/java']
         manifest.srcFile 'src/gservcies/AndroidManifest.xml'
     }

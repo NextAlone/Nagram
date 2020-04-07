@@ -259,7 +259,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
                 }, (it) -> {
                     NekoConfig.setMapPreviewProvider(it);
-                    listAdapter.notifyItemChanged(mapPreviewRow);
+                    listAdapter.notifyItemChanged(position);
                 });
 
                 builder.show();
@@ -273,7 +273,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         LocaleController.getString("LastFirst", R.string.LastFirst)
                 }, (i) -> {
                     NekoConfig.setNameOrder(i + 1);
-                    listAdapter.notifyItemChanged(mapPreviewRow);
+                    listAdapter.notifyItemChanged(position);
                 });
 
                 builder.show();
@@ -288,7 +288,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         LocaleController.getString("Valentine", R.string.Valentine)
                 }, (i) -> {
                     NekoConfig.setEventType(i);
-                    listAdapter.notifyItemChanged(eventTypeRow);
+                    listAdapter.notifyItemChanged(position);
                 });
 
                 builder.show();
@@ -304,7 +304,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 }, (i) -> {
 
                     NekoConfig.setActionBarDecoration(i);
-                    listAdapter.notifyItemChanged(eventTypeRow);
+                    listAdapter.notifyItemChanged(position);
 
                 });
 

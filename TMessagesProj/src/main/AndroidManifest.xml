@@ -88,7 +88,9 @@
         android:largeHeap="true"
         android:theme="@style/Theme.TMessages.Start"
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
-        android:supportsRtl="false">
+        android:supportsRtl="false"
+        tools:replace="android:supportsRtl">
+
         <activity
             android:name="org.telegram.ui.LaunchActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"

@@ -122,6 +122,7 @@ import java.util.TimerTask;
 import tw.nekomimi.nekogram.EditTextAutoFill;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment {
@@ -161,6 +162,8 @@ public class LoginActivity extends BaseFragment {
 
     private ActionBarMenuItem proxyItem;
     private ProxyDrawable proxyDrawable;
+
+    private boolean useOfficalId = !"release".equals(BuildConfig.BUILD_TYPE);
 
     private class ProgressView extends View {
 
@@ -303,8 +306,8 @@ public class LoginActivity extends BaseFragment {
                         ConnectionsManager.getInstance(currentAccount).cleanup(false);
                         final TLRPC.TL_auth_importBotAuthorization req = new TLRPC.TL_auth_importBotAuthorization();
 
-                        req.api_hash = BuildConfig.APP_HASH;
-                        req.api_id = BuildConfig.APP_ID;
+                        req.api_hash = useOfficalId ? BuildVars.OFFICAL_APP_HASH : BuildConfig.APP_HASH;
+                        req.api_id = useOfficalId ? BuildVars.OFFICAL_APP_ID : BuildConfig.APP_ID;
                         req.bot_auth_token = token;
                         req.flags = 0;
                         int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -370,7 +373,6 @@ public class LoginActivity extends BaseFragment {
 
         proxyItem = menu.addItem(2, R.drawable.proxy_on);
         proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
-
 
         menu.addItem(3, R.drawable.ic_translate);
 
@@ -1167,7 +1169,7 @@ public class LoginActivity extends BaseFragment {
         if (getParentActivity() instanceof LaunchActivity) {
             if (newAccount) {
                 newAccount = false;
-                ((LaunchActivity) getParentActivity()).switchToAccount(currentAccount, false);
+                ((LaunchActivity) getParentActivity()).switchToAccount(currentAccount, false,true);
                 finishFragment();
             } else {
                 final Bundle args = new Bundle();
@@ -1248,6 +1250,7 @@ public class LoginActivity extends BaseFragment {
         private TextView textView2;
         private CheckBoxCell checkBoxCell;
         private CheckBoxCell testBackendCell;
+        private CheckBoxCell useOfficalIdCell;
 
         private int countryState = 0;
 
@@ -1561,7 +1564,7 @@ public class LoginActivity extends BaseFragment {
 
             if (NekoXConfig.showTestBackend) {
                 testBackendCell = new CheckBoxCell(context, 2);
-                testBackendCell.setText(LocaleController.getString("TestBackend", R.string.TestBackend), "", ConnectionsManager.native_isTestBackend(currentAccount) != 0, false);
+                testBackendCell.setText(LocaleController.getString("TestBackend", R.string.TestBackend), "", ConnectionsManager.native_isTestBackend(currentAccount) != 0, true);
                 addView(testBackendCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
                 testBackendCell.setOnClickListener(new OnClickListener() {
 
@@ -1593,6 +1596,26 @@ public class LoginActivity extends BaseFragment {
                     }
                 });
             }
+
+            useOfficalIdCell = new CheckBoxCell(context, 2);
+            useOfficalIdCell.setText(LocaleController.getString("UseOfficalId", R.string.UseOfficalId), "", useOfficalId, false);
+            addView(useOfficalIdCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+            useOfficalIdCell.setOnClickListener(new OnClickListener() {
+
+                private Toast visibleToast;
+
+                @Override
+                public void onClick(View v) {
+                    if (getParentActivity() == null) {
+                        return;
+                    }
+                    CheckBoxCell cell = (CheckBoxCell) v;
+                    cell.setChecked(useOfficalId = !useOfficalId, true);
+                    if (useOfficalId) {
+                        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("UseOfficalIdNotice", R.string.UseOfficalIdNotice));
+                    }
+                }
+            });
 
             HashMap<String, String> languageMap = new HashMap<>();
             try {
@@ -1802,8 +1825,8 @@ public class LoginActivity extends BaseFragment {
 
             ConnectionsManager.getInstance(currentAccount).cleanup(false);
             final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
-            req.api_hash = BuildConfig.APP_HASH;
-            req.api_id = BuildConfig.APP_ID;
+            req.api_hash = useOfficalId ? BuildVars.OFFICAL_APP_HASH : BuildConfig.APP_HASH;
+            req.api_id = useOfficalId ? BuildVars.OFFICAL_APP_ID : BuildConfig.APP_ID;
             req.phone_number = phone;
             req.settings = new TLRPC.TL_codeSettings();
             req.settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;

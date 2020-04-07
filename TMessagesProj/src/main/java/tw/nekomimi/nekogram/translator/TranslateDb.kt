@@ -5,8 +5,16 @@ import tw.nekomimi.nekogram.database.mkCacheDatabase
 
 object TranslateDb {
 
-    val db by lazy { mkCacheDatabase("trans") }
-    val conn by lazy { db.getRepository("trans", TransItem::class.java) }
+    val db = mkCacheDatabase("translate_caches")
+    var conn = db.getRepository("trans",TransItem::class.java)
+
+    @JvmStatic
+    fun clear() {
+
+        conn.drop()
+        conn = db.getRepository("trans",TransItem::class.java)
+
+    }
 
     @JvmStatic
     fun contains(text: String) = conn.find(ObjectFilters.eq("text", text)).count() > 0
@@ -23,9 +31,9 @@ object TranslateDb {
 
         val result = conn.find(ObjectFilters.eq("text", text));
 
-        if (result.hasMore()) {
+        runCatching {
 
-            return result.first().trans
+            return result.first().trans!!
 
         }
 

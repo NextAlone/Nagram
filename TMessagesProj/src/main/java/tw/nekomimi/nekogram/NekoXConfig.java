@@ -11,11 +11,13 @@ import org.telegram.tgnet.TLRPC;
 
 import java.util.LinkedList;
 
+import tw.nekomimi.nekogram.database.NitritesKt;
+
 public class NekoXConfig {
 
     public static String FAQ_URL = "https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31";
 
-    private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Context.MODE_PRIVATE);
+    protected static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
 
     public static boolean disableChatAction;
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="UseOfficalId">假裝是官方應用</string>
+    <string name="UseOfficalIdNotice">登錄時將自己標識為官方應用，如果您無法註冊或登錄，這可能會有幫助。 \n\n注意：如果您正在使用 release 版本，谷歌云推送將無法工作。</string>
+    <string name="PrivacyNotice">隱私警告</string>
+    <string name="PrivacyNoticePhoneVisible">檢測到您的手機號碼對任何人都可見, 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
+    <string name="PrivacyNoticeAddByPhone">檢測到您沒有被關閉“允許通過電話號碼找到我”設置， 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
+    <string name="PrivacyNoticeP2p">檢測到您沒有關閉“允許 P2p 通話”設置， 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
     <string name="RemoveTitleEmoji">移除標題中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
     <string name="PublicPrefix">[ 公共 ]</string>

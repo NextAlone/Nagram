@@ -198,6 +198,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.translator.TranslateDb;
 import tw.nekomimi.nekogram.translator.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_BOTTOM;
@@ -1972,7 +1973,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         CharSequence text = getTextInternal(adapter, parentView, parentRichText, richText, parentBlock, maxWidth);
 
-        if (adapter.trans && TranslateDb.contains(text.toString())) {
+        if (text != null && adapter.trans && TranslateDb.contains(text.toString())) {
 
             return TranslateDb.query(text.toString());
 
@@ -2115,58 +2116,44 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public static CharSequence getPlainText(TLRPC.RichText richText) {
-
-        CharSequence text = getPlainTextInternal(richText);
-
-        if (TranslateDb.contains(text.toString())) {
-
-            return TranslateDb.query(text.toString());
-
-        }
-
-        return text;
-
-    }
-
-    public static CharSequence getPlainTextInternal(TLRPC.RichText richText) {
         if (richText == null) {
             return "";
         }
         if (richText instanceof TLRPC.TL_textFixed) {
-            return getPlainTextInternal(((TLRPC.TL_textFixed) richText).text);
+            return getPlainText(((TLRPC.TL_textFixed) richText).text);
         } else if (richText instanceof TLRPC.TL_textItalic) {
-            return getPlainTextInternal(((TLRPC.TL_textItalic) richText).text);
+            return getPlainText(((TLRPC.TL_textItalic) richText).text);
         } else if (richText instanceof TLRPC.TL_textBold) {
-            return getPlainTextInternal(((TLRPC.TL_textBold) richText).text);
+            return getPlainText(((TLRPC.TL_textBold) richText).text);
         } else if (richText instanceof TLRPC.TL_textUnderline) {
-            return getPlainTextInternal(((TLRPC.TL_textUnderline) richText).text);
+            return getPlainText(((TLRPC.TL_textUnderline) richText).text);
         } else if (richText instanceof TLRPC.TL_textStrike) {
-            return getPlainTextInternal(((TLRPC.TL_textStrike) richText).text);
+            return getPlainText(((TLRPC.TL_textStrike) richText).text);
         } else if (richText instanceof TLRPC.TL_textEmail) {
-            return getPlainTextInternal(((TLRPC.TL_textEmail) richText).text);
+            return getPlainText(((TLRPC.TL_textEmail) richText).text);
         } else if (richText instanceof TLRPC.TL_textUrl) {
-            return getPlainTextInternal(((TLRPC.TL_textUrl) richText).text);
+            return getPlainText(((TLRPC.TL_textUrl) richText).text);
         } else if (richText instanceof TLRPC.TL_textPlain) {
             return ((TLRPC.TL_textPlain) richText).text;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
-            return getPlainTextInternal(((TLRPC.TL_textAnchor) richText).text);
+            return getPlainText(((TLRPC.TL_textAnchor) richText).text);
         } else if (richText instanceof TLRPC.TL_textEmpty) {
             return "";
         } else if (richText instanceof TLRPC.TL_textConcat) {
             StringBuilder stringBuilder = new StringBuilder();
             int count = richText.texts.size();
             for (int a = 0; a < count; a++) {
-                stringBuilder.append(getPlainTextInternal(richText.texts.get(a)));
+                stringBuilder.append(getPlainText(richText.texts.get(a)));
             }
             return stringBuilder;
         } else if (richText instanceof TLRPC.TL_textSubscript) {
-            return getPlainTextInternal(((TLRPC.TL_textSubscript) richText).text);
+            return getPlainText(((TLRPC.TL_textSubscript) richText).text);
         } else if (richText instanceof TLRPC.TL_textSuperscript) {
-            return getPlainTextInternal(((TLRPC.TL_textSuperscript) richText).text);
+            return getPlainText(((TLRPC.TL_textSuperscript) richText).text);
         } else if (richText instanceof TLRPC.TL_textMarked) {
-            return getPlainTextInternal(((TLRPC.TL_textMarked) richText).text);
+            return getPlainText(((TLRPC.TL_textMarked) richText).text);
         } else if (richText instanceof TLRPC.TL_textPhone) {
-            return getPlainTextInternal(((TLRPC.TL_textPhone) richText).text);
+            return getPlainText(((TLRPC.TL_textPhone) richText).text);
         } else if (richText instanceof TLRPC.TL_textImage) {
             return "";
         }
@@ -2176,7 +2163,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public static String getUrl(TLRPC.RichText richText) {
         String url = getUrlInternal(richText);
 
-        if (TranslateDb.contains(url)) {
+        if (url != null && getInstance().adapter[0].trans && TranslateDb.contains(url)) {
 
             return TranslateDb.query(url);
 
@@ -4128,7 +4115,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 textToSearchIn = ((String) object);
             }
             if (textToSearchIn != null) {
-                if (TranslateDb.contains(textToSearchIn)) continue;
+                if (TranslateDb.contains(textToSearchIn)) {
+                    taskCount.decrementAndGet();
+                    continue;
+                }
                 String finalTextToSearchIn = textToSearchIn;
                 transPool.execute(() -> {
 
@@ -4164,7 +4154,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
                 });
             }
-
+        }
+        if (taskCount.get() == 0) {
+            dialog.dismiss();
+            UIUtil.runOnUIThread(this::updatePaintSize);
         }
 
     }
