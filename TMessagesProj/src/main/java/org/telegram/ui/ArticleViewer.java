@@ -198,7 +198,6 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.translator.TranslateDb;
 import tw.nekomimi.nekogram.translator.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_BOTTOM;
@@ -1970,35 +1969,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private CharSequence getText(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth) {
-
-        CharSequence text = getTextInternal(adapter, parentView, parentRichText, richText, parentBlock, maxWidth);
-
-        if (text != null && adapter.trans && TranslateDb.contains(text.toString())) {
-
-            return TranslateDb.query(text.toString());
-
-        }
-
-        return text;
-
-    }
-
-    private CharSequence getTextInternal(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth) {
         if (richText == null) {
             return null;
         }
         if (richText instanceof TLRPC.TL_textFixed) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textFixed) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textFixed) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textItalic) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textItalic) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textItalic) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textBold) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textBold) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textBold) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textUnderline) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textUnderline) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textUnderline) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textStrike) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textStrike) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textStrike) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textEmail) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textEmail) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textEmail) richText).text, parentBlock, maxWidth));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintUrlSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null, "mailto:" + getUrl(richText)), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -2006,7 +1991,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textUrl) {
             TLRPC.TL_textUrl textUrl = (TLRPC.TL_textUrl) richText;
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textUrl) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textUrl) richText).text, parentBlock, maxWidth));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             TextPaint paint = innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null;
             MetricAffectingSpan span;
@@ -2020,10 +2005,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPlain) {
-            return ((TLRPC.TL_textPlain) richText).text;
+            String plainText = ((TLRPC.TL_textPlain) richText).text;
+            if (plainText != null && adapter.trans && TranslateDb.contains(plainText)) {
+                plainText = TranslateDb.query(plainText);
+            }
+            return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
             TLRPC.TL_textAnchor textAnchor = (TLRPC.TL_textAnchor) richText;
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getTextInternal(adapter, parentView, parentRichText, textAnchor.text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, textAnchor.text, parentBlock, maxWidth));
             spannableStringBuilder.setSpan(new AnchorSpan(textAnchor.name), 0, spannableStringBuilder.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textEmpty) {
@@ -2040,7 +2029,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     spannableStringBuilder.setSpan(new TextSelectionHelper.IgnoreCopySpannable(), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
 
-                CharSequence innerText = getTextInternal(adapter, parentView, parentRichText, innerRichText, parentBlock, maxWidth);
+                CharSequence innerText = getText(adapter, parentView, parentRichText, innerRichText, parentBlock, maxWidth);
                 int flags = getTextFlags(lastRichText);
                 int startLength = spannableStringBuilder.length();
                 spannableStringBuilder.append(innerText);
@@ -2072,18 +2061,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textSubscript) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textSubscript) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textSubscript) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textSuperscript) {
-            return getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textSuperscript) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textSuperscript) richText).text, parentBlock, maxWidth);
         } else if (richText instanceof TLRPC.TL_textMarked) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textMarked) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textMarked) richText).text, parentBlock, maxWidth));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintMarkSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPhone) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getTextInternal(adapter, parentView, parentRichText, ((TLRPC.TL_textPhone) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textPhone) richText).text, parentBlock, maxWidth));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintUrlSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null, "tel:" + getUrl(richText)), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -4091,6 +4080,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             adapter[0].trans = false;
 
+            transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+
             cancel.set(true);
 
             transPool.shutdown();
@@ -4136,6 +4127,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         if (errorCount.incrementAndGet() > 3 || finaL) {
                             UIUtil.runOnUIThread(dialog::dismiss);
                             adapter[0].trans = false;
+                            transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                             AlertUtil.showSimpleAlert(parentActivity, e.getMessage());
                             cancel.set(true);
                             transPool.shutdown();
