@@ -1,7 +1,10 @@
 package tw.nekomimi.nekogram;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -13,9 +16,7 @@ import tw.nekomimi.nekogram.database.NitritesKt;
 
 public class NekoXConfig {
 
-    public static String FAQ_URL = "https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31";
-
-    protected static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
+    public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
 
     public static boolean disableChatAction;
 
@@ -54,7 +55,11 @@ public class NekoXConfig {
     public static boolean removeTitleEmoji;
     public static boolean hidePublicProxy;
 
+    private static SharedPreferences preferences;
+
     static {
+
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Context.MODE_PRIVATE);
 
         disableChatAction = preferences.getBoolean("disable_chat_action", false);
 
@@ -89,7 +94,7 @@ public class NekoXConfig {
 
         removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
-        hidePublicProxy = preferences.getBoolean("hide_public_proxy",false);
+        hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
 
     }
 

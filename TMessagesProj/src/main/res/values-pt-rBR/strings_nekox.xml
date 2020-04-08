@@ -2,6 +2,12 @@
 <resources>
     <string name="UseOfficalId">Disfarçada como aplicativo oficial</string>
     <string name="UseOfficalIdNotice">Faça login usando o ID do aplicativo oficial. Se não conseguir se registrar ou fazer login, isso pode ajudar. \n\nNota: o fcm não funcionará se você estiver usando a versão de lançamento.</string>
+    <string name="PrivacyNotice">Aviso de privacidade</string>
+    <string name="PrivacyNoticePhoneVisible">Detectou-se que seu número de celular está visível para qualquer pessoa, o que pode fazer com que hackers controlados pelo governo encontrem sua verdadeira identidade, desligue-o!</string>
+    <string name="PrivacyNoticeAddByPhone">Detectou-se que você não está desativado na configuração \"Permitir que me encontre através do número de telefone\", que pode fazer com que um hacker controlado pelo governo encontre sua verdadeira identidade, desligue-o!</string>
+    <string name="PrivacyNoticeP2p">Foi detectado que você não desativou a configuração \"Permitir chamadas P2p\", que pode fazer com que hackers controlados pelo governo encontrem sua verdadeira identidade, desligue-a!</string>
+    <string name="ApplySuggestion">OK, aplique</string>
+    <string name="DoNotRemindAgain">Não lembre novamente</string>
     <string name="RemoveTitleEmoji">Remover emoji no título</string>
     <string name="NekoXProxy">NekoX Público Proxy</string>
     <string name="PublicPrefix">[ Público ]</string>

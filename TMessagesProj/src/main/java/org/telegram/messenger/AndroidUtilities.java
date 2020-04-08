@@ -141,6 +141,7 @@ import java.util.regex.Pattern;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
@@ -593,12 +594,6 @@ public class AndroidUtilities {
         }
         // Allow sending VoIP logs from cache/voip_logs
         if (pathString.matches(Pattern.quote(new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
-            return false;
-        }
-        if (!NekoConfig.saveCacheToSdcard && pathString.startsWith(new File(ApplicationLoader.applicationContext.getCacheDir(), "sdcard").getAbsolutePath())) {
-            return false;
-        }
-        if (!NekoConfig.saveCacheToSdcard && pathString.startsWith(new File(ApplicationLoader.applicationContext.getFilesDir(), "Telegram").getAbsolutePath())) {
             return false;
         }
         int tries = 0;
@@ -1288,35 +1283,9 @@ public class AndroidUtilities {
     }
 
     public static File getCacheDir() {
-        String state = null;
-        try {
-            state = Environment.getExternalStorageState();
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        if (NekoConfig.saveCacheToSdcard && (state == null || state.startsWith(Environment.MEDIA_MOUNTED))) {
-            try {
-                File file = ApplicationLoader.applicationContext.getExternalCacheDir();
-                if (file != null) {
-                    return file;
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
-        try {
-            File file = ApplicationLoader.applicationContext.getCacheDir();
-            if (file != null) {
-                if (!NekoConfig.saveCacheToSdcard) {
-                    file = new File(file, "sdcard");
-                    file.mkdirs();
-                }
-                return file;
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        return new File("");
+        File cacheDir = new File(ApplicationLoader.getDataDirFixed(),"cache/media");
+        FileUtil.initDir(cacheDir);
+        return cacheDir;
     }
 
     public static int dp(float value) {

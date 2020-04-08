@@ -10,7 +10,6 @@ package org.telegram.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -84,7 +83,6 @@ import tw.nekomimi.nekogram.VmessSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -983,22 +981,28 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             boolean change = callsRow == -1;
             callsRow = rowCount++;
             callsDetailRow = rowCount++;
-            if (!notify && change) {
-                listAdapter.notifyItemChanged(proxyDetailRow);
-                listAdapter.notifyItemRangeInserted(proxyDetailRow + 1, 2);
-            }
+            UIUtil.runOnUIThread(() -> {
+                if (!notify && change) {
+                    listAdapter.notifyItemChanged(proxyDetailRow);
+                    listAdapter.notifyItemRangeInserted(proxyDetailRow + 1, 2);
+                }
+            });
         } else {
             boolean change = callsRow != -1;
             callsRow = -1;
             callsDetailRow = -1;
             if (!notify && change) {
-                listAdapter.notifyItemChanged(proxyDetailRow);
-                listAdapter.notifyItemRangeRemoved(proxyDetailRow + 1, 2);
+                UIUtil.runOnUIThread(() -> {
+                    listAdapter.notifyItemChanged(proxyDetailRow);
+                    listAdapter.notifyItemRangeRemoved(proxyDetailRow + 1, 2);
+                });
             }
         }
         checkProxyList(false);
         if (notify && listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+            UIUtil.runOnUIThread(() -> {
+                listAdapter.notifyDataSetChanged();
+            });
         }
     }
 

@@ -24,7 +24,6 @@ public class NekoConfig {
     public static boolean useSystemEmoji = SharedConfig.useSystemEmoji;
     public static boolean ignoreBlocked = false;
     public static boolean hideProxySponsorChannel = false;
-    public static boolean saveCacheToSdcard = false;
     public static boolean disablePhotoSideAction = true;
     public static boolean hideKeyboardOnChatScroll = false;
     public static int mapPreviewProvider = 0;
@@ -75,7 +74,6 @@ public class NekoConfig {
                 editor.putBoolean("transparentStatusBar", transparentStatusBar);
                 editor.putBoolean("residentNotification", residentNotification);
                 editor.putBoolean("hideProxySponsorChannel", hideProxySponsorChannel);
-                editor.putBoolean("saveCacheToSdcard", saveCacheToSdcard);
                 editor.putBoolean("showAddToSavedMessages", showAddToSavedMessages);
                 editor.putBoolean("showReport", showReport);
                 editor.putBoolean("showPrPr", showPrPr);
@@ -126,7 +124,6 @@ public class NekoConfig {
             transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
             residentNotification = preferences.getBoolean("residentNotification", false);
             hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
-            saveCacheToSdcard = preferences.getBoolean("saveCacheToSdcard", Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
             showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
             showReport = preferences.getBoolean("showReport", false);
             showPrPr = preferences.getBoolean("showPrPr", false);
@@ -307,14 +304,6 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideProxySponsorChannel", hideProxySponsorChannel);
-        editor.apply();
-    }
-
-    public static void toggleSaveCacheToSdcard() {
-        saveCacheToSdcard = !saveCacheToSdcard;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("saveCacheToSdcard", saveCacheToSdcard);
         editor.apply();
     }
 

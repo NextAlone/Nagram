@@ -1313,15 +1313,21 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             }
         }
-        ListItem fs = new ListItem();
+
+        /*
+
         fs.title = "/";
         fs.subtitle = LocaleController.getString("SystemRoot", R.string.SystemRoot);
         fs.icon = R.drawable.files_folder;
         fs.file = new File("/");
         items.add(fs);
 
+         */
+
+        ListItem fs = new ListItem();
+
         try {
-            File telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
+            File telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir("Telegram").getParentFile();
             if (telegramPath.exists()) {
                 fs = new ListItem();
                 fs.title = "Telegram";

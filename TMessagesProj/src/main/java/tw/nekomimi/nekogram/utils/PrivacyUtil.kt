@@ -127,7 +127,7 @@ object PrivacyUtil {
 
                     response.rules.forEach {
 
-                        if (it !is TLRPC.TL_privacyValueDisallowAll) {
+                        if (it is TLRPC.TL_privacyValueAllowAll) {
 
                             showPrivacyAlert(ctx, account, 2)
 
@@ -195,10 +195,11 @@ object PrivacyUtil {
 
         }
 
-        val alertDialog = builder.show()
+        runCatching {
 
-        (alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL) as TextView?)?.setTextColor(Theme.getColor(Theme.key_dialogTextRed2))
+            (builder.show().getButton(DialogInterface.BUTTON_NEUTRAL) as TextView?)?.setTextColor(Theme.getColor(Theme.key_dialogTextRed2))
 
+        }
 
     }
 

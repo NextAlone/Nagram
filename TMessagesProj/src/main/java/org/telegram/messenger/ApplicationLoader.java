@@ -48,7 +48,7 @@ import tw.nekomimi.nekogram.utils.ZipUtil;
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
-    public static volatile Context applicationContext; { applicationContext = this; }
+    public static volatile Context applicationContext;
 
     public static volatile NetworkInfo currentNetworkInfo;
     public static volatile boolean unableGetCurrentNetwork;
@@ -93,110 +93,104 @@ public class ApplicationLoader extends Application {
     }
 
     public static void postInitApplication() {
-        if (applicationInited) {
-            return;
-        }
-
-        applicationInited = true;
-
         try {
-            LocaleController.getInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            if (applicationInited) {
+                return;
+            }
 
-        try {
-            connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    try {
-                        currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                    } catch (Throwable ignore) {
+            applicationInited = true;
 
+            try {
+                LocaleController.getInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        try {
+                            currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                        } catch (Throwable ignore) {
+
+                        }
+
+                        boolean isSlow = isConnectionSlow();
+                        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                            ConnectionsManager.getInstance(a).checkConnection();
+                            FileLoader.getInstance(a).onNetworkChanged(isSlow);
+                        }
                     }
+                };
+                IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+                ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter);
+                //Utilities.globalQueue.postRunnable(ApplicationLoader::ensureCurrentNetworkGet);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                    boolean isSlow = isConnectionSlow();
-                    for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                        ConnectionsManager.getInstance(a).checkConnection();
-                        FileLoader.getInstance(a).onNetworkChanged(isSlow);
-                    }
+            try {
+                final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+                filter.addAction(Intent.ACTION_SCREEN_OFF);
+                final BroadcastReceiver mReceiver = new ScreenReceiver();
+                applicationContext.registerReceiver(mReceiver, filter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                PowerManager pm = (PowerManager) ApplicationLoader.applicationContext.getSystemService(Context.POWER_SERVICE);
+                isScreenOn = pm.isScreenOn();
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("screen state = " + isScreenOn);
                 }
-            };
-            IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-            ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter);
-            //Utilities.globalQueue.postRunnable(ApplicationLoader::ensureCurrentNetworkGet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
 
-        try {
-            final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            final BroadcastReceiver mReceiver = new ScreenReceiver();
-            applicationContext.registerReceiver(mReceiver, filter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            SharedConfig.loadConfig();
+            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                UserConfig.getInstance(a).loadConfig();
+                MessagesController.getInstance(a);
+                if (a == 0) {
+                    SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(a).getCurrentTime() + "__";
+                } else {
+                    ConnectionsManager.getInstance(a);
+                }
+                TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
+                if (user != null) {
+                    MessagesController.getInstance(a).putUser(user, true);
+                    SendMessagesHelper.getInstance(a).checkUnsentMessages();
+                }
+            }
 
-        try {
-            PowerManager pm = (PowerManager) ApplicationLoader.applicationContext.getSystemService(Context.POWER_SERVICE);
-            isScreenOn = pm.isScreenOn();
+            if (ProxyUtil.isVPNEnabled()) {
+
+                if (NekoXConfig.disableProxyWhenVpnEnabled) {
+
+                    SharedConfig.setProxyEnable(false);
+
+                }
+
+            }
+
+            ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
+            if (ExternalGcm.INSTANCE != null) {
+                ExternalGcm.INSTANCE.initPlayServices();
+            }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("screen state = " + isScreenOn);
+                FileLog.d("app initied");
             }
-        } catch (Exception e) {
+
+            MediaController.getInstance();
+            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                ContactsController.getInstance(a).checkAppAccount();
+                DownloadController.getInstance(a);
+            }
+        } catch (Throwable e) {
             FileLog.e(e);
-        }
-
-        SharedConfig.loadConfig();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            UserConfig.getInstance(a).loadConfig();
-            MessagesController.getInstance(a);
-            if (a == 0) {
-                SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(a).getCurrentTime() + "__";
-            } else {
-                ConnectionsManager.getInstance(a);
-            }
-            TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
-            if (user != null) {
-                MessagesController.getInstance(a).putUser(user, true);
-                SendMessagesHelper.getInstance(a).checkUnsentMessages();
-            }
-        }
-
-        if (ProxyUtil.isVPNEnabled()) {
-
-            if (NekoXConfig.disableProxyWhenVpnEnabled) {
-
-                SharedConfig.setProxyEnable(false);
-
-            }
-
-        } else if (MessagesController.getGlobalMainSettings().getBoolean("first_open", true)) {
-
-            MessagesController.getGlobalMainSettings().edit().putBoolean("first_open", false).apply();
-
-            if (!UserConfig.getInstance(0).isClientActivated()) {
-
-                SharedConfig.setCurrentProxy(SharedConfig.proxyList.get(0));
-
-            }
-
-        }
-
-        ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
-        if (ExternalGcm.INSTANCE != null) {
-            ExternalGcm.INSTANCE.initPlayServices();
-        }
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("app initied");
-        }
-
-        MediaController.getInstance();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            ContactsController.getInstance(a).checkAppAccount();
-            DownloadController.getInstance(a);
         }
     }
 

@@ -17,17 +17,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import androidx.exifinterface.media.ExifInterface;
-
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.SparseArray;
+
+import androidx.exifinterface.media.ExifInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,7 +65,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class ImageLoader {
 
@@ -1638,7 +1637,6 @@ public class ImageLoader {
                 FileLog.e(e);
             }
         }
-        AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
 
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
@@ -1773,80 +1771,69 @@ public class ImageLoader {
                 FileLog.e(e);
             }
         }
-        AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
-
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("cache path = " + cachePath);
         }
 
         try {
-            if (!NekoConfig.saveCacheToSdcard || Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                if (!NekoConfig.saveCacheToSdcard) {
-                    telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir("Telegram");
-                } else {
-                    telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
+            telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir("Telegram").getParentFile();
+
+            FileUtil.initDir(telegramPath);
+
+            if (telegramPath.isDirectory()) {
+                try {
+                    File imagePath = new File(telegramPath, "images");
+                    FileUtil.initDir(imagePath);
+                    if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
+                        mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE, imagePath);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("image path = " + imagePath);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
-                telegramPath.mkdirs();
 
-                if (telegramPath.isDirectory()) {
-                    try {
-                        File imagePath = new File(telegramPath, "Telegram Images");
-                        imagePath.mkdir();
-                        if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
-                            mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE, imagePath);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("image path = " + imagePath);
-                            }
+                try {
+                    File videoPath = new File(telegramPath, "videos");
+                    FileUtil.initDir(videoPath);
+                    if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
+                        mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO, videoPath);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("video path = " + videoPath);
                         }
-                    } catch (Exception e) {
-                        FileLog.e(e);
                     }
-
-                    try {
-                        File videoPath = new File(telegramPath, "Telegram Video");
-                        videoPath.mkdir();
-                        if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
-                            mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO, videoPath);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("video path = " + videoPath);
-                            }
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-
-                    try {
-                        File audioPath = new File(telegramPath, "Telegram Audio");
-                        audioPath.mkdir();
-                        if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath, FileLoader.MEDIA_DIR_AUDIO)) {
-                            AndroidUtilities.createEmptyFile(new File(audioPath, ".nomedia"));
-                            mediaDirs.put(FileLoader.MEDIA_DIR_AUDIO, audioPath);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("audio path = " + audioPath);
-                            }
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-
-                    try {
-                        File documentPath = new File(telegramPath, "Telegram Documents");
-                        documentPath.mkdir();
-                        if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath, FileLoader.MEDIA_DIR_DOCUMENT)) {
-                            AndroidUtilities.createEmptyFile(new File(documentPath, ".nomedia"));
-                            mediaDirs.put(FileLoader.MEDIA_DIR_DOCUMENT, documentPath);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("documents path = " + documentPath);
-                            }
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
-            } else {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("this Android can't rename files");
+
+                try {
+                    File audioPath = new File(telegramPath, "audios");
+                    FileUtil.initDir(audioPath);
+                    if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath, FileLoader.MEDIA_DIR_AUDIO)) {
+                        AndroidUtilities.createEmptyFile(new File(audioPath, ".nomedia"));
+                        mediaDirs.put(FileLoader.MEDIA_DIR_AUDIO, audioPath);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("audio path = " + audioPath);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+
+                try {
+                    File documentPath = new File(telegramPath, "documents");
+                    FileUtil.initDir(documentPath);
+                    if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath, FileLoader.MEDIA_DIR_DOCUMENT)) {
+                        AndroidUtilities.createEmptyFile(new File(documentPath, ".nomedia"));
+                        mediaDirs.put(FileLoader.MEDIA_DIR_DOCUMENT, documentPath);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("documents path = " + documentPath);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
             }
             SharedConfig.checkSaveToGalleryFiles();

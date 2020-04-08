@@ -1209,13 +1209,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     }
                     blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, 8), R.drawable.actions_permissions, true);
                 }
-                if (ChatObject.isChannel(currentChat) && !ChatObject.hasAdminRights(currentChat) && info.participants != null && info.participants.participants.size() != info.participants_count && realAdminCount == 0) {
-                    adminCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.actions_addadmin, true);
-                } else {
-                    adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", ChatObject.isChannel(currentChat) ? ChatObject.hasAdminRights(currentChat) ? info.admins_count : realAdminCount == 0 ? getChannelAdminCount() : realAdminCount : getAdminCount()), R.drawable.actions_addadmin, true);
-                }
-                if (ChatObject.isChannel(currentChat) && !ChatObject.hasAdminRights(currentChat) && info.participants != null && info.participants.participants.size() != info.participants_count) {
-                    getRealChannelAdminCount();
+                if (info.participants != null) {
+                    if (ChatObject.isChannel(currentChat) && !ChatObject.hasAdminRights(currentChat) && info.participants.participants.size() != info.participants_count && realAdminCount == 0) {
+                        adminCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.actions_addadmin, true);
+                    } else {
+                        adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", ChatObject.isChannel(currentChat) ? ChatObject.hasAdminRights(currentChat) ? info.admins_count : realAdminCount == 0 ? getChannelAdminCount() : realAdminCount : getAdminCount()), R.drawable.actions_addadmin, true);
+                    }
+                    if (ChatObject.isChannel(currentChat) && !ChatObject.hasAdminRights(currentChat) && info.participants.participants.size() != info.participants_count) {
+                        getRealChannelAdminCount();
+                    }
                 }
             } else {
                 if (isChannel) {

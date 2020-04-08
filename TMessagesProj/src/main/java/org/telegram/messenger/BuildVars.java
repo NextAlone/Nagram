@@ -23,9 +23,8 @@ public class BuildVars {
     public static int BUILD_VERSION;
     public static String BUILD_VERSION_STRING;
 
-    public static int OFFICAL_APP_ID = 4;
-    public static String OFFICAL_APP_HASH = "014b35b6184100b085b0d0572f9b5103";
-
+    public static int OFFICAL_APP_ID = 21724;
+    public static String OFFICAL_APP_HASH = "3e0cb5efcd52300aec5994fdfc5bdc16";
 
     static {
 

@@ -30,10 +30,15 @@ public class FileLoader extends BaseController {
 
     public interface FileLoaderDelegate {
         void fileUploadProgressChanged(String location, long uploadedSize, long totalSize, boolean isEncrypted);
+
         void fileDidUploaded(String location, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize);
+
         void fileDidFailedUpload(String location, boolean isEncrypted);
+
         void fileDidLoaded(String location, File finalFile, int type);
+
         void fileDidFailedLoad(String location, int state);
+
         void fileLoadProgressChanged(String location, long uploadedSize, long totalSize);
     }
 
@@ -79,6 +84,7 @@ public class FileLoader extends BaseController {
     private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap<>();
 
     private static volatile FileLoader[] Instance = new FileLoader[UserConfig.MAX_ACCOUNT_COUNT];
+
     public static FileLoader getInstance(int num) {
         FileLoader localInstance = Instance[num];
         if (localInstance == null) {
@@ -755,7 +761,7 @@ public class FileLoader extends BaseController {
         final CountDownLatch semaphore = new CountDownLatch(1);
         final FileLoadOperation[] result = new FileLoadOperation[1];
         fileLoaderQueue.postRunnable(() -> {
-            result[0] = loadFileInternal(document, null, null, null, null, parentObject, null, 0, 1, stream, offset, priority,  0);
+            result[0] = loadFileInternal(document, null, null, null, null, parentObject, null, 0, 1, stream, offset, priority, 0);
             semaphore.countDown();
         });
         try {
@@ -1129,24 +1135,7 @@ public class FileLoader extends BaseController {
     public static String getAttachFileName(TLObject attach, String ext) {
         if (attach instanceof TLRPC.Document) {
             TLRPC.Document document = (TLRPC.Document) attach;
-            String docExt = null;
-            if (docExt == null) {
-                docExt = getDocumentFileName(document);
-                int idx;
-                if (docExt == null || (idx = docExt.lastIndexOf('.')) == -1) {
-                    docExt = "";
-                } else {
-                    docExt = docExt.substring(idx);
-                }
-            }
-            if (docExt.length() <= 1) {
-                docExt = getExtensionByMimeType(document.mime_type);
-            }
-            if (docExt.length() > 1) {
-                return document.dc_id + "_" + document.id + docExt;
-            } else {
-                return document.dc_id + "_" + document.id;
-            }
+            return (document.dc_id + "_" + document.id).hashCode() + "_" + getDocumentFileName(document);
         } else if (attach instanceof SecureDocument) {
             SecureDocument secureDocument = (SecureDocument) attach;
             return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.id + ".jpg";

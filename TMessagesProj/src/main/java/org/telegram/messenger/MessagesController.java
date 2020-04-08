@@ -346,6 +346,37 @@ public class MessagesController extends BaseController implements NotificationCe
 
     private DialogFilter sortingDialogFilter;
 
+    private final Comparator<TLRPC.Dialog> dialogDateComparator = (dialog1, dialog2) -> {
+        int pinnedNum1 = sortingDialogFilter.pinnedDialogs.get(dialog1.id, Integer.MIN_VALUE);
+        int pinnedNum2 = sortingDialogFilter.pinnedDialogs.get(dialog2.id, Integer.MIN_VALUE);
+        if (dialog1 instanceof TLRPC.TL_dialogFolder && !(dialog2 instanceof TLRPC.TL_dialogFolder)) {
+            return -1;
+        } else if (!(dialog1 instanceof TLRPC.TL_dialogFolder) && dialog2 instanceof TLRPC.TL_dialogFolder) {
+            return 1;
+        } else if (pinnedNum1 == Integer.MIN_VALUE && pinnedNum2 != Integer.MIN_VALUE) {
+            return 1;
+        } else if (pinnedNum1 != Integer.MIN_VALUE && pinnedNum2 == Integer.MIN_VALUE) {
+            return -1;
+        } else if (pinnedNum1 != Integer.MIN_VALUE && pinnedNum2 != Integer.MIN_VALUE) {
+            if (pinnedNum1 > pinnedNum2) {
+                return 1;
+            } else if (pinnedNum1 < pinnedNum2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+        final MediaDataController mediaDataController = getMediaDataController();
+        final long date1 = DialogObject.getLastMessageOrDraftDate(dialog1, mediaDataController.getDraft(dialog1.id));
+        final long date2 = DialogObject.getLastMessageOrDraftDate(dialog2, mediaDataController.getDraft(dialog2.id));
+        if (date1 < date2) {
+            return 1;
+        } else if (date1 > date2) {
+            return -1;
+        }
+        return 0;
+    };
+
     private final Comparator<TLRPC.Dialog> dialogComparator = (dialog1, dialog2) -> {
         if (dialog1 instanceof TLRPC.TL_dialogFolder && !(dialog2 instanceof TLRPC.TL_dialogFolder)) {
             return -1;
@@ -2192,7 +2223,7 @@ public class MessagesController extends BaseController implements NotificationCe
             return;
         }
         installReferer = referer;
-        mainPreferences.edit().putString("installReferer", referer).apply();
+        mainPreferences.edit().putString("installReferer", referer).commit();
     }
 
     public void putEncryptedChat(TLRPC.EncryptedChat encryptedChat, boolean fromCache) {
@@ -2671,7 +2702,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         editor.putInt("dialog_bar_vis3" + dialogId, 3);
-        editor.apply();
+        editor.commit();
         if ((int) dialogId != 0) {
             TLRPC.TL_messages_hidePeerSettingsBar req = new TLRPC.TL_messages_hidePeerSettingsBar();
             if (currentUser != null) {
@@ -2691,7 +2722,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         editor.putInt("dialog_bar_vis3" + dialogId, 3);
-        editor.apply();
+        editor.commit();
         if ((int) dialogId == 0) {
             if (currentEncryptedChat == null || currentEncryptedChat.access_hash == 0) {
                 return;
@@ -2737,7 +2768,7 @@ public class MessagesController extends BaseController implements NotificationCe
         editor.putBoolean("dialog_bar_block" + dialogId, settings.block_contact);
         editor.putBoolean("dialog_bar_exception" + dialogId, settings.need_contacts_exception);
         editor.putBoolean("dialog_bar_location" + dialogId, settings.report_geo);
-        editor.apply();
+        editor.commit();
         getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialogId);
     }
 
@@ -4273,14 +4304,14 @@ public class MessagesController extends BaseController implements NotificationCe
             AndroidUtilities.runOnUIThread(passwordCheckRunnable);
             lastPasswordCheckTime = currentTime;
         }
-        getLocationController().update();
-        checkProxyInfoInternal(false);
-        checkTosUpdate();
         if (lastPushRegisterSendTime != 0 && Math.abs(SystemClock.elapsedRealtime() - lastPushRegisterSendTime) >= 3 * 60 * 60 * 1000) {
             if (ExternalGcm.INSTANCE != null) {
                 ExternalGcm.INSTANCE.sendRegistrationToServer();
             }
         }
+        getLocationController().update();
+        checkProxyInfoInternal(false);
+        checkTosUpdate();
     }
 
     private void checkTosUpdate() {
@@ -4301,7 +4332,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 nextTosCheckTime = getConnectionsManager().getCurrentTime() + 60 * 60;
             }
-            notificationsPreferences.edit().putInt("nextTosCheckTime", nextTosCheckTime).apply();
+            notificationsPreferences.edit().putInt("nextTosCheckTime", nextTosCheckTime).commit();
         });
     }
 
@@ -4373,7 +4404,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     proxyDialogId = did;
                     proxyDialogAddress = proxyAddress + proxySecret;
-                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).putString("proxyDialogAddress", proxyDialogAddress).apply();
+                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).putString("proxyDialogAddress", proxyDialogAddress).commit();
                     nextProxyInfoCheckTime = res.expires;
                     if (!noDialog) {
                         AndroidUtilities.runOnUIThread(() -> {
@@ -4522,7 +4553,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 if (noDialog) {
                     proxyDialogId = 0;
-                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").apply();
+                    getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").commit();
                     checkingProxyInfoRequestId = 0;
                     checkingProxyInfo = false;
                     AndroidUtilities.runOnUIThread(this::removeProxyDialog);
@@ -4534,7 +4565,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (removeCurrent != 0) {
             proxyDialogId = 0;
             proxyDialogAddress = null;
-            getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").apply();
+            getGlobalMainSettings().edit().putLong("proxy_dialog", proxyDialogId).remove("proxyDialogAddress").commit();
             nextProxyInfoCheckTime = getConnectionsManager().getCurrentTime() + 60 * 60;
             if (removeCurrent == 2) {
                 checkingProxyInfo = false;
@@ -5449,7 +5480,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     editor1.putInt("EnableGroup2", Integer.MAX_VALUE);
                     editor1.putInt("EnableChannel2", Integer.MAX_VALUE);
                 }
-                editor1.remove("EnableGroup").apply();
+                editor1.remove("EnableGroup").commit();
             }
             if (preferences.contains("EnableAll")) {
                 boolean enabled = preferences.getBoolean("EnableAll", true);
@@ -5459,10 +5490,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (!enabled) {
                     editor1.putInt("EnableAll2", Integer.MAX_VALUE);
                 }
-                editor1.remove("EnableAll").apply();
+                editor1.remove("EnableAll").commit();
             }
             if (editor1 != null) {
-                editor1.apply();
+                editor1.commit();
             }
 
             loadingNotificationSettings = 3;
@@ -5524,7 +5555,7 @@ public class MessagesController extends BaseController implements NotificationCe
                                 editor.putInt("EnableChannel2", notify_settings.mute_until);
                             }
                         }
-                        editor.apply();
+                        editor.commit();
                         if (loadingNotificationSettings == 0) {
                             getUserConfig().notificationsSettingsLoaded = true;
                             getUserConfig().saveConfig(false);
@@ -5547,7 +5578,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 SharedPreferences.Editor editor = notificationsPreferences.edit();
                 enableJoined = response instanceof TLRPC.TL_boolFalse;
                 editor.putBoolean("EnableContactJoined", enableJoined);
-                editor.apply();
+                editor.commit();
                 getUserConfig().notificationsSignUpSettingsLoaded = true;
                 getUserConfig().saveConfig(false);
             }));
@@ -12037,28 +12068,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 sortingDialogFilter = selectedDialogFilter[b];
 
-                try {
-
-                    Collections.sort(allDialogs, dialogComparator);
-
-                } catch (Exception e) {
-
-                    NekoXConfig.sortByUnread = false;
-                    NekoXConfig.sortByUnmuted = false;
-                    NekoXConfig.sortByUser = false;
-                    NekoXConfig.sortByContacts = false;
-
-                    try {
-
-                        Collections.sort(allDialogs, dialogComparator);
-
-                    } catch (Exception ex) {
-
-                        FileLog.e(ex);
-
-                    }
-
-                }
+                Collections.sort(allDialogs, dialogDateComparator);
 
                 ArrayList<TLRPC.Dialog> dialogsByFilter = selectedDialogFilter[b].dialogs;
 

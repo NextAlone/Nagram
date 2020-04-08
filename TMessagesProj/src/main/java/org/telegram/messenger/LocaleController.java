@@ -156,7 +156,7 @@ public class LocaleController {
 
         public File getPathToFile() {
 
-            File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(), "languages");
+            File baseDir = new File(ApplicationLoader.getDataDirFixed(), "languages");
 
             FileUtil.initDir(baseDir);
 
@@ -170,7 +170,8 @@ public class LocaleController {
 
         public File getPathToBaseFile() {
             if (isUnofficial()) {
-                File baseDir = new File(ApplicationLoader.applicationContext.getCacheDir().getParentFile(), "languages");
+                File baseDir = new File(ApplicationLoader.getDataDirFixed(), "languages");
+
                 FileUtil.initDir(baseDir);
                 return new File(baseDir, "unofficial_base_" + shortName + ".xml");
             }
@@ -237,7 +238,8 @@ public class LocaleController {
                 }
             }
         }
-        if (localInstance.formatterDay == null || localInstance.chatFullDate == null) localInstance.recreateFormatters();
+        if (localInstance.formatterDay == null || localInstance.chatFullDate == null)
+            localInstance.recreateFormatters();
         return localInstance;
     }
 

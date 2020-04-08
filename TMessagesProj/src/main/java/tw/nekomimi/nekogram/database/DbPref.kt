@@ -20,7 +20,9 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
 
     private inline fun <reified T> getAs(key: String, defValue: T): T {
         connection.find(Filters.eq("key", key)).apply {
-            if (hasMore()) return first().get("value", T::class.java)
+            runCatching {
+                return first().get("value", T::class.java)
+            }
         }
         return defValue
     }
@@ -106,25 +108,6 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
         override fun putString(key: String, value: String?): PrefEditor {
             toApply[key] = value
             return this
-        }
-
-        fun putAll(map: MutableMap<String, out Any?>): PrefEditor {
-
-            map.forEach { (key, value) ->
-
-                if (value == null) {
-                    connection.remove(Filters.eq("key", key))
-                } else {
-                    connection.update(Filters.eq("key", key), Document().apply {
-                        put("key", key)
-                        put("value", value)
-                    }, UpdateOptions.updateOptions(true))
-                }
-
-            }
-
-            return this
-
         }
 
         override fun commit(): Boolean {

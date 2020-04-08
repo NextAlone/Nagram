@@ -9,19 +9,9 @@ object FileUtil {
     @JvmStatic
     fun initDir(dir: File) {
 
-        dir.parentFile?.also { initDir(it) }
+        dir.mkdirs()
 
-        if (!dir.isDirectory) {
-
-            if (dir.isFile) dir.deleteRecursively()
-
-            if (!dir.mkdirs() && !dir.isDirectory) {
-
-                error("unable to create dir ${dir.path}")
-
-            }
-
-        }
+        // ignored
 
     }
 

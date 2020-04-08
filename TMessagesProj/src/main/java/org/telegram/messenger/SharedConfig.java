@@ -1424,16 +1424,26 @@ public class SharedConfig {
 
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
-        VmessProxy publicProxy = new VmessProxy(VmessLoader.getPublic());
-        publicProxy.isPublic = true;
-        proxyList.add(publicProxy);
+        try {
 
-        if (publicProxy.hashCode() == current) {
+            if (!NekoXConfig.hidePublicProxy) {
 
-            currentProxy = publicProxy;
+                VmessProxy publicProxy = new VmessProxy(VmessLoader.getPublic());
+                publicProxy.isPublic = true;
+                proxyList.add(publicProxy);
 
-            publicProxy.start();
+                if (publicProxy.hashCode() == current) {
 
+                    currentProxy = publicProxy;
+
+                    publicProxy.start();
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            FileLog.e(e);
         }
 
 
@@ -1719,16 +1729,11 @@ public class SharedConfig {
 
     public static void checkSaveToGalleryFiles() {
         try {
-            File telegramPath;
-            if (!NekoConfig.saveCacheToSdcard) {
-                telegramPath = new File(ApplicationLoader.applicationContext.getFilesDir(), "Telegram");
-            } else {
-                telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
-            }
-            File imagePath = new File(telegramPath, "Telegram Images");
-            imagePath.mkdir();
-            File videoPath = new File(telegramPath, "Telegram Video");
-            videoPath.mkdir();
+            File telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir( "Telegram").getParentFile();
+            File imagePath = new File(telegramPath, "images");
+            imagePath.mkdirs();
+            File videoPath = new File(telegramPath, "videos");
+            videoPath.mkdirs();
 
             if (saveToGallery) {
                 if (imagePath.isDirectory()) {

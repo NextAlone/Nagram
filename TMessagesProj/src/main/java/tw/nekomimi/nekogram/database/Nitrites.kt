@@ -5,10 +5,9 @@ import org.telegram.messenger.ApplicationLoader
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
-@JvmOverloads
 fun mkDatabase(name: String): Nitrite {
 
-    val dir = File("${ApplicationLoader.getDataDirFixed()}/databases")
+    val dir = File("${ApplicationLoader.getDataDirFixed()}/files")
 
     FileUtil.initDir(dir)
 
@@ -18,7 +17,6 @@ fun mkDatabase(name: String): Nitrite {
 
 }
 
-@JvmOverloads
 fun mkCacheDatabase(name: String) : Nitrite {
 
     val dir = File("${ApplicationLoader.getDataDirFixed()}/cache")
@@ -33,6 +31,16 @@ fun mkCacheDatabase(name: String) : Nitrite {
 
 fun Nitrite.openSharedPreference(name: String) = DbPref(getCollection(name))
 
-val mainSharedPreferencesDatabase = mkDatabase("shared_preferences")
+private lateinit var mainSharedPreferencesDatabase: Nitrite
 
-fun openMainSharedPreference(name: String) = mainSharedPreferencesDatabase.openSharedPreference(name)
+fun openMainSharedPreference(name: String): DbPref {
+
+    if (!::mainSharedPreferencesDatabase.isInitialized) {
+
+        mainSharedPreferencesDatabase = mkDatabase("shared_preferences")
+
+    }
+
+    return mainSharedPreferencesDatabase.openSharedPreference(name)
+
+}

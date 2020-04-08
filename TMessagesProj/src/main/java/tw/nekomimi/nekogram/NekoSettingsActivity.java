@@ -84,7 +84,6 @@ public class NekoSettingsActivity extends BaseFragment {
     private int useSystemEmojiRow;
     private int ignoreBlockedRow;
     private int hideProxySponsorChannelRow;
-    private int saveCacheToSdcardRow;
     private int skipOpenLinkConfiirm;
     private int pauseMusicOnRecordRow;
     private int disablePhotoSideActionRow;
@@ -226,11 +225,6 @@ public class NekoSettingsActivity extends BaseFragment {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         MessagesController.getInstance(a).checkProxyInfo(true);
                     }
-                }
-            } else if (position == saveCacheToSdcardRow) {
-                NekoConfig.toggleSaveCacheToSdcard();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.saveCacheToSdcard);
                 }
             } else if (position == skipOpenLinkConfiirm) {
                 NekoXConfig.toggleSkipOpenLinkConfirm();
@@ -535,7 +529,6 @@ public class NekoSettingsActivity extends BaseFragment {
         useSystemEmojiRow = rowCount++;
         ignoreBlockedRow = rowCount++;
         hideProxySponsorChannelRow = rowCount++;
-        saveCacheToSdcardRow = rowCount++;
         skipOpenLinkConfiirm = rowCount++;
         pauseMusicOnRecordRow = rowCount++;
         disablePhotoSideActionRow = rowCount++;
@@ -1103,8 +1096,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), NekoConfig.transparentStatusBar, true);
                     } else if (position == hideProxySponsorChannelRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HideProxySponsorChannel", R.string.HideProxySponsorChannel), NekoConfig.hideProxySponsorChannel, true);
-                    } else if (position == saveCacheToSdcardRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("SaveCacheToSdcard", R.string.SaveCacheToSdcard), NekoConfig.saveCacheToSdcard, true);
                     } else if (position == skipOpenLinkConfiirm) {
                         textCell.setTextAndCheck(LocaleController.getString("SkipOpenLinkConfirm", R.string.SkipOpenLinkConfirm), NekoXConfig.skipOpenLinkConfirm, true);
                     } else if (position == disableChatActionRow) {
@@ -1180,7 +1171,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == useSystemEmojiRow || position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == typefaceRow || position == nameOrderRow ||
                     position == forceTabletRow || position == mapPreviewRow || position == newYearRow ||
                     position == actionBarDecorationRow || position == eventTypeRow || position == transparentStatusBarRow ||
-                    position == hideProxySponsorChannelRow || position == saveCacheToSdcardRow || position == skipOpenLinkConfiirm ||
+                    position == hideProxySponsorChannelRow || position == skipOpenLinkConfiirm ||
                     position == disableFilteringRow || position == stickerSizeRow ||
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
@@ -1238,7 +1229,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == transparentStatusBarRow || position == hideProxySponsorChannelRow ||
                     position == ignoreBlockedRow || position == useSystemEmojiRow || position == typefaceRow ||
                     position == forceTabletRow || position == newYearRow ||
-                    position == saveCacheToSdcardRow || position == unlimitedFavedStickersRow || position == skipOpenLinkConfiirm ||
+                    position == unlimitedFavedStickersRow || position == skipOpenLinkConfiirm ||
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||
