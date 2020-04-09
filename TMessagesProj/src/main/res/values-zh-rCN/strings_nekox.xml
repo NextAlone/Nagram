@@ -2,6 +2,7 @@
 <resources>
     <string name="UseOfficalId">假装是官方应用</string>
     <string name="UseOfficalIdNotice">登录时将自己标识为官方应用，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
+    <string name="ChangeTranslateProvider">修改翻译源</string>
     <string name="PrivacyNotice">隐私警告</string>
     <string name="PrivacyNoticePhoneVisible">检测到您的手机号码对任何人都可见, 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
     <string name="PrivacyNoticeAddByPhone">检测到您没有被关闭“允许通过电话号码找到我”设置， 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
