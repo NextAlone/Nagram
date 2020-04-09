@@ -43,6 +43,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 import tw.nekomimi.nekogram.utils.StrUtil;
 
@@ -309,7 +310,13 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(ShadowsocksRLoader.Companion.getMethods(), methodField.getValueTextView()::setText);
+            select.setItems(ShadowsocksRLoader.Companion.getMethods(), (__,value) -> {
+
+                methodField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 
@@ -327,7 +334,13 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(ShadowsocksRLoader.Companion.getProtocols(), protocolField.getValueTextView()::setText);
+            select.setItems(ShadowsocksRLoader.Companion.getProtocols(), (__,value) -> {
+
+                protocolField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 
@@ -347,7 +360,13 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(ShadowsocksRLoader.Companion.getObfses(), obfsField.getValueTextView()::setText);
+            select.setItems(ShadowsocksRLoader.Companion.getObfses(), (__,value) -> {
+
+                obfsField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 

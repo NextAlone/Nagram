@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.translator;
+package tw.nekomimi.nekogram.transtale;
 
 import org.dizitart.no2.Document;
 import org.dizitart.no2.IndexType;

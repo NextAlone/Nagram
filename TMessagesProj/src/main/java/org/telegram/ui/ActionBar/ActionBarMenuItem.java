@@ -472,6 +472,16 @@ public class ActionBarMenuItem extends FrameLayout {
         this.anchor = anchor;
     }
 
+    public boolean isShowOnTop() {
+        return showOnTop;
+    }
+
+    public void setShowOnTop(boolean showOnTop) {
+        this.showOnTop = showOnTop;
+    }
+
+    private boolean showOnTop;
+
     public void toggleSubMenu() {
         if (popupLayout == null || parentMenu != null && parentMenu.isActionMode && parentMenu.parentActionBar != null && !parentMenu.parentActionBar.isActionModeShowed()) {
             return;
@@ -958,7 +968,9 @@ public class ActionBarMenuItem extends FrameLayout {
             int[] location = new int[2];
             anchor.getLocationOnScreen(location);
             int y = location[1];
-            if (height - y < popupLayout.getMeasuredHeight() + offsetY) {
+            if (showOnTop) {
+                offsetY -= popupLayout.getMeasuredHeight();
+            } else if (height - y < popupLayout.getMeasuredHeight() + offsetY) {
                 if (height - (height - y) >= popupLayout.getMeasuredHeight()) {
                     offsetY -= popupLayout.getMeasuredHeight();
                 } else if (popupLayout.getMeasuredHeight() > height) {

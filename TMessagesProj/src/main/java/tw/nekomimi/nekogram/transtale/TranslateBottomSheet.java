@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.translator;
+package tw.nekomimi.nekogram.transtale;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -62,7 +62,7 @@ public class TranslateBottomSheet extends BottomSheet {
                     url = String.format("https://translate.google.cn/?view=home&op=translate&text=%s", URLEncoder.encode(text, "UTF-8"));
                     break;
                 case -3:
-                    url = String.format("https://fanyi.baidu.com/?aldtype=38319&tpltype=sigma#auto/zh/%s", Utils.encodeURIComponent(text));
+                    url = String.format("https://fanyi.baidu.com/?aldtype=38319&tpltype=sigma#auto/zh/%s", TransUtils.encodeURIComponent(text));
                     break;
             }
         } catch (UnsupportedEncodingException e) {

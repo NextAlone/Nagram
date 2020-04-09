@@ -43,6 +43,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 import tw.nekomimi.nekogram.utils.StrUtil;
 
@@ -68,8 +69,6 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
     private boolean ignoreOnTextChange;
 
     private static final int done_button = 1;
-
-    private static String[] methodSet = ShadowsocksLoader.Companion.getMethods();
 
     public class TypeCell extends FrameLayout {
 
@@ -288,7 +287,13 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(methodSet, methodField.getValueTextView()::setText);
+            select.setItems(ShadowsocksLoader.Companion.getMethods(),(__,value) -> {
+
+                methodField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 

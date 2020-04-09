@@ -147,6 +147,8 @@ public class FileLoadOperation {
     private ArrayList<RequestInfo> requestInfos;
     private ArrayList<RequestInfo> delayedRequestInfos;
 
+    private String fileName;
+
     private File cacheFileTemp;
     private File cacheFileGzipTemp;
     private File cacheFileFinal;
@@ -266,7 +268,8 @@ public class FileLoadOperation {
         ext = ImageLoader.getHttpUrlExtension(webDocument.url, defaultExt);
     }
 
-    public FileLoadOperation(TLRPC.Document documentLocation, Object parent) {
+    public FileLoadOperation(TLRPC.Document documentLocation, Object parent,String fileName) {
+        this.fileName = fileName;
         try {
             parentObject = parent;
             if (documentLocation instanceof TLRPC.TL_documentEncrypted) {
@@ -718,6 +721,8 @@ public class FileLoadOperation {
         if (parentObject instanceof TLRPC.TL_theme) {
             TLRPC.TL_theme theme = (TLRPC.TL_theme) parentObject;
             cacheFileFinal = new File(ApplicationLoader.getFilesDirFixed(), "remote" + theme.id + ".attheme");
+        } else if (fileName != null) {
+            cacheFileFinal = new File(storePath, fileName);
         } else {
             cacheFileFinal = new File(storePath, fileNameFinal);
         }

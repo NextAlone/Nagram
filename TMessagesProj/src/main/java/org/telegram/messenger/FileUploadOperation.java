@@ -246,9 +246,6 @@ public class FileUploadOperation {
             started = true;
             if (stream == null) {
                 File cacheFile = new File(uploadingFilePath);
-                if (AndroidUtilities.isInternalUri(Uri.fromFile(cacheFile))) {
-                    throw new Exception("trying to upload internal file");
-                }
                 stream = new RandomAccessFile(cacheFile, "r");
                 if (estimatedSize != 0) {
                     totalFileSize = estimatedSize;

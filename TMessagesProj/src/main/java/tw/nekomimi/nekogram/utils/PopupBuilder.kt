@@ -1,27 +1,24 @@
 package tw.nekomimi.nekogram.utils
 
+import android.annotation.SuppressLint
 import android.view.View
 import org.telegram.ui.ActionBar.ActionBarMenuItem
 import org.telegram.ui.ActionBar.Theme
 
-class PopupBuilder(anchor: View) : ActionBarMenuItem(anchor.context, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -0x4c4c4d) {
+@SuppressLint("ViewConstructor")
+class PopupBuilder @JvmOverloads constructor(anchor: View, dialog: Boolean = false) : ActionBarMenuItem(anchor.context, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -0x4c4c4d) {
 
     init {
 
         setAnchor(anchor)
 
+        isShowOnTop = dialog
+
         isVerticalScrollBarEnabled = true
 
     }
 
-    @FunctionalInterface
-    interface ItemListener {
-
-        fun onClick(item: CharSequence)
-
-    }
-
-    fun setItems(items: Array<CharSequence>, listener: ItemListener) {
+    fun setItems(items: Array<CharSequence>, listener: (Int,CharSequence) -> Unit) {
 
         removeAllSubItems()
 
@@ -33,32 +30,7 @@ class PopupBuilder(anchor: View) : ActionBarMenuItem(anchor.context, null, Theme
 
         setDelegate {
 
-            listener.onClick(items[it])
-
-        }
-
-    }
-
-    @FunctionalInterface
-    interface IndexedItemListener {
-
-        fun onClick(item: Int)
-
-    }
-
-    fun setItemsIndexed(items: Array<CharSequence>, listener: IndexedItemListener) {
-
-        removeAllSubItems()
-
-        items.forEachIndexed { i, v ->
-
-            addSubItem(i, v)
-
-        }
-
-        setDelegate {
-
-            listener.onClick(it)
+            listener(it,items[it])
 
         }
 

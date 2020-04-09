@@ -612,7 +612,7 @@ public class FileLoader extends BaseController {
             operation = new FileLoadOperation(imageLocation, parentObject, locationExt, locationSize);
             type = MEDIA_DIR_IMAGE;
         } else if (document != null) {
-            operation = new FileLoadOperation(document, parentObject);
+            operation = new FileLoadOperation(document, parentObject,fileName);
             if (MessageObject.isVoiceDocument(document)) {
                 type = MEDIA_DIR_AUDIO;
             } else if (MessageObject.isVideoDocument(document)) {

@@ -10,6 +10,8 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ActionBar.Theme
+import tw.nekomimi.nekogram.NekoConfig
+import java.util.concurrent.atomic.AtomicReference
 
 object AlertUtil {
 
@@ -55,6 +57,80 @@ object AlertUtil {
             (alertDialog.getButton(DialogInterface.BUTTON_POSITIVE) as TextView?)?.setTextColor(Theme.getColor(Theme.key_dialogTextRed2))
 
         }
+
+    })
+
+    @JvmStatic
+    fun showTransFailedDialog(ctx: Context, noRetry: Boolean, message: String, retryRunnable: Runnable) = UIUtil.runOnUIThread(Runnable {
+
+        ctx.setTheme(R.style.Theme_TMessages)
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(LocaleController.getString("TranslateFailed", R.string.TranslateFailed))
+
+        builder.setMessage(message)
+
+        val reference = AtomicReference<AlertDialog>()
+
+        builder.setNeutralButton(LocaleController.getString("ChangeTranslateProvider", R.string.ChangeTranslateProvider)) {
+
+            _, _ ->
+
+            val view = reference.get().getButton(AlertDialog.BUTTON_NEUTRAL)
+
+            val popup = PopupBuilder(view, true)
+
+            popup.setItems(arrayOf(
+                    LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
+                    LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
+                    LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud)
+            )) { item, _ ->
+
+                reference.get().dismiss()
+
+                NekoConfig.setTranslationProvider(item + 1)
+
+                retryRunnable.run()
+
+            }
+
+            popup.show()
+
+        }
+
+        if (noRetry) {
+
+            builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel)) { _, _ ->
+
+                reference.get().dismiss()
+
+            }
+
+        } else {
+
+            builder.setPositiveButton(LocaleController.getString("Retry", R.string.Retry)) { _, _ ->
+
+                reference.get().dismiss()
+
+                retryRunnable.run()
+
+            }
+
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel)) { _, _ ->
+
+                reference.get().dismiss()
+
+            }
+
+        }
+
+        reference.set(builder.create().apply {
+
+            setDismissDialogByButtons(false)
+            show()
+
+        })
 
     })
 

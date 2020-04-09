@@ -1,18 +1,18 @@
-package tw.nekomimi.nekogram.translator
+package tw.nekomimi.nekogram.transtale
 
+import org.dizitart.no2.filters.Filters
 import org.dizitart.no2.objects.filters.ObjectFilters
 import tw.nekomimi.nekogram.database.mkCacheDatabase
 
 object TranslateDb {
 
     val db = mkCacheDatabase("translate_caches")
-    var conn = db.getRepository("trans",TransItem::class.java)
+    var conn = db.getRepository("trans", TransItem::class.java)
 
     @JvmStatic
     fun clear() {
 
-        conn.drop()
-        conn = db.getRepository("trans",TransItem::class.java)
+        conn.remove(ObjectFilters.ALL)
 
     }
 

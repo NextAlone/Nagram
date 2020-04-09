@@ -33,7 +33,7 @@ open class DnsFactory {
     fun addProvider(url: String) {
 
         providers.add(DnsOverHttps.Builder()
-                .client(HttpUtil.okhttpClient)
+                .client(HttpUtil.okHttpClient)
                 .url(url.toHttpUrl())
                 .includeIPv6(ConnectionsManager.useIpv6Address())
                 .build())

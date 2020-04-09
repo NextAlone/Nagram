@@ -6,6 +6,8 @@
     <string name="UseOfficalId">Disguised as official app</string>
     <string name="UseOfficalIdNotice">Log in using the official App Id, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
 
+    <string name="ChangeTranslateProvider">Change Provider</string>
+
     <string name="PrivacyNotice">Privacy warning</string>
     <string name="PrivacyNoticePhoneVisible">It is detected that your mobile phone number is visible to anyone, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
     <string name="PrivacyNoticeAddByPhone">It is detected that you are not turned off the \"Allow find me through phone number\" Setting, which may cause a government-controlled hacker to find your true identity, please turn it off!</string>

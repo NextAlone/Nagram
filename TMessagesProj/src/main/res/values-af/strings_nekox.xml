@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="PrivacyNotice">هشدار حریم خصوصی</string>
+    <string name="PrivacyNoticePhoneVisible">تشخیص داده شده است که شماره تلفن همراه شما برای همه قابل رویت است ، و این ممکن است باعث شود هکرهای تحت کنترل دولت هویت واقعی شما را پیدا کنند ، لطفا آن را خاموش کنید!</string>
+    <string name="ApplySuggestion">قبول،اعمال کن</string>
+    <string name="DoNotRemindAgain">دوباره یادآوری نکن</string>
+</resources>

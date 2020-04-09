@@ -94,6 +94,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -214,6 +215,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -221,9 +223,9 @@ import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.translator.TranslateBottomSheet;
-import tw.nekomimi.nekogram.translator.TranslateDb;
-import tw.nekomimi.nekogram.translator.Translator;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
 
@@ -15326,9 +15328,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 chatAdapter.updateRowWithMessageObject(messageObject, true);
                             }
                         } else {
-                            Translator.translate(original, new Translator.TranslateCallBack() {
+
+                            Translator.translate(original, new Translator.Companion.TranslateCallBack() {
                                 @Override
-                                public void onSuccess(String translation) {
+                                public void onSuccess(@NotNull String translation) {
                                     TranslateDb.save(original,translation);
                                     if (finalMessageCell != null) {
                                         MessageObject messageObject = finalMessageCell.getMessageObject();
@@ -15344,21 +15347,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
 
                                 @Override
-                                public void onError() {
-                                    try {
-                                        Toast.makeText(getParentActivity(), LocaleController.getString("TranslateFailed", R.string.TranslateFailed), Toast.LENGTH_SHORT).show();
-                                    } catch (Exception e) {
-                                        FileLog.e(e);
-                                    }
-                                }
-
-                                @Override
-                                public void onUnsupported() {
-                                    try {
-                                        Toast.makeText(getParentActivity(), LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported), Toast.LENGTH_SHORT).show();
-                                    } catch (Exception e) {
-                                        FileLog.e(e);
-                                    }
+                                public void onFailed(boolean unsupported, @NotNull String message) {
+                                    AlertUtil.showTransFailedDialog(getParentActivity(),unsupported,message,() -> {
+                                        Translator.translate(original,this);
+                                    });
                                 }
                             });
                         }

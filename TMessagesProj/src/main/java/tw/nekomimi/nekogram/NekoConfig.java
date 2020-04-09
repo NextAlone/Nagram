@@ -13,6 +13,8 @@ import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.SharedConfig;
 
 import tw.nekomimi.nekogram.database.NitritesKt;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -369,6 +371,7 @@ public class NekoConfig {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("translationProvider", translationProvider);
         editor.apply();
+        UIUtil.runOnIoDispatcher(TranslateDb::clear);
     }
 
     public static void toggleDisablePhotoSideAction() {

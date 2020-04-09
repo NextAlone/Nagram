@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import org.dizitart.no2.*
 import org.dizitart.no2.filters.Filters
 import org.telegram.messenger.FileLog
-import tw.nekomimi.nekogram.utils.UIUtil
 
 class DbPref(val connection: NitriteCollection) : SharedPreferences {
 
@@ -28,7 +27,7 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
     }
 
     override fun contains(key: String): Boolean {
-        return connection.find(Filters.eq("key", key)).hasMore()
+        return connection.find(Filters.eq("key", key)).count() > 0
     }
 
     override fun getBoolean(key: String, defValue: Boolean) = getAs(key, defValue)
@@ -65,9 +64,9 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
 
     inner class PrefEditor : SharedPreferences.Editor {
 
-        var clear = false
-        val toRemove = HashSet<String>()
-        val toApply = HashMap<String, Any?>()
+        private var clear = false
+        private val toRemove = HashSet<String>()
+        private val toApply = HashMap<String, Any?>()
 
         override fun clear(): PrefEditor {
             clear = true
@@ -137,9 +136,7 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
         }
 
         override fun apply() {
-            UIUtil.runOnIoDispatcher(Runnable {
-                commit()
-            })
+            commit()
         }
 
     }

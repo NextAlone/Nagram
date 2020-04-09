@@ -183,7 +183,6 @@ import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.WebPlayerView;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,8 +194,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.translator.TranslateDb;
-import tw.nekomimi.nekogram.translator.Translator;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -4094,61 +4093,68 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         ArrayList<Object> array = new ArrayList<>(adapter[0].textBlocks);
         AtomicInteger errorCount = new AtomicInteger();
         AtomicInteger taskCount = new AtomicInteger(array.size());
-        for (int b = 0, N = array.size(); b < N; b++) {
-            Object object = array.get(b);
-            TLRPC.PageBlock block = copy.get(object);
-            String textToSearchIn = null;
-            if (object instanceof TLRPC.RichText) {
-                TLRPC.RichText richText = (TLRPC.RichText) object;
-                CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
-                if (!TextUtils.isEmpty(innerText)) {
-                    textToSearchIn = innerText.toString();
+        try {
+            for (int b = 0, N = array.size(); b < N; b++) {
+                Object object = array.get(b);
+                TLRPC.PageBlock block = copy.get(object);
+                String textToSearchIn = null;
+                if (object instanceof TLRPC.RichText) {
+                    TLRPC.RichText richText = (TLRPC.RichText) object;
+                    CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
+                    if (!TextUtils.isEmpty(innerText)) {
+                        textToSearchIn = innerText.toString();
+                    }
+                } else if (object instanceof String) {
+                    textToSearchIn = ((String) object);
                 }
-            } else if (object instanceof String) {
-                textToSearchIn = ((String) object);
-            }
-            if (textToSearchIn != null) {
-                if (TranslateDb.contains(textToSearchIn)) {
-                    taskCount.decrementAndGet();
-                    continue;
-                }
-                String finalTextToSearchIn = textToSearchIn;
-                transPool.execute(() -> {
+                if (textToSearchIn != null) {
+                    if (TranslateDb.contains(textToSearchIn)) {
+                        taskCount.decrementAndGet();
+                        continue;
+                    }
+                    String finalTextToSearchIn = textToSearchIn;
 
-                    if (cancel.get()) return;
+                    transPool.execute(() -> {
 
-                    String localeText;
-                    try {
-                        localeText = Translator.translateSync(finalTextToSearchIn);
                         if (cancel.get()) return;
-                    } catch (IOException e) {
-                        if (cancel.get()) return;
-                        boolean finaL = taskCount.decrementAndGet() == 0;
-                        if (errorCount.incrementAndGet() > 3 || finaL) {
-                            UIUtil.runOnUIThread(dialog::dismiss);
-                            adapter[0].trans = false;
-                            transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                            AlertUtil.showSimpleAlert(parentActivity, e.getMessage());
-                            cancel.set(true);
-                            transPool.shutdown();
+
+                        String localeText;
+                        try {
+                            localeText = Translator.translate(finalTextToSearchIn);
+                            if (cancel.get()) return;
+                        } catch (Exception e) {
+                            if (cancel.get()) return;
+                            boolean finaL = taskCount.decrementAndGet() == 0;
+                            if (errorCount.incrementAndGet() > 3 || finaL) {
+                                UIUtil.runOnUIThread(dialog::dismiss);
+                                adapter[0].trans = false;
+                                transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                                AlertUtil.showSimpleAlert(parentActivity, e.getMessage());
+                                cancel.set(true);
+                                transPool.shutdown();
+                                AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
+                            }
+                            return;
                         }
-                        return;
-                    }
 
-                    TranslateDb.save(finalTextToSearchIn, localeText);
-                    UIUtil.runOnUIThread(this::updatePaintSize);
+                        TranslateDb.save(finalTextToSearchIn, localeText);
+                        UIUtil.runOnUIThread(this::updatePaintSize);
 
-                    boolean finaL = taskCount.decrementAndGet() == 0;
+                        boolean finaL = taskCount.decrementAndGet() < 1;
 
-                    if (finaL) {
+                        if (finaL) {
 
-                        UIUtil.runOnUIThread(dialog::dismiss);
-                        transPool.shutdown();
+                            UIUtil.runOnUIThread(dialog::dismiss);
+                            transPool.shutdown();
 
-                    }
+                        }
 
-                });
+                    });
+                }
             }
+        } catch (Exception ignored) {
+            dialog.dismiss();
+            UIUtil.runOnUIThread(this::updatePaintSize);
         }
         if (taskCount.get() == 0) {
             dialog.dismiss();

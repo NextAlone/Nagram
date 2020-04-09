@@ -47,6 +47,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 import tw.nekomimi.nekogram.utils.StrUtil;
 
@@ -336,7 +337,13 @@ public class VmessSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(securitySet, securityField.getValueTextView()::setText);
+            select.setItems(securitySet, (__,value) -> {
+
+                securityField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 
@@ -354,7 +361,13 @@ public class VmessSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(networkSet, networkField.getValueTextView()::setText);
+            select.setItems(networkSet, (__,value) -> {
+
+                networkField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 
@@ -372,7 +385,13 @@ public class VmessSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(headTypeSet, headTypeField.getValueTextView()::setText);
+            select.setItems(headTypeSet, (__,value) -> {
+
+                headTypeField.getValueTextView().setText(value);
+
+                return Unit.INSTANCE;
+
+            });
 
             select.show();
 

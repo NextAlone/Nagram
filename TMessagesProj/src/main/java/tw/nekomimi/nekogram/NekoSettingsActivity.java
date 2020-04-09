@@ -54,6 +54,7 @@ import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 
 @SuppressLint("RtlHardcoded")
@@ -245,13 +246,14 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 PopupBuilder builder = new PopupBuilder(view);
 
-                builder.setItemsIndexed(new String[]{
+                builder.setItems(new String[]{
                         LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram),
                         LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex),
                         LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
-                }, (it) -> {
-                    NekoConfig.setMapPreviewProvider(it);
+                }, (i, __) -> {
+                    NekoConfig.setMapPreviewProvider(i);
                     listAdapter.notifyItemChanged(position);
+                    return Unit.INSTANCE;
                 });
 
                 builder.show();
@@ -260,12 +262,13 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 PopupBuilder builder = new PopupBuilder(view);
 
-                builder.setItemsIndexed(new String[]{
+                builder.setItems(new String[]{
                         LocaleController.getString("FirstLast", R.string.FirstLast),
                         LocaleController.getString("LastFirst", R.string.LastFirst)
-                }, (i) -> {
+                }, (i, __) -> {
                     NekoConfig.setNameOrder(i + 1);
                     listAdapter.notifyItemChanged(position);
+                    return Unit.INSTANCE;
                 });
 
                 builder.show();
@@ -274,13 +277,14 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 PopupBuilder builder = new PopupBuilder(view);
 
-                builder.setItemsIndexed(new String[]{
+                builder.setItems(new String[]{
                         LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
                         LocaleController.getString("Christmas", R.string.Christmas),
                         LocaleController.getString("Valentine", R.string.Valentine)
-                }, (i) -> {
+                }, (i, __) -> {
                     NekoConfig.setEventType(i);
                     listAdapter.notifyItemChanged(position);
+                    return Unit.INSTANCE;
                 });
 
                 builder.show();
@@ -289,14 +293,16 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 PopupBuilder builder = new PopupBuilder(view);
 
-                builder.setItemsIndexed(new String[]{
+                builder.setItems(new String[]{
                         LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
                         LocaleController.getString("Snowflakes", R.string.Snowflakes),
                         LocaleController.getString("Fireworks", R.string.Fireworks)
-                }, (i) -> {
+                }, (i, __) -> {
 
                     NekoConfig.setActionBarDecoration(i);
                     listAdapter.notifyItemChanged(position);
+
+                    return null;
 
                 });
 
@@ -404,32 +410,46 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 PopupBuilder builder = new PopupBuilder(view);
 
-                builder.setItemsIndexed(new String[] {
+                builder.setItems(new String[]{
                         LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                         LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
                         LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
+
                         LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
                         LocaleController.getString("ProviderGoogleTranslateCNWeb", R.string.ProviderGoogleTranslateCNWeb),
                         LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb)
 
-                },(i) -> {
+                }, (i, __) -> {
 
                     int target;
 
                     switch (i) {
 
-                        default: target = 1;break;
-                        case 1: target = 2;break;
-                        case 2: target = 3;break;
-                        case 3: target = -1;break;
-                        case 4: target = -2;break;
-                        case 5: target = -3;break;
+                        default:
+                            target = 1;
+                            break;
+                        case 1:
+                            target = 2;
+                            break;
+                        case 2:
+                            target = 3;
+                            break;
 
-
+                        case 8:
+                            target = -1;
+                            break;
+                        case 9:
+                            target = -2;
+                            break;
+                        case 10:
+                            target = -3;
+                            break;
                     }
 
                     NekoConfig.setTranslationProvider(target);
                     listAdapter.notifyItemChanged(translationProviderRow);
+
+                    return Unit.INSTANCE;
 
                 });
 
@@ -1069,9 +1089,10 @@ public class NekoSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb);
                                 break;
                             case 3:
-                            default:
                                 value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
                                 break;
+                            default:
+                                value = "Unknown";
                         }
                         textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, false);
                     }
