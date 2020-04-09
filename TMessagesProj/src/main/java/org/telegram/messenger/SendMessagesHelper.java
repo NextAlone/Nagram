@@ -4803,12 +4803,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
         }
-        if (uri != null && AndroidUtilities.isInternalUri(uri)) {
-            return false;
-        }
-        if (path != null && AndroidUtilities.isInternalUri(Uri.fromFile(new File(path)))) {
-            return false;
-        }
         MimeTypeMap myMime = MimeTypeMap.getSingleton();
         TLRPC.TL_documentAttributeAudio attributeAudio = null;
         String extension = null;
