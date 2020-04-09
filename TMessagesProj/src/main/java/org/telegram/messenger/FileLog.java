@@ -125,10 +125,7 @@ public class FileLog {
 
     public static void e(final String message, final Throwable exception) {
         Log.e(tag, message, exception);
-        ExternalGcm.reportLog(message + "\n\n" + exception.toString());
-        if (!BuildVars.LOGS_ENABLED) {
-            return;
-        }
+        ExternalGcm.recordException(new Exception(message,exception));
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -145,10 +142,7 @@ public class FileLog {
 
     public static void e(final String message) {
         Log.e(tag, message);
-        ExternalGcm.reportLog(message);
-        if (!BuildVars.LOGS_ENABLED) {
-            return;
-        }
+        ExternalGcm.recordException(new Exception(message));
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -164,10 +158,7 @@ public class FileLog {
 
     public static void e(final Throwable e) {
         Log.e(tag,"ERR", e);
-        ExternalGcm.reportLog(e.toString());
-        if (!BuildVars.LOGS_ENABLED) {
-            return;
-        }
+        ExternalGcm.recordException(new Exception(e));
         ensureInitied();
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
@@ -208,9 +199,7 @@ public class FileLog {
 
     public static void w(final String message) {
         Log.w(tag, message);
-        if (!BuildVars.LOGS_ENABLED) {
-            return;
-        }
+        ExternalGcm.reportLog("[W] " + message);
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {

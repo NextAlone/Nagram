@@ -226,7 +226,7 @@ public class ApplicationLoader extends Application implements Thread.UncaughtExc
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
 
-        FileLog.e("[APP] uncaughtException in thread " + t + ": \n\n" + e);
+        FileLog.e("[APP] uncaughtException in thread " + t,e);
 
     }
 
