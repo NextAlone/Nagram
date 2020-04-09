@@ -3,9 +3,10 @@
 
 NekoX-Dev is an UNOFFICIAL app that uses Telegram's API.
 
-- Google play store: (unavailable now)
+- Google play store: (https://play.google.com/store/apps/details?id=nekox.messenger)
 - Update news : https://t.me/NekoX-Dev
 - Feedback: https://t.me/NekoXChat
+- Feedback (Persian) : https://t.me/NekogramX_Persian
 - Feedback: https://github.com/NekoX-Dev/NekoX/issues
 
 ## API, Protocol documentation
