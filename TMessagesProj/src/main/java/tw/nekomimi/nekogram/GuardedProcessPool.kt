@@ -39,9 +39,6 @@ import kotlin.concurrent.thread
 class GuardedProcessPool(private val onFatal: suspend (IOException) -> Unit) : CoroutineScope {
     companion object {
         private const val TAG = "GuardedProcessPool"
-        private val pid by lazy {
-            Class.forName("java.lang.ProcessManager\$ProcessImpl").getDeclaredField("pid").apply { isAccessible = true }
-        }
     }
 
     private inner class Guard(private val cmd: List<String>) {
@@ -90,18 +87,7 @@ class GuardedProcessPool(private val onFatal: suspend (IOException) -> Unit) : C
                 FileLog.w("error occurred. stop guard: " + cmd.joinToString(" "))
                 GlobalScope.launch(Dispatchers.Main) { onFatal(e) }
             } finally {
-                if (running) withContext(NonCancellable) {  // clean-up cannot be cancelled
-                    @SuppressLint("NewApi")
-                    if (Build.VERSION.SDK_INT > 21) {
-                        try {
-                            Os.kill(pid.get(process) as Int, OsConstants.SIGTERM)
-                        } catch (e: ErrnoException) {
-                            if (e.errno != OsConstants.ESRCH)  FileLog.e(e)
-                        } catch (e: ReflectiveOperationException) {
-                            FileLog.e(e)
-                        }
-                        if (withTimeoutOrNull(500) { exitChannel.receive() } != null) return@withContext
-                    }
+                if (running) withContext(NonCancellable) {
                     process.destroy()                       // kill the process
                     if (Build.VERSION.SDK_INT >= 26) {
                         if (withTimeoutOrNull(1000) { exitChannel.receive() } != null) return@withContext

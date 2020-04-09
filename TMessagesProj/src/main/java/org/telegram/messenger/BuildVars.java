@@ -17,7 +17,7 @@ public class BuildVars {
 
     public static boolean DEBUG_VERSION = false;
     public static boolean DEBUG_PRIVATE_VERSION = false;
-    public static boolean LOGS_ENABLED = false;
+    public static boolean LOGS_ENABLED = true;
     public static boolean USE_CLOUD_STRINGS = true;
 
     public static int BUILD_VERSION;
@@ -42,9 +42,8 @@ public class BuildVars {
     static {
         if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
-            DEBUG_VERSION = LOGS_ENABLED;
-            DEBUG_PRIVATE_VERSION = LOGS_ENABLED;
+            DEBUG_VERSION = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
+            DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
         }
     }
 }

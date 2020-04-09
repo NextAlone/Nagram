@@ -67,6 +67,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
@@ -125,7 +126,7 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 @SuppressLint("HardwareIds")
-public class LoginActivity extends BaseFragment {
+public class LoginActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private int currentViewNum;
     private SlideView[] views = new SlideView[9];
@@ -163,6 +164,7 @@ public class LoginActivity extends BaseFragment {
     private ActionBarMenuItem proxyItem;
     private ProxyDrawable proxyDrawable;
 
+    @SuppressWarnings("ConstantConditions")
     private boolean useOfficalId = !"release".equals(BuildConfig.BUILD_TYPE);
 
     private class ProgressView extends View {
@@ -250,6 +252,15 @@ public class LoginActivity extends BaseFragment {
                 views[a].onDestroyActivity();
             }
         }
+    }
+
+    @Override
+    public boolean onFragmentCreate() {
+
+        currentConnectionState = getConnectionsManager().getConnectionState();
+
+        return true;
+
     }
 
     @Override
@@ -371,8 +382,10 @@ public class LoginActivity extends BaseFragment {
 
         ActionBarMenu menu = actionBar.createMenu();
 
-        proxyItem = menu.addItem(2, R.drawable.proxy_on);
+        proxyDrawable = new ProxyDrawable(context);
+        proxyItem = menu.addItem(2, proxyDrawable);
         proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
+        updateProxyButton(false);
 
         menu.addItem(3, R.drawable.ic_translate);
 
@@ -586,6 +599,34 @@ public class LoginActivity extends BaseFragment {
         actionBar.setTitle(views[currentViewNum].getHeaderName());
 
         return fragmentView;
+    }
+
+    private int currentConnectionState;
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+
+        if (id == NotificationCenter.didUpdateConnectionState) {
+            int state = AccountInstance.getInstance(account).getConnectionsManager().getConnectionState();
+            if (currentConnectionState != state) {
+                currentConnectionState = state;
+                updateProxyButton(true);
+            }
+        }
+
+    }
+
+    private void updateProxyButton(boolean animated) {
+        if (proxyDrawable == null || doneItem != null && doneItem.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        String proxyAddress = preferences.getString("proxy_ip", "");
+        boolean proxyEnabled;
+        if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
+            proxyItem.setVisibility(View.VISIBLE);
+        }
+        proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
     }
 
     @Override

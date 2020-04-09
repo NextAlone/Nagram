@@ -49,8 +49,7 @@ public class XiaomiUtilities {
 			Method m = AppOpsManager.class.getMethod("checkOpNoThrow", int.class, int.class, String.class);
 			int result = (int) m.invoke(mgr, permission, android.os.Process.myUid(), ApplicationLoader.applicationContext.getPackageName());
 			return result == AppOpsManager.MODE_ALLOWED;
-		} catch (Exception x) {
-			FileLog.e(x);
+		} catch (Exception ignored) {
 		}
 		return true;
 	}

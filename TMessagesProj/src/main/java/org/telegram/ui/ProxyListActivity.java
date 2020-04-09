@@ -43,6 +43,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -158,44 +159,47 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         }
 
         public void updateStatus() {
-            String colorKey;
-            if (SharedConfig.currentProxy == currentInfo && useProxySettings) {
-                if (currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
-                    colorKey = Theme.key_windowBackgroundWhiteBlueText6;
-                    if (currentInfo.ping != 0) {
-                        valueTextView.setText(LocaleController.getString("Connected", R.string.Connected) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+            UIUtil.runOnUIThread(() -> {
+                String colorKey;
+                if (SharedConfig.currentProxy == currentInfo && useProxySettings) {
+                    if (currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
+                        colorKey = Theme.key_windowBackgroundWhiteBlueText6;
+                        if (currentInfo.ping != 0) {
+                            valueTextView.setText(LocaleController.getString("Connected", R.string.Connected) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                        } else {
+                            valueTextView.setText(LocaleController.getString("Connected", R.string.Connected));
+                        }
+                        if (!currentInfo.checking && !currentInfo.available) {
+                            currentInfo.availableCheckTime = 0;
+                        }
                     } else {
-                        valueTextView.setText(LocaleController.getString("Connected", R.string.Connected));
-                    }
-                    if (!currentInfo.checking && !currentInfo.available) {
-                        currentInfo.availableCheckTime = 0;
+                        colorKey = Theme.key_windowBackgroundWhiteGrayText2;
+                        valueTextView.setText(LocaleController.getString("Connecting", R.string.Connecting));
                     }
                 } else {
-                    colorKey = Theme.key_windowBackgroundWhiteGrayText2;
-                    valueTextView.setText(LocaleController.getString("Connecting", R.string.Connecting));
-                }
-            } else {
-                if (currentInfo.checking) {
-                    valueTextView.setText(LocaleController.getString("Checking", R.string.Checking));
-                    colorKey = Theme.key_windowBackgroundWhiteGrayText2;
-                } else if (currentInfo.available) {
-                    if (currentInfo.ping != 0) {
-                        valueTextView.setText(LocaleController.getString("Available", R.string.Available) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                    if (currentInfo.checking) {
+                        valueTextView.setText(LocaleController.getString("Checking", R.string.Checking));
+                        colorKey = Theme.key_windowBackgroundWhiteGrayText2;
+                    } else if (currentInfo.available) {
+                        if (currentInfo.ping != 0) {
+                            valueTextView.setText(LocaleController.getString("Available", R.string.Available) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                        } else {
+                            valueTextView.setText(LocaleController.getString("Available", R.string.Available));
+                        }
+                        colorKey = Theme.key_windowBackgroundWhiteGreenText;
                     } else {
-                        valueTextView.setText(LocaleController.getString("Available", R.string.Available));
+                        valueTextView.setText(LocaleController.getString("Unavailable", R.string.Unavailable));
+                        colorKey = Theme.key_windowBackgroundWhiteRedText4;
                     }
-                    colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                } else {
-                    valueTextView.setText(LocaleController.getString("Unavailable", R.string.Unavailable));
-                    colorKey = Theme.key_windowBackgroundWhiteRedText4;
                 }
-            }
-            color = Theme.getColor(colorKey);
-            valueTextView.setTag(colorKey);
-            valueTextView.setTextColor(color);
-            if (checkDrawable != null) {
-                checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-            }
+                color = Theme.getColor(colorKey);
+                valueTextView.setTag(colorKey);
+                valueTextView.setTextColor(color);
+                if (checkDrawable != null) {
+                    checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                }
+
+            });
         }
 
         public void setChecked(boolean checked) {
@@ -692,6 +696,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (position == hidePublicRow) {
 
+                if (SharedConfig.proxyEnabled && SharedConfig.currentProxy.isPublic) {
+
+                    SharedConfig.setCurrentProxy(null);
+
+                }
+
                 NekoXConfig.toggleHidePublicProxy();
 
                 TextCheckCell textCheckCell = (TextCheckCell) view;
@@ -1002,9 +1012,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         if (notify && listAdapter != null) {
             UIUtil.runOnUIThread(() -> {
                 try {
+                    listView.clearAnimation();
                     listView.getRecycledViewPool().clear();
                     listAdapter.notifyDataSetChanged();
-                } catch (Exception ignored) {}
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
             });
         }
     }
@@ -1041,7 +1054,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             SharedConfig.deleteProxy(proxyInfo);
 
-            updateRows(true);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone);
 
         }
 
@@ -1127,13 +1140,17 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
         } else if (id == NotificationCenter.proxyCheckDone) {
             if (listView != null) {
-                SharedConfig.ProxyInfo proxyInfo = (SharedConfig.ProxyInfo) args[0];
-                int idx = SharedConfig.proxyList.indexOf(proxyInfo);
-                if (idx >= 0) {
-                    RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(idx + proxyStartRow);
-                    if (holder != null && holder.itemView instanceof TextDetailProxyCell) {
-                        TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
-                        cell.updateStatus();
+                if (args.length == 0) {
+                    updateRows(true);
+                } else {
+                    SharedConfig.ProxyInfo proxyInfo = (SharedConfig.ProxyInfo) args[0];
+                    int idx = SharedConfig.proxyList.indexOf(proxyInfo);
+                    if (idx >= 0) {
+                        RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(idx + proxyStartRow);
+                        if (holder != null && holder.itemView instanceof TextDetailProxyCell) {
+                            TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
+                            cell.updateStatus();
+                        }
                     }
                 }
             }

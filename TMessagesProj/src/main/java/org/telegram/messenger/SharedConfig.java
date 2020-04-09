@@ -1404,7 +1404,7 @@ public class SharedConfig {
 
         saveProxyList();
 
-        setProxyEnable(true);
+        setProxyEnable(info != null);
 
     }
 

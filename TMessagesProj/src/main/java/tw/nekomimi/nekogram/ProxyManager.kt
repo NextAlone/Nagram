@@ -68,26 +68,12 @@ object ProxyManager {
 
     }
 
-    private fun mkNewPort(): Int {
-
-        val random = Random(System.currentTimeMillis())
-
-        var port: Int
-
-        do {
-
-            port = random.nextInt(2048, 32768)
-
-        } while (!isProxyAvailable(port))
-
-        return port
-
-    }
+    private fun mkNewPort() = Random.nextInt(2048, 32768)
 
     @JvmStatic
     fun isProxyAvailable(port: Int): Boolean {
 
-        if (port !in 2048..32767) return false
+        if (port !in 2048 until 32768) return false
 
         runCatching {
 

@@ -2089,11 +2089,12 @@ public class AndroidUtilities {
 
     public static File generatePicturePath(boolean secretChat, String ext) {
         try {
-            File storageDir = getAlbumDir(secretChat);
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            FileUtil.initDir(dir);
             Date date = new Date();
             date.setTime(System.currentTimeMillis() + Utilities.random.nextInt(1000) + 1);
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
-            return new File(storageDir, "IMG_" + timeStamp + "." + (TextUtils.isEmpty(ext) ? "jpg" : ext));
+            return new File(dir, "NekoX/IMG_" + timeStamp + "." + (TextUtils.isEmpty(ext) ? "jpg" : ext));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -2160,11 +2161,12 @@ public class AndroidUtilities {
 
     public static File generateVideoPath(boolean secretChat) {
         try {
-            File storageDir = getAlbumDir(secretChat);
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            FileUtil.initDir(dir);
             Date date = new Date();
             date.setTime(System.currentTimeMillis() + Utilities.random.nextInt(1000) + 1);
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
-            return new File(storageDir, "VID_" + timeStamp + ".mp4");
+            return new File(dir, "NekoX/VID_" + timeStamp + ".mp4");
         } catch (Exception e) {
             FileLog.e(e);
         }

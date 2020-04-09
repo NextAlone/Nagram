@@ -52,10 +52,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.core.content.FileProvider;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.video.MediaCodecVideoConvertor;
@@ -87,14 +88,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
     private native int startRecord(String path, int sampleRate);
+
     private native int writeFrame(ByteBuffer frame, int len);
+
     private native void stopRecord();
+
     public static native int isOpusFile(String path);
+
     public native byte[] getWaveform(String path);
+
     public native byte[] getWaveform2(short[] array, int length);
 
     private class AudioBuffer {
@@ -358,7 +365,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     private static final float VOLUME_NORMAL = 1.0f;
     private static final int AUDIO_NO_FOCUS_NO_DUCK = 0;
     private static final int AUDIO_NO_FOCUS_CAN_DUCK = 1;
-    private static final int AUDIO_FOCUSED  = 2;
+    private static final int AUDIO_FOCUSED = 2;
 
     private class VideoConvertMessage {
         public MessageObject messageObject;
@@ -599,7 +606,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
 
-
     private class GalleryObserverExternal extends ContentObserver {
         public GalleryObserverExternal() {
             super(null);
@@ -628,7 +634,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             Cursor cursor = null;
             try {
                 if (ApplicationLoader.applicationContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] {"COUNT(_id)"}, null, null, null);
+                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
                     if (cursor != null) {
                         if (cursor.moveToNext()) {
                             count += cursor.getInt(0);
@@ -644,7 +650,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
             try {
                 if (ApplicationLoader.applicationContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[] {"COUNT(_id)"}, null, null, null);
+                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
                     if (cursor != null) {
                         if (cursor.moveToNext()) {
                             count += cursor.getInt(0);
@@ -2380,7 +2386,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     /*if (Build.VERSION.SDK_INT >= 26) {
                         ApplicationLoader.applicationContext.startForegroundService(intent);
                     } else {*/
-                        ApplicationLoader.applicationContext.startService(intent);
+                    ApplicationLoader.applicationContext.startService(intent);
                     //}
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2731,7 +2737,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 /*if (Build.VERSION.SDK_INT >= 26) {
                     ApplicationLoader.applicationContext.startForegroundService(intent);
                 } else {*/
-                    ApplicationLoader.applicationContext.startService(intent);
+                ApplicationLoader.applicationContext.startService(intent);
                 //}
             } catch (Throwable e) {
                 FileLog.e(e);
@@ -3089,7 +3095,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         final File sourceFile = file;
-        final boolean[] cancelled = new boolean[] {false};
+        final boolean[] cancelled = new boolean[]{false};
         if (sourceFile.exists()) {
             AlertDialog progressDialog = null;
             if (context != null && type != 0) {
@@ -3110,37 +3116,35 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             new Thread(() -> {
                 try {
                     File destFile;
+                    File dir;
                     if (type == 0) {
-                        destFile = AndroidUtilities.generatePicturePath(false, FileLoader.getFileExtension(sourceFile));
+                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     } else if (type == 1) {
-                        destFile = AndroidUtilities.generateVideoPath();
+                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+                    } else if (type == 2) {
+                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                     } else {
-                        File dir;
-                        if (type == 2) {
-                            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                        } else {
-                            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
-                        }
-                        dir.mkdir();
-                        destFile = new File(dir, name);
-                        if (destFile.exists()) {
-                            int idx = name.lastIndexOf('.');
-                            for (int a = 0; a < 10; a++) {
-                                String newName;
-                                if (idx != -1) {
-                                    newName = name.substring(0, idx) + "(" + (a + 1) + ")" + name.substring(idx);
-                                } else {
-                                    newName = name + "(" + (a + 1) + ")";
-                                }
-                                destFile = new File(dir, newName);
-                                if (!destFile.exists()) {
-                                    break;
-                                }
+                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+                    }
+                    dir = new File(dir,"NekoX");
+                    destFile = new File(dir, name);
+                    if (destFile.exists()) {
+                        int idx = name.lastIndexOf('.');
+                        for (int a = 0; a < 10; a++) {
+                            String newName;
+                            if (idx != -1) {
+                                newName = name.substring(0, idx) + "(" + (a + 1) + ")" + name.substring(idx);
+                            } else {
+                                newName = name + "(" + (a + 1) + ")";
+                            }
+                            destFile = new File(dir, newName);
+                            if (!destFile.exists()) {
+                                break;
                             }
                         }
                     }
                     if (!destFile.exists()) {
-                        destFile.createNewFile();
+                        FileUtil.initFile(destFile);
                     }
                     boolean result = true;
                     long lastProgress = System.currentTimeMillis() - 500;
@@ -3179,7 +3183,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             DownloadManager downloadManager = (DownloadManager) ApplicationLoader.applicationContext.getSystemService(Context.DOWNLOAD_SERVICE);
                             downloadManager.addCompletedDownload(destFile.getName(), destFile.getName(), false, mime, destFile.getAbsolutePath(), destFile.length(), true);
                         } else {
-                            AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                            if (Build.VERSION.SDK_INT >= 24) {
+                                AndroidUtilities.addMediaToGallery(FileProvider.getUriForFile(ApplicationLoader.applicationContext, BuildConfig.APPLICATION_ID + ".provider", destFile));
+                            } else {
+                                AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -3909,6 +3917,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public interface VideoConvertorListener {
         boolean checkConversionCanceled();
-        void didWriteData(long availableSize,float progress);
+
+        void didWriteData(long availableSize, float progress);
     }
 }
