@@ -22,10 +22,10 @@ jobs:
             ./gradlew assembleMinApi21Release
           EOF
           echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*arm64-v8a*.apk")
-      - uses: actions/upload-artifact@v1
-        with:
-          name: NekoX Canary
-          path: ${{ env.APK_FILE }}
+#      - uses: actions/upload-artifact@v1
+#        with:
+#          name: NekoX Canary
+#          path: ${{ env.APK_FILE }}
       - name: Upload Canary Apk
         uses: appleboy/telegram-action@master
         with:
