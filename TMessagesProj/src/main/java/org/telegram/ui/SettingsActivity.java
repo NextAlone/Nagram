@@ -182,6 +182,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int privacyRow;
     private int dataRow;
     private int chatRow;
+    private int stickersRow;
     private int filtersRow;
     private int devicesRow;
     private int nekoRow;
@@ -456,6 +457,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     presentFragment(new DataSettingsActivity());
                 } else if (position == chatRow) {
                     presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC));
+                } else if (position == stickersRow) {
+                    presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE));
                 } else if (position == filtersRow) {
                     presentFragment(new FiltersSetupActivity());
                 } else if (position == devicesRow) {
@@ -856,6 +859,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         privacyRow = rowCount++;
         dataRow = rowCount++;
         chatRow = rowCount++;
+        stickersRow = rowCount ++;
         if (true || getMessagesController().filtersEnabled || !getMessagesController().dialogFilters.isEmpty()) {
             filtersRow = rowCount++;
         } else {
@@ -864,7 +868,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         devicesRow = rowCount++;
         nekoRow = rowCount++;
         languageRow = rowCount++;
-        devicesSectionRow = rowCount++;
+        devicesSectionRow = -1;
         helpHeaderRow = rowCount++;
         questionRow = rowCount++;
         faqRow = rowCount++;
@@ -2286,7 +2290,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == dataRow) {
                         textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
                     } else if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.msg_theme, true);
+                    } else if (position == stickersRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks),R.drawable.msg_sticker, true);
                     } else if (position == nekoRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NekoSettings", R.string.NekoSettings), R.drawable.menu_settings, true);
                     } else if (position == filtersRow) {
@@ -2363,7 +2369,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             int position = holder.getAdapterPosition();
             return position == notificationRow || position == numberRow || position == privacyRow ||
                     position == languageRow || position == usernameRow || position == bioRow ||
-                    position == versionRow || position == dataRow || position == chatRow ||
+                    position == versionRow || position == dataRow || position == chatRow || position == stickersRow ||
                     position == questionRow || position == devicesRow || position == filtersRow ||
                     position == faqRow || position == policyRow || position == sendLogsRow ||
                     position == clearLogsRow || position == switchBackendRow || position == nekoRow;
@@ -2425,7 +2431,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     position == dataRow || position == chatRow || position == questionRow ||
                     position == devicesRow || position == filtersRow || position == faqRow ||
                     position == policyRow || position == sendLogsRow || position == clearLogsRow ||
-                    position == switchBackendRow || position == nekoRow) {
+                    position == switchBackendRow || position == nekoRow || position == stickersRow) {
                 return 2;
             } else if (position == versionRow) {
                 return 5;

@@ -182,7 +182,7 @@ Telegramに招待しますか？</string>
 <string name="Agree">同意する</string>
 <string name="OtherSessions">その他の接続</string>
 <string name="MasksInfo">マスクは写真を送信する前に貼り付けます。</string>
-<string name="PinnedMessage">固定したメッセージ</string>
+<string name="PinnedMessage">固定されたメッセージ</string>
 <string name="StopLiveLocationAlertAll">現在地の共有を終了しますか？</string>
 <string name="SecretChatName">Telegram</string>
 <string name="CallText">Telegramが発信するまで %1$d:%2$02d</string>
@@ -303,8 +303,7 @@ Telegramにストレージへのアクセスを許可してください。</stri
 <string name="UserRestrictionsNoPinMessages">固定なし</string>
 <string name="ChannelAddMembers">読者を追加する</string>
 <string name="PeopleNearbyAllowAccess">アクセスを許可する</string>
-<string name="YourEmailSkipWarningText">もしもパスワードを忘れた場合、
-あなたはTelegramのアカウントに接続する方法を失う事になります。</string>
+<string name="YourEmailSkipWarningText">もしもパスワードを忘れた場合、あなたはTelegramのアカウントに接続する方法を失う事になります。</string>
 <string name="NearbyCreateGroupInfo">近所の人、同僚、同級生など
 あなたに近い人には
 あなたの地域グループが
@@ -1000,7 +999,7 @@ Telegramのログインを確認するには、「設定 &gt; 端末 &gt; QRコ�
 <string name="MasksRemovedInfo">%1$sはマスクに含まれなくなりました。</string>
 <string name="VoipRequesting">接続中</string>
 <string name="ApplyTheme">適用</string>
-<string name="SoftUserLimitAlert">グループにより多くの相手を登録したい場合はスーパーグループに変更してください。</string>
+<string name="SoftUserLimitAlert">より多くの相手を登録したい場合はスーパーグループに切り替えてください。</string>
 <string name="EventLogPromotedPinMessages">メッセージの固定</string>
 <string name="ChannelPublicInfo">検索の結果から誰でも自由に登録できます。</string>
 <string name="AddMasksInstalled">マスクを追加しました</string>
@@ -2686,7 +2685,9 @@ Telegram Desktopをダウンロード。</string>
 <string name="RegisterText">氏名を入力してください</string>
 <string name="_tg_open_google_play">Google Playを開く</string>
 <string name="AccessError">アクセスエラー</string>
-<string name="RevokeAlert">作り直すと現在のリンクは機能しなくなります。</string>
+<string name="RevokeAlert">このリンクを作り直しますか？
+
+作り直すとこれまでのリンクは機能しなくなります。</string>
 <string name="Days_one"></string>
 <string name="FilterNameHint">フォルダ名</string>
 <string name="SearchEmojiHint">絵文字を検索する</string>

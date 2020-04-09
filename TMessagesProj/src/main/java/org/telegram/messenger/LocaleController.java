@@ -341,6 +341,20 @@ public class LocaleController {
         languagesDict.put(localeInfo.shortName, localeInfo);
 
         localeInfo = new LocaleInfo();
+        localeInfo.name = "简体中文 ( NekoX )";
+        localeInfo.nameEnglish = "Simplified Chinese ( NekoX )";
+        localeInfo.shortName = "nekox_zh_cn";
+        localeInfo.baseLangCode = "zh_hans_raw";
+        localeInfo.isRtl = false;
+        localeInfo.pathToFile = "unofficial";
+        localeInfo.pluralLangCode = "zh_cn";
+        localeInfo.builtIn = true;
+        languages.add(localeInfo);
+        languagesDict.put(localeInfo.getKey(), localeInfo);
+        languagesDict.put("zh_cn", localeInfo);
+        languagesDict.put("zh_sg", localeInfo);
+
+        localeInfo = new LocaleInfo();
         localeInfo.name = "瓜体中文 \uD83D\uDE36";
         localeInfo.nameEnglish = "Duangified Chinese (Simplified)";
         localeInfo.shortName = "duang_zh_hans";
@@ -351,20 +365,6 @@ public class LocaleController {
         localeInfo.builtIn = true;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "简体中文";
-        localeInfo.nameEnglish = "Chinese (Simplified, @zh_CN)";
-        localeInfo.shortName = "classic_zh_cn";
-        localeInfo.baseLangCode = "zh_hans_raw";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_cn";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("zh_cn", localeInfo);
-        languagesDict.put("zh_sg", localeInfo);
 
         localeInfo = new LocaleInfo();
         localeInfo.name = "正體中文";
@@ -378,32 +378,8 @@ public class LocaleController {
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
         languagesDict.put("zh_tw", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "中文 (香港)";
-        localeInfo.nameEnglish = "Chinese (hongkong)";
-        localeInfo.shortName = "hongkong";
-        localeInfo.baseLangCode = "zh_hant_hk";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_hk";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
         languagesDict.put("zh_hk", localeInfo);
         languagesDict.put("zh_mo", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "香港人口語";
-        localeInfo.nameEnglish = "Chinese (hongkonger)";
-        localeInfo.shortName = "hongkonger";
-        localeInfo.baseLangCode = "zh_hant_hk";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_hk";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
 
         localeInfo = new LocaleInfo();
         localeInfo.name = "日本語";

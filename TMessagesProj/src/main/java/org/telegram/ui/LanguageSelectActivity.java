@@ -166,7 +166,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             }
             LanguageCell cell = (LanguageCell) view;
             LocaleController.LocaleInfo localeInfo = cell.getCurrentLocale();
-            if (localeInfo == null || localeInfo.pathToFile == null || localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE) {
+            if (localeInfo == null || localeInfo.pathToFile == null || localeInfo.builtIn || localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE) {
                 return false;
             }
             final LocaleController.LocaleInfo finalLocaleInfo = localeInfo;

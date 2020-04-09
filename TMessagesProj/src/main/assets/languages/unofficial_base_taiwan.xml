@@ -524,7 +524,7 @@ Telegram 團隊</string>
 <string name="Devices">裝置</string>
 <string name="AreYouSureDeletePhotoTitle">刪除照片</string>
 <string name="SettingsRecent">最近的搜尋</string>
-<string name="NewFollowersBySourceChartTitle">按來源顯示新的追隨者</string>
+<string name="NewFollowersBySourceChartTitle">新追隨者來源</string>
 <string name="PassportResidentialAddress">居住地址</string>
 <string name="Months_other">%1$d 個月</string>
 <string name="ForwardedSticker_one"></string>
@@ -917,7 +917,7 @@ Telegram 團隊</string>
 <string name="Points_many"></string>
 <string name="MembersCountSelected_other">%1$d / %2$d 已選取</string>
 <string name="AllowReadCallLog">請允許 Telegram 讀取通話記錄，以便我們自動為您輸入驗證碼。</string>
-<string name="PinToTopLimitReached">抱歉，您只能在主列表中置頂 %1$s。如果您想要更有組織，「封存的聊天」列表允許無限制的置頂。</string>
+<string name="PinToTopLimitReached">抱歉，您只能在主列表中置頂 %1$s。如果您想要更有組織，在「封存的聊天」中允許無限置頂。</string>
 <string name="FilterRemoveChats">移除聊天</string>
 <string name="June">六月</string>
 <string name="BlockUserContactsTitle">聯絡人</string>
@@ -957,13 +957,13 @@ Telegram 團隊</string>
 <string name="MasksRemovedInfo">%1$s 不再存於您的面具收藏中。</string>
 <string name="VoipRequesting">正在請求</string>
 <string name="ApplyTheme">套用</string>
-<string name="SoftUserLimitAlert">在完成群組建立及轉換為超級群組後，您將能夠加入更多的用戶。</string>
+<string name="SoftUserLimitAlert">建立群組後，您將可以加入更多成員。</string>
 <string name="EventLogPromotedPinMessages">置頂訊息</string>
 <string name="ChannelPublicInfo">公開頻道可以用搜尋找到，且任何人都可以加入。</string>
 <string name="AddMasksInstalled">新面具已加入</string>
 <string name="RecentlyViewed">最近查看的</string>
 <string name="SelectFile">選取檔案</string>
-<string name="Page3Message">**Telegram** 永久免費。不含廣告。
+<string name="Page3Message">**Telegram** 永遠免費。沒有廣告。
 不必付訂閱費。</string>
 <string name="ChannelBots">機器人</string>
 <string name="ShareLocation">位置</string>
@@ -2484,7 +2484,7 @@ Telegram 團隊</string>
 <string name="PublicPoll">記名投票</string>
 <string name="Hours_many"></string>
 <string name="Videos_many"></string>
-<string name="ViewsBySourceChartTitle">按來源檢視</string>
+<string name="ViewsBySourceChartTitle">瀏覽來源</string>
 <string name="AuthAnotherClientInfo2">在您的電腦上執行 Telegram Desktop 以取得 QR Code。</string>
 <string name="AuthAnotherClientInfo3">掃描 QR Code 以連結您的帳號。</string>
 <string name="DeleteAll">全部刪除</string>
@@ -3556,7 +3556,7 @@ Telegram 團隊</string>
 <string name="Account">帳號</string>
 <string name="Times_two"></string>
 <string name="FilterNameNonMuted">未關通知的</string>
-<string name="TopHoursChartTitle">每小時瀏覽次數 (UTC)</string>
+<string name="TopHoursChartTitle">不同時段瀏覽次數的累計 (UTC)</string>
 <string name="AutoDownloadOnUpToFor">最大 %1$s（%2$s）</string>
 <string name="AttachPhoto">照片</string>
 <string name="NotificationsForChats">聊天通知</string>
@@ -3658,7 +3658,7 @@ Telegram 團隊</string>
 <string name="PassportLanguage_EL">希臘文</string>
 <string name="ScreenCapture">在任務切換器中顯示應用程式內容</string>
 <string name="ActionYouScoredInGame">您在 un2 中得到了 %1$s 分</string>
-<string name="FingerprintNotRecognized">指紋無法被識別，請再試一次。</string>
+<string name="FingerprintNotRecognized">無法識別指紋，請再試一次。</string>
 <string name="DiscussionChannelHelp">選擇要在您頻道中顯示的討論群。</string>
 <string name="PleaseDownload">請先下載媒體</string>
 <string name="SetUrlAvailable">%1$s 可用。</string>
