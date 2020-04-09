@@ -1283,9 +1283,24 @@ public class AndroidUtilities {
     }
 
     public static File getCacheDir() {
-        File cacheDir = new File(ApplicationLoader.getDataDirFixed(), "cache/media");
-        FileUtil.initDir(cacheDir);
-        return cacheDir;
+        String state = null;
+        try {
+            state = Environment.getExternalStorageState();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
+            try {
+                File file = ApplicationLoader.applicationContext.getExternalFilesDir("caches");
+                if (file != null) {
+                    FileUtil.initDir(file);
+                    return file;
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+        return new File("");
     }
 
     public static int dp(float value) {
