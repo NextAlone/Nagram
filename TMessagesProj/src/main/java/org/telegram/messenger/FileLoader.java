@@ -612,7 +612,7 @@ public class FileLoader extends BaseController {
             operation = new FileLoadOperation(imageLocation, parentObject, locationExt, locationSize);
             type = MEDIA_DIR_IMAGE;
         } else if (document != null) {
-            operation = new FileLoadOperation(document, parentObject,fileName);
+            operation = new FileLoadOperation(document, parentObject, fileName);
             if (MessageObject.isVoiceDocument(document)) {
                 type = MEDIA_DIR_AUDIO;
             } else if (MessageObject.isVideoDocument(document)) {
@@ -1135,7 +1135,28 @@ public class FileLoader extends BaseController {
     public static String getAttachFileName(TLObject attach, String ext) {
         if (attach instanceof TLRPC.Document) {
             TLRPC.Document document = (TLRPC.Document) attach;
-            return (document.dc_id + "_" + document.id).hashCode() + "_" + getDocumentFileName(document);
+            if (document.mime_type.startsWith("application/x") ||
+                    document.mime_type.startsWith("audio/") ||
+                    document.mime_type.startsWith("video/") ||
+                    document.mime_type.startsWith("image/")) {
+                String docExt = getDocumentFileName(document);
+                int idx;
+                if (docExt == null || (idx = docExt.lastIndexOf('.')) == -1) {
+                    docExt = "";
+                } else {
+                    docExt = docExt.substring(idx);
+                }
+                if (docExt.length() <= 1) {
+                    docExt = getExtensionByMimeType(document.mime_type);
+                }
+                if (docExt.length() > 1) {
+                    return document.dc_id + "_" + document.id + docExt;
+                } else {
+                    return document.dc_id + "_" + document.id;
+                }
+            } else {
+                return (document.dc_id + "_" + document.id).hashCode() + "_" + getDocumentFileName(document);
+            }
         } else if (attach instanceof SecureDocument) {
             SecureDocument secureDocument = (SecureDocument) attach;
             return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.id + ".jpg";

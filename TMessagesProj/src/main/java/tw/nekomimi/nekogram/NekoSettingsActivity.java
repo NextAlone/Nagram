@@ -435,13 +435,13 @@ public class NekoSettingsActivity extends BaseFragment {
                             target = 3;
                             break;
 
-                        case 8:
+                        case 3:
                             target = -1;
                             break;
-                        case 9:
+                        case 4:
                             target = -2;
                             break;
-                        case 10:
+                        case 5:
                             target = -3;
                             break;
                     }

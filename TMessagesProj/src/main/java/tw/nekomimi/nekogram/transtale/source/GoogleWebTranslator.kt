@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.transtale.source
 
 import android.text.TextUtils
 import okhttp3.Request
+import org.json.JSONArray
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
@@ -9,7 +10,6 @@ import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.utils.HttpUtil
 import tw.nekomimi.nekogram.utils.applyUserAgent
-import java.lang.UnsupportedOperationException
 import java.util.regex.Pattern
 
 object GoogleWebTranslator : Translator {
@@ -49,7 +49,7 @@ object GoogleWebTranslator : Translator {
                 "&tk=" + tk +
                 "&q=" + TransUtils.encodeURIComponent(query) // 不能用URLEncoder
 
-        val response =  HttpUtil.okHttpClient
+        val response = HttpUtil.okHttpClient
                 .newCall(Request.Builder()
                         .url(url)
                         .applyUserAgent()
@@ -61,9 +61,16 @@ object GoogleWebTranslator : Translator {
 
         }
 
-        return response.body!!.string()
+        var result = StringBuilder()
 
+        val array = JSONArray(response.body!!.string()).getJSONArray(0)
+        for (index in 0 until array.length()) {
+            result.append(array.getJSONArray(index).getString(0))
+        }
+
+        return result.toString()
     }
+
 
     private val targetLanguages = listOf(
             "sq", "ar", "am", "az", "ga", "et", "eu", "be", "bg", "is", "pl", "bs", "fa",
@@ -74,5 +81,6 @@ object GoogleWebTranslator : Translator {
             "sr", "st", "si", "eo", "sk", "sl", "sw", "gd", "ceb", "so", "tg", "te", "ta",
             "th", "tr", "cy", "ur", "uk", "uz", "es", "iw", "el", "haw", "sd", "hu", "sn",
             "hy", "ig", "it", "yi", "hi", "su", "id", "jw", "en", "yo", "vi", "zh-TW", "zh-CN", "zh")
+
 
 }

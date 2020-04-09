@@ -339,6 +339,11 @@ object ProxyUtil {
                                 LocaleController.getString("SaveToGallery", R.string.SaveToGallery),
                                 LocaleController.getString("Cancel", R.string.Cancel)
 
+                        ), intArrayOf(
+
+                                R.drawable.msg_gallery,
+                                R.drawable.cancel_big
+
                         )) { _, i ->
 
                             if (i == 0) {
