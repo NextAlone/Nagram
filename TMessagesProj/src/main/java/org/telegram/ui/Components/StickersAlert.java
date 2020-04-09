@@ -54,6 +54,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -122,6 +123,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private GridLayoutManager layoutManager;
     private Activity parentActivity;
     private int itemSize;
+
+    private int menu_archive = 4;
 
     private TLRPC.TL_messages_stickerSet stickerSet;
     private TLRPC.Document selectedSticker;
@@ -562,16 +565,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         optionsButton.addSubItem(1, R.drawable.msg_share, LocaleController.getString("StickersShare", R.string.StickersShare));
         optionsButton.addSubItem(2, R.drawable.msg_link, LocaleController.getString("CopyLink", R.string.CopyLink));
         optionsButton.addSubItem(3, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
-
-        if (stickerSet.set.archived) {
-
-            optionsButton.addSubItem(5, R.drawable.chats_archive, LocaleController.getString("Unarchive", R.string.Unarchive));
-
-        } else if (stickerSet.set.installed) {
-
-            optionsButton.addSubItem(4, R.drawable.chats_archive, LocaleController.getString("Archive", R.string.Archive));
-
-        }
+        optionsButton.addSubItem(menu_archive, R.drawable.chats_archive, LocaleController.getString("Archive", R.string.Archive));
 
         optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
         optionsButton.setDelegate(this::onSubItemClick);
@@ -681,12 +675,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
         } else if (id == 3) {
             ProxyUtil.showQrDialog(getContext(), stickersUrl);
-        } else if (id == 4) {
+        } else if (id == menu_archive) {
             dismiss();
             MediaDataController.getInstance(currentAccount).toggleStickerSet(parentActivity, stickerSet, 1, parentFragment, false, false);
-        } else if (id == 5) {
-            dismiss();
-            MediaDataController.getInstance(currentAccount).toggleStickerSet(parentActivity, stickerSet, 2, parentFragment, false, false);
         }
     }
 
@@ -694,7 +685,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         if (titleTextView == null) {
             return;
         }
-        if (stickerSet != null) {
+        if (stickerSet != null && stickerSet.set != null) {
+
             SpannableStringBuilder stringBuilder = null;
             try {
                 if (urlPattern == null) {
@@ -727,7 +719,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
             titleTextView.setText(stringBuilder != null ? stringBuilder : stickerSet.set.title);
 
-            if (stickerSet.set == null || !MediaDataController.getInstance(currentAccount).isStickerPackInstalled(stickerSet.set.id)) {
+            if (!MediaDataController.getInstance(currentAccount).isStickerPackInstalled(stickerSet.set.id)) {
+                optionsButton.hideSubItem(menu_archive);
                 String text;
                 if (stickerSet.set.masks) {
                     text = LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, LocaleController.formatPluralString("MasksCount", stickerSet.documents.size())).toUpperCase();
@@ -762,6 +755,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }));
                 }, text, Theme.getColor(Theme.key_dialogTextBlue2));
             } else {
+                optionsButton.showSubItem(menu_archive);
                 String text;
                 if (stickerSet.set.masks) {
                     text = LocaleController.formatString("RemoveStickersCount", R.string.RemoveStickersCount, LocaleController.formatPluralString("MasksCount", stickerSet.documents.size())).toUpperCase();

@@ -15333,7 +15333,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 @Override
                                 public void onSuccess(@NotNull String translation) {
                                     TranslateDb.save(original,translation);
-                                    if (finalMessageCell != null) {
+                                    if (getParentActivity() != null && finalMessageCell != null) {
                                         MessageObject messageObject = finalMessageCell.getMessageObject();
                                         MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
                                                 "\u200C\u200C\n" +
@@ -15348,9 +15348,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                                 @Override
                                 public void onFailed(boolean unsupported, @NotNull String message) {
-                                    AlertUtil.showTransFailedDialog(getParentActivity(),unsupported,message,() -> {
-                                        Translator.translate(original,this);
-                                    });
+                                    Activity parentActivity = getParentActivity();
+                                    if (parentActivity != null) {
+                                        AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
+                                            Translator.translate(original, this);
+                                        });
+                                    }
                                 }
                             });
                         }
@@ -16812,6 +16815,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         alertUserOpenError(message);
                                     }
                                 }
+                            } else if (locFile == null || !locFile.isFile()) {
+
+                                AlertUtil.showToast("FILE_NOT_FOUND");
+
                             } else if (message.getDocumentName().toLowerCase().endsWith(".nekox.json")) {
 
                                 File finalLocFile = locFile;

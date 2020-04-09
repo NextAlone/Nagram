@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
 
+import kotlin.io.FilesKt;
+
 public class FileLog {
     private OutputStreamWriter streamWriter = null;
     private FastDateFormat dateFormat = null;
@@ -140,11 +142,11 @@ public class FileLog {
     }
 
     public static void e(final String message) {
+        Log.e(tag, message);
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
         ensureInitied();
-        Log.e(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -158,6 +160,7 @@ public class FileLog {
     }
 
     public static void e(final Throwable e) {
+        Log.e(tag,"ERR", e);
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
@@ -182,11 +185,11 @@ public class FileLog {
     }
 
     public static void d(final String message) {
+        Log.d(tag, message);
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
         ensureInitied();
-        Log.d(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -200,11 +203,11 @@ public class FileLog {
     }
 
     public static void w(final String message) {
+        Log.w(tag, message);
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
         ensureInitied();
-        Log.w(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -219,11 +222,8 @@ public class FileLog {
 
     public static void cleanupLogs() {
         ensureInitied();
-        File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-        if (sdCard == null) {
-            return;
-        }
-        File dir = new File (sdCard.getAbsolutePath() + "/logs");
+        File dir = ApplicationLoader.applicationContext.getExternalFilesDir("logs");
+        if (dir == null) return;
         File[] files = dir.listFiles();
         if (files != null) {
             for (int a = 0; a < files.length; a++) {

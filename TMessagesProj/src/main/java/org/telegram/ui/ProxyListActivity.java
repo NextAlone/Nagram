@@ -275,7 +275,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
 
             SharedConfig.reloadProxyList();
-            UIUtil.runOnUIThread(() -> updateRows(true));
+            updateRows(true);
 
         });
 
@@ -482,7 +482,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         listRoot.put("proxies", proxyArray);
 
                         FileUtil.writeUtf8String(listRoot.toString(4), cacheFile);
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         return;
                     }
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -1001,7 +1001,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         checkProxyList(false);
         if (notify && listAdapter != null) {
             UIUtil.runOnUIThread(() -> {
-                listAdapter.notifyDataSetChanged();
+                try {
+                    listView.getRecycledViewPool().clear();
+                    listAdapter.notifyDataSetChanged();
+                } catch (Exception ignored) {}
             });
         }
     }
@@ -1038,7 +1041,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             SharedConfig.deleteProxy(proxyInfo);
 
-            UIUtil.runOnUIThread(() -> updateRows(true));
+            updateRows(true);
 
         }
 

@@ -26,3 +26,9 @@ jobs:
         with:
           name: NekoX Canary
           path: ${{ env.APK_FILE }}
+      - name: Upload Canary Apk
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ${{ env.APK_FILE }}

@@ -38,6 +38,9 @@ dependencies {
     implementation files('libs/ss-libev-release.aar')
     implementation files('libs/ssr-libev-release.aar')
 
+    compileOnly 'com.google.firebase:firebase-messaging:20.1.5'
+    compileOnly 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
+
     releaseImplementation 'com.google.firebase:firebase-messaging:20.1.5'
     releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
 
@@ -54,8 +57,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
 
-        versionName "6.0.1.12"
-        versionCode = 16
+        versionName "6.0.1.13"
+        versionCode = 17
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
@@ -169,8 +172,6 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
-
-            multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -206,7 +207,6 @@ android {
 
     sourceSets.release {
         jniLibs.srcDir 'src/main/libs'
-        java.srcDirs = ['src/gservcies/java']
         manifest.srcFile 'src/gservcies/AndroidManifest.xml'
     }
 
@@ -256,6 +256,7 @@ android {
 
         minApi21 {
             minSdkVersion 21
+            multiDexEnabled false
             versionNameSuffix '-minApi21'
         }
     }

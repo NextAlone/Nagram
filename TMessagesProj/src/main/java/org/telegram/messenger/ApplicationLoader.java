@@ -27,6 +27,8 @@ import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteCollection;
 import org.telegram.tgnet.ConnectionsManager;
@@ -45,7 +47,7 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
 
-public class ApplicationLoader extends Application {
+public class ApplicationLoader extends Application implements Thread.UncaughtExceptionHandler {
 
     @SuppressLint("StaticFieldLeak")
     public static volatile Context applicationContext;
@@ -177,9 +179,7 @@ public class ApplicationLoader extends Application {
             }
 
             ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
-            if (ExternalGcm.INSTANCE != null) {
-                ExternalGcm.INSTANCE.initPlayServices();
-            }
+            ExternalGcm.initPlayServices();
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("app initied");
             }
@@ -200,6 +200,9 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
+
+        Thread.setDefaultUncaughtExceptionHandler(this);
+
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
@@ -218,6 +221,13 @@ public class ApplicationLoader extends Application {
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
+    }
+
+    @Override
+    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+
+        FileLog.e("[APP] uncaughtException in thread " + t + ": \n\n" + e);
+
     }
 
     @Override
