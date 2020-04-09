@@ -1,9 +1,11 @@
 package tw.nekomimi.nekogram;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -14,6 +16,8 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.GcmPushListenerService;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
+
+import javax.validation.constraints.NotNull;
 
 public class ExternalGcm {
 
@@ -52,6 +56,7 @@ public class ExternalGcm {
                             SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
                             GcmPushListenerService.sendRegistrationToServer(null);
                         });
+                        FirebaseCrashlytics.getInstance().setCustomKey("flavor",BuildConfig.FLAVOR);
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
@@ -80,6 +85,14 @@ public class ExternalGcm {
     public static void sendRegistrationToServer() {
         if (noGcm) return;
         GcmPushListenerService.sendRegistrationToServer(SharedConfig.pushString);
+    }
+
+    public static void reportLog(@NotNull String report) {
+
+        if (noGcm) return;
+
+        FirebaseCrashlytics.getInstance().log(report);
+
     }
 
 }

@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.util.Locale;
 
 import kotlin.io.FilesKt;
+import tw.nekomimi.nekogram.ExternalGcm;
 
 public class FileLog {
     private OutputStreamWriter streamWriter = null;
@@ -123,11 +124,12 @@ public class FileLog {
     }
 
     public static void e(final String message, final Throwable exception) {
+        Log.e(tag, message, exception);
+        ExternalGcm.reportLog(message + "\n\n" + exception.toString());
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
         ensureInitied();
-        Log.e(tag, message, exception);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -143,6 +145,7 @@ public class FileLog {
 
     public static void e(final String message) {
         Log.e(tag, message);
+        ExternalGcm.reportLog(message);
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
@@ -161,6 +164,7 @@ public class FileLog {
 
     public static void e(final Throwable e) {
         Log.e(tag,"ERR", e);
+        ExternalGcm.reportLog(e.toString());
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
