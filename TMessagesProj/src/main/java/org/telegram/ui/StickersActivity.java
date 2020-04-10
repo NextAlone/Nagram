@@ -224,7 +224,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
         archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, AndroidUtilities.dp(54));
-        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, AndroidUtilities.dp(54));
+        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.baseline_delete_24, AndroidUtilities.dp(54));
 
         listAdapter = new ListAdapter(context, MediaDataController.getInstance(currentAccount).getStickerSets(currentType));
 
@@ -782,10 +782,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                             };
                             icons = new int[]{
                                     R.drawable.msg_archive,
-                                    R.drawable.msg_link,
+                                    R.drawable.baseline_link_24,
                                     R.drawable.msg_reorder,
                                     R.drawable.msg_share,
-                                    R.drawable.msg_delete
+                                    R.drawable.baseline_delete_24
                             };
                         }
                         builder.setItems(items, icons, (dialog, which) -> processSelectionOption(options[which], stickerSet));

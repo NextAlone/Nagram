@@ -136,7 +136,7 @@ public class MediaActionDrawable extends Drawable {
         paint2.setColor(value | 0xff000000);
         paint3.setColor(value | 0xff000000);
         textPaint.setColor(value | 0xff000000);
-        colorFilter = new PorterDuffColorFilter(value, PorterDuff.Mode.MULTIPLY);
+        colorFilter = new PorterDuffColorFilter(value, PorterDuff.Mode.SRC_IN);
     }
 
     public void setBackColor(int value) {

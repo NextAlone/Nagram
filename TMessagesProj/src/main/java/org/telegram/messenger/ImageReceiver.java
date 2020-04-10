@@ -130,8 +130,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private int param;
     private Object currentParentObject;
     private boolean canceledLoading;
-    private static PorterDuffColorFilter selectedColorFilter = new PorterDuffColorFilter(0xffdddddd, PorterDuff.Mode.MULTIPLY);
-    private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(0xffbbbbbb, PorterDuff.Mode.MULTIPLY);
+    private static PorterDuffColorFilter selectedColorFilter = new PorterDuffColorFilter(0xffdddddd, PorterDuff.Mode.SRC_IN);
+    private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(0xffbbbbbb, PorterDuff.Mode.SRC_IN);
     private boolean forceLoding;
 
     private int currentLayerNum;

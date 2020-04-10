@@ -171,7 +171,7 @@ public class PhonebookShareAlert extends BottomSheet {
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.SRC_IN));
             addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 20, 20, LocaleController.isRTL ? 20 : 0, 0));
 
             if (!isImport) {
@@ -1022,7 +1022,7 @@ public class PhonebookShareAlert extends BottomSheet {
                     } else if (item.type == 2) {
                         icon = R.drawable.menu_location;
                     } else if (item.type == 3) {
-                        icon = R.drawable.msg_link;
+                        icon = R.drawable.baseline_link_24;
                     } else if (item.type == 4) {
                         icon = R.drawable.profile_info;
                     } else if (item.type == 5) {

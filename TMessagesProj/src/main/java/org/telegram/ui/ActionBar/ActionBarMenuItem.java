@@ -161,7 +161,7 @@ public class ActionBarMenuItem extends FrameLayout {
             iconView.setScaleType(ImageView.ScaleType.CENTER);
             addView(iconView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             if (iconColor != 0) {
-                iconView.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.MULTIPLY));
+                iconView.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SRC_IN));
             }
         }
     }
@@ -254,13 +254,13 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setIconColor(int color) {
         if (iconView != null) {
-            iconView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            iconView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         if (textView != null) {
             textView.setTextColor(color);
         }
         if (clearButton != null) {
-            clearButton.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            clearButton.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
     }
 
@@ -859,7 +859,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             };
             clearButton.setImageDrawable(progressDrawable = new CloseProgressDrawable2());
-            clearButton.setColorFilter(new PorterDuffColorFilter(parentMenu.parentActionBar.itemsColor, PorterDuff.Mode.MULTIPLY));
+            clearButton.setColorFilter(new PorterDuffColorFilter(parentMenu.parentActionBar.itemsColor, PorterDuff.Mode.SRC_IN));
             clearButton.setScaleType(ImageView.ScaleType.CENTER);
             clearButton.setAlpha(0.0f);
             clearButton.setRotation(45);

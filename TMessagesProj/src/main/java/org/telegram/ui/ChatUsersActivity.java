@@ -2484,7 +2484,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     ImageView imageView = new ImageView(mContext);
                     imageView.setImageResource(R.drawable.group_ban_empty);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
-                    imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_emptyListPlaceholder), PorterDuff.Mode.MULTIPLY));
+                    imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_emptyListPlaceholder), PorterDuff.Mode.SRC_IN));
                     linearLayout.addView(imageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
 
                     TextView textView = new TextView(mContext);

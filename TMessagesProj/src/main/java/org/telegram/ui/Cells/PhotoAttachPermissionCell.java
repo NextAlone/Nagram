@@ -35,12 +35,12 @@ public class PhotoAttachPermissionCell extends FrameLayout {
 
         imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_attachPermissionImage), PorterDuff.Mode.MULTIPLY));
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_attachPermissionImage), PorterDuff.Mode.SRC_IN));
         addView(imageView, LayoutHelper.createFrame(44, 44, Gravity.CENTER, 5, 0, 0, 27));
 
         imageView2 = new ImageView(context);
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_attachPermissionMark), PorterDuff.Mode.MULTIPLY));
+        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_attachPermissionMark), PorterDuff.Mode.SRC_IN));
         addView(imageView2, LayoutHelper.createFrame(44, 44, Gravity.CENTER, 5, 0, 0, 27));
 
         textView = new TextView(context);

@@ -113,6 +113,7 @@ import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.DialogsEmptyCell;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerActionCell;
+import org.telegram.ui.Cells.DrawerActionCheckCell;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
@@ -1889,12 +1890,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             cell.setTextAndIcon(LocaleController.getString("FilterReorder", R.string.FilterReorder), R.drawable.tabs_reorder);
                         } else if (a == 1) {
                             if (N == 2) {
-                                cell.setTextAndIcon(LocaleController.getString("FilterEditAll", R.string.FilterEditAll), R.drawable.msg_edit);
+                                cell.setTextAndIcon(LocaleController.getString("FilterEditAll", R.string.FilterEditAll), R.drawable.baseline_edit_24);
                             } else {
-                                cell.setTextAndIcon(LocaleController.getString("FilterEdit", R.string.FilterEdit), R.drawable.msg_edit);
+                                cell.setTextAndIcon(LocaleController.getString("FilterEdit", R.string.FilterEdit), R.drawable.baseline_edit_24);
                             }
                         } else {
-                            cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.msg_delete);
+                            cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.baseline_delete_24);
                         }
                         scrimPopupWindowItems[a] = cell;
                         linearLayout.addView(cell);
@@ -2100,15 +2101,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         actionMode.addView(selectedDialogsCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
         selectedDialogsCountTextView.setOnTouchListener((v, event) -> true);
 
-        pinItem = actionMode.addItemWithWidth(pin, R.drawable.msg_pin, AndroidUtilities.dp(54));
-        muteItem = actionMode.addItemWithWidth(mute, R.drawable.msg_mute, AndroidUtilities.dp(54));
+        pinItem = actionMode.addItemWithWidth(pin, R.drawable.deproko_baseline_pin_24, AndroidUtilities.dp(54));
+        muteItem = actionMode.addItemWithWidth(mute, R.drawable.baseline_volume_off_24_white, AndroidUtilities.dp(54));
         archive2Item = actionMode.addItemWithWidth(archive2, R.drawable.msg_archive, AndroidUtilities.dp(54));
-        deleteItem = actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete));
+        deleteItem = actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete));
         ActionBarMenuItem otherItem = actionMode.addItemWithWidth(0, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         archiveItem = otherItem.addSubItem(archive, R.drawable.msg_archive, LocaleController.getString("Archive", R.string.Archive));
-        pin2Item = otherItem.addSubItem(pin2, R.drawable.msg_pin, LocaleController.getString("DialogPin", R.string.DialogPin));
+        pin2Item = otherItem.addSubItem(pin2, R.drawable.deproko_baseline_pin_24, LocaleController.getString("DialogPin", R.string.DialogPin));
         readItem = otherItem.addSubItem(read, R.drawable.msg_markread, LocaleController.getString("MarkAsRead", R.string.MarkAsRead));
-        clearItem = otherItem.addSubItem(clear, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory));
+        clearItem = otherItem.addSubItem(clear, R.drawable.baseline_delete_sweep_24, LocaleController.getString("ClearHistory", R.string.ClearHistory));
         blockItem = otherItem.addSubItem(block, R.drawable.msg_block, LocaleController.getString("BlockUser", R.string.BlockUser));
 
         actionModeViews.add(pinItem);
@@ -2670,13 +2671,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
         }
         floatingButton.setBackgroundDrawable(drawable);
-        floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+        floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN));
         floatingButton.setImageResource(R.drawable.floating_pencil);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -4392,7 +4393,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             muteItem.setIcon(R.drawable.msg_unmute);
             muteItem.setContentDescription(LocaleController.getString("ChatsUnmute", R.string.ChatsUnmute));
         } else {
-            muteItem.setIcon(R.drawable.msg_mute);
+            muteItem.setIcon(R.drawable.baseline_volume_off_24_white);
             muteItem.setContentDescription(LocaleController.getString("ChatsMute", R.string.ChatsMute));
         }
         if (canReadCount != 0) {
@@ -4401,11 +4402,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             readItem.setTextAndIcon(LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread), R.drawable.msg_markunread);
         }
         if (canPinCount != 0) {
-            pinItem.setIcon(R.drawable.msg_pin);
+            pinItem.setIcon(R.drawable.deproko_baseline_pin_24);
             pinItem.setContentDescription(LocaleController.getString("PinToTop", R.string.PinToTop));
             pin2Item.setText(LocaleController.getString("DialogPin", R.string.DialogPin));
         } else {
-            pinItem.setIcon(R.drawable.msg_unpin);
+            pinItem.setIcon(R.drawable.deproko_baseline_pin_undo_24);
             pinItem.setContentDescription(LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop));
             pin2Item.setText(LocaleController.getString("DialogUnpin", R.string.DialogUnpin));
         }
@@ -5507,6 +5508,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         arrayList.add(new ThemeDescription(sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemIcon));
         arrayList.add(new ThemeDescription(sideMenu, 0, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemText));
+        arrayList.add(new ThemeDescription(sideMenu, 0, new Class[]{DrawerActionCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemText));
         arrayList.add(new ThemeDescription(sideMenu, 0, new Class[]{DrawerActionCell.class}, new String[]{"arrowView"}, null, null, null, Theme.key_chats_menuItemText));
 
         arrayList.add(new ThemeDescription(sideMenu, 0, new Class[]{DrawerUserCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemText));

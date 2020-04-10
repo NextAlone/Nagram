@@ -194,7 +194,7 @@ public class GroupCreateSpan extends View {
         colors[5] = Color.blue(color);
         colors[6] = Color.alpha(back);
         colors[7] = Color.alpha(color);
-        deleteDrawable.setColorFilter(new PorterDuffColorFilter(delete, PorterDuff.Mode.MULTIPLY));
+        deleteDrawable.setColorFilter(new PorterDuffColorFilter(delete, PorterDuff.Mode.SRC_IN));
         backPaint.setColor(back);
     }
 

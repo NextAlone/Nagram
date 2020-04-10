@@ -116,7 +116,7 @@ public class ActionBar extends FrameLayout {
         backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
         backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
         if (itemsColor != 0) {
-            backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.MULTIPLY));
+            backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.SRC_IN));
         }
         backButtonImageView.setPadding(AndroidUtilities.dp(1), 0, 0, 0);
         addView(backButtonImageView, LayoutHelper.createFrame(54, 54, Gravity.LEFT | Gravity.TOP));
@@ -948,7 +948,7 @@ public class ActionBar extends FrameLayout {
             itemsColor = color;
             if (backButtonImageView != null) {
                 if (itemsColor != 0) {
-                    backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.MULTIPLY));
+                    backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.SRC_IN));
                     Drawable drawable = backButtonImageView.getDrawable();
                     if (drawable instanceof BackDrawable) {
                         ((BackDrawable) drawable).setColor(color);

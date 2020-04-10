@@ -173,10 +173,9 @@ public final class ColorParser {
     COLOR_MAP.put("ghostwhite", 0xFFF8F8FF);
     COLOR_MAP.put("gold", 0xFFFFD700);
     COLOR_MAP.put("goldenrod", 0xFFDAA520);
-    COLOR_MAP.put("gray", 0xFF808080);
+    COLOR_MAP.put("gray", 0xFF7D868F);
     COLOR_MAP.put("green", 0xFF008000);
     COLOR_MAP.put("greenyellow", 0xFFADFF2F);
-    COLOR_MAP.put("grey", 0xFF808080);
     COLOR_MAP.put("honeydew", 0xFFF0FFF0);
     COLOR_MAP.put("hotpink", 0xFFFF69B4);
     COLOR_MAP.put("indianred", 0xFFCD5C5C);

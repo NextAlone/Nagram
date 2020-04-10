@@ -14,6 +14,9 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -21,12 +24,14 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DividerCell;
+import org.telegram.ui.Cells.DrawerActionCell;
+import org.telegram.ui.Cells.DrawerActionCheckCell;
 import org.telegram.ui.Cells.DrawerAddCell;
+import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
-import org.telegram.ui.Cells.DrawerProfileCell;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SideMenultItemAnimator;
 
@@ -34,12 +39,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-import androidx.recyclerview.widget.RecyclerView;
+import kotlin.jvm.functions.Function0;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
-    private ArrayList<Item> items = new ArrayList<>(11);
+    public ArrayList<Item> items = new ArrayList<>(11);
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShown;
     private DrawerProfileCell profileCell;
@@ -120,6 +125,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             case 3:
                 view = new DrawerActionCell(mContext);
                 break;
+            case 6:
+                view = new DrawerActionCheckCell(mContext);
+                break;
             case 4:
                 view = new DrawerUserCell(mContext);
                 break;
@@ -153,6 +161,16 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 drawerActionCell.setPadding(0, 0, 0, 0);
                 break;
             }
+            case 6: {
+                DrawerActionCheckCell drawerActionCell = (DrawerActionCheckCell) holder.itemView;
+                position -= 2;
+                if (accountsShown) {
+                    position -= getAccountRowsCount();
+                }
+                ((CheckItem) items.get(position)).bindCheck(drawerActionCell);
+                drawerActionCell.setPadding(0, 0, 0, 0);
+                break;
+            }
             case 4: {
                 DrawerUserCell drawerUserCell = (DrawerUserCell) holder.itemView;
                 drawerUserCell.invalidate();
@@ -175,7 +193,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 return 4;
             } else {
                 if (accountNumbers.size() < UserConfig.MAX_ACCOUNT_COUNT) {
-                    if (i == accountNumbers.size()){
+                    if (i == accountNumbers.size()) {
                         return 5;
                     } else if (i == accountNumbers.size() + 1) {
                         return 2;
@@ -191,7 +209,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         if (items.get(i) == null) {
             return 2;
         }
-        return 3;
+        return items.get(i) instanceof CheckItem ? 6 : 3;
     }
 
     private void resetItems() {
@@ -222,56 +240,18 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             return;
         }
         int eventType = Theme.getEventType();
-        int newGroupIcon;
-        int newSecretIcon;
-        int newChannelIcon;
-        int contactsIcon;
-        int callsIcon;
-        int savedIcon;
-        int settingsIcon;
-        int inviteIcon;
-        int helpIcon;
-        if (eventType == 0) {
-            newGroupIcon = R.drawable.menu_groups_ny;
-            newSecretIcon = R.drawable.menu_secret_ny;
-            newChannelIcon = R.drawable.menu_channel_ny;
-            contactsIcon = R.drawable.menu_contacts_ny;
-            callsIcon = R.drawable.menu_calls_ny;
-            savedIcon = R.drawable.menu_bookmarks_ny;
-            settingsIcon = R.drawable.menu_settings_ny;
-            inviteIcon = R.drawable.menu_invite_ny;
-            helpIcon = R.drawable.menu_help_ny;
-        } else if (eventType == 1) {
-            newGroupIcon = R.drawable.menu_groups_14;
-            newSecretIcon = R.drawable.menu_secret_14;
-            newChannelIcon = R.drawable.menu_broadcast_14;
-            contactsIcon = R.drawable.menu_contacts_14;
-            callsIcon = R.drawable.menu_calls_14;
-            savedIcon = R.drawable.menu_bookmarks_14;
-            settingsIcon = R.drawable.menu_settings_14;
-            inviteIcon = R.drawable.menu_secret_ny;
-            helpIcon = R.drawable.menu_help;
-        } else {
-            newGroupIcon = R.drawable.menu_groups;
-            newSecretIcon = R.drawable.menu_secret;
-            newChannelIcon = R.drawable.menu_broadcast;
-            contactsIcon = R.drawable.menu_contacts;
-            callsIcon = R.drawable.menu_calls;
-            savedIcon = R.drawable.menu_saved;
-            settingsIcon = R.drawable.menu_settings;
-            inviteIcon = R.drawable.menu_invite;
-            helpIcon = R.drawable.menu_help;
-        }
-        //items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
-        //items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
-        //items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
+        int contactsIcon = R.drawable.baseline_perm_contact_calendar_24;
+        int savedIcon = R.drawable.baseline_bookmark_24;
+        int settingsIcon = R.drawable.baseline_settings_24;
+        int inviteIcon = R.drawable.baseline_person_add_24;
+        int helpIcon = R.drawable.baseline_help_24;
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
-        items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
-        items.add(null); // divider
         items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
         items.add(new Item(9, LocaleController.getString("NekoXFaq", R.string.NekoXFaq), helpIcon));
+        items.add(null); // divider
+        items.add(new CheckItem(12,LocaleController.getString("DarkMode",R.string.DarkMode),R.drawable.baseline_brightness_2_24,() -> Theme.getActiveTheme().isDark(),null));
     }
 
     public int getId(int position) {
@@ -286,7 +266,19 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         return item != null ? item.id : -1;
     }
 
-    private class Item {
+    public CheckItem getItem(int position) {
+        position -= 2;
+        if (accountsShown) {
+            position -= getAccountRowsCount();
+        }
+        if (position < 0 || position >= items.size()) {
+            return null;
+        }
+        Item item = items.get(position);
+        return item instanceof CheckItem ? (CheckItem) item : null;
+    }
+
+    public class Item {
         public int icon;
         public String text;
         public int id;
@@ -300,6 +292,31 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         public void bind(DrawerActionCell actionCell) {
             actionCell.setTextAndIcon(text, icon);
         }
+    }
+
+    public class CheckItem extends Item {
+
+        public Function0<Boolean> isChecked;
+        public Function0<Boolean> doSwitch;
+        public Runnable onClick;
+
+        public CheckItem(int id, String text, int icon, Function0<Boolean> isChecked,@Nullable Function0<Boolean> doSwitch) {
+            super(id, text, icon);
+            this.isChecked = isChecked;
+            this.doSwitch = doSwitch;
+        }
+
+        public void bindCheck(DrawerActionCheckCell actionCell) {
+            actionCell.setTextAndValueAndCheck(text, icon, null, isChecked.invoke(), false, false);
+            if (doSwitch != null) {
+                actionCell.setOnCheckClickListener((v) -> {
+                    if (doSwitch.invoke()) {
+                        actionCell.setChecked(isChecked.invoke());
+                    }
+                });
+            }
+        }
+
     }
 
     public int getAccountsCount() {

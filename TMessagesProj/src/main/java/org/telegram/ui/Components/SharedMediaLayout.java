@@ -708,7 +708,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         searchWas = false;
 
         pinnedHeaderShadowDrawable = context.getResources().getDrawable(R.drawable.photos_header_shadow);
-        pinnedHeaderShadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundGrayShadow), PorterDuff.Mode.MULTIPLY));
+        pinnedHeaderShadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundGrayShadow), PorterDuff.Mode.SRC_IN));
 
         if (scrollSlidingTextTabStrip != null) {
             initialTab = scrollSlidingTextTabStrip.getCurrentTabId();
@@ -895,7 +895,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             forwardItem.setOnClickListener(v -> onActionBarItemClick(forward));
         }
         deleteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-        deleteItem.setIcon(R.drawable.msg_delete);
+        deleteItem.setIcon(R.drawable.baseline_delete_24);
         deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
         deleteItem.setDuplicateParentStateEnabled(false);
         actionModeLayout.addView(deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));

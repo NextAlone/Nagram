@@ -428,7 +428,7 @@ public class ChatActionCell extends BaseCell {
             int color = Theme.getColor(overrideBackground);
             if (color != overrideColor) {
                 overrideColor = color;
-                overrideColorFilter = new PorterDuffColorFilter(overrideColor, PorterDuff.Mode.MULTIPLY);
+                overrideColorFilter = new PorterDuffColorFilter(overrideColor, PorterDuff.Mode.SRC_IN);
             }
             for (int a = 0; a < 4; a++) {
                 Theme.chat_cornerOuter[a].setColorFilter(overrideColorFilter);

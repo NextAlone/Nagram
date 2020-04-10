@@ -114,7 +114,7 @@ public class DrawerProfileCell extends FrameLayout {
         darkThemeView = new ImageView(context);
         darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
         darkThemeView.setImageResource(R.drawable.menu_night);
-        darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuName), PorterDuff.Mode.MULTIPLY));
+        darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuName), PorterDuff.Mode.SRC_IN));
         if (Build.VERSION.SDK_INT >= 21) {
             darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(darkThemeBackgroundColor = Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(17)));
             Theme.setRippleDrawableForceSoftware((RippleDrawable) darkThemeView.getBackground());
@@ -125,16 +125,16 @@ public class DrawerProfileCell extends FrameLayout {
             if (Theme.getTheme(dayThemeName) == null) {
                 dayThemeName = "Blue";
             }
-            String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
+            String nightThemeName = preferences.getString("lastDarkTheme", "Night");
             if (Theme.getTheme(nightThemeName) == null) {
-                nightThemeName = "Dark Blue";
+                nightThemeName = "Night";
             }
             Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
             if (dayThemeName.equals(nightThemeName)) {
                 if (themeInfo.isDark()) {
                     dayThemeName = "Blue";
                 } else {
-                    nightThemeName = "Dark Blue";
+                    nightThemeName = "Night";
                 }
             }
 
@@ -203,12 +203,12 @@ public class DrawerProfileCell extends FrameLayout {
         }
         if (currentColor == null || currentColor != color) {
             currentColor = color;
-            shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         color = Theme.getColor(Theme.key_chats_menuName);
         if (currentMoonColor == null || currentColor != color) {
             currentMoonColor = color;
-            darkThemeView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            darkThemeView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
         if (NekoConfig.avatarAsDrawerBackground || useImageBackground) {

@@ -87,9 +87,11 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
+import org.telegram.ui.Cells.DrawerActionCheckCell;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.BlockingUpdateView;
@@ -105,6 +107,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SharingLocationsAlert;
 import org.telegram.ui.Components.SideMenultItemAnimator;
 import org.telegram.ui.Components.StickersAlert;
+import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
 
@@ -119,6 +122,7 @@ import java.util.regex.Pattern;
 import tw.nekomimi.nekogram.NekoSettingsActivity;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
@@ -545,6 +549,49 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     presentFragment(new LoginActivity(freeAccount));
                 }
                 drawerLayoutContainer.closeDrawer(false);
+            } else if (view instanceof DrawerActionCheckCell) {
+                int id = drawerLayoutAdapter.getId(position);
+              //  DrawerLayoutAdapter.CheckItem item = drawerLayoutAdapter.getItem(position);
+                if (id == 12) {
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+                    String dayThemeName = preferences.getString("lastDayTheme", "Blue");
+                    if (Theme.getTheme(dayThemeName) == null) {
+                        dayThemeName = "Blue";
+                    }
+                    String nightThemeName = preferences.getString("lastDarkTheme", "Night");
+                    if (Theme.getTheme(nightThemeName) == null) {
+                        nightThemeName = "Night";
+                    }
+                    Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
+
+                    ((DrawerActionCheckCell) view).setChecked(!themeInfo.isDark());
+
+                    if (dayThemeName.equals(nightThemeName)) {
+                        if (themeInfo.isDark()) {
+                            dayThemeName = "Blue";
+                        } else {
+                            nightThemeName = "Night";
+                        }
+                    }
+
+                    if (dayThemeName.equals(themeInfo.getKey())) {
+                        themeInfo = Theme.getTheme(nightThemeName);
+                    } else {
+                        themeInfo = Theme.getTheme(dayThemeName);
+                    }
+                    if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
+                        AlertUtil.showToast(LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff));
+                        Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
+                        Theme.saveAutoNightThemeConfig();
+                        Theme.cancelAutoNightThemeCallbacks();
+                    }
+                    int[] pos = new int[2];
+                    Switch s = ((DrawerActionCheckCell) view).checkBox;
+                    s.getLocationInWindow(pos);
+                    pos[0] += s.getMeasuredWidth() / 2;
+                    pos[1] += s.getMeasuredHeight() / 2;
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
+                }
             } else {
                 int id = drawerLayoutAdapter.getId(position);
                 if (id == 2) {
@@ -3249,7 +3296,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     themeSwitchImageView.setVisibility(View.VISIBLE);
                     float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
                     Animator anim = ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius);
-                    anim.setDuration(400);
+                    anim.setDuration(100);
                     anim.setInterpolator(Easings.easeInOutQuad);
                     anim.addListener(new AnimatorListenerAdapter() {
                         @Override

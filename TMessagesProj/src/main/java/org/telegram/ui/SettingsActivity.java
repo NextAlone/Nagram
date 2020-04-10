@@ -364,7 +364,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         otherItem = menu.addItem(0, R.drawable.ic_ab_other);
         otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-        otherItem.addSubItem(edit_name, R.drawable.msg_edit, LocaleController.getString("EditName", R.string.EditName));
+        otherItem.addSubItem(edit_name, R.drawable.baseline_edit_24, LocaleController.getString("EditName", R.string.EditName));
         otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString("LogOut", R.string.LogOut));
 
         int scrollTo;
@@ -690,9 +690,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
         });
 
-        avatarImage = new
-
-                BackupImageView(context);
+        avatarImage = new BackupImageView(context);
         avatarImage.setRoundRadius(AndroidUtilities.dp(21));
         avatarImage.setContentDescription(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
         avatarContainer.addView(avatarImage, LayoutHelper.createFrame(42, 42));
@@ -700,17 +698,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(0x55000000);
 
-        avatarProgressView = new
-
-                RadialProgressView(context) {
-                    @Override
-                    protected void onDraw(Canvas canvas) {
-                        if (avatarImage != null && avatarImage.getImageReceiver().hasNotThumb()) {
-                            paint.setAlpha((int) (0x55 * avatarImage.getImageReceiver().getCurrentAlpha()));
-                            canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, AndroidUtilities.dp(21), paint);
-                        }
-                        super.onDraw(canvas);
-                    }
+        avatarProgressView = new RadialProgressView(context) {
+            @Override
+            protected void onDraw(Canvas canvas) {
+                if (avatarImage != null && avatarImage.getImageReceiver().hasNotThumb()) {
+                    paint.setAlpha((int) (0x55 * avatarImage.getImageReceiver().getCurrentAlpha()));
+                    canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, AndroidUtilities.dp(21), paint);
+                }
+                super.onDraw(canvas);
+            }
         };
         avatarProgressView.setSize(AndroidUtilities.dp(26));
         avatarProgressView.setProgressColor(0xffffffff);
@@ -718,9 +714,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         showAvatarProgress(false, false);
 
-        titleTextView = new
-
-                SimpleTextView(context);
+        titleTextView = new SimpleTextView(context);
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -728,9 +722,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         titleTextView.setAlpha(0.0f);
         frameLayout.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
 
-        nameTextView = new
-
-                TextView(context);
+        nameTextView = new TextView(context);
         nameTextView.setTextColor(Theme.getColor(Theme.key_profile_title));
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         nameTextView.setLines(1);
@@ -743,9 +735,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         nameTextView.setPivotY(0);
         frameLayout.addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 96, 0));
 
-        onlineTextView = new
-
-                TextView(context);
+        onlineTextView = new TextView(context);
         onlineTextView.setTextColor(Theme.getColor(Theme.key_profile_status));
         onlineTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         onlineTextView.setLines(1);
@@ -755,9 +745,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         onlineTextView.setGravity(Gravity.LEFT);
         frameLayout.addView(onlineTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 96, 0));
 
-        idTextView = new
-
-                TextView(context);
+        idTextView = new TextView(context);
         idTextView.setTextColor(AvatarDrawable.getProfileTextColorForId(5));
         idTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         idTextView.setLines(1);
@@ -768,23 +756,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         idTextView.setAlpha(1.0f);
         frameLayout.addView(idTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 48, 0));
 
-        writeButton = new
-
-                ImageView(context);
+        writeButton = new ImageView(context);
 
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
         }
         writeButton.setBackgroundDrawable(drawable);
         writeButton.setImageResource(R.drawable.menu_camera_av);
-        writeButton.setColorFilter(new
-
-                PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
+        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -856,24 +840,20 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         settingsSectionRow = rowCount++;
         settingsSectionRow2 = rowCount++;
         notificationRow = rowCount++;
-        privacyRow = rowCount++;
         dataRow = rowCount++;
+        privacyRow = rowCount++;
         chatRow = rowCount++;
-        stickersRow = rowCount ++;
-        if (true || getMessagesController().filtersEnabled || !getMessagesController().dialogFilters.isEmpty()) {
-            filtersRow = rowCount++;
-        } else {
-            filtersRow = -1;
-        }
-        devicesRow = rowCount++;
+        stickersRow = rowCount++;
+        filtersRow = rowCount++;
+        devicesRow = -1;
         nekoRow = rowCount++;
         languageRow = rowCount++;
         devicesSectionRow = -1;
         helpHeaderRow = rowCount++;
         questionRow = rowCount++;
         faqRow = rowCount++;
-        policyRow = rowCount++;
-        if (BuildVars.LOGS_ENABLED || BuildVars.DEBUG_VERSION) {
+        policyRow = -1;
+        if (BuildVars.DEBUG_VERSION) {
             helpSectionCell = rowCount++;
             debugHeaderRow = rowCount++;
         } else {
@@ -887,11 +867,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             sendLogsRow = -1;
             clearLogsRow = -1;
         }
-        if (BuildVars.DEBUG_VERSION) {
-            switchBackendRow = rowCount++;
-        } else {
-            switchBackendRow = -1;
-        }
+        switchBackendRow = -1;
         versionRow = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -1885,9 +1861,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
                 new SearchResult(400, LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, () -> presentFragment(new LanguageSelectActivity())),
 
-                new SearchResult(402, LocaleController.getString("AskAQuestion", R.string.AskAQuestion), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> showDialog(AlertsCreator.createSupportAlert(SettingsActivity.this))),
-                new SearchResult(403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl))),
-                new SearchResult(404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl))),
+                new SearchResult(402, LocaleController.getString("AskAQuestion", R.string.AskAQuestion), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.baseline_help_24, () -> showDialog(AlertsCreator.createSupportAlert(SettingsActivity.this))),
+                new SearchResult(403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.baseline_help_24, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl))),
+                new SearchResult(404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.baseline_help_24, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl))),
         };
         private ArrayList<FaqSearchResult> faqSearchArray = new ArrayList<>();
 
@@ -2282,25 +2258,25 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 case 2: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == languageRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, false);
+                        textCell.setTextAndIcon(LocaleController.getString("Language", R.string.Language), R.drawable.baseline_language_24, false);
                     } else if (position == notificationRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, true);
+                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.baseline_notifications_24, true);
                     } else if (position == privacyRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, true);
+                        textCell.setTextAndIcon(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.baseline_lock_24, true);
                     } else if (position == dataRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
+                        textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.baseline_data_usage_24, true);
                     } else if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.msg_theme, true);
+                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.baseline_palette_24, true);
                     } else if (position == stickersRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks),R.drawable.msg_sticker, true);
+                        textCell.setTextAndIcon(LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.deproko_baseline_stickers_24, true);
                     } else if (position == nekoRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NekoSettings", R.string.NekoSettings), R.drawable.menu_settings, true);
+                        textCell.setTextAndIcon(LocaleController.getString("NekoSettings", R.string.NekoSettings), R.drawable.baseline_extension_24, true);
                     } else if (position == filtersRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.baseline_folder_24, true);
                     } else if (position == questionRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), R.drawable.menu_support2, true);
+                        textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), R.drawable.baseline_live_help_24, true);
                     } else if (position == faqRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NekoXFaq", R.string.NekoXFaq), R.drawable.menu_help, true);
+                        textCell.setTextAndIcon(LocaleController.getString("NekoXFaq", R.string.NekoXFaq), R.drawable.baseline_help_24, true);
                     } else if (position == policyRow) {
                         textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, false);
                     } else if (position == sendLogsRow) {
@@ -2309,8 +2285,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setText(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), switchBackendRow != -1);
                     } else if (position == switchBackendRow) {
                         textCell.setText("Switch Backend", false);
-                    } else if (position == devicesRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_devices, true);
                     }
                     break;
                 }

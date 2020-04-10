@@ -136,7 +136,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
 
         statusImageView = new ImageView(context);
         statusImageView.setVisibility(INVISIBLE);
-        statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sharedMedia_startStopLoadIcon), PorterDuff.Mode.MULTIPLY));
+        statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sharedMedia_startStopLoadIcon), PorterDuff.Mode.SRC_IN));
         if (isPickerCell) {
             addView(statusImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 8 : 72, 39, LocaleController.isRTL ? 72 : 8, 0));
         } else {

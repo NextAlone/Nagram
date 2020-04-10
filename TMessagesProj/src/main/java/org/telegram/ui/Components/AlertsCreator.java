@@ -581,11 +581,11 @@ public class AlertsCreator {
         };
 
         int[] icons = new int[]{
-                R.drawable.notifications_on,
-                R.drawable.notifications_mute1h,
-                R.drawable.notifications_mute2d,
-                R.drawable.notifications_settings,
-                R.drawable.notifications_off
+                R.drawable.baseline_notifications_24,
+                R.drawable.deproko_baseline_clock_24,
+                R.drawable.deproko_baseline_clock_24,
+                R.drawable.baseline_settings_24,
+                R.drawable.baseline_notifications_off_24
         };
 
         final LinearLayout linearLayout = new LinearLayout(parentFragment.getParentActivity());
@@ -600,10 +600,10 @@ public class AlertsCreator {
             Drawable drawable = parentFragment.getParentActivity().getResources().getDrawable(icons[a]);
             if (a == descriptions.length - 1) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogRedIcon), PorterDuff.Mode.MULTIPLY));
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogRedIcon), PorterDuff.Mode.SRC_IN));
             } else {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.SRC_IN));
             }
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             textView.setLines(1);

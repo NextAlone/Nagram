@@ -136,7 +136,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
 
         emojiButton = new ImageView(context);
-        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
+        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
         emojiButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         if (style == STYLE_FRAGMENT) {
             emojiButton.setImageResource(R.drawable.smiles_tab_smiles);
@@ -246,7 +246,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             editText.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
             editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         }
-        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
+        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemText), PorterDuff.Mode.SRC_IN));
         if (emojiView != null) {
             emojiView.updateColors();
         }

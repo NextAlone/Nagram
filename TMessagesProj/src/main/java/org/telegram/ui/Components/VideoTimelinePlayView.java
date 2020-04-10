@@ -77,9 +77,9 @@ public class VideoTimelinePlayView extends View {
         paint2 = new Paint();
         paint2.setColor(0x7f000000);
         drawableLeft = context.getResources().getDrawable(R.drawable.video_cropleft);
-        drawableLeft.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+        drawableLeft.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
         drawableRight = context.getResources().getDrawable(R.drawable.video_cropright);
-        drawableRight.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+        drawableRight.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
     }
 
     public float getProgress() {

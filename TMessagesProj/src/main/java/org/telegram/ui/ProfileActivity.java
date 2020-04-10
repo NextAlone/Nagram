@@ -2037,7 +2037,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
             if (Build.VERSION.SDK_INT < 21) {
                 Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
-                shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+                shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
                 drawable = combinedDrawable;
@@ -2045,7 +2045,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             writeButton.setBackgroundDrawable(drawable);
             writeButton.setImageResource(R.drawable.profile_newmsg);
             writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
-            writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
+            writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN));
             writeButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
                 StateListAnimator animator = new StateListAnimator();
@@ -2126,7 +2126,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             if (lockIconDrawable != null) {
-                lockIconDrawable.setColorFilter(ColorUtils.blendARGB(Theme.getColor(Theme.key_chat_lockIcon), Color.WHITE, value), PorterDuff.Mode.MULTIPLY);
+                lockIconDrawable.setColorFilter(ColorUtils.blendARGB(Theme.getColor(Theme.key_chat_lockIcon), Color.WHITE, value), PorterDuff.Mode.SRC_IN);
             }
 
             if (verifiedCrossfadeDrawable != null) {
@@ -2619,7 +2619,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int c = AndroidUtilities.getOffsetColor(color1, color2, value, 1.0f);
             nameTextView[1].setTextColor(c);
             if (lockIconDrawable != null) {
-                lockIconDrawable.setColorFilter(c, PorterDuff.Mode.MULTIPLY);
+                lockIconDrawable.setColorFilter(c, PorterDuff.Mode.SRC_IN);
             }
             if (scamDrawable != null) {
                 color1 = Theme.getColor(Theme.key_avatar_subtitleInProfileBlue);
@@ -3014,7 +3014,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     scamDrawable.setColor(ColorUtils.blendARGB(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue), Color.argb(179, 255, 255, 255), animationProgress));
                 }
                 if (lockIconDrawable != null) {
-                    lockIconDrawable.setColorFilter(ColorUtils.blendARGB(Theme.getColor(Theme.key_chat_lockIcon), Color.WHITE, animationProgress), PorterDuff.Mode.MULTIPLY);
+                    lockIconDrawable.setColorFilter(ColorUtils.blendARGB(Theme.getColor(Theme.key_chat_lockIcon), Color.WHITE, animationProgress), PorterDuff.Mode.SRC_IN);
                 }
                 if (verifiedCrossfadeDrawable != null) {
                     verifiedCrossfadeDrawable.setProgress(animationProgress);
@@ -4334,13 +4334,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             otherItem.addSubItem(share, R.drawable.msg_share, LocaleController.getString("BotShare", R.string.BotShare));
                             otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
                         } else {
-                            otherItem.addSubItem(add_contact, R.drawable.msg_addcontact, LocaleController.getString("AddContact", R.string.AddContact));
+                            otherItem.addSubItem(add_contact, R.drawable.baseline_person_add_24, LocaleController.getString("AddContact", R.string.AddContact));
                         }
                         if (!TextUtils.isEmpty(user.phone)) {
                             otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
                         }
                         if (isBot) {
-                            otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_retry, !userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
+                            otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.baseline_replay_24, !userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
                         } else {
                             otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
                         }
@@ -4350,8 +4350,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
                     }
                     otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
-                    otherItem.addSubItem(edit_contact, R.drawable.msg_edit, LocaleController.getString("EditContact", R.string.EditContact));
-                    otherItem.addSubItem(delete_contact, R.drawable.msg_delete, LocaleController.getString("DeleteContact", R.string.DeleteContact));
+                    otherItem.addSubItem(edit_contact, R.drawable.baseline_edit_24, LocaleController.getString("EditContact", R.string.EditContact));
+                    otherItem.addSubItem(delete_contact, R.drawable.baseline_delete_24, LocaleController.getString("DeleteContact", R.string.DeleteContact));
                 }
             } else {
                 otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
@@ -4926,7 +4926,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     onlineTextView[1].setTextColor(Theme.getColor((String) onlineTextViewTag));
                 }
                 if (lockIconDrawable != null) {
-                    lockIconDrawable.setColorFilter(Theme.getColor(Theme.key_chat_lockIcon), PorterDuff.Mode.MULTIPLY);
+                    lockIconDrawable.setColorFilter(Theme.getColor(Theme.key_chat_lockIcon), PorterDuff.Mode.SRC_IN);
                 }
                 if (scamDrawable != null) {
                     scamDrawable.setColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));

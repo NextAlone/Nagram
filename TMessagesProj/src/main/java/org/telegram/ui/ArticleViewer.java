@@ -3580,7 +3580,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         };
         clearButton.setImageDrawable(new CloseProgressDrawable2());
-        clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+        clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         clearButton.setScaleType(ImageView.ScaleType.CENTER);
         clearButton.setAlpha(0.0f);
         clearButton.setRotation(45);
@@ -3747,7 +3747,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         searchUpButton = new ImageView(parentActivity);
         searchUpButton.setScaleType(ImageView.ScaleType.CENTER);
         searchUpButton.setImageResource(R.drawable.msg_go_up);
-        searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+        searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         searchUpButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchPanel.addView(searchUpButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 48, 0));
         searchUpButton.setOnClickListener(view -> scrollToSearchIndex(currentSearchIndex - 1));
@@ -3756,7 +3756,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         searchDownButton = new ImageView(parentActivity);
         searchDownButton.setScaleType(ImageView.ScaleType.CENTER);
         searchDownButton.setImageResource(R.drawable.msg_go_down);
-        searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+        searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         searchDownButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchPanel.addView(searchDownButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 0, 0));
         searchDownButton.setOnClickListener(view -> scrollToSearchIndex(currentSearchIndex + 1));
@@ -3861,7 +3861,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         menuItem.addSubItem(gallery_menu_openin, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
         //menuItem.addSubItem(gallery_menu_share, LocaleController.getString("ShareFile", R.string.ShareFile), 0).setTextColor(0xfffafafa);
         menuItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
-        menuItem.addSubItem(gallery_menu_savegif, R.drawable.msg_gif, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_savegif, R.drawable.deproko_baseline_gif_24, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.redrawPopup(0xf9222222);
 
         bottomLayout = new FrameLayout(parentActivity);
@@ -4954,11 +4954,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             searchField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         }
         if (searchUpButton != null) {
-            searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+            searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
             searchUpButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         }
         if (searchDownButton != null) {
-            searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+            searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
             searchDownButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         }
         if (searchCountText != null) {
@@ -4970,7 +4970,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             menuButton.setPopupItemsColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon), true);
         }
         if (clearButton != null) {
-            clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+            clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         }
         if (backDrawable != null) {
             backDrawable.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -10875,11 +10875,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int b = Color.blue(color);
                 textView.setTextColor(getLinkTextColor());
                 backgroundPaint.setColor(Color.argb(34, r, g, b));
-                imageView.setColorFilter(new PorterDuffColorFilter(getGrayTextColor(), PorterDuff.Mode.MULTIPLY));
+                imageView.setColorFilter(new PorterDuffColorFilter(getGrayTextColor(), PorterDuff.Mode.SRC_IN));
             } else {
                 textView.setTextColor(0xffffffff);
                 backgroundPaint.setColor(0x7f000000);
-                imageView.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY));
+                imageView.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.SRC_IN));
             }
             TLRPC.Chat channel = MessagesController.getInstance(currentAccount).getChat(block.channel.id);
             if (channel == null || channel.min) {

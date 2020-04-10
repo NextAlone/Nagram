@@ -166,7 +166,7 @@ public class FireworksOverlay extends View {
         heartDrawable = new Drawable[heartColors.length];
         for (int a = 0; a < heartDrawable.length; a++) {
             heartDrawable[a] = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.heart_confetti).mutate();
-            heartDrawable[a].setColorFilter(new PorterDuffColorFilter(heartColors[a], PorterDuff.Mode.MULTIPLY));
+            heartDrawable[a].setColorFilter(new PorterDuffColorFilter(heartColors[a], PorterDuff.Mode.SRC_IN));
         }
     }
 

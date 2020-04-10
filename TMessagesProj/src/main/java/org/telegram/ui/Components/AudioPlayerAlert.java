@@ -159,7 +159,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
         parentActivity = (LaunchActivity) context;
         noCoverDrawable = context.getResources().getDrawable(R.drawable.nocover).mutate();
-        noCoverDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_placeholder), PorterDuff.Mode.MULTIPLY));
+        noCoverDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_placeholder), PorterDuff.Mode.SRC_IN));
 
         TAG = DownloadController.getInstance(currentAccount).generateObserverTag();
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
@@ -169,7 +169,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.musicDidLoad);
 
         shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_background), PorterDuff.Mode.MULTIPLY));
+        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_background), PorterDuff.Mode.SRC_IN));
         paint.setColor(Theme.getColor(Theme.key_player_placeholderBackground));
 
         containerView = new FrameLayout(context) {
@@ -304,7 +304,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         ActionBarMenu menu = actionBar.createMenu();
         menuItem = menu.addItem(0, R.drawable.ic_ab_other);
         menuItem.addSubItem(1, R.drawable.msg_forward, LocaleController.getString("Forward", R.string.Forward));
-        menuItem.addSubItem(2, R.drawable.msg_shareout, LocaleController.getString("ShareFile", R.string.ShareFile));
+        menuItem.addSubItem(2, R.drawable.baseline_share_24, LocaleController.getString("ShareFile", R.string.ShareFile));
         menuItem.addSubItem(4, R.drawable.msg_message, LocaleController.getString("ShowInChat", R.string.ShowInChat));
         menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         menuItem.setTranslationX(AndroidUtilities.dp(48));
@@ -488,7 +488,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         optionsButton.setAdditionalYOffset(-AndroidUtilities.dp(120));
         playerLayout.addView(optionsButton, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 0, 19, 10, 0));
         optionsButton.addSubItem(1, R.drawable.msg_forward, LocaleController.getString("Forward", R.string.Forward));
-        optionsButton.addSubItem(2, R.drawable.msg_shareout, LocaleController.getString("ShareFile", R.string.ShareFile));
+        optionsButton.addSubItem(2, R.drawable.baseline_share_24, LocaleController.getString("ShareFile", R.string.ShareFile));
         optionsButton.addSubItem(4, R.drawable.msg_message, LocaleController.getString("ShowInChat", R.string.ShowInChat));
         optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
         optionsButton.setDelegate(this::onSubItemClick);
@@ -767,9 +767,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private void updatePlaybackButton() {
         float currentPlaybackSpeed = MediaController.getInstance().getPlaybackSpeed(true);
         if (currentPlaybackSpeed > 1) {
-            playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerPlayPause), PorterDuff.Mode.MULTIPLY));
+            playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerPlayPause), PorterDuff.Mode.SRC_IN));
         } else {
-            playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), PorterDuff.Mode.MULTIPLY));
+            playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), PorterDuff.Mode.SRC_IN));
         }
     }
 
@@ -1059,22 +1059,22 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private void updateShuffleButton() {
         if (SharedConfig.shuffleMusic) {
             Drawable drawable = getContext().getResources().getDrawable(R.drawable.pl_shuffle).mutate();
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.SRC_IN));
             shuffleButton.setIcon(drawable);
             shuffleButton.setContentDescription(LocaleController.getString("Shuffle", R.string.Shuffle));
         } else {
             Drawable drawable = getContext().getResources().getDrawable(R.drawable.music_reverse).mutate();
             if (SharedConfig.playOrderReversed) {
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.SRC_IN));
             } else {
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), PorterDuff.Mode.MULTIPLY));
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), PorterDuff.Mode.SRC_IN));
             }
             shuffleButton.setIcon(drawable);
             shuffleButton.setContentDescription(LocaleController.getString("ReverseOrder", R.string.ReverseOrder));
         }
 
-        playOrderButtons[0].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.playOrderReversed ? Theme.key_player_buttonActive : Theme.key_player_button), PorterDuff.Mode.MULTIPLY));
-        playOrderButtons[1].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.shuffleMusic ? Theme.key_player_buttonActive : Theme.key_player_button), PorterDuff.Mode.MULTIPLY));
+        playOrderButtons[0].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.playOrderReversed ? Theme.key_player_buttonActive : Theme.key_player_button), PorterDuff.Mode.SRC_IN));
+        playOrderButtons[1].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.shuffleMusic ? Theme.key_player_buttonActive : Theme.key_player_button), PorterDuff.Mode.SRC_IN));
     }
 
     private void updateRepeatButton() {
@@ -1082,17 +1082,17 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (mode == 0) {
             repeatButton.setImageResource(R.drawable.pl_repeat);
             repeatButton.setTag(Theme.key_player_button);
-            repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), PorterDuff.Mode.MULTIPLY));
+            repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), PorterDuff.Mode.SRC_IN));
             repeatButton.setContentDescription(LocaleController.getString("AccDescrRepeatOff", R.string.AccDescrRepeatOff));
         } else if (mode == 1) {
             repeatButton.setImageResource(R.drawable.pl_repeat);
             repeatButton.setTag(Theme.key_player_buttonActive);
-            repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+            repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.SRC_IN));
             repeatButton.setContentDescription(LocaleController.getString("AccDescrRepeatList", R.string.AccDescrRepeatList));
         } else if (mode == 2) {
             repeatButton.setImageResource(R.drawable.pl_repeat1);
             repeatButton.setTag(Theme.key_player_buttonActive);
-            repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+            repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.SRC_IN));
             repeatButton.setContentDescription(LocaleController.getString("AccDescrRepeatOne", R.string.AccDescrRepeatOne));
         }
     }

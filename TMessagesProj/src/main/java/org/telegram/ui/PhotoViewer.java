@@ -2511,14 +2511,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         allMediaItem = menuItem.addSubItem(gallery_menu_showall, R.drawable.msg_media, LocaleController.getString("ShowAllMedia", R.string.ShowAllMedia));
         allMediaItem.setColors(0xfffafafa, 0xfffafafa);
-        menuItem.addSubItem(gallery_menu_savegif, R.drawable.msg_gif, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_savegif, R.drawable.deproko_baseline_gif_24, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_showinchat, R.drawable.msg_message, LocaleController.getString("ShowInChat", R.string.ShowInChat)).setColors(0xfffafafa, 0xfffafafa);
-        menuItem.addSubItem(gallery_menu_share, R.drawable.msg_shareout, LocaleController.getString("ShareFile", R.string.ShareFile)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_share, R.drawable.baseline_share_24, LocaleController.getString("ShareFile", R.string.ShareFile)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
 
         menuItem.addSubItem(gallery_menu_scan, R.drawable.wallet_qr, LocaleController.getString("ScanQRCode", R.string.ScanQRCode)).setColors(0xfffafafa, 0xfffafafa);
 
-        menuItem.addSubItem(gallery_menu_delete, R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_delete, R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_cancel_loading, R.drawable.msg_cancel, LocaleController.getString("StopDownload", R.string.StopDownload)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.redrawPopup(0xf9222222);
         sendItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
@@ -2796,9 +2796,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         pickerViewSendButton.setScaleType(ImageView.ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
         pickerViewSendButton.setBackgroundDrawable(drawable);
-        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY));
+        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.SRC_IN));
         pickerViewSendButton.setImageResource(R.drawable.attach_send);
-        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
+        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.SRC_IN));
         containerView.addView(pickerViewSendButton, LayoutHelper.createFrame(56, 56, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 14, 14));
         pickerViewSendButton.setContentDescription(LocaleController.getString("Send", R.string.Send));
         pickerViewSendButton.setOnClickListener(v -> {
@@ -3182,7 +3182,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else if (object1 instanceof MediaController.SearchImage) {
                     ((MediaController.SearchImage) object1).ttl = seconds;
                 }
-                timeItem.setColorFilter(seconds != 0 ? new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY) : null);
+                timeItem.setColorFilter(seconds != 0 ? new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN) : null);
                 if (!checkImageView.isChecked()) {
                     checkImageView.callOnClick();
                 }
@@ -4152,12 +4152,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             Drawable drawable = pickerViewSendButton.getBackground();
             Theme.setSelectorDrawableColor(drawable, color, false);
             Theme.setSelectorDrawableColor(drawable, Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton), true);
-            pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
+            pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.SRC_IN));
         }
         if (checkImageView != null) {
             checkImageView.setColor(Theme.getColor(Theme.key_dialogFloatingButton), 0xffffffff);
         }
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        PorterDuffColorFilter filter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
         if (timeItem != null && timeItem.getColorFilter() != null) {
             timeItem.setColorFilter(filter);
         }
@@ -4679,13 +4679,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         entry.stickers.addAll(stickers);
                     }
                     if (currentEditMode == 1) {
-                        cropItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                        cropItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                         entry.isCropped = true;
                     } else if (currentEditMode == 2) {
-                        tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                        tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                         entry.isFiltered = true;
                     } else if (currentEditMode == 3) {
-                        paintItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                        paintItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                         entry.isPainted = true;
                     }
                     if (savedFilterState != null) {
@@ -4704,13 +4704,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         entry.stickers.addAll(stickers);
                     }
                     if (currentEditMode == 1) {
-                        cropItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                        cropItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                         entry.isCropped = true;
                     } else if (currentEditMode == 2) {
-                        tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                        tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                         entry.isFiltered = true;
                     } else if (currentEditMode == 3) {
-                        paintItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                        paintItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                         entry.isPainted = true;
                     }
                     if (savedFilterState != null) {
@@ -6388,7 +6388,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
 
             updateCaptionTextForCurrentPhoto(object);
-            PorterDuffColorFilter filter = new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY);
+            PorterDuffColorFilter filter = new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN);
             timeItem.setColorFilter(ttl != 0 ? filter : null);
             paintItem.setColorFilter(isPainted ? filter : null);
             cropItem.setColorFilter(isCropped ? filter : null);
@@ -9284,7 +9284,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (muteVideo) {
                 actionBar.setSubtitle(null);
                 muteItem.setImageResource(R.drawable.volume_off);
-                muteItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+                muteItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
                 if (compressItem.getTag() != null) {
                     compressItem.setAlpha(0.5f);
                 }

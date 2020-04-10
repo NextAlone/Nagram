@@ -608,8 +608,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 subtitleTextView.setVisibility(View.VISIBLE);
                 drawable1 = context.getResources().getDrawable(R.drawable.sim_old);
                 drawable2 = context.getResources().getDrawable(R.drawable.sim_new);
-                drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), PorterDuff.Mode.MULTIPLY));
-                drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image2), PorterDuff.Mode.MULTIPLY));
+                drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), PorterDuff.Mode.SRC_IN));
+                drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image2), PorterDuff.Mode.SRC_IN));
                 imageView.setImageDrawable(new CombinedDrawable(drawable1, drawable2));
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 UserConfig userConfig = getUserConfig();

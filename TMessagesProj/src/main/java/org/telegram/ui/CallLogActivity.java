@@ -161,7 +161,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 			imageView = new ImageView(context);
 			imageView.setImageResource(R.drawable.profile_phone);
 			imageView.setAlpha(214);
-			imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addButton), PorterDuff.Mode.MULTIPLY));
+			imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addButton), PorterDuff.Mode.SRC_IN));
 			imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 1));
 			imageView.setScaleType(ImageView.ScaleType.CENTER);
 			imageView.setOnClickListener(callBtnClickListener);
@@ -200,15 +200,15 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 	public View createView(Context context) {
 		greenDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
 		greenDrawable.setBounds(0, 0, greenDrawable.getIntrinsicWidth(), greenDrawable.getIntrinsicHeight());
-		greenDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.MULTIPLY));
+		greenDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.SRC_IN));
 		iconOut = new ImageSpan(greenDrawable, ImageSpan.ALIGN_BOTTOM);
 		greenDrawable2 = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
 		greenDrawable2.setBounds(0, 0, greenDrawable2.getIntrinsicWidth(), greenDrawable2.getIntrinsicHeight());
-		greenDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.MULTIPLY));
+		greenDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.SRC_IN));
 		iconIn = new ImageSpan(greenDrawable2, ImageSpan.ALIGN_BOTTOM);
 		redDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
 		redDrawable.setBounds(0, 0, redDrawable.getIntrinsicWidth(), redDrawable.getIntrinsicHeight());
-		redDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedRedIcon), PorterDuff.Mode.MULTIPLY));
+		redDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedRedIcon), PorterDuff.Mode.SRC_IN));
 		iconMissed = new ImageSpan(redDrawable, ImageSpan.ALIGN_BOTTOM);
 
 		actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -326,13 +326,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
 		if (Build.VERSION.SDK_INT < 21) {
 			Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-			shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+			shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
 			CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
 			combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
 			drawable = combinedDrawable;
 		}
 		floatingButton.setBackgroundDrawable(drawable);
-		floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+		floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN));
 		floatingButton.setImageResource(R.drawable.ic_call);
 		floatingButton.setContentDescription(LocaleController.getString("Call", R.string.Call));
 		if (Build.VERSION.SDK_INT >= 21) {

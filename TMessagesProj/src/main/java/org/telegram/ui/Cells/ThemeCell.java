@@ -68,7 +68,7 @@ public class ThemeCell extends FrameLayout {
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 53 + 48 + 4 : 60, 0, LocaleController.isRTL ? 60 : 53 + 48 + 4, 0));
 
         checkImage = new ImageView(context);
-        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
+        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.SRC_IN));
         checkImage.setImageResource(R.drawable.sticker_added);
 
         if (!isNightTheme) {
@@ -78,7 +78,7 @@ public class ThemeCell extends FrameLayout {
             optionsButton.setFocusable(false);
             optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
             optionsButton.setImageResource(R.drawable.ic_ab_other);
-            optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.MULTIPLY));
+            optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.SRC_IN));
             optionsButton.setScaleType(ImageView.ScaleType.CENTER);
             optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
             addView(optionsButton, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP));
@@ -90,7 +90,7 @@ public class ThemeCell extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
+        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.SRC_IN));
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 

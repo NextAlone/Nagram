@@ -372,13 +372,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
         }
         floatingButton.setBackgroundDrawable(drawable);
-        floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+        floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN));
         floatingButton.setImageResource(R.drawable.floating_pencil);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -670,7 +670,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 dropDown.setText(LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
                 Drawable dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
-                dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), PorterDuff.Mode.MULTIPLY));
+                dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), PorterDuff.Mode.SRC_IN));
                 dropDown.setCompoundDrawablesWithIntrinsicBounds(null, null, dropDownDrawable, null);
                 dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4));
                 dropDown.setPadding(0, 0, AndroidUtilities.dp(10), 0);
@@ -1061,7 +1061,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             Rect paddings = new Rect();
             sheetDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
             sheetDrawable.getPadding(paddings);
-            sheetDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.MULTIPLY));
+            sheetDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.SRC_IN));
 
             String[] texts = new String[textsCount];
             int[] textSizes = new int[textsCount];
@@ -3413,7 +3413,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 dropDownContainer.setPopupItemsColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem), false);
             }
             if (sheetDrawable != null) {
-                sheetDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.MULTIPLY));
+                sheetDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.SRC_IN));
             }
         };
 

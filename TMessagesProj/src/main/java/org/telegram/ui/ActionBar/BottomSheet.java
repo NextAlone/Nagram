@@ -501,7 +501,7 @@ public class BottomSheet extends Dialog {
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.SRC_IN));
             addView(imageView, LayoutHelper.createLinear(56, 48));
 
             textView = new TextView(context);
@@ -570,7 +570,7 @@ public class BottomSheet extends Dialog {
 
         Rect padding = new Rect();
         shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
+        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.SRC_IN));
         shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
         backgroundPaddingTop = padding.top;
@@ -739,7 +739,7 @@ public class BottomSheet extends Dialog {
     }
 
     public void setBackgroundColor(int color) {
-        shadowDrawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        shadowDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -932,7 +932,7 @@ public class BottomSheet extends Dialog {
         }
         BottomSheetCell cell = itemViews.get(item);
         cell.textView.setTextColor(color);
-        cell.imageView.setColorFilter(new PorterDuffColorFilter(icon, PorterDuff.Mode.MULTIPLY));
+        cell.imageView.setColorFilter(new PorterDuffColorFilter(icon, PorterDuff.Mode.SRC_IN));
     }
 
     public void setItems(CharSequence[] i, int[] icons, final OnClickListener listener) {

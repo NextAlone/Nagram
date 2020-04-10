@@ -52,7 +52,7 @@ public class NotificationsCheckCell extends FrameLayout {
             moveImageView.setFocusable(false);
             moveImageView.setScaleType(ImageView.ScaleType.CENTER);
             moveImageView.setImageResource(R.drawable.poll_reorder);
-            moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+            moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.SRC_IN));
             addView(moveImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 6, 0, 6, 0));
         }
 

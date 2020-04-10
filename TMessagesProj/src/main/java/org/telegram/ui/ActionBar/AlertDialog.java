@@ -138,7 +138,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.SRC_IN));
             addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
             textView = new TextView(context);
@@ -183,7 +183,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         backgroundPaddings = new Rect();
         if (progressStyle != 3) {
             shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), PorterDuff.Mode.SRC_IN));
             shadowDrawable.getPadding(backgroundPaddings);
         }
 
@@ -395,7 +395,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
             topImageView.setScaleType(ImageView.ScaleType.CENTER);
             topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
-            topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(topBackgroundColor, PorterDuff.Mode.MULTIPLY));
+            topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(topBackgroundColor, PorterDuff.Mode.SRC_IN));
             topImageView.setPadding(0, 0, 0, 0);
             containerView.addView(topImageView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, topHeight, Gravity.LEFT | Gravity.TOP, -8, -8, 0, 0));
         }
@@ -953,7 +953,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
         AlertDialogCell cell = itemViews.get(item);
         cell.textView.setTextColor(color);
-        cell.imageView.setColorFilter(new PorterDuffColorFilter(icon, PorterDuff.Mode.MULTIPLY));
+        cell.imageView.setColorFilter(new PorterDuffColorFilter(icon, PorterDuff.Mode.SRC_IN));
     }
 
     public int getItemsCount() {
@@ -1070,6 +1070,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         public Builder setItems(CharSequence[] items, int[] icons, final OnClickListener onClickListener) {
+            // TODO: NEKOX: MIG ICONS
             alertDialog.items = items;
             alertDialog.itemIcons = icons;
             alertDialog.onClickListener = onClickListener;

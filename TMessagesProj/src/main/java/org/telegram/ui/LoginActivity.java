@@ -259,6 +259,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         currentConnectionState = getConnectionsManager().getConnectionState();
 
+        getNotificationCenter().addObserver(this, NotificationCenter.didUpdateConnectionState);
+
         return true;
 
     }
@@ -526,7 +528,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
@@ -550,7 +552,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         floatingButtonIcon = new ImageView(context);
         floatingButtonIcon.setScaleType(ImageView.ScaleType.CENTER);
-        floatingButtonIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+        floatingButtonIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN));
         floatingButtonIcon.setImageResource(R.drawable.actionbtn_next);
         floatingButtonContainer.setContentDescription(LocaleController.getString("Done", R.string.Done));
         floatingButtonContainer.addView(floatingButtonIcon, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60));
@@ -2121,19 +2123,19 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 if (currentType == 1) {
                     blackImageView = new ImageView(context);
                     blackImageView.setImageResource(R.drawable.sms_devices);
-                    blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+                    blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
                     frameLayout.addView(blackImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
                     blueImageView = new ImageView(context);
                     blueImageView.setImageResource(R.drawable.sms_bubble);
-                    blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.MULTIPLY));
+                    blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.SRC_IN));
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
                     titleTextView.setText(LocaleController.getString("SentAppCodeTitle", R.string.SentAppCodeTitle));
                 } else {
                     blueImageView = new ImageView(context);
                     blueImageView.setImageResource(R.drawable.sms_code);
-                    blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.MULTIPLY));
+                    blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.SRC_IN));
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
                     titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", R.string.SentSmsCodeTitle));
@@ -2355,7 +2357,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     codeField[a].setCursorWidth(1.5f);
 
                     Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
-                    pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
+                    pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.SRC_IN));
 
                     codeField[a].setBackgroundDrawable(pressedDrawable);
                     codeField[a].setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);

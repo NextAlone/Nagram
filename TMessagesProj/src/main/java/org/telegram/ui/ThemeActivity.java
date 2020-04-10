@@ -703,7 +703,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             menuItem = menu.addItem(0, R.drawable.ic_ab_other);
             menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
             menuItem.addSubItem(share_theme, R.drawable.msg_share, LocaleController.getString("ShareTheme", R.string.ShareTheme));
-            menuItem.addSubItem(edit_theme, R.drawable.msg_edit, LocaleController.getString("EditThemeColors", R.string.EditThemeColors));
+            menuItem.addSubItem(edit_theme, R.drawable.baseline_edit_24, LocaleController.getString("EditThemeColors", R.string.EditThemeColors));
             menuItem.addSubItem(create_theme, R.drawable.menu_palette, LocaleController.getString("CreateNewThemeMenu", R.string.CreateNewThemeMenu));
             menuItem.addSubItem(reset_settings, R.drawable.msg_reset, LocaleController.getString("ThemeResetToDefaults", R.string.ThemeResetToDefaults));
         } else {
@@ -1432,7 +1432,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 };
                 icons = new int[]{
                         0,
-                        R.drawable.msg_shareout
+                        R.drawable.baseline_share_24
                 };
             } else {
                 hasDelete = themeInfo.info == null || !themeInfo.info.isDefault;
@@ -1444,10 +1444,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         hasDelete ? LocaleController.getString("Delete", R.string.Delete) : null};
                 icons = new int[]{
                         R.drawable.msg_share,
-                        R.drawable.msg_shareout,
-                        R.drawable.msg_edit,
-                        R.drawable.msg_link,
-                        R.drawable.msg_delete
+                        R.drawable.baseline_share_24,
+                        R.drawable.baseline_edit_24,
+                        R.drawable.baseline_link_24,
+                        R.drawable.baseline_delete_24
                 };
             }
             builder.setItems(items, icons, (dialog, which) -> {
@@ -1709,10 +1709,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                     LocaleController.getString("DeleteTheme", R.string.DeleteTheme)
                             };
                             int[] icons = new int[]{
-                                    R.drawable.msg_edit,
+                                    R.drawable.baseline_edit_24,
                                     R.drawable.msg_share,
-                                    R.drawable.msg_link,
-                                    R.drawable.msg_delete
+                                    R.drawable.baseline_link_24,
+                                    R.drawable.baseline_delete_24
                             };
                             builder.setItems(items, icons, (dialog, which) -> {
                                 if (getParentActivity() == null) {

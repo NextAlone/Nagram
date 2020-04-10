@@ -147,12 +147,12 @@ public class ContentPreviewViewer {
                 if (delegate != null) {
                     if (delegate.needSend() && !delegate.isInScheduleMode()) {
                         items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
-                        icons.add(R.drawable.outline_send);
+                        icons.add(R.drawable.deproko_baseline_send_24);
                         actions.add(0);
                     }
                     if (delegate.canSchedule()) {
                         items.add(LocaleController.getString("Schedule", R.string.Schedule));
-                        icons.add(R.drawable.msg_timer);
+                        icons.add(R.drawable.baseline_timer_24);
                         actions.add(3);
                     }
                     if (currentStickerSet != null && delegate.needOpen()) {
@@ -168,7 +168,7 @@ public class ContentPreviewViewer {
                 }
                 if (isRecentSticker) {
                     items.add(LocaleController.getString("DeleteFromRecent", R.string.DeleteFromRecent));
-                    icons.add(R.drawable.msg_delete);
+                    icons.add(R.drawable.baseline_delete_24);
                     actions.add(4);
                 }
                 if (items.isEmpty()) {
@@ -235,12 +235,12 @@ public class ContentPreviewViewer {
 
                 if (delegate.needSend() && !delegate.isInScheduleMode()) {
                     items.add(LocaleController.getString("SendGifPreview", R.string.SendGifPreview));
-                    icons.add(R.drawable.outline_send);
+                    icons.add(R.drawable.deproko_baseline_send_24);
                     actions.add(0);
                 }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
-                    icons.add(R.drawable.msg_timer);
+                    icons.add(R.drawable.baseline_timer_24);
                     actions.add(3);
                 }
 
@@ -248,7 +248,7 @@ public class ContentPreviewViewer {
                 if (currentDocument != null) {
                     if (canDelete = MediaDataController.getInstance(currentAccount).hasRecentGif(currentDocument)) {
                         items.add(LocaleController.formatString("Delete", R.string.Delete));
-                        icons.add(R.drawable.msg_delete);
+                        icons.add(R.drawable.baseline_delete_24);
                         actions.add(1);
                     } else {
                         items.add(LocaleController.formatString("SaveToGIFs", R.string.SaveToGIFs));

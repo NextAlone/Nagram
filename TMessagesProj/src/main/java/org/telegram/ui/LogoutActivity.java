@@ -203,7 +203,7 @@ public class LogoutActivity extends BaseFragment {
                     } else if (position == passcodeRow) {
                         view.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", R.string.SetPasscode), LocaleController.getString("SetPasscodeInfo", R.string.SetPasscodeInfo), R.drawable.menu_passcode, true);
                     } else if (position == cacheRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.menu_clearcache, true);
+                        view.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.baseline_delete_sweep_24, true);
                     } else if (position == phoneRow) {
                         view.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", R.string.ChangePhoneNumberInfo), R.drawable.menu_newphone, true);
                     } else if (position == supportRow) {

@@ -148,7 +148,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         } else {
             imageView.setImageResource(R.drawable.no_apps);
         }
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sessions_devicesImage), PorterDuff.Mode.MULTIPLY));
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sessions_devicesImage), PorterDuff.Mode.SRC_IN));
         emptyLayout.addView(imageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
         textView1 = new TextView(context);

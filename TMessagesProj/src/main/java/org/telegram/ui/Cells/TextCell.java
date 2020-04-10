@@ -56,7 +56,7 @@ public class TextCell extends FrameLayout {
 
         imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(dialog ? Theme.key_dialogIcon : Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(dialog ? Theme.key_dialogIcon : Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.SRC_IN));
         addView(imageView);
 
         valueImageView = new ImageView(context);
@@ -132,7 +132,7 @@ public class TextCell extends FrameLayout {
         textView.setTextColor(Theme.getColor(text));
         textView.setTag(text);
         if (icon != null) {
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(icon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(icon), PorterDuff.Mode.SRC_IN));
             imageView.setTag(icon);
         }
     }

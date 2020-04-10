@@ -69,7 +69,7 @@ public class AdminedChannelCell extends FrameLayout {
         deleteButton.setScaleType(ImageView.ScaleType.CENTER);
         deleteButton.setImageResource(R.drawable.msg_panel_clear);
         deleteButton.setOnClickListener(onClickListener);
-        deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText), PorterDuff.Mode.MULTIPLY));
+        deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText), PorterDuff.Mode.SRC_IN));
         addView(deleteButton, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 7 : 0, 12, LocaleController.isRTL ? 0 : 7, 0));
     }
 

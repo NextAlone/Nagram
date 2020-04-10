@@ -263,7 +263,7 @@ public class ColorPicker extends FrameLayout {
 
         exchangeButton = new ImageView(getContext());
         exchangeButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 1));
-        exchangeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+        exchangeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         exchangeButton.setScaleType(ImageView.ScaleType.CENTER);
         exchangeButton.setVisibility(GONE);
         exchangeButton.setOnClickListener(v -> {
@@ -287,7 +287,7 @@ public class ColorPicker extends FrameLayout {
         clearButton = new ImageView(getContext());
         clearButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 1));
         clearButton.setImageDrawable(new CloseProgressDrawable2());
-        clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
+        clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         clearButton.setScaleType(ImageView.ScaleType.CENTER);
         clearButton.setVisibility(GONE);
         clearButton.setOnClickListener(v -> {
@@ -343,9 +343,9 @@ public class ColorPicker extends FrameLayout {
             menuItem.setLongClickEnabled(false);
             menuItem.setIcon(R.drawable.ic_ab_other);
             menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-            menuItem.addSubItem(item_edit, R.drawable.msg_edit, LocaleController.getString("OpenInEditor", R.string.OpenInEditor));
+            menuItem.addSubItem(item_edit, R.drawable.baseline_edit_24, LocaleController.getString("OpenInEditor", R.string.OpenInEditor));
             menuItem.addSubItem(item_share, R.drawable.msg_share, LocaleController.getString("ShareTheme", R.string.ShareTheme));
-            menuItem.addSubItem(item_delete, R.drawable.msg_delete, LocaleController.getString("DeleteTheme", R.string.DeleteTheme));
+            menuItem.addSubItem(item_delete, R.drawable.baseline_delete_24, LocaleController.getString("DeleteTheme", R.string.DeleteTheme));
             menuItem.setMenuYOffset(-AndroidUtilities.dp(80));
             menuItem.setSubMenuOpenSide(2);
             menuItem.setDelegate(id -> {
@@ -496,7 +496,7 @@ public class ColorPicker extends FrameLayout {
 
         LinearGradient gradientShader = new LinearGradient(0, 0, width, 0, new int[]{Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED}, null, Shader.TileMode.CLAMP);
         LinearGradient alphaShader = new LinearGradient(0, (height / 3), 0, height, new int[]{Color.WHITE, Color.TRANSPARENT}, null, Shader.TileMode.CLAMP);
-        ComposeShader composeShader = new ComposeShader(alphaShader, gradientShader, PorterDuff.Mode.MULTIPLY);
+        ComposeShader composeShader = new ComposeShader(alphaShader, gradientShader, PorterDuff.Mode.SRC_IN);
 
         colorWheelPaint.setShader(composeShader);
 

@@ -267,7 +267,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         eraseImageView.setScaleType(ImageView.ScaleType.CENTER);
         eraseImageView.setImageResource(R.drawable.ic_close_white);
         eraseImageView.setPadding(AndroidUtilities.dp(16), 0, 0, 0);
-        eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), PorterDuff.Mode.MULTIPLY));
+        eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), PorterDuff.Mode.SRC_IN));
         eraseImageView.setVisibility(View.INVISIBLE);
         eraseImageView.setOnClickListener(v -> {
             searchWas = false;

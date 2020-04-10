@@ -70,7 +70,7 @@ public class ColorPicker extends FrameLayout {
             1.0f
     };
 
-    private PorterDuffColorFilter colorPickerFilter = new PorterDuffColorFilter(0xff51bdf3, PorterDuff.Mode.MULTIPLY);
+    private PorterDuffColorFilter colorPickerFilter = new PorterDuffColorFilter(0xff51bdf3, PorterDuff.Mode.SRC_IN);
     private ImageView colorPickerButton;
     private ImageView settingsButton;
     private ImageView undoButton;

@@ -141,7 +141,7 @@ public class UndoView extends FrameLayout {
 
         undoImageView = new ImageView(context);
         undoImageView.setImageResource(R.drawable.chats_undo);
-        undoImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_undo_cancelColor), PorterDuff.Mode.MULTIPLY));
+        undoImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_undo_cancelColor), PorterDuff.Mode.SRC_IN));
         undoButton.addView(undoImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.LEFT));
 
         undoTextView = new TextView(context);

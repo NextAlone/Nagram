@@ -1237,7 +1237,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         dropDown.setText(LocaleController.getString("ChatGallery", R.string.ChatGallery));
         dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
-        dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
+        dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.SRC_IN));
         dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         dropDown.setPadding(0, 0, AndroidUtilities.dp(10), 0);
         dropDownContainer.addView(dropDown, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 16, 0, 0, 0));
@@ -1347,14 +1347,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, writeButtonDrawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             writeButtonDrawable = combinedDrawable;
         }
         writeButton.setBackgroundDrawable(writeButtonDrawable);
         writeButton.setImageResource(R.drawable.attach_send);
-        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
+        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.SRC_IN));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             writeButton.setOutlineProvider(new ViewOutlineProvider() {
@@ -1515,7 +1515,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         recordTime = new TextView(context);
         recordTime.setBackgroundResource(R.drawable.system);
-        recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(0x66000000, PorterDuff.Mode.MULTIPLY));
+        recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(0x66000000, PorterDuff.Mode.SRC_IN));
         recordTime.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         recordTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         recordTime.setAlpha(0.0f);
@@ -2416,7 +2416,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         Theme.setSelectorDrawableColor(writeButtonDrawable, Theme.getColor(Theme.key_dialogFloatingButton), false);
         Theme.setSelectorDrawableColor(writeButtonDrawable, Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton), true);
-        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
+        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.SRC_IN));
 
         dropDown.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         dropDownContainer.setPopupItemsColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem), false);
@@ -2450,7 +2450,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         RecyclerView.ViewHolder holder = gridView.findViewHolderForAdapterPosition(0);
         if (holder != null && holder.itemView instanceof PhotoAttachCameraCell) {
-            ((PhotoAttachCameraCell) holder.itemView).getImageView().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), PorterDuff.Mode.MULTIPLY));
+            ((PhotoAttachCameraCell) holder.itemView).getImageView().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), PorterDuff.Mode.SRC_IN));
         }
 
         containerView.invalidate();

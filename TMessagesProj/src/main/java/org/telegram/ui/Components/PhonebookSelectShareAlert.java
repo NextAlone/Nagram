@@ -262,7 +262,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             searchIconImageView = new ImageView(context);
             searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
             searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
-            searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.MULTIPLY));
+            searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.SRC_IN));
             addView(searchIconImageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 16, 11, 0, 0));
 
             clearSearchImageView = new ImageView(context);
@@ -272,7 +272,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             clearSearchImageView.setScaleX(0.1f);
             clearSearchImageView.setScaleY(0.1f);
             clearSearchImageView.setAlpha(0.0f);
-            clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.MULTIPLY));
+            clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.SRC_IN));
             addView(clearSearchImageView, LayoutHelper.createFrame(36, 36, Gravity.RIGHT | Gravity.TOP, 14, 11, 14, 0));
             clearSearchImageView.setOnClickListener(v -> {
                 searchEditText.setText("");
@@ -372,7 +372,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
         Context context = parentFragment.getParentActivity();
 
         shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
+        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.SRC_IN));
 
         searchAdapter = new ShareSearchAdapter(context);
 

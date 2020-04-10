@@ -363,7 +363,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             paintButton.setImageResource(R.drawable.photo_paint);
             paintButton.setColorFilter(null);
         } else {
-            paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+            paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
             paintButton.setImageResource(R.drawable.photo_paint);
         }
 
@@ -372,7 +372,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     public void updateColors() {
         if (paintButton != null && paintButton.getColorFilter() != null) {
-            paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+            paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
         }
         if (doneTextView != null) {
             doneTextView.setTextColor(Theme.getColor(Theme.key_dialogFloatingButton));
@@ -1047,7 +1047,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             ImageView check = new ImageView(getContext());
             check.setImageResource(R.drawable.ic_ab_done);
             check.setScaleType(ImageView.ScaleType.CENTER);
-            check.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+            check.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
             button.addView(check, LayoutHelper.createFrame(50, LayoutHelper.MATCH_PARENT));
         }
 
@@ -1115,7 +1115,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             ImageView check = new ImageView(getContext());
             check.setImageResource(R.drawable.ic_ab_done);
             check.setScaleType(ImageView.ScaleType.CENTER);
-            check.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
+            check.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.SRC_IN));
             button.addView(check, LayoutHelper.createFrame(50, LayoutHelper.MATCH_PARENT));
         }
 

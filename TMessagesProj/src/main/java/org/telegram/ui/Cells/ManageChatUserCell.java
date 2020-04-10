@@ -97,7 +97,7 @@ public class ManageChatUserCell extends FrameLayout {
             optionsButton.setFocusable(false);
             optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
             optionsButton.setImageResource(R.drawable.ic_ab_other);
-            optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.MULTIPLY));
+            optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.SRC_IN));
             optionsButton.setScaleType(ImageView.ScaleType.CENTER);
             addView(optionsButton, LayoutHelper.createFrame(52, 64, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP));
             optionsButton.setOnClickListener(v -> delegate.onOptionsButtonCheck(ManageChatUserCell.this, true));

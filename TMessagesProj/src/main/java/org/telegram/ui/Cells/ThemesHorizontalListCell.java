@@ -345,8 +345,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
 
         private void applyTheme() {
-            inDrawable.setColorFilter(new PorterDuffColorFilter(themeInfo.getPreviewInColor(), PorterDuff.Mode.MULTIPLY));
-            outDrawable.setColorFilter(new PorterDuffColorFilter(themeInfo.getPreviewOutColor(), PorterDuff.Mode.MULTIPLY));
+            inDrawable.setColorFilter(new PorterDuffColorFilter(themeInfo.getPreviewInColor(), PorterDuff.Mode.SRC_IN));
+            outDrawable.setColorFilter(new PorterDuffColorFilter(themeInfo.getPreviewOutColor(), PorterDuff.Mode.SRC_IN));
             if (themeInfo.pathToFile == null) {
                 updateColors(false);
                 optionsDrawable = null;
@@ -409,7 +409,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     if (themeInfo.info.document != null) {
                         themeInfo.themeLoaded = false;
                         placeholderAlpha = 1.0f;
-                        loadingDrawable = getResources().getDrawable(R.drawable.msg_theme).mutate();
+                        loadingDrawable = getResources().getDrawable(R.drawable.baseline_palette_24).mutate();
                         Theme.setDrawableColor(loadingDrawable, loadingColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText7));
                         if (!fileExists) {
                             String name = FileLoader.getAttachFileName(themeInfo.info.document);
@@ -526,8 +526,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 paint.setColor(blend(oldBackColor, backColor));
 
                 if (accentColorChanged) {
-                    inDrawable.setColorFilter(new PorterDuffColorFilter(blend(oldInColor, inColor), PorterDuff.Mode.MULTIPLY));
-                    outDrawable.setColorFilter(new PorterDuffColorFilter(blend(oldOutColor, outColor), PorterDuff.Mode.MULTIPLY));
+                    inDrawable.setColorFilter(new PorterDuffColorFilter(blend(oldInColor, inColor), PorterDuff.Mode.SRC_IN));
+                    outDrawable.setColorFilter(new PorterDuffColorFilter(blend(oldOutColor, outColor), PorterDuff.Mode.SRC_IN));
                     accentColorChanged = false;
                 }
 

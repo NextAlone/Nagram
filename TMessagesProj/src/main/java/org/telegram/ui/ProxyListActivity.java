@@ -233,7 +233,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 valueTextView.setTag(colorKey);
                 valueTextView.setTextColor(color);
                 if (checkDrawable != null) {
-                    checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                 }
 
             });
@@ -245,7 +245,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     checkDrawable = getResources().getDrawable(R.drawable.proxy_check).mutate();
                 }
                 if (checkDrawable != null) {
-                    checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                 }
                 if (LocaleController.isRTL) {
                     valueTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, checkDrawable, null);
@@ -805,8 +805,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         R.drawable.group_edit,
                         R.drawable.share,
                         R.drawable.wallet_qr,
-                        R.drawable.msg_link,
-                        R.drawable.msg_delete,
+                        R.drawable.baseline_link_24,
+                        R.drawable.baseline_delete_24,
                         R.drawable.msg_cancel
 
                 }, (v, i) -> {
@@ -846,7 +846,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                         }, new int[]{
 
-                                R.drawable.msg_delete,
+                                R.drawable.baseline_delete_24,
                                 R.drawable.msg_cancel
 
                         }, (dv, di) -> {

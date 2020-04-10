@@ -29,7 +29,7 @@ public class DarkTheme{
 			case "actionBarActionModeDefaultSelector":
 				return 0x7A0F1923;
 			case "chats_menuItemIcon":
-				return 0xFF828282;
+				return 0xFF7D868F;
 			case "chat_inTimeText":
 				return 0xD98091A0;
 			case "avatar_backgroundGroupCreateSpanBlue":
@@ -389,7 +389,7 @@ public class DarkTheme{
 			case "chat_inFileInfoText":
 				return 0xFF798997;
 			case "windowBackgroundWhiteGrayIcon":
-				return 0xFF828282;
+				return 0xFF7D868F;
 			case "chat_inAudioSeekbar":
 				return 0xFF516170;
 			case "chat_inContactPhoneText":
@@ -547,7 +547,7 @@ public class DarkTheme{
 
 	public static Drawable getThemedDrawable(Context context, int resId, String key) {
 		Drawable drawable = context.getResources().getDrawable(resId).mutate();
-		drawable.setColorFilter(new PorterDuffColorFilter(getColor(key), PorterDuff.Mode.MULTIPLY));
+		drawable.setColorFilter(new PorterDuffColorFilter(getColor(key), PorterDuff.Mode.SRC_IN));
 		return drawable;
 	}
 
