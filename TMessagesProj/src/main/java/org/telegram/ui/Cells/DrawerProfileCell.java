@@ -155,7 +155,7 @@ public class DrawerProfileCell extends FrameLayout {
             pos[1] += darkThemeView.getMeasuredHeight() / 2;
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
         });
-        addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
+        //addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
 
         if (Theme.getEventType() == 0) {
             snowflakesEffect = new SnowflakesEffect();

@@ -3638,7 +3638,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         menuButton.addSubItem(share_item, R.drawable.msg_share, LocaleController.getString("ShareFile", R.string.ShareFile));
         menuButton.addSubItem(open_item, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
-        menuButton.addSubItem(settings_item, R.drawable.menu_settings, LocaleController.getString("Settings", R.string.Settings));
+        menuButton.addSubItem(settings_item, R.drawable.baseline_share_24, LocaleController.getString("Settings", R.string.Settings));
         menuButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         menuButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         menuContainer.addView(menuButton, LayoutHelper.createFrame(48, 56));

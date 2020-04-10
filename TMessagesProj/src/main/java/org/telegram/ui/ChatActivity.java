@@ -14219,7 +14219,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages) {
                                 items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
                                 options.add(93);
-                                icons.add(R.drawable.menu_saved);
+                                icons.add(R.drawable.baseline_bookmark_24);
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
