@@ -99,6 +99,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int typefaceRow;
     private int hidePhoneRow;
     private int disableUndoRow;
+    private int useDefaultThemeRow;
     private int nameOrderRow;
     private int transparentStatusBarRow;
     private int forceTabletRow;
@@ -185,6 +186,11 @@ public class NekoSettingsActivity extends BaseFragment {
                 NekoXConfig.toggleDisableUndo();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableUndo);
+                }
+            } else if (position == useDefaultThemeRow) {
+                NekoXConfig.toggleUseDefaultTheme();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoXConfig.useDefaultTheme);
                 }
             } else if (position == inappCameraRow) {
                 SharedConfig.toggleInappCamera();
@@ -562,6 +568,7 @@ public class NekoSettingsActivity extends BaseFragment {
         settingsRow = rowCount++;
         hidePhoneRow = rowCount++;
         disableUndoRow = rowCount++;
+        useDefaultThemeRow = rowCount ++;
         typefaceRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? rowCount++ : -1;
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
         forceTabletRow = rowCount++;
@@ -1109,6 +1116,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, true);
                     } else if (position == disableUndoRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableUndo", R.string.DisableUndo), NekoXConfig.disableUndo, true);
+                    } else if (position == useDefaultThemeRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UseDefaultTheme", R.string.UseDefaultTheme), NekoXConfig.useDefaultTheme, true);
                     } else if (position == inappCameraRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera), SharedConfig.inappCamera, true);
                     } else if (position == ignoreMutedCountRow) {
@@ -1198,7 +1207,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
-                    position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow;
+                    position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow || position == useDefaultThemeRow;
         }
 
         @Override
@@ -1254,7 +1263,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||
-                    position == removeTitleEmojiRow || position == ignoreMutedCountRow) {
+                    position == removeTitleEmojiRow || position == ignoreMutedCountRow || position == useDefaultThemeRow) {
                 return 3;
             } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;

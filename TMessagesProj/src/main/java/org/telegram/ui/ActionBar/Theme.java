@@ -105,6 +105,7 @@ import java.util.Locale;
 import androidx.annotation.UiThread;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 public class Theme {
 
@@ -272,7 +273,7 @@ public class Theme {
                 color = getColor(isOut ? key_chat_outBubble : key_chat_inBubble);
             }
             if (backgroundDrawable[idx2][idx] != null && (backgroundDrawableColor[idx2][idx] != color || forceSetColor)) {
-                backgroundDrawable[idx2][idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                backgroundDrawable[idx2][idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                 backgroundDrawableColor[idx2][idx] = color;
             }
             return backgroundDrawable[idx2][idx];
@@ -326,7 +327,7 @@ public class Theme {
             }
             int color = getColor(isOut ? key_chat_outBubbleShadow : key_chat_inBubbleShadow);
             if (shadowDrawable[idx] != null && (shadowDrawableColor[idx] != color || forceSetColor)) {
-                shadowDrawable[idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                shadowDrawable[idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                 shadowDrawableColor[idx] = color;
             }
             return shadowDrawable[idx];
@@ -2953,8 +2954,8 @@ public class Theme {
         defaultColors.put(key_windowBackgroundGrayShadow, 0xff000000);
         defaultColors.put(key_emptyListPlaceholder, 0xff959595);
         defaultColors.put(key_divider, 0xffd9d9d9);
-        defaultColors.put(key_graySection, 0xfff5f5f5);
-        defaultColors.put(key_graySectionText, 0xff82878A);
+        defaultColors.put(key_graySection, 0xf7d868f);
+        defaultColors.put(key_graySectionText, 0xf7d868f);
         defaultColors.put(key_contextProgressInner1, 0xffbfdff6);
         defaultColors.put(key_contextProgressOuter1, 0xff2b96e2);
         defaultColors.put(key_contextProgressInner2, 0xffbfdff6);
@@ -3499,8 +3500,8 @@ public class Theme {
         defaultColors.put(key_wallet_whiteText, 0xffffffff);
         defaultColors.put(key_wallet_blackText, 0xff222222);
         defaultColors.put(key_wallet_statusText, 0xff808080);
-        defaultColors.put(key_wallet_grayText, 0xff777777);
-        defaultColors.put(key_wallet_grayText2, 0xff666666);
+        defaultColors.put(key_wallet_grayText, 0xf7d868f);
+        defaultColors.put(key_wallet_grayText2, 0xf7d868f);
         defaultColors.put(key_wallet_greenText, 0xff37a818);
         defaultColors.put(key_wallet_redText, 0xffdb4040);
         defaultColors.put(key_wallet_dateText, 0xff999999);
@@ -3749,7 +3750,7 @@ public class Theme {
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
-        themeInfo.assetName = "indigo.attheme";
+        themeInfo.assetName = NekoXConfig.useDefaultTheme ? "bluebubbles.attheme" : "nekox-indigo-1.attheme";
         themeInfo.previewBackgroundColor = -657931;
         themeInfo.previewInColor = Color.parseColor("#c0ffffff");
         themeInfo.previewOutColor = Color.parseColor("#3f51b5");
@@ -3896,7 +3897,7 @@ public class Theme {
         ThemeInfo applyingTheme = null;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         try {
-            final ThemeInfo themeDarkBlue = themesDict.get("Dark Blue");
+            final ThemeInfo themeDarkBlue = themesDict.get("Night");
 
             String theme = preferences.getString("theme", null);
             if ("Default".equals(theme)) {
@@ -3914,7 +3915,7 @@ public class Theme {
                 }
             }
 
-            theme = preferences.getString("nighttheme", null);
+            theme = preferences.getString("nighttheme", "Night");
             if ("Default".equals(theme)) {
                 applyingTheme = themesDict.get("Blue");
                 applyingTheme.currentAccentId = DEFALT_THEME_ACCENT_ID;
@@ -4184,11 +4185,11 @@ public class Theme {
         Resources resources = context.getResources();
         Drawable defaultDrawable = resources.getDrawable(resource).mutate();
         if (defaultColor != 0) {
-            defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.MULTIPLY));
+            defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.SRC_IN));
         }
         Drawable pressedDrawable = resources.getDrawable(resource).mutate();
         if (pressedColor != 0) {
-            pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.MULTIPLY));
+            pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.SRC_IN));
         }
         StateListDrawable stateListDrawable = new StateListDrawable() {
             @Override
@@ -4220,9 +4221,9 @@ public class Theme {
     public static Drawable createEditTextDrawable(Context context, boolean alert) {
         Resources resources = context.getResources();
         Drawable defaultDrawable = resources.getDrawable(R.drawable.search_dark).mutate();
-        defaultDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), PorterDuff.Mode.MULTIPLY));
+        defaultDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), PorterDuff.Mode.SRC_IN));
         Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
-        pressedDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
+        pressedDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.SRC_IN));
         StateListDrawable stateListDrawable = new StateListDrawable() {
             @Override
             public boolean selectDrawable(int index) {
@@ -4307,11 +4308,11 @@ public class Theme {
         Resources resources = context.getResources();
         Drawable defaultDrawable = resources.getDrawable(resource).mutate();
         if (defaultColor != 0) {
-            defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.MULTIPLY));
+            defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.SRC_IN));
         }
         Drawable pressedDrawable = resources.getDrawable(resource).mutate();
         if (pressedColor != 0) {
-            pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.MULTIPLY));
+            pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.SRC_IN));
         }
         StateListDrawable stateListDrawable = new StateListDrawable() {
             @Override
@@ -4398,7 +4399,7 @@ public class Theme {
         if (drawable instanceof ColorDrawable) {
             ((ColorDrawable) drawable).setColor(color);
         } else {
-            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
     }
 
@@ -5486,7 +5487,7 @@ public class Theme {
             currentThemeDeleted = true;
         }
         if (themeInfo == currentNightTheme) {
-            currentNightTheme = themesDict.get("Dark Blue");
+            currentNightTheme = themesDict.get("Night");
         }
 
         themeInfo.removeObservers();
@@ -5820,7 +5821,7 @@ public class Theme {
                         if (currentDayTheme == info) {
                             currentDayTheme = defaultTheme;
                         } else if (currentNightTheme == info) {
-                            currentNightTheme = themesDict.get("Dark Blue");
+                            currentNightTheme = themesDict.get("Night");
                             isNightTheme = true;
                         }
                         if (currentTheme == info) {
@@ -7083,8 +7084,8 @@ public class Theme {
         }
         if (currentColor != serviceColor) {
             chat_actionBackgroundPaint.setColor(serviceColor);
-            colorFilter = new PorterDuffColorFilter(serviceColor, PorterDuff.Mode.MULTIPLY);
-            colorFilter2 = new PorterDuffColorFilter(serviceColor2, PorterDuff.Mode.MULTIPLY);
+            colorFilter = new PorterDuffColorFilter(serviceColor, PorterDuff.Mode.SRC_IN);
+            colorFilter2 = new PorterDuffColorFilter(serviceColor2, PorterDuff.Mode.SRC_IN);
             currentColor = serviceColor;
             if (chat_cornerOuter[0] != null) {
                 for (int a = 0; a < 4; a++) {
@@ -7095,8 +7096,8 @@ public class Theme {
         }
         if (currentSelectedColor != servicePressedColor) {
             currentSelectedColor = servicePressedColor;
-            colorPressedFilter = new PorterDuffColorFilter(servicePressedColor, PorterDuff.Mode.MULTIPLY);
-            colorPressedFilter2 = new PorterDuffColorFilter(servicePressedColor2, PorterDuff.Mode.MULTIPLY);
+            colorPressedFilter = new PorterDuffColorFilter(servicePressedColor, PorterDuff.Mode.SRC_IN);
+            colorPressedFilter2 = new PorterDuffColorFilter(servicePressedColor2, PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -7123,13 +7124,13 @@ public class Theme {
         if (selected) {
             if (currentShareSelectedColorFilter == null || currentShareSelectedColorFilterColor != color) {
                 currentShareSelectedColorFilterColor = color;
-                currentShareSelectedColorFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
+                currentShareSelectedColorFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
             }
             return currentShareSelectedColorFilter;
         } else {
             if (currentShareColorFilter == null || currentShareColorFilterColor != color) {
                 currentShareColorFilterColor = color;
-                currentShareColorFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
+                currentShareColorFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
             }
             return currentShareColorFilter;
         }
@@ -7156,7 +7157,7 @@ public class Theme {
             return null;
         }
         Drawable drawable = context.getResources().getDrawable(resId).mutate();
-        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         return drawable;
     }
 
@@ -7348,7 +7349,7 @@ public class Theme {
         } else if (drawable instanceof ScamDrawable) {
             ((ScamDrawable) drawable).setColor(color);
         } else {
-            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
     }
 
@@ -7367,14 +7368,14 @@ public class Theme {
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                     } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     }
                 } else {
                     Drawable state = getStateDrawable(drawable, 1);
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                     } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     }
                 }
             } catch (Throwable ignore) {
@@ -7405,20 +7406,20 @@ public class Theme {
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                     } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     }
                     state = getStateDrawable(drawable, 1);
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                     } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     }
                 } else {
                     Drawable state = getStateDrawable(drawable, 2);
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                     } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     }
                 }
             } catch (Throwable ignore) {
@@ -7437,7 +7438,7 @@ public class Theme {
                     if (drawable1 instanceof ShapeDrawable) {
                         ((ShapeDrawable) drawable1).getPaint().setColor(color);
                     } else {
-                        drawable1.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                        drawable1.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     }
                 }
             }

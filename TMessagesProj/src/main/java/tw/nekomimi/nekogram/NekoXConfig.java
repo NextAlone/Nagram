@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.LinkedList;
-
-import tw.nekomimi.nekogram.database.NitritesKt;
 
 public class NekoXConfig {
 
@@ -54,6 +51,7 @@ public class NekoXConfig {
 
     public static boolean removeTitleEmoji;
     public static boolean hidePublicProxy;
+    public static boolean useDefaultTheme;
 
     private static SharedPreferences preferences;
 
@@ -95,6 +93,7 @@ public class NekoXConfig {
         removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
         hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
+        useDefaultTheme = preferences.getBoolean("use_default_theme", false);
 
     }
 
@@ -251,6 +250,12 @@ public class NekoXConfig {
     public static void toggleHidePublicProxy() {
 
         preferences.edit().putBoolean("hide_public_proxy", hidePublicProxy = !hidePublicProxy).apply();
+
+    }
+
+    public static void toggleUseDefaultTheme() {
+
+        preferences.edit().putBoolean("use_default_theme", useDefaultTheme = !useDefaultTheme).apply();
 
     }
 
