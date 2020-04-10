@@ -36,6 +36,7 @@ public class NekoXSettingActivity extends BaseFragment {
     private int rowCount;
 
     private int developerSettingsRow;
+    private int showIdAndDcRow;
     private int disableFlagSecureRow;
     private int disableScreenshotDetectionRow;
 
@@ -89,7 +90,12 @@ public class NekoXSettingActivity extends BaseFragment {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setOnItemClickListener((view, position, x, y) -> {
 
-            if (position == disableFlagSecureRow) {
+            if (position == showIdAndDcRow) {
+                NekoXConfig.toggleShowIdAndDc();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoXConfig.showIdAndDc);
+                }
+            } else if (position == disableFlagSecureRow) {
                 NekoXConfig.toggleDisableFlagSecure();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableFlagSecure);
@@ -104,7 +110,7 @@ public class NekoXSettingActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.showTestBackend);
                 }
-            }  else if (position == showBotLoginRow) {
+            } else if (position == showBotLoginRow) {
                 NekoXConfig.toggleShowBotLogin();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.showBotLogin);
@@ -126,6 +132,7 @@ public class NekoXSettingActivity extends BaseFragment {
 
     private void updateRows() {
         rowCount = 0;
+        showIdAndDcRow = rowCount++;
         developerSettingsRow = rowCount++;
         disableFlagSecureRow = rowCount++;
         disableScreenshotDetectionRow = rowCount++;
@@ -212,7 +219,9 @@ public class NekoXSettingActivity extends BaseFragment {
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
-                    if (position == disableFlagSecureRow) {
+                    if (position == showIdAndDcRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("ShowIdAndDc", R.string.ShowIdAndDc), NekoXConfig.showIdAndDc, true);
+                    } else if (position == disableFlagSecureRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableFlagSecure", R.string.DisableFlagSecure), NekoXConfig.disableFlagSecure, true);
                     } else if (position == disableScreenshotDetectionRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableScreenshotDetection", R.string.DisableScreenshotDetection), NekoXConfig.disableScreenshotDetection, false);
@@ -231,7 +240,7 @@ public class NekoXSettingActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == disableFlagSecureRow || position == disableScreenshotDetectionRow || position == showTestBackendRow || position == showBotLoginRow;
+            return position == showIdAndDcRow || position == disableFlagSecureRow || position == disableScreenshotDetectionRow || position == showTestBackendRow || position == showBotLoginRow;
         }
 
         @Override
@@ -274,7 +283,8 @@ public class NekoXSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == developerSettingsRow || position == loginSettingsRow) {
                 return 4;
-            } else if (position == disableFlagSecureRow || position == disableScreenshotDetectionRow ||
+            } else if (position == showIdAndDcRow ||
+                    position == disableFlagSecureRow || position == disableScreenshotDetectionRow ||
                     position == showTestBackendRow || position == showBotLoginRow) {
                 return 3;
             }

@@ -52,6 +52,7 @@ public class NekoXConfig {
     public static boolean removeTitleEmoji;
     public static boolean hidePublicProxy;
     public static boolean useDefaultTheme;
+    public static boolean showIdAndDc;
 
     private static SharedPreferences preferences;
 
@@ -94,6 +95,7 @@ public class NekoXConfig {
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
         hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
         useDefaultTheme = preferences.getBoolean("use_default_theme", false);
+        showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
 
     }
 
@@ -256,6 +258,12 @@ public class NekoXConfig {
     public static void toggleUseDefaultTheme() {
 
         preferences.edit().putBoolean("use_default_theme", useDefaultTheme = !useDefaultTheme).apply();
+
+    }
+
+    public static void toggleShowIdAndDc() {
+
+        preferences.edit().putBoolean("show_id_and_dc", showIdAndDc = !showIdAndDc).apply();
 
     }
 
