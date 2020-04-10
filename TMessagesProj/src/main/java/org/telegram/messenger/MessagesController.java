@@ -232,6 +232,8 @@ public class MessagesController extends BaseController implements NotificationCe
 
     private boolean loadingAppConfig;
 
+    public int thisDc;
+
     public boolean enableJoined;
     public String linkPrefix;
     public int maxGroupCount;
@@ -1173,6 +1175,7 @@ public class MessagesController extends BaseController implements NotificationCe
         AndroidUtilities.runOnUIThread(() -> {
             getDownloadController().loadAutoDownloadConfig(false);
             loadAppConfig();
+            thisDc = config.this_dc;
             maxMegagroupCount = config.megagroup_size_max;
             maxGroupCount = config.chat_size_max;
             maxEditTime = config.edit_time_limit;

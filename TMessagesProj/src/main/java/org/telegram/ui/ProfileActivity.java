@@ -139,7 +139,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
-import kotlin.collections.ArraysKt;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -527,7 +526,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             for (int i = 0; i < 2; i++) {
                 final GradientDrawable.Orientation orientation = i == 0 ? GradientDrawable.Orientation.LEFT_RIGHT : GradientDrawable.Orientation.RIGHT_LEFT;
-                pressedOverlayGradient[i] = new GradientDrawable(orientation, new int[] {0x32000000, 0});
+                pressedOverlayGradient[i] = new GradientDrawable(orientation, new int[]{0x32000000, 0});
                 pressedOverlayGradient[i].setShape(GradientDrawable.RECTANGLE);
             }
 
@@ -1348,7 +1347,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     openAddMember();
                 } else if (id == statistics) {
                     Bundle args = new Bundle();
-                    args.putInt("chat_id",chat_id);
+                    args.putInt("chat_id", chat_id);
                     StatisticActivity fragment = new StatisticActivity(args);
                     presentFragment(fragment);
                 } else if (id == start_secret_chat) {
@@ -2255,6 +2254,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         }
     }
+
     public boolean onMemberClick(TLRPC.ChatParticipant participant, boolean isLong) {
         return onMemberClick(participant, isLong, false);
     }
@@ -4136,6 +4136,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             if (user.photo != null && user.photo.dc_id != 0) {
                 idTextView.setText("ID: " + user_id + ", DC: " + user.photo.dc_id);
+            } else if (user.id == getUserConfig().clientUserId) {
+                idTextView.setText("ID: " + user_id + ", DC: " + getMessagesController().thisDc);
             } else {
                 idTextView.setText("ID: " + user_id);
             }
