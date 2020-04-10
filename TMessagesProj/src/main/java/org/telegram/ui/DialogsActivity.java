@@ -522,7 +522,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                         h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - AndroidUtilities.dp(44) - topPadding;
                     } else {
-                        h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect ? 0 : actionBar.getMeasuredHeight()) - topPadding;
+                        h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - ((onlySelect && initialDialogsType != 3) ? 0 : actionBar.getMeasuredHeight()) - topPadding;
                     }
                     child.measure(contentWidthSpec, View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h), View.MeasureSpec.EXACTLY));
                     child.setPivotX(child.getMeasuredWidth() / 2);
@@ -615,14 +615,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         childTop = commentView.getBottom();
                     }
                 } else if (child == filterTabsView) {
-                    childTop = onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight();
+                    childTop = actionBar.getMeasuredHeight();
                 } else if (child == searchListView || child == searchEmptyView) {
                     childTop = (onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight()) + topPadding;
                 } else if (child instanceof ViewPage) {
+                    if (initialDialogsType == 3 || !onlySelect) {
                     if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                         childTop = AndroidUtilities.dp(44);
-                    } else if (!onlySelect) {
+                        } else {
                         childTop = actionBar.getMeasuredHeight();
+                    }
                     }
                     childTop += topPadding;
                 } else if (child instanceof FragmentContextView) {

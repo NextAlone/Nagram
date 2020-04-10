@@ -74,7 +74,7 @@ public class NekoXConfig {
         sortByUser = preferences.getBoolean("sort_by_user", true);
         sortByContacts = preferences.getBoolean("sort_by_contacts", true);
 
-        disableUndo = preferences.getBoolean("disable_undo", true);
+        disableUndo = preferences.getBoolean("disable_undo", false);
 
         filterUsers = preferences.getBoolean("filter_users", true);
         filterContacts = preferences.getBoolean("filter_contacts", true);

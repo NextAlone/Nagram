@@ -9,7 +9,7 @@
     <string name="ChangeTranslateProvider">Change Provider</string>
 
     <string name="UseDefaultTheme">Use default theme *</string>
-    <string name="DarkMode">Dark Mode</string>
+    <string name="NightMode">Night Mode</string>
 
     <string name="PrivacyNotice">Privacy warning</string>
     <string name="PrivacyNoticePhoneVisible">It is detected that your mobile phone number is visible to anyone, which may cause government-controlled hackers to find your true identity, please turn it off!</string>

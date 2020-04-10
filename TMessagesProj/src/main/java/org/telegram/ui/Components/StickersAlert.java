@@ -677,7 +677,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             ProxyUtil.showQrDialog(getContext(), stickersUrl);
         } else if (id == menu_archive) {
             dismiss();
-            MediaDataController.getInstance(currentAccount).toggleStickerSet(parentActivity, stickerSet, 1, parentFragment, false, false);
+            MediaDataController.getInstance(currentAccount).toggleStickerSet(parentActivity, stickerSet, 1, parentFragment, false, true);
         }
     }
 
