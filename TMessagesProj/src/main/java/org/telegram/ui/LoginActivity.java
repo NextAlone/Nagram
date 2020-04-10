@@ -605,7 +605,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-
         if (id == NotificationCenter.didUpdateConnectionState) {
             int state = AccountInstance.getInstance(account).getConnectionsManager().getConnectionState();
             if (currentConnectionState != state) {
@@ -613,11 +612,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 updateProxyButton(true);
             }
         }
-
     }
 
     private void updateProxyButton(boolean animated) {
-        if (proxyDrawable == null || doneItem != null && doneItem.getVisibility() == View.VISIBLE) {
+        if (proxyDrawable == null) {
             return;
         }
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);

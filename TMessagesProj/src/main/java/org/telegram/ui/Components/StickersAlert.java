@@ -565,7 +565,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         optionsButton.addSubItem(1, R.drawable.msg_share, LocaleController.getString("StickersShare", R.string.StickersShare));
         optionsButton.addSubItem(2, R.drawable.msg_link, LocaleController.getString("CopyLink", R.string.CopyLink));
         optionsButton.addSubItem(3, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
-        optionsButton.addSubItem(menu_archive, R.drawable.chats_archive, LocaleController.getString("Archive", R.string.Archive));
+        optionsButton.addSubItem(menu_archive, R.drawable.msg_archive, LocaleController.getString("Archive", R.string.Archive));
 
         optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
         optionsButton.setDelegate(this::onSubItemClick);
