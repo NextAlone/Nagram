@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -66,6 +67,8 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.StickersAlert;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,6 +78,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -119,6 +124,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         private Drawable checkDrawable;
 
         private int color;
+        private Pattern urlPattern;
 
         public TextDetailProxyCell(Context context) {
             super(context);
@@ -154,7 +160,38 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         @SuppressLint("SetTextI18n")
         public void setProxy(SharedConfig.ProxyInfo proxyInfo) {
-            textView.setText(proxyInfo.getTitle());
+
+            String title = proxyInfo.getTitle();
+
+            SpannableStringBuilder stringBuilder = null;
+            try {
+                if (urlPattern == null) {
+                    urlPattern = Pattern.compile("@[a-zA-Z\\d_]{1,32}");
+                }
+                Matcher matcher = urlPattern.matcher(title);
+                while (matcher.find()) {
+                    if (stringBuilder == null) {
+                        stringBuilder = new SpannableStringBuilder(title);
+                        textView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+                    }
+                    int start = matcher.start();
+                    int end = matcher.end();
+                    if (title.charAt(start) != '@') {
+                        start++;
+                    }
+                    URLSpanNoUnderline url = new URLSpanNoUnderline(title.subSequence(start + 1, end).toString()) {
+                        @Override
+                        public void onClick(View widget) {
+                            MessagesController.getInstance(currentAccount).openByUserName(getURL(), ProxyListActivity.this, 1);
+                        }
+                    };
+                    stringBuilder.setSpan(url, start, end, 0);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            textView.setText(stringBuilder == null ? title : stringBuilder);
             currentInfo = proxyInfo;
         }
 
