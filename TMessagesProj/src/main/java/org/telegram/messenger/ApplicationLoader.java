@@ -47,7 +47,7 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
 
-public class ApplicationLoader extends Application {
+public class ApplicationLoader extends Application implements Thread.UncaughtExceptionHandler {
 
     @SuppressLint("StaticFieldLeak")
     public static volatile Context applicationContext;
@@ -201,6 +201,7 @@ public class ApplicationLoader extends Application {
     @Override
     public void onCreate() {
 
+        Thread.setDefaultUncaughtExceptionHandler(this);
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
@@ -221,6 +222,12 @@ public class ApplicationLoader extends Application {
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
     }
 
+    @Override
+    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+
+        FileLog.e("[APP] uncaughtException in thread " + t,e);
+
+    }
     @Override
     public void onTerminate() {
         super.onTerminate();

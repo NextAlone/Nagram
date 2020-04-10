@@ -466,7 +466,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (position == nekoRow) {
                     presentFragment(new NekoSettingsActivity());
                 } else if (position == questionRow) {
-                    showDialog(AlertsCreator.createSupportAlert(SettingsActivity.this));
+                    Browser.openUrl(getParentActivity(), "https://t.me/NekogramX");
                 } else if (position == faqRow) {
                     Browser.openUrl(getParentActivity(), NekoXConfig.FAQ_URL);
                 } else if (position == policyRow) {
@@ -1549,9 +1549,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         progressDialog.show();
         Utilities.globalQueue.postRunnable(() -> {
             try {
-                File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-                File dir = new File(sdCard.getAbsolutePath() + "/logs");
-
+                File dir = ApplicationLoader.applicationContext.getExternalFilesDir("logs");
                 File zipFile = new File(dir, "logs.zip");
                 if (zipFile.exists()) {
                     zipFile.delete();
@@ -1566,7 +1564,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 try {
                     FileOutputStream dest = new FileOutputStream(zipFile);
                     out = new ZipOutputStream(new BufferedOutputStream(dest));
-                    byte[] data = new byte[1024 * 64];
+                    byte[] data = new byte[1024 * 1024];
 
                     for (int i = 0; i < files.length; i++) {
                         FileInputStream fi = new FileInputStream(files[i]);
@@ -1618,7 +1616,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         i.putExtra(Intent.EXTRA_SUBJECT, "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()));
                         i.putExtra(Intent.EXTRA_STREAM, uri);
                         if (getParentActivity() != null) {
-                            getParentActivity().startActivityForResult(Intent.createChooser(i, "Select email application."), 500);
+                            i.setClass(getParentActivity(),LaunchActivity.class);
+                            getParentActivity().startActivity(i);
                         }
                     } else {
                         Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
@@ -2274,15 +2273,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.baseline_folder_24, true);
                     } else if (position == questionRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), R.drawable.baseline_live_help_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("NekoXUpdatesChannel", R.string.NekoXUpdatesChannel), R.drawable.baseline_bullhorn_24, true);
                     } else if (position == faqRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NekoXFaq", R.string.NekoXFaq), R.drawable.baseline_help_24, true);
                     } else if (position == policyRow) {
                         textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, false);
                     } else if (position == sendLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), true);
+                        textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs),R.drawable.baseline_bug_report_24, true);
                     } else if (position == clearLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), switchBackendRow != -1);
+                        textCell.setTextAndIcon(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs),R.drawable.baseline_delete_sweep_24, switchBackendRow != -1);
                     } else if (position == switchBackendRow) {
                         textCell.setText("Switch Backend", false);
                     }

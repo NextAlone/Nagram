@@ -3068,7 +3068,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setScaleY(nameScale);
                 }
 
-                if (diff > 0.85) {
+                if (diff > 0.85 && NekoXConfig.showIdAndDc) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {
                     idTextView.setVisibility(View.GONE);

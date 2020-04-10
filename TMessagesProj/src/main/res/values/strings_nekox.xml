@@ -8,6 +8,7 @@
 
     <string name="ChangeTranslateProvider">Change Provider</string>
 
+    <string name="NekoXUpdatesChannel">NekoX Updates Channel</string>
     <string name="ShowIdAndDc">Show id / dc in profile</string>
     <string name="UseDefaultTheme">Use default theme *</string>
     <string name="NightMode">Night Mode</string>
