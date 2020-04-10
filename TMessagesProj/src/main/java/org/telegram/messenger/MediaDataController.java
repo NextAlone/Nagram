@@ -1594,7 +1594,7 @@ public class MediaDataController extends BaseController {
     }
 
     /** @param toggle 0 - remove, 1 - archive, 2 - add */
-    public void toggleStickerSet(final Context context, final TLObject stickerSetObject, final int toggle, final BaseFragment baseFragment, final boolean showSettings, boolean showTooltip) {
+    public void toggleStickerSet(Context context, final TLObject stickerSetObject, final int toggle, final BaseFragment baseFragment, final boolean showSettings, boolean showTooltip) {
         final TLRPC.StickerSet stickerSet;
         final TLRPC.TL_messages_stickerSet messages_stickerSet;
 
@@ -1640,6 +1640,8 @@ public class MediaDataController extends BaseController {
         putStickersToCache(type, stickerSets[type], loadDate[type], loadHash[type]);
         getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, type);
 
+        if (context == null && baseFragment != null) context = baseFragment.getParentActivity();
+
         if (toggle == 2) {
             if (!cancelRemovingStickerSet(stickerSet.id)) {
                 toggleStickerSetInternal(context, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, showTooltip);
@@ -1649,6 +1651,7 @@ public class MediaDataController extends BaseController {
         } else {
             final StickerSetBulletinLayout bulletinLayout = new StickerSetBulletinLayout(context, stickerSetObject, toggle);
             final int finalCurrentIndex = currentIndex;
+            Context finalContext = context;
             final Bulletin.UndoButton undoButton = new Bulletin.UndoButton(context).setUndoAction(() -> {
                 stickerSet.archived = false;
 
@@ -1661,7 +1664,7 @@ public class MediaDataController extends BaseController {
                 loadHash[type] = calcStickersHash(stickerSets[type]);
                 putStickersToCache(type, stickerSets[type], loadDate[type], loadHash[type]);
                 getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, type);
-            }).setDelayedAction(() -> toggleStickerSetInternal(context, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, false));
+            }).setDelayedAction(() -> toggleStickerSetInternal(finalContext, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, false));
             bulletinLayout.setButton(undoButton);
             removingStickerSetsUndos.put(stickerSet.id, undoButton::undo);
             Bulletin.make(baseFragment, bulletinLayout, Bulletin.DURATION_LONG).show();
