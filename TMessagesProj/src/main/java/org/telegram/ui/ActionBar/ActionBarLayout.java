@@ -1222,7 +1222,7 @@ public class ActionBarLayout extends FrameLayout {
                 }
                 int[] screenSize = getScreenSize(getContext());
                 if (screenSize[1] / screenSize[0] > 2) {
-                    int padding = AndroidUtilities.dp(48);
+                    int padding = AndroidUtilities.dp(64);
                     fragmentView.setPadding(padding,0,padding,0);
                 }
                 containerView.addView(fragmentView);

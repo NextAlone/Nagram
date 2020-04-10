@@ -198,16 +198,29 @@ public class SharedConfig {
             }
         }
 
+        private String getType() {
+
+            if (!StrUtil.isBlank(secret)) {
+
+                return "MTProto";
+
+            } else {
+
+                return "Socks5";
+
+            }
+
+        }
 
         public String getTitle() {
 
             if (StrUtil.isBlank(remarks)) {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto]") + " " + address + ":" + port;
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[" + getType() + "]") + " " + address + ":" + port;
 
             } else {
 
-                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[MTProto]") + " " + remarks;
+                return (isPublic ? LocaleController.getString("PublicPrefix", R.string.PublicPrefix) : "[" + getType() + "]") + " " + remarks;
 
             }
 
