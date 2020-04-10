@@ -261,9 +261,25 @@ public class NekoXConfig {
 
     public static LinkedList<TLRPC.TL_dialogFilterSuggested> internalFilters = new LinkedList<>();
 
+    public static final TLRPC.TL_dialogFilter usersFilter;
+
+    public static final TLRPC.TL_dialogFilter contactsFilter;
+
+    public static final TLRPC.TL_dialogFilter groupsFilter;
+
+    public static final TLRPC.TL_dialogFilter channelsFilter;
+
+    public static final TLRPC.TL_dialogFilter botsFilter;
+
+    public static final TLRPC.TL_dialogFilter unmutedFilter;
+
+    public static final TLRPC.TL_dialogFilter unreadFilter;
+
+    public static final TLRPC.TL_dialogFilter unmutedAndUnreadFilter;
+
     static {
 
-        mkFilter(LocaleController.getString("NotificationsUsers", R.string.FilterNameUsers),
+        usersFilter = mkFilter(LocaleController.getString("NotificationsUsers", R.string.FilterNameUsers),
                 LocaleController.getString("FilterNameUsersDescription", R.string.FilterNameUsersDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
@@ -276,7 +292,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameContacts", R.string.FilterNameContacts),
+        contactsFilter = mkFilter(LocaleController.getString("FilterNameContacts", R.string.FilterNameContacts),
                 LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameContactsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
@@ -287,7 +303,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameGroups", R.string.FilterNameGroups),
+        groupsFilter = mkFilter(LocaleController.getString("FilterNameGroups", R.string.FilterNameGroups),
                 LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameGroupsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_GROUPS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
@@ -298,7 +314,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameChannels", R.string.FilterNameChannels),
+        channelsFilter = mkFilter(LocaleController.getString("FilterNameChannels", R.string.FilterNameChannels),
                 LocaleController.getString("FilterNameChannelsDescription", R.string.FilterNameChannelsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
@@ -309,7 +325,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameBots", R.string.FilterNameBots),
+        botsFilter = mkFilter(LocaleController.getString("FilterNameBots", R.string.FilterNameBots),
                 LocaleController.getString("FilterNameBotsDescription", R.string.FilterNameBotsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_BOTS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
@@ -320,7 +336,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameUnmuted", R.string.FilterNameUnmuted),
+        unmutedFilter = mkFilter(LocaleController.getString("FilterNameUnmuted", R.string.FilterNameUnmuted),
                 LocaleController.getString("FilterNameUnmutedDescription", R.string.FilterNameUnmutedDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
@@ -341,7 +357,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameUnread2", R.string.FilterNameUnread2),
+        unreadFilter = mkFilter(LocaleController.getString("FilterNameUnread2", R.string.FilterNameUnread2),
                 LocaleController.getString("FilterNameUnreadDescription", R.string.FilterNameUnreadDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
@@ -362,7 +378,7 @@ public class NekoXConfig {
 
                 });
 
-        mkFilter(LocaleController.getString("FilterNameUnmutedAndUnread", R.string.FilterNameUnmutedAndUnread),
+        unmutedAndUnreadFilter = mkFilter(LocaleController.getString("FilterNameUnmutedAndUnread", R.string.FilterNameUnmutedAndUnread),
                 LocaleController.getString("FilterNameUnmutedAndUnreadDescription", R.string.FilterNameUnmutedAndUnreadDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
@@ -396,7 +412,7 @@ public class NekoXConfig {
 
     private static int currId = 10;
 
-    private static void mkFilter(String name, String description, int flag, FilterBuilder builder) {
+    private static TLRPC.TL_dialogFilter mkFilter(String name, String description, int flag, FilterBuilder builder) {
 
         TLRPC.TL_dialogFilterSuggested suggestedFilter = new TLRPC.TL_dialogFilterSuggested();
 
@@ -414,6 +430,8 @@ public class NekoXConfig {
         internalFilters.add(suggestedFilter);
 
         currId++;
+
+        return suggestedFilter.filter;
 
     }
 

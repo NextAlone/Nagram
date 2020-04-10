@@ -37,7 +37,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.util.Property;
 import android.util.StateSet;
 import android.view.Gravity;
@@ -71,7 +74,6 @@ import androidx.viewpager.widget.ViewPager;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
@@ -620,11 +622,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     childTop = (onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight()) + topPadding;
                 } else if (child instanceof ViewPage) {
                     if (initialDialogsType == 3 || !onlySelect) {
-                    if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
-                        childTop = AndroidUtilities.dp(44);
+                        if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
+                            childTop = AndroidUtilities.dp(44);
                         } else {
-                        childTop = actionBar.getMeasuredHeight();
-                    }
+                            childTop = actionBar.getMeasuredHeight();
+                        }
                     }
                     childTop += topPadding;
                 } else if (child instanceof FragmentContextView) {
@@ -2982,9 +2984,83 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     filterTabsView.resetTabId();
                 }
                 filterTabsView.removeTabs();
-                filterTabsView.addTab(Integer.MAX_VALUE, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                //filterTabsView.addTab(Integer.MAX_VALUE, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                SpannableStringBuilder allBuilder = new SpannableStringBuilder();
+                allBuilder.append("A");
+                allBuilder.setSpan(new ImageSpan(Theme.avatarDrawables[0], "A"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                filterTabsView.addTab(Integer.MAX_VALUE, allBuilder);
                 for (int a = 0, N = filters.size(); a < N; a++) {
-                    filterTabsView.addTab(a, filters.get(a).name);
+
+                    MessagesController.DialogFilter filter = filters.get(a);
+
+                    CharSequence title;
+
+                    if (filter.flags == NekoXConfig.usersFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("U");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[2], "U"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else if (filter.flags == NekoXConfig.contactsFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("C");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[10], "C"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else if (filter.flags == NekoXConfig.groupsFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("C");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[4], "G"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else if (filter.flags == NekoXConfig.channelsFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("H");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[5], "H"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else if (filter.flags == NekoXConfig.botsFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("B");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[6], "B"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else if (filter.flags == NekoXConfig.unmutedFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("M");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[11], "M"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+
+                    } else if (filter.flags == NekoXConfig.unreadFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("R");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[12], "R"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else if (filter.flags == NekoXConfig.unmutedAndUnreadFilter.flags) {
+
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append("M");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[11], "M"), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        builder.append("R");
+                        builder.setSpan(new ImageSpan(Theme.avatarDrawables[12], "R"), 1, 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        title = builder;
+
+                    } else {
+
+                        title = filter.name;
+
+                    }
+
+                    filterTabsView.addTab(a, title);
                 }
                 id = filterTabsView.getCurrentTabId();
                 if (id >= 0) {
@@ -4392,7 +4468,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             blockItem.setVisibility(View.VISIBLE);
         }
         if (canUnmuteCount != 0) {
-            muteItem.setIcon(R.drawable.msg_unmute);
+            muteItem.setIcon(R.drawable.baseline_bullhorn_24);
             muteItem.setContentDescription(LocaleController.getString("ChatsUnmute", R.string.ChatsUnmute));
         } else {
             muteItem.setIcon(R.drawable.baseline_volume_off_24_white);

@@ -73,17 +73,17 @@ public class FilterTabsView extends FrameLayout {
 
     private class Tab {
         public int id;
-        public String title;
+        public CharSequence title;
         public int titleWidth;
         public int counter;
 
-        public Tab(int i, String t) {
+        public Tab(int i, CharSequence t) {
             id = i;
             title = t;
         }
 
         public int getWidth(boolean store) {
-            int width = titleWidth = (int) Math.ceil(textPaint.measureText(title));
+            int width = titleWidth = (int) Math.ceil(textPaint.measureText(title,0,title.length()));
             int c;
             if (store) {
                 c = delegate.getTabCounter(id);
@@ -121,7 +121,7 @@ public class FilterTabsView extends FrameLayout {
         private int tabWidth;
         private int currentPosition;
         private RectF rect = new RectF();
-        private String currentText;
+        private CharSequence currentText;
         private StaticLayout textLayout;
         private int textOffsetX;
 
@@ -629,7 +629,7 @@ public class FilterTabsView extends FrameLayout {
         invalidate();
     }
 
-    public void addTab(int id, String text) {
+    public void addTab(int id, CharSequence text) {
         int position = tabs.size();
         if (position == 0 && selectedTabId == -1) {
             selectedTabId = id;
