@@ -14389,12 +14389,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                             if (canEditAdmin && NekoConfig.showAdminActions) {
                                 items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
-                                icons.add(R.drawable.actions_addadmin);
+                                icons.add(R.drawable.baseline_stars_18);
                                 options.add(97);
                             }
                             if (canRestrict && NekoConfig.showChangePermissions) {
                                 items.add(LocaleController.getString("ChangePermissions", R.string.ChangePermissions));
-                                icons.add(R.drawable.actions_permissions);
+                                icons.add(R.drawable.baseline_block_24);
                                 options.add(98);
                             }
                         }

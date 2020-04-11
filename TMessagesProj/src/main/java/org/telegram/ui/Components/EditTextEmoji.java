@@ -142,7 +142,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             emojiButton.setImageResource(R.drawable.smiles_tab_smiles);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), 0, 0, 0, 7));
         } else {
-            emojiButton.setImageResource(R.drawable.input_smile);
+            emojiButton.setImageResource(R.drawable.baseline_emoticon_24);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | Gravity.LEFT, 0, 0, 0, 0));
         }
         if (Build.VERSION.SDK_INT >= 21) {
@@ -353,7 +353,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiButton.setImageResource(R.drawable.input_keyboard);
+                emojiButton.setImageResource(R.drawable.baseline_keyboard_24);
                 onWindowSizeChanged();
             }
         } else {
@@ -361,7 +361,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 if (currentStyle == STYLE_FRAGMENT) {
                     emojiButton.setImageResource(R.drawable.smiles_tab_smiles);
                 } else {
-                    emojiButton.setImageResource(R.drawable.input_smile);
+                    emojiButton.setImageResource(R.drawable.baseline_emoticon_24);
                 }
             }
             if (emojiView != null) {

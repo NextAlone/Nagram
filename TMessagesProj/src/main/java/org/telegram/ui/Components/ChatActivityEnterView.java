@@ -2232,7 +2232,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             attachButton = new ImageView(context);
             attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
-            attachButton.setImageResource(R.drawable.input_attach);
+            attachButton.setImageResource(R.drawable.deproko_baseline_attach_26);
             attachButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
                 attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));

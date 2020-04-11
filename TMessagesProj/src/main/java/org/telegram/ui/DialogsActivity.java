@@ -3711,7 +3711,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 int[] icons = new int[]{
                         hasUnread ? R.drawable.menu_read : 0,
-                        SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
+                        SharedConfig.archiveHidden ? R.drawable.deproko_baseline_pin_24 : R.drawable.deproko_baseline_pin_undo_24,
                 };
                 CharSequence[] items = new CharSequence[]{
                         hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,

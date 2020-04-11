@@ -105,7 +105,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         if (searchAvailable) {
             if (hasAvatar) {
                 items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search, R.drawable.chats_delete};
+                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search, R.drawable.baseline_delete_24};
             } else {
                 items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch)};
                 icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search};
@@ -113,7 +113,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         } else {
             if (hasAvatar) {
                 items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.chats_delete};
+                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.baseline_delete_24};
             } else {
                 items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery)};
                 icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};

@@ -1331,7 +1331,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 case 7: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == exceptionsAddRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAddAnException", R.string.NotificationsAddAnException), R.drawable.actions_addmember2, exceptionsStartRow != -1);
+                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAddAnException", R.string.NotificationsAddAnException), R.drawable.baseline_person_add_24, exceptionsStartRow != -1);
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                     } else if (position == deleteAllRow) {
                         textCell.setText(LocaleController.getString("NotificationsDeleteAllException", R.string.NotificationsDeleteAllException), false);

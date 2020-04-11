@@ -3,6 +3,10 @@
     <string name="UseOfficalId">假裝是官方應用</string>
     <string name="UseOfficalIdNotice">登錄時將自己標識為官方應用，如果您無法註冊或登錄，這可能會有幫助。 \n\n注意：如果您正在使用 release 版本，谷歌云推送將無法工作。</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
+    <string name="NekoXUpdatesChannel">NekoX 更新頻道</string>
+    <string name="ShowIdAndDc">在個人資料中顯示 id / dc</string>
+    <string name="UseDefaultTheme">使用默認主題 *</string>
+    <string name="NightMode">夜間模式</string>
     <string name="PrivacyNotice">隱私警告</string>
     <string name="PrivacyNoticePhoneVisible">檢測到您的手機號碼對任何人都可見, 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
     <string name="PrivacyNoticeAddByPhone">檢測到您沒有被關閉“允許通過電話號碼找到我”設置， 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>

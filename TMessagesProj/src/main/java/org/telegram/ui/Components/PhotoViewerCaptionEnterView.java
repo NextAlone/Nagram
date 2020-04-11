@@ -103,7 +103,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1.0f));
 
         emojiButton = new ImageView(context);
-        emojiButton.setImageResource(R.drawable.input_smile);
+        emojiButton.setImageResource(R.drawable.baseline_emoticon_24);
         emojiButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         emojiButton.setPadding(AndroidUtilities.dp(4), AndroidUtilities.dp(1), 0, 0);
         emojiButton.setAlpha(0.58f);
@@ -495,12 +495,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiButton.setImageResource(R.drawable.input_keyboard);
+                emojiButton.setImageResource(R.drawable.baseline_keyboard_24);
                 onWindowSizeChanged();
             }
         } else {
             if (emojiButton != null) {
-                emojiButton.setImageResource(R.drawable.input_smile);
+                emojiButton.setImageResource(R.drawable.baseline_emoticon_24);
             }
             if (emojiView != null) {
                 emojiView.setVisibility(GONE);
