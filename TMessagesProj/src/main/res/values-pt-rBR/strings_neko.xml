@@ -82,4 +82,5 @@
     <string name="UseAvatarAsDrawerBackground">Usar minha foto de perfil como fundo do menu lateral</string>
     <string name="ShowTabsOnForward">Mostrar pastas ao encaminhar</string>
     <string name="CheckAllAdministrated">Adicionar administrado</string>
+    <string name="ProviderDeepLWeb">Tradutor DeepL (Web)</string>
 </resources>
