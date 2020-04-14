@@ -119,6 +119,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoSettingsActivity;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
@@ -269,7 +270,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             long crashed_time = preferences.getLong("intro_crashed_time", 0);
             boolean fromIntro = intent.getBooleanExtra("fromIntro", false);
             if (fromIntro) {
-                preferences.edit().putLong("intro_crashed_time", 0).apply();
+                preferences.edit().putLong("intro_crashed_time", 0).commit();
             }
             if (!isProxy && Math.abs(crashed_time - System.currentTimeMillis()) >= 60 * 2 * 1000 && intent != null && !fromIntro) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", MODE_PRIVATE);
@@ -615,7 +616,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         presentFragment(new ChannelCreateActivity(args));
                     } else {
                         presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANNEL_CREATE));
-                        preferences.edit().putBoolean("channel_intro", true).apply();
+                        preferences.edit().putBoolean("channel_intro", true).commit();
                     }
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 6) {
@@ -1703,9 +1704,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                             } else if (url.contains("folders")) {
                                                 open_settings = 4;
                                             } else if (url.contains("nekox")) {
-                                                open_settings = 6;
+                                                open_settings = 101;
                                             } else if (url.contains("neko")) {
-                                                open_settings = 5;
+                                                open_settings = 100;
                                             }
                                         } else if (url.startsWith("tg:meow") || url.startsWith("tg://meow") || url.startsWith("tg:nya") || url.startsWith("tg://nya") || url.startsWith("tg:miao") || url.startsWith("tg://miao")) {
                                             try {
@@ -1920,9 +1921,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         fragment = new SessionsActivity(0);
                     } else if (open_settings == 4) {
                         fragment = new FiltersSetupActivity();
-                    } else if (open_settings == 5) {
+                    } else if (open_settings == 100) {
                         fragment = new NekoSettingsActivity();
-                    } else if (open_settings == 6) {
+                    } else if (open_settings == 101) {
                         if (NekoXConfig.developerMode) {
                             fragment = new NekoXSettingActivity();
                         } else {
@@ -3065,7 +3066,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
-        if (NekoXConfig.disableProxyWhenVpnEnabled && SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
+        if (NekoConfig.disableProxyWhenVpnEnabled && SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
             SharedConfig.setProxyEnable(false);
         }
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
@@ -3471,7 +3472,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         freeSpace = statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
                     }
                     if (freeSpace < 1024 * 1024 * 100) {
-                        preferences.edit().putLong("last_space_check", System.currentTimeMillis()).apply();
+                        preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                         AndroidUtilities.runOnUIThread(() -> {
                             try {
                                 AlertsCreator.createFreeSpaceDialog(LaunchActivity.this).show();
@@ -3538,7 +3539,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             });
             localeDialog = showAlertDialog(builder);
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-            preferences.edit().putString("language_showed2", systemLang).apply();
+            preferences.edit().putString("language_showed2", systemLang).commit();
         } catch (Exception e) {
             FileLog.e(e);
         }

@@ -379,7 +379,7 @@ public class ConnectionsManager extends BaseController {
 
     public void switchBackend() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        preferences.edit().remove("language_showed2").apply();
+        preferences.edit().remove("language_showed2").commit();
         native_switchBackend(currentAccount);
     }
 
@@ -545,7 +545,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onProxyError() {
-        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3));
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3);
     }
 
     public static void getHostByName(String hostName, long address) {

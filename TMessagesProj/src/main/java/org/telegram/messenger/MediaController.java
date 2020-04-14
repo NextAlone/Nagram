@@ -52,8 +52,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import androidx.core.content.FileProvider;
-
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
@@ -88,7 +86,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
@@ -3098,7 +3095,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         final boolean[] cancelled = new boolean[]{false};
         if (sourceFile.exists()) {
             AlertDialog progressDialog = null;
-            if (context != null && type != 0) {
+            if (context != null) {
                 try {
                     progressDialog = new AlertDialog(context, 2);
                     progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
@@ -3116,36 +3113,41 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             new Thread(() -> {
                 try {
                     File destFile;
-                    File dir;
                     if (type == 0) {
-                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                        destFile = AndroidUtilities.generatePicturePath(false, FileLoader.getFileExtension(sourceFile));
                     } else if (type == 1) {
-                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-                    } else if (type == 2) {
-                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        destFile = AndroidUtilities.generateVideoPath();
                     } else {
-                        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
-                    }
-                    dir = new File(dir,"NekoX");
-                    destFile = new File(dir, name);
-                    if (destFile.exists()) {
-                        int idx = name.lastIndexOf('.');
-                        for (int a = 0; a < 10; a++) {
-                            String newName;
-                            if (idx != -1) {
-                                newName = name.substring(0, idx) + "(" + (a + 1) + ")" + name.substring(idx);
-                            } else {
-                                newName = name + "(" + (a + 1) + ")";
-                            }
-                            destFile = new File(dir, newName);
-                            if (!destFile.exists()) {
-                                break;
+                        File dir;
+                        if (type == 2) {
+                            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        } else {
+                            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+                        }
+                        dir.mkdir();
+                        destFile = new File(dir, name);
+                        if (destFile.exists()) {
+                            int idx = name.lastIndexOf('.');
+                            for (int a = 0; a < 10; a++) {
+                                String newName;
+                                if (idx != -1) {
+                                    newName = name.substring(0, idx) + "(" + (a + 1) + ")" + name.substring(idx);
+                                } else {
+                                    newName = name + "(" + (a + 1) + ")";
+                                }
+                                destFile = new File(dir, newName);
+                                if (!destFile.exists()) {
+                                    break;
+                                }
                             }
                         }
                     }
                     if (!destFile.exists()) {
-                        FileUtil.initFile(destFile);
+                        destFile.createNewFile();
                     }
+
+                    FileLog.d("[MediaController] saveFile: from " + sourceFile + " to " + destFile);
+
                     boolean result = true;
                     long lastProgress = System.currentTimeMillis() - 500;
                     try (FileChannel source = new FileInputStream(sourceFile).getChannel(); FileChannel destination = new FileOutputStream(destFile).getChannel()) {
@@ -3183,11 +3185,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             DownloadManager downloadManager = (DownloadManager) ApplicationLoader.applicationContext.getSystemService(Context.DOWNLOAD_SERVICE);
                             downloadManager.addCompletedDownload(destFile.getName(), destFile.getName(), false, mime, destFile.getAbsolutePath(), destFile.length(), true);
                         } else {
-                            if (Build.VERSION.SDK_INT >= 24) {
-                                AndroidUtilities.addMediaToGallery(FileProvider.getUriForFile(ApplicationLoader.applicationContext, BuildConfig.APPLICATION_ID + ".provider", destFile));
-                            } else {
-                                AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
-                            }
+                            AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
                         }
                     }
                 } catch (Exception e) {
@@ -3861,7 +3859,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             FileLog.d("time=" + (System.currentTimeMillis() - time) + " canceled=" + canceled);
         }
 
-        preferences.edit().putBoolean("isPreviousOk", true).apply();
+        preferences.edit().putBoolean("isPreviousOk", true).commit();
         didWriteData(convertMessage, cacheFile, true, cacheFile.length(), error || canceled, 1f);
 
         return true;

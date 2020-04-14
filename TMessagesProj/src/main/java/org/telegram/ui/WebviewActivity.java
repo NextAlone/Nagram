@@ -174,10 +174,10 @@ public class WebviewActivity extends BaseFragment {
             }
         });
         ActionBarMenu menu = actionBar.createMenu();
-        progressItem = menu.addItemWithWidth(share, R.drawable.share, AndroidUtilities.dp(54));
+        progressItem = menu.addItemWithWidth(share, R.drawable.baseline_share_24, AndroidUtilities.dp(54));
         if (type == TYPE_GAME) {
             ActionBarMenuItem menuItem = menu.addItem(0, R.drawable.ic_ab_other);
-            menuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            menuItem.addSubItem(open_in, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
             actionBar.setTitle(currentGame);
             actionBar.setSubtitle("@" + currentBot);
@@ -395,7 +395,7 @@ public class WebviewActivity extends BaseFragment {
             messageObject.messageOwner.serializeToStream(serializedData);
             editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
             editor.putString(hash + "_link", "https://" + MessagesController.getInstance(messageObject.currentAccount).linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
-            editor.apply();
+            editor.commit();
             Browser.openUrl(parentActivity, url, false);
             serializedData.cleanup();
         } catch (Exception e) {

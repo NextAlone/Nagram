@@ -499,9 +499,9 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     ManageChatTextCell actionCell = (ManageChatTextCell) holder.itemView;
                     actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                     if (currentType == TYPE_BLOCKED) {
-                        actionCell.setText(LocaleController.getString("BlockUser", R.string.BlockUser), null, R.drawable.actions_addmember2, false);
+                        actionCell.setText(LocaleController.getString("BlockUser", R.string.BlockUser), null, R.drawable.baseline_person_add_24, false);
                     } else {
-                        actionCell.setText(LocaleController.getString("PrivacyAddAnException", R.string.PrivacyAddAnException), null, R.drawable.actions_addmember2, false);
+                        actionCell.setText(LocaleController.getString("PrivacyAddAnException", R.string.PrivacyAddAnException), null, R.drawable.baseline_person_add_24, false);
                     }
                     break;
                 case 3:

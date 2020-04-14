@@ -354,7 +354,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
                         }
                     }
-                    editor.apply();
+                    editor.commit();
                     for (int a = 0, N = exceptions.size(); a < N; a++) {
                         NotificationsSettingsActivity.NotificationException exception = exceptions.get(a);
                         getNotificationsController().updateServerNotificationsSettings(exception.did, false);
@@ -427,7 +427,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     enabled = preferences.getBoolean("EnablePreviewChannel", true);
                     editor.putBoolean("EnablePreviewChannel", !enabled);
                 }
-                editor.apply();
+                editor.commit();
                 getNotificationsController().updateServerNotificationsSettings(currentType);
             } else if (position == messageSoundRow) {
                 if (!view.isEnabled()) {
@@ -849,7 +849,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     editor.putString("ChannelSoundPath", "NoSound");
                 }
             }
-            editor.apply();
+            editor.commit();
             getNotificationsController().updateServerNotificationsSettings(currentType);
             RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(requestCode);
             if (holder != null) {
@@ -1331,7 +1331,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 case 7: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == exceptionsAddRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAddAnException", R.string.NotificationsAddAnException), R.drawable.actions_addmember2, exceptionsStartRow != -1);
+                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAddAnException", R.string.NotificationsAddAnException), R.drawable.baseline_person_add_24, exceptionsStartRow != -1);
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                     } else if (position == deleteAllRow) {
                         textCell.setText(LocaleController.getString("NotificationsDeleteAllException", R.string.NotificationsDeleteAllException), false);

@@ -25,29 +25,19 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
-import org.dizitart.no2.Nitrite;
-import org.dizitart.no2.NitriteCollection;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
-import java.util.HashMap;
 
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.database.DbPref;
-import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.ZipUtil;
 
-public class ApplicationLoader extends Application implements Thread.UncaughtExceptionHandler {
+public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
     public static volatile Context applicationContext;
@@ -95,102 +85,98 @@ public class ApplicationLoader extends Application implements Thread.UncaughtExc
     }
 
     public static void postInitApplication() {
+        if (applicationInited) {
+            return;
+        }
+
+        applicationInited = true;
+
         try {
-            if (applicationInited) {
-                return;
-            }
+            LocaleController.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            applicationInited = true;
+        try {
+            connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    try {
+                        currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                    } catch (Throwable ignore) {
 
-            try {
-                LocaleController.getInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-                BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        try {
-                            currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                        } catch (Throwable ignore) {
-
-                        }
-
-                        boolean isSlow = isConnectionSlow();
-                        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                            ConnectionsManager.getInstance(a).checkConnection();
-                            FileLoader.getInstance(a).onNetworkChanged(isSlow);
-                        }
                     }
-                };
-                IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-                ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter);
-                //Utilities.globalQueue.postRunnable(ApplicationLoader::ensureCurrentNetworkGet);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            try {
-                final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-                filter.addAction(Intent.ACTION_SCREEN_OFF);
-                final BroadcastReceiver mReceiver = new ScreenReceiver();
-                applicationContext.registerReceiver(mReceiver, filter);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                PowerManager pm = (PowerManager) ApplicationLoader.applicationContext.getSystemService(Context.POWER_SERVICE);
-                isScreenOn = pm.isScreenOn();
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("screen state = " + isScreenOn);
+                    boolean isSlow = isConnectionSlow();
+                    for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                        ConnectionsManager.getInstance(a).checkConnection();
+                        FileLoader.getInstance(a).onNetworkChanged(isSlow);
+                    }
                 }
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
+            };
+            IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+            ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter);
+            //Utilities.globalQueue.postRunnable(ApplicationLoader::ensureCurrentNetworkGet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            SharedConfig.loadConfig();
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                UserConfig.getInstance(a).loadConfig();
-                MessagesController.getInstance(a);
-                if (a == 0) {
-                    SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(a).getCurrentTime() + "__";
-                } else {
-                    ConnectionsManager.getInstance(a);
-                }
-                TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
-                if (user != null) {
-                    MessagesController.getInstance(a).putUser(user, true);
-                    SendMessagesHelper.getInstance(a).checkUnsentMessages();
-                }
-            }
+        try {
+            final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            final BroadcastReceiver mReceiver = new ScreenReceiver();
+            applicationContext.registerReceiver(mReceiver, filter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            if (ProxyUtil.isVPNEnabled()) {
-
-                if (NekoXConfig.disableProxyWhenVpnEnabled) {
-
-                    SharedConfig.setProxyEnable(false);
-
-                }
-
-            }
-
-            ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
-            ExternalGcm.initPlayServices();
+        try {
+            PowerManager pm = (PowerManager) ApplicationLoader.applicationContext.getSystemService(Context.POWER_SERVICE);
+            isScreenOn = pm.isScreenOn();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("app initied");
+                FileLog.d("screen state = " + isScreenOn);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        SharedConfig.loadConfig();
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            UserConfig.getInstance(a).loadConfig();
+            MessagesController.getInstance(a);
+            if (a == 0) {
+                SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(a).getCurrentTime() + "__";
+            } else {
+                ConnectionsManager.getInstance(a);
+            }
+            TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
+            if (user != null) {
+                MessagesController.getInstance(a).putUser(user, true);
+                SendMessagesHelper.getInstance(a).checkUnsentMessages();
+            }
+        }
+
+        if (ProxyUtil.isVPNEnabled()) {
+
+            if (NekoConfig.disableProxyWhenVpnEnabled) {
+
+                SharedConfig.setProxyEnable(false);
+
             }
 
-            MediaController.getInstance();
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                ContactsController.getInstance(a).checkAppAccount();
-                DownloadController.getInstance(a);
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
+        }
+
+        ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
+        ExternalGcm.initPlayServices();
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("app initied");
+        }
+
+        MediaController.getInstance();
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            ContactsController.getInstance(a).checkAppAccount();
+            DownloadController.getInstance(a);
         }
     }
 
@@ -201,7 +187,6 @@ public class ApplicationLoader extends Application implements Thread.UncaughtExc
     @Override
     public void onCreate() {
 
-        Thread.setDefaultUncaughtExceptionHandler(this);
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
@@ -222,17 +207,6 @@ public class ApplicationLoader extends Application implements Thread.UncaughtExc
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
     }
 
-    @Override
-    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
-
-        FileLog.e("[APP] uncaughtException in thread " + t,e);
-
-    }
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-
-    }
 
     public static void startPushService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

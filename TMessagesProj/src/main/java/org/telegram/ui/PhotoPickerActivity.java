@@ -491,7 +491,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 showAsListItem.setIcon(listSort ? R.drawable.msg_media : R.drawable.msg_list);
             });
             showAsListItem = menuItem.addSubItem(change_sort, R.drawable.msg_list, LocaleController.getString("ShowAsList", R.string.ShowAsList));
-            menuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            menuItem.addSubItem(open_in, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
         }
 
         if (selectedAlbum == null) {
@@ -1238,7 +1238,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         for (int a = 0, N = recentSearches.size(); a < N; a++) {
             editor.putString("recent" + a, recentSearches.get(a));
         }
-        editor.apply();
+        editor.commit();
     }
 
     private void loadRecentSearch() {

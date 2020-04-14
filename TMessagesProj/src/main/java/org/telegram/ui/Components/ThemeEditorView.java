@@ -1688,7 +1688,7 @@ public class ThemeEditorView {
                 editor.putFloat("py", (windowLayoutParams.y - startY) / (float) (endY - startY));
                 editor.putInt("sidey", 2);
             }
-            editor.apply();
+            editor.commit();
         }
         if (animators != null) {
             if (decelerateInterpolator == null) {

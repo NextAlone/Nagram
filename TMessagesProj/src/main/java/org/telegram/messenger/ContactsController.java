@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
 public class ContactsController extends BaseController {
@@ -311,7 +312,7 @@ public class ContactsController extends BaseController {
     }
 
     public void checkAppAccount() {
-        if (NekoXConfig.disableSystemAccount) {
+        if (NekoConfig.disableSystemAccount) {
             return;
         }
         AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
@@ -336,7 +337,7 @@ public class ContactsController extends BaseController {
                 if (!found) {
                     try {
                         am.removeAccount(accounts[a], null, null);
-                    } catch (Exception ignored) {
+                    } catch (Exception ignore) {
                     }
                 }
 
@@ -349,9 +350,9 @@ public class ContactsController extends BaseController {
             if (systemAccount == null) {
                 try {
                     TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-                    systemAccount = new Account(formatName(user.first_name,user.last_name), BuildConfig.APPLICATION_ID);
+                    systemAccount = new Account(formatName(user.first_name, user.last_name), BuildConfig.APPLICATION_ID);
                     am.addAccountExplicitly(systemAccount, "", null);
-                } catch (Exception ignored) {
+                } catch (Exception ignore) {
                 }
             }
         }
@@ -364,7 +365,7 @@ public class ContactsController extends BaseController {
             Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
             for (int a = 0; a < accounts.length; a++) {
                 Account acc = accounts[a];
-                if (NekoXConfig.disableSystemAccount) {
+                if (NekoConfig.disableSystemAccount) {
                     try {
                         am.removeAccount(accounts[a], null, null);
                     } catch (Exception ignore) {
@@ -1610,7 +1611,7 @@ public class ContactsController extends BaseController {
     private void saveContactsLoadTime() {
         try {
             SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-            preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).apply();
+            preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).commit();
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -2256,12 +2257,12 @@ public class ContactsController extends BaseController {
         getMessagesController().clearFullUsers();
         SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
         final SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("needGetStatuses", true).apply();
+        editor.putBoolean("needGetStatuses", true).commit();
         TLRPC.TL_contacts_getStatuses req = new TLRPC.TL_contacts_getStatuses();
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 AndroidUtilities.runOnUIThread(() -> {
-                    editor.remove("needGetStatuses").apply();
+                    editor.remove("needGetStatuses").commit();
                     TLRPC.Vector vector = (TLRPC.Vector) response;
                     if (!vector.objects.isEmpty()) {
                         ArrayList<TLRPC.User> dbUsersStatus = new ArrayList<>();

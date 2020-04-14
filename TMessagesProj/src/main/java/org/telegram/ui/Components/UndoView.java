@@ -36,7 +36,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
-import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class UndoView extends FrameLayout {
@@ -261,7 +261,7 @@ public class UndoView extends FrameLayout {
         if (currentActionRunnable != null) {
             currentActionRunnable.run();
         }
-        if (NekoXConfig.disableUndo && action != ACTION_DICE_INFO && action != ACTION_DICE_NO_SEND_INFO) {
+        if (NekoConfig.disableUndo && action != ACTION_DICE_INFO && action != ACTION_DICE_NO_SEND_INFO) {
             if (actionRunnable != null) actionRunnable.run();
             return;
         }

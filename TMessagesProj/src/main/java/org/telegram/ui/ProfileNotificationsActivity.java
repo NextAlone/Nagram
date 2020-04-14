@@ -229,7 +229,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 if (id == -1) {
                     if (!addingException && notificationsEnabled && customEnabled) {
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                        preferences.edit().putInt("notify2_" + dialog_id, 0).apply();
+                        preferences.edit().putInt("notify2_" + dialog_id, 0).commit();
                     }
                 } else if (id == done_button) {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
@@ -254,7 +254,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                     }
 
-                    editor.apply();
+                    editor.commit();
                     NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(dialog_id);
                     if (delegate != null) {
                         NotificationsSettingsActivity.NotificationException exception = new NotificationsSettingsActivity.NotificationException();
@@ -299,7 +299,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     customEnabled = !customEnabled;
                     notificationsEnabled = customEnabled;
-                    preferences.edit().putBoolean("custom_" + dialog_id, customEnabled).apply();
+                    preferences.edit().putBoolean("custom_" + dialog_id, customEnabled).commit();
                     TextCheckBoxCell cell = (TextCheckBoxCell) view;
                     cell.setChecked(customEnabled);
                     checkRowsEnabled();
@@ -381,7 +381,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     } else if (position == previewRow) {
                         TextCheckCell checkCell = (TextCheckCell) view;
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                        preferences.edit().putBoolean("content_preview_" + dialog_id, !checkCell.isChecked()).apply();
+                        preferences.edit().putBoolean("content_preview_" + dialog_id, !checkCell.isChecked()).commit();
                         checkCell.setChecked(!checkCell.isChecked());
                     } else if (position == callsVibrateRow) {
                         showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), dialog_id, "calls_vibrate_", () -> {
@@ -457,8 +457,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             int notifyMaxCount1 = position1 % 10 + 1;
                             int notifyDelay1 = position1 / 10 + 1;
                             SharedPreferences preferences1 = MessagesController.getNotificationsSettings(currentAccount);
-                            preferences1.edit().putInt("smart_max_count_" + dialog_id, notifyMaxCount1).apply();
-                            preferences1.edit().putInt("smart_delay_" + dialog_id, notifyDelay1 * 60).apply();
+                            preferences1.edit().putInt("smart_max_count_" + dialog_id, notifyMaxCount1).commit();
+                            preferences1.edit().putInt("smart_delay_" + dialog_id, notifyDelay1 * 60).commit();
                             if (adapter != null) {
                                 adapter.notifyItemChanged(smartRow);
                             }
@@ -470,7 +470,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), (dialog, which) -> {
                             SharedPreferences preferences12 = MessagesController.getNotificationsSettings(currentAccount);
-                            preferences12.edit().putInt("smart_max_count_" + dialog_id, 0).apply();
+                            preferences12.edit().putInt("smart_max_count_" + dialog_id, 0).commit();
                             if (adapter != null) {
                                 adapter.notifyItemChanged(smartRow);
                             }
@@ -488,7 +488,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }));
                     } else if (position == popupEnabledRow) {
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                        preferences.edit().putInt("popup_" + dialog_id, 1).apply();
+                        preferences.edit().putInt("popup_" + dialog_id, 1).commit();
                         ((RadioCell) view).setChecked(true, true);
                         view = listView.findViewWithTag(2);
                         if (view != null) {
@@ -496,7 +496,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                     } else if (position == popupDisabledRow) {
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                        preferences.edit().putInt("popup_" + dialog_id, 2).apply();
+                        preferences.edit().putInt("popup_" + dialog_id, 2).commit();
                         ((RadioCell) view).setChecked(true, true);
                         view = listView.findViewWithTag(1);
                         if (view != null) {
@@ -558,7 +558,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     editor.putString("ringtone_path_" + dialog_id, "NoSound");
                 }
             }
-            editor.apply();
+            editor.commit();
             if (adapter != null) {
                 adapter.notifyItemChanged(requestCode == 13 ? ringtoneRow : soundRow);
             }

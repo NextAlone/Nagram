@@ -2390,7 +2390,7 @@ public class NotificationsController extends BaseController {
                 }
                 if (editor != null) {
                     editor.putBoolean("custom_" + dialogId, true);
-                    editor.apply();
+                    editor.commit();
                 }
             }
         }*/
@@ -2441,7 +2441,7 @@ public class NotificationsController extends BaseController {
                 notificationChannel.setSound(null, builder.build());
             }
             systemNotificationManager.createNotificationChannel(notificationChannel);
-            preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).apply();
+            preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).commit();
         }
         return channelId;
     }
@@ -3722,7 +3722,7 @@ public class NotificationsController extends BaseController {
                 dialog.notify_settings.mute_until = untilTime;
             }
         }
-        editor.apply();
+        editor.commit();
         updateServerNotificationsSettings(dialog_id);
     }
 
@@ -3818,7 +3818,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void setGlobalNotificationsEnabled(int type, int time) {
-        getAccountInstance().getNotificationsSettings().edit().putInt(getGlobalNotificationsKey(type), time).apply();
+        getAccountInstance().getNotificationsSettings().edit().putInt(getGlobalNotificationsKey(type), time).commit();
         updateServerNotificationsSettings(type);
         getMessagesStorage().updateMutedDialogsFiltersCounters();
     }

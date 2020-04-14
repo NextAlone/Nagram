@@ -1429,7 +1429,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 nameTextView.setScaleY(scale);
                 idTextView.setTranslationX(-21 * AndroidUtilities.density * diff);
                 idTextView.setTranslationY((float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float) Math.floor(22 * AndroidUtilities.density) * diff);
-                if (diff > 0.85 && !searchMode) {
+                if (diff > 0.85 && !searchMode && NekoConfig.showIdAndDc) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {
                     idTextView.setVisibility(View.GONE);
@@ -1520,7 +1520,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         if (user.photo != null && user.photo.dc_id != 0) {
             idTextView.setText("ID: " + user.id + ", DC: " + user.photo.dc_id);
         } else {
-            idTextView.setText("ID: " + user.id);
+            idTextView.setText("ID: " + user.id + ", DC: " + getMessagesController().thisDc);
         }
         int finalId = user.id;
         idTextView.setOnLongClickListener(v -> {
@@ -1616,7 +1616,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         i.putExtra(Intent.EXTRA_SUBJECT, "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()));
                         i.putExtra(Intent.EXTRA_STREAM, uri);
                         if (getParentActivity() != null) {
-                            i.setClass(getParentActivity(),LaunchActivity.class);
+                            i.setClass(getParentActivity(), LaunchActivity.class);
                             getParentActivity().startActivity(i);
                         }
                     } else {
@@ -2100,12 +2100,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 toSave.add(o.toString());
             }
-            MessagesController.getGlobalMainSettings().edit().putStringSet("settingsSearchRecent2", toSave).apply();
+            MessagesController.getGlobalMainSettings().edit().putStringSet("settingsSearchRecent2", toSave).commit();
         }
 
         public void clearRecent() {
             recentSearches.clear();
-            MessagesController.getGlobalMainSettings().edit().remove("settingsSearchRecent2").apply();
+            MessagesController.getGlobalMainSettings().edit().remove("settingsSearchRecent2").commit();
             notifyDataSetChanged();
         }
 
@@ -2279,9 +2279,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == policyRow) {
                         textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, false);
                     } else if (position == sendLogsRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs),R.drawable.baseline_bug_report_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), R.drawable.baseline_bug_report_24, true);
                     } else if (position == clearLogsRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs),R.drawable.baseline_delete_sweep_24, switchBackendRow != -1);
+                        textCell.setTextAndIcon(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), R.drawable.baseline_delete_sweep_24, switchBackendRow != -1);
                     } else if (position == switchBackendRow) {
                         textCell.setText("Switch Backend", false);
                     }

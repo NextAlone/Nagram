@@ -4,153 +4,153 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.SharedConfig;
 
-import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
 
-    private static final Object sync = new Object();
-    public static boolean useIPv6 = false;
+    private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+
+    public static boolean useIPv6;
     //public static boolean showHiddenFeature = false;
 
-    public static boolean useSystemEmoji = SharedConfig.useSystemEmoji;
-    public static boolean ignoreBlocked = false;
-    public static boolean hideProxySponsorChannel = false;
-    public static boolean disablePhotoSideAction = true;
-    public static boolean hideKeyboardOnChatScroll = false;
-    public static int mapPreviewProvider = 0;
-    public static float stickerSize = 14.0f;
-    public static int translationProvider = 1;
+    public static boolean useSystemEmoji;
+    public static boolean ignoreBlocked;
+    public static boolean hideProxySponsorChannel;
+    public static boolean disablePhotoSideAction;
+    public static boolean hideKeyboardOnChatScroll;
+    public static int mapPreviewProvider;
+    public static float stickerSize;
+    public static int translationProvider;
 
-    public static boolean showAddToSavedMessages = true;
-    public static boolean showReport = false;
-    public static boolean showPrPr = false;
-    public static boolean showViewHistory = true;
-    public static boolean showAdminActions = true;
-    public static boolean showChangePermissions = true;
-    public static boolean showDeleteDownloadedFile = true;
-    public static boolean showMessageDetails = false;
-    public static boolean showTranslate = true;
-    public static boolean showRepeat = true;
+    public static boolean showAddToSavedMessages;
+    public static boolean showReport;
+    public static boolean showPrPr;
+    public static boolean showViewHistory;
+    public static boolean showAdminActions;
+    public static boolean showChangePermissions;
+    public static boolean showDeleteDownloadedFile;
+    public static boolean showMessageDetails;
+    public static boolean showTranslate;
+    public static boolean showRepeat;
 
-    public static boolean hidePhone = true;
-    public static int typeface = 0;
-    public static boolean transparentStatusBar = false;
-    public static boolean forceTablet = false;
-    public static boolean openArchiveOnPull = false;
-    public static boolean avatarAsDrawerBackground = true;
-    public static int nameOrder = 1;
-    public static int eventType = 0;
-    public static boolean newYear = false;
-    public static int actionBarDecoration = 0;
-    public static boolean unlimitedFavedStickers = false;
-    public static boolean unlimitedPinnedDialogs = false;
+    public static boolean hidePhone;
+    public static int typeface;
+    public static boolean transparentStatusBar;
+    public static boolean forceTablet;
+    public static boolean openArchiveOnPull;
+    public static boolean avatarAsDrawerBackground;
+    public static boolean showTabsOnForward;
+    public static int nameOrder;
+    public static int eventType;
+    public static boolean newYear;
+    public static int actionBarDecoration;
+    public static boolean unlimitedFavedStickers;
+    public static boolean unlimitedPinnedDialogs;
 
-    public static boolean residentNotification = false;
+    public static boolean residentNotification;
 
-    private static boolean configLoaded;
+    public static boolean disableChatAction;
+    public static boolean sortByUnread;
+    public static boolean sortByUnmuted;
+    public static boolean sortByUser;
+    public static boolean sortByContacts;
+
+    public static boolean disableUndo;
+
+    public static boolean filterUsers;
+    public static boolean filterContacts;
+    public static boolean filterGroups;
+    public static boolean filterChannels;
+    public static boolean filterBots;
+    public static boolean filterAdmins;
+    public static boolean filterUnmuted;
+    public static boolean filterUnread;
+    public static boolean filterUnmutedAndUnread;
+
+    public static boolean ignoreMutedCount;
+
+    public static boolean disableSystemAccount;
+    public static boolean disableProxyWhenVpnEnabled;
+    public static boolean skipOpenLinkConfirm;
+
+    public static boolean removeTitleEmoji;
+    public static boolean hidePublicProxy;
+    public static boolean useDefaultTheme;
+    public static boolean showIdAndDc;
 
     static {
-        loadConfig();
-    }
 
-    public static void saveConfig() {
-        synchronized (sync) {
-            try {
-                SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekoconfing");
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("useIPv6", useIPv6);
-                editor.putBoolean("hidePhone", hidePhone);
-                editor.putBoolean("ignoreBlocked", ignoreBlocked);
-                editor.putBoolean("forceTablet", forceTablet);
-                editor.putBoolean("transparentStatusBar", transparentStatusBar);
-                editor.putBoolean("residentNotification", residentNotification);
-                editor.putBoolean("hideProxySponsorChannel", hideProxySponsorChannel);
-                editor.putBoolean("showAddToSavedMessages", showAddToSavedMessages);
-                editor.putBoolean("showReport", showReport);
-                editor.putBoolean("showPrPr", showPrPr);
-                editor.putBoolean("showViewHistory", showViewHistory);
-                editor.putBoolean("showAdminActions", showAdminActions);
-                editor.putBoolean("showChangePermissions", showChangePermissions);
-                editor.putBoolean("showDeleteDownloadedFile", showDeleteDownloadedFile);
-                editor.putBoolean("showMessageDetails", showMessageDetails);
-                editor.putBoolean("showTranslate", showTranslate);
-                editor.putBoolean("showRepeat", showRepeat);
-                editor.putBoolean("newYear", newYear);
-                editor.putBoolean("unlimitedFavedStickers", unlimitedFavedStickers);
-                editor.putBoolean("unlimitedPinnedDialogs", unlimitedPinnedDialogs);
-                editor.putBoolean("disablePhotoSideAction", disablePhotoSideAction);
-                editor.putBoolean("hideKeyboardOnChatScroll", hideKeyboardOnChatScroll);
-                editor.putBoolean("openArchiveOnPull", openArchiveOnPull);
-                // editor.putBoolean("showHiddenFeature", showHiddenFeature);
-                editor.putBoolean("avatarAsDrawerBackground", avatarAsDrawerBackground);
-                editor.putBoolean("useSystemEmoji", useSystemEmoji);
-                editor.putFloat("stickerSize", stickerSize);
-                editor.putInt("typeface", typeface);
-                editor.putInt("nameOrder", nameOrder);
-                editor.putInt("mapPreviewProvider", mapPreviewProvider);
-                editor.putInt("translationProvider", translationProvider);
-                editor.putInt("eventType", eventType);
-                editor.putInt("actionBarDecoration", actionBarDecoration);
-                editor.apply();
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
-    }
+        useIPv6 = preferences.getBoolean("useIPv6", false);
+        hidePhone = preferences.getBoolean("hidePhone", true);
+        ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
+        forceTablet = preferences.getBoolean("forceTablet", false);
+        typeface = preferences.getInt("typeface", 0);
+        nameOrder = preferences.getInt("nameOrder", 1);
+        mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
+        transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
+        residentNotification = preferences.getBoolean("residentNotification", false);
+        hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
+        showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
+        showReport = preferences.getBoolean("showReport", false);
+        showPrPr = preferences.getBoolean("showPrPr", false);
+        showViewHistory = preferences.getBoolean("showViewHistory", true);
+        showAdminActions = preferences.getBoolean("showAdminActions", true);
+        showChangePermissions = preferences.getBoolean("showChangePermissions", true);
+        showDeleteDownloadedFile = preferences.getBoolean("showDeleteDownloadedFile", true);
+        showMessageDetails = preferences.getBoolean("showMessageDetails", false);
+        showTranslate = preferences.getBoolean("showTranslate", true);
+        showRepeat = preferences.getBoolean("showRepeat", true);
+        eventType = preferences.getInt("eventType", 0);
+        actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
+        newYear = preferences.getBoolean("newYear", false);
+        stickerSize = preferences.getFloat("stickerSize", 14.0f);
+        unlimitedFavedStickers = preferences.getBoolean("unlimitedFavedStickers", false);
+        unlimitedPinnedDialogs = preferences.getBoolean("unlimitedPinnedDialogs", false);
+        translationProvider = preferences.getInt("translationProvider", 1);
+        disablePhotoSideAction = preferences.getBoolean("disablePhotoSideAction", true);
+        openArchiveOnPull = preferences.getBoolean("openArchiveOnPull", false);
+        //showHiddenFeature = preferences.getBoolean("showHiddenFeature", false);
+        hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
+        avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
+        useSystemEmoji = preferences.getBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
+        showTabsOnForward = preferences.getBoolean("showTabsOnForward", showTabsOnForward);
 
-    public static void loadConfig() {
-        synchronized (sync) {
-            if (configLoaded) {
-                return;
-            }
+        disableChatAction = preferences.getBoolean("disable_chat_action", false);
+        sortByUnread = preferences.getBoolean("sort_by_unread", false);
+        sortByUnmuted = preferences.getBoolean("sort_by_unmuted", true);
+        sortByUser = preferences.getBoolean("sort_by_user", true);
+        sortByContacts = preferences.getBoolean("sort_by_contacts", true);
 
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-            useIPv6 = preferences.getBoolean("useIPv6", false);
-            hidePhone = preferences.getBoolean("hidePhone", true);
-            ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
-            forceTablet = preferences.getBoolean("forceTablet", false);
-            typeface = preferences.getInt("typeface", 0);
-            nameOrder = preferences.getInt("nameOrder", 1);
-            mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
-            transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
-            residentNotification = preferences.getBoolean("residentNotification", false);
-            hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
-            showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
-            showReport = preferences.getBoolean("showReport", false);
-            showPrPr = preferences.getBoolean("showPrPr", false);
-            showViewHistory = preferences.getBoolean("showViewHistory", true);
-            showAdminActions = preferences.getBoolean("showAdminActions", true);
-            showChangePermissions = preferences.getBoolean("showChangePermissions", true);
-            showDeleteDownloadedFile = preferences.getBoolean("showDeleteDownloadedFile", true);
-            showMessageDetails = preferences.getBoolean("showMessageDetails", false);
-            showTranslate = preferences.getBoolean("showTranslate", true);
-            showRepeat = preferences.getBoolean("showRepeat", true);
-            eventType = preferences.getInt("eventType", 0);
-            actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
-            newYear = preferences.getBoolean("newYear", false);
-            stickerSize = preferences.getFloat("stickerSize", 14.0f);
-            unlimitedFavedStickers = preferences.getBoolean("unlimitedFavedStickers", false);
-            unlimitedPinnedDialogs = preferences.getBoolean("unlimitedPinnedDialogs", false);
-            translationProvider = preferences.getInt("translationProvider", 1);
-            disablePhotoSideAction = preferences.getBoolean("disablePhotoSideAction", true);
-            openArchiveOnPull = preferences.getBoolean("openArchiveOnPull", false);
-            //showHiddenFeature = preferences.getBoolean("showHiddenFeature", false);
-            hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
-            avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
-            configLoaded = true;
-        }
+        disableUndo = preferences.getBoolean("disable_undo", false);
+
+        filterUsers = preferences.getBoolean("filter_users", true);
+        filterContacts = preferences.getBoolean("filter_contacts", true);
+        filterGroups = preferences.getBoolean("filter_groups", true);
+        filterChannels = preferences.getBoolean("filter_channels", true);
+        filterBots = preferences.getBoolean("filter_bots", true);
+        filterAdmins = preferences.getBoolean("filter_admins", true);
+        filterUnmuted = preferences.getBoolean("filter_unmuted", true);
+        filterUnread = preferences.getBoolean("filter_unread", true);
+        filterUnmutedAndUnread = preferences.getBoolean("filter_unmuted_and_unread", true);
+
+        disableSystemAccount = preferences.getBoolean("disable_system_account", false);
+        disableProxyWhenVpnEnabled = preferences.getBoolean("disable_proxy_when_vpn_enabled", false);
+        skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
+
+        removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
+        ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
+        hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
+        useDefaultTheme = preferences.getBoolean("use_default_theme", false);
+        showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
+
     }
 
     public static void toggleShowAddToSavedMessages() {
@@ -158,7 +158,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showAddToSavedMessages", showAddToSavedMessages);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowReport() {
@@ -166,7 +166,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showReport", showReport);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowViewHistory() {
@@ -174,7 +174,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showViewHistory", showViewHistory);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowPrPr() {
@@ -182,7 +182,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showPrPr", showPrPr);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowAdminActions() {
@@ -190,7 +190,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showAdminActions", showAdminActions);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowChangePermissions() {
@@ -198,7 +198,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showChangePermissions", showChangePermissions);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowDeleteDownloadedFile() {
@@ -206,7 +206,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showDeleteDownloadedFile", showDeleteDownloadedFile);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowMessageDetails() {
@@ -214,7 +214,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showMessageDetails", showMessageDetails);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowRepeat() {
@@ -222,7 +222,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showRepeat", showRepeat);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleIPv6() {
@@ -230,7 +230,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("useIPv6", useIPv6);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleHidePhone() {
@@ -238,7 +238,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hidePhone", hidePhone);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleIgnoreBlocked() {
@@ -246,7 +246,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("ignoreBlocked", ignoreBlocked);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleForceTablet() {
@@ -254,7 +254,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("forceTablet", forceTablet);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleTypeface() {
@@ -262,7 +262,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("typeface", typeface);
-        editor.apply();
+        editor.commit();
     }
 
     public static void setNameOrder(int order) {
@@ -270,7 +270,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("nameOrder", nameOrder);
-        editor.apply();
+        editor.commit();
 
         LocaleController.getInstance().recreateFormatters();
     }
@@ -280,7 +280,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("mapPreviewProvider", mapPreviewProvider);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleTransparentStatusBar() {
@@ -288,7 +288,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("transparentStatusBar", transparentStatusBar);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleResidentNotification() {
@@ -296,7 +296,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("residentNotification", residentNotification);
-        editor.apply();
+        editor.commit();
         ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, NotificationsService.class));
         ApplicationLoader.startPushService();
     }
@@ -306,7 +306,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideProxySponsorChannel", hideProxySponsorChannel);
-        editor.apply();
+        editor.commit();
     }
 
     public static void setEventType(int type) {
@@ -314,7 +314,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("eventType", eventType);
-        editor.apply();
+        editor.commit();
     }
 
     public static void setActionBarDecoration(int decoration) {
@@ -322,7 +322,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("actionBarDecoration", actionBarDecoration);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleNewYear() {
@@ -330,7 +330,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("newYear", newYear);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleUnlimitedFavedStickers() {
@@ -338,7 +338,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("unlimitedFavedStickers", unlimitedFavedStickers);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleUnlimitedPinnedDialogs() {
@@ -346,7 +346,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("unlimitedPinnedDialogs", unlimitedPinnedDialogs);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleShowTranslate() {
@@ -354,7 +354,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showTranslate", showTranslate);
-        editor.apply();
+        editor.commit();
     }
 
     public static void setStickerSize(float size) {
@@ -362,7 +362,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putFloat("stickerSize", stickerSize);
-        editor.apply();
+        editor.commit();
     }
 
     public static void setTranslationProvider(int provider) {
@@ -370,7 +370,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("translationProvider", translationProvider);
-        editor.apply();
+        editor.commit();
         UIUtil.runOnIoDispatcher(TranslateDb::clear);
     }
 
@@ -379,7 +379,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disablePhotoSideAction", disablePhotoSideAction);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleOpenArchiveOnPull() {
@@ -387,7 +387,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("openArchiveOnPull", openArchiveOnPull);
-        editor.apply();
+        editor.commit();
     }
 
     /*public static void toggleShowHiddenFeature() {
@@ -395,7 +395,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showHiddenFeature", showHiddenFeature);
-        editor.apply();
+        editor.commit();
     } */
 
     public static void toggleHideKeyboardOnChatScroll() {
@@ -403,7 +403,7 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideKeyboardOnChatScroll", hideKeyboardOnChatScroll);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleAvatarAsDrawerBackground() {
@@ -411,14 +411,156 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("avatarAsDrawerBackground", avatarAsDrawerBackground);
-        editor.apply();
+        editor.commit();
     }
 
     public static void toggleUseSystemEmoji() {
-        useSystemEmoji = !useSystemEmoji;
+        preferences.edit().putBoolean("useSystemEmoji", useSystemEmoji = !useSystemEmoji).commit();
+    }
+
+    public static void toggleDisableChatAction() {
+        preferences.edit().putBoolean("disable_chat_action", disableChatAction = !disableChatAction).commit();
+    }
+
+    public static void toggleSortByUnread() {
+
+        preferences.edit().putBoolean("sort_by_unread", sortByUnread = !sortByUnread).commit();
+
+    }
+
+    public static void toggleShowTabsOnForward() {
+        showTabsOnForward = !showTabsOnForward;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("useSystemEmoji", useSystemEmoji);
+        editor.putBoolean("showTabsOnForward", showTabsOnForward);
         editor.commit();
     }
+
+    public static void toggleSortByUnmuted() {
+
+        preferences.edit().putBoolean("sort_by_unmuted", sortByUnmuted = !sortByUnmuted).commit();
+
+    }
+
+    public static void toggleSortByUser() {
+
+        preferences.edit().putBoolean("sort_by_user", sortByUser = !sortByUser).commit();
+
+    }
+
+    public static void toggleSortByContacts() {
+
+        preferences.edit().putBoolean("sort_by_contacts", sortByContacts = !sortByContacts).commit();
+
+    }
+
+    public static void toggleDisableUndo() {
+
+        preferences.edit().putBoolean("disable_undo", disableUndo = !disableUndo).commit();
+
+    }
+
+    public static void toggleFilterUsers() {
+
+        preferences.edit().putBoolean("filter_users", filterUsers = !filterUsers).commit();
+
+    }
+
+    public static void toggleFilterContacts() {
+
+        preferences.edit().putBoolean("filter_contacts", filterContacts = !filterContacts).commit();
+
+    }
+
+    public static void toggleFilterGroups() {
+
+        preferences.edit().putBoolean("filterGroups", filterGroups = !filterGroups).commit();
+
+    }
+
+    public static void toggleFilterChannels() {
+
+        preferences.edit().putBoolean("filter_channels", filterChannels = !filterChannels).commit();
+
+    }
+
+    public static void toggleFilterBots() {
+
+        preferences.edit().putBoolean("filter_bots", filterBots = !filterBots).commit();
+
+    }
+
+    public static void toggleFilterAdmins() {
+
+        preferences.edit().putBoolean("filter_admins", filterAdmins = !filterAdmins).commit();
+
+    }
+
+    public static void toggleFilterUnmuted() {
+
+        preferences.edit().putBoolean("filter_unmuted", filterUnmuted = !filterUnmuted).commit();
+
+    }
+
+    public static void toggleDisableFilterUnread() {
+
+        preferences.edit().putBoolean("filter_unread", filterUnread = !filterUnread).commit();
+
+    }
+
+    public static void toggleFilterUnmutedAndUnread() {
+
+        preferences.edit().putBoolean("filter_unmuted_and_unread", filterUnmutedAndUnread = !filterUnmutedAndUnread).commit();
+
+    }
+
+    public static void toggleDisableSystemAccount() {
+
+        preferences.edit().putBoolean("disable_system_account", disableSystemAccount = !disableSystemAccount).commit();
+
+    }
+
+    public static void toggleDisableProxyWhenVpnEnabled() {
+
+        preferences.edit().putBoolean("disable_proxy_when_vpn_enabled", disableProxyWhenVpnEnabled = !disableProxyWhenVpnEnabled).commit();
+
+    }
+
+    public static void toggleSkipOpenLinkConfirm() {
+
+        preferences.edit().putBoolean("skip_open_link_confirm", skipOpenLinkConfirm = !skipOpenLinkConfirm).commit();
+
+    }
+
+    public static void toggleRemoveTitleEmoji() {
+
+        preferences.edit().putBoolean("remove_title_emoji", removeTitleEmoji = !removeTitleEmoji).commit();
+
+    }
+
+    public static void toggleIgnoredMutedCount() {
+
+        preferences.edit().putBoolean("ignore_muted_count", ignoreMutedCount = !ignoreMutedCount).commit();
+
+    }
+
+    public static void toggleHidePublicProxy() {
+
+        preferences.edit().putBoolean("hide_public_proxy", hidePublicProxy = !hidePublicProxy).commit();
+
+    }
+
+    public static void toggleUseDefaultTheme() {
+
+        preferences.edit().putBoolean("use_default_theme", useDefaultTheme = !useDefaultTheme).commit();
+
+    }
+
+    public static void toggleShowIdAndDc() {
+
+        preferences.edit().putBoolean("show_id_and_dc", showIdAndDc = !showIdAndDc).commit();
+
+    }
+
+
 }

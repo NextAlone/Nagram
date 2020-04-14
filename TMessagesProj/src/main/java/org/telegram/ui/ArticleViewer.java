@@ -536,7 +536,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt("iv_font_size", SharedConfig.ivFontSize);
-                        editor.apply();
+                        editor.commit();
                         adapter[0].searchTextOffset.clear();
                         updatePaintSize();
                         invalidate();
@@ -2925,7 +2925,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private void updatePaintFonts() {
-        ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE).edit().putInt("font_type", selectedFont).apply();
+        ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE).edit().putInt("font_type", selectedFont).commit();
         Typeface typefaceNormal = selectedFont == 0 ? Typeface.DEFAULT : Typeface.SERIF;
         Typeface typefaceItalic = selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/ritalic.ttf") : Typeface.create("serif", Typeface.ITALIC);
         Typeface typefaceBold = selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmedium.ttf") : Typeface.create("serif", Typeface.BOLD);
@@ -3636,9 +3636,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         transMenu = menuButton.addSubItem(trans_item, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
 
-        menuButton.addSubItem(share_item, R.drawable.msg_share, LocaleController.getString("ShareFile", R.string.ShareFile));
-        menuButton.addSubItem(open_item, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
-        menuButton.addSubItem(settings_item, R.drawable.baseline_share_24, LocaleController.getString("Settings", R.string.Settings));
+        menuButton.addSubItem(share_item, R.drawable.baseline_share_24, LocaleController.getString("ShareFile", R.string.ShareFile));
+        menuButton.addSubItem(open_item, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+        menuButton.addSubItem(settings_item, R.drawable.baseline_settings_24, LocaleController.getString("Settings", R.string.Settings));
         menuButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         menuButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         menuContainer.addView(menuButton, LayoutHelper.createFrame(48, 56));
@@ -3855,10 +3855,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         ActionBarMenu menu = actionBar.createMenu();
 
-        menu.addItem(gallery_menu_share, R.drawable.share);
+        menu.addItem(gallery_menu_share, R.drawable.baseline_share_24);
         menuItem = menu.addItem(0, R.drawable.ic_ab_other);
         menuItem.setLayoutInScreen(true);
-        menuItem.addSubItem(gallery_menu_openin, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_openin, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
         //menuItem.addSubItem(gallery_menu_share, LocaleController.getString("ShareFile", R.string.ShareFile), 0).setTextColor(0xfffafafa);
         menuItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_savegif, R.drawable.deproko_baseline_gif_24, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
@@ -4933,7 +4933,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE).edit();
             String key = "article" + adapter[0].currentPage.id;
-            editor.putInt(key, position).putInt(key + "o", offset).putBoolean(key + "r", AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y).apply();
+            editor.putInt(key, position).putInt(key + "o", offset).putBoolean(key + "r", AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y).commit();
         }
     }
 

@@ -1217,7 +1217,7 @@ public class Theme {
                 jsonObject.put("wMotion", isMotion);
                 jsonObject.put("pIntensity", intensity);
                 editor.putString(key, jsonObject.toString());
-                editor.apply();
+                editor.commit();
             } catch (Throwable e) {
                 FileLog.e(e);
             }
@@ -1226,7 +1226,7 @@ public class Theme {
         private void delete() {
             String key = getKey();
             SharedPreferences themeConfig = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
-            themeConfig.edit().remove(key).apply();
+            themeConfig.edit().remove(key).commit();
             new File(ApplicationLoader.getFilesDirFixed(), fileName).delete();
             new File(ApplicationLoader.getFilesDirFixed(), originalFileName).delete();
         }
@@ -3750,7 +3750,7 @@ public class Theme {
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
-        themeInfo.assetName = NekoXConfig.useDefaultTheme ? "bluebubbles.attheme" : "nekox-indigo-1.attheme";
+        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "nekox-indigo-1.attheme";
         themeInfo.previewBackgroundColor = -657931;
         themeInfo.previewInColor = Color.parseColor("#c0ffffff");
         themeInfo.previewOutColor = Color.parseColor("#3f51b5");
@@ -3888,7 +3888,7 @@ public class Theme {
                     }
                 }
                 saveOtherThemes(true, true);
-                themeConfig.edit().remove("themes").apply();
+                themeConfig.edit().remove("themes").commit();
             }
         }
 
@@ -3911,7 +3911,7 @@ public class Theme {
                 if (applyingTheme != null && !themeConfig.contains("lastDayTheme")) {
                     SharedPreferences.Editor editor = themeConfig.edit();
                     editor.putString("lastDayTheme", applyingTheme.getKey());
-                    editor.apply();
+                    editor.commit();
                 }
             }
 
@@ -3932,7 +3932,7 @@ public class Theme {
             if (currentNightTheme != null && !themeConfig.contains("lastDarkTheme")) {
                 SharedPreferences.Editor editor = themeConfig.edit();
                 editor.putString("lastDarkTheme", currentNightTheme.getKey());
-                editor.apply();
+                editor.commit();
             }
 
             SharedPreferences.Editor oldEditor = null;
@@ -4063,8 +4063,8 @@ public class Theme {
                 }
             }
             if (oldEditor != null) {
-                oldEditor.apply();
-                oldEditorNew.apply();
+                oldEditor.commit();
+                oldEditorNew.commit();
             }
 
             selectedAutoNightType = preferences.getInt("selectedAutoNightType", Build.VERSION.SDK_INT >= 29 ? AUTO_NIGHT_TYPE_SYSTEM : AUTO_NIGHT_TYPE_NONE);
@@ -4122,7 +4122,7 @@ public class Theme {
                     currentNightTheme.setOverrideWallpaper(overrideWallpaper);
                 }
             }
-            preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").apply();
+            preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").commit();
         }
 
         int switchToTheme = needSwitchToTheme();
@@ -4154,7 +4154,7 @@ public class Theme {
         } else {
             editor.remove("nighttheme");
         }
-        editor.apply();
+        editor.commit();
     }
 
     @SuppressLint("PrivateApi")
@@ -4818,7 +4818,7 @@ public class Theme {
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("theme", themeInfo.getKey());
-                    editor.apply();
+                    editor.commit();
                 }
                 String[] wallpaperLink = new String[1];
                 if (themeInfo.assetName != null) {
@@ -4897,7 +4897,7 @@ public class Theme {
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove("theme");
-                    editor.apply();
+                    editor.commit();
                 }
                 currentColorsNoAccent.clear();
                 themedWallpaperFileOffset = 0;
@@ -5138,7 +5138,7 @@ public class Theme {
                 }
             }
             editor.putInt("accent_current_" + theme.assetName, theme.currentAccentId);
-            editor.apply();
+            editor.commit();
         } else {
             if (theme.prevAccentId != -1) {
                 if (remove) {
@@ -5187,7 +5187,7 @@ public class Theme {
         }
 
         editor.putInt("lastLoadingCurrentThemeTime", lastLoadingCurrentThemeTime);
-        editor.apply();
+        editor.commit();
 
         if (full) {
             for (int b = 0; b < 5; b++) {
@@ -5629,7 +5629,7 @@ public class Theme {
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("theme", currentDayTheme.getKey());
-                editor.apply();
+                editor.commit();
             }
         } catch (Exception e) {
             FileLog.e(e);

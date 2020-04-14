@@ -1637,6 +1637,7 @@ public class ImageLoader {
                 FileLog.e(e);
             }
         }
+        AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
 
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
@@ -1771,6 +1772,7 @@ public class ImageLoader {
                 FileLog.e(e);
             }
         }
+        AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("cache path = " + cachePath);

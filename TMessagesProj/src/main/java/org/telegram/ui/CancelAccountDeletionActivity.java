@@ -367,7 +367,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     if (!permissionsItems.isEmpty()) {
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                         if (preferences.getBoolean("firstlogin", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
-                            preferences.edit().putBoolean("firstlogin", false).apply();
+                            preferences.edit().putBoolean("firstlogin", false).commit();
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                             builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);

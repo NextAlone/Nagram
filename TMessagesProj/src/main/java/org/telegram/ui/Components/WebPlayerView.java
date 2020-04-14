@@ -676,7 +676,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                                         JSExtractor extractor = new JSExtractor(jsCode);
                                         functionCode = extractor.extractFunction(functionName);
                                         if (!TextUtils.isEmpty(functionCode) && playerId != null) {
-                                            preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).apply();
+                                            preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
                                         }
                                     } catch (Exception e) {
                                         FileLog.e(e);

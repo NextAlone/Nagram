@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram
 import android.content.Context
 import com.v2ray.ang.dto.AngConfig
 import org.telegram.messenger.ApplicationLoader
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import kotlin.random.Random
@@ -18,7 +19,7 @@ object ProxyManager {
 
         var port = pref.getInt(hash, -1)
 
-        if (!isProxyAvailable(port)) {
+        if (!isTcpPortAvailable(port)) {
 
             port = mkNewPort()
 
@@ -37,7 +38,7 @@ object ProxyManager {
 
         var port = pref.getInt(hash, -1)
 
-        if (!isProxyAvailable(port)) {
+        if (!isTcpPortAvailable(port)) {
 
             port = mkNewPort()
 
@@ -56,7 +57,7 @@ object ProxyManager {
 
         var port = pref.getInt(hash, -1)
 
-        if (!isProxyAvailable(port)) {
+        if (!isTcpPortAvailable(port)) {
 
             port = mkNewPort()
 
@@ -68,29 +69,19 @@ object ProxyManager {
 
     }
 
-    private fun mkNewPort() = Random.nextInt(2048, 32768)
+    @JvmStatic
+    fun mkNewPort() = Random.nextInt(2048, 32768)
 
     @JvmStatic
-    fun isProxyAvailable(port: Int): Boolean {
-
-        if (port !in 2048 until 32768) return false
-
-        runCatching {
-
-            val server = ServerSocket()
-
-            server.bind(InetSocketAddress("127.0.0.1",port))
-
-            server.close()
-
-        }.onFailure {
-
+    open fun isTcpPortAvailable(port: Int): Boolean {
+        try {
+            ServerSocket(port).use {
+                it.reuseAddress = true
+                return true
+            }
+        } catch (ex: Exception) {
             return false
-
         }
-
-        return true
-
     }
 
 }

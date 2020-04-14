@@ -152,6 +152,7 @@ public class VoIPActivity extends Activity implements VoIPService.StateListener,
     private LinearLayout bottomButtons;
     private TextView accountNameText;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1292,7 +1293,7 @@ public class VoIPActivity extends Activity implements VoIPService.StateListener,
                                     setEmojiTooltipVisible(false);
                                 }
                             }, 5000);
-                            MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", count + 1).apply();
+                            MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", count + 1).commit();
                         }
                     }
                     if (prevState != VoIPService.STATE_ESTABLISHED && prevState != VoIPService.STATE_RECONNECTING) {

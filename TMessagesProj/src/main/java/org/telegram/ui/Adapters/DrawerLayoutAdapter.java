@@ -223,7 +223,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 editor.remove(String.format(Locale.US, "account_pos_%d", a));
             }
         }
-        editor.apply();
+        editor.commit();
         Collections.sort(accountNumbers, (o1, o2) -> {
             long l1 = preferences.getLong(String.format(Locale.US, "account_pos_%d", o1), UserConfig.getInstance(o1).loginTime);
             long l2 = preferences.getLong(String.format(Locale.US, "account_pos_%d", o2), UserConfig.getInstance(o2).loginTime);
@@ -249,7 +249,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
-        items.add(new Item(9, LocaleController.getString("NekoXFaq", R.string.NekoXFaq), helpIcon));
         items.add(null); // divider
         items.add(new CheckItem(12,LocaleController.getString("DarkMode",R.string.NightMode),R.drawable.baseline_brightness_2_24,() -> Theme.getActiveTheme().isDark(),null));
     }
@@ -333,7 +332,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE).edit().
                 putLong(String.format(Locale.US, "account_pos_%d", currentElement), targetIndex).
                 putLong(String.format(Locale.US, "account_pos_%d", targetElement), currentIndex)
-                .apply();
+                .commit();
         notifyItemMoved(currentAdapterPosition, targetAdapterPosition);
     }
 }

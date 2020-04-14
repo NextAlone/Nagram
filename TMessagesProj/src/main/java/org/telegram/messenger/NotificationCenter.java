@@ -8,8 +8,9 @@
 
 package org.telegram.messenger;
 
-import androidx.annotation.UiThread;
 import android.util.SparseArray;
+
+import androidx.annotation.UiThread;
 
 import java.util.ArrayList;
 

@@ -449,12 +449,12 @@ public class VoIPHelper {
 		tcpCell.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				boolean force = preferences.getBoolean("dbg_force_tcp_in_calls", false);
-				SharedPreferences.Editor editor = preferences.edit();
-				editor.putBoolean("dbg_force_tcp_in_calls", !force);
-				editor.apply();
-				tcpCell.setChecked(!force);
-			}
+                boolean force = preferences.getBoolean("dbg_force_tcp_in_calls", false);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("dbg_force_tcp_in_calls", !force);
+                editor.commit();
+                tcpCell.setChecked(!force);
+            }
 		});
 		ll.addView(tcpCell);
 
@@ -464,12 +464,12 @@ public class VoIPHelper {
 			dumpCell.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					boolean force = preferences.getBoolean("dbg_dump_call_stats", false);
-					SharedPreferences.Editor editor = preferences.edit();
-					editor.putBoolean("dbg_dump_call_stats", !force);
-					editor.apply();
-					dumpCell.setChecked(!force);
-				}
+                    boolean force = preferences.getBoolean("dbg_dump_call_stats", false);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("dbg_dump_call_stats", !force);
+                    editor.commit();
+                    dumpCell.setChecked(!force);
+                }
 			});
 			ll.addView(dumpCell);
 		}
@@ -480,12 +480,12 @@ public class VoIPHelper {
 			connectionServiceCell.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					boolean force = preferences.getBoolean("dbg_force_connection_service", false);
-					SharedPreferences.Editor editor = preferences.edit();
-					editor.putBoolean("dbg_force_connection_service", !force);
-					editor.apply();
-					connectionServiceCell.setChecked(!force);
-				}
+                    boolean force = preferences.getBoolean("dbg_force_connection_service", false);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("dbg_force_connection_service", !force);
+                    editor.commit();
+                    connectionServiceCell.setChecked(!force);
+                }
 			});
 			ll.addView(connectionServiceCell);
 		}

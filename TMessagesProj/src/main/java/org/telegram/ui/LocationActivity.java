@@ -518,7 +518,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     actionBar.setTitle(LocaleController.getString("ChatLocation", R.string.ChatLocation));
                 }
                 otherItem = menu.addItem(0, R.drawable.ic_ab_other);
-                otherItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+                otherItem.addSubItem(open_in, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
                 if (!getLocationController().isSharingLocation(dialogId)) {
                     otherItem.addSubItem(share_live_location, R.drawable.menu_location, LocaleController.getString("SendLiveLocationMenu", R.string.SendLiveLocationMenu));
                 }

@@ -52,10 +52,9 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-import kotlin.collections.ArraysKt;
 import tw.nekomimi.nekogram.ExternalGcm;
+import tw.nekomimi.nekogram.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -401,25 +400,25 @@ public class MessagesController extends BaseController implements NotificationCe
         boolean is1user = !DialogObject.isChannel(dialog1) && dialog1.id > 0;
         boolean is2user = !DialogObject.isChannel(dialog2) && dialog2.id > 0;
 
-        if (NekoXConfig.sortByUnread) {
+        if (NekoConfig.sortByUnread) {
             if (dialog1.unread_count == 0 && dialog2.unread_count > 0) {
                 return 1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0) {
-                if (NekoXConfig.sortByUnmuted) {
+                if (NekoConfig.sortByUnmuted) {
                     if (isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                         return 1;
                     } else if (!isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
                         return -1;
                     } else if (!isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
-                        if (NekoXConfig.sortByUser) {
+                        if (NekoConfig.sortByUser) {
                             if (!is1user && is2user) {
                                 return 1;
                             } else if (is1user && !is2user) {
                                 return -1;
                             } else if (is1user && is2user) {
-                                if (NekoXConfig.sortByContacts) {
+                                if (NekoConfig.sortByContacts) {
                                     boolean is1contact = is1user && getContactsController().isContact((int) dialog1.id);
                                     boolean is2contact = is2user && getContactsController().isContact((int) dialog2.id);
                                     if (!is1contact && is2contact) {
@@ -441,19 +440,19 @@ public class MessagesController extends BaseController implements NotificationCe
                     return 0;
                 }
             }
-        } else if (NekoXConfig.sortByUnmuted) {
+        } else if (NekoConfig.sortByUnmuted) {
             if (dialog1.unread_count == 0 && dialog2.unread_count > 0 && isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                 return 1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0 && !isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0 && !isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
-                if (NekoXConfig.sortByUser) {
+                if (NekoConfig.sortByUser) {
                     if (!is1user && is2user) {
                         return 1;
                     } else if (is1user && !is2user) {
                         return -1;
                     } else if (is1user && is2user) {
-                        if (NekoXConfig.sortByContacts) {
+                        if (NekoConfig.sortByContacts) {
                             boolean is1contact = is1user && getContactsController().isContact((int) dialog1.id);
                             boolean is2contact = is2user && getContactsController().isContact((int) dialog2.id);
                             if (!is1contact && is2contact) {
@@ -987,7 +986,8 @@ public class MessagesController extends BaseController implements NotificationCe
 
         suggestedFilters.clear();
 
-        s:for (TLRPC.TL_dialogFilterSuggested suggested : NekoXConfig.internalFilters) {
+        s:
+        for (TLRPC.TL_dialogFilterSuggested suggested : InternalFilters.internalFilters) {
 
             for (DialogFilter filter : dialogFilters) {
 
@@ -4738,7 +4738,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void sendTyping(final long dialog_id, final int action, int classGuid) {
-        if (NekoXConfig.disableChatAction) return;
+        if (NekoConfig.disableChatAction) return;
         if (dialog_id == 0) {
             return;
         }
@@ -5195,7 +5195,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (error == null) {
                 AndroidUtilities.runOnUIThread(() -> {
                     /*installReferer = null;
-                    mainPreferences.edit().remove("installReferer").apply();*/
+                    mainPreferences.edit().remove("installReferer").commit();*/
 
                     TLRPC.TL_help_recentMeUrls res = (TLRPC.TL_help_recentMeUrls) response;
                     putUsers(res.users, false);
@@ -6578,7 +6578,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             getMessagesStorage().setDialogFlags(dialog_id, 0);
         }
-        editor.apply();
+        editor.commit();
         if (updated) {
             getNotificationCenter().postNotificationName(NotificationCenter.notificationsSettingsUpdated);
         }
@@ -6623,7 +6623,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         if (editor != null) {
-            editor.apply();
+            editor.commit();
         }
     }
 
@@ -11334,10 +11334,10 @@ public class MessagesController extends BaseController implements NotificationCe
                         getMediaDataController().addNewStickerSet(update.stickerset);
                     } else if (baseUpdate instanceof TLRPC.TL_updateSavedGifs) {
                         SharedPreferences.Editor editor2 = emojiPreferences.edit();
-                        editor2.putLong("lastGifLoadTime", 0).apply();
+                        editor2.putLong("lastGifLoadTime", 0).commit();
                     } else if (baseUpdate instanceof TLRPC.TL_updateRecentStickers) {
                         SharedPreferences.Editor editor2 = emojiPreferences.edit();
-                        editor2.putLong("lastStickersLoadTime", 0).apply();
+                        editor2.putLong("lastStickersLoadTime", 0).commit();
                     } else if (baseUpdate instanceof TLRPC.TL_updateDraftMessage) {
                         TLRPC.TL_updateDraftMessage update = (TLRPC.TL_updateDraftMessage) baseUpdate;
                         forceDialogsUpdate = true;
@@ -11489,7 +11489,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }
                 if (editor != null) {
-                    editor.apply();
+                    editor.commit();
                     getNotificationCenter().postNotificationName(NotificationCenter.notificationsSettingsUpdated);
                 }
                 getMessagesStorage().updateUsers(dbUsersStatus, true, true, true);
@@ -11648,7 +11648,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             editor.remove("diditemo" + key);
                         }
                     }
-                    editor.apply();
+                    editor.commit();
                 }
                 if (markAsReadMessagesOutboxFinal != null) {
                     for (int b = 0, size = markAsReadMessagesOutboxFinal.size(); b < size; b++) {
@@ -12143,10 +12143,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
         } catch (Exception e) {
 
-            NekoXConfig.sortByUnread = false;
-            NekoXConfig.sortByUnmuted = false;
-            NekoXConfig.sortByUser = false;
-            NekoXConfig.sortByContacts = false;
+            NekoConfig.sortByUnread = false;
+            NekoConfig.sortByUnmuted = false;
+            NekoConfig.sortByUser = false;
+            NekoConfig.sortByContacts = false;
 
             try {
 

@@ -81,3 +81,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+
+## :)
+
+[关于 "NekoX 举报 Nekogram" 的声明](https://telegra.ph/page-04-12)

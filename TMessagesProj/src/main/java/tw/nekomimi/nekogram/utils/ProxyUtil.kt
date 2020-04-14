@@ -78,9 +78,9 @@ object ProxyUtil {
 
         }.recoverCatching {
 
-            // 从 GITHUB PAGES 读取
+            // 从 GITLAB 读取
 
-            val list = JSONArray(HttpUtil.get("https://nekox-dev.github.io/ProxyList/proxy_list.json")).toString()
+            val list = JSONArray(HttpUtil.get("https://gitlab.com/nekohasekai/nekox-proxy-list/-/raw/master/proxy_list.json")).toString()
 
             if (!cacheFile.isFile || list != cacheFile.readText()) {
 
@@ -92,9 +92,9 @@ object ProxyUtil {
 
         }.recoverCatching {
 
-            // 从 GITLAB 读取
+            // 从 GITHUB PAGES 读取
 
-            val list = JSONArray(HttpUtil.get("https://gitlab.com/KazamaWataru/nekox-proxy-list/-/raw/master/proxy_list.json")).toString()
+            val list = JSONArray(HttpUtil.get("https://nekox-dev.github.io/ProxyList/proxy_list.json")).toString()
 
             if (!cacheFile.isFile || list != cacheFile.readText()) {
 
@@ -212,7 +212,7 @@ object ProxyUtil {
 
         }.onFailure {
 
-            FileLog.e(it)
+            FileLog.w("$it")
 
             AlertUtil.showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
 

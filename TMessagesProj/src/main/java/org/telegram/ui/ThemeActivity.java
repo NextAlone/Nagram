@@ -335,7 +335,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("bubbleRadius", SharedConfig.bubbleRadius);
-            editor.apply();
+            editor.commit();
 
             RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(textSizeRow);
             if (holder != null && holder.itemView instanceof TextSizeCell) {
@@ -370,7 +370,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("fons_size", SharedConfig.fontSize);
-            editor.apply();
+            editor.commit();
             Theme.chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
 
             RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(textSizeRow);
@@ -801,7 +801,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 boolean animations = preferences.getBoolean("view_animations", true);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("view_animations", !animations);
-                editor.apply();
+                editor.commit();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(!animations);
                 }
@@ -812,7 +812,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 boolean send = preferences.getBoolean("send_by_enter", false);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("send_by_enter", !send);
-                editor.apply();
+                editor.commit();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(!send);
                 }
@@ -871,7 +871,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt("sortContactsBy", which);
-                    editor.apply();
+                    editor.commit();
                     if (listAdapter != null) {
                         listAdapter.notifyItemChanged(position);
                     }

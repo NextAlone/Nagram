@@ -108,7 +108,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 					editor.remove("quick_reply_msg" + (i + 1));
 			}
 		}
-		editor.apply();
+		editor.commit();
 	}
 
 	@Override

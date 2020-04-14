@@ -2507,7 +2507,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         sendItem = menu.addItem(gallery_menu_send, R.drawable.msg_forward);
 
         menuItem = menu.addItem(0, R.drawable.ic_ab_other);
-        menuItem.addSubItem(gallery_menu_openin, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_openin, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         allMediaItem = menuItem.addSubItem(gallery_menu_showall, R.drawable.msg_media, LocaleController.getString("ShowAllMedia", R.string.ShowAllMedia));
         allMediaItem.setColors(0xfffafafa, 0xfffafafa);
@@ -2620,7 +2620,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         containerView.addView(miniProgressView, LayoutHelper.createFrame(64, 64, Gravity.CENTER));
 
         shareButton = new ImageView(containerView.getContext());
-        shareButton.setImageResource(R.drawable.share);
+        shareButton.setImageResource(R.drawable.baseline_share_24);
         shareButton.setScaleType(ImageView.ScaleType.CENTER);
         shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         bottomLayout.addView(shareButton, LayoutHelper.createFrame(50, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
@@ -9307,7 +9307,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("compress_video2", selectedCompression);
-        editor.apply();
+        editor.commit();
         updateWidthHeightBitrateForCompression();
         updateVideoInfo();
         if (request) {

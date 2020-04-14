@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="UseOfficalId">假裝是官方應用</string>
-    <string name="UseOfficalIdNotice">登錄時將自己標識為官方應用，如果您無法註冊或登錄，這可能會有幫助。 \n\n注意：如果您正在使用 release 版本，谷歌云推送將無法工作。</string>
+    <string name="UseOfficalId">偽裝成官方客戶端</string>
+    <string name="UseOfficalIdNotice">登錄時將自己標識為官方客戶端，如果您無法註冊或登錄，這可能會有幫助。 \n\n注意：如果您正在使用 release 版本，谷歌雲推送將無法工作。</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
+    <string name="NekoXUpdatesChannel">NekoX 更新頻道</string>
+    <string name="ShowIdAndDc">在個人資料中顯示 id / dc</string>
+    <string name="UseDefaultTheme">使用默認主題 *</string>
+    <string name="NightMode">夜間模式</string>
     <string name="PrivacyNotice">隱私警告</string>
     <string name="PrivacyNoticePhoneVisible">檢測到您的手機號碼對任何人都可見, 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
     <string name="PrivacyNoticeAddByPhone">檢測到您沒有被關閉“允許通過電話號碼找到我”設置， 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
     <string name="PrivacyNoticeP2p">檢測到您沒有關閉“允許 P2p 通話”設置， 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
-    <string name="ApplySuggestion">應用</string>
+    <string name="ApplySuggestion">套用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除標題中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
@@ -19,7 +23,7 @@
     <string name="SaveCacheToSdcard">保存緩存到存儲卡*</string>
     <string name="FilterNameUsers">用戶</string>
     <string name="FilterNameUsersDescription">僅來自私聊的消息</string>
-    <string name="FilterNameContacts">聯係人</string>
+    <string name="FilterNameContacts">聯絡人</string>
     <string name="FilterNameContactsDescription">僅來自通訊錄用戶的消息</string>
     <string name="FilterNameGroups">群組</string>
     <string name="FilterNameGroupsDescription">僅來自群組的消息</string>

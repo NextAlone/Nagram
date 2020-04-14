@@ -2020,7 +2020,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (keyEvent.getAction() == 1) {
                         if (currentPopupContentType == 1 && botButtonsMessageObject != null) {
                             SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-                            preferences.edit().putInt("hidekeyboard_" + dialog_id, botButtonsMessageObject.getId()).apply();
+                            preferences.edit().putInt("hidekeyboard_" + dialog_id, botButtonsMessageObject.getId()).commit();
                         }
                         if (searchingType != 0) {
                             searchingType = 0;
@@ -2173,11 +2173,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (!isPopupShowing() || currentPopupContentType != 1) {
                         showPopup(1, 1);
                         SharedPreferences preferences1 = MessagesController.getMainSettings(currentAccount);
-                        preferences1.edit().remove("hidekeyboard_" + dialog_id).apply();
+                        preferences1.edit().remove("hidekeyboard_" + dialog_id).commit();
                     } else {
                         if (currentPopupContentType == 1 && botButtonsMessageObject != null) {
                             SharedPreferences preferences1 = MessagesController.getMainSettings(currentAccount);
-                            preferences1.edit().putInt("hidekeyboard_" + dialog_id, botButtonsMessageObject.getId()).apply();
+                            preferences1.edit().putInt("hidekeyboard_" + dialog_id, botButtonsMessageObject.getId()).commit();
                         }
                         openKeyboardInternal();
                     }
@@ -2209,7 +2209,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 public void onClick(View v) {
                     silent = !silent;
                     notifyButton.setImageResource(silent ? R.drawable.input_notify_off : R.drawable.input_notify_on);
-                    MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, silent).apply();
+                    MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, silent).commit();
                     NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(dialog_id);
                     try {
                         if (visibleToast != null) {
@@ -2232,7 +2232,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             attachButton = new ImageView(context);
             attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
-            attachButton.setImageResource(R.drawable.input_attach);
+            attachButton.setImageResource(R.drawable.deproko_baseline_attach_26);
             attachButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
                 attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
@@ -2955,7 +2955,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 TLRPC.Chat chat = accountInstance.getMessagesController().getChat(-(int) dialog_id);
                 isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
             }
-            preferences.edit().putBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", visible).apply();
+            preferences.edit().putBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", visible).commit();
             audioVideoButtonAnimation = new AnimatorSet();
             audioVideoButtonAnimation.playTogether(
                     ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, visible ? 1.0f : 0.1f),
@@ -3739,7 +3739,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             TLRPC.Chat chat = parentFragment.getCurrentChat();
             TLRPC.User user = parentFragment.getCurrentUser();
             if (user != null || ChatObject.isChannel(chat) && chat.megagroup || !ChatObject.isChannel(chat)) {
-                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, !notify).apply();
+                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, !notify).commit();
             }
         }
         if (stickersExpanded) {
@@ -5682,7 +5682,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         showPopup(0, 0);
                     }
                     SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-                    preferences.edit().putInt("answered_" + dialog_id, botButtonsMessageObject.getId()).apply();
+                    preferences.edit().putInt("answered_" + dialog_id, botButtonsMessageObject.getId()).commit();
                 }
                 if (delegate != null) {
                     delegate.onMessageSend(null, true, 0);
@@ -6406,7 +6406,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (isPopupShowing()) {
             if (currentPopupContentType == 1 && byBackButton && botButtonsMessageObject != null) {
                 SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-                preferences.edit().putInt("hidekeyboard_" + dialog_id, botButtonsMessageObject.getId()).apply();
+                preferences.edit().putInt("hidekeyboard_" + dialog_id, botButtonsMessageObject.getId()).commit();
             }
             if (byBackButton && searchingType != 0) {
                 searchingType = 0;
@@ -6505,10 +6505,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (height > AndroidUtilities.dp(50) && keyboardVisible && !AndroidUtilities.isInMultiwindow) {
             if (isWidthGreater) {
                 keyboardHeightLand = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).apply();
+                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
             } else {
                 keyboardHeight = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).apply();
+                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).commit();
             }
         }
 

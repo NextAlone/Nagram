@@ -897,7 +897,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     ManageChatTextCell actionCell = (ManageChatTextCell) holder.itemView;
                     actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                     if (position == chatsCreateRow) {
-                        actionCell.setText(LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup), null, R.drawable.groups_create, chatsStartRow != -1);
+                        actionCell.setText(LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup), null, R.drawable.baseline_group_add_24, chatsStartRow != -1);
                     } else if (position == showMeRow) {
                         if (showingMe = (getUserConfig().sharingMyLocationUntil > getConnectionsManager().getCurrentTime())) {
                             actionCell.setText(LocaleController.getString("StopShowingMe", R.string.StopShowingMe), null, R.drawable.actions_nearby_off, usersStartRow != -1);

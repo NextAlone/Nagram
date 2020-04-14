@@ -297,7 +297,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 } else {
                     getMessagesController().secretWebpagePreview = 1;
                 }
-                MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", getMessagesController().secretWebpagePreview).apply();
+                MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", getMessagesController().secretWebpagePreview).commit();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(getMessagesController().secretWebpagePreview == 1);
                 }
