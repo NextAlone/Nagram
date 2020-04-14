@@ -25,8 +25,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import androidx.annotation.Keep;
-
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -43,6 +41,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Keep;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
@@ -57,9 +57,13 @@ public class ActionBarLayout extends FrameLayout {
 
     public interface ActionBarLayoutDelegate {
         boolean onPreIme();
+
         boolean needPresentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, ActionBarLayout layout);
+
         boolean needAddFragmentToStack(BaseFragment fragment, ActionBarLayout layout);
+
         boolean needCloseLastFragment(ActionBarLayout layout);
+
         void onRebuildAllFragments(ActionBarLayout layout, boolean last);
     }
 
@@ -447,7 +451,7 @@ public class ActionBarLayout extends FrameLayout {
                 layerShadowDrawable.setAlpha((int) (0xff * alpha));
                 layerShadowDrawable.draw(canvas);
             } else if (child == containerViewBack) {
-                float opacity = Math.min(0.8f, (width - translationX) / (float)width);
+                float opacity = Math.min(0.8f, (width - translationX) / (float) width);
                 if (opacity < 0) {
                     opacity = 0;
                 }
@@ -858,6 +862,8 @@ public class ActionBarLayout extends FrameLayout {
         if (fragment == null || checkTransitionAnimation() || delegate != null && check && !delegate.needPresentFragment(fragment, removeLast, forceWithoutAnimation, this) || !fragment.onFragmentCreate()) {
             return false;
         }
+
+
         fragment.setInPreviewMode(preview);
         if (parentActivity.getCurrentFocus() != null) {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
@@ -1223,7 +1229,7 @@ public class ActionBarLayout extends FrameLayout {
                 int[] screenSize = getScreenSize(getContext());
                 if (screenSize[1] / screenSize[0] > 2) {
                     int padding = AndroidUtilities.dp(64);
-                    fragmentView.setPadding(padding,0,padding,0);
+                    fragmentView.setPadding(padding, 0, padding, 0);
                 }
                 containerView.addView(fragmentView);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fragmentView.getLayoutParams();
