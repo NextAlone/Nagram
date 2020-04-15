@@ -547,11 +547,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 3) {
                                 MessagesController.getInstance(currentAccount).forceResetDialogs();
                             } else if (which == 4) {
-                                BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
-                                BuildVars.DEBUG_VERSION = BuildVars.LOGS_ENABLED;
-                                BuildVars.DEBUG_PRIVATE_VERSION = BuildVars.LOGS_ENABLED;
+                                BuildVars.SAVE_LOG = !BuildVars.SAVE_LOG;
                                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
+                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.SAVE_LOG).commit();
                                 updateRows();
                             } else if (which == 5) {
                                 NekoConfig.toggleResidentNotification();
@@ -832,9 +830,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         rowCount = 0;
         emptyRow = rowCount++;
         numberSectionRow = rowCount++;
-        if (!NekoConfig.hidePhone) {
-            numberRow = rowCount++;
-        }
+        numberRow = rowCount++;
         usernameRow = rowCount++;
         bioRow = rowCount++;
         settingsSectionRow = rowCount++;
@@ -860,7 +856,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             helpSectionCell = -1;
             debugHeaderRow = -1;
         }
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.SAVE_LOG) {
             sendLogsRow = rowCount++;
             clearLogsRow = rowCount++;
         } else {

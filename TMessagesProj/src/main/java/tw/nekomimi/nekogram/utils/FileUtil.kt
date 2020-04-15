@@ -9,9 +9,28 @@ object FileUtil {
     @JvmStatic
     fun initDir(dir: File) {
 
+        var parentDir: File? = dir
+
+        while (parentDir != null) {
+
+            if (parentDir.isFile) parentDir.deleteRecursively()
+
+            parentDir = parentDir.parentFile
+
+            break
+
+        }
+
         dir.mkdirs()
 
         // ignored
+
+    }
+
+    @JvmStatic
+    fun delete(file: File) {
+
+        file.deleteRecursively()
 
     }
 

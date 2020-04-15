@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -28,6 +30,14 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
+import java.io.File;
+
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.LocaleUtil;
+import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.ZipUtil;
+
 public class NekoXSettingActivity extends BaseFragment {
 
     private RecyclerListView listView;
@@ -36,6 +46,9 @@ public class NekoXSettingActivity extends BaseFragment {
     private int rowCount;
 
     private int developerSettingsRow;
+
+    private int fetchAndExportLangRow;
+
     private int disableFlagSecureRow;
     private int disableScreenshotDetectionRow;
 
@@ -89,6 +102,12 @@ public class NekoXSettingActivity extends BaseFragment {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setOnItemClickListener((view, position, x, y) -> {
 
+            if (position == fetchAndExportLangRow) {
+
+                fetchAndExportLang();
+
+            }
+
             if (position == disableFlagSecureRow) {
                 NekoXConfig.toggleDisableFlagSecure();
                 if (view instanceof TextCheckCell) {
@@ -126,7 +145,11 @@ public class NekoXSettingActivity extends BaseFragment {
 
     private void updateRows() {
         rowCount = 0;
+
         developerSettingsRow = rowCount++;
+
+        fetchAndExportLangRow = rowCount++;
+
         disableFlagSecureRow = rowCount++;
         disableScreenshotDetectionRow = rowCount++;
 
@@ -137,6 +160,44 @@ public class NekoXSettingActivity extends BaseFragment {
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void fetchAndExportLang() {
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), 3);
+
+        pro.show();
+
+        LocaleUtil.fetchAndExportLang(currentAccount, () -> {
+
+            File zipFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "languages.zip");
+
+            FileUtil.delete(zipFile);
+
+            File[] files = LocaleUtil.cacheDir.listFiles();
+
+            if (files != null) {
+
+                ZipUtil.makeZip(zipFile, files);
+
+                AndroidUtilities.runOnUIThread(() -> {
+
+                    pro.dismiss();
+
+                    ShareUtil.shareFile(getParentActivity(), zipFile);
+
+                });
+
+            } else {
+
+                AlertUtil.showToast("No files");
+
+                AndroidUtilities.runOnUIThread(pro::dismiss);
+
+            }
+
+        });
+
     }
 
     @Override
@@ -213,15 +274,22 @@ public class NekoXSettingActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
                     if (position == disableFlagSecureRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableFlagSecure", R.string.DisableFlagSecure), NekoXConfig.disableFlagSecure, true);
+                        textCell.setTextAndCheck("Disable Flag Secure", NekoXConfig.disableFlagSecure, true);
                     } else if (position == disableScreenshotDetectionRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableScreenshotDetection", R.string.DisableScreenshotDetection), NekoXConfig.disableScreenshotDetection, false);
+                        textCell.setTextAndCheck("Disable Screenshot Detection", NekoXConfig.disableScreenshotDetection, false);
                     } else if (position == showTestBackendRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ShowTestBackend", R.string.ShowTestBackend), NekoXConfig.showTestBackend, true);
+                        textCell.setTextAndCheck("Show Test Backend", NekoXConfig.showTestBackend, true);
                     } else if (position == showBotLoginRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ShowBotLogin", R.string.ShowBotLogin), NekoXConfig.showBotLogin, false);
+                        textCell.setTextAndCheck("Show Bot Login", NekoXConfig.showBotLogin, false);
                     }
                     break;
+                }
+
+                case 2: {
+                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    if (position == fetchAndExportLangRow) {
+                        textCell.setText("Fetch Builtin Languages", true);
+                    }
                 }
 
             }
@@ -231,7 +299,11 @@ public class NekoXSettingActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == disableFlagSecureRow || position == disableScreenshotDetectionRow || position == showTestBackendRow || position == showBotLoginRow;
+            return position == fetchAndExportLangRow ||
+                    position == disableFlagSecureRow ||
+                    position == disableScreenshotDetectionRow ||
+                    position == showTestBackendRow ||
+                    position == showBotLoginRow;
         }
 
         @Override
@@ -277,6 +349,8 @@ public class NekoXSettingActivity extends BaseFragment {
             } else if (position == disableFlagSecureRow || position == disableScreenshotDetectionRow ||
                     position == showTestBackendRow || position == showBotLoginRow) {
                 return 3;
+            } else if (position == fetchAndExportLangRow) {
+                return 2;
             }
             return 6;
         }

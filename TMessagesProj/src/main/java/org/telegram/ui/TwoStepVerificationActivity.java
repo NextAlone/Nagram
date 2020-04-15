@@ -36,18 +36,21 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SRPHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -66,9 +69,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.math.BigInteger;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import tw.nekomimi.nekogram.EditTextAutoFill;
 
@@ -145,6 +145,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         if (type == 0) {
             loadPasswordInfo(false);
         }
+    }
+
+    public TwoStepVerificationActivity(int account, TLRPC.TL_account_password password) {
+        this(account, 1);
+        currentPassword = password;
+        passwordEntered = currentPasswordHash != null && currentPasswordHash.length > 0 || !currentPassword.has_password;
+        waitingForEmail = !TextUtils.isEmpty(currentPassword.email_unconfirmed_pattern);
+        initPasswordNewAlgo(currentPassword);
     }
 
     protected void setRecoveryParams(TLRPC.TL_account_password password) {
@@ -536,7 +544,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         currentPassword = password;
     }
 
-    public void setDelegate(TwoStepVerificationActivityDelegate twoStepVerificationActivityDelegate) {
+    public void setDelegate(TwoStepVerificationActivityDelegate
+                                    twoStepVerificationActivityDelegate) {
         delegate = twoStepVerificationActivityDelegate;
     }
 
@@ -551,7 +560,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    public static boolean canHandleCurrentPassword(TLRPC.TL_account_password password, boolean login) {
+    public static boolean canHandleCurrentPassword(TLRPC.TL_account_password password,
+                                                   boolean login) {
         if (login) {
             if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoUnknown) {
                 return false;
@@ -708,7 +718,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         lastValue.append(rowCount);
 
         boolean wasCodeField = passwordCodeFieldRow != -1;
-        
+
         rowCount = 0;
         setPasswordRow = -1;
         setPasswordDetailRow = -1;
@@ -1109,7 +1119,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return null;
     }
 
-    private boolean checkSecretValues(byte[] passwordBytes, TLRPC.TL_account_passwordSettings passwordSettings) {
+    private boolean checkSecretValues(byte[] passwordBytes, TLRPC.
+            TL_account_passwordSettings passwordSettings) {
         if (passwordSettings.secure_settings != null) {
             currentSecret = passwordSettings.secure_settings.secure_secret;
             byte[] passwordHash;
@@ -1517,6 +1528,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             }
             return 0;
         }
+
     }
 
     @Override

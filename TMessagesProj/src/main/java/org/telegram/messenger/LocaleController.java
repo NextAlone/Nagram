@@ -44,6 +44,7 @@ import java.util.TimeZone;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class LocaleController {
 
@@ -344,7 +345,7 @@ public class LocaleController {
         localeInfo.name = "简体中文 ( NekoX )";
         localeInfo.nameEnglish = "Simplified Chinese ( NekoX )";
         localeInfo.shortName = "nekox_zh_cn";
-        localeInfo.baseLangCode = "zh_hans_raw";
+        localeInfo.baseLangCode = "zh_hans";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
         localeInfo.pluralLangCode = "zh_cn";
@@ -355,10 +356,22 @@ public class LocaleController {
         languagesDict.put("zh_sg", localeInfo);
 
         localeInfo = new LocaleInfo();
+        localeInfo.name = "祈翠";
+        localeInfo.nameEnglish = "Cuified Chinese (zh-zhao)";
+        localeInfo.shortName = "qicui";
+        localeInfo.baseLangCode = "zh_hans";
+        localeInfo.isRtl = false;
+        localeInfo.pathToFile = "unofficial";
+        localeInfo.pluralLangCode = "zh_cn";
+        localeInfo.builtIn = true;
+        languages.add(localeInfo);
+        languagesDict.put(localeInfo.getKey(), localeInfo);
+
+        localeInfo = new LocaleInfo();
         localeInfo.name = "瓜体中文 \uD83D\uDE36";
         localeInfo.nameEnglish = "Duangified Chinese (Simplified)";
         localeInfo.shortName = "duang_zh_hans";
-        localeInfo.baseLangCode = "zh_hans_raw";
+        localeInfo.baseLangCode = "zh_hans";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
         localeInfo.pluralLangCode = "zh_duang";
@@ -1979,7 +1992,7 @@ public class LocaleController {
                     req.lang_pack = "";
                     ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                         if (response != null) {
-                            AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                            saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                         }
                     }, ConnectionsManager.RequestFlagWithoutLogin);
                 }
@@ -1988,7 +2001,7 @@ public class LocaleController {
                 req.lang_code = localeInfo.getBaseLangCode();
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {
                     if (response != null) {
-                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             }
@@ -2001,7 +2014,7 @@ public class LocaleController {
                 req.lang_pack = "";
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                     if (response != null) {
-                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             } else {
@@ -2012,7 +2025,7 @@ public class LocaleController {
                 req.lang_code = localeInfo.getLangCode();
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {
                     if (response != null) {
-                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             }

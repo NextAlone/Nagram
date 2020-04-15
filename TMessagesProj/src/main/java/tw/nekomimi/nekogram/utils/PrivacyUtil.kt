@@ -11,6 +11,8 @@ import org.telegram.tgnet.ConnectionsManager
 import org.telegram.tgnet.TLRPC
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ActionBar.Theme
+import org.telegram.ui.LaunchActivity
+import org.telegram.ui.TwoStepVerificationActivity
 
 object PrivacyUtil {
 
@@ -32,6 +34,12 @@ object PrivacyUtil {
         if (!MessagesController.getMainSettings(account).getBoolean("privacy_warning_skip_p2p", false)) {
 
             postCheckAllowP2p(ctx, account)
+
+        }
+
+        if (!MessagesController.getMainSettings(account).getBoolean("privacy_warning_skip_2fa", false)) {
+
+            postCheckAllow2fa(ctx, account)
 
         }
 
@@ -145,6 +153,23 @@ object PrivacyUtil {
 
     }
 
+    private fun postCheckAllow2fa(ctx: Context, account: Int) {
+
+        ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_getPassword(), { response, _ ->
+
+            if (response is TLRPC.TL_account_password) {
+
+                if (!response.has_password) {
+
+                    show2faAlert(ctx, account, response)
+                }
+
+            }
+
+        }, ConnectionsManager.RequestFlagFailOnServerErrors)
+
+    }
+
     private fun showPrivacyAlert(ctx: Context, account: Int, type: Int) {
 
         val builder = AlertDialog.Builder(ctx)
@@ -189,9 +214,48 @@ object PrivacyUtil {
             MessagesController.getMainSettings(account).edit().putBoolean("privacy_warning_skip_${when (type) {
                 0 -> "phone_number"
                 1 -> "add_by_phone"
-                else -> "p2p"
+                2 -> "p2p"
+                else -> "2fa"
             }
             }", true).apply()
+
+        }
+
+        runCatching {
+
+            (builder.show().getButton(DialogInterface.BUTTON_NEUTRAL) as TextView?)?.setTextColor(Theme.getColor(Theme.key_dialogTextRed2))
+
+        }
+
+    }
+
+    private fun show2faAlert(ctx: Context, account: Int, password: TLRPC.TL_account_password) {
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(LocaleController.getString("", R.string.PrivacyNotice))
+
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("PrivacyNotice2fa", R.string.PrivacyNotice2fa)))
+
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set)) { _, _ ->
+
+            if (ctx is LaunchActivity) {
+
+                UIUtil.runOnUIThread(Runnable {
+
+                    ctx.presentFragment(TwoStepVerificationActivity(account, password))
+
+                })
+
+            }
+
+        }
+
+        builder.setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+
+        builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
+
+            MessagesController.getMainSettings(account).edit().putBoolean("privacy_warning_skip_2fa", true).apply()
 
         }
 

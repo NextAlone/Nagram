@@ -8,7 +8,10 @@
 
 package org.telegram.messenger;
 
+import android.os.Build;
 import android.util.Log;
+
+import com.google.zxing.oned.EAN8Writer;
 
 import org.telegram.messenger.time.FastDateFormat;
 
@@ -46,7 +49,7 @@ public class FileLog {
     }
 
     public FileLog() {
-        if (!BuildVars.LOGS_ENABLED) {
+        if (!BuildVars.SAVE_LOG) {
             return;
         }
         init();
@@ -126,6 +129,7 @@ public class FileLog {
     public static void e(final String message, final Throwable exception) {
         Log.e(tag, message, exception);
         ExternalGcm.recordException(new Exception(message,exception));
+        if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -143,6 +147,7 @@ public class FileLog {
     public static void e(final String message) {
         Log.e(tag, message);
         ExternalGcm.recordException(new Exception(message));
+        if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -159,6 +164,7 @@ public class FileLog {
     public static void e(final Throwable e) {
         Log.e(tag,"ERR", e);
         ExternalGcm.recordException(new Exception(e));
+        if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
@@ -181,9 +187,7 @@ public class FileLog {
 
     public static void d(final String message) {
         Log.d(tag, message);
-        if (!BuildVars.LOGS_ENABLED) {
-            return;
-        }
+        if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -200,6 +204,7 @@ public class FileLog {
     public static void w(final String message) {
         Log.w(tag, message);
         ExternalGcm.reportLog("[W] " + message);
+        if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {

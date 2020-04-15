@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.utils
 
 import android.content.Context
 import android.content.DialogInterface
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import org.telegram.messenger.AndroidUtilities
@@ -10,6 +11,7 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ActionBar.Theme
+import org.telegram.ui.Components.NumberPicker
 import tw.nekomimi.nekogram.NekoConfig
 import java.util.concurrent.atomic.AtomicReference
 
@@ -133,5 +135,43 @@ object AlertUtil {
         })
 
     })
+    
+    fun showTimePicker(ctx: Context,title: String,callback: (Long) -> Unit) {
+
+        ctx.setTheme(R.style.Theme_TMessages)
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(title)
+
+        builder.setView(LinearLayout(ctx).apply {
+
+            orientation = LinearLayout.HORIZONTAL
+
+            addView(NumberPicker(ctx).apply {
+
+                minValue = 0
+                maxValue = 60
+
+            },LinearLayout.LayoutParams(-2,-2).apply {
+
+                weight = 1F
+
+            })
+
+            addView(NumberPicker(ctx).apply {
+
+                minValue = 0
+                maxValue = 60
+
+            },LinearLayout.LayoutParams(-2,-2).apply {
+
+                weight = 1F
+
+            })
+
+        })
+
+    }
 
 }

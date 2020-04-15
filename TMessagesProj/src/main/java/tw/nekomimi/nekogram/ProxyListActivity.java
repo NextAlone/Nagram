@@ -1,3 +1,5 @@
+package tw.nekomimi.nekogram;
+
 /*
  * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
@@ -5,8 +7,6 @@
  *
  * Copyright Nikolai Kudashov, 2013-2018.
  */
-
-package org.telegram.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -59,6 +59,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.CameraScanActivity;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
@@ -67,6 +68,8 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.URLSpanNoUnderline;
+import org.telegram.ui.DocumentSelectActivity;
+import org.telegram.ui.ProxySettingsActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,11 +83,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.HttpUrl;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
-import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
-import tw.nekomimi.nekogram.VmessSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -92,7 +90,7 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
-    private ListAdapter listAdapter;
+    private ProxyListActivity.ListAdapter listAdapter;
     private RecyclerListView listView;
     @SuppressWarnings("FieldCanBeLocal")
     private LinearLayoutManager layoutManager;
@@ -688,7 +686,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         }
 
-        listAdapter = new ListAdapter(context);
+        listAdapter = new ProxyListActivity.ListAdapter(context);
 
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -724,19 +722,22 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (position == hidePublicRow) {
 
+                if (SharedConfig.proxyEnabled && SharedConfig.currentProxy.isPublic) {
+
+                    SharedConfig.setCurrentProxy(null);
+
+                }
+
                 NekoConfig.toggleHidePublicProxy();
 
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 textCheckCell.setChecked(NekoConfig.hidePublicProxy);
 
-                if (NekoConfig.hidePublicProxy && SharedConfig.proxyEnabled && SharedConfig.currentProxy.isPublic) {
-                    NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
-                    SharedConfig.setCurrentProxy(null);
-                    NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
-                    listAdapter.notifyItemChanged(useProxyRow);
-                }
+                NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
 
                 SharedConfig.reloadProxyList();
+
+                NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
 
                 updateRows(true);
 
@@ -838,8 +839,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                                 if (listAdapter != null) {
                                     listAdapter.notifyItemRemoved(position);
                                     if (SharedConfig.currentProxy == null) {
-                                        listAdapter.notifyItemChanged(useProxyRow, ListAdapter.PAYLOAD_CHECKED_CHANGED);
-                                        listAdapter.notifyItemChanged(callsRow, ListAdapter.PAYLOAD_CHECKED_CHANGED);
+                                        listAdapter.notifyItemChanged(useProxyRow, ProxyListActivity.ListAdapter.PAYLOAD_CHECKED_CHANGED);
+                                        listAdapter.notifyItemChanged(callsRow, ProxyListActivity.ListAdapter.PAYLOAD_CHECKED_CHANGED);
                                     }
                                 }
 
@@ -1142,8 +1143,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     int idx = SharedConfig.proxyList.indexOf(SharedConfig.currentProxy);
                     if (idx >= 0) {
                         RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(idx + proxyStartRow);
-                        if (holder != null && holder.itemView instanceof TextDetailProxyCell) {
-                            TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
+                        if (holder != null && holder.itemView instanceof ProxyListActivity.TextDetailProxyCell) {
+                            ProxyListActivity.TextDetailProxyCell cell = (ProxyListActivity.TextDetailProxyCell) holder.itemView;
                             cell.updateStatus();
                         }
                     }
@@ -1158,8 +1159,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     int idx = SharedConfig.proxyList.indexOf(proxyInfo);
                     if (idx >= 0) {
                         RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(idx + proxyStartRow);
-                        if (holder != null && holder.itemView instanceof TextDetailProxyCell) {
-                            TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
+                        if (holder != null && holder.itemView instanceof ProxyListActivity.TextDetailProxyCell) {
+                            ProxyListActivity.TextDetailProxyCell cell = (ProxyListActivity.TextDetailProxyCell) holder.itemView;
                             cell.updateStatus();
                         }
                     }
@@ -1221,7 +1222,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     break;
                 }
                 case 5: {
-                    TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
+                    ProxyListActivity.TextDetailProxyCell cell = (ProxyListActivity.TextDetailProxyCell) holder.itemView;
                     SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
                     cell.setProxy(info);
                     cell.setChecked(SharedConfig.currentProxy == info);
@@ -1292,7 +1293,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 5:
-                    view = new TextDetailProxyCell(mContext);
+                    view = new ProxyListActivity.TextDetailProxyCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }
@@ -1320,7 +1321,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     @Override
     public ThemeDescription[] getThemeDescriptions() {
         return new ThemeDescription[]{
-                new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailProxyCell.class}, null, null, null, Theme.key_windowBackgroundWhite),
+                new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, ProxyListActivity.TextDetailProxyCell.class}, null, null, null, Theme.key_windowBackgroundWhite),
                 new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray),
 
                 new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault),
@@ -1338,12 +1339,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText),
                 new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText),
 
-                new ThemeDescription(listView, 0, new Class[]{TextDetailProxyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText),
-                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueText6),
-                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2),
-                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGreenText),
-                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText4),
-                new ThemeDescription(listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{TextDetailProxyCell.class}, new String[]{"checkImageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3),
+                new ThemeDescription(listView, 0, new Class[]{ProxyListActivity.TextDetailProxyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText),
+                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ProxyListActivity.TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueText6),
+                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ProxyListActivity.TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2),
+                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ProxyListActivity.TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGreenText),
+                new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ProxyListActivity.TextDetailProxyCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText4),
+                new ThemeDescription(listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ProxyListActivity.TextDetailProxyCell.class}, new String[]{"checkImageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3),
 
                 new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader),
 

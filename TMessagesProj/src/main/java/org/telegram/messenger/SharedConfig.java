@@ -38,7 +38,6 @@ import java.util.LinkedList;
 
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ProxyManager;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.ShadowsocksRLoader;
@@ -1418,7 +1417,7 @@ public class SharedConfig {
 
         MessagesController.getGlobalMainSettings().edit()
                 .putInt("current_proxy", info == null ? 0 : info.hashCode())
-                .commit();
+                .apply();
 
         saveProxyList();
 
@@ -1442,9 +1441,14 @@ public class SharedConfig {
 
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
+
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+
+        boolean hidePublicProxy = preferences.getBoolean("hide_public_proxy",true);
+
         try {
 
-            if (!NekoConfig.hidePublicProxy) {
+            if (!hidePublicProxy) {
 
                 VmessProxy publicProxy = new VmessProxy(VmessLoader.getPublic());
                 publicProxy.isPublic = true;
@@ -1467,7 +1471,7 @@ public class SharedConfig {
 
         File remoteProxyListFile = ProxyUtil.cacheFile;
 
-        if (remoteProxyListFile.isFile() && !NekoConfig.hidePublicProxy) {
+        if (remoteProxyListFile.isFile() && !hidePublicProxy) {
 
             try {
 

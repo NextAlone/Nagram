@@ -1212,11 +1212,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                     parcelable = Uri.parse(parcelable.toString());
                                 }
                                 Uri uri = (Uri) parcelable;
-                                if (uri != null) {
-                                    if (AndroidUtilities.isInternalUri(uri)) {
-                                        error = true;
-                                    }
-                                }
                                 if (!error) {
                                     if (uri != null && (type != null && type.startsWith("image/") || uri.toString().toLowerCase().endsWith(".jpg"))) {
                                         if (photoPathsArray == null) {

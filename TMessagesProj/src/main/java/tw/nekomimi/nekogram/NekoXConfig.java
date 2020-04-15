@@ -17,30 +17,16 @@ public class NekoXConfig {
 
     public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
 
+    private static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
+
     public static boolean developerModeEntrance;
-    public static boolean developerMode;
+    public static boolean developerMode = preferences.getBoolean("developer_mode", false);
 
-    public static boolean disableFlagSecure;
-    public static boolean disableScreenshotDetection;
+    public static boolean disableFlagSecure = preferences.getBoolean("disable_flag_secure", false);
+    public static boolean disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
 
-    public static boolean showTestBackend;
-    public static boolean showBotLogin;
-
-    private static SharedPreferences preferences;
-
-    static {
-
-        preferences = NitritesKt.openMainSharedPreference("nekox_config");
-
-        developerMode = preferences.getBoolean("developer_mode", false);
-
-        disableFlagSecure = preferences.getBoolean("disable_flag_secure", false);
-        disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
-
-        showTestBackend = preferences.getBoolean("show_test_backend", false);
-        showBotLogin = preferences.getBoolean("show_bot_login", false);
-
-    }
+    public static boolean showTestBackend = preferences.getBoolean("show_test_backend", false);
+    public static boolean showBotLogin = preferences.getBoolean("show_bot_login", false);
 
     public static void toggleDeveloperMode() {
 
