@@ -10,76 +10,74 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.SharedConfig;
 
-import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
 
-    public static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+    private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
 
-    public static boolean useIPv6 = preferences.getBoolean("useIPv6", false);
+    public static boolean useIPv6;
     //public static boolean showHiddenFeature = false;
 
-    public static boolean useSystemEmoji = preferences.getBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
-    public static boolean ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
-    public static boolean hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
-    public static boolean disablePhotoSideAction = preferences.getBoolean("disablePhotoSideAction", true);
-    //showHiddenFeature = preferences.getBoolean("showHiddenFeature", false);
-    public static boolean hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
-    public static int mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
-    public static float stickerSize = preferences.getFloat("stickerSize", 14.0f);
-    public static int translationProvider = preferences.getInt("translationProvider", 1);
+    public static boolean useSystemEmoji;
+    public static boolean ignoreBlocked;
+    public static boolean hideProxySponsorChannel;
+    public static boolean disablePhotoSideAction;
+    public static boolean hideKeyboardOnChatScroll;
+    public static int mapPreviewProvider;
+    public static float stickerSize;
+    public static int translationProvider;
 
-    public static boolean showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
-    public static boolean showReport = preferences.getBoolean("showReport", false);
-    public static boolean showPrPr = preferences.getBoolean("showPrPr", false);
-    public static boolean showViewHistory = preferences.getBoolean("showViewHistory", true);
-    public static boolean showAdminActions = preferences.getBoolean("showAdminActions", true);
-    public static boolean showChangePermissions = preferences.getBoolean("showChangePermissions", true);
-    public static boolean showDeleteDownloadedFile = preferences.getBoolean("showDeleteDownloadedFile", true);
-    public static boolean showMessageDetails = preferences.getBoolean("showMessageDetails", false);
-    public static boolean showTranslate = preferences.getBoolean("showTranslate", true);
-    public static boolean showRepeat = preferences.getBoolean("showRepeat", true);
+    public static boolean showAddToSavedMessages;
+    public static boolean showReport;
+    public static boolean showPrPr;
+    public static boolean showViewHistory;
+    public static boolean showAdminActions;
+    public static boolean showChangePermissions;
+    public static boolean showDeleteDownloadedFile;
+    public static boolean showMessageDetails;
+    public static boolean showTranslate;
+    public static boolean showRepeat;
 
-    public static boolean hidePhone = preferences.getBoolean("hidePhone", true);
-    public static int typeface = preferences.getInt("typeface", 0);
-    public static boolean transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
-    public static boolean forceTablet = preferences.getBoolean("forceTablet", false);
-    public static boolean openArchiveOnPull = preferences.getBoolean("openArchiveOnPull", false);
-    public static boolean avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
+    public static boolean hidePhone;
+    public static int typeface;
+    public static boolean transparentStatusBar;
+    public static boolean forceTablet;
+    public static boolean openArchiveOnPull;
+    public static boolean avatarAsDrawerBackground;
     public static boolean showTabsOnForward;
-    public static int nameOrder = preferences.getInt("nameOrder", 1);
-    public static int eventType = preferences.getInt("eventType", 0);
-    public static boolean newYear = preferences.getBoolean("newYear", false);
-    public static int actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
-    public static boolean unlimitedFavedStickers = preferences.getBoolean("unlimitedFavedStickers", false);
-    public static boolean unlimitedPinnedDialogs = preferences.getBoolean("unlimitedPinnedDialogs", false);
+    public static int nameOrder;
+    public static int eventType;
+    public static boolean newYear;
+    public static int actionBarDecoration;
+    public static boolean unlimitedFavedStickers;
+    public static boolean unlimitedPinnedDialogs;
 
-    public static boolean residentNotification = preferences.getBoolean("residentNotification", false);
+    public static boolean residentNotification;
 
-    public static boolean disableChatAction = preferences.getBoolean("disable_chat_action", false);
-    public static boolean sortByUnread = preferences.getBoolean("sort_by_unread", false);
-    public static boolean sortByUnmuted = preferences.getBoolean("sort_by_unmuted", true);
-    public static boolean sortByUser = preferences.getBoolean("sort_by_user", true);
-    public static boolean sortByContacts = preferences.getBoolean("sort_by_contacts", true);
+    public static boolean disableChatAction;
+    public static boolean sortByUnread;
+    public static boolean sortByUnmuted;
+    public static boolean sortByUser;
+    public static boolean sortByContacts;
 
-    public static boolean disableUndo = preferences.getBoolean("disable_undo", false);
+    public static boolean disableUndo;
 
-    public static boolean filterUsers = preferences.getBoolean("filter_users", true);
-    public static boolean filterContacts = preferences.getBoolean("filter_contacts", true);
-    public static boolean filterGroups = preferences.getBoolean("filter_groups", true);
-    public static boolean filterChannels = preferences.getBoolean("filter_channels", true);
-    public static boolean filterBots = preferences.getBoolean("filter_bots", true);
-    public static boolean filterAdmins = preferences.getBoolean("filter_admins", true);
-    public static boolean filterUnmuted = preferences.getBoolean("filter_unmuted", true);
-    public static boolean filterUnread = preferences.getBoolean("filter_unread", true);
-    public static boolean filterUnmutedAndUnread = preferences.getBoolean("filter_unmuted_and_unread", true);
+    public static boolean filterUsers;
+    public static boolean filterContacts;
+    public static boolean filterGroups;
+    public static boolean filterChannels;
+    public static boolean filterBots;
+    public static boolean filterAdmins;
+    public static boolean filterUnmuted;
+    public static boolean filterUnread;
+    public static boolean filterUnmutedAndUnread;
 
     public static boolean ignoreMutedCount;
 
-    public static boolean disableSystemAccount = preferences.getBoolean("disable_system_account", false);
+    public static boolean disableSystemAccount;
     public static boolean disableProxyWhenVpnEnabled;
     public static boolean skipOpenLinkConfirm;
 
@@ -88,86 +86,70 @@ public class NekoConfig {
     public static boolean useDefaultTheme;
     public static boolean showIdAndDc;
 
-    private static volatile boolean loaded;
-
-    public static void loadConfig() {
-
-        synchronized (NekoConfig.class) {
-
-            if (loaded) return;
-
-            loaded = true;
-
-            useIPv6 = preferences.getBoolean("useIPv6", false);
-            hidePhone = preferences.getBoolean("hidePhone", true);
-            ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
-            forceTablet = preferences.getBoolean("forceTablet", false);
-            typeface = preferences.getInt("typeface", 0);
-            nameOrder = preferences.getInt("nameOrder", 1);
-            mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
-            transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
-            residentNotification = preferences.getBoolean("residentNotification", false);
-            hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
-            showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
-            showReport = preferences.getBoolean("showReport", false);
-            showPrPr = preferences.getBoolean("showPrPr", false);
-            showViewHistory = preferences.getBoolean("showViewHistory", true);
-            showAdminActions = preferences.getBoolean("showAdminActions", true);
-            showChangePermissions = preferences.getBoolean("showChangePermissions", true);
-            showDeleteDownloadedFile = preferences.getBoolean("showDeleteDownloadedFile", true);
-            showMessageDetails = preferences.getBoolean("showMessageDetails", false);
-            showTranslate = preferences.getBoolean("showTranslate", true);
-            showRepeat = preferences.getBoolean("showRepeat", true);
-            eventType = preferences.getInt("eventType", 0);
-            actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
-            newYear = preferences.getBoolean("newYear", false);
-            stickerSize = preferences.getFloat("stickerSize", 14.0f);
-            unlimitedFavedStickers = preferences.getBoolean("unlimitedFavedStickers", false);
-            unlimitedPinnedDialogs = preferences.getBoolean("unlimitedPinnedDialogs", false);
-            translationProvider = preferences.getInt("translationProvider", 1);
-            disablePhotoSideAction = preferences.getBoolean("disablePhotoSideAction", true);
-            openArchiveOnPull = preferences.getBoolean("openArchiveOnPull", false);
-            hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
-            avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
-            showTabsOnForward = preferences.getBoolean("showTabsOnForward", showTabsOnForward);
-
-            disableChatAction = preferences.getBoolean("disable_chat_action", false);
-            sortByUnread = preferences.getBoolean("sort_by_unread", false);
-            sortByUnmuted = preferences.getBoolean("sort_by_unmuted", true);
-            sortByUser = preferences.getBoolean("sort_by_user", true);
-            sortByContacts = preferences.getBoolean("sort_by_contacts", true);
-
-            disableUndo = preferences.getBoolean("disable_undo", false);
-
-            filterUsers = preferences.getBoolean("filter_users", true);
-            filterContacts = preferences.getBoolean("filter_contacts", true);
-            filterGroups = preferences.getBoolean("filter_groups", true);
-            filterChannels = preferences.getBoolean("filter_channels", true);
-            filterBots = preferences.getBoolean("filter_bots", true);
-            filterAdmins = preferences.getBoolean("filter_admins", true);
-            filterUnmuted = preferences.getBoolean("filter_unmuted", true);
-            filterUnread = preferences.getBoolean("filter_unread", true);
-            filterUnmutedAndUnread = preferences.getBoolean("filter_unmuted_and_unread", true);
-
-            disableSystemAccount = preferences.getBoolean("disable_system_account", false);
-            disableProxyWhenVpnEnabled = preferences.getBoolean("disable_proxy_when_vpn_enabled", false);
-            skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
-
-            removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
-            ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
-            hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
-
-            useDefaultTheme = preferences.getBoolean("use_default_theme", false);
-            showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
-
-        }
-
-    }
-
     static {
 
-        loadConfig();
+        useIPv6 = preferences.getBoolean("useIPv6", false);
+        hidePhone = preferences.getBoolean("hidePhone", true);
+        ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
+        forceTablet = preferences.getBoolean("forceTablet", false);
+        typeface = preferences.getInt("typeface", 0);
+        nameOrder = preferences.getInt("nameOrder", 1);
+        mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
+        transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
+        residentNotification = preferences.getBoolean("residentNotification", false);
+        hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
+        showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
+        showReport = preferences.getBoolean("showReport", false);
+        showPrPr = preferences.getBoolean("showPrPr", false);
+        showViewHistory = preferences.getBoolean("showViewHistory", true);
+        showAdminActions = preferences.getBoolean("showAdminActions", true);
+        showChangePermissions = preferences.getBoolean("showChangePermissions", true);
+        showDeleteDownloadedFile = preferences.getBoolean("showDeleteDownloadedFile", true);
+        showMessageDetails = preferences.getBoolean("showMessageDetails", false);
+        showTranslate = preferences.getBoolean("showTranslate", true);
+        showRepeat = preferences.getBoolean("showRepeat", true);
+        eventType = preferences.getInt("eventType", 0);
+        actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
+        newYear = preferences.getBoolean("newYear", false);
+        stickerSize = preferences.getFloat("stickerSize", 14.0f);
+        unlimitedFavedStickers = preferences.getBoolean("unlimitedFavedStickers", false);
+        unlimitedPinnedDialogs = preferences.getBoolean("unlimitedPinnedDialogs", false);
+        translationProvider = preferences.getInt("translationProvider", 1);
+        disablePhotoSideAction = preferences.getBoolean("disablePhotoSideAction", true);
+        openArchiveOnPull = preferences.getBoolean("openArchiveOnPull", false);
+        //showHiddenFeature = preferences.getBoolean("showHiddenFeature", false);
+        hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
+        avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
+        useSystemEmoji = preferences.getBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
+        showTabsOnForward = preferences.getBoolean("showTabsOnForward", showTabsOnForward);
+
+        disableChatAction = preferences.getBoolean("disable_chat_action", false);
+        sortByUnread = preferences.getBoolean("sort_by_unread", false);
+        sortByUnmuted = preferences.getBoolean("sort_by_unmuted", true);
+        sortByUser = preferences.getBoolean("sort_by_user", true);
+        sortByContacts = preferences.getBoolean("sort_by_contacts", true);
+
+        disableUndo = preferences.getBoolean("disable_undo", false);
+
+        filterUsers = preferences.getBoolean("filter_users", true);
+        filterContacts = preferences.getBoolean("filter_contacts", true);
+        filterGroups = preferences.getBoolean("filter_groups", true);
+        filterChannels = preferences.getBoolean("filter_channels", true);
+        filterBots = preferences.getBoolean("filter_bots", true);
+        filterAdmins = preferences.getBoolean("filter_admins", true);
+        filterUnmuted = preferences.getBoolean("filter_unmuted", true);
+        filterUnread = preferences.getBoolean("filter_unread", true);
+        filterUnmutedAndUnread = preferences.getBoolean("filter_unmuted_and_unread", true);
+
+        disableSystemAccount = preferences.getBoolean("disable_system_account", false);
+        disableProxyWhenVpnEnabled = preferences.getBoolean("disable_proxy_when_vpn_enabled", false);
+        skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
+
+        removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
+        ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
+        hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
+        useDefaultTheme = preferences.getBoolean("use_default_theme", false);
+        showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
 
     }
 

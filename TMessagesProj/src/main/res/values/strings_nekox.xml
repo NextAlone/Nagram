@@ -126,6 +126,11 @@
     <string name="ImportProxyList">Import proxy servers</string>
     <string name="ImportProxyListConfirm">Are you sure you want to **import proxy servers**?</string>
 
+    <string name="ExportStickers">Export Stickers</string>
+    <string name="ImportStickers">Import servers from file</string>
+    <string name="StickerSets">Sticker Sets</string>
+    <string name="GIFs">GIFs</string>
+
     <string name="InvalidProxyFile">Invalid proxy list file: </string>
     <string name="ImportedProxies">Imported proxy servers: </string>
     <string name="ErrorsInImport">Import errors: </string>

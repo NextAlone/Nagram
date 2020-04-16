@@ -497,7 +497,7 @@ public class BottomSheet extends Dialog {
 
             setBackground(Theme.getSelectorDrawable(false));
 
-            super.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            super.setGravity(Gravity.CENTER);
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -545,6 +545,7 @@ public class BottomSheet extends Dialog {
                 textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, 0, 0);
             }
         }
+
     }
 
     @Override

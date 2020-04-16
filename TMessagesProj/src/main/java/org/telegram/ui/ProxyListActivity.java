@@ -724,19 +724,20 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (position == hidePublicRow) {
 
+                if (NekoConfig.hidePublicProxy && SharedConfig.proxyEnabled && SharedConfig.currentProxy.isPublic) {
+                    NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
+                    SharedConfig.setCurrentProxy(null);
+                    NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
+                }
+
                 NekoConfig.toggleHidePublicProxy();
 
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 textCheckCell.setChecked(NekoConfig.hidePublicProxy);
 
-                if (NekoConfig.hidePublicProxy && SharedConfig.proxyEnabled && SharedConfig.currentProxy.isPublic) {
-                    NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
-                    SharedConfig.setCurrentProxy(null);
-                    NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
-                    listAdapter.notifyItemChanged(useProxyRow);
-                }
-
                 SharedConfig.reloadProxyList();
+
+                listView.getRecycledViewPool().clear();
 
                 updateRows(true);
 

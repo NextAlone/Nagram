@@ -9,6 +9,7 @@
 package org.telegram.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,13 +25,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.LongSparseArray;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.JsonObject;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
+
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -41,6 +56,7 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.RadioColorCell;
@@ -58,19 +74,21 @@ import org.telegram.ui.Components.ReorderingHintDrawable;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.collection.LongSparseArray;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListUpdateCallback;
-import androidx.recyclerview.widget.RecyclerView;
+import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.StickersUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class StickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -186,6 +204,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
     }
 
+    private int menu_other = 2;
+    private int menu_export = 3;
+
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonDrawable(new BackDrawable(false));
@@ -210,10 +231,21 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     } else {
                         sendReorder();
                     }
+                } else if (id == menu_export) {
+                    exportStickers();
                 }
             }
         });
 
+        if (NekoXConfig.developerMode) {
+
+            ActionBarMenu menu = actionBar.createMenu();
+
+            ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
+
+            otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
+
+        }
 
         final ActionBarMenu actionMode = actionBar.createActionMode();
         selectedCountTextView = new NumberTextView(actionMode.getContext());
@@ -321,7 +353,139 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         return fragmentView;
     }
 
+    public void exportStickers() {
 
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+        builder.addTitle(LocaleController.getString("", R.string.ExportStickers), true);
+
+        AtomicBoolean exportSets = new AtomicBoolean(true);
+        AtomicBoolean exportArchived = new AtomicBoolean(true);
+        AtomicBoolean exportFavourite = new AtomicBoolean(true);
+        AtomicBoolean exportRecent = new AtomicBoolean(true);
+        AtomicBoolean exportGifs = new AtomicBoolean(true);
+
+        final AtomicReference<BottomSheet.BottomSheetCell> exportButton = new AtomicReference<>();
+
+        builder.setCheckItems(new String[]{
+                LocaleController.getString("StickerSets", R.string.StickerSets),
+                LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers),
+                LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers),
+                LocaleController.getString("RecentStickers", R.string.RecentStickers),
+                LocaleController.getString("GIFs", R.string.GIFs)
+        }, (__) -> true, (index, check) -> {
+
+            boolean export;
+
+            switch (index) {
+
+                case 0: {
+
+                    export = exportSets.get();
+                    exportSets.set(export = !export);
+
+                }
+                break;
+
+                case 1: {
+
+                    export = exportArchived.get();
+                    exportArchived.set(export = !export);
+
+                }
+                break;
+
+                case 2: {
+
+                    export = exportRecent.get();
+                    exportRecent.set(export = !export);
+
+                }
+                break;
+
+                case 3: {
+
+                    export = exportFavourite.get();
+                    exportFavourite.set(export = !export);
+
+                }
+                break;
+
+                default: {
+
+                    export = exportGifs.get();
+                    exportGifs.set(export = !export);
+
+                }
+                break;
+            }
+
+            check.setChecked(export, true);
+
+            if (!exportSets.get() && !exportArchived.get() && !exportRecent.get() && !exportFavourite.get() && !exportGifs.get()) {
+
+                exportButton.get().setEnabled(false);
+
+            } else {
+
+                exportButton.get().setEnabled(true);
+
+            }
+
+        });
+
+        builder.addButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+
+        exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
+
+            builder.dismiss();
+
+            exportStickersFinal(exportSets.get(), exportArchived.get(), exportFavourite.get(), exportRecent.get(), exportGifs.get());
+
+        }));
+
+        builder.show();
+
+    }
+
+    public void exportStickersFinal(boolean exportSets, boolean exportArchived, boolean exportFavourite, boolean exportRecent, boolean exportGifs) {
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), 3);
+
+        pro.setCanCacnel(false);
+
+        pro.show();
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            Activity ctx = getParentActivity();
+
+            JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived, exportFavourite, exportRecent, exportGifs);
+
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "Exported_Stickers_" + LocaleController.formatDate(System.currentTimeMillis() / 1000) + ".nekox-stickers.json");
+
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter jsonWriter = new JsonWriter(stringWriter);
+            jsonWriter.setLenient(true);
+            jsonWriter.setIndent("    ");
+            try {
+                Streams.write(exportObj, jsonWriter);
+            } catch (IOException e) {
+            }
+
+            FileUtil.writeUtf8String(stringWriter.toString(), cacheFile);
+
+            UIUtil.runOnUIThread(() -> {
+
+                pro.dismiss();
+
+                ShareUtil.shareFile(ctx, cacheFile);
+
+            });
+
+        });
+
+    }
 
     @Override
     public boolean onBackPressed() {
