@@ -138,11 +138,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;

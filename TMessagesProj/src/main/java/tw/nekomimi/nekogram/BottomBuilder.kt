@@ -34,7 +34,7 @@ class BottomBuilder(val ctx: Context) {
 
             minimumHeight = AndroidUtilities.dp(48F)
 
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(-1, -2))
+            this@BottomBuilder.rootView.addView(this, LinearLayout.LayoutParams(-1, -2))
 
         }
 
@@ -54,7 +54,7 @@ class BottomBuilder(val ctx: Context) {
     @JvmOverloads
     fun addCheckBox(text: String, value: Boolean, valueText: String? = null, listener: View.OnClickListener) {
 
-        val checkBoxCell = CheckBoxCell(ctx, 3, 21)
+        val checkBoxCell = CheckBoxCell(ctx, 1, 21)
         checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
         checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
         rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))

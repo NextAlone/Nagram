@@ -3983,7 +3983,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void saveRecentSticker(Object parentObject, TLRPC.Document document, boolean asMask) {
-        if (parentObject == null || document == null) {
+        if (document == null) {
             return;
         }
         TLRPC.TL_messages_saveRecentSticker req = new TLRPC.TL_messages_saveRecentSticker();

@@ -209,7 +209,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             @Override
             public boolean onInterceptTouchEvent(MotionEvent ev) {
-                if (progressViewStyle == 3) {
+                if (progressViewStyle > 0) {
                     showCancelAlert();
                     return false;
                 }

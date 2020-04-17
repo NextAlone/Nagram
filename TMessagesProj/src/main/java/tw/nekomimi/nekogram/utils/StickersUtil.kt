@@ -5,37 +5,172 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.MediaDataController
+import org.telegram.messenger.NotificationCenter
 import org.telegram.tgnet.ConnectionsManager
 import org.telegram.tgnet.TLRPC.*
+import org.telegram.ui.ActionBar.AlertDialog
+import org.telegram.ui.ActionBar.BaseFragment
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 object StickersUtil {
 
+    private fun AlertDialog.updateStatus(message: CharSequence) = AndroidUtilities.runOnUIThread { setMessage(message); }
+
     @JvmStatic
-    fun exportStickers(
-            account: Int, exportSets: Boolean,
-            exportArchived: Boolean, exportFavourite: Boolean,
-            exportRecent: Boolean, exportGifs: Boolean
-    ) = runBlocking {
+    fun importStickers(stickerObj: JsonObject, f: BaseFragment, progress: AlertDialog) = runBlocking {
 
+        val cancel = AtomicBoolean()
 
-        val gson = Gson()
+        progress.setOnCancelListener {
+
+            cancel.set(true)
+
+        }
+
+        stickerObj.getAsJsonObject("stickerSets")?.also {
+
+            val stickerSets = LinkedList(it.entrySet().map {
+
+                object : Map.Entry<String, String> {
+
+                    override val key: String get() = it.key
+                    override val value: String get() = it.value.asString
+
+                }
+
+            }).apply { reverse() }
+
+            val waitLock = AtomicBoolean()
+
+            for (stickerSetObj in stickerSets) {
+
+                if (cancel.get()) return@runBlocking
+
+                waitLock.set(false)
+
+                f.connectionsManager.sendRequest(TL_messages_installStickerSet().apply {
+
+                    stickerset = TL_inputStickerSetShortName().apply {
+
+                        short_name = stickerSetObj.value
+
+                    }
+
+                }) { response, error ->
+
+                    if (response is TL_messages_stickerSetInstallResultSuccess) {
+
+                        f.mediaDataController.loadStickers(MediaDataController.TYPE_IMAGE, false, true)
+
+                        progress.updateStatus("Installed: ${stickerSetObj.key}")
+
+                    } else if (response is TL_messages_stickerSetInstallResultArchive) {
+
+                        f.mediaDataController.loadStickers(MediaDataController.TYPE_IMAGE, false, true)
+
+                        AndroidUtilities.runOnUIThread {
+
+                            f.notificationCenter.postNotificationName(NotificationCenter.needAddArchivedStickers, response.sets)
+
+                        }
+
+                        progress.updateStatus("Archived: ${stickerSetObj.key}")
+
+                    } else if (error != null) {
+
+                        progress.updateStatus("Error ${error.code}: ${error.text}")
+
+                    }
+
+                    waitLock.set(true)
+
+                }
+
+                while (!waitLock.get() && !cancel.get()) delay(100L)
+
+            }
+
+        }
+
+        stickerObj.getAsJsonObject("archivedStickers")?.also {
+
+            val stickerSets = LinkedList(it.entrySet().map {
+
+                object : Map.Entry<String, String> {
+
+                    override val key: String get() = it.key
+                    override val value: String get() = it.value.asString
+
+                }
+
+            }).apply { reverse() }
+
+            val waitLock = AtomicBoolean()
+
+            for (stickerSetObj in stickerSets) {
+
+                if (cancel.get()) return@runBlocking
+
+                waitLock.set(false)
+
+                f.connectionsManager.sendRequest(TL_messages_installStickerSet().apply {
+
+                    stickerset = TL_inputStickerSetShortName().apply {
+
+                        short_name = stickerSetObj.value
+                        archived = true
+
+                    }
+
+                }) { response, error ->
+
+                    if (response is TL_messages_stickerSetInstallResultArchive) {
+
+                        f.mediaDataController.loadStickers(MediaDataController.TYPE_IMAGE, false, true)
+
+                        AndroidUtilities.runOnUIThread {
+
+                            f.notificationCenter.postNotificationName(NotificationCenter.needAddArchivedStickers, response.sets)
+
+                        }
+
+                        progress.updateStatus("Archived: ${stickerSetObj.key}")
+
+                    } else if (error != null) {
+
+                        progress.updateStatus("Error ${error.code}: ${error.text}")
+
+                    }
+
+                    waitLock.set(true)
+
+                }
+
+                while (!waitLock.get() && !cancel.get()) delay(100L)
+
+            }
+
+        }
+
+        return@runBlocking
+
+    }
+
+    @JvmStatic
+    fun exportStickers(account: Int, exportSets: Boolean, exportArchived: Boolean) = runBlocking {
 
         val exportObj = JsonObject()
 
         if (exportSets) {
 
-            exportObj.add("stickerSets", JsonArray().apply {
+            exportObj.add("stickerSets", JsonObject().apply {
 
                 MediaDataController.getInstance(account).getStickerSets(MediaDataController.TYPE_IMAGE).forEach {
 
-                    add(JsonObject().apply {
-
-                        addProperty(it.set.title,it.set.short_name)
-
-                    })
+                    addProperty(it.set.title, it.set.short_name)
 
                 }
 
@@ -81,69 +216,11 @@ object StickersUtil {
 
             while (!finishLoad.get()) delay(100L)
 
-            exportObj.add("archivedStickers", JsonArray().apply {
+            exportObj.add("archivedStickers", JsonObject().apply {
 
                 archivedSets.forEach {
 
-                    add(JsonObject().apply {
-
-                        addProperty(it.set.title,it.set.short_name)
-
-                    })
-
-                }
-
-            })
-
-        }
-
-        if (exportRecent) {
-
-            MediaDataController.getInstance(account).loadRecents(MediaDataController.TYPE_IMAGE, false, true, false)
-
-            while (!MediaDataController.getInstance(account).recentStickersLoaded[MediaDataController.TYPE_IMAGE]) delay(100L)
-
-            exportObj.add("recentStickers", JsonArray().apply {
-
-                MediaDataController.getInstance(account).getRecentStickers(MediaDataController.TYPE_IMAGE).forEach {
-
-                    add(gson.toJsonTree(it))
-
-                }
-
-            })
-
-        }
-
-        if (exportFavourite) {
-
-            MediaDataController.getInstance(account).loadRecents(MediaDataController.TYPE_FAVE, false, true, false)
-
-            while (!MediaDataController.getInstance(account).recentStickersLoaded[MediaDataController.TYPE_FAVE]) delay(100L)
-
-            exportObj.add("favouriteStickers", JsonArray().apply {
-
-                MediaDataController.getInstance(account).getRecentStickers(MediaDataController.TYPE_FAVE).forEach {
-
-                    add(gson.toJsonTree(it))
-
-                }
-
-            })
-
-        }
-
-        if (exportGifs) {
-
-            MediaDataController.getInstance(account).loadRecents(MediaDataController.TYPE_IMAGE, true, true, false)
-
-            while (!MediaDataController.getInstance(account).recentGifsLoaded) delay(100L)
-
-            exportObj.add("recentGifs", JsonArray().apply {
-
-                MediaDataController.getInstance(account).recentGifs.forEach {
-
-                    add(gson.toJsonTree(it))
+                    addProperty(it.set.title, it.set.short_name)
 
                 }
 

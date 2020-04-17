@@ -43,9 +43,9 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
+import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
-import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class ShadowsocksSettingsActivity extends BaseFragment {
 

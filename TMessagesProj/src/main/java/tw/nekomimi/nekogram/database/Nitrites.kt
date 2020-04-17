@@ -7,7 +7,13 @@ import java.io.File
 
 fun mkDatabase(name: String): Nitrite {
 
-    val file = File("${ApplicationLoader.getDataDirFixed()}/database/$name.db")
+    File("${ApplicationLoader.getDataDirFixed()}/database").apply {
+
+        if (exists()) deleteRecursively()
+
+    }
+
+    val file = File("${ApplicationLoader.getDataDirFixed()}/databases/$name.db")
 
     FileUtil.initDir(file.parentFile!!)
 

@@ -36,15 +36,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
-import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ProxyManager;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;

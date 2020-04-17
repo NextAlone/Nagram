@@ -639,7 +639,17 @@ public class DocumentSelectActivity extends BaseFragment {
             writeButtonDrawable = combinedDrawable;
         }
         writeButton.setBackgroundDrawable(writeButtonDrawable);
-        writeButton.setImageResource(R.drawable.attach_send);
+
+        if (allowPhoto) {
+
+            writeButton.setImageResource(R.drawable.baseline_send_24);
+
+        } else {
+
+            writeButton.setImageResource(R.drawable.baseline_check_24);
+
+        }
+
         writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.SRC_IN));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {

@@ -8,12 +8,15 @@
 
 package org.telegram.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -35,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
@@ -47,6 +51,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -78,6 +83,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -85,6 +91,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.StickersUtil;
@@ -206,6 +213,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     private int menu_other = 2;
     private int menu_export = 3;
+    private int menu_import = 4;
 
     @Override
     public View createView(Context context) {
@@ -233,6 +241,33 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     }
                 } else if (id == menu_export) {
                     exportStickers();
+                } else if (id == menu_import) {
+                    try {
+                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                            return;
+                        }
+                    } catch (Throwable ignore) {
+                    }
+                    DocumentSelectActivity fragment = new DocumentSelectActivity(false);
+                    fragment.setMaxSelectedFiles(1);
+                    fragment.setAllowPhoto(false);
+                    fragment.setDelegate(new DocumentSelectActivity.DocumentSelectActivityDelegate() {
+                        @Override
+                        public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
+                            activity.finishFragment();
+                            processStickersFile(new File(files.get(0)));
+                        }
+
+                        @Override
+                        public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) {
+                        }
+
+                        @Override
+                        public void startDocumentSelectActivity() {
+                        }
+                    });
+                    presentFragment(fragment);
                 }
             }
         });
@@ -244,6 +279,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
 
             otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
+            otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString("ImportStickers", R.string.ImportStickers));
 
         }
 
@@ -353,6 +389,51 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         return fragmentView;
     }
 
+    public void processStickersFile(File file) {
+
+        if (!file.isFile() || !file.getName().endsWith("nekox-stickers.json")) {
+
+            showError("not a stickers file");
+
+            return;
+
+        } else if (file.length() > 3 * 1024 * 1024L) {
+
+            showError("file too large");
+
+            return;
+
+        }
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), 1);
+        pro.show();
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            JsonObject stickerObj = new Gson().fromJson(FileUtil.readUtf8String(file), JsonObject.class);
+
+            StickersUtil.importStickers(stickerObj, this, pro);
+
+            UIUtil.runOnUIThread(() -> {
+
+                pro.dismiss();
+
+                MediaDataController.getInstance(currentAccount).checkStickers(currentType);
+                updateRows();
+
+            });
+
+        });
+
+
+    }
+
+    private void showError(String msg) {
+
+        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidStickersFile", R.string.InvalidStickersFile) + msg);
+
+    }
+
     public void exportStickers() {
 
         BottomBuilder builder = new BottomBuilder(getParentActivity());
@@ -361,18 +442,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         AtomicBoolean exportSets = new AtomicBoolean(true);
         AtomicBoolean exportArchived = new AtomicBoolean(true);
-        AtomicBoolean exportFavourite = new AtomicBoolean(true);
-        AtomicBoolean exportRecent = new AtomicBoolean(true);
-        AtomicBoolean exportGifs = new AtomicBoolean(true);
 
         final AtomicReference<BottomSheet.BottomSheetCell> exportButton = new AtomicReference<>();
 
         builder.setCheckItems(new String[]{
                 LocaleController.getString("StickerSets", R.string.StickerSets),
-                LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers),
-                LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers),
-                LocaleController.getString("RecentStickers", R.string.RecentStickers),
-                LocaleController.getString("GIFs", R.string.GIFs)
+                LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers)
         }, (__) -> true, (index, check) -> {
 
             boolean export;
@@ -387,7 +462,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 }
                 break;
 
-                case 1: {
+                default: {
 
                     export = exportArchived.get();
                     exportArchived.set(export = !export);
@@ -395,34 +470,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 }
                 break;
 
-                case 2: {
-
-                    export = exportRecent.get();
-                    exportRecent.set(export = !export);
-
-                }
-                break;
-
-                case 3: {
-
-                    export = exportFavourite.get();
-                    exportFavourite.set(export = !export);
-
-                }
-                break;
-
-                default: {
-
-                    export = exportGifs.get();
-                    exportGifs.set(export = !export);
-
-                }
-                break;
             }
 
             check.setChecked(export, true);
 
-            if (!exportSets.get() && !exportArchived.get() && !exportRecent.get() && !exportFavourite.get() && !exportGifs.get()) {
+            if (!exportSets.get() && !exportArchived.get()) {
 
                 exportButton.get().setEnabled(false);
 
@@ -440,7 +492,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             builder.dismiss();
 
-            exportStickersFinal(exportSets.get(), exportArchived.get(), exportFavourite.get(), exportRecent.get(), exportGifs.get());
+            exportStickersFinal(exportSets.get(), exportArchived.get());
 
         }));
 
@@ -448,7 +500,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     }
 
-    public void exportStickersFinal(boolean exportSets, boolean exportArchived, boolean exportFavourite, boolean exportRecent, boolean exportGifs) {
+    public void exportStickersFinal(boolean exportSets, boolean exportArchived) {
 
         AlertDialog pro = new AlertDialog(getParentActivity(), 3);
 
@@ -460,9 +512,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             Activity ctx = getParentActivity();
 
-            JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived, exportFavourite, exportRecent, exportGifs);
+            JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived);
 
-            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "Exported_Stickers_" + LocaleController.formatDate(System.currentTimeMillis() / 1000) + ".nekox-stickers.json");
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-stickers.json");
 
             StringWriter stringWriter = new StringWriter();
             JsonWriter jsonWriter = new JsonWriter(stringWriter);
