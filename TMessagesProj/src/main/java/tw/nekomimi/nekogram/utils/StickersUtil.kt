@@ -1,7 +1,5 @@
 package tw.nekomimi.nekogram.utils
 
-import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -30,6 +28,42 @@ object StickersUtil {
 
         }
 
+        val installed =  f.mediaDataController.getStickerSets(MediaDataController.TYPE_IMAGE)
+
+        val finishLoad = AtomicBoolean()
+        val archivedSets = LinkedList<StickerSetCovered>()
+
+        fun loadStickers() {
+
+            val req = TL_messages_getArchivedStickers()
+            req.offset_id = if (archivedSets.isEmpty()) 0 else archivedSets[archivedSets.size - 1].set.id
+            req.limit = 100
+            req.masks = false
+
+            f.connectionsManager.sendRequest(req) { response, _ ->
+
+                if (response is TL_messages_archivedStickers) {
+
+                    archivedSets.addAll(response.sets)
+
+                    if (response.sets.size < 100) {
+
+                        finishLoad.set(true)
+
+                    } else {
+
+                        loadStickers()
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        loadStickers()
+
         stickerObj.getAsJsonObject("stickerSets")?.also {
 
             val stickerSets = LinkedList(it.entrySet().map {
@@ -45,9 +79,12 @@ object StickersUtil {
 
             val waitLock = AtomicBoolean()
 
-            for (stickerSetObj in stickerSets) {
+            install@for (stickerSetObj in stickerSets) {
 
                 if (cancel.get()) return@runBlocking
+
+                for (s in installed) if (s.set.short_name == stickerSetObj.value) continue@install
+                for (s in archivedSets) if (s.set.short_name == stickerSetObj.value) continue@install
 
                 waitLock.set(false)
 
@@ -110,11 +147,14 @@ object StickersUtil {
 
             val waitLock = AtomicBoolean()
 
-            for (stickerSetObj in stickerSets) {
+            install@ for (stickerSetObj in stickerSets) {
 
                 if (cancel.get()) return@runBlocking
 
                 waitLock.set(false)
+
+                for (s in installed) if (s.set.short_name == stickerSetObj.value) continue@install
+                for (s in archivedSets) if (s.set.short_name == stickerSetObj.value) continue@install
 
                 f.connectionsManager.sendRequest(TL_messages_installStickerSet().apply {
 

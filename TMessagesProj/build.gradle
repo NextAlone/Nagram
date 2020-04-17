@@ -41,10 +41,10 @@ dependencies {
     implementation files('libs/ssr-libev-release.aar')
 
     compileOnly 'com.google.firebase:firebase-messaging:20.1.5'
-    compileOnly 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
+    compileOnly 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
 
     releaseImplementation 'com.google.firebase:firebase-messaging:20.1.5'
-    releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
+    releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
 
 }
 
@@ -59,8 +59,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
 
-        versionName "6.0.1.15"
-        versionCode = 20
+        versionName "6.0.1.16"
+        versionCode = 21
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 

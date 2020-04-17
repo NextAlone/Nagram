@@ -1085,7 +1085,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private void checkSingleProxy(SharedConfig.ProxyInfo proxyInfo, int repeat, Runnable callback) {
 
         proxyInfo.checking = true;
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, proxyInfo);
+
+        UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, proxyInfo));
 
         if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && !((SharedConfig.ExternalSocks5Proxy) proxyInfo).isStarted()) {
             ((SharedConfig.ExternalSocks5Proxy) proxyInfo).start();

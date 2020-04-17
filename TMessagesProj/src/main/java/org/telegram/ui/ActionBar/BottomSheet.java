@@ -497,7 +497,7 @@ public class BottomSheet extends Dialog {
 
             setBackground(Theme.getSelectorDrawable(false));
 
-            super.setGravity(Gravity.CENTER);
+            super.setGravity(Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -508,11 +508,11 @@ public class BottomSheet extends Dialog {
             textView.setLines(1);
             textView.setSingleLine(true);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setPadding(AndroidUtilities.dp(16),0,0,0);
             if (type == 0) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 textView.setGravity(Gravity.CENTER_VERTICAL);
+                textView.setPadding(AndroidUtilities.dp(16),0,0,0);
             } else if (type == 1) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);

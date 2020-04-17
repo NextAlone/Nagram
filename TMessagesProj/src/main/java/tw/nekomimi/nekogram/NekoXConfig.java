@@ -25,9 +25,6 @@ public class NekoXConfig {
     public static boolean disableFlagSecure = preferences.getBoolean("disable_flag_secure", false);
     public static boolean disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
 
-    public static boolean showTestBackend = preferences.getBoolean("show_test_backend", false);
-    public static boolean showBotLogin = preferences.getBoolean("show_bot_login", false);
-
     public static void toggleDeveloperMode() {
 
         preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
@@ -45,18 +42,5 @@ public class NekoXConfig {
         preferences.edit().putBoolean("disable_screenshot_detection", disableScreenshotDetection = !disableScreenshotDetection).apply();
 
     }
-
-    public static void toggleShowTestBackend() {
-
-        preferences.edit().putBoolean("show_test_backend", showTestBackend = !showTestBackend).apply();
-
-    }
-
-    public static void toggleShowBotLogin() {
-
-        preferences.edit().putBoolean("show_bot_login", showBotLogin = !showBotLogin).apply();
-
-    }
-
 
 }

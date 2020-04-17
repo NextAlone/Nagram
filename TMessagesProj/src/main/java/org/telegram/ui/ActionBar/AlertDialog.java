@@ -200,7 +200,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             @Override
             public boolean onTouchEvent(MotionEvent event) {
-                if (progressViewStyle == 3) {
+                if (progressViewStyle > 0) {
                     showCancelAlert();
                     return false;
                 }
@@ -474,6 +474,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         if (progressViewStyle == 1) {
+            setCanceledOnTouchOutside(false);
+            setCancelable(false);
             progressViewContainer = new FrameLayout(getContext());
             containerView.addView(progressViewContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 44, Gravity.LEFT | Gravity.TOP, 23, title == null ? 24 : 0, 23, 24));
 
@@ -485,6 +487,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             messageTextView.setEllipsize(TextUtils.TruncateAt.END);
             progressViewContainer.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, (LocaleController.isRTL ? 0 : 62), 0, (LocaleController.isRTL ? 62 : 0), 0));
         } else if (progressViewStyle == 2) {
+            setCanceledOnTouchOutside(false);
+            setCancelable(false);
             containerView.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, title == null ? 19 : 0, 24, 20));
 
             lineProgressView = new LineProgressView(getContext());

@@ -22,7 +22,7 @@ object LingoTranslator : Translator {
         val response = HttpUtil.okHttpClient.newCall(Request.Builder()
                 .url("https://api.interpreter.caiyunai.com/v1/translator")
                 .header("Content-Type", "application/json; charset=UTF-8")
-                .header("X- ", "token 9sdftiq37bnv410eon2l") // 白嫖
+                .header("X-Authorization", "token 9sdftiq37bnv410eon2l") // 白嫖
                 .applyUserAgent()
                 .post(JSONObject().apply {
 

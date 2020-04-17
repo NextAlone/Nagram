@@ -1,15 +1,20 @@
 package tw.nekomimi.nekogram
 
 import android.content.Context
+import android.text.TextUtils
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.TextView
 import org.telegram.messenger.AndroidUtilities
-import org.telegram.messenger.LocaleController
 import org.telegram.ui.ActionBar.BottomSheet
 import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.Cells.CheckBoxCell
 import org.telegram.ui.Cells.HeaderCell
+import org.telegram.ui.Cells.ShadowSectionCell
+import org.telegram.ui.Cells.TextCheckCell
 import org.telegram.ui.Components.LayoutHelper
 
 class BottomBuilder(val ctx: Context) {
@@ -26,39 +31,65 @@ class BottomBuilder(val ctx: Context) {
 
     private val buttonsView by lazy {
 
+        FrameLayout(ctx).apply {
+
+            setBackgroundColor(Theme.getColor(Theme.key_dialogBackground))
+
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT or Gravity.BOTTOM))
+
+            addView(rightButtonsView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.RIGHT));
+
+        }
+
+    }
+
+    private val rightButtonsView by lazy {
+
         LinearLayout(ctx).apply {
 
             orientation = LinearLayout.HORIZONTAL
 
-            gravity = Gravity.CENTER_VERTICAL or if (LocaleController.isRTL) Gravity.LEFT else Gravity.RIGHT
-
-            minimumHeight = AndroidUtilities.dp(48F)
-
-            this@BottomBuilder.rootView.addView(this, LinearLayout.LayoutParams(-1, -2))
+            weightSum = 1F
 
         }
 
     }
 
     @JvmOverloads
-    fun addTitle(title: String, bigTitle: Boolean = true) {
+    fun addTitle(title: String, bigTitle: Boolean = true, subTitle: String? = null) {
 
         val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, false) else HeaderCell(ctx)
 
         headerCell.setText(title)
 
-        rootView.addView(headerCell, LayoutHelper.createLinear(-1, -2))
+        subTitle?.also { headerCell.setText2(it) }
+
+        rootView.addView(headerCell, LayoutHelper.createLinear(-1, -2).apply {
+
+            bottomMargin = AndroidUtilities.dp(16F)
+
+        })
+
+        rootView.addView(ShadowSectionCell(ctx,3))
 
     }
 
     @JvmOverloads
     fun addCheckBox(text: String, value: Boolean, valueText: String? = null, listener: View.OnClickListener) {
 
-        val checkBoxCell = CheckBoxCell(ctx, 1, 21)
+        val checkBoxCell = TextCheckCell(ctx, 21,true)
         checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
         checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
         rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
-        checkBoxCell.setText(text, valueText, value, true)
+
+        if (valueText == null) {
+
+            checkBoxCell.setTextAndCheck(text, value, true)
+
+        } else {
+
+            checkBoxCell.setTextAndValueAndCheck(text,valueText,value,true,true)
+        }
 
         checkBoxCell.setOnClickListener(listener)
 
@@ -67,7 +98,7 @@ class BottomBuilder(val ctx: Context) {
     @FunctionalInterface
     interface IndexedListener {
 
-        fun onClick(index: Int, view: CheckBoxCell)
+        fun onClick(index: Int, view: TextCheckCell)
 
     }
 
@@ -78,7 +109,7 @@ class BottomBuilder(val ctx: Context) {
 
             addCheckBox(textI, value(index), valueText?.invoke(index), View.OnClickListener {
 
-                listener.onClick(index, it as CheckBoxCell)
+                listener.onClick(index, it as TextCheckCell)
 
             })
 
@@ -87,22 +118,21 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addButton(text: String, icon: Int = 0, red: Boolean = false, listener: View.OnClickListener?): BottomSheet.BottomSheetCell {
+    fun addButton(text: String, red: Boolean = false,left : Boolean = false, listener: View.OnClickListener?): TextView {
 
-        return BottomSheet.BottomSheetCell(ctx, 1).apply {
+        return TextView(ctx).apply {
 
-            setBackgroundDrawable(Theme.getSelectorDrawable(false))
-            setTextAndIcon(text, icon)
-            setTextColor(Theme.getColor(if (red) Theme.key_windowBackgroundWhiteRedText else Theme.key_dialogTextBlue2))
-            setOnClickListener { v ->
-                if (listener != null) {
-                    listener.onClick(v)
-                } else {
-                    dismiss()
-                }
-            }
-
-            buttonsView.addView(this, LinearLayout.LayoutParams(-2, -1))
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
+            setTextColor(Theme.getColor(Theme.key_dialogTextBlue4))
+            gravity = Gravity.CENTER
+            isSingleLine = true
+            ellipsize = TextUtils.TruncateAt.END
+            setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0))
+            setPadding(AndroidUtilities.dp(18f), 0, AndroidUtilities.dp(18f), 0)
+            setText(text)
+            typeface = AndroidUtilities.getTypeface("fonts/rmedium.ttf")
+            (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.LEFT))
+            setOnClickListener(listener ?: View.OnClickListener { dismiss() })
 
         }
 

@@ -392,7 +392,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                             break;
                     }
                     buttons[a].setTextAndIcon(text, 0);
-                    linearLayoutInviteContainer.addView(buttons[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                    linearLayoutInviteContainer.addView(buttons[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                     buttons[a].setOnClickListener(v2 -> {
                         Integer tag = (Integer) v2.getTag();
                         switch (tag) {

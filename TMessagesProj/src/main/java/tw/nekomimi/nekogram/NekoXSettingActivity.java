@@ -52,10 +52,6 @@ public class NekoXSettingActivity extends BaseFragment {
     private int disableFlagSecureRow;
     private int disableScreenshotDetectionRow;
 
-    private int loginSettingsRow;
-    private int showTestBackendRow;
-    private int showBotLoginRow;
-
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -118,16 +114,6 @@ public class NekoXSettingActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableScreenshotDetection);
                 }
-            } else if (position == showTestBackendRow) {
-                NekoXConfig.toggleShowTestBackend();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoXConfig.showTestBackend);
-                }
-            } else if (position == showBotLoginRow) {
-                NekoXConfig.toggleShowBotLogin();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoXConfig.showBotLogin);
-                }
             }
 
         });
@@ -152,10 +138,6 @@ public class NekoXSettingActivity extends BaseFragment {
 
         disableFlagSecureRow = rowCount++;
         disableScreenshotDetectionRow = rowCount++;
-
-        loginSettingsRow = rowCount++;
-        showTestBackendRow = rowCount++;
-        showBotLoginRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -264,8 +246,6 @@ public class NekoXSettingActivity extends BaseFragment {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == developerSettingsRow) {
                         headerCell.setText(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings));
-                    } else if (position == loginSettingsRow) {
-                        headerCell.setText(LocaleController.getString("LoginSettings", R.string.LoginSettings));
                     }
                     break;
                 }
@@ -277,10 +257,6 @@ public class NekoXSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck("Disable Flag Secure", NekoXConfig.disableFlagSecure, true);
                     } else if (position == disableScreenshotDetectionRow) {
                         textCell.setTextAndCheck("Disable Screenshot Detection", NekoXConfig.disableScreenshotDetection, false);
-                    } else if (position == showTestBackendRow) {
-                        textCell.setTextAndCheck("Show Test Backend", NekoXConfig.showTestBackend, true);
-                    } else if (position == showBotLoginRow) {
-                        textCell.setTextAndCheck("Show Bot Login", NekoXConfig.showBotLogin, false);
                     }
                     break;
                 }
@@ -301,9 +277,7 @@ public class NekoXSettingActivity extends BaseFragment {
             int position = holder.getAdapterPosition();
             return position == fetchAndExportLangRow ||
                     position == disableFlagSecureRow ||
-                    position == disableScreenshotDetectionRow ||
-                    position == showTestBackendRow ||
-                    position == showBotLoginRow;
+                    position == disableScreenshotDetectionRow;
         }
 
         @Override
@@ -344,10 +318,9 @@ public class NekoXSettingActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == developerSettingsRow || position == loginSettingsRow) {
+            if (position == developerSettingsRow) {
                 return 4;
-            } else if (position == disableFlagSecureRow || position == disableScreenshotDetectionRow ||
-                    position == showTestBackendRow || position == showBotLoginRow) {
+            } else if (position == disableFlagSecureRow || position == disableScreenshotDetectionRow) {
                 return 3;
             } else if (position == fetchAndExportLangRow) {
                 return 2;

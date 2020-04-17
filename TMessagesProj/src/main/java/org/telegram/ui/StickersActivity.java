@@ -443,7 +443,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         AtomicBoolean exportSets = new AtomicBoolean(true);
         AtomicBoolean exportArchived = new AtomicBoolean(true);
 
-        final AtomicReference<BottomSheet.BottomSheetCell> exportButton = new AtomicReference<>();
+        final AtomicReference<TextView> exportButton = new AtomicReference<>();
 
         builder.setCheckItems(new String[]{
                 LocaleController.getString("StickerSets", R.string.StickerSets),
@@ -472,7 +472,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             }
 
-            check.setChecked(export, true);
+            check.setChecked(export);
 
             if (!exportSets.get() && !exportArchived.get()) {
 
@@ -486,7 +486,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         });
 
-        builder.addButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.addButton(LocaleController.getString("Cancel", R.string.Cancel),false,true, null);
 
         exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
 
