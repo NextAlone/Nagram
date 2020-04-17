@@ -61,7 +61,6 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.RadioColorCell;
@@ -101,6 +100,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     private static final int MENU_ARCHIVE = 0;
     private static final int MENU_DELETE = 1;
+    private static final int MENU_EXPORT = 5;
+
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
@@ -110,6 +111,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private ItemTouchHelper itemTouchHelper;
     private NumberTextView selectedCountTextView;
 
+    private ActionBarMenuItem exportMenuItem;
     private ActionBarMenuItem archiveMenuItem;
     private ActionBarMenuItem deleteMenuItem;
 
@@ -231,7 +233,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     if (onBackPressed()) {
                         finishFragment();
                     }
-                } else if (id == MENU_ARCHIVE || id == MENU_DELETE) {
+                } else if (id == MENU_EXPORT || id == MENU_ARCHIVE || id == MENU_DELETE) {
                     if (!needReorder) {
                         if (activeReorderingRequests == 0) {
                             listAdapter.processSelectionMenu(id);
@@ -291,7 +293,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         actionMode.addView(selectedCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
-        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, AndroidUtilities.dp(54));
+        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.baseline_file_download_24, AndroidUtilities.dp(54));
+        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.baseline_archive_24, AndroidUtilities.dp(54));
         deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.baseline_delete_24, AndroidUtilities.dp(54));
 
         listAdapter = new ListAdapter(context, MediaDataController.getInstance(currentAccount).getStickerSets(currentType));
@@ -486,7 +489,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         });
 
-        builder.addButton(LocaleController.getString("Cancel", R.string.Cancel),false,true, null);
+        builder.addButton(LocaleController.getString("Cancel", R.string.Cancel), false, true, null);
 
         exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
 
@@ -759,7 +762,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         private void processSelectionMenu(int which) {
-            if (which == MENU_ARCHIVE || which == MENU_DELETE) {
+            if (which == MENU_EXPORT || which == MENU_ARCHIVE || which == MENU_DELETE) {
                 final ArrayList<TLRPC.StickerSet> stickerSetList = new ArrayList<>(selectedItems.size());
 
                 for (int i = 0, size = stickerSets.size(); i < size; i++) {
@@ -767,6 +770,38 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     if (selectedItems.get(stickerSet.id, false)) {
                         stickerSetList.add(stickerSet);
                     }
+                }
+
+                if (which == MENU_EXPORT) {
+
+                    AlertDialog pro = new AlertDialog(getParentActivity(),3);
+                    pro.setCanCacnel(false);
+                    pro.show();
+
+                    UIUtil.runOnIoDispatcher(() -> {
+
+                        JsonObject exportObj = StickersUtil.exportStickers(stickerSetList);
+
+                        File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-stickers.json");
+
+                        StringWriter stringWriter = new StringWriter();
+                        JsonWriter jsonWriter = new JsonWriter(stringWriter);
+                        jsonWriter.setLenient(true);
+                        jsonWriter.setIndent("    ");
+                        try {
+                            Streams.write(exportObj, jsonWriter);
+                        } catch (IOException e) {
+                        }
+
+                        FileUtil.writeUtf8String(stringWriter.toString(), cacheFile);
+
+                        UIUtil.runOnUIThread(() -> {
+                            pro.dismiss();
+                            ShareUtil.shareFile(getParentActivity(), cacheFile);
+                        });
+
+                    });
+
                 }
 
                 final int count = stickerSetList.size();

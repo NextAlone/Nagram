@@ -680,7 +680,7 @@ public class BottomSheet extends Dialog {
                     }
                     BottomSheetCell cell = new BottomSheetCell(getContext(), 0);
                     cell.setTextAndIcon(items[a], itemIcons != null ? itemIcons[a] : 0, bigTitle);
-                    rowView.addView(cell,LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+                    rowView.addView(cell,LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 56, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
                     cell.setTag(a);
                     cell.setOnClickListener(v -> dismissWithButtonClick((Integer) v.getTag()));
                     itemViews.add(cell);

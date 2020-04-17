@@ -28,7 +28,7 @@ object StickersUtil {
 
         }
 
-        val installed =  f.mediaDataController.getStickerSets(MediaDataController.TYPE_IMAGE)
+        val installed = f.mediaDataController.getStickerSets(MediaDataController.TYPE_IMAGE)
 
         val finishLoad = AtomicBoolean()
         val archivedSets = LinkedList<StickerSetCovered>()
@@ -79,7 +79,7 @@ object StickersUtil {
 
             val waitLock = AtomicBoolean()
 
-            install@for (stickerSetObj in stickerSets) {
+            install@ for (stickerSetObj in stickerSets) {
 
                 if (cancel.get()) return@runBlocking
 
@@ -267,6 +267,25 @@ object StickersUtil {
             })
 
         }
+
+        return@runBlocking exportObj
+
+    }
+
+    @JvmStatic
+    fun exportStickers(exportSets: Collection<StickerSet>) = runBlocking {
+
+        val exportObj = JsonObject()
+
+        exportObj.add("stickerSets", JsonObject().apply {
+
+            exportSets.forEach {
+
+                addProperty(it.title, it.short_name)
+
+            }
+
+        })
 
         return@runBlocking exportObj
 

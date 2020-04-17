@@ -66,7 +66,7 @@ class BottomBuilder(val ctx: Context) {
 
         rootView.addView(headerCell, LayoutHelper.createLinear(-1, -2).apply {
 
-            bottomMargin = AndroidUtilities.dp(16F)
+            bottomMargin = AndroidUtilities.dp(12F)
 
         })
 
@@ -89,6 +89,7 @@ class BottomBuilder(val ctx: Context) {
         } else {
 
             checkBoxCell.setTextAndValueAndCheck(text,valueText,value,true,true)
+
         }
 
         checkBoxCell.setOnClickListener(listener)
