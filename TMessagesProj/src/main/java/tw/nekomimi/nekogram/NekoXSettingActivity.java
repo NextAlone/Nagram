@@ -153,7 +153,7 @@ public class NekoXSettingActivity extends BaseFragment {
 
         UIUtil.runOnIoDispatcher(() -> {
 
-            LocaleUtil.fetchAndExportLang(currentAccount);
+            LocaleUtil.fetchAndExportLang();
 
             File zipFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "languages.zip");
 
@@ -267,7 +267,7 @@ public class NekoXSettingActivity extends BaseFragment {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == fetchAndExportLangRow) {
-                        textCell.setText("Fetch Builtin Languages", true);
+                        textCell.setText("Export Builtin Languages", true);
                     }
                 }
 

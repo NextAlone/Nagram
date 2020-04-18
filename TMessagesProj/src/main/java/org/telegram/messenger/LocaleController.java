@@ -44,7 +44,6 @@ import java.util.TimeZone;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class LocaleController {
 
@@ -175,7 +174,7 @@ public class LocaleController {
                 File baseDir = new File(ApplicationLoader.getDataDirFixed(), "languages");
 
                 FileUtil.initDir(baseDir);
-                return new File(baseDir, "remote_" + baseLangCode + ".xml");
+                return new File(baseDir, "unofficial_base_" + shortName + ".xml");
             }
             return null;
         }
@@ -1816,7 +1815,6 @@ public class LocaleController {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("save locale file to " + finalFile);
             }
-            FileUtil.initFile(finalFile);
             BufferedWriter writer = new BufferedWriter(new FileWriter(finalFile));
             writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
             writer.write("<resources>\n");

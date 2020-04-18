@@ -1403,6 +1403,36 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         needFinishActivity(afterSignup);
     }
 
+    private void fillNextCodeParamsSilent(Bundle params, TLRPC.TL_auth_sentCode res) {
+        params.putString("phoneHash", res.phone_code_hash);
+        if (res.next_type instanceof TLRPC.TL_auth_codeTypeCall) {
+            params.putInt("nextType", 4);
+        } else if (res.next_type instanceof TLRPC.TL_auth_codeTypeFlashCall) {
+            params.putInt("nextType", 3);
+        } else if (res.next_type instanceof TLRPC.TL_auth_codeTypeSms) {
+            params.putInt("nextType", 2);
+        }
+        if (res.type instanceof TLRPC.TL_auth_sentCodeTypeApp) {
+            params.putInt("type", 1);
+            params.putInt("length", res.type.length);
+        } else {
+            if (res.timeout == 0) {
+                res.timeout = 60;
+            }
+            params.putInt("timeout", res.timeout * 1000);
+            if (res.type instanceof TLRPC.TL_auth_sentCodeTypeCall) {
+                params.putInt("type", 4);
+                params.putInt("length", res.type.length);
+            } else if (res.type instanceof TLRPC.TL_auth_sentCodeTypeFlashCall) {
+                params.putInt("type", 3);
+                params.putString("pattern", res.type.pattern);
+            } else if (res.type instanceof TLRPC.TL_auth_sentCodeTypeSms) {
+                params.putInt("type", 2);
+                params.putInt("length", res.type.length);
+            }
+        }
+    }
+
     private void fillNextCodeParams(Bundle params, TLRPC.TL_auth_sentCode res) {
         params.putString("phoneHash", res.phone_code_hash);
         if (res.next_type instanceof TLRPC.TL_auth_codeTypeCall) {
@@ -1998,6 +2028,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 nextPressed = false;
                 if (error == null) {
                     if (phone.startsWith("99966")) {
+                        fillNextCodeParamsSilent(params, (TLRPC.TL_auth_sentCode) response);
                         String phoneHash = ((TLRPC.TL_auth_sentCode) response).phone_code_hash;
                         String dcId = phone.substring(5, 6);
                         final TLRPC.TL_auth_signIn reqI = new TLRPC.TL_auth_signIn();
@@ -2081,9 +2112,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         needShowProgress(reqIdI, false);
                         showDoneButton(true, true);
                         return;
-                    } else {
-                        fillNextCodeParams(params, (TLRPC.TL_auth_sentCode) response);
                     }
+                    fillNextCodeParams(params, (TLRPC.TL_auth_sentCode) response);
                 } else {
                     if (error.text != null) {
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {

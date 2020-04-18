@@ -7,7 +7,7 @@
     <string name="UseCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="CustomApiNo">Don\'t use custom API</string>
     <string name="CustomApiOffical">Telegram Android</string>
-    <string name="CustomApiTGX">Telegram X</string>
+    <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Manual input</string>
 
     <string name="AllowFlashCall">Allow flash call</string>

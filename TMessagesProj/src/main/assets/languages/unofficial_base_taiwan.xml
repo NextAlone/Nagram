@@ -748,7 +748,7 @@ Telegram 團隊</string>
 <string name="EmailCopied">電子郵件地址已複製到剪貼簿</string>
 <string name="DiceInfo2">將 **:dice:** 表情符號傳送到任何聊天以擲骰子。</string>
 <string name="DiscussionUnlinkChannelAlert">您確定要取消本頻道與群組「**%1$s**」的連結？</string>
-<string name="PreviewFeedback">對此預覽提出錯誤報告</string>
+<string name="PreviewFeedback">報告此預覽的錯誤</string>
 <string name="AccDescrEditing">編輯中</string>
 <string name="AndMoreTypingGroup_few"></string>
 <string name="ResetAutomaticMediaDownloadAlertTitle">重置設定</string>
