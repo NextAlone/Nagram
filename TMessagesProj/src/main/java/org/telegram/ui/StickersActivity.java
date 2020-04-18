@@ -88,6 +88,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -448,10 +449,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         final AtomicReference<TextView> exportButton = new AtomicReference<>();
 
-        builder.setCheckItems(new String[]{
+        builder.addCheckItems(new String[]{
                 LocaleController.getString("StickerSets", R.string.StickerSets),
                 LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers)
-        }, (__) -> true, (index, check) -> {
+        }, (__) -> true,false, (index, text,cell) -> {
 
             boolean export;
 
@@ -475,7 +476,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             }
 
-            check.setChecked(export);
+            cell.setChecked(export);
 
             if (!exportSets.get() && !exportArchived.get()) {
 
@@ -487,15 +488,19 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             }
 
+            return Unit.INSTANCE;
+
         });
 
-        builder.addButton(LocaleController.getString("Cancel", R.string.Cancel), false, true, null);
+        builder.addCancelButton();
 
         exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
 
             builder.dismiss();
 
             exportStickersFinal(exportSets.get(), exportArchived.get());
+
+            return Unit.INSTANCE;
 
         }));
 

@@ -70,7 +70,6 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -119,7 +118,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.EditTextAutoFill;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -139,7 +142,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private boolean checkPermissions = true;
     private boolean checkShowPermissions = true;
     private boolean newAccount;
-    private boolean syncContacts = !"cn".equals(Locale.getDefault().getCountry().toLowerCase());
+    private boolean syncContacts;
 
     private int scrollHeight;
 
@@ -264,9 +267,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private int menu_other = 5;
     private int menu_custom_api = 6;
 
-    private int customAppId;
-    private String customAppHash = null;
-
     @Override
     public View createView(Context context) {
         actionBar.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.NekogramWithEmoji));
@@ -321,8 +321,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         ConnectionsManager.getInstance(currentAccount).cleanup(false);
                         final TLRPC.TL_auth_importBotAuthorization req = new TLRPC.TL_auth_importBotAuthorization();
 
-                        req.api_hash = customAppId != 0 ? customAppHash : BuildConfig.APP_HASH;
-                        req.api_id = customAppId != 0 ? customAppId : BuildConfig.APP_ID;
+                        req.api_hash = NekoXConfig.currentAppHash();
+                        req.api_id = NekoXConfig.currentAppId();
                         req.bot_auth_token = token;
                         req.flags = 0;
                         int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -378,14 +378,146 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     }
                 } else if (id == menu_custom_api) {
 
+                    AtomicInteger targetApi = new AtomicInteger(-1);
+
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                    EditTextBoldCursor[] inputs = new EditTextBoldCursor[2];
 
                     builder.addTitle(LocaleController.getString("CustomApi", R.string.CustomApi),
                             true,
                             LocaleController.getString("UseCustomApiNotice", R.string.UseCustomApiNotice));
 
+                    builder.addRadioItem(LocaleController.getString("", R.string.CustomApiNo), NekoXConfig.customApi == 0, (cell) -> {
+
+                        targetApi.set(0);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.addRadioItem(LocaleController.getString("CustomApiOffical", R.string.CustomApiOffical), NekoXConfig.customApi == 1, (cell) -> {
+
+                        targetApi.set(1);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.addRadioItem(LocaleController.getString("CustomApiTGX", R.string.CustomApiTGX), NekoXConfig.customApi == 2, (cell) -> {
+
+                        targetApi.set(2);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+
+                    builder.addRadioItem(LocaleController.getString("CustomApiInput", R.string.CustomApiInput), NekoXConfig.customApi > 2, (cell) -> {
+
+                        targetApi.set(3);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.VISIBLE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    inputs[0] = builder.addEditText("App Id");
+                    inputs[0].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    if (NekoXConfig.customAppId != 0) {
+                        inputs[0].setText(NekoXConfig.customAppId + "");
+                    }
+                    inputs[0].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            NekoXConfig.customAppId = NumberUtil.parseInt(s.toString());
+                        }
+                    });
+
+                    inputs[1] = builder.addEditText("App Hash");
+                    inputs[1].setInputType(InputType.TYPE_CLASS_TEXT);
+                    if (StrUtil.isNotBlank(NekoXConfig.customAppHash)) {
+                        inputs[1].setText(NekoXConfig.customAppHash);
+                    }
+                    inputs[1].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            NekoXConfig.customAppHash = s.toString();
+                        }
+                    });
+
+                    for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+
+                    builder.addCancelButton();
+
+                    builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
+
+                        int target = targetApi.get();
+
+                        if (target > 2) {
+
+                            if (NekoXConfig.customAppId == 0) {
+
+                                inputs[0].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[0]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (StrUtil.isBlank(NekoXConfig.customAppHash)) {
+
+                                inputs[1].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[1]);
+
+                                return Unit.INSTANCE;
+
+                            }
+
+                        }
+
+                        NekoXConfig.customApi = target;
+                        NekoXConfig.saveCustomApi();
+
+                        builder.dismiss();
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.show();
 
                 }
+
             }
         });
 
@@ -1296,6 +1428,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
     private TLRPC.TL_help_termsOfService currentTermsOfService;
 
+    private boolean allowFlashCall;
+
     public class PhoneView extends SlideView implements AdapterView.OnItemSelectedListener {
 
         private EditTextBoldCursor codeField;
@@ -1305,6 +1439,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         private TextView textView;
         private TextView textView2;
         private CheckBoxCell checkBoxCell;
+        private CheckBoxCell allowFlashCallCell;
         private CheckBoxCell testBackendCell;
 
         private int countryState = 0;
@@ -1585,7 +1720,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             checkBoxCell = new CheckBoxCell(context, 2);
             checkBoxCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), "", syncContacts, false);
-            addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+            addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
             checkBoxCell.setOnClickListener(new OnClickListener() {
 
                 private Toast visibleToast;
@@ -1613,6 +1748,33 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         visibleToast.show();
                     }
                 }
+            });
+
+            TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
+            if (BuildVars.DEBUG_VERSION) {
+                FileLog.d("sim status = " + tm.getSimState());
+            }
+            int state = tm.getSimState();
+            boolean simcardAvailable = state != TelephonyManager.SIM_STATE_ABSENT && state != TelephonyManager.SIM_STATE_UNKNOWN && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE && !AndroidUtilities.isAirplaneModeOn();
+            boolean allowCall = true;
+            boolean allowCancelCall = true;
+            boolean allowReadCallLog = true;
+            if (Build.VERSION.SDK_INT >= 23 && simcardAvailable) {
+                allowCall = getParentActivity().checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+                allowCancelCall = getParentActivity().checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED;
+                allowReadCallLog = Build.VERSION.SDK_INT < 28 || getParentActivity().checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
+            }
+            allowFlashCall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
+
+            allowFlashCallCell = new CheckBoxCell(context, 2);
+            allowFlashCallCell.setText(LocaleController.getString("AllowFlashCall", R.string.AllowFlashCall), "", allowFlashCall, false);
+            addView(allowFlashCallCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+            allowFlashCallCell.setOnClickListener(v -> {
+                if (getParentActivity() == null) {
+                    return;
+                }
+                CheckBoxCell cell = (CheckBoxCell) v;
+                cell.setChecked(allowFlashCall = !allowFlashCall, true);
             });
 
             if (NekoXConfig.developerMode) {
@@ -1762,59 +1924,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             if (getParentActivity() == null || nextPressed) {
                 return;
             }
-            TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
-            if (BuildVars.DEBUG_VERSION) {
-                FileLog.d("sim status = " + tm.getSimState());
-            }
-            int state = tm.getSimState();
-            boolean simcardAvailable = state != TelephonyManager.SIM_STATE_ABSENT && state != TelephonyManager.SIM_STATE_UNKNOWN && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE && !AndroidUtilities.isAirplaneModeOn();
-            boolean allowCall = true;
-            boolean allowCancelCall = true;
-            boolean allowReadCallLog = true;
-            if (Build.VERSION.SDK_INT >= 23 && simcardAvailable) {
-                allowCall = getParentActivity().checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
-                allowCancelCall = getParentActivity().checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED;
-                allowReadCallLog = Build.VERSION.SDK_INT < 28 || getParentActivity().checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
-                /*if (checkPermissions) {
-                    permissionsItems.clear();
-                    if (!allowCall) {
-                        permissionsItems.add(Manifest.permission.READ_PHONE_STATE);
-                    }
-                    if (!allowCancelCall) {
-                        permissionsItems.add(Manifest.permission.CALL_PHONE);
-                    }
-                    if (!allowReadCallLog) {
-                        permissionsItems.add(Manifest.permission.READ_CALL_LOG);
-                    }
-                    boolean ok = true;
-                    if (!permissionsItems.isEmpty()) {
-                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                        if (preferences.getBoolean("firstlogin", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CALL_LOG)) {
-                            preferences.edit().putBoolean("firstlogin", false).commit();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                            if (!allowCall && (!allowCancelCall || !allowReadCallLog)) {
-                                builder.setMessage(LocaleController.getString("AllowReadCallAndLog", R.string.AllowReadCallAndLog));
-                            } else if (!allowCancelCall || !allowReadCallLog) {
-                                builder.setMessage(LocaleController.getString("AllowReadCallLog", R.string.AllowReadCallLog));
-                            } else {
-                                builder.setMessage(LocaleController.getString("AllowReadCall", R.string.AllowReadCall));
-                            }
-                            permissionsDialog = showDialog(builder.create());
-                        } else {
-                            try {
-                                getParentActivity().requestPermissions(permissionsItems.toArray(new String[0]), 6);
-                            } catch (Exception ignore) {
-                                ok = false;
-                            }
-                        }
-                        if (ok) {
-                            return;
-                        }
-                    }
-                }*/
-            }
             if (countryState == 1) {
                 needShowAlert(LocaleController.getString("NekogramWithEmoji", R.string.NekogramWithEmoji), LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 return;
@@ -1823,7 +1932,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             if (codeField.length() == 0) {
-                needShowAlert(LocaleController.getString("NekogramWithEmoji", R.string.NekogramWithEmoji), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 return;
             }
             if (phoneField.length() == 0) {
@@ -1858,33 +1967,12 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             ConnectionsManager.getInstance(currentAccount).cleanup(false);
             final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
-            req.api_hash = customAppId != 0 ? customAppHash : BuildConfig.APP_HASH;
-            req.api_id = customAppId != 0 ? customAppId : BuildConfig.APP_ID;
+            req.api_hash = NekoXConfig.currentAppHash();
+            req.api_id = NekoXConfig.currentAppId();
             req.phone_number = phone;
             req.settings = new TLRPC.TL_codeSettings();
-            req.settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
-            req.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            if (req.settings.allow_flashcall) {
-                try {
-                    String number = tm.getLine1Number();
-                    if (!TextUtils.isEmpty(number)) {
-                        req.settings.current_number = PhoneNumberUtils.compare(phone, number);
-                        if (!req.settings.current_number) {
-                            req.settings.allow_flashcall = false;
-                        }
-                    } else {
-                        if (UserConfig.getActivatedAccountsCount() > 0) {
-                            req.settings.allow_flashcall = false;
-                        } else {
-                            req.settings.current_number = false;
-                        }
-                    }
-                } catch (Exception e) {
-                    req.settings.allow_flashcall = false;
-                    FileLog.e(e);
-                }
-            }
+            req.settings.allow_flashcall = allowFlashCall;
+            req.settings.allow_app_hash = false;
             final Bundle params = new Bundle();
             params.putString("phone", "+" + codeField.getText() + " " + phoneField.getText());
             try {
@@ -1898,7 +1986,93 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                 nextPressed = false;
                 if (error == null) {
-                    fillNextCodeParams(params, (TLRPC.TL_auth_sentCode) response);
+                    if (phone.startsWith("99966")) {
+                        String phoneHash = ((TLRPC.TL_auth_sentCode) response).phone_code_hash;
+                        String dcId = phone.substring(5, 6);
+                        final TLRPC.TL_auth_signIn reqI = new TLRPC.TL_auth_signIn();
+                        reqI.phone_number = phone;
+                        reqI.phone_code = dcId + dcId + dcId + dcId + dcId;
+                        reqI.phone_code_hash = phoneHash;
+                        int reqIdI = ConnectionsManager.getInstance(currentAccount).sendRequest(reqI, (responseI, errorI) -> AndroidUtilities.runOnUIThread(() -> {
+                            boolean ok = false;
+                            if (errorI == null) {
+                                nextPressed = false;
+                                ok = true;
+                                showDoneButton(false, true);
+                                if (responseI instanceof TLRPC.TL_auth_authorizationSignUpRequired) {
+                                    TLRPC.TL_auth_authorizationSignUpRequired authorization = (TLRPC.TL_auth_authorizationSignUpRequired) responseI;
+                                    if (authorization.terms_of_service != null) {
+                                        currentTermsOfService = authorization.terms_of_service;
+                                    }
+                                    Bundle paramsI = new Bundle();
+                                    paramsI.putString("phoneFormated", phone);
+                                    paramsI.putString("phoneHash", phoneHash);
+                                    paramsI.putString("code", reqI.phone_code);
+                                    setPage(5, true, params, false);
+                                } else {
+                                    onAuthSuccess((TLRPC.TL_auth_authorization) responseI);
+                                }
+                            } else {
+                                if (errorI.text.contains("SESSION_PASSWORD_NEEDED")) {
+                                    ok = true;
+                                    TLRPC.TL_account_getPassword req2 = new TLRPC.TL_account_getPassword();
+                                    ConnectionsManager.getInstance(currentAccount).sendRequest(req2, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
+                                        nextPressed = false;
+                                        showDoneButton(false, true);
+                                        if (error1 == null) {
+                                            TLRPC.TL_account_password password = (TLRPC.TL_account_password) response1;
+                                            if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
+                                                AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                                return;
+                                            }
+                                            Bundle bundle = new Bundle();
+                                            if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+                                                TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow algo = (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) password.current_algo;
+                                                bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
+                                                bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
+                                                bundle.putString("current_p", Utilities.bytesToHex(algo.p));
+                                                bundle.putInt("current_g", algo.g);
+                                                bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
+                                                bundle.putLong("current_srp_id", password.srp_id);
+                                                bundle.putInt("passwordType", 1);
+                                            }
+                                            bundle.putString("hint", password.hint != null ? password.hint : "");
+                                            bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern != null ? password.email_unconfirmed_pattern : "");
+                                            bundle.putString("phoneFormated", phone);
+                                            bundle.putString("phoneHash", phoneHash);
+                                            bundle.putString("code", reqI.phone_code);
+                                            bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
+                                            setPage(6, true, bundle, false);
+                                        } else {
+                                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
+                                        }
+                                    }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
+                                } else {
+                                    nextPressed = false;
+                                    showDoneButton(false, true);
+
+                                    if (errorI.text.contains("PHONE_NUMBER_INVALID")) {
+                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                    } else if (errorI.text.contains("PHONE_CODE_EMPTY") || errorI.text.contains("PHONE_CODE_INVALID")) {
+                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                    } else if (errorI.text.contains("PHONE_CODE_EXPIRED")) {
+                                        onBackPressed(true);
+                                        setPage(0, true, null, true);
+                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                    } else if (errorI.text.startsWith("FLOOD_WAIT")) {
+                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                    } else {
+                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + errorI.text);
+                                    }
+                                }
+                            }
+                        }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
+                        needShowProgress(reqIdI, false);
+                        showDoneButton(true, true);
+                        return;
+                    } else {
+                        fillNextCodeParams(params, (TLRPC.TL_auth_sentCode) response);
+                    }
                 } else {
                     if (error.text != null) {
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {

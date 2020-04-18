@@ -4,18 +4,22 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.telegram.messenger.AndroidUtilities
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BottomSheet
+import org.telegram.ui.ActionBar.BottomSheet.BottomSheetCell
 import org.telegram.ui.ActionBar.Theme
-import org.telegram.ui.Cells.CheckBoxCell
 import org.telegram.ui.Cells.HeaderCell
+import org.telegram.ui.Cells.RadioButtonCell
 import org.telegram.ui.Cells.ShadowSectionCell
 import org.telegram.ui.Cells.TextCheckCell
+import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.LayoutHelper
+import java.util.*
 
 class BottomBuilder(val ctx: Context) {
 
@@ -56,7 +60,7 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addTitle(title: String, bigTitle: Boolean = true, subTitle: String? = null) {
+    fun addTitle(title: String, bigTitle: Boolean = true, subTitle: String? = null): HeaderCell {
 
         val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, false) else HeaderCell(ctx)
 
@@ -70,14 +74,16 @@ class BottomBuilder(val ctx: Context) {
 
         })
 
-        rootView.addView(ShadowSectionCell(ctx,3))
+        rootView.addView(ShadowSectionCell(ctx, 3))
+
+        return headerCell
 
     }
 
     @JvmOverloads
-    fun addCheckBox(text: String, value: Boolean, valueText: String? = null, listener: View.OnClickListener) {
+    fun addCheckItem(text: String, value: Boolean, switch: Boolean = false, valueText: String? = null, listener: (cell: TextCheckCell) -> Unit): TextCheckCell {
 
-        val checkBoxCell = TextCheckCell(ctx, 21,true)
+        val checkBoxCell = TextCheckCell(ctx, 21, !switch)
         checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
         checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
         rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
@@ -88,38 +94,119 @@ class BottomBuilder(val ctx: Context) {
 
         } else {
 
-            checkBoxCell.setTextAndValueAndCheck(text,valueText,value,true,true)
+            checkBoxCell.setTextAndValueAndCheck(text, valueText, value, true, true)
 
         }
 
-        checkBoxCell.setOnClickListener(listener)
+        checkBoxCell.setOnClickListener {
 
-    }
+            listener.invoke(checkBoxCell)
 
-    @FunctionalInterface
-    interface IndexedListener {
+        }
 
-        fun onClick(index: Int, view: TextCheckCell)
+        return checkBoxCell
 
     }
 
     @JvmOverloads
-    fun setCheckItems(text: Array<String>, value: (Int) -> Boolean, valueText: ((Int) -> String)? = null, listener: IndexedListener) {
+    fun addCheckItems(text: Array<String>, value: (Int) -> Boolean, switch: Boolean = false, valueText: ((Int) -> String)? = null, listener: (index: Int, text: String, cell: TextCheckCell) -> Unit): List<TextCheckCell> {
+
+        val list = mutableListOf<TextCheckCell>()
 
         text.forEachIndexed { index, textI ->
 
-            addCheckBox(textI, value(index), valueText?.invoke(index), View.OnClickListener {
+            list.add(addCheckItem(textI, value(index), switch, valueText?.invoke(index)) { cell ->
 
-                listener.onClick(index, it as TextCheckCell)
+                listener(index, textI, cell)
 
             })
 
         }
 
+        return list
+
+    }
+
+    private val radioButtonGroup by lazy { LinkedList<RadioButtonCell>() }
+
+    fun doRadioCheck(cell: RadioButtonCell) {
+
+        if (!cell.isChecked) {
+
+            radioButtonGroup.forEach {
+
+                if (it.isChecked) {
+
+                    it.setChecked(false, true)
+
+                }
+
+            }
+
+            cell.setChecked(true, true)
+
+        }
+
     }
 
     @JvmOverloads
-    fun addButton(text: String, red: Boolean = false,left : Boolean = false, listener: View.OnClickListener?): TextView {
+    fun addRadioItem(text: String, value: Boolean, valueText: String? = null, listener: (cell: RadioButtonCell) -> Unit): RadioButtonCell {
+
+        val checkBoxCell = RadioButtonCell(ctx, true)
+        checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
+        checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
+        rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
+
+        if (valueText == null) {
+
+            checkBoxCell.setTextAndValue(text, true, value)
+
+        } else {
+
+            checkBoxCell.setTextAndValueAndCheck(text, valueText, true, value)
+
+        }
+
+        radioButtonGroup.add(checkBoxCell)
+
+        checkBoxCell.setOnClickListener {
+
+            listener(checkBoxCell)
+
+        }
+
+        return checkBoxCell
+
+    }
+
+    @JvmOverloads
+    fun addRadioItems(text: Array<String>, value: (Int) -> Boolean, valueText: ((Int) -> String)? = null, listener: (index: Int, text: String, cell: RadioButtonCell) -> Unit): List<RadioButtonCell> {
+
+        val list = mutableListOf<RadioButtonCell>()
+
+        text.forEachIndexed { index, textI ->
+
+            list.add(addRadioItem(textI, value(index), valueText?.invoke(index)) { cell ->
+
+                listener(index, textI, cell)
+
+            })
+
+        }
+
+        return list
+
+    }
+
+    @JvmOverloads
+    fun addCancelButton(left: Boolean = true) {
+
+        addButton(LocaleController.getString("Cancel", R.string.Cancel), left = left) { dismiss() }
+
+    }
+
+    @JvmOverloads
+    fun addButton(text: String, red: Boolean = false, left: Boolean = false, listener: ((TextView) -> Unit)): TextView {
 
         return TextView(ctx).apply {
 
@@ -133,7 +220,68 @@ class BottomBuilder(val ctx: Context) {
             setText(text)
             typeface = AndroidUtilities.getTypeface("fonts/rmedium.ttf")
             (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.LEFT))
-            setOnClickListener(listener ?: View.OnClickListener { dismiss() })
+            setOnClickListener { listener(this) }
+
+        }
+
+    }
+
+    @JvmOverloads
+    fun addItem(text: String, icon: Int = 0, listener: (cell: BottomSheetCell) -> Unit): BottomSheetCell {
+
+        return BottomSheetCell(ctx, 0).apply {
+
+            setTextAndIcon(text, icon)
+
+            setOnClickListener {
+
+                listener(this)
+
+            }
+
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT or Gravity.TOP))
+
+        }
+
+    }
+
+    fun addItems(text: Array<String>, icon: (Int) -> Int, listener: (index: Int, text: String, cell: BottomSheetCell) -> Unit): List<BottomSheetCell> {
+
+        val list = mutableListOf<BottomSheetCell>()
+
+        text.forEachIndexed { index, textI ->
+
+            list.add(addItem(textI, icon(index)) { cell ->
+
+                listener(index, textI, cell)
+
+            })
+
+        }
+
+        return list
+
+    }
+
+    fun addEditText(hintText: String): EditTextBoldCursor {
+
+        return object : EditTextBoldCursor(ctx) {
+
+            override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) = super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50f), MeasureSpec.EXACTLY))
+
+        }.apply {
+
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
+            setTextColor(Theme.getColor(Theme.key_dialogTextBlack))
+            setHintText(hintText)
+            setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader))
+            isSingleLine = true
+            isFocusable = true
+            setTransformHintToHeader(true)
+            setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3))
+            setBackgroundDrawable(null)
+
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT or Gravity.TOP))
 
         }
 

@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import org.dizitart.no2.*
 import org.dizitart.no2.filters.Filters
 import org.telegram.messenger.FileLog
+import tw.nekomimi.nekogram.utils.UIUtil
 
 class DbPref(val connection: NitriteCollection) : SharedPreferences {
 
@@ -136,7 +137,7 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
         }
 
         override fun apply() {
-            commit()
+            UIUtil.runOnIoDispatcher(Runnable {  commit() } )
         }
 
     }

@@ -1,15 +1,9 @@
 package tw.nekomimi.nekogram;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
-import org.telegram.tgnet.TLRPC;
-
-import java.util.LinkedList;
+import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 
 import tw.nekomimi.nekogram.database.NitritesKt;
 
@@ -40,6 +34,54 @@ public class NekoXConfig {
     public static void toggleDisableScreenshotDetection() {
 
         preferences.edit().putBoolean("disable_screenshot_detection", disableScreenshotDetection = !disableScreenshotDetection).apply();
+
+    }
+
+    public static int customApi = preferences.getInt("custom_api", 0);
+    public static int customAppId = preferences.getInt("custom_app_id", 0);
+    public static String customAppHash = preferences.getString("custom_app_hash", "");
+
+    public static int currentAppId() {
+
+        switch (customApi) {
+
+            case 0:
+                return BuildConfig.APP_ID;
+            case 1:
+                return BuildVars.OFFICAL_APP_ID;
+            case 2:
+                return BuildVars.TGX_APP_ID;
+            default:
+                return customAppId;
+
+        }
+
+    }
+
+    public static String currentAppHash() {
+
+        switch (customApi) {
+
+            case 0:
+                return BuildConfig.APP_HASH;
+            case 1:
+                return BuildVars.OFFICAL_APP_HASH;
+            case 2:
+                return BuildVars.TGX_APP_HASH;
+            default:
+                return customAppHash;
+
+        }
+
+    }
+
+    public static void saveCustomApi() {
+
+        preferences.edit()
+                .putInt("custom_api", customApi)
+                .putInt("custom_app_id", customAppId)
+                .putString("custom_app_hash", customAppHash)
+                .apply();
 
     }
 

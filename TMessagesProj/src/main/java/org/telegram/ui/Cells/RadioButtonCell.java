@@ -105,6 +105,10 @@ public class RadioButtonCell extends LinearLayout {
         radioButton.setChecked(checked, animated);
     }
 
+    public boolean isChecked() {
+        return radioButton.isChecked();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
