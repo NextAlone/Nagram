@@ -53,6 +53,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class FilterTabsView extends FrameLayout {
 
     public interface FilterTabsViewDelegate {
@@ -819,9 +821,9 @@ public class FilterTabsView extends FrameLayout {
         if (!tabs.isEmpty()) {
             int width = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(7) - AndroidUtilities.dp(7);
             Tab firstTab = tabs.get(0);
-            firstTab.setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            if (!NekoConfig.hideAllTab) firstTab.setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             int tabWith = firstTab.getWidth(false);
-            firstTab.setTitle(allTabsWidth > width ? LocaleController.getString("FilterAllChatsShort", R.string.FilterAllChatsShort) : LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            if (!NekoConfig.hideAllTab) firstTab.setTitle(allTabsWidth > width ? LocaleController.getString("FilterAllChatsShort", R.string.FilterAllChatsShort) : LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             int trueTabsWidth = allTabsWidth - tabWith;
             trueTabsWidth += firstTab.getWidth(false);
             int prevWidth = additionalTabWidth;
@@ -970,7 +972,7 @@ public class FilterTabsView extends FrameLayout {
                 requestLayout();
                 adapter.notifyDataSetChanged();
                 allTabsWidth = 0;
-                tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                if (!NekoConfig.hideAllTab) tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int b = 0; b < N; b++) {
                     allTabsWidth += tabs.get(b).getWidth(true) + AndroidUtilities.dp(32);
                 }
@@ -999,7 +1001,7 @@ public class FilterTabsView extends FrameLayout {
             requestLayout();
             adapter.notifyDataSetChanged();
             allTabsWidth = 0;
-            tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            if (!NekoConfig.hideAllTab) tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             for (int b = 0, N = tabs.size(); b < N; b++) {
                 allTabsWidth += tabs.get(b).getWidth(true) + AndroidUtilities.dp(32);
             }

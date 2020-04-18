@@ -83,4 +83,8 @@
     <string name="ShowTabsOnForward">Mostrar pastas ao encaminhar</string>
     <string name="CheckAllAdministrated">Adicionar administrado</string>
     <string name="ProviderDeepLWeb">Tradutor DeepL (Web)</string>
+    <string name="ChatMessageAnimation">Animação de novas mensagens</string>
+    <string name="RearVideoMessages">Câmera traseira em mensagens de vídeo</string>
+    <string name="HideAllTab">Ocultar aba \"Todos os bate-papos\"</string>
+    <string name="HideAllTabAbout">Pressione o botão \"Voltar\" na página inicial, para abri-lo</string>
 </resources>
