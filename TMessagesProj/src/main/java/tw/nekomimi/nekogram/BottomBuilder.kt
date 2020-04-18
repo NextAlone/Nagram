@@ -4,9 +4,8 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
@@ -17,21 +16,34 @@ import org.telegram.ui.Cells.HeaderCell
 import org.telegram.ui.Cells.RadioButtonCell
 import org.telegram.ui.Cells.ShadowSectionCell
 import org.telegram.ui.Cells.TextCheckCell
-import org.telegram.ui.Components.EditTextBoldCursor
+import org.telegram.ui.Components.HintEditText
 import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
 class BottomBuilder(val ctx: Context) {
 
-    val builder = BottomSheet.Builder(ctx,true)
+    val builder = BottomSheet.Builder(ctx, true)
 
     private val rootView = LinearLayout(ctx).apply {
 
         orientation = LinearLayout.VERTICAL
 
+    }
+
+    private val _root = LinearLayout(ctx).apply {
+
+        addView(ScrollView(ctx).apply {
+
+            addView(this@BottomBuilder.rootView)
+            isFillViewport = true
+            isVerticalScrollBarEnabled = false
+
+        },LinearLayout.LayoutParams(-1,-1))
+
         builder.setCustomView(this)
 
     }
+
 
     private val buttonsView by lazy {
 
@@ -263,21 +275,18 @@ class BottomBuilder(val ctx: Context) {
 
     }
 
-    fun addEditText(hintText: String): EditTextBoldCursor {
+    fun addEditText(hintText: String): EditText {
 
-        return EditTextBoldCursor(ctx).apply {
+        return EditText(ctx).apply {
 
-            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
             setTextColor(Theme.getColor(Theme.key_dialogTextBlack))
             hint = hintText
-            setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader))
             isSingleLine = true
             isFocusable = true
-            setTransformHintToHeader(true)
-            setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3))
             setBackgroundDrawable(null)
 
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, Gravity.LEFT or Gravity.TOP,AndroidUtilities.dp(14F),AndroidUtilities.dp(4F),0,AndroidUtilities.dp(4F)))
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, if (LocaleController.isRTL) Gravity.RIGHT else Gravity.LEFT, AndroidUtilities.dp(8F), 0, 0, 0))
 
         }
 

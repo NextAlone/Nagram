@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,7 +46,6 @@ public class HeaderCell extends LinearLayout {
         super(context);
 
         setOrientation(LinearLayout.VERTICAL);
-
         setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(padding), 0);
 
         textView = new TextView(getContext());
@@ -61,11 +61,16 @@ public class HeaderCell extends LinearLayout {
         textView2 = new TextView(getContext());
         textView2.setTextSize(13);
         textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        textView2.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP);
-        addView(textView2, LayoutHelper.createLinear(-2, -2, 0, 10, 0, 0));
+        addView(textView2, LayoutHelper.createLinear(-2, -2, 0, 4, 0, 0));
 
         if (!text2) textView2.setVisibility(View.GONE);
 
+    }
+
+    @Override
+    public void setLayoutParams(ViewGroup.LayoutParams params) {
+        params.width = -1;
+        super.setLayoutParams(params);
     }
 
     public void setHeight(int value) {

@@ -19,7 +19,7 @@ object LocaleUtil {
     val cacheDir = File(ApplicationLoader.applicationContext.cacheDir, "builtIn_lang_export")
 
     @JvmStatic
-    fun fetchAndExportLang(account: Int,callback: Runnable) {
+    fun fetchAndExportLang(account: Int) = runBlocking {
 
         delete(cacheDir)
         initDir(cacheDir)
@@ -38,15 +38,15 @@ object LocaleUtil {
                     lang_code = localeInfo.getBaseLangCode()
                 }, { response, _ ->
 
-                    val count = finish.decrementAndGet()
-
                     if (response is TL_langPackDifference) {
+
                         LocaleController.getInstance().saveRemoteLocaleStrings(localeInfo, response, account)
 
-                        localeInfo.pathToBaseFile.copyTo(File(cacheDir,localeInfo.pathToBaseFile.name))
                     }
 
-                    if (count == 0) callback.run()
+                    localeInfo.pathToBaseFile.copyTo(File(cacheDir,localeInfo.pathToBaseFile.name))
+
+                    finish.decrementAndGet()
 
                 }, ConnectionsManager.RequestFlagWithoutLogin)
 
@@ -58,19 +58,22 @@ object LocaleUtil {
                 lang_code = localeInfo.langCode
             }, { response, _ ->
 
-                val count = finish.decrementAndGet()
-
                 if (response is TL_langPackDifference) {
+
                     LocaleController.getInstance().saveRemoteLocaleStrings(localeInfo, response, account)
 
-                    localeInfo.getPathToFile().copyTo(File(cacheDir,localeInfo.getPathToFile().name))
                 }
 
-                if (count == 0) callback.run()
+                localeInfo.getPathToFile().copyTo(File(cacheDir,localeInfo.getPathToFile().name))
+
+                finish.decrementAndGet()
 
             }, ConnectionsManager.RequestFlagWithoutLogin)
 
         }
+
+        while (finish.get() != 0) delay(100L)
+
     }
 
 }

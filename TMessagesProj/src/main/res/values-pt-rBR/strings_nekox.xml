@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="UseOfficalId">Disfarça como aplicativo oficial</string>
-    <string name="UseOfficalIdNotice">Faça login usando o ID do aplicativo oficial. Se não conseguir se registrar ou fazer login, isso pode ajudar. \n\nNota: o fcm não funcionará se você estiver usando a versão de lançamento.</string>
     <string name="ChangeTranslateProvider">Alterar Provedor</string>
     <string name="NekoXUpdatesChannel">Canal de atualizações do NekoX</string>
     <string name="ShowIdAndDc">Mostrar ID/DC no perfil</string>
@@ -108,10 +106,6 @@
     <string name="EnableDeveloperMode">Ativar modo de desenvolvedor</string>
     <string name="DisableDeveloperMode">Desativar modo desenvolvedor</string>
     <string name="DeveloperSettings">Configurações de desenvolvedor</string>
-    <string name="DisableFlagSecure">Desativar sinalização segura</string>
-    <string name="DisableScreenshotDetection">Desativar detecção de captura de tela</string>
     <string name="LoginSettings">Configurações de login</string>
-    <string name="ShowTestBackend">Mostrar back-end de teste</string>
-    <string name="ShowBotLogin">Mostrar Login do Bot</string>
     <string name="NekoXFaq">FAQ do NekoX</string>
 </resources>

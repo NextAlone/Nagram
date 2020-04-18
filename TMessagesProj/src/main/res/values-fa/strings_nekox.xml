@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="UseOfficalId">ورود به عنوان تلگرام رسمی</string>
-    <string name="UseOfficalIdNotice">با استفاده از شناسه رسمی برنامه وارد شوید ، اگر قادر به ثبت نام یا ورود به سیستم نیستید ، این ممکن است کمک کند. توجه: اگر از آخرین نسخه استفاده می کنید ، fcm کار نخواهد کرد.</string>
     <string name="ChangeTranslateProvider">تغییر ارائه دهنده خدمات</string>
     <string name="NekoXUpdatesChannel">کانال بروزرسانی NekoX</string>
     <string name="ShowIdAndDc">نمایش آیدی کاربر در پروفایل</string>
@@ -29,7 +27,7 @@
     <string name="FilterNameGroupsDescription">فقط پیامهای گفتگو های گروهی</string>
     <string name="FilterNameChannels">کانال ها</string>
     <string name="FilterNameChannelsDescription">فقط پیام های کانال ها</string>
-    <string name="FilterNameBots">ربات ها</string>
+    <string name="FilterNameBots">ربات</string>
     <string name="FilterNameBotsDescription">فقط پیام های ربات ها</string>
     <string name="FilterNameUnmuted">صدا دار</string>
     <string name="FilterNameUnmutedDescription">فقط پیام های گفتگو های صدا دار</string>
@@ -56,13 +54,13 @@
     <string name="DeleteAllInChat">حذف همه در این گفتگو</string>
     <string name="DeleteAllInChatAlert">هشدار! با این کار ، **تمام پیام ها** در این گفتگو برای همه شرکت کنندگان حذف می شود.</string>
     <string name="UnblockAll">رفع مسدودی همه</string>
-    <string name="UnblockAllWarn">آیا شما از رفع مسدود**همه ی کاربران و ربات ها**اطمینان دارید؟</string>
+    <string name="UnblockAllWarn">آیا شما از رفع مسدود**همه ی کاربران و ربات ها**اطمینان دارید?</string>
     <string name="BlockedListEmpty">شما هیچ فردی را مسدود نکرده اید :)</string>
     <string name="ProxyTypeVmess">پروکسی Vmess</string>
     <string name="AddProxySocks5">افزودن پروکسی Socks5</string>
     <string name="AddProxyTelegram">افزودن پروکسی MTproto</string>
     <string name="AddProxyVmess">افزودن پروکسی Vmess</string>
-    <string name="AddProxySS">افزودن شادوساکس SS</string>
+    <string name="AddProxySS">افزودن شادوساکس Ss</string>
     <string name="AddProxySSR">افزودن شادوساکس SSR</string>
     <string name="EditProxy">ویرایش پروکسی</string>
     <string name="ShareProxy">اشتراک گذاری پروکسی</string>
@@ -70,21 +68,21 @@
     <string name="ProxyInfoVmess">تنظیمات پروکسی Vmess</string>
     <string name="VmessUserId">آیدی کاربر</string>
     <string name="VmessAlterId">آیدی عددی</string>
-    <string name="VmessSecurity">Security</string>
+    <string name="VmessSecurity">امنیت</string>
     <string name="VmessNetwork">Network</string>
     <string name="VmessHeadType">Head Type</string>
     <string name="VmessRequestHost">Request Host / QUIC Security</string>
-    <string name="VmessPath">Path / QUIC Key</string>
-    <string name="VmessTls">Use TLS</string>
+    <string name="VmessPath">درخواست میزبان / امنیت QUIC</string>
+    <string name="VmessTls">از TLS استفاده کنید</string>
     <string name="ProxyInfoSS">تنظیمات شادوساکس ss</string>
-    <string name="SSPassword">Password</string>
-    <string name="SSMethod">Encrypt Method</string>
+    <string name="SSPassword">رمز</string>
+    <string name="SSMethod">روش رمز گذاری</string>
     <string name="ProxyInfoSSR">تنظیمات شادوساکس ssʀ</string>
-    <string name="SSRProtocol">Protocol</string>
-    <string name="SSRProtocolParams">Protocol Params</string>
+    <string name="SSRProtocol">پروتکل</string>
+    <string name="SSRProtocolParams">پارامترهای پروتکل</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
-    <string name="ProxyRemarks">Remarks</string>
+    <string name="ProxyRemarks">ملاحضات</string>
     <string name="RetestPing">تست مجدد پینگ سرورها</string>
     <string name="ReorderByPing">مرتب سازی براساس پینگ</string>
     <string name="ExportProxies">استخراج فایل سرورها</string>
@@ -108,10 +106,6 @@
     <string name="EnableDeveloperMode">فعالسازی حالت توسعه دهنده</string>
     <string name="DisableDeveloperMode">غیرفعال‌سازی حالت توسعه دهنده</string>
     <string name="DeveloperSettings">تنظیمات توسعه دهنده</string>
-    <string name="DisableFlagSecure">غیرفعال‌سازی پرچم امنیتی</string>
-    <string name="DisableScreenshotDetection">غیر فعال کردن شناسایی اسکرین‌شات</string>
     <string name="LoginSettings">تنظیمات ورود به سیستم</string>
-    <string name="ShowTestBackend">نمایش آزمایشی پس زمینه</string>
-    <string name="ShowBotLogin">دیدن ربات وارد شده</string>
     <string name="NekoXFaq">پرسش های متداول NekoX</string>
 </resources>

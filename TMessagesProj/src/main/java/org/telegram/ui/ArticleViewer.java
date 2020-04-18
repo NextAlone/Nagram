@@ -4126,14 +4126,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             if (cancel.get()) return;
                             boolean finaL = taskCount.decrementAndGet() == 0;
                             if (errorCount.incrementAndGet() > 3 || finaL) {
-                                UIUtil.runOnUIThread(dialog::dismiss);
-                                adapter[0].trans = false;
-                                transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                                AlertUtil.showSimpleAlert(parentActivity, e.getMessage());
-                                cancel.set(true);
-                                transPool.shutdown();
-                                AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
+                                UIUtil.runOnUIThread(() -> {
+                                    dialog.dismiss();
+                                    adapter[0].trans = false;
+                                    transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                                });
                             }
+                            AlertUtil.showSimpleAlert(parentActivity, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
+                            cancel.set(true);
+                            transPool.shutdown();
+                            AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
+
                             return;
                         }
 

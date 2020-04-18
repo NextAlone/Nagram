@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="UseOfficalId">متنكر كتطبيق رسمي</string>
-    <string name="UseOfficalIdNotice">تسجيل الدخول باستخدام معرف التطبيق الرسمي، إذا كنت غير قادر على التسجيل أو تسجيل الدخول، قد يساعد ذلك.\n\nملاحظة: لن يعمل fcm إذا كنت تستخدم إصدار الإصدار.</string>
     <string name="ChangeTranslateProvider">تغيير المزود</string>
     <string name="NekoXUpdatesChannel">قناة تحديثات Nekox</string>
     <string name="ShowIdAndDc">إظهار المعرف / dc في الملف الشخصي</string>
@@ -108,10 +106,6 @@
     <string name="EnableDeveloperMode">تفعيل وضع المطور</string>
     <string name="DisableDeveloperMode">تعطيل وضع المطور</string>
     <string name="DeveloperSettings">إعدادات المطور</string>
-    <string name="DisableFlagSecure">تعطيل العلامة الآمنة</string>
-    <string name="DisableScreenshotDetection">تعطيل الكشف عن لقطة الشاشة</string>
     <string name="LoginSettings">إعدادات الدخول</string>
-    <string name="ShowTestBackend">إظهار خلفية الاختبار</string>
-    <string name="ShowBotLogin">إظهار تسجيل الدخول للبوت</string>
     <string name="NekoXFaq">أسئلة NekoX الشائعة</string>
 </resources>

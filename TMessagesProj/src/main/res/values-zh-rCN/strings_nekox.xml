@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="UseOfficalId">假装是官方应用</string>
-    <string name="UseOfficalIdNotice">登录时将自己标识为官方应用，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
+    <string name="CustomApi">自定义 Api</string>
+    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
+    <string name="CustomApiNo">不使用自定义 API</string>
+    <string name="CustomApiOffical">Telegram Android</string>
+    <string name="CustomApiTGX">Telegram X</string>
+    <string name="CustomApiInput">手动输入</string>
+    <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
     <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 id / dc</string>
@@ -11,6 +16,7 @@
     <string name="PrivacyNoticePhoneVisible">检测到您的手机号码对任何人都可见, 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
     <string name="PrivacyNoticeAddByPhone">检测到您没有被关闭“允许通过电话号码找到我”设置， 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
     <string name="PrivacyNoticeP2p">检测到您没有关闭“允许 P2p 通话”设置， 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
+    <string name="PrivacyNotice2fa">检测到您没有设置密码，这可能会导致政府控制的黑客找到您的真实身份，请设置一个！</string>
     <string name="ApplySuggestion">应用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除标题中的表情</string>
@@ -91,6 +97,12 @@
     <string name="ImportProxies">从文件导入服务器列表</string>
     <string name="ImportProxyList">导入代理服务器列表</string>
     <string name="ImportProxyListConfirm">您确定要**导入代理服务器列表**吗？</string>
+    <string name="ExportStickers">导出贴纸集</string>
+    <string name="ImportStickers">从文件导入贴纸集</string>
+    <string name="ImportStickersList">导入贴纸集</string>
+    <string name="ImportStickersConfirm">您确定要**导入贴纸集**吗？</string>
+    <string name="StickerSets">贴纸集</string>
+    <string name="InvalidStickersFile">无效的贴纸集文件： </string>
     <string name="InvalidProxyFile">无效的代理列表文件： </string>
     <string name="ImportedProxies">已导入的代理服务器： </string>
     <string name="ErrorsInImport">导入错误： </string>
@@ -108,10 +120,6 @@
     <string name="EnableDeveloperMode">启用开发者模式</string>
     <string name="DisableDeveloperMode">禁用开发者模式</string>
     <string name="DeveloperSettings">开发者设置</string>
-    <string name="DisableFlagSecure">禁用安全标记</string>
-    <string name="DisableScreenshotDetection">禁用截屏检测</string>
     <string name="LoginSettings">登录设置</string>
-    <string name="ShowTestBackend">显示连接到测试后端</string>
-    <string name="ShowBotLogin">显示机器人秘钥登录</string>
     <string name="NekoXFaq">NekoX 常见问题</string>
 </resources>

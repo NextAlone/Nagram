@@ -527,7 +527,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
                                 LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
                                 LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
-                                BuildVars.DEBUG_VERSION ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs),
+                                BuildVars.SAVE_LOG ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs),
                                 NekoConfig.residentNotification ? LocaleController.getString("DisableResidentNotification", R.string.DisableResidentNotification) : LocaleController.getString("EnableResidentNotification", R.string.EnableResidentNotification),
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
@@ -849,7 +849,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         questionRow = rowCount++;
         faqRow = rowCount++;
         policyRow = -1;
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.SAVE_LOG) {
             helpSectionCell = rowCount++;
             debugHeaderRow = rowCount++;
         } else {

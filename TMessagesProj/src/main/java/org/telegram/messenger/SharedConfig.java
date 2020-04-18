@@ -89,7 +89,7 @@ public class SharedConfig {
     public static int passportConfigHash;
 
     private static boolean configLoaded;
-    private static final Object sync = new Object();
+    public static final Object sync = new Object();
     private static final Object localIdSync = new Object();
 
     public static boolean saveToGallery;
@@ -475,22 +475,13 @@ public class SharedConfig {
 
             stop();
 
-            port = ProxyManager.getPortForBean(bean);
+            VmessLoader loader = new VmessLoader();
 
-            try {
+            loader.initConfig(bean);
 
-                VmessLoader loader = new VmessLoader();
-                loader.initConfig(bean, port);
+            port = loader.start();
 
-                loader.start();
-
-                this.loader = loader;
-
-            } catch (Exception e) {
-
-                FileLog.e(e);
-
-            }
+            this.loader = loader;
 
         }
 
@@ -764,6 +755,16 @@ public class SharedConfig {
     }
 
     public static LinkedList<ProxyInfo> proxyList = new LinkedList<>();
+
+    public static LinkedList<ProxyInfo> getProxyList() {
+
+        synchronized (sync) {
+
+            return new LinkedList<>(proxyList);
+
+        }
+
+    }
 
     private static boolean proxyListLoaded;
     public static ProxyInfo currentProxy;
@@ -1440,91 +1441,94 @@ public class SharedConfig {
 
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
-
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
 
-        boolean hidePublicProxy = preferences.getBoolean("hide_public_proxy",true);
+        boolean hidePublicProxy = preferences.getBoolean("hide_public_proxy", true);
 
-        try {
-
-            if (!hidePublicProxy) {
-
-                VmessProxy publicProxy = new VmessProxy(VmessLoader.getPublic());
-                publicProxy.isPublic = true;
-                proxyList.add(publicProxy);
-
-                if (publicProxy.hashCode() == current) {
-
-                    currentProxy = publicProxy;
-
-                    publicProxy.start();
-
-                }
-
-            }
-
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-
-
-        File remoteProxyListFile = ProxyUtil.cacheFile;
-
-        if (remoteProxyListFile.isFile() && !hidePublicProxy) {
+        synchronized (sync) {
 
             try {
 
-                JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(remoteProxyListFile));
+                if (!hidePublicProxy) {
 
-                for (int a = 0; a < proxyArray.length(); a++) {
+                    VmessProxy publicProxy = new VmessProxy(VmessLoader.getPublic());
+                    publicProxy.isPublic = true;
+                    proxyList.add(publicProxy);
 
-                    JSONObject proxyObj = proxyArray.getJSONObject(a);
+                    if (publicProxy.hashCode() == current) {
 
-                    ProxyInfo info;
+                        currentProxy = publicProxy;
 
-                    try {
-
-                        if (!proxyObj.isNull("proxy")) {
-
-                            // old remote protocol
-
-                            info = parseProxyInfo(proxyObj.getString("proxy"));
-
-                        } else {
-
-                            info = ProxyInfo.fromJson(proxyObj);
-
-                        }
-
-                    } catch (Exception ex) {
-
-                        FileLog.e("load proxy failed", ex);
-
-                        continue;
-
-                    }
-
-                    info.isPublic = true;
-
-                    proxyList.add(info);
-
-                    if (info.hashCode() == current) {
-
-                        currentProxy = info;
-
-                        if (info instanceof ExternalSocks5Proxy) {
-
-                            ((ExternalSocks5Proxy) info).start();
-
-                        }
+                        publicProxy.start();
 
                     }
 
                 }
 
-            } catch (Exception ex) {
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
 
-                FileLog.e("invalid proxy list json format", ex);
+
+            File remoteProxyListFile = ProxyUtil.cacheFile;
+
+            if (remoteProxyListFile.isFile() && !hidePublicProxy) {
+
+                try {
+
+                    JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(remoteProxyListFile));
+
+                    for (int a = 0; a < proxyArray.length(); a++) {
+
+                        JSONObject proxyObj = proxyArray.getJSONObject(a);
+
+                        ProxyInfo info;
+
+                        try {
+
+                            if (!proxyObj.isNull("proxy")) {
+
+                                // old remote protocol
+
+                                info = parseProxyInfo(proxyObj.getString("proxy"));
+
+                            } else {
+
+                                info = ProxyInfo.fromJson(proxyObj);
+
+                            }
+
+                        } catch (Exception ex) {
+
+                            FileLog.e("load proxy failed", ex);
+
+                            continue;
+
+                        }
+
+                        info.isPublic = true;
+
+                        proxyList.add(info);
+
+                        if (info.hashCode() == current) {
+
+                            currentProxy = info;
+
+                            if (info instanceof ExternalSocks5Proxy) {
+
+                                ((ExternalSocks5Proxy) info).start();
+
+                            }
+
+                        }
+
+                    }
+
+                } catch (Exception ex) {
+
+                    FileLog.e("invalid proxy list json format", ex);
+
+                }
 
             }
 
@@ -1534,54 +1538,58 @@ public class SharedConfig {
 
         boolean error = false;
 
-        if (proxyListFile.isFile()) {
+        synchronized (sync) {
 
-            try {
+            if (proxyListFile.isFile()) {
 
-                JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(proxyListFile));
+                try {
 
-                for (int a = 0; a < proxyArray.length(); a++) {
+                    JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(proxyListFile));
 
-                    JSONObject proxyObj = proxyArray.getJSONObject(a);
+                    for (int a = 0; a < proxyArray.length(); a++) {
 
-                    ProxyInfo info;
+                        JSONObject proxyObj = proxyArray.getJSONObject(a);
 
-                    try {
+                        ProxyInfo info;
 
-                        info = ProxyInfo.fromJson(proxyObj);
+                        try {
 
-                    } catch (Exception ex) {
+                            info = ProxyInfo.fromJson(proxyObj);
 
-                        FileLog.d("load proxy failed: " + ex);
+                        } catch (Exception ex) {
 
-                        error = true;
+                            FileLog.d("load proxy failed: " + ex);
 
-                        continue;
+                            error = true;
 
-                    }
+                            continue;
 
-                    if (!proxyObj.isNull("internal")) continue;
-                    if (info.getTitle().toLowerCase().contains("nekox.me")) continue;
+                        }
 
-                    proxyList.add(info);
+                        if (!proxyObj.isNull("internal")) continue;
+                        if (info.getTitle().toLowerCase().contains("nekox.me")) continue;
 
-                    if (info.hashCode() == current) {
+                        proxyList.add(info);
 
-                        currentProxy = info;
+                        if (info.hashCode() == current) {
 
-                        if (info instanceof ExternalSocks5Proxy) {
+                            currentProxy = info;
 
-                            ((ExternalSocks5Proxy) info).start();
+                            if (info instanceof ExternalSocks5Proxy) {
+
+                                ((ExternalSocks5Proxy) info).start();
+
+                            }
 
                         }
 
                     }
 
+                } catch (Exception ex) {
+
+                    FileLog.d("invalid proxy list json format" + ex);
+
                 }
-
-            } catch (Exception ex) {
-
-                FileLog.d("invalid proxy list json format" + ex);
 
             }
 

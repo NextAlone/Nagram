@@ -447,16 +447,19 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 .followSslRedirects(true)
                 .build();
 
-        Request.Builder request = new Request.Builder()
-                .url(url)
+        Request.Builder request = new Request.Builder().url(url)
                 .header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)")
                 .header("Accept-Language", "en-us,en;q=0.5")
                 .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
                 .header("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
 
-        for (Map.Entry<String, String> header : headers.entrySet()) {
+        if (headers != null) {
 
-            request.addHeader(header.getKey(),header.getValue());
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+
+                request.addHeader(header.getKey(), header.getValue());
+
+            }
 
         }
 

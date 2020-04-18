@@ -2350,7 +2350,7 @@ Telegramのアカウントを元に戻す事はできません。
 <string name="Days_few"></string>
 <string name="Emoji">絵文字</string>
 <string name="ColorGreen">緑色</string>
-<string name="AddContactChat">連絡先の登録</string>
+<string name="AddContactChat">連絡先に登録</string>
 <string name="AutoNightScheduled">管理して使用する</string>
 <string name="InviteTextNum_zero"></string>
 <string name="PhoneNumberSearch">電話番号</string>
@@ -2792,7 +2792,7 @@ Telegram Desktopをダウンロード。</string>
 メニューボタンを押すと項目が表示されます。</string>
 <string name="SendingSms">SMSを送信中</string>
 <string name="CustomThemes">追加テーマ</string>
-<string name="BlockContact">相手をブロックする</string>
+<string name="BlockContact">ブロックする</string>
 <string name="TurnPasswordOffQuestionTitle">パスワードを無効にする</string>
 <string name="TelegramFAQ">Telegram FAQ</string>
 <string name="ChannelEditPermissions">制限を設定する</string>
@@ -2828,7 +2828,7 @@ Telegram Desktopをダウンロード。</string>
 <string name="AccDescrMusicInfo">%2$s %1$s</string>
 <string name="ShareMyPhone">電話番号を共有する</string>
 <string name="NotificationActionPinnedContact">%1$sが%2$sで連絡先を留めました</string>
-<string name="EditAdminRank">肩書き</string>
+<string name="EditAdminRank">呼び名</string>
 <string name="ForwardedRound_few"></string>
 <string name="NearbyPlaces">場所を指定する事も可能です</string>
 <string name="NoSharedVoice">共有した音声は
@@ -3483,7 +3483,7 @@ Telegramに通話を許可してください。</string>
 <string name="PassportPhoneInfo">電話番号を入力してください</string>
 <string name="Chats_zero"></string>
 <string name="FilterRemoveInclusionText">「%1$s」を項目から削除しますか？</string>
-<string name="FilterShowMoreChats_other">%1$d をさらに表示</string>
+<string name="FilterShowMoreChats_other">さらに%1$d個を表示</string>
 <string name="AreYouSureDeleteSingleMessage">このメッセージを削除しますか？</string>
 <string name="Voice_zero"></string>
 <string name="PrivacyPhoneTitle">誰と電話番号でつながりますか？</string>

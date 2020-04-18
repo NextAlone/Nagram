@@ -8782,6 +8782,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         return 5;
                                     } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox.json"))) {
                                         return 21;
+                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox-stickers.json"))) {
+                                        return 22;
                                     } else if (!messageObject.isNewGif() && mime.endsWith("/mp4") || mime.endsWith("/png") || mime.endsWith("/jpg") || mime.endsWith("/jpeg")) {
                                         return 6;
                                     }
@@ -14122,10 +14124,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                             options.add(6);
                             icons.add(R.drawable.baseline_share_24);
-                        } else if (type == 21) {
-                            items.add(LocaleController.getString("ImportProxyList", R.string.ImportProxyList));
+                        } else if (type == 21 || type == 22) {
                             options.add(5);
-                            icons.add(R.drawable.baseline_security_24);
+                            if (type == 21) {
+                                items.add(LocaleController.getString("ImportProxyList", R.string.ImportProxyList));
+                                icons.add(R.drawable.baseline_security_24);
+                            } else {
+                                items.add(LocaleController.getString("ImportStickersList", R.string.ImportStickersList));
+                                icons.add(R.drawable.deproko_baseline_stickers_filled_24);
+                            }
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
@@ -14970,17 +14977,27 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                             showDialog(builder.create());
                         }
-                    } else if (locFile.getName().toLowerCase().endsWith(".json")) {
+                    } else if (locFile.getName().toLowerCase().endsWith(".nekox.json")) {
 
-                        File finalLocFile = locFile;
+                        File finalLocFile1 = locFile;
                         AlertUtil.showConfirm(getParentActivity(),
                                 LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
-                                LocaleController.getString("ImportProxyList", R.string.ImportProxyListConfirm),
+                                LocaleController.getString("ImportProxyListConfirm", R.string.ImportProxyListConfirm),
                                 LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
-                                    String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
+                                    String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile1);
                                     if (!StrUtil.isBlank(status)) {
                                         presentFragment(new ProxyListActivity(status));
                                     }
+                                });
+
+                    } else if (locFile.getName().toLowerCase().endsWith(".nekox-stickers.json")) {
+
+                        File finalLocFile = locFile;
+                        AlertUtil.showConfirm(getParentActivity(),
+                                LocaleController.getString("ImportStickersList", R.string.ImportStickersList),
+                                LocaleController.getString("ImportStickersConfirm", R.string.ImportStickersConfirm),
+                                LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                    presentFragment(new StickersActivity(finalLocFile));
                                 });
 
                     }
@@ -16827,12 +16844,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 File finalLocFile = locFile;
                                 AlertUtil.showConfirm(getParentActivity(),
                                         LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
-                                        LocaleController.getString("ImportProxyList", R.string.ImportProxyListConfirm),
+                                        LocaleController.getString("ImportProxyListConfirm", R.string.ImportProxyListConfirm),
                                         LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
                                             String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
                                             if (!StrUtil.isBlank(status)) {
                                                 presentFragment(new ProxyListActivity(status));
                                             }
+                                        });
+
+                            } else if (message.getDocumentName().toLowerCase().endsWith(".nekox-stickers.json")) {
+
+                                File finalLocFile = locFile;
+                                AlertUtil.showConfirm(getParentActivity(),
+                                        LocaleController.getString("ImportStickersList", R.string.ImportStickersList),
+                                        LocaleController.getString("ImportStickersConfirm", R.string.ImportStickersConfirm),
+                                        LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                            presentFragment(new StickersActivity(finalLocFile));
                                         });
 
                             } else {

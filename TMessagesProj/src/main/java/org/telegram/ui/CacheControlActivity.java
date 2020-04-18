@@ -11,21 +11,26 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
@@ -49,8 +54,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.io.File;
 import java.util.ArrayList;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class CacheControlActivity extends BaseFragment {
 
@@ -98,6 +102,10 @@ public class CacheControlActivity extends BaseFragment {
 
         Utilities.globalQueue.postRunnable(() -> {
             cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), 0);
+
+            cacheSize += getDirectorySize(new File(ApplicationLoader.getDataDirFixed(),"cache"),0);
+            cacheSize += getDirectorySize(ApplicationLoader.applicationContext.getExternalFilesDir("logs"),0);
+
             if (canceled) {
                 return;
             }
@@ -197,6 +205,30 @@ public class CacheControlActivity extends BaseFragment {
                 if (type == FileLoader.MEDIA_DIR_CACHE) {
                     cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), documentsMusicType);
                     imagesCleared = true;
+
+                    try {
+
+                        FileUtil.delete(new File(ApplicationLoader.getDataDirFixed(), "cache"));
+
+                    } catch (Exception ignored) {
+                    }
+
+                    try {
+
+                        FileUtil.delete(ApplicationLoader.applicationContext.getExternalFilesDir("logs"));
+
+                    } catch (Exception ignored) {
+                    }
+
+                    try {
+
+                        // :)
+
+                        FileUtil.delete(Environment.getExternalStoragePublicDirectory("Telegram"));
+
+                    } catch (Exception ignored) {
+                    }
+
                 } else if (type == FileLoader.MEDIA_DIR_AUDIO) {
                     audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), documentsMusicType);
                 } else if (type == FileLoader.MEDIA_DIR_DOCUMENT) {
@@ -215,6 +247,7 @@ public class CacheControlActivity extends BaseFragment {
                     stickersSize = getDirectorySize(new File(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), "acache"), documentsMusicType);
                 }
             }
+
             final boolean imagesClearedFinal = imagesCleared;
             totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersSize;
             AndroidUtilities.runOnUIThread(() -> {

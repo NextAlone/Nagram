@@ -204,7 +204,7 @@ public class ApplicationLoader extends Application {
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
+        startPushService();
     }
 
 

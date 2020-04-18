@@ -1286,7 +1286,7 @@ public class AndroidUtilities {
         String state = null;
         try {
             state = Environment.getExternalStorageState();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             FileLog.e(e);
         }
         if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
@@ -1296,11 +1296,11 @@ public class AndroidUtilities {
                     FileUtil.initDir(file);
                     return file;
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 FileLog.e(e);
             }
         }
-        return new File("");
+        return new File(ApplicationLoader.getDataDirFixed(),"cache/media");
     }
 
     public static int dp(float value) {

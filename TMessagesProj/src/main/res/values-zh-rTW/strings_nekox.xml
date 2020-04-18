@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="UseOfficalId">偽裝成官方客戶端</string>
-    <string name="UseOfficalIdNotice">登錄時將自己標識為官方客戶端，如果您無法註冊或登錄，這可能會有幫助。 \n\n注意：如果您正在使用 release 版本，谷歌雲推送將無法工作。</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
     <string name="NekoXUpdatesChannel">NekoX 更新頻道</string>
     <string name="ShowIdAndDc">在個人資料中顯示 id / dc</string>
@@ -108,10 +106,6 @@
     <string name="EnableDeveloperMode">啓用開發人員模式</string>
     <string name="DisableDeveloperMode">禁用開發人員模式</string>
     <string name="DeveloperSettings">開發人員設定</string>
-    <string name="DisableFlagSecure">禁用安全標記</string>
-    <string name="DisableScreenshotDetection">禁用截屏檢測</string>
     <string name="LoginSettings">登錄設定</string>
-    <string name="ShowTestBackend">顯示連接到測試後端</string>
-    <string name="ShowBotLogin">顯示機器人秘鑰登錄</string>
     <string name="NekoXFaq">NekoX 常見問題</string>
 </resources>

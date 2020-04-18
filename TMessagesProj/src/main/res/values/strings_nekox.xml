@@ -134,6 +134,9 @@
 
     <string name="ExportStickers">Export Stickers</string>
     <string name="ImportStickers">Import stickers from file</string>
+    <string name="ImportStickersList">Import stickers</string>
+    <string name="ImportStickersConfirm">Are you sure you want to **import stickers**?</string>
+
     <string name="StickerSets">Sticker Sets</string>
     <string name="InvalidStickersFile">Invalid stickers file: </string>
 

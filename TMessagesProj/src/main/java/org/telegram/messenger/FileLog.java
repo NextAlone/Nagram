@@ -146,7 +146,7 @@ public class FileLog {
 
     public static void e(final String message) {
         Log.e(tag, message);
-        ExternalGcm.recordException(new Exception(message));
+        ExternalGcm.reportLog("[E]" + message);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
@@ -163,7 +163,7 @@ public class FileLog {
 
     public static void e(final Throwable e) {
         Log.e(tag,"ERR", e);
-        ExternalGcm.recordException(new Exception(e));
+        ExternalGcm.recordException(e);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         e.printStackTrace();
@@ -187,6 +187,7 @@ public class FileLog {
 
     public static void d(final String message) {
         Log.d(tag, message);
+        ExternalGcm.reportLog("[D]" + message);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {

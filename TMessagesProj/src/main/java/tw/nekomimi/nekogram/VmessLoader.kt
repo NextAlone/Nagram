@@ -1,6 +1,5 @@
 package tw.nekomimi.nekogram
 
-import android.util.Log
 import com.google.gson.Gson
 import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.V2RayConfig.SOCKS_PROTOCOL
@@ -19,6 +18,7 @@ import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import kotlin.concurrent.thread
+import kotlin.random.Random
 
 class VmessLoader {
 
@@ -103,7 +103,7 @@ class VmessLoader {
                     } else {
 
                         var result = server.replace(VMESS_PROTOCOL, "")
-                        result = Utils.decode(result)
+                        result = Utils.decodeJson(result)
                         if (result.isBlank()) {
                             error("invalid url format")
                         }
@@ -312,12 +312,12 @@ class VmessLoader {
                         var path = ""
                         var host = ""
                         val lstParameter = vmess.requestHost.split(";")
-                        if (lstParameter.size > 0) {
-                            path = lstParameter.get(0).trim()
+                        if (lstParameter.isNotEmpty()) {
+                            path = lstParameter[0].trim()
                         }
                         if (lstParameter.size > 1) {
-                            path = lstParameter.get(0).trim()
-                            host = lstParameter.get(1).trim()
+                            path = lstParameter[0].trim()
+                            host = lstParameter[1].trim()
                         }
                         vmess.path = path
                         vmess.requestHost = host
@@ -370,29 +370,46 @@ class VmessLoader {
 
     }
 
-    fun initConfig(config: VmessBean, port: Int) {
+    lateinit var bean: VmessBean
 
-        point.configureFileContent = V2rayConfigUtil.getV2rayConfig(config, port).content
-        point.domainName = V2rayConfigUtil.currDomain
+    fun initConfig(config: VmessBean) {
 
-        Log.d("nekox", point.configureFileContent)
-        Log.d("nekox", "domainName: " + point.domainName)
+        this.bean = config
 
     }
 
-    fun start() {
+    fun start(): Int {
 
-        if (point.isRunning) return
+        var retry = 3
 
-        runCatching {
+        do {
 
-            point.runLoop(true)
+            try {
 
-        }.onFailure {
+                val port = Random.nextInt(4096, 32768)
 
-            FileLog.e(it)
+                point.configureFileContent = V2rayConfigUtil.getV2rayConfig(bean, port).content
+                point.domainName = V2rayConfigUtil.currDomain
 
-        }
+                point.runLoop(true)
+
+                return port
+
+            } catch (e: Exception) {
+
+                retry --
+
+                if (retry <= 0) {
+
+                    FileLog.e(e)
+
+                    return -1
+
+                }
+
+            }
+
+        } while (true)
 
     }
 

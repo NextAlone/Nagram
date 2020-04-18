@@ -28,9 +28,13 @@ object FileUtil {
     }
 
     @JvmStatic
-    fun delete(file: File) {
+    fun delete(file: File?) {
 
-        file.deleteRecursively()
+        runCatching {
+
+            file?.deleteRecursively()
+
+        }
 
     }
 

@@ -494,7 +494,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                         JSONArray proxyArray = new JSONArray();
 
-                        for (SharedConfig.ProxyInfo info : SharedConfig.proxyList) {
+                        for (SharedConfig.ProxyInfo info : SharedConfig.getProxyList()) {
 
                             if (id == menu_dev_export_public) {
 

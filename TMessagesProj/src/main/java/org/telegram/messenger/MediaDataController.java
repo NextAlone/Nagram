@@ -147,11 +147,11 @@ public class MediaDataController extends BaseController {
 
     private ArrayList<TLRPC.Document>[] recentStickers = new ArrayList[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
     private boolean[] loadingRecentStickers = new boolean[3];
-    public boolean[] recentStickersLoaded = new boolean[3];
+    private boolean[] recentStickersLoaded = new boolean[3];
 
     private ArrayList<TLRPC.Document> recentGifs = new ArrayList<>();
     private boolean loadingRecentGifs;
-    public boolean recentGifsLoaded;
+    private boolean recentGifsLoaded;
 
     private int loadFeaturedHash;
     private int loadFeaturedDate;

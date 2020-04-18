@@ -482,7 +482,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 } else if (id == menu_retest_ping) {
                     checkProxyList(true);
                 } else if (id == menu_reorder_by_ping) {
-                    SharedConfig.proxyList = new LinkedList<>(new TreeSet<>(SharedConfig.proxyList));
+                    SharedConfig.proxyList = new LinkedList<>(new TreeSet<>(SharedConfig.getProxyList()));
                     SharedConfig.saveProxyList();
                     updateRows(true);
                 } else if (id == menu_export_json || id == menu_dev_export_public) {
@@ -496,7 +496,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                         JSONArray proxyArray = new JSONArray();
 
-                        for (SharedConfig.ProxyInfo info : SharedConfig.proxyList) {
+                        for (SharedConfig.ProxyInfo info : SharedConfig.getProxyList()) {
 
                             if (id == menu_dev_export_public) {
 
@@ -724,7 +724,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (position == hidePublicRow) {
 
-                if (NekoConfig.hidePublicProxy && SharedConfig.proxyEnabled && SharedConfig.currentProxy.isPublic) {
+                if (NekoConfig.hidePublicProxy && SharedConfig.proxyEnabled && SharedConfig.currentProxy != null && SharedConfig.currentProxy.isPublic) {
                     NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
                     SharedConfig.setCurrentProxy(null);
                     NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
@@ -1046,7 +1046,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     private void deleteUnavailableProxy() {
 
-        for (SharedConfig.ProxyInfo info : new LinkedList<>(SharedConfig.proxyList)) {
+        for (SharedConfig.ProxyInfo info : SharedConfig.getProxyList()) {
 
             if (info.isPublic) continue;
 

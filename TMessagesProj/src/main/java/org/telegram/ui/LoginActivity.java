@@ -59,6 +59,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -382,7 +383,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-                    EditTextBoldCursor[] inputs = new EditTextBoldCursor[2];
+                    EditText[] inputs = new EditText[2];
 
                     builder.addTitle(LocaleController.getString("CustomApi", R.string.CustomApi),
                             true,
@@ -394,7 +395,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         builder.doRadioCheck(cell);
 
-                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
 
                         return Unit.INSTANCE;
 
@@ -406,7 +407,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         builder.doRadioCheck(cell);
 
-                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
 
                         return Unit.INSTANCE;
 
@@ -418,7 +419,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         builder.doRadioCheck(cell);
 
-                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
 
                         return Unit.INSTANCE;
 
@@ -431,7 +432,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         builder.doRadioCheck(cell);
 
-                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.VISIBLE);
+                        for (EditText input : inputs) input.setVisibility(View.VISIBLE);
 
                         return Unit.INSTANCE;
 
@@ -449,16 +450,22 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                NekoXConfig.customAppId = 0;
+                            } else if (!NumberUtil.isInteger(s.toString())) {
+                                inputs[0].setText("0");
+                            } else {
+                                NekoXConfig.customAppId = NumberUtil.parseInt(s.toString());
+                            }
                         }
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            NekoXConfig.customAppId = NumberUtil.parseInt(s.toString());
                         }
                     });
 
                     inputs[1] = builder.addEditText("App Hash");
-                    inputs[1].setInputType(InputType.TYPE_CLASS_TEXT);
+                    inputs[1].setFilters(new InputFilter[]{new InputFilter.LengthFilter(BuildVars.OFFICAL_APP_HASH.length())});
                     if (StrUtil.isNotBlank(NekoXConfig.customAppHash)) {
                         inputs[1].setText(NekoXConfig.customAppHash);
                     }
@@ -469,17 +476,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            NekoXConfig.customAppHash = s.toString();
                         }
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            NekoXConfig.customAppHash = s.toString();
                         }
                     });
 
                     if (NekoXConfig.customApi <= 2) {
 
-                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
 
                     }
 

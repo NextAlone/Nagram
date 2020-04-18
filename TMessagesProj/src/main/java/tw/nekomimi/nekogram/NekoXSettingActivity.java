@@ -36,6 +36,7 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.LocaleUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
 
 public class NekoXSettingActivity extends BaseFragment {
@@ -150,7 +151,9 @@ public class NekoXSettingActivity extends BaseFragment {
 
         pro.show();
 
-        LocaleUtil.fetchAndExportLang(currentAccount, () -> {
+        UIUtil.runOnIoDispatcher(() -> {
+
+            LocaleUtil.fetchAndExportLang(currentAccount);
 
             File zipFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "languages.zip");
 

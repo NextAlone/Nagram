@@ -28,14 +28,21 @@ object AlertUtil {
     })
 
     @JvmStatic
-    fun showSimpleAlert(ctx: Context?, text: String) = UIUtil.runOnUIThread(Runnable {
+    @JvmOverloads
+    fun showSimpleAlert(ctx: Context?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
 
         val builder = AlertDialog.Builder(ctx ?: ApplicationLoader.applicationContext)
 
         builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
         builder.setMessage(text)
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _,_ ->
+
+            listener?.invoke(builder)
+
+            builder.dismissRunnable.run()
+
+        }
 
         builder.show()
 
@@ -135,8 +142,8 @@ object AlertUtil {
         })
 
     })
-    
-    fun showTimePicker(ctx: Context,title: String,callback: (Long) -> Unit) {
+
+    fun showTimePicker(ctx: Context, title: String, callback: (Long) -> Unit) {
 
         ctx.setTheme(R.style.Theme_TMessages)
 
@@ -153,7 +160,7 @@ object AlertUtil {
                 minValue = 0
                 maxValue = 60
 
-            },LinearLayout.LayoutParams(-2,-2).apply {
+            }, LinearLayout.LayoutParams(-2, -2).apply {
 
                 weight = 1F
 
@@ -164,7 +171,7 @@ object AlertUtil {
                 minValue = 0
                 maxValue = 60
 
-            },LinearLayout.LayoutParams(-2,-2).apply {
+            }, LinearLayout.LayoutParams(-2, -2).apply {
 
                 weight = 1F
 

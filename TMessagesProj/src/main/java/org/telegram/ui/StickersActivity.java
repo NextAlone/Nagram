@@ -90,7 +90,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
@@ -191,6 +190,13 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         currentType = type;
     }
 
+    private File stickersFile;
+
+    public StickersActivity(File stickersFile) {
+        this(MediaDataController.TYPE_IMAGE);
+        this.stickersFile = stickersFile;
+    }
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -259,7 +265,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         @Override
                         public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
                             activity.finishFragment();
-                            processStickersFile(new File(files.get(0)));
+                            processStickersFile(new File(files.get(0)), false);
                         }
 
                         @Override
@@ -275,16 +281,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         });
 
-        if (NekoXConfig.developerMode) {
+        ActionBarMenu menu = actionBar.createMenu();
 
-            ActionBarMenu menu = actionBar.createMenu();
+        ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
 
-            ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
-
-            otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
-            otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString("ImportStickers", R.string.ImportStickers));
-
-        }
+        otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
+        otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString("ImportStickers", R.string.ImportStickers));
 
         final ActionBarMenu actionMode = actionBar.createActionMode();
         selectedCountTextView = new NumberTextView(actionMode.getContext());
@@ -390,20 +392,27 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         });
 
+        if (stickersFile != null) {
+
+            processStickersFile(stickersFile, true);
+            stickersFile = null;
+
+        }
+
         return fragmentView;
     }
 
-    public void processStickersFile(File file) {
+    public void processStickersFile(File file, boolean exitOnFail) {
 
         if (!file.isFile() || !file.getName().endsWith("nekox-stickers.json")) {
 
-            showError("not a stickers file");
+            showError("not a stickers file", exitOnFail);
 
             return;
 
         } else if (file.length() > 3 * 1024 * 1024L) {
 
-            showError("file too large");
+            showError("file too large", exitOnFail);
 
             return;
 
@@ -432,9 +441,15 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     }
 
-    private void showError(String msg) {
+    private void showError(String msg, boolean exitOnFail) {
 
-        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidStickersFile", R.string.InvalidStickersFile) + msg);
+        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidStickersFile", R.string.InvalidStickersFile) + msg, (__) -> {
+
+            if (exitOnFail) finishFragment();
+
+            return Unit.INSTANCE;
+
+        });
 
     }
 
@@ -452,7 +467,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         builder.addCheckItems(new String[]{
                 LocaleController.getString("StickerSets", R.string.StickerSets),
                 LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers)
-        }, (__) -> true,false, (index, text,cell) -> {
+        }, (__) -> true, false, (index, text, cell) -> {
 
             boolean export;
 
@@ -779,7 +794,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
                 if (which == MENU_EXPORT) {
 
-                    AlertDialog pro = new AlertDialog(getParentActivity(),3);
+                    AlertDialog pro = new AlertDialog(getParentActivity(), 3);
                     pro.setCanCacnel(false);
                     pro.show();
 
