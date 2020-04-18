@@ -477,7 +477,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+                    if (NekoXConfig.customApi <= 2) {
+
+                        for (EditTextBoldCursor input : inputs) input.setVisibility(View.GONE);
+
+                    }
 
                     builder.addCancelButton();
 

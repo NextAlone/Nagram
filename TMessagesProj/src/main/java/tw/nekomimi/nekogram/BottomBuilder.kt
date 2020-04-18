@@ -23,7 +23,7 @@ import java.util.*
 
 class BottomBuilder(val ctx: Context) {
 
-    val builder = BottomSheet.Builder(ctx)
+    val builder = BottomSheet.Builder(ctx,true)
 
     private val rootView = LinearLayout(ctx).apply {
 
@@ -62,7 +62,7 @@ class BottomBuilder(val ctx: Context) {
     @JvmOverloads
     fun addTitle(title: String, bigTitle: Boolean = true, subTitle: String? = null): HeaderCell {
 
-        val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, false) else HeaderCell(ctx)
+        val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, subTitle != null) else HeaderCell(ctx)
 
         headerCell.setText(title)
 
@@ -265,23 +265,19 @@ class BottomBuilder(val ctx: Context) {
 
     fun addEditText(hintText: String): EditTextBoldCursor {
 
-        return object : EditTextBoldCursor(ctx) {
-
-            override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) = super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50f), MeasureSpec.EXACTLY))
-
-        }.apply {
+        return EditTextBoldCursor(ctx).apply {
 
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
             setTextColor(Theme.getColor(Theme.key_dialogTextBlack))
-            setHintText(hintText)
-            setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader))
+            hint = hintText
+            setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader))
             isSingleLine = true
             isFocusable = true
             setTransformHintToHeader(true)
             setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3))
             setBackgroundDrawable(null)
 
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT or Gravity.TOP))
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, Gravity.LEFT or Gravity.TOP,AndroidUtilities.dp(14F),AndroidUtilities.dp(4F),0,AndroidUtilities.dp(4F)))
 
         }
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -491,7 +492,7 @@ public class PollCreateActivity extends BaseFragment {
                 int left = MAX_QUESTION_LENGTH - (questionString != null ? questionString.length() : 0);
                 if (left <= MAX_QUESTION_LENGTH - MAX_QUESTION_LENGTH * 0.7f) {
                     headerCell.setText2(String.format("%d", left));
-                    SimpleTextView textView = headerCell.getTextView2();
+                    TextView textView = headerCell.getTextView2();
                     String key = left < 0 ? Theme.key_windowBackgroundWhiteRedText5 : Theme.key_windowBackgroundWhiteGrayText3;
                     textView.setTextColor(Theme.getColor(key));
                     textView.setTag(key);

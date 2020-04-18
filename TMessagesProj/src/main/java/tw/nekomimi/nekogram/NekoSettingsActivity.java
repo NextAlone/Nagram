@@ -594,7 +594,7 @@ public class NekoSettingsActivity extends BaseFragment {
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
-        hideAllTabRow = rowCount++;
+        hideAllTabRow = NekoXConfig.developerMode ? rowCount++ : -1;
         mapPreviewRow = rowCount++;
         stickerSizeRow = rowCount++;
         messageMenuRow = rowCount++;
