@@ -353,6 +353,7 @@ android {
         buildConfigField 'String', 'APP_HASH', getStringForConfig(System.getenv("APP_HASH"))
         buildConfigField 'String', 'HOCKEY_APP_HASH', getStringForConfig(System.getenv("HOCKEY_APP_HASH"))
         buildConfigField 'int', 'USER_ID_OWNER', System.getenv("USER_ID_OWNER")
+        buildConfigField 'String', 'USER_REPO', getStringForConfig(System.getenv("USER_REPO"))
 
 		vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
