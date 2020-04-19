@@ -82,6 +82,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.voip.VoIPPendingCall;
+import org.telegram.messenger.forkgram.AppUpdater;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarLayout;
@@ -2525,6 +2526,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void checkAppUpdate(boolean force) {
+        AppUpdater.checkNewVersion(this, getBaseContext(), (builder) -> {
+            showAlertDialog(builder);
+            return 0;
+        }, force);
+    }
+
+    // Never be called.
+    public void checkAppUpdate(boolean force, int dummy) {
         if (!force && BuildVars.DEBUG_VERSION || !force && !BuildVars.CHECK_UPDATES) {
             return;
         }
