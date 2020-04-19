@@ -46,4 +46,5 @@ public class BuildVars {
         BUILD_VERSION += BuildConfig.ADDITIONAL_BUILD_NUMBER;
     }
     public static int USER_ID_OWNER = BuildConfig.USER_ID_OWNER;
+    public static String USER_REPO = BuildConfig.USER_REPO;
 }
