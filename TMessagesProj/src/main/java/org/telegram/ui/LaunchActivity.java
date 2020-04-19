@@ -96,6 +96,7 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.voip.VoIPPendingCall;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.messenger.forkgram.AppUpdater;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -148,6 +149,8 @@ import java.util.regex.Pattern;
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
     private static final String EXTRA_ACTION_TOKEN = "actions.fulfillment.extra.ACTION_TOKEN";
+
+    private static boolean clearedCachedInstallers = false;
 
     private boolean finished;
     private String videoPath;
@@ -854,6 +857,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         MediaController.getInstance().setBaseActivity(this, true);
         AndroidUtilities.startAppCenter(this);
         //FileLog.d("UI create time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
+
+        if (!clearedCachedInstallers) {
+            clearedCachedInstallers = true;
+            AppUpdater.clearCachedInstallers(getBaseContext());
+        }
     }
 
     private void openSettings(boolean expanded) {
@@ -3340,6 +3348,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void checkAppUpdate(boolean force) {
+        AppUpdater.checkNewVersion(this, getBaseContext(), (builder) -> {
+            showAlertDialog(builder);
+            return 0;
+        }, force);
+    }
+
+    // Never be called.
+    public void checkAppUpdate(boolean force, int dummy) {
         if (!force && BuildVars.DEBUG_VERSION || !force && !BuildVars.CHECK_UPDATES) {
             return;
         }
