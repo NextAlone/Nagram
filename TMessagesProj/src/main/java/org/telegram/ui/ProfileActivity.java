@@ -399,6 +399,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int forkHeaderRow;
     private int forkSectionCell;
     private int forkRow;
+    private int forkCheckUpdateRow;
 
     private final Property<ProfileActivity, Float> HEADER_SHADOW = new AnimationProperties.FloatProperty<ProfileActivity>("headerShadow") {
         @Override
@@ -2388,6 +2389,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 presentFragment(new SessionsActivity(0));
             } else if (position == forkRow) {
                 presentFragment(new ForkSettingsActivity());
+            } else if (position == forkCheckUpdateRow) {
+                ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
             } else if (position == questionRow) {
                 showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this));
             } else if (position == faqRow) {
@@ -4865,6 +4868,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 devicesSectionRow = rowCount++;
                 forkHeaderRow = rowCount++;
                 forkRow = rowCount++;
+                forkCheckUpdateRow = rowCount++;
                 forkSectionCell = rowCount++;
                 helpHeaderRow = rowCount++;
                 questionRow = rowCount++;
@@ -6346,6 +6350,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
                     } else if (position == forkRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle), R.drawable.menu_fork, true);
+                    } else if (position == forkCheckUpdateRow) {
+                        textCell.setText(LocaleController.getString("ForkCheckUpdate", R.string.ForkCheckUpdate), true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
@@ -6491,7 +6497,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         position == versionRow || position == dataRow || position == chatRow ||
                         position == questionRow || position == devicesRow || position == filtersRow ||
                         position == faqRow || position == policyRow || position == sendLogsRow ||
-                        position == forkRow ||
+                        position == forkRow || position == forkCheckUpdateRow ||
                         position == clearLogsRow || position == switchBackendRow || position == setAvatarRow;
             }
             int type = holder.getItemViewType();
@@ -6509,7 +6515,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return 7;
             } else if (position == forkHeaderRow) {
                 return 1;
-            } else if (position == forkRow) {
+            } else if (position == forkRow || position == forkCheckUpdateRow) {
                 return 4;
             }
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
