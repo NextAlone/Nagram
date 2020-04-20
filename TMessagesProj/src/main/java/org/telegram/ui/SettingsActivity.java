@@ -199,6 +199,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int forkHeaderRow;
     private int forkSectionCell;
     private int forkRow;
+    private int forkCheckUpdateRow;
 
     private final static int edit_name = 1;
     private final static int logout = 2;
@@ -457,6 +458,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 presentFragment(new SessionsActivity(0));
             } else if (position == forkRow) {
                 presentFragment(new ForkSettingsActivity());
+            } else if (position == forkCheckUpdateRow) {
+                ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
             } else if (position == questionRow) {
                 showDialog(AlertsCreator.createSupportAlert(SettingsActivity.this));
             } else if (position == faqRow) {
@@ -843,6 +846,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         devicesSectionRow = rowCount++;
         forkHeaderRow = rowCount++;
         forkRow = rowCount++;
+        forkCheckUpdateRow = rowCount++;
         forkSectionCell = rowCount++;
         helpHeaderRow = rowCount++;
         questionRow = rowCount++;
@@ -2222,6 +2226,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
                     } else if (position == forkRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ForkSettingsTitle", R.string.ForkSettingsTitle), R.drawable.menu_fork, true);
+                    } else if (position == forkCheckUpdateRow) {
+                        textCell.setText(LocaleController.getString("ForkCheckUpdate", R.string.ForkCheckUpdate), true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
@@ -2385,7 +2391,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 return 1;
             } else if (position == forkHeaderRow) {
                 return 4;
-            } else if (position == forkRow) {
+            } else if (position == forkRow || position == forkCheckUpdateRow) {
                 return 2;
             }
             if (position == emptyRow) {
