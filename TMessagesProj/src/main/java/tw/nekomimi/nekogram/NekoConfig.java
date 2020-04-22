@@ -122,7 +122,7 @@ public class NekoConfig {
         //showHiddenFeature = preferences.getBoolean("showHiddenFeature", false);
         hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
         avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
-        useSystemEmoji = preferences.getBoolean("useSystemEmoji", SharedConfig.useSystemEmoji);
+        useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
         showTabsOnForward = preferences.getBoolean("showTabsOnForward", showTabsOnForward);
         chatMessageAnimation = preferences.getBoolean("chatMessageAnimation", false);
         rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
