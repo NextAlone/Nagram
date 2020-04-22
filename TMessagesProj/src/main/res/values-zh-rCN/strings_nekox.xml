@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="CustomApi">自定义 Api</string>
+    <string name="CustomApi">自定义 API</string>
     <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
     <string name="CustomApiNo">不使用自定义 API</string>
     <string name="CustomApiOffical">Telegram Android</string>
@@ -9,7 +9,7 @@
     <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
     <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
-    <string name="ShowIdAndDc">在个人资料中显示 id / dc</string>
+    <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="UseDefaultTheme">使用默认主题 *</string>
     <string name="NightMode">夜间模式</string>
     <string name="PrivacyNotice">隐私警告</string>
@@ -25,6 +25,7 @@
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
     <string name="SaveCacheToSdcard">保存缓存到内部存储*</string>
+    <string name="Import">导入</string>
     <string name="FilterNameUsers">用户</string>
     <string name="FilterNameUsersDescription">仅来自私聊的消息</string>
     <string name="FilterNameContacts">联系人</string>
@@ -94,16 +95,14 @@
     <string name="ExportProxies">导出服务器列表到文件</string>
     <string name="ImportProxies">从文件导入服务器列表</string>
     <string name="ImportProxyList">导入代理服务器列表</string>
-    <string name="ImportProxyListConfirm">您确定要**导入代理服务器列表**吗？</string>
+    <string name="ProxySubscription">代理订阅</string>
     <string name="ProxySubDetails">订阅详情</string>
     <string name="SubscriptionUrls">链接列表</string>
     <string name="SubscriptionUpdating">正更新订阅</string>
     <string name="SubscriptionDelete">删除订阅</string>
-    <string name="SubscriptionDeleteNotice">您确定要**删除订阅**吗？</string>
     <string name="ExportStickers">导出贴纸集</string>
     <string name="ImportStickers">从文件导入贴纸集</string>
     <string name="ImportStickersList">导入贴纸集</string>
-    <string name="ImportStickersConfirm">您确定要**导入贴纸集**吗？</string>
     <string name="StickerSets">贴纸集</string>
     <string name="InvalidStickersFile">无效的贴纸集文件： </string>
     <string name="InvalidProxyFile">无效的代理列表文件： </string>

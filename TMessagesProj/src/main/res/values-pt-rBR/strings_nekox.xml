@@ -2,7 +2,6 @@
 <resources>
     <string name="ChangeTranslateProvider">Alterar Provedor</string>
     <string name="NekoXUpdatesChannel">Canal de atualizações do NekoX</string>
-    <string name="ShowIdAndDc">Mostrar ID/DC no perfil</string>
     <string name="UseDefaultTheme">Usar o tema padrão *</string>
     <string name="NightMode">Modo Noturno</string>
     <string name="PrivacyNotice">Aviso de privacidade</string>
@@ -86,7 +85,6 @@
     <string name="ExportProxies">Exportar servidores para arquivo</string>
     <string name="ImportProxies">Importar servidores do arquivo</string>
     <string name="ImportProxyList">Importar servidores proxy</string>
-    <string name="ImportProxyListConfirm">Tem certeza de que deseja **importar servidores proxy**?</string>
     <string name="InvalidProxyFile">Arquivo de lista de proxy inválido: </string>
     <string name="ImportedProxies">Servidores proxy importados: </string>
     <string name="ErrorsInImport">Erros de importação: </string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="CustomApi">API سفارشی</string>
     <string name="UseCustomApiNotice">با استفاده از API سفارشی وارد شوید ، اگر قادر به ثبت نام یا ورود به سیستم نیستید ، این ممکن است کمک کند. توجه: اگر از نسخه نسخه استفاده می کنید ، fcm کار نخواهد کرد</string>
     <string name="CustomApiNo">از API سفارشی استفاده نکنید</string>
     <string name="CustomApiOffical">تلگرام اندروید</string>
@@ -8,7 +7,6 @@
     <string name="CustomApiInput">ورود دستی</string>
     <string name="ChangeTranslateProvider">تغییر ارائه دهنده خدمات</string>
     <string name="NekoXUpdatesChannel">کانال بروزرسانی NekoX</string>
-    <string name="ShowIdAndDc">نمایش آیدی کاربر در پروفایل</string>
     <string name="UseDefaultTheme">استفاده تم پیشفرض</string>
     <string name="NightMode">حالت شب</string>
     <string name="PrivacyNotice">هشدار حریم خصوصی</string>
@@ -92,7 +90,6 @@
     <string name="ExportProxies">استخراج فایل سرورها</string>
     <string name="ImportProxies">واردکردن فایل سرورها</string>
     <string name="ImportProxyList">ایمپورت سرورهای پروکسی</string>
-    <string name="ImportProxyListConfirm">آیا شما از**وارد کردن تمامی سرور ها**اطمینان دارید?</string>
     <string name="InvalidProxyFile">لیست پروکسی نامعتبر: </string>
     <string name="ImportedProxies">سرور های پروکسی واردشده: </string>
     <string name="ErrorsInImport">مشکل در وارد کردن فایل: </string>
