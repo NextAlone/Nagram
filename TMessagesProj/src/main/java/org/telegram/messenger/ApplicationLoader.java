@@ -36,6 +36,7 @@ import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ApplicationLoader extends Application {
 
@@ -91,11 +92,15 @@ public class ApplicationLoader extends Application {
 
         applicationInited = true;
 
-        try {
-            LocaleController.getInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UIUtil.runOnIoDispatcher(() -> {
+
+            try {
+                LocaleController.getInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
 
         try {
             connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);

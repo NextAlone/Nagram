@@ -3,7 +3,7 @@
 
     <string name="NekoX" translatable="false">Nekogram X</string>
 
-    <string name="CustomApi">Custom Api</string>
+    <string name="CustomApi">Custom API</string>
     <string name="UseCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="CustomApiNo">Don\'t use custom API</string>
     <string name="CustomApiOffical">Telegram Android</string>
@@ -15,7 +15,7 @@
     <string name="ChangeTranslateProvider">Change Provider</string>
 
     <string name="NekoXUpdatesChannel">NekoX Updates Channel</string>
-    <string name="ShowIdAndDc">Show id / dc in profile</string>
+    <string name="ShowIdAndDc">Show ID / DC in profile</string>
     <string name="UseDefaultTheme">Use default theme *</string>
     <string name="NightMode">Night Mode</string>
 
@@ -31,14 +31,13 @@
     <string name="RemoveTitleEmoji">Remove emoji in title</string>
 
     <string name="NekoXProxy">NekoX Public Proxy</string>
-    <string name="PublicPrefix">[ Public ]</string>
-    <string name="NekoXProxyInfo">It may take tens of seconds to load the NekoX Public built-in proxy :)</string>
-
-    <string name="HidePublicProxyList">Hide public proxy list</string>
+    <string name="PublicPrefix">Public</string>
 
     <string name="DisableChatAction">Don\'t send my input status</string>
     <string name="FakeScreenshot">Pretend screenshot</string>
     <string name="SaveCacheToSdcard">Save cache to sdcard*</string>
+
+    <string name="Import">Import</string>
 
     <string name="FilterNameUsers">Users</string>
     <string name="FilterNameUsersDescription">Only messages from private chats</string>
@@ -130,12 +129,16 @@
     <string name="ExportProxies">Export servers to file</string>
     <string name="ImportProxies">Import servers from file</string>
     <string name="ImportProxyList">Import proxy servers</string>
-    <string name="ImportProxyListConfirm">Are you sure you want to **import proxy servers**?</string>
+
+    <string name="ProxySubscription">Proxy Subscription</string>
+    <string name="ProxySubDetails">Subscription Details</string>
+    <string name="SubscriptionUrls">Urls</string>
+    <string name="SubscriptionUpdating">Updating Subscription</string>
+    <string name="SubscriptionDelete">Delete Subscription</string>
 
     <string name="ExportStickers">Export Stickers</string>
     <string name="ImportStickers">Import stickers from file</string>
     <string name="ImportStickersList">Import stickers</string>
-    <string name="ImportStickersConfirm">Are you sure you want to **import stickers**?</string>
 
     <string name="StickerSets">Sticker Sets</string>
     <string name="InvalidStickersFile">Invalid stickers file: </string>

@@ -11,7 +11,10 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ActionBar.Theme
+import org.telegram.ui.Cells.TextCell
+import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.NumberPicker
+import tw.nekomimi.nekogram.BottomBuilder
 import tw.nekomimi.nekogram.NekoConfig
 import java.util.concurrent.atomic.AtomicReference
 
@@ -36,7 +39,7 @@ object AlertUtil {
         builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
         builder.setMessage(text)
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _,_ ->
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
 
             listener?.invoke(builder)
 
@@ -48,8 +51,37 @@ object AlertUtil {
 
     })
 
+    @JvmOverloads
     @JvmStatic
-    fun showConfirm(ctx: Context, title: String, text: String, button: String, red: Boolean = false, listener: DialogInterface.OnClickListener) = UIUtil.runOnUIThread(Runnable {
+    fun showProgress(ctx: Context,text: String = LocaleController.getString("",R.string.Loading)): AlertDialog {
+
+        return AlertDialog.Builder(ctx,1).apply {
+
+            setMessage(text)
+
+        }.create()
+
+    }
+
+    fun showInput(ctx: Context, title: String, hint: String, onInput: (AlertDialog.Builder, String) -> String) = UIUtil.runOnUIThread( Runnable {
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(title)
+
+        builder.setView(EditTextBoldCursor(ctx).apply {
+
+            setHintText(hint)
+
+        })
+
+    })
+
+    @JvmStatic
+    @JvmOverloads
+    fun showConfirm(ctx: Context, title: String, text: String? = null,icon: Int, button: String, red: Boolean, listener: Runnable) = UIUtil.runOnUIThread(Runnable {
+
+        /*
 
         val builder = AlertDialog.Builder(ctx)
 
@@ -66,6 +98,32 @@ object AlertUtil {
             (alertDialog.getButton(DialogInterface.BUTTON_POSITIVE) as TextView?)?.setTextColor(Theme.getColor(Theme.key_dialogTextRed2))
 
         }
+
+         */
+
+        val builder = BottomBuilder(ctx)
+
+        if (text != null) {
+
+            builder.addTitle(title, true, text)
+
+        } else {
+
+            builder.addTitle(title,false)
+
+        }
+
+        builder.addItem(button, icon,red) {
+
+            builder.dismiss()
+
+            listener.run()
+
+        }
+
+        builder.addCancelItem()
+
+        builder.show()
 
     })
 

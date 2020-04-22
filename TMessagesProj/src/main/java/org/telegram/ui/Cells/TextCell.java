@@ -64,6 +64,7 @@ public class TextCell extends FrameLayout {
         addView(valueImageView);
 
         setFocusable(true);
+        setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
     }
 
     public SimpleTextView getTextView() {

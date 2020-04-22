@@ -11,8 +11,6 @@ import android.util.Base64;
 
 import com.v2ray.ang.util.Utils;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -30,16 +28,12 @@ import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -55,6 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.DnsFactory;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 //import org.telegram.messenger.BuildConfig;
 
@@ -249,9 +244,9 @@ public class ConnectionsManager extends BaseController {
 
     public int sendRequest(final TLObject object, final RequestDelegate onComplete, final QuickAckDelegate onQuickAck, final WriteToSocketDelegate onWriteToSocket, final int flags, final int datacenterId, final int connetionType, final boolean immediate) {
         final int requestToken = lastRequestToken.getAndIncrement();
-        Utilities.stageQueue.postRunnable(() -> {
+        UIUtil.runOnIoDispatcher(() -> {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("send request " + object + " with token = " + requestToken);
+                FileLog.d("send request " + object.getClass().getSimpleName() + " with token = " + requestToken);
             }
             try {
                 NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
@@ -271,14 +266,14 @@ public class ConnectionsManager extends BaseController {
                             error.code = errorCode;
                             error.text = errorText;
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.e(object + " got error " + error.code + " " + error.text);
+                                FileLog.e(object.getClass().getSimpleName() + " got error " + error.code + " " + error.text + " with token = " + requestToken);
                             }
                         }
                         if (resp != null) {
                             resp.networkType = networkType;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("java received " + resp + " error = " + error);
+                            FileLog.d("java received " + resp + " error = " + (error == null ? "null" : (error.code + ": " + error.text)));
                         }
                         final TLObject finalResponse = resp;
                         final TLRPC.TL_error finalError = error;

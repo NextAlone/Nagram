@@ -219,6 +219,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -14982,8 +14983,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         File finalLocFile1 = locFile;
                         AlertUtil.showConfirm(getParentActivity(),
                                 LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
-                                LocaleController.getString("ImportProxyListConfirm", R.string.ImportProxyListConfirm),
-                                LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                R.drawable.baseline_security_24, LocaleController.getString("Import", R.string.Import),
+                                false, () -> {
                                     String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile1);
                                     if (!StrUtil.isBlank(status)) {
                                         presentFragment(new ProxyListActivity(status));
@@ -14995,8 +14996,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         File finalLocFile = locFile;
                         AlertUtil.showConfirm(getParentActivity(),
                                 LocaleController.getString("ImportStickersList", R.string.ImportStickersList),
-                                LocaleController.getString("ImportStickersConfirm", R.string.ImportStickersConfirm),
-                                LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                R.drawable.deproko_baseline_stickers_filled_24, LocaleController.getString("Import", R.string.Import),
+                                false, () -> {
                                     presentFragment(new StickersActivity(finalLocFile));
                                 });
 
@@ -16844,8 +16845,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 File finalLocFile = locFile;
                                 AlertUtil.showConfirm(getParentActivity(),
                                         LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
-                                        LocaleController.getString("ImportProxyListConfirm", R.string.ImportProxyListConfirm),
-                                        LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                        R.drawable.baseline_security_24,LocaleController.getString("Import", R.string.Import),
+                                        false, () -> {
                                             String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
                                             if (!StrUtil.isBlank(status)) {
                                                 presentFragment(new ProxyListActivity(status));
@@ -16857,8 +16858,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 File finalLocFile = locFile;
                                 AlertUtil.showConfirm(getParentActivity(),
                                         LocaleController.getString("ImportStickersList", R.string.ImportStickersList),
-                                        LocaleController.getString("ImportStickersConfirm", R.string.ImportStickersConfirm),
-                                        LocaleController.getString("OK", R.string.OK), false, (d, v) -> {
+                                        R.drawable.deproko_baseline_stickers_filled_24,LocaleController.getString("Import", R.string.Import), false, () -> {
                                             presentFragment(new StickersActivity(finalLocFile));
                                         });
 

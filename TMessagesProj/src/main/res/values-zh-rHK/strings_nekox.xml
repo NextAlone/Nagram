@@ -13,9 +13,7 @@
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除標題中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
-    <string name="PublicPrefix">[ 公共 ]</string>
-    <string name="NekoXProxyInfo">這可能需要幾十秒的時間來加載 NekoX 公共代理 :)</string>
-    <string name="HidePublicProxyList">隱藏公共代理列表</string>
+    <string name="PublicPrefix">公共</string>
     <string name="DisableChatAction">不要發送我的輸入狀態</string>
     <string name="FakeScreenshot">假裝截屏</string>
     <string name="SaveCacheToSdcard">保存緩存到存儲卡*</string>

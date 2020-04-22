@@ -96,7 +96,7 @@ data class V2rayConfig(
                 data class HeadersBean(var Host: String = "")
             }
 
-            data class HttpsettingsBean(var host: List<String> = ArrayList<String>(), var path: String = "")
+            data class HttpsettingsBean(var host: List<String> = ArrayList(), var path: String = "")
 
             data class TlssettingsBean(var allowInsecure: Boolean = true,
                                        var serverName: String = "")

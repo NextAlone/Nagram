@@ -10,10 +10,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
+import android.util.Base64
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import cn.hutool.core.util.StrUtil
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
@@ -58,51 +60,25 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun reloadProxyList(): Boolean {
-
-        cacheFile.parentFile?.mkdirs()
+    fun downloadLegacyProxyList(): List<String>? {
 
         runCatching {
 
             // 从 GITEE 主站 读取
 
-            val list = JSONArray(HttpUtil.get("https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list.json")).toString()
-
-            if (!cacheFile.isFile || list != cacheFile.readText()) {
-
-                cacheFile.writeText(list)
-
-                return true
-
-            }
+            JSONArray(HttpUtil.get("https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list.json"))
 
         }.recoverCatching {
 
             // 从 GITLAB 读取
 
-            val list = JSONArray(HttpUtil.get("https://gitlab.com/nekohasekai/nekox-proxy-list/-/raw/master/proxy_list.json")).toString()
-
-            if (!cacheFile.isFile || list != cacheFile.readText()) {
-
-                cacheFile.writeText(list)
-
-                return true
-
-            }
+            JSONArray(HttpUtil.get("https://gitlab.com/nekohasekai/nekox-proxy-list/-/raw/master/proxy_list.json"))
 
         }.recoverCatching {
 
             // 从 GITHUB PAGES 读取
 
-            val list = JSONArray(HttpUtil.get("https://nekox-dev.github.io/ProxyList/proxy_list.json")).toString()
-
-            if (!cacheFile.isFile || list != cacheFile.readText()) {
-
-                cacheFile.writeText(list)
-
-                return true
-
-            }
+            JSONArray(HttpUtil.get("https://nekox-dev.github.io/ProxyList/proxy_list.json"))
 
         }.recoverCatching {
 
@@ -110,19 +86,61 @@ object ProxyUtil {
 
             val master = HttpUtil.getByteArray("https://github.com/NekoX-Dev/ProxyList/archive/master.zip")
 
-            val list = JSONArray(String(ZipUtil.read(ByteArrayInputStream(master), "ProxyList-master/proxy_list.json"))).toString()
+            JSONArray(String(ZipUtil.read(ByteArrayInputStream(master), "ProxyList-master/proxy_list.json")))
 
-            if (!cacheFile.isFile || list != cacheFile.readText()) {
+        }.getOrNull()?.also { arr ->
 
-                cacheFile.writeText(list)
+            return (0 until arr.length()).map {
 
-                return true
+                SharedConfig.parseProxyInfo(arr.getJSONObject(it).getString("proxy")).toUrl()
 
             }
 
         }
 
-        return false
+        return null
+
+    }
+
+    @JvmStatic
+    fun parseProxies(_text: String): MutableList<String> {
+
+        val text = runCatching {
+
+            StrUtil.utf8Str(Base64.decode(_text, Base64.DEFAULT))
+
+        }.recover {
+
+            _text
+
+        }.getOrThrow()
+
+        val proxies = mutableListOf<String>()
+
+        text.split('\n').map { it.split(" ") }.forEach {
+
+            it.forEach { line ->
+
+                if (line.startsWith("tg://proxy") ||
+                        line.startsWith("tg://socks") ||
+                        line.startsWith("https://t.me/proxy") ||
+                        line.startsWith("https://t.me/socks") ||
+                        line.startsWith(VMESS_PROTOCOL) ||
+                        line.startsWith(VMESS1_PROTOCOL) ||
+                        line.startsWith(SS_PROTOCOL) ||
+                        line.startsWith(SSR_PROTOCOL)) {
+
+                    runCatching { proxies.add(SharedConfig.parseProxyInfo(line).toUrl()) }
+
+                }
+
+            }
+
+        }
+
+        if (proxies.isEmpty()) error("no proxy link found")
+
+        return proxies
 
     }
 

@@ -62,7 +62,7 @@ object Utils {
      */
     fun encode(text: String): String {
         try {
-            return Base64.encodeToString(text.toByteArray(charset("UTF-8")), Base64.NO_WRAP or Base64.URL_SAFE)
+            return Base64.encodeToString(text.toByteArray(charset("UTF-8")), Base64.NO_WRAP)
         } catch (e: Exception) {
             e.printStackTrace()
             return ""

@@ -17,7 +17,6 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import kotlin.concurrent.thread
 import kotlin.random.Random
 
 class VmessLoader {
@@ -395,9 +394,9 @@ class VmessLoader {
 
                 return port
 
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
 
-                retry --
+                retry--
 
                 if (retry <= 0) {
 
@@ -415,13 +414,9 @@ class VmessLoader {
 
     fun stop() {
 
-        thread {
+        runCatching {
 
-            runCatching {
-
-                point.stopLoop()
-
-            }
+            point.stopLoop()
 
         }
 

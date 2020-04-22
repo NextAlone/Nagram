@@ -21,9 +21,7 @@
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除标题中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
-    <string name="PublicPrefix">[ 公共 ]</string>
-    <string name="NekoXProxyInfo">这可能需要几十秒的时间来加载 NekoX 公共代理 :)</string>
-    <string name="HidePublicProxyList">隐藏公共代理列表</string>
+    <string name="PublicPrefix">公共</string>
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
     <string name="SaveCacheToSdcard">保存缓存到内部存储*</string>
@@ -97,6 +95,11 @@
     <string name="ImportProxies">从文件导入服务器列表</string>
     <string name="ImportProxyList">导入代理服务器列表</string>
     <string name="ImportProxyListConfirm">您确定要**导入代理服务器列表**吗？</string>
+    <string name="ProxySubDetails">订阅详情</string>
+    <string name="SubscriptionUrls">链接列表</string>
+    <string name="SubscriptionUpdating">正更新订阅</string>
+    <string name="SubscriptionDelete">删除订阅</string>
+    <string name="SubscriptionDeleteNotice">您确定要**删除订阅**吗？</string>
     <string name="ExportStickers">导出贴纸集</string>
     <string name="ImportStickers">从文件导入贴纸集</string>
     <string name="ImportStickersList">导入贴纸集</string>

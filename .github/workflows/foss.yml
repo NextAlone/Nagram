@@ -12,6 +12,12 @@ jobs:
     if: "contains(github.event.head_commit.message, '[RELEASE]')"
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
