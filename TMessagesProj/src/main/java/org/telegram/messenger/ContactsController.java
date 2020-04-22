@@ -290,7 +290,7 @@ public class ContactsController extends BaseController {
                             SharedPreferences.Editor editor = preferences1.edit();
                             editor.putString("invitelink", inviteLink = res.message);
                             editor.putInt("invitelinktime", (int) (System.currentTimeMillis() / 1000));
-                            editor.commit();
+                            editor.apply();
                         });
                     }
                 }
@@ -1611,7 +1611,7 @@ public class ContactsController extends BaseController {
     private void saveContactsLoadTime() {
         try {
             SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-            preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).commit();
+            preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).apply();
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -2257,7 +2257,7 @@ public class ContactsController extends BaseController {
         getMessagesController().clearFullUsers();
         SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
         final SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("needGetStatuses", true).commit();
+        editor.putBoolean("needGetStatuses", true).apply();
         TLRPC.TL_contacts_getStatuses req = new TLRPC.TL_contacts_getStatuses();
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {

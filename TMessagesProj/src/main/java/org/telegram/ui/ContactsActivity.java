@@ -475,7 +475,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 presentFragment(new ChannelCreateActivity(args));
                             } else {
                                 presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANNEL_CREATE));
-                                preferences.edit().putBoolean("channel_intro", true).commit();
+                                preferences.edit().putBoolean("channel_intro", true).apply();
                             }
                         }
                     }
@@ -827,7 +827,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     if (grantResults[a] == PackageManager.PERMISSION_GRANTED) {
                         ContactsController.getInstance(currentAccount).forceImportContacts();
                     } else {
-                        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", askAboutContacts = false).commit();
+                        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", askAboutContacts = false).apply();
                     }
                 }
             }

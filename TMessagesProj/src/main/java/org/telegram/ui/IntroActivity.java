@@ -92,7 +92,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        preferences.edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
+        preferences.edit().putLong("intro_crashed_time", System.currentTimeMillis()).apply();
 
         titles = new String[]{
                 LocaleController.getString("Page1Title", R.string.Page1Title),
@@ -321,7 +321,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         destroyed = true;
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        preferences.edit().putLong("intro_crashed_time", 0).commit();
+        preferences.edit().putLong("intro_crashed_time", 0).apply();
     }
 
     private void checkContinueText() {
@@ -367,7 +367,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         if (!destroyed) {
                             textView.setText(string.value);
                             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                            preferences.edit().putString("language_showed2", systemLang.toLowerCase()).commit();
+                            preferences.edit().putString("language_showed2", systemLang.toLowerCase()).apply();
                         }
                     });
                 }

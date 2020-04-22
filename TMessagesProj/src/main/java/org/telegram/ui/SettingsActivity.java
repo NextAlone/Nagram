@@ -549,7 +549,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 4) {
                                 BuildVars.SAVE_LOG = !BuildVars.SAVE_LOG;
                                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.SAVE_LOG).commit();
+                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.SAVE_LOG).apply();
                                 updateRows();
                             } else if (which == 5) {
                                 NekoConfig.toggleResidentNotification();
@@ -557,7 +557,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 MessagesStorage.getInstance(currentAccount).clearSentMedia();
                                 SharedConfig.setNoSoundHintShowed(false);
                                 SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
-                                editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").remove("filterhint").commit();
+                                editor.remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").remove("filterhint").apply();
                                 SharedConfig.textSelectionHintShows = 0;
                                 SharedConfig.lockRecordAudioVideoHint = 0;
                                 SharedConfig.stickersReorderingHintUsed = false;
@@ -2096,12 +2096,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 toSave.add(o.toString());
             }
-            MessagesController.getGlobalMainSettings().edit().putStringSet("settingsSearchRecent2", toSave).commit();
+            MessagesController.getGlobalMainSettings().edit().putStringSet("settingsSearchRecent2", toSave).apply();
         }
 
         public void clearRecent() {
             recentSearches.clear();
-            MessagesController.getGlobalMainSettings().edit().remove("settingsSearchRecent2").commit();
+            MessagesController.getGlobalMainSettings().edit().remove("settingsSearchRecent2").apply();
             notifyDataSetChanged();
         }
 

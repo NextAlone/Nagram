@@ -233,7 +233,7 @@ public class UserConfig extends BaseController {
                     editor.remove("user");
                 }
 
-                editor.commit();
+                editor.apply();
                 if (oldFile != null) {
                     oldFile.delete();
                 }
@@ -454,7 +454,7 @@ public class UserConfig extends BaseController {
     }
 
     public void clearConfig() {
-        getPreferences().edit().clear().commit();
+        getPreferences().edit().clear().apply();
         clearTonConfig();
 
         sharingMyLocationUntil = 0;
@@ -508,7 +508,7 @@ public class UserConfig extends BaseController {
     }
 
     public void setPinnedDialogsLoaded(int folderId, boolean loaded) {
-        getPreferences().edit().putBoolean("2pinnedDialogsLoaded" + folderId, loaded).commit();
+        getPreferences().edit().putBoolean("2pinnedDialogsLoaded" + folderId, loaded).apply();
     }
 
     public static final int i_dialogsLoadOffsetId = 0;
@@ -524,7 +524,7 @@ public class UserConfig extends BaseController {
     }
 
     public void setTotalDialogsCount(int folderId, int totalDialogsLoadCount) {
-        getPreferences().edit().putInt("2totalDialogsLoadCount" + (folderId == 0 ? "" : folderId), totalDialogsLoadCount).commit();
+        getPreferences().edit().putInt("2totalDialogsLoadCount" + (folderId == 0 ? "" : folderId), totalDialogsLoadCount).apply();
     }
 
     public int[] getDialogLoadOffsets(int folderId) {
@@ -547,6 +547,6 @@ public class UserConfig extends BaseController {
         editor.putInt("2dialogsLoadOffsetChannelId" + (folderId == 0 ? "" : folderId), dialogsLoadOffsetChannelId);
         editor.putLong("2dialogsLoadOffsetAccess" + (folderId == 0 ? "" : folderId), dialogsLoadOffsetAccess);
         editor.putBoolean("hasValidDialogLoadIds", true);
-        editor.commit();
+        editor.apply();
     }
 }

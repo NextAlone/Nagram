@@ -107,7 +107,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 FileLog.e(e);
             }
             SharedConfig.directShareHash = Utilities.random.nextLong();
-            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putLong("directShareHash", SharedConfig.directShareHash).commit();
+            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putLong("directShareHash", SharedConfig.directShareHash).apply();
 
             for (int a = 0; a < dialogs.size(); a++) {
                 Bundle extras = new Bundle();

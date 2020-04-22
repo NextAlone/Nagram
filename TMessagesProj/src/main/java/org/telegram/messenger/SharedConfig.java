@@ -797,7 +797,7 @@ public class SharedConfig {
                 editor.putInt("textSelectionHintShows", textSelectionHintShows);
                 editor.putInt("scheduledOrNoSoundHintShows", scheduledOrNoSoundHintShows);
                 editor.putInt("lockRecordAudioVideoHint", lockRecordAudioVideoHint);
-                editor.commit();
+                editor.apply();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -1019,7 +1019,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("suggestStickers", suggestStickers);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setSearchMessagesAsListUsed(boolean searchMessagesAsListUsed) {
@@ -1027,7 +1027,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("searchMessagesAsListUsed", searchMessagesAsListUsed);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setStickersReorderingHintUsed(boolean stickersReorderingHintUsed) {
@@ -1035,56 +1035,56 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("stickersReorderingHintUsed", stickersReorderingHintUsed);
-        editor.commit();
+        editor.apply();
     }
 
     public static void increaseTextSelectionHintShowed() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("textSelectionHintShows", ++textSelectionHintShows);
-        editor.commit();
+        editor.apply();
     }
 
     public static void removeTextSelectionHint() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("textSelectionHintShows", 3);
-        editor.commit();
+        editor.apply();
     }
 
     public static void increaseScheduledOrNoSuoundHintShowed() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("scheduledOrNoSoundHintShows", ++scheduledOrNoSoundHintShows);
-        editor.commit();
+        editor.apply();
     }
 
     public static void removeScheduledOrNoSuoundHint() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("scheduledOrNoSoundHintShows", 3);
-        editor.commit();
+        editor.apply();
     }
 
     public static void increaseLockRecordAudioVideoHintShowed() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("lockRecordAudioVideoHint", ++lockRecordAudioVideoHint);
-        editor.commit();
+        editor.apply();
     }
 
     public static void removeLockRecordAudioVideoHint() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("lockRecordAudioVideoHint", 3);
-        editor.commit();
+        editor.apply();
     }
 
     public static void increaseSearchAsListHintShows() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("searchMessagesAsListHintShows", ++searchMessagesAsListHintShows);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setKeepMedia(int value) {
@@ -1092,7 +1092,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("keep_media", keepMedia);
-        editor.commit();
+        editor.apply();
     }
 
     public static void checkKeepMedia() {
@@ -1137,7 +1137,7 @@ public class SharedConfig {
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("lastKeepMediaCheckTime", lastKeepMediaCheckTime);
-            editor.commit();
+            editor.apply();
         });
     }
 
@@ -1146,7 +1146,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("loopStickers", loopStickers);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleBigEmoji() {
@@ -1154,7 +1154,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("allowBigEmoji", allowBigEmoji);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleShuffleMusic(int type) {
@@ -1168,7 +1168,7 @@ public class SharedConfig {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("shuffleMusic", shuffleMusic);
         editor.putBoolean("playOrderReversed", playOrderReversed);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleRepeatMode() {
@@ -1179,7 +1179,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("repeatMode", repeatMode);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleSaveToGallery() {
@@ -1187,7 +1187,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("save_gallery", saveToGallery);
-        editor.commit();
+        editor.apply();
         checkSaveToGalleryFiles();
     }
 
@@ -1196,7 +1196,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("autoplay_gif", autoplayGifs);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setUseThreeLinesLayout(boolean value) {
@@ -1204,7 +1204,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("useThreeLinesLayout", useThreeLinesLayout);
-        editor.commit();
+        editor.apply();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.dialogsNeedReload, true);
     }
 
@@ -1213,7 +1213,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("archiveHidden", archiveHidden);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleAutoplayVideo() {
@@ -1221,7 +1221,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("autoplay_video", autoplayVideo);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean isSecretMapPreviewSet() {
@@ -1234,7 +1234,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("mapPreviewType", mapPreviewType);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setNoSoundHintShowed(boolean value) {
@@ -1245,7 +1245,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("noSoundHintShowed", noSoundHintShowed);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toogleRaiseToSpeak() {
@@ -1253,7 +1253,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("raise_to_speak", raiseToSpeak);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleCustomTabs() {
@@ -1261,7 +1261,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("custom_tabs", customTabs);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleDirectShare() {
@@ -1269,7 +1269,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("direct_share", directShare);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleStreamMedia() {
@@ -1277,7 +1277,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("streamMedia", streamMedia);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleSortContactsByName() {
@@ -1285,7 +1285,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("sortContactsByName", sortContactsByName);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleSortFilesByName() {
@@ -1293,7 +1293,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("sortFilesByName", sortFilesByName);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleStreamAllVideo() {
@@ -1301,7 +1301,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("streamAllVideo", streamAllVideo);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleStreamMkv() {
@@ -1309,7 +1309,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("streamMkv", streamMkv);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleSaveStreamMedia() {
@@ -1317,7 +1317,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("saveStreamMedia", saveStreamMedia);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleSmoothKeyboard() {
@@ -1325,7 +1325,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("smoothKeyboard", smoothKeyboard);
-        editor.commit();
+        editor.apply();
     }
 
     public static void togglePauseMusicOnRecord() {
@@ -1333,7 +1333,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("pauseMusicOnRecord", pauseMusicOnRecord);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleInappCamera() {
@@ -1341,7 +1341,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("inappCamera", inappCamera);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleRoundCamera16to9() {
@@ -1349,7 +1349,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("roundCamera16to9", roundCamera16to9);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setDistanceSystemType(int type) {
@@ -1357,7 +1357,7 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("distanceSystemType", distanceSystemType);
-        editor.commit();
+        editor.apply();
         LocaleController.resetImperialSystemType();
     }
 

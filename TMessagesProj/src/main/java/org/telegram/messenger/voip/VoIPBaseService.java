@@ -1058,7 +1058,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 						FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
 					nm.deleteNotificationChannel("incoming_calls2"+chanIndex);
 					chanIndex++;
-					nprefs.edit().putInt("calls_notification_channel", chanIndex).commit();
+					nprefs.edit().putInt("calls_notification_channel", chanIndex).apply();
 				}else{
 					needCreate=false;
 				}

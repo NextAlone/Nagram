@@ -964,7 +964,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                         lastSaveTime = SystemClock.elapsedRealtime();
                                         Utilities.globalQueue.postRunnable(() -> {
                                             SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("media_saved_pos", Activity.MODE_PRIVATE).edit();
-                                            editor.putFloat(shouldSavePositionForCurrentAudio, value).commit();
+                                            editor.putFloat(shouldSavePositionForCurrentAudio, value).apply();
                                         });
                                     }
                                     NotificationCenter.getInstance(currentPlayingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, currentPlayingMessageObject.getId(), value);
@@ -2139,7 +2139,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         } else if (videoPlayer != null) {
             videoPlayer.setPlaybackSpeed(speed);
         }
-        MessagesController.getGlobalMainSettings().edit().putFloat(music ? "musicPlaybackSpeed" : "playbackSpeed", speed).commit();
+        MessagesController.getGlobalMainSettings().edit().putFloat(music ? "musicPlaybackSpeed" : "playbackSpeed", speed).apply();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.messagePlayingSpeedChanged);
     }
 
@@ -3859,7 +3859,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             FileLog.d("time=" + (System.currentTimeMillis() - time) + " canceled=" + canceled);
         }
 
-        preferences.edit().putBoolean("isPreviousOk", true).commit();
+        preferences.edit().putBoolean("isPreviousOk", true).apply();
         didWriteData(convertMessage, cacheFile, true, cacheFile.length(), error || canceled, 1f);
 
         return true;

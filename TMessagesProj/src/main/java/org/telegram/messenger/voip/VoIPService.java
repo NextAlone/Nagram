@@ -200,7 +200,7 @@ public class VoIPService extends VoIPBaseService{
 			if (error == null) {
 				String data = ((TLRPC.TL_dataJSON) response).data;
 				TgVoip.setGlobalServerConfig(data);
-				preferences.edit().putString("voip_server_config", data).commit();
+				preferences.edit().putString("voip_server_config", data).apply();
 			}
 		});
 	}
@@ -985,7 +985,7 @@ public class VoIPService extends VoIPBaseService{
 				if(oldest!=null)
 					hashes.remove(oldest);
 			}
-			nprefs.edit().putStringSet("calls_access_hashes", hashes).commit();
+			nprefs.edit().putStringSet("calls_access_hashes", hashes).apply();
 
 			boolean sysAecAvailable = false, sysNsAvailable = false;
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

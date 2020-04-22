@@ -258,7 +258,7 @@ public class ColorPicker extends FrameLayout {
         if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
             if (interacting && delegate != null) {
                 delegate.onFinishedColorPicking();
-                getContext().getSharedPreferences("paint", Activity.MODE_PRIVATE).edit().putFloat("last_color_location", location).commit();
+                getContext().getSharedPreferences("paint", Activity.MODE_PRIVATE).edit().putFloat("last_color_location", location).apply();
             }
             interacting = false;
             wasChangingWeight = changingWeight;

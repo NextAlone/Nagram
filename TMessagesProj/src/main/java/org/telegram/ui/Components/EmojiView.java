@@ -2577,7 +2577,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
         if (currentPage != newPage) {
             currentPage = newPage;
-            MessagesController.getGlobalEmojiSettings().edit().putInt("selected_page", newPage).commit();
+            MessagesController.getGlobalEmojiSettings().edit().putInt("selected_page", newPage).apply();
         }
     }
 
@@ -3703,7 +3703,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 delegate.onStickersGroupClick(info.id);
                             }
                         } else {
-                            MessagesController.getEmojiSettings(currentAccount).edit().putLong("group_hide_stickers_" + info.id, info.stickerset != null ? info.stickerset.id : 0).commit();
+                            MessagesController.getEmojiSettings(currentAccount).edit().putLong("group_hide_stickers_" + info.id, info.stickerset != null ? info.stickerset.id : 0).apply();
                             updateStickerTabs();
                             if (stickersGridAdapter != null) {
                                 stickersGridAdapter.notifyDataSetChanged();

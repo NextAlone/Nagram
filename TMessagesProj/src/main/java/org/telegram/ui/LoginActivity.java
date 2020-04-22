@@ -873,7 +873,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 
     private void putBundleToEditor(Bundle bundle, SharedPreferences.Editor editor, String prefix) {
@@ -1357,7 +1357,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             putBundleToEditor(bundle, editor, null);
-            editor.commit();
+            editor.apply();
         } catch (Exception e) {
             FileLog.e(e);
         }

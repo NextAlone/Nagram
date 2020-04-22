@@ -215,7 +215,7 @@ public class NotificationsController extends BaseController {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             }
             OTHER_NOTIFICATIONS_CHANNEL = "Other" + Utilities.random.nextLong();
-            preferences.edit().putString("OtherKey", OTHER_NOTIFICATIONS_CHANNEL).commit();
+            preferences.edit().putString("OtherKey", OTHER_NOTIFICATIONS_CHANNEL).apply();
         }
         if (notificationChannel == null) {
             notificationChannel = new NotificationChannel(OTHER_NOTIFICATIONS_CHANNEL, "Other", NotificationManager.IMPORTANCE_DEFAULT);
@@ -254,7 +254,7 @@ public class NotificationsController extends BaseController {
             SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
-            editor.commit();
+            editor.apply();
 
             if (Build.VERSION.SDK_INT >= 26) {
                 try {
@@ -2279,7 +2279,7 @@ public class NotificationsController extends BaseController {
                 String key = "org.telegram.key" + dialogId;
                 String channelId = preferences.getString(key, null);
                 if (channelId != null) {
-                    preferences.edit().remove(key).remove(key + "_s").commit();
+                    preferences.edit().remove(key).remove(key + "_s").apply();
                     systemNotificationManager.deleteNotificationChannel(channelId);
                 }
             } catch (Exception e) {
@@ -2307,7 +2307,7 @@ public class NotificationsController extends BaseController {
                         editor.remove(key);
                     }
                 }
-                editor.commit();
+                editor.apply();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -2424,7 +2424,7 @@ public class NotificationsController extends BaseController {
         newSettingsHash = Utilities.MD5(newSettings.toString());
         if (channelId != null && !settings.equals(newSettingsHash)) {
             if (edited) {
-                preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).commit();
+                preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).apply();
             } else {
                 systemNotificationManager.deleteNotificationChannel(channelId);
                 channelId = null;
@@ -2459,7 +2459,7 @@ public class NotificationsController extends BaseController {
             notificationChannel.setGroup(keyGroup);
             systemNotificationManager.createNotificationChannelGroup(notificationChannelGroup);
             systemNotificationManager.createNotificationChannel(notificationChannel);
-            preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).commit();
+            preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).apply();
         }
         return channelId;
     }
@@ -3740,7 +3740,7 @@ public class NotificationsController extends BaseController {
                 dialog.notify_settings.mute_until = untilTime;
             }
         }
-        editor.commit();
+        editor.apply();
         updateServerNotificationsSettings(dialog_id);
     }
 
@@ -3836,7 +3836,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void setGlobalNotificationsEnabled(int type, int time) {
-        getAccountInstance().getNotificationsSettings().edit().putInt(getGlobalNotificationsKey(type), time).commit();
+        getAccountInstance().getNotificationsSettings().edit().putInt(getGlobalNotificationsKey(type), time).apply();
         updateServerNotificationsSettings(type);
         getMessagesStorage().updateMutedDialogsFiltersCounters();
     }

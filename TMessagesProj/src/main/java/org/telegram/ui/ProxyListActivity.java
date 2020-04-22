@@ -747,7 +747,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 textCheckCell.setChecked(useProxyForCalls);
                 SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled_calls", useProxyForCalls);
-                editor.commit();
+                editor.apply();
             } else if (position >= proxyStartRow && position < proxyEndRow) {
                 SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
                 useProxySettings = true;

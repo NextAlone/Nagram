@@ -214,7 +214,7 @@ public class MediaDataController extends BaseController {
 
         drafts.clear();
         draftMessages.clear();
-        preferences.edit().clear().commit();
+        preferences.edit().clear().apply();
 
         botInfos.clear();
         botKeyboards.clear();
@@ -881,7 +881,7 @@ public class MediaDataController extends BaseController {
                 if (gif) {
                     loadingRecentGifs = false;
                     recentGifsLoaded = true;
-                    editor.putLong("lastGifLoadTime", System.currentTimeMillis()).commit();
+                    editor.putLong("lastGifLoadTime", System.currentTimeMillis()).apply();
                 } else {
                     loadingRecentStickers[type] = false;
                     recentStickersLoaded[type] = true;
@@ -1208,7 +1208,7 @@ public class MediaDataController extends BaseController {
                     TLRPC.TL_messages_archivedStickers res = (TLRPC.TL_messages_archivedStickers) response;
                     archivedStickersCount[type] = res.count;
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                    preferences.edit().putInt("archivedStickersCount" + type, res.count).commit();
+                    preferences.edit().putInt("archivedStickersCount" + type, res.count).apply();
                     getNotificationCenter().postNotificationName(NotificationCenter.archivedStickersCountDidLoad, type);
                 }
             }));
@@ -4413,7 +4413,7 @@ public class MediaDataController extends BaseController {
         if (draft == null || draft instanceof TLRPC.TL_draftMessageEmpty) {
             drafts.remove(did);
             draftMessages.remove(did);
-            preferences.edit().remove("" + did).remove("r_" + did).commit();
+            preferences.edit().remove("" + did).remove("r_" + did).apply();
             messagesController.removeDraftDialogIfNeed(did);
         } else {
             drafts.put(did, draft);
@@ -4437,7 +4437,7 @@ public class MediaDataController extends BaseController {
             editor.putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray()));
             serializedData.cleanup();
         }
-        editor.commit();
+        editor.apply();
         if (fromServer) {
             if (draft.reply_to_msg_id != 0 && replyToMessage == null) {
                 int lower_id = (int) did;
@@ -4520,7 +4520,7 @@ public class MediaDataController extends BaseController {
                 draftMessages.put(did, message);
                 SerializedData serializedData = new SerializedData(message.getObjectSize());
                 message.serializeToStream(serializedData);
-                preferences.edit().putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray())).commit();
+                preferences.edit().putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray())).apply();
                 getNotificationCenter().postNotificationName(NotificationCenter.newDraftReceived, did);
                 serializedData.cleanup();
             }
@@ -4531,7 +4531,7 @@ public class MediaDataController extends BaseController {
         drafts.clear();
         draftMessages.clear();
         draftsFolderIds.clear();
-        preferences.edit().clear().commit();
+        preferences.edit().clear().apply();
         if (notify) {
             getMessagesController().sortDialogs(null);
             getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
@@ -4546,7 +4546,7 @@ public class MediaDataController extends BaseController {
         if (!replyOnly) {
             drafts.remove(did);
             draftMessages.remove(did);
-            preferences.edit().remove("" + did).remove("r_" + did).commit();
+            preferences.edit().remove("" + did).remove("r_" + did).apply();
             getMessagesController().sortDialogs(null);
             getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
         } else if (draftMessage.reply_to_msg_id != 0) {
