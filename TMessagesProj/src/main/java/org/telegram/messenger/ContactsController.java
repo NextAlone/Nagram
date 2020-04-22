@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 
 public class ContactsController extends BaseController {
 
@@ -176,8 +175,9 @@ public class ContactsController extends BaseController {
     public HashMap<String, TLRPC.TL_contact> contactsByShortPhone = new HashMap<>();
 
     private int completedRequestsCount;
-    
+
     private static volatile ContactsController[] Instance = new ContactsController[UserConfig.MAX_ACCOUNT_COUNT];
+
     public static ContactsController getInstance(int num) {
         ContactsController localInstance = Instance[num];
         if (localInstance == null) {
@@ -325,7 +325,7 @@ public class ContactsController extends BaseController {
                 for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
                     TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
                     if (user != null) {
-                        if (acc.name.equals(formatName(user.first_name,user.last_name))) {
+                        if (acc.name.equals(formatName(user.first_name, user.last_name))) {
                             if (b == currentAccount) {
                                 systemAccount = acc;
                             }
@@ -2599,7 +2599,7 @@ public class ContactsController extends BaseController {
             lastName = lastName.trim();
         }
         StringBuilder result = new StringBuilder((firstName != null ? firstName.length() : 0) + (lastName != null ? lastName.length() : 0) + 1);
-        if (LocaleController.nameDisplayOrder == 1) {
+        if (NekoConfig.nameOrder == 1) {
             if (firstName != null && firstName.length() > 0) {
                 result.append(firstName);
                 if (lastName != null && lastName.length() > 0) {
