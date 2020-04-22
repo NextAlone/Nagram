@@ -140,7 +140,6 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate {
@@ -2077,8 +2076,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (!MessagesController.getInstance(currentAccount).checkCanOpenChat(args, ProfileActivity.this)) {
                         return;
                     }
-                    NotificationCenter.getInstance(currentAccount).removeObserver(ProfileActivity.this, NotificationCenter.closeChats);
-                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
+                    if (!AndroidUtilities.isTablet()) {
+                        NotificationCenter.getInstance(currentAccount).removeObserver(ProfileActivity.this, NotificationCenter.closeChats);
+                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
+                    }
                     presentFragment(new ChatActivity(args), true);
                 }
             });

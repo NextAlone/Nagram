@@ -787,7 +787,7 @@ public class ConnectionsManager extends BaseController {
 
         protected ResolvedDomain doInBackground(Void... voids) {
 
-            InetAddress[] result = DnsFactory.Companion.lookUp(currentHostName);
+            InetAddress[] result = DnsFactory.Companion.lookup(currentHostName).toArray(new InetAddress[0]);
 
             return new ResolvedDomain(result, 10 * 60 * 1000L);
 

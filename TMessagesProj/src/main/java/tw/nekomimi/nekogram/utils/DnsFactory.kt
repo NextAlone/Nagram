@@ -1,6 +1,8 @@
 package tw.nekomimi.nekogram.utils
 
+import okhttp3.Dns
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import org.telegram.tgnet.ConnectionsManager
 import org.xbill.DNS.DohResolver
@@ -9,54 +11,55 @@ import org.xbill.DNS.TXTRecord
 import org.xbill.DNS.Type
 import java.net.InetAddress
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-open class DnsFactory {
+open class DnsFactory : Dns {
 
     companion object : DnsFactory() {
 
         init {
 
             addProvider("https://mozilla.cloudflare-dns.com/dns-query")
-            addProvider("https://cloudflare-dns.com/dns-query")
             addProvider("https://dns.google/dns-query")
             addProvider("https://dns.twnic.tw/dns-query")
             addProvider("https://dns.adguard.com/dns-query")
 
         }
-
     }
 
     val providers = LinkedList<DnsOverHttps>()
-    val dnsJavaProviders  = LinkedList<DohResolver>()
+    val dnsJavaProviders = LinkedList<DohResolver>()
+
+    val client = OkHttpClient.Builder().connectTimeout(3,TimeUnit.SECONDS).build()
 
     fun addProvider(url: String) {
 
         providers.add(DnsOverHttps.Builder()
-                .client(HttpUtil.okHttpClient)
+                .client(client)
                 .url(url.toHttpUrl())
                 .includeIPv6(ConnectionsManager.useIpv6Address())
                 .build())
 
     }
 
-    fun lookUp(host: String) : Array<InetAddress> {
+    override fun lookup(hostname: String): List<InetAddress> {
 
         providers.forEach {
 
             runCatching {
 
-                return it.lookup(host).toTypedArray()
+                return it.lookup(hostname)
 
             }
 
         }
 
-        return arrayOf()
+        return Dns.SYSTEM.lookup(hostname)
 
     }
 
-    fun getTxts(domain: String) : ArrayList<String> {
+    fun getTxts(domain: String): ArrayList<String> {
 
         val results = ArrayList<String>()
 

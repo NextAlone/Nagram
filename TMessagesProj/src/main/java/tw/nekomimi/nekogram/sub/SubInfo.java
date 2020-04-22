@@ -111,13 +111,13 @@ public class SubInfo implements Mappable {
 
                 errors.append(e.getKey()).append(": ");
 
-                if (StrUtil.isBlank(e.getValue().getMessage())) {
+                errors.append(e.getValue().getClass().getSimpleName());
 
+                if (!StrUtil.isBlank(e.getValue().getMessage())) {
+
+                    errors.append(" ( ");
                     errors.append(e.getValue().getMessage());
-
-                } else {
-
-                    errors.append(e.getValue().getClass().getSimpleName());
+                    errors.append(" )");
 
                 }
 

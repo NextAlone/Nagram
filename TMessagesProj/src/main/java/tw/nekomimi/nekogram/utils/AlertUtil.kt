@@ -53,7 +53,7 @@ object AlertUtil {
 
     @JvmOverloads
     @JvmStatic
-    fun showProgress(ctx: Context,text: String = LocaleController.getString("",R.string.Loading)): AlertDialog {
+    fun showProgress(ctx: Context,text: String = LocaleController.getString("Loading",R.string.Loading)): AlertDialog {
 
         return AlertDialog.Builder(ctx,1).apply {
 
