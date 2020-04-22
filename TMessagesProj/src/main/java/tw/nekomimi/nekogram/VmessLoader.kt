@@ -416,6 +416,8 @@ class VmessLoader {
 
         runCatching {
 
+            point.isRunning = false
+
             point.stopLoop()
 
         }

@@ -46,6 +46,7 @@ import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
@@ -1454,9 +1455,7 @@ public class SharedConfig {
         loadProxyList();
 
         if (proxyEnabled && currentProxy == null) {
-
             setProxyEnable(false);
-
         }
 
     }
@@ -1466,10 +1465,13 @@ public class SharedConfig {
             return;
         }
 
-        for (ProxyInfo proxyInfo : proxyList) {
-            if (proxyInfo instanceof ExternalSocks5Proxy) {
-                ((ExternalSocks5Proxy) proxyInfo).stop();
+        if (!proxyList.isEmpty()) {
+            for (ProxyInfo proxyInfo : proxyList) {
+                if (proxyInfo instanceof ExternalSocks5Proxy) {
+                    ((ExternalSocks5Proxy) proxyInfo).stop();
+                }
             }
+            ThreadUtil.sleep(500L);
         }
 
         proxyListLoaded = true;
