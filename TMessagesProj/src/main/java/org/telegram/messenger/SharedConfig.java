@@ -218,7 +218,7 @@ public class SharedConfig {
 
             StringBuilder builder = new StringBuilder();
 
-            builder.append("[");
+            builder.append("[ ");
 
             if (subId != 0L) {
 
@@ -230,7 +230,7 @@ public class SharedConfig {
 
             }
 
-            builder.append("] ");
+            builder.append(" ] ");
 
             if (StrUtil.isBlank(getRemarks())) {
 

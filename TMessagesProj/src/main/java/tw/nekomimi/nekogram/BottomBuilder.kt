@@ -4,16 +4,13 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.ViewGroup
 import android.widget.*
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BottomSheet
-import org.telegram.ui.ActionBar.BottomSheet.BottomSheetCell
 import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.Cells.*
-import org.telegram.ui.Components.HintEditText
 import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
@@ -255,6 +252,8 @@ class BottomBuilder(val ctx: Context) {
     fun addItem(text: String, icon: Int = 0,red: Boolean = false, listener: (cell: TextCell) -> Unit): TextCell {
 
         return TextCell(ctx).apply {
+
+            background = Theme.getSelectorDrawable(true)
 
             setTextAndIcon(text, icon,true)
 
