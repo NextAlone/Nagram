@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -119,6 +120,7 @@ public class RecyclerAnimationScrollHelper {
                 }
 
                 for (View view : oldViews) {
+                    if (view.getParent() != null) ((ViewGroup)view.getParent()).removeView(view);
                     recyclerView.addView(view);
                     if (view instanceof ChatMessageCell) {
                         ((ChatMessageCell) view).setAnimationRunning(true, true);

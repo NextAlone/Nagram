@@ -35,7 +35,7 @@ public class SubInfo implements Mappable {
     public String name;
     public List<String> urls = new LinkedList<>();
     public List<String> proxies = new LinkedList<>();
-    public long lastFetch = -1L;
+    public Long lastFetch = -1L;
     public boolean enable = true;
     public boolean internal;
 

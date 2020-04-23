@@ -1285,22 +1285,15 @@ public class AndroidUtilities {
     public static File getCacheDir() {
         String state = null;
         try {
-            state = Environment.getExternalStorageState();
+            File file = ApplicationLoader.applicationContext.getExternalFilesDir("caches");
+            if (file != null) {
+                FileUtil.initDir(file);
+                return file;
+            }
         } catch (Throwable e) {
             FileLog.e(e);
         }
-        if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
-            try {
-                File file = ApplicationLoader.applicationContext.getExternalFilesDir("caches");
-                if (file != null) {
-                    FileUtil.initDir(file);
-                    return file;
-                }
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-        }
-        return new File(ApplicationLoader.getDataDirFixed(),"cache/media");
+        return new File(ApplicationLoader.getDataDirFixed(), "cache/media");
     }
 
     public static int dp(float value) {

@@ -28,27 +28,35 @@ fun ProxyListActivity.checkProxyList(force: Boolean, context: ExecutorService) {
 
             it.checking = true
 
-            context.execute {
+            runCatching {
 
-                runCatching {
+                context.execute {
 
-                    val lock = AtomicBoolean()
+                    runCatching {
 
-                    checkSingleProxy(it, if (it is ExternalSocks5Proxy) 3 else 0) {
+                        val lock = AtomicBoolean()
 
-                        AndroidUtilities.runOnUIThread {
+                        checkSingleProxy(it, if (it is ExternalSocks5Proxy) 3 else 0) {
 
-                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, it)
+                            AndroidUtilities.runOnUIThread {
+
+                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, it)
+
+                            }
+
+                            lock.set(true)
 
                         }
 
-                        lock.set(true)
+                        while (!lock.get()) ThreadUtil.sleep(100L)
 
                     }
 
-                    while (!lock.get()) ThreadUtil.sleep(100L)
-
                 }
+
+            }.onFailure {
+
+                return@launch
 
             }
 
