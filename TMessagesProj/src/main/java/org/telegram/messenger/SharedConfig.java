@@ -505,7 +505,7 @@ public class SharedConfig {
         @Override
         public void start() {
 
-            stop();
+            if (loader != null) return;
 
             VmessLoader loader = new VmessLoader();
 
@@ -514,6 +514,12 @@ public class SharedConfig {
             port = loader.start();
 
             this.loader = loader;
+
+            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+
+                ConnectionsManager.setProxySettings(true,address,port,username,password,secret);
+
+            }
 
         }
 
@@ -606,7 +612,7 @@ public class SharedConfig {
         @Override
         public void start() {
 
-            stop();
+            if (loader != null) return;
 
             port = ProxyManager.getPortForBean(bean);
             ShadowsocksLoader loader = new ShadowsocksLoader();
@@ -616,12 +622,20 @@ public class SharedConfig {
 
             this.loader = loader;
 
+            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+
+                ConnectionsManager.setProxySettings(true,address,port,username,password,secret);
+
+            }
+
         }
 
         @Override
         public void stop() {
 
             if (loader != null) {
+
+                FileLog.d(getTitle() + " stopped");
 
                 ShadowsocksLoader loader = this.loader;
 
@@ -710,7 +724,7 @@ public class SharedConfig {
         @Override
         public void start() {
 
-            stop();
+            if (loader != null) return;
 
             port = ProxyManager.getPortForBean(bean);
             ShadowsocksRLoader loader = new ShadowsocksRLoader();
@@ -719,6 +733,12 @@ public class SharedConfig {
             loader.start();
 
             this.loader = loader;
+
+            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+
+                ConnectionsManager.setProxySettings(true,address,port,username,password,secret);
+
+            }
 
         }
 
@@ -1443,8 +1463,6 @@ public class SharedConfig {
         MessagesController.getGlobalMainSettings().edit()
                 .putInt("current_proxy", info == null ? 0 : info.hashCode())
                 .apply();
-
-        saveProxyList();
 
         setProxyEnable(info != null);
 

@@ -187,7 +187,7 @@ public class FileLog {
 
     public static void d(final String message) {
         Log.d(tag, message);
-        ExternalGcm.reportLog("[D]" + message);
+        ExternalGcm.reportLog("[D] " + message);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
