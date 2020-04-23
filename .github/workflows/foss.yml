@@ -9,7 +9,7 @@ jobs:
   fossBuild:
     name: Foss Build
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, '[RELEASE]')"
+    if: "contains(github.event.head_commit.message, '[RELEASE]') || contains(github.event.head_commit.message, '[FOSS]')"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1

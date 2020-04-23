@@ -25,7 +25,7 @@
 	url = https://github.com/jedisct1/libsodium.git
 [submodule "ss-libev/src/main/jni/libev"]
 	path = ss-libev/src/main/jni/libev
-	url = https://git.lighttpd.net/libev.git
+	url = https://git.lighttpd.net/mirrors/libev.git
 [submodule "ss-libev/src/main/jni/re2"]
 	path = ss-libev/src/main/jni/re2
 	url = https://github.com/google/re2.git
