@@ -159,7 +159,7 @@ public class MessageObject {
 
     public CharSequence vCardData;
 
-    static final String[] excludeWords = new String[]{
+    static final String[] excludeWords = new String[] {
             " vs. ",
             " vs ",
             " versus ",
@@ -1835,6 +1835,11 @@ public class MessageObject {
             media.results.recent_voters = results.recent_voters;
             media.results.flags |= 8;
         }
+        if ((results.flags & 16) != 0) {
+            media.results.solution = results.solution;
+            media.results.solution_entities = results.solution_entities;
+            media.results.flags |= 16;
+        }
     }
 
     public boolean isPollClosed() {
@@ -2439,7 +2444,7 @@ public class MessageObject {
                 isRestrictedMessage = true;
             } else if (!isMediaEmpty()) {
                 if (messageOwner.media instanceof TLRPC.TL_messageMediaDice) {
-                    messageText = "\uD83C\uDFB2";
+                    messageText = getDiceEmoji();
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                     if (((TLRPC.TL_messageMediaPoll) messageOwner.media).poll.quiz) {
                         messageText = LocaleController.getString("QuizPoll", R.string.QuizPoll);
@@ -3373,13 +3378,13 @@ public class MessageObject {
             entityItalic.offset = 0;
             entityItalic.length = text.length();
             entities.add(entityItalic);
-            return addEntitiesToText(text, entities, isOutOwner(), type, true, photoViewer, useManualParse);
+            return addEntitiesToText(text, entities, isOutOwner(), true, photoViewer, useManualParse);
         } else {
-            return addEntitiesToText(text, messageOwner.entities, isOutOwner(), type, true, photoViewer, useManualParse);
+            return addEntitiesToText(text, messageOwner.entities, isOutOwner(), true, photoViewer, useManualParse);
         }
     }
 
-    public static boolean addEntitiesToText(CharSequence text, ArrayList<TLRPC.MessageEntity> entities, boolean out, int type, boolean usernames, boolean photoViewer, boolean useManualParse) {
+    public static boolean addEntitiesToText(CharSequence text, ArrayList<TLRPC.MessageEntity> entities, boolean out, boolean usernames, boolean photoViewer, boolean useManualParse) {
         if (!(text instanceof Spannable)) {
             return false;
         }
@@ -4609,6 +4614,17 @@ public class MessageObject {
         return messageOwner.media instanceof TLRPC.TL_messageMediaDice;
     }
 
+    public String getDiceEmoji() {
+        if (!isDice()) {
+            return null;
+        }
+        TLRPC.TL_messageMediaDice messageMediaDice = (TLRPC.TL_messageMediaDice) messageOwner.media;
+        if (TextUtils.isEmpty(messageMediaDice.emoticon)) {
+            return "\uD83C\uDFB2";
+        }
+        return messageMediaDice.emoticon;
+    }
+
     public int getDiceValue() {
         if (messageOwner.media instanceof TLRPC.TL_messageMediaDice) {
             return ((TLRPC.TL_messageMediaDice) messageOwner.media).value;
@@ -4942,7 +4958,12 @@ public class MessageObject {
                 return false;
             }
         }
-        return message.out && chat != null && chat.megagroup && (chat.creator || chat.admin_rights != null && chat.admin_rights.pin_messages);
+        if (ChatObject.isChannel(chat) && !chat.megagroup && (chat.creator || chat.admin_rights != null && chat.admin_rights.edit_messages)) {
+            return true;
+        }
+        if (message.out && chat != null && chat.megagroup && (chat.creator || chat.admin_rights != null && chat.admin_rights.pin_messages)) {
+            return true;
+        }
         //
     }
 
@@ -4980,6 +5001,9 @@ public class MessageObject {
         }
         if (message.media != null && !(message.media instanceof TLRPC.TL_messageMediaEmpty) && !(message.media instanceof TLRPC.TL_messageMediaPhoto) && !(message.media instanceof TLRPC.TL_messageMediaDocument) && !(message.media instanceof TLRPC.TL_messageMediaWebPage)) {
             return false;
+        }
+        if (ChatObject.isChannel(chat) && !chat.megagroup && (chat.creator || chat.admin_rights != null && chat.admin_rights.edit_messages)) {
+            return true;
         }
         if (message.out && chat != null && chat.megagroup && (chat.creator || chat.admin_rights != null && chat.admin_rights.pin_messages)) {
             return true;

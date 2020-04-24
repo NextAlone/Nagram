@@ -697,7 +697,7 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     @Override
-    public ThemeDescription[] getThemeDescriptions() {
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
         final ThemeDescription.ThemeDescriptionDelegate delegate = () -> {
             if (inputFields != null) {
                 for (int i = 0; i < inputFields.length; i++) {
@@ -748,6 +748,6 @@ public class ProxySettingsActivity extends BaseFragment {
             arrayList.add(new ThemeDescription(bottomCells[i], ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteLinkText));
         }
 
-        return arrayList.toArray(new ThemeDescription[0]);
+        return arrayList;
     }
 }

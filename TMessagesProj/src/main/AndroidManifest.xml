@@ -78,7 +78,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="org.telegram.messenger.${applicationClassName}"
+        android:name="org.telegram.messenger.ApplicationLoader"
         android:allowBackup="false"
         android:networkSecurityConfig="@xml/network_security_config"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"

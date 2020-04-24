@@ -16,6 +16,8 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
     implementation "androidx.interpolator:interpolator:1.0.0"
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
+    compileOnly 'com.android.support:multidex:1.0.3'
 
     compileOnly 'org.checkerframework:checker-qual:3.3.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
@@ -38,6 +40,8 @@ dependencies {
     implementation files('libs/libv2ray.aar')
     implementation files('libs/ss-libev-release.aar')
     implementation files('libs/ssr-libev-release.aar')
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
 
     compileOnly 'com.google.firebase:firebase-messaging:20.1.5'
     compileOnly 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
@@ -247,14 +251,10 @@ android {
 
     productFlavors {
         afat {
-            sourceSets.main {
-                java.srcDirs = ['src/main/java', 'src/multidex/java']
-            }
             dependencies {
                 implementation 'com.android.support:multidex:1.0.3'
             }
             multiDexEnabled true
-            manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
         }
 
         minApi21 {

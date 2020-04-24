@@ -15,7 +15,6 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BaseController;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.EmuDetector;
 import org.telegram.messenger.FileLog;
@@ -39,6 +38,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -198,11 +198,10 @@ public class ConnectionsManager extends BaseController {
             pushString = SharedConfig.pushStringStatus;
         }
         String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
-        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, getUserConfig().getClientUserId(), enablePushConnection);
-        if (currentAccount == 0 && BuildVars.DEBUG_PRIVATE_VERSION) {
-            DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
-        }
+
+        int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
+
+        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -327,7 +326,7 @@ public class ConnectionsManager extends BaseController {
 
     public void checkConnection() {
         boolean useIpv6;
-        int networkType = MessagesController.getMainSettings(currentAccount).getInt("network",0);
+        int networkType = MessagesController.getMainSettings(currentAccount).getInt("network", 0);
         if (networkType == 4) {
             useIpv6 = false;
         } else if (networkType == 6) {
@@ -343,7 +342,7 @@ public class ConnectionsManager extends BaseController {
         native_setPushConnectionEnabled(currentAccount, value);
     }
 
-    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int userId, boolean enablePushConnection) {
+    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection) {
 
         if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
 
@@ -351,8 +350,7 @@ public class ConnectionsManager extends BaseController {
 
         }
 
-        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
-
+        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
 
     }
@@ -537,7 +535,7 @@ public class ConnectionsManager extends BaseController {
                 return;
             }
 
-            if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc",false)) {
+            if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
                 return;
             }
 
@@ -668,7 +666,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setUserId(int currentAccount, int id);
 
-    public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
+    public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
 
     public static native void native_setProxySettings(int currentAccount, String address, int port, String username, String password, String secret);
 

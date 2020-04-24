@@ -549,6 +549,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     }
 
+    public boolean isSearchFieldVisible() {
+        return searchContainer.getVisibility() == VISIBLE;
+    }
+
     public boolean toggleSearch(boolean openKeyboard) {
         if (searchContainer == null) {
             return false;
@@ -609,6 +613,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public ImageView getIconView() {
         return iconView;
+    }
+
+    public TextView getTextView() {
+        return textView;
     }
 
     public void setIcon(int resId) {
