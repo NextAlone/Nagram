@@ -85,4 +85,18 @@ public class NekoXConfig {
 
     }
 
+    public static String customDcIpv4 = preferences.getString("custom_dc_v4", "");
+    public static String customDcIpv6 = preferences.getString("custom_dc_v6", "");
+    public static int customDcPort = preferences.getInt("custom_dc_port", 12345);
+
+    public static void saveCustomDc() {
+
+        preferences.edit()
+                .putString("custom_dc_v4", customDcIpv4)
+                .putString("custom_dc_v6", customDcIpv6)
+                .putInt("custom_dc_port",customDcPort)
+                .apply();
+
+    }
+
 }

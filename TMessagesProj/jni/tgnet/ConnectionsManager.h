@@ -54,7 +54,7 @@ public:
     void cleanUp(bool resetKeys);
     void cancelRequestsForGuid(int32_t guid);
     void bindRequestToGuid(int32_t requestToken, int32_t guid);
-    void applyDatacenterAddress(uint32_t datacenterId, std::string ipAddress, uint32_t port);
+    void applyDatacenterAddress(uint32_t datacenterId, std::string ipAddress, uint32_t port,uint32_t flag);
     void setDelegate(ConnectiosManagerDelegate *connectiosManagerDelegate);
     ConnectionState getConnectionState();
     void setUserId(int32_t userId);

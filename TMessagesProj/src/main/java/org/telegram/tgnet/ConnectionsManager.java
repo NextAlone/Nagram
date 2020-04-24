@@ -310,8 +310,8 @@ public class ConnectionsManager extends BaseController {
         native_bindRequestToGuid(currentAccount, requestToken, guid);
     }
 
-    public void applyDatacenterAddress(int datacenterId, String ipAddress, int port) {
-        native_applyDatacenterAddress(currentAccount, datacenterId, ipAddress, port);
+    public void applyDatacenterAddress(int datacenterId, String ipAddress, int port, int flag) {
+        native_applyDatacenterAddress(currentAccount, datacenterId, ipAddress, port, flag);
     }
 
     public int getConnectionState() {
@@ -326,7 +326,16 @@ public class ConnectionsManager extends BaseController {
     }
 
     public void checkConnection() {
-        native_setUseIpv6(currentAccount, useIpv6Address());
+        boolean useIpv6;
+        int networkType = MessagesController.getMainSettings(currentAccount).getInt("network",0);
+        if (networkType == 4) {
+            useIpv6 = false;
+        } else if (networkType == 6) {
+            useIpv6 = true;
+        } else {
+            useIpv6 = useIpv6Address();
+        }
+        native_setUseIpv6(currentAccount, useIpv6);
         native_setNetworkAvailable(currentAccount, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), ApplicationLoader.isConnectionSlow());
     }
 
@@ -527,6 +536,11 @@ public class ConnectionsManager extends BaseController {
                 }
                 return;
             }
+
+            if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc",false)) {
+                return;
+            }
+
             lastDnsRequestTime = System.currentTimeMillis();
 
             if (BuildVars.LOGS_ENABLED) {
@@ -648,7 +662,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_bindRequestToGuid(int currentAccount, int requestToken, int guid);
 
-    public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port);
+    public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port, int flag);
 
     public static native int native_getConnectionState(int currentAccount);
 
@@ -694,7 +708,7 @@ public class ConnectionsManager extends BaseController {
 
     @SuppressLint("NewApi")
     public static boolean useIpv6Address() {
-        if (Build.VERSION.SDK_INT < 19 || !(SharedConfig.proxyEnabled && SharedConfig.currentProxy != null && !SharedConfig.currentProxy.secret.isEmpty())) {
+        if (Build.VERSION.SDK_INT < 19) {
             return false;
         }
         if (BuildVars.LOGS_ENABLED) {

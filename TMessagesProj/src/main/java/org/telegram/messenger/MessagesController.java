@@ -52,6 +52,7 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.DataCenter;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -7951,7 +7952,9 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().cleanup(false);
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
-        if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
+        if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc",false)) {
+            DataCenter.applyOfficalDataCanter(currentAccount);
+        } else if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
             ConnectionsManager.native_switchBackend(currentAccount);
         }
     }

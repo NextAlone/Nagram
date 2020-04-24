@@ -574,7 +574,13 @@ public class NekoSettingsActivity extends BaseFragment {
         rowCount = 0;
 
         connectionRow = rowCount++;
-        ipv6Row = rowCount++;
+
+        if (MessagesController.getMainSettings(currentAccount).getInt("network", 0) == 0) {
+
+            ipv6Row = rowCount++;
+
+        }
+
         disableProxyWhenVpnEnabledRow = rowCount++;
         connection2Row = rowCount++;
 

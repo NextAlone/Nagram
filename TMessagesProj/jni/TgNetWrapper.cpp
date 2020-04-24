@@ -150,10 +150,10 @@ void bindRequestToGuid(JNIEnv *env, jclass c, jint instanceNum, jint requestToke
     return ConnectionsManager::getInstance(instanceNum).bindRequestToGuid(requestToken, guid);
 }
 
-void applyDatacenterAddress(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId, jstring ipAddress, jint port) {
+void applyDatacenterAddress(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId, jstring ipAddress, jint port,jint flag) {
     const char *valueStr = env->GetStringUTFChars(ipAddress, 0);
 
-    ConnectionsManager::getInstance(instanceNum).applyDatacenterAddress((uint32_t) datacenterId, std::string(valueStr), (uint32_t) port);
+    ConnectionsManager::getInstance(instanceNum).applyDatacenterAddress((uint32_t) datacenterId, std::string(valueStr), (uint32_t) port,(uint32_t) flag);
 
     if (valueStr != 0) {
         env->ReleaseStringUTFChars(ipAddress, valueStr);
@@ -427,7 +427,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_cleanUp", "(IZ)V", (void *) cleanUp},
         {"native_cancelRequestsForGuid", "(II)V", (void *) cancelRequestsForGuid},
         {"native_bindRequestToGuid", "(III)V", (void *) bindRequestToGuid},
-        {"native_applyDatacenterAddress", "(IILjava/lang/String;I)V", (void *) applyDatacenterAddress},
+        {"native_applyDatacenterAddress", "(IILjava/lang/String;II)V", (void *) applyDatacenterAddress},
         {"native_setProxySettings", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *) setProxySettings},
         {"native_getConnectionState", "(I)I", (void *) getConnectionState},
         {"native_setUserId", "(II)V", (void *) setUserId},

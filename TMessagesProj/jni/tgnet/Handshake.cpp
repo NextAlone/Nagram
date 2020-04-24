@@ -434,6 +434,19 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
                                                        "PGHKSMeRFvp3IWcmdJqXahxLCUS1Eh6MAQIDAQAB\n"
                                                        "-----END RSA PUBLIC KEY-----");
                     serverPublicKeysFingerprints.push_back(0x5a181b2235057d98LL);
+
+
+                    serverPublicKeys.push_back("-----BEGIN RSA PUBLIC KEY-----\n"
+                                               "MIIBCgKCAQEAvKLEOWTzt9Hn3/9Kdp/RdHcEhzmd8xXeLSpHIIzaXTLJDw8BhJy1\n"
+                                               "jR/iqeG8Je5yrtVabqMSkA6ltIpgylH///FojMsX1BHu4EPYOXQgB0qOi6kr08iX\n"
+                                               "ZIH9/iOPQOWDsL+Lt8gDG0xBy+sPe/2ZHdzKMjX6O9B4sOsxjFrk5qDoWDrioJor\n"
+                                               "AJ7eFAfPpOBf2w73ohXudSrJE0lbQ8pCWNpMY8cB9i8r+WBitcvouLDAvmtnTX7a\n"
+                                               "khoDzmKgpJBYliAY4qA73v7u5UIepE8QgV0jCOhxJCPubP8dg+/PlLLVKyxU5Cdi\n"
+                                               "QtZj2EMy4s9xlNKzX8XezE0MHEa6bQpnFwIDAQAB\n"
+                                               "-----END RSA PUBLIC KEY-----");
+                    serverPublicKeysFingerprints.push_back(0xa9e071c1771060cdLL);
+
+
                 }
 
                 size_t count2 = serverPublicKeysFingerprints.size();
@@ -441,7 +454,7 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
                     for (uint32_t b = 0; b < count2; b++) {
                         if ((uint64_t) result->server_public_key_fingerprints[a] == serverPublicKeysFingerprints[b]) {
                             keyFingerprint = result->server_public_key_fingerprints[a];
-                            key = serverPublicKeys[a];
+                            key = serverPublicKeys[b];
                             break;
                         }
                     }
