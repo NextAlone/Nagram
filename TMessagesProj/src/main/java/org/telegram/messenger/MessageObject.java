@@ -4965,6 +4965,7 @@ public class MessageObject {
             return true;
         }
         //
+        return false;
     }
 
     public static boolean canEditMessageScheduleTime(int currentAccount, TLRPC.Message message, TLRPC.Chat chat) {

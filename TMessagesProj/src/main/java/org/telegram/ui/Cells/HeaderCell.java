@@ -96,6 +96,9 @@ public class HeaderCell extends LinearLayout {
         textView2.setText(text);
     }
 
+    public TextView getTextView() {
+        return textView;
+    }
     public TextView getTextView2() {
         return textView2;
     }

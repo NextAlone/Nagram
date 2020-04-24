@@ -34,6 +34,7 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -316,6 +317,7 @@ public class CacheControlActivity extends BaseFragment {
 
                         // :)
 
+                        FileUtil.delete(ApplicationLoader.applicationContext.getExternalFilesDir("Telegram"));
                         FileUtil.delete(Environment.getExternalStoragePublicDirectory("Telegram"));
 
                     } catch (Exception ignored) {

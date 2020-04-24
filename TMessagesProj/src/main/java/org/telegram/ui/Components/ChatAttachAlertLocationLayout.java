@@ -5,7 +5,7 @@
  *
  * Copyright Nikolai Kudashov, 2013-2018.
  */
-
+/*
 package org.telegram.ui.Components;
 
 import android.Manifest;
@@ -1684,3 +1684,4 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         return themeDescriptions;
     }
 }
+ */

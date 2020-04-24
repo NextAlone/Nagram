@@ -1779,7 +1779,7 @@ public class ImageLoader {
         }
 
         try {
-            telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir("Telegram").getParentFile();
+            telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
 
             FileUtil.initDir(telegramPath);
 

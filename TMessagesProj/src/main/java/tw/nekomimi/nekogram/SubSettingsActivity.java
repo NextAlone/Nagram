@@ -293,7 +293,7 @@ public class SubSettingsActivity extends BaseFragment {
     }
 
     @Override
-    public ThemeDescription[] getThemeDescriptions() {
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
         final ThemeDescription.ThemeDescriptionDelegate delegate = () -> {
             if (inputFields != null) {
                 for (int i = 0; i < inputFields.length; i++) {
@@ -331,6 +331,6 @@ public class SubSettingsActivity extends BaseFragment {
             arrayList.add(new ThemeDescription(null, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText));
         }
 
-        return arrayList.toArray(new ThemeDescription[0]);
+        return arrayList;
     }
 }
