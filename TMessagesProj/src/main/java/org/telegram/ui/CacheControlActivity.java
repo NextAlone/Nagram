@@ -426,6 +426,7 @@ public class CacheControlActivity extends BaseFragment {
                         return false;
                     }
                 };
+                bottomSheet.setAllowNestedScroll(true);
                 bottomSheet.setApplyBottomPadding(false);
                 LinearLayout linearLayout = new LinearLayout(getParentActivity());
                 bottomSheetView = linearLayout;
@@ -518,15 +519,7 @@ public class CacheControlActivity extends BaseFragment {
                     cleanupFolders();
                 });
                 linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
-                NestedScrollView scrollView = new NestedScrollView(context) {
-                    @Override
-                    public boolean onTouchEvent(MotionEvent ev) {
-                        if (getMeasuredHeight() == linearLayout.getMeasuredHeight()) {
-                            return false;
-                        }
-                        return super.onTouchEvent(ev);
-                    }
-                };
+                NestedScrollView scrollView = new NestedScrollView(context);
                 scrollView.setVerticalScrollBarEnabled(false);
                 scrollView.addView(linearLayout);
                 bottomSheet.setCustomView(scrollView);
