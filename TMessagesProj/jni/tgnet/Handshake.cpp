@@ -450,11 +450,11 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
                 }
 
                 size_t count2 = serverPublicKeysFingerprints.size();
-                for (uint32_t a = 0; a < count1; a++) {
-                    for (uint32_t b = 0; b < count2; b++) {
-                        if ((uint64_t) result->server_public_key_fingerprints[a] == serverPublicKeysFingerprints[b]) {
-                            keyFingerprint = result->server_public_key_fingerprints[a];
-                            key = serverPublicKeys[b];
+                for (uint32_t a = 0; a < count2; a++) {
+                    for (uint32_t b = 0; b < count1; b++) {
+                        if ((uint64_t) result->server_public_key_fingerprints[b] == serverPublicKeysFingerprints[a]) {
+                            keyFingerprint = result->server_public_key_fingerprints[b];
+                            key = serverPublicKeys[a];
                             break;
                         }
                     }
