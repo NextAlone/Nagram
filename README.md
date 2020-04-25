@@ -10,12 +10,6 @@ NekoX is an open source third-party Telegram android app.
 - FAQ: https://telegra.ph/NekoX-FAQ-03-31
 - FAQ (Chinese): https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31
 
-## API, Protocol documentation
-
-Telegram API manuals: https://core.telegram.org/api
-
-MTProto protocol manuals: https://core.telegram.org/mtproto
-
 ## Compilation Guide
 
 ### Specify APP_ID and APP_HASH
@@ -57,7 +51,7 @@ Available variant list:
 
 ## Localization
 
-Join project at https://neko.crowdin.com/nekogram and https://nekox.crowdin.com/nekox.
+Join project at https://nekox.crowdin.com/nekox and https://neko.crowdin.com/ .
 
 ## Credits
 
@@ -69,7 +63,3 @@ Join project at https://neko.crowdin.com/nekogram and https://nekox.crowdin.com/
     <li>shadowsocks-libev: <a href="https://github.com/shadowsocks/shadowsocks-libev/blob/master/LICENSE">GPLv3</a></li>
     <li>shadowsocksRb-android: <a href="https://github.com/shadowsocksRb/shadowsocksRb-android/blob/master/LICENSE">GPLv3</a></li>
 </ul>
-
-## :)
-
-[关于 "NekoX 举报 Nekogram" 的声明](https://telegra.ph/page-04-12)
