@@ -303,7 +303,7 @@ public class Theme {
                 color = getColor(isOut ? key_chat_outBubble : key_chat_inBubble);
             }
             if (backgroundDrawable[idx2][idx] != null && (backgroundDrawableColor[idx2][idx] != color || forceSetColor)) {
-                backgroundDrawable[idx2][idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+                backgroundDrawable[idx2][idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 backgroundDrawableColor[idx2][idx] = color;
             }
             return backgroundDrawable[idx2][idx];
@@ -360,7 +360,7 @@ public class Theme {
             }
             int color = getColor(isOut ? key_chat_outBubbleShadow : key_chat_inBubbleShadow);
             if (shadowDrawable[idx] != null && (shadowDrawableColor[idx] != color || forceSetColor)) {
-                shadowDrawable[idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+                shadowDrawable[idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 shadowDrawableColor[idx] = color;
             }
             return shadowDrawable[idx];

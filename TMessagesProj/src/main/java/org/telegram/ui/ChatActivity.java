@@ -3588,7 +3588,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedMessageView.setTranslationY(-AndroidUtilities.dp(50));
             pinnedMessageView.setVisibility(View.GONE);
             pinnedMessageView.setBackgroundResource(R.drawable.blockpanel);
-            pinnedMessageView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
+            pinnedMessageView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.SRC_IN));
             contentView.addView(pinnedMessageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.TOP | Gravity.LEFT));
             pinnedMessageView.setOnClickListener(v -> {
                 wasManualScroll = true;
@@ -3619,7 +3619,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             closePinned = new ImageView(context);
             closePinned.setImageResource(R.drawable.miniplayer_close);
-            closePinned.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.MULTIPLY));
+            closePinned.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.SRC_IN));
             closePinned.setScaleType(ImageView.ScaleType.CENTER);
             closePinned.setContentDescription(LocaleController.getString("Close", R.string.Close));
             pinnedMessageView.addView(closePinned, LayoutHelper.createFrame(36, 48, Gravity.RIGHT | Gravity.TOP));
@@ -15379,7 +15379,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         "\n" +
                                         TranslateDb.query(original) +
                                         "\u200C\u200C";
-                                if (StrUtil.isNotBlank(selectedObject.caption)) {
+                                if (StrUtil.isNotBlank(messageObject.caption)) {
                                     MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
                                 } else {
                                     MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
@@ -15401,7 +15401,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                                 "\n" +
                                                 TranslateDb.query(original) +
                                                 "\u200C\u200C";
-                                        if (StrUtil.isNotBlank(selectedObject.caption)) {
+                                        if (StrUtil.isNotBlank(messageObject.caption)) {
                                             MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
                                         } else {
                                             MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
@@ -15583,8 +15583,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }, null);
                 break;
             }
-            default:
-                throw new IllegalStateException("Unexpected value: " + option);
         }
         selectedObject = null;
         selectedObjectGroup = null;

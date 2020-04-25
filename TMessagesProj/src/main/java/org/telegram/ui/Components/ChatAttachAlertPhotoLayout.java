@@ -1590,7 +1590,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 cameraView.setClipToOutline(true);
             }
             cameraView.setContentDescription(LocaleController.getString("AccDescrInstantCamera", R.string.AccDescrInstantCamera));
-            parentAlert.getContainer().addView(cameraView, 1, new FrameLayout.LayoutParams(itemSize, itemSize));
+            parentAlert.getContainer().addView(cameraView, 1, new LinearLayout.LayoutParams(itemSize, itemSize));
             cameraView.setDelegate(new CameraView.CameraViewDelegate() {
                 @Override
                 public void onCameraCreated(Camera camera) {
@@ -1670,7 +1670,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 cameraIcon.setWillNotDraw(false);
                 cameraIcon.setClipChildren(true);
             }
-            parentAlert.getContainer().addView(cameraIcon, 2, new FrameLayout.LayoutParams(itemSize, itemSize));
+            parentAlert.getContainer().addView(cameraIcon, 2, new LinearLayout.LayoutParams(itemSize, itemSize));
 
             cameraView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
             cameraView.setEnabled(mediaEnabled);
@@ -1865,7 +1865,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             zoomControlHideRunnable = null;
         }
         if (animated) {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) cameraView.getLayoutParams();
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) cameraView.getLayoutParams();
             animateCameraValues[0] = layoutParams.topMargin = (int) cameraView.getTranslationY();
             cameraView.setLayoutParams(layoutParams);
             cameraView.setTranslationY(0);
@@ -1967,7 +1967,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             cameraView.setTranslationX(0);
             cameraView.setTranslationY(0);
         }
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) cameraView.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) cameraView.getLayoutParams();
         layoutParams.width = (int) (startWidth + (endWidth - startWidth) * value);
         layoutParams.height = (int) (startHeight + (endHeight - startHeight) * value);
         if (value != 0) {
@@ -2089,16 +2089,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             int finalWidth = itemSize - cameraViewOffsetX;
             int finalHeight = itemSize - cameraViewOffsetY - cameraViewOffsetBottomY;
 
-            FrameLayout.LayoutParams layoutParams;
+            LinearLayout.LayoutParams layoutParams;
             if (!cameraOpened) {
                 cameraView.setClipTop(cameraViewOffsetY);
                 cameraView.setClipBottom(cameraViewOffsetBottomY);
-                layoutParams = (FrameLayout.LayoutParams) cameraView.getLayoutParams();
+                layoutParams = (LinearLayout.LayoutParams) cameraView.getLayoutParams();
                 if (layoutParams.height != finalHeight || layoutParams.width != finalWidth) {
                     layoutParams.width = finalWidth;
                     layoutParams.height = finalHeight;
                     cameraView.setLayoutParams(layoutParams);
-                    final FrameLayout.LayoutParams layoutParamsFinal = layoutParams;
+                    final LinearLayout.LayoutParams layoutParamsFinal = layoutParams;
                     AndroidUtilities.runOnUIThread(() -> {
                         if (cameraView != null) {
                             cameraView.setLayoutParams(layoutParamsFinal);
@@ -2107,12 +2107,12 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 }
             }
 
-            layoutParams = (FrameLayout.LayoutParams) cameraIcon.getLayoutParams();
+            layoutParams = (LinearLayout.LayoutParams) cameraIcon.getLayoutParams();
             if (layoutParams.height != finalHeight || layoutParams.width != finalWidth) {
                 layoutParams.width = finalWidth;
                 layoutParams.height = finalHeight;
                 cameraIcon.setLayoutParams(layoutParams);
-                final FrameLayout.LayoutParams layoutParamsFinal = layoutParams;
+                final LinearLayout.LayoutParams layoutParamsFinal = layoutParams;
                 AndroidUtilities.runOnUIThread(() -> {
                     if (cameraIcon != null) {
                         cameraIcon.setLayoutParams(layoutParamsFinal);
