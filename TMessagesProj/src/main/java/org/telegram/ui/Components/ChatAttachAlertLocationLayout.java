@@ -1235,7 +1235,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         //Paris, Tour Eiffel
-        GeoPoint initLocation = new GeoPoint(48.85825, 2.29448);
+        GeoPoint initLocation = new GeoPoint(39.911389, 116.380556);
         final IMapController controller = mapView.getController();
         mapView.setMaxZoomLevel(20.0);
         mapView.setMultiTouchControls(true);
@@ -1244,8 +1244,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         controller.setZoom(7.);
 
         userLocation = new Location("network");
-        userLocation.setLatitude(48.85825);
-        userLocation.setLongitude(2.29448);
+        userLocation.setLatitude(39.911389);
+        userLocation.setLongitude(116.380556);
 
         GpsMyLocationProvider imlp = new GpsMyLocationProvider(getParentActivity());
         imlp.setLocationUpdateMinDistance(10);
@@ -1609,9 +1609,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
         }
         onResumeCalled = true;
-        if (mapView != null && mapsInitialized) {
-            myLocationOverlay.enableMyLocation();
-        }
         fixLayoutInternal(true);
         if (checkPermission && Build.VERSION.SDK_INT >= 23) {
             Activity activity = getParentActivity();
