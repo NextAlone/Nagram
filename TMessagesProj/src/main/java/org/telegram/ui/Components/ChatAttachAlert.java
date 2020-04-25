@@ -103,17 +103,17 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         public void setValue(AttachAlertLayout object, float value) {
             if (value > 0.7f) {
                 float alpha = 1.0f - (1.0f - value) / 0.3f;
-                /*if (nextAttachLayout == locationLayout) {
+                if (nextAttachLayout == locationLayout) {
                     currentAttachLayout.setAlpha(1.0f - alpha);
                     nextAttachLayout.setAlpha(1.0f);
-                } else {*/
+                } else {
                     nextAttachLayout.setAlpha(alpha);
                     nextAttachLayout.onHideShowProgress(alpha);
-                //}
+                }
             } else {
-                //if (nextAttachLayout == locationLayout) {
-                //    nextAttachLayout.setAlpha(0.0f);
-                //}
+                if (nextAttachLayout == locationLayout) {
+                    nextAttachLayout.setAlpha(0.0f);
+                }
             }
             if (nextAttachLayout == pollLayout || currentAttachLayout == pollLayout) {
                 updateSelectedPosition(nextAttachLayout == pollLayout ? 1 : 0);
@@ -293,7 +293,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     private ChatAttachAlertContactsLayout contactsLayout;
     private ChatAttachAlertAudioLayout audioLayout;
     private ChatAttachAlertPollLayout pollLayout;
-    //private ChatAttachAlertLocationLayout locationLayout;
+    private ChatAttachAlertLocationLayout locationLayout;
     private ChatAttachAlertDocumentLayout documentLayout;
     private AttachAlertLayout[] layouts = new AttachAlertLayout[6];
     private AttachAlertLayout currentAttachLayout;
@@ -759,9 +759,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         }
                     } else if (top + backgroundPaddingTop < h) {
                         float toMove = offset;
-                       // if (layout == locationLayout) {
-                       //     toMove += AndroidUtilities.dp(11);
-                       /* } else */if (layout == pollLayout) {
+                        if (layout == locationLayout) {
+                            toMove += AndroidUtilities.dp(11);
+                        } else if (layout == pollLayout) {
                             toMove -= AndroidUtilities.dp(3);
                         } else {
                             toMove += AndroidUtilities.dp(4);
@@ -1078,13 +1078,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (!AndroidUtilities.isGoogleMapsInstalled(parentFragment)) {
                         return;
                     }
-                    /*
                     if (locationLayout == null) {
                         layouts[5] = locationLayout = new ChatAttachAlertLocationLayout(this, getContext());
                         locationLayout.setDelegate((location, live, notify, scheduleDate) -> ((ChatActivity) baseFragment).didSelectLocation(location, live, notify, scheduleDate));
                     }
                     showLayout(locationLayout);
-                     */
                 } else if (num == 9) {
                     if (pollLayout == null) {
                         layouts[1] = pollLayout = new ChatAttachAlertPollLayout(this, getContext());
@@ -1115,7 +1113,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     return false;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.formatString("ChatHintsDelete", R.string.ChatHintsDelete, ContactsController.formatName(button.currentUser.first_name, button.currentUser.last_name)));
                 builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> MediaDataController.getInstance(currentAccount).removeInline(button.currentUser.id));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1402,8 +1400,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             selectedId = 4;
         } else if (layout == contactsLayout) {
             selectedId = 5;
-        //} else if (layout == locationLayout) {
-        //    selectedId = 6;
+        } else if (layout == locationLayout) {
+            selectedId = 6;
         } else if (layout == pollLayout) {
             selectedId = 9;
         }
@@ -1434,7 +1432,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             containerView.removeView(nextAttachLayout);
         }
         int index = containerView.indexOfChild(currentAttachLayout);
-        containerView.addView(nextAttachLayout, /*nextAttachLayout == locationLayout ? index : */index + 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        containerView.addView(nextAttachLayout, nextAttachLayout == locationLayout ? index : index + 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         nextAttachLayout.setTranslationY(AndroidUtilities.dp(78));
         AnimatorSet animator = new AnimatorSet();
@@ -2297,7 +2295,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     galleryButton = buttonsCount++;
                     documentButton = buttonsCount++;
                 }
-                locationButton = -1;//buttonsCount++;
+                locationButton = buttonsCount++;
                 if (pollsEnabled) {
                     pollButton = buttonsCount++;
                 } else {
@@ -2338,7 +2336,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         contactsLayout = null;
         audioLayout = null;
         pollLayout = null;
-        //locationLayout = null;
+        locationLayout = null;
         documentLayout = null;
         for (int a = 1; a < layouts.length; a++) {
             if (layouts[a] == null) {
