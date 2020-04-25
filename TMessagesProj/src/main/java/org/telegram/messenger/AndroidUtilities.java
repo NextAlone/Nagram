@@ -1254,15 +1254,14 @@ public class AndroidUtilities {
                     }
                 }
                 if (!TextUtils.isEmpty(locale2)) {
-                    return new String[]{locale.replace('_', '-'), locale2};
+                    return new String[]{locale.replace('_', '-'), locale2,"en"};
                 } else {
-                    return new String[]{locale.replace('_', '-')};
+                    return new String[]{locale.replace('_', '-'),"en"};
                 }
             } else {
-                return new String[]{locale.replace('_', '-')};
+                return new String[]{locale.replace('_', '-'),"en"};
             }
         } catch (Exception ignore) {
-
         }
         return new String[]{"en"};
     }
