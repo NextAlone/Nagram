@@ -2297,7 +2297,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     galleryButton = buttonsCount++;
                     documentButton = buttonsCount++;
                 }
-                locationButton = buttonsCount++;
+                locationButton = -1;//buttonsCount++;
                 if (pollsEnabled) {
                     pollButton = buttonsCount++;
                 } else {

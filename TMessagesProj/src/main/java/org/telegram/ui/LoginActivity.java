@@ -639,7 +639,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     inputs[2] = builder.addEditText("Port");
                     inputs[2].setInputType(InputType.TYPE_CLASS_NUMBER);
-                    inputs[2].setText(NekoXConfig.customDcPort + "");
+                    if (NekoXConfig.customDcPort != 0) {
+                        inputs[2].setText(NekoXConfig.customDcPort + "");
+                    }
                     inputs[2].setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
                     inputs[2].addTextChangedListener(new TextWatcher() {
                         @Override
@@ -649,11 +651,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             if (StrUtil.isBlank(s.toString())) {
-                                NekoXConfig.customDcPort = 12345;
+                                NekoXConfig.customDcPort = 0;
                             } else {
                                 NekoXConfig.customDcPort = NumberUtil.parseInt(s.toString());
                                 if (NekoXConfig.customDcPort <= 0 || NekoXConfig.customDcPort > 65535) {
-                                    NekoXConfig.customDcPort = 12345;
+                                    NekoXConfig.customDcPort = 0;
                                     inputs[2].setError("Invalid Port");
                                 } else {
                                     inputs[2].setError(null);
@@ -668,7 +670,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     inputs[3] = builder.addEditText("Layer");
                     inputs[3].setInputType(InputType.TYPE_CLASS_NUMBER);
-                    inputs[3].setText(NekoXConfig.customDcLayer + "");
+                    if (NekoXConfig.customDcLayer != 0) {
+                        inputs[3].setText(NekoXConfig.customDcLayer + "");
+                    }
                     inputs[3].setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
                     inputs[3].addTextChangedListener(new TextWatcher() {
                         @Override
@@ -678,11 +682,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             if (StrUtil.isBlank(s.toString())) {
-                                NekoXConfig.customDcPort = 110;
+                                NekoXConfig.customDcLayer = 0;
                             } else {
-                                NekoXConfig.customDcPort = NumberUtil.parseInt(s.toString());
-                                if (NekoXConfig.customDcPort > TLRPC.LAYER) {
-                                    NekoXConfig.customDcPort = 110;
+                                NekoXConfig.customDcLayer = NumberUtil.parseInt(s.toString());
+                                if (NekoXConfig.customDcLayer > TLRPC.LAYER || NekoXConfig.customDcLayer < 85) {
+                                    NekoXConfig.customDcLayer = 0;
                                     inputs[2].setError("Layer not supported");
                                 } else {
                                     inputs[2].setError(null);
@@ -724,15 +728,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                                 return Unit.INSTANCE;
 
-                            } else if (inputs[2].getError() != null) {
+                            } else if (StrUtil.isBlank(inputs[2].getText().toString())) {
 
+                                inputs[2].setError("Port required");
                                 inputs[2].requestFocus();
                                 AndroidUtilities.showKeyboard(inputs[2]);
 
                                 return Unit.INSTANCE;
 
-                            } else if (inputs[3].getError() != null) {
+                            } else if (StrUtil.isBlank(inputs[3].getText().toString())) {
 
+                                inputs[3].setError("Layer required");
                                 inputs[3].requestFocus();
                                 AndroidUtilities.showKeyboard(inputs[3]);
 
@@ -806,7 +812,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         if(NekoXConfig.developerMode) {
 
-            otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, "Test Option");
+            otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, "Custom Backend");
 
         }
 

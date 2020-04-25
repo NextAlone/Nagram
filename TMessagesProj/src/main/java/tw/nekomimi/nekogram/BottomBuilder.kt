@@ -299,7 +299,7 @@ class BottomBuilder(val ctx: Context) {
 
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
             setTextColor(Theme.getColor(Theme.key_dialogTextBlack))
-            setHintTextColor(Theme.getColor(Theme.key_dialogTextBlack))
+            setHintTextColor(Theme.getColor(Theme.key_dialogTextBlue4))
             hint = hintText
             isSingleLine = true
             isFocusable = true

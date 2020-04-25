@@ -208,6 +208,12 @@ public class ConnectionsManager extends BaseController {
 
         int layer = MessagesController.getMainSettings(currentAccount).getInt("layer",TLRPC.LAYER);
 
+        if (layer != TLRPC.LAYER) {
+
+            FileLog.d("use custom layer " + layer);
+
+        }
+
         init(BuildVars.BUILD_VERSION, layer, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 

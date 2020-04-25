@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram
 import com.v2ray.ang.util.Utils
 import org.telegram.messenger.MessagesController
 import org.telegram.tgnet.ConnectionsManager
+import tw.nekomimi.nekogram.utils.AlertUtil
 
 object DataCenter {
 
@@ -91,7 +92,7 @@ object DataCenter {
 
         MessagesController.getMainSettings(account).edit().putInt("network", networkType).apply()
 
-        ConnectionsManager.getInstance(account).init()
+        AlertUtil.showToast("Restart required.")
 
     }
 
