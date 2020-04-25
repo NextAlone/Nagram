@@ -49,11 +49,11 @@ object GoogleWebTranslator : Translator {
                 "&tk=" + tk +
                 "&q=" + TransUtils.encodeURIComponent(query) // 不能用URLEncoder
 
-        val response = HttpUtil.okHttpClient
-                .newCall(Request.Builder()
-                        .url(url)
-                        .applyUserAgent()
-                        .build()).execute()
+        val response = runCatching {
+            HttpUtil.okHttpClient.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+        }.recoverCatching {
+            HttpUtil.okHttpClientNoDoh.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+        }.getOrThrow()
 
         if (response.code != 200) {
 
@@ -70,7 +70,6 @@ object GoogleWebTranslator : Translator {
 
         return result.toString()
     }
-
 
     private val targetLanguages = listOf(
             "sq", "ar", "am", "az", "ga", "et", "eu", "be", "bg", "is", "pl", "bs", "fa",

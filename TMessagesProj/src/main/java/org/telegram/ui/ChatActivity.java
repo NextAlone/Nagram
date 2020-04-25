@@ -220,7 +220,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
-import kotlin.Unit;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -3589,7 +3588,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedMessageView.setTranslationY(-AndroidUtilities.dp(50));
             pinnedMessageView.setVisibility(View.GONE);
             pinnedMessageView.setBackgroundResource(R.drawable.blockpanel);
-            pinnedMessageView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.SRC_IN));
+            pinnedMessageView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
             contentView.addView(pinnedMessageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.TOP | Gravity.LEFT));
             pinnedMessageView.setOnClickListener(v -> {
                 wasManualScroll = true;
@@ -3620,7 +3619,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             closePinned = new ImageView(context);
             closePinned.setImageResource(R.drawable.miniplayer_close);
-            closePinned.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.SRC_IN));
+            closePinned.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.MULTIPLY));
             closePinned.setScaleType(ImageView.ScaleType.CENTER);
             closePinned.setContentDescription(LocaleController.getString("Close", R.string.Close));
             pinnedMessageView.addView(closePinned, LayoutHelper.createFrame(36, 48, Gravity.RIGHT | Gravity.TOP));
@@ -3649,9 +3648,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     builder.setNeutralButton(LocaleController.getString("Hide", R.string.Hide), (dialogInterface, i) -> {
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                         if (chatInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
+                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
                         } else if (userInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
+                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
                         }
                         updatePinnedMessageView(true);
                     });
@@ -3659,9 +3658,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     if (chatInfo != null) {
-                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
+                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
                     } else if (userInfo != null) {
-                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
+                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
                     }
                     updatePinnedMessageView(true);
                 }
@@ -14282,7 +14281,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(89);
                                 icons.add(R.drawable.menu_info);
                             }
-                            if (!TextUtils.isEmpty(selectedObject.messageOwner.message) && NekoConfig.showTranslate) {
+                            if ((StrUtil.isNotBlank(selectedObject.messageOwner.message) || StrUtil.isNotBlank(selectedObject.caption)) && NekoConfig.showTranslate) {
                                 Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(selectedObject.messageOwner.message);
                                 items.add(matcher.find() ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
                                 options.add(88);
@@ -15350,11 +15349,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                     }
-                    String original = selectedObject.messageOwner.message;
+                    String original;
+
+                    if (StrUtil.isNotBlank(selectedObject.caption)) {
+                        original = selectedObject.caption.toString();
+                    } else {
+                        original = selectedObject.messageOwner.message;
+                    }
+
                     Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(original);
                     if (matcher.find()) {
                         if (messageCell != null) {
-                            MessageHelper.setMessageContent(selectedObject, messageCell, original.replace(matcher.group(), ""));
+                            if (StrUtil.isNotBlank(selectedObject.caption)) {
+                                MessageHelper.setMessageContent(selectedObject, messageCell, original.replace(matcher.group(), ""));
+                            } else {
+                                MessageHelper.setMessageCaption(selectedObject, messageCell, original.replace(matcher.group(), ""));
+                            }
                             chatAdapter.updateRowWithMessageObject(selectedObject, true);
                         }
                     } else {
@@ -15362,13 +15372,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (TranslateDb.contains(original)) {
                             if (finalMessageCell != null) {
                                 MessageObject messageObject = finalMessageCell.getMessageObject();
-                                MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                String replacement = original +
                                         "\u200C\u200C\n" +
                                         "\n" +
                                         "--------" +
                                         "\n" +
                                         TranslateDb.query(original) +
-                                        "\u200C\u200C");
+                                        "\u200C\u200C";
+                                if (StrUtil.isNotBlank(selectedObject.caption)) {
+                                    MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
+                                } else {
+                                    MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
+                                }
                                 chatAdapter.updateRowWithMessageObject(messageObject, true);
                             }
                         } else {
@@ -15379,13 +15394,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     TranslateDb.save(original, translation);
                                     if (getParentActivity() != null && finalMessageCell != null) {
                                         MessageObject messageObject = finalMessageCell.getMessageObject();
-                                        MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                        String replacement = original +
                                                 "\u200C\u200C\n" +
                                                 "\n" +
                                                 "--------" +
                                                 "\n" +
-                                                translation +
-                                                "\u200C\u200C");
+                                                TranslateDb.query(original) +
+                                                "\u200C\u200C";
+                                        if (StrUtil.isNotBlank(selectedObject.caption)) {
+                                            MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
+                                        } else {
+                                            MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
+                                        }
                                         chatAdapter.updateRowWithMessageObject(messageObject, true);
                                     }
                                 }
@@ -16922,7 +16942,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 File finalLocFile = locFile;
                                 AlertUtil.showConfirm(getParentActivity(),
                                         LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
-                                        R.drawable.baseline_security_24,LocaleController.getString("Import", R.string.Import),
+                                        R.drawable.baseline_security_24, LocaleController.getString("Import", R.string.Import),
                                         false, () -> {
                                             String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
                                             if (!StrUtil.isBlank(status)) {
@@ -16935,7 +16955,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 File finalLocFile = locFile;
                                 AlertUtil.showConfirm(getParentActivity(),
                                         LocaleController.getString("ImportStickersList", R.string.ImportStickersList),
-                                        R.drawable.deproko_baseline_stickers_filled_24,LocaleController.getString("Import", R.string.Import), false, () -> {
+                                        R.drawable.deproko_baseline_stickers_filled_24, LocaleController.getString("Import", R.string.Import), false, () -> {
                                             presentFragment(new StickersActivity(finalLocFile));
                                         });
 

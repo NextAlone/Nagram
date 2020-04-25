@@ -9,8 +9,7 @@ object DataCenter {
     @JvmStatic
     fun applyOfficalDataCanter(account: Int) {
 
-        MessagesController.getMainSettings(account).edit().putInt("network", 0).apply()
-        MessagesController.getMainSettings(account).edit().putBoolean("custom_dc", false).apply()
+        MessagesController.getMainSettings(account).edit().remove("network").remove("custom_dc").remove("layer").apply()
 
         if (ConnectionsManager.native_isTestBackend(account) != 0) {
 
@@ -33,13 +32,14 @@ object DataCenter {
         applyDataCanter(account, 5, "149.154.171.5")
         applyDataCanter(account, 5, "2001:67c:4e8:f005:0000:0000:0000:000a")
 
+        ConnectionsManager.native_cleanUp(account,true)
+
     }
 
     @JvmStatic
     fun applyTestDataCenter(account: Int) {
 
-        MessagesController.getMainSettings(account).edit().putInt("network", 0).apply()
-        MessagesController.getMainSettings(account).edit().putBoolean("custom_dc", false).apply()
+        MessagesController.getMainSettings(account).edit().remove("network").remove("custom_dc").remove("layer").apply()
 
         if (ConnectionsManager.native_isTestBackend(account) == 0) {
 
@@ -50,9 +50,12 @@ object DataCenter {
     }
 
     @JvmStatic
-    fun applyCustomDataCenter(account: Int, ipv4Address: String = "", ipv6Address: String = "", port: Int) {
+    fun applyCustomDataCenter(account: Int, ipv4Address: String = "", ipv6Address: String = "", port: Int,layer: Int) {
 
-        MessagesController.getMainSettings(account).edit().putBoolean("custom_dc", true).apply()
+        MessagesController.getMainSettings(account).edit()
+                .putBoolean("custom_dc", true)
+                .putInt("layer", layer)
+                .apply()
 
         if (ConnectionsManager.native_isTestBackend(account) != 0) {
 
@@ -87,6 +90,8 @@ object DataCenter {
         }
 
         MessagesController.getMainSettings(account).edit().putInt("network", networkType).apply()
+
+        ConnectionsManager.getInstance(account).init()
 
     }
 

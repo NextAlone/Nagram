@@ -411,7 +411,7 @@ public class BottomSheet extends Dialog {
                     continue;
                 }
                 if (!onCustomLayout(child, left, top, right, bottom - (drawNavigationBar ? bottomInset : 0))) {
-                    final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
+                    final LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.getLayoutParams();
 
                     final int width = child.getMeasuredWidth();
                     final int height = child.getMeasuredHeight();
@@ -563,7 +563,7 @@ public class BottomSheet extends Dialog {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 textView.setGravity(Gravity.CENTER_VERTICAL);
-                textView.setPadding(AndroidUtilities.dp(16),0,0,0);
+                textView.setPadding(AndroidUtilities.dp(16), 0, 0, 0);
                 addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
             } else if (type == 1) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -614,6 +614,7 @@ public class BottomSheet extends Dialog {
         public TextView getTextView() {
             return textView;
         }
+
     }
 
     @Override

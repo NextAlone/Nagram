@@ -155,14 +155,18 @@ public class ConnectionsManager extends BaseController {
     public ConnectionsManager(int instance) {
         super(instance);
         connectionState = native_getConnectionState(currentAccount);
+        init();
+    }
+
+    public void init() {
         String deviceModel;
         String systemLangCode;
         String langCode;
         String appVersion;
         String systemVersion;
         File config = ApplicationLoader.getFilesDirFixed();
-        if (instance != 0) {
-            config = new File(config, "account" + instance);
+        if (currentAccount != 0) {
+            config = new File(config, "account" + currentAccount);
             config.mkdirs();
         }
         String configPath = config.toString();
@@ -202,7 +206,9 @@ public class ConnectionsManager extends BaseController {
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
 
-        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+        int layer = MessagesController.getMainSettings(currentAccount).getInt("layer",TLRPC.LAYER);
+
+        init(BuildVars.BUILD_VERSION, layer, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 
     public boolean isPushConnectionEnabled() {

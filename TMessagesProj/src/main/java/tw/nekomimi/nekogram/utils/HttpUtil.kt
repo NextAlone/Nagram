@@ -21,6 +21,9 @@ object HttpUtil {
     @JvmField
     val okHttpClient = OkHttpClient().newBuilder().dns(DnsFactory).connectTimeout(5, TimeUnit.SECONDS).build()
 
+    @JvmField
+    val okHttpClientNoDoh = OkHttpClient().newBuilder().dns(DnsFactory).connectTimeout(5, TimeUnit.SECONDS).build()
+
     @JvmStatic
     val okHttpClientWithCurrProxy: OkHttpClient
         get() {

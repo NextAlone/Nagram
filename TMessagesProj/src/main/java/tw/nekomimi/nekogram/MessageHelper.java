@@ -35,6 +35,15 @@ public class MessageHelper extends BaseController {
         chatMessageCell.invalidate();
     }
 
+    public static void setMessageCaption(MessageObject messageObject, ChatMessageCell chatMessageCell, String message) {
+        messageObject.caption = message;
+        messageObject.forceUpdate = true;
+        messageObject.applyNewText();
+        messageObject.resetLayout();
+        chatMessageCell.requestLayout();
+        chatMessageCell.invalidate();
+    }
+
     public static MessageHelper getInstance(int num) {
         MessageHelper localInstance = Instance[num];
         if (localInstance == null) {
@@ -160,12 +169,12 @@ public class MessageHelper extends BaseController {
                             }
                         }
                         for (int userId : ids) {
-                            deleteUserChannelHistory(chat,userId,0);
+                            deleteUserChannelHistory(chat, userId, 0);
                         }
                         if (!msgIds.isEmpty()) {
                             getMessagesController().deleteMessages(msgIds, random_ids, null, dialog_id, channelId, true, false);
                         }
-                        deleteChannelHistory(dialog_id,chat, lastMessageId);
+                        deleteChannelHistory(dialog_id, chat, lastMessageId);
 
                     }
                 }
@@ -188,7 +197,7 @@ public class MessageHelper extends BaseController {
                 if (res.offset > 0) {
                     deleteUserChannelHistory(chat, userId, res.offset);
                 }
-               getMessagesController().processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
+                getMessagesController().processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
             }
         });
     }

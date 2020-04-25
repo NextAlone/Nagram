@@ -536,11 +536,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-                    EditText[] inputs = new EditText[3];
+                    EditText[] inputs = new EditText[4];
 
-                    builder.addTitle("TEST TITLE",
+                    builder.addTitle("Custom Backend",
                             true,
-                            "TEST NOTICE");
+                            "~");
 
                     int dcType;
 
@@ -666,6 +666,35 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
+                    inputs[3] = builder.addEditText("Layer");
+                    inputs[3].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    inputs[3].setText(NekoXConfig.customDcLayer + "");
+                    inputs[3].setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                    inputs[3].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                NekoXConfig.customDcPort = 110;
+                            } else {
+                                NekoXConfig.customDcPort = NumberUtil.parseInt(s.toString());
+                                if (NekoXConfig.customDcPort > TLRPC.LAYER) {
+                                    NekoXConfig.customDcPort = 110;
+                                    inputs[2].setError("Layer not supported");
+                                } else {
+                                    inputs[2].setError(null);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
                     if (dcType < 2) {
 
                         for (EditText input : inputs) input.setVisibility(View.GONE);
@@ -695,6 +724,20 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                                 return Unit.INSTANCE;
 
+                            } else if (inputs[2].getError() != null) {
+
+                                inputs[2].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[2]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (inputs[3].getError() != null) {
+
+                                inputs[3].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[3]);
+
+                                return Unit.INSTANCE;
+
                             } else if (StrUtil.isBlank(NekoXConfig.customDcIpv4) && StrUtil.isBlank(NekoXConfig.customDcIpv6)) {
 
                                 inputs[0].requestFocus();
@@ -720,7 +763,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         } else {
 
-                            DataCenter.applyCustomDataCenter(currentAccount,NekoXConfig.customDcIpv4,NekoXConfig.customDcIpv6,NekoXConfig.customDcPort);
+                            DataCenter.applyCustomDataCenter(currentAccount,NekoXConfig.customDcIpv4,NekoXConfig.customDcIpv6,NekoXConfig.customDcPort,NekoXConfig.customDcLayer);
                             NekoXConfig.saveCustomDc();
 
                         }

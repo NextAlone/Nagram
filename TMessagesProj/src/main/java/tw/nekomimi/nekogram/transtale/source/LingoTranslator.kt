@@ -19,7 +19,7 @@ object LingoTranslator : Translator {
 
         }
 
-        val response = HttpUtil.okHttpClient.newCall(Request.Builder()
+        val request = Request.Builder()
                 .url("https://api.interpreter.caiyunai.com/v1/translator")
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .header("X-Authorization", "token 9sdftiq37bnv410eon2l") // 白嫖
@@ -31,7 +31,13 @@ object LingoTranslator : Translator {
                     put("request_id", System.currentTimeMillis().toString())
                     put("detect", true)
 
-                }.toString().toRequestBody()).build()).execute()
+                }.toString().toRequestBody()).build()
+
+        val response = runCatching {
+            HttpUtil.okHttpClient.newCall(request).execute()
+        }.recoverCatching {
+            HttpUtil.okHttpClientNoDoh.newCall(request).execute()
+        }.getOrThrow()
 
         if (response.code != 200) {
 
