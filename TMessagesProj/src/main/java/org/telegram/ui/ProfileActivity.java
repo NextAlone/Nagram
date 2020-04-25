@@ -2994,6 +2994,56 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         updateSelectedMediaTabText();
 
+        View.OnLongClickListener longClickUserInfo = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                if (user_id == 0) {
+                    return false;
+                }
+                if (!UserObject.isUserSelf(getMessagesController().getUser(user_id))) {
+                    return false;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle("User info menu");
+                String[] items = {
+                    "Change phone number",
+                    "Change username",
+                    "Change bio",
+                };
+                builder.setItems(items, (d, which) -> {
+                    if (which == 0) {
+                        presentFragment(new ChangePhoneActivity());
+                    } else if (which == 1) {
+                        presentFragment(new ChangeUsernameActivity());
+                    } else if (which == 2) {
+                        presentFragment(new ChangeBioActivity());
+                    }
+                });
+                builder.setNegativeButton(
+                    LocaleController.getString("Cancel", R.string.Cancel),
+                    null);
+                showDialog(builder.create());
+
+                return true;
+            }
+        };
+
+        for (int a = 0; a < nameTextView.length; a++) {
+            if (playProfileAnimation == 0 && a == 0) {
+                continue;
+            }
+            nameTextView[a].setOnLongClickListener(longClickUserInfo);
+        }
+        for (int a = 0; a < onlineTextView.length; a++) {
+            if (playProfileAnimation == 0 && a == 0) {
+                continue;
+            }
+            onlineTextView[a].setOnLongClickListener(longClickUserInfo);
+        }
+        avatarImage.setOnLongClickListener(longClickUserInfo);
+
         return fragmentView;
     }
 
