@@ -10,7 +10,7 @@ object DataCenter {
     @JvmStatic
     fun applyOfficalDataCanter(account: Int) {
 
-        MessagesController.getMainSettings(account).edit().remove("layer").apply()
+        MessagesController.getMainSettings(account).edit().remove("layer").remove("custom_dc").apply()
 
         if (ConnectionsManager.native_isTestBackend(account) != 0) {
 
@@ -40,7 +40,7 @@ object DataCenter {
     @JvmStatic
     fun applyTestDataCenter(account: Int) {
 
-        MessagesController.getMainSettings(account).edit().remove("layer").apply()
+        MessagesController.getMainSettings(account).edit().remove("layer").remove("custom_dc").apply()
 
         if (ConnectionsManager.native_isTestBackend(account) == 0) {
 
@@ -53,7 +53,7 @@ object DataCenter {
     @JvmStatic
     fun applyCustomDataCenter(account: Int, ipv4Address: String = "", ipv6Address: String = "", port: Int,layer: Int) {
 
-        MessagesController.getMainSettings(account).edit().putInt("layer", layer).apply()
+        MessagesController.getMainSettings(account).edit().putInt("layer", layer).putBoolean("custom_dc",true).apply()
 
         if (ConnectionsManager.native_isTestBackend(account) != 0) {
 

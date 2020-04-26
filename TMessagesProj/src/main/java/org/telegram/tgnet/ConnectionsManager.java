@@ -532,14 +532,14 @@ public class ConnectionsManager extends BaseController {
 
     public static void onRequestNewServerIpAndPort(final int second, final int currentAccount) {
         Utilities.stageQueue.postRunnable(() -> {
+            if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
+                return;
+            }
+
             if (currentTask != null || second == 0 && Math.abs(lastDnsRequestTime - System.currentTimeMillis()) < 10000 || !ApplicationLoader.isNetworkOnline()) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("don't start task, current task = " + currentTask + " next task = " + second + " time diff = " + Math.abs(lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ApplicationLoader.isNetworkOnline());
                 }
-                return;
-            }
-
-            if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
                 return;
             }
 
