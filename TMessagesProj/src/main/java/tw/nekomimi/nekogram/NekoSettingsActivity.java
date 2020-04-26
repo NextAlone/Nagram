@@ -1199,10 +1199,10 @@ public class NekoSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb);
                                 break;
                             case 3:
-                                value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
+                                value = LocaleController.getString("ProviderYandex", R.string.ProviderYandex);
                                 break;
                             case 4:
-                                value = LocaleController.getString("ProviderYandex", R.string.ProviderYandex);
+                                value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
                                 break;
                             default:
                                 value = "Unknown";
