@@ -338,16 +338,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public void checkConnection() {
-        boolean useIpv6;
-        int networkType = MessagesController.getMainSettings(currentAccount).getInt("network", 0);
-        if (networkType == 4) {
-            useIpv6 = false;
-        } else if (networkType == 6) {
-            useIpv6 = true;
-        } else {
-            useIpv6 = useIpv6Address();
-        }
-        native_setUseIpv6(currentAccount, useIpv6);
+        native_setUseIpv6(currentAccount, useIpv6Address());
         native_setNetworkAvailable(currentAccount, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), ApplicationLoader.isConnectionSlow());
     }
 

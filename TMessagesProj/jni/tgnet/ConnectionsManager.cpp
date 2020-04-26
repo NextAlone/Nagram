@@ -3054,7 +3054,9 @@ void ConnectionsManager::applyDatacenterAddress(uint32_t datacenterId, std::stri
         Datacenter *datacenter = getDatacenterWithId(datacenterId);
         if (datacenter != nullptr) {
             std::vector<TcpAddress> addresses;
-            addresses.push_back(TcpAddress(ipAddress, port, flag, ""));
+            if (ipAddress.length() != 0) {
+                addresses.push_back(TcpAddress(ipAddress, port, flag, ""));
+            }
             datacenter->suspendConnections(true);
             datacenter->replaceAddresses(addresses, flag);
             datacenter->resetAddressAndPortNum();

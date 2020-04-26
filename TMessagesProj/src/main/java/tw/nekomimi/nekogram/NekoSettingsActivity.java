@@ -430,7 +430,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 builder.setItems(new String[]{
                         LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                         LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
-                        LocaleController.getString("ProviderYandex",R.string.ProviderYandex),
+                        LocaleController.getString("ProviderYandex", R.string.ProviderYandex),
                         LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
 
                         LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
@@ -623,11 +623,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         connectionRow = rowCount++;
 
-        if (MessagesController.getMainSettings(currentAccount).getInt("network", 0) == 0) {
-
-            ipv6Row = rowCount++;
-
-        }
+        ipv6Row = rowCount++;
 
         disableProxyWhenVpnEnabledRow = rowCount++;
         connection2Row = rowCount++;
