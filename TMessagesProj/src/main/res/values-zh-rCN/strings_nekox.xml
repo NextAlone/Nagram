@@ -8,6 +8,8 @@
     <string name="CustomApiInput">手动输入</string>
     <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
+    <string name="GoogleCloudTransKey">Google 云翻译密钥</string>
+    <string name="GoogleCloudTransKeyNotice">如果您设置了一个谷歌云密钥： 云翻译API将被调用，而不是模拟表单提交到网页版 (快速、稳定和节省流量)。</string>
     <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="UseDefaultTheme">使用默认主题 *</string>

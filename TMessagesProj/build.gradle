@@ -62,7 +62,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
 
-        versionName "6.1.0.0-rc1"
+        versionName "6.1.0.1"
         versionCode = 25
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']

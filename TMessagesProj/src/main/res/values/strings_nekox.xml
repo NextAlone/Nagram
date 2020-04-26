@@ -13,6 +13,7 @@
     <string name="AllowFlashCall">Allow flash call</string>
 
     <string name="ChangeTranslateProvider">Change Provider</string>
+    <string name="ProviderYandex">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">If you set up a Google Cloud Trans Key, the cloud translation API will be called instead of submitting a fake form to the web version when translating (faster, stable and saving traffic).</string>
 

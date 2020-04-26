@@ -20,7 +20,7 @@ interface Translator {
 
             var toLang = to.language
 
-            if (NekoConfig.translationProvider < 3 || NekoConfig.translationProvider == 4) {
+            if (NekoConfig.translationProvider < 3) {
 
                 if (to.language == "zh" && (to.country.toUpperCase() == "CN" || to.country.toUpperCase() == "TW")) {
                     toLang = to.language + "-" + to.country.toUpperCase()
@@ -33,6 +33,7 @@ interface Translator {
             val translator = when (NekoConfig.translationProvider) {
                 in 1..2 -> GoogleWebTranslator
                 3 -> LingoTranslator
+                4 -> YandexTranslator
                 else -> throw IllegalArgumentException()
             }
 

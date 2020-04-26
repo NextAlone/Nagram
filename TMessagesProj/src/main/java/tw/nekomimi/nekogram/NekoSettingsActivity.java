@@ -430,6 +430,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 builder.setItems(new String[]{
                         LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                         LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
+                        LocaleController.getString("ProviderYandex",R.string.ProviderYandex),
                         LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
 
                         LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
@@ -452,17 +453,20 @@ public class NekoSettingsActivity extends BaseFragment {
                         case 2:
                             target = 3;
                             break;
-
                         case 3:
+                            target = 4;
+                            break;
+
+                        case 5:
                             target = -1;
                             break;
-                        case 4:
+                        case 6:
                             target = -2;
                             break;
-                        case 5:
+                        case 7:
                             target = -3;
                             break;
-                        case 6:
+                        case 8:
                             target = -4;
                     }
 
@@ -1197,6 +1201,9 @@ public class NekoSettingsActivity extends BaseFragment {
                             case 3:
                                 value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
                                 break;
+                            case 4:
+                                value = LocaleController.getString("ProviderYandex", R.string.ProviderYandex);
+                                break;
                             default:
                                 value = "Unknown";
                         }
@@ -1284,7 +1291,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Connection", R.string.Connection));
                     } else if (position == chatRow) {
                         headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
-                    } else if (position == trans2Row) {
+                    } else if (position == transRow) {
                         headerCell.setText(LocaleController.getString("Translate", R.string.Translate));
                     } else if (position == experimentRow) {
                         headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));

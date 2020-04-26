@@ -1,17 +1,12 @@
 package tw.nekomimi.nekogram.utils
 
 import android.content.Context
-import android.content.DialogInterface
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.AlertDialog
-import org.telegram.ui.ActionBar.Theme
-import org.telegram.ui.Cells.TextCell
 import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.NumberPicker
 import tw.nekomimi.nekogram.BottomBuilder
@@ -53,9 +48,9 @@ object AlertUtil {
 
     @JvmOverloads
     @JvmStatic
-    fun showProgress(ctx: Context,text: String = LocaleController.getString("Loading",R.string.Loading)): AlertDialog {
+    fun showProgress(ctx: Context, text: String = LocaleController.getString("Loading", R.string.Loading)): AlertDialog {
 
-        return AlertDialog.Builder(ctx,1).apply {
+        return AlertDialog.Builder(ctx, 1).apply {
 
             setMessage(text)
 
@@ -63,7 +58,7 @@ object AlertUtil {
 
     }
 
-    fun showInput(ctx: Context, title: String, hint: String, onInput: (AlertDialog.Builder, String) -> String) = UIUtil.runOnUIThread( Runnable {
+    fun showInput(ctx: Context, title: String, hint: String, onInput: (AlertDialog.Builder, String) -> String) = UIUtil.runOnUIThread(Runnable {
 
         val builder = AlertDialog.Builder(ctx)
 
@@ -79,7 +74,7 @@ object AlertUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun showConfirm(ctx: Context, title: String, text: String? = null,icon: Int, button: String, red: Boolean, listener: Runnable) = UIUtil.runOnUIThread(Runnable {
+    fun showConfirm(ctx: Context, title: String, text: String? = null, icon: Int, button: String, red: Boolean, listener: Runnable) = UIUtil.runOnUIThread(Runnable {
 
         /*
 
@@ -109,11 +104,11 @@ object AlertUtil {
 
         } else {
 
-            builder.addTitle(title,false)
+            builder.addTitle(title, false)
 
         }
 
-        builder.addItem(button, icon,red) {
+        builder.addItem(button, icon, red) {
 
             builder.dismiss()
 
@@ -151,6 +146,7 @@ object AlertUtil {
             popup.setItems(arrayOf(
                     LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                     LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
+                    LocaleController.getString("ProviderYandex", R.string.ProviderYandex),
                     LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud)
             )) { item, _ ->
 

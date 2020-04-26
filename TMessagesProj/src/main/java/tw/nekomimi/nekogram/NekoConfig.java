@@ -156,6 +156,7 @@ public class NekoConfig {
         hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
         useDefaultTheme = preferences.getBoolean("use_default_theme", false);
         showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
+
         googleCloudTranslateKey = preferences.getString("google_cloud_translate_key",null);
 
     }
