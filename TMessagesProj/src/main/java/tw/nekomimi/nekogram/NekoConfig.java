@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsService;
-import org.telegram.messenger.SharedConfig;
 
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.UIUtil;
@@ -88,6 +87,8 @@ public class NekoConfig {
     public static boolean useDefaultTheme;
     public static boolean showIdAndDc;
 
+    public static String googleCloudTranslateKey;
+
     static {
 
         useIPv6 = preferences.getBoolean("useIPv6", false);
@@ -155,6 +156,7 @@ public class NekoConfig {
         hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
         useDefaultTheme = preferences.getBoolean("use_default_theme", false);
         showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
+        googleCloudTranslateKey = preferences.getString("google_cloud_translate_key",null);
 
     }
 
@@ -588,6 +590,12 @@ public class NekoConfig {
     public static void toggleShowIdAndDc() {
 
         preferences.edit().putBoolean("show_id_and_dc", showIdAndDc = !showIdAndDc).commit();
+
+    }
+
+    public static void setGoogleTranslateKey(String key) {
+
+        preferences.edit().putString("google_cloud_translate_key", googleCloudTranslateKey = key).commit();
 
     }
 

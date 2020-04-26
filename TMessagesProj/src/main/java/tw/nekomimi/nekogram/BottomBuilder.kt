@@ -32,7 +32,7 @@ class BottomBuilder(val ctx: Context) {
             isFillViewport = true
             isVerticalScrollBarEnabled = false
 
-        },LinearLayout.LayoutParams(-1,-1))
+        }, LinearLayout.LayoutParams(-1, -1))
 
         builder.setCustomView(this)
 
@@ -66,7 +66,19 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addTitle(title: String, bigTitle: Boolean = true, subTitle: String? = null): HeaderCell {
+    fun addTitle(title: String, bigTitle: Boolean = true): HeaderCell {
+
+        return addTitle(title, bigTitle, null)
+
+    }
+
+    fun addTitle(title: String, subTitle: String): HeaderCell {
+
+        return addTitle(title, true, subTitle)
+
+    }
+
+    fun addTitle(title: String, bigTitle: Boolean, subTitle: String?): HeaderCell {
 
         val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, subTitle != null) else HeaderCell(ctx)
 
@@ -207,7 +219,7 @@ class BottomBuilder(val ctx: Context) {
     @JvmOverloads
     fun addCancelItem() {
 
-        addItem(LocaleController.getString("Cancel", R.string.Cancel),R.drawable.baseline_cancel_24) { dismiss() }
+        addItem(LocaleController.getString("Cancel", R.string.Cancel), R.drawable.baseline_cancel_24) { dismiss() }
 
     }
 
@@ -215,6 +227,14 @@ class BottomBuilder(val ctx: Context) {
     fun addCancelButton(left: Boolean = true) {
 
         addButton(LocaleController.getString("Cancel", R.string.Cancel), left = left) { dismiss() }
+
+    }
+
+
+    @JvmOverloads
+    fun addOkButton(listener: ((TextView) -> Unit)) {
+
+        addButton(LocaleController.getString("OK", R.string.OK)) { listener(it); }
 
     }
 
@@ -249,13 +269,13 @@ class BottomBuilder(val ctx: Context) {
 
     }
 
-    fun addItem(text: String, icon: Int = 0,red: Boolean = false, listener: (cell: TextCell) -> Unit): TextCell {
+    fun addItem(text: String, icon: Int = 0, red: Boolean = false, listener: (cell: TextCell) -> Unit): TextCell {
 
         return TextCell(ctx).apply {
 
             background = Theme.getSelectorDrawable(true)
 
-            setTextAndIcon(text, icon,true)
+            setTextAndIcon(text, icon, true)
 
             setOnClickListener {
 
@@ -265,7 +285,7 @@ class BottomBuilder(val ctx: Context) {
 
             if (red) {
 
-                setColors("key_dialogTextRed2","key_dialogTextRed2")
+                setColors("key_dialogTextRed2", "key_dialogTextRed2")
 
             }
 

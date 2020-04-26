@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
 
+import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 
@@ -93,9 +95,13 @@ public class NekoSettingsActivity extends BaseFragment {
     private int hideAllTabRow;
     private int mapPreviewRow;
     private int stickerSizeRow;
-    private int translationProviderRow;
     private int messageMenuRow;
     private int chat2Row;
+
+    private int transRow;
+    private int translationProviderRow;
+    private int googleCloudTranslateKeyRow;
+    private int trans2Row;
 
     private int settingsRow;
     private int typefaceRow;
@@ -469,6 +475,44 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 builder.show();
 
+            } else if (position == googleCloudTranslateKeyRow) {
+
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                builder.addTitle(
+                        LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey),
+                        LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice)
+                );
+
+                EditText keyField = builder.addEditText("Key");
+
+                if (StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)) {
+
+                    keyField.setText(NekoConfig.googleCloudTranslateKey);
+
+                }
+
+                builder.addCancelButton();
+
+                builder.addOkButton((it) -> {
+
+                    String key = keyField.getText().toString();
+
+                    if (StrUtil.isBlank(key)) key = null;
+
+                    NekoConfig.setGoogleTranslateKey(key);
+
+                    builder.dismiss();
+
+                    return Unit.INSTANCE;
+
+                });
+
+                builder.show();
+
+                keyField.requestFocus();
+                AndroidUtilities.showKeyboard(keyField);
+
             } else if (position == pauseMusicOnRecordRow) {
                 SharedConfig.togglePauseMusicOnRecord();
                 if (view instanceof TextCheckCell) {
@@ -604,8 +648,12 @@ public class NekoSettingsActivity extends BaseFragment {
         mapPreviewRow = rowCount++;
         stickerSizeRow = rowCount++;
         messageMenuRow = rowCount++;
-        translationProviderRow = rowCount++;
         chat2Row = rowCount++;
+
+        transRow = rowCount++;
+        translationProviderRow = rowCount++;
+        googleCloudTranslateKeyRow = rowCount++;
+        trans2Row = rowCount++;
 
         settingsRow = rowCount++;
         hidePhoneRow = rowCount++;
@@ -1120,6 +1168,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("MessageMenu", R.string.MessageMenu), true);
                     } else if (position == sortMenuRow) {
                         textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
+                    } else if (position == googleCloudTranslateKeyRow) {
+                        textCell.setText(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), true);
                     } else if (position == deleteAccountRow) {
                         textCell.setText(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), false);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
@@ -1234,6 +1284,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Connection", R.string.Connection));
                     } else if (position == chatRow) {
                         headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
+                    } else if (position == trans2Row) {
+                        headerCell.setText(LocaleController.getString("Translate", R.string.Translate));
                     } else if (position == experimentRow) {
                         headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
                     } else if (position == dialogsRow) {
@@ -1263,7 +1315,8 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == hideProxySponsorChannelRow || position == skipOpenLinkConfiirm ||
                     position == disableFilteringRow || position == stickerSizeRow ||
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
-                    position == translationProviderRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
+                    position == translationProviderRow || position == googleCloudTranslateKeyRow ||
+                    position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
                     position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
@@ -1310,10 +1363,10 @@ public class NekoSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == connection2Row || position == dialogs2Row || position == chat2Row || position == experiment2Row || position == privacy2Row) {
+            if (position == connection2Row || position == dialogs2Row || position == chat2Row || position == trans2Row || position == experiment2Row || position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
-                    position == sortMenuRow ||
+                    position == sortMenuRow || position == googleCloudTranslateKeyRow ||
                     position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
                 return 2;
             } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||
@@ -1328,7 +1381,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
                     position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow) {
                 return 3;
-            } else if (position == settingsRow || position == connectionRow || position == chatRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
+            } else if (position == settingsRow || position == connectionRow || position == chatRow || position == transRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;
             } else if (position == needRestartRow) {
                 return 7;

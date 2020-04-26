@@ -19,10 +19,8 @@ fun Request.Builder.applyUserAgent(): Request.Builder {
 object HttpUtil {
 
     @JvmField
-    val okHttpClient = OkHttpClient().newBuilder().dns(DnsFactory).connectTimeout(5, TimeUnit.SECONDS).build()
-
-    @JvmField
-    val okHttpClientNoDoh = OkHttpClient().newBuilder().dns(DnsFactory).connectTimeout(5, TimeUnit.SECONDS).build()
+    val okHttpClient = OkHttpClient().newBuilder().dns(DnsFactory).connectTimeout(3, TimeUnit.SECONDS).build()
+    val okHttpClientNoDoh = OkHttpClient().newBuilder().connectTimeout(3, TimeUnit.SECONDS).build()
 
     @JvmStatic
     val okHttpClientWithCurrProxy: OkHttpClient

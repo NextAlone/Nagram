@@ -20,7 +20,7 @@ interface Translator {
 
             var toLang = to.language
 
-            if (NekoConfig.translationProvider < 3) {
+            if (NekoConfig.translationProvider < 3 || NekoConfig.translationProvider == 4) {
 
                 if (to.language == "zh" && (to.country.toUpperCase() == "CN" || to.country.toUpperCase() == "TW")) {
                     toLang = to.language + "-" + to.country.toUpperCase()

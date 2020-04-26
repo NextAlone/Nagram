@@ -1,11 +1,13 @@
 package tw.nekomimi.nekogram.transtale.source
 
 import android.text.TextUtils
+import cn.hutool.core.util.StrUtil
 import okhttp3.Request
 import org.json.JSONArray
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.NekoXPushService
 import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.utils.HttpUtil
@@ -17,6 +19,8 @@ object GoogleWebTranslator : Translator {
     lateinit var tkk: LongArray
 
     override fun doTranslate(from: String, to: String, query: String): String {
+
+        if (NekoConfig.translationProvider != 2 && StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)) return GoogleCloudTranslator.doTranslate(from, to, query)
 
         if (to !in targetLanguages) {
 
@@ -50,9 +54,9 @@ object GoogleWebTranslator : Translator {
                 "&q=" + TransUtils.encodeURIComponent(query) // 不能用URLEncoder
 
         val response = runCatching {
-            HttpUtil.okHttpClient.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+            (if (NekoConfig.translationProvider == 2) HttpUtil.okHttpClientNoDoh else HttpUtil.okHttpClient).newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
         }.recoverCatching {
-            HttpUtil.okHttpClientNoDoh.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+            HttpUtil.okHttpClientWithCurrProxy.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
         }.getOrThrow()
 
         if (response.code != 200) {
@@ -61,7 +65,7 @@ object GoogleWebTranslator : Translator {
 
         }
 
-        var result = StringBuilder()
+        val result = StringBuilder()
 
         val array = JSONArray(response.body!!.string()).getJSONArray(0)
         for (index in 0 until array.length()) {

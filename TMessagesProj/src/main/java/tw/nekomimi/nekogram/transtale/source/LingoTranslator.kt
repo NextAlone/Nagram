@@ -36,7 +36,7 @@ object LingoTranslator : Translator {
         val response = runCatching {
             HttpUtil.okHttpClient.newCall(request).execute()
         }.recoverCatching {
-            HttpUtil.okHttpClientNoDoh.newCall(request).execute()
+            HttpUtil.okHttpClientWithCurrProxy.newCall(request).execute()
         }.getOrThrow()
 
         if (response.code != 200) {
