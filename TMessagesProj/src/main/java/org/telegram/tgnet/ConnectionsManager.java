@@ -169,6 +169,12 @@ public class ConnectionsManager extends BaseController {
             config = new File(config, "account" + currentAccount);
             config.mkdirs();
         }
+        File tgnetFile = new File(config,"tgnet.dat");
+        File tgnetFileNew = new File(config,"tgnet.dat.new");
+        if (tgnetFileNew.isFile()) {
+            tgnetFile.delete();
+            tgnetFileNew.renameTo(tgnetFile);
+        }
         String configPath = config.toString();
         boolean enablePushConnection = isPushConnectionEnabled();
         try {
