@@ -35,7 +35,7 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.0.2'
     implementation 'org.dizitart:nitrite:3.4.1'
     implementation 'net.lingala.zip4j:zip4j:2.5.2'
-    implementation 'cn.hutool:hutool-core:5.3.1'
+    implementation 'cn.hutool:hutool-core:5.3.2'
 
     implementation files('libs/libv2ray.aar')
     implementation files('libs/ss-libev-release.aar')

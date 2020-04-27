@@ -72,12 +72,13 @@ jobs:
             ./gradlew ssr-libev:assembleRelease &&
             rm -rf TMessagesProj/libs/*-libev-release.aar &&
             find . -name "*-libev-release.aar" -exec mv {} TMessagesProj/libs \; &&
-            ./gradlew assembleAfatFoss
+            ./gradlew assembleAfatFoss &&
+            echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*.apk")
           EOF
       - uses: actions/upload-artifact@master
         with:
           name: NekoX-Foss
-          path: "TMessagesProj/build/outputs/apk/afat/foss"
+          path: ${{ env.APK_FILE }}
       - uses: actions/upload-artifact@master
         with:
           name: V2ray Library

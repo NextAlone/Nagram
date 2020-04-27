@@ -8,3 +8,5 @@ local.properties
 .cxx
 afat
 arm64
+/TMessagesProj/jni/ffmpeg/build/
+/TMessagesProj/jni/boringssl/build/
