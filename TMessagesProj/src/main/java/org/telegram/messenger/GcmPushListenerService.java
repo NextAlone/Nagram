@@ -175,7 +175,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                             }
                             String ip = parts[0];
                             int port = Integer.parseInt(parts[1]);
-                            ConnectionsManager.getInstance(currentAccount).applyDatacenterAddress(dc, ip, port, 0);
+                            ConnectionsManager.getInstance(currentAccount).applyDatacenterAddress(dc, ip, port);
                             ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
                             countDownLatch.countDown();
                             return;

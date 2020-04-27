@@ -155,25 +155,15 @@ public class ConnectionsManager extends BaseController {
     public ConnectionsManager(int instance) {
         super(instance);
         connectionState = native_getConnectionState(currentAccount);
-        init();
-    }
-
-    public void init() {
         String deviceModel;
         String systemLangCode;
         String langCode;
         String appVersion;
         String systemVersion;
         File config = ApplicationLoader.getFilesDirFixed();
-        if (currentAccount != 0) {
-            config = new File(config, "account" + currentAccount);
+        if (instance != 0) {
+            config = new File(config, "account" + instance);
             config.mkdirs();
-        }
-        File tgnetFile = new File(config,"tgnet.dat");
-        File tgnetFileNew = new File(config,"tgnet.dat.new");
-        if (tgnetFileNew.isFile()) {
-            tgnetFile.delete();
-            tgnetFileNew.renameTo(tgnetFile);
         }
         String configPath = config.toString();
         boolean enablePushConnection = isPushConnectionEnabled();
@@ -212,15 +202,7 @@ public class ConnectionsManager extends BaseController {
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
 
-        int layer = MessagesController.getMainSettings(currentAccount).getInt("layer",TLRPC.LAYER);
-
-        if (layer != TLRPC.LAYER) {
-
-            FileLog.d("use custom layer " + layer);
-
-        }
-
-        init(BuildVars.BUILD_VERSION, layer, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -328,8 +310,8 @@ public class ConnectionsManager extends BaseController {
         native_bindRequestToGuid(currentAccount, requestToken, guid);
     }
 
-    public void applyDatacenterAddress(int datacenterId, String ipAddress, int port, int flag) {
-        native_applyDatacenterAddress(currentAccount, datacenterId, ipAddress, port, flag);
+    public void applyDatacenterAddress(int datacenterId, String ipAddress, int port) {
+        native_applyDatacenterAddress(currentAccount, datacenterId, ipAddress, port);
     }
 
     public int getConnectionState() {
@@ -538,9 +520,6 @@ public class ConnectionsManager extends BaseController {
 
     public static void onRequestNewServerIpAndPort(final int second, final int currentAccount) {
         Utilities.stageQueue.postRunnable(() -> {
-            if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
-                return;
-            }
 
             if (currentTask != null || second == 0 && Math.abs(lastDnsRequestTime - System.currentTimeMillis()) < 10000 || !ApplicationLoader.isNetworkOnline()) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -670,7 +649,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_bindRequestToGuid(int currentAccount, int requestToken, int guid);
 
-    public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port, int flag);
+    public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port);
 
     public static native int native_getConnectionState(int currentAccount);
 

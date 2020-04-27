@@ -82,3 +82,11 @@ jobs:
         with:
           name: V2ray Library
           path: "TMessagesProj/libs/libv2ray.aar"
+      - uses: actions/upload-artifact@master
+        with:
+          name: Boringssl Library
+          path: "TMessagesProj/jni/boringssl/build"
+      - uses: actions/upload-artifact@master
+        with:
+          name: Ffmpeg Library
+          path: "TMessagesProj/jni/ffmpeg/build"

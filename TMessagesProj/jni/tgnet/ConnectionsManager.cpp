@@ -3049,16 +3049,14 @@ void ConnectionsManager::authorizedOnMovingDatacenter() {
     });
 }
 
-void ConnectionsManager::applyDatacenterAddress(uint32_t datacenterId, std::string ipAddress, uint32_t port,uint32_t flag) {
+void ConnectionsManager::applyDatacenterAddress(uint32_t datacenterId, std::string ipAddress, uint32_t port) {
     scheduleTask([&, datacenterId, ipAddress, port] {
         Datacenter *datacenter = getDatacenterWithId(datacenterId);
         if (datacenter != nullptr) {
             std::vector<TcpAddress> addresses;
-            if (ipAddress.length() != 0) {
-                addresses.push_back(TcpAddress(ipAddress, port, flag, ""));
-            }
+            addresses.push_back(TcpAddress(ipAddress, port, 0, ""));
             datacenter->suspendConnections(true);
-            datacenter->replaceAddresses(addresses, flag);
+            datacenter->replaceAddresses(addresses, 0);
             datacenter->resetAddressAndPortNum();
             saveConfig();
             if (datacenter->isHandshakingAny()) {
