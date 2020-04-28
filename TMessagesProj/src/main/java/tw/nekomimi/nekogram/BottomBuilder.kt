@@ -313,14 +313,15 @@ class BottomBuilder(val ctx: Context) {
 
     }
 
-    fun addEditText(hintText: String): EditText {
+    @JvmOverloads
+    fun addEditText(hintText: String? = null): EditText {
 
         return EditText(ctx).apply {
 
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
             setTextColor(Theme.getColor(Theme.key_dialogTextBlack))
             setHintTextColor(Theme.getColor(Theme.key_dialogTextBlue4))
-            hint = hintText
+            hintText?.also {  hint = it }
             isSingleLine = true
             isFocusable = true
             setBackgroundDrawable(null)

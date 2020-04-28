@@ -160,6 +160,43 @@ void applyDatacenterAddress(JNIEnv *env, jclass c, jint instanceNum, jint datace
     }
 }
 
+void setDatacenterPublicKey(JNIEnv *env, jclass c, jint instanceNum, jint dataCenterId, jstring publicKey, jlong fingerprint) {
+    const char *publicKeyStr = env->GetStringUTFChars(publicKey, nullptr);
+
+    ConnectionsManager::getInstance(instanceNum).setDatacenterPublicKey(dataCenterId, publicKeyStr,fingerprint);
+
+    if (publicKeyStr != nullptr) {
+        env->ReleaseStringUTFChars(publicKey, publicKeyStr);
+    }
+
+}
+
+void setDatacenterAddress(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId, jstring ipv4Address, jstring ipv6Address, jint port) {
+    const char *v4Str = env->GetStringUTFChars(ipv4Address, nullptr);
+    const char *v6Str = env->GetStringUTFChars(ipv4Address, nullptr);
+
+    ConnectionsManager::getInstance(instanceNum).setDatacenterAddress((uint32_t) datacenterId, std::string(v4Str), std::string(v6Str), (uint32_t) port);
+
+    if (v4Str != nullptr) {
+        env->ReleaseStringUTFChars(ipv4Address, v4Str);
+    }
+    if (v6Str != nullptr) {
+        env->ReleaseStringUTFChars(ipv6Address, v6Str);
+    }
+}
+
+void setLayer(JNIEnv *env, jclass c, jint instanceNum, jint layer) {
+
+    ConnectionsManager::getInstance(instanceNum).setLayer((uint32_t) layer);
+
+}
+
+void saveDatacenters(JNIEnv *env, jclass c,jint instanceNum) {
+
+    ConnectionsManager::getInstance(instanceNum).saveDatacenters();
+
+}
+
 void setProxySettings(JNIEnv *env, jclass c, jint instanceNum, jstring address, jint port, jstring username, jstring password, jstring secret) {
     const char *addressStr = env->GetStringUTFChars(address, 0);
     const char *usernameStr = env->GetStringUTFChars(username, 0);
@@ -260,29 +297,29 @@ jlong checkProxy(JNIEnv *env, jclass c, jint instanceNum, jstring address, jint 
 }
 
 class Delegate : public ConnectiosManagerDelegate {
-    
+
     void onUpdate(int32_t instanceNum) {
         jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onUpdate, instanceNum);
     }
-    
+
     void onSessionCreated(int32_t instanceNum) {
         jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onSessionCreated, instanceNum);
     }
-    
+
     void onConnectionStateChanged(ConnectionState state, int32_t instanceNum) {
         jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onConnectionStateChanged, state, instanceNum);
     }
-    
+
     void onUnparsedMessageReceived(int64_t reqMessageId, NativeByteBuffer *buffer, ConnectionType connectionType, int32_t instanceNum) {
         if (connectionType == ConnectionTypeGeneric) {
             jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onUnparsedMessageReceived, (jlong) (intptr_t) buffer, instanceNum);
         }
     }
-    
+
     void onLogout(int32_t instanceNum) {
         jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onLogout, instanceNum);
     }
-    
+
     void onUpdateConfig(TL_config *config, int32_t instanceNum) {
         NativeByteBuffer *buffer = BuffersStorage::getInstance().getFreeBuffer(config->getObjectSize());
         config->serializeToStream(buffer);
@@ -290,7 +327,7 @@ class Delegate : public ConnectiosManagerDelegate {
         jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onUpdateConfig, (jlong) (intptr_t) buffer, instanceNum);
         buffer->reuse();
     }
-    
+
     void onInternalPushReceived(int32_t instanceNum) {
         jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onInternalPushReceived, instanceNum);
     }
@@ -428,6 +465,10 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_cancelRequestsForGuid", "(II)V", (void *) cancelRequestsForGuid},
         {"native_bindRequestToGuid", "(III)V", (void *) bindRequestToGuid},
         {"native_applyDatacenterAddress", "(IILjava/lang/String;I)V", (void *) applyDatacenterAddress},
+        {"native_setDatacenterPublicKey", "(IILjava/lang/String;J)V", (void *) setDatacenterPublicKey},
+        {"native_setDatacenterAddress", "(IILjava/lang/String;Ljava/lang/String;I)V", (void *) setDatacenterAddress},
+        {"native_saveDatacenters", "(I)V", (void *) saveDatacenters},
+        {"native_setLayer", "(II)V", (void *) setLayer},
         {"native_setProxySettings", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *) setProxySettings},
         {"native_getConnectionState", "(I)I", (void *) getConnectionState},
         {"native_setUserId", "(II)V", (void *) setUserId},
@@ -462,15 +503,15 @@ inline int registerNativeMethods(JNIEnv *env, const char *className, JNINativeMe
 
 extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
     java = vm;
-    
+
     if (!registerNativeMethods(env, NativeByteBufferClassPathName, NativeByteBufferMethods, sizeof(NativeByteBufferMethods) / sizeof(NativeByteBufferMethods[0]))) {
         return JNI_FALSE;
     }
-    
+
     if (!registerNativeMethods(env, ConnectionsManagerClassPathName, ConnectionsManagerMethods, sizeof(ConnectionsManagerMethods) / sizeof(ConnectionsManagerMethods[0]))) {
         return JNI_FALSE;
     }
-    
+
     jclass_RequestDelegateInternal = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/RequestDelegateInternal"));
     if (jclass_RequestDelegateInternal == 0) {
         return JNI_FALSE;

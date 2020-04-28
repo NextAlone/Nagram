@@ -202,7 +202,15 @@ public class ConnectionsManager extends BaseController {
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
 
-        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+        int layer = MessagesController.getMainSettings(currentAccount).getInt("layer",TLRPC.LAYER);
+
+        if (layer != TLRPC.LAYER) {
+
+            FileLog.d("use custom layer " + layer);
+
+        }
+
+        init(BuildVars.BUILD_VERSION, layer, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -650,6 +658,11 @@ public class ConnectionsManager extends BaseController {
     public static native void native_bindRequestToGuid(int currentAccount, int requestToken, int guid);
 
     public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port);
+
+    public static native void native_setDatacenterAddress(int currentAccount, int datacenterId, String ipv4Address,String ipv6Address, int port);
+    public static native void native_setDatacenterPublicKey(int currentAccount, int datacenterId, String publicKey, long fingerprint);
+    public static native void native_saveDatacenters(int currentAccount);
+    public static native void native_setLayer(int currentAccount,int layer);
 
     public static native int native_getConnectionState(int currentAccount);
 

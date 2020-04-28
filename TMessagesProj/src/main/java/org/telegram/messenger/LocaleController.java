@@ -20,6 +20,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
+import android.view.Gravity;
 
 import org.telegram.messenger.support.ArrayUtils;
 import org.telegram.messenger.time.FastDateFormat;
@@ -54,6 +55,12 @@ public class LocaleController {
     static final int QUANTITY_MANY = 0x0010;
 
     public static boolean isRTL = false;
+
+    public static int generateFlagStart() {
+
+        return isRTL ? Gravity.RIGHT : Gravity.LEFT;
+
+    }
 
     public static boolean is24HourFormat = false;
     public FastDateFormat formatterDay;

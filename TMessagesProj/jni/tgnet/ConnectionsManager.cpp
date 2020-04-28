@@ -429,7 +429,9 @@ void ConnectionsManager::loadConfig() {
         }
     }
 
-    initDatacenters();
+    if (datacenters.empty()) {
+        initDatacenters();
+    }
 
     if ((datacenters.size() != 0 && currentDatacenterId == 0) || pushSessionId == 0) {
         if (pushSessionId == 0) {
@@ -677,7 +679,9 @@ void ConnectionsManager::onConnectionClosed(Connection *connection, int reason) 
                         } else {
                             requestingSecondAddress = 0;
                         }
-                        delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                        if (datacenter->keyFingerprint == 0) {
+                            delegate->onRequestNewServerIpAndPort(requestingSecondAddress,instanceNum);
+                        }
                     } else {
                         if (LOGS_ENABLED) DEBUG_D("connection has usefull data, don't request anything");
                     }
@@ -3067,6 +3071,77 @@ void ConnectionsManager::applyDatacenterAddress(uint32_t datacenterId, std::stri
     });
 }
 
+void ConnectionsManager::setDatacenterAddress(uint32_t datacenterId, std::string ipv4Address,std::string ipv6Address, uint32_t port) {
+    scheduleTask([&, datacenterId, ipv4Address,ipv6Address, port] {
+        Datacenter *datacenter = getDatacenterWithId(datacenterId);
+        if (datacenter != nullptr) {
+
+            datacenter->suspendConnections(true);
+            datacenter->resetAddressAndPortNum();
+            datacenter->addressesIpv4Download.clear();
+            datacenter->addressesIpv6Download.clear();
+            datacenter->addressesIpv4Temp.clear();
+
+            if (ipv4Address.empty()) {
+                datacenter->addressesIpv4.clear();
+            } else {
+                std::vector<TcpAddress> v4Addresses;
+                v4Addresses.push_back(TcpAddress(ipv4Address, port, 0, ""));
+                datacenter->replaceAddresses(v4Addresses, 0);
+            }
+
+            if (ipv6Address.empty()) {
+                datacenter->addressesIpv6.clear();
+            } else {
+                std::vector<TcpAddress> v6Addresses;
+                v6Addresses.push_back(TcpAddress(ipv4Address, port, 1, ""));
+                datacenter->replaceAddresses(v6Addresses, 1);
+            }
+
+        }
+    });
+}
+
+void ConnectionsManager::setLayer(uint32_t layer) {
+
+    scheduleTask([&, layer] {
+
+        currentLayer = layer;
+
+    });
+
+}
+
+void ConnectionsManager::saveDatacenters() {
+
+    scheduleTask([&] {
+
+        saveConfig();
+
+        for (std::map<uint32_t, Datacenter *>::iterator iter = datacenters.begin(); iter != datacenters.end(); iter++) {
+            iter->second->clearAuthKey(HandshakeTypeAll);
+            iter->second->recreateSessions(HandshakeTypeAll);
+            iter->second->authorized = false;
+            if (iter->second->isHandshakingAny()) {
+                iter->second->beginHandshake(HandshakeTypeCurrent, true);
+            }
+        }
+
+    });
+
+}
+
+void ConnectionsManager::setDatacenterPublicKey(uint32_t datacenterId, std::string publicKey, uint64_t fingerprint) {
+    scheduleTask([&, datacenterId, publicKey, fingerprint] {
+        Datacenter *datacenter = getDatacenterWithId(datacenterId);
+        if (datacenter != nullptr) {
+            datacenter->publicKey = publicKey;
+            datacenter->keyFingerprint = fingerprint;
+            datacenter->storePermConfig();
+        }
+    });
+}
+
 ConnectionState ConnectionsManager::getConnectionState() {
     return connectionState;
 }
@@ -3171,13 +3246,19 @@ void ConnectionsManager::applyDnsConfig(NativeByteBuffer *buffer, std::string ph
             }
             if (requestingSecondAddress == 2) {
                 requestingSecondAddress = 3;
-                delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                if (getDatacenterWithId(currentDatacenterId)->keyFingerprint == 0) {
+                    delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                }
             } else if (requestingSecondAddress == 1) {
                 requestingSecondAddress = 2;
-                delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                if (getDatacenterWithId(currentDatacenterId)->keyFingerprint == 0) {
+                    delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                }
             } else if (requestingSecondAddress == 0) {
                 requestingSecondAddress = 1;
-                delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                if (getDatacenterWithId(currentDatacenterId)->keyFingerprint == 0) {
+                    delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                }
             } else {
                 requestingSecondAddress = 0;
             }

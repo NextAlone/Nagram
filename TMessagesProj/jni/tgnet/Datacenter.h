@@ -97,6 +97,8 @@ private:
     uint32_t lastInitMediaVersion = 0;
     bool authorized = false;
 
+    std::string publicKey;
+    uint64_t keyFingerprint = 0;
     std::vector<TcpAddress> addressesIpv4;
     std::vector<TcpAddress> addressesIpv6;
     std::vector<TcpAddress> addressesIpv4Download;
@@ -121,6 +123,7 @@ private:
     ByteArray *authKeyMediaTemp = nullptr;
     int64_t authKeyMediaTempId = 0;
     Config *config = nullptr;
+    Config *permConfig = nullptr;
     bool isCdnDatacenter = false;
 
     std::vector<std::unique_ptr<Handshake>> handshakes;
@@ -148,6 +151,9 @@ private:
     friend class Connection;
     friend class Handshake;
     friend class Request;
+
+    NativeByteBuffer *sizeCalculator;
+    void storePermConfig();
 };
 
 #endif

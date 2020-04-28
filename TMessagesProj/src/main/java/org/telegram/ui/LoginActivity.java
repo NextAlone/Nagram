@@ -47,7 +47,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
-import android.util.Base64;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -66,6 +65,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.v2ray.ang.util.Utils;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -111,6 +112,10 @@ import org.telegram.ui.Components.SlideView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -121,12 +126,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.DataCenter;
 import tw.nekomimi.nekogram.EditTextAutoFill;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -267,6 +275,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
     private int menu_other = 5;
     private int menu_custom_api = 6;
+    private int menu_custom_dc = 7;
 
     @Override
     public View createView(Context context) {
@@ -526,6 +535,343 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     builder.show();
 
+                } else if (id == menu_custom_dc) {
+
+                    AtomicInteger targetDc = new AtomicInteger(-1);
+
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                    EditText[] inputs = new EditText[6];
+
+                    builder.addTitle("Custom Backend",
+                            true,
+                            "~");
+
+                    int dcType;
+
+                    if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
+                        dcType = 2;
+                    } else if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
+                        dcType = 1;
+                    } else {
+                        dcType = 0;
+                    }
+
+                    builder.addRadioItem("OFFICAL", dcType == 0, (cell) -> {
+
+                        targetDc.set(0);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.addRadioItem("TEST DC", dcType == 1, (cell) -> {
+
+                        targetDc.set(1);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.addRadioItem(LocaleController.getString("CustomApiInput", R.string.CustomApiInput), dcType == 2, (cell) -> {
+
+                        targetDc.set(2);
+
+                        builder.doRadioCheck(cell);
+
+                        for (EditText input : inputs) input.setVisibility(View.VISIBLE);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    inputs[0] = builder.addEditText("Ipv4 Address");
+                    inputs[0].setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                    if (StrUtil.isNotBlank(NekoXConfig.customDcIpv4)) {
+                        inputs[0].setText(NekoXConfig.customDcIpv4);
+                    }
+                    inputs[0].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s) || Utils.isIpv4Address(s.toString())) {
+                                inputs[0].setError(null);
+                                NekoXConfig.customDcIpv4 = s.toString();
+                            } else {
+                                inputs[0].setError("Invalid Ipv4 Address");
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    inputs[1] = builder.addEditText("Ipv6 Address");
+                    if (StrUtil.isNotBlank(NekoXConfig.customDcIpv6)) {
+                        inputs[1].setText(NekoXConfig.customDcIpv6);
+                    }
+                    inputs[1].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s) || Utils.isIpv6Address(s.toString())) {
+                                inputs[1].setError(null);
+                                NekoXConfig.customDcIpv6 = s.toString();
+                            } else {
+                                inputs[1].setError("Invalid Ipv6 Address");
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    inputs[2] = builder.addEditText("Port");
+                    inputs[2].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    if (NekoXConfig.customDcPort != 0) {
+                        inputs[2].setText(NekoXConfig.customDcPort + "");
+                    }
+                    inputs[2].setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+                    inputs[2].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                NekoXConfig.customDcPort = 0;
+                            } else {
+                                NekoXConfig.customDcPort = NumberUtil.parseInt(s.toString());
+                                if (NekoXConfig.customDcPort <= 0 || NekoXConfig.customDcPort > 65535) {
+                                    NekoXConfig.customDcPort = 0;
+                                    inputs[2].setError("Invalid Port");
+                                } else {
+                                    inputs[2].setError(null);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    inputs[3] = builder.addEditText("Layer");
+                    inputs[3].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    if (NekoXConfig.customDcLayer != 0) {
+                        inputs[3].setText(NekoXConfig.customDcLayer + "");
+                    }
+                    inputs[3].setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                    inputs[3].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                NekoXConfig.customDcLayer = 0;
+                            } else {
+                                NekoXConfig.customDcLayer = NumberUtil.parseInt(s.toString());
+                                if (NekoXConfig.customDcLayer > TLRPC.LAYER || NekoXConfig.customDcLayer < 85) {
+                                    NekoXConfig.customDcLayer = 0;
+                                    inputs[3].setError("Layer not supported");
+                                } else {
+                                    inputs[3].setError(null);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    inputs[4] = builder.addEditText("Public Key");
+                    inputs[4].setInputType(InputType.TYPE_CLASS_TEXT);
+                    inputs[4].setGravity(Gravity.TOP | LocaleController.generateFlagStart());
+                    inputs[4].setSingleLine(false);
+                    inputs[4].setMinLines(6);
+                    if (StrUtil.isNotBlank(NekoXConfig.customDcPublicKey)) {
+                        inputs[4].setText(NekoXConfig.customDcPublicKey);
+                    }
+                    inputs[4].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                NekoXConfig.customDcPublicKey = "";
+                                inputs[5].setText("PublicKey required");
+                            } else {
+
+                                try {
+
+                                    String publicKeyBase64 = s.toString()
+                                            .replace("-----BEGIN RSA PUBLIC KEY-----", "")
+                                            .replace("-----BEGIN PUBLIC KEY-----", "")
+                                            .replace("-----END RSA PUBLIC KEY-----", "")
+                                            .replace("-----END PUBLIC KEY-----", "");
+
+                                    PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.decode(publicKeyBase64)));
+
+                                    NekoXConfig.customDcPublicKey = s.toString();
+                                    inputs[4].setError(null);
+
+                                    long fingerprint = DataCenter.calcAuthKeyId(publicKey.getEncoded());
+                                    inputs[5].setText(Long.toHexString(fingerprint));
+                                    NekoXConfig.customDcFingerprint = fingerprint;
+
+                                } catch (Exception e) {
+
+                                    FileLog.e("Invalid public key",e);
+
+                                    inputs[4].setError("Invalid RSA Public Key");
+                                    inputs[5].setText("PublicKey required");
+                                    NekoXConfig.customDcPublicKey = "";
+
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    inputs[5] = builder.addEditText();
+                    inputs[5].setText("PublicKey required");
+                    inputs[5].setEnabled(false);
+                    if (NekoXConfig.customDcFingerprint != 0) {
+                        inputs[5].setText(NekoXConfig.customDcFingerprint + "");
+                    }
+
+                    if (dcType < 2) {
+
+                        for (EditText input : inputs) input.setVisibility(View.GONE);
+
+                    }
+
+
+                    builder.addCancelButton();
+
+                    builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
+
+                        int target = targetDc.get();
+
+                        if (target >= 2) {
+
+                            if (inputs[0].getError() != null) {
+
+                                inputs[0].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[0]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (inputs[1].getError() != null) {
+
+                                inputs[1].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[1]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (StrUtil.isBlank(inputs[2].getText().toString())) {
+
+                                AlertUtil.showToast("Input Port");
+                                inputs[2].setError("Port required");
+                                inputs[2].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[2]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (StrUtil.isBlank(inputs[3].getText().toString())) {
+
+                                AlertUtil.showToast("Input Layer");
+                                inputs[3].setError("Layer required");
+                                inputs[3].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[3]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (StrUtil.isBlank(inputs[4].getText().toString())) {
+
+                                AlertUtil.showToast("Input PublicKey");
+                                inputs[4].setError("PublicKey required");
+                                inputs[4].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[5]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (StrUtil.isBlank(NekoXConfig.customDcIpv4) && StrUtil.isBlank(NekoXConfig.customDcIpv6)) {
+
+                                AlertUtil.showToast("Input Address");
+                                inputs[0].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[0]);
+
+                                return Unit.INSTANCE;
+
+                            }
+
+                        }
+
+                        if (target == dcType) {
+
+                            // do nothing
+
+                        } else if (target == 0) {
+
+                            if (dcType == 3) {
+
+
+                            }
+
+                            DataCenter.applyOfficalDataCanter(currentAccount);
+
+                        } else if (target == 1) {
+
+                            DataCenter.applyTestDataCenter(currentAccount);
+
+                        } else {
+
+                            DataCenter.applyCustomDataCenter(currentAccount,
+                                    NekoXConfig.customDcIpv4,
+                                    NekoXConfig.customDcIpv6,
+                                    NekoXConfig.customDcPort,
+                                    NekoXConfig.customDcLayer,
+                                    NekoXConfig.customDcPublicKey,
+                                    NekoXConfig.customDcFingerprint);
+
+                            NekoXConfig.saveCustomDc();
+
+                        }
+
+                        builder.dismiss();
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.show();
                 }
 
             }
@@ -554,6 +900,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
 
+        if (NekoXConfig.developerMode) {
+
+            otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, "Custom Backend");
+
+        }
         actionBar.setAllowOverlayTitle(true);
         doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
         doneProgressView = new ContextProgressView(context, 1);
@@ -4297,7 +4648,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             if (currentTermsOfService != null) {
                 SerializedData data = new SerializedData(currentTermsOfService.getObjectSize());
                 currentTermsOfService.serializeToStream(data);
-                String str = Base64.encodeToString(data.toByteArray(), Base64.DEFAULT);
+                String str = Base64.encode(data.toByteArray());
                 bundle.putString("terms", str);
                 data.cleanup();
             }
@@ -4316,7 +4667,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             try {
                 String terms = bundle.getString("terms");
                 if (terms != null) {
-                    byte[] arr = Base64.decode(terms, Base64.DEFAULT);
+                    byte[] arr = Base64.decode(terms);
                     if (arr != null) {
                         SerializedData data = new SerializedData(arr);
                         currentTermsOfService = TLRPC.TL_help_termsOfService.TLdeserialize(data, data.readInt32(false), false);

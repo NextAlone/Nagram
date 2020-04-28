@@ -18,6 +18,15 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - run: git submodule update --init --recursive
+      - uses: actions/cache@v1
+        with:
+          path: TMessagesProj/jni/boringssl/build
+          key: boringssl-${{ hashFiles('TMessagesProj/jni/boringssl/.git') }}
+      - uses: actions/cache@v1
+        with:
+          path: TMessagesProj/jni/ffmpeg/build
+          key: ffmpeg-${{ hashFiles('TMessagesProj/jni/ffmpeg/.git') }}
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
@@ -26,7 +35,6 @@ jobs:
           go-version: 1.13
       - name: Build native libraries
         run: |
-          git submodule update --init --recursive
 
           cd TMessagesProj/libs
 
@@ -59,10 +67,13 @@ jobs:
           export NINJA_PATH=/usr/bin/ninja
           export PATH=`echo $ANDROID_HOME/cmake/*/bin`:$PATH
 
-          ./build_ffmpeg_clang.sh
+          [ -d "ffmpeg/build" ] || ./build_ffmpeg_clang.sh
+
           ./patch_ffmpeg.sh
+
           ./patch_boringssl.sh
-          ./build_boringssl.sh
+
+          [ -d "patch_boringssl/build" ] || ./build_boringssl.sh
 
       - name: assemble
         run: |
@@ -72,9 +83,10 @@ jobs:
             ./gradlew ssr-libev:assembleRelease &&
             rm -rf TMessagesProj/libs/*-libev-release.aar &&
             find . -name "*-libev-release.aar" -exec mv {} TMessagesProj/libs \; &&
-            ./gradlew assembleAfatFoss &&
-            echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*.apk")
+            ./gradlew assembleAfatFoss
           EOF
+          ls TMessagesProj/build/outputs/apk
+          echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*")
       - uses: actions/upload-artifact@master
         with:
           name: NekoX-Foss
