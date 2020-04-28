@@ -9,13 +9,13 @@ jobs:
   fossBuild:
     name: Foss Build
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, '[RELEASE]') || contains(github.event.head_commit.message, '[N]')"
+    if: "contains(github.event.head_commit.message, '[RELEASE]')"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
         with:
           path: ~/.gradle
-          key: gradle-${{ hashFiles('**/*.gradle') }}
+          key: native-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
       - run: git submodule update --init --recursive
@@ -73,7 +73,7 @@ jobs:
 
           ./patch_boringssl.sh
 
-          [ -d "patch_boringssl/build" ] || ./build_boringssl.sh
+          [ -d "boringssl/build" ] || ./build_boringssl.sh
 
       - name: assemble
         run: |

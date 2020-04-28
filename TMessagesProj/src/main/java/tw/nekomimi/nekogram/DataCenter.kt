@@ -1,24 +1,29 @@
 package tw.nekomimi.nekogram
 
-import cn.hutool.core.util.ArrayUtil
 import cn.hutool.crypto.digest.DigestUtil
 import org.telegram.messenger.MessagesController
 import org.telegram.tgnet.ConnectionsManager
+import org.telegram.tgnet.SerializedData
+import java.math.BigInteger
 import java.nio.ByteBuffer
+import java.security.interfaces.RSAPublicKey
 
 object DataCenter {
 
     //    func calcAuthKeyId(keyData []byte) int64 {
-//        sha1 := Sha1Digest(keyData)
-//        // Lower 64 bits = 8 bytes of 20 byte SHA1 hash.
-//        return int64(binary.LittleEndian.Uint64(sha1[12:]))
-//    }
+    //        sha1 := Sha1Digest(keyData)
+    //        // Lower 64 bits = 8 bytes of 20 byte SHA1 hash.
+    //        return int64(binary.LittleEndian.Uint64(sha1[12:]))
+    //    }
     @JvmStatic
-    fun calcAuthKeyId(publicKey: ByteArray): Long {
+    fun calcAuthKeyId(publicKey: RSAPublicKey): Long {
 
-        val sha1 = DigestUtil.sha1(publicKey)
+        val key = SerializedData()
 
-        return ByteBuffer.wrap(ArrayUtil.sub(sha1, 12, sha1.size)).long
+        key.writeByteArray(publicKey.modulus.toByteArray())
+        key.writeByteArray(publicKey.publicExponent.toByteArray())
+
+        return BigInteger(DigestUtil.sha1(key.toByteArray()).slice(12 until 20).toByteArray()).toLong()
 
     }
 
@@ -80,7 +85,7 @@ object DataCenter {
         }
 
         ConnectionsManager.native_saveDatacenters(account)
-        ConnectionsManager.native_setLayer(account,layer)
+        ConnectionsManager.native_setLayer(account, layer)
 
         repeat(5) {
 

@@ -112,10 +112,8 @@ import org.telegram.ui.Components.SlideView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.security.KeyFactory;
+import java.math.BigInteger;
 import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -134,6 +132,7 @@ import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.DataCenter;
 import tw.nekomimi.nekogram.EditTextAutoFill;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.parts.PKCS1Pub;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 @SuppressLint("HardwareIds")
@@ -410,7 +409,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     });
 
-                    builder.addRadioItem(LocaleController.getString("CustomApiOffical", R.string.CustomApiOffical), NekoXConfig.customApi == 1, (cell) -> {
+                    builder.addRadioItem(LocaleController.getString("CustomApiOfficial", R.string.CustomApiOfficial), NekoXConfig.customApi == 1, (cell) -> {
 
                         targetApi.set(1);
 
@@ -543,9 +542,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     EditText[] inputs = new EditText[6];
 
-                    builder.addTitle("Custom Backend",
+                    builder.addTitle(LocaleController.getString("CustomBackend",R.string.CustomBackend),
                             true,
-                            "~");
+                            LocaleController.getString("CustomBackendNotice",R.string.CustomBackendNotice));
 
                     int dcType;
 
@@ -557,7 +556,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         dcType = 0;
                     }
 
-                    builder.addRadioItem("OFFICAL", dcType == 0, (cell) -> {
+                    builder.addRadioItem(LocaleController.getString("CustomBackendProduction",R.string.CustomBackendProduction), dcType == 0, (cell) -> {
 
                         targetDc.set(0);
 
@@ -569,7 +568,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     });
 
-                    builder.addRadioItem("TEST DC", dcType == 1, (cell) -> {
+                    builder.addRadioItem(LocaleController.getString("CustomBackendTestDC",R.string.CustomBackendTestDC), dcType == 1, (cell) -> {
 
                         targetDc.set(1);
 
@@ -593,7 +592,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     });
 
-                    inputs[0] = builder.addEditText("Ipv4 Address");
+                    inputs[0] = builder.addEditText(LocaleController.getString("CustomBackendIpv4",R.string.CustomBackendIpv4));
                     inputs[0].setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
                     if (StrUtil.isNotBlank(NekoXConfig.customDcIpv4)) {
                         inputs[0].setText(NekoXConfig.customDcIpv4);
@@ -618,7 +617,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[1] = builder.addEditText("Ipv6 Address");
+                    inputs[1] = builder.addEditText(LocaleController.getString("CustomBackendIpv6",R.string.CustomBackendIpv6));
                     if (StrUtil.isNotBlank(NekoXConfig.customDcIpv6)) {
                         inputs[1].setText(NekoXConfig.customDcIpv6);
                     }
@@ -642,7 +641,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[2] = builder.addEditText("Port");
+                    inputs[2] = builder.addEditText(LocaleController.getString("UseProxyPort",R.string.UseProxyPort));
                     inputs[2].setInputType(InputType.TYPE_CLASS_NUMBER);
                     if (NekoXConfig.customDcPort != 0) {
                         inputs[2].setText(NekoXConfig.customDcPort + "");
@@ -673,7 +672,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[3] = builder.addEditText("Layer");
+                    inputs[3] = builder.addEditText(LocaleController.getString("CustomBackendLayer",R.string.CustomBackendLayer));
                     inputs[3].setInputType(InputType.TYPE_CLASS_NUMBER);
                     if (NekoXConfig.customDcLayer != 0) {
                         inputs[3].setText(NekoXConfig.customDcLayer + "");
@@ -704,7 +703,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[4] = builder.addEditText("Public Key");
+                    inputs[4] = builder.addEditText(LocaleController.getString("CustomBackendPublicKey",R.string.CustomBackendPublicKey));
                     inputs[4].setInputType(InputType.TYPE_CLASS_TEXT);
                     inputs[4].setGravity(Gravity.TOP | LocaleController.generateFlagStart());
                     inputs[4].setSingleLine(false);
@@ -721,32 +720,23 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             if (StrUtil.isBlank(s.toString())) {
                                 NekoXConfig.customDcPublicKey = "";
-                                inputs[5].setText("PublicKey required");
+                                inputs[5].setText("");
                             } else {
 
                                 try {
 
                                     String publicKeyBase64 = s.toString()
                                             .replace("-----BEGIN RSA PUBLIC KEY-----", "")
-                                            .replace("-----BEGIN PUBLIC KEY-----", "")
-                                            .replace("-----END RSA PUBLIC KEY-----", "")
-                                            .replace("-----END PUBLIC KEY-----", "");
+                                            .replace("-----END RSA PUBLIC KEY-----", "");
 
-                                    PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.decode(publicKeyBase64)));
+                                    PKCS1Pub.decodePKCS1PublicKey(Base64.decode(publicKeyBase64));
 
                                     NekoXConfig.customDcPublicKey = s.toString();
                                     inputs[4].setError(null);
 
-                                    long fingerprint = DataCenter.calcAuthKeyId(publicKey.getEncoded());
-                                    inputs[5].setText(Long.toHexString(fingerprint));
-                                    NekoXConfig.customDcFingerprint = fingerprint;
-
                                 } catch (Exception e) {
 
-                                    FileLog.e("Invalid public key",e);
-
-                                    inputs[4].setError("Invalid RSA Public Key");
-                                    inputs[5].setText("PublicKey required");
+                                    inputs[4].setError("Invalid PKCS1 Key");
                                     NekoXConfig.customDcPublicKey = "";
 
                                 }
@@ -759,12 +749,41 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[5] = builder.addEditText();
-                    inputs[5].setText("PublicKey required");
-                    inputs[5].setEnabled(false);
+                    inputs[5] = builder.addEditText(LocaleController.getString("CustomBackendFingerprint",R.string.CustomBackendFingerprint));
                     if (NekoXConfig.customDcFingerprint != 0) {
-                        inputs[5].setText(NekoXConfig.customDcFingerprint + "");
+                        inputs[5].setText("0x" + Long.toString(NekoXConfig.customDcFingerprint,16));
                     }
+                    inputs[5].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                NekoXConfig.customDcFingerprint = 0;
+                                inputs[5].setError(null);
+                            } else {
+                                String f = s.toString();
+                                int r = 10;
+                                if (f.startsWith("0x")) {
+                                    f = f.substring(2);
+                                    r = 16;
+                                }
+                                try {
+                                    NekoXConfig.customDcFingerprint = new BigInteger(f,r).longValue();
+                                    inputs[5].setError(null);
+                                } catch (NumberFormatException e) {
+                                    NekoXConfig.customDcFingerprint = 0;
+                                    inputs[5].setError("Invalid Fingerprint");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
 
                     if (dcType < 2) {
 
@@ -795,7 +814,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                                 return Unit.INSTANCE;
 
-                            } else if (StrUtil.isBlank(inputs[2].getText().toString())) {
+                            } else if (NekoXConfig.customDcPort == 0) {
 
                                 AlertUtil.showToast("Input Port");
                                 inputs[2].setError("Port required");
@@ -804,7 +823,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                                 return Unit.INSTANCE;
 
-                            } else if (StrUtil.isBlank(inputs[3].getText().toString())) {
+                            } else if (NekoXConfig.customDcLayer == 0) {
 
                                 AlertUtil.showToast("Input Layer");
                                 inputs[3].setError("Layer required");
@@ -813,11 +832,20 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                                 return Unit.INSTANCE;
 
-                            } else if (StrUtil.isBlank(inputs[4].getText().toString())) {
+                            } else if (StrUtil.isBlank(NekoXConfig.customDcPublicKey)) {
 
                                 AlertUtil.showToast("Input PublicKey");
                                 inputs[4].setError("PublicKey required");
                                 inputs[4].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[5]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (NekoXConfig.customDcFingerprint == 0L) {
+
+                                AlertUtil.showToast("Input Fingerprint");
+                                inputs[5].setError("Fingerprint required");
+                                inputs[5].requestFocus();
                                 AndroidUtilities.showKeyboard(inputs[5]);
 
                                 return Unit.INSTANCE;

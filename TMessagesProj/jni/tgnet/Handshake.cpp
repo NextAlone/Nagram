@@ -111,6 +111,7 @@ void Handshake::cleanupHandshake() {
 void Handshake::clearServerPublicKey() {
 
     serverPublicKeys.clear();
+    clearServerPublicKey();
 
 }
 
@@ -479,6 +480,8 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
                 }
                 return;
             }
+
+            if (LOGS_ENABLED) DEBUG_D("publicKey: %s, fingerprint: %lld",key.c_str(),keyFingerprint);
 
             authServerNonce = new ByteArray(result->server_nonce.get());
 

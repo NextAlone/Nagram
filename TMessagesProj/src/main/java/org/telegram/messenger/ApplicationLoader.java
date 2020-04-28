@@ -33,12 +33,16 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class ApplicationLoader extends Application {
 
@@ -62,9 +66,100 @@ public class ApplicationLoader extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {
+        if (SDK_INT >= Build.VERSION_CODES.P) {
+            Reflection.unseal(base);
+        }
         super.attachBaseContext(base);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             MultiDex.install(this);
+        }
+    }
+
+    /**
+     * @author weishu
+     * @date 2018/6/7.
+     */
+    public static class Reflection {
+        private static final String TAG = "Reflection";
+
+        private static Object sVmRuntime;
+        private static Method setHiddenApiExemptions;
+
+        static {
+            if (SDK_INT >= Build.VERSION_CODES.P) {
+                try {
+                    Method forName = Class.class.getDeclaredMethod("forName", String.class);
+                    Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
+
+                    Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
+                    Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
+                    setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
+                    sVmRuntime = getRuntime.invoke(null);
+                } catch (Throwable e) {
+                    FileLog.e("reflect bootstrap failed:", e);
+                }
+            }
+
+        }
+
+        private static int UNKNOWN = -9999;
+
+        private static final int ERROR_SET_APPLICATION_FAILED = -20;
+
+        private static final int ERROR_EXEMPT_FAILED = -21;
+
+        private static int unsealed = UNKNOWN;
+
+        public static int unseal(Context context) {
+            if (SDK_INT < 28) {
+                // Below Android P, ignore
+                return 0;
+            }
+
+            // try exempt API first.
+            if (exemptAll()) {
+                return 0;
+            } else {
+                return ERROR_EXEMPT_FAILED;
+            }
+        }
+
+        /**
+         * make the method exempted from hidden API check.
+         *
+         * @param method the method signature prefix.
+         * @return true if success.
+         */
+        public static boolean exempt(String method) {
+            return exempt(new String[]{method});
+        }
+
+        /**
+         * make specific methods exempted from hidden API check.
+         *
+         * @param methods the method signature prefix, such as "Ldalvik/system", "Landroid" or even "L"
+         * @return true if success
+         */
+        public static boolean exempt(String... methods) {
+            if (sVmRuntime == null || setHiddenApiExemptions == null) {
+                return false;
+            }
+
+            try {
+                setHiddenApiExemptions.invoke(sVmRuntime, new Object[]{methods});
+                return true;
+            } catch (Throwable e) {
+                return false;
+            }
+        }
+
+        /**
+         * Make all hidden API exempted.
+         *
+         * @return true if success.
+         */
+        public static boolean exemptAll() {
+            return exempt(new String[]{"L"});
         }
     }
 
@@ -220,11 +315,22 @@ public class ApplicationLoader extends Application {
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
         startPushService();
+
+        try {
+
+            EnvUtil.doTest();
+
+        }catch (Exception e) {
+
+            FileLog.e("EnvUtil test Failed",e);
+
+        }
+
     }
 
 
     public static void startPushService() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return; // USE NOTIF LISTENER
         }
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
@@ -236,7 +342,7 @@ public class ApplicationLoader extends Application {
         }
         if (enabled) {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && NekoConfig.residentNotification) {
+                if (SDK_INT >= Build.VERSION_CODES.O && NekoConfig.residentNotification) {
                     applicationContext.startForegroundService(new Intent(applicationContext, NotificationsService.class));
                 } else {
                     applicationContext.startService(new Intent(applicationContext, NotificationsService.class));

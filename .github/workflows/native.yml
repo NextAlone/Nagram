@@ -1,0 +1,75 @@
+name: Native Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  nativeBuild:
+    name: Native Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[N]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: native-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: git submodule update --init --recursive
+      - uses: actions/cache@v1
+        with:
+          path: TMessagesProj/jni/boringssl/build
+          key: boringssl-${{ hashFiles('TMessagesProj/jni/boringssl/.git') }}
+      - uses: actions/cache@v1
+        with:
+          path: TMessagesProj/jni/ffmpeg/build
+          key: ffmpeg-${{ hashFiles('TMessagesProj/jni/ffmpeg/.git') }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build native libraries
+        run: |
+
+          cd TMessagesProj/jni
+
+          while :
+          do
+             sudo apt-get install -y ninja-build && break
+             sleep 5
+          done
+
+          export NDK=$ANDROID_HOME/ndk-bundle
+          export NINJA_PATH=/usr/bin/ninja
+          export PATH=`echo $ANDROID_HOME/cmake/*/bin`:$PATH
+
+          [ -d "ffmpeg/build" ] || ./build_ffmpeg_clang.sh
+
+          ./patch_ffmpeg.sh
+
+          ./patch_boringssl.sh
+
+          [ -d "boringssl/build" ] || ./build_boringssl.sh
+
+      - name: assemble
+        run: |
+          sudo bash <<EOF
+            export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}" &&
+            ./gradlew assembleAfatFoss
+          EOF
+          ls TMessagesProj/build/outputs/apk
+          echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*")
+      - uses: actions/upload-artifact@master
+        with:
+          name: NekoX-Foss
+          path: ${{ env.APK_FILE }}
+      - uses: actions/upload-artifact@master
+        with:
+          name: Boringssl Library
+          path: "TMessagesProj/jni/boringssl/build"
+      - uses: actions/upload-artifact@master
+        with:
+          name: Ffmpeg Library
+          path: "TMessagesProj/jni/ffmpeg/build"

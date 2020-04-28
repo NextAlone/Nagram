@@ -6,9 +6,19 @@
     <string name="CustomApi">Custom API</string>
     <string name="UseCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="CustomApiNo">Don\'t use custom API</string>
-    <string name="CustomApiOffical">Telegram Android</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Manual input</string>
+
+    <string name="CustomBackend">Custom Backend</string>
+    <string name="CustomBackendNotice">This function is only provided for expert users, if you don\'t know what the following options represent, just ignore it.</string>
+    <string name="CustomBackendProduction">Official Production DataCenter</string>
+    <string name="CustomBackendTestDC">Official Test DataCenter</string>
+    <string name="CustomBackendIpv4">Ipv4 Address</string>
+    <string name="CustomBackendIpv6">Ipv6 Address</string>
+    <string name="CustomBackendLayer">Layer</string>
+    <string name="CustomBackendPublicKey">Public Key</string>
+    <string name="CustomBackendFingerprint">Key Fingerprint</string>
 
     <string name="AllowFlashCall">Allow flash call</string>
 
