@@ -198,13 +198,13 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addRadioItems(text: Array<String>, value: (Int) -> Boolean, valueText: ((Int) -> String)? = null, listener: (index: Int, text: String, cell: RadioButtonCell) -> Unit): List<RadioButtonCell> {
+    fun addRadioItems(text: Array<String>, value: (Int,String) -> Boolean, valueText: ((Int,String) -> String)? = null, listener: (index: Int, text: String, cell: RadioButtonCell) -> Unit): List<RadioButtonCell> {
 
         val list = mutableListOf<RadioButtonCell>()
 
         text.forEachIndexed { index, textI ->
 
-            list.add(addRadioItem(textI, value(index), valueText?.invoke(index)) { cell ->
+            list.add(addRadioItem(textI, value(index,textI), valueText?.invoke(index,textI)) { cell ->
 
                 listener(index, textI, cell)
 

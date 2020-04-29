@@ -65,6 +65,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class ImageLoader {
@@ -1779,9 +1780,7 @@ public class ImageLoader {
         }
 
         try {
-            telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-
-            FileUtil.initDir(telegramPath);
+            telegramPath = EnvUtil.getTelegramPath();
 
             if (telegramPath.isDirectory()) {
                 try {

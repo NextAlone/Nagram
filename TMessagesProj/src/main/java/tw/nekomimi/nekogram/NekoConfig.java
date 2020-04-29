@@ -84,11 +84,12 @@ public class NekoConfig {
     public static boolean skipOpenLinkConfirm;
 
     public static boolean removeTitleEmoji;
-    public static boolean hidePublicProxy;
     public static boolean useDefaultTheme;
     public static boolean showIdAndDc;
 
     public static String googleCloudTranslateKey;
+
+    public static String cachePath;
 
     static {
 
@@ -154,11 +155,11 @@ public class NekoConfig {
 
         removeTitleEmoji = preferences.getBoolean("remove_title_emoji", false);
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
-        hidePublicProxy = preferences.getBoolean("hide_public_proxy", false);
         useDefaultTheme = preferences.getBoolean("use_default_theme", false);
         showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
 
         googleCloudTranslateKey = preferences.getString("google_cloud_translate_key",null);
+        cachePath = preferences.getString("cache_path",null);
 
     }
 
@@ -577,12 +578,6 @@ public class NekoConfig {
 
     }
 
-    public static void toggleHidePublicProxy() {
-
-        preferences.edit().putBoolean("hide_public_proxy", hidePublicProxy = !hidePublicProxy).commit();
-
-    }
-
     public static void toggleUseDefaultTheme() {
 
         preferences.edit().putBoolean("use_default_theme", useDefaultTheme = !useDefaultTheme).commit();
@@ -597,8 +592,15 @@ public class NekoConfig {
 
     public static void setGoogleTranslateKey(String key) {
 
-        preferences.edit().putString("google_cloud_translate_key", googleCloudTranslateKey = key).commit();
+        preferences.edit().putString("google_cloud_translate_key", googleCloudTranslateKey = key).apply();
 
     }
+
+    public static void setCachePath(String cachePath) {
+
+        preferences.edit().putString("cache_path", NekoConfig.cachePath = cachePath).apply();
+
+    }
+
 
 }

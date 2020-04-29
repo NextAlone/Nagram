@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -54,9 +55,12 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 
 @SuppressLint("RtlHardcoded")
@@ -105,6 +109,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int settingsRow;
     private int typefaceRow;
+    private int cachePathRow;
     private int hidePhoneRow;
     private int disableUndoRow;
     private int useDefaultThemeRow;
@@ -320,6 +325,43 @@ public class NekoSettingsActivity extends BaseFragment {
                     listAdapter.notifyItemChanged(position);
 
                     return null;
+
+                });
+
+                builder.show();
+
+            } else if (position == cachePathRow) {
+
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                builder.addTitle(LocaleController.getString("CachePath",R.string.CachePath));
+
+                AtomicReference<String> target = new AtomicReference<>();
+
+                builder.addRadioItems(EnvUtil.getAvailableDirectories(),
+                        (index, path) -> path.equals(NekoConfig.cachePath), (__, path, cell) -> {
+
+                            target.set(path);
+                            builder.doRadioCheck(cell);
+
+                            return null;
+
+                        });
+
+                builder.addCancelButton();
+                builder.addOkButton((it) -> {
+
+                    if (target.get() != null) {
+
+                        NekoConfig.setCachePath(target.get());
+                        ImageLoader.getInstance().checkMediaPaths();
+                        listAdapter.notifyItemChanged(position);
+
+                    }
+
+                    builder.dismiss();
+
+                    return Unit.INSTANCE;
 
                 });
 
@@ -644,7 +686,7 @@ public class NekoSettingsActivity extends BaseFragment {
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
-        hideAllTabRow = rowCount ++;
+        hideAllTabRow = rowCount++;
         mapPreviewRow = rowCount++;
         stickerSizeRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -661,6 +703,7 @@ public class NekoSettingsActivity extends BaseFragment {
         useDefaultThemeRow = rowCount++;
         showIdAndDcRow = rowCount++;
         typefaceRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? rowCount++ : -1;
+        cachePathRow = rowCount++;
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
         forceTabletRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
@@ -1162,6 +1205,8 @@ public class NekoSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("DependsOnDate", R.string.DependsOnDate);
                         }
                         textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, false);
+                    } else if (position == cachePathRow) {
+                        textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
                     } else if (position == stickerSizeRow) {
                         textCell.setTextAndValue(LocaleController.getString("StickerSize", R.string.StickerSize), String.valueOf(Math.round(NekoConfig.stickerSize)), true);
                     } else if (position == messageMenuRow) {
@@ -1324,7 +1369,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
                     position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
                     position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
-                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow;
+                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == cachePathRow;
         }
 
         @Override
@@ -1369,7 +1414,7 @@ public class NekoSettingsActivity extends BaseFragment {
             if (position == connection2Row || position == dialogs2Row || position == chat2Row || position == trans2Row || position == experiment2Row || position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
-                    position == sortMenuRow || position == googleCloudTranslateKeyRow ||
+                    position == sortMenuRow || position == googleCloudTranslateKeyRow || position == cachePathRow ||
                     position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
                 return 2;
             } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||

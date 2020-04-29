@@ -142,6 +142,7 @@ import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
@@ -1254,12 +1255,12 @@ public class AndroidUtilities {
                     }
                 }
                 if (!TextUtils.isEmpty(locale2)) {
-                    return new String[]{locale.replace('_', '-'), locale2,"en"};
+                    return new String[]{locale.replace('_', '-'), locale2, "en"};
                 } else {
-                    return new String[]{locale.replace('_', '-'),"en"};
+                    return new String[]{locale.replace('_', '-'), "en"};
                 }
             } else {
-                return new String[]{locale.replace('_', '-'),"en"};
+                return new String[]{locale.replace('_', '-'), "en"};
             }
         } catch (Exception ignore) {
         }
@@ -1284,11 +1285,9 @@ public class AndroidUtilities {
     public static File getCacheDir() {
         String state = null;
         try {
-            File file = ApplicationLoader.applicationContext.getExternalFilesDir("caches");
-            if (file != null) {
-                FileUtil.initDir(file);
-                return file;
-            }
+            File file = new File(EnvUtil.getTelegramPath(), "caches");
+            FileUtil.initDir(file);
+            return file;
         } catch (Throwable e) {
             FileLog.e(e);
         }

@@ -20,6 +20,8 @@
     <string name="CustomBackendPublicKey">Public Key</string>
     <string name="CustomBackendFingerprint">Key Fingerprint</string>
 
+    <string name="CachePath">Cache directory</string>
+
     <string name="AllowFlashCall">Allow flash call</string>
 
     <string name="ChangeTranslateProvider">Change Provider</string>

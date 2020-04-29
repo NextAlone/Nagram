@@ -56,9 +56,6 @@ public class RadioButtonCell extends LinearLayout {
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setLines(1);
-        textView.setMaxLines(1);
-        textView.setSingleLine(true);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textLayout.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 0, 0, 0, 5));
 

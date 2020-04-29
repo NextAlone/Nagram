@@ -45,6 +45,7 @@ import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
@@ -1750,8 +1751,8 @@ public class SharedConfig {
 
     public static void checkSaveToGalleryFiles() {
         try {
-            File telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-            File imagePath = new File(telegramPath, "images");
+            File telegramPath = EnvUtil.getTelegramPath();
+            File imagePath = new File(telegramPath, "");
             imagePath.mkdirs();
             File videoPath = new File(telegramPath, "videos");
             videoPath.mkdirs();
