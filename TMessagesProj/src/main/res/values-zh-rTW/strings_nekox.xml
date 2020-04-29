@@ -3,11 +3,12 @@
     <string name="CustomApi">自定義API</string>
     <string name="UseCustomApiNotice">使用自定義api登錄，如果您無法註冊或登錄，這可能會有所幫助。\n\n注意：如果您正在使用 release 版本，谷歌云推送將不起作用。</string>
     <string name="CustomApiNo">不要使用自定義API</string>
-    <string name="CustomApiOffical">Telegram Android</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">手動輸入</string>
     <string name="AllowFlashCall">允許通話</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
+    <string name="ProviderYandex">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google 云翻譯密鑰</string>
     <string name="GoogleCloudTransKeyNotice">如果您設置了 Google 云翻譯密鑰，則將在翻譯時調用雲翻譯API，而不是向網頁版本提交假表格（更快，穩定並節省流量）。</string>
     <string name="NekoXUpdatesChannel">NekoX 更新頻道</string>

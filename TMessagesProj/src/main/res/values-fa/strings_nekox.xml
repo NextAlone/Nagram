@@ -2,7 +2,7 @@
 <resources>
     <string name="UseCustomApiNotice">با استفاده از API سفارشی وارد شوید ، اگر قادر به ثبت نام یا ورود به سیستم نیستید ، این ممکن است کمک کند. توجه: اگر از نسخه نسخه استفاده می کنید ، fcm کار نخواهد کرد</string>
     <string name="CustomApiNo">از API سفارشی استفاده نکنید</string>
-    <string name="CustomApiOffical">تلگرام اندروید</string>
+    <string name="CustomApiOfficial">تلگرام اندروید</string>
     <string name="CustomApiTGX">تلگرام اندروید X</string>
     <string name="CustomApiInput">ورود دستی</string>
     <string name="ChangeTranslateProvider">تغییر ارائه دهنده خدمات</string>
