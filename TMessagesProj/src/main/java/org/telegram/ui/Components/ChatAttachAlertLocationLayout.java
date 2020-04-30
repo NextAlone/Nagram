@@ -99,6 +99,7 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharingLiveLocationCell;
 import org.telegram.ui.ChatActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -812,9 +813,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         adapter.setOverScrollHeight(overScrollHeight);
 
         addView(mapViewClip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
-
-        // SET TFOSS USERAGENT FOR OSM SERVERS
-        Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekogramX ) " + BuildConfig.VERSION_NAME);
 
         mapView = new MapView(context) {
 
