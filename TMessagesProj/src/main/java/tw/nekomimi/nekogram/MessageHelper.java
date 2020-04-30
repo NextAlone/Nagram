@@ -38,7 +38,6 @@ public class MessageHelper extends BaseController {
     public static void setMessageCaption(MessageObject messageObject, ChatMessageCell chatMessageCell, String message) {
         messageObject.caption = message;
         messageObject.forceUpdate = true;
-        messageObject.applyNewText();
         messageObject.resetLayout();
         chatMessageCell.requestLayout();
         chatMessageCell.invalidate();

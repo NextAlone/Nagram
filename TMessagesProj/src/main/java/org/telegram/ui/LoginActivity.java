@@ -542,9 +542,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     EditText[] inputs = new EditText[6];
 
-                    builder.addTitle(LocaleController.getString("CustomBackend",R.string.CustomBackend),
+                    builder.addTitle(LocaleController.getString("CustomBackend", R.string.CustomBackend),
                             true,
-                            LocaleController.getString("CustomBackendNotice",R.string.CustomBackendNotice));
+                            LocaleController.getString("CustomBackendNotice", R.string.CustomBackendNotice));
 
                     int dcType;
 
@@ -556,7 +556,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         dcType = 0;
                     }
 
-                    builder.addRadioItem(LocaleController.getString("CustomBackendProduction",R.string.CustomBackendProduction), dcType == 0, (cell) -> {
+                    builder.addRadioItem(LocaleController.getString("CustomBackendProduction", R.string.CustomBackendProduction), dcType == 0, (cell) -> {
 
                         targetDc.set(0);
 
@@ -568,7 +568,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     });
 
-                    builder.addRadioItem(LocaleController.getString("CustomBackendTestDC",R.string.CustomBackendTestDC), dcType == 1, (cell) -> {
+                    builder.addRadioItem(LocaleController.getString("CustomBackendTestDC", R.string.CustomBackendTestDC), dcType == 1, (cell) -> {
 
                         targetDc.set(1);
 
@@ -592,7 +592,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     });
 
-                    inputs[0] = builder.addEditText(LocaleController.getString("CustomBackendIpv4",R.string.CustomBackendIpv4));
+                    inputs[0] = builder.addEditText(LocaleController.getString("CustomBackendIpv4", R.string.CustomBackendIpv4));
                     inputs[0].setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
                     if (StrUtil.isNotBlank(NekoXConfig.customDcIpv4)) {
                         inputs[0].setText(NekoXConfig.customDcIpv4);
@@ -617,7 +617,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[1] = builder.addEditText(LocaleController.getString("CustomBackendIpv6",R.string.CustomBackendIpv6));
+                    inputs[1] = builder.addEditText(LocaleController.getString("CustomBackendIpv6", R.string.CustomBackendIpv6));
                     if (StrUtil.isNotBlank(NekoXConfig.customDcIpv6)) {
                         inputs[1].setText(NekoXConfig.customDcIpv6);
                     }
@@ -641,7 +641,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[2] = builder.addEditText(LocaleController.getString("UseProxyPort",R.string.UseProxyPort));
+                    inputs[2] = builder.addEditText(LocaleController.getString("UseProxyPort", R.string.UseProxyPort));
                     inputs[2].setInputType(InputType.TYPE_CLASS_NUMBER);
                     if (NekoXConfig.customDcPort != 0) {
                         inputs[2].setText(NekoXConfig.customDcPort + "");
@@ -672,7 +672,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[3] = builder.addEditText(LocaleController.getString("CustomBackendLayer",R.string.CustomBackendLayer));
+                    inputs[3] = builder.addEditText(LocaleController.getString("CustomBackendLayer", R.string.CustomBackendLayer));
                     inputs[3].setInputType(InputType.TYPE_CLASS_NUMBER);
                     if (NekoXConfig.customDcLayer != 0) {
                         inputs[3].setText(NekoXConfig.customDcLayer + "");
@@ -703,7 +703,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[4] = builder.addEditText(LocaleController.getString("CustomBackendPublicKey",R.string.CustomBackendPublicKey));
+                    inputs[4] = builder.addEditText(LocaleController.getString("CustomBackendPublicKey", R.string.CustomBackendPublicKey));
                     inputs[4].setInputType(InputType.TYPE_CLASS_TEXT);
                     inputs[4].setGravity(Gravity.TOP | LocaleController.generateFlagStart());
                     inputs[4].setSingleLine(false);
@@ -749,9 +749,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
 
-                    inputs[5] = builder.addEditText(LocaleController.getString("CustomBackendFingerprint",R.string.CustomBackendFingerprint));
+                    inputs[5] = builder.addEditText(LocaleController.getString("CustomBackendFingerprint", R.string.CustomBackendFingerprint));
                     if (NekoXConfig.customDcFingerprint != 0) {
-                        inputs[5].setText("0x" + Long.toString(NekoXConfig.customDcFingerprint,16));
+                        inputs[5].setText("0x" + Long.toString(NekoXConfig.customDcFingerprint, 16));
                     }
                     inputs[5].addTextChangedListener(new TextWatcher() {
                         @Override
@@ -771,7 +771,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                     r = 16;
                                 }
                                 try {
-                                    NekoXConfig.customDcFingerprint = new BigInteger(f,r).longValue();
+                                    NekoXConfig.customDcFingerprint = new BigInteger(f, r).longValue();
                                     inputs[5].setError(null);
                                 } catch (NumberFormatException e) {
                                     NekoXConfig.customDcFingerprint = 0;
@@ -927,12 +927,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         }
 
         otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
+        otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24,LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
-        if (NekoXConfig.developerMode) {
-
-            otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, "Custom Backend");
-
-        }
         actionBar.setAllowOverlayTitle(true);
         doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
         doneProgressView = new ContextProgressView(context, 1);

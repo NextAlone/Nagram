@@ -186,6 +186,7 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -193,9 +194,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -1954,7 +1956,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         } else if (richText instanceof TLRPC.TL_textUrl) {
             return getLastRichText(((TLRPC.TL_textUrl) richText).text);
         } else if (richText instanceof TLRPC.TL_textAnchor) {
-            getLastRichText(((TLRPC.TL_textAnchor) richText).text);
+            return getLastRichText(((TLRPC.TL_textAnchor) richText).text);
         } else if (richText instanceof TLRPC.TL_textSubscript) {
             return getLastRichText(((TLRPC.TL_textSubscript) richText).text);
         } else if (richText instanceof TLRPC.TL_textSuperscript) {
@@ -1968,21 +1970,27 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private CharSequence getText(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth) {
+
+        return getText(adapter, parentView, parentRichText, richText, parentBlock, maxWidth, false);
+
+    }
+
+    private CharSequence getText(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth, boolean noTranslate) {
         if (richText == null) {
             return null;
         }
         if (richText instanceof TLRPC.TL_textFixed) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textFixed) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textFixed) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textItalic) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textItalic) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textItalic) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textBold) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textBold) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textBold) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textUnderline) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textUnderline) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textUnderline) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textStrike) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textStrike) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textStrike) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textEmail) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textEmail) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textEmail) richText).text, parentBlock, maxWidth, noTranslate));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintUrlSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null, "mailto:" + getUrl(richText)), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1990,7 +1998,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textUrl) {
             TLRPC.TL_textUrl textUrl = (TLRPC.TL_textUrl) richText;
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textUrl) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textUrl) richText).text, parentBlock, maxWidth, noTranslate));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             TextPaint paint = innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null;
             MetricAffectingSpan span;
@@ -2005,13 +2013,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (plainText != null && adapter.trans && TranslateDb.contains(plainText)) {
+            if (!noTranslate && StrUtil.isNotBlank(plainText) && adapter.trans && TranslateDb.contains(plainText)) {
                 plainText = TranslateDb.query(plainText);
             }
             return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
             TLRPC.TL_textAnchor textAnchor = (TLRPC.TL_textAnchor) richText;
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, textAnchor.text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, textAnchor.text, parentBlock, maxWidth, noTranslate));
             spannableStringBuilder.setSpan(new AnchorSpan(textAnchor.name), 0, spannableStringBuilder.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textEmpty) {
@@ -2028,7 +2036,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     spannableStringBuilder.setSpan(new TextSelectionHelper.IgnoreCopySpannable(), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
 
-                CharSequence innerText = getText(adapter, parentView, parentRichText, innerRichText, parentBlock, maxWidth);
+                CharSequence innerText = getText(adapter, parentView, parentRichText, innerRichText, parentBlock, maxWidth, noTranslate);
                 int flags = getTextFlags(lastRichText);
                 int startLength = spannableStringBuilder.length();
                 spannableStringBuilder.append(innerText);
@@ -2060,18 +2068,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textSubscript) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textSubscript) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textSubscript) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textSuperscript) {
-            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textSuperscript) richText).text, parentBlock, maxWidth);
+            return getText(adapter, parentView, parentRichText, ((TLRPC.TL_textSuperscript) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TLRPC.TL_textMarked) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textMarked) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textMarked) richText).text, parentBlock, maxWidth, noTranslate));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintMarkSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPhone) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textPhone) richText).text, parentBlock, maxWidth));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(adapter, parentView, parentRichText, ((TLRPC.TL_textPhone) richText).text, parentBlock, maxWidth, noTranslate));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintUrlSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parentRichText, richText, parentBlock) : null, "tel:" + getUrl(richText)), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -2122,7 +2130,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         } else if (richText instanceof TLRPC.TL_textUrl) {
             return getPlainText(((TLRPC.TL_textUrl) richText).text);
         } else if (richText instanceof TLRPC.TL_textPlain) {
-            return ((TLRPC.TL_textPlain) richText).text;
+            String plainText = ((TLRPC.TL_textPlain) richText).text;
+            if (plainText != null && Instance.adapter[0].trans && TranslateDb.contains(plainText)) {
+                plainText = TranslateDb.query(plainText);
+            }
+            return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
             return getPlainText(((TLRPC.TL_textAnchor) richText).text);
         } else if (richText instanceof TLRPC.TL_textEmpty) {
@@ -2149,18 +2161,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public static String getUrl(TLRPC.RichText richText) {
-        String url = getUrlInternal(richText);
-
-        if (url != null && getInstance().adapter[0].trans && TranslateDb.contains(url)) {
-
-            return TranslateDb.query(url);
-
-        }
-
-        return url;
-    }
-
-    private static String getUrlInternal(TLRPC.RichText richText) {
         if (richText instanceof TLRPC.TL_textFixed) {
             return getUrl(((TLRPC.TL_textFixed) richText).text);
         } else if (richText instanceof TLRPC.TL_textItalic) {
@@ -4089,80 +4089,145 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         AlertDialog dialog = proc.show();
 
-        HashMap<Object, TLRPC.PageBlock> copy = new HashMap<>(adapter[0].textToBlocks);
-        ArrayList<Object> array = new ArrayList<>(adapter[0].textBlocks);
-        AtomicInteger errorCount = new AtomicInteger();
-        AtomicInteger taskCount = new AtomicInteger(array.size());
-        try {
-            for (int b = 0, N = array.size(); b < N; b++) {
-                Object object = array.get(b);
-                TLRPC.PageBlock block = copy.get(object);
-                String textToSearchIn = null;
-                if (object instanceof TLRPC.RichText) {
-                    TLRPC.RichText richText = (TLRPC.RichText) object;
-                    CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
-                    if (!TextUtils.isEmpty(innerText)) {
-                        textToSearchIn = innerText.toString();
-                    }
-                } else if (object instanceof String) {
-                    textToSearchIn = ((String) object);
-                }
-                if (textToSearchIn != null) {
-                    if (TranslateDb.contains(textToSearchIn)) {
-                        taskCount.decrementAndGet();
-                        continue;
-                    }
-                    String finalTextToSearchIn = textToSearchIn;
+        UIUtil.runOnIoDispatcher(() -> {
 
-                    transPool.execute(() -> {
-
-                        if (cancel.get()) return;
-
-                        String localeText;
-                        try {
-                            localeText = Translator.translate(finalTextToSearchIn);
-                            if (cancel.get()) return;
-                        } catch (Exception e) {
-                            if (cancel.get()) return;
-                            boolean finaL = taskCount.decrementAndGet() == 0;
-                            if (errorCount.incrementAndGet() > 3 || finaL) {
-                                UIUtil.runOnUIThread(() -> {
-                                    dialog.dismiss();
-                                    adapter[0].trans = false;
-                                    transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                                });
-                            }
-                            AlertUtil.showSimpleAlert(parentActivity, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
-                            cancel.set(true);
-                            transPool.shutdown();
-                            AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
-
-                            return;
-                        }
-
-                        TranslateDb.save(finalTextToSearchIn, localeText);
-                        UIUtil.runOnUIThread(this::updatePaintSize);
-
-                        boolean finaL = taskCount.decrementAndGet() < 1;
-
-                        if (finaL) {
-
-                            UIUtil.runOnUIThread(dialog::dismiss);
-                            transPool.shutdown();
-
-                        }
-
-                    });
+            HashMap<Object, TLRPC.PageBlock> copy = new HashMap<>(adapter[0].textToBlocks);
+            ArrayList<Object> array = new ArrayList<>(adapter[0].textBlocks);
+            AtomicInteger errorCount = new AtomicInteger();
+            AtomicInteger taskCount = new AtomicInteger(array.size());
+            for (Object item : array) {
+                if (item instanceof TLRPC.TL_textConcat) {
+                    taskCount.addAndGet(((TLRPC.TL_textConcat) item).texts.size() - 1);
                 }
             }
-        } catch (Exception ignored) {
-            dialog.dismiss();
-            UIUtil.runOnUIThread(this::updatePaintSize);
-        }
-        if (taskCount.get() == 0) {
-            dialog.dismiss();
-            UIUtil.runOnUIThread(this::updatePaintSize);
-        }
+            try {
+                for (int b = 0, N = array.size(); b < N; b++) {
+                    Object object = array.get(b);
+                    TLRPC.PageBlock block = copy.get(object);
+                    String textToSearchIn = null;
+                    if (object instanceof TLRPC.RichText) {
+                        TLRPC.RichText richText = (TLRPC.RichText) object;
+                        if (richText.texts.size() > 0) {
+                            for (TLRPC.RichText node : richText.texts) {
+                                String nodeText = getText(adapter[0], null, node, node, block, 1000).toString();
+
+                                if (TranslateDb.contains(nodeText)) {
+                                    taskCount.decrementAndGet();
+                                    continue;
+                                }
+
+                                transPool.execute(() -> {
+
+                                    if (cancel.get()) return;
+
+                                    String localeText;
+                                    try {
+                                        localeText = Translator.translate(nodeText);
+                                        if (cancel.get()) return;
+                                    } catch (Exception e) {
+                                        if (cancel.get()) return;
+                                        boolean finaL = taskCount.decrementAndGet() == 0;
+                                        if (errorCount.incrementAndGet() > 3 || finaL) {
+                                            UIUtil.runOnUIThread(() -> {
+                                                dialog.dismiss();
+                                                adapter[0].trans = false;
+                                                transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                                            });
+
+                                            AlertUtil.showSimpleAlert(parentActivity, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
+                                            cancel.set(true);
+                                            transPool.shutdown();
+                                            AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
+                                        }
+                                        return;
+                                    }
+
+                                    TranslateDb.save(nodeText, localeText);
+                                    UIUtil.runOnUIThread(this::updatePaintSize);
+
+                                    boolean finaL = taskCount.decrementAndGet() < 1;
+
+                                    if (finaL) {
+
+                                        UIUtil.runOnUIThread(dialog::dismiss);
+                                        transPool.shutdown();
+
+                                    }
+
+                                });
+                            }
+                            return;
+                        }
+                        CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
+                        if (!TextUtils.isEmpty(innerText)) {
+                            textToSearchIn = innerText.toString();
+                        }
+                    } else if (object instanceof String) {
+                        textToSearchIn = ((String) object);
+                    }
+
+                    if (textToSearchIn != null) {
+
+                        if (TranslateDb.contains(textToSearchIn)) {
+                            taskCount.decrementAndGet();
+                            continue;
+                        }
+
+                        String finalTextToSearchIn = textToSearchIn;
+
+                        transPool.execute(() -> {
+
+                            if (cancel.get()) return;
+
+                            String localeText;
+                            try {
+                                localeText = Translator.translate(finalTextToSearchIn);
+                                if (cancel.get()) return;
+                            } catch (Exception e) {
+                                if (cancel.get()) return;
+                                boolean finaL = taskCount.decrementAndGet() == 0;
+                                if (errorCount.incrementAndGet() > 3 || finaL) {
+                                    UIUtil.runOnUIThread(() -> {
+                                        dialog.dismiss();
+                                        adapter[0].trans = false;
+                                        transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                                    });
+
+                                    AlertUtil.showSimpleAlert(parentActivity, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
+                                    cancel.set(true);
+                                    transPool.shutdown();
+                                    AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
+                                }
+                                return;
+                            }
+
+                            TranslateDb.save(finalTextToSearchIn, localeText);
+                            UIUtil.runOnUIThread(this::updatePaintSize);
+
+                            boolean finaL = taskCount.decrementAndGet() < 1;
+
+                            if (finaL) {
+
+                                UIUtil.runOnUIThread(dialog::dismiss);
+                                transPool.shutdown();
+
+                            }
+
+                        });
+                    }
+                }
+                if (taskCount.get() == 0) {
+                    transPool.shutdown();
+                    UIUtil.runOnUIThread(dialog::dismiss);
+                    UIUtil.runOnUIThread(this::updatePaintSize);
+                }
+            } catch (Exception ignored) {
+                transPool.shutdown();
+                UIUtil.runOnUIThread(dialog::dismiss);
+                UIUtil.runOnUIThread(this::updatePaintSize);
+            }
+
+        });
 
     }
 
@@ -4338,9 +4403,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     if (object instanceof TLRPC.RichText) {
                         TLRPC.RichText richText = (TLRPC.RichText) object;
                         CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
-                        if (!TextUtils.isEmpty(innerText)) {
-                            textToSearchIn = innerText.toString().toLowerCase();
-                        }
                     } else if (object instanceof String) {
                         textToSearchIn = ((String) object).toLowerCase();
                     }
@@ -4518,8 +4580,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         return open(null, webpage, url, true);
     }
 
-    private boolean open(final MessageObject messageObject, TLRPC.WebPage webpage, String url,
-                         boolean first) {
+    private boolean open(final MessageObject messageObject, TLRPC.WebPage webpage, String url, boolean first) {
         if (parentActivity == null || isVisible && !collapsed || messageObject == null && webpage == null) {
             return false;
         }
@@ -5107,8 +5168,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         });
     }
 
-    private void loadChannel(final BlockChannelCell cell, WebpageAdapter adapter, TLRPC.Chat
-            channel) {
+    private void loadChannel(final BlockChannelCell cell, WebpageAdapter adapter, TLRPC.Chat channel) {
         if (loadingChannel || TextUtils.isEmpty(channel.username)) {
             return;
         }

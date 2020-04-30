@@ -15351,16 +15351,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     String original;
 
-                    if (StrUtil.isNotBlank(selectedObject.caption)) {
-                        original = selectedObject.caption.toString();
-                    } else {
+                    if (StrUtil.isBlank(selectedObject.caption)) {
                         original = selectedObject.messageOwner.message;
+                    } else {
+                        original = selectedObject.caption.toString();
                     }
 
                     Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(original);
                     if (matcher.find()) {
                         if (messageCell != null) {
-                            if (StrUtil.isNotBlank(selectedObject.caption)) {
+                            if (StrUtil.isBlank(selectedObject.caption)) {
                                 MessageHelper.setMessageContent(selectedObject, messageCell, original.replace(matcher.group(), ""));
                             } else {
                                 MessageHelper.setMessageCaption(selectedObject, messageCell, original.replace(matcher.group(), ""));
@@ -15379,7 +15379,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         "\n" +
                                         TranslateDb.query(original) +
                                         "\u200C\u200C";
-                                if (StrUtil.isNotBlank(messageObject.caption)) {
+                                if (StrUtil.isBlank(messageObject.caption)) {
                                     MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
                                 } else {
                                     MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
@@ -15401,7 +15401,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                                 "\n" +
                                                 TranslateDb.query(original) +
                                                 "\u200C\u200C";
-                                        if (StrUtil.isNotBlank(messageObject.caption)) {
+                                        if (StrUtil.isBlank(messageObject.caption)) {
                                             MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
                                         } else {
                                             MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);

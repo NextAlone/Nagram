@@ -1,8 +1,7 @@
 package tw.nekomimi.nekogram
 
-import android.util.Base64
+import cn.hutool.core.codec.Base64
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
-import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
@@ -183,12 +182,11 @@ class ShadowsocksRLoader {
 
         override fun toString(): String {
 
-            val flags = Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP
-            return "ssr://" + Base64.encodeToString("%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&remarks=%s".format(Locale.ENGLISH, host, remotePort, protocol, method, obfs,
-                    Base64.encodeToString("%s".format(Locale.ENGLISH, password).toByteArray(), flags),
-                    Base64.encodeToString("%s".format(Locale.ENGLISH, obfs_param).toByteArray(), flags),
-                    Base64.encodeToString("%s".format(Locale.ENGLISH, protocol_param).toByteArray(), flags),
-                    Base64.encodeToString("%s".format(Locale.ENGLISH, remarks ?: "").toByteArray(), flags)).toByteArray(), flags)
+            return "ssr://" + Base64.encodeUrlSafe("%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&remarks=%s".format(Locale.ENGLISH, host, remotePort, protocol, method, obfs,
+                    Base64.encodeUrlSafe("%s".format(Locale.ENGLISH, password)),
+                    Base64.encodeUrlSafe("%s".format(Locale.ENGLISH, obfs_param)),
+                    Base64.encodeUrlSafe("%s".format(Locale.ENGLISH, protocol_param)),
+                    Base64.encodeUrlSafe("%s".format(Locale.ENGLISH, remarks ?: ""))))
         }
 
     }
