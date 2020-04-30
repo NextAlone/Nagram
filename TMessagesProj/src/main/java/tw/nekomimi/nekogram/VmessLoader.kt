@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram
 
+import cn.hutool.core.codec.Base64
 import com.google.gson.Gson
 import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.V2RayConfig.SOCKS_PROTOCOL
@@ -103,7 +104,7 @@ class VmessLoader {
                     } else {
 
                         var result = server.replace(VMESS_PROTOCOL, "")
-                        result = Utils.decodeJson(result)
+                        result = Base64.decodeStr(result)
                         if (result.isBlank()) {
                             error("invalid url format")
                         }
@@ -166,9 +167,9 @@ class VmessLoader {
                     //part decode
                     val indexS = result.indexOf("@")
                     if (indexS > 0) {
-                        result = Utils.decode(result.substring(0, indexS)) + result.substring(indexS, result.length)
+                        result = Base64.decodeStr(result.substring(0, indexS)) + result.substring(indexS, result.length)
                     } else {
-                        result = Utils.decode(result)
+                        result = Base64.decodeStr(result)
                     }
 
                     val legacyPattern = "^(.+?):(.*)@(.+?):(\\d+?)$".toRegex()
@@ -198,7 +199,7 @@ class VmessLoader {
                     //part decode
                     val indexS = result.indexOf(":")
                     if (indexS < 0) {
-                        result = Utils.decode(result)
+                        result = Base64.decodeStr(result)
                     }
 
                     val legacyPattern = "^(.+?):(\\d+?)$".toRegex()
@@ -342,7 +343,7 @@ class VmessLoader {
             if (indexSplit > 0) {
                 result = result.substring(0, indexSplit)
             }
-            result = Utils.decode(result)
+            result = Base64.decodeStr(result)
 
             val arr1 = result.split('@')
             if (arr1.count() != 2) {

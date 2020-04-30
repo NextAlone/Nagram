@@ -1,6 +1,6 @@
 package tw.nekomimi.nekogram
 
-import android.util.Base64
+import cn.hutool.core.codec.Base64
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.runBlocking
@@ -10,7 +10,6 @@ import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
-import java.util.*
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
@@ -112,7 +111,7 @@ class ShadowsocksLoader {
             put("server", host)
             put("server_port", remotePort)
             put("password", password)
-            put("method",method)
+            put("method", method)
             put("ipv6", true)
         }
 
@@ -139,7 +138,7 @@ class ShadowsocksLoader {
 
                     }
 
-                    val methodAndPswd = Utils.decode(link.username)
+                    val methodAndPswd = Base64.decodeStr(link.username)
 
                     return Bean(
                             link.host,
@@ -157,7 +156,7 @@ class ShadowsocksLoader {
 
                     if (v2Url.contains("#")) v2Url = v2Url.substringBefore("#")
 
-                    val link = ("https://" + Utils.decode(v2Url.substringAfter(SS_PROTOCOL))).toHttpUrlOrNull()
+                    val link = ("https://" + Base64.decodeStr(v2Url.substringAfter(SS_PROTOCOL))).toHttpUrlOrNull()
                             ?: error("invalid v2rayNG link $url")
 
                     return Bean(
@@ -176,9 +175,9 @@ class ShadowsocksLoader {
 
         override fun toString(): String {
 
-            var url = "ss://" + Base64.encode("$method:$password".toByteArray(),Base64.NO_WRAP or Base64.URL_SAFE) + "@$host:$remotePort"
+            var url = "ss://" + Base64.encodeUrlSafe("$method:$password") + "@$host:$remotePort"
 
-            if (remarks?.isNotBlank() == true) url += "#" + Utils.urlEncode(remarks!!)
+            if (remarks?.isNotBlank() == true) url += "#" + Base64.encodeUrlSafe(remarks!!)
 
             return url
 

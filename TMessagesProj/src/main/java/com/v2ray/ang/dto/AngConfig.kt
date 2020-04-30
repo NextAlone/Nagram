@@ -1,11 +1,10 @@
 package com.v2ray.ang.dto
 
-import android.util.Base64
+import cn.hutool.core.codec.Base64
 import com.google.gson.Gson
 import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
-import com.v2ray.ang.util.Utils
 
 data class AngConfig(
         var index: Int,
@@ -57,15 +56,15 @@ data class AngConfig(
                 vmessQRCode.path = path
                 vmessQRCode.tls = streamSecurity
 
-                return VMESS_PROTOCOL + Utils.encode(Gson().toJson(vmessQRCode))
+                return VMESS_PROTOCOL + cn.hutool.core.codec.Base64.encode(Gson().toJson(vmessQRCode))
 
             } else if (configType == V2RayConfig.EConfigType.Shadowsocks) {
 
-                val remark = "#" + Utils.urlEncode(remarks)
+                val remark = "#" + Base64.encodeUrlSafe(remarks)
 
                 val url = String.format("%s:%s@%s:%s", security, id, address, port)
 
-                return SS_PROTOCOL + Base64.encodeToString(url.toByteArray(charset("UTF-8")), Base64.NO_WRAP) + remark
+                return SS_PROTOCOL + Base64.encode(url.toByteArray(charset("UTF-8"))) + remark
 
             } else {
 

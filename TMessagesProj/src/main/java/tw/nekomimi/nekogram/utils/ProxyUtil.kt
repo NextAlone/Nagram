@@ -10,11 +10,11 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
-import android.util.Base64
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import cn.hutool.core.codec.Base64
 import cn.hutool.core.util.StrUtil
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
@@ -33,7 +33,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.NetworkInterface
 import java.util.*
-
+import kotlin.collections.HashMap
 
 object ProxyUtil {
 
@@ -107,7 +107,7 @@ object ProxyUtil {
 
         val text = runCatching {
 
-            StrUtil.utf8Str(Base64.decode(_text, Base64.DEFAULT))
+            Base64.decodeStr(_text)
 
         }.recover {
 

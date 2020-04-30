@@ -140,26 +140,26 @@ class ShadowsocksRLoader {
 
             fun parse(url: String): Bean {
 
-                val params = Utils.decode(url.substringAfter(SSR_PROTOCOL)).split(":")
+                val params = Base64.decodeStr(url.substringAfter(SSR_PROTOCOL)).split(":")
 
                 val bean = Bean(params[0],
                         params[1].toInt(),
                         protocol = params[2],
                         method = params[3],
                         obfs = params[4],
-                        password = Utils.decode(params[5].substringBefore("/")))
+                        password = Base64.decodeStr(params[5].substringBefore("/")))
 
                 val httpUrl = ("https://localhost" + params[5].substringAfter("/")).toHttpUrl()
 
                 runCatching {
 
-                    bean.obfs_param = Utils.decode(httpUrl.queryParameter("obfsparam")!!)
+                    bean.obfs_param = Base64.decodeStr(httpUrl.queryParameter("obfsparam")!!)
 
                 }
 
                 runCatching {
 
-                    bean.protocol_param = Utils.decode(httpUrl.queryParameter("protoparam")!!)
+                    bean.protocol_param = Base64.decodeStr(httpUrl.queryParameter("protoparam")!!)
 
                 }
 
@@ -169,7 +169,7 @@ class ShadowsocksRLoader {
 
                     if (remarks?.isNotBlank() == true) {
 
-                        bean.remarks = Utils.decode(remarks)
+                        bean.remarks = Base64.decodeStr(remarks)
 
                     }
 

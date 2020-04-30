@@ -1,8 +1,7 @@
 package com.v2ray.ang.util
 
 import android.text.TextUtils
-import android.util.Base64
-import org.json.JSONObject
+import cn.hutool.core.codec.Base64
 import org.telegram.messenger.ApplicationLoader
 import java.io.IOException
 import java.net.Socket
@@ -23,49 +22,6 @@ object Utils {
         } catch (e: Exception) {
             e.printStackTrace()
             return 0
-        }
-    }
-
-
-    /**
-     * base64 decode
-     */
-    fun decode(text: String): String {
-        return runCatching {
-            Base64.decode(text, Base64.URL_SAFE or Base64.NO_WRAP).toString(charset("UTF-8"))
-        }.recoverCatching {
-            Base64.decode(text, Base64.NO_WRAP).toString(charset("UTF-8"))
-        }.recoverCatching {
-            Base64.decode(text, Base64.DEFAULT).toString(charset("UTF-8"))
-        }.getOrThrow()
-    }
-
-    fun decodeJson(text: String): String {
-        return runCatching {
-            Base64.decode(text, Base64.URL_SAFE or Base64.NO_WRAP).toString(charset("UTF-8")).also {
-                JSONObject(it)
-            }
-        }.recoverCatching {
-            Base64.decode(text, Base64.NO_WRAP).toString(charset("UTF-8")).also {
-                JSONObject(it)
-            }
-        }.recoverCatching {
-            Base64.decode(text, Base64.DEFAULT).toString(charset("UTF-8")).also {
-                JSONObject(it)
-            }
-        }.getOrThrow()
-    }
-
-
-    /**
-     * base64 encode
-     */
-    fun encode(text: String): String {
-        try {
-            return Base64.encodeToString(text.toByteArray(charset("UTF-8")), Base64.NO_WRAP)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return ""
         }
     }
 
