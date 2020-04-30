@@ -221,6 +221,10 @@ public class ApplicationLoader extends Application {
 
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
 
+        // SET TFOSS USERAGENT FOR OSM SERVERS
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS(F-Droid) "+BuildConfig.VERSION_NAME);
+        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(getCacheDir(),"osmdroid"));
+
         LauncherIconController.tryFixLauncherIconIfNeeded();
     }
 
