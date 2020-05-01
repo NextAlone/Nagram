@@ -33,7 +33,6 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
                     remove(item)
                     add(item.text)
-                    addAll(item.texts)
 
                     hasNext = true
 
@@ -52,7 +51,6 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
                     remove(item)
                     add(item.text)
-                    addAll(item.texts)
 
                     hasNext = true
 
@@ -62,7 +60,6 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
                     remove(item)
                     add(item.text)
-                    addAll(item.texts)
 
                     hasNext = true
 
@@ -72,7 +69,6 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
                     remove(item)
                     add(item.text)
-                    addAll(item.texts)
 
                     hasNext = true
 
@@ -82,7 +78,6 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
                     remove(item)
                     add(item.text)
-                    addAll(item.texts)
 
                     hasNext = true
 
