@@ -55,7 +55,6 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 import cn.hutool.core.util.StrUtil;
@@ -246,7 +245,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 }
                 for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
-                        MessagesController.getInstance(a).checkProxyInfo(true);
+                        MessagesController.getInstance(a).checkPromoInfo(true);
                     }
                 }
             } else if (position == skipOpenLinkConfiirm) {
@@ -334,7 +333,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-                builder.addTitle(LocaleController.getString("CachePath",R.string.CachePath));
+                builder.addTitle(LocaleController.getString("CachePath", R.string.CachePath));
 
                 AtomicReference<String> target = new AtomicReference<>();
 
@@ -834,7 +833,7 @@ public class NekoSettingsActivity extends BaseFragment {
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        int count = NekoXConfig.developerMode ? 10 : 9;
+        int count = NekoXConfig.developerMode ? 9 : 8;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
@@ -851,30 +850,26 @@ public class NekoSettingsActivity extends BaseFragment {
                     break;
                 }
                 case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("Prpr", R.string.Prpr), NekoConfig.showPrPr, false);
-                    break;
-                }
-                case 4: {
                     textCell.setTextAndCheck(LocaleController.getString("ViewHistory", R.string.ViewHistory), NekoConfig.showViewHistory, false);
                     break;
                 }
-                case 5: {
+                case 4: {
                     textCell.setTextAndCheck(LocaleController.getString("Translate", R.string.Translate), NekoConfig.showTranslate, false);
                     break;
                 }
-                case 6: {
+                case 5: {
                     textCell.setTextAndCheck(LocaleController.getString("ReportChat", R.string.ReportChat), NekoConfig.showReport, false);
                     break;
                 }
-                case 7: {
+                case 6: {
                     textCell.setTextAndCheck(LocaleController.getString("EditAdminRights", R.string.EditAdminRights), NekoConfig.showAdminActions, false);
                     break;
                 }
-                case 8: {
+                case 7: {
                     textCell.setTextAndCheck(LocaleController.getString("ChangePermissions", R.string.ChangePermissions), NekoConfig.showChangePermissions, false);
                     break;
                 }
-                case 9: {
+                case 8: {
                     textCell.setTextAndCheck(LocaleController.getString("MessageDetails", R.string.MessageDetails), NekoConfig.showMessageDetails, false);
                     break;
                 }
@@ -901,36 +896,31 @@ public class NekoSettingsActivity extends BaseFragment {
                         break;
                     }
                     case 3: {
-                        NekoConfig.toggleShowPrPr();
-                        textCell.setChecked(NekoConfig.showPrPr);
-                        break;
-                    }
-                    case 4: {
                         NekoConfig.toggleShowViewHistory();
                         textCell.setChecked(NekoConfig.showViewHistory);
                         break;
                     }
-                    case 5: {
+                    case 4: {
                         NekoConfig.toggleShowTranslate();
                         textCell.setChecked(NekoConfig.showTranslate);
                         break;
                     }
-                    case 6: {
+                    case 5: {
                         NekoConfig.toggleShowReport();
                         textCell.setChecked(NekoConfig.showReport);
                         break;
                     }
-                    case 7: {
+                    case 6: {
                         NekoConfig.toggleShowAdminActions();
                         textCell.setChecked(NekoConfig.showAdminActions);
                         break;
                     }
-                    case 8: {
+                    case 7: {
                         NekoConfig.toggleShowChangePermissions();
                         textCell.setChecked(NekoConfig.showChangePermissions);
                         break;
                     }
-                    case 9: {
+                    case 8: {
                         NekoConfig.toggleShowMessageDetails();
                         textCell.setChecked(NekoConfig.showMessageDetails);
                         break;

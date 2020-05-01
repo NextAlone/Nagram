@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
@@ -41,6 +43,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
@@ -49,6 +52,11 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 import static org.telegram.ui.ActionBar.FloatingToolbar.STYLE_THEME;
 import static org.telegram.ui.ActionBar.Theme.key_chat_inTextSelectionHighlight;
@@ -1216,8 +1224,9 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
         final ActionMode.Callback callback = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                menu.add(Menu.NONE, android.R.id.copy, 0, android.R.string.copy);
-                menu.add(Menu.NONE, android.R.id.selectAll, 1, android.R.string.selectAll);
+                menu.add(Menu.NONE, 0, 0, android.R.string.copy);
+                menu.add(Menu.NONE, 1, 1, android.R.string.selectAll);
+                menu.add(Menu.NONE, 2, 2, R.string.Translate);
                 return true;
             }
 
@@ -1230,6 +1239,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     } else {
                         menu.getItem(1).setVisible(true);
                     }
+                    menu.getItem(2).setVisible(selectedView instanceof View);
                 }
                 return true;
             }
@@ -1240,10 +1250,10 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     return true;
                 }
                 switch (item.getItemId()) {
-                    case android.R.id.copy:
+                    case 0:
                         copyText();
                         return true;
-                    case android.R.id.selectAll:
+                    case 1: {
                         CharSequence text = getText(selectedView, false);
                         if (text == null) {
                             return true;
@@ -1254,6 +1264,35 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         invalidate();
                         showActions();
                         return true;
+                    }
+                    case 2:
+                        CharSequence textS = getTextForCopy();
+                        if (textS == null) {
+                            return true;
+                        }
+                        String urlFinal = textS.toString();
+                        Activity activity = ProxyUtil.getOwnerActivity((((View) selectedView).getContext()));
+                        if (TranslateDb.contains(urlFinal)) {
+                            AlertUtil.showSimpleAlert(activity, TranslateDb.query(urlFinal));
+                        } else {
+                            AlertDialog pro = AlertUtil.showProgress(activity);
+                            pro.show();
+                            Translator.translate(urlFinal, new Translator.Companion.TranslateCallBack() {
+                                @Override public void onSuccess(@NotNull String translation) {
+                                    TranslateDb.save(urlFinal, translation);
+                                    pro.dismiss();
+                                    AlertUtil.showSimpleAlert(activity, translation);
+                                }
+
+                                @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                                    pro.dismiss();
+                                    AlertUtil.showTransFailedDialog(activity, unsupported, message, () -> {
+                                        pro.show();
+                                        Translator.translate(urlFinal, this);
+                                    });
+                                }
+                            });
+                        }
                     default:
                         clear();
                 }
@@ -1429,8 +1468,15 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
 
     public static class Callback {
-        public void onStateChanged(boolean isSelected){};
-        public void onTextCopied(){};
+        public void onStateChanged(boolean isSelected) {
+        }
+
+        ;
+
+        public void onTextCopied() {
+        }
+
+        ;
     }
 
     protected void fillLayoutForOffset(int offset, LayoutBlock layoutBlock) {

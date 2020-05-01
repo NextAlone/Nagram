@@ -35,7 +35,6 @@ public class NekoConfig {
 
     public static boolean showAddToSavedMessages;
     public static boolean showReport;
-    public static boolean showPrPr;
     public static boolean showViewHistory;
     public static boolean showAdminActions;
     public static boolean showChangePermissions;
@@ -91,6 +90,10 @@ public class NekoConfig {
 
     public static String cachePath;
 
+    public static String translateToLang;
+    public static String translateInputLang = "en";
+
+
     static {
 
         useIPv6 = preferences.getBoolean("useIPv6", false);
@@ -105,7 +108,6 @@ public class NekoConfig {
         hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
         showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
         showReport = preferences.getBoolean("showReport", false);
-        showPrPr = preferences.getBoolean("showPrPr", false);
         showViewHistory = preferences.getBoolean("showViewHistory", true);
         showAdminActions = preferences.getBoolean("showAdminActions", true);
         showChangePermissions = preferences.getBoolean("showChangePermissions", true);
@@ -184,14 +186,6 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showViewHistory", showViewHistory);
-        editor.commit();
-    }
-
-    public static void toggleShowPrPr() {
-        showPrPr = !showPrPr;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("showPrPr", showPrPr);
         editor.commit();
     }
 

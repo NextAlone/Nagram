@@ -107,6 +107,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -186,20 +187,15 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_BOTTOM;
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_LEFT;
@@ -208,7 +204,7 @@ import static org.telegram.messenger.MessageObject.POSITION_FLAG_TOP;
 
 public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
-    private Activity parentActivity;
+    public Activity parentActivity;
     private BaseFragment parentFragment;
     private ArrayList<BlockEmbedCell> createdWebViews = new ArrayList<>();
 
@@ -276,7 +272,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     private RecyclerListView[] listView;
     private LinearLayoutManager[] layoutManager;
-    private WebpageAdapter[] adapter;
+    public WebpageAdapter[] adapter;
 
     private AnimatorSet pageSwitchAnimation;
 
@@ -320,7 +316,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     private static final int open_item = 4;
     private static final int settings_item = 5;
 
-    private ActionBarMenuSubItem transMenu;
+    public ActionBarMenuSubItem transMenu;
 
     private int anchorsOffsetMeasuredWidth;
 
@@ -1975,7 +1971,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     }
 
-    private CharSequence getText(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth, boolean noTranslate) {
+    public CharSequence getText(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth, boolean noTranslate) {
         if (richText == null) {
             return null;
         }
@@ -2918,7 +2914,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private void updatePaintSize() {
+    public void updatePaintSize() {
         for (int i = 0; i < 2; i++) {
             adapter[i].notifyDataSetChanged();
         }
@@ -3656,7 +3652,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (!adapter[0].trans) {
                     adapter[0].trans = true;
                     transMenu.setTextAndIcon(LocaleController.getString("UndoTranslate", R.string.UndoTranslate), R.drawable.photo_undo);
-                    doTransLATE();
+                    ArticleTransKt.doTransLATE(this);
                 } else {
                     adapter[0].trans = false;
                     transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
@@ -4065,170 +4061,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         containerView.addView(textSelectionHelper.getOverlayView(activity));
 
         updatePaintColors();
-    }
-
-    private void doTransLATE() {
-
-        AlertDialog.Builder proc = new AlertDialog.Builder(parentActivity, 3);
-
-        ExecutorService transPool = Executors.newFixedThreadPool(5);
-
-        AtomicBoolean cancel = new AtomicBoolean(false);
-
-        proc.setOnCancelListener((it) -> {
-
-            adapter[0].trans = false;
-
-            transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-
-            cancel.set(true);
-
-            transPool.shutdown();
-
-        });
-
-        AlertDialog dialog = proc.show();
-
-        UIUtil.runOnIoDispatcher(() -> {
-
-            HashMap<Object, TLRPC.PageBlock> copy = new HashMap<>(adapter[0].textToBlocks);
-            ArrayList<Object> array = new ArrayList<>(adapter[0].textBlocks);
-            AtomicInteger errorCount = new AtomicInteger();
-            AtomicInteger taskCount = new AtomicInteger(array.size());
-            for (Object item : array) {
-                if (item instanceof TLRPC.TL_textConcat) {
-                    taskCount.addAndGet(((TLRPC.TL_textConcat) item).texts.size() - 1);
-                }
-            }
-            try {
-                for (int b = 0, N = array.size(); b < N; b++) {
-                    Object object = array.get(b);
-                    TLRPC.PageBlock block = copy.get(object);
-                    String textToSearchIn = null;
-                    if (object instanceof TLRPC.RichText) {
-                        TLRPC.RichText richText = (TLRPC.RichText) object;
-                        if (richText.texts.size() > 0) {
-                            for (TLRPC.RichText node : richText.texts) {
-                                String nodeText = getText(adapter[0], null, node, node, block, 1000).toString();
-
-                                if (TranslateDb.contains(nodeText)) {
-                                    taskCount.decrementAndGet();
-                                    continue;
-                                }
-
-                                transPool.execute(() -> {
-
-                                    if (cancel.get()) return;
-
-                                    String localeText;
-                                    try {
-                                        localeText = Translator.translate(nodeText);
-                                        if (cancel.get()) return;
-                                    } catch (Exception e) {
-                                        if (cancel.get()) return;
-                                        boolean finaL = taskCount.decrementAndGet() == 0;
-                                        if (errorCount.incrementAndGet() > 3 || finaL) {
-                                            UIUtil.runOnUIThread(() -> {
-                                                dialog.dismiss();
-                                                adapter[0].trans = false;
-                                                transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                                            });
-
-                                            AlertUtil.showSimpleAlert(parentActivity, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
-                                            cancel.set(true);
-                                            transPool.shutdown();
-                                            AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
-                                        }
-                                        return;
-                                    }
-
-                                    TranslateDb.save(nodeText, localeText);
-                                    UIUtil.runOnUIThread(this::updatePaintSize);
-
-                                    boolean finaL = taskCount.decrementAndGet() < 1;
-
-                                    if (finaL) {
-
-                                        UIUtil.runOnUIThread(dialog::dismiss);
-                                        transPool.shutdown();
-
-                                    }
-
-                                });
-                            }
-                            return;
-                        }
-                        CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
-                        if (!TextUtils.isEmpty(innerText)) {
-                            textToSearchIn = innerText.toString();
-                        }
-                    } else if (object instanceof String) {
-                        textToSearchIn = ((String) object);
-                    }
-
-                    if (textToSearchIn != null) {
-
-                        if (TranslateDb.contains(textToSearchIn)) {
-                            taskCount.decrementAndGet();
-                            continue;
-                        }
-
-                        String finalTextToSearchIn = textToSearchIn;
-
-                        transPool.execute(() -> {
-
-                            if (cancel.get()) return;
-
-                            String localeText;
-                            try {
-                                localeText = Translator.translate(finalTextToSearchIn);
-                                if (cancel.get()) return;
-                            } catch (Exception e) {
-                                if (cancel.get()) return;
-                                boolean finaL = taskCount.decrementAndGet() == 0;
-                                if (errorCount.incrementAndGet() > 3 || finaL) {
-                                    UIUtil.runOnUIThread(() -> {
-                                        dialog.dismiss();
-                                        adapter[0].trans = false;
-                                        transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                                    });
-
-                                    AlertUtil.showSimpleAlert(parentActivity, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
-                                    cancel.set(true);
-                                    transPool.shutdown();
-                                    AlertUtil.showTransFailedDialog(parentActivity, e instanceof UnsupportedOperationException, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), this::doTransLATE);
-                                }
-                                return;
-                            }
-
-                            TranslateDb.save(finalTextToSearchIn, localeText);
-                            UIUtil.runOnUIThread(this::updatePaintSize);
-
-                            boolean finaL = taskCount.decrementAndGet() < 1;
-
-                            if (finaL) {
-
-                                UIUtil.runOnUIThread(dialog::dismiss);
-                                transPool.shutdown();
-
-                            }
-
-                        });
-                    }
-                }
-                if (taskCount.get() == 0) {
-                    transPool.shutdown();
-                    UIUtil.runOnUIThread(dialog::dismiss);
-                    UIUtil.runOnUIThread(this::updatePaintSize);
-                }
-            } catch (Exception ignored) {
-                transPool.shutdown();
-                UIUtil.runOnUIThread(dialog::dismiss);
-                UIUtil.runOnUIThread(this::updatePaintSize);
-            }
-
-        });
-
     }
 
     private void showSearch(boolean show) {
@@ -5308,7 +5140,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private class WebpageAdapter extends RecyclerListView.SelectionAdapter {
+    public class WebpageAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context context;
         private ArrayList<TLRPC.PageBlock> localBlocks = new ArrayList<>();
@@ -5319,8 +5151,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private HashMap<String, TLRPC.TL_textAnchor> anchorsParent = new HashMap<>();
         private HashMap<TLRPC.TL_pageBlockAudio, MessageObject> audioBlocks = new HashMap<>();
         private ArrayList<MessageObject> audioMessages = new ArrayList<>();
-        private HashMap<Object, TLRPC.PageBlock> textToBlocks = new HashMap<>();
-        private ArrayList<Object> textBlocks = new ArrayList<>();
+        public HashMap<Object, TLRPC.PageBlock> textToBlocks = new HashMap<>();
+        public ArrayList<Object> textBlocks = new ArrayList<>();
         private HashMap<String, Integer> searchTextOffset = new HashMap<>();
 
         private TLRPC.WebPage currentPage;
@@ -6339,6 +6171,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         private void cleanup() {
+            trans = false;
+            transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
             currentPage = null;
             blocks.clear();
             photoBlocks.clear();

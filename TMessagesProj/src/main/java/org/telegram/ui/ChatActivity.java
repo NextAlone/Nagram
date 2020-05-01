@@ -14303,11 +14303,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     message.isFromUser());
                             boolean allowViewHistory = currentUser == null
                                     && (currentChat != null && !currentChat.broadcast && message.isFromUser());
-                            if (allowPrpr && NekoConfig.showPrPr) {
-                                items.add(LocaleController.getString("Prpr", R.string.Prpr));
-                                options.add(92);
-                                icons.add(R.drawable.msg_prpr);
-                            }
+
                             if (allowViewHistory && NekoConfig.showViewHistory) {
                                 items.add(LocaleController.getString("ViewUserHistory", R.string.ViewHistory));
                                 options.add(90);
@@ -15473,30 +15469,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.from_id);
                 getMediaDataController().searchMessagesInChat("", dialog_id, mergeDialogId, classGuid, 0, user);
                 showMessagesSearchListView(true);
-                break;
-            }
-            case 92: {
-                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.from_id);
-                if (user.username != null) {
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage("/prpr@" + user.username, dialog_id, selectedObject, null, false,
-                            null, null, null, true, 0);
-                } else {
-                    SpannableString spannableString = new SpannableString("/prpr@" + user.first_name);
-                    spannableString.setSpan(new URLSpanUserMention(Integer.toString(user.id), 1), 6, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    CharSequence[] cs = new CharSequence[]{spannableString};
-                    boolean supportsSendingNewEntities = true;
-                    long peer = getDialogId();
-                    if ((int) peer == 0) {
-                        int high_id = (int) (peer >> 32);
-                        TLRPC.EncryptedChat encryptedChat = getMessagesController().getEncryptedChat(high_id);
-                        if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 101) {
-                            supportsSendingNewEntities = false;
-                        }
-                    }
-                    ArrayList<TLRPC.MessageEntity> entities = getMediaDataController().getEntities(cs, supportsSendingNewEntities);
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(spannableString.toString(), dialog_id, selectedObject, null, false,
-                            entities, null, null, true, 0);
-                }
                 break;
             }
             case 91: {

@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram.utils
 import android.content.Context
 import android.widget.LinearLayout
 import android.widget.Toast
+import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
@@ -37,6 +38,34 @@ object AlertUtil {
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
 
             listener?.invoke(builder)
+
+            builder.dismissRunnable.run()
+
+        }
+
+        builder.show()
+
+    })
+
+    @JvmStatic
+    fun showCopyAlert(ctx: Context, text: String) = UIUtil.runOnUIThread(Runnable {
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(LocaleController.getString("Translate", R.string.Translate))
+        builder.setMessage(text)
+
+        builder.setNegativeButton(LocaleController.getString("Copy", R.string.Copy)) { _, _ ->
+
+            AndroidUtilities.addToClipboard(text)
+
+            AlertUtil.showToast(LocaleController.getString("TextCopied",R.string.TextCopied))
+
+            builder.dismissRunnable.run()
+
+        }
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
 
             builder.dismissRunnable.run()
 

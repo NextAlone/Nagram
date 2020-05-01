@@ -15,8 +15,11 @@ interface Translator {
 
         @Throws(Exception::class)
         @JvmStatic
-        @JvmOverloads
-        fun translate(to: Locale = LocaleController.getInstance().currentLocale, query: String): String {
+        fun translate(query: String) = translate(LocaleController.getInstance().currentLocale,query)
+
+        @Throws(Exception::class)
+        @JvmStatic
+        fun translate(to: Locale, query: String): String {
 
             var toLang = to.language
 
