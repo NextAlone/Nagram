@@ -29,63 +29,12 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
             when (item) {
 
-                is TLRPC.TL_textMarked -> {
-
-                    remove(item)
-                    add(item.text)
-
-                    hasNext = true
-
-                }
-
                 is TLRPC.TL_textConcat -> {
 
                     remove(item)
                     addAll(item.texts)
 
                     hasNext = true
-
-                }
-
-                is TLRPC.TL_textFixed -> {
-
-                    remove(item)
-                    add(item.text)
-
-                    hasNext = true
-
-                }
-
-                is TLRPC.TL_textSubscript -> {
-
-                    remove(item)
-                    add(item.text)
-
-                    hasNext = true
-
-                }
-
-                is TLRPC.TL_textSuperscript -> {
-
-                    remove(item)
-                    add(item.text)
-
-                    hasNext = true
-
-                }
-
-                is TLRPC.TL_textAnchor -> {
-
-                    remove(item)
-                    add(item.text)
-
-                    hasNext = true
-
-                }
-
-                is TLRPC.RichText -> {
-
-                    item.texts.takeIf { isNotEmpty() }?.also { addAll(it);hasNext = true; }
 
                 }
 

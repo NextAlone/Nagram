@@ -89,20 +89,26 @@ object FileUtil {
     @JvmStatic
     fun extLib(name: String): File {
 
-        val execFile = File(ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir, "lib$name.so")
+        var execFile = File(ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir, "lib$name.so")
 
         if (!execFile.isFile) {
 
-            val abi = when (execFile.parentFile!!.name) {
+            execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/lib$name.so")
 
-                "arm64", "aarch64" -> "arm64-v8a"
-                "x86", "i386", "i486", "i586", "i686" -> "x86"
-                "x86_64", "amd64" -> "x86_64"
-                else -> "armeabi-v7a"
+            if (!execFile.isFile) {
+
+                val abi = when (execFile.parentFile!!.name) {
+
+                    "arm64", "aarch64" -> "arm64-v8a"
+                    "x86", "i386", "i486", "i586", "i686" -> "x86"
+                    "x86_64", "amd64" -> "x86_64"
+                    else -> "armeabi-v7a"
+
+                }
+
+                saveNonAsset("lib/$abi/${execFile.name}", execFile);
 
             }
-
-            saveNonAsset("lib/$abi/${execFile.name}", execFile);
 
         }
 
@@ -118,6 +124,8 @@ object FileUtil {
 
     @JvmStatic
     fun saveNonAsset(path: String, saveTo: File) {
+
+        saveTo.parentFile?.also { initDir(it) }
 
         val assets = ApplicationLoader.applicationContext.assets
 

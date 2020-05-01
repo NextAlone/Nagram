@@ -33,6 +33,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -806,7 +807,15 @@ public class SharedConfig {
 
     public static LinkedList<ProxyInfo> getProxyList() {
 
-        return new LinkedList<>(proxyList);
+        while (true) {
+
+            try {
+
+                return new LinkedList<>(proxyList);
+
+            } catch (ConcurrentModificationException ignored) {}
+
+        }
 
     }
 

@@ -1273,7 +1273,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         String urlFinal = textS.toString();
                         Activity activity = ProxyUtil.getOwnerActivity((((View) selectedView).getContext()));
                         if (TranslateDb.contains(urlFinal)) {
-                            AlertUtil.showSimpleAlert(activity, TranslateDb.query(urlFinal));
+                            AlertUtil.showCopyAlert(activity, TranslateDb.query(urlFinal));
                         } else {
                             AlertDialog pro = AlertUtil.showProgress(activity);
                             pro.show();
@@ -1281,7 +1281,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                 @Override public void onSuccess(@NotNull String translation) {
                                     TranslateDb.save(urlFinal, translation);
                                     pro.dismiss();
-                                    AlertUtil.showSimpleAlert(activity, translation);
+                                    AlertUtil.showCopyAlert(activity, translation);
                                 }
 
                                 @Override public void onFailed(boolean unsupported, @NotNull String message) {

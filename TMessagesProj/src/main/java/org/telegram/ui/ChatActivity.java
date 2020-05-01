@@ -12375,7 +12375,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     ChatMessageCell cell = (ChatMessageCell) view;
                     MessageObject message = cell.getMessageObject();
-                    if (message != null && message.equals(hintMessageObject)) {
+                    if (message != null && hintMessageObject != null && message.equals(hintMessageObject)) {
                         cell.showHintButton(true, true, type);
                     }
                 }
@@ -12582,7 +12582,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, 8, stringBuilder);
-        if (true || currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
+        if (AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
             stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
             run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
@@ -12597,7 +12597,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         menu.add(R.id.menu_groupbolditalic, R.id.menu_link, 11, LocaleController.getString("CreateLink", R.string.CreateLink));
         menu.add(R.id.menu_groupbolditalic, R.id.menu_mention, 12, LocaleController.getString("CreateMention", R.string.CreateMention));
         menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, 13, LocaleController.getString("Regular", R.string.Regular));
-        return true;
     }
 
     private void updateScheduledInterface(boolean animated) {
@@ -14322,7 +14321,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(89);
                                 icons.add(R.drawable.menu_info);
                             }
-                            if ((StrUtil.isNotBlank(selectedObject.messageOwner.message) || StrUtil.isNotBlank(selectedObject.caption)) && NekoConfig.showTranslate) {
+                            if (StrUtil.isNotBlank(selectedObject.messageOwner.message) && NekoConfig.showTranslate) {
                                 Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(selectedObject.messageOwner.message);
                                 items.add(matcher.find() ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
                                 options.add(88);
@@ -15390,22 +15389,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                     }
-                    String original;
-
-                    if (StrUtil.isBlank(selectedObject.caption)) {
-                        original = selectedObject.messageOwner.message;
-                    } else {
-                        original = selectedObject.caption.toString();
-                    }
+                    String original = selectedObject.messageOwner.message;
 
                     Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(original);
                     if (matcher.find()) {
                         if (messageCell != null) {
-                            if (StrUtil.isBlank(selectedObject.caption)) {
-                                MessageHelper.setMessageContent(selectedObject, messageCell, original.replace(matcher.group(), ""));
-                            } else {
-                                MessageHelper.setMessageCaption(selectedObject, messageCell, original.replace(matcher.group(), ""));
-                            }
+                            MessageHelper.setMessageContent(selectedObject, messageCell, original.replace(matcher.group(), ""));
                             chatAdapter.updateRowWithMessageObject(selectedObject, true);
                         }
                     } else {
@@ -15413,18 +15402,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (TranslateDb.contains(original)) {
                             if (finalMessageCell != null) {
                                 MessageObject messageObject = finalMessageCell.getMessageObject();
-                                String replacement = original +
+                                MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
                                         "\u200C\u200C\n" +
                                         "\n" +
                                         "--------" +
                                         "\n" +
                                         TranslateDb.query(original) +
-                                        "\u200C\u200C";
-                                if (StrUtil.isBlank(messageObject.caption)) {
-                                    MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
-                                } else {
-                                    MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
-                                }
+                                        "\u200C\u200C");
                                 chatAdapter.updateRowWithMessageObject(messageObject, true);
                             }
                         } else {
@@ -15435,18 +15419,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     TranslateDb.save(original, translation);
                                     if (getParentActivity() != null && finalMessageCell != null) {
                                         MessageObject messageObject = finalMessageCell.getMessageObject();
-                                        String replacement = original +
+                                        MessageHelper.setMessageContent(messageObject,finalMessageCell,original +
                                                 "\u200C\u200C\n" +
                                                 "\n" +
                                                 "--------" +
                                                 "\n" +
-                                                TranslateDb.query(original) +
-                                                "\u200C\u200C";
-                                        if (StrUtil.isBlank(messageObject.caption)) {
-                                            MessageHelper.setMessageContent(messageObject, finalMessageCell, replacement);
-                                        } else {
-                                            MessageHelper.setMessageCaption(messageObject, finalMessageCell, replacement);
-                                        }
+                                                translation +
+                                                "\u200C\u200C");
                                         chatAdapter.updateRowWithMessageObject(messageObject, true);
                                     }
                                 }

@@ -25,8 +25,8 @@ object EnvUtil {
 
         LinkedList<File>().apply {
 
-            add(File(ApplicationLoader.applicationContext.cacheDir, "files/files"))
-            add(File(ApplicationLoader.applicationContext.filesDir, "cache/files"))
+            add(File(ApplicationLoader.getDataDirFixed(), "files/media"))
+            add(File(ApplicationLoader.getDataDirFixed(), "cache/media"))
 
             rootDirectories.forEach {
 

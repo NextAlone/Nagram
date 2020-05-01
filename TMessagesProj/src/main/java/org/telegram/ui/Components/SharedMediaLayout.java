@@ -3816,7 +3816,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override
         public int getItemCount() {
-            return chatInfo != null ? chatInfo.participants.participants.size() : 0;
+            return (chatInfo != null && chatInfo.participants != null) ? chatInfo.participants.participants.size() : 0;
         }
 
         @Override

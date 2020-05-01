@@ -308,7 +308,7 @@ public class UndoView extends FrameLayout {
         if (currentActionRunnable != null) {
             currentActionRunnable.run();
         }
-        if (NekoConfig.disableUndo && action != ACTION_DICE_INFO && action != ACTION_DICE_NO_SEND_INFO) {
+        if (NekoConfig.disableUndo && action < ACTION_QUIZ_CORRECT) {
             if (actionRunnable != null) actionRunnable.run();
             return;
         }

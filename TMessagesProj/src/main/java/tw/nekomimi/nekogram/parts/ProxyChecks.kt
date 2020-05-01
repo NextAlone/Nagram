@@ -18,7 +18,7 @@ fun ProxyListActivity.checkProxyList(force: Boolean, context: ExecutorService) {
 
     GlobalScope.launch(Dispatchers.IO) {
 
-        SharedConfig.proxyList.forEach {
+        SharedConfig.proxyList.toList().forEach {
 
             if (it.checking || SystemClock.elapsedRealtime() - it.availableCheckTime < 2 * 60 * 1000L && !force) {
 

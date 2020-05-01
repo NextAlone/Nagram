@@ -26,6 +26,8 @@ public class PickerBottomLayout extends FrameLayout {
 
     public LinearLayout doneButton;
     public TextView cancelButton;
+    public LinearLayout middleButton;
+    public TextView middleButtonTextView;
     public TextView doneButtonTextView;
     public TextView doneButtonBadgeTextView;
 
@@ -48,11 +50,31 @@ public class PickerBottomLayout extends FrameLayout {
         cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(cancelButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
+        LinearLayout rightLayout = new LinearLayout(context);
+        rightLayout.setOrientation(LinearLayout.HORIZONTAL);
+        rightLayout.setGravity(Gravity.CENTER_VERTICAL);
+        addView(rightLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
+
+        middleButton = new LinearLayout(context);
+        middleButton.setOrientation(LinearLayout.HORIZONTAL);
+        middleButton.setBackgroundDrawable(Theme.createSelectorDrawable(0x0f000000, 0));
+        middleButton.setPadding(AndroidUtilities.dp(33), 0, AndroidUtilities.dp(33), 0);
+        middleButton.setVisibility(GONE);
+        rightLayout.addView(middleButton);
+
+        middleButtonTextView = new TextView(context);
+        middleButtonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        middleButtonTextView.setTextColor(Theme.getColor(Theme.key_picker_enabledButton));
+        middleButtonTextView.setGravity(Gravity.CENTER);
+        middleButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8));
+        middleButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        middleButton.addView(middleButtonTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
+
         doneButton = new LinearLayout(context);
         doneButton.setOrientation(LinearLayout.HORIZONTAL);
         doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(0x0f000000, 0));
         doneButton.setPadding(AndroidUtilities.dp(33), 0, AndroidUtilities.dp(33), 0);
-        addView(doneButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
+        rightLayout.addView(doneButton);
 
         doneButtonBadgeTextView = new TextView(context);
         doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

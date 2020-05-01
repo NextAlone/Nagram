@@ -823,6 +823,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 for (SubInfo subInfo : SubManager.getSubList().find()) {
 
+                    if (subInfo == null) continue;
+
                     try {
 
                         subInfo.proxies = subInfo.reloadProxies();
