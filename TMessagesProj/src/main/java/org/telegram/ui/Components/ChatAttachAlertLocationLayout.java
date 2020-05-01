@@ -401,7 +401,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             searchAdapter.destroy();
         }
 
-
         ActionBarMenu menu = parentAlert.actionBar.createMenu();
 
         overlayView = new MapOverlayView(context);
@@ -953,6 +952,10 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             } catch (Exception e) {
                 FileLog.e(e);
             }
+            if(mapView.getOverlays().contains(myLocationOverlay)) {
+                mapView.getOverlays().remove(myLocationOverlay);
+            }
+            myLocationOverlay.disableMyLocation();
         }
         onResumeCalled = false;
     }
@@ -969,6 +972,10 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         try {
             if (mapView != null) {
                 mapView.onPause();
+                if(mapView.getOverlays().contains(myLocationOverlay)) {
+                    mapView.getOverlays().remove(myLocationOverlay);
+                }
+                myLocationOverlay.disableMyLocation();
             }
         } catch (Exception ignore) {
 
@@ -1585,6 +1592,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             } catch (Throwable e) {
                 FileLog.e(e);
             }
+            mapView.getOverlays().add(myLocationOverlay);
+            myLocationOverlay.enableMyLocation();
         }
         onResumeCalled = true;
     }
