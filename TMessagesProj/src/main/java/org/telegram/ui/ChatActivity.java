@@ -12562,6 +12562,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return true;
             }
         }
+        fillActionModeMenu(menu);
+        return true;
+    }
+
+    public void fillActionModeMenu(Menu menu) {
+        if (menu.findItem(R.id.menu_bold) != null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= 23) {
             menu.removeItem(android.R.id.shareText);
         }
@@ -16608,6 +16616,30 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
                             MessageObject.addLinks(false, stringBuilder);
+                            MessageObject.GroupedMessages group = cell.getCurrentMessagesGroup();
+                            if (group != null) {
+                                for (int a = 0, N = group.posArray.size(); a < N; a++) {
+                                    MessageObject.GroupedMessagePosition pos = group.posArray.get(a);
+                                    if ((pos.flags & MessageObject.POSITION_FLAG_LEFT) != 0) {
+                                        MessageObject m = group.messages.get(a);
+                                        if (m != messageObject) {
+                                            messageObject = m;
+                                            int count = chatListView.getChildCount();
+                                            for (int b = 0; b < count; b++) {
+                                                View view = chatListView.getChildAt(b);
+                                                if (!(view instanceof ChatMessageCell)) {
+                                                    continue;
+                                                }
+                                                ChatMessageCell c = (ChatMessageCell) view;
+                                                if (messageObject.equals(c.getMessageObject())) {
+                                                    cell = c;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                             showInfoHint(messageObject, stringBuilder, 1);
                         }
                         cell.showHintButton(false, true, type);
