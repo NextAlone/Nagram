@@ -1467,7 +1467,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             mapTypeButton.setTranslationY(translationY);
             searchAreaButton.setTranslation(translationY);
             locationButton.setTranslationY(-clipSize);
-            markerImageView.setTranslationY(markerTop = (mapHeight - clipSize) / 2 - AndroidUtilities.dp(48) + trY);
+            markerImageView.setTranslationY(markerTop = (mapHeight) / 2 - AndroidUtilities.dp(48) + trY);
             if (prevClipSize != clipSize) {
                 GeoPoint location;
                 if (lastPressedMarker != null) {
