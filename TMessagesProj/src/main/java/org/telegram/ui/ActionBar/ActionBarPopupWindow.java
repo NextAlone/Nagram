@@ -401,6 +401,12 @@ public class ActionBarPopupWindow extends PopupWindow {
             content.setPivotX(content.getMeasuredWidth());
             content.setPivotY(0);
             int count = content.getItemsCount();
+            int height = AndroidUtilities.displayMetrics.heightPixels;
+            int item =  content.getItemAt(0).getMeasuredHeight();
+            if (item > 0) {
+                int maxItems = height / item;
+                if (count > maxItems) count = maxItems;
+            }
             content.positions.clear();
             int visibleCount = 0;
             for (int a = 0; a < count; a++) {
@@ -422,6 +428,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                     ObjectAnimator.ofFloat(content, "backScaleY", 0.0f, 1.0f),
                     ObjectAnimator.ofInt(content, "backAlpha", 0, 255));
             windowAnimatorSet.setDuration(150 + 16 * visibleCount);
+            int finalCount = count;
             windowAnimatorSet.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -432,8 +439,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 public void onAnimationEnd(Animator animation) {
                     windowAnimatorSet = null;
                     ActionBarPopupWindowLayout content = (ActionBarPopupWindowLayout) getContentView();
-                    int count = content.getItemsCount();
-                    for (int a = 0; a < count; a++) {
+                    for (int a = 0; a < finalCount; a++) {
                         View child = content.getItemAt(a);
                         child.setAlpha(1.0f);
                     }

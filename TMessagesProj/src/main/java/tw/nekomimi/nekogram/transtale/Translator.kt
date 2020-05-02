@@ -91,7 +91,7 @@ interface Translator {
 
             val builder = PopupBuilder(anchor)
 
-            var locales = (if (full) LocaleUtils.availableLocaleList() else LocaleController.getInstance().languages.map { it.pluralLangCode }.toSet().map { it.code2Locale }).filter { it.country.isBlank() && it.variant.isBlank() }.toTypedArray()
+            var locales = (if (full) LocaleUtils.availableLocaleList().filter { it.variant.isBlank() } else LocaleController.getInstance().languages.map { it.pluralLangCode }.toSet().map { it.code2Locale }).toTypedArray()
 
             val currLocale = LocaleController.getInstance().currentLocale
 
@@ -114,7 +114,7 @@ interface Translator {
 
             for (i in locales.indices) {
 
-                localeNames[i] = if (i == 0) {
+                localeNames[i] = if (!full && i == 0) {
 
                     LocaleController.getString("Default", R.string.Default) + " ( " + locales[i].getDisplayName(currLocale) + " )"
 
