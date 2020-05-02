@@ -10,7 +10,6 @@ NekoX is an open source third-party Telegram android app.
 - FAQ: https://telegra.ph/NekoX-FAQ-03-31
 - FAQ (Chinese): https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31
 
-
 ## Telegram-FOSS Changes:
 
 *Replacement of non-FOSS, untrustworthy or suspicious binaries or source code:*
@@ -75,6 +74,7 @@ NekoX is an open source third-party Telegram android app.
 - Add stickers without sticker pack
 - Sticker set list backup / restore / share
 - Full InstantView translation support
+- Translation support for selected text on input and in messages
 - Delete all messages in group
 - Dialog sorting is optional "Unread and can be prioritized for reminding" etc.
 - Allow to skip "regret within five seconds"

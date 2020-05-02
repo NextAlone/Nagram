@@ -21,6 +21,9 @@
     <string name="ProviderYandex">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google 云翻译密钥</string>
     <string name="GoogleCloudTransKeyNotice">如果您设置了一个谷歌云密钥： 云翻译API将被调用，而不是模拟表单提交到网页版 (快速、稳定和节省流量)。</string>
+    <string name="TransToLang">翻译目标语言</string>
+    <string name="TransInputToLang">输入翻译目标语言</string>
+    <string name="More">更多</string>
     <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="UseDefaultTheme">使用默认主题 *</string>
@@ -32,6 +35,7 @@
     <string name="PrivacyNotice2fa">检测到您没有设置密码，这可能会导致政府控制的黑客找到您的真实身份，请设置一个！</string>
     <string name="ApplySuggestion">应用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
+    <string name="InstantViewTransWithWeb">无法使用网页翻译器翻译 InstantView</string>
     <string name="RemoveTitleEmoji">移除标题中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
     <string name="PublicPrefix">公共</string>
