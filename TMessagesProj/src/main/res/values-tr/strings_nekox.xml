@@ -27,7 +27,6 @@
     <string name="PublicPrefix">Genel</string>
     <string name="DisableChatAction">Giriş durumumu (yazıyor, vb.) gönderme</string>
     <string name="FakeScreenshot">Ekran görüntüsü gibi davran</string>
-    <string name="SaveCacheToSdcard">Önbelleği SD Karta (Hafıza Kartına) Kaydet*</string>
     <string name="Import">İçe aktar</string>
     <string name="FilterNameUsers">Kullanıcılar</string>
     <string name="FilterNameUsersDescription">Yalnızca özel sohbetlerden gelen iletiler</string>

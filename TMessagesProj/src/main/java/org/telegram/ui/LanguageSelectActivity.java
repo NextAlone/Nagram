@@ -164,14 +164,12 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 if (localeInfo.toInstall) {
                     AlertsCreator.createLanguageAlert((LaunchActivity) getParentActivity(),localeInfo.pack,() -> {
                         finishFragment();
-                        UIUtil.runOnIoDispatcher(TranslateDb::clear);
                     }).show();
                     return;
                 }
                 LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, currentAccount);
                 parentLayout.rebuildAllFragmentViews(false, false);
             }
-            UIUtil.runOnIoDispatcher(TranslateDb::clear);
             finishFragment();
         });
 

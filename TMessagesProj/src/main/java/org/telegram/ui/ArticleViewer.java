@@ -2009,8 +2009,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (!noTranslate && StrUtil.isNotBlank(plainText) && adapter.trans && TranslateDb.contains(plainText)) {
-                plainText = TranslateDb.query(plainText);
+            if (!noTranslate && StrUtil.isNotBlank(plainText) && adapter.trans && TranslateDb.currentTarget().contains(plainText)) {
+                plainText = TranslateDb.currentTarget().query(plainText);
             }
             return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
@@ -2127,8 +2127,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return getPlainText(((TLRPC.TL_textUrl) richText).text);
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (plainText != null && Instance != null && Instance.adapter[0].trans && TranslateDb.contains(plainText)) {
-                plainText = TranslateDb.query(plainText);
+            if (plainText != null && Instance != null && Instance.adapter[0].trans && TranslateDb.currentTarget().contains(plainText)) {
+                plainText = TranslateDb.currentTarget().query(plainText);
             }
             return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
@@ -2442,7 +2442,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         CharSequence text;
         if (plainText != null) {
-            text = (parentAdapter.trans && TranslateDb.contains(plainText.toString())) ? TranslateDb.query(plainText.toString()) : plainText;
+            text = (parentAdapter.trans && TranslateDb.currentTarget().contains(plainText.toString())) ? TranslateDb.currentTarget().query(plainText.toString()) : plainText;
         } else {
             text = getText(parentAdapter, parentView, richText, richText, parentBlock, width);
         }

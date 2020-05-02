@@ -74,7 +74,7 @@ NekoX is an open source third-party Telegram android app.
 - Allow auto disable proxy when VPN is enabled
 - Add stickers without sticker pack
 - Sticker set list backup / restore / share
-- Instant View translation support
+- Full InstantView translation support
 - Delete all messages in group
 - Dialog sorting is optional "Unread and can be prioritized for reminding" etc.
 - Allow to skip "regret within five seconds"

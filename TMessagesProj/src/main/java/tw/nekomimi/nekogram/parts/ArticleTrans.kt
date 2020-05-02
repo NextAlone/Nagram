@@ -117,7 +117,7 @@ fun ArticleViewer.doTransLATE() {
 
                 deferreds.add(async(transPool) {
 
-                    if (TranslateDb.contains(str)) {
+                    if (TranslateDb.currentTarget().contains(str)) {
 
                         update("${all - taskCount.get()} / $all")
 
@@ -135,7 +135,7 @@ fun ArticleViewer.doTransLATE() {
 
                         if (cancel.get()) return@async
 
-                        TranslateDb.save(str, Translator.translate(str))
+                        TranslateDb.currentTarget().save(str, Translator.translate(str))
 
                         update((all - taskCount.get()).toString() + " / " + all)
 

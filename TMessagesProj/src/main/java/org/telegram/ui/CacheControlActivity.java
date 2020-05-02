@@ -68,6 +68,7 @@ import org.telegram.ui.Components.UndoView;
 import java.io.File;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class CacheControlActivity extends BaseFragment {
@@ -623,6 +624,9 @@ public class CacheControlActivity extends BaseFragment {
                     database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
                     database.executeFast("VACUUM").stepThis().dispose();
                     database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
+
+                    TranslateDb.clearAll();
+
                 } catch (Exception e) {
                     FileLog.e(e);
                 } finally {

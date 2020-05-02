@@ -14,7 +14,6 @@
     <string name="NekoXProxy">خادم NekoX العام</string>
     <string name="DisableChatAction">لا تقم بإرسال حالة الإدخال</string>
     <string name="FakeScreenshot">لقطة شاشة مخرجة</string>
-    <string name="SaveCacheToSdcard">حفظ التخزين المؤقت على sdcard*</string>
     <string name="FilterNameUsers">المستخدمون</string>
     <string name="FilterNameUsersDescription">فقط الرسائل من المحادثات الخاصة</string>
     <string name="FilterNameContacts">جهات الاتصال</string>

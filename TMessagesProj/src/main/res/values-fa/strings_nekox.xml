@@ -20,7 +20,6 @@
     <string name="NekoXProxy">پروکسی عمومی NekoX</string>
     <string name="DisableChatAction">وضعیت مرا ارسال نکن</string>
     <string name="FakeScreenshot">تصویر پیش‌نمایش</string>
-    <string name="SaveCacheToSdcard">ذخیره کش در حافظه sd card</string>
     <string name="FilterNameUsers">کاربران</string>
     <string name="FilterNameUsersDescription">فقط پیام های چت های خصوصی</string>
     <string name="FilterNameContacts">مخاطبین</string>

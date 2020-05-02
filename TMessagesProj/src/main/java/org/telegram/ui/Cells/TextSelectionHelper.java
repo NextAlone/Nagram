@@ -1277,14 +1277,14 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         if (NekoConfig.translationProvider < 0) {
                             TranslateBottomSheet.show(activity, urlFinal);
                         } else {
-                            if (TranslateDb.contains(urlFinal)) {
-                                AlertUtil.showCopyAlert(activity, TranslateDb.query(urlFinal));
+                            if (TranslateDb.currentTarget().contains(urlFinal)) {
+                                AlertUtil.showCopyAlert(activity, TranslateDb.currentTarget().query(urlFinal));
                             } else {
                                 AlertDialog pro = AlertUtil.showProgress(activity);
                                 pro.show();
                                 Translator.translate(urlFinal, new Translator.Companion.TranslateCallBack() {
                                     @Override public void onSuccess(@NotNull String translation) {
-                                        TranslateDb.save(urlFinal, translation);
+                                        TranslateDb.currentTarget().save(urlFinal, translation);
                                         pro.dismiss();
                                         AlertUtil.showCopyAlert(activity, translation);
                                     }

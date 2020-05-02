@@ -29,6 +29,10 @@
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">If you set up a Google Cloud Trans Key, the cloud translation API will be called instead of submitting a fake form to the web version when translating (faster, stable and saving traffic).</string>
 
+    <string name="TransToLang">Translation target language</string>
+    <string name="TransInputToLang">Translation input target language</string>
+    <string name="More">More</string>
+
     <string name="NekoXUpdatesChannel">NekoX Updates Channel</string>
     <string name="ShowIdAndDc">Show ID / DC in profile</string>
     <string name="UseDefaultTheme">Use default theme *</string>
@@ -52,7 +56,6 @@
 
     <string name="DisableChatAction">Don\'t send my input status</string>
     <string name="FakeScreenshot">Pretend screenshot</string>
-    <string name="SaveCacheToSdcard">Save cache to sdcard*</string>
 
     <string name="Import">Import</string>
 

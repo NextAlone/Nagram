@@ -14,7 +14,6 @@
     <string name="NekoXProxy">NekoXパブリックプロキシ</string>
     <string name="PublicPrefix">パブリック</string>
     <string name="DisableChatAction">入力ステータスを送信しない</string>
-    <string name="SaveCacheToSdcard">キャッシュをSDカードに保存</string>
     <string name="FilterNameUsers">ユーザー</string>
     <string name="FilterNameUsersDescription">プライベートチャットからのメッセージのみ</string>
     <string name="FilterNameContacts">連絡先</string>

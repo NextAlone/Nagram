@@ -12,6 +12,7 @@ import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.utils.HttpUtil
 import tw.nekomimi.nekogram.utils.applyUserAgent
+import java.util.*
 import java.util.regex.Pattern
 
 object GoogleWebTranslator : Translator {

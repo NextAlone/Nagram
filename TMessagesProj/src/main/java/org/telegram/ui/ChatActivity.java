@@ -220,6 +220,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -794,6 +795,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int text_strike = 55;
     private final static int text_underline = 56;
     private final static int text_mention = 57;
+    private final static int text_transalte = 58;
 
     private final static int search = 40;
 
@@ -1569,6 +1571,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         chatActivityEnterView.getEditField().setSelectionOverride(editTextStart, editTextEnd);
                         chatActivityEnterView.getEditField().makeSelectedRegular();
                     }
+                } else if (id == text_transalte) {
+                    if (chatActivityEnterView != null) {
+                        chatActivityEnterView.getEditField().setSelectionOverride(editTextStart, editTextEnd);
+                        chatActivityEnterView.getEditField().makeSelectedTranslate();
+                    }
                 } else if (id == show_pinned) {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     preferences.edit().putInt("pin_" + dialog_id, 0).apply();
@@ -1739,6 +1746,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             editTextItem = menu.addItem(0, R.drawable.ic_ab_other);
             editTextItem.setTag(null);
             editTextItem.setVisibility(View.GONE);
+
+            editTextItem.addSubItem(text_transalte, LocaleController.getString("Translate", R.string.Translate));
 
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -3649,9 +3658,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     builder.setNeutralButton(LocaleController.getString("Hide", R.string.Hide), (dialogInterface, i) -> {
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                         if (chatInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
+                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
                         } else if (userInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
+                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
                         }
                         updatePinnedMessageView(true);
                     });
@@ -3659,9 +3668,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     if (chatInfo != null) {
-                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).commit();
+                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
                     } else if (userInfo != null) {
-                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).commit();
+                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
                     }
                     updatePinnedMessageView(true);
                 }
@@ -12521,10 +12530,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (!TextUtils.isEmpty(message)) {
                         if (topUndoView != null) {
                             if (type == MessagesController.PROMO_TYPE_PROXY) {
-                                preferences.edit().putLong("proxychannel", dialog_id).commit();
+                                preferences.edit().putLong("proxychannel", dialog_id).apply();
                             } else if (type == MessagesController.PROMO_TYPE_PSA) {
                                 String psaType = getMessagesController().promoPsaType;
-                                preferences.edit().putBoolean(psaType + "_shown", true).commit();
+                                preferences.edit().putBoolean(psaType + "_shown", true).apply();
                             }
                             SpannableStringBuilder stringBuilder = new SpannableStringBuilder(message);
                             MessageObject.addLinks(false, stringBuilder);
@@ -12573,6 +12582,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (Build.VERSION.SDK_INT >= 23) {
             menu.removeItem(android.R.id.shareText);
         }
+
+        menu.add(R.id.menu_translate, R.id.menu_translate, 5, LocaleController.getString("Translate", R.string.Translate));
+
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
         stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         menu.add(R.id.menu_groupbolditalic, R.id.menu_bold, 6, stringBuilder);
@@ -12597,6 +12609,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         menu.add(R.id.menu_groupbolditalic, R.id.menu_link, 11, LocaleController.getString("CreateLink", R.string.CreateLink));
         menu.add(R.id.menu_groupbolditalic, R.id.menu_mention, 12, LocaleController.getString("CreateMention", R.string.CreateMention));
         menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, 13, LocaleController.getString("Regular", R.string.Regular));
+
     }
 
     private void updateScheduledInterface(boolean animated) {
@@ -14558,13 +14571,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (selectedObject == null || i < 0 || i >= options.size()) {
                         return false;
                     }
-                    if (processSelectedOptionLongClick(options.get(i))) {
+
+                    int r = processSelectedOptionLongClick(cell, options.get(i));
+
+                    if (r == 2) {
                         if (scrimPopupWindow != null) {
                             scrimPopupWindow.dismiss();
                         }
-                        return true;
                     }
-                    return false;
+                    return r > 0;
                 });
             }
             scrollView.addView(linearLayout, LayoutHelper.createScroll(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
@@ -15402,7 +15417,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (NekoConfig.translationProvider < 0) {
                             TranslateBottomSheet.show(getParentActivity(), original);
                         } else {
-                            if (TranslateDb.contains(original)) {
+                            if (TranslateDb.currentTarget().contains(original)) {
                                 if (finalMessageCell != null) {
                                     MessageObject messageObject = finalMessageCell.getMessageObject();
                                     MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
@@ -15410,7 +15425,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                             "\n" +
                                             "--------" +
                                             "\n" +
-                                            TranslateDb.query(original) +
+                                            TranslateDb.currentTarget().query(original) +
                                             "\u200C\u200C");
                                     chatAdapter.updateRowWithMessageObject(messageObject, true);
                                 }
@@ -15419,7 +15434,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 Translator.translate(original, new Translator.Companion.TranslateCallBack() {
                                     @Override
                                     public void onSuccess(@NotNull String translation) {
-                                        TranslateDb.save(original, translation);
+                                        TranslateDb.currentTarget().save(original, translation);
                                         if (getParentActivity() != null && finalMessageCell != null) {
                                             MessageObject messageObject = finalMessageCell.getMessageObject();
                                             MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
@@ -15593,8 +15608,96 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         selectedObjectToEditCaption = null;
     }
 
-    private boolean processSelectedOptionLongClick(int option) {
+    private int processSelectedOptionLongClick(ActionBarMenuSubItem cell, int option) {
         switch (option) {
+            case 88: {
+
+                ChatMessageCell messageCell = null;
+                int count = chatListView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = chatListView.getChildAt(a);
+                    if (child instanceof ChatMessageCell) {
+                        ChatMessageCell c = (ChatMessageCell) child;
+                        if (c.getMessageObject() == selectedObject) {
+                            messageCell = c;
+                            break;
+                        }
+                    }
+                }
+
+                if (messageCell == null) return 0;
+
+                String original = selectedObject.messageOwner.message;
+
+                Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(original);
+                if (matcher.find()) return 0;
+
+                ChatMessageCell finalMessageCell = messageCell;
+                Translator.showTargetLangSelect(cell, 0, (locale) -> {
+
+                    if (scrimPopupWindow != null) {
+                        scrimPopupWindow.dismiss();
+                        scrimPopupWindow = null;
+                        scrimPopupWindowItems = null;
+                    }
+
+                    if (NekoConfig.translationProvider < 0) {
+                        TranslateBottomSheet.show(getParentActivity(), original);
+                    } else {
+                        if (TranslateDb.forLocale(locale).contains(original)) {
+                                MessageObject messageObject = finalMessageCell.getMessageObject();
+                                MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                        "\u200C\u200C\n" +
+                                        "\n" +
+                                        "--------" +
+                                        "\n" +
+                                        TranslateDb.forLocale(locale).query(original) +
+                                        "\u200C\u200C");
+                                chatAdapter.updateRowWithMessageObject(messageObject, true);
+                        } else {
+
+                            Translator.translate(locale,original, new Translator.Companion.TranslateCallBack() {
+                                @Override
+                                public void onSuccess(@NotNull String translation) {
+                                    TranslateDb.forLocale(locale).save(original, translation);
+                                    if (getParentActivity() != null) {
+                                        MessageObject messageObject = finalMessageCell.getMessageObject();
+                                        MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                                "\u200C\u200C\n" +
+                                                "\n" +
+                                                "--------" +
+                                                "\n" +
+                                                translation +
+                                                "\u200C\u200C");
+                                        chatAdapter.updateRowWithMessageObject(messageObject, true);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(boolean unsupported, @NotNull String message) {
+                                    Activity parentActivity = getParentActivity();
+                                    if (parentActivity != null) {
+                                        AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
+                                            if (NekoConfig.translationProvider < 0) {
+                                                TranslateBottomSheet.show(getParentActivity(), original);
+                                            } else {
+                                                Translator.translate(original, this);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
+                    return Unit.INSTANCE;
+
+                });
+
+                return 1;
+
+            }
             case 94: {
                 ArrayList<MessageObject> messages = new ArrayList<>();
                 messages.add(selectedObject);
@@ -15617,12 +15720,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(toSend.toString(), dialog_id, selectedObject, null, false,
                                 null, null, null, true, 0);
-                        return true;
+                        return 2;
                     }
                 }
             }
         }
-        return false;
+        return 0;
     }
 
     @Override

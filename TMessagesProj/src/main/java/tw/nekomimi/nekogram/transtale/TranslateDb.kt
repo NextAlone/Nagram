@@ -1,43 +1,57 @@
 package tw.nekomimi.nekogram.transtale
 
-import org.dizitart.no2.filters.Filters
+import org.dizitart.no2.objects.ObjectRepository
 import org.dizitart.no2.objects.filters.ObjectFilters
-import tw.nekomimi.nekogram.database.mkCacheDatabase
+import org.telegram.messenger.LocaleController
+import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.database.mkDatabase
+import java.util.*
+import kotlin.collections.HashMap
 
-object TranslateDb {
+class TranslateDb(val code: String) {
 
-    val db = mkCacheDatabase("translate_caches")
-    var conn = db.getRepository("trans", TransItem::class.java)
+    var conn: ObjectRepository<TransItem> = db.getRepository(code, TransItem::class.java)
 
-    @JvmStatic
-    fun clear() {
+    companion object {
 
-        conn.remove(ObjectFilters.ALL)
+        val db = mkDatabase("translate_caches")
+
+        val repo = HashMap<Locale, TranslateDb>()
+
+        @JvmStatic fun currentTarget() = NekoConfig.translateToLang?.transDbByCode ?: LocaleController.getInstance().currentLocale.transDb
+
+        @JvmStatic fun forLocale(locale: Locale) = locale.transDb
+
+        @JvmStatic fun currentInputTarget() = NekoConfig.translateInputLang.transDbByCode
+
+        @JvmStatic fun clearAll() {
+
+            db.listRepositories().map { it.transDbByCode }.forEach { it.clear() }
+
+            repo.clear()
+
+        }
 
     }
 
-    @JvmStatic
-    fun contains(text: String) = conn.find(ObjectFilters.eq("text", text)).count() > 0
+    fun clear() = synchronized<Unit>(this) {
 
-    @JvmStatic
-    fun save(text: String, trans: String) {
+        conn.drop()
+        conn = db.getRepository(code, TransItem::class.java)
+
+    }
+
+    fun contains(text: String) = synchronized(this) { conn.find(ObjectFilters.eq("text", text)).count() > 0 }
+
+    fun save(text: String, trans: String) = synchronized<Unit>(this) {
 
         conn.update(TransItem(text, trans), true)
 
     }
 
-    @JvmStatic
-    fun query(text: String): String? {
+    fun query(text: String) = synchronized<String?>(this) {
 
-        val result = conn.find(ObjectFilters.eq("text", text));
-
-        runCatching {
-
-            return result.first().trans!!
-
-        }
-
-        return null
+        return conn.find(ObjectFilters.eq("text", text)).firstOrDefault().trans
 
     }
 

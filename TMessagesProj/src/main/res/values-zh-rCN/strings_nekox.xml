@@ -37,7 +37,6 @@
     <string name="PublicPrefix">公共</string>
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
-    <string name="SaveCacheToSdcard">保存缓存到内部存储*</string>
     <string name="Import">导入</string>
     <string name="FilterNameUsers">用户</string>
     <string name="FilterNameUsersDescription">仅来自私聊的消息</string>

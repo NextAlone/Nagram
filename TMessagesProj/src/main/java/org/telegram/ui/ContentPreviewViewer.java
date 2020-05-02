@@ -150,6 +150,11 @@ public class ContentPreviewViewer {
                         icons.add(R.drawable.deproko_baseline_send_24);
                         actions.add(0);
                     }
+                    if (delegate.needSend() && !delegate.isInScheduleMode()) {
+                        items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
+                        icons.add(R.drawable.input_notify_off);
+                        actions.add(100);
+                    }
                     if (delegate.canSchedule()) {
                         items.add(LocaleController.getString("Schedule", R.string.Schedule));
                         icons.add(R.drawable.baseline_timer_24);
@@ -182,9 +187,9 @@ public class ContentPreviewViewer {
                     if (parentActivity == null) {
                         return;
                     }
-                    if (actions.get(which) == 0) {
+                    if (actions.get(which) == 0 || actions.get(which) == 100) {
                         if (delegate != null) {
-                            delegate.sendSticker(currentDocument, parentObject, true, 0);
+                            delegate.sendSticker(currentDocument, parentObject, actions.get(which) == 0, 0);
                         }
                     } else if (actions.get(which) == 1) {
                         if (delegate != null) {
@@ -238,6 +243,11 @@ public class ContentPreviewViewer {
                     icons.add(R.drawable.deproko_baseline_send_24);
                     actions.add(0);
                 }
+                if (delegate.needSend() && !delegate.isInScheduleMode()) {
+                    items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
+                    icons.add(R.drawable.input_notify_off);
+                    actions.add(100);
+                }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
                     icons.add(R.drawable.baseline_timer_24);
@@ -267,8 +277,8 @@ public class ContentPreviewViewer {
                     if (parentActivity == null) {
                         return;
                     }
-                    if (actions.get(which) == 0) {
-                        delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, true, 0);
+                    if (actions.get(which) == 0 || actions.get(which) == 100) {
+                        delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, actions.get(which) == 0, 0);
                     } else if (actions.get(which) == 1) {
                         MediaDataController.getInstance(currentAccount).removeRecentGif(currentDocument);
                         delegate.gifAddedOrDeleted();

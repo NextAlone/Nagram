@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.HashMap
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
@@ -76,7 +77,7 @@ class WeakField<T> {
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return value
-                ?: throw IllegalStateException("Property ${property.name} should be initialized before get.")
+            ?: throw IllegalStateException("Property ${property.name} should be initialized before get.")
     }
 
     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
@@ -85,27 +86,42 @@ class WeakField<T> {
 
 }
 
-fun <T, R> receive(initializer: T.() -> R) = LazyReceiver(initializer)
+fun <T, R> receive(getter: T.() -> R) = Receiver(getter)
 
-class LazyReceiver<T, R>(val initializer: T.() -> R) {
-
-    private var isInitialized by AtomicBoolean()
-    private var _impl: R? = null
+class Receiver<T, R>(val getter: T.() -> R) {
 
     @Suppress("UNCHECKED_CAST")
     operator fun getValue(thisRef: Any?, property: KProperty<*>): R {
 
-        if (isInitialized) return _impl as R
+        return getter(thisRef as T)
+
+    }
+
+}
+
+fun <T : Any, R> receiveLazy(initializer: T.() -> R) = LazyReceiver(initializer)
+
+class LazyReceiver<T : Any, R>(val initializer: T.() -> R) {
+
+    private val isInitialized = HashMap<T, Unit>()
+    private val cache = HashMap<T, R>()
+
+    @Suppress("UNCHECKED_CAST")
+    operator fun getValue(thisRef: Any, property: KProperty<*>): R {
+
+        if (isInitialized[thisRef] != null) return cache[thisRef] as R
 
         synchronized(this) {
 
-            if (isInitialized) return _impl as R
+            if (isInitialized[thisRef] != null) return cache[thisRef] as R
 
-            _impl = initializer(thisRef as T)
+            return initializer(thisRef as T).apply {
 
-            isInitialized = true
+                cache[thisRef] = this
 
-            return _impl as R
+                isInitialized[thisRef] = Unit
+
+            }
 
         }
 

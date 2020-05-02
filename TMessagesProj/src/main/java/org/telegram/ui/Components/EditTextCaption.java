@@ -32,6 +32,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -39,6 +40,13 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
+
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class EditTextCaption extends EditTextBoldCursor {
 
@@ -112,6 +120,48 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TextStyleSpan(run));
     }
 
+    public void makeSelectedTranslate() {
+
+        int start = getSelectionStart();
+        int end = getSelectionEnd();
+
+        String text = getText().subSequence(start,end).toString();
+
+        if (TranslateDb.currentInputTarget().contains(text)) {
+
+            getText().replace(start,end, TranslateDb.currentInputTarget().query(text));
+
+        } else {
+
+            if (NekoConfig.translationProvider < 0) {
+                TranslateBottomSheet.show(getContext(), text);
+            } else {
+
+                AlertDialog pro = AlertUtil.showProgress(getContext());
+                pro.show();
+
+                Translator.translate(TranslatorKt.getCode2Locale(NekoConfig.translateInputLang), text, new Translator.Companion.TranslateCallBack() {
+
+                    @Override public void onSuccess(@NotNull String translation) {
+                        pro.dismiss();
+                        getText().replace(start,end, translation);
+                        TranslateDb.currentInputTarget().save(text, translation);
+                    }
+
+                    @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                        pro.dismiss();
+                        AlertUtil.showTransFailedDialog(getContext(), unsupported, message, () -> {
+                            pro.show();
+                            Translator.translate(text, this);
+                        });
+                    }
+                });
+
+            }
+
+        }
+
+    }
 
     public void makeSelectedMention() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -355,11 +405,14 @@ public class EditTextCaption extends EditTextBoldCursor {
                     makeSelectedUnderline();
                     mode.finish();
                     return true;
+                } else if (item.getItemId() == R.id.menu_translate) {
+                    makeSelectedTranslate();
+                    mode.finish();
+                    return true;
                 }
                 try {
                     return callback.onActionItemClicked(mode, item);
                 } catch (Exception ignore) {
-
                 }
                 return true;
             }

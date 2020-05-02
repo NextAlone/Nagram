@@ -55,10 +55,13 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 
@@ -103,6 +106,8 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int transRow;
     private int translationProviderRow;
+    private int translateToLangRow;
+    private int translateInputToLangRow;
     private int googleCloudTranslateKeyRow;
     private int trans2Row;
 
@@ -498,6 +503,16 @@ public class NekoSettingsActivity extends BaseFragment {
 
                 builder.show();
 
+            } else if (position == translateToLangRow || position == translateInputToLangRow) {
+
+                Translator.showTargetLangSelect(view,position == translateToLangRow ? 1: 2,(locale) -> {
+
+                    listAdapter.notifyItemChanged(position);
+
+                    return Unit.INSTANCE;
+
+                });
+
             } else if (position == googleCloudTranslateKeyRow) {
 
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
@@ -671,6 +686,8 @@ public class NekoSettingsActivity extends BaseFragment {
 
         transRow = rowCount++;
         translationProviderRow = rowCount++;
+        translateToLangRow = rowCount++;
+        translateInputToLangRow = rowCount++;
         googleCloudTranslateKeyRow = rowCount++;
         trans2Row = rowCount++;
 
@@ -1181,6 +1198,10 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("MessageMenu", R.string.MessageMenu), true);
                     } else if (position == sortMenuRow) {
                         textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
+                    } else if (position == translateToLangRow) {
+                        textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
+                    } else if (position == translateInputToLangRow) {
+                        textCell.setTextAndValue(LocaleController.getString("TransInputToLang", R.string.TransInputToLang), NekoConfig.formatLang(NekoConfig.translateInputLang), true);
                     } else if (position == googleCloudTranslateKeyRow) {
                         textCell.setText(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), true);
                     } else if (position == deleteAccountRow) {
@@ -1331,7 +1352,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == hideProxySponsorChannelRow || position == skipOpenLinkConfiirm ||
                     position == disableFilteringRow || position == stickerSizeRow ||
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
-                    position == translationProviderRow || position == googleCloudTranslateKeyRow ||
+                    position == translationProviderRow || position == translateToLangRow || position == translateInputToLangRow || position == googleCloudTranslateKeyRow ||
                     position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
@@ -1382,7 +1403,8 @@ public class NekoSettingsActivity extends BaseFragment {
             if (position == connection2Row || position == dialogs2Row || position == chat2Row || position == trans2Row || position == experiment2Row || position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
-                    position == sortMenuRow || position == googleCloudTranslateKeyRow || position == cachePathRow ||
+                    position == sortMenuRow || position == cachePathRow || position == googleCloudTranslateKeyRow ||
+                    position == translateToLangRow || position == translateInputToLangRow ||
                     position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
                 return 2;
             } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||
