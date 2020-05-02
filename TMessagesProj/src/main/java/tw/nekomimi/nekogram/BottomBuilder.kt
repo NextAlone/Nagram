@@ -66,25 +66,29 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addTitle(title: String, bigTitle: Boolean = true): HeaderCell {
+    fun addTitle(title: CharSequence, bigTitle: Boolean = true): HeaderCell {
 
         return addTitle(title, bigTitle, null)
 
     }
 
-    fun addTitle(title: String, subTitle: String): HeaderCell {
+    fun addTitle(title: CharSequence, subTitle: CharSequence): HeaderCell {
 
         return addTitle(title, true, subTitle)
 
     }
 
-    fun addTitle(title: String, bigTitle: Boolean, subTitle: String?): HeaderCell {
+    fun addTitle(title: CharSequence, bigTitle: Boolean, subTitle: CharSequence?): HeaderCell {
 
         val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, subTitle != null) else HeaderCell(ctx)
 
         headerCell.setText(title)
 
-        subTitle?.also { headerCell.setText2(it) }
+        subTitle?.also {
+
+            headerCell.setText2(it)
+
+        }
 
         rootView.addView(headerCell, LayoutHelper.createLinear(-1, -2).apply {
 
@@ -273,7 +277,7 @@ class BottomBuilder(val ctx: Context) {
 
         return TextCell(ctx).apply {
 
-            background = Theme.getSelectorDrawable(true)
+            background = Theme.getSelectorDrawable(false)
 
             setTextAndIcon(text, icon, true)
 

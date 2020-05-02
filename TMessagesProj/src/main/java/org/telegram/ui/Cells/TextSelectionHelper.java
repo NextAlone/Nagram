@@ -53,6 +53,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -1272,26 +1274,30 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         }
                         String urlFinal = textS.toString();
                         Activity activity = ProxyUtil.getOwnerActivity((((View) selectedView).getContext()));
-                        if (TranslateDb.contains(urlFinal)) {
-                            AlertUtil.showCopyAlert(activity, TranslateDb.query(urlFinal));
+                        if (NekoConfig.translationProvider < 0) {
+                            TranslateBottomSheet.show(activity, urlFinal);
                         } else {
-                            AlertDialog pro = AlertUtil.showProgress(activity);
-                            pro.show();
-                            Translator.translate(urlFinal, new Translator.Companion.TranslateCallBack() {
-                                @Override public void onSuccess(@NotNull String translation) {
-                                    TranslateDb.save(urlFinal, translation);
-                                    pro.dismiss();
-                                    AlertUtil.showCopyAlert(activity, translation);
-                                }
+                            if (TranslateDb.contains(urlFinal)) {
+                                AlertUtil.showCopyAlert(activity, TranslateDb.query(urlFinal));
+                            } else {
+                                AlertDialog pro = AlertUtil.showProgress(activity);
+                                pro.show();
+                                Translator.translate(urlFinal, new Translator.Companion.TranslateCallBack() {
+                                    @Override public void onSuccess(@NotNull String translation) {
+                                        TranslateDb.save(urlFinal, translation);
+                                        pro.dismiss();
+                                        AlertUtil.showCopyAlert(activity, translation);
+                                    }
 
-                                @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                                    pro.dismiss();
-                                    AlertUtil.showTransFailedDialog(activity, unsupported, message, () -> {
-                                        pro.show();
-                                        Translator.translate(urlFinal, this);
-                                    });
-                                }
-                            });
+                                    @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                                        pro.dismiss();
+                                        AlertUtil.showTransFailedDialog(activity, unsupported, message, () -> {
+                                            pro.show();
+                                            Translator.translate(urlFinal, this);
+                                        });
+                                    }
+                                });
+                            }
                         }
                     default:
                         clear();

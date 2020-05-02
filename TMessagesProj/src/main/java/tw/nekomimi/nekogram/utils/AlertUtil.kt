@@ -12,6 +12,7 @@ import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.NumberPicker
 import tw.nekomimi.nekogram.BottomBuilder
 import tw.nekomimi.nekogram.NekoConfig
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 object AlertUtil {
@@ -21,7 +22,7 @@ object AlertUtil {
         Toast.makeText(
                 ApplicationLoader.applicationContext,
                 text.takeIf { it.isNotBlank() }
-                        ?: "喵 !",
+                    ?: "喵 !",
                 Toast.LENGTH_LONG
         ).show()
     })
@@ -59,7 +60,7 @@ object AlertUtil {
 
             AndroidUtilities.addToClipboard(text)
 
-            AlertUtil.showToast(LocaleController.getString("TextCopied",R.string.TextCopied))
+            AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied))
 
             builder.dismissRunnable.run()
 
@@ -129,11 +130,11 @@ object AlertUtil {
 
         if (text != null) {
 
-            builder.addTitle(title, true, text)
+            builder.addTitle(title, text)
 
         } else {
 
-            builder.addTitle(title, false)
+            builder.addTitle(title)
 
         }
 
@@ -152,7 +153,8 @@ object AlertUtil {
     })
 
     @JvmStatic
-    fun showTransFailedDialog(ctx: Context, noRetry: Boolean, message: String, retryRunnable: Runnable) = UIUtil.runOnUIThread(Runnable {
+    @JvmOverloads
+    fun showTransFailedDialog(ctx: Context, noRetry: Boolean, noWeb: Boolean = false, message: String, retryRunnable: Runnable) = UIUtil.runOnUIThread(Runnable {
 
         ctx.setTheme(R.style.Theme_TMessages)
 
@@ -172,16 +174,31 @@ object AlertUtil {
 
             val popup = PopupBuilder(view, true)
 
-            popup.setItems(arrayOf(
+            val items = LinkedList<String>()
+
+            items.addAll(arrayOf(
                     LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                     LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
                     LocaleController.getString("ProviderYandex", R.string.ProviderYandex),
                     LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud)
-            )) { item, _ ->
+            ))
+
+            if (!noWeb) {
+
+                items.addAll(arrayOf(
+                        LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
+                        LocaleController.getString("ProviderGoogleTranslateCNWeb", R.string.ProviderGoogleTranslateCNWeb),
+                        LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb),
+                        LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb)
+                ))
+
+            }
+
+            popup.setItems(items.toTypedArray()) { item, _ ->
 
                 reference.get().dismiss()
 
-                NekoConfig.setTranslationProvider(item + 1)
+                NekoConfig.setTranslationProvider(if (item < 4) item + 1 else -item + 3)
 
                 retryRunnable.run()
 

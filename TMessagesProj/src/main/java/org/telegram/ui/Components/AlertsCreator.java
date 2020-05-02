@@ -40,7 +40,6 @@ import android.widget.Toast;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -57,7 +56,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
@@ -73,7 +71,6 @@ import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextColorCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.ChatRightsEditActivity;
 import org.telegram.ui.LanguageSelectActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.NotificationsCustomSettingsActivity;
@@ -90,6 +87,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
+
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 
 public class AlertsCreator {
 
@@ -321,7 +321,39 @@ public class AlertsCreator {
         return builder.show();
     }
 
-    public static AlertDialog.Builder createLanguageAlert(LaunchActivity activity, final TLRPC.TL_langPackLanguage language) {
+    private static SpannableStringBuilder mkTransSpan(String str, TLRPC.TL_langPackLanguage language, BottomBuilder builder) {
+        SpannableStringBuilder spanned = new SpannableStringBuilder(AndroidUtilities.replaceTags(str));
+
+        int start = TextUtils.indexOf(spanned, '[');
+        int end;
+        if (start != -1) {
+            end = TextUtils.indexOf(spanned, ']', start + 1);
+            if (start != -1 && end != -1) {
+                spanned.delete(end, end + 1);
+                spanned.delete(start, start + 1);
+            }
+        } else {
+            end = -1;
+        }
+
+        if (start != -1 && end != -1) {
+            spanned.setSpan(new URLSpanNoUnderline(language.translations_url) {
+                @Override
+                public void onClick(View widget) {
+                    builder.dismiss();
+                    super.onClick(widget);
+                }
+            }, start, end - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        return spanned;
+    }
+
+    public static BottomSheet createLanguageAlert(LaunchActivity activity, final TLRPC.TL_langPackLanguage language) {
+        return createLanguageAlert(activity, language, null).create();
+    }
+
+    public static BottomBuilder createLanguageAlert(LaunchActivity activity, final TLRPC.TL_langPackLanguage language, Runnable callback) {
         if (language == null) {
             return null;
         }
@@ -331,29 +363,31 @@ public class AlertsCreator {
             language.base_lang_code = language.base_lang_code.replace('-', '_').toLowerCase();
         }
 
-        SpannableStringBuilder spanned;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        BottomBuilder builder = new BottomBuilder(activity);
         LocaleController.LocaleInfo currentInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-        String str;
         if (currentInfo.shortName.equals(language.lang_code)) {
-            builder.setTitle(LocaleController.getString("Language", R.string.Language));
-            str = LocaleController.formatString("LanguageSame", R.string.LanguageSame, language.name);
-            builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
-            builder.setNeutralButton(LocaleController.getString("SETTINGS", R.string.SETTINGS), (dialog, which) -> activity.presentFragment(new LanguageSelectActivity()));
+            String str = LocaleController.formatString("LanguageSame", R.string.LanguageSame, language.name);
+            builder.addTitle(LocaleController.getString("Language", R.string.Language), mkTransSpan(str, language, builder));
+            builder.addCancelButton();
+            builder.addButton(LocaleController.getString("SETTINGS", R.string.SETTINGS), (__) -> {
+                builder.dismiss();
+                activity.presentFragment(new LanguageSelectActivity());
+                return Unit.INSTANCE;
+            });
         } else {
             if (language.strings_count == 0) {
-                builder.setTitle(LocaleController.getString("LanguageUnknownTitle", R.string.LanguageUnknownTitle));
-                str = LocaleController.formatString("LanguageUnknownCustomAlert", R.string.LanguageUnknownCustomAlert, language.name);
-                builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                String str = LocaleController.formatString("LanguageUnknownCustomAlert", R.string.LanguageUnknownCustomAlert, language.name);
+                builder.addTitle(LocaleController.getString("LanguageUnknownTitle", R.string.LanguageUnknownTitle), mkTransSpan(str, language, builder));
+                builder.addCancelButton();
             } else {
-                builder.setTitle(LocaleController.getString("LanguageTitle", R.string.LanguageTitle));
+                String str;
                 if (language.official) {
                     str = LocaleController.formatString("LanguageAlert", R.string.LanguageAlert, language.name, (int) Math.ceil(language.translated_count / (float) language.strings_count * 100));
                 } else {
                     str = LocaleController.formatString("LanguageCustomAlert", R.string.LanguageCustomAlert, language.name, (int) Math.ceil(language.translated_count / (float) language.strings_count * 100));
                 }
-                builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), (dialogInterface, i) -> {
+                builder.addTitle(LocaleController.getString("LanguageTitle", R.string.LanguageTitle), mkTransSpan(str, language, builder));
+                builder.addButton(LocaleController.getString("Change", R.string.Change), (it) -> {
                     String key;
                     if (language.official) {
                         key = "remote_" + language.lang_code;
@@ -375,46 +409,17 @@ public class AlertsCreator {
                             localeInfo.pathToFile = "unofficial";
                         }
                     }
+                    if (callback != null) {
+                        callback.run();
+                    }
                     LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, UserConfig.selectedAccount);
                     activity.rebuildAllFragments(true);
+                    builder.dismiss();
+                    return Unit.INSTANCE;
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.addCancelButton();
             }
         }
-
-        spanned = new SpannableStringBuilder(AndroidUtilities.replaceTags(str));
-
-        int start = TextUtils.indexOf(spanned, '[');
-        int end;
-        if (start != -1) {
-            end = TextUtils.indexOf(spanned, ']', start + 1);
-            if (start != -1 && end != -1) {
-                spanned.delete(end, end + 1);
-                spanned.delete(start, start + 1);
-            }
-        } else {
-            end = -1;
-        }
-
-        if (start != -1 && end != -1) {
-            spanned.setSpan(new URLSpanNoUnderline(language.translations_url) {
-                @Override
-                public void onClick(View widget) {
-                    builder.getDismissRunnable().run();
-                    super.onClick(widget);
-                }
-            }, start, end - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        final TextView message = new TextView(activity);
-        message.setText(spanned);
-        message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        message.setLinkTextColor(Theme.getColor(Theme.key_dialogTextLink));
-        message.setHighlightColor(Theme.getColor(Theme.key_dialogLinkSelection));
-        message.setPadding(AndroidUtilities.dp(23), 0, AndroidUtilities.dp(23), 0);
-        message.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-        message.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        builder.setView(message);
 
         return builder;
     }

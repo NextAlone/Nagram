@@ -2412,7 +2412,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
                 if (response instanceof TLRPC.TL_langPackLanguage) {
                     TLRPC.TL_langPackLanguage res = (TLRPC.TL_langPackLanguage) response;
-                    showAlertDialog(AlertsCreator.createLanguageAlert(LaunchActivity.this, res));
+                    AlertsCreator.createLanguageAlert(LaunchActivity.this, res).show();
                 } else if (error != null) {
                     if ("LANG_CODE_NOT_SUPPORTED".equals(error.text)) {
                         showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LanguageUnsupportedError", R.string.LanguageUnsupportedError)));

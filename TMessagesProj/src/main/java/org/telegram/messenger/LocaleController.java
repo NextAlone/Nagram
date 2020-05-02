@@ -119,6 +119,9 @@ public class LocaleController {
         public boolean builtIn;
         public int serverIndex;
 
+        public TLRPC.TL_langPackLanguage pack;
+        public boolean toInstall;
+
         public String getSaveString() {
             String langCode = baseLangCode == null ? "" : baseLangCode;
             String pluralCode = TextUtils.isEmpty(pluralLangCode) ? shortName : pluralLangCode;

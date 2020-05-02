@@ -483,32 +483,10 @@ public class NekoSettingsActivity extends BaseFragment {
 
                     int target;
 
-                    switch (i) {
-
-                        default:
-                            target = 1;
-                            break;
-                        case 1:
-                            target = 2;
-                            break;
-                        case 2:
-                            target = 3;
-                            break;
-                        case 3:
-                            target = 4;
-                            break;
-
-                        case 5:
-                            target = -1;
-                            break;
-                        case 6:
-                            target = -2;
-                            break;
-                        case 7:
-                            target = -3;
-                            break;
-                        case 8:
-                            target = -4;
+                    if (i < 4) {
+                        target = i + 1;
+                    } else {
+                        target = -i + 3;
                     }
 
                     NekoConfig.setTranslationProvider(target);

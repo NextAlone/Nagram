@@ -6,10 +6,33 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
 import org.telegram.messenger.BuildConfig
+import org.telegram.messenger.ContactsController
 import org.telegram.ui.LaunchActivity
 import java.io.File
 
 object ShareUtil {
+
+    @JvmStatic
+    @JvmOverloads
+    fun shareText(ctx: Context,text: String,choose: Boolean = false) {
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+
+        if (!choose) {
+
+            intent.setClass(ctx,LaunchActivity::class.java)
+            ctx.startActivity(intent)
+
+        } else {
+
+            ctx.startActivity(Intent.createChooser(intent, text))
+
+        }
+
+    }
 
     @JvmOverloads
     @JvmStatic

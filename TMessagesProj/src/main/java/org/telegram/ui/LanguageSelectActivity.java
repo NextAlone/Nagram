@@ -16,21 +16,27 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.LanguageCell;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -38,13 +44,15 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class LanguageSelectActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -153,6 +161,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             LanguageCell cell = (LanguageCell) view;
             LocaleController.LocaleInfo localeInfo = cell.getCurrentLocale();
             if (localeInfo != null) {
+                if (localeInfo.toInstall) {
+                    AlertsCreator.createLanguageAlert((LaunchActivity) getParentActivity(),localeInfo.pack,() -> {
+                        finishFragment();
+                        UIUtil.runOnIoDispatcher(TranslateDb::clear);
+                    }).show();
+                    return;
+                }
                 LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, currentAccount);
                 parentLayout.rebuildAllFragmentViews(false, false);
             }
@@ -166,34 +181,57 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             }
             LanguageCell cell = (LanguageCell) view;
             LocaleController.LocaleInfo localeInfo = cell.getCurrentLocale();
-            if (localeInfo == null || localeInfo.pathToFile == null || localeInfo.builtIn || localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE) {
+
+            if (localeInfo == null || localeInfo.pathToFile == null || localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE) {
                 return false;
             }
-            final LocaleController.LocaleInfo finalLocaleInfo = localeInfo;
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle));
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
-            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
-                if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, currentAccount)) {
-                    fillLanguages();
-                    if (searchResult != null) {
-                        searchResult.remove(finalLocaleInfo);
-                    }
-                    if (listAdapter != null) {
-                        listAdapter.notifyDataSetChanged();
-                    }
-                    if (searchListViewAdapter != null) {
-                        searchListViewAdapter.notifyDataSetChanged();
-                    }
-                }
+
+            BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+            builder.addItem(LocaleController.getString("BotShare",R.string.BotShare),R.drawable.baseline_send_24,false,(__) -> {
+
+                builder.dismiss();
+
+                ShareUtil.shareText(getParentActivity(),"https://t.me/setlanguage/" + localeInfo.shortName.replace('_','-'));
+
+                return Unit.INSTANCE;
+
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            AlertDialog alertDialog = builder.create();
-            showDialog(alertDialog);
-            TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            if (button != null) {
-                button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+
+            if (!localeInfo.isBuiltIn()) {
+
+                builder.addItem(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle), R.drawable.baseline_delete_24, true, (__) -> {
+
+                    builder.dismiss();
+
+                    AlertUtil.showConfirm(getParentActivity(),
+                            LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle),
+                            R.drawable.baseline_delete_24,
+                            LocaleController.getString("Delete", R.string.Delete), true, () -> {
+
+                                if (LocaleController.getInstance().deleteLanguage(localeInfo, currentAccount)) {
+                                    fillLanguages();
+                                    if (searchResult != null) {
+                                        searchResult.remove(localeInfo);
+                                    }
+                                    if (listAdapter != null) {
+                                        listAdapter.notifyDataSetChanged();
+                                    }
+                                    if (searchListViewAdapter != null) {
+                                        searchListViewAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                            });
+
+                    return Unit.INSTANCE;
+
+                });
+
             }
+
+            builder.show();
+
             return true;
         });
 
@@ -299,21 +337,64 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             long time = System.currentTimeMillis();
             ArrayList<LocaleController.LocaleInfo> resultArray = new ArrayList<>();
 
+            boolean noSearch = false;
+
             for (int a = 0, N = unofficialLanguages.size(); a < N; a++) {
                 LocaleController.LocaleInfo c = unofficialLanguages.get(a);
-                if (c.name.toLowerCase().startsWith(query) || c.nameEnglish.toLowerCase().startsWith(query)) {
+                if (c.name.toLowerCase().contains(query) || c.nameEnglish.toLowerCase().contains(query)) {
                     resultArray.add(c);
+                } else if (c.shortName.contains(query)) {
+                    resultArray.add(c);
+                    if (c.shortName.equals(query)) {
+                        noSearch = true;
+                    }
                 }
             }
 
             for (int a = 0, N = sortedLanguages.size(); a < N; a++) {
                 LocaleController.LocaleInfo c = sortedLanguages.get(a);
-                if (c.name.toLowerCase().startsWith(query) || c.nameEnglish.toLowerCase().startsWith(query)) {
+                if (c.name.toLowerCase().contains(query) || c.nameEnglish.toLowerCase().contains(query)) {
                     resultArray.add(c);
+                } else if (c.shortName.contains(query)) {
+                    resultArray.add(c);
+                    if (c.shortName.equals(query)) {
+                        noSearch = true;
+                    }
                 }
             }
 
             updateSearchResults(resultArray);
+
+            if (!noSearch) {
+
+                TLRPC.TL_langpack_getLanguage req = new TLRPC.TL_langpack_getLanguage();
+                req.lang_code = query.replace('_', '-');
+                req.lang_pack = "android";
+                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                    if (response instanceof TLRPC.TL_langPackLanguage) {
+                        TLRPC.TL_langPackLanguage res = (TLRPC.TL_langPackLanguage) response;
+                        if (res.strings_count == 0) return;
+                        resultArray.add(new LocaleController.LocaleInfo() {{
+                            name = res.native_name;
+                            nameEnglish = res.name;
+                            shortName = res.lang_code;
+                            pluralLangCode = res.plural_code;
+                            baseLangCode = res.base_lang_code;
+                            isRtl = res.rtl;
+                            if (res.official) {
+                                pathToFile = "remote";
+                            } else {
+                                pathToFile = "unofficial";
+                            }
+                            toInstall = true;
+                            pack = res;
+                        }});
+                        updateSearchResults(resultArray);
+                    }
+                }));
+
+            }
+
         });
     }
 

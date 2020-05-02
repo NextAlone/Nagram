@@ -5,11 +5,11 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.tgnet.TLRPC
 import org.telegram.ui.ArticleViewer
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.utils.AlertUtil
-import tw.nekomimi.nekogram.utils.AlertUtil.showTransFailedDialog
-import tw.nekomimi.nekogram.utils.UIUtil.runOnUIThread
+import tw.nekomimi.nekogram.utils.UIUtil
 import java.lang.Runnable
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -50,13 +50,31 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
 fun ArticleViewer.doTransLATE() {
 
+    if (NekoConfig.translationProvider < 0) {
+
+        adapter[0].trans = false
+        transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate)
+
+        AlertUtil.showTransFailedDialog(parentActivity,true,true,LocaleController.getString("InstantViewTransWithWeb",R.string.InstantViewTransWithWeb), Runnable {
+
+            adapter[0].trans = true
+            transMenu.setTextAndIcon(LocaleController.getString("UndoTranslate", R.string.UndoTranslate), R.drawable.ic_translate)
+
+            doTransLATE()
+
+        })
+
+        return
+
+    }
+
     val dialog = AlertUtil.showProgress(parentActivity)
 
     dialog.show()
 
     fun update(message: String) {
 
-        runOnUIThread(Runnable { dialog.setMessage(message) })
+        UIUtil.runOnUIThread(Runnable { dialog.setMessage(message) })
 
     }
 
@@ -103,7 +121,7 @@ fun ArticleViewer.doTransLATE() {
 
                         update("${all - taskCount.get()} / $all")
 
-                        if (taskCount.decrementAndGet() % 10 == 0) runOnUIThread(Runnable {
+                        if (taskCount.decrementAndGet() % 10 == 0) UIUtil.runOnUIThread(Runnable {
 
                             updatePaintSize()
 
@@ -121,7 +139,7 @@ fun ArticleViewer.doTransLATE() {
 
                         update((all - taskCount.get()).toString() + " / " + all)
 
-                        if (taskCount.decrementAndGet() % 10 == 0) runOnUIThread(Runnable {
+                        if (taskCount.decrementAndGet() % 10 == 0) UIUtil.runOnUIThread(Runnable {
 
                             updatePaintSize()
 
@@ -135,14 +153,17 @@ fun ArticleViewer.doTransLATE() {
 
                             cancel.set(true)
 
-                            runOnUIThread(Runnable {
+                            UIUtil.runOnUIThread(Runnable {
 
                                 cancel.set(true)
                                 dialog.dismiss()
                                 updatePaintSize()
                                 adapter[0].trans = false
                                 transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate)
-                                showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message ?: it.javaClass.simpleName, Runnable { doTransLATE() })
+
+                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, true,it.message ?: it.javaClass.simpleName, Runnable {
+                                    doTransLATE()
+                                })
 
                             })
 
@@ -162,7 +183,7 @@ fun ArticleViewer.doTransLATE() {
 
         deferreds.awaitAll()
 
-        runOnUIThread(Runnable {
+        UIUtil.runOnUIThread(Runnable {
 
             transPool.cancel()
 

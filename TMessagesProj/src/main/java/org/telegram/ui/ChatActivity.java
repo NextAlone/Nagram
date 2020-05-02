@@ -12582,7 +12582,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, 8, stringBuilder);
-        if (AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
+        if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
             stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
             run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
@@ -15399,49 +15399,57 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                     } else {
                         ChatMessageCell finalMessageCell = messageCell;
-                        if (TranslateDb.contains(original)) {
-                            if (finalMessageCell != null) {
-                                MessageObject messageObject = finalMessageCell.getMessageObject();
-                                MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
-                                        "\u200C\u200C\n" +
-                                        "\n" +
-                                        "--------" +
-                                        "\n" +
-                                        TranslateDb.query(original) +
-                                        "\u200C\u200C");
-                                chatAdapter.updateRowWithMessageObject(messageObject, true);
-                            }
+                        if (NekoConfig.translationProvider < 0) {
+                            TranslateBottomSheet.show(getParentActivity(), original);
                         } else {
-
-                            Translator.translate(original, new Translator.Companion.TranslateCallBack() {
-                                @Override
-                                public void onSuccess(@NotNull String translation) {
-                                    TranslateDb.save(original, translation);
-                                    if (getParentActivity() != null && finalMessageCell != null) {
-                                        MessageObject messageObject = finalMessageCell.getMessageObject();
-                                        MessageHelper.setMessageContent(messageObject,finalMessageCell,original +
-                                                "\u200C\u200C\n" +
-                                                "\n" +
-                                                "--------" +
-                                                "\n" +
-                                                translation +
-                                                "\u200C\u200C");
-                                        chatAdapter.updateRowWithMessageObject(messageObject, true);
-                                    }
+                            if (TranslateDb.contains(original)) {
+                                if (finalMessageCell != null) {
+                                    MessageObject messageObject = finalMessageCell.getMessageObject();
+                                    MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                            "\u200C\u200C\n" +
+                                            "\n" +
+                                            "--------" +
+                                            "\n" +
+                                            TranslateDb.query(original) +
+                                            "\u200C\u200C");
+                                    chatAdapter.updateRowWithMessageObject(messageObject, true);
                                 }
+                            } else {
 
-                                @Override
-                                public void onFailed(boolean unsupported, @NotNull String message) {
-                                    Activity parentActivity = getParentActivity();
-                                    if (parentActivity != null) {
-                                        AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
-                                            Translator.translate(original, this);
-                                        });
+                                Translator.translate(original, new Translator.Companion.TranslateCallBack() {
+                                    @Override
+                                    public void onSuccess(@NotNull String translation) {
+                                        TranslateDb.save(original, translation);
+                                        if (getParentActivity() != null && finalMessageCell != null) {
+                                            MessageObject messageObject = finalMessageCell.getMessageObject();
+                                            MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                                    "\u200C\u200C\n" +
+                                                    "\n" +
+                                                    "--------" +
+                                                    "\n" +
+                                                    translation +
+                                                    "\u200C\u200C");
+                                            chatAdapter.updateRowWithMessageObject(messageObject, true);
+                                        }
                                     }
-                                }
-                            });
+
+                                    @Override
+                                    public void onFailed(boolean unsupported, @NotNull String message) {
+                                        Activity parentActivity = getParentActivity();
+                                        if (parentActivity != null) {
+                                            AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
+                                                if (NekoConfig.translationProvider < 0) {
+                                                    TranslateBottomSheet.show(getParentActivity(), original);
+                                                } else {
+                                                    Translator.translate(original, this);
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+
                         }
-
                     }
 
                 }
