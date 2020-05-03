@@ -2394,16 +2394,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
                         if (hasRecordVideo && videoSendButton.getTag() != null) {
-                            delegate.needStartRecordVideo(1, true, 0);
+                            delegate.needStartRecordVideo(3, true, 0);
                         } else {
-                            if (recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
-                            }
-                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                            // if (recordingAudioVideo && isInScheduleMode()) {
+                            //    AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
+                            // }
+                            MediaController.getInstance().stopRecording(2, true, 0);
                             delegate.needStartRecordAudio(0);
                         }
-                        recordingAudioVideo = false;
-                        updateRecordIntefrace(RECORD_STATE_SENDING);
+                        // recordingAudioVideo = false;
+                        // updateRecordIntefrace(RECORD_STATE_SENDING);
                     }
                     return false;
                 }
@@ -2470,16 +2470,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         startedDraggingX = -1;
                         if (hasRecordVideo && videoSendButton.getTag() != null) {
                             CameraController.getInstance().cancelOnInitRunnable(onFinishInitCameraRunnable);
-                            delegate.needStartRecordVideo(1, true, 0);
+                            delegate.needStartRecordVideo(3, true, 0);
                         } else {
-                            if (recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
-                            }
+                            // if (recordingAudioVideo && isInScheduleMode()) {
+                            //    AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
+                            // }
                             delegate.needStartRecordAudio(0);
-                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                            MediaController.getInstance().stopRecording(2, true, 0);
                         }
-                        recordingAudioVideo = false;
-                        updateRecordIntefrace(RECORD_STATE_SENDING);
+                        // recordingAudioVideo = false;
+                        // updateRecordIntefrace(RECORD_STATE_SENDING);
                     }
                 }
             } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE && recordingAudioVideo) {
