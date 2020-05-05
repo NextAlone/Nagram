@@ -1,6 +1,5 @@
 package tw.nekomimi.nekogram;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
@@ -25,7 +24,6 @@ import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
-import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -49,8 +47,8 @@ public class NekoXSettingActivity extends BaseFragment {
 
     private int developerSettingsRow;
 
+    private int enableRow;
     private int fetchAndExportLangRow;
-
     private int disableFlagSecureRow;
     private int disableScreenshotDetectionRow;
 
@@ -61,7 +59,6 @@ public class NekoXSettingActivity extends BaseFragment {
         return true;
     }
 
-    @SuppressLint("NewApi")
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -101,12 +98,13 @@ public class NekoXSettingActivity extends BaseFragment {
         listView.setOnItemClickListener((view, position, x, y) -> {
 
             if (position == fetchAndExportLangRow) {
-
                 fetchAndExportLang();
-
             }
 
-            if (position == disableFlagSecureRow) {
+            if (position == enableRow) {
+                NekoXConfig.toggleDeveloperMode();
+                updateRows();
+            } else if (position == disableFlagSecureRow) {
                 NekoXConfig.toggleDisableFlagSecure();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableFlagSecure);
@@ -136,6 +134,7 @@ public class NekoXSettingActivity extends BaseFragment {
 
         developerSettingsRow = rowCount++;
 
+        enableRow = rowCount++;
         fetchAndExportLangRow = rowCount++;
 
         disableFlagSecureRow = rowCount++;
@@ -258,16 +257,26 @@ public class NekoXSettingActivity extends BaseFragment {
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
-                    if (position == disableFlagSecureRow) {
-                        textCell.setTextAndCheck("Disable Flag Secure", NekoXConfig.disableFlagSecure, true);
-                    } else if (position == disableScreenshotDetectionRow) {
-                        textCell.setTextAndCheck("Disable Screenshot Detection", NekoXConfig.disableScreenshotDetection, false);
+                    if (position == enableRow) {
+                        textCell.setTextAndCheck("Enable", NekoXConfig.developerMode, true);
+                    } else {
+                        if (!NekoXConfig.developerMode) {
+                            textCell.setEnabled(false);
+                        }
+                        if (position == disableFlagSecureRow) {
+                            textCell.setTextAndCheck("Disable Flag Secure", NekoXConfig.disableFlagSecure, true);
+                        } else if (position == disableScreenshotDetectionRow) {
+                            textCell.setTextAndCheck("Disable Screenshot Detection", NekoXConfig.disableScreenshotDetection, false);
+                        }
                     }
                     break;
                 }
 
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    if (!NekoXConfig.developerMode) {
+                        textCell.setEnabled(false);
+                    }
                     if (position == fetchAndExportLangRow) {
                         textCell.setText("Export Builtin Languages", true);
                     }
@@ -279,10 +288,8 @@ public class NekoXSettingActivity extends BaseFragment {
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int position = holder.getAdapterPosition();
-            return position == fetchAndExportLangRow ||
-                    position == disableFlagSecureRow ||
-                    position == disableScreenshotDetectionRow;
+            int type = holder.getItemViewType();
+            return type == 2 || type == 3;
         }
 
         @Override
@@ -311,10 +318,6 @@ public class NekoXSettingActivity extends BaseFragment {
                 case 6:
                     view = new TextDetailSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 7:
-                    view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));

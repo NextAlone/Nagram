@@ -1,3 +1,7 @@
+import cn.hutool.core.io.FileUtil
+import cn.hutool.json.JSONObject
+import cn.hutool.system.SystemUtil
+
 import java.security.MessageDigest
 
 apply plugin: 'com.android.application'
@@ -7,6 +11,22 @@ apply plugin: 'kotlin-android-extensions'
 
 configurations {
     compile.exclude module: 'support-v4'
+}
+
+buildscript {
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+    }
+
+    dependencies {
+
+        classpath 'cn.hutool:hutool-all:5.3.2'
+
+    }
+
 }
 
 dependencies {
@@ -19,7 +39,7 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     compileOnly 'com.android.support:multidex:1.0.3'
 
-    compileOnly 'org.checkerframework:checker-qual:3.3.0'
+    compileOnly 'org.checkerframework:checker-qual:3.4.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -36,23 +56,45 @@ dependencies {
     implementation 'org.dizitart:nitrite:3.4.1'
     implementation 'net.lingala.zip4j:zip4j:2.5.2'
 
-    implementation 'cn.hutool:hutool-core:5.3.2'
-    implementation 'cn.hutool:hutool-crypto:5.3.2'
+    implementation 'cn.hutool:hutool-all:5.3.2'
+    implementation 'org.tukaani:xz:1.8'
 
 
     implementation files('libs/libv2ray.aar')
     implementation files('libs/ss-libev-release.aar')
     implementation files('libs/ssr-libev-release.aar')
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
-    implementation 'com.android.support:multidex:1.0.3'
 
-    compileOnly 'com.google.firebase:firebase-messaging:20.1.6'
-    compileOnly 'com.google.firebase:firebase-crashlytics:17.0.0'
+    def fcmVersion = '20.1.4'
 
-    releaseImplementation 'com.google.firebase:firebase-messaging:20.1.6'
+    //noinspection GradleDependency
+    compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
+    compileOnly "com.google.firebase:firebase-crashlytics:17.0.0"
+    compileOnly 'com.google.android.play:core:1.7.2'
+
+    //noinspection GradleDependency
+    releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
     releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+    releaseImplementation 'com.google.android.play:core:1.7.2'
 
 }
+
+def verName = "6.1.1.0-rc03"
+def verCode = 29
+
+task writeUpdateInfo {
+
+    def info = new JSONObject()
+
+    info.set("version", verName)
+    info.set("versionCode", verCode)
+    info.set("defaultApkName","NekoX-afat-armeabi-v7a-release.apk.xz")
+
+    FileUtil.writeUtf8String(info.toStringPretty(), new File("build/update.json"))
+
+}
+
+tasks.findByName("preBuild").finalizedBy(writeUpdateInfo)
 
 android {
     compileSdkVersion 29
@@ -65,8 +107,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
 
-        versionName "6.1.1.0-rc03"
-        versionCode = 29
+        versionName verName
+        versionCode verCode
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
@@ -246,7 +288,7 @@ android {
     def tgVoipDexClassesPath = "org/telegram/messenger/voip"
     def dxUtilPath = "${sdkDirectory.path}/build-tools/${buildToolsVersion}/dx"
 
-    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+    if (SystemUtil.getOsInfo().isWindows()) {
         dxUtilPath += ".bat"
     }
 

@@ -28,7 +28,7 @@ jobs:
       - name: assembleRelease
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-          ./gradlew TMessagesPro:assembleRelease \
+          ./gradlew TMessagesProj:assembleRelease \
                     TMessagesProj:assembleReleaseNoGcm \
                     TMessagesProj:bundleAfatRelease
       - name: Upload apks
@@ -41,6 +41,24 @@ jobs:
           ref=${ref/"refs/tags/"/}
           msg="${{ github.event.head_commit.message }}"
           ghr -delete -n "$ref" -b "$msg" "$ref" apks/
+          rm -rf $HOME/.ssh
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.SSH_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          mv build/update.json apks
+          cd apks
+          rm *universal*
+          xz *.apk
+          export GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+          git init
+          git config --global user.name "世界"
+          git config --global user.email "i@nekox.me"
+          git remote add github "git@github.com:NekoX-Dev/Resources.git"
+          git remote add gitlab "git@gitlab.com:NekoX/Resources.git"
+          git add . --all
+          git commit -m 喵
+          git push github master -f
+          git push gitlab master -f
       - uses: r0adkll/upload-google-play@master
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}

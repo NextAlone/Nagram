@@ -10,6 +10,15 @@
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Manual input</string>
 
+    <string name="CheckUpdate">Check Update</string>
+    <string name="NoUpdate">No update found</string>
+    <string name="UpdateAvailable">New update available</string>
+    <string name="Download">Download</string>
+    <string name="DownloadFailed">Download Failed</string>
+    <string name="Install">Install</string>
+    <string name="Ignore">Ignore</string>
+    <string name="UpdateDownloaded">An update has just been downloaded.</string>
+
     <string name="CustomBackend">Custom Backend</string>
     <string name="CustomBackendNotice">This function is only provided for expert users, if you don\'t know what the following options represent, just ignore it.</string>
     <string name="CustomBackendProduction">Official Production DataCenter</string>

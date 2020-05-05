@@ -55,6 +55,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.checkerframework.common.subtyping.qual.Bottom;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -124,9 +125,14 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoSettingsActivity;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.NekoXSettingActivity;
+import tw.nekomimi.nekogram.parts.UpdateChecksKt;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -501,10 +507,41 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (position == numberRow) {
                     presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
                 } else if (position == versionRow) {
+                    TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
                     pressCount++;
                     if (pressCount == 8) {
                         NekoXConfig.developerModeEntrance = true;
                         Toast.makeText(getParentActivity(), "¯\\_(ツ)_/¯", Toast.LENGTH_SHORT).show();
+                    } else {
+                        BottomBuilder builder = new BottomBuilder(getParentActivity());
+                        builder.addTitle(cell.getTextView().getText().toString(), false);
+                        builder.addItem(LocaleController.getString("CopyDetails", R.string.CopyDetails), R.drawable.baseline_content_copy_24, (it) -> {
+                            builder.dismiss();
+                            AndroidUtilities.addToClipboard(cell.getTextView().getText().toString());
+                            AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
+                            return Unit.INSTANCE;
+                        });
+                        builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_system_update_24, (it) -> {
+                            builder.dismiss();
+                            UpdateChecksKt.checkUpdate(SettingsActivity.this);
+                            return Unit.INSTANCE;
+                        });
+                        if (NekoXConfig.developerModeEntrance) {
+                            builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings),R.drawable.baseline_developer_mode_24,(it) -> {
+                                builder.dismiss();
+                                BottomBuilder devBuilder = new BottomBuilder(getParentActivity());
+                                devBuilder.addTitle("**Your telegram account may be banned**","We are not responsible for any improper use of developer features.");
+                                devBuilder.addItem(LocaleController.getString("Continue",R.string.Continue),R.drawable.baseline_warning_24,true,(__) -> {
+                                    devBuilder.dismiss();
+                                    presentFragment(new NekoXSettingActivity());
+                                    return Unit.INSTANCE;
+                                });
+                                devBuilder.addCancelItem();
+                                devBuilder.show();
+                                return Unit.INSTANCE;
+                            });
+                        }
+                        builder.show();
                     }
                 }
             }
@@ -532,8 +569,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
-                                SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
-                                NekoXConfig.developerModeEntrance ? (NekoXConfig.developerMode ? LocaleController.getString("DisableDeveloperMode", R.string.DisableDeveloperMode) : LocaleController.getString("EnableDeveloperMode", R.string.EnableDeveloperMode)) : null
+                                SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic)
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -567,8 +603,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 MessagesStorage.getInstance(currentAccount).readAllDialogs(-1);
                             } else if (which == 9) {
                                 SharedConfig.togglePauseMusicOnRecord();
-                            } else if (which == 10) {
-                                NekoXConfig.toggleDeveloperMode();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -595,9 +629,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         };
 
         searchListView.setVerticalScrollBarEnabled(false);
-        searchListView.setLayoutManager(new
-
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        searchListView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         searchListView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(searchListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         searchListView.setAdapter(searchAdapter);
@@ -652,9 +684,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         });
         searchListView.setVisibility(View.GONE);
 
-        emptyView = new
-
-                EmptyTextProgressView(context);
+        emptyView = new EmptyTextProgressView(context);
         emptyView.showTextView();
         emptyView.setTextSize(18);
         emptyView.setVisibility(View.GONE);
@@ -662,9 +692,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         emptyView.setPadding(0, AndroidUtilities.dp(50), 0, 0);
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        topView = new
-
-                TopView(context);
+        topView = new TopView(context);
         topView.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(topView);
 

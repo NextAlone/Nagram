@@ -23,26 +23,9 @@ import kotlin.random.Random
 
 class VmessLoader {
 
-    private val point: V2RayPoint = Libv2ray.newV2RayPoint(EmptyCallback(), true)
+    private val point = Libv2ray.newV2RayPoint(EmptyCallback(), true)
 
     companion object {
-
-        @JvmStatic
-        val public = VmessBean().apply {
-
-            address = "nekox.me"
-            port = 443
-            configType = V2RayConfig.EConfigType.Vmess
-            id = "73670f86-6046-4ffd-b468-6cd73cea1f29"
-            security = "none"
-            network = "ws"
-            streamSecurity = "tls"
-            requestHost = "nekox.me"
-            path = "/internet"
-
-            remarks = LocaleController.getString("NekoXProxy", R.string.NekoXProxy)
-
-        }
 
         fun parseVmess1Link(server: String): VmessBean {
 

@@ -29,11 +29,19 @@ object AlertUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun showSimpleAlert(ctx: Context?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
+    fun showSimpleAlert(ctx: Context, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) {
 
-        val builder = AlertDialog.Builder(ctx ?: ApplicationLoader.applicationContext)
 
-        builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX))
+        showSimpleAlert(ctx,null, text, listener)
+
+    }
+
+    @JvmStatic
+    fun showSimpleAlert(ctx: Context,title: String?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(title ?: LocaleController.getString("NekoX", R.string.NekoX))
         builder.setMessage(text)
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->

@@ -11,7 +11,7 @@ public class NekoXConfig {
 
     public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
 
-    private static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
+    public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
 
     public static boolean developerModeEntrance;
     public static boolean developerMode = preferences.getBoolean("developer_mode", false);
@@ -22,6 +22,15 @@ public class NekoXConfig {
     public static void toggleDeveloperMode() {
 
         preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
+
+        if (!developerMode) {
+
+            preferences.edit()
+                    .putBoolean("disable_flag_secure", disableFlagSecure = false)
+                    .putBoolean("disable_screenshot_detection", disableScreenshotDetection = false)
+                    .apply();
+
+        }
 
     }
 
@@ -98,10 +107,10 @@ public class NekoXConfig {
         preferences.edit()
                 .putString("custom_dc_v4", customDcIpv4)
                 .putString("custom_dc_v6", customDcIpv6)
-                .putInt("custom_dc_port",customDcPort)
-                .putInt("custom_dc_layer",customDcLayer)
-                .putString("custom_dc_public_key",customDcPublicKey)
-                .putLong("custom_dc_fingerprint",customDcFingerprint)
+                .putInt("custom_dc_port", customDcPort)
+                .putInt("custom_dc_layer", customDcLayer)
+                .putString("custom_dc_public_key", customDcPublicKey)
+                .putLong("custom_dc_fingerprint", customDcFingerprint)
                 .apply();
 
     }

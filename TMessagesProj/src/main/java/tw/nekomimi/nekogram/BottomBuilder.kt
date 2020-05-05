@@ -82,7 +82,7 @@ class BottomBuilder(val ctx: Context) {
 
         val headerCell = if (bigTitle) HeaderCell(ctx, Theme.key_dialogTextBlue2, 21, 15, subTitle != null) else HeaderCell(ctx)
 
-        headerCell.setText(title)
+        headerCell.setText(if (title is String) AndroidUtilities.replaceTags(title) else title)
 
         subTitle?.also {
 
@@ -202,13 +202,13 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addRadioItems(text: Array<String>, value: (Int,String) -> Boolean, valueText: ((Int,String) -> String)? = null, listener: (index: Int, text: String, cell: RadioButtonCell) -> Unit): List<RadioButtonCell> {
+    fun addRadioItems(text: Array<String>, value: (Int, String) -> Boolean, valueText: ((Int, String) -> String)? = null, listener: (index: Int, text: String, cell: RadioButtonCell) -> Unit): List<RadioButtonCell> {
 
         val list = mutableListOf<RadioButtonCell>()
 
         text.forEachIndexed { index, textI ->
 
-            list.add(addRadioItem(textI, value(index,textI), valueText?.invoke(index,textI)) { cell ->
+            list.add(addRadioItem(textI, value(index, textI), valueText?.invoke(index, textI)) { cell ->
 
                 listener(index, textI, cell)
 
@@ -273,7 +273,8 @@ class BottomBuilder(val ctx: Context) {
 
     }
 
-    fun addItem(text: String, icon: Int = 0, red: Boolean = false, listener: (cell: TextCell) -> Unit): TextCell {
+    @JvmOverloads
+    fun addItem(text: String, icon: Int = 0, red: Boolean = false, listener: ((cell: TextCell) -> Unit)?): TextCell {
 
         return TextCell(ctx).apply {
 
@@ -283,7 +284,7 @@ class BottomBuilder(val ctx: Context) {
 
             setOnClickListener {
 
-                listener(this)
+                if (listener == null) dismiss() else listener(this)
 
             }
 
@@ -325,7 +326,7 @@ class BottomBuilder(val ctx: Context) {
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
             setTextColor(Theme.getColor(Theme.key_dialogTextBlack))
             setHintTextColor(Theme.getColor(Theme.key_dialogTextBlue4))
-            hintText?.also {  hint = it }
+            hintText?.also { hint = it }
             isSingleLine = true
             isFocusable = true
             setBackgroundDrawable(null)

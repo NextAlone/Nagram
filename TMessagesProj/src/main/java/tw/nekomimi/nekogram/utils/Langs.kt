@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram.utils
 import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
+import org.telegram.ui.ActionBar.AlertDialog
 import java.math.BigInteger
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -143,3 +144,6 @@ operator fun AtomicLong.setValue(thisRef: Any?, property: KProperty<*>, value: L
 
 operator fun <T> AtomicReference<T>.getValue(thisRef: Any?, property: KProperty<*>): T = get()
 operator fun <T> AtomicReference<T>.setValue(thisRef: Any?, property: KProperty<*>, value: T) = set(value)
+
+fun AlertDialog.uUpdate(message: String) = UIUtil.runOnUIThread { setMessage(message) }
+fun AlertDialog.uDismiss() = UIUtil.runOnUIThread { dismiss() }

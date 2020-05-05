@@ -462,7 +462,7 @@ object ProxyUtil {
 
         } catch (ex: NoSuchMethodError) {
 
-            AlertUtil.showSimpleAlert(ctx, "很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
+            AlertUtil.showSimpleAlert(ctx,"很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
 
         }
 

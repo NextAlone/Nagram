@@ -1,8 +1,10 @@
 package tw.nekomimi.nekogram.utils
 
+import android.os.Build
 import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.BuildVars
+import org.telegram.messenger.FileLog
 import java.io.File
-import java.io.FileInputStream
 
 object FileUtil {
 
@@ -86,6 +88,30 @@ object FileUtil {
 
     }
 
+
+    @Suppress("DEPRECATION")
+    private fun getAbi() = try {
+        if (Build.CPU_ABI.equals("x86_64", ignoreCase = true)) {
+            "x86_64"
+        } else if (Build.CPU_ABI.equals("arm64-v8a", ignoreCase = true)) {
+            "arm64-v8a"
+        } else if (Build.CPU_ABI.equals("armeabi-v7a", ignoreCase = true)) {
+            "armeabi-v7a"
+        } else if (Build.CPU_ABI.equals("armeabi", ignoreCase = true)) {
+            "armeabi"
+        } else if (Build.CPU_ABI.equals("x86", ignoreCase = true)) {
+            "x86"
+        } else {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Unsupported arch: " + Build.CPU_ABI)
+            }
+            "armeabi"
+        }
+    } catch (e: Exception) {
+        FileLog.e(e)
+        "armeabi"
+    }
+
     @JvmStatic
     fun extLib(name: String): File {
 
@@ -93,20 +119,17 @@ object FileUtil {
 
         if (!execFile.isFile) {
 
-            execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/lib$name.so")
+            System.loadLibrary(name)
 
             if (!execFile.isFile) {
 
-                val abi = when (execFile.parentFile!!.name) {
+                execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/${execFile.name}")
 
-                    "arm64", "aarch64" -> "arm64-v8a"
-                    "x86", "i386", "i486", "i586", "i686" -> "x86"
-                    "x86_64", "amd64" -> "x86_64"
-                    else -> "armeabi-v7a"
+                if (!execFile.isFile) {
+
+                    saveNonAsset("lib/${getAbi()}/${execFile.name}", execFile);
 
                 }
-
-                saveNonAsset("lib/$abi/${execFile.name}", execFile);
 
             }
 
@@ -127,11 +150,11 @@ object FileUtil {
 
         saveTo.parentFile?.also { initDir(it) }
 
-        val assets = ApplicationLoader.applicationContext.assets
+        saveTo.createNewFile()
 
-        saveTo.outputStream().use {
+        (ApplicationLoader::class.java.getResourceAsStream(path) ?: error("not found")).use {
 
-            IoUtil.copy(FileInputStream(assets.openNonAssetFd(path).fileDescriptor), it)
+            IoUtil.copy(it, saveTo)
 
         }
 

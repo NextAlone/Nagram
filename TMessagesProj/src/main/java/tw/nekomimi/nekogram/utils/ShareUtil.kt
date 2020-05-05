@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import org.telegram.messenger.BuildConfig
-import org.telegram.messenger.ContactsController
 import org.telegram.ui.LaunchActivity
 import java.io.File
 
@@ -14,7 +14,7 @@ object ShareUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun shareText(ctx: Context,text: String,choose: Boolean = false) {
+    fun shareText(ctx: Context, text: String, choose: Boolean = false) {
 
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -23,7 +23,7 @@ object ShareUtil {
 
         if (!choose) {
 
-            intent.setClass(ctx,LaunchActivity::class.java)
+            intent.setClass(ctx, LaunchActivity::class.java)
             ctx.startActivity(intent)
 
         } else {
@@ -61,6 +61,44 @@ object ShareUtil {
         i.setClass(ctx, LaunchActivity::class.java)
 
         ctx.startActivity(i)
+
+    }
+
+    @JvmOverloads
+    @JvmStatic
+    fun openFile(ctx: Context, fileToOpen: File) {
+
+        val uri = if (Build.VERSION.SDK_INT >= 24) {
+
+            FileProvider.getUriForFile(ctx, BuildConfig.APPLICATION_ID + ".provider", fileToOpen)
+
+        } else {
+
+            Uri.fromFile(fileToOpen)
+
+        }
+
+        val intent = Intent(Intent.ACTION_VIEW)
+
+        if (Build.VERSION.SDK_INT >= 24) {
+
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        }
+
+        if (fileToOpen.extension.isBlank()) {
+
+            intent.type = "application/octet-stream"
+
+        } else {
+
+            intent.type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileToOpen.extension)
+
+        }
+
+        intent.data = uri
+
+        ctx.startActivity(intent)
 
     }
 
