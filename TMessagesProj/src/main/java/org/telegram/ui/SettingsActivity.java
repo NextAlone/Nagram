@@ -55,7 +55,6 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.checkerframework.common.subtyping.qual.Bottom;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -133,6 +132,11 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
 import tw.nekomimi.nekogram.parts.UpdateChecksKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.EnvUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.LangsKt;
+import tw.nekomimi.nekogram.utils.ThreadUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -480,7 +484,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (position == sendLogsRow) {
                     sendLogs();
                 } else if (position == clearLogsRow) {
-                    FileLog.cleanupLogs();
+                    AlertDialog pro = AlertUtil.showProgress(getParentActivity());
+                    pro.show();
+                    UIUtil.runOnIoDispatcher(() -> {
+                        FileUtil.delete(new File(EnvUtil.getTelegramPath(),"logs"));
+                        ThreadUtil.sleep(100L);
+                        LangsKt.uDismiss(pro);
+                    });
                 } else if (position == switchBackendRow) {
                     if (getParentActivity() == null) {
                         return;
@@ -521,17 +531,28 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                             return Unit.INSTANCE;
                         });
+                        builder.addItem(BuildVars.SAVE_LOG ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
+                            builder.dismiss();
+                            BuildVars.SAVE_LOG = !BuildVars.SAVE_LOG;
+                            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
+                            sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.SAVE_LOG).apply();
+                            updateRows();
+                            if (!BuildVars.SAVE_LOG) {
+                                UIUtil.runOnIoDispatcher(() -> FileUtil.delete(new File(EnvUtil.getTelegramPath(),"logs")));
+                            }
+                            return Unit.INSTANCE;
+                        });
                         builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_system_update_24, (it) -> {
                             builder.dismiss();
-                            UpdateChecksKt.checkUpdate(SettingsActivity.this);
+                            UpdateChecksKt.checkUpdate(getParentActivity());
                             return Unit.INSTANCE;
                         });
                         if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode) {
-                            builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings),R.drawable.baseline_developer_mode_24,(it) -> {
+                            builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                                 builder.dismiss();
                                 BottomBuilder devBuilder = new BottomBuilder(getParentActivity());
-                                devBuilder.addTitle("**Your telegram account may be banned**","We are not responsible for any improper use of developer features.");
-                                devBuilder.addItem(LocaleController.getString("Continue",R.string.Continue),R.drawable.baseline_warning_24,true,(__) -> {
+                                devBuilder.addTitle(LocaleController.getString("DevModeTitle",R.string.DevModeTitle), LocaleController.getString("DevModeNotice",R.string.DevModeNotice));
+                                devBuilder.addItem(LocaleController.getString("Continue", R.string.Continue), R.drawable.baseline_warning_24, true, (__) -> {
                                     devBuilder.dismiss();
                                     presentFragment(new NekoXSettingActivity());
                                     return Unit.INSTANCE;
@@ -553,6 +574,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
             @Override
             public boolean onItemClick(View view, int position) {
+                if (!NekoXConfig.developerMode) return false;
                 if (position == versionRow) {
                     pressCount++;
                     if (pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
@@ -565,7 +587,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
                                 LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
                                 BuildVars.SAVE_LOG ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs),
-                                NekoConfig.residentNotification ? LocaleController.getString("DisableResidentNotification", R.string.DisableResidentNotification) : LocaleController.getString("EnableResidentNotification", R.string.EnableResidentNotification),
+                                null,
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
@@ -583,13 +605,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 3) {
                                 MessagesController.getInstance(currentAccount).forceResetDialogs();
                             } else if (which == 4) {
-                                BuildVars.SAVE_LOG = !BuildVars.SAVE_LOG;
-                                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.SAVE_LOG).apply();
-                                updateRows();
-                            } else if (which == 5) {
                                 NekoConfig.toggleResidentNotification();
-                            } else if (which == 6) {
+                            } else if (which == 5) {
                                 MessagesStorage.getInstance(currentAccount).clearSentMedia();
                                 SharedConfig.setNoSoundHintShowed(false);
                                 SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
@@ -597,11 +614,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 SharedConfig.textSelectionHintShows = 0;
                                 SharedConfig.lockRecordAudioVideoHint = 0;
                                 SharedConfig.stickersReorderingHintUsed = false;
-                            } else if (which == 7) {
+                            } else if (which == 6) {
                                 VoIPHelper.showCallDebugSettings(getParentActivity());
-                            } else if (which == 8) {
+                            } else if (which == 7) {
                                 MessagesStorage.getInstance(currentAccount).readAllDialogs(-1);
-                            } else if (which == 9) {
+                            } else if (which == 8) {
                                 SharedConfig.togglePauseMusicOnRecord();
                             }
                         });
