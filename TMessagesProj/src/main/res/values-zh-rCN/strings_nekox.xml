@@ -15,7 +15,7 @@
     <string name="Install">安装</string>
     <string name="Ignore">忽略</string>
     <string name="UpdateDownloaded">一个更新刚刚下载完成.</string>
-    <string name="DevModeTitle">**您的电报帐户可能被禁止**“</string>
+    <string name="DevModeTitle">**您的电报账号可能被封禁**</string>
     <string name="DevModeNotice">对于开发者功能的任何不当使用，我们概不负责。</string>
     <string name="TapToDisable">点击以禁用, 这个通知不需要显示.</string>
     <string name="PlaceHolder">占位符 - 请禁用</string>

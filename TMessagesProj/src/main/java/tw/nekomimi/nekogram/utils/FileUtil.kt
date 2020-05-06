@@ -1,10 +1,13 @@
 package tw.nekomimi.nekogram.utils
 
 import android.os.Build
+import cn.hutool.core.io.FileUtil
+import cn.hutool.core.io.resource.ResourceUtil
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.BuildVars
 import org.telegram.messenger.FileLog
 import java.io.File
+import java.util.zip.ZipFile
 
 object FileUtil {
 
@@ -123,6 +126,8 @@ object FileUtil {
 
             if (!execFile.isFile) {
 
+                FileLog.d("Native library $execFile not found")
+
                 execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/${execFile.name}")
 
                 if (!execFile.isFile) {
@@ -148,15 +153,47 @@ object FileUtil {
     @JvmStatic
     fun saveNonAsset(path: String, saveTo: File) {
 
-        saveTo.parentFile?.also { initDir(it) }
+        ZipFile(ApplicationLoader.applicationContext.applicationInfo.sourceDir).use {
 
-        saveTo.createNewFile()
+            it.getInputStream(it.getEntry(path) ?: return@use).use { ins ->
 
-        (ApplicationLoader::class.java.getResourceAsStream(path) ?: error("not found")).use {
+                IoUtil.copy(ins, saveTo)
+
+                return
+
+            }
+
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            ApplicationLoader.applicationContext.applicationInfo.splitSourceDirs.forEach { split ->
+
+                ZipFile(split).use {
+
+                    it.getInputStream(it.getEntry(path) ?: return@use).use { ins ->
+
+                        IoUtil.copy(ins, saveTo)
+
+                        return
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        ResourceUtil.getStream(path)?.use {
 
             IoUtil.copy(it, saveTo)
 
+            return
+
         }
+
+        error("res not found: $path")
 
     }
 

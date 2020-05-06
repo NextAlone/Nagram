@@ -225,7 +225,15 @@ public class SharedConfig {
 
             if (subId != 0L) {
 
-                builder.append(SubManager.getSubList().find(ObjectFilters.eq("id", subId)).firstOrDefault().displayName());
+                try {
+
+                    builder.append(SubManager.getSubList().find(ObjectFilters.eq("id", subId)).firstOrDefault().displayName());
+
+                } catch (Exception e){
+
+                    builder.append("Unknown");
+
+                }
 
             } else {
 

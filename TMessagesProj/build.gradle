@@ -59,28 +59,27 @@ dependencies {
     implementation 'cn.hutool:hutool-all:5.3.2'
     implementation 'org.tukaani:xz:1.8'
 
-
     implementation files('libs/libv2ray.aar')
     implementation files('libs/ss-libev-release.aar')
     implementation files('libs/ssr-libev-release.aar')
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 
-    def fcmVersion = '20.1.4'
+    def fcmVersion = '20.1.6'
+    def crashlyticsVersion = '17.0.0'
+    def playCoreVersion = '1.7.2'
 
-    //noinspection GradleDependency
     compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
-    compileOnly "com.google.firebase:firebase-crashlytics:17.0.0"
-    compileOnly 'com.google.android.play:core:1.7.2'
+    compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    compileOnly "com.google.android.play:core:$playCoreVersion"
 
-    //noinspection GradleDependency
     releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
-    releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0'
-    releaseImplementation 'com.google.android.play:core:1.7.2'
+    releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    releaseImplementation "com.google.android.play:core:$playCoreVersion"
 
 }
 
-def verName = "6.1.1.0-rc03"
-def verCode = 29
+def verName = "6.1.1.0-rc04"
+def verCode = 30
 
 task writeUpdateInfo {
 

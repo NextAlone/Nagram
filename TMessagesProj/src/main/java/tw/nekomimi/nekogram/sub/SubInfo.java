@@ -43,9 +43,9 @@ public class SubInfo implements Mappable {
 
         if (id == 1) return LocaleController.getString("PublicPrefix", R.string.PublicPrefix);
 
-        if (name.length() < 5) return name;
+        if (name.length() < 10) return name;
 
-        return name.substring(0,5) + "...";
+        return name.substring(0,10) + "...";
 
     }
 
@@ -142,8 +142,6 @@ public class SubInfo implements Mappable {
     public Document write(NitriteMapper mapper) {
 
         Document document = new Document();
-
-        if (id == 0) id = SubManager.getSubList().find().totalCount() + 10;
 
         document.put("id", id);
         document.put("name", name);

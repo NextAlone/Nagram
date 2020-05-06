@@ -276,7 +276,18 @@ public class SubSettingsActivity extends BaseFragment {
 
             }
 
-            SubManager.getSubList().update(subInfo, true);
+            if (subInfo.id == 0) subInfo.id = SubManager.count + 10;
+
+            do {
+
+                try {
+                    SubManager.getSubList().update(subInfo, true);
+                    break;
+                } catch (Exception ignored) {
+                }
+                subInfo.id ++;
+
+            } while (true);
 
             SharedConfig.reloadProxyList();
 

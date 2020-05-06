@@ -3,7 +3,6 @@ package tw.nekomimi.nekogram.utils
 import net.lingala.zip4j.ZipFile
 import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.CompressionLevel
-import net.lingala.zip4j.util.Zip4jUtil
 import java.io.File
 import java.io.InputStream
 import java.util.zip.ZipInputStream
@@ -11,7 +10,7 @@ import java.util.zip.ZipInputStream
 object ZipUtil {
 
     @JvmStatic
-    fun makeZip(zipFile: File,vararg contents: File) {
+    fun makeZip(zipFile: File, vararg contents: File) {
 
         val params = ZipParameters().apply {
 
@@ -23,7 +22,7 @@ object ZipUtil {
 
             contents.forEach {
 
-                if (it.isFile) addFile(it,params) else addFolder(it, params)
+                if (it.isFile) addFile(it, params) else addFolder(it, params)
 
             }
 

@@ -12,7 +12,9 @@ object IoUtil {
     @JvmStatic
     fun copy(inS: InputStream,outF: File) {
 
-        FileUtil.initFile(outF)
+        outF.parentFile?.also { FileUtil.initDir(it) }
+
+        outF.createNewFile()
 
         outF.outputStream().use {
 
