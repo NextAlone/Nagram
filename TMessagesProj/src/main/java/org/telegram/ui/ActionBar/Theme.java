@@ -105,7 +105,6 @@ import java.util.Locale;
 import androidx.annotation.UiThread;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 
 public class Theme {
 
@@ -3813,23 +3812,28 @@ public class Theme {
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
-        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "nekox-indigo-1.attheme";
+        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "nekox-indigo.attheme";
         themeInfo.previewBackgroundColor = -657931;
-        themeInfo.previewInColor = Color.parseColor("#c0ffffff");
-        themeInfo.previewOutColor = Color.parseColor("#3f51b5");
+        themeInfo.previewInColor = NekoConfig.useDefaultTheme ? 0xffffffff : Color.parseColor("#c0ffffff");
+        themeInfo.previewOutColor = NekoConfig.useDefaultTheme ? 0xffd0e6ff: Color.parseColor("#3f51b5");
         themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
         themeInfo.sortIndex = 1;
-        themeInfo.setAccentColorOptions(
-                new int[]    { 0xFF5890C5,                     0xFF239853,                    0xFFCE5E82,                    0xFF7F63C3,                    0xFF2491AD,                    0xFF299C2F,                    0xFF8854B4, 0xFF328ACF, 0xFF43ACC7, 0xFF52AC44, 0xFFCD5F93, 0xFFD28036, 0xFF8366CC, 0xFFCE4E57, 0xFFD3AE40, 0xFF7B88AB },
-                new int[]    { 0xFFB8E18D,                     0xFFFAFBCC,                    0xFFFFF9DC,                    0xFFC14F6E,                    0xFFD1BD1B,                    0xFFFFFAC9,                    0xFFFCF6D8, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-                new int[]    { 0x00000000,                     0xFFF2FBC9,                    0xFFFBF4DF, 	                         0,	                             0,                    0xFFFDEDB4,                    0xFFFCF7B6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-                new int[]    { 0x00000000,                     0xFFDFE2A0,                    0xFFE2B991,                    0xFFD7C1E9,                    0xFFDCD1C0,                    0xFFEFB576,                    0xFFC0A2D1, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-                new int[]    { 0x00000000,                     0xFFC1E1A3,                    0xFFEBE2BA,                    0xFFE8CDD6,                    0xFFE0DFC6,                    0xFFECE771,                    0xFFDECCDE, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-                new int[]    {         99,                              9,                            10,                            11,                            12,                            13,                            14,          0,          1,          2,          3,          4,          5,          6,          7,          8 },
-                new String[] {         "",                             "",                            "",                             "",                           "",                            "", "",         "",         "",         "",         "",         "",         "",         "",         "",         "" },
-                new int[]    {          0,                            180,                            45,                             0,                            45,                           180,                             0,          0,          0,          0,          0,          0,          0,          0,          0,          0 },
-                new int[]    {          0,                             52,                            46,                            57,                            45,                            64,                            52,          0,          0,          0,          0,          0,          0,          0,          0,          0 }
-                );
+        if (NekoConfig.useDefaultTheme) {
+            themeInfo.firstAccentIsDefault = true;
+            themeInfo.setAccentColorOptions(
+                    new int[]{0xFF5890C5, 0xFF239853, 0xFFCE5E82, 0xFF7F63C3, 0xFF2491AD, 0xFF299C2F, 0xFF8854B4, 0xFF328ACF, 0xFF43ACC7, 0xFF52AC44, 0xFFCD5F93, 0xFFD28036, 0xFF8366CC, 0xFFCE4E57, 0xFFD3AE40, 0xFF7B88AB},
+                    new int[]{0xFFB8E18D, 0xFFFAFBCC, 0xFFFFF9DC, 0xFFC14F6E, 0xFFD1BD1B, 0xFFFFFAC9, 0xFFFCF6D8, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000},
+                    new int[]{0x00000000, 0xFFF2FBC9, 0xFFFBF4DF, 0, 0, 0xFFFDEDB4, 0xFFFCF7B6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000},
+                    new int[]{0x00000000, 0xFFDFE2A0, 0xFFE2B991, 0xFFD7C1E9, 0xFFDCD1C0, 0xFFEFB576, 0xFFC0A2D1, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000},
+                    new int[]{0x00000000, 0xFFC1E1A3, 0xFFEBE2BA, 0xFFE8CDD6, 0xFFE0DFC6, 0xFFECE771, 0xFFDECCDE, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000},
+                    new int[]{99, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    new String[]{"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""},
+                    new int[]{0, 180, 45, 0, 45, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 52, 46, 57, 45, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+            );
+        } else {
+
+        }
         themes.add(currentDayTheme = currentTheme = defaultTheme = themeInfo);
         themesDict.put("Blue", themeInfo);
 
@@ -6031,7 +6035,7 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        File file = new File(ApplicationLoader.getCacheDirFixed(), assetName);
         long size;
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);

@@ -8,10 +8,7 @@
 
 package org.telegram.messenger;
 
-import android.os.Build;
 import android.util.Log;
-
-import com.google.zxing.oned.EAN8Writer;
 
 import org.telegram.messenger.time.FastDateFormat;
 
@@ -20,8 +17,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
 
-import kotlin.io.FilesKt;
 import tw.nekomimi.nekogram.ExternalGcm;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 
 public class FileLog {
     private OutputStreamWriter streamWriter = null;
@@ -35,6 +32,7 @@ public class FileLog {
     private final static String tag = BuildConfig.APPLICATION_ID;
 
     private static volatile FileLog Instance = null;
+
     public static FileLog getInstance() {
         FileLog localInstance = Instance;
         if (localInstance == null) {
@@ -61,11 +59,7 @@ public class FileLog {
         }
         dateFormat = FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss", Locale.US);
         try {
-            File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-            if (sdCard == null) {
-                return;
-            }
-            File dir = new File(sdCard.getAbsolutePath() + "/logs");
+            File dir = new File(EnvUtil.getTelegramPath(), "logs");
             dir.mkdirs();
             currentFile = new File(dir, dateFormat.format(System.currentTimeMillis()) + ".txt");
         } catch (Exception e) {
@@ -93,11 +87,7 @@ public class FileLog {
             return "";
         }
         try {
-            File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-            if (sdCard == null) {
-                return "";
-            }
-            File dir = new File(sdCard.getAbsolutePath() + "/logs");
+            File dir = new File(EnvUtil.getTelegramPath(), "logs");
             dir.mkdirs();
             getInstance().networkFile = new File(dir, getInstance().dateFormat.format(System.currentTimeMillis()) + "_net.txt");
             return getInstance().networkFile.getAbsolutePath();
@@ -112,11 +102,7 @@ public class FileLog {
             return "";
         }
         try {
-            File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-            if (sdCard == null) {
-                return "";
-            }
-            File dir = new File(sdCard.getAbsolutePath() + "/logs");
+            File dir = new File(EnvUtil.getTelegramPath(), "logs");
             dir.mkdirs();
             getInstance().tonlibFile = new File(dir, getInstance().dateFormat.format(System.currentTimeMillis()) + "_tonlib.txt");
             return getInstance().tonlibFile.getAbsolutePath();
@@ -128,7 +114,7 @@ public class FileLog {
 
     public static void e(final String message, final Throwable exception) {
         Log.e(tag, message, exception);
-        ExternalGcm.recordException(new Exception(message,exception));
+        ExternalGcm.recordException(new Exception(message, exception));
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
         if (getInstance().streamWriter != null) {
@@ -162,7 +148,7 @@ public class FileLog {
     }
 
     public static void e(final Throwable e) {
-        Log.e(tag,"ERR", e);
+        Log.e(tag, "ERR", e);
         ExternalGcm.recordException(e);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
@@ -219,25 +205,4 @@ public class FileLog {
         }
     }
 
-    public static void cleanupLogs() {
-        ensureInitied();
-        File dir = ApplicationLoader.applicationContext.getExternalFilesDir("logs");
-        if (dir == null) return;
-        File[] files = dir.listFiles();
-        if (files != null) {
-            for (int a = 0; a < files.length; a++) {
-                File file = files[a];
-                if (getInstance().currentFile != null && file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) {
-                    continue;
-                }
-                if (getInstance().networkFile != null && file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) {
-                    continue;
-                }
-                if (getInstance().tonlibFile != null && file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())) {
-                    continue;
-                }
-                file.delete();
-            }
-        }
-    }
 }

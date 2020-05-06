@@ -193,6 +193,16 @@ public class ApplicationLoader extends Application {
 
     }
 
+    public static File getCacheDirFixed() {
+
+        File filesDir = new File(getDataDirFixed(), "cache");
+
+        FileUtil.initDir(filesDir);
+
+        return filesDir;
+
+    }
+
     public static void postInitApplication() {
         if (applicationInited) {
             return;

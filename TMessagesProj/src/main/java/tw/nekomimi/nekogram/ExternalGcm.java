@@ -123,7 +123,7 @@ public class ExternalGcm {
 
                 builder.addTitle(LocaleController.getString("UpdateDownloaded", R.string.UpdateDownloaded), false);
 
-                builder.addItem(LocaleController.getString("Update", R.string.Update), R.drawable.baseline_system_update_24, false, (it) -> {
+                builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false, (it) -> {
 
                     manager.completeUpdate();
 
@@ -131,7 +131,7 @@ public class ExternalGcm {
 
                 });
 
-                builder.addItem(LocaleController.getString("Later", R.string.Later), R.drawable.baseline_watch_later_24, false, null);
+                builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false, null);
 
                 builder.show();
 

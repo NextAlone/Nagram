@@ -21,7 +21,6 @@ import java.util.zip.ZipInputStream
 object UpdateUtil {
 
     val updateUrls = arrayOf(
-            "https://gitee.com/nekoshizuku/nekox-resources/raw/master",
             "https://gitlab.com/NekoX/Resources/-/raw/master",
             "https://raw.githubusercontent.com/NekoX-Dev/Resources/master"
     )
@@ -59,7 +58,7 @@ object UpdateUtil {
 
                     builder.addTitle(LocaleController.getString("UpdateAvailable", R.string.UpdateAvailable), updateInfo.getString("version"))
 
-                    builder.addItem(LocaleController.getString("Update", R.string.Update), R.drawable.baseline_system_update_24, false) {
+                    builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false) {
 
                         doUpdate(ctx, code, updateInfo.getString("defaultApkName"))
 
@@ -69,7 +68,7 @@ object UpdateUtil {
 
                     }
 
-                    builder.addItem(LocaleController.getString("Later", R.string.Later), R.drawable.baseline_watch_later_24, false) {
+                    builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false) {
 
                         builder.dismiss()
 
@@ -216,7 +215,7 @@ object UpdateUtil {
 
                         override fun progress(progressSize: Long) {
 
-                            update("$progressSize / $size ( ${((progressSize / size) * 100).toInt()}% )")
+                            update("$progressSize / $size ( ${((progressSize * 100 / size).toFloat() / 100F).toInt()}% )")
 
                         }
 

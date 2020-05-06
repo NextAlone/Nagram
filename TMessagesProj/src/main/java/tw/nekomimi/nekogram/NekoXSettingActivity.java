@@ -31,6 +31,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.io.File;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.parts.UpdateChecksKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.LocaleUtil;
@@ -48,9 +49,11 @@ public class NekoXSettingActivity extends BaseFragment {
     private int developerSettingsRow;
 
     private int enableRow;
-    private int fetchAndExportLangRow;
     private int disableFlagSecureRow;
     private int disableScreenshotDetectionRow;
+
+    private int fetchAndExportLangRow;
+    private int checkUpdateRepoForceRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -99,6 +102,8 @@ public class NekoXSettingActivity extends BaseFragment {
 
             if (position == fetchAndExportLangRow) {
                 fetchAndExportLang();
+            } else if (position == checkUpdateRepoForceRow) {
+                UpdateChecksKt.checkUpdate(getParentActivity(), true);
             }
 
             if (position == enableRow) {
@@ -135,10 +140,12 @@ public class NekoXSettingActivity extends BaseFragment {
         developerSettingsRow = rowCount++;
 
         enableRow = rowCount++;
-        fetchAndExportLangRow = rowCount++;
 
         disableFlagSecureRow = rowCount++;
         disableScreenshotDetectionRow = rowCount++;
+
+        fetchAndExportLangRow = rowCount++;
+        checkUpdateRepoForceRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -279,6 +286,8 @@ public class NekoXSettingActivity extends BaseFragment {
                     }
                     if (position == fetchAndExportLangRow) {
                         textCell.setText("Export Builtin Languages", true);
+                    } else if (position == checkUpdateRepoForceRow) {
+                        textCell.setText("Force Update (Repo)", false);
                     }
                 }
 
@@ -289,7 +298,7 @@ public class NekoXSettingActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 2 || type == 3;
+            return (type == 2 || type == 3) && holder.itemView.isEnabled();
         }
 
         @Override
@@ -328,12 +337,10 @@ public class NekoXSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == developerSettingsRow) {
                 return 4;
-            } else if (position == disableFlagSecureRow || position == disableScreenshotDetectionRow) {
-                return 3;
-            } else if (position == fetchAndExportLangRow) {
+            } else if (position == fetchAndExportLangRow || position == checkUpdateRepoForceRow) {
                 return 2;
             }
-            return 6;
+            return 3;
         }
     }
 }

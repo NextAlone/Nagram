@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
+import android.app.Activity
 import android.content.IntentSender.SendIntentException
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
@@ -17,37 +18,36 @@ import tw.nekomimi.nekogram.NekoXConfig
 import tw.nekomimi.nekogram.utils.*
 import java.util.*
 
-fun SettingsActivity.checkUpdate() {
+@JvmOverloads
+fun Activity.checkUpdate(force: Boolean = false) {
 
-    val ctx = parentActivity
-
-    val progress = AlertUtil.showProgress(ctx)
+    val progress = AlertUtil.showProgress(this)
 
     progress.show()
 
     UIUtil.runOnIoDispatcher {
 
-        if (ExternalGcm.checkPlayServices()) {
+        if (ExternalGcm.checkPlayServices() && !force) {
 
             progress.uUpdate(LocaleController.getString("Checking", R.string.Checking) + " (Play Store)")
 
-            val manager = AppUpdateManagerFactory.create(ctx)
+            val manager = AppUpdateManagerFactory.create(this)
 
             manager.registerListener(InstallStateUpdatedListener {
 
                 if (it.installStatus() == InstallStatus.DOWNLOADED) {
 
-                    val builder = BottomBuilder(ctx)
+                    val builder = BottomBuilder(this)
 
                     builder.addTitle(LocaleController.getString("UpdateDownloaded", R.string.UpdateDownloaded), false)
 
-                    builder.addItem(LocaleController.getString("Update", R.string.Update), R.drawable.baseline_system_update_24, false) {
+                    builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false) {
 
                         manager.completeUpdate()
 
                     }
 
-                    builder.addItem(LocaleController.getString("Later", R.string.Later), R.drawable.baseline_watch_later_24, false, null)
+                    builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false, null)
 
                     builder.show()
 
@@ -63,7 +63,7 @@ fun SettingsActivity.checkUpdate() {
 
                     try {
 
-                        manager.startUpdateFlowForResult(it, AppUpdateType.FLEXIBLE, ctx, 114514)
+                        manager.startUpdateFlowForResult(it, AppUpdateType.FLEXIBLE, this, 114514)
 
                     } catch (ignored: SendIntentException) { }
 
@@ -99,15 +99,15 @@ fun SettingsActivity.checkUpdate() {
 
                 progress.uDismiss()
 
-                if (code > BuildConfig.VERSION_CODE) UIUtil.runOnUIThread {
+                if (code > BuildConfig.VERSION_CODE || force) UIUtil.runOnUIThread {
 
-                    val builder = BottomBuilder(ctx)
+                    val builder = BottomBuilder(this)
 
                     builder.addTitle(LocaleController.getString("UpdateAvailable", R.string.UpdateAvailable), updateInfo.getString("version"))
 
-                    builder.addItem(LocaleController.getString("Update", R.string.Update), R.drawable.baseline_system_update_24, false) {
+                    builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false) {
 
-                        UpdateUtil.doUpdate(ctx, code, updateInfo.getString("defaultApkName"))
+                        UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultApkName"))
 
                         builder.dismiss()
 
@@ -115,7 +115,7 @@ fun SettingsActivity.checkUpdate() {
 
                     }
 
-                    builder.addItem(LocaleController.getString("Later", R.string.Later), R.drawable.baseline_watch_later_24, false) {
+                    builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false) {
 
                         builder.dismiss()
 

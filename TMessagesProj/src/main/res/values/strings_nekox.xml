@@ -13,11 +13,16 @@
     <string name="CheckUpdate">Check Update</string>
     <string name="NoUpdate">No update found</string>
     <string name="UpdateAvailable">New update available</string>
-    <string name="Download">Download</string>
+    <string name="UpdateUpdate">Update</string>
+    <string name="UpdateLater">Later</string>
     <string name="DownloadFailed">Download Failed</string>
     <string name="Install">Install</string>
     <string name="Ignore">Ignore</string>
     <string name="UpdateDownloaded">An update has just been downloaded.</string>
+
+
+    <string name="DevModeTitle">**Your telegram account may be banned**</string>
+    <string name="DevModeNotice">We are not responsible for any improper use of developer features.</string>
 
     <string name="TapToDisable">Tap to disable. You don\'t need these.</string>
     <string name="PlaceHolder">Placeholder - Please Disable</string>
