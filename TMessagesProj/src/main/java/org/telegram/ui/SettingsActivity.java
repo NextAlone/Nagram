@@ -526,7 +526,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             UpdateChecksKt.checkUpdate(SettingsActivity.this);
                             return Unit.INSTANCE;
                         });
-                        if (NekoXConfig.developerModeEntrance) {
+                        if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode) {
                             builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings),R.drawable.baseline_developer_mode_24,(it) -> {
                                 builder.dismiss();
                                 BottomBuilder devBuilder = new BottomBuilder(getParentActivity());

@@ -595,7 +595,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     if (openNotificationListenSettings()) {
-                        if (isNotificationListenerEnabled()) {
+                        if (ApplicationLoader.isNotificationListenerEnabled()) {
                             AlertUtil.showToast( LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
                         } else {
                             AlertUtil.showToast(LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
@@ -657,14 +657,6 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         });
 
         return fragmentView;
-    }
-
-    public boolean isNotificationListenerEnabled() {
-        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(getParentActivity());
-        if (packageNames.contains(getParentActivity().getPackageName())) {
-            return true;
-        }
-        return false;
     }
 
     public boolean openNotificationListenSettings() {
@@ -886,7 +878,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == androidAutoAlertRow) {
                         checkCell.setTextAndCheck("Android Auto", preferences.getBoolean("EnableAutoNotifications", false), true);
                     } else if (position == notificationsServiceRow) {
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? isNotificationListenerEnabled() : preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? ApplicationLoader.isNotificationListenerEnabled() : preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
                     } else if (position == notificationsServiceConnectionRow) {
                         checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", getMessagesController().backgroundConnection), true, true);
                     } else if (position == badgeNumberShowRow) {

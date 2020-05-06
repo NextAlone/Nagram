@@ -25,7 +25,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.multidex.MultiDex;
 
 import org.telegram.tgnet.ConnectionsManager;
@@ -34,6 +36,7 @@ import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -314,8 +317,8 @@ public class ApplicationLoader extends Application {
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekogramX ) " + BuildConfig.VERSION_NAME);
-        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(),"osmdroid"));
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekoX ) " + BuildConfig.VERSION_NAME);
+        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
         startPushService();
 
@@ -323,18 +326,17 @@ public class ApplicationLoader extends Application {
 
             EnvUtil.doTest();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
 
-            FileLog.e("EnvUtil test Failed",e);
+            FileLog.e("EnvUtil test Failed", e);
 
         }
 
     }
 
-
     public static void startPushService() {
-        if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return; // USE NOTIF LISTENER
+        if (ExternalGcm.checkPlayServices() && (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && isNotificationListenerEnabled())) {
+            return;
         }
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
         boolean enabled;
@@ -342,24 +344,42 @@ public class ApplicationLoader extends Application {
             enabled = preferences.getBoolean("pushService", true);
         } else {
             enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", true);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("pushService", enabled);
+            editor.putBoolean("pushConnection", enabled);
+            editor.apply();
+            SharedPreferences preferencesCA = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+            SharedPreferences.Editor editorCA = preferencesCA.edit();
+            editorCA.putBoolean("pushConnection", enabled);
+            editorCA.putBoolean("pushService", enabled);
+            editorCA.apply();
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).setPushConnectionEnabled(true);
         }
         if (enabled) {
             try {
-                if (SDK_INT >= Build.VERSION_CODES.O && NekoConfig.residentNotification) {
+                Log.d("TFOSS", "Starting push service...");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     applicationContext.startForegroundService(new Intent(applicationContext, NotificationsService.class));
                 } else {
                     applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
                 }
-            } catch (Throwable ignore) {
-
+            } catch (Throwable e) {
+                Log.d("TFOSS", "Failed to start push service");
             }
         } else {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
-
             PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
             AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
             alarm.cancel(pintent);
         }
+    }
+
+    public static boolean isNotificationListenerEnabled() {
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(applicationContext);
+        if (packageNames.contains(applicationContext.getPackageName())) {
+            return true;
+        }
+        return false;
     }
 
     @Override
