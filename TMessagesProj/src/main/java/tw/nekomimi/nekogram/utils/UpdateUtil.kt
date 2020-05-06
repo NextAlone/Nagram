@@ -215,7 +215,7 @@ object UpdateUtil {
 
                         override fun progress(progressSize: Long) {
 
-                            update("$progressSize / $size ( ${((progressSize * 100 / size).toFloat() / 100F).toInt()}% )")
+                            update("$progressSize / $size")
 
                         }
 

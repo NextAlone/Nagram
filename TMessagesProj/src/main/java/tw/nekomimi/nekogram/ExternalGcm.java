@@ -25,6 +25,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.ConnectionsManager;
 
 import javax.validation.constraints.NotNull;
 
@@ -64,7 +65,7 @@ public class ExternalGcm {
                                 FileLog.d("Failed to get regid");
                             }
                             SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-                            GcmPushListenerService.sendRegistrationToServer(null);
+                            ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
                         });
                         FirebaseCrashlytics.getInstance().setCustomKey("flavor", BuildConfig.FLAVOR);
                     } catch (Throwable e) {
@@ -76,7 +77,7 @@ public class ExternalGcm {
                     FileLog.d("No valid Google Play Services APK found.");
                 }
                 SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
-                GcmPushListenerService.sendRegistrationToServer(null);
+                ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
             }
         }, 1000);
 

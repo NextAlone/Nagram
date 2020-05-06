@@ -1,11 +1,9 @@
 import cn.hutool.core.io.FileUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.system.SystemUtil
-
 import java.security.MessageDigest
 
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -78,8 +76,8 @@ dependencies {
 
 }
 
-def verName = "6.1.1.0-rc04"
-def verCode = 30
+def verName = "6.1.1.0"
+def verCode = 32
 
 task writeUpdateInfo {
 
