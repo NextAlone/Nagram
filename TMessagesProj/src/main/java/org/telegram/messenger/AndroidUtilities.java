@@ -295,21 +295,17 @@ public class AndroidUtilities {
         return true;
     };
 
-    public static boolean addLinks(Spannable text, int mask) {
-        if (text != null && containsUnsupportedCharacters(text.toString()) || mask == 0) {
-            return false;
-        }
+    public static boolean addProxyLinks(Spannable text) {
+        if (text == null) return false;
         final URLSpan[] old = text.getSpans(0, text.length(), URLSpan.class);
         for (int i = old.length - 1; i >= 0; i--) {
-            text.removeSpan(old[i]);
+            String url = old[i].getURL();
+            if (url.startsWith("vmess") || url.startsWith("ss")) {
+                text.removeSpan(old[i]);
+            }
         }
         final ArrayList<LinkSpec> links = new ArrayList<>();
-        if ((mask & Linkify.PHONE_NUMBERS) != 0) {
-            Linkify.addLinks(text, Linkify.PHONE_NUMBERS);
-        }
-        //if ((mask & Linkify.WEB_URLS) != 0) {
-        gatherLinks(links, text, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://", VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL}, sUrlMatchFilter);
-        //}
+        gatherLinks(links, text, LinkifyPort.PROXY_PATTERN, new String[]{VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL}, sUrlMatchFilter);
         pruneOverlaps(links);
         if (links.size() == 0) {
             return false;
@@ -320,6 +316,38 @@ public class AndroidUtilities {
             if (oldSpans != null && oldSpans.length > 0) {
                 for (int b = 0; b < oldSpans.length; b++) {
                     text.removeSpan(oldSpans[b]);
+                }
+            }
+            text.setSpan(new URLSpan(link.url), link.start, link.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return true;
+    }
+
+    public static boolean addLinks(Spannable text, int mask) {
+        if (text == null || containsUnsupportedCharacters(text.toString()) || mask == 0) {
+            return false;
+        }
+        final URLSpan[] old = text.getSpans(0, text.length(), URLSpan.class);
+        for (int i = old.length - 1; i >= 0; i--) {
+            text.removeSpan(old[i]);
+        }
+        final ArrayList<LinkSpec> links = new ArrayList<>();
+        if ((mask & Linkify.PHONE_NUMBERS) != 0) {
+            Linkify.addLinks(text, Linkify.PHONE_NUMBERS);
+        }
+        if ((mask & Linkify.WEB_URLS) != 0) {
+            gatherLinks(links, text, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter);
+        }
+        pruneOverlaps(links);
+        if (links.size() == 0) {
+            return false;
+        }
+        for (int a = 0, N = links.size(); a < N; a++) {
+            LinkSpec link = links.get(a);
+            URLSpan[] oldSpans = text.getSpans(link.start, link.end, URLSpan.class);
+            if (oldSpans != null && oldSpans.length > 0) {
+                for (URLSpan oldSpan : oldSpans) {
+                    text.removeSpan(oldSpan);
                 }
             }
             text.setSpan(new URLSpan(link.url), link.start, link.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -699,217 +727,217 @@ public class AndroidUtilities {
         }
     }
 
-    private static class VcardData {
-        String name;
-        ArrayList<String> phones = new ArrayList<>();
-        StringBuilder vcard = new StringBuilder();
+private static class VcardData {
+    String name;
+    ArrayList<String> phones = new ArrayList<>();
+    StringBuilder vcard = new StringBuilder();
+}
+
+public static class VcardItem {
+    public ArrayList<String> vcardData = new ArrayList<>();
+    public String fullData = "";
+    public int type;
+    public boolean checked = true;
+
+    public String[] getRawValue() {
+        int idx = fullData.indexOf(':');
+        if (idx < 0) {
+            return new String[0];
+        }
+
+        String valueType = fullData.substring(0, idx);
+        String value = fullData.substring(idx + 1);
+
+        String nameEncoding = null;
+        String nameCharset = "UTF-8";
+        String[] params = valueType.split(";");
+        for (int a = 0; a < params.length; a++) {
+            String[] args2 = params[a].split("=");
+            if (args2.length != 2) {
+                continue;
+            }
+            if (args2[0].equals("CHARSET")) {
+                nameCharset = args2[1];
+            } else if (args2[0].equals("ENCODING")) {
+                nameEncoding = args2[1];
+            }
+        }
+        String[] args = value.split(";");
+        boolean added = false;
+        for (int a = 0; a < args.length; a++) {
+            if (TextUtils.isEmpty(args[a])) {
+                continue;
+            }
+            if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
+                if (bytes != null && bytes.length != 0) {
+                    try {
+                        args[a] = new String(bytes, nameCharset);
+                    } catch (Exception ignore) {
+
+                    }
+                }
+            }
+        }
+        return args;
     }
 
-    public static class VcardItem {
-        public ArrayList<String> vcardData = new ArrayList<>();
-        public String fullData = "";
-        public int type;
-        public boolean checked = true;
+    public String getValue(boolean format) {
+        StringBuilder result = new StringBuilder();
 
-        public String[] getRawValue() {
-            int idx = fullData.indexOf(':');
-            if (idx < 0) {
-                return new String[0];
+        int idx = fullData.indexOf(':');
+        if (idx < 0) {
+            return "";
+        }
+
+        if (result.length() > 0) {
+            result.append(", ");
+        }
+
+        String valueType = fullData.substring(0, idx);
+        String value = fullData.substring(idx + 1);
+
+        String nameEncoding = null;
+        String nameCharset = "UTF-8";
+        String[] params = valueType.split(";");
+        for (int a = 0; a < params.length; a++) {
+            String[] args2 = params[a].split("=");
+            if (args2.length != 2) {
+                continue;
             }
+            if (args2[0].equals("CHARSET")) {
+                nameCharset = args2[1];
+            } else if (args2[0].equals("ENCODING")) {
+                nameEncoding = args2[1];
+            }
+        }
+        String[] args = value.split(";");
+        boolean added = false;
+        for (int a = 0; a < args.length; a++) {
+            if (TextUtils.isEmpty(args[a])) {
+                continue;
+            }
+            if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
+                if (bytes != null && bytes.length != 0) {
+                    try {
+                        args[a] = new String(bytes, nameCharset);
+                    } catch (Exception ignore) {
 
-            String valueType = fullData.substring(0, idx);
-            String value = fullData.substring(idx + 1);
-
-            String nameEncoding = null;
-            String nameCharset = "UTF-8";
-            String[] params = valueType.split(";");
-            for (int a = 0; a < params.length; a++) {
-                String[] args2 = params[a].split("=");
-                if (args2.length != 2) {
-                    continue;
-                }
-                if (args2[0].equals("CHARSET")) {
-                    nameCharset = args2[1];
-                } else if (args2[0].equals("ENCODING")) {
-                    nameEncoding = args2[1];
+                    }
                 }
             }
+            if (added && result.length() > 0) {
+                result.append(" ");
+            }
+            result.append(args[a]);
+            if (!added) {
+                added = args[a].length() > 0;
+            }
+        }
+
+        if (format) {
+            if (type == 0) {
+                return PhoneFormat.getInstance().format(result.toString());
+            } else if (type == 5) {
+                String[] date = result.toString().split("T");
+                if (date.length > 0) {
+                    date = date[0].split("-");
+                    if (date.length == 3) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, Utilities.parseInt(date[0]));
+                        calendar.set(Calendar.MONTH, Utilities.parseInt(date[1]) - 1);
+                        calendar.set(Calendar.DAY_OF_MONTH, Utilities.parseInt(date[2]));
+                        return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
+                    }
+                }
+            }
+        }
+        return result.toString();
+    }
+
+    public String getRawType(boolean first) {
+        int idx = fullData.indexOf(':');
+        if (idx < 0) {
+            return "";
+        }
+        String value = fullData.substring(0, idx);
+        if (type == 20) {
+            value = value.substring(2);
             String[] args = value.split(";");
-            boolean added = false;
-            for (int a = 0; a < args.length; a++) {
-                if (TextUtils.isEmpty(args[a])) {
-                    continue;
-                }
-                if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                    byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
-                    if (bytes != null && bytes.length != 0) {
-                        try {
-                            args[a] = new String(bytes, nameCharset);
-                        } catch (Exception ignore) {
-
-                        }
-                    }
-                }
-            }
-            return args;
-        }
-
-        public String getValue(boolean format) {
-            StringBuilder result = new StringBuilder();
-
-            int idx = fullData.indexOf(':');
-            if (idx < 0) {
-                return "";
-            }
-
-            if (result.length() > 0) {
-                result.append(", ");
-            }
-
-            String valueType = fullData.substring(0, idx);
-            String value = fullData.substring(idx + 1);
-
-            String nameEncoding = null;
-            String nameCharset = "UTF-8";
-            String[] params = valueType.split(";");
-            for (int a = 0; a < params.length; a++) {
-                String[] args2 = params[a].split("=");
-                if (args2.length != 2) {
-                    continue;
-                }
-                if (args2[0].equals("CHARSET")) {
-                    nameCharset = args2[1];
-                } else if (args2[0].equals("ENCODING")) {
-                    nameEncoding = args2[1];
-                }
-            }
-            String[] args = value.split(";");
-            boolean added = false;
-            for (int a = 0; a < args.length; a++) {
-                if (TextUtils.isEmpty(args[a])) {
-                    continue;
-                }
-                if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                    byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
-                    if (bytes != null && bytes.length != 0) {
-                        try {
-                            args[a] = new String(bytes, nameCharset);
-                        } catch (Exception ignore) {
-
-                        }
-                    }
-                }
-                if (added && result.length() > 0) {
-                    result.append(" ");
-                }
-                result.append(args[a]);
-                if (!added) {
-                    added = args[a].length() > 0;
-                }
-            }
-
-            if (format) {
-                if (type == 0) {
-                    return PhoneFormat.getInstance().format(result.toString());
-                } else if (type == 5) {
-                    String[] date = result.toString().split("T");
-                    if (date.length > 0) {
-                        date = date[0].split("-");
-                        if (date.length == 3) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.set(Calendar.YEAR, Utilities.parseInt(date[0]));
-                            calendar.set(Calendar.MONTH, Utilities.parseInt(date[1]) - 1);
-                            calendar.set(Calendar.DAY_OF_MONTH, Utilities.parseInt(date[2]));
-                            return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
-                        }
-                    }
-                }
-            }
-            return result.toString();
-        }
-
-        public String getRawType(boolean first) {
-            int idx = fullData.indexOf(':');
-            if (idx < 0) {
-                return "";
-            }
-            String value = fullData.substring(0, idx);
-            if (type == 20) {
-                value = value.substring(2);
-                String[] args = value.split(";");
-                if (first) {
-                    value = args[0];
-                } else if (args.length > 1) {
-                    value = args[args.length - 1];
-                } else {
-                    value = "";
-                }
-            } else {
-                String[] args = value.split(";");
-                for (int a = 0; a < args.length; a++) {
-                    if (args[a].indexOf('=') >= 0) {
-                        continue;
-                    }
-                    value = args[a];
-                }
-                return value;
-            }
-            return value;
-        }
-
-        public String getType() {
-            if (type == 5) {
-                return LocaleController.getString("ContactBirthday", R.string.ContactBirthday);
-            } else if (type == 6) {
-                if ("ORG".equalsIgnoreCase(getRawType(true))) {
-                    return LocaleController.getString("ContactJob", R.string.ContactJob);
-                } else {
-                    return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
-                }
-            }
-            int idx = fullData.indexOf(':');
-            if (idx < 0) {
-                return "";
-            }
-            String value = fullData.substring(0, idx);
-            if (type == 20) {
-                value = value.substring(2);
-                String[] args = value.split(";");
+            if (first) {
                 value = args[0];
+            } else if (args.length > 1) {
+                value = args[args.length - 1];
             } else {
-                String[] args = value.split(";");
-                for (int a = 0; a < args.length; a++) {
-                    if (args[a].indexOf('=') >= 0) {
-                        continue;
-                    }
-                    value = args[a];
-                }
-                if (value.startsWith("X-")) {
-                    value = value.substring(2);
-                }
-                switch (value) {
-                    case "PREF":
-                        value = LocaleController.getString("PhoneMain", R.string.PhoneMain);
-                        break;
-                    case "HOME":
-                        value = LocaleController.getString("PhoneHome", R.string.PhoneHome);
-                        break;
-                    case "MOBILE":
-                    case "CELL":
-                        value = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
-                        break;
-                    case "OTHER":
-                        value = LocaleController.getString("PhoneOther", R.string.PhoneOther);
-                        break;
-                    case "WORK":
-                        value = LocaleController.getString("PhoneWork", R.string.PhoneWork);
-                        break;
-                }
+                value = "";
             }
-            value = value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
+        } else {
+            String[] args = value.split(";");
+            for (int a = 0; a < args.length; a++) {
+                if (args[a].indexOf('=') >= 0) {
+                    continue;
+                }
+                value = args[a];
+            }
             return value;
         }
+        return value;
     }
+
+    public String getType() {
+        if (type == 5) {
+            return LocaleController.getString("ContactBirthday", R.string.ContactBirthday);
+        } else if (type == 6) {
+            if ("ORG".equalsIgnoreCase(getRawType(true))) {
+                return LocaleController.getString("ContactJob", R.string.ContactJob);
+            } else {
+                return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
+            }
+        }
+        int idx = fullData.indexOf(':');
+        if (idx < 0) {
+            return "";
+        }
+        String value = fullData.substring(0, idx);
+        if (type == 20) {
+            value = value.substring(2);
+            String[] args = value.split(";");
+            value = args[0];
+        } else {
+            String[] args = value.split(";");
+            for (int a = 0; a < args.length; a++) {
+                if (args[a].indexOf('=') >= 0) {
+                    continue;
+                }
+                value = args[a];
+            }
+            if (value.startsWith("X-")) {
+                value = value.substring(2);
+            }
+            switch (value) {
+                case "PREF":
+                    value = LocaleController.getString("PhoneMain", R.string.PhoneMain);
+                    break;
+                case "HOME":
+                    value = LocaleController.getString("PhoneHome", R.string.PhoneHome);
+                    break;
+                case "MOBILE":
+                case "CELL":
+                    value = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
+                    break;
+                case "OTHER":
+                    value = LocaleController.getString("PhoneOther", R.string.PhoneOther);
+                    break;
+                case "WORK":
+                    value = LocaleController.getString("PhoneWork", R.string.PhoneWork);
+                    break;
+            }
+        }
+        value = value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
+        return value;
+    }
+}
 
     public static byte[] getStringBytes(String src) {
         try {
@@ -1826,21 +1854,22 @@ public class AndroidUtilities {
         return new SpannableStringBuilder(str);
     }
 
-    public static class LinkMovementMethodMy extends LinkMovementMethod {
-        @Override
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {
-                boolean result = super.onTouchEvent(widget, buffer, event);
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    Selection.removeSelection(buffer);
-                }
-                return result;
-            } catch (Exception e) {
-                FileLog.e(e);
+public static class LinkMovementMethodMy extends LinkMovementMethod {
+    @Override
+    public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+        try {
+            boolean result = super.onTouchEvent(widget, buffer, event);
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                Selection.removeSelection(buffer);
             }
-            return false;
+            return result;
+        } catch (Exception e) {
+            FileLog.e(e);
         }
+        return false;
     }
+
+}
 
     public static boolean needShowPasscode() {
         return needShowPasscode(false);

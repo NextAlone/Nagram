@@ -201,10 +201,11 @@ public class LinkifyPort {
             + ")";
 
     public static Pattern WEB_URL = null;
+    public static Pattern PROXY_PATTERN = Pattern.compile(PROXY_URL);
 
     static {
         try {
-            WEB_URL = Pattern.compile("(" + WEB_URL_WITH_PROTOCOL + "|" + WEB_URL_WITHOUT_PROTOCOL+ "|" + PROXY_URL + ")");
+            WEB_URL = Pattern.compile("(" + WEB_URL_WITH_PROTOCOL + "|" + WEB_URL_WITHOUT_PROTOCOL + ")");
         } catch (Exception e) {
             FileLog.e(e);
         }
