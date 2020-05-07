@@ -352,6 +352,9 @@ public class ApplicationLoader extends Application {
         boolean enabled;
         if (preferences.contains("pushService")) {
             enabled = preferences.getBoolean("pushService", true);
+            if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                if (!preferences.getBoolean("pushConnection", true)) return;
+            }
         } else {
             enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", true);
             SharedPreferences.Editor editor = preferences.edit();

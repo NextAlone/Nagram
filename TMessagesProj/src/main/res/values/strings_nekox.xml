@@ -153,6 +153,8 @@
     <string name="ProxyInfoSS">Shadowsocks Proxy Settings</string>
     <string name="SSPassword">Password</string>
     <string name="SSMethod">Encrypt Method</string>
+    <string name="SSPlugin">Plugin</string>
+    <string name="SSPluginOpts">Plugin Configuration</string>
 
     <string name="ProxyInfoSSR">ShadowsocksR Proxy Settings</string>
     <string name="SSRProtocol">Protocol</string>

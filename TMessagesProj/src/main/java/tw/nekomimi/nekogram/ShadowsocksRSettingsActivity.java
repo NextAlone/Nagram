@@ -208,6 +208,10 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
                         SharedConfig.addProxy(currentProxyInfo);
                         SharedConfig.setCurrentProxy(currentProxyInfo);
                     } else {
+                        currentProxyInfo.proxyCheckPingId = 0;
+                        currentProxyInfo.availableCheckTime = 0;
+                        currentProxyInfo.ping = 0;
+                        SharedConfig.saveProxyList();
                         SharedConfig.setProxyEnable(false);
                     }
 
