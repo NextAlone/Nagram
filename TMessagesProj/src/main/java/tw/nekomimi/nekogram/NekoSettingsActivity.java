@@ -44,6 +44,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
+import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
@@ -55,10 +56,8 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.transtale.Translator;
@@ -99,6 +98,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int hideKeyboardOnChatScrollRow;
     private int rearVideoMessagesRow;
     private int hideAllTabRow;
+    private int confirmAVRow;
     private int mapPreviewRow;
     private int stickerSizeRow;
     private int messageMenuRow;
@@ -142,6 +142,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int unlimitedPinnedDialogsRow;
     private int deleteAccountRow;
     private int experiment2Row;
+
 
     @Override
     public boolean onFragmentCreate() {
@@ -505,7 +506,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
             } else if (position == translateToLangRow || position == translateInputToLangRow) {
 
-                Translator.showTargetLangSelect(view,position == translateToLangRow ? 1: 2,(locale) -> {
+                Translator.showTargetLangSelect(view, position == translateToLangRow ? 1 : 2, (locale) -> {
 
                     listAdapter.notifyItemChanged(position);
 
@@ -636,8 +637,46 @@ public class NekoSettingsActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(NekoConfig.hideAllTab);
                 }
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
-            }
+            } else if (position == tabsTitleTypeRow) {
+                ArrayList<String> arrayList = new ArrayList<>();
+                ArrayList<Integer> types = new ArrayList<>();
+                arrayList.add(LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText));
+                types.add(NekoConfig.TITLE_TYPE_TEXT);
+                arrayList.add(LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon));
+                types.add(NekoConfig.TITLE_TYPE_ICON);
+                arrayList.add(LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix));
+                types.add(NekoConfig.TITLE_TYPE_MIX);
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(LocaleController.getString("TabTitleType", R.string.TabTitleType));
+                builder.setMessage(LocaleController.getString("TabTitleTypeTip", R.string.TabTitleTypeTip));
+                final LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                builder.setView(linearLayout);
+
+                for (int a = 0; a < arrayList.size(); a++) {
+                    RadioColorCell cell = new RadioColorCell(context);
+                    cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
+                    cell.setTag(a);
+                    cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+                    cell.setTextAndValue(arrayList.get(a), NekoConfig.tabsTitleType == types.get(a));
+                    linearLayout.addView(cell);
+                    cell.setOnClickListener(v -> {
+                        Integer which = (Integer) v.getTag();
+                        NekoConfig.setTabsTitleType(types.get(which));
+                        listAdapter.notifyItemChanged(tabsTitleTypeRow);
+                        getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
+                        builder.getDismissRunnable().run();
+                    });
+                }
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                showDialog(builder.create());
+            } else if (position == confirmAVRow) {
+                NekoConfig.toggleConfirmAVMessage();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.confirmAVMessage);
+                }
+            }
         });
 
         return fragmentView;
@@ -679,6 +718,7 @@ public class NekoSettingsActivity extends BaseFragment {
         hideKeyboardOnChatScrollRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
         hideAllTabRow = rowCount++;
+        confirmAVRow = rowCount++;
         mapPreviewRow = rowCount++;
         stickerSizeRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -1309,6 +1349,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), NekoConfig.rearVideoMessages, true);
                     } else if (position == hideAllTabRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("HideAllTab", R.string.HideAllTab), LocaleController.getString("HideAllTabAbout", R.string.HideAllTabAbout), NekoConfig.hideAllTab, true, true);
+                    } else if (position == confirmAVRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("ConfirmAVMessage", R.string.ConfirmAVMessage), NekoConfig.confirmAVMessage, true);
                     }
 
                     break;
@@ -1358,7 +1400,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
                     position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
                     position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
-                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == cachePathRow;
+                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == cachePathRow || position == tabsTitleTypeRow || position == confirmAVRow;
         }
 
         @Override
@@ -1417,9 +1459,11 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||
                     position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
                     position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
-                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow) {
+                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow ||
+            ||position == confirmAVRow){
                 return 3;
-            } else if (position == settingsRow || position == connectionRow || position == chatRow || position == transRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
+            } else
+            if (position == settingsRow || position == connectionRow || position == chatRow || position == transRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;
             } else if (position == needRestartRow) {
                 return 7;
