@@ -9,6 +9,7 @@ import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.json.JSONObject
 import org.telegram.messenger.BuildConfig
+import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.tukaani.xz.XZInputStream
@@ -30,15 +31,19 @@ object UpdateUtil {
 
         if (ExternalGcm.checkPlayServices()) {
 
+            FileLog.d("checking updates from google play")
+
             ExternalGcm.checkUpdate(ctx)
 
             return@runOnIoDispatcher
 
         }
 
+        FileLog.d("checking updates from repo")
+
         if (System.currentTimeMillis() - NekoXConfig.preferences.getLong("ignored_update_at", -1) > 1 * 60 * 60 * 1000L) {
 
-            // ignored
+            FileLog.d("ignored")
 
             return@runOnIoDispatcher
 
@@ -53,6 +58,8 @@ object UpdateUtil {
                 val code = updateInfo.getInt("versionCode")
 
                 if (code > BuildConfig.VERSION_CODE.coerceAtLeast(NekoXConfig.preferences.getInt("ignore_update", -1))) UIUtil.runOnUIThread {
+
+                    FileLog.d("update available")
 
                     val builder = BottomBuilder(ctx)
 
@@ -86,9 +93,17 @@ object UpdateUtil {
 
                     builder.show()
 
+                } else {
+
+                    FileLog.d("no updates")
+
                 }
 
                 return@runOnIoDispatcher
+
+            }.onFailure {
+
+                FileLog.d(it.toString())
 
             }
 

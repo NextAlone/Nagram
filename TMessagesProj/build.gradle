@@ -54,11 +54,13 @@ dependencies {
     implementation 'org.dizitart:nitrite:3.4.1'
     implementation 'net.lingala.zip4j:zip4j:2.5.2'
 
-    implementation 'cn.hutool:hutool-all:5.3.2'
+    implementation 'cn.hutool:hutool-core:5.3.2'
+    implementation 'cn.hutool:hutool-crypto:5.3.2'
+
     implementation 'org.tukaani:xz:1.8'
 
     implementation files('libs/libv2ray.aar')
-    implementation files('libs/ss-libev-release.aar')
+    implementation files('libs/ss-rust-release.aar')
     implementation files('libs/ssr-libev-release.aar')
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 

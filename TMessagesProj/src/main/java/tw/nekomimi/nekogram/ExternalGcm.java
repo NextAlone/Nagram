@@ -144,9 +144,9 @@ public class ExternalGcm {
 
         manager.getAppUpdateInfo().addOnSuccessListener((appUpdateInfo) -> {
 
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.availableVersionCode() <= BuildConfig.VERSION_CODE) {
 
-                if (appUpdateInfo.availableVersionCode() <= BuildConfig.VERSION_CODE) return;
+                FileLog.d("update available");
 
                 try {
 
@@ -154,6 +154,10 @@ public class ExternalGcm {
 
                 } catch (IntentSender.SendIntentException ignored) {
                 }
+
+            } else {
+
+                FileLog.d("no updates");
 
             }
 

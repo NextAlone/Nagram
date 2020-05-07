@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ssBuild:
+    name: SS-Rust Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[R]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: native-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: git submodule update --init --recursive
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+      - name: setup rust targets
+        run: rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
+      - name: assemble
+        run: |
+          ./gradlew ss-rust:assembleRelease
+          ls ss-rust/build/outputs/aar
+      - uses: actions/upload-artifact@master
+        with:
+          name: NekoX-Foss
+          path: ss-rust/build/outputs/aar

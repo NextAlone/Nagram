@@ -781,7 +781,6 @@ public class ConnectionsManager extends BaseController {
         return false;
     }
 
-
     private static class ResolveHostByNameTask extends AsyncTask<Void, Void, ResolvedDomain> {
 
         private ArrayList<Long> addresses = new ArrayList<>();
