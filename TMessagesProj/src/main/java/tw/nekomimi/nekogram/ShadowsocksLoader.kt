@@ -43,10 +43,8 @@ class ShadowsocksLoader {
             runCatching {
 
                 start(listOf(FileUtil.extLib("ss-local").path,
-                        "-b", "127.0.0.1",
-                        "-t", "600",
-                        "-c", cacheCfg.path,
-                        "-l", port.toString())) {
+                        "--local-addr", "127.0.0.1:$port",
+                        "--config", cacheCfg.path)) {
 
                     cacheCfg.delete()
 
@@ -177,7 +175,7 @@ class ShadowsocksLoader {
 
             var url = "ss://" + Base64.encodeUrlSafe("$method:$password") + "@$host:$remotePort"
 
-            if (remarks?.isNotBlank() == true) url += "#" + Base64.encodeUrlSafe(remarks!!)
+            if (remarks?.isNotBlank() == true) url += "#" + Utils.urlEncode(remarks!!)
 
             return url
 
