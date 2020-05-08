@@ -2417,7 +2417,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     cell.getTextView().setMovementMethod(null);
                     cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
 
-                    String abi = new File(getParentActivity().getApplicationInfo().nativeLibraryDir).getName();
+                    String abi = FileUtil.getAbi();
                     cell.setText(String.format("%1$s %2$s", LocaleController.getString("NekoX", R.string.NekoX), String.format(Locale.US, "v%s %s %s", BuildConfig.VERSION_NAME, abi, BuildConfig.BUILD_TYPE)));
                     cell.getTextView().setPadding(0, AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14));
                     view = cell;

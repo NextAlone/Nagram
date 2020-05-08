@@ -386,7 +386,7 @@ class VmessLoader {
 
                 }
 
-                point.configureFileContent = V2rayConfigUtil.getV2rayConfig(bean, port).content
+                point.configureFileContent = conf
                 point.domainName = V2rayConfigUtil.currDomain
 
                 point.runLoop(true)

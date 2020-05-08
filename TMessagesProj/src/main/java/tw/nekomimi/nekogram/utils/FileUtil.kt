@@ -1,12 +1,11 @@
 package tw.nekomimi.nekogram.utils
 
 import android.os.Build
-import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.resource.ResourceUtil
 import org.telegram.messenger.ApplicationLoader
-import org.telegram.messenger.BuildVars
 import org.telegram.messenger.FileLog
 import java.io.File
+import java.util.*
 import java.util.zip.ZipFile
 
 object FileUtil {
@@ -91,28 +90,61 @@ object FileUtil {
 
     }
 
+    @JvmStatic
+    @Suppress("DEPRECATION") val abi by lazy {
 
-    @Suppress("DEPRECATION")
-    private fun getAbi() = try {
-        if (Build.CPU_ABI.equals("x86_64", ignoreCase = true)) {
-            "x86_64"
-        } else if (Build.CPU_ABI.equals("arm64-v8a", ignoreCase = true)) {
-            "arm64-v8a"
-        } else if (Build.CPU_ABI.equals("armeabi-v7a", ignoreCase = true)) {
-            "armeabi-v7a"
-        } else if (Build.CPU_ABI.equals("armeabi", ignoreCase = true)) {
-            "armeabi"
-        } else if (Build.CPU_ABI.equals("x86", ignoreCase = true)) {
-            "x86"
-        } else {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("Unsupported arch: " + Build.CPU_ABI)
+        val libDirs = mutableListOf<String>()
+
+        ZipFile(ApplicationLoader.applicationContext.applicationInfo.sourceDir).use {
+
+            it.getEntry("lib/") ?: return@use
+
+            for (entry in it.entries()) {
+
+                if (entry.isDirectory && it.name.length > 4 && it.name.startsWith("lib/")) {
+
+                    libDirs.add(entry.name.substringAfter("lib/").substringBefore("/"))
+
+                }
+
             }
-            "armeabi"
+
         }
-    } catch (e: Exception) {
-        FileLog.e(e)
-        "armeabi"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            ApplicationLoader.applicationContext.applicationInfo.splitSourceDirs?.forEach { split ->
+
+                ZipFile(split).use {
+
+                    it.getEntry("lib/") ?: return@use
+
+                    for (entry in it.entries()) {
+
+                        if (entry.isDirectory && it.name.length > 4 && it.name.startsWith("lib/")) {
+
+                            libDirs.add(entry.name.substringAfter("lib/").substringBefore("/"))
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (libDirs.size == 1) libDirs[0] else {
+
+            Build.CPU_ABI.toLowerCase()
+
+        }.also {
+
+            FileLog.d("current abi: $it")
+
+        }
+
     }
 
     @JvmStatic
@@ -132,7 +164,7 @@ object FileUtil {
 
                 if (!execFile.isFile) {
 
-                    saveNonAsset("lib/${getAbi()}/${execFile.name}", execFile);
+                    saveNonAsset("lib/$abi/${execFile.name}", execFile);
 
                 }
 
@@ -167,7 +199,7 @@ object FileUtil {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            ApplicationLoader.applicationContext.applicationInfo.splitSourceDirs.forEach { split ->
+            ApplicationLoader.applicationContext.applicationInfo.splitSourceDirs?.forEach { split ->
 
                 ZipFile(split).use {
 
