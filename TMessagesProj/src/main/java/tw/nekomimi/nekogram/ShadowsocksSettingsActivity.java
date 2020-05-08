@@ -195,7 +195,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StrUtil.isBlank(passwordField.getText())) {
+                    if (StrUtil.isBlank(passwordField.getText()) && !"plain".equals(methodField.getTextView().getText().toString().toLowerCase())) {
 
                         passwordField.requestFocus();
                         AndroidUtilities.showKeyboard(passwordField);
