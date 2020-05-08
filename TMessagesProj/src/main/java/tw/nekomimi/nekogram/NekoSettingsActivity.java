@@ -99,9 +99,11 @@ public class NekoSettingsActivity extends BaseFragment {
     private int rearVideoMessagesRow;
     private int hideAllTabRow;
     private int confirmAVRow;
+    private int askBeforeCallRow;
     private int mapPreviewRow;
     private int stickerSizeRow;
     private int messageMenuRow;
+    private int tabsTitleTypeRow;
     private int chat2Row;
 
     private int transRow;
@@ -676,6 +678,11 @@ public class NekoSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.confirmAVMessage);
                 }
+            } else if (position == askBeforeCallRow) {
+                NekoConfig.toggleAskBeforeCall();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.askBeforeCall);
+                }
             }
         });
 
@@ -719,9 +726,11 @@ public class NekoSettingsActivity extends BaseFragment {
         rearVideoMessagesRow = rowCount++;
         hideAllTabRow = rowCount++;
         confirmAVRow = rowCount++;
+        askBeforeCallRow = rowCount++;
         mapPreviewRow = rowCount++;
         stickerSizeRow = rowCount++;
         messageMenuRow = rowCount++;
+        tabsTitleTypeRow = rowCount++;
         chat2Row = rowCount++;
 
         transRow = rowCount++;
@@ -1278,6 +1287,20 @@ public class NekoSettingsActivity extends BaseFragment {
                                 value = "Unknown";
                         }
                         textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, false);
+                    } else if (position == tabsTitleTypeRow) {
+                        String value;
+                        switch (NekoConfig.tabsTitleType) {
+                            case NekoConfig.TITLE_TYPE_TEXT:
+                                value = LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText);
+                                break;
+                            case NekoConfig.TITLE_TYPE_ICON:
+                                value = LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon);
+                                break;
+                            case NekoConfig.TITLE_TYPE_MIX:
+                            default:
+                                value = LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix);
+                        }
+                        textCell.setTextAndValue(LocaleController.getString("TabTitleType", R.string.TabTitleType), value, false);
                     }
                     break;
                 }
@@ -1351,8 +1374,9 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("HideAllTab", R.string.HideAllTab), LocaleController.getString("HideAllTabAbout", R.string.HideAllTabAbout), NekoConfig.hideAllTab, true, true);
                     } else if (position == confirmAVRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ConfirmAVMessage", R.string.ConfirmAVMessage), NekoConfig.confirmAVMessage, true);
+                    } else if (position == askBeforeCallRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("AskBeforeCalling", R.string.AskBeforeCalling), NekoConfig.askBeforeCall, true);
                     }
-
                     break;
                 }
                 case 4: {
@@ -1400,7 +1424,8 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
                     position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
                     position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
-                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == cachePathRow || position == tabsTitleTypeRow || position == confirmAVRow;
+                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == cachePathRow ||
+                    position == tabsTitleTypeRow || position == confirmAVRow || position == askBeforeCallRow;
         }
 
         @Override
@@ -1460,10 +1485,9 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
                     position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
                     position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow ||
-            ||position == confirmAVRow){
+                    position == confirmAVRow || position == askBeforeCallRow) {
                 return 3;
-            } else
-            if (position == settingsRow || position == connectionRow || position == chatRow || position == transRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
+            } else if (position == settingsRow || position == connectionRow || position == chatRow || position == transRow || position == experimentRow || position == dialogsRow || position == privacyRow) {
                 return 4;
             } else if (position == needRestartRow) {
                 return 7;

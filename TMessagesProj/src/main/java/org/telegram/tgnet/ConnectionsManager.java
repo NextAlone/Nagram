@@ -678,8 +678,6 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setSystemLangCode(int currentAccount, String langCode);
 
-    public static native void native_seSystemLangCode(int currentAccount, String langCode);
-
     public static native void native_setJava(boolean useJavaByteBuffers);
 
     public static native void native_setPushConnectionEnabled(int currentAccount, boolean value);
@@ -720,21 +718,12 @@ public class ConnectionsManager extends BaseController {
                     if (!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.getInterfaceAddresses().isEmpty()) {
                         continue;
                     }
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("valid interface: " + networkInterface);
-                    }
                     List<InterfaceAddress> interfaceAddresses = networkInterface.getInterfaceAddresses();
                     for (int a = 0; a < interfaceAddresses.size(); a++) {
                         InterfaceAddress address = interfaceAddresses.get(a);
                         InetAddress inetAddress = address.getAddress();
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("address: " + inetAddress.getHostAddress());
-                        }
                         if (inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isMulticastAddress()) {
                             continue;
-                        }
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("address is good");
                         }
                     }
                 }

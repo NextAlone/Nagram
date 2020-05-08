@@ -312,9 +312,6 @@ public class ContactsController extends BaseController {
     }
 
     public void checkAppAccount() {
-        if (NekoConfig.disableSystemAccount) {
-            return;
-        }
         AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
         try {
             Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
@@ -334,7 +331,7 @@ public class ContactsController extends BaseController {
                         }
                     }
                 }
-                if (!found) {
+                if (!found || NekoConfig.disableSystemAccount) {
                     try {
                         am.removeAccount(accounts[a], null, null);
                     } catch (Exception ignore) {
@@ -342,17 +339,18 @@ public class ContactsController extends BaseController {
                 }
 
             }
-        } catch (Throwable ignore) {
-
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
         if (getUserConfig().isClientActivated()) {
             readContacts();
-            if (systemAccount == null) {
+            if (systemAccount == null && !NekoConfig.disableSystemAccount) {
                 try {
                     TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                     systemAccount = new Account(formatName(user.first_name, user.last_name), BuildConfig.APPLICATION_ID);
                     am.addAccountExplicitly(systemAccount, "", null);
-                } catch (Exception ignore) {
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
             }
         }

@@ -19,6 +19,10 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class NekoConfig {
 
+    public static final int TITLE_TYPE_TEXT = 0;
+    public static final int TITLE_TYPE_ICON = 1;
+    public static final int TITLE_TYPE_MIX = 2;
+
     private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
 
     public static boolean useIPv6;
@@ -32,9 +36,12 @@ public class NekoConfig {
     public static boolean chatMessageAnimation;
     public static boolean rearVideoMessages;
     public static boolean hideAllTab;
+    public static boolean confirmAVMessage = true;
+    public static boolean askBeforeCall = true;
     public static int mapPreviewProvider;
     public static float stickerSize;
     public static int translationProvider;
+    public static int tabsTitleType = TITLE_TYPE_TEXT;
 
     public static boolean showAddToSavedMessages;
     public static boolean showReport;
@@ -189,6 +196,10 @@ public class NekoConfig {
 
         translateToLang = preferences.getString("trans_to_lang", null);
         translateInputLang = preferences.getString("trans_input_to_lang", "en");
+
+        tabsTitleType = preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT);
+        confirmAVMessage = preferences.getBoolean("confirmAVMessage", true);
+        askBeforeCall = preferences.getBoolean("askBeforeCall", true);
 
     }
 
@@ -632,6 +643,30 @@ public class NekoConfig {
 
         preferences.edit().putString("trans_input_to_lang", translateInputLang = toLang).apply();
 
+    }
+
+    public static void setTabsTitleType(int type) {
+        tabsTitleType = type;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("tabsTitleType", tabsTitleType);
+        editor.apply();
+    }
+
+    public static void toggleConfirmAVMessage() {
+        confirmAVMessage = !confirmAVMessage;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("confirmAVMessage", confirmAVMessage);
+        editor.apply();
+    }
+
+    public static void toggleAskBeforeCall() {
+        askBeforeCall = !askBeforeCall;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("askBeforeCall", askBeforeCall);
+        editor.commit();
     }
 
 }
