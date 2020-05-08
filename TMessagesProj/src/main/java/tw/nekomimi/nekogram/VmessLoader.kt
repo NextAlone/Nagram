@@ -372,6 +372,20 @@ class VmessLoader {
 
                 val port = Random.nextInt(4096, 32768)
 
+                val conf = V2rayConfigUtil.getV2rayConfig(bean, port).content
+
+                runCatching {
+
+                    Libv2ray.testConfig(conf)
+
+                }.onFailure {
+
+                    FileLog.e(it)
+
+                    return -1
+
+                }
+
                 point.configureFileContent = V2rayConfigUtil.getV2rayConfig(bean, port).content
                 point.domainName = V2rayConfigUtil.currDomain
 

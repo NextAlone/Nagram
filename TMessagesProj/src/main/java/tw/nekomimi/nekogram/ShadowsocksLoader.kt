@@ -95,6 +95,22 @@ class ShadowsocksLoader {
             var remarks: String? = null
     ) {
 
+        init {
+
+            val pl = PluginConfiguration(plugin)
+
+            if (pl.selected.contains("v2ray") && pl.selected != "v2ray") {
+
+                pl.pluginsOptions["v2ray"] = pl.getOptions()
+                pl.pluginsOptions.remove(pl.selected)
+                pl.selected = "v2ray"
+
+                // reslove v2ray plugin
+
+            }
+
+        }
+
         override fun equals(other: Any?): Boolean {
             return super.equals(other) || (other is Bean && hash == other.hash)
         }
