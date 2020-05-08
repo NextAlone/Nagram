@@ -355,13 +355,16 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 ConnectionsManager.getInstance(currentAccount).updateDcSettings();
                                 needFinishActivity(false);
                             } else {
+                                if (error.code == 401) {
+                                    ConnectionsManager.native_cleanUp(currentAccount,true);
+                                }
                                 if (error.text != null) {
                                     if (error.text.contains("ACCESS_TOKEN_INVALID")) {
                                         needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
                                     } else if (error.text.startsWith("FLOOD_WAIT")) {
                                         needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("FloodWait", R.string.FloodWait));
                                     } else if (error.code != -1000) {
-                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error.text);
+                                        needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error.code + ": " + error.text);
                                     }
                                 }
                             }
@@ -867,11 +870,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             // do nothing
 
                         } else if (target == 0) {
-
-                            if (dcType == 3) {
-
-
-                            }
 
                             DataCenter.applyOfficalDataCanter(currentAccount);
 

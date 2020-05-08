@@ -4,6 +4,7 @@ import cn.hutool.crypto.digest.DigestUtil
 import org.telegram.messenger.MessagesController
 import org.telegram.tgnet.ConnectionsManager
 import org.telegram.tgnet.SerializedData
+import org.telegram.tgnet.TLRPC
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.security.interfaces.RSAPublicKey
@@ -45,6 +46,7 @@ object DataCenter {
         applyDataCanter(account, 5, "149.154.171.5", "2001:67c:4e8:f005:0000:0000:0000:000a")
 
         ConnectionsManager.native_cleanUp(account, true)
+        ConnectionsManager.native_setLayer(account, TLRPC.LAYER)
 
         repeat(5) {
 
@@ -64,6 +66,8 @@ object DataCenter {
             ConnectionsManager.getInstance(account).switchBackend()
 
         }
+
+        ConnectionsManager.native_setLayer(account, TLRPC.LAYER)
 
     }
 

@@ -164,11 +164,36 @@ object FileUtil {
 
                 if (!execFile.isFile) {
 
-                    saveNonAsset("lib/$abi/${execFile.name}", execFile);
+                    runCatching {
+
+                        saveNonAsset("lib/${Build.CPU_ABI}/${execFile.name}", execFile)
+
+                        FileLog.d("lib extracted with default abi: $execFile, ${Build.CPU_ABI}")
+
+                    }.recover {
+
+                        saveNonAsset("lib/${Build.CPU_ABI2}/${execFile.name}", execFile)
+
+                        FileLog.d("lib extracted with abi2: $execFile, ${Build.CPU_ABI2}")
+
+
+                    }
+
+                } else {
+
+                    FileLog.d("lib already extracted: $name")
 
                 }
 
+            } else {
+
+                FileLog.d("lib found after load: $name")
+
             }
+
+        } else {
+
+            FileLog.d("lib found in nativePath: $name")
 
         }
 
@@ -185,9 +210,21 @@ object FileUtil {
     @JvmStatic
     fun saveNonAsset(path: String, saveTo: File) {
 
+        ResourceUtil.getStream(path)?.use {
+
+            FileLog.d("found nonAsset in resources: $path")
+
+            IoUtil.copy(it, saveTo)
+
+            return
+
+        }
+
         ZipFile(ApplicationLoader.applicationContext.applicationInfo.sourceDir).use {
 
             it.getInputStream(it.getEntry(path) ?: return@use).use { ins ->
+
+                FileLog.d("found nonAsset in main apk: $path")
 
                 IoUtil.copy(ins, saveTo)
 
@@ -205,6 +242,8 @@ object FileUtil {
 
                     it.getInputStream(it.getEntry(path) ?: return@use).use { ins ->
 
+                        FileLog.d("found nonAsset in split apk: $path, $split")
+
                         IoUtil.copy(ins, saveTo)
 
                         return
@@ -214,14 +253,6 @@ object FileUtil {
                 }
 
             }
-
-        }
-
-        ResourceUtil.getStream(path)?.use {
-
-            IoUtil.copy(it, saveTo)
-
-            return
 
         }
 
