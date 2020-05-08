@@ -44,7 +44,6 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
-import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
@@ -92,7 +91,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int useSystemEmojiRow;
     private int ignoreBlockedRow;
     private int hideProxySponsorChannelRow;
-    private int skipOpenLinkConfiirm;
+    private int skipOpenLinkConfirm;
     private int pauseMusicOnRecordRow;
     private int disablePhotoSideActionRow;
     private int hideKeyboardOnChatScrollRow;
@@ -256,7 +255,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         MessagesController.getInstance(a).checkPromoInfo(true);
                     }
                 }
-            } else if (position == skipOpenLinkConfiirm) {
+            } else if (position == skipOpenLinkConfirm) {
                 NekoConfig.toggleSkipOpenLinkConfirm();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.skipOpenLinkConfirm);
@@ -640,39 +639,27 @@ public class NekoSettingsActivity extends BaseFragment {
                 }
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (position == tabsTitleTypeRow) {
-                ArrayList<String> arrayList = new ArrayList<>();
-                ArrayList<Integer> types = new ArrayList<>();
-                arrayList.add(LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText));
-                types.add(NekoConfig.TITLE_TYPE_TEXT);
-                arrayList.add(LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon));
-                types.add(NekoConfig.TITLE_TYPE_ICON);
-                arrayList.add(LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix));
-                types.add(NekoConfig.TITLE_TYPE_MIX);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("TabTitleType", R.string.TabTitleType));
-                builder.setMessage(LocaleController.getString("TabTitleTypeTip", R.string.TabTitleTypeTip));
-                final LinearLayout linearLayout = new LinearLayout(context);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-                builder.setView(linearLayout);
+                PopupBuilder builder = new PopupBuilder(view);
 
-                for (int a = 0; a < arrayList.size(); a++) {
-                    RadioColorCell cell = new RadioColorCell(context);
-                    cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
-                    cell.setTag(a);
-                    cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-                    cell.setTextAndValue(arrayList.get(a), NekoConfig.tabsTitleType == types.get(a));
-                    linearLayout.addView(cell);
-                    cell.setOnClickListener(v -> {
-                        Integer which = (Integer) v.getTag();
-                        NekoConfig.setTabsTitleType(types.get(which));
-                        listAdapter.notifyItemChanged(tabsTitleTypeRow);
-                        getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
-                        builder.getDismissRunnable().run();
-                    });
-                }
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                showDialog(builder.create());
+                builder.setItems(new String[]{
+
+                        LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText),
+                        LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon),
+                        LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix)
+
+                }, (i, __) -> {
+
+                    NekoConfig.setTabsTitleType(i);
+                    listAdapter.notifyItemChanged(tabsTitleTypeRow);
+                    getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
+
+                    return Unit.INSTANCE;
+
+                });
+
+                builder.show();
+
             } else if (position == confirmAVRow) {
                 NekoConfig.toggleConfirmAVMessage();
                 if (view instanceof TextCheckCell) {
@@ -719,7 +706,7 @@ public class NekoSettingsActivity extends BaseFragment {
         useSystemEmojiRow = rowCount++;
         ignoreBlockedRow = rowCount++;
         hideProxySponsorChannelRow = rowCount++;
-        skipOpenLinkConfiirm = rowCount++;
+        skipOpenLinkConfirm = rowCount++;
         pauseMusicOnRecordRow = rowCount++;
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
@@ -1239,8 +1226,6 @@ public class NekoSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("DependsOnDate", R.string.DependsOnDate);
                         }
                         textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, false);
-                    } else if (position == cachePathRow) {
-                        textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
                     } else if (position == stickerSizeRow) {
                         textCell.setTextAndValue(LocaleController.getString("StickerSize", R.string.StickerSize), String.valueOf(Math.round(NekoConfig.stickerSize)), true);
                     } else if (position == messageMenuRow) {
@@ -1251,8 +1236,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
                     } else if (position == translateInputToLangRow) {
                         textCell.setTextAndValue(LocaleController.getString("TransInputToLang", R.string.TransInputToLang), NekoConfig.formatLang(NekoConfig.translateInputLang), true);
-                    } else if (position == googleCloudTranslateKeyRow) {
-                        textCell.setText(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), true);
                     } else if (position == deleteAccountRow) {
                         textCell.setText(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), false);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
@@ -1304,6 +1287,15 @@ public class NekoSettingsActivity extends BaseFragment {
                     }
                     break;
                 }
+                case 6: {
+                    TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
+                    if (position == googleCloudTranslateKeyRow) {
+                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), NekoConfig.googleCloudTranslateKey, true);
+                    } else if (position == cachePathRow) {
+                        textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
+                    }
+                }
+                break;
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
@@ -1325,7 +1317,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), NekoConfig.transparentStatusBar, true);
                     } else if (position == hideProxySponsorChannelRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HideProxySponsorChannel", R.string.HideProxySponsorChannel), NekoConfig.hideProxySponsorChannel, true);
-                    } else if (position == skipOpenLinkConfiirm) {
+                    } else if (position == skipOpenLinkConfirm) {
                         textCell.setTextAndCheck(LocaleController.getString("SkipOpenLinkConfirm", R.string.SkipOpenLinkConfirm), NekoConfig.skipOpenLinkConfirm, true);
                     } else if (position == disableChatActionRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableChatAction", R.string.DisableChatAction), NekoConfig.disableChatAction, true);
@@ -1415,7 +1407,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == useSystemEmojiRow || position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == typefaceRow || position == nameOrderRow ||
                     position == forceTabletRow || position == mapPreviewRow || position == newYearRow ||
                     position == actionBarDecorationRow || position == eventTypeRow || position == transparentStatusBarRow ||
-                    position == hideProxySponsorChannelRow || position == skipOpenLinkConfiirm ||
+                    position == hideProxySponsorChannelRow || position == skipOpenLinkConfirm ||
                     position == disableFilteringRow || position == stickerSizeRow ||
                     position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
                     position == translationProviderRow || position == translateToLangRow || position == translateInputToLangRow || position == googleCloudTranslateKeyRow ||
@@ -1470,15 +1462,15 @@ public class NekoSettingsActivity extends BaseFragment {
             if (position == connection2Row || position == dialogs2Row || position == chat2Row || position == trans2Row || position == experiment2Row || position == privacy2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == mapPreviewRow || position == stickerSizeRow || position == messageMenuRow ||
-                    position == sortMenuRow || position == cachePathRow || position == googleCloudTranslateKeyRow ||
-                    position == translateToLangRow || position == translateInputToLangRow ||
-                    position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
+                    position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
+                    position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow ||
+                    position == tabsTitleTypeRow) {
                 return 2;
             } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||
                     position == transparentStatusBarRow || position == hideProxySponsorChannelRow ||
                     position == ignoreBlockedRow || position == useSystemEmojiRow || position == typefaceRow ||
                     position == forceTabletRow || position == newYearRow ||
-                    position == unlimitedFavedStickersRow || position == skipOpenLinkConfiirm ||
+                    position == unlimitedFavedStickersRow || position == skipOpenLinkConfirm ||
                     position == disableFilteringRow || position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
                     position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
                     position == hideKeyboardOnChatScrollRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||

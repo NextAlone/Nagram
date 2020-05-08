@@ -25,6 +25,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
+import cn.hutool.core.util.StrUtil;
+
 public class TextDetailSettingsCell extends FrameLayout {
 
     private TextView textView;
@@ -97,6 +99,11 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     public void setTextAndValue(String text, CharSequence value, boolean divider) {
         textView.setText(text);
+        if (StrUtil.isBlank(value)) {
+            valueTextView.setVisibility(GONE);
+        } else {
+            valueTextView.setVisibility(VISIBLE);
+        }
         valueTextView.setText(value);
         needDivider = divider;
         imageView.setVisibility(GONE);

@@ -113,6 +113,8 @@
     <string name="ProxyInfoSS">Shadowsocks 代理设置</string>
     <string name="SSPassword">密码</string>
     <string name="SSMethod">加密方法</string>
+    <string name="SSPlugin">插件</string>
+    <string name="SSPluginOpts">插件配置</string>
     <string name="ProxyInfoSSR">ShadowsocksR 代理设置</string>
     <string name="SSRProtocol">协议</string>
     <string name="SSRProtocolParams">协议参数</string>
