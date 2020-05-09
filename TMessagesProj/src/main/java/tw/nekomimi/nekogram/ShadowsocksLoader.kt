@@ -97,6 +97,8 @@ class ShadowsocksLoader {
 
         init {
 
+            if (method == "plain") method = "none"
+
             val pl = PluginConfiguration(plugin)
 
             if (pl.selected.contains("v2ray") && pl.selected != "v2ray") {
@@ -224,7 +226,7 @@ class ShadowsocksLoader {
 
         val methods = arrayOf(
 
-                "plain",
+                "none",
                 "rc4-md5",
                 "aes-128-cfb",
                 "aes-192-cfb",
