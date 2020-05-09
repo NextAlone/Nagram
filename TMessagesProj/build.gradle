@@ -21,7 +21,7 @@ buildscript {
 
     dependencies {
 
-        classpath 'cn.hutool:hutool-all:5.3.2'
+        classpath 'cn.hutool:hutool-all:5.3.3'
 
     }
 
@@ -407,10 +407,11 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
 
     tasks.all { task ->
-        if (((task.name.contains('Crashlytics'))) && !task.name.endsWith("Release")) {
+        if (task.name.startsWith('uploadCrashlyticsMappingFile')) {
             task.enabled = false
-        }
-        if (((task.name.endsWith('GoogleServices'))) && !task.name.endsWith("ReleaseGoogleServices")) {
+        } else if (((task.name.contains('Crashlytics'))) && !task.name.endsWith("Release")) {
+            task.enabled = false
+        } else if (((task.name.endsWith('GoogleServices'))) && !task.name.endsWith("ReleaseGoogleServices")) {
             task.enabled = false
         }
     }
