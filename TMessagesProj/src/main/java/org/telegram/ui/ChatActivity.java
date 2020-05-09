@@ -888,6 +888,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int migrated_to = arguments.getInt("migrated_to", 0);
         scrollToTopOnResume = arguments.getBoolean("scrollToTopOnResume", false);
         needRemovePreviousSameChatActivity = arguments.getBoolean("need_remove_previous_same_chat_activity", true);
+        noForwardQuote = arguments.getBoolean("forward_noquote", false);
 
         if (chatId != 0) {
             currentChat = getMessagesController().getChat(chatId);
@@ -1873,8 +1874,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
             actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.baseline_favorite_20, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
             actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.baseline_content_copy_24, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
-            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.baseline_forward_24, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
-            actionModeViews.add(actionMode.addItemWithWidth(forward_noquote, R.drawable.baseline_fast_forward_24, AndroidUtilities.dp(54), LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward)));
+            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
+            actionModeViews.add(actionMode.addItemWithWidth(forward_noquote, R.drawable.msg_forward_noquote, AndroidUtilities.dp(54), LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward)));
             actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
         } else {
             actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
@@ -7297,7 +7298,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             AlertsCreator.showSendMediaAlert(getSendMessagesHelper().sendMessage(arrayList, did == 0 ? dialog_id : did, notify, scheduleDate), this);
         } else {
             for (MessageObject object : arrayList) {
-                getSendMessagesHelper().processForwardFromMyName(object, did == 0 ? dialog_id : did, true);
+                getSendMessagesHelper().processForwardFromMyName(object, did == 0 ? dialog_id : did, true, notify, scheduleDate);
             }
         }
     }
@@ -14303,10 +14304,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (!inScheduleMode && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(2);
-                            icons.add(R.drawable.baseline_forward_24);
+                            icons.add(R.drawable.msg_forward);
                             items.add(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
                             options.add(95);
-                            icons.add(R.drawable.baseline_fast_forward_24);
+                            icons.add(R.drawable.msg_forward_noquote);
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages) {
                                 items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
                                 options.add(93);
@@ -15782,6 +15783,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int lower_part = (int) did;
                 int high_part = (int) (did >> 32);
                 Bundle args = new Bundle();
+                if (noForwardQuote) {
+                    args.putBoolean("forward_noquote", true);
+                }
                 args.putBoolean("scrollToTopOnResume", scrollToTopOnResume);
                 if (lower_part != 0) {
                     if (lower_part > 0) {
