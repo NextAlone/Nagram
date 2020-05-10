@@ -1,6 +1,7 @@
 import cn.hutool.core.io.FileUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.system.SystemUtil
+
 import java.security.MessageDigest
 
 apply plugin: 'com.android.application'
@@ -35,8 +36,7 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
-
-    compileOnly 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
 
     compileOnly 'org.checkerframework:checker-qual:3.4.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
@@ -60,9 +60,7 @@ dependencies {
 
     implementation 'org.tukaani:xz:1.8'
 
-    implementation files('libs/libv2ray.aar')
-    implementation files('libs/ss-rust-release.aar')
-    implementation files('libs/ssr-libev-release.aar')
+    compileOnly files('libs/libv2ray.aar')
 
     def fcmVersion = '20.1.6'
     def crashlyticsVersion = '17.0.0'
@@ -87,7 +85,8 @@ task writeUpdateInfo {
 
     info.set("version", verName)
     info.set("versionCode", verCode)
-    info.set("defaultApkName","NekoX-afat-armeabi-v7a-release.apk.xz")
+    info.set("defaultFlavor","full")
+    info.set("defaultApkName", "NekoX-full-arm64-v8a-release.apk.xz")
 
     FileUtil.writeUtf8String(info.toStringPretty(), new File("build/update.json"))
 
@@ -104,6 +103,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        //noinspection OldTargetApi
         targetSdkVersion 28
 
         versionName verName
@@ -132,8 +132,6 @@ android {
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
             }
         }
-
-        manifestPlaceholders = [applicationClassName: "MultiDexApplicationLoader"]
 
     }
 
@@ -222,6 +220,7 @@ android {
         debug {
             debuggable true
             jniDebuggable true
+            multiDexEnabled true
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -287,24 +286,22 @@ android {
     def tgVoipDexClassesPath = "org/telegram/messenger/voip"
     def dxUtilPath = "${sdkDirectory.path}/build-tools/${buildToolsVersion}/dx"
 
-    if (SystemUtil.getOsInfo().isWindows()) {
+    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
         dxUtilPath += ".bat"
     }
 
-    flavorDimensions "minApi"
+    flavorDimensions "version"
 
     productFlavors {
-        afat {
-            dependencies {
-                implementation 'com.android.support:multidex:1.0.3'
-            }
-            multiDexEnabled true
+        mini {
+            versionNameSuffix '-mini'
         }
-
-        minApi21 {
-            minSdkVersion 21
-            multiDexEnabled false
-            versionNameSuffix '-minApi21'
+        full {
+            dependencies {
+                implementation files('libs/libv2ray.aar')
+                implementation files('libs/ss-rust-release.aar')
+                implementation files('libs/ssr-libev-release.aar')
+            }
         }
     }
 
@@ -379,7 +376,7 @@ private static File findJavaHome() {
     if (javaPath != null) {
         File javaBase = new File(javaPath)
         if (javaBase.exists()) {
-            if (javaBase.getName().equalsIgnoreCase("jre") && new File(javaBase.getParentFile(), "bin/java").exists()) {
+            if (javaBase.getName().equalsIgnoreCase("jre") && new File(javaBase.getParentFile(), System.getProperty("os.name").toLowerCase().contains("windows") ? "bin/java.exe" : "bin/java").exists()) {
                 return javaBase.getParentFile()
             } else {
                 return javaBase

@@ -1549,12 +1549,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         doneItem.setAlpha(0.0f);
         doneItem.setVisibility(View.GONE);
         if (!onlySelect && searchString == null && folderId == 0) {
-            proxyDrawable = new ProxyDrawable(context);
-            proxyItem = menu.addItem(2, proxyDrawable);
-            proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
+            //proxyDrawable = new ProxyDrawable(context);
+            //proxyItem = menu.addItem(2, proxyDrawable);
+            //proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
             passcodeItem = menu.addItem(1, R.drawable.lock_close);
             updatePasscodeButton();
-            updateProxyButton(false);
+            //updateProxyButton(false);
         }
 
         scanItem = menu.addItem(3, R.drawable.wallet_qr);
@@ -1570,6 +1570,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (proxyItem != null) {
                     proxyItem.setVisibility(View.GONE);
+                }
+                if (scanItem != null) {
                     scanItem.setVisibility(View.VISIBLE);
                 }
                 if (viewPages[0] != null) {
@@ -1592,6 +1594,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (proxyItem != null) {
                     proxyItem.setVisibility(View.VISIBLE);
+                }
+                if (scanItem != null) {
                     scanItem.setVisibility(View.GONE);
                 }
                 if (searchString != null) {
@@ -4844,7 +4848,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.closeSearchField();
             }
         } else if (id == NotificationCenter.proxySettingsChanged) {
-            updateProxyButton(false);
+            //updateProxyButton(false);
         } else if (id == NotificationCenter.updateInterfaces) {
             Integer mask = (Integer) args[0];
             updateVisibleRows(mask);
@@ -4916,7 +4920,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int state = AccountInstance.getInstance(account).getConnectionsManager().getConnectionState();
             if (currentConnectionState != state) {
                 currentConnectionState = state;
-                updateProxyButton(true);
+                //updateProxyButton(true);
             }
         } else if (id == NotificationCenter.needDeleteDialog) {
             if (fragmentView == null || isPaused) {

@@ -300,7 +300,8 @@ class BottomBuilder(val ctx: Context) {
 
     }
 
-    fun addItems(text: Array<String>, icon: (Int) -> Int, listener: (index: Int, text: String, cell: TextCell) -> Unit): List<TextCell> {
+    @JvmOverloads
+    fun addItems(text: Array<String>, icon: (Int) -> Int = { 0 }, listener: (index: Int, text: String, cell: TextCell) -> Unit): List<TextCell> {
 
         val list = mutableListOf<TextCell>()
 

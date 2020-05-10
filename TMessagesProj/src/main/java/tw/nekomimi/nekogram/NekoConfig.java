@@ -26,7 +26,6 @@ public class NekoConfig {
     private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
 
     public static boolean useIPv6;
-    //public static boolean showHiddenFeature = false;
 
     public static boolean useSystemEmoji;
     public static boolean ignoreBlocked;
@@ -36,12 +35,12 @@ public class NekoConfig {
     public static boolean chatMessageAnimation;
     public static boolean rearVideoMessages;
     public static boolean hideAllTab;
-    public static boolean confirmAVMessage = true;
-    public static boolean askBeforeCall = true;
+    public static boolean confirmAVMessage;
+    public static boolean askBeforeCall;
     public static int mapPreviewProvider;
     public static float stickerSize;
     public static int translationProvider;
-    public static int tabsTitleType = TITLE_TYPE_TEXT;
+    public static int tabsTitleType;
 
     public static boolean showAddToSavedMessages;
     public static boolean showReport;
@@ -198,8 +197,8 @@ public class NekoConfig {
         translateInputLang = preferences.getString("trans_input_to_lang", "en");
 
         tabsTitleType = preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT);
-        confirmAVMessage = preferences.getBoolean("confirmAVMessage", true);
-        askBeforeCall = preferences.getBoolean("askBeforeCall", true);
+        confirmAVMessage = preferences.getBoolean("confirmAVMessage", false);
+        askBeforeCall = preferences.getBoolean("askBeforeCall", false);
 
     }
 

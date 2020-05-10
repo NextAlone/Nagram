@@ -30,7 +30,7 @@ jobs:
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           ./gradlew TMessagesProj:assembleRelease \
                     TMessagesProj:assembleReleaseNoGcm \
-                    TMessagesProj:bundleAfatRelease
+                    TMessagesProj:bundleFullRelease
       - name: Upload apks
         run: |
           sudo apt install -y rename

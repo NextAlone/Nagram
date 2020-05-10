@@ -22,7 +22,7 @@ jobs:
       - name: Run Gradle Build
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-          ./gradlew assembleMinApi21Release
+          ./gradlew assembleFullRelease
           echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*arm64-v8a*.apk")
 #      - uses: actions/upload-artifact@v1
 #        with:
@@ -85,7 +85,7 @@ jobs:
         run: |
           sudo bash <<EOF
             export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}" &&
-            ./gradlew assembleAfatFoss
+            ./gradlew assembleFullFoss
           EOF
           ls TMessagesProj/build/outputs/apk
           echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*")
@@ -178,7 +178,7 @@ jobs:
             ./gradlew ssr-libev:assembleRelease &&
             rm -rf TMessagesProj/libs/*-libev-release.aar &&
             find . -name "*-libev-release.aar" -exec mv {} TMessagesProj/libs \; &&
-            ./gradlew assembleAfatFoss
+            ./gradlew assembleFullFoss
           EOF
           ls TMessagesProj/build/outputs/apk
           echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*")

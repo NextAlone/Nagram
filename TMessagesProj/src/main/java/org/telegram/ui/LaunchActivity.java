@@ -593,6 +593,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     pos[0] += s.getMeasuredWidth() / 2;
                     pos[1] += s.getMeasuredHeight() / 2;
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
+                } else if (id == 13) {
+                    presentFragment(new ProxyListActivity());
+                    drawerLayoutContainer.closeDrawer(false);
                 }
             } else {
                 int id = drawerLayoutAdapter.getId(position);
@@ -673,6 +676,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.notificationsCountUpdated);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.screenStateChanged);
+        NotificationCenter.getGlobalInstance().addObserver(drawerLayoutAdapter, NotificationCenter.proxySettingsChanged);
 
         if (actionBarLayout.fragmentsStack.isEmpty()) {
             if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
@@ -2811,6 +2815,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.screenStateChanged);
+        NotificationCenter.getGlobalInstance().removeObserver(drawerLayoutAdapter, NotificationCenter.proxySettingsChanged);
+
     }
 
     public void presentFragment(BaseFragment fragment) {

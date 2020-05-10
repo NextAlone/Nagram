@@ -8,10 +8,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.json.JSONObject
-import org.telegram.messenger.BuildConfig
-import org.telegram.messenger.FileLog
-import org.telegram.messenger.LocaleController
-import org.telegram.messenger.R
+import org.telegram.messenger.*
 import org.tukaani.xz.XZInputStream
 import tw.nekomimi.nekogram.BottomBuilder
 import tw.nekomimi.nekogram.ExternalGcm
@@ -28,6 +25,14 @@ object UpdateUtil {
 
     @JvmStatic
     fun checkUpdate(ctx: Activity) = UIUtil.runOnIoDispatcher {
+
+        if (BuildVars.isUnknown) {
+
+            FileLog.d("${BuildConfig.BUILD_TYPE} version, skip update check.")
+
+            return@runOnIoDispatcher
+
+        }
 
         if (ExternalGcm.checkPlayServices()) {
 
@@ -67,7 +72,7 @@ object UpdateUtil {
 
                     builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false) {
 
-                        doUpdate(ctx, code, updateInfo.getString("defaultApkName"))
+                        doUpdate(ctx, code, updateInfo.getString("defaultFlavor"))
 
                         builder.dismiss()
 
@@ -111,7 +116,7 @@ object UpdateUtil {
 
     }
 
-    fun doUpdate(ctx: Activity, targetVer: Int, defFileName: String) {
+    fun doUpdate(ctx: Activity, targetVer: Int, defFlavor: String,buildType: String = BuildConfig.BUILD_TYPE,flavor: String = BuildConfig.FLAVOR) {
 
         val pro = AlertUtil.showProgress(ctx)
         pro.setCanCacnel(false)
@@ -124,7 +129,7 @@ object UpdateUtil {
 
         UIUtil.runOnIoDispatcher {
 
-            val fileName = "NekoX-${BuildConfig.FLAVOR}-${Build.CPU_ABI}-${BuildConfig.BUILD_TYPE}.apk.xz"
+            var fileName = "NekoX-$flavor-${Build.CPU_ABI}-$buildType.apk.xz"
 
             var response: Response? = null
 
@@ -154,7 +159,9 @@ object UpdateUtil {
 
                         try {
 
-                            response = HttpUtil.okHttpClient.newCall(Request.Builder().url("$url/$defFileName").build()).execute()
+                            fileName = "NekoX-$defFlavor-${Build.CPU_ABI}-$buildType.apk.xz"
+
+                            response = HttpUtil.okHttpClient.newCall(Request.Builder().url("$url/$fileName").build()).execute()
 
                             if (response!!.code != 200) error("HTTP ${response!!.code} :${response!!.body!!.string()}")
 
@@ -194,7 +201,7 @@ object UpdateUtil {
 
             val size = body.contentLength()
 
-            val target = File(ctx.externalCacheDir, "nekox-$targetVer.apk")
+            val target = File(ctx.externalCacheDir, "nekox-$targetVer-$flavor-$buildType.apk")
 
             update("Downloading...")
 

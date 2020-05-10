@@ -11,6 +11,7 @@
     <string name="CustomApiInput">Manual input</string>
 
     <string name="CheckUpdate">Check Update</string>
+    <string name="SwitchVersion">Switch Version</string>
     <string name="NoUpdate">No update found</string>
     <string name="UpdateAvailable">New update available</string>
     <string name="UpdateUpdate">Update</string>
@@ -192,6 +193,7 @@
     <string name="DeleteUnavailableServerConfirm">Are you sure you want to **delete unavailable servers**?</string>
 
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
+    <string name="MiniVersionAlert">Sorry, mini version not support this type of proxy, please switch version in settings.</string>
 
     <string name="ImportProxyFromClipboard">Import From Clipboard</string>
     <string name="BrokenLink">Unknown / Broken Link</string>

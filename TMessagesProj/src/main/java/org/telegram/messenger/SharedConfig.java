@@ -229,7 +229,7 @@ public class SharedConfig {
 
                     builder.append(SubManager.getSubList().find(ObjectFilters.eq("id", subId)).firstOrDefault().displayName());
 
-                } catch (Exception e){
+                } catch (Exception e) {
 
                     builder.append("Unknown");
 
@@ -498,6 +498,12 @@ public class SharedConfig {
 
             this.bean = bean;
 
+            if (BuildVars.isMini) {
+
+                throw new RuntimeException(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert));
+
+            }
+
         }
 
         @Override
@@ -527,7 +533,7 @@ public class SharedConfig {
 
             if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
 
-                ConnectionsManager.setProxySettings(true,address,port,username,password,secret);
+                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
 
             }
 
@@ -605,6 +611,18 @@ public class SharedConfig {
 
             this.bean = bean;
 
+            if (BuildVars.isMini) {
+
+                throw new RuntimeException(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert));
+
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                throw new RuntimeException(LocaleController.getString("MinApi21Required", R.string.MinApi21Required));
+
+            }
+
         }
 
         @Override
@@ -634,7 +652,7 @@ public class SharedConfig {
 
             if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
 
-                ConnectionsManager.setProxySettings(true,address,port,username,password,secret);
+                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
 
             }
 
@@ -717,6 +735,18 @@ public class SharedConfig {
 
             this.bean = bean;
 
+            if (BuildVars.isMini) {
+
+                throw new RuntimeException(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert));
+
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                throw new RuntimeException(LocaleController.getString("MinApi21Required", R.string.MinApi21Required));
+
+            }
+
         }
 
         @Override
@@ -746,7 +776,7 @@ public class SharedConfig {
 
             if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
 
-                ConnectionsManager.setProxySettings(true,address,port,username,password,secret);
+                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
 
             }
 
@@ -821,7 +851,8 @@ public class SharedConfig {
 
                 return new LinkedList<>(proxyList);
 
-            } catch (ConcurrentModificationException ignored) {}
+            } catch (ConcurrentModificationException ignored) {
+            }
 
         }
 
@@ -1469,6 +1500,8 @@ public class SharedConfig {
             }
 
             ConnectionsManager.setProxySettings(enable, finalInfo.address, finalInfo.port, finalInfo.username, finalInfo.password, finalInfo.secret);
+
+            UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged));
 
         });
 

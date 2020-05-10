@@ -21,7 +21,9 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -41,7 +43,7 @@ import java.util.Locale;
 
 import kotlin.jvm.functions.Function0;
 
-public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
+public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
     private Context mContext;
     public ArrayList<Item> items = new ArrayList<>(11);
@@ -98,6 +100,11 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     public boolean isAccountsShown() {
         return accountsShown;
+    }
+
+    @Override public void didReceivedNotification(int id, int account, Object... args) {
+        resetItems();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -249,6 +256,10 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
+        items.add(new CheckItem(13,LocaleController.getString("Proxy",R.string.Proxy),R.drawable.baseline_security_24,() -> SharedConfig.proxyEnabled,() -> {
+            SharedConfig.setProxyEnable(!SharedConfig.proxyEnabled);
+            return true;
+        }));
         items.add(null); // divider
         items.add(new CheckItem(12,LocaleController.getString("DarkMode",R.string.NightMode),R.drawable.baseline_brightness_2_24,() -> Theme.getActiveTheme().isDark(),null));
     }
@@ -297,7 +308,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
         public Function0<Boolean> isChecked;
         public Function0<Boolean> doSwitch;
-        public Runnable onClick;
 
         public CheckItem(int id, String text, int icon, Function0<Boolean> isChecked,@Nullable Function0<Boolean> doSwitch) {
             super(id, text, icon);

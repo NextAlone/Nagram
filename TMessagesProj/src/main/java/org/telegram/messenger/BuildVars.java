@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 
 import kotlin.collections.ArraysKt;
 
+@SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
     public static boolean DEBUG_VERSION = true;
@@ -23,7 +24,6 @@ public class BuildVars {
     public static boolean USE_CLOUD_STRINGS = true;
 
     public static boolean SAVE_LOG;
-
 
     public static int BUILD_VERSION;
     public static String BUILD_VERSION_STRING;
@@ -34,15 +34,8 @@ public class BuildVars {
     public static int TGX_APP_ID = 21724;
     public static String TGX_APP_HASH = "3e0cb5efcd52300aec5994fdfc5bdc16";
 
-    private static int[] INTERNAL_APP_IDS = {
-            0,BuildConfig.APP_ID, OFFICAL_APP_ID, TGX_APP_ID
-    };
-
-    public static boolean isCustom(int appId) {
-
-        return ArraysKt.contains(INTERNAL_APP_IDS, appId);
-
-    }
+    public static boolean isUnknown = !BuildConfig.BUILD_TYPE.startsWith("release");
+    public static boolean isMini = "mini".equals(BuildConfig.FLAVOR);
 
     static {
 
@@ -55,12 +48,10 @@ public class BuildVars {
             BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
         }
 
-    }
-
-    static {
-        if (ApplicationLoader.applicationContext != null) {
+    if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
             SAVE_LOG = sharedPreferences.getBoolean("logsEnabled", SAVE_LOG);
         }
     }
+
 }

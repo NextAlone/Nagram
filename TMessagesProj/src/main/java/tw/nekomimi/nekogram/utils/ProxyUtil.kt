@@ -192,25 +192,9 @@ object ProxyUtil {
 
             } else if (link.startsWith(SS_PROTOCOL)) {
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
-                    AlertUtil.showToast(LocaleController.getString("MinApi21Required", R.string.MinApi21Required))
-
-                    return
-
-                }
-
                 AndroidUtilities.showShadowsocksAlert(ctx, SharedConfig.ShadowsocksProxy(link))
 
             } else if (link.startsWith(SSR_PROTOCOL)) {
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
-                    AlertUtil.showToast(LocaleController.getString("MinApi21Required", R.string.MinApi21Required))
-
-                    return
-
-                }
 
                 AndroidUtilities.showShadowsocksRAlert(ctx, SharedConfig.ShadowsocksRProxy(link))
 
