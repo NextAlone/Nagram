@@ -32,6 +32,8 @@ fun Activity.switchVersion() {
 
     }.toTypedArray()) { index: Int, _: String, _: TextCell ->
 
+        builder.dismiss()
+
         val buildType = when {
             index % 2 != 0 -> "release"
             else -> "releaseNoGcm"
@@ -58,9 +60,13 @@ fun Activity.switchVersion() {
 
                     val code = updateInfo.getInt("versionCode")
 
-                    progress.dismiss()
+                    UIUtil.runOnUIThread {
 
-                    UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultFlavor"), buildType, flavor)
+                        progress.dismiss()
+
+                        UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultFlavor"), buildType, flavor)
+
+                    }
 
                     return@runOnIoDispatcher
 
@@ -79,6 +85,8 @@ fun Activity.switchVersion() {
         }
 
     }
+
+    builder.show()
 
 }
 

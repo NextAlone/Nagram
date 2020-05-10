@@ -55,7 +55,13 @@ open class DnsFactory : Dns {
 
         }
 
-        return Dns.SYSTEM.lookup(hostname)
+        runCatching {
+
+            return Dns.SYSTEM.lookup(hostname)
+
+        }
+
+        return listOf()
 
     }
 

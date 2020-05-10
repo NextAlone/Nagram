@@ -37,10 +37,16 @@ import org.telegram.messenger.R
 
     val lookup = mutableMapOf<String, Plugin>().apply {
         for (plugin in this@PluginList) {
-            fun check(old: Plugin?) = check(old == null || old === plugin)
+            fun check(old: Plugin?) = check(old == null || old === plugin) { LocaleController.formatString("SSPluginConflictingName",R.string.SSPluginConflictingName,plugin.id) }
             check(put(plugin.id, plugin))
             for (alias in plugin.idAliases) check(put(alias, plugin))
         }
     }
-    val lookupNames get() = lookup.keys.map { it.takeIf { it.isNotBlank() } ?: LocaleController.getString("Disable", R.string.Disable) }.toTypedArray()
+    val lookupNames get() = lookup.values.map {
+        if (it.label.isNotBlank()) {
+            "${it.label} (${it.id})"
+        } else {
+            it.id
+        }
+    }.map { it.takeIf { it.isNotBlank() } ?: LocaleController.getString("Disable", R.string.Disable) }.toTypedArray()
 }

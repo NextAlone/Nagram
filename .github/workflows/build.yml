@@ -128,6 +128,14 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: 1.13
+      - name: install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+      - name: setup rust targets
+        run: rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
       - name: Build native libraries
         run: |
 
@@ -172,12 +180,11 @@ jobs:
 
       - name: assemble
         run: |
+          ./gradlew ss-rust:assembleRelease ssr-libev:assembleRelease
+          rm -rf TMessagesProj/libs/ss*-release.aar
+          find . -name "ss*-release.aar" -exec mv {} TMessagesProj/libs \;
           sudo bash <<EOF
             export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-            ./gradlew ss-libev:assembleRelease &&
-            ./gradlew ssr-libev:assembleRelease &&
-            rm -rf TMessagesProj/libs/*-libev-release.aar &&
-            find . -name "*-libev-release.aar" -exec mv {} TMessagesProj/libs \; &&
             ./gradlew assembleFullFoss
           EOF
           ls TMessagesProj/build/outputs/apk
@@ -196,7 +203,7 @@ jobs:
           path: "TMessagesProj/jni/boringssl/build"
       - uses: actions/upload-artifact@master
         with:
-          name: Ffmpeg Library
+          name: FFmpeg Library
           path: "TMessagesProj/jni/ffmpeg/build"
   ssBuild:
     name: SS-Rust Build

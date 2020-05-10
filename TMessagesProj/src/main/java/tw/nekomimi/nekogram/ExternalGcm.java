@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram;
 import android.app.Activity;
 import android.content.IntentSender;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -134,7 +135,15 @@ public class ExternalGcm {
 
                 builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false, null);
 
-                builder.show();
+                try {
+
+                    builder.show();
+
+                } catch (WindowManager.BadTokenException e) {
+
+                    manager.completeUpdate();
+
+                }
 
             }
 

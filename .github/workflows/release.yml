@@ -59,10 +59,11 @@ jobs:
           git commit -m 喵
           git push github master -f
           git push gitlab master -f
+          echo ::set-env name=AAB_FILE::$(find TMessagesProj/build/outputs/bundle -name "*.aab")
       - uses: r0adkll/upload-google-play@master
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
           packageName: nekox.messenger
-          releaseFile: "TMessagesProj/build/outputs/bundle/afatRelease/TMessagesProj-afat-release.aab"
+          releaseFile:  ${{ env.AAB_FILE }}
           track: production
         if: "!startsWith(github.event.head_commit.message, '!!')"

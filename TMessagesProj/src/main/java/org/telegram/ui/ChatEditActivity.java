@@ -1208,7 +1208,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     } else {
                         count = 8;
                     }
-                    blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, 8), R.drawable.baseline_block_24, true);
+                    blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), count + " / 9", R.drawable.baseline_block_24, true);
                 }
                 if (info.participants != null) {
                     if (ChatObject.isChannel(currentChat) && !ChatObject.hasAdminRights(currentChat) && info.participants.participants.size() != info.participants_count && realAdminCount == 0) {

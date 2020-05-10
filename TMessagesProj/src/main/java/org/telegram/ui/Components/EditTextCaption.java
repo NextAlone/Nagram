@@ -41,6 +41,7 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 
+import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
@@ -120,16 +121,31 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TextStyleSpan(run));
     }
 
+    private String replaceAt(String origin, int start, int end, String translation) {
+
+        String trans = origin.substring(0, start);
+
+        trans += translation;
+
+        trans += origin.substring(end);
+
+        return trans;
+
+    }
+
     public void makeSelectedTranslate() {
 
         int start = getSelectionStart();
         int end = getSelectionEnd();
 
-        String text = getText().subSequence(start,end).toString();
+        String origin = getText().toString();
+        String text = getText().subSequence(start, end).toString();
+
+        if (StrUtil.isBlank(origin)) return;
 
         if (TranslateDb.currentInputTarget().contains(text)) {
 
-            getText().replace(start,end, TranslateDb.currentInputTarget().query(text));
+            setText(replaceAt(origin,start,end,TranslateDb.currentInputTarget().query(text)));
 
         } else {
 
@@ -144,7 +160,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
                     @Override public void onSuccess(@NotNull String translation) {
                         pro.dismiss();
-                        getText().replace(start,end, translation);
+                        setText(replaceAt(origin,start,end,translation));
                         TranslateDb.currentInputTarget().save(text, translation);
                     }
 

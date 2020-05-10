@@ -336,22 +336,30 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(plugins.getLookupNames(), (index, __) -> {
+            try {
 
-                String pluginId = plugins.get(index).getId();
+                select.setItems(plugins.getLookupNames(), (index, __) -> {
 
-                plugin.setSelected(pluginId);
+                    String pluginId = plugins.get(index).getId();
 
-                ((View) pluginOptsField.getParent()).setVisibility(StrUtil.isBlank(pluginId) ? View.GONE : View.VISIBLE);
+                    plugin.setSelected(pluginId);
 
-                pluginField.getValueTextView().setText(plugin.getSelectedName());
-                pluginOptsField.getValueTextView().setText(plugin.getOptions(pluginId).toString());
+                    ((View) pluginOptsField.getParent()).setVisibility(StrUtil.isBlank(pluginId) ? View.GONE : View.VISIBLE);
 
-                return Unit.INSTANCE;
+                    pluginField.getValueTextView().setText(plugin.getSelectedName());
+                    pluginOptsField.getValueTextView().setText(plugin.getOptions(pluginId).toString());
 
-            });
+                    return Unit.INSTANCE;
 
-            select.show();
+                });
+
+                select.show();
+
+            } catch (Exception e) {
+
+                AlertUtil.showSimpleAlert(getParentActivity(),e.getMessage());
+
+            }
 
         });
 
