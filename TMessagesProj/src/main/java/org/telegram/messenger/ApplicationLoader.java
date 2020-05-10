@@ -266,18 +266,23 @@ public class ApplicationLoader extends Application {
 
         SharedConfig.loadConfig();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            UserConfig.getInstance(a).loadConfig();
-            MessagesController.getInstance(a);
-            if (a == 0) {
-                SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(a).getCurrentTime() + "__";
-            } else {
-                ConnectionsManager.getInstance(a);
-            }
-            TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
-            if (user != null) {
-                MessagesController.getInstance(a).putUser(user, true);
-                SendMessagesHelper.getInstance(a).checkUnsentMessages();
-            }
+            final int finalA = a;
+            Runnable initRunnable = () -> {
+                UserConfig.getInstance(finalA).loadConfig();
+                MessagesController.getInstance(finalA);
+                if (finalA == 0) {
+                    SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(finalA).getCurrentTime() + "__";
+                } else {
+                    ConnectionsManager.getInstance(finalA);
+                }
+                TLRPC.User user = UserConfig.getInstance(finalA).getCurrentUser();
+                if (user != null) {
+                    MessagesController.getInstance(finalA).putUser(user, true);
+                    SendMessagesHelper.getInstance(finalA).checkUnsentMessages();
+                }
+            };
+            if (finalA == UserConfig.selectedAccount) initRunnable.run();
+            else UIUtil.runOnIoDispatcher(initRunnable);
         }
 
         if (ProxyUtil.isVPNEnabled()) {
@@ -298,8 +303,13 @@ public class ApplicationLoader extends Application {
 
         MediaController.getInstance();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            ContactsController.getInstance(a).checkAppAccount();
-            DownloadController.getInstance(a);
+            final int finalA = a;
+            Runnable initRunnable = () -> {
+                ContactsController.getInstance(finalA).checkAppAccount();
+                DownloadController.getInstance(finalA);
+            };
+            if (finalA == UserConfig.selectedAccount) initRunnable.run();
+            else UIUtil.runOnIoDispatcher(initRunnable);
         }
     }
 
