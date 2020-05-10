@@ -7,6 +7,7 @@
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">手动输入</string>
     <string name="CheckUpdate">检查更新</string>
+    <string name="SwitchVersion">切换版本</string>
     <string name="NoUpdate">没有发现更新</string>
     <string name="UpdateAvailable">有可用的更新</string>
     <string name="UpdateUpdate">更新</string>
@@ -86,6 +87,8 @@
     <string name="DisableSystemAccount">禁用系统帐户</string>
     <string name="FilterMenu">分类菜单</string>
     <string name="DisableProxyWhenVpnEnabled">启用 VPN 时禁用代理</string>
+    <string name="UseProxyItem">使用侧滑栏代理项而不是按钮</string>
+    <string name="HideProxyByDefault">默认隐藏代理按钮</string>
     <string name="SkipOpenLinkConfirm">跳过打开链接确认</string>
     <string name="DeleteAllInChat">删除群组所有消息</string>
     <string name="DeleteAllInChatAlert">警告！这将**删除此聊天中所有用户**的**所有消息**。</string>
@@ -145,6 +148,7 @@
     <string name="DeleteAllServerConfirm">您确定要**删除所有服务器**吗？</string>
     <string name="DeleteUnavailableServerConfirm">您确定要**删除不可用的服务器**吗？</string>
     <string name="MinApi21Required">抱歉，您至少需要 Android 5 (API21)。</string>
+    <string name="MiniVersionAlert">抱歉，mini 版本不支持此类型的代理，请在设置中切换版本。</string>
     <string name="ImportProxyFromClipboard">从剪贴板导入</string>
     <string name="BrokenLink">未知或损坏的链接</string>
     <string name="ShareQRCode">二维码</string>
