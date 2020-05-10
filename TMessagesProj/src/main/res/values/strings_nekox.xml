@@ -121,6 +121,8 @@
     <string name="FilterMenu">Dialogs Filter Menu</string>
 
     <string name="DisableProxyWhenVpnEnabled">Disable proxy when VPN enabled</string>
+    <string name="UseProxyItem">Use sidebar proxy item instead of button</string>
+    <string name="HideProxyByDefault">Hide proxy settings by default</string>
     <string name="SkipOpenLinkConfirm">Skip open link confirm</string>
 
     <string name="DeleteAllInChat">Delete all in chat</string>

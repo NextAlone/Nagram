@@ -112,7 +112,6 @@ import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.DialogsEmptyCell;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerActionCell;
-import org.telegram.ui.Cells.DrawerActionCheckCell;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
@@ -190,6 +189,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ActionBarMenuItem passcodeItem;
     private boolean passcodeItemVisible;
     private ActionBarMenuItem proxyItem;
+    private boolean proxyItemVisible;
     private ActionBarMenuItem scanItem;
     private ActionBarMenuItem searchItem;
     private ActionBarMenuItem doneItem;
@@ -1290,7 +1290,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                             boolean hintShowed = preferences.getBoolean("archivehint_l", false) || SharedConfig.archiveHidden;
                             if (!hintShowed) {
-                            preferences.edit().putBoolean("archivehint_l", true).apply();
+                                preferences.edit().putBoolean("archivehint_l", true).apply();
                             }
                             getUndoView().showWithAction(dialog.id, hintShowed ? UndoView.ACTION_ARCHIVE : UndoView.ACTION_ARCHIVE_HINT, null, () -> {
                                 dialogsListFrozen = true;
@@ -1539,22 +1539,22 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         AndroidUtilities.runOnUIThread(() -> Theme.createChatResources(context, false));
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarDefaultSelector), Theme.getColor(Theme.key_actionBarDefaultIcon), true);
-        doneItem.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
-        actionBar.addView(doneItem, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 0, 10, 0));
-        doneItem.setOnClickListener(v -> {
-            filterTabsView.setIsEditing(false);
-            showDoneItem(false);
-        });
-        doneItem.setAlpha(0.0f);
-        doneItem.setVisibility(View.GONE);
         if (!onlySelect && searchString == null && folderId == 0) {
-            //proxyDrawable = new ProxyDrawable(context);
-            //proxyItem = menu.addItem(2, proxyDrawable);
-            //proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
+            doneItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarDefaultSelector), Theme.getColor(Theme.key_actionBarDefaultIcon), true);
+            doneItem.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
+            actionBar.addView(doneItem, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 0, 10, 0));
+            doneItem.setOnClickListener(v -> {
+                filterTabsView.setIsEditing(false);
+                showDoneItem(false);
+            });
+            doneItem.setAlpha(0.0f);
+            doneItem.setVisibility(View.GONE);
+            proxyDrawable = new ProxyDrawable(context);
+            proxyItem = menu.addItem(2, proxyDrawable);
+            proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
             passcodeItem = menu.addItem(1, R.drawable.lock_close);
             updatePasscodeButton();
-            //updateProxyButton(false);
+            updateProxyButton(false);
         }
 
         scanItem = menu.addItem(3, R.drawable.wallet_qr);
@@ -1568,7 +1568,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (switchItem != null) {
                     switchItem.setVisibility(View.GONE);
                 }
-                if (proxyItem != null) {
+                if (proxyItem != null && proxyItemVisible) {
                     proxyItem.setVisibility(View.GONE);
                 }
                 if (scanItem != null) {
@@ -3002,7 +3002,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     filterTabsView.resetTabId();
                 }
                 filterTabsView.removeTabs();
-                if (!NekoConfig.hideAllTab) filterTabsView.addTab(Integer.MAX_VALUE, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                if (!NekoConfig.hideAllTab)
+                    filterTabsView.addTab(Integer.MAX_VALUE, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
                     switch (NekoConfig.tabsTitleType) {
@@ -4578,10 +4579,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         String proxyAddress = preferences.getString("proxy_ip", "");
         boolean proxyEnabled;
-        if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
-            proxyItem.setVisibility(View.VISIBLE);
+        if (!NekoConfig.useProxyItem && (!NekoConfig.hideProxyByDefault || (proxyEnabled = preferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(proxyAddress)) || getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty())) {
+            if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
+                proxyItem.setVisibility(View.VISIBLE);
+            }
+            proxyItemVisible = true;
+            proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
+        } else {
+            proxyItemVisible = false;
+            proxyItem.setVisibility(View.GONE);
         }
-        proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
     }
 
     private AnimatorSet doneItemAnimator;
@@ -4608,7 +4615,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (searchItem != null) {
                 searchItem.setVisibility(View.VISIBLE);
             }
-            if (proxyItem != null) {
+            if (proxyItem != null && proxyItemVisible) {
                 proxyItem.setVisibility(View.VISIBLE);
             }
             if (passcodeItem != null && passcodeItemVisible) {
@@ -4617,7 +4624,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         ArrayList<Animator> arrayList = new ArrayList<>();
         arrayList.add(ObjectAnimator.ofFloat(doneItem, View.ALPHA, show ? 1.0f : 0.0f));
-        arrayList.add(ObjectAnimator.ofFloat(proxyItem, View.ALPHA, show ? 0.0f : 1.0f));
+        if (proxyItemVisible) {
+            arrayList.add(ObjectAnimator.ofFloat(proxyItem, View.ALPHA, show ? 0.0f : 1.0f));
+        }
         if (passcodeItemVisible) {
             arrayList.add(ObjectAnimator.ofFloat(passcodeItem, View.ALPHA, show ? 0.0f : 1.0f));
         }
@@ -4631,7 +4640,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (searchItem != null) {
                         searchItem.setVisibility(View.INVISIBLE);
                     }
-                    if (proxyItem != null) {
+                    if (proxyItem != null && proxyItemVisible) {
                         proxyItem.setVisibility(View.INVISIBLE);
                     }
                     if (passcodeItem != null && passcodeItemVisible) {
@@ -4848,7 +4857,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.closeSearchField();
             }
         } else if (id == NotificationCenter.proxySettingsChanged) {
-            //updateProxyButton(false);
+            updateProxyButton(false);
         } else if (id == NotificationCenter.updateInterfaces) {
             Integer mask = (Integer) args[0];
             updateVisibleRows(mask);
@@ -4920,7 +4929,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int state = AccountInstance.getInstance(account).getConnectionsManager().getConnectionState();
             if (currentConnectionState != state) {
                 currentConnectionState = state;
-                //updateProxyButton(true);
+                updateProxyButton(true);
             }
         } else if (id == NotificationCenter.needDeleteDialog) {
             if (fragmentView == null || isPaused) {

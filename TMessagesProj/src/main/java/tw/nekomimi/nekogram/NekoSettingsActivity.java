@@ -78,6 +78,8 @@ public class NekoSettingsActivity extends BaseFragment {
     private int connectionRow;
     private int ipv6Row;
     private int disableProxyWhenVpnEnabledRow;
+    private int useProxyItemRow;
+    private int hideProxyByDefaultRow;
     private int connection2Row;
 
     private int dialogsRow;
@@ -198,6 +200,16 @@ public class NekoSettingsActivity extends BaseFragment {
                 NekoConfig.toggleDisableProxyWhenVpnEnabled();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableProxyWhenVpnEnabled);
+                }
+            } else if (position == useProxyItemRow) {
+                NekoConfig.toggleUseProxyItem();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.useProxyItem);
+                }
+            } else if (position == hideProxyByDefaultRow) {
+                NekoConfig.toggleHideProxyByDefault();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.hideProxyByDefault);
                 }
             } else if (position == hidePhoneRow) {
                 NekoConfig.toggleHidePhone();
@@ -691,8 +703,9 @@ public class NekoSettingsActivity extends BaseFragment {
         connectionRow = rowCount++;
 
         ipv6Row = rowCount++;
-
         disableProxyWhenVpnEnabledRow = rowCount++;
+        useProxyItemRow = rowCount++;
+        hideProxyByDefaultRow = rowCount++;
         connection2Row = rowCount++;
 
         dialogsRow = rowCount++;
@@ -1302,7 +1315,11 @@ public class NekoSettingsActivity extends BaseFragment {
                     if (position == ipv6Row) {
                         textCell.setTextAndCheck(LocaleController.getString("IPv6", R.string.IPv6), NekoConfig.useIPv6, true);
                     } else if (position == disableProxyWhenVpnEnabledRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableProxyWhenVpnEnabled", R.string.DisableProxyWhenVpnEnabled), NekoConfig.disableProxyWhenVpnEnabled, false);
+                        textCell.setTextAndCheck(LocaleController.getString("DisableProxyWhenVpnEnabled", R.string.DisableProxyWhenVpnEnabled), NekoConfig.disableProxyWhenVpnEnabled, true);
+                    } else if (position == useProxyItemRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UseProxyItem", R.string.UseProxyItem), NekoConfig.useProxyItem, true);
+                    } else if (position == hideProxyByDefaultRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("HideProxyByDefault", R.string.HideProxyByDefault), NekoConfig.hideProxyByDefault, false);
                     } else if (position == hidePhoneRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, true);
                     } else if (position == disableUndoRow) {
@@ -1402,22 +1419,8 @@ public class NekoSettingsActivity extends BaseFragment {
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int position = holder.getAdapterPosition();
-            return position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow || position == ignoreBlockedRow ||
-                    position == useSystemEmojiRow || position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == typefaceRow || position == nameOrderRow ||
-                    position == forceTabletRow || position == mapPreviewRow || position == newYearRow ||
-                    position == actionBarDecorationRow || position == eventTypeRow || position == transparentStatusBarRow ||
-                    position == hideProxySponsorChannelRow || position == skipOpenLinkConfirm ||
-                    position == disableFilteringRow || position == stickerSizeRow ||
-                    position == unlimitedFavedStickersRow || position == messageMenuRow || position == deleteAccountRow ||
-                    position == translationProviderRow || position == translateToLangRow || position == translateInputToLangRow || position == googleCloudTranslateKeyRow ||
-                    position == smoothKeyboardRow || position == pauseMusicOnRecordRow ||
-                    position == disablePhotoSideActionRow || position == unlimitedPinnedDialogsRow || position == openArchiveOnPullRow ||
-                    position == hideKeyboardOnChatScrollRow || position == sortMenuRow || position == disableSystemAccountRow ||
-                    position == avatarAsDrawerBackgroundRow || position == removeTitleEmojiRow || position == ignoreMutedCountRow ||
-                    position == useDefaultThemeRow || position == showIdAndDcRow || position == showTabsOnForwardRow ||
-                    position == chatMessageAnimationRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == cachePathRow ||
-                    position == tabsTitleTypeRow || position == confirmAVRow || position == askBeforeCallRow;
+            int type = holder.getItemViewType();
+            return type == 2 || type == 3 || type == 6;
         }
 
         @Override
@@ -1466,7 +1469,9 @@ public class NekoSettingsActivity extends BaseFragment {
                     position == deleteAccountRow || position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow ||
                     position == tabsTitleTypeRow) {
                 return 2;
-            } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow || position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||
+            } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow ||
+                    position == useProxyItemRow || position == hideProxyByDefaultRow ||
+                    position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow || position == disableChatActionRow ||
                     position == transparentStatusBarRow || position == hideProxySponsorChannelRow ||
                     position == ignoreBlockedRow || position == useSystemEmojiRow || position == typefaceRow ||
                     position == forceTabletRow || position == newYearRow ||

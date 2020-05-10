@@ -4857,4 +4857,5 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         return arrayList;
     }
+
 }

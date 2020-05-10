@@ -91,7 +91,6 @@ import org.telegram.ui.Cells.DrawerActionCheckCell;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
-import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.BlockingUpdateView;
@@ -553,7 +552,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerActionCheckCell) {
                 int id = drawerLayoutAdapter.getId(position);
-              //  DrawerLayoutAdapter.CheckItem item = drawerLayoutAdapter.getItem(position);
+                //  DrawerLayoutAdapter.CheckItem item = drawerLayoutAdapter.getItem(position);
                 if (id == 12) {
                     SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
                     String dayThemeName = preferences.getString("lastDayTheme", "Blue");
@@ -870,7 +869,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             showTosActivity(account, UserConfig.getInstance(account).unacceptedTermsOfService);
         }
         if (afterLogin) {
-            PrivacyUtil.postCheckAll(this,account);
+            PrivacyUtil.postCheckAll(this, account);
         }
         updateCurrentConnectionState(currentAccount);
     }

@@ -13,8 +13,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import kotlin.collections.ArraysKt;
-
 @SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
@@ -48,7 +46,7 @@ public class BuildVars {
             BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
         }
 
-    if (ApplicationLoader.applicationContext != null) {
+        if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
             SAVE_LOG = sharedPreferences.getBoolean("logsEnabled", SAVE_LOG);
         }

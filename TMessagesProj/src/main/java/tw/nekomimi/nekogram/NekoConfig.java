@@ -1,21 +1,19 @@
 package tw.nekomimi.nekogram;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.R;
 
-import java.lang.reflect.Method;
 import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class NekoConfig {
 
@@ -101,6 +99,9 @@ public class NekoConfig {
 
     public static String translateToLang;
     public static String translateInputLang;
+
+    public static boolean hideProxyByDefault;
+    public static boolean useProxyItem;
 
     public static String formatLang(String name) {
 
@@ -199,6 +200,9 @@ public class NekoConfig {
         tabsTitleType = preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT);
         confirmAVMessage = preferences.getBoolean("confirmAVMessage", false);
         askBeforeCall = preferences.getBoolean("askBeforeCall", false);
+
+        hideProxyByDefault = preferences.getBoolean("hide_proxy_by_default", BuildVars.isMini);
+        useProxyItem = preferences.getBoolean("use_proxy_item",false);
 
     }
 
@@ -645,27 +649,37 @@ public class NekoConfig {
     }
 
     public static void setTabsTitleType(int type) {
-        tabsTitleType = type;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("tabsTitleType", tabsTitleType);
-        editor.apply();
+
+        preferences.edit().putInt("tabsTitleType", tabsTitleType = type).apply();
+
     }
 
     public static void toggleConfirmAVMessage() {
-        confirmAVMessage = !confirmAVMessage;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("confirmAVMessage", confirmAVMessage);
-        editor.apply();
+
+        preferences.edit().putBoolean("tabsTitleType", confirmAVMessage = !confirmAVMessage).apply();
+
     }
 
     public static void toggleAskBeforeCall() {
-        askBeforeCall = !askBeforeCall;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("askBeforeCall", askBeforeCall);
-        editor.commit();
+
+        preferences.edit().putBoolean("askBeforeCall", askBeforeCall = !askBeforeCall).apply();
+
+    }
+
+    public static void toggleHideProxyByDefault() {
+
+        preferences.edit().putBoolean("hide_proxy_by_default", hideProxyByDefault = !hideProxyByDefault).apply();
+
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+
+    }
+
+    public static void toggleUseProxyItem() {
+
+        preferences.edit().putBoolean("use_proxy_item",useProxyItem = !useProxyItem).apply();
+
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+
     }
 
 }

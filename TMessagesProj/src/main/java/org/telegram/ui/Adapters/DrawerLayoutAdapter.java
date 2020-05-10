@@ -33,7 +33,6 @@ import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
-import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SideMenultItemAnimator;
 
@@ -42,6 +41,7 @@ import java.util.Collections;
 import java.util.Locale;
 
 import kotlin.jvm.functions.Function0;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
@@ -256,10 +256,12 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
-        items.add(new CheckItem(13,LocaleController.getString("Proxy",R.string.Proxy),R.drawable.baseline_security_24,() -> SharedConfig.proxyEnabled,() -> {
-            SharedConfig.setProxyEnable(!SharedConfig.proxyEnabled);
-            return true;
-        }));
+        if (NekoConfig.useProxyItem && (!NekoConfig.hideProxyByDefault || SharedConfig.proxyEnabled)) {
+            items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.baseline_security_24, () -> SharedConfig.proxyEnabled, () -> {
+                SharedConfig.setProxyEnable(!SharedConfig.proxyEnabled);
+                return true;
+            }));
+        }
         items.add(null); // divider
         items.add(new CheckItem(12,LocaleController.getString("DarkMode",R.string.NightMode),R.drawable.baseline_brightness_2_24,() -> Theme.getActiveTheme().isDark(),null));
     }
