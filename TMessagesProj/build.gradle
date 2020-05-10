@@ -76,8 +76,8 @@ dependencies {
 
 }
 
-def verName = "6.1.1.1-rc01"
-def verCode = 33
+def verName = "6.1.1.1-rc02"
+def verCode = 35
 
 task writeUpdateInfo {
 
@@ -296,12 +296,14 @@ android {
         mini {
             versionNameSuffix '-mini'
         }
-        full {
-            dependencies {
-                implementation files('libs/libv2ray.aar')
-                implementation files('libs/ss-rust-release.aar')
-                implementation files('libs/ssr-libev-release.aar')
-            }
+        full {}
+    }
+
+    sourceSets.full {
+        dependencies {
+            implementation files('libs/libv2ray.aar')
+            implementation files('libs/ss-rust-release.aar')
+            implementation files('libs/ssr-libev-release.aar')
         }
     }
 

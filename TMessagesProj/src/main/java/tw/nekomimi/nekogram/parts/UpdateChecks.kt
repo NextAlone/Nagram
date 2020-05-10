@@ -80,6 +80,8 @@ fun Activity.switchVersion() {
 
     }
 
+    builder.show()
+
 }
 
 @JvmOverloads
