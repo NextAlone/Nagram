@@ -27,7 +27,7 @@ fun Activity.switchVersion() {
             else -> "releaseNoGcm"
         } && BuildConfig.FLAVOR == when {
             index < 3 -> "mini"
-            else -> "release"
+            else -> "full"
         })
 
     }.toTypedArray()) { index: Int, _: String, _: TextCell ->
@@ -41,7 +41,7 @@ fun Activity.switchVersion() {
 
         val flavor = when {
             index < 3 -> "mini"
-            else -> "release"
+            else -> "full"
         }
 
         val progress = AlertUtil.showProgress(this)
