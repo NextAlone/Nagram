@@ -20,18 +20,27 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Setup ghr
-        run: |
-          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
-          tar xvzf ghr.tar.gz; rm ghr.tar.gz
-          sudo mv ghr*linux_amd64/ghr /usr/local/bin; rm -rf ghr*linux_amd64
       - name: assembleRelease
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           ./gradlew TMessagesProj:assembleRelease \
                     TMessagesProj:assembleReleaseNoGcm \
                     TMessagesProj:bundleFullRelease
+          echo ::set-env name=AAB_FILE::$(find TMessagesProj/build/outputs/bundle -name "*.aab")
+      - uses: r0adkll/upload-google-play@master
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
+          packageName: nekox.messenger
+          releaseFile:  ${{ env.AAB_FILE }}
+          track: production
+      - name: Setup ghr
+        if: "!startsWith(github.event.head_commit.message, '!!')"
+        run: |
+          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
+          tar xvzf ghr.tar.gz; rm ghr.tar.gz
+          sudo mv ghr*linux_amd64/ghr /usr/local/bin; rm -rf ghr*linux_amd64
       - name: Upload apks
+        if: "!startsWith(github.event.head_commit.message, '!!')"
         run: |
           sudo apt install -y rename
           export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
@@ -59,11 +68,3 @@ jobs:
           git commit -m 喵
           git push github master -f
           git push gitlab master -f
-          echo ::set-env name=AAB_FILE::$(find TMessagesProj/build/outputs/bundle -name "*.aab")
-      - uses: r0adkll/upload-google-play@master
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
-          packageName: nekox.messenger
-          releaseFile:  ${{ env.AAB_FILE }}
-          track: production
-        if: "!startsWith(github.event.head_commit.message, '!!')"
