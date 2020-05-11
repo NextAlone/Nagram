@@ -24,9 +24,9 @@ public class FileLog {
     private OutputStreamWriter streamWriter = null;
     private FastDateFormat dateFormat = null;
     private DispatchQueue logQueue = null;
-    private File currentFile = null;
-    private File networkFile = null;
-    private File tonlibFile = null;
+    public File currentFile = null;
+    public File networkFile = null;
+    public File tonlibFile = null;
     private boolean initied;
 
     private final static String tag = BuildConfig.APPLICATION_ID;

@@ -40,6 +40,7 @@ import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.database.WarppedPref;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -66,6 +67,10 @@ public class ApplicationLoader extends Application {
     public static volatile long mainInterfacePausedStageQueueTime;
 
     public static boolean hasPlayServices;
+
+    @Override public SharedPreferences getSharedPreferences(String name, int mode) {
+        return new WarppedPref(super.getSharedPreferences(name, mode));
+    }
 
     @Override
     protected void attachBaseContext(Context base) {

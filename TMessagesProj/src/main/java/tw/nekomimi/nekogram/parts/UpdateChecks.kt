@@ -20,29 +20,23 @@ fun Activity.switchVersion() {
             "Mini Release NoGcm",
             "Full Release",
             "Full Release NoGcm"
-    ).filterIndexed { index, _ ->
+    ).filterIndexed { index, text ->
 
         !(BuildConfig.BUILD_TYPE == when {
-            index % 2 != 0 -> "release"
-            else -> "releaseNoGcm"
-        } && BuildConfig.FLAVOR == when {
-            index < 3 -> "mini"
+            text.endsWith("NoGcm") -> "releaseNoGcm"
             else -> "release"
-        })
+        } && BuildConfig.FLAVOR == text.substringBefore(" ").toLowerCase())
 
-    }.toTypedArray()) { index: Int, _: String, _: TextCell ->
+    }.toTypedArray()) { index: Int, text: String, _: TextCell ->
 
         builder.dismiss()
 
         val buildType = when {
-            index % 2 != 0 -> "release"
-            else -> "releaseNoGcm"
-        }
-
-        val flavor = when {
-            index < 3 -> "mini"
+            text.endsWith("NoGcm") -> "releaseNoGcm"
             else -> "release"
         }
+
+        val flavor = text.substringBefore(" ").toLowerCase()
 
         val progress = AlertUtil.showProgress(this)
 

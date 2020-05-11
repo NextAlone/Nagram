@@ -69,6 +69,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class CacheControlActivity extends BaseFragment {
@@ -309,7 +310,13 @@ public class CacheControlActivity extends BaseFragment {
 
                     try {
 
-                        FileUtil.delete(ApplicationLoader.applicationContext.getExternalFilesDir("logs"));
+                        FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"),(it) -> {
+                            if (it.equals(FileLog.getInstance().currentFile) ||
+                                    it.equals(FileLog.getInstance().networkFile) ||
+                                    it.equals(FileLog.getInstance().tonlibFile)) {
+                                return false;
+                            } else return true;
+                        });
 
                     } catch (Exception ignored) {
                     }

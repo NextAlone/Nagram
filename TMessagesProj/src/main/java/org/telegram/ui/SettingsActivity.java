@@ -135,8 +135,10 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.LangsKt;
+import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import tw.nekomimi.nekogram.utils.ZipUtil;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -487,7 +489,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     AlertDialog pro = AlertUtil.showProgress(getParentActivity());
                     pro.show();
                     UIUtil.runOnIoDispatcher(() -> {
-                        FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"));
+                        FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"),(it) -> {
+                            if (it.equals(FileLog.getInstance().currentFile) ||
+                                    it.equals(FileLog.getInstance().networkFile) ||
+                            it.equals(FileLog.getInstance().tonlibFile)) {
+                                return false;
+                            } else return true;
+                        });
                         ThreadUtil.sleep(100L);
                         LangsKt.uDismiss(pro);
                     });
@@ -536,9 +544,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.SAVE_LOG).apply();
                         updateRows();
-                        if (!BuildVars.SAVE_LOG) {
-                            UIUtil.runOnIoDispatcher(() -> FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs")));
-                        }
                         return Unit.INSTANCE;
                     });
                     if (!BuildVars.isUnknown) {
@@ -1587,92 +1592,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     private void sendLogs() {
-        if (getParentActivity() == null) {
-            return;
-        }
-        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-        progressDialog.setCanCacnel(false);
-        progressDialog.show();
-        Utilities.globalQueue.postRunnable(() -> {
-            try {
-                File dir = ApplicationLoader.applicationContext.getExternalFilesDir("logs");
-                File zipFile = new File(dir, "logs.zip");
-                if (zipFile.exists()) {
-                    zipFile.delete();
-                }
 
-                File[] files = dir.listFiles();
+        File logsCache = new File(ApplicationLoader.getCacheDirFixed(), "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()) + ".zip");
 
-                boolean[] finished = new boolean[1];
+        ZipUtil.makeZip(logsCache,new File(EnvUtil.getTelegramPath(),"logs"));
 
-                BufferedInputStream origin = null;
-                ZipOutputStream out = null;
-                try {
-                    FileOutputStream dest = new FileOutputStream(zipFile);
-                    out = new ZipOutputStream(new BufferedOutputStream(dest));
-                    byte[] data = new byte[1024 * 1024];
+        ShareUtil.shareFile(getParentActivity(),logsCache);
 
-                    for (int i = 0; i < files.length; i++) {
-                        FileInputStream fi = new FileInputStream(files[i]);
-                        origin = new BufferedInputStream(fi, data.length);
-
-                        ZipEntry entry = new ZipEntry(files[i].getName());
-                        out.putNextEntry(entry);
-                        int count;
-                        while ((count = origin.read(data, 0, data.length)) != -1) {
-                            out.write(data, 0, count);
-                        }
-                        if (origin != null) {
-                            origin.close();
-                            origin = null;
-                        }
-                    }
-                    finished[0] = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (origin != null) {
-                        origin.close();
-                    }
-                    if (out != null) {
-                        out.close();
-                    }
-                }
-
-                AndroidUtilities.runOnUIThread(() -> {
-                    try {
-                        progressDialog.dismiss();
-                    } catch (Exception ignore) {
-
-                    }
-                    if (finished[0]) {
-                        Uri uri;
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            uri = FileProvider.getUriForFile(getParentActivity(), BuildConfig.APPLICATION_ID + ".provider", zipFile);
-                        } else {
-                            uri = Uri.fromFile(zipFile);
-                        }
-
-                        Intent i = new Intent(Intent.ACTION_SEND);
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        }
-                        i.setType("message/rfc822");
-                        i.putExtra(Intent.EXTRA_EMAIL, "");
-                        i.putExtra(Intent.EXTRA_SUBJECT, "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()));
-                        i.putExtra(Intent.EXTRA_STREAM, uri);
-                        if (getParentActivity() != null) {
-                            i.setClass(getParentActivity(), LaunchActivity.class);
-                            getParentActivity().startActivity(i);
-                        }
-                    } else {
-                        Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     private class SearchAdapter extends RecyclerListView.SelectionAdapter {

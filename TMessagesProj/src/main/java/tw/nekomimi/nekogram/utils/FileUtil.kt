@@ -32,11 +32,12 @@ object FileUtil {
     }
 
     @JvmStatic
-    fun delete(file: File?) {
+    @JvmOverloads
+    fun delete(file: File?,filter: (File) -> Boolean = { true }) {
 
         runCatching {
 
-            file?.deleteRecursively()
+            file?.takeIf { filter(it) }?.deleteRecursively()
 
         }
 

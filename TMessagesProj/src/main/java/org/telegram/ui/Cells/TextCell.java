@@ -150,7 +150,9 @@ public class TextCell extends FrameLayout {
     public void setTextAndIcon(String text, int resId, boolean divider) {
         textView.setText(text);
         valueTextView.setText(null);
-        imageView.setImageResource(resId);
+        if (resId != 0) {
+            imageView.setImageResource(resId);
+        }
         imageView.setVisibility(VISIBLE);
         valueTextView.setVisibility(GONE);
         valueImageView.setVisibility(GONE);

@@ -656,7 +656,7 @@ public class NekoConfig {
 
     public static void toggleConfirmAVMessage() {
 
-        preferences.edit().putBoolean("tabsTitleType", confirmAVMessage = !confirmAVMessage).apply();
+        preferences.edit().putBoolean("confirmAVMessage", confirmAVMessage = !confirmAVMessage).apply();
 
     }
 
