@@ -1184,6 +1184,9 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                         if (!currentChat.default_banned_rights.send_stickers) {
                             count++;
                         }
+                        if (!currentChat.default_banned_rights.send_gifs) {
+                            count++;
+                        }
                         if (!currentChat.default_banned_rights.send_media) {
                             count++;
                         }
@@ -1206,7 +1209,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                             count++;
                         }
                     } else {
-                        count = 8;
+                        count = 9;
                     }
                     blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), count + " / 9", R.drawable.baseline_block_24, true);
                 }
