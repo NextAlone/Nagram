@@ -8829,7 +8829,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 return 21;
                             }
                         }
-                        if (messageObject.messageOwner.ttl <= 0) {
+                        if (NekoXConfig.disableFlagSecure || messageObject.messageOwner.ttl <= 0) {
                             return 4;
                         }
                     }
