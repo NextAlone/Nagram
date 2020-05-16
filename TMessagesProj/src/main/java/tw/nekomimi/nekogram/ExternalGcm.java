@@ -63,7 +63,7 @@ public class ExternalGcm {
                             }
                         }).addOnFailureListener(e -> {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("Failed to get regid");
+                                FileLog.e("Failed to get regid",e);
                             }
                             SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
                             ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
