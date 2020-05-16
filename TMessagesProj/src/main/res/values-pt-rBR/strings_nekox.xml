@@ -6,6 +6,19 @@
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Entrada manual</string>
+    <string name="CheckUpdate">Checar atualização</string>
+    <string name="SwitchVersion">Mudar versão</string>
+    <string name="NoUpdate">Nenhuma atualização encontrada</string>
+    <string name="UpdateAvailable">Nova atualização disponível</string>
+    <string name="UpdateUpdate">Atualizar</string>
+    <string name="UpdateLater">Mais tarde</string>
+    <string name="DownloadFailed">Falha no Download</string>
+    <string name="Install">Instalar</string>
+    <string name="Ignore">Ignorar</string>
+    <string name="UpdateDownloaded">Uma atualização acabou de ser baixada.</string>
+    <string name="DevModeTitle">**Sua conta de telegrama pode ser banida**</string>
+    <string name="DevModeNotice">Não nos responsabilizamos por qualquer uso inadequado dos recursos do desenvolvedor.</string>
+    <string name="TapToDisable">Toque para desativar. Você não precisa disso.</string>
     <string name="CustomBackend">Back-end personalizado</string>
     <string name="CustomBackendNotice">Essa função é fornecida apenas para usuários experientes; se você não souber o que as elas representam, apenas ignore.</string>
     <string name="CustomBackendProduction">Data Center de Produção Oficial</string>
@@ -73,6 +86,8 @@
     <string name="DisableSystemAccount">Desativar Conta do Sistema</string>
     <string name="FilterMenu">Menu de Filtro de Conversas</string>
     <string name="DisableProxyWhenVpnEnabled">Desativar proxy quando a VPN estiver ativada</string>
+    <string name="UseProxyItem">Use o item proxy da barra lateral em vez do botão</string>
+    <string name="HideProxyByDefault">Ocultar configurações de proxy por padrão</string>
     <string name="SkipOpenLinkConfirm">Ignorar a confirmação para abrir links</string>
     <string name="DeleteAllInChat">Excluir tudo na conversa</string>
     <string name="DeleteAllInChatAlert">Aviso! Isto irá **excluir todas as mensagens** deste chat para **todos** os participantes.</string>
@@ -85,6 +100,7 @@
     <string name="AddProxyVmess">Adicionar Proxy Vmess</string>
     <string name="AddProxySS">Adicionar Shadowsocks Proxy</string>
     <string name="AddProxySSR">Adicionar ShadowsocksR Proxy</string>
+    <string name="SSPluginConflictingName">Vários plugins usam este ID: %s , até você desinstalar os plug-ins conflitantes, nenhum deles estará disponível.</string>
     <string name="EditProxy">Editar Proxy</string>
     <string name="ShareProxy">Compartilhar Proxy</string>
     <string name="ProxyDelete">Excluir proxy</string>
@@ -100,6 +116,8 @@
     <string name="ProxyInfoSS">Configurações do Proxy Shadowsocks</string>
     <string name="SSPassword">Senha</string>
     <string name="SSMethod">Método de criptografia</string>
+    <string name="SSPlugin">Plugin</string>
+    <string name="SSPluginOpts">Configuração de plugins</string>
     <string name="ProxyInfoSSR">Configurações do proxy ShadowsocksR</string>
     <string name="SSRProtocol">Protocolo</string>
     <string name="SSRProtocolParams">Parâmetros de protocolo</string>
@@ -130,6 +148,7 @@
     <string name="DeleteAllServerConfirm">Tem certeza de que deseja **excluir todos os servidores**?</string>
     <string name="DeleteUnavailableServerConfirm">Tem certeza de que deseja **excluir servidores indisponíveis**?</string>
     <string name="MinApi21Required">Desculpe, você precisa pelo menos do Android 5 (API21).</string>
+    <string name="MiniVersionAlert">Desculpe, a versão mini não é compatível com esse tipo de proxy. Altere a versão nas configurações.</string>
     <string name="ImportProxyFromClipboard">Importar da área de transferência</string>
     <string name="BrokenLink">Link desconhecido / quebrado</string>
     <string name="ShareQRCode">Código QR</string>

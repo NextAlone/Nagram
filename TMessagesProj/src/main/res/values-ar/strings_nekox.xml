@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="CustomApi">API مخصص</string>
-    <string name="UseCustomApiNotice">تسجيل الدخول باستخدام معرف التطبيق الرسمي، إذا كنت غير قادر على التسجيل أو تسجيل الدخول، قد يساعد ذلك.\n\nملاحظة: لن يعمل fcm إذا كنت تستخدم إصدار الإصدار.</string>
+    <string name="UseCustomApiNotice">تسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة، إذا كنت غير قادر على تسجيل أو تسجيل الدخول، قد يساعد هذا.nnNote: fcm لن تعمل إذا كنت تستخدم اهر الإصدار.</string>
     <string name="CustomApiNo">لا تستخدم API مخصص</string>
     <string name="CustomApiOfficial">تيليجرام أندرويد</string>
     <string name="CustomApiTGX">تيليجرام أندرويد X</string>
-    <string name="CustomApiInput">إدخال يدوي</string>
+    <string name="CustomApiInput">الإدخال اليدوي</string>
     <string name="CheckUpdate">تحقق من التحديث</string>
+    <string name="SwitchVersion">تبديل الإصدار</string>
     <string name="NoUpdate">لا يوجد تحديث</string>
     <string name="UpdateAvailable">تحديث جديد متوفر</string>
     <string name="UpdateUpdate">تحديث</string>
@@ -15,11 +16,11 @@
     <string name="Install">تثبيت</string>
     <string name="Ignore">تجاهل</string>
     <string name="UpdateDownloaded">تم تحميل التحديث للتو.</string>
-    <string name="DevModeTitle">**حساب البرقية الخاص بك قد يكون محظوراً**</string>
+    <string name="DevModeTitle">**حساب التيليجرام الخاص بك قد يكون محظوراً**</string>
     <string name="DevModeNotice">نحن لسنا مسؤولين عن أي استخدام غير سليم لميزات المطور.</string>
     <string name="TapToDisable">انقر للتعطيل. لا تحتاج هذه.</string>
-    <string name="PlaceHolder">مكان - الرجاء تعطيل</string>
-    <string name="CustomBackend">الخلفية المخصصة</string>
+    <string name="PlaceHolder">العنصر النائب - الرجاء تعطيله</string>
+    <string name="CustomBackend">واجهة الخلفية المخصصة</string>
     <string name="CustomBackendNotice">هذه الوظيفة متوفرة فقط للمستخدمين الخبراء، إذا كنت لا تعرف ما الذي تمثله الخيارات التالية، فقط تجاهلها.</string>
     <string name="CustomBackendProduction">مركز بيانات الإنتاج الرسمي</string>
     <string name="CustomBackendTestDC">مركز بيانات الاختبار الرسمي</string>
@@ -34,8 +35,8 @@
     <string name="ProviderYandex">ترجمة اليانديكس</string>
     <string name="GoogleCloudTransKey">مفتاح ترجمة سحابة Google</string>
     <string name="GoogleCloudTransKeyNotice">إذا قمت بإعداد Google Cloud Trans Key ، فسيتم استدعاء API للترجمة السحابية بدلاً من إرسال نموذج مزيف إلى إصدار الويب عند الترجمة (حركة مرور أسرع وثابتة وحفظها).</string>
-    <string name="TransToLang">اللغة المستهدفة للترجمة</string>
-    <string name="TransInputToLang">اللغة المستهدفة لمدخل الترجمة</string>
+    <string name="TransToLang">لغة هدف الترجمة</string>
+    <string name="TransInputToLang">لغة هدف إدخال الترجمة</string>
     <string name="More">المزيد</string>
     <string name="NekoXUpdatesChannel">قناة تحديثات Nekox</string>
     <string name="ShowIdAndDc">إظهار ID / DC في الملف الشخصی</string>
@@ -86,6 +87,8 @@
     <string name="DisableSystemAccount">تعطيل الحساب الخاص بالنظام</string>
     <string name="FilterMenu">قائمة عوامل تصفية الحوار</string>
     <string name="DisableProxyWhenVpnEnabled">تعطيل البروكسي عند تمكين VPN</string>
+    <string name="UseProxyItem">استخدام عنصر وكيل الشريط الجانبي بدلاً من الزر</string>
+    <string name="HideProxyByDefault">إخفاء إعدادات الوكيل بشكل افتراضي</string>
     <string name="SkipOpenLinkConfirm">تخطي تأكيد فتح الرابط</string>
     <string name="DeleteAllInChat">احذف الكل في الدردشة</string>
     <string name="DeleteAllInChatAlert">تحذير! سيؤدي هذا إلى **حذف جميع الرسائل** في هذه المحادثة لـ **جميع** المشاركين.</string>
@@ -98,6 +101,7 @@
     <string name="AddProxyVmess">إضافة وكيل Vmess</string>
     <string name="AddProxySS">إضافة وكيل Shadowsock</string>
     <string name="AddProxySSR">إضافة وكيل ShadowsocksR</string>
+    <string name="SSPluginConflictingName">تستخدم العديد من الإضافات هذا المعرف: %s ، حتى تقوم بإلغاء تثبيت المكونات الإضافية المتعارضة ، ولا يتوفر أي منهما.</string>
     <string name="EditProxy">تحرير البروكسي</string>
     <string name="ShareProxy">مشاركة البروكسي</string>
     <string name="ProxyDelete">حذف البروكسي</string>
@@ -145,6 +149,7 @@
     <string name="DeleteAllServerConfirm">هل أنت متأكد من أنك تريد **حذف جميع الخوادم**؟</string>
     <string name="DeleteUnavailableServerConfirm">هل أنت متأكد من أنك تريد **حذف الخوادم غير المتاحة**؟</string>
     <string name="MinApi21Required">عذراً، تحتاج على الأقل إلى أندرويد 5 (API21).</string>
+    <string name="MiniVersionAlert">عذرا، إصدار صغير لا تدعم هذا النوع من الوكيل، يرجى التبديل الإصدار في الإعدادات.</string>
     <string name="ImportProxyFromClipboard">استيراد من الحافظة</string>
     <string name="BrokenLink">رابط غير معروف / مكسور</string>
     <string name="ShareQRCode">كود QR</string>
