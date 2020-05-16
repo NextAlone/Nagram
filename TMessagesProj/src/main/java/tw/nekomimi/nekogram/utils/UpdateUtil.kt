@@ -8,7 +8,11 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.json.JSONObject
-import org.telegram.messenger.*
+import org.telegram.messenger.BuildVars
+import org.telegram.messenger.FileLog
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.BuildConfig
+import org.telegram.messenger.R
 import org.tukaani.xz.XZInputStream
 import tw.nekomimi.nekogram.BottomBuilder
 import tw.nekomimi.nekogram.ExternalGcm
@@ -46,7 +50,7 @@ object UpdateUtil {
 
         FileLog.d("checking updates from repo")
 
-        if (System.currentTimeMillis() - NekoXConfig.preferences.getLong("ignored_update_at", -1) > 1 * 60 * 60 * 1000L) {
+        if (System.currentTimeMillis() - NekoXConfig.preferences.getLong("ignored_update_at", -1) < 1 * 60 * 60 * 1000L) {
 
             FileLog.d("ignored")
 
@@ -116,7 +120,7 @@ object UpdateUtil {
 
     }
 
-    fun doUpdate(ctx: Activity, targetVer: Int, defFlavor: String,buildType: String = BuildConfig.BUILD_TYPE,flavor: String = BuildConfig.FLAVOR) {
+    fun doUpdate(ctx: Activity, targetVer: Int, defFlavor: String, buildType: String = BuildConfig.BUILD_TYPE, flavor: String = BuildConfig.FLAVOR) {
 
         val pro = AlertUtil.showProgress(ctx)
         pro.setCanCacnel(false)
