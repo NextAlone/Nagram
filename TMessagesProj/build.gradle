@@ -310,6 +310,9 @@ android {
         if (((task.name.endsWith('Ndk') || task.name.startsWith('generateJsonModel') || task.name.startsWith('externalNativeBuild'))) && !task.name.contains("Foss")) {
             task.enabled = false
         }
+        if (task.name.contains("uploadCrashlyticsMappingFile")) {
+            enabled = false
+        }
     }
 
     applicationVariants.all { variant ->
