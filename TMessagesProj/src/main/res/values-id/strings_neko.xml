@@ -77,9 +77,22 @@
     <string name="OpenArchiveOnPull">Buka Arsip pada saat pulldown</string>
     <string name="HideKeyboardOnChatScroll">Sembunyikan keyboard saat gulir obrolan</string>
     <string name="UserRestrictionsSendStickers2">Kirim Stiker</string>
-    <string name="UserRestrictionsSendGifs">Mengirim Gif</string>
-    <string name="UseAvatarAsDrawerBackground">Menggunakan Photo Profil sebagai latar belakang laci</string>
+    <string name="UserRestrictionsSendGifs">Kirim GIF</string>
+    <string name="UseAvatarAsDrawerBackground">Gunakan avatar sebagai latar belakang</string>
     <string name="ShowTabsOnForward">Tampilkan label saat meneruskan</string>
     <string name="CheckAllAdministrated">Tambahkan Admin</string>
-    <string name="ProviderDeepLWeb">Penerjemah DeepL (Web)</string>
+    <string name="ProviderDeepLWeb">DeepL Terjemahan (Web)</string>
+    <string name="ChatMessageAnimation">Animasi pesan baru</string>
+    <string name="RearVideoMessages">Kamera belakang saat Pesan Video</string>
+    <string name="HideAllTab">Sembunyikan tab \"Semua Obrolan\"</string>
+    <string name="HideAllTabAbout">Tekan \"Kembali\" di beranda untuk membukanya.</string>
+    <string name="TabTitleType">Tampilkan di tab</string>
+    <string name="TabTitleTypeTip">Emoticon disinkronisasi secara awan oleh Telegram.</string>
+    <string name="TabTitleTypeText">Judul</string>
+    <string name="TabTitleTypeIcon">Emoticon</string>
+    <string name="TabTitleTypeMix">Emoticon dengan judul</string>
+    <string name="ConfirmAVMessage">Konfirmasikan saat mengirimkan video/pesan suara</string>
+    <string name="AskBeforeCalling">Tanyakan sebelum menelepon</string>
+    <string name="ConfirmCall">Konfirmasikan panggilan</string>
+    <string name="CallTo">Memanggil ke **%1$s**?</string>
 </resources>
