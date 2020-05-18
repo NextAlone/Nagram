@@ -121,8 +121,6 @@
     <string name="ProxyInfoSSR">Configurações do proxy ShadowsocksR</string>
     <string name="SSRProtocol">Protocolo</string>
     <string name="SSRProtocolParams">Parâmetros de protocolo</string>
-    <string name="SSRObfs">Obfs</string>
-    <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyRemarks">Observações</string>
     <string name="RetestPing">Teste novamente o ping para todos os servidores</string>
     <string name="ReorderByPing">Reordenar servidores por ping</string>

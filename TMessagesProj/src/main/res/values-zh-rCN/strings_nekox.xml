@@ -101,6 +101,7 @@
     <string name="AddProxyVmess">添加 Vmess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>
     <string name="AddProxySSR">添加 ShadowsocksR 代理</string>
+    <string name="SSPluginConflictingName">多个插件使用此ID： %s ，直到您卸载冲突插件，他们均不可用。</string>
     <string name="EditProxy">编辑代理</string>
     <string name="ShareProxy">分享代理</string>
     <string name="ProxyDelete">删除代理</string>
