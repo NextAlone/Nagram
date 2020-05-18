@@ -27,7 +27,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -51,7 +50,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Keep;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -109,11 +107,7 @@ import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,8 +115,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
@@ -489,10 +481,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     AlertDialog pro = AlertUtil.showProgress(getParentActivity());
                     pro.show();
                     UIUtil.runOnIoDispatcher(() -> {
-                        FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"),(it) -> {
+                        FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"), (it) -> {
                             if (it.equals(FileLog.getInstance().currentFile) ||
                                     it.equals(FileLog.getInstance().networkFile) ||
-                            it.equals(FileLog.getInstance().tonlibFile)) {
+                                    it.equals(FileLog.getInstance().tonlibFile)) {
                                 return false;
                             } else return true;
                         });
@@ -820,8 +812,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             drawable = combinedDrawable;
         }
         writeButton.setBackgroundDrawable(drawable);
-        writeButton.setImageResource(R.drawable.deproko_baseline_camera_26_av);
-        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN));
+        writeButton.setImageResource(R.drawable.baseline_edit_24);
+        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.SRC_IN));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -1595,9 +1587,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         File logsCache = new File(ApplicationLoader.getCacheDirFixed(), "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()) + ".zip");
 
-        ZipUtil.makeZip(logsCache,new File(EnvUtil.getTelegramPath(),"logs"));
+        ZipUtil.makeZip(logsCache, new File(EnvUtil.getTelegramPath(), "logs"));
 
-        ShareUtil.shareFile(getParentActivity(),logsCache);
+        ShareUtil.shareFile(getParentActivity(), logsCache);
 
     }
 

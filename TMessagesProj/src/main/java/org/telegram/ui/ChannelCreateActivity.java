@@ -16,6 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -474,7 +476,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
             };
             avatarEditor.setScaleType(ImageView.ScaleType.CENTER);
-            avatarEditor.setImageResource(R.drawable.deproko_baseline_camera_26_av);
+            avatarEditor.setImageResource(R.drawable.deproko_baseline_camera_26);
+            avatarEditor.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultIcon), PorterDuff.Mode.SRC_IN));
+
             avatarEditor.setEnabled(false);
             avatarEditor.setClickable(false);
             frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 16, 12, LocaleController.isRTL ? 16 : 0, 12));
