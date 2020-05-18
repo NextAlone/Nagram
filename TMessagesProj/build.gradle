@@ -75,8 +75,8 @@ dependencies {
 
 }
 
-def verName = "6.1.1.2-rc01"
-def verCode = 39
+def verName = "6.1.1.2"
+def verCode = 40
 
 task writeUpdateInfo {
 

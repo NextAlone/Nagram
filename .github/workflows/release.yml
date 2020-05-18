@@ -28,12 +28,6 @@ jobs:
                     TMessagesProj:assembleReleaseNoGcm \
                     TMessagesProj:bundleFullRelease
           echo ::set-env name=AAB_FILE::$(find TMessagesProj/build/outputs/bundle -name "*.aab")
-      - uses: r0adkll/upload-google-play@master
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
-          packageName: nekox.messenger
-          releaseFile:  ${{ env.AAB_FILE }}
-          track: production
       - name: Setup ghr
         run: |
           wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
@@ -67,3 +61,9 @@ jobs:
           git commit -m 喵
           git push github master -f
           git push gitlab master -f
+      - uses: r0adkll/upload-google-play@master
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
+          packageName: nekox.messenger
+          releaseFile:  ${{ env.AAB_FILE }}
+          track: production
