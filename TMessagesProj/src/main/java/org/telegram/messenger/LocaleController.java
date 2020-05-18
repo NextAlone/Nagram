@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class LocaleController {
@@ -353,7 +354,7 @@ public class LocaleController {
         localeInfo.name = "简体中文 ( NekoX )";
         localeInfo.nameEnglish = "Simplified Chinese ( NekoX )";
         localeInfo.shortName = "nekox_zh_cn";
-        localeInfo.baseLangCode = "zh_hans";
+        localeInfo.baseLangCode = "zh_hans_raw";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
         localeInfo.pluralLangCode = "zh_cn";
@@ -367,7 +368,7 @@ public class LocaleController {
         localeInfo.name = "瓜体中文 \uD83D\uDE36";
         localeInfo.nameEnglish = "Duangified Chinese (Simplified)";
         localeInfo.shortName = "duang_zh_hans";
-        localeInfo.baseLangCode = "zh_hans";
+        localeInfo.baseLangCode = "zh_hans_raw";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
         localeInfo.pluralLangCode = "zh_duang";
@@ -1692,6 +1693,12 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
+        if (NekoConfig.disableNumberRounding) {
+            if (rounded != null) {
+                rounded[0] = number;
+            }
+            return String.valueOf(number);
+        }
         StringBuilder K = new StringBuilder();
         int lastDec = 0;
         int KCount = 0;

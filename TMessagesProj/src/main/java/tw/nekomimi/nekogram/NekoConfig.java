@@ -35,6 +35,7 @@ public class NekoConfig {
     public static boolean hideAllTab;
     public static boolean confirmAVMessage;
     public static boolean askBeforeCall;
+    public static boolean disableNumberRounding;
     public static int mapPreviewProvider;
     public static float stickerSize;
     public static int translationProvider;
@@ -200,6 +201,7 @@ public class NekoConfig {
         tabsTitleType = preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT);
         confirmAVMessage = preferences.getBoolean("confirmAVMessage", false);
         askBeforeCall = preferences.getBoolean("askBeforeCall", false);
+        disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
 
         hideProxyByDefault = preferences.getBoolean("hide_proxy_by_default", BuildVars.isMini);
         useProxyItem = preferences.getBoolean("use_proxy_item",false);
@@ -679,6 +681,12 @@ public class NekoConfig {
         preferences.edit().putBoolean("use_proxy_item",useProxyItem = !useProxyItem).apply();
 
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+
+    }
+
+    public static void toggleDisableNumberRounding() {
+
+        preferences.edit().putBoolean("disableNumberRounding",disableNumberRounding = !disableNumberRounding).apply();
 
     }
 
