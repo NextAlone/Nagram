@@ -3628,7 +3628,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         menuButton.setDuplicateParentStateEnabled(false);
         menuButton.setClickable(true);
         menuButton.setIcon(R.drawable.ic_ab_other);
-        menuButton.addSubItem(search_item, R.drawable.msg_search, LocaleController.getString("Search", R.string.Search));
+        menuButton.addSubItem(search_item, R.drawable.baseline_search_24, LocaleController.getString("Search", R.string.Search));
 
         transMenu = menuButton.addSubItem(trans_item, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
 
@@ -3856,7 +3856,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         menuItem.setLayoutInScreen(true);
         menuItem.addSubItem(gallery_menu_openin, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
         //menuItem.addSubItem(gallery_menu_share, LocaleController.getString("ShareFile", R.string.ShareFile), 0).setTextColor(0xfffafafa);
-        menuItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_save, R.drawable.baseline_image_24, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_savegif, R.drawable.deproko_baseline_gif_24, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.redrawPopup(0xf9222222);
 

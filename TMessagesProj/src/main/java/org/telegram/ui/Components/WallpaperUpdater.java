@@ -67,7 +67,7 @@ public class WallpaperUpdater {
             icons = null;
         } else {
             items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery)};
-            icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};
+            icons = new int[]{R.drawable.deproko_baseline_camera_26, R.drawable.baseline_image_24};
         }
 
         builder.setItems(items, icons, (dialogInterface, i) -> {

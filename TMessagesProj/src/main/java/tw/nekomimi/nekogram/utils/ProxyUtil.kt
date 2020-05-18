@@ -343,8 +343,8 @@ object ProxyUtil {
 
                         ), intArrayOf(
 
-                                R.drawable.msg_gallery,
-                                R.drawable.msg_cancel
+                                R.drawable.baseline_image_24,
+                                R.drawable.baseline_cancel_24
 
                         )) { _, i ->
 

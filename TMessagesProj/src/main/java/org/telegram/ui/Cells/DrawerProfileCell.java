@@ -58,7 +58,6 @@ public class DrawerProfileCell extends FrameLayout {
     private TextView phoneTextView;
     private ImageView shadowView;
     private ImageView arrowView;
-    private ImageView darkThemeView;
 
     private Rect srcRect = new Rect();
     private Rect destRect = new Rect();
@@ -111,52 +110,6 @@ public class DrawerProfileCell extends FrameLayout {
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
         setArrowState(false);
 
-        darkThemeView = new ImageView(context);
-        darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
-        darkThemeView.setImageResource(R.drawable.menu_night);
-        darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuName), PorterDuff.Mode.SRC_IN));
-        if (Build.VERSION.SDK_INT >= 21) {
-            darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(darkThemeBackgroundColor = Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(17)));
-            Theme.setRippleDrawableForceSoftware((RippleDrawable) darkThemeView.getBackground());
-        }
-        darkThemeView.setOnClickListener(v -> {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
-            String dayThemeName = preferences.getString("lastDayTheme", "Blue");
-            if (Theme.getTheme(dayThemeName) == null) {
-                dayThemeName = "Blue";
-            }
-            String nightThemeName = preferences.getString("lastDarkTheme", "Night");
-            if (Theme.getTheme(nightThemeName) == null) {
-                nightThemeName = "Night";
-            }
-            Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
-            if (dayThemeName.equals(nightThemeName)) {
-                if (themeInfo.isDark()) {
-                    dayThemeName = "Blue";
-                } else {
-                    nightThemeName = "Night";
-                }
-            }
-
-            if (dayThemeName.equals(themeInfo.getKey())) {
-                themeInfo = Theme.getTheme(nightThemeName);
-            } else {
-                themeInfo = Theme.getTheme(dayThemeName);
-            }
-            if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
-                Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
-                Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
-                Theme.saveAutoNightThemeConfig();
-                Theme.cancelAutoNightThemeCallbacks();
-            }
-            int[] pos = new int[2];
-            darkThemeView.getLocationInWindow(pos);
-            pos[0] += darkThemeView.getMeasuredWidth() / 2;
-            pos[1] += darkThemeView.getMeasuredHeight() / 2;
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
-        });
-        //addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
-
         if (Theme.getEventType() == 0) {
             snowflakesEffect = new SnowflakesEffect();
             snowflakesEffect.setColorKey(Theme.key_chats_menuName);
@@ -190,7 +143,6 @@ public class DrawerProfileCell extends FrameLayout {
         boolean useImageBackground = !backgroundKey.equals(Theme.key_chats_menuTopBackground) && Theme.isCustomTheme() && !Theme.isPatternWallpaper() && backgroundDrawable != null && !(backgroundDrawable instanceof ColorDrawable) && !(backgroundDrawable instanceof GradientDrawable);
         boolean drawCatsShadow = false;
         int color;
-        int darkBackColor = 0;
         if (!NekoConfig.avatarAsDrawerBackground && !useImageBackground && Theme.hasThemeKey(Theme.key_chats_menuTopShadowCats)) {
             color = Theme.getColor(Theme.key_chats_menuTopShadowCats);
             drawCatsShadow = true;
@@ -205,11 +157,6 @@ public class DrawerProfileCell extends FrameLayout {
             currentColor = color;
             shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
-        color = Theme.getColor(Theme.key_chats_menuName);
-        if (currentMoonColor == null || currentColor != color) {
-            currentMoonColor = color;
-            darkThemeView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
-        }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
         if (NekoConfig.avatarAsDrawerBackground || useImageBackground) {
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
@@ -219,7 +166,6 @@ public class DrawerProfileCell extends FrameLayout {
             if (backgroundDrawable instanceof ColorDrawable || backgroundDrawable instanceof GradientDrawable) {
                 backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 backgroundDrawable.draw(canvas);
-                darkBackColor = Theme.getColor(Theme.key_listSelector);
             } else if (backgroundDrawable instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
                 float scaleX = (float) getMeasuredWidth() / (float) bitmap.getWidth();
@@ -236,7 +182,6 @@ public class DrawerProfileCell extends FrameLayout {
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
-                darkBackColor = (Theme.getServiceMessageColor() & 0x00ffffff) | 0x50000000;
             }
         } else {
             int visibility = drawCatsShadow? VISIBLE : INVISIBLE;
@@ -245,19 +190,6 @@ public class DrawerProfileCell extends FrameLayout {
             }
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
             super.onDraw(canvas);
-            darkBackColor = Theme.getColor(Theme.key_listSelector);
-        }
-
-        if (darkBackColor != 0) {
-            if (darkBackColor != darkThemeBackgroundColor) {
-                backPaint.setColor(darkThemeBackgroundColor = darkBackColor);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    Theme.setSelectorDrawableColor(darkThemeView.getBackground(), darkThemeBackgroundColor = darkBackColor, true);
-                }
-            }
-            if (useImageBackground && backgroundDrawable instanceof BitmapDrawable) {
-                canvas.drawCircle(darkThemeView.getX() + darkThemeView.getMeasuredWidth() / 2, darkThemeView.getY() + darkThemeView.getMeasuredHeight() / 2, AndroidUtilities.dp(17), backPaint);
-            }
         }
 
         if (snowflakesEffect != null) {

@@ -433,7 +433,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 }
             };
             avatarEditor.setScaleType(ImageView.ScaleType.CENTER);
-            avatarEditor.setImageResource(R.drawable.menu_camera_av);
+            avatarEditor.setImageResource(R.drawable.deproko_baseline_camera_26_av);
             avatarEditor.setEnabled(false);
             avatarEditor.setClickable(false);
             frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 16, 12, LocaleController.isRTL ? 16 : 0, 12));

@@ -1054,7 +1054,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                     LocaleController.getString("StickersHide", R.string.StickersHide),
                                     LocaleController.getString("StickersReorder", R.string.StickersReorder)
                             };
-                            icons = new int[]{R.drawable.msg_archive, R.drawable.msg_reorder};
+                            icons = new int[]{R.drawable.baseline_archive_24, R.drawable.msg_reorder};
                         } else {
                             options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE};
                             items = new CharSequence[]{
@@ -1065,10 +1065,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                     LocaleController.getString("StickersRemove", R.string.StickersRemove),
                             };
                             icons = new int[]{
-                                    R.drawable.msg_archive,
+                                    R.drawable.baseline_archive_24,
                                     R.drawable.baseline_link_24,
                                     R.drawable.msg_reorder,
-                                    R.drawable.msg_share,
+                                    R.drawable.baseline_forward_24,
                                     R.drawable.baseline_delete_24
                             };
                         }

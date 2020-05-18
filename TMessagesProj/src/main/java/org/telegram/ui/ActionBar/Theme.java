@@ -6529,7 +6529,7 @@ public class Theme {
             dialogs_checkDrawable = resources.getDrawable(R.drawable.list_check).mutate();
             dialogs_checkReadDrawable = resources.getDrawable(R.drawable.list_check).mutate();
             dialogs_halfCheckDrawable = resources.getDrawable(R.drawable.list_halfcheck);
-            dialogs_clockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
+            dialogs_clockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
             dialogs_errorDrawable = resources.getDrawable(R.drawable.list_warning_sign);
             dialogs_reorderDrawable = resources.getDrawable(R.drawable.list_reorder).mutate();
             dialogs_groupDrawable = resources.getDrawable(R.drawable.list_group);
@@ -6724,12 +6724,12 @@ public class Theme {
             chat_msgOutHalfCheckSelectedDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
             chat_msgMediaHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck_s).mutate();
             chat_msgStickerHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck_s).mutate();
-            chat_msgOutClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
-            chat_msgOutSelectedClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
-            chat_msgInClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
-            chat_msgInSelectedClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
-            chat_msgMediaClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
-            chat_msgStickerClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
+            chat_msgOutClockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
+            chat_msgOutSelectedClockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
+            chat_msgInClockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
+            chat_msgInSelectedClockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
+            chat_msgMediaClockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
+            chat_msgStickerClockDrawable = resources.getDrawable(R.drawable.deproko_baseline_clock_24).mutate();
             chat_msgInViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgInViewsSelectedDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgOutViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
@@ -6759,7 +6759,7 @@ public class Theme {
                 chat_pollCheckDrawable[a] = resources.getDrawable(R.drawable.poll_right).mutate();
                 chat_pollCrossDrawable[a] = resources.getDrawable(R.drawable.poll_wrong).mutate();
                 chat_pollHintDrawable[a] = resources.getDrawable(R.drawable.smiles_panel_objects).mutate();
-                chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
+                chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.baseline_help_24).mutate();
             }
 
             calllog_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
@@ -6889,8 +6889,8 @@ public class Theme {
             chat_photoStatesDrawables[12][0] = resources.getDrawable(R.drawable.doc_big).mutate();
             chat_photoStatesDrawables[12][1] = resources.getDrawable(R.drawable.doc_big).mutate();
 
-            chat_contactDrawable[0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_contact);
-            chat_contactDrawable[1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_contact);
+            chat_contactDrawable[0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.baseline_person_24);
+            chat_contactDrawable[1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.baseline_person_24);
 
             chat_locationDrawable[0] = resources.getDrawable(R.drawable.msg_location).mutate();
             chat_locationDrawable[1] = resources.getDrawable(R.drawable.msg_location).mutate();

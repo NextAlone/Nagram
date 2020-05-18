@@ -2121,14 +2121,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         pinItem = actionMode.addItemWithWidth(pin, R.drawable.deproko_baseline_pin_24, AndroidUtilities.dp(54));
         muteItem = actionMode.addItemWithWidth(mute, R.drawable.baseline_volume_off_24_white, AndroidUtilities.dp(54));
-        archive2Item = actionMode.addItemWithWidth(archive2, R.drawable.msg_archive, AndroidUtilities.dp(54));
+        archive2Item = actionMode.addItemWithWidth(archive2, R.drawable.baseline_archive_24, AndroidUtilities.dp(54));
         deleteItem = actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete));
         ActionBarMenuItem otherItem = actionMode.addItemWithWidth(0, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-        archiveItem = otherItem.addSubItem(archive, R.drawable.msg_archive, LocaleController.getString("Archive", R.string.Archive));
+        archiveItem = otherItem.addSubItem(archive, R.drawable.baseline_archive_24, LocaleController.getString("Archive", R.string.Archive));
         pin2Item = otherItem.addSubItem(pin2, R.drawable.deproko_baseline_pin_24, LocaleController.getString("DialogPin", R.string.DialogPin));
-        readItem = otherItem.addSubItem(read, R.drawable.msg_markread, LocaleController.getString("MarkAsRead", R.string.MarkAsRead));
+        readItem = otherItem.addSubItem(read, R.drawable.deproko_baseline_check_double_24, LocaleController.getString("MarkAsRead", R.string.MarkAsRead));
         clearItem = otherItem.addSubItem(clear, R.drawable.baseline_delete_sweep_24, LocaleController.getString("ClearHistory", R.string.ClearHistory));
-        blockItem = otherItem.addSubItem(block, R.drawable.msg_block, LocaleController.getString("BlockUser", R.string.BlockUser));
+        blockItem = otherItem.addSubItem(block, R.drawable.baseline_block_24, LocaleController.getString("BlockUser", R.string.BlockUser));
 
         actionModeViews.add(pinItem);
         actionModeViews.add(archive2Item);
@@ -3740,7 +3740,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
                 int[] icons = new int[]{
-                        hasUnread ? R.drawable.menu_read : 0,
+                        hasUnread ? R.drawable.deproko_baseline_check_double_24 : 0,
                         SharedConfig.archiveHidden ? R.drawable.deproko_baseline_pin_24 : R.drawable.deproko_baseline_pin_undo_24,
                 };
                 CharSequence[] items = new CharSequence[]{
@@ -4404,8 +4404,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
         if (canUnarchiveCount != 0) {
-            archiveItem.setTextAndIcon(LocaleController.getString("Unarchive", R.string.Unarchive), R.drawable.msg_unarchive);
-            archive2Item.setIcon(R.drawable.msg_unarchive);
+            archiveItem.setTextAndIcon(LocaleController.getString("Unarchive", R.string.Unarchive), R.drawable.baseline_unarchive_24);
+            archive2Item.setIcon(R.drawable.baseline_unarchive_24);
             if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
                 archive2Item.setVisibility(View.VISIBLE);
                 archiveItem.setVisibility(View.GONE);
@@ -4414,8 +4414,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 archive2Item.setVisibility(View.GONE);
             }
         } else if (canArchiveCount != 0) {
-            archiveItem.setTextAndIcon(LocaleController.getString("Archive", R.string.Archive), R.drawable.msg_archive);
-            archive2Item.setIcon(R.drawable.msg_archive);
+            archiveItem.setTextAndIcon(LocaleController.getString("Archive", R.string.Archive), R.drawable.baseline_archive_24);
+            archive2Item.setIcon(R.drawable.baseline_archive_24);
             if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
                 archive2Item.setVisibility(View.VISIBLE);
                 archiveItem.setVisibility(View.GONE);
@@ -4452,9 +4452,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             muteItem.setContentDescription(LocaleController.getString("ChatsMute", R.string.ChatsMute));
         }
         if (canReadCount != 0) {
-            readItem.setTextAndIcon(LocaleController.getString("MarkAsRead", R.string.MarkAsRead), R.drawable.msg_markread);
+            readItem.setTextAndIcon(LocaleController.getString("MarkAsRead", R.string.MarkAsRead), R.drawable.deproko_baseline_check_double_24);
         } else {
-            readItem.setTextAndIcon(LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread), R.drawable.msg_markunread);
+            readItem.setTextAndIcon(LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread), R.drawable.baseline_unsubscribe_24);
         }
         if (canPinCount != 0) {
             pinItem.setIcon(R.drawable.deproko_baseline_pin_24);

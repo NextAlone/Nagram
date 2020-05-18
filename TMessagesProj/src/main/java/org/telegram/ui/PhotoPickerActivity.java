@@ -1039,9 +1039,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         itemCells[a] = new ActionBarMenuSubItem(getParentActivity());
                         if (num == 0) {
                             if (UserObject.isUserSelf(user)) {
-                                itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
+                                itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
                             } else {
-                                itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
+                                itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                             }
                         } else if (num == 1) {
                             itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
@@ -1858,9 +1858,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 case 3: {
                     TextCell cell = (TextCell) holder.itemView;
                     if (position < recentSearches.size()) {
-                        cell.setTextAndIcon(recentSearches.get(position), R.drawable.menu_recent, false);
+                        cell.setTextAndIcon(recentSearches.get(position), R.drawable.baseline_schedule_24, false);
                     } else {
-                        cell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", R.string.ClearRecentHistory), R.drawable.menu_clear_recent, false);
+                        cell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", R.string.ClearRecentHistory), R.drawable.baseline_delete_sweep_24, false);
                     }
                     break;
                 }
