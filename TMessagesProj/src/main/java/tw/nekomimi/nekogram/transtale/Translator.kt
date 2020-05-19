@@ -164,7 +164,7 @@ interface Translator {
 
         @JvmStatic
         @JvmOverloads
-        fun translate(to: Locale = LocaleController.getInstance().currentLocale, query: String, translateCallBack: TranslateCallBack) {
+        fun translate(to: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale, query: String, translateCallBack: TranslateCallBack) {
 
             UIUtil.runOnIoDispatcher(Runnable {
 
