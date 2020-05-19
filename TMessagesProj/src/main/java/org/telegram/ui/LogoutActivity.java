@@ -208,6 +208,8 @@ public class LogoutActivity extends BaseFragment {
                         view.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.baseline_delete_sweep_24, true);
                     } else if (position == phoneRow) {
                         view.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", R.string.ChangePhoneNumberInfo), R.drawable.baseline_exit_to_app_24, true);
+                    } else if (position == supportRow) {
+                        view.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", R.string.ContactSupport), LocaleController.getString("ContactSupportInfo", R.string.ContactSupportInfo), R.drawable.baseline_help_24, false);
                     }
                     break;
                 }

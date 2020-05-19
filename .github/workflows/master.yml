@@ -6,8 +6,8 @@ on:
       - master
 
 jobs:
-  alapaBuild:
-    name: Alapa Build
+  alahaBuild:
+    name: Alaha Build
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[S]') && !contains(github.event.head_commit.message, '[RELEASE]') && !contains(github.event.head_commit.message, '[N]')"
     steps:
@@ -27,7 +27,7 @@ jobs:
       - name: Upload Alapa Apk
         uses: appleboy/telegram-action@master
         with:
-          to: ${{ secrets.ALAPA_CHANNEL }}
+          to: ${{ secrets.ALAHA_CHANNEL }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: ${{ env.APK_FILE }}
   fossBuild:
