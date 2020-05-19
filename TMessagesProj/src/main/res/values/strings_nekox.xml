@@ -21,6 +21,8 @@
     <string name="Ignore">Ignore</string>
     <string name="UpdateDownloaded">An update has just been downloaded.</string>
 
+    <string name="LinkedGroupChat">Linked Group</string>
+    <string name="LinkedChannelChat">Linked Channel</string>
 
     <string name="DevModeTitle">**Your telegram account may be banned**</string>
     <string name="DevModeNotice">We are not responsible for any improper use of developer features.</string>
@@ -138,7 +140,7 @@
     <string name="AddProxyVmess">Add Vmess Proxy</string>
     <string name="AddProxySS">Add Shadowsocks Proxy</string>
     <string name="AddProxySSR">Add ShadowsocksR Proxy</string>
-    <string name="SSPluginConflictingName">Several plugins use this id: %s , until you uninstall the conflicting plugins, neither is available.</string>
+    <string name="SSPluginConflictingName">Several plugins use this id: %s.</string>
 
     <string name="EditProxy">Edit Proxy</string>
     <string name="ShareProxy">Share Proxy</string>

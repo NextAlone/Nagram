@@ -799,6 +799,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private final static int search = 40;
 
+    private final static int linked_chat = 60;
+
     private final static int id_chat_compose_panel = 1000;
 
     RecyclerListView.OnItemLongClickListenerExtended onItemLongClickListener = new RecyclerListView.OnItemLongClickListenerExtended() {
@@ -1583,6 +1585,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     updatePinnedMessageView(true);
                 } else if (id == fake_screenshot) {
                     getSecretChatHelper().sendScreenshotMessage(currentEncryptedChat, getMediaController().getLastVisibleMessageIds(), null);
+                } else if (id == linked_chat) {
+                    if (chatInfo == null) {
+                        return;
+                    }
+                    Bundle args = new Bundle();
+                    args.putInt("chat_id", chatInfo.linked_chat_id);
+                    if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this)) {
+                        return;
+                    }
+                    presentFragment(new ChatActivity(args));
                 }
             }
         });
@@ -1807,12 +1819,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentChat != null && !currentChat.creator) {
                 headerItem.addSubItem(report, R.drawable.baseline_report_24, LocaleController.getString("ReportChat", R.string.ReportChat));
             }
+
+            if (currentChat != null && (currentChat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
+                String text;
+                if (!currentChat.megagroup) {
+                    text = LocaleController.getString("LinkedGroupChat", R.string.LinkedGroupChat);
+                } else {
+                    text = LocaleController.getString("LinkedChannelChat", R.string.LinkedChannelChat);
+                }
+                headerItem.addSubItem(linked_chat, R.drawable.baseline_layers_24, text);
+            }
+
             if (!ChatObject.isChannel(currentChat) || currentChat != null && currentChat.megagroup && TextUtils.isEmpty(currentChat.username)) {
                 headerItem.addSubItem(clear_history, R.drawable.baseline_delete_sweep_24, LocaleController.getString("ClearHistory", R.string.ClearHistory));
             }
             if (ChatObject.isChannel(currentChat) && currentChat.megagroup) {
                 headerItem.addSubItem(delete_history, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
-
             }
 
             if (ChatObject.isChannel(currentChat) && ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
@@ -15649,18 +15671,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         TranslateBottomSheet.show(getParentActivity(), original);
                     } else {
                         if (TranslateDb.forLocale(locale).contains(original)) {
-                                MessageObject messageObject = finalMessageCell.getMessageObject();
-                                MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
-                                        "\u200C\u200C\n" +
-                                        "\n" +
-                                        "--------" +
-                                        "\n" +
-                                        TranslateDb.forLocale(locale).query(original) +
-                                        "\u200C\u200C");
-                                chatAdapter.updateRowWithMessageObject(messageObject, true);
+                            MessageObject messageObject = finalMessageCell.getMessageObject();
+                            MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
+                                    "\u200C\u200C\n" +
+                                    "\n" +
+                                    "--------" +
+                                    "\n" +
+                                    TranslateDb.forLocale(locale).query(original) +
+                                    "\u200C\u200C");
+                            chatAdapter.updateRowWithMessageObject(messageObject, true);
                         } else {
 
-                            Translator.translate(locale,original, new Translator.Companion.TranslateCallBack() {
+                            Translator.translate(locale, original, new Translator.Companion.TranslateCallBack() {
                                 @Override
                                 public void onSuccess(@NotNull String translation) {
                                     TranslateDb.forLocale(locale).save(original, translation);
