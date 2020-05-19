@@ -101,7 +101,6 @@
     <string name="AddProxyVmess">إضافة وكيل Vmess</string>
     <string name="AddProxySS">إضافة وكيل Shadowsock</string>
     <string name="AddProxySSR">إضافة وكيل ShadowsocksR</string>
-    <string name="SSPluginConflictingName">تستخدم العديد من الإضافات هذا المعرف: %s ، حتى تقوم بإلغاء تثبيت المكونات الإضافية المتعارضة ، ولا يتوفر أي منهما.</string>
     <string name="EditProxy">تحرير البروكسي</string>
     <string name="ShareProxy">مشاركة البروكسي</string>
     <string name="ProxyDelete">حذف البروكسي</string>

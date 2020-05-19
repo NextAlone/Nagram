@@ -101,7 +101,6 @@
     <string name="AddProxyVmess">افزودن پروکسی Vmess</string>
     <string name="AddProxySS">افزودن پراکسی شادوساکس</string>
     <string name="AddProxySSR">افزودن پراکسی شادوساکس آر</string>
-    <string name="SSPluginConflictingName">چندین پلاگین از این شناسه استفاده می کنند: %s ، تا زمانی که پلاگین های متضاد را حذف نکنید ، در دسترس نیست.</string>
     <string name="EditProxy">ویرایش پراکسی</string>
     <string name="ShareProxy">اشتراک گذاری پراکسی</string>
     <string name="ProxyDelete">حذف پراکسی</string>

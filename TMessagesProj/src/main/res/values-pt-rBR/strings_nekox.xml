@@ -100,7 +100,6 @@
     <string name="AddProxyVmess">Adicionar Proxy Vmess</string>
     <string name="AddProxySS">Adicionar Shadowsocks Proxy</string>
     <string name="AddProxySSR">Adicionar ShadowsocksR Proxy</string>
-    <string name="SSPluginConflictingName">Vários plugins usam este ID: %s , até você desinstalar os plug-ins conflitantes, nenhum deles estará disponível.</string>
     <string name="EditProxy">Editar Proxy</string>
     <string name="ShareProxy">Compartilhar Proxy</string>
     <string name="ProxyDelete">Excluir proxy</string>
