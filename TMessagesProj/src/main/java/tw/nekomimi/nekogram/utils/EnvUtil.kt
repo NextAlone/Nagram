@@ -21,9 +21,8 @@ object EnvUtil {
     }
 
     @JvmStatic
-    val availableDirectories by lazy {
-
-        LinkedList<File>().apply {
+    val availableDirectories
+        get() = LinkedList<File>().apply {
 
             add(File(ApplicationLoader.getDataDirFixed(), "files/media"))
             add(File(ApplicationLoader.getDataDirFixed(), "cache/media"))
@@ -36,8 +35,6 @@ object EnvUtil {
             }
 
         }.map { it.path }.toTypedArray()
-
-    }
 
     @JvmStatic
     fun getTelegramPath(): File {
