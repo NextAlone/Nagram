@@ -27,7 +27,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +43,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -65,7 +63,6 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
@@ -580,27 +577,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 }
             } else if (position == notificationsServiceRow) {
-                if (XiaomiUtilities.isMIUI() && !XiaomiUtilities.isCustomPermissionGranted(XiaomiUtilities.OP_AUTO_START)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(LocaleController.getString("NekoX",R.string.NekoX));
-                    builder.setMessage(LocaleController.getString("MIUIPermissionNote",R.string.MIUIPermissionNote));
-                    builder.setPositiveButton(LocaleController.getString("OK",R.string.OK),(_x,_y) -> {
-
-                        getParentActivity().startActivity(XiaomiUtilities.getPermissionManagerIntent());
-
-                    });
-                    builder.setNegativeButton(LocaleController.getString("Cancel",R.string.Cancel),null);
-                    builder.show();
-                    return;
-                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    if (openNotificationListenSettings()) {
-                        if (ApplicationLoader.isNotificationListenerEnabled()) {
-                            AlertUtil.showToast( LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
-                        } else {
-                            AlertUtil.showToast(LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
-                        }
+                    if (ApplicationLoader.isNotificationListenerEnabled()) {
+                        AlertUtil.showToast(LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
+                    } else {
+                        AlertUtil.showToast(LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
                     }
+                    AndroidUtilities.runOnUIThread(this::openNotificationListenSettings, 500L);
                 } else {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     enabled = preferences.getBoolean("pushService", getMessagesController().keepAliveService);
@@ -679,7 +662,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 getParentActivity().startActivity(intent);
                 return true;
             } catch (Exception ex) {
-                AlertsCreator.showSimpleToast(this,"Open NotificationAccessSettings Error");
+                AlertsCreator.showSimpleToast(this, "Open NotificationAccessSettings Error");
             }
         }
         return false;

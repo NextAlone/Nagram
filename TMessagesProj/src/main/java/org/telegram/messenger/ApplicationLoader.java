@@ -223,6 +223,13 @@ public class ApplicationLoader extends Application {
                 e.printStackTrace();
             }
 
+            try {
+                EnvUtil.doTest();
+            } catch (Exception e) {
+                FileLog.e("EnvUtil test Failed", e);
+
+            }
+
         });
 
         try {
@@ -346,16 +353,6 @@ public class ApplicationLoader extends Application {
         org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
         startPushService();
-
-        try {
-
-            EnvUtil.doTest();
-
-        } catch (Exception e) {
-
-            FileLog.e("EnvUtil test Failed", e);
-
-        }
 
     }
 

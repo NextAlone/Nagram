@@ -116,8 +116,6 @@
     <string name="EnablePushAlert">Please enable "NekoX Push Service"</string>
     <string name="DisablePushAlert">Please disable "NekoX Push Service"</string>
 
-    <string name="MIUIPermissionNote">For MIUI users, please enable auto-start permission for NekoX to receive notifications normally.</string>
-
     <string name="DisableUndo">Disable Undo</string>
     <string name="DisableSystemAccount">Disable System Account</string>
     <string name="FilterMenu">Dialogs Filter Menu</string>
