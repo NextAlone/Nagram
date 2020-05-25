@@ -278,6 +278,8 @@ class BottomBuilder(val ctx: Context) {
 
         return TextCell(ctx).apply {
 
+            textView.setGravity(Gravity.LEFT)
+
             background = Theme.getSelectorDrawable(false)
 
             setTextAndIcon(text, icon, true)
