@@ -81,7 +81,6 @@
     <string name="NekoXPushService">Layanan Push NekoX</string>
     <string name="EnablePushAlert">Harap aktifkan \"Layanan Push NekoX\"</string>
     <string name="DisablePushAlert">Harap nonaktifkan \"Layanan Push NekoX\"</string>
-    <string name="MIUIPermissionNote">Untuk pengguna MIUI, harap aktifkan izin mulai otomatis untuk NekoX untuk menerima pemberitahuan secara normal.</string>
     <string name="DisableUndo">Batal Nonaktifkan</string>
     <string name="DisableSystemAccount">Nonaktifkan Akun Sistem</string>
     <string name="FilterMenu">Menu Filter Obrolan</string>

@@ -73,7 +73,6 @@
     <string name="NekoXPushService">NekoX プッシュサービス</string>
     <string name="EnablePushAlert">\"NekoX プッシュサービス\"を有効にしてください</string>
     <string name="DisablePushAlert">\"NekoX プッシュサービス\"を無効にしてください</string>
-    <string name="MIUIPermissionNote">MIUIユーザーは、NekoXが通知を正常に受信できるように、自動起動権限を有効にしてください。</string>
     <string name="DisableUndo">取り消しを無効にする</string>
     <string name="DisableSystemAccount">システムアカウントを無効にする</string>
     <string name="FilterMenu">ダイアログフィルターメニュー</string>

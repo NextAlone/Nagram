@@ -16,6 +16,8 @@
     <string name="Install">تثبيت</string>
     <string name="Ignore">تجاهل</string>
     <string name="UpdateDownloaded">تم تحميل التحديث للتو.</string>
+    <string name="LinkedGroupChat">مجموعة مرتبطة</string>
+    <string name="LinkedChannelChat">قناة مرتبطة</string>
     <string name="DevModeTitle">**حساب التيليجرام الخاص بك قد يكون محظوراً**</string>
     <string name="DevModeNotice">نحن لسنا مسؤولين عن أي استخدام غير سليم لميزات المطور.</string>
     <string name="TapToDisable">انقر للتعطيل. لا تحتاج هذه.</string>
@@ -82,7 +84,6 @@
     <string name="NekoXPushService">خدمة دفع NekoX</string>
     <string name="EnablePushAlert">الرجاء تمكين \"خدمة دفع NekoX\"</string>
     <string name="DisablePushAlert">الرجاء تعطيل \"خدمة دفع Nekox\"</string>
-    <string name="MIUIPermissionNote">لمستخدمي MIUI ، يرجى تمكين إذن البدء التلقائي لـ NekoX لتلقي الإشعارات بشكل طبيعي.</string>
     <string name="DisableUndo">تعطيل التراجع</string>
     <string name="DisableSystemAccount">تعطيل الحساب الخاص بالنظام</string>
     <string name="FilterMenu">قائمة عوامل تصفية الحوار</string>
@@ -101,6 +102,7 @@
     <string name="AddProxyVmess">إضافة وكيل Vmess</string>
     <string name="AddProxySS">إضافة وكيل Shadowsock</string>
     <string name="AddProxySSR">إضافة وكيل ShadowsocksR</string>
+    <string name="SSPluginConflictingName">العديد من الإضافات تستخدم هذا المعرف: %s.</string>
     <string name="EditProxy">تحرير البروكسي</string>
     <string name="ShareProxy">مشاركة البروكسي</string>
     <string name="ProxyDelete">حذف البروكسي</string>

@@ -54,7 +54,6 @@
     <string name="NekoXPushService">NekoX Push Hizmeti</string>
     <string name="EnablePushAlert">Lütfen etkinleştirin \"NekoX Push Service\"</string>
     <string name="DisablePushAlert">Lütfen devre dışı bırak \"NekoX Push Service\"</string>
-    <string name="MIUIPermissionNote">MIUI kullanıcıları için, NekoX\'un normal şekilde bildirim alması için lütfen otomatik başlatma iznini etkinleştirin.</string>
     <string name="DisableUndo">Geri Almayı Devre Dışı Bırak</string>
     <string name="DisableSystemAccount">Sistem Hesabını Devre Dışı Bırak</string>
     <string name="FilterMenu">Mesajlar Filtresi Menüsü</string>

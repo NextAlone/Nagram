@@ -84,7 +84,6 @@
     <string name="NekoXPushService">NekoX 通知服务</string>
     <string name="EnablePushAlert">请启用 \"NekoX 通知服务\"</string>
     <string name="DisablePushAlert">请禁用 \"NekoX 通知服务\"</string>
-    <string name="MIUIPermissionNote">对于 MIUI 用户, 请先为 NekoX 启用自启动权限才能正常接收通知.</string>
     <string name="DisableUndo">禁用五秒内后悔</string>
     <string name="DisableSystemAccount">禁用系统帐户</string>
     <string name="FilterMenu">分类菜单</string>

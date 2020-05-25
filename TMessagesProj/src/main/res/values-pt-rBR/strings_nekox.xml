@@ -81,7 +81,6 @@
     <string name="NekoXPushService">Serviço de Notificação NekoX</string>
     <string name="EnablePushAlert">Por favor habilite o \"Serviço de Notificação NekoX\"</string>
     <string name="DisablePushAlert">Por favor desabilite \"Serviço de Notificação NekoX\"</string>
-    <string name="MIUIPermissionNote">Para usuários do MIUI, ative a permissão de inicialização automática para o NekoX receber notificações normalmente.</string>
     <string name="DisableUndo">Desativar Desfazer</string>
     <string name="DisableSystemAccount">Desativar Conta do Sistema</string>
     <string name="FilterMenu">Menu de Filtro de Conversas</string>
