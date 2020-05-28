@@ -217,4 +217,8 @@
 
     <string name="NekoXFaq">NekoX FAQ</string>
 
+    <string name="TransSite">Translate Platform</string>
+    <string name="NekoTrans">Translate Nekogram</string>
+    <string name="NekoXTrans">Translate NekoX</string>
+
 </resources>

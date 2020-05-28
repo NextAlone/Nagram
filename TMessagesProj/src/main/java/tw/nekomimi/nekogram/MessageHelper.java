@@ -1,5 +1,7 @@
 package tw.nekomimi.nekogram;
 
+import android.content.Context;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
@@ -11,6 +13,7 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class MessageHelper extends BaseController {

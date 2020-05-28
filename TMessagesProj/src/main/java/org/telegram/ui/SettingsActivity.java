@@ -119,10 +119,10 @@ import java.util.Set;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoSettingsActivity;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
 import tw.nekomimi.nekogram.parts.UpdateChecksKt;
+import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -894,7 +894,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         languageRow = rowCount++;
         devicesSectionRow = -1;
         helpHeaderRow = rowCount++;
-        questionRow = rowCount++;
+        questionRow = -1;
         faqRow = rowCount++;
         policyRow = -1;
         if (BuildVars.SAVE_LOG) {

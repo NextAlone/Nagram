@@ -30,7 +30,6 @@ public class NekoConfig {
     public static boolean hideProxySponsorChannel;
     public static boolean disablePhotoSideAction;
     public static boolean hideKeyboardOnChatScroll;
-    public static boolean chatMessageAnimation;
     public static boolean rearVideoMessages;
     public static boolean hideAllTab;
     public static boolean confirmAVMessage;
@@ -161,7 +160,6 @@ public class NekoConfig {
         avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
         useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
         showTabsOnForward = preferences.getBoolean("showTabsOnForward", showTabsOnForward);
-        chatMessageAnimation = preferences.getBoolean("chatMessageAnimation", false);
         rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
         hideAllTab = preferences.getBoolean("hideAllTab", false);
 
@@ -479,14 +477,6 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showTabsOnForward", showTabsOnForward);
-        editor.apply();
-    }
-
-    public static void toggleChatMessageAnimation() {
-        chatMessageAnimation = !chatMessageAnimation;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("chatMessageAnimation", chatMessageAnimation);
         editor.apply();
     }
 
