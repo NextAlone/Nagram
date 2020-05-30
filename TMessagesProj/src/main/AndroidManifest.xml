@@ -111,6 +111,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/NekoX"
         android:largeHeap="true"
+        android:extractNativeLibs="true"
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher"

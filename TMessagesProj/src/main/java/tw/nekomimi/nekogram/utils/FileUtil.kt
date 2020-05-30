@@ -5,7 +5,6 @@ import cn.hutool.core.io.resource.ResourceUtil
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import java.io.File
-import java.util.*
 import java.util.zip.ZipFile
 
 object FileUtil {
@@ -33,7 +32,7 @@ object FileUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun delete(file: File?,filter: (File) -> Boolean = { true }) {
+    fun delete(file: File?, filter: (File) -> Boolean = { true }) {
 
         runCatching {
 
@@ -155,40 +154,30 @@ object FileUtil {
 
         if (!execFile.isFile) {
 
-            System.loadLibrary(name)
+            FileLog.d("Native library $execFile not found")
+
+            execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/${execFile.name}")
 
             if (!execFile.isFile) {
 
-                FileLog.d("Native library $execFile not found")
+                runCatching {
 
-                execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/${execFile.name}")
+                    saveNonAsset("lib/${Build.CPU_ABI}/${execFile.name}", execFile)
 
-                if (!execFile.isFile) {
+                    FileLog.d("lib extracted with default abi: $execFile, ${Build.CPU_ABI}")
 
-                    runCatching {
+                }.recover {
 
-                        saveNonAsset("lib/${Build.CPU_ABI}/${execFile.name}", execFile)
+                    saveNonAsset("lib/${Build.CPU_ABI2}/${execFile.name}", execFile)
 
-                        FileLog.d("lib extracted with default abi: $execFile, ${Build.CPU_ABI}")
+                    FileLog.d("lib extracted with abi2: $execFile, ${Build.CPU_ABI2}")
 
-                    }.recover {
-
-                        saveNonAsset("lib/${Build.CPU_ABI2}/${execFile.name}", execFile)
-
-                        FileLog.d("lib extracted with abi2: $execFile, ${Build.CPU_ABI2}")
-
-
-                    }
-
-                } else {
-
-                    FileLog.d("lib already extracted: $name")
 
                 }
 
             } else {
 
-                FileLog.d("lib found after load: $name")
+                FileLog.d("lib already extracted: $name")
 
             }
 
