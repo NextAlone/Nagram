@@ -24,6 +24,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -88,6 +89,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int eventTypeRow;
     private int newYearRow;
     private int actionBarDecorationRow;
+    private int appBarShadowRow;
     private int appearance2Row;
 
     private int privacyRow;
@@ -446,6 +448,13 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableNumberRounding);
                 }
+            } else if (position == appBarShadowRow) {
+                NekoConfig.toggleDisableAppBarShadow();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableAppBarShadow);
+                }
+                ActionBarLayout.headerShadowDrawable = NekoConfig.disableAppBarShadow ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
+                parentLayout.rebuildAllFragmentViews(true, true);
             }
         });
 
@@ -570,6 +579,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
         forceTabletRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
+        appBarShadowRow = rowCount++;
         removeTitleEmojiRow = rowCount++;
         eventTypeRow = rowCount++;
         newYearRow = rowCount++;
@@ -797,6 +807,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("AskBeforeCalling", R.string.AskBeforeCalling), NekoConfig.askBeforeCall, true);
                     } else if (position == disableNumberRoundingRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("DisableNumberRounding", R.string.DisableNumberRounding), "4.8K -> 4777", NekoConfig.disableNumberRounding, true, true);
+                    } else if (position == appBarShadowRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, eventTypeRow != -1);
                     }
                     break;
                 }
@@ -871,18 +883,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (position == nameOrderRow || position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
                     position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
                 return 2;
-            } else if (position == ipv6Row || position == disableProxyWhenVpnEnabledRow ||
-                    position == useProxyItemRow || position == hideProxyByDefaultRow ||
-                    position == hidePhoneRow || position == disableUndoRow || position == inappCameraRow ||
-                    position == transparentStatusBarRow || position == hideProxySponsorChannelRow || position == useSystemEmojiRow || position == typefaceRow ||
-                    position == forceTabletRow || position == newYearRow || position == openArchiveOnPullRow || position == disableSystemAccountRow || position == avatarAsDrawerBackgroundRow ||
-                    position == removeTitleEmojiRow || position == useDefaultThemeRow || position == showIdAndDcRow ||
-                    position == askBeforeCallRow || position == disableNumberRoundingRow) {
-                return 3;
             } else if (position == connectionRow || position == transRow || position == dialogsRow || position == privacyRow || position == generalRow || position == appearanceRow) {
                 return 4;
+            } else if (position == googleCloudTranslateKeyRow || position == cachePathRow) {
+                return  6;
             }
-            return 6;
+            return 3;
         }
     }
 }

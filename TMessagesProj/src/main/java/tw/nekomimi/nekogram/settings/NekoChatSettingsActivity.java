@@ -634,16 +634,12 @@ public class NekoChatSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == mapPreviewRow || position == messageMenuRow || position == tabsTitleTypeRow) {
                 return 2;
-            } else if (position == ignoreBlockedRow || position == disablePhotoSideActionRow || position == disableChatActionRow ||
-                    position == hideKeyboardOnChatScrollRow || position == ignoreMutedCountRow || position == skipOpenLinkConfirmRow ||
-                    position == showTabsOnForwardRow || position == rearVideoMessagesRow || position == hideAllTabRow || position == confirmAVRow) {
-                return 3;
             } else if (position == chatRow || position == foldersRow || position == stickerSizeHeaderRow) {
                 return 4;
             } else if (position == stickerSizeRow) {
                 return 8;
             }
-            return 2;
+            return 3;
         }
     }
 }

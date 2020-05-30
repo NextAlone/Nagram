@@ -103,6 +103,8 @@ public class NekoConfig {
     public static boolean hideProxyByDefault;
     public static boolean useProxyItem;
 
+    public static boolean disableAppBarShadow;
+
     public static String formatLang(String name) {
 
         if (name == null) {
@@ -203,6 +205,8 @@ public class NekoConfig {
 
         hideProxyByDefault = preferences.getBoolean("hide_proxy_by_default", BuildVars.isMini);
         useProxyItem = preferences.getBoolean("use_proxy_item",false);
+
+        disableAppBarShadow = preferences.getBoolean("disableAppBarShadow", false);
 
     }
 
@@ -677,6 +681,12 @@ public class NekoConfig {
     public static void toggleDisableNumberRounding() {
 
         preferences.edit().putBoolean("disableNumberRounding",disableNumberRounding = !disableNumberRounding).apply();
+
+    }
+
+    public static void toggleDisableAppBarShadow() {
+
+        preferences.edit().putBoolean("disableAppBarShadow",disableAppBarShadow = !disableAppBarShadow).apply();
 
     }
 
