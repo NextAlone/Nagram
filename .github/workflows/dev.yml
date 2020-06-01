@@ -9,7 +9,7 @@ jobs:
   canaryBuild:
     name: Canary Build
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[S]') && !contains(github.event.head_commit.message, '[RELEASE]') && !contains(github.event.head_commit.message, '[N]')"
+    if: "!contains(github.event.head_commit.message, '[s]') && !contains(github.event.head_commit.message, '[RELEASE]')"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -97,6 +97,36 @@ jobs:
         with:
           name: Ffmpeg Library
           path: "TMessagesProj/jni/ffmpeg/build"
+  v2rayBuild:
+    name: V2ray Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[v2ray]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+      - name: Build V2ray
+        run: |
+          go env -w GOPATH=$HOME/go
+          export GOPATH=$HOME/go
+          export PATH=$PATH:$GOPATH/bin
+
+          go get -u github.com/golang/protobuf/protoc-gen-go
+          go get -v golang.org/x/mobile/cmd/...
+          go get -v go.starlark.net/starlark
+          go get -v github.com/refraction-networking/utls
+          go get -v github.com/gorilla/websocket
+          go get -v -insecure v2ray.com/core
+          go get github.com/2dust/AndroidLibV2rayLite
+
+          gomobile init
+
+         env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
+      - uses: actions/upload-artifact@master
+        with:
+          name: libv2ray
+          path: libv2ray.aar
   ssBuild:
     name: SS-Rust Build
     runs-on: ubuntu-latest
