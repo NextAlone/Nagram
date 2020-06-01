@@ -68,6 +68,27 @@ object ProxyManager {
 
     }
 
+
+    @JvmStatic
+    fun getPortForBean(bean: RelayBatonLoader.Bean): Int {
+
+        val hash = bean.hash.toString()
+
+        var port = pref.getInt(hash, -1)
+
+        if (!isProxyAvailable(port)) {
+
+            port = mkNewPort()
+
+            pref.edit().putInt(hash, port).apply()
+
+        }
+
+        return port
+
+    }
+
+
     private fun mkNewPort() = Random.nextInt(2048, 32768)
 
     @JvmStatic

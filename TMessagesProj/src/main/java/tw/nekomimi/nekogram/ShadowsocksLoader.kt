@@ -1,5 +1,8 @@
 package tw.nekomimi.nekogram
 
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import cn.hutool.core.codec.Base64
 import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.PluginManager
@@ -15,6 +18,7 @@ import java.io.File
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
+@SuppressLint("NewApi")
 class ShadowsocksLoader {
 
     lateinit var bean: Bean

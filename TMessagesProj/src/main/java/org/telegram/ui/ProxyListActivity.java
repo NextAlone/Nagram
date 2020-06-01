@@ -88,6 +88,7 @@ import java.util.regex.Pattern;
 import kotlin.Unit;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.RelayBatonSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
 import tw.nekomimi.nekogram.SubSettingsActivity;
@@ -327,6 +328,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int menu_add_input_vmess = 4;
     private int menu_add_input_ss = 7;
     private int menu_add_input_ssr = 8;
+    private int menu_add_input_rb = 17;
+
     private int menu_add_import_from_clipboard = 5;
     private int menu_add_scan_qr = 6;
     private int menu_other = 9;
@@ -656,8 +659,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         if (!BuildVars.isMini) {
 
             addItem.addSubItem(menu_add_input_vmess, LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess)).setOnClickListener((v) -> presentFragment(new VmessSettingsActivity()));
-            addItem.addSubItem(menu_add_input_ss, LocaleController.getString("AddProxySS", R.string.AddProxySS)).setOnClickListener((v) -> presentFragment(new ShadowsocksSettingsActivity()));
-            addItem.addSubItem(menu_add_input_ssr, LocaleController.getString("AddProxySSR", R.string.AddProxySSR)).setOnClickListener((v) -> presentFragment(new ShadowsocksRSettingsActivity()));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                addItem.addSubItem(menu_add_input_ss, LocaleController.getString("AddProxySS", R.string.AddProxySS)).setOnClickListener((v) -> presentFragment(new ShadowsocksSettingsActivity()));
+                addItem.addSubItem(menu_add_input_ssr, LocaleController.getString("AddProxySSR", R.string.AddProxySSR)).setOnClickListener((v) -> presentFragment(new ShadowsocksRSettingsActivity()));
+            }
+            addItem.addSubItem(menu_add_input_rb, LocaleController.getString("AddProxyRB", R.string.AddProxyRB)).setOnClickListener((v) -> presentFragment(new RelayBatonSettingsActivity()));
 
         }
 
@@ -756,9 +762,15 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         if (info instanceof SharedConfig.VmessProxy) {
                             presentFragment(new VmessSettingsActivity((SharedConfig.VmessProxy) info));
                         } else if (info instanceof SharedConfig.ShadowsocksProxy) {
-                            presentFragment(new ShadowsocksSettingsActivity((SharedConfig.ShadowsocksProxy) info));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                presentFragment(new ShadowsocksSettingsActivity((SharedConfig.ShadowsocksProxy) info));
+                            }
                         } else if (info instanceof SharedConfig.ShadowsocksRProxy) {
-                            presentFragment(new ShadowsocksRSettingsActivity((SharedConfig.ShadowsocksRProxy) info));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                presentFragment(new ShadowsocksRSettingsActivity((SharedConfig.ShadowsocksRProxy) info));
+                            }
+                        } else if (info instanceof SharedConfig.RelayBatonProxy) {
+                            presentFragment(new RelayBatonSettingsActivity((SharedConfig.RelayBatonProxy) info));
                         } else {
                             presentFragment(new ProxySettingsActivity(info));
                         }
@@ -850,7 +862,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     }
 
-    private void addProxy() {
+    @SuppressLint("NewApi") private void addProxy() {
 
         BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
 
@@ -861,7 +873,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess),
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySS", R.string.AddProxySS),
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySSR", R.string.AddProxySSR),
-
+                LocaleController.getString("AddProxyRB", R.string.AddProxyRB),
                 LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard),
                 LocaleController.getString("ScanQRCode", R.string.ScanQRCode)
 
@@ -888,6 +900,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 presentFragment(new ShadowsocksRSettingsActivity());
 
             } else if (i == 5) {
+
+                presentFragment(new RelayBatonSettingsActivity());
+
+            } else if (i == 6) {
 
                 ProxyUtil.importFromClipboard(getParentActivity());
 

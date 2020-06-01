@@ -122,11 +122,33 @@ jobs:
 
           gomobile init
 
-         env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
+          env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
       - uses: actions/upload-artifact@master
         with:
           name: libv2ray
           path: libv2ray.aar
+  rbBuild:
+    name: RelayBaton Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[rb]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build RelayBaton
+        run: bash .github/scripts/build-relaybaton.sh
+      - name: package
+        run: |
+          ./gradlew relaybaton:assembleRelease
+          ls relaybaton/build/outputs/aar
+      - uses: actions/upload-artifact@master
+        with:
+          name: relaybaton
+          path: relaybaton/build/outputs/aar
   ssBuild:
     name: SS-Rust Build
     runs-on: ubuntu-latest

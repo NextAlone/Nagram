@@ -23,6 +23,7 @@ import java.util.Objects;
 import javax.xml.transform.ErrorListener;
 
 import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.RelayBatonLoader;
 import tw.nekomimi.nekogram.utils.HttpUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
@@ -138,6 +139,7 @@ public class SubInfo implements Mappable {
         SubInfo subInfo = (SubInfo) o;
         return id == subInfo.id;
     }
+
     @Override
     public Document write(NitriteMapper mapper) {
 
@@ -147,7 +149,6 @@ public class SubInfo implements Mappable {
         document.put("name", name);
         document.put("urls", urls);
         document.put("proxies",proxies);
-
         document.put("lastFetch", lastFetch);
         document.put("enable", enable);
         document.put("internal", internal);

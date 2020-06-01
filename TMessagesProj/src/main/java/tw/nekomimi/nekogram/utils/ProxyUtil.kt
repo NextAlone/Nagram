@@ -20,6 +20,7 @@ import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
+import com.v2ray.ang.V2RayConfig.RB_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
@@ -128,7 +129,8 @@ object ProxyUtil {
                         line.startsWith(VMESS_PROTOCOL) ||
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL)) {
+                        line.startsWith(SSR_PROTOCOL) ||
+                        line.startsWith(RB_PROTOCOL)) {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line).toUrl()) }
 
@@ -162,7 +164,8 @@ object ProxyUtil {
                         line.startsWith(VMESS_PROTOCOL) ||
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL)) {
+                        line.startsWith(SSR_PROTOCOL) ||
+                        line.startsWith(RB_PROTOCOL)) {
 
                     exists = true
 
@@ -197,6 +200,10 @@ object ProxyUtil {
             } else if (link.startsWith(SSR_PROTOCOL)) {
 
                 AndroidUtilities.showShadowsocksRAlert(ctx, SharedConfig.ShadowsocksRProxy(link))
+
+            } else if (link.startsWith(RB_PROTOCOL)) {
+
+                AndroidUtilities.showRelayBatonAlert(ctx, SharedConfig.RelayBatonProxy(link))
 
             } else {
 

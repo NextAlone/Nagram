@@ -278,7 +278,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
                 case 2:
                     passwordField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    cursor.setHintText(LocaleController.getString("SSPassword", R.string.SSPassword));
+                    cursor.setHintText(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword));
                     cursor.setText(currentBean.getPassword());
                     break;
                 case 3:

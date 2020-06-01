@@ -49,7 +49,7 @@ class GuardedProcessPool(private val onFatal: suspend (IOException) -> Unit) : C
         } catch (_: IOException) { }    // ignore
 
         fun start() {
-            process = ProcessBuilder(cmd).directory(ApplicationLoader.applicationContext.filesDir).start()
+            process = ProcessBuilder(cmd).directory(ApplicationLoader.applicationContext.cacheDir).start()
         }
 
         suspend fun looper(onRestartCallback: (suspend () -> Unit)?) {
