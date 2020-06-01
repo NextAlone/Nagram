@@ -9,6 +9,7 @@ NekoX is an open source third-party Telegram android app.
 - Chat Group (Persian) : https://t.me/NekogramX_Persian
 - FAQ: https://telegra.ph/NekoX-FAQ-03-31
 - FAQ (Chinese): https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31
+- [Wall of Shame - Nekogram](https://github.com/Nekogram/Nekogram/wiki/Wall-of-Shame)
 
 ## Telegram-FOSS Changes:
 
@@ -64,12 +65,12 @@ NekoX is an open source third-party Telegram android app.
 
 ## NekoX Changes
 
-- Built-in Vmess, Shadowsocks, SSR proxies support
+- Built-in Vmess, Shadowsocks, SSR, RelayBaton (ESNI) proxies support
 - Built-in public proxy list
 - Proxy subscription support.
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc.
 - Scan the qrcode (any link, can add a proxy).
-- The ( vemss / vmess1 / ss / ssr ) proxy link in the message can be clicked.
+- The ( vemss / vmess1 / ss / ssr / rb ) proxy link in the message can be clicked.
 - Allow auto disable proxy when VPN is enabled
 - Add stickers without sticker pack
 - Sticker set list backup / restore / share

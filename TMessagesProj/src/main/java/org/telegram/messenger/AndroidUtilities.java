@@ -2780,6 +2780,13 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
                             AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": " + ex.getMessage());
                         }
                         return true;
+                    } else if (scheme.equals("rb")) {
+                        try {
+                            showRelayBatonAlert(activity, new SharedConfig.RelayBatonProxy(data.toString()));
+                        } catch (Exception ex) {
+                            AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": " + ex.getMessage());
+                        }
+                        return true;
                     }
                 }
                 if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(port)) {
