@@ -16,9 +16,12 @@
     <string name="Install">Instalar</string>
     <string name="Ignore">Ignorar</string>
     <string name="UpdateDownloaded">Uma atualização acabou de ser baixada.</string>
+    <string name="LinkedGroupChat">Grupo vinculado</string>
+    <string name="LinkedChannelChat">Canal vinculado</string>
     <string name="DevModeTitle">**Sua conta de telegrama pode ser banida**</string>
     <string name="DevModeNotice">Não nos responsabilizamos por qualquer uso inadequado dos recursos do desenvolvedor.</string>
     <string name="TapToDisable">Toque para desativar. Você não precisa disso.</string>
+    <string name="PlaceHolder">Espaço reservado - Por favor desative</string>
     <string name="CustomBackend">Back-end personalizado</string>
     <string name="CustomBackendNotice">Essa função é fornecida apenas para usuários experientes; se você não souber o que as elas representam, apenas ignore.</string>
     <string name="CustomBackendProduction">Data Center de Produção Oficial</string>
@@ -99,6 +102,7 @@
     <string name="AddProxyVmess">Adicionar Proxy Vmess</string>
     <string name="AddProxySS">Adicionar Shadowsocks Proxy</string>
     <string name="AddProxySSR">Adicionar ShadowsocksR Proxy</string>
+    <string name="SSPluginConflictingName">Vários plugins usam esse id: %s.</string>
     <string name="EditProxy">Editar Proxy</string>
     <string name="ShareProxy">Compartilhar Proxy</string>
     <string name="ProxyDelete">Excluir proxy</string>
@@ -119,6 +123,8 @@
     <string name="ProxyInfoSSR">Configurações do proxy ShadowsocksR</string>
     <string name="SSRProtocol">Protocolo</string>
     <string name="SSRProtocolParams">Parâmetros de protocolo</string>
+    <string name="SSRObfs">Obfs</string>
+    <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyRemarks">Observações</string>
     <string name="RetestPing">Teste novamente o ping para todos os servidores</string>
     <string name="ReorderByPing">Reordenar servidores por ping</string>

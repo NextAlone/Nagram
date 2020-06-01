@@ -102,6 +102,8 @@
     <string name="AddProxyVmess">添加 Vmess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>
     <string name="AddProxySSR">添加 ShadowsocksR 代理</string>
+    <string name="AddProxyRB">添加 RelayBaton 代理</string>
+    <string name="SSPluginConflictingName">多个插件使用此ID： %s.</string>
     <string name="EditProxy">编辑代理</string>
     <string name="ShareProxy">分享代理</string>
     <string name="ProxyDelete">删除代理</string>
@@ -124,6 +126,8 @@
     <string name="SSRProtocolParams">协议参数</string>
     <string name="SSRObfs">混淆</string>
     <string name="SSRObfsParam">混淆参数</string>
+    <string name="ProxyInfoRB">RelayBaton 代理设置</string>
+    <string name="ESNI">加密的服务器名称指示</string>
     <string name="ProxyRemarks">别名</string>
     <string name="RetestPing">重新测试所有 Ping 值</string>
     <string name="ReorderByPing">基于 Ping 值重新排序</string>

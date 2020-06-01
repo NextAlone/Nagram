@@ -100,8 +100,8 @@
     <string name="AddProxySocks5">افزودن پروکسی Socks5</string>
     <string name="AddProxyTelegram">افزودن پروکسی MTProto</string>
     <string name="AddProxyVmess">افزودن پروکسی Vmess</string>
-    <string name="AddProxySS">افزودن پروکسی شادوساکس</string>
-    <string name="AddProxySSR">افزودن پروکسی شادوساکس آر</string>
+    <string name="AddProxySS">افزودن پروکسی شادوساکس SS</string>
+    <string name="AddProxySSR">افزودن پروکسی شادوساکس آر SSR</string>
     <string name="SSPluginConflictingName">چندین افزونه از این شناسه استفاده می کنند: %s.</string>
     <string name="EditProxy">ویرایش پروکسی</string>
     <string name="ShareProxy">اشتراک گذاری پروکسی</string>
@@ -141,7 +141,7 @@
     <string name="ImportStickersList">وارد کردن برچسب ها</string>
     <string name="StickerSets">مجموعه ی برچسب ها</string>
     <string name="InvalidStickersFile">پرونده برچسب نامعتبر: </string>
-    <string name="InvalidProxyFile">لیست پراکسی نامعتبر: </string>
+    <string name="InvalidProxyFile">لیست پر,کسی نامعتبر: </string>
     <string name="ImportedProxies">سرور های پروکسی وارد شده: </string>
     <string name="ErrorsInImport">مشکل در وارد کردن فایل: </string>
     <string name="NoProxy">شما هیچ سرور پراکسی اضافه نکرده اید.</string>

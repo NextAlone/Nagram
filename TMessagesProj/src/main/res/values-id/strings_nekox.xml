@@ -7,6 +7,7 @@
     <string name="CustomApiTGX">Telegram X Android</string>
     <string name="CustomApiInput">Manual input</string>
     <string name="CheckUpdate">Periksa pembaruan</string>
+    <string name="SwitchVersion">Ganti Versi</string>
     <string name="NoUpdate">Tidak ditemukan pembaruan</string>
     <string name="UpdateAvailable">Pembaruan terbaru tersedia</string>
     <string name="UpdateUpdate">Perbarui</string>
@@ -15,6 +16,8 @@
     <string name="Install">Pasang</string>
     <string name="Ignore">Abaikan</string>
     <string name="UpdateDownloaded">Pembaruan baru saja diunduh.</string>
+    <string name="LinkedGroupChat">Grup Tertaut</string>
+    <string name="LinkedChannelChat">Saluran yang Ditautkan</string>
     <string name="DevModeTitle">**Akun telegram Anda mungkin dibanned**</string>
     <string name="DevModeNotice">Kami tidak bertanggung jawab atas penyalahgunaan fitur pengembang.</string>
     <string name="TapToDisable">Sentuh untuk menonaktifkan. Jika anda tidak membutuhkan ini.</string>
@@ -85,6 +88,8 @@
     <string name="DisableSystemAccount">Nonaktifkan Akun Sistem</string>
     <string name="FilterMenu">Menu Filter Obrolan</string>
     <string name="DisableProxyWhenVpnEnabled">Nonaktifkan proxy saat VPN diaktifkan</string>
+    <string name="UseProxyItem">Gunakan item proxy bilah sisi alih-alih tombol</string>
+    <string name="HideProxyByDefault">Sembunyikan pengaturan proxy secara default</string>
     <string name="SkipOpenLinkConfirm">Lewati dialog konfirmasi saat membuka tautan</string>
     <string name="DeleteAllInChat">Hapus semua pesan dalam obrolan</string>
     <string name="DeleteAllInChatAlert">Peringatan! Ini akan menghapus **semua pesan** di obrolan ini untuk **semua** peserta.</string>
@@ -97,6 +102,7 @@
     <string name="AddProxyVmess">Tambahkan Vmess Proxy</string>
     <string name="AddProxySS">Tambahkan Shadowsocks Proxy</string>
     <string name="AddProxySSR">Tambahkan ShadowsocksR Proxy</string>
+    <string name="SSPluginConflictingName">Beberapa plugin menggunakan id ini: %s.</string>
     <string name="EditProxy">Edit Proxy</string>
     <string name="ShareProxy">Bagikan Proxy</string>
     <string name="ProxyDelete">Hapus Proxy</string>
@@ -144,6 +150,7 @@
     <string name="DeleteAllServerConfirm">Anda yakin ingin **menghapus semua server**?</string>
     <string name="DeleteUnavailableServerConfirm">Anda yakin ingin **menghapus semua server tidak tersedia**?</string>
     <string name="MinApi21Required">Maaf, anda memerlukan setidaknya Android 5 (API 21).</string>
+    <string name="MiniVersionAlert">Maaf, versi mini tidak mendukung jenis proxy ini, silakan alihkan versi dalam pengaturan.</string>
     <string name="ImportProxyFromClipboard">Impor Dari Papan Klip</string>
     <string name="BrokenLink">Tidak Dikenal / Tautan Rusak</string>
     <string name="ShareQRCode">Kode QR</string>

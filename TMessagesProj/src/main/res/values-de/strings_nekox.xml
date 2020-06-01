@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="CustomApi">Benutzerdefinierte API</string>
+    <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.\n\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
+    <string name="CustomApiNo">Verwenden Sie keine benutzerdefinierte API</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
+    <string name="CustomApiTGX">Telegram Android X</string>
+    <string name="CustomApiInput">Manuelle Eingabe</string>
+    <string name="CheckUpdate">Update prüfen</string>
+    <string name="SwitchVersion">Version wechseln</string>
+</resources>
