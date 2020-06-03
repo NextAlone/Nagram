@@ -2,6 +2,10 @@ name: Dev Branch Build
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '!.github/workflows/**'
     branches:
       - dev
 
