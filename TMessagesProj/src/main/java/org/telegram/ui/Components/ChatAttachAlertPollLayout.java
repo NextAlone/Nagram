@@ -479,7 +479,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     @Override
     void onPreMeasure(int availableWidth, int availableHeight) {
         int padding;
-        if (parentAlert.sizeNotifierFrameLayout.getKeyboardHeight() > AndroidUtilities.dp(20)) {
+        if (parentAlert.sizeNotifierFrameLayout.measureKeyboardHeight() > AndroidUtilities.dp(20)) {
             padding = AndroidUtilities.dp(52);
             parentAlert.setAllowNestedScroll(false);
         } else {
@@ -792,8 +792,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     textCell.setColors(null, Theme.key_windowBackgroundWhiteBlueText4);
                     Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.poll_add_circle);
                     Drawable drawable2 = mContext.getResources().getDrawable(R.drawable.poll_add_plus);
-                    drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
-                    drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.MULTIPLY));
+                    drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.SRC_IN));
+                    drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.SRC_IN));
                     CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
                     textCell.setTextAndIcon(LocaleController.getString("AddAnOption", R.string.AddAnOption), combinedDrawable, false);
                     break;

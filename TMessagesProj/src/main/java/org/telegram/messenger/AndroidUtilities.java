@@ -1239,19 +1239,6 @@ public static class VcardItem {
         return false;
     }
 
-    public static boolean isKeyboardShowed(View view) {
-        if (view == null) {
-            return false;
-        }
-        try {
-            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            return inputManager.isActive(view);
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        return false;
-    }
-
     public static String[] getCurrentKeyboardLanguage() {
         try {
             InputMethodManager inputManager = (InputMethodManager) ApplicationLoader.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -1900,7 +1887,7 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
             return;
         }
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(ObjectAnimator.ofFloat(view, "translationX", AndroidUtilities.dp(x)));
+        animatorSet.playTogether(ObjectAnimator.ofFloat(view, "translationX", dp(x)));
         animatorSet.setDuration(50);
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override

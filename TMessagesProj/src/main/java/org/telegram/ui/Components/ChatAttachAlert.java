@@ -95,6 +95,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         void didSelectBot(TLRPC.User user);
         void onCameraOpened();
         void needEnterComment();
+        void doOnIdle(Runnable runnable);
     }
 
     public float translationProgress;
@@ -571,7 +572,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     ignoreLayout = false;
                 }
                 int availableHeight = totalHeight - getPaddingTop();
-                int keyboardSize = useSmoothKeyboard ? 0 : getKeyboardHeight();
+                int keyboardSize = useSmoothKeyboard ? 0 : measureKeyboardHeight();
                 if (!AndroidUtilities.isInMultiwindow && keyboardSize <= AndroidUtilities.dp(20)) {
                     availableHeight -= commentTextView.getEmojiPadding();
                 }
@@ -612,7 +613,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 setMeasuredDimension(widthSize, heightSize);
                 widthSize -= backgroundPaddingLeft * 2;
 
-                int keyboardSize = useSmoothKeyboard ? 0 : getKeyboardHeight();
+                int keyboardSize = useSmoothKeyboard ? 0 : measureKeyboardHeight();
                 if (keyboardSize <= AndroidUtilities.dp(20)) {
                     if (!AndroidUtilities.isInMultiwindow) {
                         heightSize -= commentTextView.getEmojiPadding();
@@ -661,7 +662,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     setSystemGestureExclusionRects(exclusionRects);
                 }
 
-                int keyboardSize = useSmoothKeyboard ? 0 : getKeyboardHeight();
+                int keyboardSize = useSmoothKeyboard ? 0 : measureKeyboardHeight();
                 int paddingBottom = keyboardSize <= AndroidUtilities.dp(20) && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet() ? commentTextView.getEmojiPadding() : 0;
                 setBottomClip(paddingBottom);
 
@@ -969,10 +970,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         } else {
                             info.searchImage = searchImage;
                         }
-
+                        info.thumbPath = searchImage.thumbPath;
+                        info.videoEditedInfo = searchImage.editedInfo;
                         info.caption = searchImage.caption != null ? searchImage.caption.toString() : null;
                         info.entities = searchImage.entities;
-                        info.masks = !searchImage.stickers.isEmpty() ? new ArrayList<>(searchImage.stickers) : null;
+                        info.masks = searchImage.stickers;
                         info.ttl = searchImage.ttl;
                         if (searchImage.inlineResult != null && searchImage.type == 1) {
                             info.inlineResult = searchImage.inlineResult;
@@ -1027,7 +1029,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         shadow = new View(context);
         shadow.setBackgroundResource(R.drawable.attach_shadow);
-        shadow.getBackground().setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+        shadow.getBackground().setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.SRC_IN));
         containerView.addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 2, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 84));
 
         buttonsRecyclerView = new RecyclerListView(context) {
@@ -1339,6 +1341,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     public void show() {
         super.show();
         buttonPressed = false;
+        if (baseFragment instanceof ChatActivity) {
+            ChatActivity chatActivity = (ChatActivity) baseFragment;
+            calcMandatoryInsets = chatActivity.isKeyboardVisible();
+        }
     }
 
     public void setEditingMessageObject(MessageObject messageObject) {
@@ -1899,7 +1905,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             return;
         }
         int newOffset = layout.getCurrentItemTop();
-        FileLog.d(layout + " offset = " + newOffset);
         if (newOffset == Integer.MAX_VALUE) {
             return;
         }
@@ -2146,7 +2151,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     @Override
     public void onOpenAnimationEnd() {
-        NotificationCenter.getInstance(currentAccount).setAnimationInProgress(false);
         MediaController.AlbumEntry albumEntry;
         if (baseFragment instanceof ChatActivity) {
             albumEntry = MediaController.allMediaAlbumEntry;
@@ -2328,6 +2332,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     @Override
     public void dismissInternal() {
+        delegate.doOnIdle(this::removeFromRoot);
+    }
+
+    private void removeFromRoot() {
         if (containerView != null) {
             containerView.setVisibility(View.INVISIBLE);
         }

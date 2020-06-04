@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+
+import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class SearchField extends FrameLayout {
@@ -49,7 +52,7 @@ public class SearchField extends FrameLayout {
         searchIconImageView = new ImageView(context);
         searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
         searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
-        searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.MULTIPLY));
+        searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.SRC_IN));
         if (supportRtl) {
             lp = LayoutHelper.createFrameRelatively(36, 36, Gravity.START | Gravity.TOP, 16, 11, 0, 0);
         } else {
@@ -64,7 +67,7 @@ public class SearchField extends FrameLayout {
         clearSearchImageView.setScaleX(0.1f);
         clearSearchImageView.setScaleY(0.1f);
         clearSearchImageView.setAlpha(0.0f);
-        clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.MULTIPLY));
+        clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.SRC_IN));
         if (supportRtl) {
             lp = LayoutHelper.createFrameRelatively(36, 36, Gravity.END | Gravity.TOP, 14, 11, 14, 0);
         } else {
@@ -182,5 +185,14 @@ public class SearchField extends FrameLayout {
 
     public CloseProgressDrawable2 getProgressDrawable() {
         return progressDrawable;
+    }
+
+    public void getThemeDescriptions(List<ThemeDescription> descriptions) {
+        descriptions.add(new ThemeDescription(searchBackground, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_dialogSearchBackground));
+        descriptions.add(new ThemeDescription(searchIconImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_dialogSearchIcon));
+        descriptions.add(new ThemeDescription(clearSearchImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_dialogSearchIcon));
+        descriptions.add(new ThemeDescription(searchEditText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_dialogSearchText));
+        descriptions.add(new ThemeDescription(searchEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_dialogSearchHint));
+        descriptions.add(new ThemeDescription(searchEditText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, Theme.key_featuredStickers_addedIcon));
     }
 }

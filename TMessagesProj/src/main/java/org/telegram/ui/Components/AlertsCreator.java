@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Html;
@@ -56,6 +57,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
@@ -80,6 +82,7 @@ import org.telegram.ui.ReportOtherActivity;
 import org.telegram.ui.ThemePreviewActivity;
 import org.telegram.ui.TooManyCommunitiesActivity;
 
+import java.net.IDN;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -452,7 +455,7 @@ public class AlertsCreator {
     }
 
     public static AlertDialog.Builder createSimpleAlert(Context context, final String title, final String text) {
-        if (text == null) {
+        if (context == null || text == null) {
             return null;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -807,6 +810,47 @@ public class AlertsCreator {
         }
     }
 
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean ask) {
+        showOpenUrlAlert(fragment, url, punycode, true, ask);
+    }
+
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask) {
+        if (fragment == null || fragment.getParentActivity() == null) {
+            return;
+        }
+        long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
+        if (Browser.isInternalUrl(url, null) || !ask) {
+            Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph);
+        } else {
+            String urlFinal;
+            if (punycode) {
+                try {
+                    Uri uri = Uri.parse(url);
+                    String host = IDN.toASCII(uri.getHost(), IDN.ALLOW_UNASSIGNED);
+                    urlFinal = uri.getScheme() + "://" + host + uri.getPath();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                    urlFinal = url;
+                }
+            } else {
+                urlFinal = url;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle));
+            String format = LocaleController.getString("OpenUrlAlert2", R.string.OpenUrlAlert2);
+            int index = format.indexOf("%");
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(String.format(format, urlFinal));
+            if (index >= 0) {
+                stringBuilder.setSpan(new URLSpan(urlFinal), index, index + urlFinal.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            builder.setMessage(stringBuilder);
+            builder.setMessageTextViewClickable(false);
+            builder.setPositiveButton(LocaleController.getString("Open", R.string.Open), (dialogInterface, i) -> Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            fragment.showDialog(builder.create());
+        }
+    }
+
     public static AlertDialog createSupportAlert(BaseFragment fragment) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return null;
@@ -1047,7 +1091,11 @@ public class AlertsCreator {
         }
 
         if (second) {
-            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllMessagesAlert", R.string.DeleteAllMessagesAlert)));
+            if (UserObject.isUserSelf(user)) {
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllMessagesSavedAlert", R.string.DeleteAllMessagesSavedAlert)));
+            } else {
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllMessagesAlert", R.string.DeleteAllMessagesAlert)));
+            }
         } else {
             if (clear) {
                 if (user != null) {
@@ -1088,7 +1136,7 @@ public class AlertsCreator {
                             if (user.id == selfUserId) {
                                 messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("AreYouSureDeleteThisChatSavedMessages", R.string.AreYouSureDeleteThisChatSavedMessages)));
                             } else {
-                                if (user.bot) {
+                                if (user.bot && !user.support) {
                                     messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithBot", R.string.AreYouSureDeleteThisChatWithBot, UserObject.getUserName(user))));
                                 } else {
                                     messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithUser", R.string.AreYouSureDeleteThisChatWithUser, UserObject.getUserName(user))));
@@ -1143,17 +1191,22 @@ public class AlertsCreator {
             }
         }
         builder.setPositiveButton(actionText, (dialogInterface, i) -> {
-            if (user != null && !clearingCache && !second && deleteForAll[0]) {
-                MessagesStorage.getInstance(fragment.getCurrentAccount()).getMessagesCount(user.id, (count) -> {
-                    if (count >= 50) {
-                        createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, secret, onProcessRunnable);
-                    } else {
-                        if (onProcessRunnable != null) {
-                            onProcessRunnable.run(deleteForAll[0]);
+            if (!clearingCache && !second) {
+                if (UserObject.isUserSelf(user)) {
+                    createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, secret, onProcessRunnable);
+                    return;
+                } else if (user != null && deleteForAll[0]) {
+                    MessagesStorage.getInstance(fragment.getCurrentAccount()).getMessagesCount(user.id, (count) -> {
+                        if (count >= 50) {
+                            createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, secret, onProcessRunnable);
+                        } else {
+                            if (onProcessRunnable != null) {
+                                onProcessRunnable.run(deleteForAll[0]);
+                            }
                         }
-                    }
-                });
-                return;
+                    });
+                    return;
+                }
             }
             if (onProcessRunnable != null) {
                 onProcessRunnable.run(second || deleteForAll[0]);

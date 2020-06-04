@@ -473,6 +473,10 @@ public class FileLoadOperation {
         }
     }
 
+    protected File getCacheFileFinal() {
+        return cacheFileFinal;
+    }
+
     protected File getCurrentFile() {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final File[] result = new File[1];
@@ -532,11 +536,14 @@ public class FileLoadOperation {
         return progress + getDownloadedLengthFromOffsetInternal(ranges, (int) (totalBytesCount * progress), totalBytesCount) / (float) totalBytesCount;
     }
 
-    protected int getDownloadedLengthFromOffset(final int offset, final int length) {
+    protected int[] getDownloadedLengthFromOffset(final int offset, final int length) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        final int[] result = new int[1];
+        final int[] result = new int[2];
         Utilities.stageQueue.postRunnable(() -> {
             result[0] = getDownloadedLengthFromOffsetInternal(notLoadedBytesRanges, offset, length);
+            if (state == stateFinished) {
+                result[1] = 1;
+            }
             countDownLatch.countDown();
         });
         try {
@@ -544,7 +551,7 @@ public class FileLoadOperation {
         } catch (Exception ignore) {
 
         }
-        return result[0];
+        return result;
     }
 
     public String getFileName() {
@@ -922,8 +929,8 @@ public class FileLoadOperation {
             }
             if (!isPreloadVideoOperation && downloadedBytes != 0 && totalBytesCount > 0) {
                 copyNotLoadedRanges();
-                delegate.didChangedLoadProgress(FileLoadOperation.this, downloadedBytes, totalBytesCount);
             }
+            updateProgress();
             try {
                 fileOutputStream = new RandomAccessFile(cacheFileTemp, "rws");
                 if (downloadedBytes != 0) {
@@ -957,6 +964,12 @@ public class FileLoadOperation {
             }
         }
         return true;
+    }
+
+    public void updateProgress() {
+        if (delegate != null && downloadedBytes != totalBytesCount && totalBytesCount > 0) {
+            delegate.didChangedLoadProgress(FileLoadOperation.this, downloadedBytes, totalBytesCount);
+        }
     }
 
     public boolean isPaused() {

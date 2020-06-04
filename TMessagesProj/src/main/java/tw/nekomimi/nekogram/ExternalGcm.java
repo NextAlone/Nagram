@@ -43,7 +43,7 @@ public class ExternalGcm {
     public static void initPlayServices() {
 
         AndroidUtilities.runOnUIThread(() -> {
-            if (checkPlayServices()) {
+            if (hasPlayServices = checkPlayServices()) {
                 final String currentPushString = SharedConfig.pushString;
                 if (!TextUtils.isEmpty(currentPushString)) {
                     if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
@@ -63,12 +63,11 @@ public class ExternalGcm {
                             }
                         }).addOnFailureListener(e -> {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.e("Failed to get regid",e);
+                                FileLog.d("Failed to get regid");
                             }
                             SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-                            ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
+                            GcmPushListenerService.sendRegistrationToServer(null);
                         });
-                        FirebaseCrashlytics.getInstance().setCustomKey("flavor", BuildConfig.FLAVOR);
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
@@ -78,7 +77,7 @@ public class ExternalGcm {
                     FileLog.d("No valid Google Play Services APK found.");
                 }
                 SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
-                ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
+                GcmPushListenerService.sendRegistrationToServer(null);
             }
         }, 1000);
 

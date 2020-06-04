@@ -232,6 +232,10 @@ public class ActionBarPopupWindow extends PopupWindow {
             linearLayout.addView(child);
         }
 
+        public void addView(View child, LinearLayout.LayoutParams layoutParams) {
+            linearLayout.addView(child, layoutParams);
+        }
+
         public void removeInnerViews() {
             linearLayout.removeAllViews();
         }

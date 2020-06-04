@@ -17,7 +17,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -50,6 +49,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
@@ -442,7 +442,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         dropDown.setText(LocaleController.getString("ChatGallery", R.string.ChatGallery));
         dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
-        dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
+        dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.SRC_IN));
         dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         dropDown.setPadding(0, 0, AndroidUtilities.dp(10), 0);
         dropDownContainer.addView(dropDown, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 16, 0, 0, 0));
@@ -651,7 +651,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
         recordTime = new TextView(context);
         recordTime.setBackgroundResource(R.drawable.system);
-        recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(0x66000000, PorterDuff.Mode.MULTIPLY));
+        recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(0x66000000, PorterDuff.Mode.SRC_IN));
         recordTime.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         recordTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         recordTime.setAlpha(0.0f);
@@ -1836,7 +1836,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     FileLog.e(e);
                 }
             }
-            final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Video.Thumbnails.MINI_KIND);
+            final Bitmap bitmap = SendMessagesHelper.createVideoThumbnail(videoPath, MediaStore.Video.Thumbnails.MINI_KIND);
             String fileName = Integer.MIN_VALUE + "_" + SharedConfig.getLastLocalId() + ".jpg";
             final File cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), fileName);
             try {
@@ -2329,7 +2329,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         RecyclerView.ViewHolder holder = gridView.findViewHolderForAdapterPosition(0);
         if (holder != null && holder.itemView instanceof PhotoAttachCameraCell) {
-            ((PhotoAttachCameraCell) holder.itemView).getImageView().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), PorterDuff.Mode.MULTIPLY));
+            ((PhotoAttachCameraCell) holder.itemView).getImageView().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), PorterDuff.Mode.SRC_IN));
         }
 
         dropDown.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));

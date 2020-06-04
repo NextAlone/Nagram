@@ -300,6 +300,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int joinRow;
     private int lastSectionRow;
 
+    private int transitionIndex;
+
     private final Property<ProfileActivity, Float> HEADER_SHADOW = new AnimationProperties.FloatProperty<ProfileActivity>("headerShadow") {
         @Override
         public void setValue(ProfileActivity object, float value) {
@@ -1495,6 +1497,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         onlineTextView[1].setTextColor(Color.argb(179, 255, 255, 255));
                         idTextView.setTextColor(Color.argb(179, 255, 255, 255));
                         actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
+                        actionBar.setItemsColor(Color.WHITE, false);
                         overlaysView.setOverlaysVisible();
                         overlaysView.setAlphaValue(1.0f, false);
                         avatarImage.setForegroundAlpha(1.0f);
@@ -2651,6 +2654,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             otherItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
             callItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
             editItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
+
+            if (verifiedDrawable != null) {
+                color1 = Theme.getColor(Theme.key_profile_verifiedBackground);
+                color2 = Theme.getColor(Theme.key_player_actionBarTitle);
+                verifiedDrawable.setColorFilter(AndroidUtilities.getOffsetColor(color1, color2, value, 1.0f), PorterDuff.Mode.SRC_IN);
+            }
+
+            if (verifiedCheckDrawable != null) {
+                color1 = Theme.getColor(Theme.key_profile_verifiedCheck);
+                color2 = Theme.getColor(Theme.key_windowBackgroundWhite);
+                verifiedCheckDrawable.setColorFilter(AndroidUtilities.getOffsetColor(color1, color2, value, 1.0f), PorterDuff.Mode.SRC_IN);
+            }
         }
 
         @Override
@@ -2768,6 +2783,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void checkListViewScroll() {
+        if (sharedMediaLayoutAttached) {
+            sharedMediaLayout.setVisibleHeight(listView.getMeasuredHeight() - sharedMediaLayout.getTop());
+        }
+
         if (listView.getChildCount() <= 0 || openAnimationInProgress) {
             return;
         }
@@ -3472,8 +3491,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             openAnimationInProgress = true;
         }
         if (isOpen) {
-            NotificationCenter.getInstance(currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad});
-            NotificationCenter.getInstance(currentAccount).setAnimationInProgress(true);
+            transitionIndex = NotificationCenter.getInstance(currentAccount).setAnimationInProgress(transitionIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad});
         }
     }
 
@@ -3488,7 +3506,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
             }
-            NotificationCenter.getInstance(currentAccount).setAnimationInProgress(false);
+            NotificationCenter.getInstance(currentAccount).onAnimationFinish(transitionIndex);
         }
     }
 
@@ -4530,7 +4548,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     break;
                 }
                 case 3: {
-                    view = new AboutLinkCell(mContext) {
+                    view = new AboutLinkCell(mContext, ProfileActivity.this) {
                         @Override
                         protected void didPressUrl(String url) {
                             if (url.startsWith("@")) {
@@ -5043,8 +5061,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGray));
         arrayList.add(new ThemeDescription(listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4));
 
-        arrayList.add(new ThemeDescription(nameTextView[1], 0, null, null, new Drawable[]{verifiedCheckDrawable}, null, Theme.key_profile_verifiedCheck));
-        arrayList.add(new ThemeDescription(nameTextView[1], 0, null, null, new Drawable[]{verifiedDrawable}, null, Theme.key_profile_verifiedBackground));
+        if (mediaHeaderVisible) {
+            arrayList.add(new ThemeDescription(nameTextView[1], 0, null, null, new Drawable[]{verifiedCheckDrawable}, null, Theme.key_player_actionBarTitle));
+            arrayList.add(new ThemeDescription(nameTextView[1], 0, null, null, new Drawable[]{verifiedDrawable}, null, Theme.key_windowBackgroundWhite));
+        } else {
+            arrayList.add(new ThemeDescription(nameTextView[1], 0, null, null, new Drawable[]{verifiedCheckDrawable}, null, Theme.key_profile_verifiedCheck));
+            arrayList.add(new ThemeDescription(nameTextView[1], 0, null, null, new Drawable[]{verifiedDrawable}, null, Theme.key_profile_verifiedBackground));
+        }
 
         return arrayList;
     }

@@ -35,7 +35,6 @@ public class ColorPicker extends FrameLayout {
         void onFinishedColorPicking();
         void onSettingsPressed();
         void onUndoPressed();
-        boolean onColorPicker();
     }
 
     private ColorPickerDelegate delegate;
@@ -45,13 +44,12 @@ public class ColorPicker extends FrameLayout {
     private OvershootInterpolator interpolator = new OvershootInterpolator(1.02f);
 
     private static final int[] COLORS = new int[]{
-            0xff000000,
-            0xffff0000,
+            0xffea2739,
             0xffdb3ad2,
             0xff3051e3,
             0xff49c5ed,
             0xff80c864,
-            0xffffff00,
+            0xfffcde65,
             0xfffc964d,
             0xff000000,
             0xffffffff
@@ -59,7 +57,6 @@ public class ColorPicker extends FrameLayout {
 
     private static final float[] LOCATIONS = new float[]{
             0.0f,
-            0.07f,
             0.14f,
             0.24f,
             0.39f,
@@ -70,8 +67,6 @@ public class ColorPicker extends FrameLayout {
             1.0f
     };
 
-    private PorterDuffColorFilter colorPickerFilter = new PorterDuffColorFilter(0xff51bdf3, PorterDuff.Mode.SRC_IN);
-    private ImageView colorPickerButton;
     private ImageView settingsButton;
     private ImageView undoButton;
     private Drawable shadowDrawable;
@@ -83,7 +78,7 @@ public class ColorPicker extends FrameLayout {
     private RectF rectF = new RectF();
 
     private float location;
-    private float weight = 0.27f;
+    private float weight = 0.016773745f;
     private float draggingFactor;
     private boolean dragging;
 
@@ -98,36 +93,18 @@ public class ColorPicker extends FrameLayout {
         settingsButton = new ImageView(context);
         settingsButton.setScaleType(ImageView.ScaleType.CENTER);
         settingsButton.setImageResource(R.drawable.photo_paint_brush);
-        addView(settingsButton, LayoutHelper.createFrame(60, 52));
+        addView(settingsButton, LayoutHelper.createFrame(46, 52));
         settingsButton.setOnClickListener(v -> {
             if (delegate != null) {
                 delegate.onSettingsPressed();
             }
         });
 
-        colorPickerButton = new ImageView(context);
-        colorPickerButton.setScaleType(ImageView.ScaleType.CENTER);
-        colorPickerButton.setImageResource(R.drawable.photo_color_picker);
-        addView(colorPickerButton, LayoutHelper.createFrame(60, 52));
-        colorPickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (delegate != null) {
-                    boolean p = delegate.onColorPicker();
-
-                    PorterDuffColorFilter f = null;
-                    if (p) f = colorPickerFilter;
-
-                    colorPickerButton.setColorFilter(f);
-                    colorPickerButton.setImageResource(R.drawable.photo_color_picker);
-                }
-            }
-        });
 
         undoButton = new ImageView(context);
         undoButton.setScaleType(ImageView.ScaleType.CENTER);
         undoButton.setImageResource(R.drawable.photo_undo);
-        addView(undoButton, LayoutHelper.createFrame(60, 52));
+        addView(undoButton, LayoutHelper.createFrame(46, 52));
         undoButton.setOnClickListener(v -> {
             if (delegate != null) {
                 delegate.onUndoPressed();
@@ -212,12 +189,6 @@ public class ColorPicker extends FrameLayout {
         return Color.argb(255, r, g, b);
     }
 
-    public void setSwatchPaintColor(int color) {
-        findColorLocation(color);
-        swatchPaint.setColor(color);
-        swatchStrokePaint.setColor(color);
-        invalidate();
-    }
 
     public void setLocation(float value) {
         int color = colorForLocation(location = value);
@@ -298,14 +269,12 @@ public class ColorPicker extends FrameLayout {
         int width = right - left;
         int height = bottom - top;
 
-        gradientPaint.setShader(new LinearGradient(AndroidUtilities.dp(56), 0, width - AndroidUtilities.dp(52) * 2, 0, COLORS, LOCATIONS, Shader.TileMode.REPEAT));
+        gradientPaint.setShader(new LinearGradient(AndroidUtilities.dp(56), 0, width - AndroidUtilities.dp(56), 0, COLORS, LOCATIONS, Shader.TileMode.REPEAT));
         int y = height - AndroidUtilities.dp(32);
-        rectF.set(AndroidUtilities.dp(56), y, width - AndroidUtilities.dp(52) * 2, y + AndroidUtilities.dp(12));
+        rectF.set(AndroidUtilities.dp(56), y, width - AndroidUtilities.dp(56), y + AndroidUtilities.dp(12));
 
-        // Move settingButton left after coloPickerButton.
-        settingsButton.layout(width - settingsButton.getMeasuredWidth() * 2 - AndroidUtilities.dp(30), height - AndroidUtilities.dp(52), width, height);
+        settingsButton.layout(width - settingsButton.getMeasuredWidth(), height - AndroidUtilities.dp(52), width, height);
         undoButton.layout(0, height - AndroidUtilities.dp(52), settingsButton.getMeasuredWidth(), height);
-        colorPickerButton.layout(width - colorPickerButton.getMeasuredWidth(), height - AndroidUtilities.dp(52), width, height);
     }
 
     @Override
@@ -357,14 +326,5 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
-    private void findColorLocation(int color) {
-        for (float i = 0; i <= 1; i += 0.001f) {
-            int colorOnLine = colorForLocation(i);
-            if (Math.abs(color - colorOnLine) < 10000) {
-                setLocation(i);
-                return;
-            }
-        }
-    }
 
 }
