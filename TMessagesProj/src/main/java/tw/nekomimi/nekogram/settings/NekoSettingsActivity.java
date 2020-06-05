@@ -103,7 +103,7 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName("NekoXUpdates", this, 1);
+                MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
             } else if (position == donateRow) {
                 Browser.openUrl(getParentActivity(), "https://patreon.com/NekoXDev");
             } else if (position == translationRow) {
@@ -235,7 +235,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@NekoXUpdates", true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@NekogramX", true);
                     } else if (position == googlePlayRow) {
                         textCell.setText(LocaleController.getString("GooglePlay", R.string.GooglePlay), true);
                     } else if (position == sourceCodeRow) {

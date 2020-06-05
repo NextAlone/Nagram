@@ -600,7 +600,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         askBeforeCallRow = rowCount++;
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
-        translationProviderRow = rowCount++;
         nameOrderRow = rowCount++;
         general2Row = rowCount++;
 

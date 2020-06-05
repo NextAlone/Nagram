@@ -222,6 +222,7 @@ public class ProxySettingsActivity extends BaseFragment {
                         SharedConfig.setCurrentProxy(currentProxyInfo);
                     } else {
                         SharedConfig.setProxyEnable(false);
+                        SharedConfig.saveProxyList();
                     }
                     if (addingNewProxy || SharedConfig.currentProxy == currentProxyInfo) {
                         editor.putString("proxy_ip", currentProxyInfo.address);
@@ -243,6 +244,7 @@ public class ProxySettingsActivity extends BaseFragment {
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
 
                     finishFragment();
+
                 }
             }
         });
