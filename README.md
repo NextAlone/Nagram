@@ -65,7 +65,7 @@ NekoX is an open source third-party Telegram android app.
 
 ## NekoX Changes
 
-- Built-in Vmess, Shadowsocks, SSR, RelayBaton (ESNI) proxies support
+- Built-in Vmess, Shadowsocks, SSR, <del>RelayBaton (ESNI)</del> proxies support
 - Built-in public proxy list
 - Proxy subscription support.
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc.

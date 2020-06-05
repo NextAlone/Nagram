@@ -26,7 +26,7 @@ buildscript {
 
     dependencies {
 
-        classpath "cn.hutool:hutool-all:5.3.5"
+        classpath "cn.hutool:hutool-all:5.3.7"
 
     }
 
@@ -42,7 +42,7 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
 
-    compileOnly 'org.checkerframework:checker-qual:3.4.0'
+    compileOnly 'org.checkerframework:checker-qual:3.4.1'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -54,11 +54,11 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
     implementation 'dnsjava:dnsjava:3.1.0'
-    implementation 'org.dizitart:nitrite:3.4.1'
-    implementation 'net.lingala.zip4j:zip4j:2.6.0'
+    implementation 'org.dizitart:nitrite:3.4.2'
+    implementation 'net.lingala.zip4j:zip4j:2.6.1'
 
-    implementation "cn.hutool:hutool-core:5.3.5"
-    implementation "cn.hutool:hutool-crypto:5.3.5"
+    implementation 'cn.hutool:hutool-core:5.3.7'
+    implementation 'cn.hutool:hutool-crypto:5.3.7'
 
     implementation 'org.tukaani:xz:1.8'
 
