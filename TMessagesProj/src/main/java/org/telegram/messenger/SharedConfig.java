@@ -1671,22 +1671,22 @@ public class SharedConfig {
 
             if (!subInfo.enable) continue;
 
-            if (subInfo.id == 1L) {
-
-                try {
-                    RelayBatonProxy publicProxy = (RelayBatonProxy) parseProxyInfo(RelayBatonLoader.publicServer);
-                    publicProxy.setRemarks(LocaleController.getString("NekoXProxy",R.string.NekoXProxy));
-                    publicProxy.subId = subInfo.id;
-                    proxyList.add(publicProxy);
-                    if (publicProxy.hashCode() == current) {
-                        currentProxy = publicProxy;
-                        UIUtil.runOnIoDispatcher(publicProxy::start);
-                    }
-                } catch (InvalidProxyException e) {
-                    e.printStackTrace();
-                }
-
-            }
+//            if (subInfo.id == 1L) {
+//
+//                try {
+//                    RelayBatonProxy publicProxy = (RelayBatonProxy) parseProxyInfo(RelayBatonLoader.publicServer);
+//                    publicProxy.setRemarks(LocaleController.getString("NekoXProxy",R.string.NekoXProxy));
+//                    publicProxy.subId = subInfo.id;
+//                    proxyList.add(publicProxy);
+//                    if (publicProxy.hashCode() == current) {
+//                        currentProxy = publicProxy;
+//                        UIUtil.runOnIoDispatcher(publicProxy::start);
+//                    }
+//                } catch (InvalidProxyException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
 
             for (String proxy : subInfo.proxies) {
 
@@ -1828,7 +1828,7 @@ public class SharedConfig {
 
             }
 
-        } else if (url.startsWith(RB_PROTOCOL)) {
+        }/* else if (url.startsWith(RB_PROTOCOL)) {
 
             try {
 
@@ -1840,7 +1840,7 @@ public class SharedConfig {
 
             }
 
-        }
+        } */
 
         if (url.startsWith("tg:proxy") ||
                 url.startsWith("tg://proxy") ||

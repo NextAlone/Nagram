@@ -306,7 +306,6 @@ android {
     sourceSets.full {
         dependencies {
             implementation files('libs/libv2ray.aar')
-            implementation files('libs/relaybaton-release.aar')
             implementation files('libs/ss-rust-release.aar')
             implementation files('libs/ssr-libev-release.aar')
         }

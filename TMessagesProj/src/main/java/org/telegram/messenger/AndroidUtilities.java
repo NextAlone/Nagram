@@ -306,7 +306,7 @@ public class AndroidUtilities {
             }
         }
         final ArrayList<LinkSpec> links = new ArrayList<>();
-        gatherLinks(links, text, LinkifyPort.PROXY_PATTERN, new String[]{VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL, RB_PROTOCOL}, sUrlMatchFilter);
+        gatherLinks(links, text, LinkifyPort.PROXY_PATTERN, new String[]{VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL/*, RB_PROTOCOL*/}, sUrlMatchFilter);
         pruneOverlaps(links);
         if (links.size() == 0) {
             return false;
