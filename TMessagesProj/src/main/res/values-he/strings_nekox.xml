@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">הגדרות מפתחים</string>
     <string name="LoginSettings">הגדרות כניסה</string>
     <string name="NekoXFaq">שאלות נפוצות על NekoX</string>
+    <string name="TransSite">תרגם פלטפורמה</string>
+    <string name="NekoTrans">תרגם נקוגרמה</string>
+    <string name="NekoXTrans">תרגם NekoX</string>
 </resources>

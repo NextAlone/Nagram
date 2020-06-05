@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">Настройки разработчика</string>
     <string name="LoginSettings">Настройки входа</string>
     <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="TransSite">Перевести платформу</string>
+    <string name="NekoTrans">Перевести Nekogram</string>
+    <string name="NekoXTrans">Перевести NekoX</string>
 </resources>

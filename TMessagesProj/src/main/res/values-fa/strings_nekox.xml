@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">تنظیمات برنامه نویس</string>
     <string name="LoginSettings">تنظیمات ورود به سیستم</string>
     <string name="NekoXFaq">پرسش های متداول NekoX</string>
+    <string name="TransSite">ترجمه بستر نرم افزار</string>
+    <string name="NekoTrans">ترجمه نكوگرام</string>
+    <string name="NekoXTrans">ترجمه NekoX</string>
 </resources>

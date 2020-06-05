@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">개발자 설정</string>
     <string name="LoginSettings">로그인 설정</string>
     <string name="NekoXFaq">NekoX 자주하는 질문</string>
+    <string name="TransSite">플랫폼 번역</string>
+    <string name="NekoTrans">Nekogram 번역</string>
+    <string name="NekoXTrans">NekoX 번역</string>
 </resources>

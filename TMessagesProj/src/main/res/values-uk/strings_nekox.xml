@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">Налаштування для розробників</string>
     <string name="LoginSettings">Параметри входу</string>
     <string name="NekoXFaq">Питання NekoX</string>
+    <string name="TransSite">Перекласти платформу</string>
+    <string name="NekoTrans">Перекласти некограм</string>
+    <string name="NekoXTrans">Перекласти NekoX</string>
 </resources>

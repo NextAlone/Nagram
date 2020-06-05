@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">Configuraciones de desarrollador</string>
     <string name="LoginSettings">Configuración de inicio de sesión</string>
     <string name="NekoXFaq">Preguntas frecuentes sobre NekoX</string>
+    <string name="TransSite">Traducir Plataforma</string>
+    <string name="NekoTrans">Traducir Nekograma</string>
+    <string name="NekoXTrans">Traducir NekoX</string>
 </resources>

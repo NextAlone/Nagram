@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">Geliştirici Ayarları</string>
     <string name="LoginSettings">Giriş Ayarları</string>
     <string name="NekoXFaq">NekoX SSS</string>
+    <string name="TransSite">Tercüme Platformu</string>
+    <string name="NekoTrans">Nekogram temasını tercüme et</string>
+    <string name="NekoXTrans">NekoX temasını tercüme et</string>
 </resources>
