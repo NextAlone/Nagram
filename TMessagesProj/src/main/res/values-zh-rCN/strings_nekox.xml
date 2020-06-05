@@ -164,4 +164,7 @@
     <string name="DeveloperSettings">开发者设置</string>
     <string name="LoginSettings">登录设置</string>
     <string name="NekoXFaq">NekoX 常见问题</string>
+    <string name="TransSite">翻译平台</string>
+    <string name="NekoTrans">翻译 Nekogram</string>
+    <string name="NekoXTrans">翻译 NekoX</string>
 </resources>

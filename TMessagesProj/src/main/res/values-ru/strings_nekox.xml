@@ -102,6 +102,7 @@
     <string name="AddProxyVmess">Добавить Vmess Proxy</string>
     <string name="AddProxySS">Добавить прокси Shadowsocks</string>
     <string name="AddProxySSR">Добавить прокси ShadowsocksR</string>
+    <string name="AddProxyRB">Добавить сервер RelayBaton</string>
     <string name="SSPluginConflictingName">Несколько плагинов используют этот идентификатор: %s.</string>
     <string name="EditProxy">Изменить прокси</string>
     <string name="ShareProxy">Поделиться прокси</string>
@@ -125,6 +126,8 @@
     <string name="SSRProtocolParams">Protocol Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyInfoRB">Настройки RelayBaton Proxy</string>
+    <string name="ESNI">Зашифрованный SNI</string>
     <string name="ProxyRemarks">Замечания</string>
     <string name="RetestPing">Проверка пинга для всех серверов</string>
     <string name="ReorderByPing">Сортировать серверы путем пинга</string>

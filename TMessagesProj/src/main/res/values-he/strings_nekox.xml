@@ -102,6 +102,7 @@
     <string name="AddProxyVmess">הוסף Vmess Proxy</string>
     <string name="AddProxySS">הוסף פרוקסי Shadowsocks</string>
     <string name="AddProxySSR">הוסף פרוקסי ShadowsocksR</string>
+    <string name="AddProxyRB">הוסף פרוקסי RelayBaton</string>
     <string name="SSPluginConflictingName">מספר תוספים משתמשים במזהה זה: %s.</string>
     <string name="EditProxy">ערוך פרוקסי</string>
     <string name="ShareProxy">שתף פרוקסי</string>
@@ -125,6 +126,8 @@
     <string name="SSRProtocolParams">פרמטרי פרוטוקול</string>
     <string name="SSRObfs">אובסס</string>
     <string name="SSRObfsParam">אובפס פרם</string>
+    <string name="ProxyInfoRB">הגדרות פרוקסי של RelayBaton</string>
+    <string name="ESNI">SNI מוצפן</string>
     <string name="ProxyRemarks">הערות</string>
     <string name="RetestPing">בדוק מחדש את פינג לכל השרתים</string>
     <string name="ReorderByPing">סדר מחדש את השרתים באמצעות פינג</string>
