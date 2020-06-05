@@ -13,6 +13,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONObject
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
+import tw.nekomimi.nekogram.utils.AlertUtil
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 import kotlin.concurrent.thread
@@ -38,8 +39,6 @@ class ShadowsocksLoader {
 
         val cacheCfg = File(ApplicationLoader.applicationContext.cacheDir, "ss_cfg_${bean.hash}.json")
 
-        cacheCfg.writeText(bean.toJson().toString())
-
         shadowsocksProcess = GuardedProcessPool {
 
             FileLog.e(it)
@@ -47,6 +46,8 @@ class ShadowsocksLoader {
         }.apply {
 
             runCatching {
+
+                cacheCfg.writeText(bean.toJson().toString())
 
                 start(listOf(FileUtil.extLib("ss-local").path,
                         "--local-addr", "127.0.0.1:$port",
@@ -56,7 +57,9 @@ class ShadowsocksLoader {
 
                 }
 
-            }.onFailure {
+            }.onFailure { it ->
+
+                AlertUtil.showToast("${it.javaClass.simpleName}: ${it.message}")
 
                 cacheCfg.delete()
 
@@ -210,7 +213,7 @@ class ShadowsocksLoader {
 
         override fun toString(): String {
 
-            var url = HttpUrl.Builder()
+            val url = HttpUrl.Builder()
                     .scheme("https")
                     .encodedUsername(Base64.encodeUrlSafe("$method:$password"))
                     .host(host)
