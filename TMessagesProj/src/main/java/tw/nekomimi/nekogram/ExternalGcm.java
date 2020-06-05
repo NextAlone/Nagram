@@ -77,7 +77,7 @@ public class ExternalGcm {
                     FileLog.d("No valid Google Play Services APK found.");
                 }
                 SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
-                GcmPushListenerService.sendRegistrationToServer(null);
+                ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
             }
         }, 1000);
 

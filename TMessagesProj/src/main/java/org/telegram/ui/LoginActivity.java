@@ -113,7 +113,6 @@ import org.telegram.ui.Components.SlideView;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -551,11 +550,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     int dcType;
 
-                    if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
-                        dcType = 2;
-                    } else if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
+                     if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
                         dcType = 1;
-                    } else {
+                    } else if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
+                         dcType = 2;
+                     } else {
                         dcType = 0;
                     }
 
@@ -793,7 +792,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         for (EditText input : inputs) input.setVisibility(View.GONE);
 
                     }
-
 
                     builder.addCancelButton();
 
