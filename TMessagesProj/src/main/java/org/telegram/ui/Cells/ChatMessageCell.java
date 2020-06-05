@@ -6411,11 +6411,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     textX += diff;
                 }
             }
-            if (transitionParams.animateChangeProgress != 1f && transitionParams.animateMessageText) {
-                drawMessageText(canvas, transitionParams.animateOutTextBlocks, false, (1f - transitionParams.animateChangeProgress));
+            if (transitionParams.animateChangeProgress != 1.0f && transitionParams.animateMessageText) {
+                drawMessageText(canvas, transitionParams.animateOutTextBlocks, false, (1.0f - transitionParams.animateChangeProgress));
                 drawMessageText(canvas, currentMessageObject.textLayoutBlocks, true, transitionParams.animateChangeProgress);
             } else {
-                drawMessageText(canvas, currentMessageObject.textLayoutBlocks, true, 1f);
+                drawMessageText(canvas, currentMessageObject.textLayoutBlocks, true, 1.0f);
             }
 
 
@@ -7135,75 +7135,77 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private void drawMessageText(Canvas canvas, ArrayList<MessageObject.TextLayoutBlock> textLayoutBlocks, boolean origin, float alpha) {
-        if (textLayoutBlocks != null && !textLayoutBlocks.isEmpty()) {
-            int oldAlpha = 0;
-            int firstVisibleBlockNum;
-            int lastVisibleBlockNum;
-            if (origin) {
-                if (fullyDraw) {
-                    this.firstVisibleBlockNum = 0;
-                    this.lastVisibleBlockNum = textLayoutBlocks.size();
+        if (textLayoutBlocks == null || textLayoutBlocks.isEmpty()) {
+            return;
+        }
+        int oldAlpha = 0;
+        int firstVisibleBlockNum;
+        int lastVisibleBlockNum;
+        if (origin) {
+            if (fullyDraw) {
+                this.firstVisibleBlockNum = 0;
+                this.lastVisibleBlockNum = textLayoutBlocks.size();
+            }
+            firstVisibleBlockNum = this.firstVisibleBlockNum;
+            lastVisibleBlockNum = this.lastVisibleBlockNum;
+        } else {
+            firstVisibleBlockNum = 0;
+            lastVisibleBlockNum = textLayoutBlocks.size();
+        }
+
+        if (firstVisibleBlockNum >= 0) {
+            int restore = Integer.MIN_VALUE;
+            if (alpha != 1.0f) {
+                if (currentBackgroundDrawable != null) {
+                    int top = currentBackgroundDrawable.getBounds().top;
+                    int bottom = currentBackgroundDrawable.getBounds().bottom;
+
+                    if (getY() < 0) {
+                        top = (int) -getY();
+                    }
+                    if (getY() + getMeasuredHeight() > parentHeight) {
+                        bottom = (int) (parentHeight - getY());
+                    }
+                    rect.set(
+                            currentBackgroundDrawable.getBounds().left, top,
+                            currentBackgroundDrawable.getBounds().right, bottom
+                    );
+                } else {
+                    rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 }
-                firstVisibleBlockNum = this.firstVisibleBlockNum;
-                lastVisibleBlockNum = this.lastVisibleBlockNum;
-            } else {
-                firstVisibleBlockNum = 0;
-                lastVisibleBlockNum = textLayoutBlocks.size();
+                restore = canvas.saveLayerAlpha(rect, (int) (alpha * 255), Canvas.ALL_SAVE_FLAG);
+            }
+            for (int a = firstVisibleBlockNum; a <= lastVisibleBlockNum; a++) {
+                if (a >= textLayoutBlocks.size()) {
+                    break;
+                }
+                MessageObject.TextLayoutBlock block = textLayoutBlocks.get(a);
+                canvas.save();
+                canvas.translate(textX - (block.isRtl() ? (int) Math.ceil(currentMessageObject.textXOffset) : 0), textY + block.textYOffset);
+                if (pressedLink != null && a == linkBlockNum) {
+                    for (int b = 0; b < urlPath.size(); b++) {
+                        canvas.drawPath(urlPath.get(b), Theme.chat_urlPaint);
+                    }
+                }
+                if (a == linkSelectionBlockNum && !urlPathSelection.isEmpty()) {
+                    for (int b = 0; b < urlPathSelection.size(); b++) {
+                        canvas.drawPath(urlPathSelection.get(b), Theme.chat_textSearchSelectionPaint);
+                    }
+                }
+
+                if (delegate.getTextSelectionHelper() != null && transitionParams.animateChangeProgress == 1f) {
+                    delegate.getTextSelectionHelper().draw(currentMessageObject, block, canvas);
+                }
+                try {
+                    block.textLayout.draw(canvas);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                canvas.restore();
             }
 
-            if (firstVisibleBlockNum >= 0) {
-                if (alpha != 1f) {
-                    if (currentBackgroundDrawable != null) {
-                        int top = currentBackgroundDrawable.getBounds().top;
-                        int bottom = currentBackgroundDrawable.getBounds().bottom;
-
-                        if (getY() < 0) {
-                            top = (int) -getY();
-                        }
-                        if (getY() + getMeasuredHeight() > parentHeight) {
-                            bottom = (int) (parentHeight - getY());
-                        }
-                        rect.set(
-                                currentBackgroundDrawable.getBounds().left, top,
-                                currentBackgroundDrawable.getBounds().right, bottom
-                        );
-                    } else {
-                        rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                    }
-                    canvas.saveLayerAlpha(rect, (int) (alpha * 255), Canvas.ALL_SAVE_FLAG);
-                }
-                for (int a = firstVisibleBlockNum; a <= lastVisibleBlockNum; a++) {
-                    if (a >= textLayoutBlocks.size()) {
-                        break;
-                    }
-                    MessageObject.TextLayoutBlock block = textLayoutBlocks.get(a);
-                    canvas.save();
-                    canvas.translate(textX - (block.isRtl() ? (int) Math.ceil(currentMessageObject.textXOffset) : 0), textY + block.textYOffset);
-                    if (pressedLink != null && a == linkBlockNum) {
-                        for (int b = 0; b < urlPath.size(); b++) {
-                            canvas.drawPath(urlPath.get(b), Theme.chat_urlPaint);
-                        }
-                    }
-                    if (a == linkSelectionBlockNum && !urlPathSelection.isEmpty()) {
-                        for (int b = 0; b < urlPathSelection.size(); b++) {
-                            canvas.drawPath(urlPathSelection.get(b), Theme.chat_textSearchSelectionPaint);
-                        }
-                    }
-
-                    if (delegate.getTextSelectionHelper() != null && transitionParams.animateChangeProgress == 1f) {
-                        delegate.getTextSelectionHelper().draw(currentMessageObject, block, canvas);
-                    }
-                    try {
-                        block.textLayout.draw(canvas);
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    canvas.restore();
-                }
-
-                if (alpha != 1f) {
-                    canvas.restore();
-                }
+            if (restore != Integer.MIN_VALUE) {
+                canvas.restoreToCount(restore);
             }
         }
     }
@@ -9206,7 +9208,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
 
-        if (alphaInternal != 1f) {
+        int restore = Integer.MIN_VALUE;
+        if (alphaInternal != 1.0f) {
             int top = 0;
             int left = 0;
             int bottom = getMeasuredHeight();
@@ -9233,7 +9236,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 bottom = (int) (parentHeight - getY());
             }
             rect.set(left, top, right, bottom);
-            canvas.saveLayerAlpha(rect, (int) (255 * alphaInternal), Canvas.ALL_SAVE_FLAG);
+            restore = canvas.saveLayerAlpha(rect, (int) (255 * alphaInternal), Canvas.ALL_SAVE_FLAG);
         }
         if (transitionParams.animateBackgroundBoundsInner && currentBackgroundDrawable != null) {
             Rect r = currentBackgroundDrawable.getBounds();
@@ -9348,8 +9351,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 parent.invalidate();
             }
         }
-        if (alphaInternal != 1f) {
-            canvas.restore();
+        if (restore != Integer.MIN_VALUE) {
+            canvas.restoreToCount(restore);
         }
         updateSelectionTextPosition();
     }
@@ -9492,9 +9495,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return;
         }
 
+        int restore = Integer.MIN_VALUE;
         if (alpha != 1f) {
             rect.set(0, 0, getMaxNameWidth(), getMeasuredHeight());
-            canvas.saveLayerAlpha(rect, (int) (255 * alpha), Canvas.ALL_SAVE_FLAG);
+            restore = canvas.saveLayerAlpha(rect, (int) (255 * alpha), Canvas.ALL_SAVE_FLAG);
         }
 
         if (drawNameLayout && nameLayout != null) {
@@ -9689,8 +9693,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
 
-        if (alpha != 1f) {
-            canvas.restore();
+        if (restore != Integer.MIN_VALUE) {
+            canvas.restoreToCount(restore);
         }
     }
 
@@ -9825,13 +9829,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
 
-        if (renderingAlpha != 1f) {
+        int restore = Integer.MIN_VALUE;
+        if (renderingAlpha != 1.0f) {
             rect.set(captionX, captionY, captionX + captionLayout.getWidth(),  captionY + captionLayout.getHeight());
-            canvas.saveLayerAlpha(rect, (int) (255 * renderingAlpha), Canvas.ALL_SAVE_FLAG);
+            restore = canvas.saveLayerAlpha(rect, (int) (255 * renderingAlpha), Canvas.ALL_SAVE_FLAG);
         }
 
         canvas.translate(captionX, captionY);
-
 
         if (pressedLink != null) {
             for (int b = 0; b < urlPath.size(); b++) {
@@ -9853,8 +9857,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 FileLog.e(e);
             }
         }
-        if (renderingAlpha != 1f) {
-            canvas.restore();
+        if (restore != Integer.MIN_VALUE) {
+            canvas.restoreToCount(restore);
         }
         canvas.restore();
     }
