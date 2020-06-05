@@ -128,9 +128,6 @@ import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
 import org.telegram.ui.Components.AnimationProperties;
-import org.telegram.ui.Components.FilterTabsView;
-import org.telegram.ui.Components.FiltersListBottomSheet;
-import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ChatActivityEnterView;
@@ -139,6 +136,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.DialogsItemAnimator;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.FilterTabsView;
+import org.telegram.ui.Components.FiltersListBottomSheet;
 import org.telegram.ui.Components.FragmentContextView;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
@@ -1550,16 +1548,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         AndroidUtilities.runOnUIThread(() -> Theme.createChatResources(context, false));
 
         ActionBarMenu menu = actionBar.createMenu();
+        doneItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarDefaultSelector), Theme.getColor(Theme.key_actionBarDefaultIcon), true);
+        doneItem.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
+        actionBar.addView(doneItem, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 0, 10, 0));
+        doneItem.setOnClickListener(v -> {
+            filterTabsView.setIsEditing(false);
+            showDoneItem(false);
+        });
+        doneItem.setAlpha(0.0f);
+        doneItem.setVisibility(View.GONE);
         if (!onlySelect && searchString == null && folderId == 0) {
-            doneItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarDefaultSelector), Theme.getColor(Theme.key_actionBarDefaultIcon), true);
-            doneItem.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
-            actionBar.addView(doneItem, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 0, 10, 0));
-            doneItem.setOnClickListener(v -> {
-                filterTabsView.setIsEditing(false);
-                showDoneItem(false);
-            });
-            doneItem.setAlpha(0.0f);
-            doneItem.setVisibility(View.GONE);
             proxyDrawable = new ProxyDrawable(context);
             proxyItem = menu.addItem(2, proxyDrawable);
             proxyItem.setContentDescription(LocaleController.getString("ProxySettings", R.string.ProxySettings));
@@ -1689,7 +1687,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             scrollToTop();
         });
 
-        if (initialDialogsType == 0 && folderId == 0 && !onlySelect && TextUtils.isEmpty(searchString)) {
+        if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward) || initialDialogsType == 0 && folderId == 0 && !onlySelect && TextUtils.isEmpty(searchString)) {
             scrimPaint = new Paint() {
                 @Override
                 public void setAlpha(int a) {
