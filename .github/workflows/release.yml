@@ -58,7 +58,7 @@ jobs:
           git remote add origin "git@github.com:NekoX-Dev/Resources.git"
           git add . --all
           git commit -m 喵
-          git push github master -f
+          git push origin master -f
       - uses: r0adkll/upload-google-play@master
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
