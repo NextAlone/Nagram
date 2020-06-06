@@ -1941,6 +1941,8 @@ public class TLRPC {
         public String text;
         public byte[] option;
 
+        public String translatedText; // custom
+
         public static TL_pollAnswer TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             if (TL_pollAnswer.constructor != constructor) {
                 if (exception) {
@@ -25066,6 +25068,8 @@ public class TLRPC {
         public int close_period;
         public int close_date;
 
+        public String translatedQuestion; // custom
+
         public static Poll TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             Poll result = null;
             switch (constructor) {
@@ -41404,7 +41408,8 @@ public class TLRPC {
 		public int reqId; //custom
         public int realId; //custom
         public int stickerVerified = 1; //custom
-
+        public String translatedMessage; //custom
+        public boolean translated; // custom
 
         public static Message TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             Message result = null;

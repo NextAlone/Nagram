@@ -57,6 +57,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoXConfig;
 
 public class MessageObject {
@@ -1668,14 +1669,22 @@ public class MessageObject {
     }
 
     public void applyNewText() {
-        if (TextUtils.isEmpty(messageOwner.message)) {
+
+        if ((!messageOwner.translated && StrUtil.isBlank(messageOwner.message)) || (messageOwner.translated && StrUtil.isBlank(messageOwner.translatedMessage))) {
             return;
         }
+
         TLRPC.User fromUser = null;
         if (isFromUser()) {
             fromUser = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id);
         }
-        messageText = messageOwner.message;
+
+        if (messageOwner.translated) {
+            messageText = messageOwner.translatedMessage;
+        } else {
+            messageText = messageOwner.message;
+        }
+
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
@@ -3177,8 +3186,16 @@ public class MessageObject {
         if (caption != null || isRoundVideo()) {
             return;
         }
-        if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && !TextUtils.isEmpty(messageOwner.message)) {
-            caption = Emoji.replaceEmoji(messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
+        if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && (!messageOwner.translated && StrUtil.isNotBlank(messageOwner.message)) && (messageOwner.translated && StrUtil.isNotBlank(messageOwner.translatedMessage))) {
+
+            String msg;
+            if (messageOwner.translated) {
+                msg = messageOwner.translatedMessage;
+            } else {
+                msg = messageOwner.message;
+            }
+
+            caption = Emoji.replaceEmoji(msg, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
 
             boolean hasEntities;
             if (messageOwner.send_state != MESSAGE_SEND_STATE_SENT) {

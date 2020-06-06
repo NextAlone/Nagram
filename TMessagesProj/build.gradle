@@ -154,7 +154,6 @@ android {
     packagingOptions {
 
         exclude '/fabric/**'
-        exclude '/kotlin/**'
         exclude '/META-INF/*.version'
         exclude '/META-INF/*.kotlin_module'
         exclude '/builddef.lst'

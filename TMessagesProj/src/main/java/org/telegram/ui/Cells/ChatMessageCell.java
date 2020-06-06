@@ -2525,7 +2525,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
         if (messageObjectToSet != null) {
@@ -2588,6 +2588,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
+    private boolean lastTranslated;
+
     private void setMessageContent(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
         if (messageObject.checkLayout() || currentPosition != null && lastHeight != AndroidUtilities.displaySize.y) {
             currentMessageObject = null;
@@ -2643,7 +2645,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             groupChanged = newPosition != currentPosition;
         }
-        if (messageChanged || dataChanged || groupChanged || pollChanged || isPhotoDataChanged(messageObject) || pinnedBottom != bottomNear || pinnedTop != topNear) {
+        boolean transChanged = false;
+        if (lastTranslated != messageObject.messageOwner.translated) {
+            lastTranslated = messageObject.messageOwner.translated;
+            transChanged = true;
+        }
+        if (messageChanged || dataChanged || groupChanged || pollChanged || isPhotoDataChanged(messageObject) || pinnedBottom != bottomNear || pinnedTop != topNear || transChanged) {
             pinnedBottom = bottomNear;
             pinnedTop = topNear;
             currentMessageObject = messageObject;
@@ -3861,7 +3868,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (pollVoted) {
                     messageObject.checkedVotes.clear();
                 }
-                titleLayout = new StaticLayout(Emoji.replaceEmoji(media.poll.question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.dp(2) - getExtraTextX() * 2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+                String question;
+
+                if (messageObject.messageOwner.translated) {
+
+                    question = media.poll.translatedQuestion;
+
+                } else {
+
+                    question = media.poll.question;
+
+                }
+
+                titleLayout = new StaticLayout(Emoji.replaceEmoji(question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.dp(2) - getExtraTextX() * 2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 boolean titleRtl = false;
                 if (titleLayout != null) {
                     for (int a = 0, N = titleLayout.getLineCount(); a < N; a++) {
@@ -3997,7 +4017,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 for (int a = 0, N = media.poll.answers.size(); a < N; a++) {
                     PollButton button = new PollButton();
                     button.answer = media.poll.answers.get(a);
-                    button.title = new StaticLayout(Emoji.replaceEmoji(button.answer.text, Theme.chat_audioPerformerPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false), Theme.chat_audioPerformerPaint, maxWidth - AndroidUtilities.dp(33), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+                    String answerText;
+                    if (messageObject.messageOwner.translated) {
+                        answerText = button.answer.translatedText;
+                    } else {
+                        answerText = button.answer.text;
+                    }
+
+                    button.title = new StaticLayout(Emoji.replaceEmoji(answerText, Theme.chat_audioPerformerPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false), Theme.chat_audioPerformerPaint, maxWidth - AndroidUtilities.dp(33), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     button.y = height + AndroidUtilities.dp(52);
                     button.height = button.title.getHeight();
                     pollButtons.add(button);

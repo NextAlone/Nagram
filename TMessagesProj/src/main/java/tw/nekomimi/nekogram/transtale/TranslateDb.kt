@@ -49,9 +49,9 @@ class TranslateDb(val code: String) {
 
     }
 
-    fun query(text: String) = synchronized<String?>(this) {
+    fun query(text: String) = synchronized(this) {
 
-        return conn.find(ObjectFilters.eq("text", text)).firstOrDefault().trans
+        conn.find(ObjectFilters.eq("text", text)).firstOrDefault()?.trans
 
     }
 

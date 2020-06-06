@@ -227,6 +227,7 @@ import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.parts.MessageTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
@@ -259,11 +260,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private RadialProgressView progressBar;
     private ActionBarMenuSubItem addContactItem;
     private ClippingImageView animatingImageView;
-    private RecyclerListView chatListView;
+    public RecyclerListView chatListView;
     private ChatListItemAnimator chatListItemAniamtor;
     private int chatListViewClipTop;
     private GridLayoutManagerFixed chatLayoutManager;
-    private ChatActivityAdapter chatAdapter;
+    public ChatActivityAdapter chatAdapter;
     private UnreadCounterTextView bottomOverlayChatText;
     private UnreadCounterTextView bottomOverlayChatText2;
     private RadialProgressView bottomOverlayProgress;
@@ -423,7 +424,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private AnimatorSet runningAnimation;
 
     private MessageObject selectedObjectToEditCaption;
-    private MessageObject selectedObject;
+    public MessageObject selectedObject;
     private MessageObject.GroupedMessages selectedObjectGroup;
     private ArrayList<MessageObject> forwardingMessages;
     private MessageObject forwardingMessage;
@@ -648,7 +649,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     replaceAnimator.cancel();
                 }
                 replaceProgress = 0;
-                replaceAnimator = ValueAnimator.ofFloat(0,1f);
+                replaceAnimator = ValueAnimator.ofFloat(0, 1f);
                 replaceAnimator.addUpdateListener(animation -> {
                     replaceProgress = (float) animation.getAnimatedValue();
                     invalidate();
@@ -658,6 +659,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
         }
+
         public void setText(CharSequence text) {
             layoutTextWidth = (int) Math.ceil(layoutPaint.measureText(text, 0, text.length()));
             textLayout = new StaticLayout(text, layoutPaint, layoutTextWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
@@ -2397,7 +2399,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     heightSize -= actionBarHeight;
                 }
 
-                if  (lastHeight != allHeight && ! SharedConfig.smoothKeyboard) {
+                if (lastHeight != allHeight && !SharedConfig.smoothKeyboard) {
                     measureKeyboardHeight();
                 }
                 int keyboardSize = SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight();
@@ -3424,7 +3426,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 );
                             }
                             canvas.translate(canvasOffsetX, canvasOffsetY);
-                            cell.drawCaptionLayout(canvas, selectionOnly,  alpha);
+                            cell.drawCaptionLayout(canvas, selectionOnly, alpha);
                             canvas.restore();
                         }
                         drawCaptionAfter.clear();
@@ -5870,7 +5872,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         bottomOverlayChatText2 = new UnreadCounterTextView(context);
         bottomOverlayChatText2.setVisibility(View.GONE);
-        bottomOverlayChat.addView(bottomOverlayChatText2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT,  0, 0, 1.5f, 0, 0));
+        bottomOverlayChat.addView(bottomOverlayChatText2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 0, 1.5f, 0, 0));
         bottomOverlayChatText2.setOnClickListener(v -> {
             if (chatInfo == null) {
                 return;
@@ -6413,7 +6415,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (chatAttachAlert.isShowing()) {
                         AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
                         if (chatActivityEnterView.getVisibility() == View.VISIBLE && fragmentView != null) {
-                       //     fragmentView.requestLayout();
+                            //     fragmentView.requestLayout();
                         }
                     }
                     super.dismissInternal();
@@ -11237,11 +11239,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             chatAdapter.notifyItemInserted(placeToPaste);
                         }
                         if (obj.isOut() && waitingForSendingMessageLoad) {
-                                waitingForSendingMessageLoad = false;
-                                chatActivityEnterView.hideTopView(true);
-                                if (changeBoundAnimator != null) {
-                                    changeBoundAnimator.start();
-                                }
+                            waitingForSendingMessageLoad = false;
+                            chatActivityEnterView.hideTopView(true);
+                            if (changeBoundAnimator != null) {
+                                changeBoundAnimator.start();
+                            }
                         }
                         if (!obj.isOut() && obj.messageOwner.mentioned && obj.isContentUnread()) {
                             newMentionsCount++;
@@ -14944,9 +14946,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(89);
                                 icons.add(R.drawable.menu_info);
                             }
-                            if (StrUtil.isNotBlank(selectedObject.messageOwner.message) && NekoConfig.showTranslate) {
-                                Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(selectedObject.messageOwner.message);
-                                items.add(matcher.find() ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
+                            if ((StrUtil.isNotBlank(selectedObject.messageOwner.message) || selectedObject.isPoll()) && NekoConfig.showTranslate) {
+                                items.add(selectedObject.messageOwner.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
                                 options.add(88);
                                 icons.add(R.drawable.ic_translate);
                             }
@@ -15999,87 +16000,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case 88: {
-                if (NekoConfig.translationProvider < 0) {
-                    TranslateBottomSheet.show(getParentActivity(), selectedObject.messageOwner.message);
-                } else {
-                    ChatMessageCell messageCell = null;
-                    int count = chatListView.getChildCount();
-                    for (int a = 0; a < count; a++) {
-                        View child = chatListView.getChildAt(a);
-                        if (child instanceof ChatMessageCell) {
-                            ChatMessageCell cell = (ChatMessageCell) child;
-                            if (cell.getMessageObject() == selectedObject) {
-                                messageCell = cell;
-                                break;
-                            }
-                        }
-                    }
-                    String original = selectedObject.messageOwner.message;
 
-                    Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(original);
-                    if (matcher.find()) {
-                        if (messageCell != null) {
-                            MessageHelper.setMessageContent(selectedObject, messageCell, original.replace(matcher.group(), ""));
-                            chatAdapter.updateRowWithMessageObject(selectedObject, true);
-                        }
-                    } else {
-                        ChatMessageCell finalMessageCell = messageCell;
-                        if (NekoConfig.translationProvider < 0) {
-                            TranslateBottomSheet.show(getParentActivity(), original);
-                        } else {
-                            if (TranslateDb.currentTarget().contains(original)) {
-                                if (finalMessageCell != null) {
-                                    MessageObject messageObject = finalMessageCell.getMessageObject();
-                                    MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
-                                            "\u200C\u200C\n" +
-                                            "\n" +
-                                            "--------" +
-                                            "\n" +
-                                            TranslateDb.currentTarget().query(original) +
-                                            "\u200C\u200C");
-                                    chatAdapter.updateRowWithMessageObject(messageObject, true);
-                                }
-                            } else {
-
-                                Translator.translate(original, new Translator.Companion.TranslateCallBack() {
-                                    @Override
-                                    public void onSuccess(@NotNull String translation) {
-                                        TranslateDb.currentTarget().save(original, translation);
-                                        if (getParentActivity() != null && finalMessageCell != null) {
-                                            MessageObject messageObject = finalMessageCell.getMessageObject();
-                                            MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
-                                                    "\u200C\u200C\n" +
-                                                    "\n" +
-                                                    "--------" +
-                                                    "\n" +
-                                                    translation +
-                                                    "\u200C\u200C");
-                                            chatAdapter.updateRowWithMessageObject(messageObject, true);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailed(boolean unsupported, @NotNull String message) {
-                                        Activity parentActivity = getParentActivity();
-                                        if (parentActivity != null) {
-                                            AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
-                                                if (NekoConfig.translationProvider < 0) {
-                                                    TranslateBottomSheet.show(getParentActivity(), original);
-                                                } else {
-                                                    Translator.translate(original, this);
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            }
-
-                        }
-                    }
-
-                }
+                MessageTransKt.translateMessage(this);
 
                 break;
+
             }
             case 89: {
                 presentFragment(new MessageDetailsActivity(selectedObject));
@@ -16235,14 +16160,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
 
-                if (messageCell == null) return 0;
+                if (selectedObject.messageOwner.translated) {
 
-                String original = selectedObject.messageOwner.message;
+                    selectedObject.messageOwner.translated = false;
 
-                Matcher matcher = Pattern.compile("\u200C\u200C\\n\\n--------\\n.*\u200C\u200C", Pattern.DOTALL).matcher(original);
-                if (matcher.find()) return 0;
+                    MessageHelper.resetMessageContent(selectedObject, messageCell);
 
-                ChatMessageCell finalMessageCell = messageCell;
+                    chatAdapter.updateRowWithMessageObject(selectedObject, true);
+
+                    return 1;
+
+                }
+
                 Translator.showTargetLangSelect(cell, 0, (locale) -> {
 
                     if (scrimPopupWindow != null) {
@@ -16251,55 +16180,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         scrimPopupWindowItems = null;
                     }
 
-                    if (NekoConfig.translationProvider < 0) {
-                        TranslateBottomSheet.show(getParentActivity(), original);
-                    } else {
-                        if (TranslateDb.forLocale(locale).contains(original)) {
-                            MessageObject messageObject = finalMessageCell.getMessageObject();
-                            MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
-                                    "\u200C\u200C\n" +
-                                    "\n" +
-                                    "--------" +
-                                    "\n" +
-                                    TranslateDb.forLocale(locale).query(original) +
-                                    "\u200C\u200C");
-                            chatAdapter.updateRowWithMessageObject(messageObject, true);
-                        } else {
-
-                            Translator.translate(locale, original, new Translator.Companion.TranslateCallBack() {
-                                @Override
-                                public void onSuccess(@NotNull String translation) {
-                                    TranslateDb.forLocale(locale).save(original, translation);
-                                    if (getParentActivity() != null) {
-                                        MessageObject messageObject = finalMessageCell.getMessageObject();
-                                        MessageHelper.setMessageContent(messageObject, finalMessageCell, original +
-                                                "\u200C\u200C\n" +
-                                                "\n" +
-                                                "--------" +
-                                                "\n" +
-                                                translation +
-                                                "\u200C\u200C");
-                                        chatAdapter.updateRowWithMessageObject(messageObject, true);
-                                    }
-                                }
-
-                                @Override
-                                public void onFailed(boolean unsupported, @NotNull String message) {
-                                    Activity parentActivity = getParentActivity();
-                                    if (parentActivity != null) {
-                                        AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
-                                            if (NekoConfig.translationProvider < 0) {
-                                                TranslateBottomSheet.show(getParentActivity(), original);
-                                            } else {
-                                                Translator.translate(original, this);
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
-
-                    }
+                    MessageTransKt.translateMessage(this, locale);
 
                     return Unit.INSTANCE;
 
@@ -18294,7 +18175,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         @Override
         public void notifyItemMoved(int fromPosition, int toPosition) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("notify item moved" + fromPosition + ":"  + toPosition);
+                FileLog.d("notify item moved" + fromPosition + ":" + toPosition);
             }
             if (chatListView.getItemAnimator() != chatListItemAniamtor) {
                 chatListView.setItemAnimator(chatListItemAniamtor);

@@ -25,8 +25,7 @@ public class MessageHelper extends BaseController {
         super(num);
     }
 
-    public static void setMessageContent(MessageObject messageObject, ChatMessageCell chatMessageCell, String message) {
-        messageObject.messageOwner.message = message;
+    public static void resetMessageContent(MessageObject messageObject, ChatMessageCell chatMessageCell) {
         if (messageObject.caption != null) {
             messageObject.caption = null;
             messageObject.generateCaption();
@@ -34,6 +33,7 @@ public class MessageHelper extends BaseController {
         }
         messageObject.applyNewText();
         messageObject.resetLayout();
+        chatMessageCell.onAttachedToWindow();
         chatMessageCell.requestLayout();
         chatMessageCell.invalidate();
     }
