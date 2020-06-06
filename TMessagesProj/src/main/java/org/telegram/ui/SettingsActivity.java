@@ -116,6 +116,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import cn.hutool.core.util.ArrayUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -1585,9 +1586,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private void sendLogs() {
 
+        File path = new File(EnvUtil.getTelegramPath(), "logs");
+
+        if (!path.isDirectory() || ArrayUtil.isEmpty(path.listFiles())) {
+
+            AlertUtil.showToast("Empty Logs");
+
+            return;
+
+        }
+
         File logsCache = new File(ApplicationLoader.getCacheDirFixed(), "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()) + ".zip");
 
-        ZipUtil.makeZip(logsCache, new File(EnvUtil.getTelegramPath(), "logs"));
+        ZipUtil.makeZip(logsCache, path);
 
         ShareUtil.shareFile(getParentActivity(), logsCache);
 

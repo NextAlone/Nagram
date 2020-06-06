@@ -748,14 +748,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             default:
                                 value = "Unknown";
                         }
-                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
                     }
                     break;
                 }
                 case 6: {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
                     if (position == googleCloudTranslateKeyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), NekoConfig.googleCloudTranslateKey, true);
+                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice",R.string.GoogleCloudTransKeyNotice), true);
                     } else if (position == cachePathRow) {
                         textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
                     }

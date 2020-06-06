@@ -55,12 +55,10 @@ jobs:
           git init
           git config --global user.name "世界"
           git config --global user.email "i@nekox.me"
-          git remote add github "git@github.com:NekoX-Dev/Resources.git"
-          git remote add gitlab "git@gitlab.com:NekoX/Resources.git"
+          git remote add origin "git@github.com:NekoX-Dev/Resources.git"
           git add . --all
           git commit -m 喵
           git push github master -f
-          git push gitlab master -f
       - uses: r0adkll/upload-google-play@master
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}

@@ -8,10 +8,10 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.json.JSONObject
+import org.telegram.messenger.BuildConfig
 import org.telegram.messenger.BuildVars
 import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
-import org.telegram.messenger.BuildConfig
 import org.telegram.messenger.R
 import org.tukaani.xz.XZInputStream
 import tw.nekomimi.nekogram.BottomBuilder
@@ -22,10 +22,7 @@ import java.util.zip.ZipInputStream
 
 object UpdateUtil {
 
-    val updateUrls = arrayOf(
-            "https://gitlab.com/NekoX/Resources/-/raw/master",
-            "https://raw.githubusercontent.com/NekoX-Dev/Resources/master"
-    )
+    val updateUrls = arrayOf("https://raw.githubusercontent.com/NekoX-Dev/Resources/master")
 
     @JvmStatic
     fun checkUpdate(ctx: Activity) = UIUtil.runOnIoDispatcher {

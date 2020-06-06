@@ -2697,25 +2697,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 f = FileLoader.getPathToAttach(currentFileLocation.location, avatarsDialogId != 0 || isEvent);
             }
 
-            if (f.exists()) {
+            Bitmap bitmap;
 
-                Bitmap bitmap;
+            if (isVideo) {
 
-                if (isVideo) {
+                bitmap = videoTextureView.getBitmap();
 
-                    bitmap = videoTextureView.getBitmap();
+            } else if (f != null && f.exists()) {
 
-                } else {
-
-                    bitmap = ImageLoader.loadBitmap(f.getPath(), null, -1f, -1f, false);
-
-                }
-
-                ProxyUtil.tryReadQR(parentActivity, bitmap);
+                bitmap = ImageLoader.loadBitmap(f.getPath(), null, -1f, -1f, false);
 
             } else {
                 showDownloadAlert();
+                return;
             }
+
+            ProxyUtil.tryReadQR(parentActivity, bitmap);
+
         } catch (Exception ignored) {
             AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound));
         }

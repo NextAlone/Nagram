@@ -196,6 +196,7 @@ import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_BOTTOM;
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_LEFT;
@@ -3842,6 +3843,41 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         MediaDataController.getInstance(currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000));
                         MessagesController.getInstance(currentAccount).saveGif(adapter[0].currentPage, document);
                     }
+                } else if (id == gallery_menu_scan) {
+
+                    boolean isVideo = imagesArr.get(currentIndex) instanceof TLRPC.TL_pageBlockVideo;
+
+                    try {
+
+                        if (isVideo) {
+
+                            ProxyUtil.tryReadQR(parentActivity, videoTextureView.getBitmap());
+
+                        } else {
+
+                            File f = getMediaFile(photoAdapter, currentIndex);
+
+                            if (f != null && f.exists()) {
+
+                                Bitmap bitmap = ImageLoader.loadBitmap(f.getPath(), null, -1f, -1f, false);
+
+                                ProxyUtil.tryReadQR(parentActivity, bitmap);
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+                                builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                                showDialog(builder.create());
+                            }
+
+                        }
+
+                    } catch (Exception ignored) {
+
+                        AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound));
+
+                    }
                 }
             }
 
@@ -3861,6 +3897,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         //menuItem.addSubItem(gallery_menu_share, LocaleController.getString("ShareFile", R.string.ShareFile), 0).setTextColor(0xfffafafa);
         menuItem.addSubItem(gallery_menu_save, R.drawable.baseline_image_24, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_savegif, R.drawable.deproko_baseline_gif_24, LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_scan, R.drawable.wallet_qr, LocaleController.getString("ScanQRCode", R.string.ScanQRCode)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.redrawPopup(0xf9222222);
 
         bottomLayout = new FrameLayout(parentActivity);
@@ -11662,6 +11699,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     private final static int gallery_menu_share = 2;
     private final static int gallery_menu_openin = 3;
     private final static int gallery_menu_savegif = 4;
+    private final static int gallery_menu_scan = 5;
 
     private static DecelerateInterpolator decelerateInterpolator;
     private static Paint progressPaint;
@@ -12289,6 +12327,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (currentAnimation != null) {
                 menuItem.setVisibility(View.VISIBLE);
                 menuItem.hideSubItem(gallery_menu_save);
+                menuItem.hideSubItem(gallery_menu_scan);
                 menuItem.showSubItem(gallery_menu_savegif);
                 actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));
             } else {
@@ -12303,6 +12342,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, currentIndex + 1, imagesArr.size()));
                 }
                 menuItem.showSubItem(gallery_menu_save);
+                menuItem.showSubItem(gallery_menu_scan);
                 menuItem.hideSubItem(gallery_menu_savegif);
             }
             groupedPhotosListView.fillList();
