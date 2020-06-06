@@ -9378,7 +9378,7 @@ public class MessagesController extends BaseController implements NotificationCe
             dialog.pinnedNum = 0;
         }
         sortDialogs(null);
-        if (!pin && dialogs.get(dialogs.size() - 1) == dialog && !dialogsEndReached.get(folderId)) {
+        if (!pin && !dialogs.isEmpty() && dialogs.get(dialogs.size() - 1) == dialog && !dialogsEndReached.get(folderId)) {
             dialogs.remove(dialogs.size() - 1);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);

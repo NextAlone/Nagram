@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.ui.Cells.ChatMessageCell;
 
@@ -74,7 +75,7 @@ public class RecyclerAnimationScrollHelper {
         oldStableIds.clear();
 
         for (int i = 0; i < n; i++) {
-            View child = recyclerView.getChildAt(0);
+            View child = recyclerView.getChildAt(i);
             oldViews.add(child);
             int childPosition = layoutManager.getPosition(child);
             positionToOldView.put(childPosition, child);
@@ -88,12 +89,9 @@ public class RecyclerAnimationScrollHelper {
             if (child instanceof ChatMessageCell) {
                 ((ChatMessageCell) child).setAnimationRunning(true, true);
             }
-            layoutManager.removeAndRecycleView(child, recyclerView.mRecycler);
-
         }
 
-        recyclerView.mRecycler.clear();
-        recyclerView.getRecycledViewPool().clear();
+        recyclerView.prepareForFastScroll();
 
         AnimatableAdapter animatableAdapter = null;
         if (adapter instanceof AnimatableAdapter) {
@@ -162,9 +160,9 @@ public class RecyclerAnimationScrollHelper {
                     if (bot > oldH) oldH = bot;
                     if (topl < oldT) oldT = topl;
 
-
                     if (view.getParent() == null) {
                         recyclerView.addView(view);
+                        layoutManager.ignoreView(view);
                     }
                     if (view instanceof ChatMessageCell) {
                         ((ChatMessageCell) view).setAnimationRunning(true, true);
@@ -178,8 +176,6 @@ public class RecyclerAnimationScrollHelper {
                     int finalHeight = scrollDown ? oldH : recyclerView.getHeight() - oldT;
                     scrollLength = finalHeight + (scrollDown ? -top : bottom - recyclerView.getHeight());
                 }
-
-
 
                 if (animator != null) {
                     animator.removeAllListeners();
@@ -229,6 +225,7 @@ public class RecyclerAnimationScrollHelper {
                                 ((ChatMessageCell) view).setAnimationRunning(false, true);
                             }
                             view.setTranslationY(0);
+                            layoutManager.stopIgnoringView(view);
                             recyclerView.removeView(view);
                         }
 
@@ -241,6 +238,10 @@ public class RecyclerAnimationScrollHelper {
 
                             if (recyclerView.mChildHelper.getHiddenChildCount() != 0) {
                                 throw new RuntimeException("hidden child count must be 0");
+                            }
+
+                            if (recyclerView.getCachedChildCount() != 0) {
+                                throw new RuntimeException("recycler cached child count must be 0");
                             }
                         }
 
