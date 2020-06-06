@@ -1670,7 +1670,7 @@ public class MessageObject {
 
     public void applyNewText() {
 
-        if ((!messageOwner.translated && StrUtil.isBlank(messageOwner.message)) || (messageOwner.translated && StrUtil.isBlank(messageOwner.translatedMessage))) {
+        if (StrUtil.isBlank(messageOwner.message) || (messageOwner.translated && StrUtil.isBlank(messageOwner.translatedMessage))) {
             return;
         }
 
@@ -3186,7 +3186,7 @@ public class MessageObject {
         if (caption != null || isRoundVideo()) {
             return;
         }
-        if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && (!messageOwner.translated && StrUtil.isNotBlank(messageOwner.message)) && (messageOwner.translated && StrUtil.isNotBlank(messageOwner.translatedMessage))) {
+        if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && StrUtil.isNotBlank(messageOwner.message) && (!messageOwner.translated || StrUtil.isNotBlank(messageOwner.translatedMessage))) {
 
             String msg;
             if (messageOwner.translated) {
