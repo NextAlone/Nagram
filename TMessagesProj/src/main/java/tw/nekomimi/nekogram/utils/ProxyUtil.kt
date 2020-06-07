@@ -14,8 +14,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import cn.hutool.core.codec.Base64
-import cn.hutool.core.util.StrUtil
+import android.util.Base64
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
@@ -26,20 +25,15 @@ import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import org.json.JSONArray
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
 import org.telegram.ui.ActionBar.BottomSheet
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.NetworkInterface
 import java.util.*
 import kotlin.collections.HashMap
 
 object ProxyUtil {
-
-    @JvmField
-    val cacheFile = File(ApplicationLoader.applicationContext.filesDir.parentFile, "nekox/remote_proxy_list.json")
 
     @JvmStatic
     fun isVPNEnabled(): Boolean {
@@ -61,54 +55,11 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun downloadLegacyProxyList(): List<String>? {
-
-        runCatching {
-
-            // 从 GITEE 主站 读取
-
-            JSONArray(HttpUtil.get("https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list.json"))
-
-        }.recoverCatching {
-
-            // 从 GITLAB 读取
-
-            JSONArray(HttpUtil.get("https://gitlab.com/nekohasekai/nekox-proxy-list/-/raw/master/proxy_list.json"))
-
-        }.recoverCatching {
-
-            // 从 GITHUB PAGES 读取
-
-            JSONArray(HttpUtil.get("https://nekox-dev.github.io/ProxyList/proxy_list.json"))
-
-        }.recoverCatching {
-
-            // 从 GITHUB 主站 读取
-
-            val master = HttpUtil.getByteArray("https://github.com/NekoX-Dev/ProxyList/archive/master.zip")
-
-            JSONArray(String(ZipUtil.read(ByteArrayInputStream(master), "ProxyList-master/proxy_list.json")))
-
-        }.getOrNull()?.also { arr ->
-
-            return (0 until arr.length()).map {
-
-                SharedConfig.parseProxyInfo(arr.getJSONObject(it).getString("proxy")).toUrl()
-
-            }
-
-        }
-
-        return null
-
-    }
-
-    @JvmStatic
     fun parseProxies(_text: String): MutableList<String> {
 
         val text = runCatching {
 
-            Base64.decodeStr(_text)
+            String(Base64.decode(_text, Base64.URL_SAFE))
 
         }.recover {
 

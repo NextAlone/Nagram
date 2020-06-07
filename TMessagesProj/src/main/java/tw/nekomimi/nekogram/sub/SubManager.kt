@@ -9,14 +9,12 @@ object SubManager {
 
     val database by lazy { mkDatabase("proxy_sub") }
 
-    @JvmField var count = 0
+    val count get() = subList.find().totalCount()
 
     @JvmStatic
     val subList by lazy {
 
         database.getRepository("proxy_sub", SubInfo::class.java).apply {
-
-            count = find().totalCount()
 
             val public = find(ObjectFilters.eq("id", 1L)).firstOrDefault()
 
@@ -24,6 +22,12 @@ object SubManager {
 
                 name = LocaleController.getString("NekoXProxy", R.string.NekoXProxy)
                 enable = public?.enable ?: true
+
+                urls = listOf(
+                        "https://gitlab.com/nekohasekai/nekox-proxy-list/-/raw/master/proxy_list",
+                        "https://nekox-dev.github.io/ProxyList/proxy_list",
+                        "https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list"
+                )
 
                 id = 1L
                 internal = true

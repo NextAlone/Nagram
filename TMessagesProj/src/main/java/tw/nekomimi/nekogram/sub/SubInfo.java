@@ -54,28 +54,6 @@ public class SubInfo implements Mappable {
 
         HashMap<String,Exception> exceptions = new HashMap<>();
 
-        if (id == 1) {
-
-            try {
-
-                List<String> legacyList = ProxyUtil.downloadLegacyProxyList();
-
-                if (legacyList != null) {
-
-                    exceptions.put("<Internal>", new IOException("Update Failed"));
-
-                    return legacyList;
-
-                }
-
-            } catch (Exception e) {
-
-                exceptions.put("<Internal>", e);
-
-            }
-
-        }
-
         for (String url : urls) {
 
             try {
