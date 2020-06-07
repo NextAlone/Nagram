@@ -166,8 +166,6 @@ fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.c
 
                             question = Translator.translate(target, pool.question)
 
-                            db.save(pool.question, question!!)
-
                         }.onFailure {
 
                             status.uDismiss()
@@ -204,8 +202,6 @@ fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.c
 
                                 answer = Translator.translate(target, it.text)
 
-                                db.save(it.text, answer!!)
-
                             }.onFailure { e ->
 
                                 status.uDismiss()
@@ -241,8 +237,6 @@ fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.c
                         runCatching {
 
                             text = Translator.translate(target, selectedObject.messageOwner.message)
-
-                            db.save(selectedObject.messageOwner.message, text!!)
 
                         }.onFailure {
 

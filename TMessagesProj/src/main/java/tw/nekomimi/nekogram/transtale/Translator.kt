@@ -83,7 +83,11 @@ interface Translator {
 
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
-            return translator.doTranslate("auto", toLang, query)
+            return translator.doTranslate("auto", toLang, query).also {
+
+                to.transDb.save(query, it)
+
+            }
 
         }
 

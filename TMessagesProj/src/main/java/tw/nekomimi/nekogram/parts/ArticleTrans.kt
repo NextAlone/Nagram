@@ -135,7 +135,7 @@ fun ArticleViewer.doTransLATE() {
 
                         if (cancel.get()) return@async
 
-                        TranslateDb.currentTarget().save(str, Translator.translate(str))
+                        Translator.translate(str)
 
                         update((all - taskCount.get()).toString() + " / " + all)
 

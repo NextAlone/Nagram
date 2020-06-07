@@ -38,30 +38,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.media.MediaCodecInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
-
-import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.collection.ArrayMap;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.dynamicanimation.animation.DynamicAnimation;
-import androidx.dynamicanimation.animation.SpringAnimation;
-import androidx.dynamicanimation.animation.SpringForce;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScrollerEnd;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -114,11 +96,29 @@ import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScrollerEnd;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.BuildConfig;
@@ -126,31 +126,34 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DownloadController;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SecureDocument;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.WebFile;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.Utilities;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -158,9 +161,6 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.MentionsAdapter;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.PhotoPickerPhotoCell;
 import org.telegram.ui.Components.AlertsCreator;
@@ -170,7 +170,6 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.ClippingImageView;
-import org.telegram.messenger.ImageReceiver;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.FadingTextViewLayout;
 import org.telegram.ui.Components.FilterShaders;
@@ -213,9 +212,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
@@ -828,9 +833,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean bottomTouchEnabled = true;
 
     private ArrayList<MessageObject> imagesArrTemp = new ArrayList<>();
-    private SparseArray<MessageObject>[] imagesByIdsTemp = new SparseArray[] {new SparseArray<>(), new SparseArray<>()};
+    private SparseArray<MessageObject>[] imagesByIdsTemp = new SparseArray[]{new SparseArray<>(), new SparseArray<>()};
     private ArrayList<MessageObject> imagesArr = new ArrayList<>();
-    private SparseArray<MessageObject>[] imagesByIds = new SparseArray[] {new SparseArray<>(), new SparseArray<>()};
+    private SparseArray<MessageObject>[] imagesByIds = new SparseArray[]{new SparseArray<>(), new SparseArray<>()};
     private ArrayList<ImageLocation> imagesArrLocations = new ArrayList<>();
     private ArrayList<SecureDocument> secureDocuments = new ArrayList<>();
     private ArrayList<TLRPC.Photo> avatarsArr = new ArrayList<>();
@@ -2646,7 +2651,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 String finalPath = (String) args[1];
                 long finalSize = (Long) args[3];
                 float progress = (float) args[4];
-                photoProgressViews[0].setProgress(progress,true);
+                photoProgressViews[0].setProgress(progress, true);
                 if (finalSize != 0) {
                     requestingPreview = false;
                     photoProgressViews[0].setProgress(1f, true);
@@ -2812,7 +2817,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             final Drawable circleDrawable = ContextCompat.getDrawable(parentActivity, R.drawable.circle_big);
             final CombinedDrawable playDrawable = new CombinedDrawable(circleDrawable.mutate(), ContextCompat.getDrawable(parentActivity, R.drawable.video_play1));
             final CombinedDrawable pauseDrawable = new CombinedDrawable(circleDrawable.mutate(), ContextCompat.getDrawable(parentActivity, R.drawable.video_pause1));
-            progressDrawables = new Drawable[] {
+            progressDrawables = new Drawable[]{
                     circleDrawable, // PROGRESS_EMPTY
                     ContextCompat.getDrawable(parentActivity, R.drawable.cancel_big), // PROGRESS_CANCEL
                     ContextCompat.getDrawable(parentActivity, R.drawable.load_big), // PROGRESS_LOAD
@@ -3518,9 +3523,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         bottomLayout.setBackgroundColor(0x7f000000);
         containerView.addView(bottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.BOTTOM | Gravity.LEFT));
 
-        pressedDrawable[0] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[] {0x32000000, 0});
+        pressedDrawable[0] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0x32000000, 0});
         pressedDrawable[0].setShape(GradientDrawable.RECTANGLE);
-        pressedDrawable[1] = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[] {0x32000000, 0});
+        pressedDrawable[1] = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{0x32000000, 0});
         pressedDrawable[1].setShape(GradientDrawable.RECTANGLE);
 
         groupedPhotosListView = new GroupedPhotosListView(actvityContext, AndroidUtilities.dp(10));
@@ -3914,8 +3919,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             sendPopupLayout.setBackgroundColor(0xf9222222);
 
             int i = 0;
-            for (int a = 0; a < 2; a++) {
-                if (a == 0 && placeProvider != null && placeProvider.getSelectedPhotos() != null) {
+            for (int a = 0; a < 3; a++) {
+                if (a == 1 && placeProvider != null && placeProvider.getSelectedPhotos() != null) {
                     HashMap<Object, Object> hashMap = placeProvider.getSelectedPhotos();
                     boolean hasTtl = false;
                     for (HashMap.Entry<Object, Object> entry : hashMap.entrySet()) {
@@ -3937,19 +3942,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (hasTtl) {
                         continue;
                     }
-                } else if (a == 1 && UserObject.isUserSelf(user)) {
+                } else if (a == 2 && UserObject.isUserSelf(user)) {
                     continue;
                 }
                 int num = a;
                 ActionBarMenuSubItem cell = new ActionBarMenuSubItem(parentActivity);
                 cell.setBackgroundDrawable(Theme.createSelectorDrawable(0x24ffffff, 7));
                 if (num == 0) {
+                    cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                } else if (num == 1) {
                     if (UserObject.isUserSelf(user)) {
                         cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
                     } else {
                         cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                     }
-                } else if (num == 1) {
+                } else if (num == 2) {
                     cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                 }
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
@@ -3960,10 +3967,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         sendPopupWindow.dismiss();
                     }
                     if (num == 0) {
+                        translateComment(TranslatorKt.getCode2Locale(NekoConfig.translateInputLang));
+                    } else if (num == 1) {
                         AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentChatActivity.getDialogId(), this::sendPressed);
                     } else if (num == 1) {
                         sendPressed(false, 0);
                     }
+                });
+                cell.setOnLongClickListener(v -> {
+                    if (num == 0) {
+                        Translator.showTargetLangSelect(cell, 0, (locale) -> {
+                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                                sendPopupWindow.dismiss();
+                            }
+                            translateComment(locale);
+                            return Unit.INSTANCE;
+                        });
+                        return true;
+                    }
+                    return false;
                 });
                 i++;
             }
@@ -4656,6 +4678,58 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
+    private void translateComment(Locale target) {
+
+        String origin = captionEditText.getFieldCharSequence().toString();
+
+        if (NekoConfig.translationProvider < 0) {
+            TranslateBottomSheet.show(parentActivity, origin);
+        } else {
+
+            TranslateDb db = TranslateDb.forLocale(target);
+            if (db.contains(origin)) {
+                String translated = db.query(origin);
+                captionEditText.setFieldText(translated);
+                return;
+
+            }
+
+            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+                final AtomicBoolean cancel = new AtomicBoolean();
+                AlertDialog status = AlertUtil.showProgress(parentActivity);
+
+                {
+
+                    status.setOnCancelListener((__) -> {
+                        cancel.set(true);
+                    });
+
+                    status.show();
+
+                }
+
+                @Override public void onSuccess(@NotNull String translation) {
+                    status.dismiss();
+                    captionEditText.setFieldText(translation);
+                }
+
+                @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                    status.dismiss();
+                    AlertUtil.showTransFailedDialog(parentActivity, unsupported, message, () -> {
+                        status = AlertUtil.showProgress(parentActivity);
+                        status.show();
+                        Translator.translate(origin, this);
+                    });
+                }
+
+            });
+
+        }
+
+    }
+
+
     private void sendPressed(boolean notify, int scheduleDate) {
         if (captionEditText.getTag() != null) {
             return;
@@ -4712,6 +4786,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         openCaptionEnter();
     };
+
     private TextView createCaptionTextView() {
         TextView textView = new TextView(actvityContext) {
             @Override
@@ -5123,7 +5198,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         Object object = imagesArrLocals.get(currentIndex);
         if (apply) {
             CharSequence caption = captionEditText.getFieldCharSequence();
-            CharSequence[] result = new CharSequence[] {caption};
+            CharSequence[] result = new CharSequence[]{caption};
 
             ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(result, supportsSendingNewEntities());
             if (object instanceof MediaController.PhotoEntry) {
@@ -7112,7 +7187,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 TLRPC.BotInlineResult botInlineResult = (TLRPC.BotInlineResult) object;
                 if (botInlineResult.document != null) {
                     return FileLoader.getAttachFileName(botInlineResult.document);
-                }  else if (botInlineResult.photo != null) {
+                } else if (botInlineResult.photo != null) {
                     TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(botInlineResult.photo.sizes, AndroidUtilities.getPhotoSize());
                     return FileLoader.getAttachFileName(sizeFull);
                 } else if (botInlineResult.content instanceof TLRPC.TL_webDocument) {

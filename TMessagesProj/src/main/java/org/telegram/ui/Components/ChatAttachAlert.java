@@ -44,13 +44,19 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Keep;
+import androidx.core.graphics.ColorUtils;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -79,22 +85,30 @@ import org.telegram.ui.PhotoPickerSearchActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import androidx.annotation.Keep;
-import androidx.core.graphics.ColorUtils;
-import androidx.dynamicanimation.animation.DynamicAnimation;
-import androidx.dynamicanimation.animation.SpringAnimation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import kotlin.Unit;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class ChatAttachAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
 
     public interface ChatAttachViewDelegate {
         void didPressedButton(int button, boolean arg, boolean notify, int scheduleDate);
+
         View getRevealView();
+
         void didSelectBot(TLRPC.User user);
+
         void onCameraOpened();
+
         void needEnterComment();
+
         void doOnIdle(Runnable runnable);
     }
 
@@ -1240,23 +1254,25 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
             itemCells = new ActionBarMenuSubItem[2];
             int i = 0;
-            for (int a = 0; a < 2; a++) {
-                if (a == 0) {
+            for (int a = 0; a < 3; a++) {
+                if (a == 1) {
                     if (!currentAttachLayout.canScheduleMessages()) {
                         continue;
                     }
-                } else if (a == 1 && UserObject.isUserSelf(user)) {
+                } else if (a == 2 && UserObject.isUserSelf(user)) {
                     continue;
                 }
                 int num = a;
                 itemCells[a] = new ActionBarMenuSubItem(getContext());
                 if (num == 0) {
+                    itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                } else if (num == 1) {
                     if (UserObject.isUserSelf(user)) {
                         itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
                     } else {
                         itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                     }
-                } else if (num == 1) {
+                } else if (num == 2) {
                     itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                 }
                 itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
@@ -1267,6 +1283,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         sendPopupWindow.dismiss();
                     }
                     if (num == 0) {
+                        translateComment(parentFragment.getParentActivity(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang));
+                    } else if (num == 1) {
                         AlertsCreator.createScheduleDatePickerDialog(getContext(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                             if (currentAttachLayout == photoLayout) {
                                 sendPressed(notify, scheduleDate);
@@ -1275,7 +1293,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                                 dismiss();
                             }
                         });
-                    } else if (num == 1) {
+                    } else if (num == 2) {
                         if (currentAttachLayout == photoLayout) {
                             sendPressed(false, 0);
                         } else {
@@ -1283,6 +1301,20 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             dismiss();
                         }
                     }
+                });
+
+                itemCells[a].setOnLongClickListener(v -> {
+                    if (num == 0) {
+                        Translator.showTargetLangSelect(itemCells[num], 0, (locale) -> {
+                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                                sendPopupWindow.dismiss();
+                            }
+                            translateComment(parentFragment.getParentActivity(), locale);
+                            return Unit.INSTANCE;
+                        });
+                        return true;
+                    }
+                    return false;
                 });
                 i++;
             }
@@ -1335,6 +1367,59 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         selectedCountView.setScaleX(0.2f);
         selectedCountView.setScaleY(0.2f);
         containerView.addView(selectedCountView, LayoutHelper.createFrame(42, 24, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, -8, 9));
+    }
+
+    private void translateComment(Context ctx, Locale target) {
+
+        if (NekoConfig.translationProvider < 0) {
+            TranslateBottomSheet.show(ctx, commentTextView.getText().toString());
+        } else {
+
+            TranslateDb db = TranslateDb.forLocale(target);
+            String origin = commentTextView.getText().toString();
+
+            if (db.contains(origin)) {
+
+                String translated = db.query(origin);
+                commentTextView.getEditText().setText(translated);
+
+                return;
+
+            }
+
+            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+                final AtomicBoolean cancel = new AtomicBoolean();
+                AlertDialog status = AlertUtil.showProgress(ctx);
+
+                {
+
+                    status.setOnCancelListener((__) -> {
+                        cancel.set(true);
+                    });
+
+                    status.show();
+
+                }
+
+                @Override public void onSuccess(@NotNull String translation) {
+                    status.dismiss();
+                    commentTextView.getEditText().setText(translation);
+                }
+
+                @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                    status.dismiss();
+                    AlertUtil.showTransFailedDialog(ctx, unsupported, message, () -> {
+                        status = AlertUtil.showProgress(ctx);
+                        status.show();
+                        Translator.translate(origin, this);
+                    });
+                }
+
+            });
+
+        }
+
     }
 
     @Override

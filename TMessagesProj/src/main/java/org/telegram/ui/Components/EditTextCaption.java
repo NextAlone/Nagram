@@ -143,7 +143,9 @@ public class EditTextCaption extends EditTextBoldCursor {
 
         if (StrUtil.isBlank(origin)) return;
 
-        if (TranslateDb.currentInputTarget().contains(text)) {
+        TranslateDb db = TranslateDb.currentInputTarget();
+
+        if (db.contains(text)) {
 
             setText(replaceAt(origin,start,end,TranslateDb.currentInputTarget().query(text)));
 
@@ -153,24 +155,24 @@ public class EditTextCaption extends EditTextBoldCursor {
                 TranslateBottomSheet.show(getContext(), text);
             } else {
 
-                AlertDialog pro = AlertUtil.showProgress(getContext());
-                pro.show();
-
                 Translator.translate(TranslatorKt.getCode2Locale(NekoConfig.translateInputLang), text, new Translator.Companion.TranslateCallBack() {
 
+                    AlertDialog status = AlertUtil.showProgress(getContext()); { status.show(); }
+
                     @Override public void onSuccess(@NotNull String translation) {
-                        pro.dismiss();
+                        status.dismiss();
                         setText(replaceAt(origin,start,end,translation));
-                        TranslateDb.currentInputTarget().save(text, translation);
                     }
 
                     @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                        pro.dismiss();
+                        status.dismiss();
                         AlertUtil.showTransFailedDialog(getContext(), unsupported, message, () -> {
-                            pro.show();
+                            status = AlertUtil.showProgress(getContext());
+                            status.show();
                             Translator.translate(text, this);
                         });
                     }
+
                 });
 
             }

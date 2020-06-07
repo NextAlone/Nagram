@@ -12185,6 +12185,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     boolean isVoted = object.isVoted();
                     TLRPC.TL_messageMediaPoll media = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                     if (poll != null) {
+                        object.messageOwner.translated = false;
                         media.poll = poll;
                         isQuiz = poll.quiz;
                     } else if (media.poll != null) {

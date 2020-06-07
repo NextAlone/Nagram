@@ -87,6 +87,7 @@ import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -126,46 +127,77 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
     public interface ChatActivityEnterViewDelegate {
         void onMessageSend(CharSequence message, boolean notify, int scheduleDate);
+
         void needSendTyping();
+
         void onTextChanged(CharSequence text, boolean bigChange);
+
         void onTextSelectionChanged(int start, int end);
+
         void onTextSpansChanged(CharSequence text);
+
         void onAttachButtonHidden();
+
         void onAttachButtonShow();
+
         void onWindowSizeChanged(int size);
+
         void onStickersTab(boolean opened);
+
         void onMessageEditEnd(boolean loading);
+
         void didPressAttachButton();
+
         void needStartRecordVideo(int state, boolean notify, int scheduleDate);
+
         void needChangeVideoPreviewState(int state, float seekProgress);
+
         void onSwitchRecordMode(boolean video);
+
         void onPreAudioVideoRecord();
+
         void needStartRecordAudio(int state);
+
         void needShowMediaBanHint();
+
         void onStickersExpandedChange();
+
         void onUpdateSlowModeButton(View button, boolean show, CharSequence time);
+
         default void scrollToSendingMessage() {
 
         }
+
         default void openScheduledMessages() {
 
         }
+
         default boolean hasScheduledMessages() {
             return true;
         }
+
         void onSendLongClick();
+
         void onAudioVideoInterfaceUpdated();
+
         default void bottomPanelTranslationYChanged(float translation) {
 
         }
+
         default void prepareMessageSending() {
 
         }
@@ -615,6 +647,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             drawable.stop();
             invalidate();
         }
+
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -937,7 +970,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             tooltipLayout = new StaticLayout(tooltipMessage, tooltipPaint, AndroidUtilities.dp(220), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
             int n = tooltipLayout.getLineCount();
             tooltipWidth = 0;
-            for (int i = 0 ; i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 float w = tooltipLayout.getLineWidth(i);
                 if (w > tooltipWidth) {
                     tooltipWidth = w;
@@ -1461,7 +1494,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         public void showWaves(boolean b, boolean animated) {
             if (!animated) {
-                wavesEnterAnimation = b? 1f : 0.5f;
+                wavesEnterAnimation = b ? 1f : 0.5f;
             }
             showWaves = b;
         }
@@ -2853,7 +2886,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         if (child == topView) {
             canvas.save();
-            canvas.clipRect(0, animatedTop, getMeasuredWidth(),  animatedTop + child.getLayoutParams().height + AndroidUtilities.dp(2));
+            canvas.clipRect(0, animatedTop, getMeasuredWidth(), animatedTop + child.getLayoutParams().height + AndroidUtilities.dp(2));
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (child == topView) {
@@ -2914,19 +2947,21 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
             sendPopupLayout.setShowedFromBotton(false);
 
-            for (int a = 0; a < 2; a++) {
-                if (a == 1 && (UserObject.isUserSelf(user) || slowModeTimer > 0 && !isInScheduleMode())) {
+            for (int a = 0; a < 3; a++) {
+                if (a == 2 && (UserObject.isUserSelf(user) || slowModeTimer > 0 && !isInScheduleMode())) {
                     continue;
                 }
                 int num = a;
                 ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
                 if (num == 0) {
+                    cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                } else if (num == 1) {
                     if (UserObject.isUserSelf(user)) {
                         cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
                     } else {
                         cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                     }
-                } else if (num == 1) {
+                } else if (num == 2) {
                     cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                 }
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
@@ -2935,11 +2970,27 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
+
                     if (num == 0) {
+                        translateComment(parentFragment.getParentActivity(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang));
+                    } if (num == 1) {
                         AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal);
-                    } else if (num == 1) {
+                    } else if (num == 2) {
                         sendMessageInternal(false, 0);
                     }
+                });
+                cell.setOnLongClickListener(v -> {
+                    if (num == 0) {
+                        Translator.showTargetLangSelect(cell, 0, (locale) -> {
+                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                                sendPopupWindow.dismiss();
+                            }
+                            translateComment(parentFragment.getParentActivity(), locale);
+                            return Unit.INSTANCE;
+                        });
+                        return true;
+                    }
+                    return false;
                 });
             }
 
@@ -2980,6 +3031,59 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 
         return false;
+    }
+
+    private void translateComment(Context ctx, Locale target) {
+
+        if (NekoConfig.translationProvider < 0) {
+            TranslateBottomSheet.show(ctx, messageEditText.getText().toString());
+        } else {
+
+            TranslateDb db = TranslateDb.forLocale(target);
+            String origin = messageEditText.getText().toString();
+
+            if (db.contains(origin)) {
+
+                String translated = db.query(origin);
+                messageEditText.setText(translated);
+
+                return;
+
+            }
+
+            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+                final AtomicBoolean cancel = new AtomicBoolean();
+                AlertDialog status = AlertUtil.showProgress(ctx);
+
+                {
+
+                    status.setOnCancelListener((__) -> {
+                        cancel.set(true);
+                    });
+
+                    status.show();
+
+                }
+
+                @Override public void onSuccess(@NotNull String translation) {
+                    status.dismiss();
+                    messageEditText.setText(translation);
+                }
+
+                @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                    status.dismiss();
+                    AlertUtil.showTransFailedDialog(getContext(), unsupported, message, () -> {
+                        status = AlertUtil.showProgress(ctx);
+                        status.show();
+                        Translator.translate(origin, this);
+                    });
+                }
+
+            });
+
+        }
+
     }
 
     public boolean isSendButtonVisible() {
@@ -7157,7 +7261,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 pressed = cancelRect.contains(x, y);
                 if (pressed) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        selectableBackground.setHotspot(x,y);
+                        selectableBackground.setHotspot(x, y);
                     }
                     setPressed(true);
                 }
