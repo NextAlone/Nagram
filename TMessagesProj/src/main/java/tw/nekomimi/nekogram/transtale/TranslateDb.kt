@@ -5,6 +5,7 @@ import org.dizitart.no2.objects.filters.ObjectFilters
 import org.telegram.messenger.LocaleController
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.database.mkDatabase
+import tw.nekomimi.nekogram.utils.UIUtil
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -17,6 +18,19 @@ class TranslateDb(val code: String) {
         val db = mkDatabase("translate_caches")
 
         val repo = HashMap<Locale, TranslateDb>()
+        val chat = db.getRepository(ChatLanguage::class.java)
+
+        @JvmStatic fun getChatLanguage(chatId: Int, default: Locale): Locale {
+
+            return chat.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.language?.code2Locale ?: default
+
+        }
+
+        @JvmStatic fun saveChatLanguage(chatId: Int, locale: Locale) = UIUtil.runOnIoDispatcher {
+
+            chat.update(ChatLanguage(chatId, locale.locale2code), true)
+
+        }
 
         @JvmStatic fun currentTarget() = NekoConfig.translateToLang?.transDbByCode ?: LocaleController.getInstance().currentLocale.transDb
 
@@ -34,7 +48,7 @@ class TranslateDb(val code: String) {
 
     }
 
-    fun clear() = synchronized<Unit>(this) {
+    fun clear() = synchronized(this) {
 
         conn.drop()
         conn = db.getRepository(code, TransItem::class.java)

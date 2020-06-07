@@ -49,6 +49,7 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PopupBuilder;
 
@@ -356,7 +357,17 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
             } else if (position == translateToLangRow || position == translateInputToLangRow) {
 
-                Translator.showTargetLangSelect(view, position == translateToLangRow ? 1 : 2, (locale) -> {
+                Translator.showTargetLangSelect(view, position == translateInputToLangRow, (locale) -> {
+
+                    if (position == translateToLangRow) {
+
+                        NekoConfig.setTranslateToLang(TranslatorKt.getLocale2code(locale));
+
+                    } else {
+
+                        NekoConfig.setTranslateInputToLang(TranslatorKt.getLocale2code(locale));
+
+                    }
 
                     listAdapter.notifyItemChanged(position);
 
@@ -755,7 +766,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 case 6: {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
                     if (position == googleCloudTranslateKeyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice",R.string.GoogleCloudTransKeyNotice), true);
+                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice), true);
                     } else if (position == cachePathRow) {
                         textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
                     }
@@ -885,7 +896,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (position == connectionRow || position == transRow || position == dialogsRow || position == privacyRow || position == generalRow || position == appearanceRow) {
                 return 4;
             } else if (position == googleCloudTranslateKeyRow || position == cachePathRow) {
-                return  6;
+                return 6;
             }
             return 3;
         }

@@ -2025,12 +2025,32 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 rectangle.bottom += AndroidUtilities.dp(1000);
                 return super.requestRectangleOnScreen(rectangle);
             }
+
         };
-        messageEditText.setDelegate(() -> {
-            if (delegate != null) {
-                delegate.onTextSpansChanged(messageEditText.getText());
+        messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+
+            @Override public void onSpansChanged() {
+                if (delegate != null) {
+                    delegate.onTextSpansChanged(messageEditText.getText());
+                }
             }
+
+            @Override public int getCurrentChat() {
+
+                int chatId;
+                if (parentFragment.getCurrentChat() != null) {
+                    chatId = parentFragment.getCurrentChat().id;
+                } else if (parentFragment.getCurrentUser() != null) {
+                    chatId = parentFragment.getCurrentUser().id;
+                } else {
+                    chatId = -1;
+                }
+
+                return chatId;
+            }
+
         });
+
         messageEditText.setWindowView(parentActivity.getWindow().getDecorView());
         TLRPC.EncryptedChat encryptedChat = parentFragment != null ? parentFragment.getCurrentEncryptedChat() : null;
         messageEditText.setAllowTextEntitiesIntersection(supportsSendingNewEntities());
@@ -2966,14 +2986,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
                 sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a, 0, 0));
+
+                int chatId;
+                if (chat != null) {
+                    chatId = chat.id;
+                } else if (user != null) {
+                    chatId = user.id;
+                } else {
+                    chatId = -1;
+                }
+
                 cell.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
-
                     if (num == 0) {
-                        translateComment(parentFragment.getParentActivity(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang));
-                    } if (num == 1) {
+                        translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
+                    }
+                    if (num == 1) {
                         AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal);
                     } else if (num == 2) {
                         sendMessageInternal(false, 0);
@@ -2981,11 +3011,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 });
                 cell.setOnLongClickListener(v -> {
                     if (num == 0) {
-                        Translator.showTargetLangSelect(cell, 0, (locale) -> {
+                        Translator.showTargetLangSelect(cell, true, (locale) -> {
                             if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                                 sendPopupWindow.dismiss();
                             }
-                            translateComment(parentFragment.getParentActivity(), locale);
+                            translateComment(locale);
+                            TranslateDb.saveChatLanguage(chatId, locale);
                             return Unit.INSTANCE;
                         });
                         return true;
@@ -3033,10 +3064,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return false;
     }
 
-    private void translateComment(Context ctx, Locale target) {
+    private void translateComment(Locale target) {
 
         if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(ctx, messageEditText.getText().toString());
+            TranslateBottomSheet.show(parentActivity, messageEditText.getText().toString());
         } else {
 
             TranslateDb db = TranslateDb.forLocale(target);
@@ -3054,7 +3085,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
 
                 final AtomicBoolean cancel = new AtomicBoolean();
-                AlertDialog status = AlertUtil.showProgress(ctx);
+                AlertDialog status = AlertUtil.showProgress(parentActivity);
 
                 {
 
@@ -3073,8 +3104,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                 @Override public void onFailed(boolean unsupported, @NotNull String message) {
                     status.dismiss();
-                    AlertUtil.showTransFailedDialog(getContext(), unsupported, message, () -> {
-                        status = AlertUtil.showProgress(ctx);
+                    AlertUtil.showTransFailedDialog(parentActivity, unsupported, message, () -> {
+                        status = AlertUtil.showProgress(parentActivity);
                         status.show();
                         Translator.translate(origin, this);
                     });

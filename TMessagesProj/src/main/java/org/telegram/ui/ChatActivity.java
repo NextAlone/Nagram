@@ -96,7 +96,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
-import org.jetbrains.annotations.NotNull;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -228,8 +227,6 @@ import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
@@ -16166,17 +16163,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 if (selectedObject.messageOwner.translated) {
 
-                    selectedObject.messageOwner.translated = false;
-
-                    MessageHelper.resetMessageContent(selectedObject, messageCell);
-
-                    chatAdapter.updateRowWithMessageObject(selectedObject, true);
-
-                    return 1;
+                    return 0;
 
                 }
 
-                Translator.showTargetLangSelect(cell, 0, (locale) -> {
+                Translator.showTargetLangSelect(cell, (locale) -> {
 
                     if (scrimPopupWindow != null) {
                         scrimPopupWindow.dismiss();

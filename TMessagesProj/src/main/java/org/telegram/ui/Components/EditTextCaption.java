@@ -66,6 +66,8 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public interface EditTextCaptionDelegate {
         void onSpansChanged();
+
+        int getCurrentChat();
     }
 
     public EditTextCaption(Context context) {
@@ -147,7 +149,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
         if (db.contains(text)) {
 
-            setText(replaceAt(origin,start,end,TranslateDb.currentInputTarget().query(text)));
+            setText(replaceAt(origin, start, end, TranslateDb.currentInputTarget().query(text)));
 
         } else {
 
@@ -155,13 +157,17 @@ public class EditTextCaption extends EditTextBoldCursor {
                 TranslateBottomSheet.show(getContext(), text);
             } else {
 
-                Translator.translate(TranslatorKt.getCode2Locale(NekoConfig.translateInputLang), text, new Translator.Companion.TranslateCallBack() {
+                Translator.translate(TranslateDb.getChatLanguage(delegate.getCurrentChat(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)), text, new Translator.Companion.TranslateCallBack() {
 
-                    AlertDialog status = AlertUtil.showProgress(getContext()); { status.show(); }
+                    AlertDialog status = AlertUtil.showProgress(getContext());
+
+                    {
+                        status.show();
+                    }
 
                     @Override public void onSuccess(@NotNull String translation) {
                         status.dismiss();
-                        setText(replaceAt(origin,start,end,translation));
+                        setText(replaceAt(origin, start, end, translation));
                     }
 
                     @Override public void onFailed(boolean unsupported, @NotNull String message) {

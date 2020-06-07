@@ -3962,12 +3962,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
                 cell.setColors(0xffffffff, 0xffffffff);
                 sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * i, 0, 0));
+                int chatId;
+                if (chat != null) {
+                    chatId = chat.id;
+                } else if (user != null) {
+                    chatId = user.id;
+                } else {
+                    chatId = -1;
+                }
                 cell.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
                     if (num == 0) {
-                        translateComment(TranslatorKt.getCode2Locale(NekoConfig.translateInputLang));
+                        translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
                     } else if (num == 1) {
                         AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentChatActivity.getDialogId(), this::sendPressed);
                     } else if (num == 1) {
@@ -3976,11 +3984,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 });
                 cell.setOnLongClickListener(v -> {
                     if (num == 0) {
-                        Translator.showTargetLangSelect(cell, 0, (locale) -> {
+                        Translator.showTargetLangSelect(cell, true, (locale) -> {
                             if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                                 sendPopupWindow.dismiss();
                             }
                             translateComment(locale);
+                            TranslateDb.saveChatLanguage(chatId, locale);
                             return Unit.INSTANCE;
                         });
                         return true;

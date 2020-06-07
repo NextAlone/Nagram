@@ -482,12 +482,22 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 
                     sendPopupLayout.addView(itemCells[a], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a, 0, 0));
+
+                    int chatId;
+                    if (chat != null) {
+                        chatId = chat.id;
+                    } else if (user != null) {
+                        chatId = user.id;
+                    } else {
+                        chatId = -1;
+                    }
+
                     itemCells[a].setOnClickListener(v -> {
                         if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                             sendPopupWindow.dismiss();
                         }
                         if (num == 0) {
-                            translateComment(TranslatorKt.getCode2Locale(NekoConfig.translateInputLang));
+                            translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
                         } else if (num == 1) {
                             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                                 sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify, scheduleDate);
@@ -500,11 +510,12 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     });
                     itemCells[a].setOnLongClickListener(v -> {
                         if (num == 0) {
-                            Translator.showTargetLangSelect(itemCells[num], 0, (locale) -> {
+                            Translator.showTargetLangSelect(itemCells[num], true, (locale) -> {
                                 if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                                     sendPopupWindow.dismiss();
                                 }
                                 translateComment(locale);
+                                TranslateDb.saveChatLanguage(chatId, locale);
                                 return Unit.INSTANCE;
                             });
                             return true;

@@ -64,12 +64,20 @@ interface Translator {
 
             var toLang = to.language
 
+            val country = to.country
+
+            if (country.toLowerCase() == "duang") {
+
+                country == "CN"
+
+            }
+
             if (NekoConfig.translationProvider < 3) {
 
-                if (to.language == "zh" && (to.country.toUpperCase() == "CN" || to.country.toUpperCase() == "TW")) {
-                    toLang = to.language + "-" + to.country.toUpperCase()
-                } else if (to.language == "pt" && to.country in arrayOf("PT", "BR")) {
-                    toLang = to.language + "-" + to.country.toUpperCase()
+                if (to.language == "zh" && (country.toUpperCase() == "CN" || country.toUpperCase() == "TW")) {
+                    toLang = to.language + "-" + country.toUpperCase()
+                } else if (to.language == "pt" && country in arrayOf("PT", "BR")) {
+                    toLang = to.language + "-" + country.toUpperCase()
                 }
 
             }
@@ -91,17 +99,24 @@ interface Translator {
 
         }
 
-        @JvmStatic @JvmOverloads fun showTargetLangSelect(anchor: View, type: Int, full: Boolean = false, callback: (Locale) -> Unit) {
+        @JvmStatic @JvmOverloads fun showTargetLangSelect(anchor: View, input: Boolean = false, full: Boolean = false, callback: (Locale) -> Unit) {
 
             val builder = PopupBuilder(anchor)
 
-            var locales = (if (full) LocaleUtils.availableLocaleList().filter { it.variant.isBlank() } else LocaleController.getInstance().languages.map { it.pluralLangCode }.toSet().map { it.code2Locale }).toTypedArray()
+            var locales = (if (full) LocaleUtils.availableLocaleList()
+                    .filter { it.variant.isBlank() } else LocaleController.getInstance()
+                    .languages
+                    .map { it.pluralLangCode }
+                    .toSet()
+                    .filter { !it.toLowerCase().contains("duang") }
+                    .map { it.code2Locale })
+                    .toTypedArray()
 
             val currLocale = LocaleController.getInstance().currentLocale
 
             for (i in locales.indices) {
 
-                val defLang = if (type < 2) currLocale else Locale.ENGLISH
+                val defLang = if (!input) currLocale else Locale.ENGLISH
 
                 if (locales[i] == defLang) {
 
@@ -136,25 +151,13 @@ interface Translator {
 
             }
 
-            val finalLocales = locales
-
             builder.setItems(localeNames.filterIsInstance<CharSequence>().toTypedArray()) { index: Int, _ ->
 
                 if (index == locales.size) {
 
-                    showTargetLangSelect(anchor, type, true, callback)
+                    showTargetLangSelect(anchor, input, true, callback)
 
                 } else {
-
-                    if (type == 1) {
-
-                        NekoConfig.setTranslateToLang(finalLocales[index].locale2code)
-
-                    } else if (type == 2) {
-
-                        NekoConfig.setTranslateInputToLang(finalLocales[index].locale2code)
-
-                    }
 
                     callback(locales[index])
 
