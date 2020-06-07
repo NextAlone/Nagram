@@ -65,6 +65,7 @@ public class SubSettingsActivity extends BaseFragment {
     public SubSettingsActivity() {
         super();
         subInfo = new SubInfo();
+        subInfo.id = 0L;
     }
 
     public SubSettingsActivity(SubInfo subInfo) {
@@ -276,7 +277,7 @@ public class SubSettingsActivity extends BaseFragment {
 
             }
 
-            if (subInfo.id == 0) subInfo.id = SubManager.count + 10;
+            if (subInfo.id == 0) subInfo.id = SubManager.getCount() + 10;
 
             do {
 

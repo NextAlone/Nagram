@@ -122,9 +122,12 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
+import tw.nekomimi.nekogram.sub.SubInfo;
+import tw.nekomimi.nekogram.sub.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
@@ -804,6 +807,25 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         MediaController.getInstance().setBaseActivity(this, true);
         UpdateUtil.checkUpdate(this);
+        UIUtil.runOnIoDispatcher(() -> {
+
+            for (SubInfo subInfo : SubManager.getSubList().find()) {
+
+                if (subInfo == null) continue;
+
+                try {
+
+                    subInfo.proxies = subInfo.reloadProxies();
+                    subInfo.lastFetch = System.currentTimeMillis();
+
+                    SubManager.getSubList().update(subInfo, true);
+
+                } catch (SubInfo.AllTriesFailed allTriesFailed) {
+                }
+
+            }
+
+        });
     }
 
     private void checkSystemBarColors() {

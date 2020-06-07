@@ -828,34 +828,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             AlertUtil.showSimpleAlert(context, alert);
             alert = null;
 
-        } else {
-
-            UIUtil.runOnIoDispatcher(() -> {
-
-                boolean updated = false;
-
-                for (SubInfo subInfo : SubManager.getSubList().find()) {
-
-                    if (subInfo == null) continue;
-
-                    try {
-
-                        subInfo.proxies = subInfo.reloadProxies();
-                        subInfo.lastFetch = System.currentTimeMillis();
-
-                        SubManager.getSubList().update(subInfo, true);
-
-                        updated = subInfo.id == 1;
-
-                    } catch (SubInfo.AllTriesFailed allTriesFailed) {
-                    }
-
-                }
-
-                if (updated) updateRows(true);
-
-            });
-
         }
 
         return fragmentView;

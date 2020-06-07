@@ -9,7 +9,7 @@ object SubManager {
 
     val database by lazy { mkDatabase("proxy_sub") }
 
-    val count get() = subList.find().totalCount()
+    @JvmStatic val count get() = subList.find().totalCount()
 
     @JvmStatic
     val subList by lazy {

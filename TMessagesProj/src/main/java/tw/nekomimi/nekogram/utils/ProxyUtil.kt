@@ -59,7 +59,7 @@ object ProxyUtil {
 
         val text = runCatching {
 
-            String(Base64.decode(_text, Base64.URL_SAFE))
+            String(Base64.decode(_text, Base64.NO_PADDING))
 
         }.recover {
 
