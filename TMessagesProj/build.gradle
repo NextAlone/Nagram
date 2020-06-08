@@ -13,7 +13,7 @@ configurations {
 
 def okHttpVersion = '4.7.2'
 def fcmVersion = '20.2.0'
-def crashlyticsVersion = '17.0.0'
+def crashlyticsVersion = '17.0.1'
 def playCoreVersion = '1.7.3'
 
 buildscript {
@@ -74,8 +74,8 @@ dependencies {
 
 }
 
-def verName = "6.2.0.1-rc04"
-def verCode = 48
+def verName = "6.2.0.1-rc05"
+def verCode = 49
 
 task writeUpdateInfo {
 
