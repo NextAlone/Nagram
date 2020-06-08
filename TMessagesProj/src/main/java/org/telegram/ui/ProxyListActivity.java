@@ -1050,8 +1050,20 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         UIUtil.runOnIoDispatcher(() -> {
 
             if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && !((SharedConfig.ExternalSocks5Proxy) proxyInfo).isStarted()) {
-                ((SharedConfig.ExternalSocks5Proxy) proxyInfo).start();
+
+                try {
+
+                    ((SharedConfig.ExternalSocks5Proxy) proxyInfo).start();
+
+                } catch (Exception e) {
+
+                    FileLog.e(e);
+                    AlertUtil.showToast(e);
+
+                }
+
                 ThreadUtil.sleep(233L);
+
             }
 
             proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {

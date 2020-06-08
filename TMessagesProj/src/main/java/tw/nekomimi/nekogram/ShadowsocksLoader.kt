@@ -1,8 +1,6 @@
 package tw.nekomimi.nekogram
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import cn.hutool.core.codec.Base64
 import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.PluginManager
@@ -145,8 +143,8 @@ class ShadowsocksLoader {
             put("method", method)
             put("ipv6", true)
             if (pluginInitResult != null) {
-                put("plugin",pluginInitResult!!.first)
-                put("plugin_opts",pluginInitResult!!.second.toString())
+                put("plugin", pluginInitResult!!.first)
+                put("plugin_opts", pluginInitResult!!.second.toString())
             }
         }
 
@@ -223,7 +221,7 @@ class ShadowsocksLoader {
 
             if (plugin.isNotBlank()) url.addQueryParameter("plugin", plugin)
 
-            return url.build().toString().replace("https://","ss://")
+            return url.build().toString().replace("https://", "ss://")
 
         }
 

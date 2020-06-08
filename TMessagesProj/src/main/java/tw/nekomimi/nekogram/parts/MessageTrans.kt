@@ -80,9 +80,7 @@ fun MessageObject.translateFinished(locale: Locale): Boolean {
 }
 
 @JvmOverloads
-fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale) {
-
-    val selectedObject = selectedObject
+fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale) {
 
     val messageCell by lazy {
 
@@ -176,7 +174,7 @@ fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.c
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, false, it.message ?: it.javaClass.simpleName, Runnable {
 
-                                    translateMessage(target)
+                                    translateMessage(selectedObject, target)
 
                                 })
 
@@ -212,7 +210,7 @@ fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.c
 
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, false, e.message ?: e.javaClass.simpleName, Runnable {
 
-                                        translateMessage(target)
+                                        translateMessage(selectedObject, target)
 
                                     })
 
@@ -248,7 +246,7 @@ fun ChatActivity.translateMessage(target: Locale = NekoConfig.translateToLang?.c
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, false, it.message ?: it.javaClass.simpleName, Runnable {
 
-                                    translateMessage(target)
+                                    translateMessage(selectedObject, target)
 
                                 })
 

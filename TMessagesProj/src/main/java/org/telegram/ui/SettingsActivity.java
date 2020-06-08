@@ -116,7 +116,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.RuntimeUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -127,6 +127,7 @@ import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.IoUtil;
 import tw.nekomimi.nekogram.utils.LangsKt;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.ThreadUtil;
@@ -1588,11 +1589,23 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         File path = new File(EnvUtil.getTelegramPath(), "logs");
 
-        if (!path.isDirectory() || ArrayUtil.isEmpty(path.listFiles())) {
+        FileUtil.initDir(path);
 
-            AlertUtil.showToast("Empty Logs");
+        File logcatFile = new File(path, "logcat.txt");
 
-            return;
+        FileUtil.delete(logcatFile);
+
+        try {
+
+            Process process = RuntimeUtil.exec("logcat", "-d");
+
+            IoUtil.copy(process, logcatFile);
+
+            RuntimeUtil.exec("logcat", "-c");
+
+        } catch (Exception e) {
+
+            FileLog.e(e);
 
         }
 

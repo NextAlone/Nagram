@@ -20,7 +20,6 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
@@ -48,12 +47,12 @@ import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.VmessLoader;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
-import static com.v2ray.ang.V2RayConfig.RB_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
 
@@ -528,15 +527,25 @@ public class SharedConfig {
 
             VmessLoader loader = new VmessLoader();
 
-            loader.initConfig(bean);
+            try {
 
-            port = loader.start();
+                loader.initConfig(bean);
 
-            this.loader = loader;
+                port = loader.start();
 
-            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+                this.loader = loader;
 
-                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
+                if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+
+                    ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
+
+                }
+
+            } catch (Exception e) {
+
+                FileLog.e(e);
+
+                AlertUtil.showToast(e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
 
             }
 
@@ -640,12 +649,12 @@ public class SharedConfig {
 
         }
 
-         @Override
+        @Override
         public void start() {
 
             if (loader != null) return;
 
-            port = ProxyManager.getPortForBean(bean);
+            port = ProxyManager.mkPort();
             ShadowsocksLoader loader = new ShadowsocksLoader();
             loader.initConfig(bean, port);
 
@@ -769,7 +778,7 @@ public class SharedConfig {
 
             if (loader != null) return;
 
-            port = ProxyManager.getPortForBean(bean);
+            port = ProxyManager.mkPort();
             ShadowsocksRLoader loader = new ShadowsocksRLoader();
             loader.initConfig(bean, port);
 
@@ -884,7 +893,7 @@ public class SharedConfig {
 
             if (loader != null) return;
 
-            port = ProxyManager.getPortForBean(bean);
+            port = ProxyManager.mkPort();
             RelayBatonLoader loader = new RelayBatonLoader();
             loader.initConfig(bean, port);
 
@@ -1607,13 +1616,24 @@ public class SharedConfig {
 
         UIUtil.runOnIoDispatcher(() -> {
 
-            if (enable && finalInfo instanceof ExternalSocks5Proxy) {
+            try {
 
-                ((ExternalSocks5Proxy) finalInfo).start();
+                if (enable && finalInfo instanceof ExternalSocks5Proxy) {
 
-            } else if (!enable && finalInfo instanceof ExternalSocks5Proxy) {
+                    ((ExternalSocks5Proxy) finalInfo).start();
 
-                ((ExternalSocks5Proxy) finalInfo).stop();
+                } else if (!enable && finalInfo instanceof ExternalSocks5Proxy) {
+
+                    ((ExternalSocks5Proxy) finalInfo).stop();
+
+                }
+
+            } catch (Exception e) {
+
+                FileLog.e(e);
+                AlertUtil.showToast(e);
+
+                return;
 
             }
 
@@ -1702,7 +1722,20 @@ public class SharedConfig {
 
                         if (info instanceof ExternalSocks5Proxy) {
 
-                            UIUtil.runOnIoDispatcher(((ExternalSocks5Proxy) info)::start);
+                            UIUtil.runOnIoDispatcher(() -> {
+
+                                try {
+
+                                    ((ExternalSocks5Proxy) info).start();
+
+                                } catch (Exception e) {
+
+                                    FileLog.e(e);
+                                    AlertUtil.showToast(e);
+
+                                }
+
+                            });
 
                         }
 
@@ -1758,8 +1791,24 @@ public class SharedConfig {
 
                         if (info instanceof ExternalSocks5Proxy) {
 
-                            UIUtil.runOnIoDispatcher(((ExternalSocks5Proxy) info)::start);
+                            if (info instanceof ExternalSocks5Proxy) {
 
+                                UIUtil.runOnIoDispatcher(() -> {
+
+                                    try {
+
+                                        ((ExternalSocks5Proxy) info).start();
+
+                                    } catch (Exception e) {
+
+                                        FileLog.e(e);
+                                        AlertUtil.showToast(e);
+
+                                    }
+
+                                });
+
+                            }
                         }
 
                     }
@@ -1884,7 +1933,7 @@ public class SharedConfig {
                         continue;
                     }
                     proxyArray.put(obj);
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }

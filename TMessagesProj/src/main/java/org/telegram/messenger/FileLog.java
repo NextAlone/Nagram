@@ -113,7 +113,6 @@ public class FileLog {
     }
 
     public static void e(final String message, final Throwable exception) {
-        Log.e(tag, message, exception);
         ExternalGcm.recordException(new Exception(message, exception));
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
@@ -131,7 +130,6 @@ public class FileLog {
     }
 
     public static void e(final String message) {
-        Log.e(tag, message);
         ExternalGcm.reportLog("[E]" + message);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
@@ -147,8 +145,7 @@ public class FileLog {
         }
     }
 
-    public static void e(final Throwable e) {
-        Log.e(tag, "ERR", e);
+    public static void e(Throwable e) {
         ExternalGcm.recordException(e);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
@@ -156,11 +153,19 @@ public class FileLog {
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
-                    StackTraceElement[] stack = e.getStackTrace();
-                    for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
-                    }
+                    Throwable ex = e;
+                    do {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: ");
+                        if (ex != e) {
+                            getInstance().streamWriter.write("Caused by:");
+                        }
+                        getInstance().streamWriter.write(ex + "\n");
+                        StackTraceElement[] stack = ex.getStackTrace();
+                        for (int a = 0; a < stack.length; a++) {
+                            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                        }
+                        ex = ex.getCause();
+                    } while (ex != null);
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -172,7 +177,6 @@ public class FileLog {
     }
 
     public static void d(final String message) {
-        Log.d(tag, message);
         ExternalGcm.reportLog("[D] " + message);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();
@@ -189,7 +193,6 @@ public class FileLog {
     }
 
     public static void w(final String message) {
-        Log.w(tag, message);
         ExternalGcm.reportLog("[W] " + message);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();

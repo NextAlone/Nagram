@@ -16002,7 +16002,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case 88: {
 
-                MessageTransKt.translateMessage(this);
+                MessageTransKt.translateMessage(this, selectedObject);
 
                 break;
 
@@ -16175,7 +16175,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         scrimPopupWindowItems = null;
                     }
 
-                    MessageTransKt.translateMessage(this, locale);
+                    MessageTransKt.translateMessage(this, selectedObject, locale);
 
                     return Unit.INSTANCE;
 

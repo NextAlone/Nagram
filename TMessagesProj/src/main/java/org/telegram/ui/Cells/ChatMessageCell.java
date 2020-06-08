@@ -3872,13 +3872,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 String question;
 
                 if (messageObject.messageOwner.translated) {
-
                     question = media.poll.translatedQuestion;
-
+                    if (question == null) {
+                        messageObject.messageOwner.translated = false;
+                        question = media.poll.question;
+                    }
                 } else {
-
                     question = media.poll.question;
-
                 }
 
                 titleLayout = new StaticLayout(Emoji.replaceEmoji(question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.dp(2) - getExtraTextX() * 2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);

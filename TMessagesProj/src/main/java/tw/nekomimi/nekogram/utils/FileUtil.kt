@@ -16,11 +16,11 @@ object FileUtil {
 
         while (parentDir != null) {
 
+            if (parentDir.isDirectory) break
+
             if (parentDir.isFile) parentDir.deleteRecursively()
 
             parentDir = parentDir.parentFile
-
-            break
 
         }
 
@@ -150,40 +150,61 @@ object FileUtil {
     @JvmStatic
     fun extLib(name: String): File {
 
-        var execFile = File(ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir, "lib$name.so")
+        val execFile = File(ApplicationLoader.applicationContext.applicationInfo.nativeLibraryDir, "lib$name.so")
 
-        if (!execFile.isFile) {
+        if (execFile.isFile && execFile.canExecute()) return execFile
 
-            FileLog.d("Native library $execFile not found")
+        val newFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/${execFile.name}")
 
-            execFile = File(ApplicationLoader.getDataDirFixed(), "cache/lib/${execFile.name}")
+        if (newFile.isFile) {
 
-            if (!execFile.isFile) {
+            FileLog.d("lib already extracted: $newFile")
 
-                runCatching {
+            if (!newFile.canExecute()) {
 
-                    saveNonAsset("lib/${Build.CPU_ABI}/${execFile.name}", execFile)
-
-                    FileLog.d("lib extracted with default abi: $execFile, ${Build.CPU_ABI}")
-
-                }.recover {
-
-                    saveNonAsset("lib/${Build.CPU_ABI2}/${execFile.name}", execFile)
-
-                    FileLog.d("lib extracted with abi2: $execFile, ${Build.CPU_ABI2}")
-
-
-                }
-
-            } else {
-
-                FileLog.d("lib already extracted: $name")
+                newFile.setExecutable(true)
 
             }
 
-        } else {
+            return newFile
 
-            FileLog.d("lib found in nativePath: $name")
+        }
+
+        if (execFile.isFile) {
+
+            FileLog.w("$execFile not executable")
+
+            if (!newFile.isFile) {
+
+                execFile.copyTo(newFile)
+
+            }
+
+            if (!newFile.canExecute()) {
+
+                newFile.setExecutable(true)
+
+            }
+
+            return newFile
+
+        }
+
+        if (!newFile.isFile) {
+
+            runCatching {
+
+                saveNonAsset("lib/${Build.CPU_ABI}/${execFile.name}", execFile)
+
+                FileLog.d("lib extracted with default abi: $execFile, ${Build.CPU_ABI}")
+
+            }.recover {
+
+                saveNonAsset("lib/${Build.CPU_ABI2}/${execFile.name}", execFile)
+
+                FileLog.d("lib extracted with abi2: $execFile, ${Build.CPU_ABI2}")
+
+            }
 
         }
 
@@ -196,6 +217,7 @@ object FileUtil {
         return execFile
 
     }
+
 
     @JvmStatic
     fun saveNonAsset(path: String, saveTo: File) {

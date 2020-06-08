@@ -144,8 +144,8 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
-import static com.v2ray.ang.V2RayConfig.RB_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL;
@@ -728,217 +728,217 @@ public class AndroidUtilities {
         }
     }
 
-private static class VcardData {
-    String name;
-    ArrayList<String> phones = new ArrayList<>();
-    StringBuilder vcard = new StringBuilder();
-}
-
-public static class VcardItem {
-    public ArrayList<String> vcardData = new ArrayList<>();
-    public String fullData = "";
-    public int type;
-    public boolean checked = true;
-
-    public String[] getRawValue() {
-        int idx = fullData.indexOf(':');
-        if (idx < 0) {
-            return new String[0];
-        }
-
-        String valueType = fullData.substring(0, idx);
-        String value = fullData.substring(idx + 1);
-
-        String nameEncoding = null;
-        String nameCharset = "UTF-8";
-        String[] params = valueType.split(";");
-        for (int a = 0; a < params.length; a++) {
-            String[] args2 = params[a].split("=");
-            if (args2.length != 2) {
-                continue;
-            }
-            if (args2[0].equals("CHARSET")) {
-                nameCharset = args2[1];
-            } else if (args2[0].equals("ENCODING")) {
-                nameEncoding = args2[1];
-            }
-        }
-        String[] args = value.split(";");
-        boolean added = false;
-        for (int a = 0; a < args.length; a++) {
-            if (TextUtils.isEmpty(args[a])) {
-                continue;
-            }
-            if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
-                if (bytes != null && bytes.length != 0) {
-                    try {
-                        args[a] = new String(bytes, nameCharset);
-                    } catch (Exception ignore) {
-
-                    }
-                }
-            }
-        }
-        return args;
+    private static class VcardData {
+        String name;
+        ArrayList<String> phones = new ArrayList<>();
+        StringBuilder vcard = new StringBuilder();
     }
 
-    public String getValue(boolean format) {
-        StringBuilder result = new StringBuilder();
+    public static class VcardItem {
+        public ArrayList<String> vcardData = new ArrayList<>();
+        public String fullData = "";
+        public int type;
+        public boolean checked = true;
 
-        int idx = fullData.indexOf(':');
-        if (idx < 0) {
-            return "";
-        }
+        public String[] getRawValue() {
+            int idx = fullData.indexOf(':');
+            if (idx < 0) {
+                return new String[0];
+            }
 
-        if (result.length() > 0) {
-            result.append(", ");
-        }
+            String valueType = fullData.substring(0, idx);
+            String value = fullData.substring(idx + 1);
 
-        String valueType = fullData.substring(0, idx);
-        String value = fullData.substring(idx + 1);
-
-        String nameEncoding = null;
-        String nameCharset = "UTF-8";
-        String[] params = valueType.split(";");
-        for (int a = 0; a < params.length; a++) {
-            String[] args2 = params[a].split("=");
-            if (args2.length != 2) {
-                continue;
-            }
-            if (args2[0].equals("CHARSET")) {
-                nameCharset = args2[1];
-            } else if (args2[0].equals("ENCODING")) {
-                nameEncoding = args2[1];
-            }
-        }
-        String[] args = value.split(";");
-        boolean added = false;
-        for (int a = 0; a < args.length; a++) {
-            if (TextUtils.isEmpty(args[a])) {
-                continue;
-            }
-            if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
-                if (bytes != null && bytes.length != 0) {
-                    try {
-                        args[a] = new String(bytes, nameCharset);
-                    } catch (Exception ignore) {
-
-                    }
-                }
-            }
-            if (added && result.length() > 0) {
-                result.append(" ");
-            }
-            result.append(args[a]);
-            if (!added) {
-                added = args[a].length() > 0;
-            }
-        }
-
-        if (format) {
-            if (type == 0) {
-                return PhoneFormat.getInstance().format(result.toString());
-            } else if (type == 5) {
-                String[] date = result.toString().split("T");
-                if (date.length > 0) {
-                    date = date[0].split("-");
-                    if (date.length == 3) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.YEAR, Utilities.parseInt(date[0]));
-                        calendar.set(Calendar.MONTH, Utilities.parseInt(date[1]) - 1);
-                        calendar.set(Calendar.DAY_OF_MONTH, Utilities.parseInt(date[2]));
-                        return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
-                    }
-                }
-            }
-        }
-        return result.toString();
-    }
-
-    public String getRawType(boolean first) {
-        int idx = fullData.indexOf(':');
-        if (idx < 0) {
-            return "";
-        }
-        String value = fullData.substring(0, idx);
-        if (type == 20) {
-            value = value.substring(2);
-            String[] args = value.split(";");
-            if (first) {
-                value = args[0];
-            } else if (args.length > 1) {
-                value = args[args.length - 1];
-            } else {
-                value = "";
-            }
-        } else {
-            String[] args = value.split(";");
-            for (int a = 0; a < args.length; a++) {
-                if (args[a].indexOf('=') >= 0) {
+            String nameEncoding = null;
+            String nameCharset = "UTF-8";
+            String[] params = valueType.split(";");
+            for (int a = 0; a < params.length; a++) {
+                String[] args2 = params[a].split("=");
+                if (args2.length != 2) {
                     continue;
                 }
-                value = args[a];
+                if (args2[0].equals("CHARSET")) {
+                    nameCharset = args2[1];
+                } else if (args2[0].equals("ENCODING")) {
+                    nameEncoding = args2[1];
+                }
+            }
+            String[] args = value.split(";");
+            boolean added = false;
+            for (int a = 0; a < args.length; a++) {
+                if (TextUtils.isEmpty(args[a])) {
+                    continue;
+                }
+                if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                    byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
+                    if (bytes != null && bytes.length != 0) {
+                        try {
+                            args[a] = new String(bytes, nameCharset);
+                        } catch (Exception ignore) {
+
+                        }
+                    }
+                }
+            }
+            return args;
+        }
+
+        public String getValue(boolean format) {
+            StringBuilder result = new StringBuilder();
+
+            int idx = fullData.indexOf(':');
+            if (idx < 0) {
+                return "";
+            }
+
+            if (result.length() > 0) {
+                result.append(", ");
+            }
+
+            String valueType = fullData.substring(0, idx);
+            String value = fullData.substring(idx + 1);
+
+            String nameEncoding = null;
+            String nameCharset = "UTF-8";
+            String[] params = valueType.split(";");
+            for (int a = 0; a < params.length; a++) {
+                String[] args2 = params[a].split("=");
+                if (args2.length != 2) {
+                    continue;
+                }
+                if (args2[0].equals("CHARSET")) {
+                    nameCharset = args2[1];
+                } else if (args2[0].equals("ENCODING")) {
+                    nameEncoding = args2[1];
+                }
+            }
+            String[] args = value.split(";");
+            boolean added = false;
+            for (int a = 0; a < args.length; a++) {
+                if (TextUtils.isEmpty(args[a])) {
+                    continue;
+                }
+                if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                    byte[] bytes = decodeQuotedPrintable(getStringBytes(args[a]));
+                    if (bytes != null && bytes.length != 0) {
+                        try {
+                            args[a] = new String(bytes, nameCharset);
+                        } catch (Exception ignore) {
+
+                        }
+                    }
+                }
+                if (added && result.length() > 0) {
+                    result.append(" ");
+                }
+                result.append(args[a]);
+                if (!added) {
+                    added = args[a].length() > 0;
+                }
+            }
+
+            if (format) {
+                if (type == 0) {
+                    return PhoneFormat.getInstance().format(result.toString());
+                } else if (type == 5) {
+                    String[] date = result.toString().split("T");
+                    if (date.length > 0) {
+                        date = date[0].split("-");
+                        if (date.length == 3) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(Calendar.YEAR, Utilities.parseInt(date[0]));
+                            calendar.set(Calendar.MONTH, Utilities.parseInt(date[1]) - 1);
+                            calendar.set(Calendar.DAY_OF_MONTH, Utilities.parseInt(date[2]));
+                            return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
+                        }
+                    }
+                }
+            }
+            return result.toString();
+        }
+
+        public String getRawType(boolean first) {
+            int idx = fullData.indexOf(':');
+            if (idx < 0) {
+                return "";
+            }
+            String value = fullData.substring(0, idx);
+            if (type == 20) {
+                value = value.substring(2);
+                String[] args = value.split(";");
+                if (first) {
+                    value = args[0];
+                } else if (args.length > 1) {
+                    value = args[args.length - 1];
+                } else {
+                    value = "";
+                }
+            } else {
+                String[] args = value.split(";");
+                for (int a = 0; a < args.length; a++) {
+                    if (args[a].indexOf('=') >= 0) {
+                        continue;
+                    }
+                    value = args[a];
+                }
+                return value;
             }
             return value;
         }
-        return value;
-    }
 
-    public String getType() {
-        if (type == 5) {
-            return LocaleController.getString("ContactBirthday", R.string.ContactBirthday);
-        } else if (type == 6) {
-            if ("ORG".equalsIgnoreCase(getRawType(true))) {
-                return LocaleController.getString("ContactJob", R.string.ContactJob);
-            } else {
-                return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
-            }
-        }
-        int idx = fullData.indexOf(':');
-        if (idx < 0) {
-            return "";
-        }
-        String value = fullData.substring(0, idx);
-        if (type == 20) {
-            value = value.substring(2);
-            String[] args = value.split(";");
-            value = args[0];
-        } else {
-            String[] args = value.split(";");
-            for (int a = 0; a < args.length; a++) {
-                if (args[a].indexOf('=') >= 0) {
-                    continue;
+        public String getType() {
+            if (type == 5) {
+                return LocaleController.getString("ContactBirthday", R.string.ContactBirthday);
+            } else if (type == 6) {
+                if ("ORG".equalsIgnoreCase(getRawType(true))) {
+                    return LocaleController.getString("ContactJob", R.string.ContactJob);
+                } else {
+                    return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
                 }
-                value = args[a];
             }
-            if (value.startsWith("X-")) {
+            int idx = fullData.indexOf(':');
+            if (idx < 0) {
+                return "";
+            }
+            String value = fullData.substring(0, idx);
+            if (type == 20) {
                 value = value.substring(2);
+                String[] args = value.split(";");
+                value = args[0];
+            } else {
+                String[] args = value.split(";");
+                for (int a = 0; a < args.length; a++) {
+                    if (args[a].indexOf('=') >= 0) {
+                        continue;
+                    }
+                    value = args[a];
+                }
+                if (value.startsWith("X-")) {
+                    value = value.substring(2);
+                }
+                switch (value) {
+                    case "PREF":
+                        value = LocaleController.getString("PhoneMain", R.string.PhoneMain);
+                        break;
+                    case "HOME":
+                        value = LocaleController.getString("PhoneHome", R.string.PhoneHome);
+                        break;
+                    case "MOBILE":
+                    case "CELL":
+                        value = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
+                        break;
+                    case "OTHER":
+                        value = LocaleController.getString("PhoneOther", R.string.PhoneOther);
+                        break;
+                    case "WORK":
+                        value = LocaleController.getString("PhoneWork", R.string.PhoneWork);
+                        break;
+                }
             }
-            switch (value) {
-                case "PREF":
-                    value = LocaleController.getString("PhoneMain", R.string.PhoneMain);
-                    break;
-                case "HOME":
-                    value = LocaleController.getString("PhoneHome", R.string.PhoneHome);
-                    break;
-                case "MOBILE":
-                case "CELL":
-                    value = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
-                    break;
-                case "OTHER":
-                    value = LocaleController.getString("PhoneOther", R.string.PhoneOther);
-                    break;
-                case "WORK":
-                    value = LocaleController.getString("PhoneWork", R.string.PhoneWork);
-                    break;
-            }
+            value = value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
+            return value;
         }
-        value = value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
-        return value;
     }
-}
 
     public static byte[] getStringBytes(String src) {
         try {
@@ -1842,22 +1842,22 @@ public static class VcardItem {
         return new SpannableStringBuilder(str);
     }
 
-public static class LinkMovementMethodMy extends LinkMovementMethod {
-    @Override
-    public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-        try {
-            boolean result = super.onTouchEvent(widget, buffer, event);
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                Selection.removeSelection(buffer);
+    public static class LinkMovementMethodMy extends LinkMovementMethod {
+        @Override
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                boolean result = super.onTouchEvent(widget, buffer, event);
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    Selection.removeSelection(buffer);
+                }
+                return result;
+            } catch (Exception e) {
+                FileLog.e(e);
             }
-            return result;
-        } catch (Exception e) {
-            FileLog.e(e);
+            return false;
         }
-        return false;
-    }
 
-}
+    }
 
     public static boolean needShowPasscode() {
         return needShowPasscode(false);
@@ -2989,7 +2989,6 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             AtomicInteger count = new AtomicInteger();
             if (a == 7) {
-                info.start();
 
                 RequestTimeDelegate callback = new RequestTimeDelegate() {
                     @Override
@@ -3013,7 +3012,18 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
 
                 };
 
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+
+                UIUtil.runOnIoDispatcher(() -> {
+
+                    try {
+                        info.start();
+                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        AlertUtil.showToast(e);
+                    }
+
+                });
 
             }
         }
@@ -3055,105 +3065,120 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
     }
 
     public static void showShadowsocksAlert(Context activity, final SharedConfig.ShadowsocksProxy info) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity);
-        final Runnable dismissRunnable = builder.getDismissRunnable();
+        try {
+            BottomSheet.Builder builder = new BottomSheet.Builder(activity);
+            final Runnable dismissRunnable = builder.getDismissRunnable();
 
-        builder.setApplyTopPadding(false);
-        builder.setApplyBottomPadding(false);
-        LinearLayout linearLayout = new LinearLayout(activity);
-        builder.setCustomView(linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (int a = 0; a < 5; a++) {
-            String text = null;
-            String detail = null;
-            if (a == 0) {
-                text = info.bean.getHost();
-                detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
-            } else if (a == 1) {
-                text = "" + info.bean.getRemotePort();
-                detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
-            } else if (a == 2) {
-                text = info.bean.getPassword();
-                detail = LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword);
-            } else if (a == 3) {
-                text = info.bean.getMethod();
-                detail = LocaleController.getString("SSMethod", R.string.SSMethod);
-            } else {
-                text = LocaleController.getString("Checking", R.string.Checking);
-                detail = LocaleController.getString("Checking", R.string.Checking);
-            }
-            if (TextUtils.isEmpty(text)) {
-                continue;
-            }
-            TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
-            cell.setTextAndValue(text, detail, true);
-            cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-            cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
-            linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            AtomicInteger count = new AtomicInteger();
-            if (a == 4) {
-                info.start();
-                RequestTimeDelegate callback = new RequestTimeDelegate() {
-                    @Override
-                    public void run(long time) {
-                        int c = count.getAndIncrement();
-                        String colorKey;
-                        if (time != -1) {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else if (c < 2) {
-                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
-                            colorKey = Theme.key_windowBackgroundWhiteRedText4;
+            builder.setApplyTopPadding(false);
+            builder.setApplyBottomPadding(false);
+            LinearLayout linearLayout = new LinearLayout(activity);
+            builder.setCustomView(linearLayout);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            for (int a = 0; a < 5; a++) {
+                String text = null;
+                String detail = null;
+                if (a == 0) {
+                    text = info.bean.getHost();
+                    detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
+                } else if (a == 1) {
+                    text = "" + info.bean.getRemotePort();
+                    detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
+                } else if (a == 2) {
+                    text = info.bean.getPassword();
+                    detail = LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword);
+                } else if (a == 3) {
+                    text = info.bean.getMethod();
+                    detail = LocaleController.getString("SSMethod", R.string.SSMethod);
+                } else {
+                    text = LocaleController.getString("Checking", R.string.Checking);
+                    detail = LocaleController.getString("Checking", R.string.Checking);
+                }
+                if (TextUtils.isEmpty(text)) {
+                    continue;
+                }
+                TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
+                cell.setTextAndValue(text, detail, true);
+                cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
+                linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                AtomicInteger count = new AtomicInteger();
+                if (a == 4) {
+
+                    RequestTimeDelegate callback = new RequestTimeDelegate() {
+                        @Override
+                        public void run(long time) {
+                            int c = count.getAndIncrement();
+                            String colorKey;
+                            if (time != -1) {
+                                info.stop();
+                                cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
+                                colorKey = Theme.key_windowBackgroundWhiteGreenText;
+                            } else if (c < 2) {
+                                ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
+                                colorKey = Theme.key_windowBackgroundWhiteGreenText;
+                            } else {
+                                info.stop();
+                                cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
+                                colorKey = Theme.key_windowBackgroundWhiteRedText4;
+                            }
+                            cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
                         }
-                        cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
-                    }
 
-                };
+                    };
 
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                    UIUtil.runOnIoDispatcher(() -> {
 
+                        try {
+                            info.start();
+                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                            AlertUtil.showToast(e);
+                        }
+
+                    });
+
+                }
             }
+
+            PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
+            pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+            linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
+            pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+            pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+            pickerBottomLayout.cancelButton.setOnClickListener(view -> {
+                info.stop();
+                dismissRunnable.run();
+            });
+            pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+            pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
+            pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
+            pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
+            pickerBottomLayout.middleButton.setOnClickListener((it) -> {
+                SharedConfig.addProxy(info);
+
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+
+                dismissRunnable.run();
+
+            });
+            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
+            pickerBottomLayout.doneButton.setOnClickListener(v -> {
+
+                SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
+
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+
+                dismissRunnable.run();
+
+            });
+            builder.show();
+        } catch (Exception e) {
+            FileLog.e(e);
+            AlertUtil.showToast(e);
         }
-
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
-        pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(view -> {
-            info.stop();
-            dismissRunnable.run();
-        });
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-            SharedConfig.addProxy(info);
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(v -> {
-
-            SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        builder.show();
     }
 
     public static void showShadowsocksRAlert(Context activity, final SharedConfig.ShadowsocksRProxy info) {
@@ -3206,7 +3231,7 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             AtomicInteger count = new AtomicInteger();
             if (a == 6) {
-                info.start();
+
                 RequestTimeDelegate callback = new RequestTimeDelegate() {
                     @Override
                     public void run(long time) {
@@ -3229,7 +3254,17 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
 
                 };
 
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                UIUtil.runOnIoDispatcher(() -> {
+
+                    try {
+                        info.start();
+                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        AlertUtil.showToast(e);
+                    }
+
+                });
 
             }
         }
@@ -3308,7 +3343,6 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             AtomicInteger count = new AtomicInteger();
             if (a == 4) {
-                info.start();
                 RequestTimeDelegate callback = new RequestTimeDelegate() {
                     @Override
                     public void run(long time) {
@@ -3331,7 +3365,17 @@ public static class LinkMovementMethodMy extends LinkMovementMethod {
 
                 };
 
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                UIUtil.runOnIoDispatcher(() -> {
+
+                    try {
+                        info.start();
+                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        AlertUtil.showToast(e);
+                    }
+
+                });
 
             }
         }

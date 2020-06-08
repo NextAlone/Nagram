@@ -18,6 +18,9 @@ import java.util.concurrent.atomic.AtomicReference
 object AlertUtil {
 
     @JvmStatic
+    fun showToast(e: Throwable) = showToast(e.message ?: e.javaClass.simpleName)
+
+    @JvmStatic
     fun showToast(text: String) = UIUtil.runOnUIThread(Runnable {
         Toast.makeText(
                 ApplicationLoader.applicationContext,
