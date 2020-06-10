@@ -3622,6 +3622,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         checkLayout();
     }
 
+    private boolean checkPlayServices() {
+        return false;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void didReceivedNotification(int id, final int account, Object... args) {
@@ -3756,6 +3760,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (actionBarLayout == null || actionBarLayout.fragmentsStack.isEmpty()) {
                 return;
             }
+
+            if (!checkPlayServices()) {
+                return;
+            }
+
             final int type = (Integer) args[0];
             final HashMap<String, ContactsController.Contact> contactHashMap = (HashMap<String, ContactsController.Contact>) args[1];
             final boolean first = (Boolean) args[2];
