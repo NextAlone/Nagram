@@ -36,4 +36,9 @@
     <string name="ChangeTranslateProvider">Anbieter wechseln</string>
     <string name="ProviderYandexTranslate">Yandex.Übersetzen</string>
     <string name="GoogleCloudTransKey">Google-Cloud-Übersetzungs-Schlüssel</string>
+    <string name="GoogleCloudTransKeyNotice">Wenn Sie einen Google Cloud-Translate-Schlüssel einrichten, wird die API für die Cloud-Übersetzung aufgerufen, anstatt beim Übersetzen ein gefälschtes Formular an die Web-Version zu senden (schneller, stabiler und datensparender).</string>
+    <string name="TransToLang">Zielsprache der Übersetzung</string>
+    <string name="TransInputToLang">Quellsprache der Übersetzung</string>
+    <string name="More">Mehr</string>
+    <string name="NekoXUpdatesChannel">NekoX Update-Kanal</string>
 </resources>

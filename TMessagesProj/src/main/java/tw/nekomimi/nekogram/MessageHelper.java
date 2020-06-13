@@ -1,7 +1,5 @@
 package tw.nekomimi.nekogram;
 
-import android.content.Context;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
@@ -13,7 +11,6 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class MessageHelper extends BaseController {
@@ -25,7 +22,7 @@ public class MessageHelper extends BaseController {
         super(num);
     }
 
-    public static void resetMessageContent(MessageObject messageObject, ChatMessageCell chatMessageCell) {
+    public static void resetMessageContent(MessageObject messageObject) {
         if (messageObject.caption != null) {
             messageObject.caption = null;
             messageObject.generateCaption();
@@ -33,6 +30,9 @@ public class MessageHelper extends BaseController {
         }
         messageObject.applyNewText();
         messageObject.resetLayout();
+    }
+
+    public static void resetMessageContent(ChatMessageCell chatMessageCell) {
         chatMessageCell.onAttachedToWindow();
         chatMessageCell.requestLayout();
         chatMessageCell.invalidate();

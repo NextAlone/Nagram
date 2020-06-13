@@ -39,7 +39,7 @@ fun MessageObject.toRawString(): String {
 
     } else {
 
-        content = messageOwner.message
+        content = messageOwner.message ?: ""
 
     }
 
@@ -63,7 +63,7 @@ fun MessageObject.translateFinished(locale: Locale): Boolean {
 
             val answer = db.query(it.text) ?: return false
 
-            it.translatedText = answer + " | " + it.text
+            it.translatedText = it.text + " | " + answer
 
         }
 
@@ -80,27 +80,34 @@ fun MessageObject.translateFinished(locale: Locale): Boolean {
 }
 
 @JvmOverloads
-fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale) {
+fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale) {
 
-    val messageCell by lazy {
+    if (messages.all { it.messageOwner.translated }) {
 
-        for (index in 0 until chatListView.childCount) {
+        messages.forEach { messageObject ->
 
-            chatListView.getChildAt(index).takeIf { it is ChatMessageCell && it.messageObject === selectedObject }?.also { return@lazy it as ChatMessageCell }
+            messageObject.messageOwner.translated = false
+
+            MessageHelper.resetMessageContent(messageObject);
+
+            for (index in 0 until chatListView.childCount) {
+
+                val cell = chatListView.getChildAt(index)
+                        .takeIf { it is ChatMessageCell && it.messageObject === messageObject } as ChatMessageCell?
+
+                if (cell != null) {
+
+                    MessageHelper.resetMessageContent(cell);
+
+                    break
+
+                }
+
+            }
+
+            chatAdapter.updateRowWithMessageObject(messageObject, true)
 
         }
-
-        error("not found")
-
-    }
-
-    if (selectedObject.messageOwner.translated) {
-
-        selectedObject.messageOwner.translated = false
-
-        MessageHelper.resetMessageContent(selectedObject, messageCell)
-
-        chatAdapter.updateRowWithMessageObject(selectedObject, true)
 
         return
 
@@ -108,43 +115,70 @@ fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale =
 
     if (NekoConfig.translationProvider < 0) {
 
-        TranslateBottomSheet.show(parentActivity, selectedObject.toRawString())
+        TranslateBottomSheet.show(parentActivity, messages.map { it.toRawString() }.filter { it.isNotBlank() }.joinToString("\n"))
 
         return
 
     }
 
+    val status = AlertUtil.showProgress(parentActivity)
+
+    val canceled = AtomicBoolean()
+
+    status.setOnCancelListener {
+
+        canceled.set(true)
+
+    }
+
+    status.show()
+
     GlobalScope.launch(Dispatchers.IO) {
 
-        if (selectedObject.translateFinished(target)) {
+        messages.forEachIndexed { i, selectedObject ->
 
-            withContext(Dispatchers.Main) {
+            val isEnd = i == messages.size - 1
 
-                selectedObject.messageOwner.translated = true
+            var messageCell: ChatMessageCell? = null
 
-                MessageHelper.resetMessageContent(selectedObject, messageCell)
+            for (index in 0 until chatListView.childCount) {
 
-                chatAdapter.updateRowWithMessageObject(selectedObject, true)
+                val cell = chatListView.getChildAt(index)
+                        .takeIf { it is ChatMessageCell && it.messageObject === selectedObject } as ChatMessageCell?
 
-            }
+                if (cell != null) {
 
-            return@launch
+                    messageCell = cell
 
-        }
+                    break
 
-        withContext(Dispatchers.Main) {
-
-            val status = AlertUtil.showProgress(parentActivity)
-
-            val canceled = AtomicBoolean()
-
-            status.setOnCancelListener {
-
-                canceled.set(true)
+                }
 
             }
 
-            status.show()
+            if (selectedObject.translateFinished(target)) {
+
+                withContext(Dispatchers.Main) {
+
+                    selectedObject.messageOwner.translated = true
+
+                    MessageHelper.resetMessageContent(selectedObject)
+
+                    messageCell?.also {
+
+                        MessageHelper.resetMessageContent(it)
+
+                    }
+
+                    chatAdapter.updateRowWithMessageObject(selectedObject, true)
+
+                    if (isEnd) status.dismiss()
+
+                }
+
+                return@forEachIndexed
+
+            }
 
             withContext(Dispatchers.IO) trans@{
 
@@ -174,7 +208,7 @@ fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale =
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, false, it.message ?: it.javaClass.simpleName, Runnable {
 
-                                    translateMessage(selectedObject, target)
+                                    translateMessages(messages, target)
 
                                 })
 
@@ -210,7 +244,7 @@ fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale =
 
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, false, e.message ?: e.javaClass.simpleName, Runnable {
 
-                                        translateMessage(selectedObject, target)
+                                        translateMessages(messages, target)
 
                                     })
 
@@ -246,7 +280,7 @@ fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale =
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, false, it.message ?: it.javaClass.simpleName, Runnable {
 
-                                    translateMessage(selectedObject, target)
+                                    translateMessages(messages, target)
 
                                 })
 
@@ -269,15 +303,21 @@ fun ChatActivity.translateMessage(selectedObject: MessageObject,target: Locale =
 
                     withContext(Dispatchers.Main) {
 
-                        status.dismiss()
+                        MessageHelper.resetMessageContent(selectedObject)
 
-                        MessageHelper.resetMessageContent(selectedObject, messageCell)
+                        messageCell?.also {
+
+                            MessageHelper.resetMessageContent(it)
+
+                        }
 
                         chatAdapter.updateRowWithMessageObject(selectedObject, true)
 
+                        if (isEnd) status.dismiss()
+
                     }
 
-                }
+                } else return@trans
 
             }
 

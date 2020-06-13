@@ -421,7 +421,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private AnimatorSet runningAnimation;
 
     private MessageObject selectedObjectToEditCaption;
-    public MessageObject selectedObject;
+    private MessageObject selectedObject;
     private MessageObject.GroupedMessages selectedObjectGroup;
     private ArrayList<MessageObject> forwardingMessages;
     private MessageObject forwardingMessage;
@@ -934,6 +934,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int edit = 23;
     private final static int add_shortcut = 24;
     private final static int show_pinned = 25;
+    private final static int translate = 101;
 
     private final static int fake_screenshot = 27;
     private final static int delete_all = 28;
@@ -1415,6 +1416,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
+    private ArrayList<MessageObject> getSelectedMessages() {
+
+        ArrayList<MessageObject> fmessages = new ArrayList<>();
+
+        for (int a = 1; a >= 0; a--) {
+            ArrayList<Integer> ids = new ArrayList<>();
+            for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                ids.add(selectedMessagesIds[a].keyAt(b));
+            }
+            Collections.sort(ids);
+            for (int b = 0; b < ids.size(); b++) {
+                Integer id = ids.get(b);
+                MessageObject messageObject = selectedMessagesIds[a].get(id);
+                if (messageObject != null) {
+                    fmessages.add(messageObject);
+                }
+            }
+            selectedMessagesCanCopyIds[a].clear();
+            selectedMessagesCanStarIds[a].clear();
+            selectedMessagesIds[a].clear();
+        }
+        hideActionMode();
+        updatePinnedMessageView(true);
+        updateVisibleRows();
+
+        return fmessages;
+
+    }
+
     @Override
     public View createView(Context context) {
         textSelectionHelper = new TextSelectionHelper.ChatListTextSelectionHelper();
@@ -1500,6 +1530,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         AndroidUtilities.addToClipboard(str);
                     }
                     clearSelectionMode();
+                } else if (id == translate) {
+                    MessageTransKt.translateMessages(ChatActivity.this, getSelectedMessages().toArray(new MessageObject[0]));
                 } else if (id == delete) {
                     if (getParentActivity() == null) {
                         return;
@@ -2040,22 +2072,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionMode.addView(selectedMessagesCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 65, 0, 0, 0));
         selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
 
+        actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
+        actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.baseline_favorite_20, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
+        actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.baseline_content_copy_24, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
+
         if (currentEncryptedChat == null) {
-            actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
-            actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.baseline_favorite_20, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
-            actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.baseline_content_copy_24, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
             actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
             actionModeViews.add(actionMode.addItemWithWidth(forward_noquote, R.drawable.msg_forward_noquote, AndroidUtilities.dp(54), LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward)));
-            actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
-        } else {
-            actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
-            actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.baseline_favorite_20, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
-            actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.baseline_content_copy_24, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
-            actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
         }
+
+        actionModeViews.add(actionMode.addItemWithWidth(translate, R.drawable.ic_translate, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Translate)));
+        actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(copy).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(star).setVisibility(selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+        actionMode.getItem(translate).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.GONE : View.VISIBLE);
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
         checkActionBarMenu();
 
@@ -16007,7 +16039,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case 88: {
 
-                MessageTransKt.translateMessage(this, selectedObject);
+                MessageTransKt.translateMessages(this, new MessageObject[] { selectedObject });
 
                 break;
 
@@ -16180,7 +16212,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         scrimPopupWindowItems = null;
                     }
 
-                    MessageTransKt.translateMessage(this, selectedObject, locale);
+                    MessageTransKt.translateMessages(this, new MessageObject[] { selectedObject }, locale);
 
                     return Unit.INSTANCE;
 
