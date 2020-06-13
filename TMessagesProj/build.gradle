@@ -34,7 +34,7 @@ buildscript {
 
 dependencies {
 
-    implementation 'androidx.core:core:1.4.0-alpha01'
+    implementation 'androidx.core:core:1.5.0-alpha01'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
@@ -95,7 +95,7 @@ tasks.findByName("preBuild").finalizedBy(writeUpdateInfo)
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.3'
-    ndkVersion "21.1.6352462"
+    ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "nekox.messenger"
 

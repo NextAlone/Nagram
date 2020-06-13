@@ -60,7 +60,7 @@ index fd3532664..7fcfb1627 100644
 -              ${HANDSHAKER_ARGS} ${RUNNER_ARGS}
 -    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 -    DEPENDS all_tests bssl_shim handshaker
--    ${MAYBE_USES_TERMINAL})
+-    USES_TERMINAL)
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
 index e940f7d5f..f5221d70d 100644
 --- a/crypto/CMakeLists.txt
@@ -73,7 +73,7 @@ index e940f7d5f..f5221d70d 100644
  
  if(FIPS_DELOCATE)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -461,91 +461,3 @@ endif()
+@@ -461,93 +461,3 @@ endif()
  if(USE_CUSTOM_LIBCXX)
    target_link_libraries(crypto libcxx)
  endif()
@@ -128,6 +128,7 @@ index e940f7d5f..f5221d70d 100644
 -  fipsmodule/md5/md5_test.cc
 -  fipsmodule/modes/gcm_test.cc
 -  fipsmodule/rand/ctrdrbg_test.cc
+-  fipsmodule/rand/fork_detect_test.cc
 -  fipsmodule/sha/sha_test.cc
 -  hkdf/hkdf_test.cc
 -  hmac_extra/hmac_test.cc
@@ -149,6 +150,7 @@ index e940f7d5f..f5221d70d 100644
 -  siphash/siphash_test.cc
 -  test/file_test_gtest.cc
 -  thread_test.cc
+-  trust_token/trust_token_test.cc
 -  x509/x509_test.cc
 -  x509/x509_time_test.cc
 -  x509v3/tab_test.cc

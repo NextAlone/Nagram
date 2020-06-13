@@ -130,19 +130,7 @@ public class FileLog {
     }
 
     public static void e(final String message) {
-        ExternalGcm.reportLog("[E]" + message);
-        if (!BuildVars.SAVE_LOG) return;
-        ensureInitied();
-        if (getInstance().streamWriter != null) {
-            getInstance().logQueue.postRunnable(() -> {
-                try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
-                    getInstance().streamWriter.flush();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+        e(new Exception(message));
     }
 
     public static void e(Throwable e) {

@@ -15,6 +15,32 @@ buildscript {
     }
 }
 
+static String detectNdkVersion() {
+
+    def version = "21.2.6472646"
+
+    def androidHome = System.getenv("ANDROID_HOME")
+
+    if (androidHome == null) return version
+
+    def versionFile = new File(androidHome,"ndk-bundle/source.properties")
+
+    if (!versionFile.isFile()) return version
+
+    def versionProperties = new Properties()
+
+    versionProperties.load(versionFile.newDataInputStream())
+
+    return versionProperties.getProperty("Pkg.Revision",version)
+
+}
+
+ext {
+
+    ndkVersion = detectNdkVersion()
+
+}
+
 allprojects {
     repositories {
         // The order in which you list these repositories matter.

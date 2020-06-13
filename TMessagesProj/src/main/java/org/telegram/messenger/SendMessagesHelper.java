@@ -36,6 +36,8 @@ import android.widget.Toast;
 import androidx.annotation.UiThread;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 
+import com.google.gson.Gson;
+
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -1841,7 +1843,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     if (!messageObject.isGif() && (videoEditedInfo == null || !videoEditedInfo.muted)) {
                         uploadedDocument.nosound_video = true;
                         if (BuildVars.DEBUG_VERSION) {
-                            FileLog.d("nosound_video = true");
+                            FileLog.e("nosound_video = true");
                         }
                     }
                     if (document.access_hash == 0) {

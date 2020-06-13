@@ -17656,8 +17656,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     @Override
-                    public TextSelectionHelper.ChatListTextSelectionHelper getTextSelectionHelper
-                            () {
+                    public TextSelectionHelper.ChatListTextSelectionHelper getTextSelectionHelper() {
                         return textSelectionHelper;
                     }
 
