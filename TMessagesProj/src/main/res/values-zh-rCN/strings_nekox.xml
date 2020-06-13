@@ -34,7 +34,7 @@
     <string name="CachePath">缓存目录</string>
     <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google 云翻译密钥</string>
     <string name="GoogleCloudTransKeyNotice">如果您设置了一个谷歌云密钥： 云翻译API将被调用，而不是模拟表单提交到网页版 (快速、稳定和节省流量)。</string>
     <string name="TransToLang">翻译目标语言</string>

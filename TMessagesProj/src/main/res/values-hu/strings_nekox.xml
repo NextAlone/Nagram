@@ -34,7 +34,7 @@
     <string name="CachePath">Gyorsítótár könyvtár</string>
     <string name="AllowFlashCall">Flash hívás engedélyezése</string>
     <string name="ChangeTranslateProvider">Cserélje ki a szolgáltatót</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate kulcs</string>
     <string name="GoogleCloudTransKeyNotice">Ha beállít egy Google Cloud Trans kulcsot, akkor a felhő fordítási API-t hívja meg, és nem fordít hamis űrlapot a webes verzióhoz, amikor fordítja (gyorsabb, stabil és forgalmat takarít meg).</string>
     <string name="TransToLang">Fordítási célnyelv</string>

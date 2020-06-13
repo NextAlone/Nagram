@@ -34,7 +34,7 @@
     <string name="CachePath">Cache-bibliotek</string>
     <string name="AllowFlashCall">Tillad flashopkald</string>
     <string name="ChangeTranslateProvider">Skift udbyder</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Oversæt-nøgle</string>
     <string name="GoogleCloudTransKeyNotice">Hvis du konfigurerer en Google Cloud Trans-nøgle, kaldes cloud-oversættelses-API\'et i stedet for at indsende en falsk form til webversionen, når du oversætter (hurtigere, stabil og gemmer trafik).</string>
     <string name="TransToLang">Oversættelse målsprog</string>

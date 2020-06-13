@@ -34,7 +34,7 @@
     <string name="CachePath">Каталог кешу</string>
     <string name="AllowFlashCall">Дозволити спалах виклику</string>
     <string name="ChangeTranslateProvider">Змінити оператора</string>
-    <string name="ProviderYandex">Яндекс.Перекладач</string>
+    <string name="ProviderYandexTranslate">Яндекс.Перекладач</string>
     <string name="GoogleCloudTransKey">Ключ Google Cloud Translate</string>
     <string name="GoogleCloudTransKeyNotice">Якщо ви встановите ключ Trans від Google, API перекладу в хмарі буде викликано замість відправлення підробки форми в веб-версію при перекладі (швидшого, стабільного і економії трафіку).</string>
     <string name="TransToLang">Переклад цільової мови</string>

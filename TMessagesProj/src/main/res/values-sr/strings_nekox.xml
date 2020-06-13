@@ -34,7 +34,7 @@
     <string name="CachePath">Цацхе директориј</string>
     <string name="AllowFlashCall">Дозволи фласх позив</string>
     <string name="ChangeTranslateProvider">Промени провајдера</string>
-    <string name="ProviderYandex">Иандек.Транслате</string>
+    <string name="ProviderYandexTranslate">Иандек.Транслате</string>
     <string name="GoogleCloudTransKey">Кључ за Гоогле Цлоуд Транслате</string>
     <string name="GoogleCloudTransKeyNotice">Ако поставите Гоогле Цлоуд Транс Кеи, позиваће се АПИ превод облака уместо да поднесе лажни образац веб верзији приликом превођења (бржи, стабилнији и штеди саобраћај).</string>
     <string name="TransToLang">Преводни циљни језик</string>

@@ -34,7 +34,7 @@
     <string name="CachePath">Directory cache</string>
     <string name="AllowFlashCall">Consenti chiamata flash</string>
     <string name="ChangeTranslateProvider">Cambia Provider</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Traduci Chiave</string>
     <string name="GoogleCloudTransKeyNotice">Se si imposta una chiave Trans di Google Cloud, l\'API di traduzione cloud verrà chiamato invece di inviare un modulo falso alla versione web quando si traduce (più veloce, stabile e di risparmio di traffico).</string>
     <string name="TransToLang">Lingua di destinazione della traduzione</string>

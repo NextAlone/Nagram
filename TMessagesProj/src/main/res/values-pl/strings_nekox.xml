@@ -34,7 +34,7 @@
     <string name="CachePath">Katalog pamięci podręcznej</string>
     <string name="AllowFlashCall">Zezwalaj na połączenie flash</string>
     <string name="ChangeTranslateProvider">Zmień dostawcę</string>
-    <string name="ProviderYandex">Tłumaczenie Yandexa</string>
+    <string name="ProviderYandexTranslate">Tłumaczenie Yandexa</string>
     <string name="GoogleCloudTransKey">Klucz tłumaczenia Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">Jeśli ustawisz Google Cloud Trans Key, API tłumaczenia w chmurze będzie wywoływane zamiast przesyłania fałszywego formularza do wersji internetowej podczas tłumaczenia (szybsza, stabilna i zapisująca ruch).</string>
     <string name="TransToLang">Język docelowy tłumaczenia</string>

@@ -34,7 +34,7 @@
     <string name="CachePath">緩存目錄</string>
     <string name="AllowFlashCall">允許通話</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google 云翻譯密鑰</string>
     <string name="GoogleCloudTransKeyNotice">如果您設置了 Google 云翻譯密鑰，則將在翻譯時調用雲翻譯API，而不是向網頁版本提交假表格（更快，穩定並節省流量）。</string>
     <string name="TransToLang">翻譯目標語言</string>

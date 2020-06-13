@@ -34,7 +34,7 @@
     <string name="CachePath">Thư mục bộ nhớ cache</string>
     <string name="AllowFlashCall">Cho phép cuộc gọi flash</string>
     <string name="ChangeTranslateProvider">Thay đổi nhà cung cấp</string>
-    <string name="ProviderYandex">Yandex.TransTable</string>
+    <string name="ProviderYandexTranslate">Yandex.TransTable</string>
     <string name="GoogleCloudTransKey">Khóa dịch trên nền tảng đám mây của Google</string>
     <string name="GoogleCloudTransKeyNotice">Nếu bạn thiết lập Google Cloud Trans Key, API dịch đám mây sẽ được gọi thay vì gửi biểu mẫu giả cho phiên bản web khi dịch (nhanh hơn, ổn định và lưu lượng truy cập).</string>
     <string name="TransToLang">Ngôn ngữ mục tiêu dịch</string>

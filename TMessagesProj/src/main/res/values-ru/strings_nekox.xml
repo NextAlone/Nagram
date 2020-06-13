@@ -5,9 +5,9 @@
     <string name="CustomApiNo">Не использовать пользовательский API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
-    <string name="CustomApiInput">Ручной ввод</string>
-    <string name="CheckUpdate">Проверить обновление</string>
-    <string name="SwitchVersion">Переключить версию</string>
+    <string name="CustomApiInput">Ввести вручную</string>
+    <string name="CheckUpdate">Проверить обновления</string>
+    <string name="SwitchVersion">Сменить версию</string>
     <string name="NoUpdate">Обновление не найдено</string>
     <string name="UpdateAvailable">Доступно новое обновление</string>
     <string name="UpdateUpdate">Обновить</string>
@@ -16,14 +16,14 @@
     <string name="Install">Установить</string>
     <string name="Ignore">Пропустить</string>
     <string name="UpdateDownloaded">Обновление было только что загружено.</string>
-    <string name="LinkedGroupChat">Связанная группа</string>
-    <string name="LinkedChannelChat">Связанный канал</string>
-    <string name="DevModeTitle">**Ваш счет телеграммы можно забанить**</string>
+    <string name="LinkedGroupChat">Привязанная группа</string>
+    <string name="LinkedChannelChat">Привязанный канал</string>
+    <string name="DevModeTitle">** Ваш аккаунт в Telegram может быть заблокирован **</string>
     <string name="DevModeNotice">Мы не несем ответственности за ненадлежащее использование функций разработчика.</string>
-    <string name="TapToDisable">Нажмите, чтобы отключить. Это не нужно.</string>
-    <string name="PlaceHolder">Заполнитель - Пожалуйста, отключите</string>
+    <string name="TapToDisable">Нажмите, чтобы отключить. Вам это не нужно.</string>
+    <string name="PlaceHolder">Заполнитель - пожалуйста, отключите</string>
     <string name="CustomBackend">Пользовательский бэкэнд</string>
-    <string name="CustomBackendNotice">Эта функция предоставляется только экспертным пользователям, если вы не знаете, что представляют следующие параметры, просто игнорируйте их.</string>
+    <string name="CustomBackendNotice">Эта функция предназначена только для опытных пользователей, если вы не знаете, зачем это нужно —не используйте её.</string>
     <string name="CustomBackendProduction">Официальный производственный центр данных</string>
     <string name="CustomBackendTestDC">Официальный тестовый датацентр</string>
     <string name="CustomBackendIpv4">Адрес Ipv4</string>
@@ -34,7 +34,7 @@
     <string name="CachePath">Каталог кэша</string>
     <string name="AllowFlashCall">Разрешить флэш-вызов</string>
     <string name="ChangeTranslateProvider">Изменить провайдера</string>
-    <string name="ProviderYandex">Яндекс.Перевод</string>
+    <string name="ProviderYandexTranslate">Яндекс.Перевод</string>
     <string name="GoogleCloudTransKey">Ключ для перевода через Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">Если вы настроили ключ Google Cloud, API перевода в облаке будет вызываться вместо отправки поддельной формы в веб-версию при переводе (быстрее, стабильном и экономивном трафике).</string>
     <string name="TransToLang">Целевой язык перевода</string>
@@ -130,10 +130,10 @@
     <string name="ESNI">Зашифрованный SNI</string>
     <string name="ProxyRemarks">Замечания</string>
     <string name="RetestPing">Проверка пинга для всех серверов</string>
-    <string name="ReorderByPing">Сортировать серверы путем пинга</string>
-    <string name="ExportProxies">Экспорт серверов в файл</string>
-    <string name="ImportProxies">Импортировать серверы из файла</string>
-    <string name="ImportProxyList">Импорт прокси серверов</string>
+    <string name="ReorderByPing">Сортировать по пингу</string>
+    <string name="ExportProxies">Экспорт в файл</string>
+    <string name="ImportProxies">Импорт из файла</string>
+    <string name="ImportProxyList">Импорт прокси-серверов</string>
     <string name="ProxySubscription">Подписка на прокси</string>
     <string name="ProxySubDetails">Информация о подписке</string>
     <string name="SubscriptionUrls">Ссылки</string>
@@ -164,7 +164,7 @@
     <string name="DeveloperSettings">Настройки разработчика</string>
     <string name="LoginSettings">Настройки входа</string>
     <string name="NekoXFaq">NekoX FAQ</string>
-    <string name="TransSite">Перевести платформу</string>
+    <string name="TransSite">Помочь перевести Neko</string>
     <string name="NekoTrans">Перевести Nekogram</string>
     <string name="NekoXTrans">Перевести NekoX</string>
 </resources>

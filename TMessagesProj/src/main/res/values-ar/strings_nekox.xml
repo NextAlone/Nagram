@@ -34,7 +34,7 @@
     <string name="CachePath">دليل ذاكرة التخزين المؤقت</string>
     <string name="AllowFlashCall">السماح بإجراء مكالمة فلاش</string>
     <string name="ChangeTranslateProvider">تغيير المزود</string>
-    <string name="ProviderYandex">ترجمة اليانديكس</string>
+    <string name="ProviderYandexTranslate">ترجمة اليانديكس</string>
     <string name="GoogleCloudTransKey">مفتاح ترجمة سحابة Google</string>
     <string name="GoogleCloudTransKeyNotice">إذا قمت بإعداد Google Cloud Trans Key ، فسيتم استدعاء API للترجمة السحابية بدلاً من إرسال نموذج مزيف إلى إصدار الويب عند الترجمة (حركة مرور أسرع وثابتة وحفظها).</string>
     <string name="TransToLang">لغة هدف الترجمة</string>

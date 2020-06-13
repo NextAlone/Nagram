@@ -104,6 +104,7 @@ public class NekoConfig {
     public static boolean useProxyItem;
 
     public static boolean disableAppBarShadow;
+    public static boolean mediaPreview;
 
     public static String formatLang(String name) {
 
@@ -207,6 +208,7 @@ public class NekoConfig {
         useProxyItem = preferences.getBoolean("use_proxy_item",false);
 
         disableAppBarShadow = preferences.getBoolean("disableAppBarShadow", false);
+        mediaPreview = preferences.getBoolean("mediaPreview", false);
 
     }
 
@@ -690,4 +692,9 @@ public class NekoConfig {
 
     }
 
+    public static void toggleMediaPreview() {
+
+        preferences.edit().putBoolean("mediaPreview",mediaPreview = !mediaPreview).apply();
+
+    }
 }

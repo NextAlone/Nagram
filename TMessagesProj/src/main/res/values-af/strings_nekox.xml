@@ -34,7 +34,7 @@
     <string name="CachePath">Kasgids</string>
     <string name="AllowFlashCall">Laat flitsoproep toe</string>
     <string name="ChangeTranslateProvider">Verander verskaffer</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate-sleutel</string>
     <string name="GoogleCloudTransKeyNotice">As u \'n Google Cloud Trans-sleutel opstel, word die API vir wolkvertaling geroep in plaas daarvan om \'n valse vorm by die webweergawe in te dien wanneer u vertaal (vinniger, stabiel en besparing van verkeer).</string>
     <string name="TransToLang">Vertaling doeltaal</string>

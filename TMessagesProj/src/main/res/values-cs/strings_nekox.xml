@@ -34,7 +34,7 @@
     <string name="CachePath">Složka mezipaměti</string>
     <string name="AllowFlashCall">Povolit flash hovor</string>
     <string name="ChangeTranslateProvider">Změnit poskytovatele</string>
-    <string name="ProviderYandex">Překlad</string>
+    <string name="ProviderYandexTranslate">Překlad</string>
     <string name="GoogleCloudTransKey">Klíč překladače Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">Pokud nastavíte Google Cloud Trans klíč, API pro překlad do cloudu bude voláno namísto odeslání falešného formuláře do webové verze při překladu (rychlejší, stabilní a úsporný provoz).</string>
     <string name="TransToLang">Cílový jazyk překladu</string>

@@ -34,7 +34,7 @@
     <string name="CachePath">Välimuistihakemisto</string>
     <string name="AllowFlashCall">Salli flash-puhelu</string>
     <string name="ChangeTranslateProvider">Vaihda palveluntarjoaja</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">Jos määrität Google Cloud Trans -avaimen, pilvipalvelun sovellusliittymään kutsutaan väärennetyn muodon lähettämisen sijasta verkkosivustolle käännettäessä (nopeampi, vakaa ja säästää liikennettä).</string>
     <string name="TransToLang">Käännös kohdekielellä</string>

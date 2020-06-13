@@ -34,7 +34,7 @@
     <string name="CachePath">Cache-katalog</string>
     <string name="AllowFlashCall">Tillåt flash samtal</string>
     <string name="ChangeTranslateProvider">Ändra leverantör</string>
-    <string name="ProviderYandex">Yandex.Översätt</string>
+    <string name="ProviderYandexTranslate">Yandex.Översätt</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate nyckel</string>
     <string name="GoogleCloudTransKeyNotice">Om du ställer in en Google Cloud Trans Key, molnet översättning API kommer att kallas istället för att skicka in en falsk form till webbversionen när du översätter (snabbare, stabil och spara trafik).</string>
     <string name="TransToLang">Målspråk för översättning</string>

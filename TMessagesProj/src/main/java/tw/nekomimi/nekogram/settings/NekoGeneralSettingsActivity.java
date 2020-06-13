@@ -328,7 +328,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 builder.setItems(new String[]{
                         LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                         LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
-                        LocaleController.getString("ProviderYandex", R.string.ProviderYandex),
+                        LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
                         LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
 
                         LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
@@ -751,7 +751,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb);
                                 break;
                             case 3:
-                                value = LocaleController.getString("ProviderYandex", R.string.ProviderYandex);
+                                value = LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate);
                                 break;
                             case 4:
                                 value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);

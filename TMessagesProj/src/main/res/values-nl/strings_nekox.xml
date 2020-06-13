@@ -34,7 +34,7 @@
     <string name="CachePath">Cache map</string>
     <string name="AllowFlashCall">Toestaan flitsoproep</string>
     <string name="ChangeTranslateProvider">Verander Provider</string>
-    <string name="ProviderYandex">Vertalen</string>
+    <string name="ProviderYandexTranslate">Vertalen</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">Als je een Google Cloud Trans Key instelt, de cloud-vertaling API wordt aangeroepen in plaats van een nep formulier naar de webversie te sturen bij het vertalen (sneller, stabiel en opslaan van verkeer).</string>
     <string name="TransToLang">Vertaal doeltaal</string>

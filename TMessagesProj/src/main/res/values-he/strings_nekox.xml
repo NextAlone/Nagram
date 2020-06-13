@@ -34,7 +34,7 @@
     <string name="CachePath">ספריית מטמון</string>
     <string name="AllowFlashCall">אפשר שיחת פלאש</string>
     <string name="ChangeTranslateProvider">החלף ספק</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">מפתח הענן של גוגל</string>
     <string name="GoogleCloudTransKeyNotice">אם תגדיר מפתח Cloud Cloud של גוגל, API של תרגום ענן ייקרא במקום להגיש טופס מזויף לגרסת האינטרנט בעת התרגום (תנועה מהירה יותר, יציבה וחוסכת).</string>
     <string name="TransToLang">שפת יעד לתרגום</string>

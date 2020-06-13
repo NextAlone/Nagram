@@ -34,7 +34,7 @@
     <string name="CachePath">Κατάλογος προσωρινής μνήμης</string>
     <string name="AllowFlashCall">Να επιτρέπεται η κλήση flash</string>
     <string name="ChangeTranslateProvider">Αλλαγή παροχέα</string>
-    <string name="ProviderYandex">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Κλειδί μετάφρασης Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">Εάν ρυθμίσετε ένα Google Cloud Trans Key, θα κληθείτε το API μετάφρασης cloud αντί να υποβάλετε μια ψεύτικη φόρμα στην έκδοση ιστού κατά τη μετάφραση (ταχύτερη, σταθερή και εξοικονόμηση επισκεψιμότητας).</string>
     <string name="TransToLang">Γλώσσα προορισμού μετάφρασης</string>

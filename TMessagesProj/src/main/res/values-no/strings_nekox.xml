@@ -34,7 +34,7 @@
     <string name="CachePath">Mellomlager mappe</string>
     <string name="AllowFlashCall">Tillat flash-samtale</string>
     <string name="ChangeTranslateProvider">Endre operatør</string>
-    <string name="ProviderYandex">Yandex.Oversett</string>
+    <string name="ProviderYandexTranslate">Yandex.Oversett</string>
     <string name="GoogleCloudTransKey">Google Cloud Oversett nøkkel</string>
     <string name="GoogleCloudTransKeyNotice">Hvis du setter opp en Google Cloud Trans-nøkkel, vil API-oversettelsen for skien bli kalt i stedet for å sende inn et falsk skjema til nettversjonen når du oversetter (raskere, stabil og sparer trafikk).</string>
     <string name="TransToLang">Oversettelses mål-språk</string>
