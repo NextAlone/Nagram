@@ -207,6 +207,11 @@ import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
+import tw.nekomimi.nekogram.MessageDetailsActivity;
+import tw.nekomimi.nekogram.MessageHelper;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -249,7 +254,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     protected ChatActivityEnterView chatActivityEnterView;
     int chatActivityEnterViewAnimateFromTop;
     private View timeItem2;
-    private ActionBarMenuSubItem fakeScreenshotItem;
     private ActionBarMenuItem attachItem;
     private ActionBarMenuItem headerItem;
     private ActionBarMenuItem editTextItem;
@@ -936,7 +940,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int show_pinned = 25;
     private final static int translate = 101;
 
-    private final static int fake_screenshot = 27;
     private final static int delete_all = 28;
 
     private final static int bot_help = 30;
@@ -1763,8 +1766,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     preferences.edit().putInt("pin_" + dialog_id, 0).apply();
                     updatePinnedMessageView(true);
-                } else if (id == fake_screenshot) {
-                    getSecretChatHelper().sendScreenshotMessage(currentEncryptedChat, getMediaController().getLastVisibleMessageIds(), null);
                 } else if (id == linked_chat) {
                     if (chatInfo == null) {
                         return;
@@ -1970,14 +1971,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (searchItem != null) {
                 headerItem.addSubItem(search, R.drawable.baseline_search_24, LocaleController.getString("Search", R.string.Search));
             }
-            if (currentUser != null) {
-                addContactItem = headerItem.addSubItem(share_contact, R.drawable.baseline_person_add_24, "");
-            }
-            if (currentEncryptedChat != null) {
-                timeItem2 = headerItem.addSubItem(chat_enc_timer, R.drawable.baseline_timer_24, LocaleController.getString("SetTimer", R.string.SetTimer));
-                fakeScreenshotItem = headerItem.addSubItem(fake_screenshot, R.drawable.baseline_star_24, LocaleController.getString("FakeScreenshot", R.string.FakeScreenshot));
-            }
-
             boolean allowShowPinned;
             if (currentChat != null) {
                 allowShowPinned = ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_PIN) || ChatObject.isChannel(currentChat);
@@ -1991,27 +1984,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (allowShowPinned) {
                 headerItem.addSubItem(show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString("PinnedMessage", R.string.PinnedMessage));
             }
-
-            if (currentUser == null || !currentUser.self) {
-                muteItem = headerItem.addSubItem(mute, R.drawable.baseline_volume_off_24_white, null);
-            }
-
             if (currentChat != null && !currentChat.creator) {
                 headerItem.addSubItem(report, R.drawable.baseline_report_24, LocaleController.getString("ReportChat", R.string.ReportChat));
             }
-
-            if (currentChat != null && (currentChat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
-                String text;
-                if (!currentChat.megagroup) {
-                    text = LocaleController.getString("LinkedGroupChat", R.string.LinkedGroupChat);
-                } else {
-                    text = LocaleController.getString("LinkedChannelChat", R.string.LinkedChannelChat);
-                }
-                headerItem.addSubItem(linked_chat, R.drawable.baseline_layers_24, text);
+            if (currentUser != null) {
+                addContactItem = headerItem.addSubItem(share_contact, R.drawable.msg_addcontact, "");
             }
-
+            if (currentEncryptedChat != null) {
+                timeItem2 = headerItem.addSubItem(chat_enc_timer, R.drawable.msg_timer, LocaleController.getString("SetTimer", R.string.SetTimer));
+            }
             if (!ChatObject.isChannel(currentChat) || currentChat != null && currentChat.megagroup && TextUtils.isEmpty(currentChat.username)) {
                 headerItem.addSubItem(clear_history, R.drawable.baseline_delete_sweep_24, LocaleController.getString("ClearHistory", R.string.ClearHistory));
+            }
+            if (currentUser == null || !currentUser.self) {
+                muteItem = headerItem.addSubItem(mute, R.drawable.msg_mute, null);
             }
             if (ChatObject.isChannel(currentChat) && currentChat.megagroup) {
                 headerItem.addSubItem(delete_history, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
@@ -2020,7 +2006,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (ChatObject.isChannel(currentChat) && ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
                 headerItem.addSubItem(delete_all, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllInChat", R.string.DeleteAllInChat));
             }
-
             if (ChatObject.isChannel(currentChat)) {
                 if (!ChatObject.isNotInChat(currentChat)) {
                     if (currentChat.megagroup) {
@@ -14951,9 +14936,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(2);
                             icons.add(R.drawable.msg_forward);
+                        }
+                        if (!selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                             items.add(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
                             options.add(95);
                             icons.add(R.drawable.msg_forward_noquote);
+                        }
+                        if (!inScheduleMode && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages) {
                                 items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
                                 options.add(93);
@@ -14979,16 +14968,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(90);
                                 icons.add(R.drawable.baseline_schedule_24);
                             }
-                            if (NekoConfig.showMessageDetails) {
-                                items.add(LocaleController.getString("MessageDetails", R.string.MessageDetails));
-                                options.add(89);
-                                icons.add(R.drawable.menu_info);
-                            }
                             if ((StrUtil.isNotBlank(selectedObject.messageOwner.message) || selectedObject.isPoll()) && NekoConfig.showTranslate) {
                                 items.add(selectedObject.messageOwner.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
                                 options.add(88);
                                 icons.add(R.drawable.ic_translate);
                             }
+                        }
+                        if (NekoConfig.showMessageDetails) {
+                            items.add(LocaleController.getString("MessageDetails", R.string.MessageDetails));
+                            options.add(89);
+                            icons.add(R.drawable.menu_info);
                         }
                         if (allowUnpin) {
                             items.add(LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
@@ -16039,7 +16028,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case 88: {
 
-                MessageTransKt.translateMessages(this, new MessageObject[] { selectedObject });
+                MessageTransKt.translateMessages(this, new MessageObject[]{selectedObject});
 
                 break;
 
@@ -16104,6 +16093,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case 94: {
+                if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+                    return;
+                }
                 ArrayList<MessageObject> messages = new ArrayList<>();
                 messages.add(selectedObject);
                 forwardMessages(messages, false, true, 0);
@@ -16212,7 +16204,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         scrimPopupWindowItems = null;
                     }
 
-                    MessageTransKt.translateMessages(this, new MessageObject[] { selectedObject }, locale);
+                    MessageTransKt.translateMessages(this, new MessageObject[]{selectedObject}, locale);
 
                     return Unit.INSTANCE;
 

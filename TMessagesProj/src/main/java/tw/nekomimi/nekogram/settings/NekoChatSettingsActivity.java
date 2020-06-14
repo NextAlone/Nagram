@@ -45,7 +45,7 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
 
 @SuppressLint("RtlHardcoded")
-public class NekoChatSettingsActivity extends BaseFragment {
+public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
@@ -82,6 +82,7 @@ public class NekoChatSettingsActivity extends BaseFragment {
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         updateRows();
 
         return true;
@@ -418,6 +419,21 @@ public class NekoChatSettingsActivity extends BaseFragment {
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.setView(linearLayout);
         showDialog(builder.create());
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.emojiDidLoad) {
+            if (listView != null) {
+                listView.invalidateViews();
+            }
+        }
+    }
+
+    @Override
+    public void onFragmentDestroy() {
+        super.onFragmentDestroy();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
     }
 
     private class StickerSizeCell extends FrameLayout {

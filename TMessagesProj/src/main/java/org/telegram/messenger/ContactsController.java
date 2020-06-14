@@ -345,7 +345,7 @@ public class ContactsController extends BaseController {
             readContacts();
             if (systemAccount == null && !NekoConfig.disableSystemAccount) {
                 try {
-                    TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+                    TLRPC.User user = getUserConfig().getCurrentUser();
                     systemAccount = new Account(formatName(user.first_name, user.last_name), BuildConfig.APPLICATION_ID);
                     am.addAccountExplicitly(systemAccount, "", null);
                 } catch (Exception e) {

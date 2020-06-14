@@ -3948,6 +3948,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             delegate.needStartRecordVideo(4, notify, scheduleDate);
             hideRecordedAudioPanel(true);
             checkSendButton(true);
+            return;
         } else if (audioToSend != null) {
             MessageObject playing = MediaController.getInstance().getPlayingMessageObject();
             if (playing != null && playing == audioToSendMessageObject) {
@@ -3959,6 +3960,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             hideRecordedAudioPanel(true);
             checkSendButton(true);
+            return;
         }
         CharSequence message = messageEditText.getText();
         if (parentFragment != null) {
