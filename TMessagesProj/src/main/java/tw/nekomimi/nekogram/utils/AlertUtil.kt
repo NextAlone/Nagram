@@ -32,7 +32,7 @@ object AlertUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun showSimpleAlert(ctx: Context, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) {
+    fun showSimpleAlert(ctx: Context?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) {
 
         showSimpleAlert(ctx,null, text, listener)
 
@@ -40,7 +40,9 @@ object AlertUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun showSimpleAlert(ctx: Context,title: String?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
+    fun showSimpleAlert(ctx: Context?,title: String?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
+
+        if(ctx == null) return@Runnable
 
         val builder = AlertDialog.Builder(ctx)
 

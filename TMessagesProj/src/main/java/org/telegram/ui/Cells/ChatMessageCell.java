@@ -1657,7 +1657,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 }
                             }
                         });
-                        builder.show();
+                        // nekox change: avoid BTE
+                        try {
+                            builder.show();
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("CopyDetails", R.string.CopyDetails)}, (dialogInterface, i) -> {
@@ -1677,7 +1682,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 }
                             }
                         });
-                        builder.show();
+                        // nekox change: avoid BTE
+                        try {
+                            builder.show();
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     }
                 }
                 pressedBotButton = -1;

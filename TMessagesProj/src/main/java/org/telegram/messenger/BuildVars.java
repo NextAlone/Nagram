@@ -16,7 +16,7 @@ import android.content.pm.PackageManager;
 @SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
-    public static boolean DEBUG_VERSION = true;
+    public static boolean DEBUG_VERSION = false;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean LOGS_ENABLED = true;
     public static boolean USE_CLOUD_STRINGS = true;

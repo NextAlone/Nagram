@@ -17807,7 +17807,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (position >= messagesStartRow && position < messagesEndRow) {
                 MessageObject message = messages.get(position - messagesStartRow);
                 View view = holder.itemView;
-                boolean fromUserBlocked = MessagesController.getInstance(currentAccount).blockedUsers.indexOfKey(message.getFromId()) >= 0 && NekoConfig.ignoreBlocked;
+                boolean fromUserBlocked = getMessagesController().blockedUsers.indexOfKey(message.getFromId()) >= 0 && NekoConfig.ignoreBlocked;
 
                 if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;
@@ -19016,7 +19016,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 continue;
             }
             final TLRPC.ChannelParticipant channelParticipant;
-            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(participant.user_id);
+            TLRPC.User user = getMessagesController().getUser(participant.user_id);
             if (ChatObject.isChannel(currentChat)) {
                 channelParticipant = ((TLRPC.TL_chatChannelParticipant) participant).channelParticipant;
             } else {

@@ -113,20 +113,7 @@ public class FileLog {
     }
 
     public static void e(final String message, final Throwable exception) {
-        ExternalGcm.recordException(new Exception(message, exception));
-        if (!BuildVars.SAVE_LOG) return;
-        ensureInitied();
-        if (getInstance().streamWriter != null) {
-            getInstance().logQueue.postRunnable(() -> {
-                try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
-                    getInstance().streamWriter.write(exception.toString());
-                    getInstance().streamWriter.flush();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+        e(new Exception(message, exception));
     }
 
     public static void e(final String message) {
@@ -134,6 +121,7 @@ public class FileLog {
     }
 
     public static void e(Throwable e) {
+        Log.e(tag, "error", e);
         ExternalGcm.recordException(e);
         if (!BuildVars.SAVE_LOG) return;
         ensureInitied();

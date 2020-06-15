@@ -97,7 +97,11 @@ object UpdateUtil {
 
                     }
 
-                    builder.show()
+                    runCatching {
+
+                        builder.show()
+
+                    }
 
                 } else {
 

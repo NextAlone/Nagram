@@ -3188,8 +3188,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         destFile.createNewFile();
                     }
 
-                    FileLog.d("[MediaController] saveFile: from " + sourceFile + " to " + destFile);
-
                     boolean result = true;
                     long lastProgress = System.currentTimeMillis() - 500;
                     try (FileChannel source = new FileInputStream(sourceFile).getChannel(); FileChannel destination = new FileOutputStream(destFile).getChannel()) {

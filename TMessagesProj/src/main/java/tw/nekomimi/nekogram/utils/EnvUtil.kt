@@ -53,7 +53,7 @@ object EnvUtil {
 
         }
 
-        telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null)!!
+        telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null) ?: File(ApplicationLoader.getDataDirFixed(), "cache/files")
 
         if (telegramPath.isDirectory || telegramPath.mkdirs()) {
 

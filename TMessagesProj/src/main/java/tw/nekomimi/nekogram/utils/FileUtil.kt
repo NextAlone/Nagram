@@ -222,13 +222,17 @@ object FileUtil {
     @JvmStatic
     fun saveNonAsset(path: String, saveTo: File) {
 
-        ResourceUtil.getStream(path)?.use {
+        runCatching {
 
-            FileLog.d("found nonAsset in resources: $path")
+            ResourceUtil.getStream(path).use {
 
-            IoUtil.copy(it, saveTo)
+                FileLog.d("found nonAsset in resources: $path")
 
-            return
+                IoUtil.copy(it, saveTo)
+
+                return
+
+            }
 
         }
 

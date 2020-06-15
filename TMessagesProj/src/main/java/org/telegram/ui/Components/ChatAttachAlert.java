@@ -1252,7 +1252,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             });
             sendPopupLayout.setShowedFromBotton(false);
 
-            itemCells = new ActionBarMenuSubItem[2];
+            itemCells = new ActionBarMenuSubItem[3];
             int i = 0;
             for (int a = 0; a < 3; a++) {
                 if (a == 1) {
