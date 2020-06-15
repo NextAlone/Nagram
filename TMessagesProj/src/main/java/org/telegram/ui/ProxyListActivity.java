@@ -798,17 +798,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                                     if (SharedConfig.currentProxy == null) {
                                         SharedConfig.setProxyEnable(false);
                                     }
-                                    NotificationCenter.getGlobalInstance().removeObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
                                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-                                    NotificationCenter.getGlobalInstance().addObserver(ProxyListActivity.this, NotificationCenter.proxySettingsChanged);
-                                    updateRows(false);
-                                    if (listAdapter != null) {
-                                        listAdapter.notifyItemRemoved(position);
-                                        if (SharedConfig.currentProxy == null) {
-                                            listAdapter.notifyItemChanged(useProxyRow, ListAdapter.PAYLOAD_CHECKED_CHANGED);
-                                            listAdapter.notifyItemChanged(callsRow, ListAdapter.PAYLOAD_CHECKED_CHANGED);
-                                        }
-                                    }
 
                                 });
 

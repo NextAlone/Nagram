@@ -2720,6 +2720,7 @@ public class AndroidUtilities {
                 String address = null;
                 String secret = null;
                 String scheme = data.getScheme();
+                String remarks = null;
                 if (scheme != null) {
                     if ((scheme.equals("http") || scheme.equals("https"))) {
                         String host = data.getHost().toLowerCase();
@@ -2732,6 +2733,7 @@ public class AndroidUtilities {
                                     user = data.getQueryParameter("user");
                                     password = data.getQueryParameter("pass");
                                     secret = data.getQueryParameter("secret");
+                                    remarks = data.getFragment();
                                 }
                             }
                         }
@@ -2786,7 +2788,7 @@ public class AndroidUtilities {
                     if (secret == null) {
                         secret = "";
                     }
-                    showProxyAlert(activity, address, port, user, password, secret);
+                    showProxyAlert(activity, address, port, user, password, secret, remarks);
                     return true;
                 }
             }
@@ -2811,7 +2813,7 @@ public class AndroidUtilities {
         return true;
     }
 
-    public static void showProxyAlert(Context activity, final String address, final String port, final String user, final String password, final String secret) {
+    public static void showProxyAlert(Context activity, final String address, final String port, final String user, final String password, final String secret,final String remarks) {
         BottomSheet.Builder builder = new BottomSheet.Builder(activity);
         final Runnable dismissRunnable = builder.getDismissRunnable();
 
@@ -2930,6 +2932,8 @@ public class AndroidUtilities {
                 info = new SharedConfig.ProxyInfo(address, p, "", "", secret);
 
             }
+
+            info.setRemarks(remarks);
 
             SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
 

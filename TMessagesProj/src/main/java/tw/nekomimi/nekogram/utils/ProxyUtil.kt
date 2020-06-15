@@ -10,11 +10,11 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
+import android.util.Base64
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import android.util.Base64
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
@@ -74,13 +74,13 @@ object ProxyUtil {
             it.forEach { line ->
 
                 if (line.startsWith("tg://proxy") ||
-                        line.startsWith("tg://socks") ||
-                        line.startsWith("https://t.me/proxy") ||
-                        line.startsWith("https://t.me/socks") ||
-                        line.startsWith(VMESS_PROTOCOL) ||
-                        line.startsWith(VMESS1_PROTOCOL) ||
-                        line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL) /*||
+                    line.startsWith("tg://socks") ||
+                    line.startsWith("https://t.me/proxy") ||
+                    line.startsWith("https://t.me/socks") ||
+                    line.startsWith(VMESS_PROTOCOL) ||
+                    line.startsWith(VMESS1_PROTOCOL) ||
+                    line.startsWith(SS_PROTOCOL) ||
+                    line.startsWith(SSR_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line).toUrl()) }
@@ -102,35 +102,30 @@ object ProxyUtil {
 
         val clip = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        var exists = false
+        val proxies = clip
+                .primaryClip
+                ?.getItemAt(0)
+                ?.text
+                ?.let { parseProxies(it.toString()) }
+                ?.mapNotNull { runCatching { SharedConfig.parseProxyInfo(it) }.getOrNull() }
 
-        clip.primaryClip?.getItemAt(0)?.text?.split('\n')?.map { it.split(" ") }?.forEach {
+        if (proxies.isNullOrEmpty()) {
 
-            it.forEach { line ->
+            AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
 
-                if (line.startsWith("tg://proxy") ||
-                        line.startsWith("tg://socks") ||
-                        line.startsWith("https://t.me/proxy") ||
-                        line.startsWith("https://t.me/socks") ||
-                        line.startsWith(VMESS_PROTOCOL) ||
-                        line.startsWith(VMESS1_PROTOCOL) ||
-                        line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL) ||
-                        line.startsWith(RB_PROTOCOL)) {
-
-                    exists = true
-
-                    import(ctx, line)
-
-                }
-
-            }
+            return
 
         }
 
-        if (!exists) {
+        proxies.forEach {
 
-            AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
+            SharedConfig.addProxy(it)
+
+        }
+
+        UIUtil.runOnUIThread {
+
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged)
 
         }
 
@@ -165,7 +160,8 @@ object ProxyUtil {
                         url.queryParameter("port"),
                         url.queryParameter("user"),
                         url.queryParameter("pass"),
-                        url.queryParameter("secret"))
+                        url.queryParameter("secret"),
+                        url.fragment)
 
 
             }
@@ -404,7 +400,7 @@ object ProxyUtil {
 
         } catch (ex: NoSuchMethodError) {
 
-            AlertUtil.showSimpleAlert(ctx,"很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
+            AlertUtil.showSimpleAlert(ctx, "很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
 
         }
 
