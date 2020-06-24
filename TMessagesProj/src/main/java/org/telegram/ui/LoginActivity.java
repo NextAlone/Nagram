@@ -69,6 +69,7 @@ import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessageObject;
@@ -294,8 +295,8 @@ public class LoginActivity extends BaseFragment {
                         ConnectionsManager.getInstance(currentAccount).cleanup(false);
                         final TLRPC.TL_auth_importBotAuthorization req = new TLRPC.TL_auth_importBotAuthorization ();
 
-                        req.api_hash = BuildVars.APP_HASH;
-                        req.api_id = BuildVars.APP_ID;
+                        req.api_hash = BuildConfig.APP_HASH;
+                        req.api_id = BuildConfig.APP_ID;
                         req.bot_auth_token = token;
                         req.flags = 0;
                         int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -1781,18 +1782,13 @@ public class LoginActivity extends BaseFragment {
 
             ConnectionsManager.getInstance(currentAccount).cleanup(false);
             final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
-            req.api_hash = BuildVars.APP_HASH;
-            req.api_id = BuildVars.APP_ID;
+            req.api_hash = BuildConfig.APP_HASH;
+            req.api_id = BuildConfig.APP_ID;
             req.phone_number = phone;
             req.settings = new TLRPC.TL_codeSettings();
             req.settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
             req.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            if (req.settings.allow_app_hash) {
-                preferences.edit().putString("sms_hash", BuildVars.SMS_HASH).commit();
-            } else {
-                preferences.edit().remove("sms_hash").commit();
-            }
             if (req.settings.allow_flashcall) {
                 try {
                     String number = tm.getLine1Number();

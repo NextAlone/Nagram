@@ -10,23 +10,37 @@ package org.telegram.messenger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
+@SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
     public static boolean DEBUG_VERSION = false;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean LOGS_ENABLED = false;
     public static boolean USE_CLOUD_STRINGS = true;
-    public static boolean CHECK_UPDATES = true;
-    public static boolean TON_WALLET_STANDALONE = false;
-    public static int BUILD_VERSION = 1988;
-    public static String BUILD_VERSION_STRING = "6.2.0";
-    public static int APP_ID = BuildConfig.APP_ID; //obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id
-    public static String APP_HASH = BuildConfig.APP_HASH; //obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id
-    public static String SMS_HASH = DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT";
-    public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=tw.nekomimi.nekogram";
+
+    public static int BUILD_VERSION;
+    public static String BUILD_VERSION_STRING;
+
+    public static int OFFICAL_APP_ID = 4;
+    public static String OFFICAL_APP_HASH = "014b35b6184100b085b0d0572f9b5103";
+
+    public static int TGX_APP_ID = 21724;
+    public static String TGX_APP_HASH = "3e0cb5efcd52300aec5994fdfc5bdc16";
 
     static {
+
+        try {
+            PackageInfo info = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+            BUILD_VERSION = info.versionCode;
+            BUILD_VERSION_STRING = info.packageName;
+        } catch (PackageManager.NameNotFoundException e) {
+            BUILD_VERSION = BuildConfig.VERSION_CODE;
+            BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
+        }
+
         if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
             LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);

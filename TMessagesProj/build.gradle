@@ -1,24 +1,44 @@
+import cn.hutool.core.io.FileUtil
+import cn.hutool.json.JSONObject
+
 import java.security.MessageDigest
-import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.application'
-
-repositories {
-    mavenCentral()
-    google()
-    jcenter()
-}
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 configurations {
     compile.exclude module: 'support-v4'
 }
 
+def okHttpVersion = '4.7.2'
+def fcmVersion = '20.2.1'
+def crashlyticsVersion = '17.1.0'
+def playCoreVersion = '1.7.3'
+
+buildscript {
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+    }
+
+    dependencies {
+
+        classpath "cn.hutool:hutool-all:5.3.7"
+
+    }
+
+}
+
 dependencies {
-    implementation 'androidx.core:core:1.1.0-beta01'
+
+    implementation 'androidx.core:core:1.5.0-alpha01'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'androidx.interpolator:interpolator:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
+    implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
 
@@ -28,28 +48,96 @@ dependencies {
     implementation 'com.stripe:stripe-android:2.0.2'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.osmdroid:osmdroid-android:6.1.6'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
+
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
+    implementation 'dnsjava:dnsjava:3.2.1'
+    implementation 'org.dizitart:nitrite:3.4.2'
+    implementation 'net.lingala.zip4j:zip4j:2.6.1'
+
+    implementation 'cn.hutool:hutool-core:5.3.8'
+    implementation 'cn.hutool:hutool-crypto:5.3.8'
+
+    implementation 'org.tukaani:xz:1.8'
+
+    compileOnly files('libs/libv2ray.aar')
+
+    compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
+    compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    compileOnly "com.google.android.play:core:$playCoreVersion"
+
+    releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
+    releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    releaseImplementation "com.google.android.play:core:$playCoreVersion"
+
 }
 
-//return an api key from a properties file.
-def getAppId(){
-    Properties properties = new Properties()
-    properties.load(new FileInputStream("./API_KEYS"))
-    return properties.get("APP_ID")
+def verName = "6.2.0.1"
+def verCode = 50
+
+task writeUpdateInfo {
+
+    def info = new JSONObject()
+
+    info.set("version", verName)
+    info.set("versionCode", verCode)
+    info.set("defaultFlavor", "full")
+    info.set("defaultApkName", "NekoX-full-arm64-v8a-release.apk.xz")
+
+    FileUtil.writeUtf8String(info.toStringPretty(), new File("build/update.json"))
+
 }
-def getAppHash(){
-    Properties properties = new Properties()
-    properties.load(new FileInputStream("./API_KEYS"))
-    return "\"" + properties.get("APP_HASH") + "\""
-}
+
+tasks.findByName("preBuild").finalizedBy(writeUpdateInfo)
 
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.3'
-    ndkVersion "21.1.6352462"
+    ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "tw.nekomimi.nekogram"
+    defaultConfig.applicationId = "nekox.messenger"
 
-    sourceSets.main.jniLibs.srcDirs = ['./jni/']
+    defaultConfig {
+        minSdkVersion 16
+        //noinspection OldTargetApi
+        targetSdkVersion 28
+
+        versionName verName
+        versionCode verCode
+
+        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+
+        def appId = null
+        def appHash = null
+
+        //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
+
+        if (project.rootProject.file('local.properties').exists()) {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID")
+            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH")
+        }
+
+        buildConfigField 'int', 'APP_ID', appId != null ? appId : "1391584"
+        buildConfigField 'String', 'APP_HASH', "\"" + (appHash != null ? appHash : "355c91550b0d658cfb7ff89dcf91a08c") + "\""
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 
     externalNativeBuild {
         ndkBuild {
@@ -63,6 +151,16 @@ android {
         disable 'BlockedPrivateApi'
     }
 
+    packagingOptions {
+
+        exclude '/fabric/**'
+        exclude '/META-INF/*.version'
+        exclude '/META-INF/*.kotlin_module'
+        exclude '/builddef.lst'
+        exclude '/*.txt'
+
+    }
+
     dexOptions {
         jumboMode = true
     }
@@ -72,253 +170,158 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     signingConfigs {
         def keystorePwd = null
         def alias = null
         def pwd = null
+        Properties properties
+
         if (project.rootProject.file('local.properties').exists()) {
-            Properties properties = new Properties()
+            properties = new Properties()
             properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            keystorePwd = properties.getProperty("RELEASE_STORE_PASSWORD")
-            alias = properties.getProperty("RELEASE_KEY_ALIAS")
-            pwd = properties.getProperty("RELEASE_KEY_PASSWORD")
+        } else {
+            def base64 = System.getenv("LOCAL_PROPERTIES")
+            if (base64 != null && !base64.isBlank()) {
+                properties = new Properties()
+                properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
+            }
         }
+
+        if (properties != null) {
+            keystorePwd = properties.getProperty("KEYSTORE_PASS")
+            alias = properties.getProperty("ALIAS_NAME")
+            pwd = properties.getProperty("ALIAS_PASS")
+        }
+
+        keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
+        alias = alias ?: System.getenv("ALIAS_NAME")
+        pwd = pwd ?: System.getenv("ALIAS_PASS")
+
         release {
-            storeFile file("config/release.keystore")
-            storePassword keystorePwd != null ? keystorePwd : System.getenv("KEYSTORE_PASS")
-            keyAlias alias != null ? alias : System.getenv("ALIAS_NAME")
-            keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
+
+            storeFile project.file('release.keystore')
+            storePassword keystorePwd
+            keyAlias alias
+            keyPassword pwd
         }
+
         debug {
-            storeFile file("config/release.keystore")
-            storePassword keystorePwd != null ? keystorePwd : System.getenv("KEYSTORE_PASS")
-            keyAlias alias != null ? alias : System.getenv("ALIAS_NAME")
-            keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
+
+            storeFile project.file('debug.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+
         }
     }
-
 
     buildTypes {
         debug {
             debuggable true
             jniDebuggable true
-            signingConfig signingConfigs.debug
-            applicationIdSuffix ".beta"
-            minifyEnabled true
             multiDexEnabled true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        /*debugAsan {
-            debuggable true
-            jniDebuggable true
-            signingConfig signingConfigs.debug
-            applicationIdSuffix ".beta"
-            minifyEnabled true
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            packagingOptions {
-                doNotStrip "**.so"
-            }
-
-            sourceSets {
-                main {
-                    jniLibs {
-                        srcDir {
-                            'jniLibs'
-                        }
-                    }
-                    resources {
-                        srcDir {
-                            'jniRes'
-                        }
-                    }
-                }
-            }
-        }*/
-
-        HA {
+        releaseNoGcm {
+            initWith debug
             debuggable false
             jniDebuggable false
-            signingConfig signingConfigs.debug
-            applicationIdSuffix ".beta"
             minifyEnabled true
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources true
+            signingConfig signingConfigs.release
         }
 
         release {
-            debuggable false
-            jniDebuggable false
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources false
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            initWith releaseNoGcm
         }
+
+        foss {
+            initWith release
+        }
+    }
+
+    sourceSets.main {
+        jni.srcDirs = ['./jni/']
     }
 
     sourceSets.debug {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
+        jniLibs.srcDir 'src/main/libs'
     }
 
-    /*sourceSets.debugAsan {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
-    }*/
-
-    sourceSets.HA {
-        manifest.srcFile 'config/debug/AndroidManifest.xml'
+    sourceSets.releaseNoGcm {
+        jniLibs.srcDir 'src/main/libs'
     }
 
     sourceSets.release {
-        manifest.srcFile 'config/release/AndroidManifest.xml'
+        jniLibs.srcDir 'src/main/libs'
+        manifest.srcFile 'src/gservcies/AndroidManifest.xml'
     }
 
-    flavorDimensions "minApi"
-
-    productFlavors {
-        armv7 {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-            ext {
-                abiVersionCode = 1
-            }
-        }
-        x86 {
-            ndk {
-                abiFilters "x86"
-            }
-            ext {
-                abiVersionCode = 2
-            }
-        }
-        armv7_SDK23 {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 3
-            }
-        }
-        x86_SDK23 {
-            ndk {
-                abiFilters "x86"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 4
-            }
-        }
-        arm64 {
-            ndk {
-                abiFilters "arm64-v8a"
-            }
-            ext {
-                abiVersionCode = 5
-            }
-        }
-        x64 {
-            ndk {
-                abiFilters "x86_64"
-            }
-            ext {
-                abiVersionCode = 6
-            }
-        }
-        arm64_SDK23 {
-            ndk {
-                abiFilters "arm64-v8a"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            /*sourceSets.debugAsan {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }*/
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 7
-            }
-        }
-        x64_SDK23 {
-            ndk {
-                abiFilters "x86_64"
-            }
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            minSdkVersion 23
-            ext {
-                abiVersionCode = 8
-            }
-        }
-        afat {
-            sourceSets.debug {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }
-            /*sourceSets.debugAsan {
-                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
-            }*/
-            sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
-            }
-            ext {
-                abiVersionCode = 9
-            }
-        }
+    sourceSets.foss {
+        jni.srcDirs = ['./jni/']
     }
 
-    defaultConfig.versionCode = 10 * 1989
+    flavorDimensions "version"
+
+    splits {
+
+        abi {
+
+            enable true
+
+            reset()
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+
+            universalApk true
+
+        }
+
+    }
 
     def tgVoipDexFileName = "libtgvoip.dex"
     def tgVoipDexClasses = ["AudioRecordJNI", "AudioTrackJNI", "NativeTgVoipDelegate", "NativeTgVoipInstance", "TgVoipNativeLoader", "Resampler", "VLog"]
     def tgVoipDexClassesPath = "org/telegram/messenger/voip"
     def dxUtilPath = "${sdkDirectory.path}/build-tools/${buildToolsVersion}/dx"
-    if (OperatingSystem.current().isWindows()) {
-        dxUtilPath = "${sdkDirectory.path}\\build-tools\\${buildToolsVersion}\\dx.bat"
+
+    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        dxUtilPath += ".bat"
+    }
+
+    flavorDimensions "version"
+
+    productFlavors {
+        mini {
+            versionNameSuffix '-mini'
+        }
+        full {}
+    }
+
+    sourceSets.full {
+        dependencies {
+            implementation files('libs/libv2ray.aar')
+            implementation files('libs/ss-rust-release.aar')
+            implementation files('libs/ssr-libev-release.aar')
+        }
+    }
+
+    tasks.all { task ->
+        if (((task.name.endsWith('Ndk') || task.name.startsWith('generateJsonModel') || task.name.startsWith('externalNativeBuild'))) && !task.name.contains("Foss")) {
+            task.enabled = false
+        }
+        if (task.name.contains("uploadCrashlyticsMappingFile")) {
+            enabled = false
+        }
     }
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = "Nekogram-${defaultConfig.versionName}-${defaultConfig.versionCode / 10}-${variant.productFlavors.get(0).name}-${buildType.name}.apk"
-            output.getProcessManifestProvider().get().doLast {
-                def abiVersion = variant.productFlavors.get(0).abiVersionCode
-
-                def outputDir = manifestOutputDirectory
-                File directory
-                if (outputDir instanceof File) {
-                    directory = outputDir
-                } else {
-                    directory = outputDir.get().asFile
-                }
-
-                String manifestPath = directory.toString() + "/AndroidManifest.xml"
-                def manifestContent = file(manifestPath).getText()
-
-                manifestContent = manifestContent.replace(String.format('android:versionCode="%d"', defaultConfig.versionCode), String.format('android:versionCode="%s"', defaultConfig.versionCode + abiVersion))
-                file(manifestPath).write(manifestContent)
-            }
+            outputFileName = outputFileName.replace("TMessageProj","NekoX")
         }
 
         def assembleTgVoipDexTaskName = "assemble${variant.name.capitalize()}TgVoipDex"
@@ -377,33 +380,6 @@ android {
         tasks.findByName("${assembleTgVoipDexTaskName}").mustRunAfter tasks.findByName("merge${variant.name.capitalize()}Assets")
     }
 
-    variantFilter { variant ->
-        def names = variant.flavors*.name
-        if (variant.buildType.name != "release" && !names.contains("afat")) {
-            setIgnore(true)
-        }
-    }
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionName "6.2.0.1"
-
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
-
-        externalNativeBuild {
-            ndkBuild {
-                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8", "LOCAL_ARM_NEON:=false"
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            }
-        }
-    }
-
-    bundle {
-        language {
-            enableSplit = false
-        }
-    }
 }
 
 private static File findJavaHome() {
@@ -411,7 +387,7 @@ private static File findJavaHome() {
     if (javaPath != null) {
         File javaBase = new File(javaPath)
         if (javaBase.exists()) {
-            if (javaBase.getName().equalsIgnoreCase("jre") && new File(javaBase.getParentFile(), "bin/java").exists()) {
+            if (javaBase.getName().equalsIgnoreCase("jre") && new File(javaBase.getParentFile(), System.getProperty("os.name").toLowerCase().contains("windows") ? "bin/java.exe" : "bin/java").exists()) {
                 return javaBase.getParentFile()
             } else {
                 return javaBase
@@ -427,7 +403,7 @@ private static File findJavaHome() {
 private static File findJavac() {
     File javaHome = findJavaHome()
     if (javaHome != null) {
-        if (OperatingSystem.current().isWindows()) {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             return new File(javaHome.getParent(), "bin/javac.exe")
         } else {
             return new File(javaHome, "bin/javac")
@@ -435,4 +411,21 @@ private static File findJavac() {
     } else {
         return null
     }
+}
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+
+    tasks.all { task ->
+        if (task.name.startsWith('uploadCrashlyticsMappingFile')) {
+            task.enabled = false
+        } else if (((task.name.contains('Crashlytics'))) && !task.name.endsWith("Release")) {
+            task.enabled = false
+        } else if (((task.name.endsWith('GoogleServices'))) && !task.name.endsWith("ReleaseGoogleServices")) {
+            task.enabled = false
+        }
+    }
+
 }

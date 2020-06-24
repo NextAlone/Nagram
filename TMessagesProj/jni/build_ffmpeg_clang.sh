@@ -9,11 +9,7 @@ function build_one {
     NM="${CROSS_PREFIX}nm"
     STRIP="${CROSS_PREFIX}strip"
 
-	echo "Cleaning..."
-	rm -f config.h
-	make clean || true
-	rm -rf ${TOOLCHAIN_PREFIX}
-	
+
 	echo "Toolchain..."
 	python $NDK/build/tools/make_standalone_toolchain.py \
 	--arch ${ARCH} \
@@ -89,6 +85,12 @@ function build_one {
 	#read
 	make -j$COMPILATION_PROC_COUNT
 	make install
+
+	echo "Cleaning..."
+	rm -f config.h
+	make clean || true
+	rm -rf ${TOOLCHAIN_PREFIX}
+
 }
 
 function setCurrentPlatform {

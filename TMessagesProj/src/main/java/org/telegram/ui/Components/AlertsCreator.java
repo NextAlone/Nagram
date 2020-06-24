@@ -319,9 +319,6 @@ public class AlertsCreator {
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         builder.setMessage(text);
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        if (updateApp) {
-            builder.setNegativeButton(LocaleController.getString("UpdateApp", R.string.UpdateApp), (dialog, which) -> Browser.openUrl(context, BuildVars.PLAYSTORE_APP_URL));
-        }
         return builder.show();
     }
 
