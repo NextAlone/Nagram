@@ -3,7 +3,6 @@ package tw.nekomimi.nekogram.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -34,7 +33,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 
 @SuppressLint("RtlHardcoded")
 public class NekoSettingsActivity extends BaseFragment {
@@ -55,7 +55,6 @@ public class NekoSettingsActivity extends BaseFragment {
     private int sourceCodeRow;
     private int translationRow;
     private int donateRow;
-    private int sponsorRow;
     private int about2Row;
 
     @Override
@@ -104,29 +103,25 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName(LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), this, 1);
+                MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
             } else if (position == donateRow) {
-                Browser.openUrl(getParentActivity(), "https://nekogram.github.io/donation.html");
+                Browser.openUrl(getParentActivity(), "https://patreon.com/NekoXDev");
             } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                builder.addItem(LocaleController.getString("NekoTrans", R.string.NekoTrans), (__) -> {
+                    Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
+                    return Unit.INSTANCE;
+                });
+                builder.addItem(LocaleController.getString("NekoXTrans", R.string.NekoXTrans), (__) -> {
+                    Browser.openUrl(getParentActivity(), "https://nekox.crowdin.com/nekox");
+                    return Unit.INSTANCE;
+                });
+                builder.show();
             } else if (position == googlePlayRow) {
-                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=tw.nekomimi.nekogram");
+                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/Nekogram/Nekogram");
-            } else if (position == sponsorRow) {
-                Browser.openUrl(getParentActivity(), "https://console.argo.moe/auth/register?code=nekogram");
+                Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX");
             }
-        });
-        listView.setOnItemLongClickListener((view, position) -> {
-            if (position == experimentRow) {
-                NekoConfig.toggleShowHiddenFeature();
-                listView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                if (NekoConfig.showHiddenFeature) {
-                    AndroidUtilities.shakeView(view, 2, 0);
-                }
-                return true;
-            }
-            return false;
         });
 
         return fragmentView;
@@ -154,11 +149,6 @@ public class NekoSettingsActivity extends BaseFragment {
         sourceCodeRow = rowCount++;
         translationRow = rowCount++;
         donateRow = rowCount++;
-        if (!LocaleController.getString("SponsorTitle", R.string.SponsorTitle).equals("dummy")) {
-            sponsorRow = rowCount++;
-        } else {
-            sponsorRow = -1;
-        }
         about2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -234,22 +224,24 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 2: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.baseline_chat_bubble_24, true);
                     } else if (position == generalRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_theme, true);
+                        textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.baseline_palette_24, true);
                     } else if (position == experimentRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, false);
+                        textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.baseline_star_24, false);
                     }
                     break;
                 }
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@" + LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@NekogramX", true);
                     } else if (position == googlePlayRow) {
                         textCell.setText(LocaleController.getString("GooglePlay", R.string.GooglePlay), true);
                     } else if (position == sourceCodeRow) {
                         textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
+                    } else if (position == translationRow) {
+                        textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
                     }
                     break;
                 }
@@ -264,12 +256,8 @@ public class NekoSettingsActivity extends BaseFragment {
                 }
                 case 6: {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
-                    if (position == translationRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Translation", R.string.Translation), LocaleController.getString("TranslationAbout", R.string.TranslationAbout), true);
-                    } else if (position == donateRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Donate", R.string.Donate), LocaleController.getString("DonateAbout", R.string.DonateAbout), sponsorRow != -1);
-                    } else if (position == sponsorRow) {
-                        textCell.setTextAndValue(LocaleController.getString("SponsorTitle", R.string.SponsorTitle), LocaleController.getString("SponsorContent", R.string.SponsorContent), false);
+                    if (position == donateRow) {
+                        textCell.setTextAndValue(LocaleController.getString("Donate", R.string.Donate), LocaleController.getString("DonateAbout", R.string.DonateAbout), false);
                     }
                     break;
                 }
@@ -325,11 +313,11 @@ public class NekoSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == chatRow || position == generalRow || position == experimentRow) {
                 return 2;
-            } else if (position == googlePlayRow || position == channelRow || position == sourceCodeRow) {
+            } else if (position == googlePlayRow || position == channelRow || position == sourceCodeRow || position == translationRow) {
                 return 3;
             } else if (position == categoriesRow || position == aboutRow) {
                 return 4;
-            } else if (position == translationRow || position == donateRow || position == sponsorRow) {
+            } else if (position == donateRow) {
                 return 6;
             }
             return 2;

@@ -6,13 +6,11 @@ import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +30,6 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
-import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
@@ -47,7 +44,6 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.translator.Translator;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -64,7 +60,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int experimentRow;
     private int smoothKeyboardRow;
     private int mediaPreviewRow;
-    private int saveCacheToPrivateDirectoryRow;
     private int disableFilteringRow;
     private int unlimitedFavedStickersRow;
     private int unlimitedPinnedDialogsRow;
@@ -74,47 +69,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int shouldNOTTrustMeRow;
 
     private UndoView tooltip;
-
-    static public AlertDialog getTranslationProviderAlert(Context context) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        ArrayList<Integer> types = new ArrayList<>();
-        arrayList.add(LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate));
-        types.add(Translator.PROVIDER_GOOGLE);
-        arrayList.add(LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN));
-        types.add(Translator.PROVIDER_GOOGLE_CN);
-        arrayList.add(LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud));
-        types.add(Translator.PROVIDER_LINGO);
-        arrayList.add(LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb));
-        types.add(Translator.PROVIDER_GOOGLE_WEB);
-        arrayList.add(LocaleController.getString("ProviderGoogleTranslateCNWeb", R.string.ProviderGoogleTranslateCNWeb));
-        types.add(Translator.PROVIDER_GOOGLE_CN_WEB);
-        arrayList.add(LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb));
-        types.add(Translator.PROVIDER_BAIDU_WEB);
-        arrayList.add(LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb));
-        types.add(Translator.PROVIDER_DEEPL_WEB);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("TranslationProvider", R.string.TranslationProvider));
-        final LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        builder.setView(linearLayout);
-
-        for (int a = 0; a < arrayList.size(); a++) {
-            RadioColorCell cell = new RadioColorCell(context);
-            cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
-            cell.setTag(a);
-            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            cell.setTextAndValue(arrayList.get(a), NekoConfig.translationProvider == types.get(a));
-            linearLayout.addView(cell);
-            cell.setOnClickListener(v -> {
-                Integer which = (Integer) v.getTag();
-                NekoConfig.setTranslationProvider(types.get(which));
-                builder.getDismissRunnable().run();
-            });
-        }
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        return builder.create();
-    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -155,14 +109,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == saveCacheToPrivateDirectoryRow) {
-                NekoConfig.toggleSaveCacheToPrivateDirectory();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.saveCacheToPrivateDirectory);
-                }
-                tooltip.setInfoText(LocaleController.formatString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
-                tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-            } else if (position == disableFilteringRow) {
+            if (position == disableFilteringRow) {
                 sensitiveEnabled = !sensitiveEnabled;
                 TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
                 req.sensitive_enabled = sensitiveEnabled;
@@ -268,11 +215,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.unlimitedPinnedDialogs);
                 }
-            } else if (position == shouldNOTTrustMeRow) {
-                NekoConfig.toggleShouldNOTTrustMe();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.shouldNOTTrustMe);
-                }
             } else if (position == mediaPreviewRow) {
                 NekoConfig.toggleMediaPreview();
                 if (view instanceof TextCheckCell) {
@@ -306,13 +248,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         experimentRow = rowCount++;
         smoothKeyboardRow = !AndroidUtilities.isTablet() ? rowCount++ : -1;
         mediaPreviewRow = rowCount++;
-        saveCacheToPrivateDirectoryRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? rowCount++ : -1;
         disableFilteringRow = rowCount++;
         unlimitedFavedStickersRow = rowCount++;
         unlimitedPinnedDialogsRow = rowCount++;
-        deleteAccountRow = NekoConfig.showHiddenFeature ? rowCount++ : -1;
+        deleteAccountRow = rowCount++;
         experiment2Row = rowCount++;
-        shouldNOTTrustMeRow = NekoConfig.showHiddenFeature ? rowCount++ : -1;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -440,9 +380,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
-                    if (position == saveCacheToPrivateDirectoryRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("SaveCacheToPrivateDirectory", R.string.SaveCacheToPrivateDirectory), NekoConfig.saveCacheToPrivateDirectory, true);
-                    } else if (position == disableFilteringRow) {
+                    if (position == disableFilteringRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("SensitiveDisableFiltering", R.string.SensitiveDisableFiltering), LocaleController.getString("SensitiveAbout", R.string.SensitiveAbout), sensitiveEnabled, true, true);
                         textCell.setEnabled(sensitiveCanChange, null);
                     } else if (position == unlimitedFavedStickersRow) {
@@ -451,9 +389,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard), SharedConfig.smoothKeyboard, true);
                     } else if (position == unlimitedPinnedDialogsRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedPinnedDialogs", R.string.UnlimitedPinnedDialogs), LocaleController.getString("UnlimitedPinnedDialogsAbout", R.string.UnlimitedPinnedDialogsAbout), NekoConfig.unlimitedPinnedDialogs, true, deleteAccountRow != -1);
-                    } else if (position == shouldNOTTrustMeRow) {
-                        textCell.setTextAndCheck("Don't trust me", NekoConfig.shouldNOTTrustMe, false);
-                    } else if (position == mediaPreviewRow) {
+                   } else if (position == mediaPreviewRow) {
                         textCell.setTextAndCheck(LocaleController.getString("MediaPreview", R.string.MediaPreview), NekoConfig.mediaPreview, true);
                     }
                     break;
@@ -517,8 +453,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == deleteAccountRow) {
                 return 2;
-            } else if (position == saveCacheToPrivateDirectoryRow || position == unlimitedFavedStickersRow || position == disableFilteringRow ||
-                    position == smoothKeyboardRow || position == unlimitedPinnedDialogsRow || position == shouldNOTTrustMeRow || position == mediaPreviewRow) {
+            } else if (position == unlimitedFavedStickersRow || position == disableFilteringRow ||
+                    position == smoothKeyboardRow || position == unlimitedPinnedDialogsRow || position == mediaPreviewRow) {
                 return 3;
             } else if (position == experimentRow) {
                 return 4;
