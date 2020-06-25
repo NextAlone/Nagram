@@ -163,4 +163,8 @@
     <string name="DisableDeveloperMode">Entwicklermodus deaktivieren</string>
     <string name="DeveloperSettings">Entwickleroptionen</string>
     <string name="LoginSettings">Anmeldeeinstellungen</string>
+    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="TransSite">Plattform übersetzen</string>
+    <string name="NekoTrans">Nekogram übersetzen</string>
+    <string name="NekoXTrans">NekoX übersetzen</string>
 </resources>

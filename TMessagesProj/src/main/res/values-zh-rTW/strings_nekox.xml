@@ -165,6 +165,6 @@
     <string name="LoginSettings">登錄設定</string>
     <string name="NekoXFaq">NekoX 常見問題</string>
     <string name="TransSite">翻譯平台</string>
-    <string name="NekoTrans">平移腦電圖</string>
-    <string name="NekoXTrans">翻譯NekoX</string>
+    <string name="NekoTrans">翻譯 Nekogram</string>
+    <string name="NekoXTrans">翻譯 NekoX</string>
 </resources>

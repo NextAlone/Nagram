@@ -34,7 +34,7 @@
     <string name="CachePath">Önbellek dizini</string>
     <string name="AllowFlashCall">Hızlı aramaya izin ver</string>
     <string name="ChangeTranslateProvider">Sağlayıcıyı Değiştir</string>
-    <string name="ProviderYandexTranslate">Yandex Çeviri</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Çeviri Anahtarı</string>
     <string name="GoogleCloudTransKeyNotice">Bir Google Cloud Trans Anahtarı ayarlarsanız, çeviri yaparken web sürümüne sahte bir form göndermek yerine bulut çeviri API\'sı çağrılır (daha hızlı, kararlı ve tasarruflu trafik).</string>
     <string name="TransToLang">Çeviri hedef dili</string>

@@ -34,7 +34,7 @@
     <string name="CachePath">キャッシュディレクトリ</string>
     <string name="AllowFlashCall">フラッシュコールを許可</string>
     <string name="ChangeTranslateProvider">プロバイダを変更</string>
-    <string name="ProviderYandexTranslate">Yandex.翻訳</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">Google Cloud Trans Keyを設定すると、翻訳時に偽のフォームをウェブバージョンに送信する代わりにクラウド翻訳APIが呼び出されます（高速で安定しており、トラフィックの節約になります）</string>
     <string name="TransToLang">翻訳対象言語</string>
@@ -165,6 +165,6 @@
     <string name="LoginSettings">ログイン設定</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">プラットフォームを翻訳</string>
-    <string name="NekoTrans">ネコグラムを翻訳</string>
+    <string name="NekoTrans">Nekogramを翻訳</string>
     <string name="NekoXTrans">NekoXを翻訳</string>
 </resources>

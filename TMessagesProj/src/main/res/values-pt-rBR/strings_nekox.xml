@@ -34,7 +34,7 @@
     <string name="CachePath">Diretório de cache</string>
     <string name="AllowFlashCall">Permitir chamada rápida</string>
     <string name="ChangeTranslateProvider">Alterar Provedor</string>
-    <string name="ProviderYandexTranslate">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.Tradutor</string>
     <string name="GoogleCloudTransKey">Chave de tradução do Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">Se você configurar um Google Cloud Trans Key, a API de conversão em nuvem será chamada em vez de enviar um formulário falso para a versão da Web durante a tradução (tráfego mais rápido, estável e leve).</string>
     <string name="TransToLang">Idioma de destino para tradução</string>
@@ -164,7 +164,7 @@
     <string name="DeveloperSettings">Configurações de desenvolvedor</string>
     <string name="LoginSettings">Configurações de login</string>
     <string name="NekoXFaq">FAQ do NekoX</string>
-    <string name="TransSite">Plataforma de Tradução</string>
+    <string name="TransSite">Traduzir plataforma</string>
     <string name="NekoTrans">Traduzir Nekogram</string>
     <string name="NekoXTrans">Traduzir NekoX</string>
 </resources>

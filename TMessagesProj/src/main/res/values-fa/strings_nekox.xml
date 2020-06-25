@@ -34,7 +34,7 @@
     <string name="CachePath">فهرست کش</string>
     <string name="AllowFlashCall">تماس flash call مجاز است</string>
     <string name="ChangeTranslateProvider">تغییر ارائه دهنده خدمات</string>
-    <string name="ProviderYandexTranslate">ترجمه Yandex</string>
+    <string name="ProviderYandexTranslate">ترجمه با موتور \"یاندکس\"</string>
     <string name="GoogleCloudTransKey">کلید ترجمه Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">اگر کلید Google Cloud Trans را تنظیم کرده باشید ، به جای ارسال فرم جعلی به نسخه وب هنگام ترجمه (سریعتر ، پایدار و صرفه جویی در ترافیک) ، API ترجمه ابری فراخوانی می شود.</string>
     <string name="TransToLang">ترجمه زبان هدف</string>

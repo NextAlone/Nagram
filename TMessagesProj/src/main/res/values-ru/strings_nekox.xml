@@ -81,7 +81,7 @@
     <string name="SortByUnmuted">Сначала со звуком</string>
     <string name="SortByUser">Сначала личные</string>
     <string name="SortByContacts">Сначала контакты</string>
-    <string name="NekoXPushService">NekoX Push Service</string>
+    <string name="NekoXPushService">Сервис Push NekoX</string>
     <string name="EnablePushAlert">Включите \"NekoX Push Service\"</string>
     <string name="DisablePushAlert">Отключите \"NekoX Push Service\"</string>
     <string name="DisableUndo">Отключить подтверждение действий</string>

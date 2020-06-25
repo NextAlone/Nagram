@@ -22,7 +22,7 @@
     <string name="DevModeNotice">نحن لسنا مسؤولين عن أي استخدام غير سليم لميزات المطور.</string>
     <string name="TapToDisable">انقر للتعطيل. لا تحتاج هذه.</string>
     <string name="PlaceHolder">العنصر النائب - الرجاء تعطيله</string>
-    <string name="CustomBackend">واجهة الخلفية المخصصة</string>
+    <string name="CustomBackend">خلفية مخصص</string>
     <string name="CustomBackendNotice">هذه الوظيفة متوفرة فقط للمستخدمين الخبراء، إذا كنت لا تعرف ما الذي تمثله الخيارات التالية، فقط تجاهلها.</string>
     <string name="CustomBackendProduction">مركز بيانات الإنتاج الرسمي</string>
     <string name="CustomBackendTestDC">مركز بيانات الاختبار الرسمي</string>
@@ -34,11 +34,11 @@
     <string name="CachePath">دليل ذاكرة التخزين المؤقت</string>
     <string name="AllowFlashCall">السماح بإجراء مكالمة فلاش</string>
     <string name="ChangeTranslateProvider">تغيير المزود</string>
-    <string name="ProviderYandexTranslate">ترجمة اليانديكس</string>
+    <string name="ProviderYandexTranslate">ترجمة Yandex.Translate</string>
     <string name="GoogleCloudTransKey">مفتاح ترجمة سحابة Google</string>
     <string name="GoogleCloudTransKeyNotice">إذا قمت بإعداد Google Cloud Trans Key ، فسيتم استدعاء API للترجمة السحابية بدلاً من إرسال نموذج مزيف إلى إصدار الويب عند الترجمة (حركة مرور أسرع وثابتة وحفظها).</string>
-    <string name="TransToLang">لغة هدف الترجمة</string>
-    <string name="TransInputToLang">لغة هدف إدخال الترجمة</string>
+    <string name="TransToLang">اللغة الهدف للترجمة</string>
+    <string name="TransInputToLang">اللغة الهدف لإدخال الترجمة</string>
     <string name="More">المزيد</string>
     <string name="NekoXUpdatesChannel">قناة تحديثات Nekox</string>
     <string name="ShowIdAndDc">إظهار ID / DC في الملف الشخصی</string>
@@ -52,7 +52,7 @@
     <string name="ApplySuggestion">حسنًا، قم بتطبيقه</string>
     <string name="DoNotRemindAgain">لا تذكرني مرة أخرى</string>
     <string name="InstantViewTransWithWeb">لا يمكن ترجمة InstantView مع مترجم الويب</string>
-    <string name="RemoveTitleEmoji">إزالة الإيموجي من العناوين</string>
+    <string name="RemoveTitleEmoji">إزالة الرموز التعبيرية من العناوين</string>
     <string name="NekoXProxy">خادم NekoX العام</string>
     <string name="PublicPrefix">عامة</string>
     <string name="DisableChatAction">لا تقم بإرسال حالة الإدخال</string>
@@ -164,7 +164,7 @@
     <string name="DeveloperSettings">إعدادات المطور</string>
     <string name="LoginSettings">إعدادات الدخول</string>
     <string name="NekoXFaq">أسئلة NekoX الشائعة</string>
-    <string name="TransSite">ترجمة المنصة</string>
+    <string name="TransSite">ترجمة النظام الأساسي</string>
     <string name="NekoTrans">ترجمة Nekogram</string>
     <string name="NekoXTrans">ترجمة NekoX</string>
 </resources>

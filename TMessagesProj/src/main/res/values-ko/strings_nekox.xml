@@ -34,7 +34,7 @@
     <string name="CachePath">캐시 디렉토리</string>
     <string name="AllowFlashCall">플래시 통화 허용</string>
     <string name="ChangeTranslateProvider">제공자 변경</string>
-    <string name="ProviderYandexTranslate">Yandex 번역</string>
+    <string name="ProviderYandexTranslate">Yandex. 번역</string>
     <string name="GoogleCloudTransKey">Google 클라우드 번역 키</string>
     <string name="GoogleCloudTransKeyNotice">Google Cloud Trans Key를 설정하면 번역 할 때 (빠르고 안정적이며 트래픽 절약) 웹 버전에 가짜 양식을 제출하는 대신 클라우드 변환 API가 호출됩니다.</string>
     <string name="TransToLang">번역할 언어</string>

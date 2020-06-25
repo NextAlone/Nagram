@@ -165,6 +165,6 @@
     <string name="LoginSettings">Параметри входу</string>
     <string name="NekoXFaq">Питання NekoX</string>
     <string name="TransSite">Перекласти платформу</string>
-    <string name="NekoTrans">Перекласти некограм</string>
+    <string name="NekoTrans">Перекласти Nekogram</string>
     <string name="NekoXTrans">Перекласти NekoX</string>
 </resources>

@@ -34,7 +34,7 @@
     <string name="CachePath">Direktori cache</string>
     <string name="AllowFlashCall">Izinkan panggilan cepat</string>
     <string name="ChangeTranslateProvider">Ubah Penyedia</string>
-    <string name="ProviderYandexTranslate">Yandex.Terjemahan</string>
+    <string name="ProviderYandexTranslate">Yandex.Terjemahkan</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">Jika anda menyiapkan Google Cloud Trans Key, API terjemahan awan akan digunakan, alih-alih mengirimkan formulir palsu ke versi web saat menerjemahkan (lalu lintas yang lebih cepat, stabil, dan hemat).</string>
     <string name="TransToLang">Bahasa target terjemahan</string>
