@@ -289,7 +289,7 @@ public class Switch extends View {
         if (icon != 0) {
             iconDrawable = getResources().getDrawable(icon).mutate();
             if (iconDrawable != null) {
-                iconDrawable.setColorFilter(new PorterDuffColorFilter(lastIconColor = Theme.getColor(isChecked ? trackCheckedColorKey : trackColorKey), PorterDuff.Mode.MULTIPLY));
+                iconDrawable.setColorFilter(new PorterDuffColorFilter(lastIconColor = Theme.getColor(isChecked ? trackCheckedColorKey : trackColorKey), PorterDuff.Mode.SRC_IN));
             }
         } else {
             iconDrawable = null;
@@ -400,7 +400,7 @@ public class Switch extends View {
             color1 = Theme.getColor(trackColorKey);
             color2 = Theme.getColor(trackCheckedColorKey);
             if (a == 0 && iconDrawable != null && lastIconColor != (isChecked ? color2 : color1)) {
-                iconDrawable.setColorFilter(new PorterDuffColorFilter(lastIconColor = (isChecked ? color2 : color1), PorterDuff.Mode.MULTIPLY));
+                iconDrawable.setColorFilter(new PorterDuffColorFilter(lastIconColor = (isChecked ? color2 : color1), PorterDuff.Mode.SRC_IN));
             }
 
             r1 = Color.red(color1);

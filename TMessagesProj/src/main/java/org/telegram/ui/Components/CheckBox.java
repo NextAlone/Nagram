@@ -137,7 +137,7 @@ public class CheckBox extends View {
 
     public void setColor(int backgroundColor, int checkColor) {
         color = backgroundColor;
-        checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, PorterDuff.Mode.MULTIPLY));
+        checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, PorterDuff.Mode.SRC_IN));
         textPaint.setColor(checkColor);
         invalidate();
     }
@@ -148,7 +148,7 @@ public class CheckBox extends View {
     }
 
     public void setCheckColor(int checkColor) {
-        checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, PorterDuff.Mode.MULTIPLY));
+        checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, PorterDuff.Mode.SRC_IN));
         textPaint.setColor(checkColor);
         invalidate();
     }

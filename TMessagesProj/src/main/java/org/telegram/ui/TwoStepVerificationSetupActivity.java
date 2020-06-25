@@ -759,14 +759,14 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 if (Build.VERSION.SDK_INT >= 21) {
                     showPasswordButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
                 }
-                showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
+                showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
                 showPasswordButton.setVisibility(View.GONE);
                 frameLayout.addView(showPasswordButton, LayoutHelper.createFrame(36, 36, Gravity.RIGHT | Gravity.TOP, 0, -5, 0, 0));
                 showPasswordButton.setOnClickListener(v -> {
                     ignoreTextChange = true;
                     if (passwordEditText.getTransformationMethod() == null) {
                         passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
+                        showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
                         if (currentType == TYPE_ENTER_FIRST) {
                             if (passwordEditText.length() > 0) {
                                 animationDrawables[3].setCustomEndFrame(-1);
@@ -779,7 +779,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         }
                     } else {
                         passwordEditText.setTransformationMethod(null);
-                        showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelSend), PorterDuff.Mode.MULTIPLY));
+                        showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelSend), PorterDuff.Mode.SRC_IN));
                         if (currentType == TYPE_ENTER_FIRST) {
                             if (passwordEditText.length() > 0) {
                                 animationDrawables[3].setCustomEndFrame(18);

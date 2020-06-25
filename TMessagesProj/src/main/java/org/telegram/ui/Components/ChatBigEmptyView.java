@@ -88,7 +88,7 @@ public class ChatBigEmptyView extends LinearLayout {
             addView(linearLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 8, 0, 0));
 
             ImageView imageView = new ImageView(context);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), PorterDuff.Mode.SRC_IN));
             if (type == EMPTY_VIEW_TYPE_SECRET) {
                 imageView.setImageResource(R.drawable.ic_lock_white);
             } else if (type == EMPTY_VIEW_TYPE_SAVED) {
@@ -171,7 +171,7 @@ public class ChatBigEmptyView extends LinearLayout {
             textViews.get(a).setTextColor(color);
         }
         for (int a = 0; a < imageViews.size(); a++) {
-            imageViews.get(a).setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), PorterDuff.Mode.MULTIPLY));
+            imageViews.get(a).setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), PorterDuff.Mode.SRC_IN));
         }
     }
 

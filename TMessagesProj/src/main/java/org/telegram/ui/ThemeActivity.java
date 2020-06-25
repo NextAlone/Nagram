@@ -490,7 +490,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             emojiRow = rowCount++;
             raiseToSpeakRow = rowCount++;
             sendByEnterRow = rowCount++;
-            saveToGalleryRow = NekoConfig.saveCacheToPrivateDirectory ? -1 : rowCount++;
+            saveToGalleryRow = -1;
             distanceRow = rowCount++;
             settings2Row = rowCount++;
             stickersRow = rowCount++;
@@ -649,7 +649,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         } else if (id == NotificationCenter.themeAccentListUpdated) {
             if (listAdapter != null && themeAccentListRow != -1) {
-                listAdapter.notifyItemChanged(themeAccentListRow, new Object());
+                try {
+                    listView.stopScroll();
+                    listAdapter.notifyItemChanged(themeAccentListRow, new Object());
+                } catch (Exception ignored) {}
             }
         } else if (id == NotificationCenter.themeListUpdated) {
             updateRows(true);
@@ -699,9 +702,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             ActionBarMenu menu = actionBar.createMenu();
             menuItem = menu.addItem(0, R.drawable.ic_ab_other);
             menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-            menuItem.addSubItem(share_theme, R.drawable.msg_share, LocaleController.getString("ShareTheme", R.string.ShareTheme));
-            menuItem.addSubItem(edit_theme, R.drawable.msg_edit, LocaleController.getString("EditThemeColors", R.string.EditThemeColors));
-            menuItem.addSubItem(create_theme, R.drawable.menu_palette, LocaleController.getString("CreateNewThemeMenu", R.string.CreateNewThemeMenu));
+            menuItem.addSubItem(share_theme, R.drawable.baseline_forward_24, LocaleController.getString("ShareTheme", R.string.ShareTheme));
+            menuItem.addSubItem(edit_theme, R.drawable.baseline_edit_24, LocaleController.getString("EditThemeColors", R.string.EditThemeColors));
+            menuItem.addSubItem(create_theme, R.drawable.baseline_palette_24, LocaleController.getString("CreateNewThemeMenu", R.string.CreateNewThemeMenu));
             menuItem.addSubItem(reset_settings, R.drawable.msg_reset, LocaleController.getString("ThemeResetToDefaults", R.string.ThemeResetToDefaults));
         } else {
             actionBar.setTitle(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme));
@@ -1429,7 +1432,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 };
                 icons = new int[]{
                         0,
-                        R.drawable.msg_shareout
+                        R.drawable.baseline_share_24
                 };
             } else {
                 hasDelete = themeInfo.info == null || !themeInfo.info.isDefault;
@@ -1440,11 +1443,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         themeInfo.info != null && themeInfo.info.creator ? LocaleController.getString("ThemeSetUrl", R.string.ThemeSetUrl) : null,
                         hasDelete ? LocaleController.getString("Delete", R.string.Delete) : null};
                 icons = new int[]{
-                        R.drawable.msg_share,
-                        R.drawable.msg_shareout,
-                        R.drawable.msg_edit,
-                        R.drawable.msg_link,
-                        R.drawable.msg_delete
+                        R.drawable.baseline_forward_24,
+                        R.drawable.baseline_share_24,
+                        R.drawable.baseline_edit_24,
+                        R.drawable.baseline_link_24,
+                        R.drawable.baseline_delete_24
                 };
             }
             builder.setItems(items, icons, (dialog, which) -> {
@@ -1706,10 +1709,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                     LocaleController.getString("DeleteTheme", R.string.DeleteTheme)
                             };
                             int[] icons = new int[]{
-                                    R.drawable.msg_edit,
-                                    R.drawable.msg_share,
-                                    R.drawable.msg_link,
-                                    R.drawable.msg_delete
+                                    R.drawable.baseline_edit_24,
+                                    R.drawable.baseline_forward_24,
+                                    R.drawable.baseline_link_24,
+                                    R.drawable.baseline_delete_24
                             };
                             builder.setItems(items, icons, (dialog, which) -> {
                                 if (getParentActivity() == null) {

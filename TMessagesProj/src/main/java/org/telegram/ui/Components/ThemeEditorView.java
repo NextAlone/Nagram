@@ -172,7 +172,7 @@ public class ThemeEditorView {
                 ImageView searchIconImageView = new ImageView(context);
                 searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
                 searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
-                searchIconImageView.setColorFilter(new PorterDuffColorFilter(0xffa1a8af, PorterDuff.Mode.MULTIPLY));
+                searchIconImageView.setColorFilter(new PorterDuffColorFilter(0xffa1a8af, PorterDuff.Mode.SRC_IN));
                 addView(searchIconImageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 16, 11, 0, 0));
 
                 clearSearchImageView = new ImageView(context);
@@ -183,7 +183,7 @@ public class ThemeEditorView {
                 clearSearchImageView.setScaleX(0.1f);
                 clearSearchImageView.setScaleY(0.1f);
                 clearSearchImageView.setAlpha(0.0f);
-                clearSearchImageView.setColorFilter(new PorterDuffColorFilter(0xffa1a8af, PorterDuff.Mode.MULTIPLY));
+                clearSearchImageView.setColorFilter(new PorterDuffColorFilter(0xffa1a8af, PorterDuff.Mode.SRC_IN));
                 addView(clearSearchImageView, LayoutHelper.createFrame(36, 36, Gravity.RIGHT | Gravity.TOP, 14, 11, 14, 0));
                 clearSearchImageView.setOnClickListener(v -> {
                     searchEditText.setText("");

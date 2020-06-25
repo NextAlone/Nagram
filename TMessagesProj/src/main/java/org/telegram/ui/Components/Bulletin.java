@@ -468,7 +468,7 @@ public final class Bulletin {
             final int undoInfoColor = Theme.getColor(Theme.key_undo_infoColor);
 
             imageView = new ImageView(context);
-            imageView.setColorFilter(new PorterDuffColorFilter(undoInfoColor, PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(undoInfoColor, PorterDuff.Mode.SRC_IN));
             addView(imageView, LayoutHelper.createFrameRelatively(24, 24, Gravity.START | Gravity.CENTER_VERTICAL, 16, 12, 16, 12));
 
             textView = new TextView(context);
@@ -572,7 +572,7 @@ public final class Bulletin {
             final ImageView undoImageView = new ImageView(getContext());
             undoImageView.setOnClickListener(v -> undo());
             undoImageView.setImageResource(R.drawable.chats_undo);
-            undoImageView.setColorFilter(new PorterDuffColorFilter(undoCancelColor, PorterDuff.Mode.MULTIPLY));
+            undoImageView.setColorFilter(new PorterDuffColorFilter(undoCancelColor, PorterDuff.Mode.SRC_IN));
             undoImageView.setBackground(Theme.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000));
             ViewHelper.setPaddingRelative(undoImageView, 0, 12, 0, 12);
             addView(undoImageView, LayoutHelper.createFrameRelatively(56, 48, Gravity.CENTER_VERTICAL));

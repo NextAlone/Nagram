@@ -136,13 +136,13 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
 
         emojiButton = new ImageView(context);
-        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
+        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
         emojiButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         if (style == STYLE_FRAGMENT) {
             emojiButton.setImageResource(R.drawable.smiles_tab_smiles);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), 0, 0, 0, 7));
         } else {
-            emojiButton.setImageResource(R.drawable.input_smile);
+            emojiButton.setImageResource(R.drawable.baseline_emoticon_24);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | Gravity.LEFT, 0, 0, 0, 0));
         }
         if (Build.VERSION.SDK_INT >= 21) {
@@ -246,7 +246,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             editText.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
             editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         }
-        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
+        emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemText), PorterDuff.Mode.SRC_IN));
         if (emojiView != null) {
             emojiView.updateColors();
         }
@@ -353,7 +353,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiButton.setImageResource(R.drawable.input_keyboard);
+                emojiButton.setImageResource(R.drawable.baseline_keyboard_24);
                 onWindowSizeChanged();
             }
         } else {
@@ -361,7 +361,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 if (currentStyle == STYLE_FRAGMENT) {
                     emojiButton.setImageResource(R.drawable.smiles_tab_smiles);
                 } else {
-                    emojiButton.setImageResource(R.drawable.input_smile);
+                    emojiButton.setImageResource(R.drawable.baseline_emoticon_24);
                 }
             }
             if (emojiView != null) {
@@ -431,7 +431,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             @Override
             public void onClearEmojiRecent() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                 builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
                 builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> emojiView.clearRecentEmoji());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -458,10 +458,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         if (height > AndroidUtilities.dp(50) && keyboardVisible && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
             if (isWidthGreater) {
                 keyboardHeightLand = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
+                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).apply();
             } else {
                 keyboardHeight = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).commit();
+                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).apply();
             }
         }
 

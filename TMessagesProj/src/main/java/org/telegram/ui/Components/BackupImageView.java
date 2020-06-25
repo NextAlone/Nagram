@@ -100,7 +100,7 @@ public class BackupImageView extends View {
     public void setImageResource(int resId, int color) {
         Drawable drawable = getResources().getDrawable(resId);
         if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         imageReceiver.setImageBitmap(drawable);
         invalidate();
