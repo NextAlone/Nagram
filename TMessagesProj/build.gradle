@@ -313,7 +313,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessageProj","NekoX")
+            outputFileName = outputFileName.replace("TMessagesProj","NekoX")
         }
 
         def assembleTgVoipDexTaskName = "assemble${variant.name.capitalize()}TgVoipDex"

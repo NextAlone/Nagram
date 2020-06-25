@@ -1,0 +1,196 @@
+name: Dev Branch Build
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '!.github/workflows/**'
+    branches:
+      - dev
+
+jobs:
+  canaryBuild:
+    name: Canary Build
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[s]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Run Gradle Build
+        run: |
+          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          ./gradlew assembleFullRelease
+          echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*arm64-v8a*.apk")
+          echo ::set-env name=APK_FILE_ARMV7::$(find TMessagesProj/build/outputs/apk -name "*armeabi*.apk")
+          echo ::set-env name=APK_FILE_X86::$(find TMessagesProj/build/outputs/apk -name "*x86-*.apk")
+          echo ::set-env name=APK_FILE_X64::$(find TMessagesProj/build/outputs/apk -name "*x86_64*.apk")
+      - name: Upload Canary Apk
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CANARY_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ${{ env.APK_FILE }}
+      - name: Upload Canary Apk ( armv7 )
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CANARY_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ${{ env.APK_FILE_ARMV7 }}
+  nativeBuild:
+    name: Native Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[n]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: native-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: git submodule update --init --recursive
+      - uses: actions/cache@v1
+        with:
+          path: TMessagesProj/jni/boringssl/build
+          key: boringssl-${{ hashFiles('TMessagesProj/jni/boringssl/.git') }}
+      - uses: actions/cache@v1
+        with:
+          path: TMessagesProj/jni/ffmpeg/build
+          key: ffmpeg-${{ hashFiles('TMessagesProj/jni/ffmpeg/.git') }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build native libraries
+        run: |
+
+          cd TMessagesProj/jni
+
+          while :
+          do
+             sudo apt-get install -y ninja-build && break
+             sleep 5
+          done
+
+          export NDK=$ANDROID_HOME/ndk-bundle
+          export NINJA_PATH=/usr/bin/ninja
+          export PATH=`echo $ANDROID_HOME/cmake/*/bin`:$PATH
+
+          [ -d "ffmpeg/build" ] || ./build_ffmpeg_clang.sh
+
+          ./patch_ffmpeg.sh
+
+          ./patch_boringssl.sh
+
+          [ -d "boringssl/build" ] || ./build_boringssl.sh
+
+      - name: assemble
+        run: |
+          sudo bash <<EOF
+            export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}" &&
+            ./gradlew assembleFullFoss
+          EOF
+          ls TMessagesProj/build/outputs/apk
+          echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*universal*")
+      - uses: actions/upload-artifact@master
+        with:
+          name: NekoX-Foss
+          path: ${{ env.APK_FILE }}
+      - uses: actions/upload-artifact@master
+        with:
+          name: Boringssl Library
+          path: "TMessagesProj/jni/boringssl/build"
+      - uses: actions/upload-artifact@master
+        with:
+          name: Ffmpeg Library
+          path: "TMessagesProj/jni/ffmpeg/build"
+  v2rayBuild:
+    name: V2ray Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[v]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+      - name: Build V2ray
+        run: |
+          go env -w GOPATH=$HOME/go
+          export GOPATH=$HOME/go
+          export PATH=$PATH:$GOPATH/bin
+
+          go get -u github.com/golang/protobuf/protoc-gen-go
+          go get -v golang.org/x/mobile/cmd/...
+          go get -v go.starlark.net/starlark
+          go get -v github.com/refraction-networking/utls
+          go get -v github.com/gorilla/websocket
+          go get -v -insecure v2ray.com/core
+          go get github.com/2dust/AndroidLibV2rayLite
+
+          gomobile init
+
+          env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
+      - uses: actions/upload-artifact@master
+        with:
+          name: libv2ray
+          path: libv2ray.aar
+  rbBuild:
+    name: RelayBaton Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[rb]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build RelayBaton
+        run: bash .github/scripts/build-relaybaton.sh
+      - name: package
+        run: |
+          ./gradlew relaybaton:assembleRelease
+          ls relaybaton/build/outputs/aar
+      - uses: actions/upload-artifact@master
+        with:
+          name: relaybaton
+          path: relaybaton/build/outputs/aar
+  ssBuild:
+    name: SS-Rust Build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[ss-rust]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: native-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: git submodule update --init --recursive
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+      - name: setup rust targets
+        run: rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
+      - name: assemble
+        run: |
+          ./gradlew ss-rust:assembleRelease
+          ls ss-rust/build/outputs/aar
+      - uses: actions/upload-artifact@master
+        with:
+          name: ss-rust
+          path: ss-rust/build/outputs/aar

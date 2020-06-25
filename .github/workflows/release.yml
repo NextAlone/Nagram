@@ -1,0 +1,62 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  releaseBuild:
+    name: Release Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: assembleRelease
+        run: |
+          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          ./gradlew TMessagesProj:assembleRelease \
+                    TMessagesProj:assembleReleaseNoGcm \
+                    TMessagesProj:bundleFullRelease
+          echo ::set-env name=AAB_FILE::$(find TMessagesProj/build/outputs/bundle -name "*.aab")
+      - name: Setup ghr
+        run: |
+          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
+          tar xvzf ghr.tar.gz; rm ghr.tar.gz
+          sudo mv ghr*linux_amd64/ghr /usr/local/bin; rm -rf ghr*linux_amd64
+      - name: Upload apks
+        run: |
+          export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          mkdir apks; find . -name "*.apk" -exec mv {} apks \;
+          ref="${{ github.ref }}"
+          ref=${ref/"refs/tags/"/}
+          msg="${{ github.event.head_commit.message }}"
+          ghr -delete -n "$ref" -b "$msg" "$ref" apks/
+          rm -rf $HOME/.ssh
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.SSH_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          mv build/update.json apks
+          cd apks
+          rm *universal*
+          xz *.apk
+          export GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+          git init
+          git config --global user.name "世界"
+          git config --global user.email "i@nekox.me"
+          git remote add origin "git@github.com:NekoX-Dev/Resources.git"
+          git add . --all
+          git commit -m 喵
+          git push origin master -f
+      - uses: r0adkll/upload-google-play@master
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
+          packageName: nekox.messenger
+          releaseFile:  ${{ env.AAB_FILE }}
+          track: production
