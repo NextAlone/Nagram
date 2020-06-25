@@ -25,9 +25,7 @@ buildscript {
     }
 
     dependencies {
-
-        classpath "cn.hutool:hutool-all:5.3.7"
-
+        classpath "cn.hutool:hutool-all:5.3.8"
     }
 
 }
@@ -41,6 +39,10 @@ dependencies {
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
+
+    // replace zxing with latest
+    // TODO: fix problem with android L
+    implementation 'com.google.zxing:core:3.4.0'
 
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
