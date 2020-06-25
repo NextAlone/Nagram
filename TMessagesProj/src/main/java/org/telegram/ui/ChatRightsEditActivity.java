@@ -974,7 +974,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             int left = MAX_RANK_LENGTH - (currentRank != null ? currentRank.codePointCount(0, currentRank.length()) : 0);
             if (left <= MAX_RANK_LENGTH - MAX_RANK_LENGTH * 0.7f) {
                 headerCell.setText2(String.format("%d", left));
-                SimpleTextView textView = headerCell.getTextView2();
+                TextView textView = headerCell.getTextView2();
                 String key = left < 0 ? Theme.key_windowBackgroundWhiteRedText5 : Theme.key_windowBackgroundWhiteGrayText3;
                 textView.setTextColor(Theme.getColor(key));
                 textView.setTag(key);

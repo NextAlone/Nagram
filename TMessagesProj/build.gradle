@@ -210,14 +210,6 @@ android {
             keyPassword pwd
         }
 
-        debug {
-
-            storeFile project.file('debug.keystore')
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
-
-        }
     }
 
     buildTypes {
@@ -225,7 +217,7 @@ android {
             debuggable true
             jniDebuggable true
             multiDexEnabled true
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -235,7 +227,6 @@ android {
             jniDebuggable false
             minifyEnabled true
             shrinkResources true
-            signingConfig signingConfigs.release
         }
 
         release {

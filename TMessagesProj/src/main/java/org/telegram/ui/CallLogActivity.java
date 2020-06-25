@@ -451,7 +451,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
         builder.addTitle(LocaleController.getString("ConfirmDeleteCallLog", R.string.ConfirmDeleteCallLog));
-        builder.addItem(LocaleController.getString("Delete", R.string.Delete), R.drawable.baseline_delete_24, (dialog, which) -> {
+        builder.addItem(LocaleController.getString("Delete", R.string.Delete), R.drawable.baseline_delete_24, (cell) -> {
             ArrayList<Integer> ids = new ArrayList<>();
             for (TLRPC.Message msg : row.calls) {
                 ids.add(msg.id);

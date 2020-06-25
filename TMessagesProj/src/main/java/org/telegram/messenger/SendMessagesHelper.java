@@ -6036,7 +6036,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         if (forceDocument) {
                             videoEditedInfo = null;
                         } else {
-                            videoEditedInfo = info.videoEditedInfo;
+                            videoEditedInfo = info.videoEditedInfo != null ? info.videoEditedInfo : createCompressionSettings(info.path);
                         }
 
                         if (!forceDocument && (videoEditedInfo != null || info.path.endsWith("mp4"))) {

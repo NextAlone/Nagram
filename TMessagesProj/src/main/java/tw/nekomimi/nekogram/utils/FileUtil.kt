@@ -192,17 +192,37 @@ object FileUtil {
 
         if (!newFile.isFile) {
 
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+
+                Build.SUPPORTED_ABIS.forEachIndexed { index, abi ->
+
+                    runCatching {
+
+                        saveNonAsset("lib/$abi/${execFile.name}", execFile)
+
+                        FileLog.d("lib extracted with default abi$index ($abi): $execFile")
+
+                    }
+
+                }
+
+                error("library not found ${execFile.name}")
+
+            }
+
+        } else {
+
             runCatching {
 
                 saveNonAsset("lib/${Build.CPU_ABI}/${execFile.name}", execFile)
 
-                FileLog.d("lib extracted with default abi: $execFile, ${Build.CPU_ABI}")
+                FileLog.d("lib extracted with default abi (${Build.CPU_ABI}): $execFile")
 
             }.recover {
 
                 saveNonAsset("lib/${Build.CPU_ABI2}/${execFile.name}", execFile)
 
-                FileLog.d("lib extracted with abi2: $execFile, ${Build.CPU_ABI2}")
+                FileLog.d("lib extracted with abi2 (${Build.CPU_ABI2}): $execFile")
 
             }
 
