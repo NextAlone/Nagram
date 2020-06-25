@@ -1,101 +1,41 @@
 package tw.nekomimi.nekogram;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Cells.ChatMessageCell;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
-import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
-import tw.nekomimi.nekogram.translator.TranslateBottomSheet;
-import tw.nekomimi.nekogram.translator.Translator;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class MessageHelper extends BaseController {
 
     private static volatile MessageHelper[] Instance = new MessageHelper[UserConfig.MAX_ACCOUNT_COUNT];
-    @SuppressLint("StaticFieldLeak")
-    private static AlertDialog progressDialog;
     private int lastReqId;
 
     public MessageHelper(int num) {
         super(num);
     }
 
-    public static void resetMessageContent(MessageObject messageObject, ChatMessageCell chatMessageCell) {
-        messageObject.forceUpdate = true;
+    public static void resetMessageContent(MessageObject messageObject) {
         if (messageObject.caption != null) {
             messageObject.caption = null;
             messageObject.generateCaption();
+            messageObject.forceUpdate = true;
         }
         messageObject.applyNewText();
         messageObject.resetLayout();
-        chatMessageCell.requestLayout();
-        chatMessageCell.invalidate();
     }
 
-    public static void showTranslateDialog(Context context, String query) {
-        if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(context, query);
-        } else {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-            }
-            progressDialog = new AlertDialog(context, 3);
-            progressDialog.showDelayed(400);
-            Translator.translate(query, new Translator.TranslateCallBack() {
-                @Override
-                public void onSuccess(Object translation) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage((String) translation);
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                    builder.setNeutralButton(LocaleController.getString("Copy", R.string.Copy), (dialog, which) -> AndroidUtilities.addToClipboard((String) translation));
-                    builder.show();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    if (e != null && e.getLocalizedMessage() != null) {
-                        builder.setTitle(LocaleController.getString("TranslateFailed", R.string.TranslateFailed));
-                        builder.setMessage(e.getLocalizedMessage());
-                    } else {
-                        builder.setMessage(LocaleController.getString("TranslateFailed", R.string.TranslateFailed));
-                    }
-                    builder.setNeutralButton(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), (dialog, which) -> NekoGeneralSettingsActivity.getTranslationProviderAlert(context).show());
-                    builder.setPositiveButton(LocaleController.getString("Retry", R.string.Retry), (dialog, which) -> showTranslateDialog(context, query));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.show();
-                }
-
-                @Override
-                public void onUnsupported() {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported));
-                    builder.setPositiveButton(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), (dialog, which) -> NekoGeneralSettingsActivity.getTranslationProviderAlert(context).show());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.show();
-                }
-            });
-        }
+    public static void resetMessageContent(ChatMessageCell chatMessageCell) {
+        chatMessageCell.onAttachedToWindow();
+        chatMessageCell.requestLayout();
+        chatMessageCell.invalidate();
     }
 
     public static MessageHelper getInstance(int num) {
@@ -163,4 +103,97 @@ public class MessageHelper extends BaseController {
             }
         }), ConnectionsManager.RequestFlagFailOnServerErrors);
     }
+
+    public void deleteChannelHistory(final long dialog_id, TLRPC.Chat chat, final int offset_id) {
+
+        final TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
+        req.peer = getMessagesController().getInputPeer((int) dialog_id);
+        if (req.peer == null) {
+            return;
+        }
+        req.limit = 100;
+        req.offset_id = offset_id;
+        final int currentReqId = ++lastReqId;
+        getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (error == null) {
+                int lastMessageId = offset_id;
+                if (currentReqId == lastReqId) {
+                    if (response != null) {
+                        TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                        int size = res.messages.size();
+                        if (size == 0) {
+                            return;
+                        }
+                        /*
+                        ArrayList<Integer> ids = new ArrayList<>();
+                        ArrayList<Long> random_ids = new ArrayList<>();
+                        int channelId = 0;
+                        for (int a = 0; a < res.messages.size(); a++) {
+                            TLRPC.Message message = res.messages.get(a);
+                            ids.add(message.id);
+                            if (message.random_id != 0) {
+                                random_ids.add(message.random_id);
+                            }
+                            if (message.to_id.channel_id != 0) {
+                                channelId = message.to_id.channel_id;
+                            }
+                            if (message.id > lastMessageId) {
+                                lastMessageId = message.id;
+                            }
+                        }
+                        getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, channelId, true, false);
+                         */
+                        HashSet<Integer> ids = new HashSet<>();
+                        ArrayList<Integer> msgIds = new ArrayList<>();
+                        ArrayList<Long> random_ids = new ArrayList<>();
+                        int channelId = 0;
+                        for (int a = 0; a < res.messages.size(); a++) {
+                            TLRPC.Message message = res.messages.get(a);
+                            ids.add(message.id);
+                            if (message.from_id > 0) {
+                                ids.add(message.from_id);
+                            } else {
+                                msgIds.add(message.id);
+                                if (message.random_id != 0) {
+                                    random_ids.add(message.random_id);
+                                }
+                            }
+                            if (message.id > lastMessageId) {
+                                lastMessageId = message.id;
+                            }
+                        }
+                        for (int userId : ids) {
+                            deleteUserChannelHistory(chat, userId, 0);
+                        }
+                        if (!msgIds.isEmpty()) {
+                            getMessagesController().deleteMessages(msgIds, random_ids, null, dialog_id, channelId, true, false);
+                        }
+                        deleteChannelHistory(dialog_id, chat, lastMessageId);
+
+                    }
+                }
+            } else {
+                AlertUtil.showToast(error.code + ": " + error.text);
+            }
+        }), ConnectionsManager.RequestFlagFailOnServerErrors);
+    }
+
+    public void deleteUserChannelHistory(final TLRPC.Chat chat, int userId, int offset) {
+        if (offset == 0) {
+            getMessagesStorage().deleteUserChannelHistory(chat.id, userId);
+        }
+        TLRPC.TL_channels_deleteUserHistory req = new TLRPC.TL_channels_deleteUserHistory();
+        req.channel = getMessagesController().getInputChannel(chat.id);
+        req.user_id = getMessagesController().getInputUser(userId);
+        getConnectionsManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;
+                if (res.offset > 0) {
+                    deleteUserChannelHistory(chat, userId, res.offset);
+                }
+                getMessagesController().processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
+            }
+        });
+    }
+
 }
