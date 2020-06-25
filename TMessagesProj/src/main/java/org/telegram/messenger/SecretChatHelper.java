@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
+import tw.nekomimi.nekogram.utils.AlertUtil;
+
 public class SecretChatHelper extends BaseController {
 
     public static class TL_decryptedMessageHolder extends TLObject {
@@ -1950,25 +1952,12 @@ public class SecretChatHelper extends BaseController {
                         });
                     } else {
                         delayedEncryptedChatUpdates.clear();
-                        AndroidUtilities.runOnUIThread(() -> {
-                            if (!((Activity) context).isFinishing()) {
-                                startingSecretChat = false;
-                                try {
-                                    progressDialog.dismiss();
-                                } catch (Exception e) {
-                                    FileLog.e(e);
-                                }
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setMessage(LocaleController.getString("CreateEncryptedChatError", R.string.CreateEncryptedChatError));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                builder.show().setCanceledOnTouchOutside(true);
-                            }
-                        });
+                        AlertUtil.showToast(error);
                     }
                 }, ConnectionsManager.RequestFlagFailOnServerErrors);
             } else {
                 delayedEncryptedChatUpdates.clear();
+                AlertUtil.showToast(error);
                 AndroidUtilities.runOnUIThread(() -> {
                     startingSecretChat = false;
                     if (!((Activity) context).isFinishing()) {

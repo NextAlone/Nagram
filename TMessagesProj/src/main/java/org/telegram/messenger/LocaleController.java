@@ -14,12 +14,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
+import android.view.Gravity;
 
+import org.telegram.messenger.support.ArrayUtils;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -30,6 +33,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +44,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class LocaleController {
 
@@ -51,7 +56,13 @@ public class LocaleController {
     static final int QUANTITY_MANY = 0x0010;
 
     public static boolean isRTL = false;
-    public static int nameDisplayOrder = 1;
+
+    public static int generateFlagStart() {
+
+        return isRTL ? Gravity.RIGHT : Gravity.LEFT;
+
+    }
+
     public static boolean is24HourFormat = false;
     public FastDateFormat formatterDay;
     public FastDateFormat formatterWeek;
@@ -109,6 +120,9 @@ public class LocaleController {
         public boolean builtIn;
         public int serverIndex;
 
+        public TLRPC.TL_langPackLanguage pack;
+        public boolean toInstall;
+
         public String getSaveString() {
             String langCode = baseLangCode == null ? "" : baseLangCode;
             String pluralCode = TextUtils.isEmpty(pluralLangCode) ? shortName : pluralLangCode;
@@ -151,17 +165,25 @@ public class LocaleController {
         }
 
         public File getPathToFile() {
+
+            File baseDir = new File(ApplicationLoader.getDataDirFixed(), "languages");
+
+            FileUtil.initDir(baseDir);
+
             if (isRemote()) {
-                return new File(ApplicationLoader.getFilesDirFixed(), "remote_" + shortName + ".xml");
+                return new File(baseDir, "remote_" + shortName + ".xml");
             } else if (isUnofficial()) {
-                return new File(ApplicationLoader.getFilesDirFixed(), "unofficial_" + shortName + ".xml");
+                return new File(baseDir, "unofficial_" + shortName + ".xml");
             }
             return !TextUtils.isEmpty(pathToFile) ? new File(pathToFile) : null;
         }
 
         public File getPathToBaseFile() {
             if (isUnofficial()) {
-                return new File(ApplicationLoader.getFilesDirFixed(), "unofficial_base_" + shortName + ".xml");
+                File baseDir = new File(ApplicationLoader.getDataDirFixed(), "languages");
+
+                FileUtil.initDir(baseDir);
+                return new File(baseDir, "unofficial_base_" + shortName + ".xml");
             }
             return null;
         }
@@ -215,6 +237,7 @@ public class LocaleController {
     private ArrayList<LocaleInfo> otherLanguages = new ArrayList<>();
 
     private static volatile LocaleController Instance = null;
+
     public static LocaleController getInstance() {
         LocaleController localInstance = Instance;
         if (localInstance == null) {
@@ -225,6 +248,8 @@ public class LocaleController {
                 }
             }
         }
+        if (localInstance.formatterDay == null || localInstance.chatFullDate == null)
+            localInstance.recreateFormatters();
         return localInstance;
     }
 
@@ -326,6 +351,20 @@ public class LocaleController {
         languagesDict.put(localeInfo.shortName, localeInfo);
 
         localeInfo = new LocaleInfo();
+        localeInfo.name = "简体中文 ( NekoX )";
+        localeInfo.nameEnglish = "Simplified Chinese ( NekoX )";
+        localeInfo.shortName = "nekox_zh_cn";
+        localeInfo.baseLangCode = "zh_hans_raw";
+        localeInfo.isRtl = false;
+        localeInfo.pathToFile = "unofficial";
+        localeInfo.pluralLangCode = "zh_cn";
+        localeInfo.builtIn = true;
+        languages.add(localeInfo);
+        languagesDict.put(localeInfo.getKey(), localeInfo);
+        languagesDict.put("zh_cn", localeInfo);
+        languagesDict.put("zh_sg", localeInfo);
+
+        localeInfo = new LocaleInfo();
         localeInfo.name = "瓜体中文 \uD83D\uDE36";
         localeInfo.nameEnglish = "Duangified Chinese (Simplified)";
         localeInfo.shortName = "duang_zh_hans";
@@ -336,23 +375,6 @@ public class LocaleController {
         localeInfo.builtIn = true;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("zh_cn", localeInfo);
-        languagesDict.put("zh_sg", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "瓜體中文";
-        localeInfo.nameEnglish = "Duangified Chinese (Traditional)";
-        localeInfo.shortName = "duang_zh_hant";
-        localeInfo.baseLangCode = "zh_hant_raw";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_tw";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("zh_tw", localeInfo);
-        languagesDict.put("zh_hk", localeInfo);
-        languagesDict.put("zh_mo", localeInfo);
 
         localeInfo = new LocaleInfo();
         localeInfo.name = "正體中文";
@@ -365,6 +387,9 @@ public class LocaleController {
         localeInfo.builtIn = true;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
+        languagesDict.put("zh_tw", localeInfo);
+        languagesDict.put("zh_hk", localeInfo);
+        languagesDict.put("zh_mo", localeInfo);
 
         localeInfo = new LocaleInfo();
         localeInfo.name = "日本語";
@@ -721,7 +746,7 @@ public class LocaleController {
             }
         }
         editor.putString("unofficial", stringBuilder.toString());
-        editor.commit();
+        editor.apply();
     }
 
     public boolean deleteLanguage(LocaleInfo localeInfo, int currentAccount) {
@@ -897,6 +922,7 @@ public class LocaleController {
                 saveOtherLanguages();
             }
         }
+        loadPrebuiltLocaleFile(localeInfo);
         if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (force || !pathToFile.exists() || hasBase && !pathToBaseFile.exists())) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
@@ -928,7 +954,7 @@ public class LocaleController {
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("language", localeInfo.getKey());
-                editor.commit();
+                editor.apply();
             }
             if (pathToFile == null) {
                 localeValues.clear();
@@ -1562,7 +1588,6 @@ public class LocaleController {
         isRTL = lang.length() == 2 && (lang.equals("ar") || lang.equals("fa") || lang.equals("he") || lang.equals("iw")) ||
                 lang.startsWith("ar_") || lang.startsWith("fa_") || lang.startsWith("he_") || lang.startsWith("iw_")
                 || currentLocaleInfo != null && currentLocaleInfo.isRtl;
-        nameDisplayOrder = NekoConfig.nameOrder;
 
         formatterDayMonth = createFormatter(locale, getStringInternal("formatterMonth", R.string.formatterMonth), "dd MMM");
         formatterYear = createFormatter(locale, getStringInternal("formatterYear", R.string.formatterYear), "dd.MM.yy");
@@ -1743,7 +1768,7 @@ public class LocaleController {
                     return getString("WithinAWeek", R.string.WithinAWeek);
                 } else if (user.status.expires == -102) {
                     return getString("WithinAMonth", R.string.WithinAMonth);
-                }  else {
+                } else {
                     return formatDateOnline(user.status.expires);
                 }
             }
@@ -1859,7 +1884,7 @@ public class LocaleController {
                             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("language", localeInfo.getKey());
-                            editor.commit();
+                            editor.apply();
                         }
                         if (newLocale != null) {
                             localeValues = valuesToSet;
@@ -1980,7 +2005,7 @@ public class LocaleController {
                     req.lang_pack = "";
                     ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                         if (response != null) {
-                            AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                            saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                         }
                     }, ConnectionsManager.RequestFlagWithoutLogin);
                 }
@@ -1989,7 +2014,7 @@ public class LocaleController {
                 req.lang_code = localeInfo.getBaseLangCode();
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {
                     if (response != null) {
-                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             }
@@ -2002,7 +2027,7 @@ public class LocaleController {
                 req.lang_pack = "";
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                     if (response != null) {
-                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             } else {
@@ -2013,9 +2038,50 @@ public class LocaleController {
                 req.lang_code = localeInfo.getLangCode();
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {
                     if (response != null) {
-                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount));
+                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount);
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
+            }
+        }
+    }
+
+    private static String[] prebuilt;
+
+    private void loadPrebuiltLocaleFile(LocaleInfo localeInfo) {
+
+        if (prebuilt == null) {
+
+            try {
+                AssetManager assets = ApplicationLoader.applicationContext.getAssets();
+                prebuilt = assets.list("languages");
+            } catch (IOException e) {
+                FileLog.e(e);
+                return;
+            }
+
+        }
+
+        if (prebuilt == null) {
+
+            FileLog.w("empty prebuilt languages list");
+
+            return;
+
+        }
+
+        File pathToFile = localeInfo.getPathToFile();
+        File pathToBaseFile = localeInfo.getPathToBaseFile();
+
+        if ((pathToFile != null && !pathToFile.isFile()) || (pathToBaseFile != null && !pathToBaseFile.isFile())) {
+            try {
+                if (pathToBaseFile != null && !pathToBaseFile.isFile() && ArrayUtils.contains(prebuilt, pathToBaseFile.getName())) {
+                    FileUtil.saveAsset("languages/" + pathToBaseFile.getName(), pathToBaseFile);
+                }
+                if (pathToFile != null && !pathToFile.isFile() && ArrayUtils.contains(prebuilt, pathToFile.getName())) {
+                    FileUtil.saveAsset("languages/" + pathToFile.getName(), pathToFile);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
             }
         }
     }

@@ -4,7 +4,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public class BaseController {
 
-    protected int currentAccount;
+    public int currentAccount;
     private AccountInstance parentAccountInstance;
 
     public BaseController(int num) {

@@ -21,6 +21,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import androidx.annotation.Keep;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.ScrollerCompat;
+
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +54,7 @@ public class ActionBarPopupWindow extends PopupWindow {
     private AnimatorSet windowAnimatorSet;
     private boolean animationEnabled = allowAnimation;
     private int dismissAnimationDuration = 150;
+
     static {
         Field f = null;
         try {
@@ -92,9 +96,13 @@ public class ActionBarPopupWindow extends PopupWindow {
         protected Drawable backgroundDrawable;
 
         public ActionBarPopupWindowLayout(Context context) {
+            this(context,false);
+        }
+
+        public ActionBarPopupWindowLayout(Context context, boolean verticalScrollBarEnabled) {
             super(context);
 
-            backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
+            backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
             setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
 
             setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
@@ -102,7 +110,7 @@ public class ActionBarPopupWindow extends PopupWindow {
 
             try {
                 scrollView = new ScrollView(context);
-                scrollView.setVerticalScrollBarEnabled(false);
+                scrollView.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
                 addView(scrollView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
             } catch (Throwable e) {
                 FileLog.e(e);
@@ -111,7 +119,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             if (scrollView != null) {
-                scrollView.addView(linearLayout, new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                scrollView.addView(linearLayout, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             } else {
                 addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
             }
@@ -131,7 +139,7 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public void setBackgroundColor(int color) {
             if (backgroundColor != color) {
-                backgroundDrawable.setColorFilter(new PorterDuffColorFilter(backgroundColor = color, PorterDuff.Mode.MULTIPLY));
+                backgroundDrawable.setColorFilter(new PorterDuffColorFilter(backgroundColor = color, PorterDuff.Mode.SRC_IN));
             }
         }
 
@@ -397,6 +405,12 @@ public class ActionBarPopupWindow extends PopupWindow {
             content.setPivotX(content.getMeasuredWidth());
             content.setPivotY(0);
             int count = content.getItemsCount();
+            int height = AndroidUtilities.displayMetrics.heightPixels;
+            int item =  content.getItemAt(0).getMeasuredHeight();
+            if (item > 0) {
+                int maxItems = height / item;
+                if (count > maxItems) count = maxItems;
+            }
             content.positions.clear();
             int visibleCount = 0;
             for (int a = 0; a < count; a++) {
@@ -418,6 +432,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                     ObjectAnimator.ofFloat(content, "backScaleY", 0.0f, 1.0f),
                     ObjectAnimator.ofInt(content, "backAlpha", 0, 255));
             windowAnimatorSet.setDuration(150 + 16 * visibleCount);
+            int finalCount = count;
             windowAnimatorSet.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -428,8 +443,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 public void onAnimationEnd(Animator animation) {
                     windowAnimatorSet = null;
                     ActionBarPopupWindowLayout content = (ActionBarPopupWindowLayout) getContentView();
-                    int count = content.getItemsCount();
-                    for (int a = 0; a < count; a++) {
+                    for (int a = 0; a < finalCount; a++) {
                         View child = content.getItemAt(a);
                         child.setAlpha(1.0f);
                     }

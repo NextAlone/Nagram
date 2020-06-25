@@ -36,6 +36,8 @@ import android.widget.Toast;
 import androidx.annotation.UiThread;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 
+import com.google.gson.Gson;
+
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -51,7 +53,6 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.Point;
-import org.telegram.ui.PaymentFormActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -1842,7 +1843,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     if (!messageObject.isGif() && (videoEditedInfo == null || !videoEditedInfo.muted)) {
                         uploadedDocument.nosound_video = true;
                         if (BuildVars.DEBUG_VERSION) {
-                            FileLog.d("nosound_video = true");
+                            FileLog.e("nosound_video = true");
                         }
                     }
                     if (document.access_hash == 0) {
@@ -2192,14 +2193,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     } else if (response instanceof TLRPC.TL_urlAuthResultDefault) {
                         TLRPC.TL_urlAuthResultDefault res = (TLRPC.TL_urlAuthResultDefault) response;
                         AlertsCreator.showOpenUrlAlert(parentFragment, button.url, false, true);
-                    }
-                } else if (button instanceof TLRPC.TL_keyboardButtonBuy) {
-                    if (response instanceof TLRPC.TL_payments_paymentForm) {
-                        final TLRPC.TL_payments_paymentForm form = (TLRPC.TL_payments_paymentForm) response;
-                        getMessagesController().putUsers(form.users, false);
-                        parentFragment.presentFragment(new PaymentFormActivity(form, messageObject));
-                    } else if (response instanceof TLRPC.TL_payments_paymentReceipt) {
-                        parentFragment.presentFragment(new PaymentFormActivity(messageObject, (TLRPC.TL_payments_paymentReceipt) response));
                     }
                 } else {
                     TLRPC.TL_messages_botCallbackAnswer res = (TLRPC.TL_messages_botCallbackAnswer) response;
@@ -4912,12 +4905,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
         }
-        if (uri != null && AndroidUtilities.isInternalUri(uri)) {
-            return false;
-        }
-        if (path != null && AndroidUtilities.isInternalUri(Uri.fromFile(new File(path)))) {
-            return false;
-        }
         MimeTypeMap myMime = MimeTypeMap.getSingleton();
         TLRPC.TL_documentAttributeAudio attributeAudio = null;
         String extension = null;
@@ -6049,7 +6036,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         if (forceDocument) {
                             videoEditedInfo = null;
                         } else {
-                            videoEditedInfo = info.videoEditedInfo != null ? info.videoEditedInfo : createCompressionSettings(info.path);
+                            videoEditedInfo = info.videoEditedInfo;
                         }
 
                         if (!forceDocument && (videoEditedInfo != null || info.path.endsWith("mp4"))) {

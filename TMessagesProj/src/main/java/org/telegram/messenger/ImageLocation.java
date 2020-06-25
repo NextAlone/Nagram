@@ -100,6 +100,14 @@ public class ImageLocation {
         return getForPhoto(photoSize.location, photoSize.size, photo, null, null, false, dc_id, null, photoSize.type);
     }
 
+    public static boolean isUserHasPhoto(TLRPC.User user) {
+        if (user == null || user.access_hash == 0 || user.photo == null || user.photo.photo_big == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static ImageLocation getForUser(TLRPC.User user, boolean big) {
         if (user == null || user.access_hash == 0 || user.photo == null) {
             return null;

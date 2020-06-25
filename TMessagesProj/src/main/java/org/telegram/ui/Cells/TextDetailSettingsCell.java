@@ -25,6 +25,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
+import cn.hutool.core.util.StrUtil;
+
 public class TextDetailSettingsCell extends FrameLayout {
 
     private TextView textView;
@@ -58,7 +60,7 @@ public class TextDetailSettingsCell extends FrameLayout {
 
         imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.SRC_IN));
         imageView.setVisibility(GONE);
         addView(imageView, LayoutHelper.createFrame(52, 52, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 8, 6, 8, 0));
     }
@@ -97,6 +99,11 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     public void setTextAndValue(String text, CharSequence value, boolean divider) {
         textView.setText(text);
+        if (StrUtil.isBlank(value)) {
+            valueTextView.setVisibility(GONE);
+        } else {
+            valueTextView.setVisibility(VISIBLE);
+        }
         valueTextView.setText(value);
         needDivider = divider;
         imageView.setVisibility(GONE);

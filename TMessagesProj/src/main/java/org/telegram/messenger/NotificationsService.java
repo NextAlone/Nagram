@@ -18,12 +18,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 
 import androidx.core.app.NotificationCompat;
-
-import org.telegram.ui.LaunchActivity;
-
-import tw.nekomimi.nekogram.NekoConfig;
 
 public class NotificationsService extends Service {
 
@@ -31,24 +28,26 @@ public class NotificationsService extends Service {
     public void onCreate() {
         super.onCreate();
         ApplicationLoader.postInitApplication();
-        if (NekoConfig.residentNotification) {
-            Intent activityIntent = new Intent(this, LaunchActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
-
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("nekogram", LocaleController.getString("NekogramRunning", R.string.NekogramRunning), NotificationManager.IMPORTANCE_DEFAULT);
-                channel.enableLights(false);
-                channel.enableVibration(false);
-                channel.setSound(null, null);
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null) {
-                    notificationManager.createNotificationChannel(channel);
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "push_service_channel";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, LocaleController.getString("PlaceHolder", R.string.PlaceHolder), NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("NekoX - System");
+            channel.enableLights(false);
+            channel.enableVibration(false);
+            channel.setSound(null, null);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
             }
-            Notification notification = new NotificationCompat.Builder(this, "nekogram")
+            Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+            intent.putExtra(Settings.EXTRA_CHANNEL_ID, CHANNEL_ID);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.notification)
                     .setColor(0xff11acfa)
                     .setContentTitle(LocaleController.getString("NekogramRunning", R.string.NekogramRunning))
+                    .setContentText(LocaleController.getString("TapToDisable",R.string.TapToDisable))
                     .setContentIntent(pendingIntent)
                     .setCategory(NotificationCompat.CATEGORY_STATUS)
                     .build();
@@ -71,7 +70,12 @@ public class NotificationsService extends Service {
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
         if (preferences.getBoolean("pushService", true)) {
             Intent intent = new Intent("org.telegram.start");
-            sendBroadcast(intent);
+            try {
+                sendBroadcast(intent);
+            } catch (Exception ex) {
+                // 辣鷄miui 就你事最多.jpg
+            }
         }
     }
+
 }

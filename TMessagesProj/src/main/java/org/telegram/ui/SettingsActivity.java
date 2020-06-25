@@ -1580,9 +1580,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private void sendLogs() {
 
-                File[] files = dir.listFiles();
+        File path = new File(EnvUtil.getTelegramPath(), "logs");
 
-                boolean[] finished = new boolean[1];
+        File logcatFile = new File(path, "NekoX-" + System.currentTimeMillis() + ".log");
 
         FileUtil.delete(logcatFile);
 
@@ -1592,25 +1592,16 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
             IoUtil.copy(process, logcatFile);
 
-                        Intent i = new Intent(Intent.ACTION_SEND);
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        }
-                        i.setType("message/rfc822");
-                        i.putExtra(Intent.EXTRA_EMAIL, "");
-                        i.putExtra(Intent.EXTRA_SUBJECT, "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()));
-                        i.putExtra(Intent.EXTRA_STREAM, uri);
-                        if (getParentActivity() != null) {
-                            getParentActivity().startActivityForResult(Intent.createChooser(i, "Select email application."), 500);
-                        }
-                    } else {
-                        Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+            RuntimeUtil.exec("logcat", "-c");
+
+            ShareUtil.shareFile(getParentActivity(), logcatFile);
+
+        } catch (Exception e) {
+
+            AlertUtil.showToast(e);
+
+        }
+
     }
 
     private class SearchAdapter extends RecyclerListView.SelectionAdapter {

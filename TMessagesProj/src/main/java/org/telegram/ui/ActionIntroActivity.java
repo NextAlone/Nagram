@@ -56,6 +56,9 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
+
 @TargetApi(23)
 public class ActionIntroActivity extends BaseFragment implements LocationController.LocationFetchCallback {
 
@@ -544,11 +547,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     break;
                 }
                 case ACTION_TYPE_CHANGE_PHONE_NUMBER: {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", R.string.PhoneNumberChangeTitle));
-                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
-                    builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), (dialogInterface, i) -> presentFragment(new ChangePhoneActivity(), true));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+                    builder.addTitle(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
+                    builder.addItem(LocaleController.getString("Change", R.string.Change), (i) -> {
+                        presentFragment(new ChangePhoneActivity(), true);
+                        return Unit.INSTANCE;
+                    });
+                    builder.addCancelItem();
                     showDialog(builder.create());
                     break;
                 }
@@ -608,8 +613,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 subtitleTextView.setVisibility(View.VISIBLE);
                 drawable1 = context.getResources().getDrawable(R.drawable.sim_old);
                 drawable2 = context.getResources().getDrawable(R.drawable.sim_new);
-                drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), PorterDuff.Mode.MULTIPLY));
-                drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image2), PorterDuff.Mode.MULTIPLY));
+                drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), PorterDuff.Mode.SRC_IN));
+                drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image2), PorterDuff.Mode.SRC_IN));
                 imageView.setImageDrawable(new CombinedDrawable(drawable1, drawable2));
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 UserConfig userConfig = getUserConfig();
@@ -668,7 +673,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
         builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
         builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
@@ -722,7 +727,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             if (grantResults != null && grantResults.length != 0) {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                     builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
                     builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                         if (getParentActivity() == null) {
@@ -747,7 +752,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 processOpenQrReader();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
                 builder.setMessage(LocaleController.getString("QRCodePermissionNoCamera", R.string.QRCodePermissionNoCamera));
                 builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                     try {

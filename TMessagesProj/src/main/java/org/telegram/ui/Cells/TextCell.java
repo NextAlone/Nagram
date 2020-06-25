@@ -55,8 +55,9 @@ public class TextCell extends FrameLayout {
         addView(valueTextView);
 
         imageView = new ImageView(context);
+        imageView.setVisibility(GONE);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(dialog ? Theme.key_dialogIcon : Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(dialog ? Theme.key_dialogIcon : Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.SRC_IN));
         addView(imageView);
 
         valueImageView = new ImageView(context);
@@ -132,7 +133,7 @@ public class TextCell extends FrameLayout {
         textView.setTextColor(Theme.getColor(text));
         textView.setTag(text);
         if (icon != null) {
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(icon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(icon), PorterDuff.Mode.SRC_IN));
             imageView.setTag(icon);
         }
     }
@@ -150,11 +151,13 @@ public class TextCell extends FrameLayout {
     public void setTextAndIcon(String text, int resId, boolean divider) {
         textView.setText(text);
         valueTextView.setText(null);
-        imageView.setImageResource(resId);
-        imageView.setVisibility(VISIBLE);
+        if (resId != 0) {
+            imageView.setImageResource(resId);
+            imageView.setVisibility(VISIBLE);
+        }
+        imageView.setPadding(0, AndroidUtilities.dp(7), 0, 0);
         valueTextView.setVisibility(GONE);
         valueImageView.setVisibility(GONE);
-        imageView.setPadding(0, AndroidUtilities.dp(7), 0, 0);
         needDivider = divider;
         setWillNotDraw(!needDivider);
     }

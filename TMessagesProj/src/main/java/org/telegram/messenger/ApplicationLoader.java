@@ -26,21 +26,34 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.core.app.NotificationManagerCompat;
+import androidx.multidex.MultiDex;
 
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Set;
 
+import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
-import androidx.multidex.MultiDex;
+import tw.nekomimi.nekogram.database.WarppedPref;
+import tw.nekomimi.nekogram.utils.EnvUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
     public static volatile Context applicationContext;
+
     public static volatile NetworkInfo currentNetworkInfo;
     public static volatile Handler applicationHandler;
 
@@ -55,28 +68,144 @@ public class ApplicationLoader extends Application {
 
     public static boolean hasPlayServices;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
+    @Override public SharedPreferences getSharedPreferences(String name, int mode) {
+        return new WarppedPref(super.getSharedPreferences(name, mode));
     }
 
-    public static File getFilesDirFixed() {
-        for (int a = 0; a < 10; a++) {
-            File path = ApplicationLoader.applicationContext.getFilesDir();
-            if (path != null) {
-                return path;
+    @Override
+    protected void attachBaseContext(Context base) {
+        if (SDK_INT >= Build.VERSION_CODES.P) {
+            Reflection.unseal(base);
+        }
+        super.attachBaseContext(base);
+        if (SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            MultiDex.install(this);
+        }
+    }
+
+    /**
+     * @author weishu
+     * @date 2018/6/7.
+     */
+    public static class Reflection {
+        private static final String TAG = "Reflection";
+
+        private static Object sVmRuntime;
+        private static Method setHiddenApiExemptions;
+
+        static {
+            if (SDK_INT >= Build.VERSION_CODES.P) {
+                try {
+                    Method forName = Class.class.getDeclaredMethod("forName", String.class);
+                    Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
+
+                    Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
+                    Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
+                    setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
+                    sVmRuntime = getRuntime.invoke(null);
+                } catch (Throwable e) {
+                    FileLog.e("reflect bootstrap failed:", e);
+                }
             }
+
+        }
+
+        private static int UNKNOWN = -9999;
+
+        private static final int ERROR_SET_APPLICATION_FAILED = -20;
+
+        private static final int ERROR_EXEMPT_FAILED = -21;
+
+        private static int unsealed = UNKNOWN;
+
+        public static int unseal(Context context) {
+            if (SDK_INT < 28) {
+                // Below Android P, ignore
+                return 0;
+            }
+
+            // try exempt API first.
+            if (exemptAll()) {
+                return 0;
+            } else {
+                return ERROR_EXEMPT_FAILED;
+            }
+        }
+
+        /**
+         * make the method exempted from hidden API check.
+         *
+         * @param method the method signature prefix.
+         * @return true if success.
+         */
+        public static boolean exempt(String method) {
+            return exempt(new String[]{method});
+        }
+
+        /**
+         * make specific methods exempted from hidden API check.
+         *
+         * @param methods the method signature prefix, such as "Ldalvik/system", "Landroid" or even "L"
+         * @return true if success
+         */
+        public static boolean exempt(String... methods) {
+            if (sVmRuntime == null || setHiddenApiExemptions == null) {
+                return false;
+            }
+
+            try {
+                setHiddenApiExemptions.invoke(sVmRuntime, new Object[]{methods});
+                return true;
+            } catch (Throwable e) {
+                return false;
+            }
+        }
+
+        /**
+         * Make all hidden API exempted.
+         *
+         * @return true if success.
+         */
+        public static boolean exemptAll() {
+            return exempt(new String[]{"L"});
+        }
+    }
+
+    @SuppressLint("SdCardPath")
+    public static File getDataDirFixed() {
+        try {
+            File path = applicationContext.getFilesDir();
+            if (path != null) {
+                return path.getParentFile();
+            }
+        } catch (Exception ignored) {
         }
         try {
             ApplicationInfo info = applicationContext.getApplicationInfo();
-            File path = new File(info.dataDir, "files");
-            path.mkdirs();
-            return path;
-        } catch (Exception e) {
-            FileLog.e(e);
+            return new File(info.dataDir);
+        } catch (Exception ignored) {
         }
-        return new File("/data/data/org.telegram.messenger/files");
+        return new File("/data/data/" + BuildConfig.APPLICATION_ID + "/");
+    }
+
+    public static File getFilesDirFixed() {
+
+        File filesDir = new File(getDataDirFixed(), "files");
+
+        FileUtil.initDir(filesDir);
+
+        return filesDir;
+
+    }
+
+    public static File getCacheDirFixed() {
+
+        File filesDir = new File(getDataDirFixed(), "cache");
+
+        FileUtil.initDir(filesDir);
+
+        return filesDir;
+
     }
 
     public static void postInitApplication() {
@@ -86,11 +215,22 @@ public class ApplicationLoader extends Application {
 
         applicationInited = true;
 
-        try {
-            LocaleController.getInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UIUtil.runOnIoDispatcher(() -> {
+
+            try {
+                LocaleController.getInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                EnvUtil.doTest();
+            } catch (Exception e) {
+                FileLog.e("EnvUtil test Failed", e);
+
+            }
+
+        });
 
         try {
             connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -137,29 +277,50 @@ public class ApplicationLoader extends Application {
 
         SharedConfig.loadConfig();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            UserConfig.getInstance(a).loadConfig();
-            MessagesController.getInstance(a);
-            if (a == 0) {
-                SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(a).getCurrentTime() + "__";
-            } else {
-                ConnectionsManager.getInstance(a);
+            final int finalA = a;
+            Runnable initRunnable = () -> {
+                UserConfig.getInstance(finalA).loadConfig();
+                MessagesController.getInstance(finalA);
+                if (finalA == 0) {
+                    SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(finalA).getCurrentTime() + "__";
+                } else {
+                    ConnectionsManager.getInstance(finalA);
+                }
+                TLRPC.User user = UserConfig.getInstance(finalA).getCurrentUser();
+                if (user != null) {
+                    MessagesController.getInstance(finalA).putUser(user, true);
+                    SendMessagesHelper.getInstance(finalA).checkUnsentMessages();
+                }
+            };
+            if (finalA == UserConfig.selectedAccount) initRunnable.run();
+            else UIUtil.runOnIoDispatcher(initRunnable);
+        }
+
+        if (ProxyUtil.isVPNEnabled()) {
+
+            if (NekoConfig.disableProxyWhenVpnEnabled) {
+
+                SharedConfig.setProxyEnable(false);
+
             }
-            TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
-            if (user != null) {
-                MessagesController.getInstance(a).putUser(user, true);
-                SendMessagesHelper.getInstance(a).checkUnsentMessages();
-            }
+
         }
 
         ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
+        ExternalGcm.initPlayServices();
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app initied");
         }
 
         MediaController.getInstance();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            ContactsController.getInstance(a).checkAppAccount();
-            DownloadController.getInstance(a);
+            final int finalA = a;
+            Runnable initRunnable = () -> {
+                ContactsController.getInstance(finalA).checkAppAccount();
+                DownloadController.getInstance(finalA);
+            };
+            if (finalA == UserConfig.selectedAccount) initRunnable.run();
+            else UIUtil.runOnIoDispatcher(initRunnable);
         }
     }
 
@@ -169,10 +330,10 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
+
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
-
         }
 
         super.onCreate();
@@ -196,39 +357,62 @@ public class ApplicationLoader extends Application {
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekoX ) " + BuildConfig.VERSION_NAME);
+        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
-        // SET TFOSS USERAGENT FOR OSM SERVERS
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS(F-Droid) "+BuildConfig.VERSION_NAME);
-        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(getCacheDir(),"osmdroid"));
+        startPushService();
 
     }
 
     public static void startPushService() {
+        if (ExternalGcm.checkPlayServices() || (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && isNotificationListenerEnabled())) {
+            return;
+        }
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
         boolean enabled;
         if (preferences.contains("pushService")) {
             enabled = preferences.getBoolean("pushService", true);
+            if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                if (!preferences.getBoolean("pushConnection", true)) return;
+            }
         } else {
-            enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", false);
+            enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", true);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("pushService", enabled);
+            editor.putBoolean("pushConnection", enabled);
+            editor.apply();
+            SharedPreferences preferencesCA = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+            SharedPreferences.Editor editorCA = preferencesCA.edit();
+            editorCA.putBoolean("pushConnection", enabled);
+            editorCA.putBoolean("pushService", enabled);
+            editorCA.apply();
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).setPushConnectionEnabled(true);
         }
         if (enabled) {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && NekoConfig.residentNotification) {
+                Log.d("TFOSS", "Starting push service...");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     applicationContext.startForegroundService(new Intent(applicationContext, NotificationsService.class));
                 } else {
                     applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
                 }
-            } catch (Throwable ignore) {
-
+            } catch (Throwable e) {
+                Log.d("TFOSS", "Failed to start push service");
             }
         } else {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
-
             PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
-            AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
             alarm.cancel(pintent);
         }
+    }
+
+    public static boolean isNotificationListenerEnabled() {
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(applicationContext);
+        if (packageNames.contains(applicationContext.getPackageName())) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -241,7 +425,6 @@ public class ApplicationLoader extends Application {
             e.printStackTrace();
         }
     }
-
 
     private static void ensureCurrentNetworkGet(boolean force) {
         if (force || currentNetworkInfo == null) {

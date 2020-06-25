@@ -123,6 +123,19 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean measurePopup = true;
     private boolean forceSmoothKeyboard;
 
+
+    @Override
+    public boolean isVerticalScrollBarEnabled() {
+        return verticalScrollBarEnabled;
+    }
+
+    @Override
+    public void setVerticalScrollBarEnabled(boolean verticalScrollBarEnabled) {
+        this.verticalScrollBarEnabled = verticalScrollBarEnabled;
+    }
+
+    private boolean verticalScrollBarEnabled;
+
     public ActionBarMenuItem(Context context, ActionBarMenu menu, int backgroundColor, int iconColor) {
         this(context, menu, backgroundColor, iconColor, false);
     }
@@ -149,7 +162,7 @@ public class ActionBarMenuItem extends FrameLayout {
             iconView.setScaleType(ImageView.ScaleType.CENTER);
             addView(iconView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             if (iconColor != 0) {
-                iconView.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.MULTIPLY));
+                iconView.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SRC_IN));
             }
         }
     }
@@ -242,13 +255,13 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setIconColor(int color) {
         if (iconView != null) {
-            iconView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            iconView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         if (textView != null) {
             textView.setTextColor(color);
         }
         if (clearButton != null) {
-            clearButton.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            clearButton.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
     }
 
@@ -270,7 +283,7 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         rect = new Rect();
         location = new int[2];
-        popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
+        popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), verticalScrollBarEnabled);
         popupLayout.setOnTouchListener((v, event) -> {
             if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                 if (popupWindow != null && popupWindow.isShowing()) {
@@ -402,7 +415,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void redrawPopup(int color) {
-        if (popupLayout != null && popupLayout.getBackgroundColor() != color) {
+        if (popupLayout != null) {
             popupLayout.setBackgroundColor(color);
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupLayout.invalidate();
@@ -449,6 +462,26 @@ public class ActionBarMenuItem extends FrameLayout {
     public void setMenuYOffset(int offset) {
         yOffset = offset;
     }
+
+    private View anchor;
+
+    public View getAnchor() {
+        return anchor;
+    }
+
+    public void setAnchor(View anchor) {
+        this.anchor = anchor;
+    }
+
+    public boolean isShowOnTop() {
+        return showOnTop;
+    }
+
+    public void setShowOnTop(boolean showOnTop) {
+        this.showOnTop = showOnTop;
+    }
+
+    private boolean showOnTop;
 
     public void toggleSubMenu() {
         if (popupLayout == null || parentMenu != null && parentMenu.isActionMode && parentMenu.parentActionBar != null && !parentMenu.parentActionBar.isActionModeShowed()) {
@@ -844,7 +877,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             };
             clearButton.setImageDrawable(progressDrawable = new CloseProgressDrawable2());
-            clearButton.setColorFilter(new PorterDuffColorFilter(parentMenu.parentActionBar.itemsColor, PorterDuff.Mode.MULTIPLY));
+            clearButton.setColorFilter(new PorterDuffColorFilter(parentMenu.parentActionBar.itemsColor, PorterDuff.Mode.SRC_IN));
             clearButton.setScaleType(ImageView.ScaleType.CENTER);
             clearButton.setAlpha(0.0f);
             clearButton.setRotation(45);
@@ -946,7 +979,25 @@ public class ActionBarMenuItem extends FrameLayout {
     private void updateOrShowPopup(boolean show, boolean update) {
         int offsetY;
 
-        if (parentMenu != null) {
+        if (anchor != null) {
+            float scaleY = anchor.getScaleY();
+            offsetY = -(int) (anchor.getMeasuredHeight() * scaleY - anchor.getTranslationY() / scaleY) + additionalYOffset;
+            int height = AndroidUtilities.displayMetrics.heightPixels;
+            int[] location = new int[2];
+            anchor.getLocationOnScreen(location);
+            int y = location[1];
+            if (showOnTop) {
+                offsetY -= popupLayout.getMeasuredHeight();
+            } else if (height - y < popupLayout.getMeasuredHeight() + offsetY) {
+                if (height - (height - y) >= popupLayout.getMeasuredHeight()) {
+                    offsetY -= popupLayout.getMeasuredHeight();
+                } else if (popupLayout.getMeasuredHeight() > height) {
+                    offsetY -= scaleY;
+                } else {
+                    offsetY -= popupLayout.getMeasuredHeight() / 2;
+                }
+            }
+        } else if (parentMenu != null) {
             offsetY = -parentMenu.parentActionBar.getMeasuredHeight() + parentMenu.getTop() + parentMenu.getPaddingTop()/* - (int) parentMenu.parentActionBar.getTranslationY()*/;
         } else {
             float scaleY = getScaleY();
@@ -958,7 +1009,33 @@ public class ActionBarMenuItem extends FrameLayout {
             popupLayout.scrollToTop();
         }
 
-        if (parentMenu != null) {
+        if (anchor != null) {
+            if (subMenuOpenSide == 0) {
+                //if (anchor.getParent() != null) {
+                    //View parent = (View) anchor.getParent();
+                    if (show) {
+                        popupWindow.showAsDropDown(anchor, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY);
+                    }
+                    if (update) {
+                        popupWindow.update(anchor, anchor.getLeft() + anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY, -1, -1);
+                    }
+                //}
+            } else if (subMenuOpenSide == 1) {
+                if (show) {
+                    popupWindow.showAsDropDown(anchor, -AndroidUtilities.dp(8) + additionalXOffset, offsetY);
+                }
+                if (update) {
+                    popupWindow.update(anchor, -AndroidUtilities.dp(8) + additionalXOffset, offsetY, -1, -1);
+                }
+            } else {
+                if (show) {
+                    popupWindow.showAsDropDown(anchor, anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY);
+                }
+                if (update) {
+                    popupWindow.update(anchor, anchor.getMeasuredWidth() - popupLayout.getMeasuredWidth() + additionalXOffset, offsetY, -1, -1);
+                }
+            }
+        } else if (parentMenu != null) {
             View parent = parentMenu.parentActionBar;
             if (subMenuOpenSide == 0) {
                 if (SharedConfig.smoothKeyboard) {
