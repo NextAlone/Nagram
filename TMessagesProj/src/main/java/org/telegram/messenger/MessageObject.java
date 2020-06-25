@@ -57,7 +57,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 public class MessageObject {
 
@@ -130,9 +131,6 @@ public class MessageObject {
     public boolean cancelEditing;
 
     public boolean scheduled;
-
-    public boolean translated;
-    public Object originalMessage;
 
     public ArrayList<TLRPC.TL_pollAnswer> checkedVotes;
 
@@ -1671,14 +1669,22 @@ public class MessageObject {
     }
 
     public void applyNewText() {
-        if (TextUtils.isEmpty(messageOwner.message)) {
+
+        if (StrUtil.isBlank(messageOwner.message) || (messageOwner.translated && StrUtil.isBlank(messageOwner.translatedMessage))) {
             return;
         }
+
         TLRPC.User fromUser = null;
         if (isFromUser()) {
             fromUser = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id);
         }
-        messageText = messageOwner.message;
+
+        if (messageOwner.translated) {
+            messageText = messageOwner.translatedMessage;
+        } else {
+            messageText = messageOwner.message;
+        }
+
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
@@ -2388,7 +2394,7 @@ public class MessageObject {
                     if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
                         if (isMissed) {
                             messageText = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);
-                        }else {
+                        } else {
                             messageText = LocaleController.getString("CallMessageOutgoing", R.string.CallMessageOutgoing);
                         }
                     } else {
@@ -2534,7 +2540,7 @@ public class MessageObject {
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) {
                     messageText = messageOwner.media.description;
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported) {
-                    messageText = LocaleController.getString("UnsupportedMedia", R.string.UnsupportedMedia).replace("https://telegram.org/update", "https://play.google.com/store/apps/details?id=tw.nekomimi.nekogram");
+                    messageText = LocaleController.getString("UnsupportedMedia", R.string.UnsupportedMedia).replace("https://telegram.org/update", "https://github.com/NekoX-Dev/NekoX");
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                     if (isSticker() || isAnimatedStickerDocument(getDocument(), true)) {
                         String sch = getStickerChar();
@@ -3186,8 +3192,16 @@ public class MessageObject {
         if (caption != null || isRoundVideo()) {
             return;
         }
-        if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && !TextUtils.isEmpty(messageOwner.message)) {
-            caption = Emoji.replaceEmoji(messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
+        if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && StrUtil.isNotBlank(messageOwner.message) && (!messageOwner.translated || StrUtil.isNotBlank(messageOwner.translatedMessage))) {
+
+            String msg;
+            if (messageOwner.translated) {
+                msg = messageOwner.translatedMessage;
+            } else {
+                msg = messageOwner.message;
+            }
+
+            caption = Emoji.replaceEmoji(msg, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
 
             boolean hasEntities;
             if (messageOwner.send_state != MESSAGE_SEND_STATE_SENT) {
@@ -3222,6 +3236,12 @@ public class MessageObject {
                     }
                 }
                 addUrlsByPattern(isOutOwner(), caption, true, 0, 0, true);
+            }
+
+            try {
+                AndroidUtilities.addProxyLinks((Spannable) caption);
+            } catch (Exception e) {
+                FileLog.e(e);
             }
 
             addEntitiesToText(caption, useManualParse);
@@ -3757,16 +3777,16 @@ public class MessageObject {
 
         boolean useManualParse = !hasEntities && (
                 eventId != 0 ||
-                messageOwner instanceof TLRPC.TL_message_old ||
-                messageOwner instanceof TLRPC.TL_message_old2 ||
-                messageOwner instanceof TLRPC.TL_message_old3 ||
-                messageOwner instanceof TLRPC.TL_message_old4 ||
-                messageOwner instanceof TLRPC.TL_messageForwarded_old ||
-                messageOwner instanceof TLRPC.TL_messageForwarded_old2 ||
-                messageOwner instanceof TLRPC.TL_message_secret ||
-                messageOwner.media instanceof TLRPC.TL_messageMediaInvoice ||
-                isOut() && messageOwner.send_state != MESSAGE_SEND_STATE_SENT ||
-                messageOwner.id < 0 || messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported);
+                        messageOwner instanceof TLRPC.TL_message_old ||
+                        messageOwner instanceof TLRPC.TL_message_old2 ||
+                        messageOwner instanceof TLRPC.TL_message_old3 ||
+                        messageOwner instanceof TLRPC.TL_message_old4 ||
+                        messageOwner instanceof TLRPC.TL_messageForwarded_old ||
+                        messageOwner instanceof TLRPC.TL_messageForwarded_old2 ||
+                        messageOwner instanceof TLRPC.TL_message_secret ||
+                        messageOwner.media instanceof TLRPC.TL_messageMediaInvoice ||
+                        isOut() && messageOwner.send_state != MESSAGE_SEND_STATE_SENT ||
+                        messageOwner.id < 0 || messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported);
 
         if (useManualParse) {
             addLinks(isOutOwner(), messageText, true, true);
@@ -3778,6 +3798,11 @@ public class MessageObject {
                     FileLog.e(e);
                 }
             }
+        }
+        try {
+            AndroidUtilities.addProxyLinks((Spannable) messageText);
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
         if (isYouTubeVideo() || replyMessageObject != null && replyMessageObject.isYouTubeVideo()) {
             addUrlsByPattern(isOutOwner(), messageText, false, 3, Integer.MAX_VALUE, false);
@@ -4129,7 +4154,7 @@ public class MessageObject {
     }
 
     public static boolean shouldEncryptPhotoOrVideo(TLRPC.Message message) {
-        if (NekoConfig.shouldNOTTrustMe) {
+        if (NekoXConfig.disableFlagSecure) {
             return false;
         }
         if (message instanceof TLRPC.TL_message_secret) {
@@ -4144,7 +4169,7 @@ public class MessageObject {
     }
 
     public static boolean isSecretPhotoOrVideo(TLRPC.Message message) {
-        if (NekoConfig.shouldNOTTrustMe) {
+        if (NekoXConfig.disableFlagSecure) {
             return false;
         }
         if (message instanceof TLRPC.TL_message_secret) {
@@ -4156,7 +4181,7 @@ public class MessageObject {
     }
 
     public static boolean isSecretMedia(TLRPC.Message message) {
-        if (NekoConfig.shouldNOTTrustMe) {
+        if (NekoXConfig.disableFlagSecure) {
             return false;
         }
         if (message instanceof TLRPC.TL_message_secret) {
@@ -4168,7 +4193,7 @@ public class MessageObject {
     }
 
     public boolean needDrawBluredPreview() {
-        if (NekoConfig.shouldNOTTrustMe) {
+        if (NekoXConfig.disableFlagSecure) {
             return false;
         }
         if (messageOwner instanceof TLRPC.TL_message_secret) {
@@ -4181,7 +4206,7 @@ public class MessageObject {
     }
 
     public boolean isSecretMedia() {
-        if (NekoConfig.shouldNOTTrustMe) {
+        if (NekoXConfig.disableFlagSecure) {
             return false;
         }
         if (messageOwner instanceof TLRPC.TL_message_secret) {
@@ -4661,7 +4686,7 @@ public class MessageObject {
             }
             if (photoHeight > maxHeight) {
                 photoWidth *= maxHeight / photoHeight;
-                photoHeight = (int)maxHeight;
+                photoHeight = (int) maxHeight;
             }
             if (photoWidth > maxWidth) {
                 photoHeight *= maxWidth / photoWidth;
@@ -5065,7 +5090,7 @@ public class MessageObject {
     }
 
     public boolean canForwardMessage() {
-        return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16;
+        return NekoXConfig.disableFlagSecure || !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16;
     }
 
     public boolean canEditMedia() {

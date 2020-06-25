@@ -125,14 +125,16 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.SecretMediaViewer;
 
-import tw.nekomimi.nekogram.NekoConfig;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView {
 
@@ -1655,27 +1657,37 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 }
                             }
                         });
-                        builder.show();
+                        // nekox change: avoid BTE
+                        try {
+                            builder.show();
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("CopyDetails", R.string.CopyDetails)}, (dialogInterface, i) -> {
                             if (i == 0) {
                                 try {
                                     AndroidUtilities.addToClipboard(button.button.text);
-                                    Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                    AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                                 } catch (Exception e) {
                                     FileLog.e(e);
                                 }
                             } else if (i == 1) {
                                 try {
                                     AndroidUtilities.addToClipboard(gson.toJson(button.button));
-                                    Toast.makeText(getContext(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                    AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                                 } catch (Exception e) {
                                     FileLog.e(e);
                                 }
                             }
                         });
-                        builder.show();
+                        // nekox change: avoid BTE
+                        try {
+                            builder.show();
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     }
                 }
                 pressedBotButton = -1;
@@ -2523,7 +2535,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
         if (messageObjectToSet != null) {
@@ -2586,6 +2598,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
+    private boolean lastTranslated;
+
     private void setMessageContent(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
         if (messageObject.checkLayout() || currentPosition != null && lastHeight != AndroidUtilities.displaySize.y) {
             currentMessageObject = null;
@@ -2641,7 +2655,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             groupChanged = newPosition != currentPosition;
         }
-        if (messageChanged || dataChanged || groupChanged || pollChanged || isPhotoDataChanged(messageObject) || pinnedBottom != bottomNear || pinnedTop != topNear) {
+        boolean transChanged = false;
+        if (lastTranslated != messageObject.messageOwner.translated) {
+            lastTranslated = messageObject.messageOwner.translated;
+            transChanged = true;
+        }
+        if (messageChanged || dataChanged || groupChanged || pollChanged || isPhotoDataChanged(messageObject) || pinnedBottom != bottomNear || pinnedTop != topNear || transChanged) {
             pinnedBottom = bottomNear;
             pinnedTop = topNear;
             currentMessageObject = messageObject;
@@ -3859,7 +3878,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (pollVoted) {
                     messageObject.checkedVotes.clear();
                 }
-                titleLayout = new StaticLayout(Emoji.replaceEmoji(media.poll.question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.dp(2) - getExtraTextX() * 2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+                String question;
+
+                if (messageObject.messageOwner.translated) {
+                    question = media.poll.translatedQuestion;
+                    if (question == null) {
+                        messageObject.messageOwner.translated = false;
+                        question = media.poll.question;
+                    }
+                } else {
+                    question = media.poll.question;
+                }
+
+                titleLayout = new StaticLayout(Emoji.replaceEmoji(question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.dp(2) - getExtraTextX() * 2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 boolean titleRtl = false;
                 if (titleLayout != null) {
                     for (int a = 0, N = titleLayout.getLineCount(); a < N; a++) {
@@ -3995,7 +4027,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 for (int a = 0, N = media.poll.answers.size(); a < N; a++) {
                     PollButton button = new PollButton();
                     button.answer = media.poll.answers.get(a);
-                    button.title = new StaticLayout(Emoji.replaceEmoji(button.answer.text, Theme.chat_audioPerformerPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false), Theme.chat_audioPerformerPaint, maxWidth - AndroidUtilities.dp(33), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+                    String answerText;
+                    if (messageObject.messageOwner.translated) {
+                        answerText = button.answer.translatedText;
+                    } else {
+                        answerText = button.answer.text;
+                    }
+
+                    button.title = new StaticLayout(Emoji.replaceEmoji(answerText, Theme.chat_audioPerformerPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false), Theme.chat_audioPerformerPaint, maxWidth - AndroidUtilities.dp(33), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     button.y = height + AndroidUtilities.dp(52);
                     button.height = button.title.getHeight();
                     pollButtons.add(button);
@@ -8262,8 +8302,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeString = "";
         } else if (edited) {
             timeString = LocaleController.getString("EditedMessage", R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
-        } else {
+        } else if (LocaleController.getInstance().formatterDay != null && LocaleController.getInstance().formatterYear != null) {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
+        } else {
+            timeString = messageObject.messageOwner.date + "";
         }
         if (signString != null) {
             currentTimeString = ", " + timeString;

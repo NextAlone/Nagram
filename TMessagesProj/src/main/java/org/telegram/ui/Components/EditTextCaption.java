@@ -32,6 +32,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -39,6 +40,14 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
+
+import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class EditTextCaption extends EditTextBoldCursor {
 
@@ -57,6 +66,8 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public interface EditTextCaptionDelegate {
         void onSpansChanged();
+
+        int getCurrentChat();
     }
 
     public EditTextCaption(Context context) {
@@ -112,6 +123,69 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TextStyleSpan(run));
     }
 
+    private String replaceAt(String origin, int start, int end, String translation) {
+
+        String trans = origin.substring(0, start);
+
+        trans += translation;
+
+        trans += origin.substring(end);
+
+        return trans;
+
+    }
+
+    public void makeSelectedTranslate() {
+
+        int start = getSelectionStart();
+        int end = getSelectionEnd();
+
+        String origin = getText().toString();
+        String text = getText().subSequence(start, end).toString();
+
+        if (StrUtil.isBlank(origin)) return;
+
+        TranslateDb db = TranslateDb.currentInputTarget();
+
+        if (db.contains(text)) {
+
+            setText(replaceAt(origin, start, end, TranslateDb.currentInputTarget().query(text)));
+
+        } else {
+
+            if (NekoConfig.translationProvider < 0) {
+                TranslateBottomSheet.show(getContext(), text);
+            } else {
+
+                Translator.translate(TranslateDb.getChatLanguage(delegate.getCurrentChat(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)), text, new Translator.Companion.TranslateCallBack() {
+
+                    AlertDialog status = AlertUtil.showProgress(getContext());
+
+                    {
+                        status.show();
+                    }
+
+                    @Override public void onSuccess(@NotNull String translation) {
+                        status.dismiss();
+                        setText(replaceAt(origin, start, end, translation));
+                    }
+
+                    @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                        status.dismiss();
+                        AlertUtil.showTransFailedDialog(getContext(), unsupported, message, () -> {
+                            status = AlertUtil.showProgress(getContext());
+                            status.show();
+                            Translator.translate(text, this);
+                        });
+                    }
+
+                });
+
+            }
+
+        }
+
+    }
 
     public void makeSelectedMention() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -355,11 +429,14 @@ public class EditTextCaption extends EditTextBoldCursor {
                     makeSelectedUnderline();
                     mode.finish();
                     return true;
+                } else if (item.getItemId() == R.id.menu_translate) {
+                    makeSelectedTranslate();
+                    mode.finish();
+                    return true;
                 }
                 try {
                     return callback.onActionItemClicked(mode, item);
                 } catch (Exception ignore) {
-
                 }
                 return true;
             }

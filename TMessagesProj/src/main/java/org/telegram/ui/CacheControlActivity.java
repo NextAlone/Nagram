@@ -34,6 +34,7 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -66,6 +67,12 @@ import org.telegram.ui.Components.UndoView;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.utils.EnvUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class CacheControlActivity extends BaseFragment {
 
@@ -128,6 +135,10 @@ public class CacheControlActivity extends BaseFragment {
 
         Utilities.globalQueue.postRunnable(() -> {
             cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), 0);
+
+            cacheSize += getDirectorySize(new File(ApplicationLoader.getDataDirFixed(), "cache"), 0);
+            cacheSize += getDirectorySize(ApplicationLoader.applicationContext.getExternalFilesDir("logs"), 0);
+
             if (canceled) {
                 return;
             }
@@ -194,12 +205,12 @@ public class CacheControlActivity extends BaseFragment {
         View view = layoutManager.findViewByPosition(storageUsageRow);
         if (view instanceof StroageUsageView) {
             StroageUsageView stroageUsageView = ((StroageUsageView) view);
-            long currentTime =  System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && currentTime - fragmentCreateTime > 250) {
                 TransitionSet transition = new TransitionSet();
                 ChangeBounds changeBounds = new ChangeBounds();
                 changeBounds.setDuration(250);
-                changeBounds.excludeTarget(stroageUsageView.legendLayout,true);
+                changeBounds.excludeTarget(stroageUsageView.legendLayout, true);
                 Fade in = new Fade(Fade.IN);
                 in.setDuration(290);
                 transition
@@ -291,6 +302,31 @@ public class CacheControlActivity extends BaseFragment {
                 if (type == FileLoader.MEDIA_DIR_CACHE) {
                     cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), documentsMusicType);
                     imagesCleared = true;
+
+                    try {
+
+                        FileUtil.delete(new File(ApplicationLoader.getDataDirFixed(), "cache"));
+
+                    } catch (Exception ignored) {
+                    }
+
+                    try {
+
+                        FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"));
+
+                    } catch (Exception ignored) {
+                    }
+
+                    try {
+
+                        // :)
+
+                        FileUtil.delete(ApplicationLoader.applicationContext.getExternalFilesDir("Telegram"));
+                        FileUtil.delete(Environment.getExternalStoragePublicDirectory("Telegram"));
+
+                    } catch (Exception ignored) {
+                    }
+
                 } else if (type == FileLoader.MEDIA_DIR_AUDIO) {
                     audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), documentsMusicType);
                 } else if (type == FileLoader.MEDIA_DIR_DOCUMENT) {
@@ -504,13 +540,11 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     private void clearDatabase() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle));
-        builder.setMessage(LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        builder.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), (dialogInterface, i) -> {
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+        builder.addTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle), LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
+        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear),R.drawable.baseline_delete_sweep_24, true, (i) -> {
             if (getParentActivity() == null) {
-                return;
+                return Unit.INSTANCE;
             }
             final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
             progressDialog.setCanCacnel(false);
@@ -591,6 +625,9 @@ public class CacheControlActivity extends BaseFragment {
                     database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
                     database.executeFast("VACUUM").stepThis().dispose();
                     database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
+
+                    TranslateDb.clearAll();
+
                 } catch (Exception e) {
                     FileLog.e(e);
                 } finally {
@@ -607,13 +644,10 @@ public class CacheControlActivity extends BaseFragment {
                     });
                 }
             });
+            return Unit.INSTANCE;
         });
-        AlertDialog alertDialog = builder.create();
-        showDialog(alertDialog);
-        TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        if (button != null) {
-            button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
-        }
+        builder.addCancelItem();
+        builder.show();
     }
 
     @Override

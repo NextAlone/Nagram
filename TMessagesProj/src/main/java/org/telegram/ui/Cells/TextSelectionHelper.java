@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
@@ -41,6 +43,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
@@ -50,9 +53,14 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.MessageHelper;
-import static com.google.zxing.common.detector.MathUtils.distance;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
+import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
+import static com.google.zxing.common.detector.MathUtils.distance;
 import static org.telegram.ui.ActionBar.FloatingToolbar.STYLE_THEME;
 import static org.telegram.ui.ActionBar.Theme.key_chat_inTextSelectionHighlight;
 
@@ -1216,9 +1224,9 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
         final ActionMode.Callback callback = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                menu.add(Menu.NONE, android.R.id.copy, 0, android.R.string.copy);
-                menu.add(Menu.NONE, android.R.id.selectAll, 1, android.R.string.selectAll);
-                menu.add(Menu.NONE, R.id.menu_translate, 2, R.string.Translate);
+                menu.add(Menu.NONE, 0, 0, android.R.string.copy);
+                menu.add(Menu.NONE, 1, 1, android.R.string.selectAll);
+                menu.add(Menu.NONE, 2, 2, R.string.Translate);
                 return true;
             }
 
@@ -1231,6 +1239,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     } else {
                         menu.getItem(1).setVisible(true);
                     }
+                    menu.getItem(2).setVisible(selectedView instanceof View);
                 }
                 return true;
             }
@@ -1241,10 +1250,10 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     return true;
                 }
                 switch (item.getItemId()) {
-                    case android.R.id.copy:
+                    case 0:
                         copyText();
                         return true;
-                    case android.R.id.selectAll:
+                    case 1: {
                         CharSequence text = getText(selectedView, false);
                         if (text == null) {
                             return true;
@@ -1255,19 +1264,38 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         invalidate();
                         showActions();
                         return true;
-                    case R.id.menu_translate:
-                        if (!isSelectionMode()) {
+                    }
+                    case 2:
+                        CharSequence textS = getTextForCopy();
+                        if (textS == null) {
                             return true;
                         }
-                        CharSequence str = getTextForCopy();
-                        if (str == null) {
-                            return true;
-                        }
-                        MessageHelper.showTranslateDialog(textSelectionOverlay.getContext(), str.toString());
-                        hideActions();
-                        clear(true);
-                        if (TextSelectionHelper.this.callback != null) {
-                            TextSelectionHelper.this.callback.onTextCopied();
+                        String urlFinal = textS.toString();
+                        Activity activity = ProxyUtil.getOwnerActivity((((View) selectedView).getContext()));
+                        if (NekoConfig.translationProvider < 0) {
+                            TranslateBottomSheet.show(activity, urlFinal);
+                        } else {
+                            TranslateDb db = TranslateDb.currentTarget();
+                            if (db.contains(urlFinal)) {
+                                AlertUtil.showCopyAlert(activity, db.query(urlFinal));
+                            } else {
+                                AlertDialog pro = AlertUtil.showProgress(activity);
+                                pro.show();
+                                Translator.translate(urlFinal, new Translator.Companion.TranslateCallBack() {
+                                    @Override public void onSuccess(@NotNull String translation) {
+                                        pro.dismiss();
+                                        AlertUtil.showCopyAlert(activity, translation);
+                                    }
+
+                                    @Override public void onFailed(boolean unsupported, @NotNull String message) {
+                                        pro.dismiss();
+                                        AlertUtil.showTransFailedDialog(activity, unsupported, message, () -> {
+                                            pro.show();
+                                            Translator.translate(urlFinal, this);
+                                        });
+                                    }
+                                });
+                            }
                         }
                     default:
                         clear();
