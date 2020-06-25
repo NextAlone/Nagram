@@ -156,12 +156,15 @@ public class LinkifyPort {
     private static final String DOMAIN_NAME_STR = "(" + HOST_NAME + "|" + IP_ADDRESS_STRING + ")";
     private static final Pattern DOMAIN_NAME = Pattern.compile(DOMAIN_NAME_STR);
     private static final String PROTOCOL = "(?i:http|https|ton|tg)://";
+    private static final String PROXY_PROTOCOL = "(?i:vmess|vmess1|ss|ssr|rb)://";
     private static final String WORD_BOUNDARY = "(?:\\b|$|^)";
     private static final String USER_INFO = "(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
             + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
             + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@";
     private static final String PORT_NUMBER = "\\:\\d{1,5}";
     private static final String PATH_AND_QUERY = "[/\\?](?:(?:[" + LABEL_CHAR + ";/\\?:@&=#~" + "\\-\\.\\+!\\*'\\(\\),_\\$])|(?:%[a-fA-F0-9]{2}))*";
+    private static final String BASE64 = "(?:[A-Za-z0-9+\\/]{4}\\\\n?)*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)";
+    private static final String PATH_AND_QUERY_BASE64 = "[/\\?]?(?:(?:[" + LABEL_CHAR + ";/\\?:@&=#~" + "\\-\\.\\+!\\*'\\(\\),_\\$])|(?:%[a-fA-F0-9]{2})|" + BASE64 + ")*";
     private static final String RELAXED_DOMAIN_NAME = "(?:" + "(?:" + IRI_LABEL + "(?:\\.(?=\\S))" + "?)+" + "|" + IP_ADDRESS_STRING + ")";
 
     private static final String WEB_URL_WITHOUT_PROTOCOL = "("
@@ -185,7 +188,20 @@ public class LinkifyPort {
             + "(?:" + PATH_AND_QUERY + ")?"
             + WORD_BOUNDARY
             + ")";
+
+    private static final String PROXY_URL = "("
+            + WORD_BOUNDARY
+            + "(?:"
+            + "(?:" + PROXY_PROTOCOL + "(?:" + USER_INFO + ")?" + ")"
+            + "(?:" + RELAXED_DOMAIN_NAME + ")?"
+            + "(?:" + PORT_NUMBER + ")?"
+            + ")"
+            + "(?:" + PATH_AND_QUERY_BASE64 + ")?"
+            + WORD_BOUNDARY
+            + ")";
+
     public static Pattern WEB_URL = null;
+    public static Pattern PROXY_PATTERN = Pattern.compile(PROXY_URL);
 
     static {
         try {

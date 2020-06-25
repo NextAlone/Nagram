@@ -64,7 +64,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 
 public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLayout {
 
@@ -108,6 +108,12 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     private int maxSelectedFiles = -1;
     private boolean canSelectOnlyImageFiles;
     private boolean allowMusic;
+
+    public void setAllowPhoto(boolean allowPhoto) {
+        this.allowPhoto = allowPhoto;
+    }
+
+    private boolean allowPhoto = true;
 
     private boolean searching;
 
@@ -222,7 +228,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
         emptyImageView = new ImageView(context);
         emptyImageView.setImageResource(R.drawable.files_empty);
-        emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogEmptyImage), PorterDuff.Mode.MULTIPLY));
+        emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogEmptyImage), PorterDuff.Mode.SRC_IN));
         emptyView.addView(emptyImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
         emptyTitleTextView = new TextView(context);
@@ -969,12 +975,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
         ListItem fs;
         try {
-            File telegramPath;
-            if (NekoConfig.saveCacheToPrivateDirectory) {
-                telegramPath = new File(ApplicationLoader.applicationContext.getFilesDir(), "Telegram");
-            } else {
-                telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
-            }
+            File telegramPath = EnvUtil.getTelegramPath();
             if (telegramPath.exists()) {
                 fs = new ListItem();
                 fs.title = "Telegram";
@@ -987,12 +988,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             FileLog.e(e);
         }
 
-        fs = new ListItem();
-        fs.title = LocaleController.getString("Gallery", R.string.Gallery);
-        fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
-        fs.icon = R.drawable.files_gallery;
-        fs.file = null;
-        items.add(fs);
+        if (allowPhoto) {
+
+            fs = new ListItem();
+            fs.title = LocaleController.getString("Gallery", R.string.Gallery);
+            fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
+            fs.icon = R.drawable.files_gallery;
+            fs.file = null;
+            items.add(fs);
+
+        }
 
         if (allowMusic) {
             fs = new ListItem();
