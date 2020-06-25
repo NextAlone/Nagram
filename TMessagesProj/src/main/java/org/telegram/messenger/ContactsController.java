@@ -175,7 +175,7 @@ public class ContactsController extends BaseController {
     public HashMap<String, TLRPC.TL_contact> contactsByShortPhone = new HashMap<>();
 
     private int completedRequestsCount;
-    
+
     private static volatile ContactsController[] Instance = new ContactsController[UserConfig.MAX_ACCOUNT_COUNT];
     public static ContactsController getInstance(int num) {
         ContactsController localInstance = Instance[num];
@@ -313,7 +313,7 @@ public class ContactsController extends BaseController {
     public void checkAppAccount() {
         AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
         try {
-            Account[] accounts = am.getAccountsByType("tw.nekomimi.nekogram");
+            Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
             systemAccount = null;
             for (int a = 0; a < accounts.length; a++) {
                 Account acc = accounts[a];
@@ -321,7 +321,7 @@ public class ContactsController extends BaseController {
                 for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
                     TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
                     if (user != null) {
-                        if (acc.name.equals("" + user.id)) {
+                        if (acc.name.equals(formatName(user.first_name, user.last_name))) {
                             if (b == currentAccount) {
                                 systemAccount = acc;
                             }
@@ -330,26 +330,26 @@ public class ContactsController extends BaseController {
                         }
                     }
                 }
-                if (!found) {
+                if (!found || NekoConfig.disableSystemAccount) {
                     try {
                         am.removeAccount(accounts[a], null, null);
                     } catch (Exception ignore) {
-
                     }
                 }
 
             }
-        } catch (Throwable ignore) {
-
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
         if (getUserConfig().isClientActivated()) {
             readContacts();
-            if (systemAccount == null) {
+            if (systemAccount == null && !NekoConfig.disableSystemAccount) {
                 try {
-                    systemAccount = new Account("" + UserConfig.getInstance(currentAccount).getClientUserId(), "tw.nekomimi.nekogram");
+                    TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+                    systemAccount = new Account(formatName(user.first_name, user.last_name), BuildConfig.APPLICATION_ID);
                     am.addAccountExplicitly(systemAccount, "", null);
-                } catch (Exception ignore) {
-
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
             }
         }
@@ -359,24 +359,32 @@ public class ContactsController extends BaseController {
         try {
             systemAccount = null;
             AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
-            Account[] accounts = am.getAccountsByType("tw.nekomimi.nekogram");
+            Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
             for (int a = 0; a < accounts.length; a++) {
                 Account acc = accounts[a];
-                boolean found = false;
-                for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
-                    TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
-                    if (user != null) {
-                        if (acc.name.equals("" + user.id)) {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (!found) {
+                if (NekoConfig.disableSystemAccount) {
                     try {
                         am.removeAccount(accounts[a], null, null);
                     } catch (Exception ignore) {
 
+                    }
+                } else {
+                    boolean found = false;
+                    for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
+                        TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
+                        if (user != null) {
+                            if (acc.name.equals(formatName(user.first_name, user.last_name))) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        try {
+                            am.removeAccount(accounts[a], null, null);
+                        } catch (Exception ignore) {
+
+                        }
                     }
                 }
             }
@@ -435,7 +443,7 @@ public class ContactsController extends BaseController {
                 AndroidUtilities.runOnUIThread(() -> {
                     AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
                     try {
-                        Account[] accounts = am.getAccountsByType("tw.nekomimi.nekogram");
+                        Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
                         systemAccount = null;
                         for (int a = 0; a < accounts.length; a++) {
                             Account acc = accounts[a];
@@ -453,7 +461,7 @@ public class ContactsController extends BaseController {
 
                     }
                     try {
-                        systemAccount = new Account("" + UserConfig.getInstance(currentAccount).getClientUserId(), "tw.nekomimi.nekogram");
+                        systemAccount = new Account("" + UserConfig.getInstance(currentAccount).getClientUserId(), BuildConfig.APPLICATION_ID);
                         am.addAccountExplicitly(systemAccount, "", null);
                     } catch (Exception ignore) {
 
@@ -1600,7 +1608,7 @@ public class ContactsController extends BaseController {
     private void saveContactsLoadTime() {
         try {
             SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-            preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).commit();
+            preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).apply();
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -2246,7 +2254,7 @@ public class ContactsController extends BaseController {
         getMessagesController().clearFullUsers();
         SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
         final SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("needGetStatuses", true).commit();
+        editor.putBoolean("needGetStatuses", true).apply();
         TLRPC.TL_contacts_getStatuses req = new TLRPC.TL_contacts_getStatuses();
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {

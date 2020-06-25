@@ -8,11 +8,15 @@
 
 package org.telegram.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -24,14 +28,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.LongSparseArray;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
+
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -60,24 +80,30 @@ import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.TrendingStickersLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.collection.LongSparseArray;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListUpdateCallback;
-import androidx.recyclerview.widget.RecyclerView;
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.StickersUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class StickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private static final int MENU_ARCHIVE = 0;
     private static final int MENU_DELETE = 1;
+    private static final int MENU_EXPORT = 5;
+
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
@@ -88,6 +114,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private NumberTextView selectedCountTextView;
     private TrendingStickersAlert trendingStickersAlert;
 
+    private ActionBarMenuItem exportMenuItem;
     private ActionBarMenuItem archiveMenuItem;
     private ActionBarMenuItem deleteMenuItem;
 
@@ -166,6 +193,13 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         currentType = type;
     }
 
+    private File stickersFile;
+
+    public StickersActivity(File stickersFile) {
+        this(MediaDataController.TYPE_IMAGE);
+        this.stickersFile = stickersFile;
+    }
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -189,6 +223,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
     }
 
+    private int menu_other = 2;
+    private int menu_export = 3;
+    private int menu_import = 4;
+
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonDrawable(new BackDrawable(false));
@@ -205,7 +243,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     if (onBackPressed()) {
                         finishFragment();
                     }
-                } else if (id == MENU_ARCHIVE || id == MENU_DELETE) {
+                } else if (id == MENU_EXPORT || id == MENU_ARCHIVE || id == MENU_DELETE) {
                     if (!needReorder) {
                         if (activeReorderingRequests == 0) {
                             listAdapter.processSelectionMenu(id);
@@ -213,10 +251,45 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     } else {
                         sendReorder();
                     }
+                } else if (id == menu_export) {
+                    exportStickers();
+                } else if (id == menu_import) {
+                    try {
+                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                            return;
+                        }
+                    } catch (Throwable ignore) {
+                    }
+                    DocumentSelectActivity fragment = new DocumentSelectActivity(false);
+                    fragment.setMaxSelectedFiles(1);
+                    fragment.setAllowPhoto(false);
+                    fragment.setDelegate(new DocumentSelectActivity.DocumentSelectActivityDelegate() {
+                        @Override
+                        public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
+                            activity.finishFragment();
+                            processStickersFile(new File(files.get(0)), false);
+                        }
+
+                        @Override
+                        public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) {
+                        }
+
+                        @Override
+                        public void startDocumentSelectActivity() {
+                        }
+                    });
+                    presentFragment(fragment);
                 }
             }
         });
 
+        ActionBarMenu menu = actionBar.createMenu();
+
+        ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
+
+        otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
+        otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString("ImportStickers", R.string.ImportStickers));
 
         final ActionBarMenu actionMode = actionBar.createActionMode();
         selectedCountTextView = new NumberTextView(actionMode.getContext());
@@ -226,8 +299,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         actionMode.addView(selectedCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
-        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, AndroidUtilities.dp(54));
-        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, AndroidUtilities.dp(54));
+        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.baseline_file_download_24, AndroidUtilities.dp(54));
+        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.baseline_archive_24, AndroidUtilities.dp(54));
+        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.baseline_delete_24, AndroidUtilities.dp(54));
 
         listAdapter = new ListAdapter(context, MediaDataController.getInstance(currentAccount).getStickerSets(currentType));
 
@@ -333,10 +407,175 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         });
 
+        if (stickersFile != null) {
+
+            processStickersFile(stickersFile, true);
+            stickersFile = null;
+
+        }
+
         return fragmentView;
     }
 
+    public void processStickersFile(File file, boolean exitOnFail) {
 
+        if (!file.isFile() || !file.getName().endsWith("nekox-stickers.json")) {
+
+            showError("not a stickers file", exitOnFail);
+
+            return;
+
+        } else if (file.length() > 3 * 1024 * 1024L) {
+
+            showError("file too large", exitOnFail);
+
+            return;
+
+        }
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), 1);
+        pro.show();
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            JsonObject stickerObj = new Gson().fromJson(FileUtil.readUtf8String(file), JsonObject.class);
+
+            StickersUtil.importStickers(stickerObj, this, pro);
+
+            UIUtil.runOnUIThread(() -> {
+
+                pro.dismiss();
+
+                MediaDataController.getInstance(currentAccount).checkStickers(currentType);
+                updateRows();
+
+            });
+
+        });
+
+
+    }
+
+    private void showError(String msg, boolean exitOnFail) {
+
+        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidStickersFile", R.string.InvalidStickersFile) + msg, (__) -> {
+
+            if (exitOnFail) finishFragment();
+
+            return Unit.INSTANCE;
+
+        });
+
+    }
+
+    public void exportStickers() {
+
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+        builder.addTitle(LocaleController.getString("", R.string.ExportStickers), true);
+
+        AtomicBoolean exportSets = new AtomicBoolean(true);
+        AtomicBoolean exportArchived = new AtomicBoolean(true);
+
+        final AtomicReference<TextView> exportButton = new AtomicReference<>();
+
+        builder.addCheckItems(new String[]{
+                LocaleController.getString("StickerSets", R.string.StickerSets),
+                LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers)
+        }, (__) -> true, false, (index, text, cell) -> {
+
+            boolean export;
+
+            switch (index) {
+
+                case 0: {
+
+                    export = exportSets.get();
+                    exportSets.set(export = !export);
+
+                }
+                break;
+
+                default: {
+
+                    export = exportArchived.get();
+                    exportArchived.set(export = !export);
+
+                }
+                break;
+
+            }
+
+            cell.setChecked(export);
+
+            if (!exportSets.get() && !exportArchived.get()) {
+
+                exportButton.get().setEnabled(false);
+
+            } else {
+
+                exportButton.get().setEnabled(true);
+
+            }
+
+            return Unit.INSTANCE;
+
+        });
+
+        builder.addCancelButton();
+
+        exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
+
+            builder.dismiss();
+
+            exportStickersFinal(exportSets.get(), exportArchived.get());
+
+            return Unit.INSTANCE;
+
+        }));
+
+        builder.show();
+
+    }
+
+    public void exportStickersFinal(boolean exportSets, boolean exportArchived) {
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), 3);
+
+        pro.setCanCacnel(false);
+
+        pro.show();
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            Activity ctx = getParentActivity();
+
+            JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived);
+
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-stickers.json");
+
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter jsonWriter = new JsonWriter(stringWriter);
+            jsonWriter.setLenient(true);
+            jsonWriter.setIndent("    ");
+            try {
+                Streams.write(exportObj, jsonWriter);
+            } catch (IOException e) {
+            }
+
+            FileUtil.writeUtf8String(stringWriter.toString(), cacheFile);
+
+            UIUtil.runOnUIThread(() -> {
+
+                pro.dismiss();
+
+                ShareUtil.shareFile(ctx, cacheFile);
+
+            });
+
+        });
+
+    }
 
     @Override
     public boolean onBackPressed() {
@@ -558,7 +797,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         private void processSelectionMenu(int which) {
-            if (which == MENU_ARCHIVE || which == MENU_DELETE) {
+            if (which == MENU_EXPORT || which == MENU_ARCHIVE || which == MENU_DELETE) {
                 final ArrayList<TLRPC.StickerSet> stickerSetList = new ArrayList<>(selectedItems.size());
 
                 for (int i = 0, size = stickerSets.size(); i < size; i++) {
@@ -566,6 +805,38 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     if (selectedItems.get(stickerSet.id, false)) {
                         stickerSetList.add(stickerSet);
                     }
+                }
+
+                if (which == MENU_EXPORT) {
+
+                    AlertDialog pro = new AlertDialog(getParentActivity(), 3);
+                    pro.setCanCacnel(false);
+                    pro.show();
+
+                    UIUtil.runOnIoDispatcher(() -> {
+
+                        JsonObject exportObj = StickersUtil.exportStickers(stickerSetList);
+
+                        File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-stickers.json");
+
+                        StringWriter stringWriter = new StringWriter();
+                        JsonWriter jsonWriter = new JsonWriter(stringWriter);
+                        jsonWriter.setLenient(true);
+                        jsonWriter.setIndent("    ");
+                        try {
+                            Streams.write(exportObj, jsonWriter);
+                        } catch (IOException e) {
+                        }
+
+                        FileUtil.writeUtf8String(stringWriter.toString(), cacheFile);
+
+                        UIUtil.runOnUIThread(() -> {
+                            pro.dismiss();
+                            ShareUtil.shareFile(getParentActivity(), cacheFile);
+                        });
+
+                    });
+
                 }
 
                 final int count = stickerSetList.size();
@@ -785,7 +1056,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                     LocaleController.getString("StickersHide", R.string.StickersHide),
                                     LocaleController.getString("StickersReorder", R.string.StickersReorder)
                             };
-                            icons = new int[]{R.drawable.msg_archive, R.drawable.msg_reorder};
+                            icons = new int[]{R.drawable.baseline_archive_24, R.drawable.msg_reorder};
                         } else {
                             options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE};
                             items = new CharSequence[]{
@@ -796,11 +1067,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                     LocaleController.getString("StickersRemove", R.string.StickersRemove),
                             };
                             icons = new int[]{
-                                    R.drawable.msg_archive,
-                                    R.drawable.msg_link,
+                                    R.drawable.baseline_archive_24,
+                                    R.drawable.baseline_link_24,
                                     R.drawable.msg_reorder,
-                                    R.drawable.msg_share,
-                                    R.drawable.msg_delete
+                                    R.drawable.baseline_forward_24,
+                                    R.drawable.baseline_delete_24
                             };
                         }
                         builder.setItems(items, icons, (dialog, which) -> processSelectionOption(options[which], stickerSet));

@@ -14,6 +14,8 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import androidx.annotation.UiThread;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
@@ -37,7 +39,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
-import androidx.annotation.UiThread;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class MessagesStorage extends BaseController {
 
@@ -1874,6 +1876,9 @@ public class MessagesStorage extends BaseController {
                         continue;
                     }
                     flags = filter.flags;
+                    if (NekoConfig.ignoreMutedCount && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                        flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
+                    }
                 } else {
                     filter = null;
                     flags = MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS;
@@ -3897,6 +3902,9 @@ public class MessagesStorage extends BaseController {
                 }
                 unreadCount = filter.pendingUnreadCount;
                 flags = filter.flags;
+                if (NekoConfig.ignoreMutedCount && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                    flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
+                }
             } else {
                 filter = null;
                 flags = MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS;
