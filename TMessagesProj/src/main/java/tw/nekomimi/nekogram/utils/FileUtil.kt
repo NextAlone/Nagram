@@ -137,7 +137,11 @@ object FileUtil {
 
         if (libDirs.size == 1) libDirs[0] else {
 
-            Build.CPU_ABI.toLowerCase()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Build.SUPPORTED_ABIS[0]
+            } else {
+                Build.CPU_ABI
+            }.toLowerCase()
 
         }.also {
 
