@@ -160,8 +160,9 @@ public class DrawerProfileCell extends FrameLayout {
             shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
+        phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
+
         if (useAdb() || useImageBackground) {
-            phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             if (shadowView.getVisibility() != VISIBLE) {
                 shadowView.setVisibility(VISIBLE);
             }
@@ -190,7 +191,6 @@ public class DrawerProfileCell extends FrameLayout {
             if (shadowView.getVisibility() != visibility) {
                 shadowView.setVisibility(visibility);
             }
-            phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
             super.onDraw(canvas);
         }
 

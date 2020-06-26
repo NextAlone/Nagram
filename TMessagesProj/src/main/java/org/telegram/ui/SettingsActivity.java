@@ -118,6 +118,7 @@ import java.util.Set;
 
 import cn.hutool.core.util.RuntimeUtil;
 import kotlin.Unit;
+import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -519,10 +520,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         NekoXConfig.developerModeEntrance = true;
                     }
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
-                    builder.addTitle(cell.getTextView().getText().toString(), false);
+                    String message = cell.getTextView().getText().toString();
+                    try {
+                        if (!BuildVars.isMini) {
+                            message += "\n" + Libv2ray.checkVersionX();
+                        }
+                    } catch (Exception ignored) {}
+                    builder.addTitle(message);
+                    String finalMessage = message;
                     builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
                         builder.dismiss();
-                        AndroidUtilities.addToClipboard(cell.getTextView().getText().toString());
+                        AndroidUtilities.addToClipboard(finalMessage);
                         AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                         return Unit.INSTANCE;
                     });
@@ -2349,8 +2357,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     cell.getTextView().setMovementMethod(null);
                     cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
 
-                    String abi = FileUtil.getAbi();
-                    cell.setText(String.format("%1$s %2$s", LocaleController.getString("NekoX", R.string.NekoX), String.format(Locale.US, "v%s %s %s", BuildConfig.VERSION_NAME, abi, BuildConfig.BUILD_TYPE)));
+                    cell.setText("Nekogram X v" + BuildConfig.VERSION_NAME + " " + FileUtil.getAbi() + " " + BuildConfig.BUILD_TYPE);
+
                     cell.getTextView().setPadding(0, AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14));
                     view = cell;
                     Drawable drawable = Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
