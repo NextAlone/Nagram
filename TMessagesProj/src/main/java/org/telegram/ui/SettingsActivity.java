@@ -526,11 +526,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                         return Unit.INSTANCE;
                     });
-                    builder.addItem(BuildVars.DEBUG_VERSION ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
+                    builder.addItem(BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
                         builder.dismiss();
-                        BuildVars.DEBUG_VERSION = !BuildVars.DEBUG_VERSION;
+                        BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
                         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.DEBUG_VERSION).apply();
+                        sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
                         updateRows();
                         return Unit.INSTANCE;
                     });

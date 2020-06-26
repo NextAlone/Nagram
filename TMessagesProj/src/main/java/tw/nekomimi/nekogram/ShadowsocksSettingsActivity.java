@@ -57,7 +57,6 @@ import java.util.ArrayList;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.PopupBuilder;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class ShadowsocksSettingsActivity extends BaseFragment {

@@ -204,8 +204,8 @@ public class NekoConfig {
         askBeforeCall = preferences.getBoolean("askBeforeCall", false);
         disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
 
-        hideProxyByDefault = preferences.getBoolean("hide_proxy_by_default", BuildVars.isMini);
-        useProxyItem = preferences.getBoolean("use_proxy_item",false);
+        hideProxyByDefault = preferences.getBoolean("hide_proxy_by_default", false);
+        useProxyItem = preferences.getBoolean("use_proxy_item", true);
 
         disableAppBarShadow = preferences.getBoolean("disableAppBarShadow", false);
         mediaPreview = preferences.getBoolean("mediaPreview", false);

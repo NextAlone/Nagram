@@ -16,9 +16,9 @@ import android.content.pm.PackageManager;
 @SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
-    public static boolean DEBUG_VERSION = false;
-    public static boolean DEBUG_PRIVATE_VERSION = false;
-    public static boolean LOGS_ENABLED = false;
+    public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
+    public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
+    public static boolean LOGS_ENABLED;
     public static boolean USE_CLOUD_STRINGS = true;
 
     public static int BUILD_VERSION;
@@ -46,7 +46,7 @@ public class BuildVars {
 
         if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
+            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", LOGS_ENABLED);
         }
     }
 }

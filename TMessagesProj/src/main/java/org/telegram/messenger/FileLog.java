@@ -47,9 +47,6 @@ public class FileLog {
     }
 
     public static void e(final Throwable e) {
-        if (!BuildVars.LOGS_ENABLED) {
-            return;
-        }
         Log.e(mkTag(),mkMessage(e),e);
     }
 

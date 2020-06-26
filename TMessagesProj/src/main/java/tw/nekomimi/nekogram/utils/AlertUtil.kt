@@ -13,6 +13,7 @@ import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.NumberPicker
 import tw.nekomimi.nekogram.BottomBuilder
 import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.PopupBuilder
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 

@@ -10,7 +10,7 @@ import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.source.GoogleWebTranslator
 import tw.nekomimi.nekogram.transtale.source.LingoTranslator
 import tw.nekomimi.nekogram.transtale.source.YandexTranslator
-import tw.nekomimi.nekogram.utils.PopupBuilder
+import tw.nekomimi.nekogram.PopupBuilder
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
