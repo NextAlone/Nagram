@@ -1,5 +1,3 @@
-# Pre-compiled binary library
+# Pre-compiled binary libraries.
 
-This is done because it can only be compiled under Linux :)
-
-About foss compilation, please refer to [here](https://github.com/NekogramX/NekoX/blob/master/.github/workflows/foss.yml)
+About compilation, please refer to [here](https://github.com/NekoX-Dev/NekoX/blob/master/update_jni.sh)

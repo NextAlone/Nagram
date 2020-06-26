@@ -48,6 +48,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -63,16 +66,16 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
@@ -95,15 +98,9 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ArrayUtil;
 import kotlin.Unit;
-import kotlin.collections.CollectionsKt;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -113,6 +110,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
     public interface DocumentSelectActivityDelegate {
         void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate);
+
         void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate);
 
         void startDocumentSelectActivity();
@@ -840,54 +838,50 @@ public class DocumentSelectActivity extends BaseFragment {
 
     private void translateComment(Locale target) {
 
-        if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(getParentActivity(), commentTextView.getText().toString());
-        } else {
+        TranslateDb db = TranslateDb.forLocale(target);
+        String origin = commentTextView.getText().toString();
 
-            TranslateDb db = TranslateDb.forLocale(target);
-            String origin = commentTextView.getText().toString();
+        if (db.contains(origin)) {
 
-            if (db.contains(origin)) {
+            String translated = db.query(origin);
+            commentTextView.getEditText().setText(translated);
 
-                String translated = db.query(origin);
-                commentTextView.getEditText().setText(translated);
+            return;
 
-                return;
+        }
+
+        Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+            final AtomicBoolean cancel = new AtomicBoolean();
+            AlertDialog status = AlertUtil.showProgress(getParentActivity());
+
+            {
+
+                status.setOnCancelListener((__) -> {
+                    cancel.set(true);
+                });
+
+                status.show();
 
             }
 
-            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+            @Override
+            public void onSuccess(@NotNull String translation) {
+                status.dismiss();
+                commentTextView.getEditText().setText(translation);
+            }
 
-                final AtomicBoolean cancel = new AtomicBoolean();
-                AlertDialog status = AlertUtil.showProgress(getParentActivity());
-
-                {
-
-                    status.setOnCancelListener((__) -> {
-                        cancel.set(true);
-                    });
-
+            @Override
+            public void onFailed(boolean unsupported, @NotNull String message) {
+                status.dismiss();
+                AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
+                    status = AlertUtil.showProgress(getParentActivity());
                     status.show();
+                    Translator.translate(origin, this);
+                });
+            }
 
-                }
-
-                @Override public void onSuccess(@NotNull String translation) {
-                    status.dismiss();
-                    commentTextView.getEditText().setText(translation);
-                }
-
-                @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                    status.dismiss();
-                    AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
-                        status = AlertUtil.showProgress(getParentActivity());
-                        status.show();
-                        Translator.translate(origin, this);
-                    });
-                }
-
-            });
-
-        }
+        });
 
     }
 

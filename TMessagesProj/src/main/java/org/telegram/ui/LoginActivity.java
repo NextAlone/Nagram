@@ -66,6 +66,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.os.ConfigurationCompat;
+
 import com.v2ray.ang.util.Utils;
 
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -916,7 +918,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
 
-        if (NekoXConfig.developerMode) {
+        Locale current = ConfigurationCompat.getLocales(getParentActivity().getResources().getConfiguration()).get(0);
+
+        if (NekoXConfig.developerMode || !"cn".equals(current.getCountry().toLowerCase())) {
 
             otherItem.addSubItem(4, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
 

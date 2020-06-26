@@ -217,7 +217,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -4700,50 +4699,46 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         String origin = captionEditText.getFieldCharSequence().toString();
 
-        if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(parentActivity, origin);
-        } else {
+        TranslateDb db = TranslateDb.forLocale(target);
+        if (db.contains(origin)) {
+            String translated = db.query(origin);
+            captionEditText.setFieldText(translated);
+            return;
 
-            TranslateDb db = TranslateDb.forLocale(target);
-            if (db.contains(origin)) {
-                String translated = db.query(origin);
-                captionEditText.setFieldText(translated);
-                return;
+        }
+
+        Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+            final AtomicBoolean cancel = new AtomicBoolean();
+            AlertDialog status = AlertUtil.showProgress(parentActivity);
+
+            {
+
+                status.setOnCancelListener((__) -> {
+                    cancel.set(true);
+                });
+
+                status.show();
 
             }
 
-            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+            @Override
+            public void onSuccess(@NotNull String translation) {
+                status.dismiss();
+                captionEditText.setFieldText(translation);
+            }
 
-                final AtomicBoolean cancel = new AtomicBoolean();
-                AlertDialog status = AlertUtil.showProgress(parentActivity);
-
-                {
-
-                    status.setOnCancelListener((__) -> {
-                        cancel.set(true);
-                    });
-
+            @Override
+            public void onFailed(boolean unsupported, @NotNull String message) {
+                status.dismiss();
+                AlertUtil.showTransFailedDialog(parentActivity, unsupported, message, () -> {
+                    status = AlertUtil.showProgress(parentActivity);
                     status.show();
+                    Translator.translate(origin, this);
+                });
+            }
 
-                }
-
-                @Override public void onSuccess(@NotNull String translation) {
-                    status.dismiss();
-                    captionEditText.setFieldText(translation);
-                }
-
-                @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                    status.dismiss();
-                    AlertUtil.showTransFailedDialog(parentActivity, unsupported, message, () -> {
-                        status = AlertUtil.showProgress(parentActivity);
-                        status.show();
-                        Translator.translate(origin, this);
-                    });
-                }
-
-            });
-
-        }
+        });
 
     }
 

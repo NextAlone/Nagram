@@ -11,7 +11,6 @@ import org.telegram.ui.Cells.ChatMessageCell
 import org.telegram.ui.ChatActivity
 import tw.nekomimi.nekogram.MessageHelper
 import tw.nekomimi.nekogram.NekoConfig
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet
 import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.transtale.code2Locale
@@ -80,7 +79,8 @@ fun MessageObject.translateFinished(locale: Locale): Boolean {
 }
 
 @JvmOverloads
-fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale) {
+fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Locale = NekoConfig.translateToLang?.code2Locale
+        ?: LocaleController.getInstance().currentLocale) {
 
     if (messages.all { it.messageOwner.translated }) {
 
@@ -108,14 +108,6 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
             chatAdapter.updateRowWithMessageObject(messageObject, true)
 
         }
-
-        return
-
-    }
-
-    if (NekoConfig.translationProvider < 0) {
-
-        TranslateBottomSheet.show(parentActivity, messages.map { it.toRawString() }.filter { it.isNotBlank() }.joinToString("\n"))
 
         return
 
@@ -206,7 +198,8 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
                             if (parentActivity != null && !canceled.get()) {
 
-                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, false, it.message ?: it.javaClass.simpleName, Runnable {
+                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
+                                        ?: it.javaClass.simpleName, Runnable {
 
                                     translateMessages(messages, target)
 
@@ -242,7 +235,8 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
                                 if (parentActivity != null && !canceled.get()) {
 
-                                    AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, false, e.message ?: e.javaClass.simpleName, Runnable {
+                                    AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, e.message
+                                            ?: e.javaClass.simpleName, Runnable {
 
                                         translateMessages(messages, target)
 
@@ -278,7 +272,8 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
                             if (parentActivity != null && !canceled.get()) {
 
-                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, false, it.message ?: it.javaClass.simpleName, Runnable {
+                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
+                                        ?: it.javaClass.simpleName, Runnable {
 
                                     translateMessages(messages, target)
 

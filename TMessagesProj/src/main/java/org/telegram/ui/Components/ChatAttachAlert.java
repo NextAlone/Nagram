@@ -90,7 +90,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -100,10 +99,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public interface ChatAttachViewDelegate {
         void didPressedButton(int button, boolean arg, boolean notify, int scheduleDate);
+
         View getRevealView();
+
         void didSelectBot(TLRPC.User user);
+
         void onCameraOpened();
+
         void needEnterComment();
+
         void doOnIdle(Runnable runnable);
     }
 
@@ -1370,54 +1374,51 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     private void translateComment(Context ctx, Locale target) {
 
-        if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(ctx, commentTextView.getText().toString());
-        } else {
 
-            TranslateDb db = TranslateDb.forLocale(target);
-            String origin = commentTextView.getText().toString();
+        TranslateDb db = TranslateDb.forLocale(target);
+        String origin = commentTextView.getText().toString();
 
-            if (db.contains(origin)) {
+        if (db.contains(origin)) {
 
-                String translated = db.query(origin);
-                commentTextView.getEditText().setText(translated);
+            String translated = db.query(origin);
+            commentTextView.getEditText().setText(translated);
 
-                return;
+            return;
+
+        }
+
+        Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+            final AtomicBoolean cancel = new AtomicBoolean();
+            AlertDialog status = AlertUtil.showProgress(ctx);
+
+            {
+
+                status.setOnCancelListener((__) -> {
+                    cancel.set(true);
+                });
+
+                status.show();
 
             }
 
-            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+            @Override
+            public void onSuccess(@NotNull String translation) {
+                status.dismiss();
+                commentTextView.getEditText().setText(translation);
+            }
 
-                final AtomicBoolean cancel = new AtomicBoolean();
-                AlertDialog status = AlertUtil.showProgress(ctx);
-
-                {
-
-                    status.setOnCancelListener((__) -> {
-                        cancel.set(true);
-                    });
-
+            @Override
+            public void onFailed(boolean unsupported, @NotNull String message) {
+                status.dismiss();
+                AlertUtil.showTransFailedDialog(ctx, unsupported, message, () -> {
+                    status = AlertUtil.showProgress(ctx);
                     status.show();
+                    Translator.translate(origin, this);
+                });
+            }
 
-                }
-
-                @Override public void onSuccess(@NotNull String translation) {
-                    status.dismiss();
-                    commentTextView.getEditText().setText(translation);
-                }
-
-                @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                    status.dismiss();
-                    AlertUtil.showTransFailedDialog(ctx, unsupported, message, () -> {
-                        status = AlertUtil.showProgress(ctx);
-                        status.show();
-                        Translator.translate(origin, this);
-                    });
-                }
-
-            });
-
-        }
+        });
 
     }
 

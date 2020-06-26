@@ -35,13 +35,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
@@ -72,12 +75,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -87,6 +86,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
     public interface PhotoAlbumPickerActivityDelegate {
         void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate);
+
         void startPhotoSelectActivity();
     }
 
@@ -590,54 +590,50 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
     private void translateComment(Locale target) {
 
-        if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(getParentActivity(), commentTextView.getText().toString());
-        } else {
+        TranslateDb db = TranslateDb.forLocale(target);
+        String origin = commentTextView.getText().toString();
 
-            TranslateDb db = TranslateDb.forLocale(target);
-            String origin = commentTextView.getText().toString();
+        if (db.contains(origin)) {
 
-            if (db.contains(origin)) {
+            String translated = db.query(origin);
+            commentTextView.getEditText().setText(translated);
 
-                String translated = db.query(origin);
-                commentTextView.getEditText().setText(translated);
+            return;
 
-                return;
+        }
+
+        Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+            final AtomicBoolean cancel = new AtomicBoolean();
+            AlertDialog status = AlertUtil.showProgress(getParentActivity());
+
+            {
+
+                status.setOnCancelListener((__) -> {
+                    cancel.set(true);
+                });
+
+                status.show();
 
             }
 
-            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+            @Override
+            public void onSuccess(@NotNull String translation) {
+                status.dismiss();
+                commentTextView.getEditText().setText(translation);
+            }
 
-                final AtomicBoolean cancel = new AtomicBoolean();
-                AlertDialog status = AlertUtil.showProgress(getParentActivity());
-
-                {
-
-                    status.setOnCancelListener((__) -> {
-                        cancel.set(true);
-                    });
-
+            @Override
+            public void onFailed(boolean unsupported, @NotNull String message) {
+                status.dismiss();
+                AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
+                    status = AlertUtil.showProgress(getParentActivity());
                     status.show();
+                    Translator.translate(origin, this);
+                });
+            }
 
-                }
-
-                @Override public void onSuccess(@NotNull String translation) {
-                    status.dismiss();
-                    commentTextView.getEditText().setText(translation);
-                }
-
-                @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                    status.dismiss();
-                    AlertUtil.showTransFailedDialog(getParentActivity(), unsupported, message, () -> {
-                        status = AlertUtil.showProgress(getParentActivity());
-                        status.show();
-                        Translator.translate(origin, this);
-                    });
-                }
-
-            });
-
-        }
+        });
 
     }
 

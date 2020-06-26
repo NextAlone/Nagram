@@ -174,7 +174,7 @@ object AlertUtil {
 
     @JvmStatic
     @JvmOverloads
-    fun showTransFailedDialog(ctx: Context, noRetry: Boolean, noWeb: Boolean = false, message: String, retryRunnable: Runnable) = UIUtil.runOnUIThread(Runnable {
+    fun showTransFailedDialog(ctx: Context, noRetry: Boolean, message: String, retryRunnable: Runnable) = UIUtil.runOnUIThread(Runnable {
 
         ctx.setTheme(R.style.Theme_TMessages)
 
@@ -203,22 +203,11 @@ object AlertUtil {
                     LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud)
             ))
 
-            if (!noWeb) {
-
-                items.addAll(arrayOf(
-                        LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
-                        LocaleController.getString("ProviderGoogleTranslateCNWeb", R.string.ProviderGoogleTranslateCNWeb),
-                        LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb),
-                        LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb)
-                ))
-
-            }
-
             popup.setItems(items.toTypedArray()) { item, _ ->
 
                 reference.get().dismiss()
 
-                NekoConfig.setTranslationProvider(if (item < 4) item + 1 else -item + 3)
+                NekoConfig.setTranslationProvider(item + 1)
 
                 retryRunnable.run()
 

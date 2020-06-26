@@ -131,7 +131,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateBottomSheet;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -2029,13 +2028,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         };
         messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
 
-            @Override public void onSpansChanged() {
+            @Override
+            public void onSpansChanged() {
                 if (delegate != null) {
                     delegate.onTextSpansChanged(messageEditText.getText());
                 }
             }
 
-            @Override public int getCurrentChat() {
+            @Override
+            public int getCurrentChat() {
 
                 int chatId;
                 if (parentFragment.getCurrentChat() != null) {
@@ -3066,54 +3067,50 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void translateComment(Locale target) {
 
-        if (NekoConfig.translationProvider < 0) {
-            TranslateBottomSheet.show(parentActivity, messageEditText.getText().toString());
-        } else {
+        TranslateDb db = TranslateDb.forLocale(target);
+        String origin = messageEditText.getText().toString();
 
-            TranslateDb db = TranslateDb.forLocale(target);
-            String origin = messageEditText.getText().toString();
+        if (db.contains(origin)) {
 
-            if (db.contains(origin)) {
+            String translated = db.query(origin);
+            messageEditText.setText(translated);
 
-                String translated = db.query(origin);
-                messageEditText.setText(translated);
+            return;
 
-                return;
+        }
+
+        Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+
+            final AtomicBoolean cancel = new AtomicBoolean();
+            AlertDialog status = AlertUtil.showProgress(parentActivity);
+
+            {
+
+                status.setOnCancelListener((__) -> {
+                    cancel.set(true);
+                });
+
+                status.show();
 
             }
 
-            Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {
+            @Override
+            public void onSuccess(@NotNull String translation) {
+                status.dismiss();
+                messageEditText.setText(translation);
+            }
 
-                final AtomicBoolean cancel = new AtomicBoolean();
-                AlertDialog status = AlertUtil.showProgress(parentActivity);
-
-                {
-
-                    status.setOnCancelListener((__) -> {
-                        cancel.set(true);
-                    });
-
+            @Override
+            public void onFailed(boolean unsupported, @NotNull String message) {
+                status.dismiss();
+                AlertUtil.showTransFailedDialog(parentActivity, unsupported, message, () -> {
+                    status = AlertUtil.showProgress(parentActivity);
                     status.show();
+                    Translator.translate(origin, this);
+                });
+            }
 
-                }
-
-                @Override public void onSuccess(@NotNull String translation) {
-                    status.dismiss();
-                    messageEditText.setText(translation);
-                }
-
-                @Override public void onFailed(boolean unsupported, @NotNull String message) {
-                    status.dismiss();
-                    AlertUtil.showTransFailedDialog(parentActivity, unsupported, message, () -> {
-                        status = AlertUtil.showProgress(parentActivity);
-                        status.show();
-                        Translator.translate(origin, this);
-                    });
-                }
-
-            });
-
-        }
+        });
 
     }
 
@@ -7292,7 +7289,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 pressed = cancelRect.contains(x, y);
                 if (pressed) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        selectableBackground.setHotspot(x,y);
+                        selectableBackground.setHotspot(x, y);
                     }
                     setPressed(true);
                 }

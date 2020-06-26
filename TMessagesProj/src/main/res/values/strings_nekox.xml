@@ -67,8 +67,6 @@
     <string name="ApplySuggestion">OK, Apply it</string>
     <string name="DoNotRemindAgain">Don\'t remind again</string>
 
-    <string name="InstantViewTransWithWeb">Cannot translate InstantView with web translator</string>
-
     <string name="RemoveTitleEmoji">Remove emoji in title</string>
 
     <string name="NekoXProxy">NekoX Public Proxy</string>

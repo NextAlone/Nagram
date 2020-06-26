@@ -1,0 +1,69 @@
+{
+  "dns": {
+    "servers": [
+      "https+local://mozilla.cloudflare-dns.com/dns-query",
+      "https+local://dns.google/dns-query",
+      "https+local://dns.adguard.com/dns-query"
+    ]
+  },
+  "inbounds": [{
+    "tag": "socks-in",
+    "listen": "127.0.0.1",
+    "port": 114514,
+    "protocol": "socks",
+    "settings": {
+      "auth": "noauth",
+      "udp": true,
+      "userLevel": 8
+    },
+    "sniffing": {
+      "destOverride": [
+        "http",
+        "tls"
+      ],
+      "enabled": true
+    }
+  }
+  ],
+  "outbounds": [{
+    "tag": "proxy",
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [{
+        "address": "v2ray.cool",
+        "port": 443,
+        "users": [{
+          "alterId": 64,
+          "id": "73670f86-1145-4ffd-b468-6cd73cea1f29",
+          "level": 8,
+          "security": "none"
+        }]
+      }]
+    },
+    "streamSettings": {
+      "network": "ws",
+      "security": "tls",
+      "tlssettings": {
+        "allowInsecure": true,
+        "serverName": "baidu.com"
+      },
+      "wssettings": {
+        "connectionReuse": true,
+        "headers": {
+          "Host": "baidu.com"
+        },
+        "path": "/search"
+      }
+    }
+  }],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [{
+      "inboundTag": [
+        "socks-in"
+      ],
+      "outboundTag": "proxy",
+      "type": "field"
+    }]
+  }
+}

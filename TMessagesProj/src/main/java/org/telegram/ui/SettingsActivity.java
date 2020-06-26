@@ -520,7 +520,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
                     builder.addTitle(cell.getTextView().getText().toString(), false);
-                    builder.addItem(LocaleController.getString("CopyDetails", R.string.CopyDetails), R.drawable.baseline_content_copy_24, (it) -> {
+                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
                         builder.dismiss();
                         AndroidUtilities.addToClipboard(cell.getTextView().getText().toString());
                         AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));

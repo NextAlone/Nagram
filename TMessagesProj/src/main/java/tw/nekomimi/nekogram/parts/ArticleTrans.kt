@@ -50,24 +50,6 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
 fun ArticleViewer.doTransLATE() {
 
-    if (NekoConfig.translationProvider < 0) {
-
-        adapter[0].trans = false
-        transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate)
-
-        AlertUtil.showTransFailedDialog(parentActivity,true,true,LocaleController.getString("InstantViewTransWithWeb",R.string.InstantViewTransWithWeb), Runnable {
-
-            adapter[0].trans = true
-            transMenu.setTextAndIcon(LocaleController.getString("UndoTranslate", R.string.UndoTranslate), R.drawable.ic_translate)
-
-            doTransLATE()
-
-        })
-
-        return
-
-    }
-
     val dialog = AlertUtil.showProgress(parentActivity)
 
     dialog.show()
@@ -161,7 +143,7 @@ fun ArticleViewer.doTransLATE() {
                                 adapter[0].trans = false
                                 transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate)
 
-                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, true,it.message ?: it.javaClass.simpleName, Runnable {
+                                AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException,it.message ?: it.javaClass.simpleName, Runnable {
                                     doTransLATE()
                                 })
 

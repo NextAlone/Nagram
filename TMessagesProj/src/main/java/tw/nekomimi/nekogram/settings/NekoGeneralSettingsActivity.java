@@ -329,24 +329,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                         LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
                         LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
-                        LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
-
-                        LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb),
-                        LocaleController.getString("ProviderGoogleTranslateCNWeb", R.string.ProviderGoogleTranslateCNWeb),
-                        LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb),
-                        LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb)
+                        LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud)
 
                 }, (i, __) -> {
 
-                    int target;
-
-                    if (i < 4) {
-                        target = i + 1;
-                    } else {
-                        target = -i + 3;
-                    }
-
-                    NekoConfig.setTranslationProvider(target);
+                    NekoConfig.setTranslationProvider(i + 1);
                     listAdapter.notifyItemChanged(translationProviderRow);
 
                     return Unit.INSTANCE;
@@ -735,20 +722,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             case 1:
                                 value = LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate);
                                 break;
-                            case -1:
-                                value = LocaleController.getString("ProviderGoogleTranslateWeb", R.string.ProviderGoogleTranslateWeb);
-                                break;
                             case 2:
                                 value = LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN);
-                                break;
-                            case -2:
-                                value = LocaleController.getString("ProviderGoogleTranslateCNWeb", R.string.ProviderGoogleTranslateCNWeb);
-                                break;
-                            case -3:
-                                value = LocaleController.getString("ProviderBaiduFanyiWeb", R.string.ProviderBaiduFanyiWeb);
-                                break;
-                            case -4:
-                                value = LocaleController.getString("ProviderDeepLWeb", R.string.ProviderDeepLWeb);
                                 break;
                             case 3:
                                 value = LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate);

@@ -1,42 +1,151 @@
-# Nekogram
-![Logo](https://raw.githubusercontent.com/Nekogram/Nekogram/master/TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher.png)  
-Nekogram is an UNOFFICIAL app that uses Telegram's API.
+# NekoX
 
-- Google play store: https://play.google.com/store/apps/details?id=tw.nekomimi.nekogram
-- Update news (English): https://t.me/nekoupdates
-- Update news (Chinese): https://t.me/zuragram
-- APKs: https://github.com/Nekogram/Nekogram/releases
-- Feedback: https://t.me/nekosupportbot
-- Feedback: https://github.com/Nekogram/Nekogram/issues
+NekoX is an open source third-party Telegram android app.
 
-## API, Protocol documentation
+- Google play store: (https://play.google.com/store/apps/details?id=nekox.messenger)
+- Update news : https://t.me/NekoX-Dev
+- Feedback: https://github.com/NekoX-Dev/NekoX/issues
+- Chat Group: https://t.me/NekoXChat
+- Chat Group (Persian) : https://t.me/NekogramX_Persian
+- FAQ: https://telegra.ph/NekoX-FAQ-03-31
+- FAQ (Chinese): https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31
+- [Wall of Shame - Nekogram](https://github.com/Nekogram/Nekogram/wiki/Wall-of-Shame)
 
-Telegram API manuals: https://core.telegram.org/api
+## Telegram-FOSS Changes:
 
-MTproto protocol manuals: https://core.telegram.org/mtproto
+*Replacement of non-FOSS, untrustworthy or suspicious binaries or source code:*
+- Do location sharing with OpenStreetMap(osmdroid) instead of Google Maps
+- Use Twemoji emoji set instead of Apple's emoji
+- Google Play Services GCM replaced with Telegram's push service
+- Has to show a notification on Oreo+, ask Google
+- **SECURITY:** Old BoringSSL prebuilts are replaced with the newest upstream source code built at compile time
+- **SECURITY:** Old FFmpeg prebuilts are replaced with the newest upstream source code built at compile time
+- **SECURITY:** Bundled libWebP is updated
+
+*Removal of non-FOSS, untrustworthy or suspicious binaries or source code and their functionality:*
+- Google Vision face detection and barcode scanning (Passport)
+- Google Wallet and Android Pay integration
+- Google Voice integration
+- HockeyApp crash reporting and self-updates
+- Google SMS retrieval. You have to type the code manually
+
+*Other:*
+- Allow to set a proxy before login
+- Added the ability to parse locations from intents containing a `geo:<lat>,<lon>,<zoom>` string
+- Force static map previews from Telegram
+
+## Nekogram Changes
+
+- Repeat others' message in one click.
+- Save to saved messages in one click.
+- Ignore messages from blocked users.
+- Forward messages without quoting.
+- Create a mention by user's ID.
+- Allow non-admin users to view group chat permissions and administrators.
+- Select a map preview provider for normal dialogs.
+- Promote/restrict user directly from contextual menu clicking on user's message.
+- Show user chat history in groups from contextual menu clicking on user's message.
+- Delete single downloaded file.
+- Customize stickers display size.
+- Show and export message details.
+- Unlimited favorite stickers.
+- Filter chats list: users, groups, channels, bots, admin, unmuted.
+- Multi-accounts (up to 8).
+- Log in with bot accounts.
+- Decide whether to sync contacts on first login.
+- Show ID and data center.
+- Transparent status bar.
+- Change displaying name order.
+- Hide mobile number from navigation menu drawer and settings menu.
+- Built-in Chinese and Japanese language.
+- Use system font and emojis.
+- Store cache into app's private directory.
+- Hide proxy sponsor channels.
+- Toogle to show sensitive media contents in public channels.
+
+## NekoX Changes
+
+- Built-in Vmess, Shadowsocks, SSR, <del>RelayBaton (ESNI)</del> proxies support
+- Built-in public proxy list
+- Proxy subscription support.
+- Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc.
+- Scan the qrcode (any link, can add a proxy).
+- The ( vemss / vmess1 / ss / ssr / rb ) proxy link in the message can be clicked.
+- Allow auto disable proxy when VPN is enabled
+- Add stickers without sticker pack
+- Sticker set list backup / restore / share
+- Full InstantView translation support
+- Translation support for selected text on input and in messages
+- Delete all messages in group
+- Dialog sorting is optional "Unread and can be prioritized for reminding" etc.
+- Allow to skip "regret within five seconds"
+- Unblock all users support
+- Google Cloud Translate / Yandex.Translate support
+- Custom cache directory (supports external storage)
+- Custom AppId and Hash (optional NekoX / Andorid / Android X or Manual input)
+- Custom server (official, test DC or Manual input)
+- Keep the original file name when downloading files
+- View the data center you belong to when you don't have an avatar
+- Proxies, groups, channels, sticker packs are able to shared as QRCodes.
+- Force English emoji keywords to be loaded
+- Add "@Name" when long press @ user option
+- Enhanced notification service, optional version without Google Services.
+- Built-in Material Design themes / Telegram X style icons
+
+## How to get Google Cloud Translate Key
+
+https://telegra.ph/google-cloud-trans-key-04-26
 
 ## Compilation Guide
 
-1. Download the Nekogram source code from https://github.com/Nekogram/Nekogram ( git clone https://github.com/Nekogram/Nekogram.git )
-2. Copy your release.keystore into TMessagesProj/config
-3. Fill out RELEASE_KEY_PASSWORD, RELEASE_KEY_ALIAS, RELEASE_STORE_PASSWORD in local.properties to access your  release.keystore
-4. Open the project in the Studio (note that it should be opened, NOT imported).
-5. If you're compiling DEBUG version, make sure your build variants is set to afatDebugMultidex.
-6. You are ready to compile Nekogram.
+### Specify APP_ID and APP_HASH
+
+Fill out TELEGRAM_APP_ID and TELEGRAM_APP_HASH in local.properties
+
+### Build Types
+
+#### Debug
+
+`./gradlew assemble<Variant>Debug`
+
+The default debug key is used, and placing yours is not needed.
+
+#### Release
+
+`./gradlew assemble<Variant>Release`
+
+The difference between release and other build types is that it adds fcm and firebase crash analysis, if you don't like them, use releaseNoGcm.
+
+To compile the release version, please place your keysotre at TMessageProj/release.jks, and fill in KEYSTORE_PASS, ALIAS_NAME, ALIAS_PASS in local.properties, environment variables are also recommended
+
+If you don't use NekoX's APP_ID and APP_HASH, you need to register a physical firebase app and replace google-services.json to ensure fcm works
+
+#### Foss
+
+`./gradlew assemble<Variant>Foss`
+
+OK, a version without firebase cloud messaging and precompiled native libraries, maybe this makes you feel more free, or your phone does not have Google services.
+
+To compile the foss version, please refer to [build script](.github/workflows/build.yml).
+
+### Build Variants
+
+Available variant list:
+
+`Full`
+`Mini` ( without ss/ssr/v2ray )
 
 ## Localization
 
-Nekogram is forked from Telegram, thus most locales follows the translations of Telegram for Android, checkout https://translations.telegram.org/en/android/.
+Join project at https://nekox.crowdin.com/nekox and https://neko.crowdin.com/ .
 
-As for the Nekogram specialized strings, we use Crowdin to translate Nekogram. Join project at https://neko.crowdin.com/nekogram. Help us bring Nekogram to the world!
+## Credits
 
-## Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars2.githubusercontent.com/u/42698724?s=460&v=4" width="80px;"/><br /><sub>猫耳逆变器</sub>](https://github.com/NekoInverter)<br />[💻](https://github.com/Nekogram/Nekogram/commits?author=NekoInverter "Code") | [<img src="https://avatars1.githubusercontent.com/u/18373361?s=460&v=4" width="80px;"/><br /><sub>梨子</sub>](https://github.com/rikakomoe)<br />[💻](https://github.com/Nekogram/Nekogram/commits?author=rikakomoe "Code") | [<img src="https://i.loli.net/2020/01/17/e9Z5zkG7lNwUBPE.jpg" width="80px;"/><br /><sub>呆瓜</sub>](https://t.me/Duang)<br /> [🎨](#design-duang "Design") |
-| :---: | :---: | :---: |
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+<ul>
+    <li>Telegram-FOSS: <a href="https://github.com/Telegram-FOSS-Team/Telegram-FOSS/blob/master/LICENSE">GPLv2</a></li>
+    <li>Nekogram: <a href="https://github.com/Nekogram/Nekogram/blob/master/LICENSE">GPLv2</a></li>
+    <li>v2rayNG: <a href="https://github.com/2dust/v2rayNG/blob/master/LICENSE">GPLv3</a></li>
+    <li>AndroidLibV2rayLite: <a href="https://github.com/2dust/AndroidLibV2rayLite/blob/master/LICENSE">LGPLv3</a></li>
+    <li>shadowsocks-android: <a href="https://github.com/shadowsocks/shadowsocks-android/blob/master/LICENSE">GPLv3</a></li>
+    <li>shadowsocksRb-android: <a href="https://github.com/shadowsocksRb/shadowsocksRb-android/blob/master/LICENSE">GPLv3</a></li>
+</ul>
