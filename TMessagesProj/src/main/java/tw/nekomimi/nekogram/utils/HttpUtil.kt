@@ -21,14 +21,14 @@ object HttpUtil {
     @JvmField
     val okHttpClient = OkHttpClient().newBuilder()
             .dns(DnsFactory)
-            .connectTimeout(3, TimeUnit.SECONDS)
-            .readTimeout(3, TimeUnit.SECONDS)
+            .connectTimeout(2, TimeUnit.SECONDS)
+            .readTimeout(2, TimeUnit.SECONDS)
             .build()
 
     val okHttpClientNoDoh = OkHttpClient()
             .newBuilder()
-            .connectTimeout(3, TimeUnit.SECONDS)
-            .readTimeout(3, TimeUnit.SECONDS)
+            .connectTimeout(2, TimeUnit.SECONDS)
+            .readTimeout(2, TimeUnit.SECONDS)
             .build()
 
     @JvmStatic

@@ -106,6 +106,8 @@ public class NekoConfig {
     public static boolean disableAppBarShadow;
     public static boolean mediaPreview;
 
+    public static boolean proxyAutoSwitch;
+
     public static String formatLang(String name) {
 
         if (name == null) {
@@ -209,6 +211,8 @@ public class NekoConfig {
 
         disableAppBarShadow = preferences.getBoolean("disableAppBarShadow", false);
         mediaPreview = preferences.getBoolean("mediaPreview", false);
+
+        proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
 
     }
 
@@ -697,4 +701,11 @@ public class NekoConfig {
         preferences.edit().putBoolean("mediaPreview",mediaPreview = !mediaPreview).apply();
 
     }
+
+    public static void toggleProxyAutoSwitch() {
+
+        preferences.edit().putBoolean("proxy_auto_switch",proxyAutoSwitch = !proxyAutoSwitch).apply();
+
+    }
+
 }

@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Se detecta que no ha establecido una contraseña, lo que puede causar que los hackers controlados por el gobierno encuentren su verdadera identidad, ¡por favor configure una!</string>
     <string name="ApplySuggestion">OK, aplícalo</string>
     <string name="DoNotRemindAgain">No volver a recordar</string>
-    <string name="InstantViewTransWithWeb">No se puede traducir InstantView con el traductor web</string>
     <string name="RemoveTitleEmoji">Eliminar emoji en el título</string>
     <string name="NekoXProxy">Proxy público de NekoX</string>
     <string name="PublicPrefix">Público</string>

@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">تشخیص داده می شود که رمز عبوری تنظیم نکرده اید ، و این ممکن است باعث شود هکرهای تحت کنترل دولت هویت واقعی شما را پیدا کنند ، لطفاً آنرا تعیین کنید</string>
     <string name="ApplySuggestion">قبول،اعمال کن</string>
     <string name="DoNotRemindAgain">دیگر یادآوری نشود</string>
-    <string name="InstantViewTransWithWeb">ترجمه InstantView با مترجم وب امکان پذیر نیست</string>
     <string name="RemoveTitleEmoji">حذف ایموجی کنار اسم Nekogram x</string>
     <string name="NekoXProxy">پروکسی عمومی NekoX</string>
     <string name="PublicPrefix">عمومی</string>

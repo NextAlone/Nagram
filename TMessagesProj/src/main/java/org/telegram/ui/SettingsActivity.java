@@ -900,14 +900,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         questionRow = -1;
         faqRow = rowCount++;
         policyRow = -1;
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
             helpSectionCell = rowCount++;
             debugHeaderRow = rowCount++;
         } else {
             helpSectionCell = -1;
             debugHeaderRow = -1;
         }
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
             sendLogsRow = rowCount++;
             clearLogsRow = rowCount++;
         } else {

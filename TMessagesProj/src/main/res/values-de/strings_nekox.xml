@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Es wurde festgestellt, dass Du kein Passwort festgelegt hast, was dazu führen kann, dass staatlich kontrollierte Hacker Deine wahre Identität ermitteln können. Bitte setze eines!</string>
     <string name="ApplySuggestion">OK, anwenden</string>
     <string name="DoNotRemindAgain">Nicht mehr erinnern</string>
-    <string name="InstantViewTransWithWeb">InstantView kann nicht mit dem Web-Übersetzer übersetzt werden</string>
     <string name="RemoveTitleEmoji">Emoji im Titel entfernen</string>
     <string name="NekoXProxy">Öffentlicher NekoX-Proxy</string>
     <string name="PublicPrefix">Öffentlich</string>

@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">تم اكتشاف أنك لم تقم بإيقاف تشغيل إعدادات \"المكالمات من نظير لنظيرp2p\"، قد يتسبب في العثور على هويتك الحقيقية للقرصنة التي تسيطر عليها الحكومة، يرجى إيقافها!</string>
     <string name="ApplySuggestion">حسنًا، قم بتطبيقه</string>
     <string name="DoNotRemindAgain">لا تذكرني مرة أخرى</string>
-    <string name="InstantViewTransWithWeb">لا يمكن ترجمة InstantView مع مترجم الويب</string>
     <string name="RemoveTitleEmoji">إزالة الرموز التعبيرية من العناوين</string>
     <string name="NekoXProxy">خادم NekoX العام</string>
     <string name="PublicPrefix">عامة</string>

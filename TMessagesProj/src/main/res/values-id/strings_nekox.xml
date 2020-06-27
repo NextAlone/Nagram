@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Terdeteksi bahwa anda belum menetapkan kata sandi, yang dapat menyebabkan peretas yang dimiliki pemerintah menemukan identitas anda yang sebenarnya, harap setel!</string>
     <string name="ApplySuggestion">Oke, Terapkan</string>
     <string name="DoNotRemindAgain">Jangan Ingatkan lagi</string>
-    <string name="InstantViewTransWithWeb">Tidak dapat menerjemahkan InstantView menggunakan penerjemah web</string>
     <string name="RemoveTitleEmoji">Hapus emoji dari judul Nekogram X</string>
     <string name="NekoXProxy">NekoX Publik Proxy</string>
     <string name="PublicPrefix">Publik</string>

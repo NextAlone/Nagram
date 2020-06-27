@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">檢測到您尚未設置密碼，這可能導致政府控制的黑客找到您的真實身份，請設置一個！</string>
     <string name="ApplySuggestion">套用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
-    <string name="InstantViewTransWithWeb">無法使用網絡翻譯器翻譯InstantView</string>
     <string name="RemoveTitleEmoji">移除標題中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
     <string name="PublicPrefix">公共</string>

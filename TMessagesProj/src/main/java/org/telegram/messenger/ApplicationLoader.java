@@ -42,6 +42,7 @@ import java.util.Set;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.database.WarppedPref;
+import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -306,7 +307,6 @@ public class ApplicationLoader extends Application {
 
         }
 
-        ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
         ExternalGcm.initPlayServices();
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app initied");
@@ -322,6 +322,7 @@ public class ApplicationLoader extends Application {
             if (finalA == UserConfig.selectedAccount) initRunnable.run();
             else UIUtil.runOnIoDispatcher(initRunnable);
         }
+
     }
 
     public ApplicationLoader() {

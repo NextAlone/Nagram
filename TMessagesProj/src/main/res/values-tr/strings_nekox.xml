@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Devlet kontrolündeki bilgisayar korsanlarının gerçek kimliğinizi bulmasına neden olabilecek bir şifre ayarlamadığınız tespit edildi, lütfen bir tane belirleyin!</string>
     <string name="ApplySuggestion">Tamam, uygula</string>
     <string name="DoNotRemindAgain">Bir daha hatırlatma</string>
-    <string name="InstantViewTransWithWeb">InstantView web çevirmeni ile çevrilemiyor</string>
     <string name="RemoveTitleEmoji">Başlıktaki emojiyi (😶) kaldırın</string>
     <string name="NekoXProxy">NekoX Genel Proxy</string>
     <string name="PublicPrefix">Genel</string>
