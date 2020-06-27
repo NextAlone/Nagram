@@ -16,6 +16,7 @@
     <string name="Install">安装</string>
     <string name="Ignore">忽略</string>
     <string name="UpdateDownloaded">一个更新刚刚下载完成.</string>
+    <string name="ProxyAutoSwitch">代理自动切换</string>
     <string name="LinkedGroupChat">链接的群组</string>
     <string name="LinkedChannelChat">链接的频道</string>
     <string name="DevModeTitle">**您的电报账号可能被封禁**</string>
@@ -51,7 +52,6 @@
     <string name="PrivacyNotice2fa">检测到您没有设置密码，这可能会导致政府控制的黑客找到您的真实身份，请设置一个！</string>
     <string name="ApplySuggestion">应用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
-    <string name="InstantViewTransWithWeb">无法使用网页翻译器翻译 InstantView</string>
     <string name="RemoveTitleEmoji">移除标题中的表情</string>
     <string name="NekoXProxy">NekoX 公共代理</string>
     <string name="PublicPrefix">公共</string>

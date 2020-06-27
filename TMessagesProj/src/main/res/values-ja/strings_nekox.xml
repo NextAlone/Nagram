@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">パスワードが設定されていないことが検出されました。これにより、政府の管理下にあるハッカーがあなたの本当の身元を見つける可能性があります。パスワードを設定してください。</string>
     <string name="ApplySuggestion">わかりました。 適用します</string>
     <string name="DoNotRemindAgain">今後表示しない</string>
-    <string name="InstantViewTransWithWeb">ウェブ翻訳者でInstantViewを翻訳できません</string>
     <string name="RemoveTitleEmoji">タイトルの絵文字を削除</string>
     <string name="NekoXProxy">NekoXパブリックプロキシ</string>
     <string name="PublicPrefix">パブリック</string>

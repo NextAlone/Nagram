@@ -824,7 +824,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     }
 
-    @SuppressLint("NewApi") private void addProxy() {
+    @SuppressLint("NewApi")
+    private void addProxy() {
 
         BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
 
@@ -1033,10 +1034,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     public void checkSingleProxy(SharedConfig.ProxyInfo proxyInfo, int repeat, Runnable callback) {
 
-        proxyInfo.checking = true;
-
-        UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, proxyInfo));
-
         UIUtil.runOnIoDispatcher(() -> {
 
             if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && !((SharedConfig.ExternalSocks5Proxy) proxyInfo).isStarted()) {
@@ -1057,11 +1054,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
 
             proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {
-                proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
                 if (time == -1) {
                     if (repeat > 0) {
                         checkSingleProxy(proxyInfo, repeat - 1, callback);
                     } else {
+                        proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
                         proxyInfo.checking = false;
                         proxyInfo.available = false;
                         proxyInfo.ping = 0;
@@ -1073,6 +1070,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         }
                     }
                 } else {
+                    proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
                     proxyInfo.checking = false;
                     proxyInfo.ping = time;
                     proxyInfo.available = true;

@@ -60,13 +60,12 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int experimentRow;
     private int smoothKeyboardRow;
     private int mediaPreviewRow;
+    private int proxyAutoSwitchRow;
     private int disableFilteringRow;
     private int unlimitedFavedStickersRow;
     private int unlimitedPinnedDialogsRow;
     private int deleteAccountRow;
     private int experiment2Row;
-
-    private int shouldNOTTrustMeRow;
 
     private UndoView tooltip;
 
@@ -224,6 +223,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
+            } else if (position == proxyAutoSwitchRow) {
+                NekoConfig.toggleProxyAutoSwitch();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.proxyAutoSwitch);
+                }
             }
         });
 
@@ -248,6 +252,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         experimentRow = rowCount++;
         smoothKeyboardRow = !AndroidUtilities.isTablet() ? rowCount++ : -1;
         mediaPreviewRow = rowCount++;
+        proxyAutoSwitchRow = rowCount++;
         disableFilteringRow = rowCount++;
         unlimitedFavedStickersRow = rowCount++;
         unlimitedPinnedDialogsRow = rowCount++;
@@ -389,8 +394,10 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard), SharedConfig.smoothKeyboard, true);
                     } else if (position == unlimitedPinnedDialogsRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedPinnedDialogs", R.string.UnlimitedPinnedDialogs), LocaleController.getString("UnlimitedPinnedDialogsAbout", R.string.UnlimitedPinnedDialogsAbout), NekoConfig.unlimitedPinnedDialogs, true, deleteAccountRow != -1);
-                   } else if (position == mediaPreviewRow) {
+                    } else if (position == mediaPreviewRow) {
                         textCell.setTextAndCheck(LocaleController.getString("MediaPreview", R.string.MediaPreview), NekoConfig.mediaPreview, true);
+                    } else if (position == proxyAutoSwitchRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("ProxyAutoSwitch", R.string.ProxyAutoSwitch), NekoConfig.proxyAutoSwitch, true);
                     }
                     break;
                 }
@@ -453,13 +460,10 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == deleteAccountRow) {
                 return 2;
-            } else if (position == unlimitedFavedStickersRow || position == disableFilteringRow ||
-                    position == smoothKeyboardRow || position == unlimitedPinnedDialogsRow || position == mediaPreviewRow) {
-                return 3;
             } else if (position == experimentRow) {
                 return 4;
             }
-            return 2;
+            return 3;
         }
     }
 }

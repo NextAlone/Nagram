@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Для повышения конфиденциальности рекомендуем включить двухфакторную аутентификацию.</string>
     <string name="ApplySuggestion">Ок, сделаем это!</string>
     <string name="DoNotRemindAgain">Больше не напоминать</string>
-    <string name="InstantViewTransWithWeb">Невозможно перевести InstantView с веб-переводчиком</string>
     <string name="RemoveTitleEmoji">Убрать эмодзи из шапки</string>
     <string name="NekoXProxy">Список прокси от NekoX</string>
     <string name="PublicPrefix">Из списка</string>

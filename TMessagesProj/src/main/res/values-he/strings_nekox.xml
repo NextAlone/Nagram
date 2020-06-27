@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">מתגלה שלא הגדרת סיסמה, מה שעלול לגרום להאקרים שבשליטת הממשלה למצוא את זהותך האמיתית, אנא הגדר סיסמה!</string>
     <string name="ApplySuggestion">אוקיי, החל אותו</string>
     <string name="DoNotRemindAgain">אל תזכיר שוב</string>
-    <string name="InstantViewTransWithWeb">לא ניתן לתרגם את InstantView באמצעות מתרגם לאינטרנט</string>
     <string name="RemoveTitleEmoji">הסר אמוג\'י בכותרת</string>
     <string name="NekoXProxy">פרוקסי ציבור NekoX</string>
     <string name="PublicPrefix">ציבורי</string>

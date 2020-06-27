@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Виявлено, що ви не встановили пароль, через що хакери під контролем уряду можуть знайти справжню особу, будь ласка, встановіть його!</string>
     <string name="ApplySuggestion">Добре, застосувати</string>
     <string name="DoNotRemindAgain">Не нагадувати більше</string>
-    <string name="InstantViewTransWithWeb">Неможливо перекласти InstantView з web translator</string>
     <string name="RemoveTitleEmoji">Видаляти смайли в назві</string>
     <string name="NekoXProxy">Публічний проксі NekoX</string>
     <string name="PublicPrefix">Загальнодоступна</string>

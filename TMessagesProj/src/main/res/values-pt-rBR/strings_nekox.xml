@@ -51,7 +51,6 @@
     <string name="PrivacyNotice2fa">Foi detectado que você não definiu uma senha, o que pode fazer com que os hackers controlados pelo governo encontrem sua verdadeira identidade, por favor, defina uma!</string>
     <string name="ApplySuggestion">OK, Aplicar</string>
     <string name="DoNotRemindAgain">Não lembre novamente</string>
-    <string name="InstantViewTransWithWeb">Não é possível traduzir InstantView com o tradutor web</string>
     <string name="RemoveTitleEmoji">Remover emoji no título</string>
     <string name="NekoXProxy">Proxy Público do NekoX</string>
     <string name="PublicPrefix">Público</string>

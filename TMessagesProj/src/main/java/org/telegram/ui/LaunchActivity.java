@@ -819,8 +819,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     subInfo.lastFetch = System.currentTimeMillis();
 
                     SubManager.getSubList().update(subInfo, true);
+                    SharedConfig.reloadProxyList();
 
                 } catch (SubInfo.AllTriesFailed allTriesFailed) {
+
+                    FileLog.e(allTriesFailed);
+
                 }
 
             }

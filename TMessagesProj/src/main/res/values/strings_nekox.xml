@@ -20,6 +20,7 @@
     <string name="Install">Install</string>
     <string name="Ignore">Ignore</string>
     <string name="UpdateDownloaded">An update has just been downloaded.</string>
+    <string name="ProxyAutoSwitch">Proxy Auto Switch</string>
 
     <string name="LinkedGroupChat">Linked Group</string>
     <string name="LinkedChannelChat">Linked Channel</string>
