@@ -472,7 +472,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-        builder.addTitle(LocaleController.getString("", R.string.ExportStickers), true);
+        builder.addTitle(LocaleController.getString("ExportStickers", R.string.ExportStickers), true);
 
         AtomicBoolean exportSets = new AtomicBoolean(true);
         AtomicBoolean exportArchived = new AtomicBoolean(true);

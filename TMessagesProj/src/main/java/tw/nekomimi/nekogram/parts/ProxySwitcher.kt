@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
+import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.SharedConfig
 import org.telegram.tgnet.ConnectionsManager
 import tw.nekomimi.nekogram.NekoConfig
@@ -12,7 +13,6 @@ object ProxySwitcher {
     val switchTimer by lazy { Timer("Proxy Switch Timer") }
     var currentTask: SwitchTask? = null
 
-
     fun cancel() {
 
         currentTask = null
@@ -23,14 +23,14 @@ object ProxySwitcher {
     fun reschedule() {
 
         cancel()
-        switchTimer.schedule(SwitchTask().also { currentTask = it }, 3000L)
+        switchTimer.schedule(SwitchTask().also { currentTask = it }, 3333L)
 
     }
 
     @JvmStatic
-    fun didReceivedNotification(connectionState: Int) = UIUtil.runOnIoDispatcher run@{
+    fun didReceivedNotification(connectionState: Int) {
 
-        if (!NekoConfig.proxyAutoSwitch) return@run
+        if (!NekoConfig.proxyAutoSwitch) return
 
         currentConnectionState = connectionState
 

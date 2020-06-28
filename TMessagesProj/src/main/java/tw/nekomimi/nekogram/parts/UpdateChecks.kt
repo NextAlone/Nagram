@@ -112,7 +112,7 @@ fun Activity.checkUpdate(force: Boolean = false) {
 
                     val builder = BottomBuilder(this)
 
-                    builder.addTitle(LocaleController.getString("UpdateDownloaded", R.string.UpdateDownloaded), false)
+                    builder.addTitle(LocaleController.getString("UpdateDownloaded", R.string.UpdateDownloaded))
 
                     builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false) {
 

@@ -292,7 +292,7 @@ public class TextCheckCell extends FrameLayout {
             canvas.drawCircle(cx, cy, animatedRad, animationPaint);
         }
         if (needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 3, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 3, Theme.dividerPaint);
+            canvas.drawLine(0, getMeasuredHeight() - 3, getMeasuredWidth(), getMeasuredHeight() - 3, Theme.dividerPaint);
         }
     }
 

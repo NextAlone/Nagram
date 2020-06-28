@@ -122,7 +122,7 @@ public class ExternalGcm {
 
                 BottomBuilder builder = new BottomBuilder(ctx);
 
-                builder.addTitle(LocaleController.getString("UpdateDownloaded", R.string.UpdateDownloaded), false);
+                builder.addTitle(LocaleController.getString("UpdateDownloaded", R.string.UpdateDownloaded));
 
                 builder.addItem(LocaleController.getString("UpdateUpdate", R.string.UpdateUpdate), R.drawable.baseline_system_update_24, false, (it) -> {
 

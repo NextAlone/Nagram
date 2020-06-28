@@ -32,7 +32,6 @@ public class HeaderCell extends LinearLayout {
 
     private TextView textView;
     private TextView textView2;
-    private int height = 40;
 
     public HeaderCell(Context context) {
         this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false);
@@ -48,7 +47,7 @@ public class HeaderCell extends LinearLayout {
 
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2,boolean bigTitle) {
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, boolean bigTitle) {
         super(context);
 
         setOrientation(LinearLayout.VERTICAL);
@@ -61,7 +60,6 @@ public class HeaderCell extends LinearLayout {
         }
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        textView.setMinHeight(AndroidUtilities.dp(height - topMargin));
         textView.setTextColor(Theme.getColor(textColorKey));
         textView.setTag(textColorKey);
         addView(textView, LayoutHelper.createLinear(-1, -2));
@@ -83,7 +81,7 @@ public class HeaderCell extends LinearLayout {
     }
 
     public void setHeight(int value) {
-        textView.setMinHeight(AndroidUtilities.dp(height = value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
+        textView.setMinHeight(AndroidUtilities.dp(value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
@@ -108,6 +106,7 @@ public class HeaderCell extends LinearLayout {
     public TextView getTextView() {
         return textView;
     }
+
     public TextView getTextView2() {
         return textView2;
     }
