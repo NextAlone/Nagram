@@ -10,7 +10,10 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BottomSheet
 import org.telegram.ui.ActionBar.Theme
-import org.telegram.ui.Cells.*
+import org.telegram.ui.Cells.HeaderCell
+import org.telegram.ui.Cells.RadioButtonCell
+import org.telegram.ui.Cells.TextCell
+import org.telegram.ui.Cells.TextCheckCell
 import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
@@ -80,7 +83,11 @@ class BottomBuilder(val ctx: Context) {
 
     fun addTitle(title: CharSequence, bigTitle: Boolean, subTitle: CharSequence?): HeaderCell {
 
-        val headerCell = HeaderCell(ctx)
+        val headerCell = if (bigTitle) {
+            HeaderCell(ctx, Theme.key_dialogTextBlue2, 23, 15, false, true)
+        } else {
+            HeaderCell(ctx, Theme.key_dialogTextGray2, 16, 12, false)
+        }
 
         headerCell.setText(if (title is String) AndroidUtilities.replaceTags(title) else title)
 
@@ -92,11 +99,9 @@ class BottomBuilder(val ctx: Context) {
 
         rootView.addView(headerCell, LayoutHelper.createLinear(-1, -2).apply {
 
-            bottomMargin = AndroidUtilities.dp(12F)
+            bottomMargin = AndroidUtilities.dp(8F)
 
         })
-
-        rootView.addView(ShadowSectionCell(ctx, 3))
 
         return headerCell
 
@@ -282,7 +287,7 @@ class BottomBuilder(val ctx: Context) {
 
             background = Theme.getSelectorDrawable(false)
 
-            setTextAndIcon(text, icon, true)
+            setTextAndIcon(text, icon, false)
 
             setOnClickListener {
 

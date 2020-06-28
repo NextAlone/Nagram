@@ -3494,7 +3494,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         menuItem.addSubItem(gallery_menu_save, R.drawable.baseline_image_24, LocaleController.getString("SaveToGallery", R.string.SaveToGallery)).setColors(0xfffafafa, 0xfffafafa);
 
         menuItem.addSubItem(gallery_menu_scan, R.drawable.wallet_qr, LocaleController.getString("ScanQRCode", R.string.ScanQRCode)).setColors(0xfffafafa, 0xfffafafa);
-        menuItem.addSubItem(gallery_menu_setascurrent, R.drawable.deproko_baseline_camera_26, LocaleController.getString("SetAsCurrent", R.string.SetAsCurrent)).setColors(0xfffafafa, 0xfffafafa);
+        menuItem.addSubItem(gallery_menu_setascurrent, R.drawable.baseline_camera_alt_24, LocaleController.getString("SetAsCurrent", R.string.SetAsCurrent)).setColors(0xfffafafa, 0xfffafafa);
 
         menuItem.addSubItem(gallery_menu_delete, R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_cancel_loading, R.drawable.baseline_cancel_24, LocaleController.getString("StopDownload", R.string.StopDownload)).setColors(0xfffafafa, 0xfffafafa);

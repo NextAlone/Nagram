@@ -16,42 +16,48 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
 import androidx.core.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoAlbumPickerActivity;
 import org.telegram.ui.PhotoCropActivity;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.PhotoPickerActivity;
 import org.telegram.ui.PhotoViewer;
+import org.telegram.ui.SettingsActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 
 public class ImageUpdater implements NotificationCenter.NotificationCenterDelegate, PhotoCropActivity.PhotoEditActivityDelegate {
 
@@ -96,41 +102,58 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         if (parentFragment == null || parentFragment.getParentActivity() == null) {
             return;
         }
-        BottomSheet.Builder builder = new BottomSheet.Builder(parentFragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
+        BottomBuilder builder = new BottomBuilder(parentFragment.getParentActivity());
 
-        CharSequence[] items;
-        int[] icons;
+        if (hasAvatar && parentFragment instanceof SettingsActivity) {
 
-        if (searchAvailable) {
-            if (hasAvatar) {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                icons = new int[]{R.drawable.deproko_baseline_camera_26, R.drawable.baseline_image_24, R.drawable.baseline_search_24, R.drawable.baseline_delete_24};
-            } else {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch)};
-                icons = new int[]{R.drawable.deproko_baseline_camera_26, R.drawable.baseline_image_24, R.drawable.baseline_search_24};
-            }
-        } else {
-            if (hasAvatar) {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                icons = new int[]{R.drawable.deproko_baseline_camera_26, R.drawable.baseline_image_24, R.drawable.baseline_delete_24};
-            } else {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery)};
-                icons = new int[]{R.drawable.deproko_baseline_camera_26, R.drawable.baseline_image_24};
-            }
+            builder.addItem(LocaleController.getString("Open", R.string.Open), R.drawable.baseline_visibility_24, __ -> {
+
+                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
+                if (user != null && user.photo != null && user.photo.photo_big != null) {
+                    PhotoViewer.getInstance().setParentActivity(parentFragment.getParentActivity());
+                    if (user.photo.dc_id != 0) {
+                        user.photo.photo_big.dc_id = user.photo.dc_id;
+                    }
+                    PhotoViewer.getInstance().openPhoto(user.photo.photo_big, ((SettingsActivity) parentFragment).provider);
+                }
+
+                return Unit.INSTANCE;
+            });
+
         }
 
-        builder.setItems(items, icons, (dialogInterface, i) -> {
-            if (i == 0) {
-                openCamera();
-            } else if (i == 1) {
-                openGallery();
-            } else if (searchAvailable && i == 2) {
-                openSearch();
-            } else if (searchAvailable && i == 3 || i == 2) {
-                onDeleteAvatar.run();
-            }
+        builder.addItem(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), R.drawable.baseline_camera_alt_24, __ -> {
+            openCamera();
+            ;
+            return Unit.INSTANCE;
         });
+
+        builder.addItem(LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), R.drawable.baseline_image_24, __ -> {
+            openGallery();
+            ;
+            return Unit.INSTANCE;
+        });
+
+
+        if (searchAvailable) {
+
+            builder.addItem(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), R.drawable.baseline_search_24, __ -> {
+                openSearch();
+                ;
+                return Unit.INSTANCE;
+            });
+
+        }
+
+        if (hasAvatar) {
+
+            builder.addItem(LocaleController.getString("DeletePhoto", R.string.DeletePhoto), R.drawable.baseline_delete_24, true, __ -> {
+                onDeleteAvatar.run();
+                return Unit.INSTANCE;
+            });
+
+        }
+
         BottomSheet sheet = builder.create();
         parentFragment.showDialog(sheet);
         sheet.setItemColor(searchAvailable ? 3 : 2, Theme.getColor(Theme.key_dialogTextRed2), Theme.getColor(Theme.key_dialogRedIcon));

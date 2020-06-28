@@ -187,7 +187,7 @@ object ProxyUtil {
 
             } else {
 
-                val url = link.toHttpUrlOrNull()!!
+                val url = link.replace("tg://","https://t.me/").toHttpUrlOrNull()!!
 
                 AndroidUtilities.showProxyAlert(ctx,
                         url.queryParameter("server"),
@@ -204,7 +204,7 @@ object ProxyUtil {
 
         }.onFailure {
 
-            FileLog.w("$it")
+            FileLog.e(it)
 
             AlertUtil.showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
 

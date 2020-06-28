@@ -203,7 +203,7 @@ public class ConnectionsManager extends BaseController {
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
 
-        int layer = MessagesController.getMainSettings(currentAccount).getInt("layer",TLRPC.LAYER);
+        int layer = MessagesController.getMainSettings(currentAccount).getInt("layer", TLRPC.LAYER);
 
         if (layer != TLRPC.LAYER) {
 
@@ -486,11 +486,15 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onConnectionStateChanged(final int state, final int currentAccount) {
-        AndroidUtilities.runOnUIThread(() -> {
-            getInstance(currentAccount).connectionState = state;
-            AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
-        });
-        ProxySwitcher.didReceivedNotification(state);
+        try {
+            AndroidUtilities.runOnUIThread(() -> {
+                getInstance(currentAccount).connectionState = state;
+                ProxySwitcher.didReceivedNotification(state);
+                AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
+            });
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     public static void onLogout(final int currentAccount) {
@@ -551,7 +555,9 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onProxyError() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3);
+        AndroidUtilities.runOnUIThread(() -> {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3);
+        });
     }
 
     public static void getHostByName(String hostName, long address) {
@@ -661,10 +667,13 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port);
 
-    public static native void native_setDatacenterAddress(int currentAccount, int datacenterId, String ipv4Address,String ipv6Address, int port);
+    public static native void native_setDatacenterAddress(int currentAccount, int datacenterId, String ipv4Address, String ipv6Address, int port);
+
     public static native void native_setDatacenterPublicKey(int currentAccount, int datacenterId, String publicKey, long fingerprint);
+
     public static native void native_saveDatacenters(int currentAccount);
-    public static native void native_setLayer(int currentAccount,int layer);
+
+    public static native void native_setLayer(int currentAccount, int layer);
 
     public static native int native_getConnectionState(int currentAccount);
 

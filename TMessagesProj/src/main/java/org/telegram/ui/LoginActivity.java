@@ -357,7 +357,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 needFinishActivity(false);
                             } else {
                                 if (error.code == 401) {
-                                    ConnectionsManager.native_cleanUp(currentAccount,true);
+                                    ConnectionsManager.native_cleanUp(currentAccount, true);
                                 }
                                 if (error.text != null) {
                                     if (error.text.contains("ACCESS_TOKEN_INVALID")) {
@@ -552,11 +552,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     int dcType;
 
-                     if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
+                    if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
                         dcType = 1;
                     } else if (MessagesController.getMainSettings(currentAccount).getBoolean("custom_dc", false)) {
-                         dcType = 2;
-                     } else {
+                        dcType = 2;
+                    } else {
                         dcType = 0;
                     }
 
@@ -920,14 +920,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         Locale current = ConfigurationCompat.getLocales(getParentActivity().getResources().getConfiguration()).get(0);
 
-        if (NekoXConfig.developerMode || !"cn".equals(current.getCountry().toLowerCase())) {
+        boolean disableAdvOptions = !NekoXConfig.developerMode && "cn".equals(current.getCountry().toLowerCase());
 
+        if (!disableAdvOptions) {
             otherItem.addSubItem(4, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
-
         }
 
         otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
-        otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24,LocaleController.getString("CustomBackend", R.string.CustomBackend));
+
+        if (!disableAdvOptions) {
+            otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
+        }
 
         actionBar.setAllowOverlayTitle(true);
         doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));

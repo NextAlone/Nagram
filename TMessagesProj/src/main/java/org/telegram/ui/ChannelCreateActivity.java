@@ -479,7 +479,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
             };
             avatarEditor.setScaleType(ImageView.ScaleType.CENTER);
-            avatarEditor.setImageResource(R.drawable.deproko_baseline_camera_26);
+            avatarEditor.setImageResource(R.drawable.baseline_camera_alt_24);
             avatarEditor.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultIcon), PorterDuff.Mode.SRC_IN));
 
             avatarEditor.setEnabled(false);

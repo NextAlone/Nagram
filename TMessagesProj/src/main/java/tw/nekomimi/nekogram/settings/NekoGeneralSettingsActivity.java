@@ -711,7 +711,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         }
                         textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, false);
                     } else if (position == sortMenuRow) {
-                        textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
+                        textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), false);
                     } else if (position == translateToLangRow) {
                         textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
                     } else if (position == translateInputToLangRow) {
@@ -734,14 +734,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             default:
                                 value = "Unknown";
                         }
-                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, false);
                     }
                     break;
                 }
                 case 6: {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
                     if (position == googleCloudTranslateKeyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice), true);
+                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice), false);
                     } else if (position == cachePathRow) {
                         textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
                     }
@@ -781,7 +781,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == openArchiveOnPullRow) {
                         textCell.setTextAndCheck(LocaleController.getString("OpenArchiveOnPull", R.string.OpenArchiveOnPull), NekoConfig.openArchiveOnPull, true);
                     } else if (position == disableSystemAccountRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableSystemAccount", R.string.DisableSystemAccount), NekoConfig.disableSystemAccount, true);
+                        textCell.setTextAndCheck(LocaleController.getString("DisableSystemAccount", R.string.DisableSystemAccount), NekoConfig.disableSystemAccount, false);
                     } else if (position == avatarAsDrawerBackgroundRow) {
                         textCell.setTextAndCheck(LocaleController.getString("UseAvatarAsDrawerBackground", R.string.UseAvatarAsDrawerBackground), NekoConfig.avatarAsDrawerBackground, true);
                     } else if (position == removeTitleEmojiRow) {

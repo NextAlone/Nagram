@@ -113,7 +113,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import cn.hutool.core.util.RuntimeUtil;
@@ -247,7 +246,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    private PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
+    public PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
 
         @Override
         public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
@@ -371,8 +370,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         otherItem = menu.addItem(0, R.drawable.ic_ab_other);
         otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-        otherItem.addSubItem(edit_name, R.drawable.baseline_edit_24, LocaleController.getString("EditName", R.string.EditName));
-        otherItem.addSubItem(logout, R.drawable.baseline_exit_to_app_24, LocaleController.getString("LogOut", R.string.LogOut));
+        // otherItem.addSubItem(edit_name, R.drawable.baseline_edit_24, LocaleController.getString("EditName", R.string.EditName));
+        otherItem.addSubItem(logout, LocaleController.getString("LogOut", R.string.LogOut));
 
         int scrollTo;
         int scrollToPosition = 0;
@@ -525,7 +524,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         if (!BuildVars.isMini) {
                             message += "\n" + Libv2ray.checkVersionX();
                         }
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                     builder.addTitle(message);
                     String finalMessage = message;
                     builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
@@ -726,17 +726,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         avatarContainer.setPivotY(0);
         frameLayout.addView(avatarContainer, LayoutHelper.createFrame(42, 42, Gravity.TOP | Gravity.LEFT, 64, 0, 0, 0));
         avatarContainer.setOnClickListener(v -> {
-            if (avatar != null) {
+            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
+            if (user == null) {
+                user = UserConfig.getInstance(currentAccount).getCurrentUser();
+            }
+            if (user == null) {
                 return;
             }
-            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-            if (user != null && user.photo != null && user.photo.photo_big != null) {
-                PhotoViewer.getInstance().setParentActivity(getParentActivity());
-                if (user.photo.dc_id != 0) {
-                    user.photo.photo_big.dc_id = user.photo.dc_id;
-                }
-                PhotoViewer.getInstance().openPhoto(user.photo.photo_big, provider);
-            }
+            imageUpdater.openMenu(user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty), () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null));
         });
 
         avatarImage = new BackupImageView(context);
@@ -817,7 +814,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         writeButton.setBackgroundDrawable(drawable);
         writeButton.setImageResource(R.drawable.baseline_edit_24);
-        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.SRC_IN));
+        writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -834,16 +831,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         frameLayout.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.RIGHT | Gravity.TOP, 0, 0, 16, 0));
         writeButton.setOnClickListener(v -> {
-            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-            if (user == null) {
-                user = UserConfig.getInstance(currentAccount).getCurrentUser();
-            }
-            if (user == null) {
-                return;
-            }
-            imageUpdater.openMenu(user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty), () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null));
+            presentFragment(new ChangeNameActivity());
         });
-        writeButton.setContentDescription(LocaleController.getString("AccDescrChangeProfilePicture", R.string.AccDescrChangeProfilePicture));
 
         if (scrollTo != -1) {
             layoutManager.scrollToPositionWithOffset(scrollTo, scrollToPosition);
