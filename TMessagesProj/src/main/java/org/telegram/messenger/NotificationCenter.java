@@ -190,6 +190,10 @@ public class NotificationCenter {
     public static final int messagePlayingSpeedChanged = totalEvents++;
     public static final int screenStateChanged = totalEvents++;
 
+    // custom
+
+    public static final int updateUserStatus = totalEvents++;
+
     private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();

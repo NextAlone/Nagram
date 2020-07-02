@@ -3,6 +3,8 @@
 
     <string name="NekoX" translatable="false">Nekogram X</string>
 
+    <string name="Locked">Locked</string>
+
     <string name="CustomApi">Custom API</string>
     <string name="UseCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="CustomApiNo">Don\'t use custom API</string>

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.NotificationCenter;
 
 import tw.nekomimi.nekogram.database.NitritesKt;
 
@@ -19,6 +20,10 @@ public class NekoXConfig {
     public static boolean disableFlagSecure = preferences.getBoolean("disable_flag_secure", false);
     public static boolean disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
 
+    public static boolean disableStatusUpdate = preferences.getBoolean("disable_status_update", false);
+    public static boolean keepOnlineStatus = preferences.getBoolean("keepOnlineStatus", false);
+
+
     public static void toggleDeveloperMode() {
 
         preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
@@ -28,7 +33,9 @@ public class NekoXConfig {
             preferences.edit()
                     .putBoolean("disable_flag_secure", disableFlagSecure = false)
                     .putBoolean("disable_screenshot_detection", disableScreenshotDetection = false)
+                    .putBoolean("disable_status_update", disableStatusUpdate = false)
                     .apply();
+
 
         }
 
@@ -114,5 +121,22 @@ public class NekoXConfig {
                 .apply();
 
     }
+
+    public static void toggleDisableStatusUpdate() {
+
+        preferences.edit().putBoolean("disable_status_update", disableStatusUpdate = !disableStatusUpdate).apply();
+
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null);
+
+    }
+
+    public static void toggleKeepOnlineStatus() {
+
+        preferences.edit().putBoolean("keepOnlineStatus", keepOnlineStatus = !keepOnlineStatus).apply();
+
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null);
+
+    }
+
 
 }

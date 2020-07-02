@@ -51,6 +51,7 @@ public class NekoXSettingActivity extends BaseFragment {
     private int enableRow;
     private int disableFlagSecureRow;
     private int disableScreenshotDetectionRow;
+    private int disableStatusUpdateRow;
 
     private int fetchAndExportLangRow;
     private int checkUpdateRepoForceRow;
@@ -119,6 +120,11 @@ public class NekoXSettingActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableScreenshotDetection);
                 }
+            } else if (position == disableStatusUpdateRow) {
+                NekoXConfig.toggleDisableStatusUpdate();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoXConfig.disableStatusUpdate);
+                }
             }
 
         });
@@ -143,6 +149,7 @@ public class NekoXSettingActivity extends BaseFragment {
 
         disableFlagSecureRow = rowCount++;
         disableScreenshotDetectionRow = rowCount++;
+        disableStatusUpdateRow = rowCount++;
 
         fetchAndExportLangRow = rowCount++;
         checkUpdateRepoForceRow = rowCount++;
@@ -282,6 +289,9 @@ public class NekoXSettingActivity extends BaseFragment {
                             textCell.setTextAndCheck("Disable Flag Secure", NekoXConfig.disableFlagSecure, true);
                         } else if (position == disableScreenshotDetectionRow) {
                             textCell.setTextAndCheck("Disable Screenshot Detection", NekoXConfig.disableScreenshotDetection, false);
+                        } else if (position == disableStatusUpdateRow) {
+                            textCell.setTextAndCheck("Disable Status Update", NekoXConfig.disableStatusUpdate, false);
+
                         }
                     }
                     break;

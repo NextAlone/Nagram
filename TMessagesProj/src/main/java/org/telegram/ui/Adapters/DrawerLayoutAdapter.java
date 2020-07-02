@@ -19,12 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerActionCell;
@@ -40,8 +42,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import cn.hutool.core.util.StrUtil;
 import kotlin.jvm.functions.Function0;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
@@ -102,8 +106,17 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         return accountsShown;
     }
 
-    @Override public void didReceivedNotification(int id, int account, Object... args) {
-        resetItems();
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.updateUserStatus) {
+            if (args[0] != null) {
+                TLRPC.TL_updateUserStatus update = (TLRPC.TL_updateUserStatus) args[0];
+                int selectedUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                if (update.user_id != selectedUserId) {
+                    return;
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -262,8 +275,20 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
                 return true;
             }));
         }
+        if (NekoXConfig.disableStatusUpdate && !UserConfig.getInstance(UserConfig.selectedAccount).isBot) {
+            boolean online = MessagesController.getInstance(UserConfig.selectedAccount).isOnline();
+            String message = online ? StrUtil.upperFirst(LocaleController.getString("Online", R.string.Online)) : LocaleController.getString("VoipOfflineTitle",R.string.VoipOfflineTitle);
+            if (NekoXConfig.keepOnlineStatus) {
+                message += " (" + LocaleController.getString("Locked",R.string.Locked) +  ")";
+            }
+            items.add(new CheckItem(14, message, R.drawable.baseline_visibility_24, () -> online, () -> {
+                MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
+                controller.updateStatus(!online);
+                return true;
+            }));
+        }
         items.add(null); // divider
-        items.add(new CheckItem(12,LocaleController.getString("DarkMode",R.string.NightMode),R.drawable.baseline_brightness_2_24,() -> Theme.getActiveTheme().isDark(),null));
+        items.add(new CheckItem(12, LocaleController.getString("DarkMode", R.string.NightMode), R.drawable.baseline_brightness_2_24, () -> Theme.getActiveTheme().isDark(), null));
     }
 
     public int getId(int position) {
@@ -311,7 +336,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         public Function0<Boolean> isChecked;
         public Function0<Boolean> doSwitch;
 
-        public CheckItem(int id, String text, int icon, Function0<Boolean> isChecked,@Nullable Function0<Boolean> doSwitch) {
+        public CheckItem(int id, String text, int icon, Function0<Boolean> isChecked, @Nullable Function0<Boolean> doSwitch) {
             super(id, text, icon);
             this.isChecked = isChecked;
             this.doSwitch = doSwitch;
