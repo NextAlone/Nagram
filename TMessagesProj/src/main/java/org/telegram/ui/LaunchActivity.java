@@ -598,6 +598,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 } else if (id == 13) {
                     presentFragment(new ProxyListActivity());
                     drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 14) {
+                    NekoXConfig.toggleKeepOnlineStatus();;
+                    drawerLayoutAdapter.notifyDataSetChanged();
                 }
             } else {
                 int id = drawerLayoutAdapter.getId(position);
@@ -678,7 +681,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.notificationsCountUpdated);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.screenStateChanged);
+
         NotificationCenter.getGlobalInstance().addObserver(drawerLayoutAdapter, NotificationCenter.proxySettingsChanged);
+        NotificationCenter.getGlobalInstance().addObserver(drawerLayoutAdapter, NotificationCenter.updateUserStatus);
 
         if (actionBarLayout.fragmentsStack.isEmpty()) {
             if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
@@ -898,6 +903,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             PrivacyUtil.postCheckAll(this, account);
         }
         updateCurrentConnectionState(currentAccount);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null);
     }
 
     private void switchToAvailableAccountOrLogout() {
@@ -2861,6 +2867,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.screenStateChanged);
         NotificationCenter.getGlobalInstance().removeObserver(drawerLayoutAdapter, NotificationCenter.proxySettingsChanged);
+        NotificationCenter.getGlobalInstance().removeObserver(drawerLayoutAdapter, NotificationCenter.updateUserStatus);
 
     }
 
