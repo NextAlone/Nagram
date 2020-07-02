@@ -16,6 +16,7 @@
     <string name="Install">Instalar</string>
     <string name="Ignore">Ignorar</string>
     <string name="UpdateDownloaded">Se ha descargado una actualización.</string>
+    <string name="ProxyAutoSwitch">Cambio automático del proxy</string>
     <string name="LinkedGroupChat">Grupo vinculado</string>
     <string name="LinkedChannelChat">Canal vinculado</string>
     <string name="DevModeTitle">**Tu cuenta de telegram puede ser baneada**</string>

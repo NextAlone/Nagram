@@ -16,6 +16,7 @@
     <string name="Install">Установить</string>
     <string name="Ignore">Пропустить</string>
     <string name="UpdateDownloaded">Обновление загружено.</string>
+    <string name="ProxyAutoSwitch">Автопереключение прокси</string>
     <string name="LinkedGroupChat">Привязанная группа</string>
     <string name="LinkedChannelChat">Привязанный канал</string>
     <string name="DevModeTitle">** Ваш аккаунт в Telegram может быть заблокирован **</string>

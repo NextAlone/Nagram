@@ -16,6 +16,7 @@
     <string name="Install">להתקין</string>
     <string name="Ignore">להתעלם</string>
     <string name="UpdateDownloaded">זה עתה הורד עדכון.</string>
+    <string name="ProxyAutoSwitch">מתג אוטומטי של פרוקסי</string>
     <string name="LinkedGroupChat">קבוצה מקושרת</string>
     <string name="LinkedChannelChat">ערוץ מקושר</string>
     <string name="DevModeTitle">** חשבון המברק שלך עשוי להיות אסור **</string>
