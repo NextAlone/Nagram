@@ -44,9 +44,13 @@ dependencies {
     // TODO: fix problem with android L
     implementation 'com.google.zxing:core:3.4.0'
 
-    compileOnly 'org.checkerframework:checker-qual:3.4.1'
+    compileOnly 'org.checkerframework:checker-qual:3.5.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
-    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
+
+    // don't change this :)
+    //noinspection GradleDependency
+    implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
+
     implementation 'com.stripe:stripe-android:2.0.2'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.osmdroid:osmdroid-android:6.1.6'
@@ -75,7 +79,7 @@ dependencies {
 
 }
 
-def verName = "6.2.0.2-rc01"
+def verName = "6.2.0.2-preview-2"
 def verCode = 52
 
 task writeUpdateInfo {
