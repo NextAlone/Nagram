@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.parts
 
 import android.app.Activity
 import android.content.IntentSender
+import cn.hutool.core.util.StrUtil
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
@@ -11,7 +12,6 @@ import org.json.JSONObject
 import org.telegram.messenger.BuildConfig
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import org.telegram.ui.Cells.TextCell
 import tw.nekomimi.nekogram.BottomBuilder
 import tw.nekomimi.nekogram.ExternalGcm
 import tw.nekomimi.nekogram.NekoXConfig
@@ -22,70 +22,81 @@ fun Activity.switchVersion() {
 
     val builder = BottomBuilder(this)
 
-    builder.addItems(arrayOf(
-            "Mini Release",
-            "Mini Release NoGcm",
-            "Full Release",
-            "Full Release NoGcm"
-    ).filterIndexed { index, text ->
+    fun addVersion(fPrefix: String, fSuffix: String, noGcm: Boolean) {
 
-        !(BuildConfig.BUILD_TYPE == when {
-            text.endsWith("NoGcm") -> "releaseNoGcm"
-            else -> "release"
-        } && BuildConfig.FLAVOR == text.substringBefore(" ").toLowerCase())
+        var buildType = "Release"
 
-    }.toTypedArray()) { index: Int, text: String, _: TextCell ->
+        if (noGcm) buildType += "NoGcm"
 
-        builder.dismiss()
+        builder.addItem("$fPrefix $buildType $fSuffix".trim()) {
 
-        val buildType = when {
-            text.endsWith("NoGcm") -> "releaseNoGcm"
-            else -> "release"
-        }
+            val flavor = (fPrefix.toLowerCase() + fSuffix).trim()
 
-        val flavor = text.substringBefore(" ").toLowerCase()
+            buildType = StrUtil.lowerFirst(buildType)
 
-        val progress = AlertUtil.showProgress(this)
+            val progress = AlertUtil.showProgress(this)
 
-        progress.show()
+            progress.show()
 
-        UIUtil.runOnIoDispatcher {
+            UIUtil.runOnIoDispatcher {
 
-            val ex = mutableListOf<Throwable>()
+                val ex = mutableListOf<Throwable>()
 
-            UpdateUtil.updateUrls.forEach { url ->
+                UpdateUtil.updateUrls.forEach { url ->
 
-                runCatching {
+                    runCatching {
 
-                    val updateInfo = JSONObject(HttpUtil.get("$url/update.json"))
+                        val updateInfo = JSONObject(HttpUtil.get("$url/update.json"))
 
-                    val code = updateInfo.getInt("versionCode")
+                        val code = updateInfo.getInt("versionCode")
 
-                    UIUtil.runOnUIThread {
+                        UIUtil.runOnUIThread {
 
-                        progress.dismiss()
+                            progress.dismiss()
 
-                        UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultFlavor"), buildType, flavor)
+                            UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultFlavor"), buildType, flavor)
+
+                        }
+
+                        return@runOnIoDispatcher
+
+                    }.onFailure {
+
+                        ex.add(it)
 
                     }
 
-                    return@runOnIoDispatcher
-
-                }.onFailure {
-
-                    ex.add(it)
-
                 }
 
+                progress.dismiss()
+
+                AlertUtil.showToast(ex.joinToString("\n") { it.message ?: it.javaClass.simpleName })
+
             }
-
-            progress.dismiss()
-
-            AlertUtil.showToast(ex.joinToString("\n") { it.message ?: it.javaClass.simpleName })
 
         }
 
     }
+
+    fun addVersion(fPrefix: String, fSuffix: String) {
+
+        addVersion(fPrefix, fSuffix, false)
+        addVersion(fPrefix, fSuffix, true)
+
+    }
+
+    fun addVersion(fPrefix: String) {
+
+        arrayOf("", "NoEmoji", "Apple", "Noto", "Twitter", "Facebook").forEach {
+
+            addVersion(fPrefix, "${it}Emoji")
+
+        }
+
+    }
+
+    addVersion("Full")
+    addVersion("Mini")
 
     builder.show()
 

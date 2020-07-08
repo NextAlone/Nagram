@@ -98,7 +98,7 @@ public class BottomSheet extends Dialog {
     protected String behindKeyboardColorKey = Theme.key_dialogBackground;
     protected int behindKeyboardColor;
 
-    private boolean canDismissWithSwipe = true;
+    private boolean canDismissWithSwipe = false;
 
     private boolean allowCustomAnimation = true;
     private boolean showWithoutAnimation;

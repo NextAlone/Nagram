@@ -549,11 +549,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             return Unit.INSTANCE;
                         });
                     }
-                    builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
-                        builder.dismiss();
-                        UpdateChecksKt.switchVersion(getParentActivity());
-                        return Unit.INSTANCE;
-                    });
+                    if (BuildConfig.BUILD_TYPE.startsWith("release")) {
+                        builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
+                            builder.dismiss();
+                            UpdateChecksKt.switchVersion(getParentActivity());
+                            return Unit.INSTANCE;
+                        });
+                    }
                     if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode) {
                         builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                             builder.dismiss();

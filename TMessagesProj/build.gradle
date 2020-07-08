@@ -30,6 +30,12 @@ buildscript {
 
 }
 
+repositories {
+
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+
+}
+
 dependencies {
 
     implementation 'androidx.core:core:1.5.0-alpha01'
@@ -73,6 +79,11 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
+    compileOnly 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
+    compileOnly 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
+    compileOnly 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
+    compileOnly 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
+
     releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
     releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
@@ -111,8 +122,6 @@ android {
 
         versionName verName
         versionCode verCode
-
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
         def appId = null
         def appHash = null
@@ -295,14 +304,67 @@ android {
         mini {
             versionNameSuffix '-mini'
         }
+        miniNoEmoji {
+            versionNameSuffix '-mini-no-emoji'
+        }
+        miniAppleEmoji {
+            versionNameSuffix '-mini-apple-emoji'
+        }
+        miniNotoEmoji {
+            versionNameSuffix '-mini-noto-emoji'
+        }
+        miniTwitterEmoji {
+            versionNameSuffix '-mini-twitter-emoji'
+        }
+        miniFacebookEmoji {
+            versionNameSuffix '-mini-facebook-emoji'
+        }
         full {}
+        fullNoEmoji {
+            versionNameSuffix '-full-no-emoji'
+        }
+        fullAppleEmoji {
+            versionNameSuffix '-full-apple-emoji'
+        }
+        fullNotoEmoji {
+            versionNameSuffix '-full-noto-emoji'
+        }
+        fullTwitterEmoji {
+            versionNameSuffix '-full-twitter-emoji'
+        }
+        fullFacebookEmoji {
+            versionNameSuffix '-full-facebook-emoji'
+        }
     }
 
-    sourceSets.full {
-        dependencies {
-            implementation files('libs/libv2ray.aar')
-            implementation files('libs/ss-rust-release.aar')
-            implementation files('libs/ssr-libev-release.aar')
+    sourceSets.all { set ->
+        if (set.name.startsWith("full")) {
+            set.dependencies {
+                implementation files('libs/libv2ray.aar')
+                implementation files('libs/ss-rust-release.aar')
+                implementation files('libs/ssr-libev-release.aar')
+            }
+        }
+        if (set.name.matches("(mini|full).*")) {
+            if (set.name.contains("Apple")) {
+                set.dependencies {
+                    implementation 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
+                }
+            } else if (set.name.contains("Noto")) {
+                set.dependencies {
+                    implementation 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
+                }
+            } else if (set.name.contains("Twitter")) {
+                set.dependencies {
+                    implementation 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
+                }
+            } else if (set.name.contains("Facebook")) {
+                set.dependencies {
+                    implementation 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
+                }
+            } else {
+                set.assets.srcDirs = ["src/main/assets", "src/emojis/blob"]
+            }
         }
     }
 
@@ -317,7 +379,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj","NekoX")
+            outputFileName = outputFileName.replace("TMessagesProj", "NekoX")
         }
 
         def assembleTgVoipDexTaskName = "assemble${variant.name.capitalize()}TgVoipDex"

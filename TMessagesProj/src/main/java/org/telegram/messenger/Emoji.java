@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class Emoji {
@@ -264,8 +265,6 @@ public class Emoji {
             return rect;
         }
 
-        private static Typeface blobCompat;
-
         @Override
         public void draw(Canvas canvas) {
             Rect b;
@@ -275,33 +274,23 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (!NekoConfig.useSystemEmoji) {
+            String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
 
-                if (blobCompat == null) {
+            if (NekoConfig.useSystemEmoji || EmojiProvider.noEmoji || EmojiProvider.isFont || !EmojiProvider.contains(emoji)) {
 
-                    blobCompat = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), "fonts/blob_compat.ttf");
-
+                if (!NekoConfig.useSystemEmoji && EmojiProvider.isFont) {
+                    textPaint.setTypeface(EmojiProvider.getFont());
                 }
 
-                textPaint.setTypeface(blobCompat);
+                textPaint.setTextSize(b.height() * 0.8f);
+                canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
+
+            } else {
+
+                canvas.drawBitmap(EmojiProvider.readDrawable(emoji).getBitmap(), null, b, paint);
 
             }
 
-            String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
-            textPaint.setTextSize(b.height() * 0.8f);
-            canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
-
-//
-//            if (emojiBmp[info.page][info.page2] == null) {
-//                loadEmoji(info.page, info.page2);
-//                canvas.drawRect(getBounds(), placeholderPaint);
-//                return;
-//            }
-//
-//
-//            //if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
-//            canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
-//            //}
         }
 
         @Override

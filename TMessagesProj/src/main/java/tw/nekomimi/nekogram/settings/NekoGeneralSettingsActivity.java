@@ -47,6 +47,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -573,7 +574,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         appearanceRow = rowCount++;
         typefaceRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? rowCount++ : -1;
         useDefaultThemeRow = rowCount++;
-        useSystemEmojiRow = rowCount++;
+        useSystemEmojiRow = EmojiProvider.noEmoji ? -1 : rowCount++;
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
         forceTabletRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
