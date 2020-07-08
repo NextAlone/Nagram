@@ -552,7 +552,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     if (BuildConfig.BUILD_TYPE.startsWith("release")) {
                         builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
                             builder.dismiss();
-                            UpdateChecksKt.switchVersion(getParentActivity());
+                            Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
                             return Unit.INSTANCE;
                         });
                     }

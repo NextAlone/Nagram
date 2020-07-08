@@ -21,13 +21,13 @@ object EmojiProvider {
 
     // default use blob
     @JvmField
-    val isFont = !type.contains("Emoji")
+    val isFont = type.contains("Blob")
 
     @JvmStatic
     val font by lazy {
         if (!isFont) throw IllegalStateException()
         val resName = when {
-            !type.contains("emoji") -> "blob_compat.ttf"
+            type.contains("Blob") -> "blob_compat.ttf"
             else -> throw IllegalStateException()
         }
         Typeface.createFromAsset(ApplicationLoader.applicationContext.assets, "fonts/$resName");

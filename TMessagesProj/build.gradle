@@ -7,6 +7,35 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
+
+if (serviceAccountCredentialsFile.isFile()) {
+
+    setupPlay()
+
+    play.serviceAccountCredentials = serviceAccountCredentialsFile
+
+} else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
+
+    setupPlay()
+
+}
+
+void setupPlay() {
+
+    apply plugin: 'com.github.triplet.play'
+
+    play {
+
+        track = "production"
+        
+        defaultToAppBundles = true
+
+    }
+
+}
+
+
 configurations {
     compile.exclude module: 'support-v4'
 }
@@ -36,62 +65,8 @@ repositories {
 
 }
 
-dependencies {
-
-    implementation 'androidx.core:core:1.5.0-alpha01'
-    implementation 'androidx.palette:palette:1.0.0'
-    implementation 'androidx.viewpager:viewpager:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.2.0'
-    implementation "androidx.interpolator:interpolator:1.0.0"
-    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
-    implementation 'com.android.support:multidex:1.0.3'
-
-    // replace zxing with latest
-    // TODO: fix problem with android L
-    implementation 'com.google.zxing:core:3.4.0'
-
-    compileOnly 'org.checkerframework:checker-qual:3.5.0'
-    compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
-
-    // don't change this :)
-    //noinspection GradleDependency
-    implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
-
-    implementation 'com.stripe:stripe-android:2.0.2'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.osmdroid:osmdroid-android:6.1.6'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
-
-    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.2.1'
-    implementation 'org.dizitart:nitrite:3.4.2'
-
-    implementation 'cn.hutool:hutool-core:5.3.8'
-    implementation 'cn.hutool:hutool-crypto:5.3.8'
-
-    implementation 'org.tukaani:xz:1.8'
-
-    compileOnly files('libs/libv2ray.aar')
-
-    compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
-    compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
-    compileOnly "com.google.android.play:core:$playCoreVersion"
-
-    compileOnly 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
-    compileOnly 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
-    compileOnly 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
-    compileOnly 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
-
-    releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
-    releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
-    releaseImplementation "com.google.android.play:core:$playCoreVersion"
-
-}
-
-def verName = "6.2.0.2-preview-1"
-def verCode = 51
+def verName = "6.2.0.3-rc02"
+def verCode = 55
 
 task writeUpdateInfo {
 
@@ -100,7 +75,7 @@ task writeUpdateInfo {
     info.set("version", verName)
     info.set("versionCode", verCode)
     info.set("defaultFlavor", "full")
-    info.set("defaultApkName", "NekoX-full-arm64-v8a-release.apk.xz")
+    info.set("defaultApkName", "NekoX-full-blobEmoji-arm64-v8a-release.apk.xz")
 
     FileUtil.writeUtf8String(info.toStringPretty(), new File("build/update.json"))
 
@@ -251,41 +226,35 @@ android {
         }
     }
 
-    sourceSets.main {
-        jni.srcDirs = ['./jni/']
-    }
+    sourceSets {
 
-    sourceSets.debug {
-        jniLibs.srcDir 'src/main/libs'
-    }
-
-    sourceSets.releaseNoGcm {
-        jniLibs.srcDir 'src/main/libs'
-    }
-
-    sourceSets.release {
-        jniLibs.srcDir 'src/main/libs'
-        manifest.srcFile 'src/gservcies/AndroidManifest.xml'
-    }
-
-    sourceSets.foss {
-        jni.srcDirs = ['./jni/']
-    }
-
-    flavorDimensions "version"
-
-    splits {
-
-        abi {
-
-            enable true
-
-            reset()
-            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-
-            universalApk true
-
+        main {
+            jni.srcDirs = ['./jni/']
         }
+
+        debug {
+            jniLibs.srcDir 'src/main/libs'
+        }
+
+        releaseNoGcm {
+            jniLibs.srcDir 'src/main/libs'
+        }
+
+        release {
+            jniLibs.srcDir 'src/main/libs'
+            manifest.srcFile 'src/gservcies/AndroidManifest.xml'
+        }
+
+        foss {
+            jni.srcDirs = ['./jni/']
+        }
+
+    }
+
+    splits.abi {
+
+        enable true
+        universalApk true
 
     }
 
@@ -298,75 +267,45 @@ android {
         dxUtilPath += ".bat"
     }
 
-    flavorDimensions "version"
+    flavorDimensions "version", "emoji"
 
     productFlavors {
+
         mini {
-            versionNameSuffix '-mini'
+            dimension "version"
         }
-        miniNoEmoji {
-            versionNameSuffix '-mini-no-emoji'
+
+        full {
+            dimension "version"
         }
-        miniAppleEmoji {
-            versionNameSuffix '-mini-apple-emoji'
+
+        noEmoji {
+            dimension "emoji"
         }
-        miniNotoEmoji {
-            versionNameSuffix '-mini-noto-emoji'
+
+        blobEmoji {
+            dimension "emoji"
         }
-        miniTwitterEmoji {
-            versionNameSuffix '-mini-twitter-emoji'
+
+        appleEmoji {
+            dimension "emoji"
         }
-        miniFacebookEmoji {
-            versionNameSuffix '-mini-facebook-emoji'
+
+        notoEmoji {
+            dimension "emoji"
         }
-        full {}
-        fullNoEmoji {
-            versionNameSuffix '-full-no-emoji'
+
+        twitterEmoji {
+            dimension "emoji"
         }
-        fullAppleEmoji {
-            versionNameSuffix '-full-apple-emoji'
+
+        facebookEmoji {
+            dimension "emoji"
         }
-        fullNotoEmoji {
-            versionNameSuffix '-full-noto-emoji'
-        }
-        fullTwitterEmoji {
-            versionNameSuffix '-full-twitter-emoji'
-        }
-        fullFacebookEmoji {
-            versionNameSuffix '-full-facebook-emoji'
-        }
+
     }
 
-    sourceSets.all { set ->
-        if (set.name.startsWith("full")) {
-            set.dependencies {
-                implementation files('libs/libv2ray.aar')
-                implementation files('libs/ss-rust-release.aar')
-                implementation files('libs/ssr-libev-release.aar')
-            }
-        }
-        if (set.name.matches("(mini|full).*")) {
-            if (set.name.contains("Apple")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
-                }
-            } else if (set.name.contains("Noto")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
-                }
-            } else if (set.name.contains("Twitter")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
-                }
-            } else if (set.name.contains("Facebook")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
-                }
-            } else {
-                set.assets.srcDirs = ["src/main/assets", "src/emojis/blob"]
-            }
-        }
-    }
+    sourceSets.blobEmoji.assets.srcDirs = ["src/main/assets", "src/emojis/blob"]
 
     tasks.all { task ->
         if (((task.name.endsWith('Ndk') || task.name.startsWith('generateJsonModel') || task.name.startsWith('externalNativeBuild'))) && !task.name.contains("Foss")) {
@@ -437,6 +376,70 @@ android {
         tasks.findByName("compile${variant.name.capitalize()}JavaWithJavac").finalizedBy(assembleTgVoipDexTaskName)
         tasks.findByName("${assembleTgVoipDexTaskName}").mustRunAfter tasks.findByName("merge${variant.name.capitalize()}Assets")
     }
+
+}
+
+
+dependencies {
+
+    implementation 'androidx.core:core:1.5.0-alpha01'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.exifinterface:exifinterface:1.2.0'
+    implementation "androidx.interpolator:interpolator:1.0.0"
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
+
+    // replace zxing with latest
+    // TODO: fix problem with android L
+    implementation 'com.google.zxing:core:3.4.0'
+
+    compileOnly 'org.checkerframework:checker-qual:3.5.0'
+    compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
+
+    // don't change this :)
+    //noinspection GradleDependency
+    implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
+
+    implementation 'com.stripe:stripe-android:2.0.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.osmdroid:osmdroid-android:6.1.6'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
+
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
+    implementation 'dnsjava:dnsjava:3.2.1'
+    implementation 'org.dizitart:nitrite:3.4.2'
+
+    implementation 'cn.hutool:hutool-core:5.3.8'
+    implementation 'cn.hutool:hutool-crypto:5.3.8'
+
+    implementation 'org.tukaani:xz:1.8'
+
+    compileOnly files('libs/libv2ray.aar')
+
+    fullImplementation files('libs/libv2ray.aar')
+    fullImplementation files('libs/ss-rust-release.aar')
+    fullImplementation files('libs/ssr-libev-release.aar')
+
+    compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
+    compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    compileOnly "com.google.android.play:core:$playCoreVersion"
+
+    compileOnly 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
+    compileOnly 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
+    compileOnly 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
+    compileOnly 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
+
+    appleEmojiImplementation 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
+    notoEmojiImplementation 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
+    twitterEmojiImplementation 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
+    facebookEmojiImplementation 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
+
+    releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
+    releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    releaseImplementation "com.google.android.play:core:$playCoreVersion"
 
 }
 
