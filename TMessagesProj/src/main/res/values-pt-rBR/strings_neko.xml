@@ -21,7 +21,6 @@
     <string name="AddToSavedMessages">Salvar mensagem</string>
     <string name="CreateMention">Criar Menção</string>
     <string name="ForceTabletMode">Forçar o modo tablet</string>
-    <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Barra de status transparente</string>
     <string name="EnableResidentNotification">Mostrar notificação de residente</string>
     <string name="DisableResidentNotification">Desativar notificação de residente</string>
@@ -48,8 +47,6 @@
     <string name="StickerSizeDialogMessageBigOne">Um grande</string>
     <string name="StickerSizeDialogMessageSmallOne">Um pequeno</string>
     <string name="StickerSizeDialogMessageReplyTo">Miau</string>
-    <string name="StickerSizeDialogName">Duang</string>
-    <string name="Experiment">Experimental</string>
     <string name="UnlimitedFavoredStickers">Adesivos favoritos ilimitados</string>
     <string name="UnlimitedFavoredStickersAbout">Adicione adesivos ilimitados aos favoritos. Os adesivos podem não estar sincronizados com outros dispositivos</string>
     <string name="MessageDetails">Detalhes</string>
@@ -63,10 +60,8 @@
     <string name="ProviderGoogleTranslate">Google Tradutor</string>
     <string name="ProviderGoogleTranslateCN">Google Tradutor CN</string>
     <string name="TranslateApiUnsupported">O provedor de tradução que você selecionou não suporta o seu idioma.</string>
-    <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Desfazer tradução</string>
     <string name="DisablePhotoViewerSideAction">Desativar toque lateral para mudar fotos</string>
-    <string name="BotToken">Token</string>
     <string name="UnlimitedPinnedDialogs">Chats fixados ilimitados</string>
     <string name="UnlimitedPinnedDialogsAbout">Fixar chats ilimitados desativar a sincronização.</string>
     <string name="OpenArchiveOnPull">Abrir chats arquivados ao puxar para baixo</string>
@@ -82,7 +77,6 @@
     <string name="TabTitleType">Mostrar em abas</string>
     <string name="TabTitleTypeTip">Os emoticons são sincronizados em nuvem pelo Telegram.</string>
     <string name="TabTitleTypeText">Títulos</string>
-    <string name="TabTitleTypeIcon">Emoticons</string>
     <string name="TabTitleTypeMix">Emoticons com títulos</string>
     <string name="ConfirmAVMessage">Confirme o envio de vídeo/mensagem de voz</string>
     <string name="AskBeforeCalling">Perguntar antes de ligar</string>
@@ -98,10 +92,8 @@
     <string name="DonateAbout">Apoie o nosso desenvolvimento.</string>
     <string name="TranslationAbout">Ajude-nos a traduzir o Nekogram para o seu idioma.</string>
     <string name="Translation">Traduzir Nekogram</string>
-    <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Código fonte no Github</string>
     <string name="ResetStickerSize">Redefinir tamanho do sticker</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">Reinicie o aplicativo para tirar efeito.</string>
     <string name="DisableAppBarShadow">Desativar sombra da barra de título</string>
     <string name="BetaWarning">Esse é um recurso **beta** implementado pelo **Telegram**.</string>
@@ -111,5 +103,4 @@
     <string name="IdTypeAbout">A API do Telegram usa IDs como está, mas o Bot API adiciona menos no início para grupos, e -100 para que os canais e supergrupos se encaixem em um campo.</string>
     <string name="IdTypeHidden">Ocultar</string>
     <string name="IdTypeAPI">API do Telegram</string>
-    <string name="IdTypeBOTAPI">Bot API</string>
 </resources>

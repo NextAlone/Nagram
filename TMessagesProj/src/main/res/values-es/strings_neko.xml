@@ -11,7 +11,6 @@
     <string name="InvalidAccessToken">Tóken de acceso inválido</string>
     <string name="IgnoreBlocked">En grupos, ignorar usuarios bloqueados</string>
     <string name="Connection">Conexión</string>
-    <string name="Chat">Chat</string>
     <string name="NameOrder">Orden de nombres</string>
     <string name="FirstLast">Nombre Apellido</string>
     <string name="LastFirst">Apellido Nombre</string>
@@ -21,7 +20,6 @@
     <string name="AddToSavedMessages">Guardar mensaje</string>
     <string name="CreateMention">Crear mención</string>
     <string name="ForceTabletMode">Forzar modo tablet</string>
-    <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Barra de estado transparente</string>
     <string name="EnableResidentNotification">Mostrar una notificación permanente</string>
     <string name="DisableResidentNotification">Desactivar notificación permanente</string>
@@ -48,8 +46,6 @@
     <string name="StickerSizeDialogMessageBigOne">Grandote</string>
     <string name="StickerSizeDialogMessageSmallOne">Chiquitito</string>
     <string name="StickerSizeDialogMessageReplyTo">Miau</string>
-    <string name="StickerSizeDialogName">Duang</string>
-    <string name="Experiment">Experimental</string>
     <string name="UnlimitedFavoredStickers">Stickers favoritos ilimitados</string>
     <string name="UnlimitedFavoredStickersAbout">Añade stickers ilimitados a favoritos. Puede que los stickers no se sincronicen con otros dispositivos.</string>
     <string name="MessageDetails">Detalles</string>
@@ -63,7 +59,6 @@
     <string name="ProviderGoogleTranslate">Traductor de Google</string>
     <string name="ProviderGoogleTranslateCN">Traductor de Google CN</string>
     <string name="TranslateApiUnsupported">El proveedor de traducción seleccionado no soporta su idioma.</string>
-    <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Deshacer traducción</string>
     <string name="DisablePhotoViewerSideAction">No cambiar de imagen con toques</string>
     <string name="BotToken">Tóken</string>
@@ -98,7 +93,6 @@
     <string name="DonateAbout">Apoya nuestro desarrollo.</string>
     <string name="TranslationAbout">Ayúdanos a traducir Nekogram a tu idioma.</string>
     <string name="Translation">Traducir Nekogram</string>
-    <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Código fuente en Github</string>
     <string name="ResetStickerSize">Restablecer tamaño del sticker</string>
     <string name="RestartAppToTakeEffect">Reiniciar la app para que tenga efecto.</string>

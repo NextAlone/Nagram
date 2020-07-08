@@ -11,7 +11,6 @@
     <string name="InvalidAccessToken">Accesso col token non valido</string>
     <string name="IgnoreBlocked">Ignora gli utenti bloccati nel gruppo</string>
     <string name="Connection">Connessione</string>
-    <string name="Chat">Chat</string>
     <string name="NameOrder">Ordinamento nome</string>
     <string name="FirstLast">Dal primo all\'ultimo</string>
     <string name="LastFirst">Dall\'ultimo al primo</string>
@@ -21,7 +20,6 @@
     <string name="AddToSavedMessages">Salva messaggio</string>
     <string name="CreateMention">Crea menzione</string>
     <string name="ForceTabletMode">Forza modalità tablet</string>
-    <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Barra di stato trasparente</string>
     <string name="EnableResidentNotification">Mostra notifica persistente</string>
     <string name="DisableResidentNotification">Disabilita notifica persistente</string>
@@ -35,7 +33,6 @@
     <string name="Snowflakes">Fiocchi di neve</string>
     <string name="Fireworks">Fuochi d\'artificio</string>
     <string name="DeleteDownloadedFile">Elimina il file scaricato</string>
-    <string name="TestBackend">Test Backend</string>
     <string name="TestBackendOn">Questo account si connetterà al server di test.</string>
     <string name="TestBackendOff">Questo account si connetterà al server principale.</string>
     <string name="HideProxySponsorChannel">Nascondi canale sponsor proxy</string>
@@ -48,7 +45,6 @@
     <string name="StickerSizeDialogMessageBigOne">Uno grande</string>
     <string name="StickerSizeDialogMessageSmallOne">Uno piccolo</string>
     <string name="StickerSizeDialogMessageReplyTo">Miao</string>
-    <string name="StickerSizeDialogName">Duang</string>
     <string name="Experiment">Sperimentale</string>
     <string name="UnlimitedFavoredStickers">Adesivi preferiti illimitati</string>
     <string name="UnlimitedFavoredStickersAbout">Aggiungi adesivi illimitati ai preferiti. Gli adesivi potrebbero non essere sincronizzati con altri dispositivi.</string>
@@ -63,10 +59,8 @@
     <string name="ProviderGoogleTranslate">Google Traduttore</string>
     <string name="ProviderGoogleTranslateCN">Google Traduttore CN</string>
     <string name="TranslateApiUnsupported">Il fornitore della traduzione selezionato non supporta la tua lingua.</string>
-    <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Annulla traduzione</string>
     <string name="DisablePhotoViewerSideAction">Disattiva scorrimento delle foto con i tap</string>
-    <string name="BotToken">Token</string>
     <string name="UnlimitedPinnedDialogs">Chat fissate illimitate</string>
     <string name="UnlimitedPinnedDialogsAbout">Fissa chat illimitate disattivando la loro sincronizzazione.</string>
     <string name="OpenArchiveOnPull">Apri l\'archivio tirando giù</string>
@@ -82,7 +76,6 @@
     <string name="TabTitleType">Mostra sulle schede</string>
     <string name="TabTitleTypeTip">Le emoticon sono sincronizzate su cloud tramite Telegram.</string>
     <string name="TabTitleTypeText">Titoli</string>
-    <string name="TabTitleTypeIcon">Emoticons</string>
     <string name="TabTitleTypeMix">Emoticons con titoli</string>
     <string name="ConfirmAVMessage">Conferma l\'invio di video/audio messaggio</string>
     <string name="AskBeforeCalling">Chiedi prima di chiamare</string>
@@ -98,7 +91,6 @@
     <string name="DonateAbout">Supporta lo sviluppo.</string>
     <string name="TranslationAbout">Aiutaci a tradurre Nekogram nella tua lingua.</string>
     <string name="Translation">Traduci Nekogram</string>
-    <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Codice sorgente su Github</string>
     <string name="ResetStickerSize">Resetta dimensione sticker</string>
     <string name="RestartAppToTakeEffect">Riavvia l\'app per applicare le modifiche.</string>

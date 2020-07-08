@@ -16,6 +16,7 @@
     <string name="Install">インストール</string>
     <string name="Ignore">無視する</string>
     <string name="UpdateDownloaded">アップデートがダウンロードされました</string>
+    <string name="ProxyAutoSwitch">プロキシ自動切り替え</string>
     <string name="LinkedGroupChat">リンクされたグループ</string>
     <string name="LinkedChannelChat">リンクされたチャンネル</string>
     <string name="DevModeTitle">**あなたのTelegramアカウントがBANされている可能性があります**</string>

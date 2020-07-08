@@ -16,6 +16,7 @@
     <string name="Install">تثبيت</string>
     <string name="Ignore">تجاهل</string>
     <string name="UpdateDownloaded">تم تحميل التحديث للتو.</string>
+    <string name="ProxyAutoSwitch">التبديل التلقائي للوكيل</string>
     <string name="LinkedGroupChat">مجموعة مرتبطة</string>
     <string name="LinkedChannelChat">قناة مرتبطة</string>
     <string name="DevModeTitle">**حساب التيليجرام الخاص بك قد يكون محظوراً**</string>

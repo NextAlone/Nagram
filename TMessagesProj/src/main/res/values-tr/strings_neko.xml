@@ -21,7 +21,6 @@
     <string name="AddToSavedMessages">Mesajı kaydet</string>
     <string name="CreateMention">Bahset</string>
     <string name="ForceTabletMode">Tablet modunu zorla</string>
-    <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Saydam durum çubuğu</string>
     <string name="EnableResidentNotification">Kalıcı bildirim göster</string>
     <string name="DisableResidentNotification">Kalıcı bildirimi devre dışı bırak</string>
@@ -98,7 +97,6 @@
     <string name="DonateAbout">Gelişimimizi destekleyin.</string>
     <string name="TranslationAbout">Nekogram\'ı kendi dilinize çevirmemize yardımcı olun.</string>
     <string name="Translation">Nekogram\'ı diline çevir</string>
-    <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github\'da kaynak kodu</string>
     <string name="ResetStickerSize">Çıkartma boyutunu varsayılan yap</string>
     <string name="RestartAppToTakeEffect">Etkili olması için uygulamayı yeniden başlatın.</string>

@@ -16,6 +16,7 @@
     <string name="Install">Yüklemek</string>
     <string name="Ignore">Aldırmamak</string>
     <string name="UpdateDownloaded">Bir güncelleme indirildi.</string>
+    <string name="ProxyAutoSwitch">Proxy Otomatik Anahtarı</string>
     <string name="LinkedGroupChat">Bağlantılı Grup</string>
     <string name="LinkedChannelChat">Bağlantılı Kanal</string>
     <string name="DevModeTitle">** Telgraf hesabınız yasaklanmış olabilir **</string>

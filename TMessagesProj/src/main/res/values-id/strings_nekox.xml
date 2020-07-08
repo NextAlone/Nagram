@@ -16,6 +16,7 @@
     <string name="Install">Pasang</string>
     <string name="Ignore">Abaikan</string>
     <string name="UpdateDownloaded">Pembaruan baru saja diunduh.</string>
+    <string name="ProxyAutoSwitch">Proxy Beralih Otomatis</string>
     <string name="LinkedGroupChat">Grup Tertaut</string>
     <string name="LinkedChannelChat">Saluran tertaut</string>
     <string name="DevModeTitle">**Akun telegram Anda mungkin dibanned**</string>

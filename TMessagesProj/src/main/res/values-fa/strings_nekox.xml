@@ -16,6 +16,7 @@
     <string name="Install">نصب کن</string>
     <string name="Ignore">نادیده بگیر</string>
     <string name="UpdateDownloaded">یک آپدیت به تازگی بارگیری شده است.</string>
+    <string name="ProxyAutoSwitch">سوئیچ خودکار پروکسی</string>
     <string name="LinkedGroupChat">گروه پیوند شده</string>
     <string name="LinkedChannelChat">کانال پیوند شده</string>
     <string name="DevModeTitle">** ممکن است حساب تلگرام شما Ban باشد **</string>

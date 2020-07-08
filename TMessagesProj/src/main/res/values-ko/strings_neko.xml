@@ -101,7 +101,6 @@
     <string name="GooglePlay">구글플레이</string>
     <string name="SourceCode">Github 의 소스코드</string>
     <string name="ResetStickerSize">스티커 사이즈 초기화</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">변경된 설정 적용을 위해 앱을 재시작</string>
     <string name="DisableAppBarShadow">제목 표시줄 그림자 비활성화</string>
     <string name="BetaWarning">\"텔레그램\"의 \"베타\" 기능 입니다.</string>

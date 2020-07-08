@@ -16,6 +16,7 @@
     <string name="Install">Installieren</string>
     <string name="Ignore">Ignorieren</string>
     <string name="UpdateDownloaded">Ein Update wurde gerade heruntergeladen.</string>
+    <string name="ProxyAutoSwitch">Proxy Auto-Schalter</string>
     <string name="LinkedGroupChat">Verknüpfte Gruppe</string>
     <string name="LinkedChannelChat">Verknüpfter Kanal</string>
     <string name="DevModeTitle">**Dein Telegram-Konto wurde möglicherweise gesperrt**</string>

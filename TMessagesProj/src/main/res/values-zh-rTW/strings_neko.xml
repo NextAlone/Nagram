@@ -98,7 +98,6 @@
     <string name="DonateAbout">支援我們的開發。</string>
     <string name="TranslationAbout">幫助我們將 Nekogram 翻譯成您的語言。</string>
     <string name="Translation">翻譯 Nekogram</string>
-    <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github 上的原始碼</string>
     <string name="ResetStickerSize">重置貼圖大小</string>
     <string name="RestartAppToTakeEffect">重啟應用以生效。</string>

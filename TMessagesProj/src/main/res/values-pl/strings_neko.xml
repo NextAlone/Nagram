@@ -7,7 +7,6 @@
     <string name="Hide">Ukryj</string>
     <string name="DeleteAllFromSelf">Usuń wszystkie swoje wiadomości</string>
     <string name="DeleteAllFromSelfAlert">Uwaga to usunie wszystkie wiadomości które napisałeś na tym chacie.</string>
-    <string name="BotLogin">Bot Login</string>
     <string name="InvalidAccessToken">Nieprawidłowy token dostępu</string>
     <string name="IgnoreBlocked">Ignoruj zablokowanych użytkowników w grupie</string>
     <string name="Connection">Połączenie</string>
@@ -25,7 +24,6 @@
     <string name="Snowflakes">Płatki śnieżne</string>
     <string name="Fireworks">Fajerwerki</string>
     <string name="DeleteDownloadedFile">Usunąć pobrany plik</string>
-    <string name="TestBackend">Test Backend</string>
     <string name="TestBackendOn">To konto połączenia do testowego serwera.</string>
     <string name="TestBackendOff">To konto połączenia do testowego serwera.</string>
     <string name="HideProxySponsorChannel">Ukryj kanał sponsora proxy</string>
@@ -47,4 +45,5 @@
     <string name="TranslationProvider">Dostawca tłumaczeń</string>
     <string name="ProviderGoogleTranslate">Tłumacz Google</string>
     <string name="UndoTranslate">Cofnij tłumaczenie</string>
+    <string name="Translation">Tłumacz Nekogram</string>
 </resources>

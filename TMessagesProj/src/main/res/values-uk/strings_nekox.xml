@@ -16,6 +16,7 @@
     <string name="Install">Інсталювати</string>
     <string name="Ignore">Ігнорувати</string>
     <string name="UpdateDownloaded">Оновлення тільки що завантажено.</string>
+    <string name="ProxyAutoSwitch">Автоматичне перемикання проксі</string>
     <string name="LinkedGroupChat">Пов\'язана група</string>
     <string name="LinkedChannelChat">Пов\'язаний канал</string>
     <string name="DevModeTitle">**Ваш обліковий запис Telegram може бути забанений**</string>

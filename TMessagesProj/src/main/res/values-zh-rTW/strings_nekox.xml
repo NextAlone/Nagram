@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">鎖定</string>
     <string name="CustomApi">自定義API</string>
     <string name="UseCustomApiNotice">使用自定義api登錄，如果您無法註冊或登錄，這可能會有所幫助。\n\n注意：如果您正在使用 release 版本，谷歌云推送將不起作用。</string>
     <string name="CustomApiNo">不要使用自定義API</string>
@@ -16,6 +17,7 @@
     <string name="Install">安裝</string>
     <string name="Ignore">忽視</string>
     <string name="UpdateDownloaded">剛剛下載了一個更新。</string>
+    <string name="ProxyAutoSwitch">代理自動切換</string>
     <string name="LinkedGroupChat">關聯組</string>
     <string name="LinkedChannelChat">關聯頻道</string>
     <string name="DevModeTitle">**您的電報帳戶可能被禁止**</string>

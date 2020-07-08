@@ -48,7 +48,6 @@
     <string name="StickerSizeDialogMessageBigOne">واحد كبير</string>
     <string name="StickerSizeDialogMessageSmallOne">واحد صغير</string>
     <string name="StickerSizeDialogMessageReplyTo">ماكيف</string>
-    <string name="StickerSizeDialogName">Duang</string>
     <string name="Experiment">تجريبية</string>
     <string name="UnlimitedFavoredStickers">ملصقات مفضلة غير محدودة</string>
     <string name="UnlimitedFavoredStickersAbout">إضافة ملصقات غير محدودة إلى المفضلة. الملصقات قد لا تكون متزامنة مع الأجهزة الأخرى.</string>
@@ -101,7 +100,6 @@
     <string name="GooglePlay">جوجل بلاي</string>
     <string name="SourceCode">مصدر التعليمات البرمجية على Github</string>
     <string name="ResetStickerSize">إعادة تعيين حجم ملصق</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">إعادة تشغيل التطبيق لتصبح سارية المفعول.</string>
     <string name="DisableAppBarShadow">تعطيل ظل شريط العنوان</string>
 </resources>

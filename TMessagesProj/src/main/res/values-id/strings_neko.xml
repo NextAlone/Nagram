@@ -7,7 +7,6 @@
     <string name="Hide">Sembunyikan</string>
     <string name="DeleteAllFromSelf">Hapus semua pesan anda</string>
     <string name="DeleteAllFromSelfAlert">Peringatan! Ini akan **menghapus semua pesan milik anda** dalam obrolan ini untuk **semua** peserta.</string>
-    <string name="BotLogin">Bot Login</string>
     <string name="InvalidAccessToken">Token akses tidak valid</string>
     <string name="IgnoreBlocked">Abaikan pengguna yang diblokir dalam grup</string>
     <string name="Connection">Koneksi</string>
@@ -18,7 +17,6 @@
     <string name="Repeat">Ulangi</string>
     <string name="AddToSavedMessages">Simpan pesan</string>
     <string name="CreateMention">Buat Mention</string>
-    <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Bilah status transparan</string>
     <string name="EnableResidentNotification">Tampilkan pemberitahuan penduduk</string>
     <string name="DisableResidentNotification">Nonaktifkan pemberitahuan penduduk</string>
@@ -34,13 +32,11 @@
     <string name="TestBackendOff">Akun ini akan dihubungkan ke produksi backend.</string>
     <string name="HideProxySponsorChannel">Sembunyikan channel sponsor proxy</string>
     <string name="ViewHistory">Lihat riwayat</string>
-    <string name="Nya">Meow!</string>
     <string name="SensitiveDisableFiltering">Nonaktifkan pemfilteran konten sensitif</string>
     <string name="SensitiveAbout">Tampilkan media sensitif di channel publik di semua perangkat anda.</string>
     <string name="StickerSize">Ukuran stiker</string>
     <string name="StickerSizeDialogMessageBigOne">Stiker ini besar</string>
     <string name="StickerSizeDialogMessageSmallOne">Stiker ini mengecil</string>
-    <string name="StickerSizeDialogMessageReplyTo">Meow</string>
     <string name="StickerSizeDialogName">Dewi</string>
     <string name="Experiment">Eksperimental</string>
     <string name="UnlimitedFavoredStickers">Stiker difavoritkan tanpa batas</string>
@@ -56,10 +52,8 @@
     <string name="ProviderGoogleTranslate">Google Terjemahan</string>
     <string name="ProviderGoogleTranslateCN">Google Terjemahan CN</string>
     <string name="TranslateApiUnsupported">Penyedia terjemahan yang anda pilih tidak mendukung bahasa Anda.</string>
-    <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Batal menerjemahkan</string>
     <string name="DisablePhotoViewerSideAction">Nonaktifkan Balikkan Foto dengan mengetuk</string>
-    <string name="BotToken">Token</string>
     <string name="UnlimitedPinnedDialogs">Dialog sematkan tanpa batas</string>
     <string name="UnlimitedPinnedDialogsAbout">Sematkan dialog tak terbatas dengan mematikan sinkronisasi.</string>
     <string name="OpenArchiveOnPull">Buka Arsip pada saat pulldown</string>
@@ -81,4 +75,5 @@
     <string name="AskBeforeCalling">Tanyakan sebelum menelepon</string>
     <string name="ConfirmCall">Konfirmasikan panggilan</string>
     <string name="CallTo">Memanggil ke **%1$s**?</string>
+    <string name="Translation">Terjemahkan Nekogram</string>
 </resources>
