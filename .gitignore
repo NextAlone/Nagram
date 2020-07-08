@@ -10,3 +10,4 @@ local.properties
 /TMessagesProj/jni/boringssl/build/
 CMakeLists.txt
 CMakeLists.txt.orig
+service_account_credentials.json

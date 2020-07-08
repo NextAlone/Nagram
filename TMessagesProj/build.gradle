@@ -7,13 +7,44 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
+
+if (serviceAccountCredentialsFile.isFile()) {
+
+    setupPlay()
+
+    play.serviceAccountCredentials = serviceAccountCredentialsFile
+
+} else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
+
+    setupPlay()
+
+}
+
+void setupPlay() {
+
+    apply plugin: 'com.github.triplet.play'
+
+    play {
+
+        track = "production"
+        
+        defaultToAppBundles = true
+
+        userFraction = 1
+
+    }
+
+}
+
+
 configurations {
     compile.exclude module: 'support-v4'
 }
 
 def okHttpVersion = '4.7.2'
-def fcmVersion = '20.2.1'
-def crashlyticsVersion = '17.1.0'
+def fcmVersion = '20.2.2'
+def crashlyticsVersion = '17.1.1'
 def playCoreVersion = '1.7.3'
 
 buildscript {
@@ -90,8 +121,8 @@ dependencies {
 
 }
 
-def verName = "6.2.0.2-preview-1"
-def verCode = 51
+def verName = "6.2.0.3-rc03"
+def verCode = 56
 
 task writeUpdateInfo {
 
@@ -251,41 +282,35 @@ android {
         }
     }
 
-    sourceSets.main {
-        jni.srcDirs = ['./jni/']
-    }
+    sourceSets {
 
-    sourceSets.debug {
-        jniLibs.srcDir 'src/main/libs'
-    }
-
-    sourceSets.releaseNoGcm {
-        jniLibs.srcDir 'src/main/libs'
-    }
-
-    sourceSets.release {
-        jniLibs.srcDir 'src/main/libs'
-        manifest.srcFile 'src/gservcies/AndroidManifest.xml'
-    }
-
-    sourceSets.foss {
-        jni.srcDirs = ['./jni/']
-    }
-
-    flavorDimensions "version"
-
-    splits {
-
-        abi {
-
-            enable true
-
-            reset()
-            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-
-            universalApk true
-
+        main {
+            jni.srcDirs = ['./jni/']
         }
+
+        debug {
+            jniLibs.srcDir 'src/main/libs'
+        }
+
+        releaseNoGcm {
+            jniLibs.srcDir 'src/main/libs'
+        }
+
+        release {
+            jniLibs.srcDir 'src/main/libs'
+            manifest.srcFile 'src/gservcies/AndroidManifest.xml'
+        }
+
+        foss {
+            jni.srcDirs = ['./jni/']
+        }
+
+    }
+
+    splits.abi {
+
+        enable true
+        universalApk true
 
     }
 
@@ -362,7 +387,7 @@ android {
                 set.dependencies {
                     implementation 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
                 }
-            } else {
+            } else if (!set.name.contains("NoEmoji")) {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/blob"]
             }
         }

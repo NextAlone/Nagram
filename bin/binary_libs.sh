@@ -12,16 +12,16 @@ cp ssr-libev/build/outputs/aar/* TMessagesProj/libs
 
 cd TMessagesProj/libs
 
-go get -u github.com/golang/protobuf/protoc-gen-go
 go get -v golang.org/x/mobile/cmd/...
-go get -v go.starlark.net/starlark
-go get -v github.com/refraction-networking/utls
-go get -v github.com/gorilla/websocket
-go get -v -insecure v2ray.com/core
-go get github.com/2dust/AndroidLibV2rayLite
+
+v2rayCore="$(go env GOPATH)/src/v2ray.com/core"
+rm -rf "$v2rayCore"
+mkdir -p "$v2rayCore"
+git clone https://github.com/v2fly/v2ray-core.git "$v2rayCore"
+go get -d github.com/2dust/AndroidLibV2rayLite
 
 gomobile init
-env GO111MODULE=off gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
+gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite
 rm *-sources.jar
 
 cd  ../..

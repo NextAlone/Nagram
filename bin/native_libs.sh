@@ -55,7 +55,7 @@ export NINJA_PATH="$(command -v ninja)"
 
 export PATH=$(echo "$ANDROID_HOME"/cmake/*/bin):$PATH
 
-cd TMessagesProj/jni
+cd TMessagesProj/jni || exit 1
 
 git submodule update --init --recursive
 
