@@ -228,14 +228,14 @@ class BottomBuilder(val ctx: Context) {
     @JvmOverloads
     fun addCancelItem() {
 
-        addItem(LocaleController.getString("Cancel", R.string.Cancel), R.drawable.baseline_cancel_24) { dismiss() }
+        addItem(LocaleController.getString("Cancel", R.string.Cancel), R.drawable.baseline_cancel_24) {}
 
     }
 
     @JvmOverloads
     fun addCancelButton(left: Boolean = true) {
 
-        addButton(LocaleController.getString("Cancel", R.string.Cancel), left = left) { dismiss() }
+        addButton(LocaleController.getString("Cancel", R.string.Cancel), left = left) {}
 
     }
 
@@ -262,7 +262,7 @@ class BottomBuilder(val ctx: Context) {
             setText(text)
             typeface = AndroidUtilities.getTypeface("fonts/rmedium.ttf")
             (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.LEFT))
-            setOnClickListener { listener(this) }
+            setOnClickListener { dismiss();listener(this) }
 
         }
 
@@ -291,7 +291,9 @@ class BottomBuilder(val ctx: Context) {
 
             setOnClickListener {
 
-                if (listener == null) dismiss() else listener(this)
+                dismiss()
+
+                listener?.invoke(this)
 
             }
 

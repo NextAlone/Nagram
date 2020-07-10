@@ -26,6 +26,10 @@ jobs:
           mkdir -p $HOME/.ssh
           echo "${{ secrets.SSH_KEY }}" > $HOME/.ssh/id_rsa
           chmod 600 $HOME/.ssh/id_rsa
+          cat > service_account_credentials.json << EOF
+          ${{ secrets.GOOGLE_ACCOUNT_SERVICE }}
+          EOF
           ref="${{ github.ref }}"
           ref=${ref/"refs/tags/"/}
           ./bin/release.sh "$ref"
+          ./bin/publish_play.sh

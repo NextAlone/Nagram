@@ -45,8 +45,8 @@ import org.telegram.messenger.R
     val lookupNames get() = lookup.values.map {
         if (it.label.isNotBlank()) {
             "${it.label} (${it.id})"
-        } else {
+        } else if (it.id.isNotBlank()) {
             it.id
-        }
+        } else ""
     }.map { it.takeIf { it.isNotBlank() } ?: LocaleController.getString("Disable", R.string.Disable) }.toTypedArray()
 }

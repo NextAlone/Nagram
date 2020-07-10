@@ -529,13 +529,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder.addTitle(message);
                     String finalMessage = message;
                     builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
-                        builder.dismiss();
                         AndroidUtilities.addToClipboard(finalMessage);
                         AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                         return Unit.INSTANCE;
                     });
                     builder.addItem(BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
-                        builder.dismiss();
                         BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
                         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
@@ -544,25 +542,21 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     });
                     if (!BuildVars.isUnknown) {
                         builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_system_update_24, (it) -> {
-                            builder.dismiss();
                             UpdateChecksKt.checkUpdate(getParentActivity());
                             return Unit.INSTANCE;
                         });
                     }
                     if (BuildConfig.BUILD_TYPE.startsWith("release")) {
                         builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
-                            builder.dismiss();
                             Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
                             return Unit.INSTANCE;
                         });
                     }
                     if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode) {
                         builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
-                            builder.dismiss();
                             BottomBuilder devBuilder = new BottomBuilder(getParentActivity());
                             devBuilder.addTitle(LocaleController.getString("DevModeTitle", R.string.DevModeTitle), LocaleController.getString("DevModeNotice", R.string.DevModeNotice));
                             devBuilder.addItem(LocaleController.getString("Continue", R.string.Continue), R.drawable.baseline_warning_24, true, (__) -> {
-                                devBuilder.dismiss();
                                 presentFragment(new NekoXSettingActivity());
                                 return Unit.INSTANCE;
                             });

@@ -85,6 +85,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.BottomBuilder;
@@ -1121,8 +1122,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 if (sub.internal) return false;
 
-                builder.dismiss();
-
                 presentFragment(new SubSettingsActivity(sub));
 
                 return true;
@@ -1133,15 +1132,17 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         builder.addButton(LocaleController.getString("Add", R.string.Add), false, true, (it) -> {
 
-            builder.dismiss();
-
             presentFragment(new SubSettingsActivity());
 
             return Unit.INSTANCE;
 
         });
 
-        builder.addButton(LocaleController.getString("Update", R.string.Update), (it) -> {
+        String updateStr = LocaleController.getString("Update", R.string.Update);
+        updateStr = updateStr.toLowerCase();
+        updateStr = StrUtil.upperFirst(updateStr);
+
+        builder.addButton(updateStr, (it) -> {
 
             AlertDialog pro = AlertUtil.showProgress(getParentActivity(), LocaleController.getString("SubscriptionUpdating", R.string.SubscriptionUpdating));
             AtomicBoolean canceled = new AtomicBoolean();
@@ -1179,14 +1180,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 updateRows(true);
 
-                UIUtil.runOnUIThread(() -> {
-
-                    builder.dismiss();
-
-                    pro.dismiss();
-
-                });
-
+                UIUtil.runOnUIThread(pro::dismiss);
 
             });
 
@@ -1195,8 +1189,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         });
 
         builder.addButton(LocaleController.getString("OK", R.string.OK), (it) -> {
-
-            builder.dismiss();
 
             if (!toChange.isEmpty()) {
 

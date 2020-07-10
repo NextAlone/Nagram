@@ -107,16 +107,7 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == donateRow) {
                 Browser.openUrl(getParentActivity(), "https://patreon.com/NekoXDev");
             } else if (position == translationRow) {
-                BottomBuilder builder = new BottomBuilder(getParentActivity());
-                builder.addItem(LocaleController.getString("NekoTrans", R.string.NekoTrans), (__) -> {
-                    Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
-                    return Unit.INSTANCE;
-                });
-                builder.addItem(LocaleController.getString("NekoXTrans", R.string.NekoXTrans), (__) -> {
-                    Browser.openUrl(getParentActivity(), "https://nekox.crowdin.com/nekox");
-                    return Unit.INSTANCE;
-                });
-                builder.show();
+                Browser.openUrl(getParentActivity(), "https://nekox.crowdin.com/nekox");
             } else if (position == googlePlayRow) {
                 Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {

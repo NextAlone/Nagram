@@ -12,5 +12,5 @@ fi
 
 rm -rf build/apks &&
 mkdir -p build/apks &&
-find TMessagesProj -name "*.apk" -exec cp {} build/apks \; &&
+find TMessagesProj/build/outputs/apk -name "*.apk" -exec cp {} build/apks \; &&
 ghr -delete -n "$1" "$1" build/apks/

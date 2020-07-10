@@ -309,8 +309,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                     }
 
-                    builder.dismiss();
-
                     return Unit.INSTANCE;
 
                 });
@@ -389,8 +387,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     if (StrUtil.isBlank(key)) key = null;
 
                     NekoConfig.setGoogleTranslateKey(key);
-
-                    builder.dismiss();
 
                     return Unit.INSTANCE;
 

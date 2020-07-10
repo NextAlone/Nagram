@@ -160,8 +160,6 @@ object AlertUtil {
 
         builder.addItem(button, icon, red) {
 
-            builder.dismiss()
-
             listener.run()
 
         }

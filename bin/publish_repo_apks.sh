@@ -2,7 +2,7 @@
 
 rm -rf build/apks &&
 mkdir -p build/apks &&
-find TMessagesProj -name "*.apk" -exec cp {} build/apks \; &&
+find TMessagesProj/build/outputs/apk -name "*.apk" -exec cp {} build/apks \; &&
 cp build/update.json build/apks &&
 cd build/apks &&
 rm *universal* &&

@@ -9,7 +9,6 @@ NekoX is an open source third-party Telegram android app.
 - Chat Group (Persian) : https://t.me/NekogramX_Persian
 - FAQ: https://telegra.ph/NekoX-FAQ-03-31
 - FAQ (Chinese): https://telegra.ph/NekoX-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C-03-31
-- [Wall of Shame - Nekogram](https://github.com/Nekogram/Nekogram/wiki/Wall-of-Shame)
 
 ## Telegram-FOSS Changes:
 
@@ -34,7 +33,9 @@ NekoX is an open source third-party Telegram android app.
 - Added the ability to parse locations from intents containing a `geo:<lat>,<lon>,<zoom>` string
 - Force static map previews from Telegram
 
-## Nekogram Changes
+## Old 0penSource Nekogram Changes
+
+We regret that [Nekogram](https://github.com/Nekogram/Nekogram-issue-tracker) is no longer open source, but uses drklo/master to [disguise open source](https://github.com/Nekogram/Android).
 
 - Repeat others' message in one click.
 - Save to saved messages in one click.
@@ -126,7 +127,7 @@ If you don't use NekoX's APP_ID and APP_HASH, you need to register a physical fi
 
 OK, a version without firebase cloud messaging and precompiled native libraries, maybe this makes you feel more free, or your phone does not have Google services.
 
-To compile the foss version, please refer to [build script](.github/workflows/build.yml).
+To compile the foss version, please refer to [build script](./update_jni.sh).
 
 ### Build Variants
 
@@ -137,13 +138,13 @@ Available variant list:
 
 ## Localization
 
-Join project at https://nekox.crowdin.com/nekox and https://neko.crowdin.com/ .
+Join project at https://nekox.crowdin.com/nekox.
 
 ## Credits
 
 <ul>
     <li>Telegram-FOSS: <a href="https://github.com/Telegram-FOSS-Team/Telegram-FOSS/blob/master/LICENSE">GPLv2</a></li>
-    <li>Nekogram: <a href="https://github.com/Nekogram/Nekogram/blob/master/LICENSE">GPLv2</a></li>
+    <li><del>Nekogram: <a href="https://github.com/Nekogram/Nekogram/blob/master/LICENSE">GPLv2</a></del> (No longer open source)</li>
     <li>v2rayNG: <a href="https://github.com/2dust/v2rayNG/blob/master/LICENSE">GPLv3</a></li>
     <li>AndroidLibV2rayLite: <a href="https://github.com/2dust/AndroidLibV2rayLite/blob/master/LICENSE">LGPLv3</a></li>
     <li>shadowsocks-android: <a href="https://github.com/shadowsocks/shadowsocks-android/blob/master/LICENSE">GPLv3</a></li>
