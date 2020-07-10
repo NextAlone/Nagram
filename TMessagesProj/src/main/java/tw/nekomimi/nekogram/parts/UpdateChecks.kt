@@ -18,90 +18,6 @@ import tw.nekomimi.nekogram.NekoXConfig
 import tw.nekomimi.nekogram.utils.*
 import java.util.*
 
-fun Activity.switchVersion() {
-
-    val builder = BottomBuilder(this)
-
-    fun addVersion(fPrefix: String, fSuffix: String, noGcm: Boolean) {
-
-        var buildType = "Release"
-
-        if (noGcm) buildType += "NoGcm"
-
-        builder.addItem("$fPrefix $buildType $fSuffix".trim()) {
-
-            val flavor = (fPrefix.toLowerCase() + fSuffix).trim()
-
-            buildType = StrUtil.lowerFirst(buildType)
-
-            val progress = AlertUtil.showProgress(this)
-
-            progress.show()
-
-            UIUtil.runOnIoDispatcher {
-
-                val ex = mutableListOf<Throwable>()
-
-                UpdateUtil.updateUrls.forEach { url ->
-
-                    runCatching {
-
-                        val updateInfo = JSONObject(HttpUtil.get("$url/update.json"))
-
-                        val code = updateInfo.getInt("versionCode")
-
-                        UIUtil.runOnUIThread {
-
-                            progress.dismiss()
-
-                            UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultFlavor"), buildType, flavor)
-
-                        }
-
-                        return@runOnIoDispatcher
-
-                    }.onFailure {
-
-                        ex.add(it)
-
-                    }
-
-                }
-
-                progress.dismiss()
-
-                AlertUtil.showToast(ex.joinToString("\n") { it.message ?: it.javaClass.simpleName })
-
-            }
-
-        }
-
-    }
-
-    fun addVersion(fPrefix: String, fSuffix: String) {
-
-        addVersion(fPrefix, fSuffix, false)
-        addVersion(fPrefix, fSuffix, true)
-
-    }
-
-    fun addVersion(fPrefix: String) {
-
-        arrayOf("", "NoEmoji", "Apple", "Noto", "Twitter", "Facebook").forEach {
-
-            addVersion(fPrefix, "${it}Emoji")
-
-        }
-
-    }
-
-    addVersion("Full")
-    addVersion("Mini")
-
-    builder.show()
-
-}
-
 @JvmOverloads
 fun Activity.checkUpdate(force: Boolean = false) {
 
@@ -194,23 +110,17 @@ fun Activity.checkUpdate(force: Boolean = false) {
 
                         UpdateUtil.doUpdate(this, code, updateInfo.getString("defaultFlavor"))
 
-                        builder.dismiss()
-
                         NekoXConfig.preferences.edit().remove("ignored_update_at").remove("ignore_update_at").apply()
 
                     }
 
                     builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false) {
 
-                        builder.dismiss()
-
                         NekoXConfig.preferences.edit().putLong("ignored_update_at", System.currentTimeMillis()).apply()
 
                     }
 
                     builder.addItem(LocaleController.getString("Ignore", R.string.Ignore), R.drawable.baseline_block_24, true) {
-
-                        builder.dismiss()
 
                         NekoXConfig.preferences.edit().putInt("ignore_update", code).apply()
 

@@ -98,25 +98,15 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun importFromClipboard() {
+    fun importFromClipboard(ctx: Activity) {
 
         var text = (ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip?.getItemAt(0)?.text?.toString()
-
-        if (text != null) {
-
-            runCatching {
-
-                text = String(Base64.decode(text, Base64.NO_PADDING))
-
-            }
-
-        }
 
         val proxies = mutableListOf<SharedConfig.ProxyInfo>()
 
         var error = false
 
-        text?.split('\n')?.map { it.split(" ") }?.forEach {
+        text?.trim()?.split('\n')?.map { it.split(" ") }?.forEach {
 
             it.forEach { line ->
 
@@ -132,7 +122,45 @@ object ProxyUtil {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
 
+                        error = true
+
                         AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        runCatching {
+
+            if (proxies.isNullOrEmpty() && !error) {
+
+                String(Base64.decode(text, Base64.NO_PADDING)).trim().split('\n').map { it.split(" ") }.forEach { str ->
+
+                    str.forEach { line ->
+
+                        if (line.startsWith("tg://proxy") ||
+                                line.startsWith("tg://socks") ||
+                                line.startsWith("https://t.me/proxy") ||
+                                line.startsWith("https://t.me/socks") ||
+                                line.startsWith(VMESS_PROTOCOL) ||
+                                line.startsWith(VMESS1_PROTOCOL) ||
+                                line.startsWith(SS_PROTOCOL) ||
+                                line.startsWith(SSR_PROTOCOL) /*||
+                            line.startsWith(RB_PROTOCOL)*/) {
+
+                            runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
+
+                                error = true
+
+                                AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
+
+                            }
+
+                        }
 
                     }
 
@@ -147,6 +175,10 @@ object ProxyUtil {
             if (!error) AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
 
             return
+
+        } else if (!error){
+
+            AlertUtil.showSimpleAlert(ctx, LocaleController.getString("ImportedProxies",R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.title })
 
         }
 
@@ -206,7 +238,15 @@ object ProxyUtil {
 
             FileLog.e(it)
 
-            AlertUtil.showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
+            if (BuildVars.LOGS_ENABLED){
+
+                AlertUtil.showSimpleAlert(ctx, it)
+
+            } else {
+
+                AlertUtil.showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
+
+            }
 
         }
 

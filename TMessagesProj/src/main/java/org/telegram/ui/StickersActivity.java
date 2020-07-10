@@ -526,8 +526,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
 
-            builder.dismiss();
-
             exportStickersFinal(exportSets.get(), exportArchived.get());
 
             return Unit.INSTANCE;

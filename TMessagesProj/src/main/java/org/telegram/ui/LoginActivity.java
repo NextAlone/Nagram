@@ -530,8 +530,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         NekoXConfig.customApi = target;
                         NekoXConfig.saveCustomApi();
 
-                        builder.dismiss();
-
                         return Unit.INSTANCE;
 
                     });
@@ -890,8 +888,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             NekoXConfig.saveCustomDc();
 
                         }
-
-                        builder.dismiss();
 
                         return Unit.INSTANCE;
 

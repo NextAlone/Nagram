@@ -85,6 +85,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.BottomBuilder;
@@ -581,7 +582,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         ActionBarMenuItem addItem = menu.addItem(menu_add, R.drawable.add);
 
-        addItem.addSubItem(menu_add_import_from_clipboard, LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard)).setOnClickListener((v) -> ProxyUtil.importFromClipboard());
+        addItem.addSubItem(menu_add_import_from_clipboard, LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard)).setOnClickListener((v) -> {
+
+            ProxyUtil.importFromClipboard(getParentActivity());
+
+        });
+
         addItem.addSubItem(menu_add_scan_qr, LocaleController.getString("ScanQRCode", R.string.ScanQRCode)).setOnClickListener((v) -> {
 
             if (Build.VERSION.SDK_INT >= 23) {
@@ -827,9 +833,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     @SuppressLint("NewApi")
     private void addProxy() {
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-        builder.setItems(new String[]{
+        builder.addItems(new String[]{
 
                 LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5),
                 LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram),
@@ -840,7 +846,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard),
                 LocaleController.getString("ScanQRCode", R.string.ScanQRCode)
 
-        }, (v, i) -> {
+        }, (i,t,c) -> {
 
             if (i == 0) {
 
@@ -868,7 +874,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (i == 6) {
 
-                ProxyUtil.importFromClipboard();
+                ProxyUtil.importFromClipboard(getParentActivity());
 
             } else {
 
@@ -934,6 +940,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 });
 
             }
+
+            return Unit.INSTANCE;
 
         });
 
@@ -1121,8 +1129,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 if (sub.internal) return false;
 
-                builder.dismiss();
-
                 presentFragment(new SubSettingsActivity(sub));
 
                 return true;
@@ -1133,15 +1139,17 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         builder.addButton(LocaleController.getString("Add", R.string.Add), false, true, (it) -> {
 
-            builder.dismiss();
-
             presentFragment(new SubSettingsActivity());
 
             return Unit.INSTANCE;
 
         });
 
-        builder.addButton(LocaleController.getString("Update", R.string.Update), (it) -> {
+        String updateStr = LocaleController.getString("Update", R.string.Update);
+        updateStr = updateStr.toLowerCase();
+        updateStr = StrUtil.upperFirst(updateStr);
+
+        builder.addButton(updateStr, (it) -> {
 
             AlertDialog pro = AlertUtil.showProgress(getParentActivity(), LocaleController.getString("SubscriptionUpdating", R.string.SubscriptionUpdating));
             AtomicBoolean canceled = new AtomicBoolean();
@@ -1179,14 +1187,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 updateRows(true);
 
-                UIUtil.runOnUIThread(() -> {
-
-                    builder.dismiss();
-
-                    pro.dismiss();
-
-                });
-
+                UIUtil.runOnUIThread(pro::dismiss);
 
             });
 
@@ -1195,8 +1196,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         });
 
         builder.addButton(LocaleController.getString("OK", R.string.OK), (it) -> {
-
-            builder.dismiss();
 
             if (!toChange.isEmpty()) {
 

@@ -475,8 +475,6 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
             onPreferenceChange(options.getText().toString());
 
-            builder.dismiss();
-
             return Unit.INSTANCE;
 
         });

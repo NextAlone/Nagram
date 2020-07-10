@@ -188,8 +188,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
             builder.addItem(LocaleController.getString("BotShare",R.string.BotShare),R.drawable.baseline_send_24,false,(__) -> {
 
-                builder.dismiss();
-
                 ShareUtil.shareText(getParentActivity(),"https://t.me/setlanguage/" + localeInfo.shortName.replace('_','-'));
 
                 return Unit.INSTANCE;
@@ -199,8 +197,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             if (!localeInfo.isBuiltIn()) {
 
                 builder.addItem(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle), R.drawable.baseline_delete_24, true, (__) -> {
-
-                    builder.dismiss();
 
                     AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle),

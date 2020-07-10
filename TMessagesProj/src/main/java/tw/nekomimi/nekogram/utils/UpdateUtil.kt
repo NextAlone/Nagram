@@ -75,23 +75,17 @@ object UpdateUtil {
 
                         doUpdate(ctx, code, updateInfo.getString("defaultFlavor"))
 
-                        builder.dismiss()
-
                         NekoXConfig.preferences.edit().remove("ignored_update_at").remove("ignore_update_at").apply()
 
                     }
 
                     builder.addItem(LocaleController.getString("UpdateLater", R.string.UpdateLater), R.drawable.baseline_watch_later_24, false) {
 
-                        builder.dismiss()
-
                         NekoXConfig.preferences.edit().putLong("ignored_update_at", System.currentTimeMillis()).apply()
 
                     }
 
                     builder.addItem(LocaleController.getString("Ignore", R.string.Ignore), R.drawable.baseline_block_24, true) {
-
-                        builder.dismiss()
 
                         NekoXConfig.preferences.edit().putInt("ignore_update", code).apply()
 

@@ -373,7 +373,6 @@ public class AlertsCreator {
             builder.addTitle(LocaleController.getString("Language", R.string.Language), mkTransSpan(str, language, builder));
             builder.addCancelButton();
             builder.addButton(LocaleController.getString("SETTINGS", R.string.SETTINGS), (__) -> {
-                builder.dismiss();
                 activity.presentFragment(new LanguageSelectActivity());
                 return Unit.INSTANCE;
             });
@@ -417,7 +416,6 @@ public class AlertsCreator {
                     }
                     LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, UserConfig.selectedAccount);
                     activity.rebuildAllFragments(true);
-                    builder.dismiss();
                     return Unit.INSTANCE;
                 });
                 builder.addCancelButton();
