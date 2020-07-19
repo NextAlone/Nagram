@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram.utils
 
 import android.content.Context
+import android.os.Environment
 import android.os.storage.StorageManager
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
@@ -33,6 +34,8 @@ object EnvUtil {
                 add(File(it, "Android/data/" + ApplicationLoader.applicationContext.packageName + "/cache"))
 
             }
+
+            add(Environment.getExternalStoragePublicDirectory("NekoX"))
 
         }.map { it.path }.toTypedArray()
 
