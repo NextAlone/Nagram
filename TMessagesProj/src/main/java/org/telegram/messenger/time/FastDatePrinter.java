@@ -32,6 +32,9 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import tw.nekomimi.nekogram.JalaliCalendar;
+import tw.nekomimi.nekogram.NekoConfig;
+
 /**
  * <p>FastDatePrinter is a fast and thread-safe version of
  * {@link java.text.SimpleDateFormat}.</p>
@@ -429,8 +432,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
      *
      * @return a new Calendar instance.
      */
-    private GregorianCalendar newCalendar() {
-        // hard code GregorianCalendar
+    private Calendar newCalendar() {
+        if (NekoConfig.usePersianCalender) {
+            return new JalaliCalendar(mTimeZone, mLocale);
+        }
         return new GregorianCalendar(mTimeZone, mLocale);
     }
 

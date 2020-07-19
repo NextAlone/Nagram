@@ -93,6 +93,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.JalaliCalendar;
 
 public class AlertsCreator {
 
@@ -775,7 +776,7 @@ public class AlertsCreator {
     }
 
     private static void updateDayPicker(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = JalaliCalendar.mInstance();
         calendar.set(Calendar.MONTH, monthPicker.getValue());
         calendar.set(Calendar.YEAR, yearPicker.getValue());
         dayPicker.setMinValue(1);
@@ -783,7 +784,7 @@ public class AlertsCreator {
     }
 
     private static void checkPickerDate(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = JalaliCalendar.mInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         int currentYear = calendar.get(Calendar.YEAR);
@@ -1317,7 +1318,7 @@ public class AlertsCreator {
         monthPicker.setMaxValue(11);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 0.3f));
         monthPicker.setFormatter(value -> {
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = JalaliCalendar.mInstance();
             calendar.set(Calendar.DAY_OF_MONTH, 1);
             calendar.set(Calendar.MONTH, value);
             return calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
@@ -1329,7 +1330,7 @@ public class AlertsCreator {
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = JalaliCalendar.mInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         final int currentYear = calendar.get(Calendar.YEAR);
         yearPicker.setMinValue(currentYear + minYear);
@@ -1372,7 +1373,7 @@ public class AlertsCreator {
         int hour = hourPicker.getValue();
         int minute = minutePicker.getValue();
 
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = JalaliCalendar.mInstance();
         long systemTime = System.currentTimeMillis();
         calendar.setTimeInMillis(systemTime);
         int currentYear = calendar.get(Calendar.YEAR);
@@ -1527,7 +1528,7 @@ public class AlertsCreator {
         container.addView(linearLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         long currentTime = System.currentTimeMillis();
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = JalaliCalendar.mInstance();
         calendar.setTimeInMillis(currentTime);
         int currentYear = calendar.get(Calendar.YEAR);
 

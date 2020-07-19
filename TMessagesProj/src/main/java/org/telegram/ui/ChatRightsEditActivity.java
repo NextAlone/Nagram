@@ -69,6 +69,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.JalaliCalendar;
+
 public class ChatRightsEditActivity extends BaseFragment {
 
     private ListAdapter listViewAdapter;
@@ -412,13 +414,13 @@ public class ChatRightsEditActivity extends BaseFragment {
                                 listViewAdapter.notifyItemChanged(untilDateRow);
                                 break;
                             case 4: {
-                                Calendar calendar = Calendar.getInstance();
+                                Calendar calendar = JalaliCalendar.mInstance();
                                 int year = calendar.get(Calendar.YEAR);
                                 int monthOfYear = calendar.get(Calendar.MONTH);
                                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                                 try {
                                     DatePickerDialog dialog = new DatePickerDialog(getParentActivity(), (view1, year1, month, dayOfMonth1) -> {
-                                        Calendar calendar1 = Calendar.getInstance();
+                                        Calendar calendar1 = JalaliCalendar.mInstance();
                                         calendar1.clear();
                                         calendar1.set(year1, month, dayOfMonth1);
                                         final int time = (int) (calendar1.getTime().getTime() / 1000);
@@ -439,7 +441,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
                                     final DatePicker datePicker = dialog.getDatePicker();
 
-                                    Calendar date = Calendar.getInstance();
+                                    Calendar date = JalaliCalendar.mInstance();
                                     date.setTimeInMillis(System.currentTimeMillis());
                                     date.set(Calendar.HOUR_OF_DAY, date.getMinimum(Calendar.HOUR_OF_DAY));
                                     date.set(Calendar.MINUTE, date.getMinimum(Calendar.MINUTE));

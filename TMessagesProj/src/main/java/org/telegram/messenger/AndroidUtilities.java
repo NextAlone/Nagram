@@ -141,6 +141,7 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -848,7 +849,7 @@ public class AndroidUtilities {
                     if (date.length > 0) {
                         date = date[0].split("-");
                         if (date.length == 3) {
-                            Calendar calendar = Calendar.getInstance();
+                            Calendar calendar = JalaliCalendar.mInstance();
                             calendar.set(Calendar.YEAR, Utilities.parseInt(date[0]));
                             calendar.set(Calendar.MONTH, Utilities.parseInt(date[1]) - 1);
                             calendar.set(Calendar.DAY_OF_MONTH, Utilities.parseInt(date[2]));

@@ -107,6 +107,7 @@ public class NekoConfig {
     public static boolean mediaPreview;
 
     public static boolean proxyAutoSwitch;
+    public static boolean usePersianCalender;
 
     public static String formatLang(String name) {
 
@@ -213,6 +214,7 @@ public class NekoConfig {
         mediaPreview = preferences.getBoolean("mediaPreview", false);
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
+        usePersianCalender = preferences.getBoolean("usePersianCalender", false);
 
     }
 
@@ -707,5 +709,12 @@ public class NekoConfig {
         preferences.edit().putBoolean("proxy_auto_switch",proxyAutoSwitch = !proxyAutoSwitch).apply();
 
     }
+
+    public static void toggleUsePersianCalender() {
+
+        preferences.edit().putBoolean("usePersianCalender",usePersianCalender = !usePersianCalender).apply();
+
+    }
+
 
 }

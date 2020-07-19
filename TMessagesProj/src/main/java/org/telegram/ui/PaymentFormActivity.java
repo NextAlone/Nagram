@@ -113,6 +113,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.JalaliCalendar;
+
 public class PaymentFormActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private final static int FIELD_CARD = 0;
@@ -1390,7 +1392,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     if (builder.length() == 4 && args.length == 2) {
                                         int month = Utilities.parseInt(args[0]);
                                         int year = Utilities.parseInt(args[1]) + 2000;
-                                        Calendar rightNow = Calendar.getInstance();
+                                        Calendar rightNow = JalaliCalendar.mInstance();
                                         int currentYear = rightNow.get(Calendar.YEAR);
                                         int currentMonth = rightNow.get(Calendar.MONTH) + 1;
                                         if (year < currentYear || year == currentYear && month < currentMonth) {

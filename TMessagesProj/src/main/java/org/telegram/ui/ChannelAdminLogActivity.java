@@ -116,6 +116,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -962,13 +963,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 return;
             }
             AndroidUtilities.hideKeyboard(searchItem.getSearchField());
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = JalaliCalendar.mInstance();
             int year = calendar.get(Calendar.YEAR);
             int monthOfYear = calendar.get(Calendar.MONTH);
             int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             try {
                 DatePickerDialog dialog = new DatePickerDialog(getParentActivity(), (view1, year1, month, dayOfMonth1) -> {
-                    Calendar calendar1 = Calendar.getInstance();
+                    Calendar calendar1 = JalaliCalendar.mInstance();
                     calendar1.clear();
                     calendar1.set(year1, month, dayOfMonth1);
                     int date = (int) (calendar1.getTime().getTime() / 1000);

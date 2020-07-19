@@ -109,6 +109,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int disableNumberRoundingRow;
     private int openArchiveOnPullRow;
     private int nameOrderRow;
+    private int usePersianCalenderRow;
     private int general2Row;
 
     private UndoView restartTooltip;
@@ -229,7 +230,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.typeface == 1);
                 }
-
             } else if (position == nameOrderRow) {
 
                 PopupBuilder builder = new PopupBuilder(view);
@@ -450,6 +450,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }
                 ActionBarLayout.headerShadowDrawable = NekoConfig.disableAppBarShadow ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
+            } else if (position == usePersianCalenderRow) {
+                NekoConfig.toggleUsePersianCalender();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.usePersianCalender);
+                }
             }
         });
 
@@ -596,6 +601,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
+        usePersianCalenderRow = rowCount++;
         general2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -678,7 +684,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("FirstLast", R.string.FirstLast);
                                 break;
                         }
-                        textCell.setTextAndValue(LocaleController.getString("NameOrder", R.string.NameOrder), value, eventTypeRow != -1);
+                        textCell.setTextAndValue(LocaleController.getString("NameOrder", R.string.NameOrder), value, true);
                     } else if (position == eventTypeRow) {
                         String value;
                         switch (NekoConfig.eventType) {
@@ -791,6 +797,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("DisableNumberRounding", R.string.DisableNumberRounding), "4.8K -> 4777", NekoConfig.disableNumberRounding, true, true);
                     } else if (position == appBarShadowRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, eventTypeRow != -1);
+                    } else if (position == usePersianCalenderRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UsePersianCalender", R.string.UsePersianCalender), NekoConfig.usePersianCalender, false);
                     }
                     break;
                 }
