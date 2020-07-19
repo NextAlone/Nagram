@@ -115,9 +115,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
@@ -2891,6 +2893,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         return rightActionBarLayout;
     }
 
+    public HashMap<Integer, Function<Intent, Unit>> callbacks = new HashMap<>();
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (SharedConfig.passcodeHash.length() != 0 && SharedConfig.lastPauseTime != 0) {
@@ -2901,6 +2905,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             UserConfig.getInstance(currentAccount).saveConfig(false);
         }
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (callbacks.containsKey(requestCode)) {
+
+            callbacks.remove(requestCode).apply(data);
+
+            return;
+
+        }
+
         ThemeEditorView editorView = ThemeEditorView.getInstance();
         if (editorView != null) {
             editorView.onActivityResult(requestCode, resultCode, data);

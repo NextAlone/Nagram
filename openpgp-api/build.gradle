@@ -1,0 +1,16 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        versionCode 9
+        versionName '13.0' // API-Version . minor
+        minSdkVersion 9
+        targetSdkVersion 28
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}

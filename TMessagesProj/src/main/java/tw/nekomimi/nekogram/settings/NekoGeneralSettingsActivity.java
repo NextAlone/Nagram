@@ -1,8 +1,14 @@
 package tw.nekomimi.nekogram.settings;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +19,8 @@ import android.widget.LinearLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLoader;
@@ -42,6 +50,8 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import cn.hutool.core.util.StrUtil;
@@ -49,10 +59,12 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nekogram.utils.PGPUtil;
 
 @SuppressLint("RtlHardcoded")
 public class NekoGeneralSettingsActivity extends BaseFragment {
@@ -75,6 +87,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int translateInputToLangRow;
     private int googleCloudTranslateKeyRow;
     private int trans2Row;
+
+    private int openKeyChainRow;
+    private int pgpAppRow;
+    private int emailRow;
+    private int keyRow;
+    private int openKeyChain2Row;
 
     private int dialogsRow;
     private int sortMenuRow;
@@ -455,7 +473,52 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.usePersianCalender);
                 }
+            } else if (position == pgpAppRow) {
+
+                PopupBuilder builder = new PopupBuilder(view);
+
+                builder.addSubItem(0, LocaleController.getString("None", R.string.None));
+
+                LinkedList<String> appsMap = new LinkedList<>();
+                appsMap.add("");
+
+                Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
+                List<ResolveInfo> resInfo = getParentActivity().getPackageManager().queryIntentServices(intent, 0);
+
+                if (resInfo != null) {
+                    for (ResolveInfo resolveInfo : resInfo) {
+                        if (resolveInfo.serviceInfo == null) {
+                            continue;
+                        }
+
+                        String packageName = resolveInfo.serviceInfo.packageName;
+                        String simpleName = String.valueOf(resolveInfo.serviceInfo.loadLabel(getParentActivity().getPackageManager()));
+
+                        builder.addSubItem(appsMap.size(), simpleName);
+                        appsMap.add(packageName);
+
+                    }
+                }
+
+                builder.setDelegate((i) -> {
+
+                    NekoConfig.setOpenPGPApp(appsMap.get(i));
+                    NekoConfig.setOpenPGPKeyId(0L);
+                    listAdapter.notifyItemChanged(pgpAppRow);
+                    listAdapter.notifyItemChanged(keyRow);
+
+                    if (i > 0) PGPUtil.recreateConnection();
+
+                });
+
+                builder.show();
+
+            } else if (position == keyRow) {
+
+                requestKey(new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID));
+
             }
+
         });
 
         restartTooltip = new UndoView(context);
@@ -464,6 +527,79 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         return fragmentView;
     }
+
+    private void requestKey(Intent data) {
+
+        PGPUtil.post(() -> PGPUtil.api.executeApiAsync(data, null, null, result -> {
+
+            switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+
+                case OpenPgpApi.RESULT_CODE_SUCCESS: {
+
+                    long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
+                    NekoConfig.setOpenPGPKeyId(keyId);
+
+                    listAdapter.notifyItemChanged(keyRow);
+
+                    break;
+                }
+                case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
+
+                    PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+                    try {
+                        Activity act = (Activity) getParentActivity();
+                        act.startIntentSenderFromChild(
+                                act, pi.getIntentSender(),
+                                114, null, 0, 0, 0);
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e(OpenPgpApi.TAG, "SendIntentException", e);
+                    }
+                    break;
+                }
+                case OpenPgpApi.RESULT_CODE_ERROR: {
+                    OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
+                    AlertUtil.showToast(error.getMessage());
+                    break;
+                }
+            }
+
+        }));
+
+
+    }
+
+    @Override
+    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 114 && resultCode == Activity.RESULT_OK) {
+
+            requestKey(data);
+
+        }
+
+    }
+
+    private static class OpenPgpProviderEntry {
+        private String packageName;
+        private String simpleName;
+        private Intent intent;
+
+        OpenPgpProviderEntry(String packageName, String simpleName) {
+            this.packageName = packageName;
+            this.simpleName = simpleName;
+        }
+
+        OpenPgpProviderEntry(String packageName, String simpleName, Intent intent) {
+            this(packageName, simpleName);
+            this.intent = intent;
+        }
+
+        @Override
+        public String toString() {
+            return simpleName;
+        }
+    }
+
 
     private void showSortMenuAlert() {
         if (getParentActivity() == null) {
@@ -567,6 +703,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         translateInputToLangRow = rowCount++;
         googleCloudTranslateKeyRow = rowCount++;
         trans2Row = rowCount++;
+
+        openKeyChainRow = rowCount++;
+        pgpAppRow = rowCount++;
+//        emailRow = rowCount++;
+        keyRow = rowCount++;
+        openKeyChain2Row = rowCount++;
 
         dialogsRow = rowCount++;
         sortMenuRow = rowCount++;
@@ -737,7 +879,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             default:
                                 value = "Unknown";
                         }
-                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
+                    } else if (position == pgpAppRow) {
+                        textCell.setTextAndValue(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp), NekoConfig.getOpenPGPAppName(), true);
+                    } else if (position == keyRow) {
+                        textCell.setTextAndValue(LocaleController.getString("OpenPGPKey", R.string.OpenPGPKey), NekoConfig.openPGPKeyId + "", true);
                     }
                     break;
                 }
@@ -816,6 +962,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("DialogsSettings", R.string.DialogsSettings));
                     } else if (position == privacyRow) {
                         headerCell.setText(LocaleController.getString("PrivacyTitle", R.string.PrivacyTitle));
+                    } else if (position == openKeyChainRow) {
+                        headerCell.setText(LocaleController.getString("OpenKayChain", R.string.OpenKayChain));
                     }
                     break;
                 }
@@ -868,12 +1016,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         @Override
         public int getItemViewType(int position) {
             if (position == connection2Row || position == dialogs2Row || position == trans2Row || position == privacy2Row ||
-                    position == general2Row || position == appearance2Row) {
+                    position == general2Row || position == appearance2Row || position == openKeyChain2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
-                    position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow) {
+                    position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow ||
+                    position == pgpAppRow || position == keyRow) {
                 return 2;
-            } else if (position == connectionRow || position == transRow || position == dialogsRow || position == privacyRow || position == generalRow || position == appearanceRow) {
+            } else if (position == connectionRow || position == transRow || position == dialogsRow ||
+                    position == privacyRow || position == generalRow || position == appearanceRow || position == openKeyChainRow) {
                 return 4;
             } else if (position == googleCloudTranslateKeyRow || position == cachePathRow) {
                 return 6;

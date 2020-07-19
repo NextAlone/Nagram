@@ -16,8 +16,11 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -48,6 +51,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.ActionMode;
@@ -88,6 +92,8 @@ import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
 
 import org.jetbrains.annotations.NotNull;
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -122,6 +128,8 @@ import org.telegram.ui.GroupStickersActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.StickersActivity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,12 +137,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.PGPUtil;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
@@ -2968,63 +2979,94 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
             sendPopupLayout.setShowedFromBotton(false);
 
-            for (int a = 0; a < 3; a++) {
-                if (a == 2 && (UserObject.isUserSelf(user) || slowModeTimer > 0 && !isInScheduleMode())) {
-                    continue;
-                }
-                int num = a;
-                ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
-                if (num == 0) {
-                    cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                } else if (num == 1) {
-                    if (UserObject.isUserSelf(user)) {
-                        cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
-                    } else {
-                        cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
-                    }
-                } else if (num == 2) {
-                    cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
-                }
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a, 0, 0));
+            int chatId;
+            if (chat != null) {
+                chatId = chat.id;
+            } else if (user != null) {
+                chatId = user.id;
+            } else {
+                chatId = -1;
+            }
 
-                int chatId;
-                if (chat != null) {
-                    chatId = chat.id;
-                } else if (user != null) {
-                    chatId = user.id;
-                } else {
-                    chatId = -1;
-                }
+            int a = 0;
 
+            ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
+
+            if (StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+
+                cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
                 cell.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
-                    if (num == 0) {
-                        translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
-                    }
-                    if (num == 1) {
-                        AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal);
-                    } else if (num == 2) {
-                        sendMessageInternal(false, 0);
-                    }
+                    signComment(NekoConfig.openPGPKeyId);
+
                 });
                 cell.setOnLongClickListener(v -> {
-                    if (num == 0) {
-                        Translator.showTargetLangSelect(cell, true, (locale) -> {
-                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                                sendPopupWindow.dismiss();
-                            }
-                            translateComment(locale);
-                            TranslateDb.saveChatLanguage(chatId, locale);
-                            return Unit.INSTANCE;
-                        });
-                        return true;
+                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                        sendPopupWindow.dismiss();
                     }
-                    return false;
+                    signComment(1L);
+                    return true;
                 });
+                cell.setMinimumWidth(AndroidUtilities.dp(196));
+                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+                cell = new ActionBarMenuSubItem(getContext());
+
             }
+
+            cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+            cell.setOnClickListener(v -> {
+                if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                    sendPopupWindow.dismiss();
+                }
+                translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
+            });
+            ActionBarMenuSubItem finalCell = cell;
+            cell.setOnLongClickListener(v -> {
+                Translator.showTargetLangSelect(finalCell, true, (locale) -> {
+                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                        sendPopupWindow.dismiss();
+                    }
+                    translateComment(locale);
+                    TranslateDb.saveChatLanguage(chatId, locale);
+                    return Unit.INSTANCE;
+                });
+                return true;
+            });
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+            if (!UserObject.isUserSelf(user) && (slowModeTimer == 0 || !isInScheduleMode())) {
+
+                cell = new ActionBarMenuSubItem(getContext());
+                if (UserObject.isUserSelf(user)) {
+                    cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+                } else {
+                    cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                }
+                cell.setOnClickListener(v -> {
+                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                        sendPopupWindow.dismiss();
+                    }
+                    AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal);
+                });
+                cell.setMinimumWidth(AndroidUtilities.dp(196));
+                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+            }
+
+            cell = new ActionBarMenuSubItem(getContext());
+            cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+            cell.setOnClickListener(v -> {
+                if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                    sendPopupWindow.dismiss();
+                }
+                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal);
+            });
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
 
             sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
                 @Override
@@ -3063,6 +3105,71 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 
         return false;
+    }
+
+    private void signComment(long signKeyId) {
+
+        if (parentActivity instanceof LaunchActivity) {
+
+            ((LaunchActivity) parentActivity).callbacks.put(115, result -> {
+
+                long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
+                if (signKeyId < 1L) NekoConfig.setOpenPGPKeyId(keyId);
+
+                signComment(keyId);
+
+                return Unit.INSTANCE;
+
+            });
+
+        }
+
+        Intent intent = new Intent(OpenPgpApi.ACTION_CLEARTEXT_SIGN);
+
+        if (signKeyId < 0L) intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, signKeyId);
+
+        ByteArrayInputStream is = IoUtil.toUtf8Stream(messageEditText.getText().toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        PGPUtil.post(() -> PGPUtil.api.executeApiAsync(intent, is, os, result -> {
+
+            switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+
+                case OpenPgpApi.RESULT_CODE_SUCCESS: {
+
+                    String str = StrUtil.utf8Str(os.toByteArray());
+
+                    if (StrUtil.isNotBlank(str)) messageEditText.setText(str);
+
+                    break;
+
+                }
+
+                case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
+
+                    PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+                    try {
+                        parentActivity.startIntentSenderFromChild(parentActivity, pi.getIntentSender(),
+                                115, null, 0, 0, 0);
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e(OpenPgpApi.TAG, "SendIntentException", e);
+                    }
+                    break;
+                }
+                case OpenPgpApi.RESULT_CODE_ERROR: {
+                    OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
+                    if (error.getMessage().contains("not found") && signKeyId < 0L) {
+                        NekoConfig.setOpenPGPKeyId(0L);
+                        signComment(0L);
+                    } else {
+                        AlertUtil.showToast(error.getMessage());
+                    }
+                    break;
+                }
+            }
+
+        }));
+
     }
 
     private void translateComment(Locale target) {

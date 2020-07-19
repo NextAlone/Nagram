@@ -219,7 +219,12 @@
     <string name="NekoXFaq">NekoX FAQ</string>
 
     <string name="TransSite">Translate Platform</string>
-    <string name="NekoXTrans">Translate NekoX</string>
     <string name="UsePersianCalender">Use Persian Calender</string>
+
+    <string name="OpenKayChain">OpenPGP Client</string>
+    <string name="OpenPGPApp">OpenPGP App</string>
+    <string name="OpenPGPKey">OpenPGP Key</string>
+    <string name="None">None</string>
+    <string name="Sign">Sign</string>
 
 </resources>

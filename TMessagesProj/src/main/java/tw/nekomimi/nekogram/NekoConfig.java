@@ -3,6 +3,9 @@ package tw.nekomimi.nekogram;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -21,7 +24,7 @@ public class NekoConfig {
     public static final int TITLE_TYPE_ICON = 1;
     public static final int TITLE_TYPE_MIX = 2;
 
-    private static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+    public static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
 
     public static boolean useIPv6;
 
@@ -108,6 +111,27 @@ public class NekoConfig {
 
     public static boolean proxyAutoSwitch;
     public static boolean usePersianCalender;
+
+    public static String openPGPApp;
+    public static long openPGPKeyId;
+
+    public static String getOpenPGPAppName() {
+
+        if (StrUtil.isNotBlank(openPGPApp)) {
+
+            try {
+                PackageManager manager = ApplicationLoader.applicationContext.getPackageManager();
+                ApplicationInfo info = manager.getApplicationInfo(openPGPApp, PackageManager.GET_META_DATA);
+                return (String) manager.getApplicationLabel(info);
+            } catch (PackageManager.NameNotFoundException e) {
+                openPGPApp = "";
+            }
+
+        }
+
+        return LocaleController.getString("None",R.string.None);
+
+    }
 
     public static String formatLang(String name) {
 
@@ -215,6 +239,8 @@ public class NekoConfig {
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
         usePersianCalender = preferences.getBoolean("usePersianCalender", false);
+        openPGPApp = preferences.getString("openPGPApp","");
+        openPGPKeyId = preferences.getLong("openPGPKeyId",0L);
 
     }
 
@@ -713,6 +739,18 @@ public class NekoConfig {
     public static void toggleUsePersianCalender() {
 
         preferences.edit().putBoolean("usePersianCalender",usePersianCalender = !usePersianCalender).apply();
+
+    }
+
+    public static void setOpenPGPApp(String packageName) {
+
+         preferences.edit().putString("openPGPApp",openPGPApp = packageName).apply();
+
+    }
+
+    public static void setOpenPGPKeyId(long keyId) {
+
+        preferences.edit().putLong("openPGPKeyId",openPGPKeyId = keyId).apply();
 
     }
 

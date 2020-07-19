@@ -42,8 +42,8 @@ configurations {
     compile.exclude module: 'support-v4'
 }
 
-def okHttpVersion = '4.7.2'
-def fcmVersion = '20.2.2'
+def okHttpVersion = '4.8.0'
+def fcmVersion = '20.2.3'
 def crashlyticsVersion = '17.1.1'
 def playCoreVersion = '1.7.3'
 
@@ -63,6 +63,7 @@ buildscript {
 
 repositories {
 
+    jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 
 }
@@ -92,17 +93,19 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.osmdroid:osmdroid-android:6.1.6'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8'
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.2.1'
+    implementation 'dnsjava:dnsjava:3.2.2'
     implementation 'org.dizitart:nitrite:3.4.2'
 
-    implementation 'cn.hutool:hutool-core:5.3.8'
-    implementation 'cn.hutool:hutool-crypto:5.3.8'
+    implementation 'cn.hutool:hutool-core:5.3.9'
+    implementation 'cn.hutool:hutool-crypto:5.3.9'
 
     implementation 'org.tukaani:xz:1.8'
+    implementation project(":openpgp-api")
+
 
     compileOnly files('libs/libv2ray.aar')
 
@@ -271,14 +274,17 @@ android {
             jniDebuggable false
             minifyEnabled true
             shrinkResources true
+            matchingFallbacks = ['debug']
         }
 
         release {
             initWith releaseNoGcm
+            matchingFallbacks = ['debug']
         }
 
         foss {
             initWith release
+            matchingFallbacks = ['debug']
         }
     }
 
