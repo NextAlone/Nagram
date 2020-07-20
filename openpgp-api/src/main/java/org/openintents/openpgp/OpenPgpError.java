@@ -113,4 +113,9 @@ public class OpenPgpError implements Parcelable {
             return new OpenPgpError[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return errorId + ": " + message;
+    }
 }

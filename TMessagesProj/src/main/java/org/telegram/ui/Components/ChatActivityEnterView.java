@@ -20,7 +20,6 @@ import android.app.PendingIntent;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -51,7 +50,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.ActionMode;
@@ -2999,14 +2997,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
-                    signComment(NekoConfig.openPGPKeyId);
+                    signComment(true);
 
                 });
                 cell.setOnLongClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
-                    signComment(1L);
+                    signComment(false);
                     return true;
                 });
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
@@ -3107,31 +3105,33 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return false;
     }
 
-    private void signComment(long signKeyId) {
+    private void signComment(boolean save) {
+
+        Intent intent = new Intent();
+
+        if (NekoConfig.openPGPKeyId != 0L && save) intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NekoConfig.openPGPKeyId);
+
+        signComment(intent, save);
+
+    }
+
+    private void signComment(Intent intent, boolean save) {
 
         if (parentActivity instanceof LaunchActivity) {
 
             ((LaunchActivity) parentActivity).callbacks.put(115, result -> {
 
-                long keyId = signKeyId;
+                long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
 
-                if (signKeyId == 0L || signKeyId == 1L) {
+                if (save && keyId != 0L) NekoConfig.setOpenPGPKeyId(keyId);
 
-                     keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
-
-                    if (signKeyId == 0L) NekoConfig.setOpenPGPKeyId(keyId);
-
-                }
-
-                signComment(keyId);
+                signComment(result, save);
 
             });
 
         }
 
-        Intent intent = new Intent(OpenPgpApi.ACTION_CLEARTEXT_SIGN);
-
-        if (signKeyId < 0L) intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, signKeyId);
+        intent.setAction(OpenPgpApi.ACTION_CLEARTEXT_SIGN);
 
         ByteArrayInputStream is = IoUtil.toUtf8Stream(messageEditText.getText().toString());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -3143,9 +3143,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
 
                     String str = StrUtil.utf8Str(os.toByteArray());
-
                     if (StrUtil.isNotBlank(str)) messageEditText.setText(str);
-
                     break;
 
                 }
@@ -3155,18 +3153,20 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                     try {
                         parentActivity.startIntentSenderFromChild(parentActivity, pi.getIntentSender(), 115, null, 0, 0, 0);
-                    } catch (IntentSender.SendIntentException e) {
-                        Log.e(OpenPgpApi.TAG, "SendIntentException", e);
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        AlertUtil.showToast(e);
                     }
                     break;
                 }
                 case OpenPgpApi.RESULT_CODE_ERROR: {
                     OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
-                    if (error.getMessage().contains("not found") && signKeyId < 0L) {
+                    if (error == null) return;
+                    if (error.getMessage() != null && error.getMessage().contains("not found") && save) {
                         NekoConfig.setOpenPGPKeyId(0L);
-                        signComment(0L);
+                        signComment(new Intent(), true);
                     } else {
-                        AlertUtil.showToast(error.getMessage());
+                        AlertUtil.showToast(error.toString());
                     }
                     break;
                 }

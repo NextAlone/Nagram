@@ -99,8 +99,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
-import org.openintents.openpgp.OpenPgpDecryptionResult;
-import org.openintents.openpgp.OpenPgpSignatureResult;
+import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.sufficientlysecure.keychain.pgp.PgpHelper;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -214,15 +213,8 @@ import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
-import cn.hutool.core.io.IoUtil;
-import tw.nekomimi.nekogram.JalaliCalendar;
-import tw.nekomimi.nekogram.MessageDetailsActivity;
-import tw.nekomimi.nekogram.MessageHelper;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
-
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -237,6 +229,7 @@ import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -271,6 +264,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private ActionBarMenuItem searchItem;
     private RadialProgressView progressBar;
     private ActionBarMenuSubItem addContactItem;
+    private ActionBarMenuSubItem shareKeyItem;
     private ClippingImageView animatingImageView;
     public RecyclerListView chatListView;
     private ChatListItemAnimator chatListItemAniamtor;
@@ -950,8 +944,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int add_shortcut = 24;
     private final static int show_pinned = 25;
     private final static int translate = 101;
-
-    private final static int delete_all = 28;
+    private final static int share_key = 28;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -1559,7 +1552,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     showDialog(AlertsCreator.createTTLAlert(getParentActivity(), currentEncryptedChat).create());
-                } else if (id == delete_history || id == delete_all) {
+                } else if (id == delete_history) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     TextView messageTextView = new TextView(context);
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -1585,27 +1578,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     textView.setEllipsize(TextUtils.TruncateAt.END);
                     if (id == delete_history) {
                         textView.setText(LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
-                    } else {
-                        textView.setText(LocaleController.getString("DeleteAllInChat", R.string.DeleteAllInChat));
                     }
                     frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 21 : 76), 11, (LocaleController.isRTL ? 76 : 21), 0));
                     frameLayout.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 57, 24, 9));
-                    if (id == delete_history) {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllFromSelfAlert", R.string.DeleteAllFromSelfAlert)));
-                        builder.setPositiveButton(LocaleController.getString("DeleteAll", R.string.DeleteAll), (dialogInterface, i) -> {
-                            if (ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
-                                getMessagesController().deleteUserChannelHistory(currentChat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
-                            } else {
-                                MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
-                            }
-                        });
-                    } else {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllInChatAlert", R.string.DeleteAllInChatAlert)));
-                        builder.setPositiveButton(LocaleController.getString("DeleteAllInChat", R.string.DeleteAllInChat), (dialogInterface, i) -> {
-                            MessageHelper.getInstance(currentAccount).deleteChannelHistory(dialog_id, currentChat, 0);
-                        });
-                    }
-
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllFromSelfAlert", R.string.DeleteAllFromSelfAlert)));
+                    builder.setPositiveButton(LocaleController.getString("DeleteAll", R.string.DeleteAll), (dialogInterface, i) -> {
+                        if (ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
+                            getMessagesController().deleteUserChannelHistory(currentChat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
+                        } else {
+                            MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
+                        }
+                    });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
@@ -1677,6 +1660,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         args.putBoolean("addContact", true);
                         presentFragment(new ContactAddActivity(args));
                     }
+                } else if (id == share_key) {
+
+                    selectAndShareMyKey(new Intent());
+
                 } else if (id == mute) {
                     toggleMute(false);
                 } else if (id == add_shortcut) {
@@ -2001,6 +1988,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentUser != null) {
                 addContactItem = headerItem.addSubItem(share_contact, R.drawable.msg_addcontact, "");
             }
+
+            shareKeyItem = headerItem.addSubItem(share_key, R.drawable.baseline_vpn_key_24, LocaleController.getString("ShareMyKey", R.string.ShareMyKey));
+
             if (currentEncryptedChat != null) {
                 timeItem2 = headerItem.addSubItem(chat_enc_timer, R.drawable.msg_timer, LocaleController.getString("SetTimer", R.string.SetTimer));
             }
@@ -2012,10 +2002,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (ChatObject.isChannel(currentChat) && currentChat.megagroup) {
                 headerItem.addSubItem(delete_history, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
-            }
-
-            if (ChatObject.isChannel(currentChat) && ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
-                headerItem.addSubItem(delete_all, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllInChat", R.string.DeleteAllInChat));
             }
             if (ChatObject.isChannel(currentChat)) {
                 if (!ChatObject.isNotInChat(currentChat)) {
@@ -6834,6 +6820,92 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         showDialog(builder.create());
     }
 
+    private void selectAndShareMyKey(Intent intent) {
+
+        intent.setAction(OpenPgpApi.ACTION_GET_SIGN_KEY_ID);
+
+        PGPUtil.post(() -> PGPUtil.api.executeApiAsync(intent, null, null, result -> {
+
+            switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+
+                case OpenPgpApi.RESULT_CODE_SUCCESS: {
+
+                    result.putExtra(OpenPgpApi.EXTRA_KEY_ID, result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L));
+
+                    shareMyKey(result);
+
+                    break;
+
+                }
+                case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
+
+                    PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+                    try {
+                        Activity act = (Activity) getParentActivity();
+                        act.startIntentSenderFromChild(act, pi.getIntentSender(), 117, null, 0, 0, 0);
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e(OpenPgpApi.TAG, "SendIntentException", e);
+                    }
+                    break;
+                }
+                case OpenPgpApi.RESULT_CODE_ERROR: {
+                    OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
+                    AlertUtil.showToast(error.getMessage());
+                    break;
+                }
+            }
+
+        }));
+
+    }
+
+    private void shareMyKey(Intent intent) {
+
+        intent.setAction(OpenPgpApi.ACTION_GET_KEY);
+        intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        PGPUtil.post(() -> PGPUtil.api.executeApiAsync(intent, null, os, result -> {
+
+            switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+
+                case OpenPgpApi.RESULT_CODE_SUCCESS: {
+
+                    String str = StrUtil.utf8Str(os.toByteArray());
+                    if (StrUtil.isBlank(str)) return;
+                    getSendMessagesHelper().sendMessage(str, dialog_id, null, null, false, null, null, null, true, 0);
+                    if (!inScheduleMode) {
+                        moveScrollToLastMessage();
+                    }
+                    hideFieldPanel(false);
+                    break;
+
+                }
+
+                case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
+
+                    PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+                    try {
+                        getParentActivity().startIntentSenderFromChild(getParentActivity(), pi.getIntentSender(), 118, null, 0, 0, 0);
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        AlertUtil.showToast(e);
+                    }
+                    break;
+                }
+                case OpenPgpApi.RESULT_CODE_ERROR: {
+                    OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
+                    if (error == null) return;
+                    AlertUtil.showToast(error.toString());
+                    break;
+                }
+            }
+
+        }));
+
+    }
+
     private void hideVoiceHint() {
         if (voiceHintTextView == null) {
             return;
@@ -9985,6 +10057,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     showAttachmentError();
                 }
                 afterMessageSend();
+            } else if (requestCode == 117) {
+                selectAndShareMyKey(data);
+            } else if (requestCode == 118) {
+                shareMyKey(data);
             }
         }
     }
@@ -13810,6 +13886,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             addToContactsButton.setVisibility(View.GONE);
         }
+
+        if (StrUtil.isBlank(NekoConfig.openPGPApp)) {
+            shareKeyItem.setVisibility(View.GONE);
+        } else {
+            shareKeyItem.setVisibility(View.VISIBLE);
+        }
+
         if (userBlocked || addToContactsButton.getVisibility() == View.GONE && reportSpamButton.getVisibility() == View.GONE) {
             show = false;
         }
@@ -16246,7 +16329,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }, null);
                 break;
             }
-            case 200: case 201: {
+            case 200:
+            case 201: {
 
                 Intent open = new Intent(Intent.ACTION_SEND);
                 open.setType("application/pgp-message");
@@ -16278,7 +16362,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 break;
             }
-            case 202: case 203: {
+            case 202:
+            case 203: {
 
                 Intent open = new Intent(NekoConfig.openPGPApp + ".action.IMPORT_KEY");
                 open.putExtra(NekoConfig.openPGPApp + ".EXTRA_KEY_BYTES", StrUtil.utf8Bytes(selectedObject.messageOwner.message));

@@ -231,5 +231,6 @@
     <string name="PGPVerify">Verify Message</string>
     <string name="PGPImport">Import Public Key</string>
     <string name="PGPImportPrivate">Import Private Key</string>
+    <string name="ShareMyKey">Share My Public Key</string>
 
 </resources>
