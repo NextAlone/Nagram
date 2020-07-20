@@ -18,11 +18,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -57,6 +59,7 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.SparseArray;
@@ -96,6 +99,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
+import org.openintents.openpgp.OpenPgpDecryptionResult;
+import org.openintents.openpgp.OpenPgpSignatureResult;
+import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -207,6 +213,7 @@ import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
+import cn.hutool.core.io.IoUtil;
 import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.MessageHelper;
@@ -214,6 +221,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -235,6 +243,7 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.PGPUtil;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -15023,6 +15032,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(88);
                                 icons.add(R.drawable.ic_translate);
                             }
+                            if (StrUtil.isNotBlank(selectedObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp) && selectedObject.messageOwner.message.contains("-----BEGIN PGP")) {
+                                items.add(LocaleController.getString("DecryptVerify", R.string.DecryptVerify));
+                                options.add(200);
+                                icons.add(R.drawable.baseline_vpn_key_24);
+                            }
                         }
                         if (NekoConfig.showMessageDetails) {
                             items.add(LocaleController.getString("MessageDetails", R.string.MessageDetails));
@@ -16215,6 +16229,39 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         SendMessagesHelper.getInstance(currentAccount).editMessage(message, null, false, ChatActivity.this, null, scheduleDate, null);
                     }
                 }, null);
+                break;
+            }
+            case 200: {
+
+                Intent open = new Intent(Intent.ACTION_SEND);
+                open.setType("application/pgp-message");
+                open.putExtra(Intent.EXTRA_TEXT, selectedObject.messageOwner.message);
+                open.setClassName(NekoConfig.openPGPApp,NekoConfig.openPGPApp + ".ui.DecryptActivity");
+
+                try {
+
+                    getParentActivity().startActivity(open);
+
+                } catch (Exception e) {
+
+                    AlertUtil.showToast(e);
+
+                }
+
+//                ByteArrayInputStream is = IoUtil.toUtf8Stream(selectedObject.messageOwner.message);
+//
+//                PGPUtil.post(() -> PGPUtil.api.executeApiAsync(new Intent(OpenPgpApi.ACTION_DECRYPT_VERIFY), is, null, new OpenPgpApi.IOpenPgpCallback() {
+//
+//                    @Override
+//                    public void onReturn(Intent result) {
+//
+//
+//                        OpenPgpSignatureResult s = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
+//
+//                    }
+//
+//                }));
+
                 break;
             }
         }

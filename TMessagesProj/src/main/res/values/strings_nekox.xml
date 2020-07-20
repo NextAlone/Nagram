@@ -227,4 +227,6 @@
     <string name="None">None</string>
     <string name="Sign">Sign</string>
 
+    <string name="DecryptVerify">Decrypt / Verify</string>
+
 </resources>

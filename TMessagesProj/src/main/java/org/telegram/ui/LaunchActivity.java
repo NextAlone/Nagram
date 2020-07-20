@@ -115,11 +115,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kotlin.Unit;
+import kotlin.reflect.KFunction;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
@@ -2893,7 +2895,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         return rightActionBarLayout;
     }
 
-    public HashMap<Integer, Function<Intent, Unit>> callbacks = new HashMap<>();
+    @FunctionalInterface
+    public interface Callback {
+
+        void invoke(Intent data);
+
+    }
+
+    public HashMap<Integer, Callback> callbacks = new HashMap<>();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -2908,7 +2917,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
         if (callbacks.containsKey(requestCode)) {
 
-            callbacks.remove(requestCode).apply(data);
+            callbacks.remove(requestCode).invoke(data);
 
             return;
 

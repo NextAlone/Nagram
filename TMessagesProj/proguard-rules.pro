@@ -20,6 +20,7 @@
 -keep class org.telegram.tgnet.QuickAckDelegate { *; }
 -keep class org.telegram.tgnet.WriteToSocketDelegate { *; }
 -keep class com.v2ray.ang.dto.** { *; }
+-keep class org.openintents.openpgp.** { *; }
 
 # -keep class io.github.trojan_gfw.** { *; }
 

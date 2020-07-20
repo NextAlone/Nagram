@@ -3113,12 +3113,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             ((LaunchActivity) parentActivity).callbacks.put(115, result -> {
 
-                long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
-                if (signKeyId < 1L) NekoConfig.setOpenPGPKeyId(keyId);
+                long keyId = signKeyId;
+
+                if (signKeyId == 0L || signKeyId == 1L) {
+
+                     keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
+
+                    if (signKeyId == 0L) NekoConfig.setOpenPGPKeyId(keyId);
+
+                }
 
                 signComment(keyId);
-
-                return Unit.INSTANCE;
 
             });
 
@@ -3149,8 +3154,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                     try {
-                        parentActivity.startIntentSenderFromChild(parentActivity, pi.getIntentSender(),
-                                115, null, 0, 0, 0);
+                        parentActivity.startIntentSenderFromChild(parentActivity, pi.getIntentSender(), 115, null, 0, 0, 0);
                     } catch (IntentSender.SendIntentException e) {
                         Log.e(OpenPgpApi.TAG, "SendIntentException", e);
                     }
