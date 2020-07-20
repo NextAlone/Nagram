@@ -222,11 +222,14 @@
     <string name="UsePersianCalender">Use Persian Calender</string>
 
     <string name="OpenKayChain">OpenPGP Client</string>
-    <string name="OpenPGPApp">OpenPGP App</string>
+    <string name="OpenPGPApp">OpenPGP Provider</string>
     <string name="OpenPGPKey">OpenPGP Key</string>
     <string name="None">None</string>
     <string name="Sign">Sign</string>
 
-    <string name="DecryptVerify">Decrypt / Verify</string>
+    <string name="PGPDecrypt">Decrypt Message</string>
+    <string name="PGPVerify">Verify Message</string>
+    <string name="PGPImport">Import Public Key</string>
+    <string name="PGPImportPrivate">Import Private Key</string>
 
 </resources>

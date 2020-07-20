@@ -102,6 +102,7 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import org.openintents.openpgp.OpenPgpDecryptionResult;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
+import org.sufficientlysecure.keychain.pgp.PgpHelper;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -13267,9 +13268,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         menu.clear();
 
-        menu.add(android.R.id.cut, android.R.id.cut,0,android.R.string.cut);
-        menu.add(android.R.id.copy, android.R.id.copy,1,android.R.string.copy);
-        menu.add(android.R.id.paste, android.R.id.paste, 2,android.R.string.paste);
+        menu.add(android.R.id.cut, android.R.id.cut, 0, android.R.string.cut);
+        menu.add(android.R.id.copy, android.R.id.copy, 1, android.R.string.copy);
+        menu.add(android.R.id.paste, android.R.id.paste, 2, android.R.string.paste);
 
         menu.add(R.id.menu_translate, R.id.menu_translate, 5, LocaleController.getString("Translate", R.string.Translate));
 
@@ -15032,10 +15033,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(88);
                                 icons.add(R.drawable.ic_translate);
                             }
-                            if (StrUtil.isNotBlank(selectedObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp) && selectedObject.messageOwner.message.contains("-----BEGIN PGP")) {
-                                items.add(LocaleController.getString("DecryptVerify", R.string.DecryptVerify));
-                                options.add(200);
-                                icons.add(R.drawable.baseline_vpn_key_24);
+                            if (StrUtil.isNotBlank(selectedObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+                                if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
+                                    items.add(LocaleController.getString("PGPVerify", R.string.PGPVerify));
+                                    options.add(200);
+                                    icons.add(R.drawable.baseline_vpn_key_24);
+                                } else if (PgpHelper.PGP_MESSAGE.matcher(selectedObject.messageOwner.message).matches()) {
+                                    items.add(LocaleController.getString("PGPDecrypt", R.string.PGPDecrypt));
+                                    options.add(201);
+                                    icons.add(R.drawable.baseline_vpn_key_24);
+                                } else if (PgpHelper.PGP_PRIVATE_KEY.matcher(selectedObject.messageOwner.message).matches()) {
+                                    items.add(LocaleController.getString("PGPImportPrivate", R.string.PGPImportPrivate));
+                                    options.add(202);
+                                    icons.add(R.drawable.baseline_vpn_key_24);
+                                } else if (PgpHelper.PGP_PUBLIC_KEY.matcher(selectedObject.messageOwner.message).matches()) {
+                                    items.add(LocaleController.getString("PGPImport", R.string.PGPImport));
+                                    options.add(203);
+                                    icons.add(R.drawable.baseline_vpn_key_24);
+                                }
                             }
                         }
                         if (NekoConfig.showMessageDetails) {
@@ -16231,12 +16246,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }, null);
                 break;
             }
-            case 200: {
+            case 200: case 201: {
 
                 Intent open = new Intent(Intent.ACTION_SEND);
                 open.setType("application/pgp-message");
                 open.putExtra(Intent.EXTRA_TEXT, selectedObject.messageOwner.message);
-                open.setClassName(NekoConfig.openPGPApp,NekoConfig.openPGPApp + ".ui.DecryptActivity");
+                open.setClassName(NekoConfig.openPGPApp, NekoConfig.openPGPApp + ".ui.DecryptActivity");
 
                 try {
 
@@ -16255,7 +16270,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    @Override
 //                    public void onReturn(Intent result) {
 //
-//
 //                        OpenPgpSignatureResult s = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
 //
 //                    }
@@ -16263,6 +16277,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                }));
 
                 break;
+            }
+            case 202: case 203: {
+
+                Intent open = new Intent(NekoConfig.openPGPApp + ".action.IMPORT_KEY");
+                open.putExtra(NekoConfig.openPGPApp + ".EXTRA_KEY_BYTES", StrUtil.utf8Bytes(selectedObject.messageOwner.message));
+
+                try {
+
+                    getParentActivity().startActivity(open);
+
+                } catch (Exception e) {
+
+                    AlertUtil.showToast(e);
+
+                }
+
             }
         }
         selectedObject = null;
