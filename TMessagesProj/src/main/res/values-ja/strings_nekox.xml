@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">ロックされています</string>
     <string name="CustomApi">カスタムAPI</string>
     <string name="UseCustomApiNotice">カスタムAPIを使用してログインします。登録やログインができない時には役に立つかもしれません。\n\n注意:リリースバージョンを使用しているとFCMは動作しません。</string>
     <string name="CustomApiNo">カスタムAPIを使用しない</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">ログイン設定</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">プラットフォームを翻訳</string>
-    <string name="NekoTrans">Nekogramを翻訳</string>
-    <string name="NekoXTrans">NekoXを翻訳</string>
+    <string name="UsePersianCalender">ペルシャ暦を使用する</string>
+    <string name="OpenKayChain">OpenPGP クライアント</string>
+    <string name="OpenPGPApp">OpenPGPプロバイダー</string>
+    <string name="OpenPGPKey">OpenPGP キー</string>
+    <string name="None">なし</string>
+    <string name="Sign">符号</string>
+    <string name="PGPDecrypt">メッセージの復号化</string>
+    <string name="PGPVerify">メッセージを確認</string>
+    <string name="PGPImport">公開鍵をインポート</string>
+    <string name="PGPImportPrivate">プライベートキーをインポート</string>
+    <string name="ShareMyKey">公開鍵を共有</string>
 </resources>

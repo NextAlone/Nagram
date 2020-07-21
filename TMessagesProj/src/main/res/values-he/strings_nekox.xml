@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">נָעוּל</string>
     <string name="CustomApi">ממשק API מותאם אישית</string>
     <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.\n\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
     <string name="CustomApiNo">אל תשתמש בממשק API מותאם אישית</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">הגדרות כניסה</string>
     <string name="NekoXFaq">שאלות נפוצות על NekoX</string>
     <string name="TransSite">תרגם פלטפורמה</string>
-    <string name="NekoTrans">תרגם Nekogram</string>
-    <string name="NekoXTrans">תרגם NekoX</string>
+    <string name="UsePersianCalender">השתמש בלוח השנה הפרסי</string>
+    <string name="OpenKayChain">לקוח OpenPGP</string>
+    <string name="OpenPGPApp">ספק OpenPGP</string>
+    <string name="OpenPGPKey">מפתח OpenPGP</string>
+    <string name="None">אף אחד</string>
+    <string name="Sign">סִימָן</string>
+    <string name="PGPDecrypt">פענח הודעה</string>
+    <string name="PGPVerify">אמת את ההודעה</string>
+    <string name="PGPImport">ייבא מפתח ציבורי</string>
+    <string name="PGPImportPrivate">ייבא מפתח פרטי</string>
+    <string name="ShareMyKey">שתף את המפתח הציבורי שלי</string>
 </resources>

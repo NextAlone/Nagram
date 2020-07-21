@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">Заблоковано</string>
     <string name="CustomApi">Користувацький API</string>
     <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.\n\nПримітка: fcm не буде працювати, якщо ви використовуєте версію релізу.</string>
     <string name="CustomApiNo">Не використовувати користувацький API</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">Параметри входу</string>
     <string name="NekoXFaq">Питання NekoX</string>
     <string name="TransSite">Перекласти платформу</string>
-    <string name="NekoTrans">Перекласти Nekogram</string>
-    <string name="NekoXTrans">Перекласти NekoX</string>
+    <string name="UsePersianCalender">Використовувати перський календар</string>
+    <string name="OpenKayChain">Клієнт OpenPGP</string>
+    <string name="OpenPGPApp">OpenPGP постачальник</string>
+    <string name="OpenPGPKey">Ключ OpenPGP</string>
+    <string name="None">Без ефекту</string>
+    <string name="Sign">Підпис</string>
+    <string name="PGPDecrypt">Розшифрувати Повідомлення</string>
+    <string name="PGPVerify">Підтвердити повідомлення</string>
+    <string name="PGPImport">Імпортувати відкритий ключ</string>
+    <string name="PGPImportPrivate">Імпорт приватного ключа</string>
+    <string name="ShareMyKey">Поділіться моїм публічним ключем</string>
 </resources>

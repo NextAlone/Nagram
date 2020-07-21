@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">잠김</string>
     <string name="CustomApi">사용자 정의 API</string>
     <string name="UseCustomApiNotice">사용자 정의 API를 사용하여 로그인 시, 등록하거나 로그인 할 수 없으면, 이 항목이 도움이 될 수 있습니다.\n\n참고: 정식 버전을 사용하는 경우 fcm이 작동하지 않습니다.</string>
     <string name="CustomApiNo">사용자 정의 API 사용하지 않기</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">로그인 설정</string>
     <string name="NekoXFaq">NekoX 자주하는 질문</string>
     <string name="TransSite">플랫폼 번역</string>
-    <string name="NekoTrans">Nekogram 번역</string>
-    <string name="NekoXTrans">NekoX 번역</string>
+    <string name="UsePersianCalender">페르시아 달력 사용</string>
+    <string name="OpenKayChain">OpenPGP 클라이언트</string>
+    <string name="OpenPGPApp">OpenPGP 제공자</string>
+    <string name="OpenPGPKey">OpenPGP 키</string>
+    <string name="None">없음</string>
+    <string name="Sign">기호</string>
+    <string name="PGPDecrypt">메시지 해독</string>
+    <string name="PGPVerify">메시지 확인</string>
+    <string name="PGPImport">공개 키 가져 오기</string>
+    <string name="PGPImportPrivate">개인 키 가져 오기</string>
+    <string name="ShareMyKey">내 공개 키 공유</string>
 </resources>

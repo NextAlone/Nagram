@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">Kilitli</string>
     <string name="CustomApi">Özel API</string>
     <string name="UseCustomApiNotice">Özel API kullanarak giriş yapın, kayıt yapamaz veya giriş yapamıyorsanız, bu yardımcı olabilir.\n\nNot: Yayın sürümünü kullanıyorsanız fcm çalışmaz.</string>
     <string name="CustomApiNo">Özel API kullanma</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">Giriş Ayarları</string>
     <string name="NekoXFaq">NekoX SSS</string>
     <string name="TransSite">Tercüme Platformu</string>
-    <string name="NekoTrans">Nekogram temasını tercüme et</string>
-    <string name="NekoXTrans">NekoX temasını tercüme et</string>
+    <string name="UsePersianCalender">Farsça Takvimi Kullan</string>
+    <string name="OpenKayChain">OpenPGP İstemcisi</string>
+    <string name="OpenPGPApp">OpenPGP Sağlayıcısı</string>
+    <string name="OpenPGPKey">OpenPGP Anahtarı</string>
+    <string name="None">Yok</string>
+    <string name="Sign">İşaret</string>
+    <string name="PGPDecrypt">Mesajın şifresini çöz</string>
+    <string name="PGPVerify">Mesajı Doğrula</string>
+    <string name="PGPImport">Genel Anahtarı İçe Aktar</string>
+    <string name="PGPImportPrivate">Özel Anahtarı İçe Aktar</string>
+    <string name="ShareMyKey">Ortak Anahtarımı Paylaş</string>
 </resources>

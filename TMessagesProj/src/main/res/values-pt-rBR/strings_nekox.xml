@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="CustomApi">API personalizada</string>
+    <string name="Locked">Bloqueado</string>
+    <string name="CustomApi">API Personalizada</string>
     <string name="UseCustomApiNotice">Efetue login usando a API personalizada. Se você não conseguir se registrar ou efetuar login, isso pode ajudar.\n\nNota: o fcm não vai funcionar se você estiver usando a versão de final.</string>
     <string name="CustomApiNo">Não use a API personalizada</string>
     <string name="CustomApiOfficial">Telegram Android</string>
@@ -16,6 +17,7 @@
     <string name="Install">Instalar</string>
     <string name="Ignore">Ignorar</string>
     <string name="UpdateDownloaded">Uma atualização acabou de ser baixada.</string>
+    <string name="ProxyAutoSwitch">Alternar Proxy Automático</string>
     <string name="LinkedGroupChat">Grupo vinculado</string>
     <string name="LinkedChannelChat">Canal vinculado</string>
     <string name="DevModeTitle">**Sua conta de telegrama pode ser banida**</string>
@@ -164,6 +166,15 @@
     <string name="LoginSettings">Configurações de login</string>
     <string name="NekoXFaq">FAQ do NekoX</string>
     <string name="TransSite">Traduzir plataforma</string>
-    <string name="NekoTrans">Traduzir Nekogram</string>
-    <string name="NekoXTrans">Traduzir NekoX</string>
+    <string name="UsePersianCalender">Usar calendário persa</string>
+    <string name="OpenKayChain">Cliente OpenPGP</string>
+    <string name="OpenPGPApp">Provedor OpenPGP</string>
+    <string name="OpenPGPKey">Chave OpenPGP</string>
+    <string name="None">Nenhuma</string>
+    <string name="Sign">Assinar</string>
+    <string name="PGPDecrypt">Descriptografar Mensagem</string>
+    <string name="PGPVerify">Verificar mensagem</string>
+    <string name="PGPImport">Importar chave pública</string>
+    <string name="PGPImportPrivate">Importar Chave Privada</string>
+    <string name="ShareMyKey">Compartilhar minha chave pública</string>
 </resources>

@@ -166,6 +166,15 @@
     <string name="LoginSettings">登录设置</string>
     <string name="NekoXFaq">NekoX 常见问题</string>
     <string name="TransSite">翻译平台</string>
-    <string name="NekoTrans">翻译 Nekogram</string>
-    <string name="NekoXTrans">翻译 NekoX</string>
+    <string name="UsePersianCalender">使用波斯日历</string>
+    <string name="OpenKayChain">OpenPGP 客户端</string>
+    <string name="OpenPGPApp">OpenPGP 提供应用</string>
+    <string name="OpenPGPKey">OpenPGP 密钥</string>
+    <string name="None">无</string>
+    <string name="Sign">签名</string>
+    <string name="PGPDecrypt">解密消息</string>
+    <string name="PGPVerify">验证消息</string>
+    <string name="PGPImport">导入公钥</string>
+    <string name="PGPImportPrivate">导入私钥</string>
+    <string name="ShareMyKey">分享我的公钥</string>
 </resources>

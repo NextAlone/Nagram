@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">Bloqueado</string>
     <string name="CustomApi">API personalizada</string>
     <string name="UseCustomApiNotice">Inicie sesión con la Api personalizada, si no puede registrarse o iniciar sesión, esto puede ayudar.\n\n Nota: fcm no funcionará si está utilizando la versión de lanzamiento.</string>
     <string name="CustomApiNo">No usar API personalizada</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">Configuración de inicio de sesión</string>
     <string name="NekoXFaq">Preguntas frecuentes sobre NekoX</string>
     <string name="TransSite">Traducir plataforma</string>
-    <string name="NekoTrans">Traducir Nekograma</string>
-    <string name="NekoXTrans">Traducir NekoX</string>
+    <string name="UsePersianCalender">Usar el calendario persa</string>
+    <string name="OpenKayChain">Cliente OpenPGP</string>
+    <string name="OpenPGPApp">Proveedor OpenPGP</string>
+    <string name="OpenPGPKey">Clave OpenPGP</string>
+    <string name="None">Ninguna</string>
+    <string name="Sign">Signo</string>
+    <string name="PGPDecrypt">Descifrar mensaje</string>
+    <string name="PGPVerify">Verificar mensaje</string>
+    <string name="PGPImport">Importar clave pública</string>
+    <string name="PGPImportPrivate">Importar clave privada</string>
+    <string name="ShareMyKey">Compartir Mi Clave Pública</string>
 </resources>

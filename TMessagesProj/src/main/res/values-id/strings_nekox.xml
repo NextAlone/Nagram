@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">Terkunci</string>
     <string name="CustomApi">API Kustom</string>
     <string name="UseCustomApiNotice">Gunakan api kustom untuk masuk, ini mungkin membantu jika anda tidak dapat mendaftar atau masuk.\n\nCatatan: fcm tidak akan bekerja jika anda menggunakan versi rilisan.</string>
     <string name="CustomApiNo">Jangan gunakan API kustom</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">Pengaturan Login</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">Platform Terjemahan</string>
-    <string name="NekoTrans">Terjemahkan Nekogram</string>
-    <string name="NekoXTrans">Terjemahkan NekoX</string>
+    <string name="UsePersianCalender">Gunakan Kalender Persia</string>
+    <string name="OpenKayChain">Klien OpenPGP</string>
+    <string name="OpenPGPApp">Penyedia OpenPGP</string>
+    <string name="OpenPGPKey">Kunci OpenPGP</string>
+    <string name="None">Tidak ada</string>
+    <string name="Sign">Tanda</string>
+    <string name="PGPDecrypt">Dekripsi Pesan</string>
+    <string name="PGPVerify">Verifikasi Pesan</string>
+    <string name="PGPImport">Impor Kunci Publik</string>
+    <string name="PGPImportPrivate">Impor Kunci Pribadi</string>
+    <string name="ShareMyKey">Bagikan Kunci Publik Saya</string>
 </resources>

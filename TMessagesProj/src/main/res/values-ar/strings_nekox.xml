@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">مقفل</string>
     <string name="CustomApi">API مخصص</string>
     <string name="UseCustomApiNotice">تسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة، إذا كنت غير قادر على تسجيل أو تسجيل الدخول، قد يساعد هذا.nnNote: fcm لن تعمل إذا كنت تستخدم اهر الإصدار.</string>
     <string name="CustomApiNo">لا تستخدم API مخصص</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">إعدادات الدخول</string>
     <string name="NekoXFaq">أسئلة NekoX الشائعة</string>
     <string name="TransSite">ترجمة النظام الأساسي</string>
-    <string name="NekoTrans">ترجمة Nekogram</string>
-    <string name="NekoXTrans">ترجمة NekoX</string>
+    <string name="UsePersianCalender">استخدم التقويم الفارسي</string>
+    <string name="OpenKayChain">عميل OpenPGP</string>
+    <string name="OpenPGPApp">موفر OpenPGP</string>
+    <string name="OpenPGPKey">مفتاح OpenPGP</string>
+    <string name="None">لا شيء</string>
+    <string name="Sign">التوقيع</string>
+    <string name="PGPDecrypt">فك تشفير الرسالة</string>
+    <string name="PGPVerify">تحقق من الرسالة</string>
+    <string name="PGPImport">استيراد مفتاح عمومي</string>
+    <string name="PGPImportPrivate">استيراد مفتاح خاص</string>
+    <string name="ShareMyKey">شارك مفتاحي العام</string>
 </resources>

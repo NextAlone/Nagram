@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">قفل شده</string>
     <string name="CustomApi">API سفارشی</string>
     <string name="UseCustomApiNotice">با استفاده از شناسه رسمی برنامه وارد شوید ، اگر قادر به ثبت نام یا ورود به سیستم نیستید ، این ممکن است کمک کند. توجه: اگر از آخرین نسخه استفاده می کنید ، fcm کار نخواهد کرد.</string>
     <string name="CustomApiNo">از API سفارشی استفاده نکن</string>
@@ -165,6 +166,15 @@
     <string name="LoginSettings">تنظیمات ورود به سیستم</string>
     <string name="NekoXFaq">پرسش های متداول NekoX</string>
     <string name="TransSite">ترجمه بستر های نرم افزاری</string>
-    <string name="NekoTrans">ترجمه Nekogram</string>
-    <string name="NekoXTrans">ترجمه NekoX</string>
+    <string name="UsePersianCalender">از تقویم پارسی استفاده کن</string>
+    <string name="OpenKayChain">کلاینت OpenPGP</string>
+    <string name="OpenPGPApp">ارائه دهنده OpenPGP</string>
+    <string name="OpenPGPKey">کلید OpenPGP</string>
+    <string name="None">هیچ کدام</string>
+    <string name="Sign">امضاء </string>
+    <string name="PGPDecrypt">رمزگشایی پیام</string>
+    <string name="PGPVerify">پیام را تأیید کن</string>
+    <string name="PGPImport">کلید عمومی را بارگذاری کن</string>
+    <string name="PGPImportPrivate">کلید خصوصی را بارگذاری کن</string>
+    <string name="ShareMyKey">کلید عمومی من را به اشتراک بگذار</string>
 </resources>
