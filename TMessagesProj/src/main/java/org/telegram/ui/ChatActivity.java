@@ -1985,6 +1985,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentChat != null && !currentChat.creator) {
                 headerItem.addSubItem(report, R.drawable.baseline_report_24, LocaleController.getString("ReportChat", R.string.ReportChat));
             }
+
+            if (currentChat != null && (currentChat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
+                String text;
+                if (!currentChat.megagroup) {
+                    text = LocaleController.getString("LinkedGroupChat", R.string.LinkedGroupChat);
+                } else {
+                    text = LocaleController.getString("LinkedChannelChat", R.string.LinkedChannelChat);
+                }
+                headerItem.addSubItem(linked_chat, R.drawable.baseline_layers_24, text);
+            }
+
             if (currentUser != null) {
                 addContactItem = headerItem.addSubItem(share_contact, R.drawable.msg_addcontact, "");
             }
@@ -2066,7 +2077,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeViews.add(actionMode.addItemWithWidth(translate, R.drawable.ic_translate, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Translate)));
         actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
 
-        actionMode.getItem(edit).setVisibility(View.GONE);
+        actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(copy).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(star).setVisibility(View.GONE);
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
