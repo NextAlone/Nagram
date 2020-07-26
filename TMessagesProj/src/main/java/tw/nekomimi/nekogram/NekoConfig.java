@@ -247,7 +247,7 @@ public class NekoConfig {
         useProxyItem = preferences.getBoolean("use_proxy_item", true);
 
         disableAppBarShadow = preferences.getBoolean("disableAppBarShadow", false);
-        mediaPreview = preferences.getBoolean("mediaPreview", false);
+        mediaPreview = preferences.getBoolean("mediaPreview", true);
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
         //preferences.getBoolean("usePersianCalender", false);
