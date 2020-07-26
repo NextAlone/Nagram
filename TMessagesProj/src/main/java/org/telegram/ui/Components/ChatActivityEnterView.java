@@ -2538,7 +2538,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         AndroidUtilities.cancelRunOnUIThread(recordAudioVideoRunnable);
                         delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
                         setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
-                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        if (!NekoConfig.disableVibration) {
+                            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        }
                         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
                     } else if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
@@ -2883,7 +2885,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void startLockTransition() {
         AnimatorSet animatorSet = new AnimatorSet();
-        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        if (!NekoConfig.disableVibration) {
+            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        }
 
         ObjectAnimator translate = ObjectAnimator.ofFloat(recordCircle, "lockAnimatedTranslation", recordCircle.startTranslation);
         translate.setStartDelay(100);
@@ -3100,7 +3104,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - sendPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8), y);
         sendPopupWindow.dimBehind();
         sendButton.invalidate();
-        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        if (!NekoConfig.disableVibration) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        }
 
         return false;
     }

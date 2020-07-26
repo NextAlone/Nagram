@@ -23,9 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.SystemClock;
-import android.os.Vibrator;
-import androidx.annotation.IdRes;
-import androidx.core.os.CancellationSignal;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -45,11 +42,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
+import androidx.core.os.CancellationSignal;
+
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
@@ -58,6 +58,9 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class PasscodeView extends FrameLayout {
 
@@ -123,7 +126,9 @@ public class PasscodeView extends FrameLayout {
                 return;
             }
             try {
-                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (!NekoConfig.disableVibration) {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                }
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -244,7 +249,9 @@ public class PasscodeView extends FrameLayout {
                 return;
             }
             try {
-                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (!NekoConfig.disableVibration) {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                }
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -878,10 +885,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     private void onPasscodeError() {
-        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        VibrateUtil.vibrate();
         shakeTextView(2, 0);
     }
 
@@ -1111,10 +1115,7 @@ public class PasscodeView extends FrameLayout {
         fingerprintImageView.setImageResource(R.drawable.ic_fingerprint_error);
         fingerprintStatusTextView.setText(error);
         fingerprintStatusTextView.setTextColor(0xfff4511e);
-        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        VibrateUtil.vibrate();
         AndroidUtilities.shakeView(fingerprintStatusTextView, 2, 0);
     }
 

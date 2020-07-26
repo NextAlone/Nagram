@@ -39,6 +39,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public static native long create(String src, int w, int h, int[] params, boolean precache, int[] colorReplacement, boolean limitFps);
@@ -892,7 +894,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             } else if (nextRenderingBitmap != null && (renderingBitmap == null || timeDiff >= timeCheck) && isCurrentParentViewMaster()) {
                 if (vibrationPattern != null && currentParentView != null) {
                     Integer force = vibrationPattern.get(currentFrame - 1);
-                    if (force != null) {
+                    if (force != null && !NekoConfig.disableVibration) {
                         currentParentView.performHapticFeedback(force == 1 ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                 }

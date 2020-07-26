@@ -19,6 +19,8 @@ import org.telegram.ui.Charts.view_data.LegendSignatureView;
 import org.telegram.ui.Charts.view_data.LineViewData;
 import org.telegram.ui.Charts.view_data.PieLegendView;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 
 public class PieChartView extends StackLinearChartView<PieChartViewData> {
 
@@ -372,12 +374,14 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
             pieLegendView.setTranslationX(xl);
             pieLegendView.setTranslationY(yl);
 
-            boolean v = false;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                v = performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            }
-            if (!v) {
-                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            if (!NekoConfig.disableVibration) {
+                boolean v = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    v = performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
+                if (!v) {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
             }
 
         }

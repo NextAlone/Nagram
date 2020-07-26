@@ -11,7 +11,6 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.os.Vibrator;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -62,6 +61,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.EditTextAutoFill;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class TwoStepVerificationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -817,10 +817,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         if (getParentActivity() == null) {
             return;
         }
-        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        VibrateUtil.vibrate();
         if (clear) {
             field.setText("");
         }

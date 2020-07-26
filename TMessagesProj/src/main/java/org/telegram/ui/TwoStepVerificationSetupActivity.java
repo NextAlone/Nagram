@@ -22,7 +22,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -70,6 +69,7 @@ import org.telegram.ui.Components.RLottieImageView;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.EditTextAutoFill;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class TwoStepVerificationSetupActivity extends BaseFragment {
 
@@ -1495,10 +1495,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         if (getParentActivity() == null) {
             return;
         }
-        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        VibrateUtil.vibrate();
         if (clear) {
             field.setText("");
         }

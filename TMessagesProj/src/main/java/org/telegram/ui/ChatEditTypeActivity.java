@@ -11,7 +11,6 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -55,6 +54,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class ChatEditTypeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -485,10 +485,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         }
         if (!isPrivate && ((currentChat.username == null && usernameTextView.length() != 0) || (currentChat.username != null && !currentChat.username.equalsIgnoreCase(usernameTextView.getText().toString())))) {
             if (usernameTextView.length() != 0 && !lastNameAvailable) {
-                Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                if (v != null) {
-                    v.vibrate(200);
-                }
+                VibrateUtil.vibrate();
                 AndroidUtilities.shakeView(checkTextView, 2, 0);
                 return false;
             }

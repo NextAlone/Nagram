@@ -16,7 +16,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -30,6 +29,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -46,7 +49,6 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.DialogRadioCell;
@@ -65,11 +67,8 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import tw.nekomimi.nekogram.JalaliCalendar;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class ChatRightsEditActivity extends BaseFragment {
 
@@ -902,10 +901,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         if (currentType == TYPE_ADMIN) {
             if (rankRow != -1 && currentRank.codePointCount(0, currentRank.length()) > MAX_RANK_LENGTH) {
                 listView.smoothScrollToPosition(rankRow);
-                Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                if (v != null) {
-                    v.vibrate(200);
-                }
+                VibrateUtil.vibrate();
                 RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(rankHeaderRow);
                 if (holder != null) {
                     AndroidUtilities.shakeView(holder.itemView, 2, 0);

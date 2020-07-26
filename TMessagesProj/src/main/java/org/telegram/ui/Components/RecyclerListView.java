@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class RecyclerListView extends RecyclerView {
 
     private OnItemClickListener onItemClickListener;
@@ -581,12 +583,16 @@ public class RecyclerListView extends RecyclerView {
                     View child = currentChildView;
                     if (onItemLongClickListener != null) {
                         if (onItemLongClickListener.onItemClick(currentChildView, currentChildPosition)) {
-                            child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            if (!NekoConfig.disableVibration) {
+                                child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            }
                             child.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                         }
                     } else if (onItemLongClickListenerExtended != null) {
                         if (onItemLongClickListenerExtended.onItemClick(currentChildView, currentChildPosition, event.getX() - currentChildView.getX(), event.getY() - currentChildView.getY())) {
-                            child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            if (!NekoConfig.disableVibration) {
+                                child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            }
                             child.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                             longPressCalled = true;
                         }

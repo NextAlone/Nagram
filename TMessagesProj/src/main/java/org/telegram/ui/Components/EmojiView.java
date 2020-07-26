@@ -104,6 +104,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class EmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private ArrayList<View> views = new ArrayList<>();
@@ -1771,7 +1773,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
                     backspacePressed = false;
                     if (!backspaceOnce) {
-                        if (delegate != null && delegate.onBackspace()) {
+                        if (delegate != null && delegate.onBackspace() && !NekoConfig.disableVibration) {
                             backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                         }
                     }
@@ -2799,7 +2801,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (!backspacePressed) {
                 return;
             }
-            if (delegate != null && delegate.onBackspace()) {
+            if (delegate != null && delegate.onBackspace() && !NekoConfig.disableVibration) {
                 backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
             backspaceOnce = true;

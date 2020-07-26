@@ -53,6 +53,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -233,7 +234,9 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 textY = maybeTextY;
 
                 selectedView = newView;
-                textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration) {
+                    textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
                 showActions();
                 invalidate();
 
@@ -816,7 +819,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                                     if (viewChanged || layoutOld != layoutNew || newSelectionLine != layoutNew.getLineForOffset(selectionStart) && newSelectionLine == nextWhitespaceLine) {
                                         jumpToLine(newSelection, nextWhitespace, viewChanged, layoutBlock.yOffset, oldYoffset, oldSelectedView);
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !NekoConfig.disableVibration) {
                                             textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
                                         }
                                         TextSelectionHelper.this.invalidate();
@@ -828,7 +831,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                             selectionStart = k;
                                             movingHandleStart = false;
                                         }
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !NekoConfig.disableVibration) {
                                             textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
                                         }
                                         TextSelectionHelper.this.invalidate();
@@ -879,7 +882,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                                 selectionStart = k;
                                                 movingHandleStart = false;
                                             }
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !NekoConfig.disableVibration) {
                                                 textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
                                             }
                                             TextSelectionHelper.this.invalidate();
@@ -917,7 +920,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                                     if (viewChanged || layoutOld != layoutNew || newSelectionLine != layoutNew.getLineForOffset(selectionEnd) && newSelectionLine == nextWhitespaceLine) {
                                         jumpToLine(newSelection, nextWhitespace, viewChanged, layoutBlock.yOffset, oldYoffset, oldSelectedView);
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !NekoConfig.disableVibration) {
                                             textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
                                         }
                                         TextSelectionHelper.this.invalidate();
@@ -929,7 +932,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                             selectionStart = k;
                                             movingHandleStart = true;
                                         }
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !NekoConfig.disableVibration) {
                                             textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
                                         }
                                         TextSelectionHelper.this.invalidate();
@@ -961,7 +964,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                                 selectionStart = k;
                                                 movingHandleStart = true;
                                             }
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !NekoConfig.disableVibration) {
                                                 textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
                                             }
                                             TextSelectionHelper.this.invalidate();

@@ -15,6 +15,8 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public abstract class BaseCell extends ViewGroup {
 
     private final class CheckForTap implements Runnable {
@@ -33,7 +35,9 @@ public abstract class BaseCell extends ViewGroup {
         public void run() {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration) {
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
                 onLongPress();
                 MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
                 onTouchEvent(event);

@@ -24,7 +24,6 @@ import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -114,6 +113,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.JalaliCalendar;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class PaymentFormActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -3046,10 +3046,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void shakeView(View view) {
-        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        VibrateUtil.vibrate();
         AndroidUtilities.shakeView(view, 2, 0);
     }
 
@@ -3081,10 +3078,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             return;
         }
         if (inputFields[FIELD_SAVEDPASSWORD].length() == 0) {
-            Vibrator v = (Vibrator) ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
-            if (v != null) {
-                v.vibrate(200);
-            }
+            VibrateUtil.vibrate();
             AndroidUtilities.shakeView(inputFields[FIELD_SAVEDPASSWORD], 2, 0);
             return;
         }
@@ -3127,10 +3121,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 goToNextStep();
                             } else {
                                 if (error1.text.equals("PASSWORD_HASH_INVALID")) {
-                                    Vibrator v = (Vibrator) ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
-                                    if (v != null) {
-                                        v.vibrate(200);
-                                    }
+                                    VibrateUtil.vibrate();
                                     AndroidUtilities.shakeView(inputFields[FIELD_SAVEDPASSWORD], 2, 0);
                                     inputFields[FIELD_SAVEDPASSWORD].setText("");
                                 } else {

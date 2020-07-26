@@ -3913,7 +3913,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
 
                 int maxVote = 0;
-                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote) {
+                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !NekoConfig.disableVibration) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
                 animatePollAnswerAlpha = animatePollAnswer = attachedToWindow && (pollVoteInProgress || pollUnvoteInProgress);

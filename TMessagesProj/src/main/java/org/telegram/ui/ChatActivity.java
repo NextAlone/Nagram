@@ -2994,10 +2994,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else if (startedTrackingSlidingView) {
                         if (Math.abs(dx) >= AndroidUtilities.dp(50)) {
                             if (!wasTrackingVibrate) {
-                                try {
-                                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                } catch (Exception ignore) {
-
+                                if (!NekoConfig.disableVibration) {
+                                    try {
+                                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    } catch (Exception ignore) {
+                                    }
                                 }
                                 wasTrackingVibrate = true;
                             }
@@ -12360,10 +12361,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (voters.chosen) {
                                 if (voters.correct) {
                                     fireworksOverlay.start();
-                                    pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    if (!NekoConfig.disableVibration) {
+                                        pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    }
                                 } else {
                                     ((ChatMessageCell) pollView).shakeView();
-                                    pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    if (!NekoConfig.disableVibration) {
+                                        pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    }
                                     showPollSolution(cell.getMessageObject(), results);
                                     cell.showHintButton(false, true, 0);
                                 }
@@ -17918,7 +17923,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             return;
                         }
                         fireworksOverlay.start();
-                        fireworksOverlay.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        if (!NekoConfig.disableVibration) {
+                            fireworksOverlay.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        }
                     }
                 });
                 if (currentEncryptedChat == null) {

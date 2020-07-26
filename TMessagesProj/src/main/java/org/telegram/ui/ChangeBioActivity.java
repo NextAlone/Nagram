@@ -10,7 +10,6 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -45,6 +44,8 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class ChangeBioActivity extends BaseFragment {
 
@@ -103,10 +104,7 @@ public class ChangeBioActivity extends BaseFragment {
                 }
                 CharSequence result = super.filter(source, start, end, dest, dstart, dend);
                 if (result != null && source != null && result.length() != source.length()) {
-                    Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
+                    VibrateUtil.vibrate();
                     AndroidUtilities.shakeView(checkTextView, 2, 0);
                 }
                 return result;

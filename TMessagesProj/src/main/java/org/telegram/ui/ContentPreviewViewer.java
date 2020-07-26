@@ -57,6 +57,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ContentPreviewViewer {
 
     private class FrameLayoutDrawer extends FrameLayout {
@@ -217,7 +219,9 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration) {
+                    containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
             } else if (delegate != null) {
                 animateY = true;
                 visibleDialog = new BottomSheet(parentActivity, false) {
@@ -304,7 +308,9 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration) {
+                    containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
                 if (canDelete) {
                     visibleDialog.setItemColor(items.size() - 1, Theme.getColor(Theme.key_dialogTextRed2), Theme.getColor(Theme.key_dialogRedIcon));
                 }

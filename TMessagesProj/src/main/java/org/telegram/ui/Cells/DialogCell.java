@@ -1820,7 +1820,7 @@ public class DialogCell extends BaseCell {
         if (isSliding) {
             boolean prevValue = drawRevealBackground;
             drawRevealBackground = Math.abs(translationX) >= getMeasuredWidth() * 0.3f;
-            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden) {
+            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !NekoConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {

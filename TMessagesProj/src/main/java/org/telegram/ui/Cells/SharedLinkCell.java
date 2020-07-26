@@ -41,6 +41,8 @@ import org.telegram.ui.ActionBar.Theme;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class SharedLinkCell extends FrameLayout {
 
     public interface SharedLinkCellDelegate {
@@ -70,7 +72,9 @@ public class SharedLinkCell extends FrameLayout {
         public void run() {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration) {
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
                 if (pressedLink >= 0) {
                     delegate.onLinkPress(links.get(pressedLink), true);
                 }

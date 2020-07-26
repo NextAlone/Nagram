@@ -15,7 +15,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
@@ -62,6 +61,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -110,26 +111,17 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                         return;
                     }
                     if (firstNameField.length() == 0) {
-                        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (v != null) {
-                            v.vibrate(200);
-                        }
+                        VibrateUtil.vibrate();
                         AndroidUtilities.shakeView(firstNameField, 2, 0);
                         return;
                     }
                     if (codeField.length() == 0) {
-                        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (v != null) {
-                            v.vibrate(200);
-                        }
+                        VibrateUtil.vibrate();
                         AndroidUtilities.shakeView(codeField, 2, 0);
                         return;
                     }
                     if (phoneField.length() == 0) {
-                        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (v != null) {
-                            v.vibrate(200);
-                        }
+                        VibrateUtil.vibrate();
                         AndroidUtilities.shakeView(phoneField, 2, 0);
                         return;
                     }

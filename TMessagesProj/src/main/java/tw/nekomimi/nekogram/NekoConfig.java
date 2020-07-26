@@ -115,6 +115,8 @@ public class NekoConfig {
     public static String openPGPApp;
     public static long openPGPKeyId;
 
+    public static boolean disableVibration;
+
     public static String getOpenPGPAppName() {
 
         if (StrUtil.isNotBlank(openPGPApp)) {
@@ -241,6 +243,8 @@ public class NekoConfig {
         usePersianCalender = preferences.getBoolean("usePersianCalender", false);
         openPGPApp = preferences.getString("openPGPApp","");
         openPGPKeyId = preferences.getLong("openPGPKeyId",0L);
+
+        disableVibration = preferences.getBoolean("disableVibration", false);
 
     }
 
@@ -754,5 +758,10 @@ public class NekoConfig {
 
     }
 
+    public static void toggleDisableVibration() {
+
+        preferences.edit().putBoolean("disableVibration",disableVibration = !disableVibration).apply();
+
+    }
 
 }

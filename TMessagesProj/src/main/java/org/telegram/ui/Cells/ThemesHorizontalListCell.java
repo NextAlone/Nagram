@@ -58,6 +58,8 @@ import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ThemesHorizontalListCell extends RecyclerListView implements NotificationCenter.NotificationCenterDelegate {
 
     private static byte[] bytes = new byte[1024];
@@ -190,7 +192,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     if (action == MotionEvent.ACTION_DOWN) {
                         pressed = true;
                     } else {
-                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        if (!NekoConfig.disableVibration) {
+                            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        }
                         showOptionsForTheme(themeInfo);
                     }
                 }

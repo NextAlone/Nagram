@@ -49,6 +49,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class ActionBarLayout extends FrameLayout {
 
@@ -525,6 +526,9 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = lastFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = lastFragment.createView(parentActivity);
+            if (NekoConfig.disableVibration) {
+                VibrateUtil.disableHapticFeedback(fragmentView);
+            }
         }
         ViewGroup parent = (ViewGroup) fragmentView.getParent();
         if (parent != null) {
@@ -876,6 +880,9 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = fragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = fragment.createView(parentActivity);
+            if (NekoConfig.disableVibration) {
+                VibrateUtil.disableHapticFeedback(fragmentView);
+            }
         } else {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {
@@ -1170,7 +1177,9 @@ public class ActionBarLayout extends FrameLayout {
                 }
             });
             animatorSet.start();
-            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            if (!NekoConfig.disableVibration) {
+                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            }
 
             fragment.setInPreviewMode(false);
         }
@@ -1215,6 +1224,9 @@ public class ActionBarLayout extends FrameLayout {
             View fragmentView = previousFragment.fragmentView;
             if (fragmentView == null) {
                 fragmentView = previousFragment.createView(parentActivity);
+                if (NekoConfig.disableVibration) {
+                    VibrateUtil.disableHapticFeedback(fragmentView);
+                }
             }
 
             if (!inPreviewMode) {
@@ -1386,6 +1398,9 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = previousFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = previousFragment.createView(parentActivity);
+            if (NekoConfig.disableVibration) {
+                VibrateUtil.disableHapticFeedback(fragmentView);
+            }
         } else {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {

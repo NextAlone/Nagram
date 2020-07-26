@@ -19,7 +19,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
@@ -94,6 +93,7 @@ import java.util.concurrent.CountDownLatch;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.JalaliCalendar;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class AlertsCreator {
 
@@ -2940,10 +2940,7 @@ public class AlertsCreator {
                 return;
             }
             if (editText.length() == 0) {
-                Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
-                if (vibrator != null) {
-                    vibrator.vibrate(200);
-                }
+                VibrateUtil.vibrate();
                 AndroidUtilities.shakeView(editText, 2, 0);
                 return;
             }

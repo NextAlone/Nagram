@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.StateSet;
@@ -157,6 +156,7 @@ import java.util.ArrayList;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1093,7 +1093,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 if (!canShowHiddenArchive) {
                                     canShowHiddenArchive = true;
-                                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    if (!NekoConfig.disableVibration) {
+                                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    }
                                     if (parentPage.pullForegroundDrawable != null) {
                                         parentPage.pullForegroundDrawable.colorize(true);
                                     }
@@ -2398,7 +2400,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             if (canShowHiddenArchive != canShowInternal) {
                                 canShowHiddenArchive = canShowInternal;
                                 if (viewPage.archivePullViewState == ARCHIVE_ITEM_STATE_HIDDEN) {
-                                    viewPage.listView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    if (!NekoConfig.disableVibration) {
+                                        viewPage.listView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                    }
                                     if (viewPage.pullForegroundDrawable != null) {
                                         viewPage.pullForegroundDrawable.colorize(canShowInternal);
                                     }
@@ -4143,10 +4147,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     showDialog(builder.create());
                 }
                 AndroidUtilities.shakeView(pinItem, 2, 0);
-                Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                if (v != null) {
-                    v.vibrate(200);
-                }
+                VibrateUtil.vibrate();
                 return;
             }
         } else if ((action == delete || action == clear) && count > 1 && alert) {

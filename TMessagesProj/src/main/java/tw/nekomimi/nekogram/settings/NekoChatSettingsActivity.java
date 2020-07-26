@@ -64,8 +64,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int disableChatActionRow;
     private int disablePhotoSideActionRow;
     private int hideKeyboardOnChatScrollRow;
+    private int disableVibrationRow;
     private int skipOpenLinkConfirmRow;
-
     private int rearVideoMessagesRow;
     private int confirmAVRow;
     private int mapPreviewRow;
@@ -219,6 +219,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.confirmAVMessage);
                 }
+            } else if (position == disableVibrationRow) {
+                NekoConfig.toggleDisableVibration();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableVibration);
+                }
             }
         });
 
@@ -247,6 +252,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
+        disableVibrationRow = rowCount ++;
         skipOpenLinkConfirmRow = rowCount ++;
         rearVideoMessagesRow = rowCount++;
         confirmAVRow = rowCount++;
@@ -579,6 +585,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndValueAndCheck(LocaleController.getString("HideAllTab", R.string.HideAllTab), LocaleController.getString("HideAllTabAbout", R.string.HideAllTabAbout), NekoConfig.hideAllTab, true, true);
                     } else if (position == confirmAVRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ConfirmAVMessage", R.string.ConfirmAVMessage), NekoConfig.confirmAVMessage, true);
+                    } else if (position == disableVibrationRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), NekoConfig.disableVibration, true);
                     }
                     break;
                 }
