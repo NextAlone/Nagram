@@ -40,7 +40,7 @@ def getStringForConfig(String s) {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.1'
+    buildToolsVersion '30.0.0'
     ndkVersion "21.3.6528147"
 
     defaultConfig.applicationId = "org.forkclient.messenger"
