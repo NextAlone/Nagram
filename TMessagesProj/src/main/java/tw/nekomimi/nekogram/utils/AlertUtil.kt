@@ -1,6 +1,8 @@
 package tw.nekomimi.nekogram.utils
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.LinearLayout
 import android.widget.Toast
 import org.telegram.messenger.AndroidUtilities
@@ -20,6 +22,32 @@ import java.util.concurrent.atomic.AtomicReference
 object AlertUtil {
 
     @JvmStatic
+    fun copyAndAlert(text: String) {
+
+        AndroidUtilities.addToClipboard(text)
+
+        AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied))
+
+    }
+
+    @JvmStatic
+    fun call(number: String) {
+
+        runCatching {
+
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+" + number))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ApplicationLoader.applicationContext.startActivity(intent)
+
+        }.onFailure {
+
+            showToast(it)
+
+        }
+
+    }
+
+    @JvmStatic
     fun showToast(e: Throwable) = showToast(e.message ?: e.javaClass.simpleName)
 
     @JvmStatic
@@ -30,7 +58,7 @@ object AlertUtil {
         Toast.makeText(
                 ApplicationLoader.applicationContext,
                 text.takeIf { it.isNotBlank() }
-                    ?: "喵 !",
+                        ?: "喵 !",
                 Toast.LENGTH_LONG
         ).show()
     })
@@ -39,7 +67,7 @@ object AlertUtil {
     @JvmOverloads
     fun showSimpleAlert(ctx: Context?, error: Throwable) {
 
-        showSimpleAlert(ctx,null, error.message ?: error.javaClass.simpleName) {}
+        showSimpleAlert(ctx, null, error.message ?: error.javaClass.simpleName) {}
 
     }
 
@@ -47,15 +75,15 @@ object AlertUtil {
     @JvmOverloads
     fun showSimpleAlert(ctx: Context?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) {
 
-        showSimpleAlert(ctx,null, text, listener)
+        showSimpleAlert(ctx, null, text, listener)
 
     }
 
     @JvmStatic
     @JvmOverloads
-    fun showSimpleAlert(ctx: Context?,title: String?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
+    fun showSimpleAlert(ctx: Context?, title: String?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
 
-        if(ctx == null) return@Runnable
+        if (ctx == null) return@Runnable
 
         val builder = AlertDialog.Builder(ctx)
 

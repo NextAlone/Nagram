@@ -213,13 +213,14 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
         final int action = ev.getAction();
         if (action == MotionEvent.ACTION_DOWN) {
+
             isScrollingListView = true;
             isSwipingViewPager = true;
             scrolledByUser = true;
             downPoint.set(ev.getX(), ev.getY());
-            if (adapter.getCount() > 1) {
+            //if (adapter.getCount() > 1) {
                 callback.onDown(ev.getX() < getWidth() / 3f);
-            }
+            //}
             isDownReleased = false;
         } else if (action == MotionEvent.ACTION_UP) {
             if (!isDownReleased) {
@@ -573,7 +574,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                         imagesLocationsSizes.add(-1);
                     }
                 }
-                for (int a = 0; a < arrayList.size(); a++) {
+                /*for (int a = 0; a < arrayList.size(); a++) {
                     TLRPC.Photo photo = arrayList.get(a);
                     if (photo == null || photo instanceof TLRPC.TL_photoEmpty || photo.sizes == null) {
                         continue;
@@ -628,6 +629,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     }
                 }
                 loadNeighboringThumbs();
+                 */
                 getAdapter().notifyDataSetChanged();
                 if (!scrolledByUser) {
                     resetCurrentItem();

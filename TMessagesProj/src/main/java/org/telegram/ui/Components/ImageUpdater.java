@@ -81,7 +81,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private File picturePath = null;
     private String finalPath;
     private boolean clearAfterUpdate;
-    private boolean useAttachMenu = true;
+    private boolean useAttachMenu;
     private boolean openWithFrontfaceCamera;
 
     private boolean searchAvailable = true;
@@ -171,33 +171,15 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
         }
 
-        builder.addItem(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), R.drawable.baseline_camera_alt_24, __ -> {
-            openCamera();
-            ;
+        builder.addItem(LocaleController.getString("UploadImage", R.string.UploadImage), R.drawable.baseline_image_24, __ -> {
+            openAttachMenu();;
             return Unit.INSTANCE;
         });
-
-        builder.addItem(LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), R.drawable.baseline_image_24, __ -> {
-            openGallery();
-            ;
-            return Unit.INSTANCE;
-        });
-
 
         if (searchAvailable) {
 
             builder.addItem(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), R.drawable.baseline_search_24, __ -> {
                 openSearch();
-                ;
-                return Unit.INSTANCE;
-            });
-
-        }
-
-        if (canSelectVideo) {
-
-            builder.addItem(LocaleController.getString("ChooseRecordVideo", R.string.ChooseRecordVideo), R.drawable.baseline_videocam_16, __ -> {
-                openVideoCamera();
                 return Unit.INSTANCE;
             });
 
