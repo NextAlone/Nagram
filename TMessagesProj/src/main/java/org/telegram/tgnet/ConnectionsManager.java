@@ -350,8 +350,17 @@ public class ConnectionsManager extends BaseController {
             native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
 
         }
+        String installer = "";
+        try {
+            installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+        } catch (Throwable ignore) {
 
-        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+        }
+        if (installer == null) {
+            installer = "";
+        }
+
+        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
 
     }
@@ -513,14 +522,6 @@ public class ConnectionsManager extends BaseController {
         if (detector.detect()) {
             flags |= 1024;
         }
-        try {
-            String installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-            if ("com.android.vending".equals(installer)) {
-                flags |= 2048;
-            }
-        } catch (Throwable ignore) {
-
-        }
         return flags;
     }
 
@@ -533,16 +534,18 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onRequestNewServerIpAndPort(final int second, final int currentAccount) {
-        Utilities.stageQueue.postRunnable(() -> {
+        Utilities.globalQueue.postRunnable(() -> {
+            boolean networkOnline = ApplicationLoader.isNetworkOnline();
+            Utilities.stageQueue.postRunnable(() -> {
 
-            if (currentTask != null || second == 0 && Math.abs(lastDnsRequestTime - System.currentTimeMillis()) < 10000 || !ApplicationLoader.isNetworkOnline()) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("don't start task, current task = " + currentTask + " next task = " + second + " time diff = " + Math.abs(lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ApplicationLoader.isNetworkOnline());
+            if (currentTask != null || second == 0 && Math.abs(lastDnsRequestTime - System.currentTimeMillis()) < 10000 || !networkOnline) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("don't start task, current task = " + currentTask + " next task = " + second + " time diff = " + Math.abs(lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ApplicationLoader.isNetworkOnline());
+                    }
+                    return;
                 }
-                return;
-            }
 
-            lastDnsRequestTime = System.currentTimeMillis();
+                lastDnsRequestTime = System.currentTimeMillis();
 
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("start dns txt task");
@@ -551,6 +554,7 @@ public class ConnectionsManager extends BaseController {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
             currentTask = task;
 
+            });
         });
     }
 
@@ -679,7 +683,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setUserId(int currentAccount, int id);
 
-    public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
+    public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, String installer, int timezoneOffset, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
 
     public static native void native_setProxySettings(int currentAccount, String address, int port, String username, String password, String secret);
 

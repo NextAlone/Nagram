@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -277,9 +276,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         }
         if (NekoXConfig.disableStatusUpdate && !UserConfig.getInstance(UserConfig.selectedAccount).isBot) {
             boolean online = MessagesController.getInstance(UserConfig.selectedAccount).isOnline();
-            String message = online ? StrUtil.upperFirst(LocaleController.getString("Online", R.string.Online)) : LocaleController.getString("VoipOfflineTitle",R.string.VoipOfflineTitle);
+            String message = online ? StrUtil.upperFirst(LocaleController.getString("Online", R.string.Online)) : LocaleController.getString("VoipOfflineTitle", R.string.VoipOfflineTitle);
             if (NekoXConfig.keepOnlineStatus) {
-                message += " (" + LocaleController.getString("Locked",R.string.Locked) +  ")";
+                message += " (" + LocaleController.getString("Locked", R.string.Locked) + ")";
             }
             items.add(new CheckItem(14, message, R.drawable.baseline_visibility_24, () -> online, () -> {
                 MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
@@ -315,7 +314,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         return item instanceof CheckItem ? (CheckItem) item : null;
     }
 
-    public class Item {
+    private static class Item {
         public int icon;
         public String text;
         public int id;

@@ -218,6 +218,8 @@ public class ActionBarLayout extends FrameLayout {
     private Runnable waitingForKeyboardCloseRunnable;
     private Runnable delayedOpenAnimationRunnable;
 
+    private boolean inBubbleMode;
+
     private boolean inPreviewMode;
     private boolean previewOpenAnimationInProgress;
     private ColorDrawable previewBackgroundDrawable;
@@ -336,6 +338,14 @@ public class ActionBarLayout extends FrameLayout {
         drawHeaderShadow(canvas, 255, y);
     }
 
+    public void setInBubbleMode(boolean value) {
+        inBubbleMode = value;
+    }
+
+    public boolean isInBubbleMode() {
+        return inBubbleMode;
+    }
+
     public void drawHeaderShadow(Canvas canvas, int alpha, int y) {
         if (headerShadowDrawable != null) {
             headerShadowDrawable.setAlpha(alpha);
@@ -358,7 +368,7 @@ public class ActionBarLayout extends FrameLayout {
     public void dismissDialogs() {
         if (!fragmentsStack.isEmpty()) {
             BaseFragment lastFragment = fragmentsStack.get(fragmentsStack.size() - 1);
-            lastFragment.dismissCurrentDialig();
+            lastFragment.dismissCurrentDialog();
         }
     }
 
@@ -583,7 +593,7 @@ public class ActionBarLayout extends FrameLayout {
                     int dx = Math.max(0, (int) (ev.getX() - startedTrackingX));
                     int dy = Math.abs((int) ev.getY() - startedTrackingY);
                     velocityTracker.addMovement(ev);
-                    if (!inPreviewMode && maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
+                    if (!transitionAnimationInProgress && !inPreviewMode && maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
                         BaseFragment currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                         if (currentFragment.canBeginSlide()) {
                             prepareForMoving(ev);
@@ -1014,10 +1024,12 @@ public class ActionBarLayout extends FrameLayout {
                     fragment.onTransitionAnimationEnd(true, false);
                     fragment.onBecomeFullyVisible();
                 };
-                if (currentFragment != null) {
-                    currentFragment.onTransitionAnimationStart(false, false);
+                if (!fragment.needDelayOpenAnimation()) {
+                    if (currentFragment != null) {
+                        currentFragment.onTransitionAnimationStart(false, false);
+                    }
+                    fragment.onTransitionAnimationStart(true, false);
                 }
-                fragment.onTransitionAnimationStart(true, false);
                 oldFragment = currentFragment;
                 newFragment = fragment;
                 AnimatorSet animation = null;
@@ -1055,6 +1067,10 @@ public class ActionBarLayout extends FrameLayout {
                                     return;
                                 }
                                 delayedOpenAnimationRunnable = null;
+                                if (currentFragment != null) {
+                                    currentFragment.onTransitionAnimationStart(false, false);
+                                }
+                                fragment.onTransitionAnimationStart(true, false);
                                 startLayoutAnimation(true, true, preview);
                             }
                         };
@@ -1744,13 +1760,9 @@ public class ActionBarLayout extends FrameLayout {
                 onOpenAnimationEnd();
             }
             containerView.invalidate();
-            if (intent != null) {
-                parentActivity.startActivityForResult(intent, requestCode);
-            }
-        } else {
-            if (intent != null) {
-                parentActivity.startActivityForResult(intent, requestCode);
-            }
+        }
+        if (intent != null) {
+            parentActivity.startActivityForResult(intent, requestCode);
         }
     }
 

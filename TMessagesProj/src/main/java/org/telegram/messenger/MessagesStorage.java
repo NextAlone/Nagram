@@ -11,6 +11,7 @@ package org.telegram.messenger;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
+import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -74,6 +75,7 @@ public class MessagesStorage extends BaseController {
 
     private ArrayList<MessagesController.DialogFilter> dialogFilters = new ArrayList<>();
     private SparseArray<MessagesController.DialogFilter> dialogFiltersMap = new SparseArray<>();
+    private LongSparseArray<Boolean> unknownDialogsIds = new LongSparseArray<>();
     private int mainUnreadCount;
     private int archiveUnreadCount;
     private volatile int pendingMainUnreadCount;
@@ -263,7 +265,7 @@ public class MessagesStorage extends BaseController {
         try {
             database = new SQLiteDatabase(cacheFile.getPath());
             database.executeFast("PRAGMA secure_delete = ON").stepThis().dispose();
-            database.executeFast("PRAGMA temp_store = 1").stepThis().dispose();
+            database.executeFast("PRAGMA temp_store = MEMORY").stepThis().dispose();
             database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
 
             if (createTable) {
@@ -918,6 +920,7 @@ public class MessagesStorage extends BaseController {
         pendingArchiveUnreadCount = 0;
         dialogFilters.clear();
         dialogFiltersMap.clear();
+        unknownDialogsIds.clear();
 
         lastSavedSeq = 0;
         lastSavedPts = 0;
@@ -947,9 +950,6 @@ public class MessagesStorage extends BaseController {
     }
 
     public void cleanup(final boolean isLogin) {
-        if (!isLogin) {
-            storageQueue.cleanupQueue();
-        }
         storageQueue.postRunnable(() -> {
             cleanupInternal(true);
             openDatabase(1);
@@ -2901,6 +2901,7 @@ public class MessagesStorage extends BaseController {
                 final ArrayList<Integer> mids = new ArrayList<>();
                 SQLiteCursor cursor = database.queryFinalized("SELECT data FROM messages WHERE uid = " + did);
                 ArrayList<File> filesToDelete = new ArrayList<>();
+                ArrayList<Pair<Long, Integer>> idsToDelete = new ArrayList<>();
                 try {
                     while (cursor.next()) {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -2910,7 +2911,7 @@ public class MessagesStorage extends BaseController {
                             data.reuse();
                             if (message != null && message.from_id == uid && message.id != 1) {
                                 mids.add(message.id);
-                                addFilesToDelete(message, filesToDelete, false);
+                                addFilesToDelete(message, filesToDelete, idsToDelete, false);
                             }
                         }
                     }
@@ -2918,6 +2919,7 @@ public class MessagesStorage extends BaseController {
                     FileLog.e(e);
                 }
                 cursor.dispose();
+                deleteFromDownloadQueue(idsToDelete, true);
                 AndroidUtilities.runOnUIThread(() -> getMessagesController().markChannelDialogMessageAsDeleted(mids, channelId));
                 markMessagesAsDeletedInternal(mids, channelId, false, false);
                 updateDialogsWithDeletedMessagesInternal(mids, null, channelId);
@@ -2931,26 +2933,52 @@ public class MessagesStorage extends BaseController {
         });
     }
 
-    private boolean addFilesToDelete(TLRPC.Message message, ArrayList<File> filesToDelete, boolean forceCache) {
+    private boolean addFilesToDelete(TLRPC.Message message, ArrayList<File> filesToDelete, ArrayList<Pair<Long, Integer>> ids, boolean forceCache) {
         if (message == null) {
             return false;
         }
-        if (message.media instanceof TLRPC.TL_messageMediaPhoto && message.media.photo != null) {
-            for (int a = 0, N = message.media.photo.sizes.size(); a < N; a++) {
-                TLRPC.PhotoSize photoSize = message.media.photo.sizes.get(a);
+        int type = 0;
+        long id = 0;
+        TLRPC.Document document = MessageObject.getDocument(message);
+        TLRPC.Photo photo = MessageObject.getPhoto(message);
+        if (MessageObject.isVoiceMessage(message)) {
+            id = document.id;
+            type = DownloadController.AUTODOWNLOAD_TYPE_AUDIO;
+        } else if (MessageObject.isStickerMessage(message) || MessageObject.isAnimatedStickerMessage(message)) {
+            id = document.id;
+            type = DownloadController.AUTODOWNLOAD_TYPE_PHOTO;
+        } else if (MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message) || MessageObject.isGifMessage(message)) {
+            id = document.id;
+            type = DownloadController.AUTODOWNLOAD_TYPE_VIDEO;
+        } else if (document != null) {
+            id = document.id;
+            type = DownloadController.AUTODOWNLOAD_TYPE_DOCUMENT;
+        } else if (photo != null) {
+            TLRPC.PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
+            if (photoSize != null) {
+                id = photo.id;
+                type = DownloadController.AUTODOWNLOAD_TYPE_PHOTO;
+            }
+        }
+        if (id != 0) {
+            ids.add(new Pair<>(id, type));
+        }
+        if (photo != null) {
+            for (int a = 0, N = photo.sizes.size(); a < N; a++) {
+                TLRPC.PhotoSize photoSize = photo.sizes.get(a);
                 File file = FileLoader.getPathToAttach(photoSize);
                 if (file != null && file.toString().length() > 0) {
                     filesToDelete.add(file);
                 }
             }
             return true;
-        } else if (message.media instanceof TLRPC.TL_messageMediaDocument && message.media.document != null) {
-            File file = FileLoader.getPathToAttach(message.media.document, forceCache);
+        } else if (document != null) {
+            File file = FileLoader.getPathToAttach(document, forceCache);
             if (file != null && file.toString().length() > 0) {
                 filesToDelete.add(file);
             }
-            for (int a = 0, N = message.media.document.thumbs.size(); a < N; a++) {
-                TLRPC.PhotoSize photoSize = message.media.document.thumbs.get(a);
+            for (int a = 0, N = document.thumbs.size(); a < N; a++) {
+                TLRPC.PhotoSize photoSize = document.thumbs.get(a);
                 file = FileLoader.getPathToAttach(photoSize);
                 if (file != null && file.toString().length() > 0) {
                     filesToDelete.add(file);
@@ -2978,6 +3006,7 @@ public class MessagesStorage extends BaseController {
                 if ((int) did == 0 || messagesOnly == 2) {
                     SQLiteCursor cursor = database.queryFinalized("SELECT data FROM messages WHERE uid = " + did);
                     ArrayList<File> filesToDelete = new ArrayList<>();
+                    ArrayList<Pair<Long, Integer>> idsToDelete = new ArrayList<>();
                     try {
                         while (cursor.next()) {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -2985,13 +3014,14 @@ public class MessagesStorage extends BaseController {
                                 TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                                 message.readAttachPath(data, getUserConfig().clientUserId);
                                 data.reuse();
-                                addFilesToDelete(message, filesToDelete, false);
+                                addFilesToDelete(message, filesToDelete, idsToDelete, false);
                             }
                         }
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
                     cursor.dispose();
+                    deleteFromDownloadQueue(idsToDelete, true);
                     getFileLoader().deleteFiles(filesToDelete, messagesOnly);
                 }
 
@@ -3093,18 +3123,24 @@ public class MessagesStorage extends BaseController {
                 }
 
                 final TLRPC.photos_Photos res = new TLRPC.TL_photos_photos();
+                ArrayList<TLRPC.Message> messages = new ArrayList<>();
 
                 while (cursor.next()) {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         TLRPC.Photo photo = TLRPC.Photo.TLdeserialize(data, data.readInt32(false), false);
+                        if (data.remaining() > 0) {
+                            messages.add(TLRPC.Message.TLdeserialize(data, data.readInt32(false), false));
+                        } else {
+                            messages.add(null);
+                        }
                         data.reuse();
                         res.photos.add(photo);
                     }
                 }
                 cursor.dispose();
 
-                Utilities.stageQueue.postRunnable(() -> getMessagesController().processLoadedUserPhotos(res, did, count, max_id, true, classGuid));
+                Utilities.stageQueue.postRunnable(() -> getMessagesController().processLoadedUserPhotos(res, messages, did, count, max_id, true, classGuid));
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -3282,7 +3318,7 @@ public class MessagesStorage extends BaseController {
         });
     }
 
-    public void putDialogPhotos(final int did, final TLRPC.photos_Photos photos) {
+    public void putDialogPhotos(int did, TLRPC.photos_Photos photos, ArrayList<TLRPC.Message> messages) {
         if (photos == null) {
             return;
         }
@@ -3296,8 +3332,15 @@ public class MessagesStorage extends BaseController {
                         continue;
                     }
                     state.requery();
-                    NativeByteBuffer data = new NativeByteBuffer(photo.getObjectSize());
+                    int size = photo.getObjectSize();
+                    if (messages != null) {
+                        size += messages.get(a).getObjectSize();
+                    }
+                    NativeByteBuffer data = new NativeByteBuffer(size);
                     photo.serializeToStream(data);
+                    if (messages != null) {
+                        messages.get(a).serializeToStream(data);
+                    }
                     state.bindInteger(1, did);
                     state.bindLong(2, photo.id);
                     state.bindByteBuffer(3, data);
@@ -3315,6 +3358,7 @@ public class MessagesStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
                 ArrayList<File> filesToDelete = new ArrayList<>();
+                ArrayList<Pair<Long, Integer>> idsToDelete = new ArrayList<>();
                 final ArrayList<TLRPC.Message> messages = new ArrayList<>();
                 SQLiteCursor cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid, date, uid FROM messages WHERE mid IN (%s)", TextUtils.join(",", mids)));
                 while (cursor.next()) {
@@ -3324,7 +3368,7 @@ public class MessagesStorage extends BaseController {
                         message.readAttachPath(data, getUserConfig().clientUserId);
                         data.reuse();
                         if (message.media != null) {
-                            if (!addFilesToDelete(message, filesToDelete, true)) {
+                            if (!addFilesToDelete(message, filesToDelete, idsToDelete, true)) {
                                 continue;
                             } else {
                                 if (message.media.document != null) {
@@ -3342,6 +3386,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
                 cursor.dispose();
+                deleteFromDownloadQueue(idsToDelete, true);
                 if (!messages.isEmpty()) {
                     SQLitePreparedStatement state = database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
                     for (int a = 0; a < messages.size(); a++) {
@@ -4714,6 +4759,7 @@ public class MessagesStorage extends BaseController {
                     state.bindLong(2, info.user.id);
                     state.step();
                     state.dispose();
+                    unknownDialogsIds.remove(info.user.id);
                 }
             } catch (Exception e) {
                 FileLog.e(e);
@@ -4773,6 +4819,7 @@ public class MessagesStorage extends BaseController {
                     state.bindLong(2, -info.id);
                     state.step();
                     state.dispose();
+                    unknownDialogsIds.remove(-info.id);
                 }
             } catch (Exception e) {
                 FileLog.e(e);
@@ -4919,15 +4966,12 @@ public class MessagesStorage extends BaseController {
                                 TLRPC.ChatParticipant newParticipant;
                                 if (invited_id == 1) {
                                     newParticipant = new TLRPC.TL_chatParticipantAdmin();
-                                    newParticipant.user_id = participant.user_id;
-                                    newParticipant.date = participant.date;
-                                    newParticipant.inviter_id = participant.inviter_id;
                                 } else {
                                     newParticipant = new TLRPC.TL_chatParticipant();
-                                    newParticipant.user_id = participant.user_id;
-                                    newParticipant.date = participant.date;
-                                    newParticipant.inviter_id = participant.inviter_id;
                                 }
+                                newParticipant.user_id = participant.user_id;
+                                newParticipant.date = participant.date;
+                                newParticipant.inviter_id = participant.inviter_id;
                                 info.participants.participants.set(a, newParticipant);
                                 break;
                             }
@@ -5923,7 +5967,6 @@ public class MessagesStorage extends BaseController {
                     cursor = database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start IN (0, 1)", dialogId));
                     if (cursor.next()) {
                         isEnd = cursor.intValue(0) == 1;
-                        cursor.dispose();
                     } else {
                         cursor.dispose();
                         cursor = database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM messages WHERE uid = %d AND mid > 0", dialogId));
@@ -5939,8 +5982,8 @@ public class MessagesStorage extends BaseController {
                                 state.dispose();
                             }
                         }
-                        cursor.dispose();
                     }
+                    cursor.dispose();
 
                     if (load_type == 3 || load_type == 4 || queryFromServer && load_type == 2) {
                         cursor = database.queryFinalized(String.format(Locale.US, "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0", dialogId));
@@ -6421,15 +6464,15 @@ public class MessagesStorage extends BaseController {
         int mentionsUnreadFinal = mentions_unread;
         int countUnreadFinal = count_unread;
         int maxUnreadDateFinal = max_unread_date;
-        if (!scheduled && mergeDialogId != 0 && res.messages.size() < count && isEnd && load_type == 2) {
+        /*if (!scheduled && mergeDialogId != 0 && res.messages.size() < count && isEnd && load_type == 2) { TODO fix if end not reached
             Runnable runnable = getMessagesInternal(mergeDialogId, 0, count, Integer.MAX_VALUE, 0, 0, classGuid, 0, false, false, loadIndex);
             return () -> {
                 getMessagesController().processLoadedMessages(res, dialogId, mergeDialogId, countQueryFinal, maxIdOverrideFinal, offset_date, true, classGuid, minUnreadIdFinal, lastMessageIdFinal, countUnreadFinal, maxUnreadDateFinal, load_type, isChannel, isEndFinal, scheduled, -loadIndex, queryFromServerFinal, mentionsUnreadFinal);
                 runnable.run();
             };
-        } else {
+        } else {*/
             return () -> getMessagesController().processLoadedMessages(res, dialogId, mergeDialogId, countQueryFinal, maxIdOverrideFinal, offset_date, true, classGuid, minUnreadIdFinal, lastMessageIdFinal, countUnreadFinal, maxUnreadDateFinal, load_type, isChannel, isEndFinal, scheduled, loadIndex, queryFromServerFinal, mentionsUnreadFinal);
-        }
+        //}
     }
 
     public void getMessages(long dialogId, long mergeDialogId, boolean loadInfo, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, boolean isChannel, boolean scheduled, int loadIndex) {
@@ -7170,6 +7213,32 @@ public class MessagesStorage extends BaseController {
                 FileLog.e(e);
             }
         });
+    }
+
+    private void deleteFromDownloadQueue(ArrayList<Pair<Long, Integer>> ids, boolean transaction) {
+        if (ids == null || ids.isEmpty()) {
+            return;
+        }
+        try {
+            if (transaction) {
+                database.beginTransaction();
+            }
+            SQLitePreparedStatement state = database.executeFast("DELETE FROM download_queue WHERE uid = ? AND type = ?");
+            for (int a = 0, N = ids.size(); a < N; a++) {
+                Pair<Long, Integer> pair = ids.get(a);
+                state.requery();
+                state.bindLong(1, pair.first);
+                state.bindInteger(1, pair.second);
+                state.step();
+            }
+            state.dispose();
+            if (transaction) {
+                database.commitTransaction();
+            }
+            AndroidUtilities.runOnUIThread(() -> getDownloadController().cancelDownloading(ids));
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     public void clearDownloadQueue(final int type) {
@@ -7934,6 +8003,7 @@ public class MessagesStorage extends BaseController {
                         state_dialogs_replace.bindInteger(13, 0);
                         state_dialogs_replace.bindNull(14);
                         state_dialogs_replace.step();
+                        unknownDialogsIds.put(key, true);
                     }
                 }
                 state_dialogs_update.dispose();
@@ -8097,8 +8167,8 @@ public class MessagesStorage extends BaseController {
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state = null;
         if (oldMessageId == newMessageId && date != 0) {
-            SQLitePreparedStatement state = null;
             try {
                 if (scheduled == 0) {
                     state = database.executeFast("UPDATE messages SET send_state = 0, date = ? WHERE mid = ?");
@@ -8115,11 +8185,8 @@ public class MessagesStorage extends BaseController {
                     state.dispose();
                 }
             }
-
             return new long[]{did, newId};
         } else {
-            SQLitePreparedStatement state = null;
-
             if (scheduled == 0) {
                 try {
                     state = database.executeFast("UPDATE messages SET mid = ?, send_state = 0 WHERE mid = ?");
@@ -8464,6 +8531,7 @@ public class MessagesStorage extends BaseController {
                     ids = TextUtils.join(",", messages);
                 }
                 ArrayList<File> filesToDelete = new ArrayList<>();
+                ArrayList<Pair<Long, Integer>> idsToDelete = new ArrayList<>();
                 int currentUser = getUserConfig().getClientUserId();
                 SQLiteCursor cursor = database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention, mid FROM messages WHERE mid IN(%s)", ids));
 
@@ -8496,14 +8564,14 @@ public class MessagesStorage extends BaseController {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                             message.readAttachPath(data, getUserConfig().clientUserId);
                             data.reuse();
-                            addFilesToDelete(message, filesToDelete, false);
+                            addFilesToDelete(message, filesToDelete, idsToDelete, false);
                         }
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
                 cursor.dispose();
-
+                deleteFromDownloadQueue(idsToDelete, true);
                 getFileLoader().deleteFiles(filesToDelete, 0);
 
                 for (int a = 0; a < dialogsToUpdate.size(); a++) {
@@ -8782,6 +8850,7 @@ public class MessagesStorage extends BaseController {
             maxMessageId |= ((long) channelId) << 32;
 
             ArrayList<File> filesToDelete = new ArrayList<>();
+            ArrayList<Pair<Long, Integer>> idsToDelete = new ArrayList<>();
             int currentUser = getUserConfig().getClientUserId();
 
             SQLiteCursor cursor = database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE uid = %d AND mid <= %d", -channelId, maxMessageId));
@@ -8813,7 +8882,7 @@ public class MessagesStorage extends BaseController {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                         message.readAttachPath(data, getUserConfig().clientUserId);
                         data.reuse();
-                        addFilesToDelete(message, filesToDelete, false);
+                        addFilesToDelete(message, filesToDelete, idsToDelete, false);
                     }
                 }
             } catch (Exception e) {
@@ -8821,6 +8890,7 @@ public class MessagesStorage extends BaseController {
             }
             cursor.dispose();
 
+            deleteFromDownloadQueue(idsToDelete, true);
             getFileLoader().deleteFiles(filesToDelete, 0);
 
             for (int a = 0; a < dialogsToUpdate.size(); a++) {
@@ -9253,6 +9323,7 @@ public class MessagesStorage extends BaseController {
                     //load_type == 3 ? load around message
                     //load_type == 4 ? load around date
                     ArrayList<File> filesToDelete = new ArrayList<>();
+                    ArrayList<Pair<Long, Integer>> idsToDelete = new ArrayList<>();
 
                     SQLitePreparedStatement state_messages = database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
                     SQLitePreparedStatement state_media = database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
@@ -9292,7 +9363,7 @@ public class MessagesStorage extends BaseController {
                                         sameMedia = oldMessage.media.document.id == message.media.document.id;
                                     }
                                     if (!sameMedia) {
-                                        addFilesToDelete(oldMessage, filesToDelete, false);
+                                        addFilesToDelete(oldMessage, filesToDelete, idsToDelete, false);
                                     }
                                 }
                                 boolean oldMention = cursor.intValue(3) != 0;
@@ -9359,8 +9430,9 @@ public class MessagesStorage extends BaseController {
                                 state3.bindInteger(10, message.date);
                                 state3.bindInteger(11, pinned);
                                 state3.bindInteger(12, flags);
-                                state3.bindInteger(13, 0);
+                                state3.bindInteger(13, -1);
                                 state3.bindNull(14);
+                                unknownDialogsIds.put(dialog_id, true);
                             }
                             state3.step();
                             state3.dispose();
@@ -9447,6 +9519,7 @@ public class MessagesStorage extends BaseController {
                     if (botKeyboard != null) {
                         getMediaDataController().putBotKeyboard(dialog_id, botKeyboard);
                     }
+                    deleteFromDownloadQueue(idsToDelete, false);
                     getFileLoader().deleteFiles(filesToDelete, 0);
                     putUsersInternal(messages.users);
                     putChatsInternal(messages.chats);
@@ -9855,9 +9928,10 @@ public class MessagesStorage extends BaseController {
 
                 for (int a = 0; a < dialogs.dialogs.size(); a++) {
                     TLRPC.Dialog dialog = dialogs.dialogs.get(a);
-
                     boolean exists = false;
                     DialogObject.initDialog(dialog);
+                    unknownDialogsIds.remove(dialog.id);
+
                     if (check == 1) {
                         SQLiteCursor cursor = database.queryFinalized("SELECT did FROM dialogs WHERE did = " + dialog.id);
                         exists = cursor.next();
@@ -10014,13 +10088,17 @@ public class MessagesStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
                 int folderId;
-                SQLiteCursor cursor = database.queryFinalized("SELECT folder_id FROM dialogs WHERE did = ?", dialogId);
-                if (cursor.next()) {
-                    folderId = cursor.intValue(0);
-                } else {
+                if (unknownDialogsIds.get(dialogId) != null) {
                     folderId = -1;
+                } else {
+                    SQLiteCursor cursor = database.queryFinalized("SELECT folder_id FROM dialogs WHERE did = ?", dialogId);
+                    if (cursor.next()) {
+                        folderId = cursor.intValue(0);
+                    } else {
+                        folderId = -1;
+                    }
+                    cursor.dispose();
                 }
-                cursor.dispose();
                 AndroidUtilities.runOnUIThread(() -> callback.run(folderId));
             } catch (Exception e) {
                 FileLog.e(e);
@@ -10045,6 +10123,7 @@ public class MessagesStorage extends BaseController {
                         state.bindInteger(2, 0);
                         state.bindLong(3, did);
                         state.step();
+                        unknownDialogsIds.remove(did);
                     }
                 } else if (inputPeers != null) {
                     for (int a = 0, N = inputPeers.size(); a < N; a++) {
@@ -10055,6 +10134,7 @@ public class MessagesStorage extends BaseController {
                         state.bindInteger(2, 0);
                         state.bindLong(3, did);
                         state.step();
+                        unknownDialogsIds.remove(did);
                     }
                 } else {
                     state.requery();

@@ -546,7 +546,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
                 @Override
                 public void onSeekBarPressed(boolean pressed) {
+                }
 
+                @Override
+                public CharSequence getContentDescription() {
+                    return String.valueOf(Math.round(startFontSize + (endFontSize - startFontSize) * sizeBar.getProgress()));
+                }
+
+                @Override
+                public int getStepsCount() {
+                    return endFontSize - startFontSize;
                 }
             });
             addView(sizeBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 5, 5, 39, 0));
@@ -612,7 +621,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void setTextAndTypeface(String text, Typeface typeface) {
             textView.setText(text);
             textView.setTypeface(typeface);
+            setContentDescription(text);
             invalidate();
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+            super.onInitializeAccessibilityNodeInfo(info);
+            info.setClassName(RadioButton.class.getName());
+            info.setChecked(radioButton.isChecked());
+            info.setCheckable(true);
         }
     }
 
@@ -1770,7 +1788,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     textSelectionHelper.clear();
                 }
                 showDialog(linkSheet = builder.create());
-                return true;
             } else {
                 if (row < 0 || row >= adapter[0].blocks.size()) {
                     return false;
@@ -1805,8 +1822,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     offset = 0;
                 }
                 layoutManager[0].scrollToPositionWithOffset(row, currentHeaderHeight - AndroidUtilities.dp(56) - offset);
-                return true;
             }
+            return true;
         }
         return false;
     }
@@ -2336,23 +2353,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (richText == pageBlockVideo.caption.text) {
                 currentMap = mediaCaptionTextPaints;
                 textSize = AndroidUtilities.dp(14);
-                textColor = getTextColor();
             } else {
                 currentMap = mediaCreditTextPaints;
                 textSize = AndroidUtilities.dp(12);
-                textColor = getTextColor();
             }
+            textColor = getTextColor();
         } else if (parentBlock instanceof TLRPC.TL_pageBlockAudio) {
             TLRPC.TL_pageBlockAudio pageBlockAudio = (TLRPC.TL_pageBlockAudio) parentBlock;
             if (richText == pageBlockAudio.caption.text) {
                 currentMap = mediaCaptionTextPaints;
                 textSize = AndroidUtilities.dp(14);
-                textColor = getTextColor();
             } else {
                 currentMap = mediaCreditTextPaints;
                 textSize = AndroidUtilities.dp(12);
-                textColor = getTextColor();
             }
+            textColor = getTextColor();
         } else if (parentBlock instanceof TLRPC.TL_pageBlockRelatedArticles) {
             currentMap = relatedArticleTextPaints;
             textSize = AndroidUtilities.dp(15);
@@ -3960,6 +3975,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 setImageIndex(index, true);
             }
+
+            @Override
+            public void onShowAnimationStart() {
+
+            }
+
+            @Override
+            public void onStopScrolling() {
+
+            }
         });
 
         captionTextViewNext = new TextView(activity);
@@ -4438,7 +4463,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private void openPreviewsChat(TLRPC.User user, long wid) {
-        if (user == null || parentActivity == null) {
+        if (user == null || !(parentActivity instanceof LaunchActivity)) {
             return;
         }
         Bundle args = new Bundle();
@@ -6586,7 +6611,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     buttonState = -1;
                 }
                 radialProgress.setIcon(getIconForCurrentState(), false, animated);
-                invalidate();
             } else {
                 DownloadController.getInstance(currentAccount).addLoadingFileObserver(fileName, null, this);
                 float setProgress = 0;
@@ -6606,8 +6630,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 radialProgress.setIcon(getIconForCurrentState(), progressVisible, animated);
                 radialProgress.setProgress(setProgress, false);
-                invalidate();
             }
+            invalidate();
         }
 
         private void didPressedButton(boolean animated) {
@@ -7018,7 +7042,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         private void didPressedButton(boolean animated) {
             if (buttonState == 0) {
-                if (MediaController.getInstance().setPlaylist(parentAdapter.audioMessages, currentMessageObject, false)) {
+                if (MediaController.getInstance().setPlaylist(parentAdapter.audioMessages, currentMessageObject, 0, false)) {
                     buttonState = 1;
                     radialProgress.setIcon(getIconForCurrentState(), false, animated);
                     invalidate();
@@ -7445,7 +7469,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     videoView.setVisibility(INVISIBLE);
                     videoView.loadVideo(null, null, null, null, false);
                     HashMap<String, String> args = new HashMap<>();
-                    args.put("Referer", "http://youtube.com");
+                    args.put("Referer", ApplicationLoader.applicationContext.getPackageName());
                     webView.loadUrl(currentBlock.url, args);
                 }
 
@@ -7592,7 +7616,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     super.onLoadResource(view, url);
                 }
 
-
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
@@ -7664,7 +7687,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             videoView.setVisibility(INVISIBLE);
                             videoView.loadVideo(null, null, null, null, false);
                             HashMap<String, String> args = new HashMap<>();
-                            args.put("Referer", "http://youtube.com");
+                            args.put("Referer", ApplicationLoader.applicationContext.getPackageName());
                             webView.loadUrl(currentBlock.url, args);
                         }
                     }
@@ -10474,7 +10497,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 DownloadController.getInstance(currentAccount).removeLoadingFileObserver(this);
                 buttonState = -1;
                 radialProgress.setIcon(getIconForCurrentState(), false, animated);
-                invalidate();
             } else {
                 DownloadController.getInstance(currentAccount).addLoadingFileObserver(fileName, null, this);
                 float setProgress = 0;
@@ -10487,8 +10509,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 radialProgress.setIcon(getIconForCurrentState(), true, animated);
                 radialProgress.setProgress(setProgress, false);
-                invalidate();
             }
+            invalidate();
         }
 
         @Override
@@ -12566,7 +12588,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
             } else if (currentAnimation != null) {
                 imageReceiver.setImageBitmap(currentAnimation);
-                currentAnimation.setSecondParentView(photoContainerView);
+                currentAnimation.addSecondParentView(photoContainerView);
             }
         } else {
             if (size[0] == 0) {
@@ -12977,7 +12999,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             photoContainerView.setScaleY(1.0f);
         }
         if (currentAnimation != null) {
-            currentAnimation.setSecondParentView(null);
+            currentAnimation.removeSecondParentView(photoContainerView);
             currentAnimation = null;
             centerImage.setImageBitmap((Drawable) null);
         }
@@ -12992,7 +13014,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             currentThumb = null;
         }
         if (currentAnimation != null) {
-            currentAnimation.setSecondParentView(null);
+            currentAnimation.removeSecondParentView(photoContainerView);
             currentAnimation = null;
         }
         for (int a = 0; a < 3; a++) {

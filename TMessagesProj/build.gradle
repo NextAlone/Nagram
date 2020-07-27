@@ -81,7 +81,8 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.sharetarget:sharetarget:1.0.0"
 
     // replace zxing with latest
     // TODO: fix problem with android L
@@ -96,7 +97,7 @@ dependencies {
 
     implementation 'com.stripe:stripe-android:2.0.2'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.osmdroid:osmdroid-android:6.1.7'
+    implementation 'org.osmdroid:osmdroid-android:6.1.8'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8'
 
@@ -105,8 +106,8 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.2.2'
     implementation 'org.dizitart:nitrite:3.4.2'
 
-    implementation 'cn.hutool:hutool-core:5.3.9'
-    implementation 'cn.hutool:hutool-crypto:5.3.9'
+    implementation 'cn.hutool:hutool-core:5.3.10'
+    implementation 'cn.hutool:hutool-crypto:5.3.10'
 
     implementation 'org.tukaani:xz:1.8'
     implementation project(":openpgp-api")
@@ -145,8 +146,8 @@ task writeUpdateInfo {
 tasks.findByName("preBuild").finalizedBy(writeUpdateInfo)
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.1'
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "nekox.messenger"

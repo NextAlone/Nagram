@@ -10,6 +10,8 @@ package org.telegram.messenger;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -195,11 +197,17 @@ public class SecretChatHelper extends BaseController {
             newChat.user_id = user_id;
             final TLRPC.Dialog dialog = new TLRPC.TL_dialog();
             dialog.id = dialog_id;
+            dialog.folder_id = newChat.folder_id;
             dialog.unread_count = 0;
             dialog.top_message = 0;
             dialog.last_message_date = update.date;
             getMessagesController().putEncryptedChat(newChat, false);
             AndroidUtilities.runOnUIThread(() -> {
+                if (dialog.folder_id == 1) {
+                    SharedPreferences.Editor editor = MessagesController.getNotificationsSettings(currentAccount).edit();
+                    editor.putBoolean("dialog_bar_archived" + dialog_id, true);
+                    editor.commit();
+                }
                 getMessagesController().dialogs_dict.put(dialog.id, dialog);
                 getMessagesController().allDialogs.add(dialog);
                 getMessagesController().sortDialogs(null);
@@ -463,6 +471,7 @@ public class SecretChatHelper extends BaseController {
 
             MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
             newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+            newMsgObj.wasJustSent = true;
             ArrayList<MessageObject> objArr = new ArrayList<>();
             objArr.add(newMsgObj);
             getMessagesController().updateInterfaceWithMessages(message.dialog_id, objArr, false);
@@ -492,6 +501,7 @@ public class SecretChatHelper extends BaseController {
 
             MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
             newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+            newMsgObj.wasJustSent = true;
             ArrayList<MessageObject> objArr = new ArrayList<>();
             objArr.add(newMsgObj);
             getMessagesController().updateInterfaceWithMessages(message.dialog_id, objArr, false);
@@ -894,7 +904,9 @@ public class SecretChatHelper extends BaseController {
                     }
                     newMessage.media = new TLRPC.TL_messageMediaPhoto();
                     newMessage.media.flags |= 3;
-                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    if (TextUtils.isEmpty(newMessage.message)) {
+                        newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    }
                     newMessage.media.photo = new TLRPC.TL_photo();
                     newMessage.media.photo.file_reference = new byte[0];
                     newMessage.media.photo.date = newMessage.date;
@@ -936,7 +948,9 @@ public class SecretChatHelper extends BaseController {
                     newMessage.media.document.key = decryptedMessage.media.key;
                     newMessage.media.document.iv = decryptedMessage.media.iv;
                     newMessage.media.document.dc_id = file.dc_id;
-                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    if (TextUtils.isEmpty(newMessage.message)) {
+                        newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    }
                     newMessage.media.document.date = date;
                     newMessage.media.document.size = file.size;
                     newMessage.media.document.id = file.id;
@@ -979,7 +993,9 @@ public class SecretChatHelper extends BaseController {
                     }
                     newMessage.media = new TLRPC.TL_messageMediaDocument();
                     newMessage.media.flags |= 3;
-                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    if (TextUtils.isEmpty(newMessage.message)) {
+                        newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    }
                     newMessage.media.document = new TLRPC.TL_documentEncrypted();
                     newMessage.media.document.id = file.id;
                     newMessage.media.document.access_hash = file.access_hash;
@@ -991,6 +1007,16 @@ public class SecretChatHelper extends BaseController {
                         newMessage.media.document.attributes.add(fileName);
                     } else {
                         newMessage.media.document.attributes = decryptedMessage.media.attributes;
+                    }
+                    if (newMessage.ttl > 0) {
+                        for (int a = 0, N = newMessage.media.document.attributes.size(); a < N; a++) {
+                            TLRPC.DocumentAttribute attribute = newMessage.media.document.attributes.get(a);
+                            if (attribute instanceof TLRPC.TL_documentAttributeAudio || attribute instanceof TLRPC.TL_documentAttributeVideo) {
+                                newMessage.ttl = Math.max(attribute.duration + 1, newMessage.ttl);
+                                break;
+                            }
+                        }
+                        newMessage.ttl = Math.max(decryptedMessage.media.duration + 1, newMessage.ttl);
                     }
                     newMessage.media.document.size = decryptedMessage.media.size != 0 ? Math.min(decryptedMessage.media.size, file.size) : file.size;
                     newMessage.media.document.key = decryptedMessage.media.key;
@@ -1056,7 +1082,9 @@ public class SecretChatHelper extends BaseController {
                     newMessage.media.document.size = file.size;
                     newMessage.media.document.dc_id = file.dc_id;
                     newMessage.media.document.mime_type = decryptedMessage.media.mime_type;
-                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    if (TextUtils.isEmpty(newMessage.message)) {
+                        newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
+                    }
                     if (newMessage.media.document.mime_type == null) {
                         newMessage.media.document.mime_type = "audio/ogg";
                     }
