@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./gradlew TMessagesProj:publishFullBlobEmojiRelease
+./gradlew TMessagesProj:publishFullRelease

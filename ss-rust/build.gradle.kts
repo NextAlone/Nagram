@@ -9,11 +9,12 @@ android {
 
     ndkVersion = rootProject.extra.get("ndkVersion").toString()
 
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(28)
+        minSdkVersion(23)
+        targetSdkVersion(30)
     }
+    buildToolsVersion = "30.0.1"
 
 }
 

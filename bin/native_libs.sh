@@ -21,6 +21,7 @@ if [ ! -x "$(command -v go)" ]; then
 
 fi
 
+
 if [ ! -x "$(command -v ninja)" ]; then
 
 #  apt install -y ninja-build
@@ -31,11 +32,11 @@ if [ ! -x "$(command -v ninja)" ]; then
 
 fi
 
-if [ ! -x "$(command -v clang)" ]; then
+if [ ! -x "$(command -v cmake)" ]; then
 
-#  apt install -y clang
+#  apt install -y cmake
 
-  echo "install clang please!"
+  echo "install cmake please!"
 
   exit 1
 
@@ -59,12 +60,18 @@ cd TMessagesProj/jni || exit 1
 
 git submodule update --init --recursive
 
-[ -d "ffmpeg/build" ] || ./build_ffmpeg_clang.sh
+cd ffmpeg
+git reset --hard
+git clean -fdx
+cd ..
 
-rm -rf ffmpeg/toolchain-android
-
+./build_ffmpeg_clang.sh
 ./patch_ffmpeg.sh
 
-./patch_boringssl.sh
+cd boringssl
+git reset --hard
+git clean -fdx
+cd ..
 
-[ -d "boringssl/build" ] || ./build_boringssl.sh
+./patch_boringssl.sh
+./build_boringssl.sh

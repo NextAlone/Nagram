@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         versionCode 9
@@ -13,4 +13,5 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildToolsVersion '30.0.1'
 }

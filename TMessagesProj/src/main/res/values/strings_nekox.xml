@@ -201,6 +201,8 @@
     <string name="DeleteUnavailableServerConfirm">Are you sure you want to **delete unavailable servers**?</string>
 
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
+    <string name="MinApi23Required">Sorry, you need at least Android 6 (API23).</string>
+
     <string name="MiniVersionAlert">Sorry, mini version not support this type of proxy, please switch version in settings.</string>
 
     <string name="ImportProxyFromClipboard">Import From Clipboard</string>

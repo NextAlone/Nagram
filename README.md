@@ -73,7 +73,9 @@ We regret that [Nekogram](https://github.com/Nekogram/Nekogram-issue-tracker) is
 - Scan the qrcode (any link, can add a proxy).
 - The ( vemss / vmess1 / ss / ssr / rb ) proxy link in the message can be clicked.
 - Allow auto disable proxy when VPN is enabled
+- Proxy automatic switcher
 - Add stickers without sticker pack
+- Allow disable vibration
 - Sticker set list backup / restore / share
 - Full InstantView translation support
 - Translation support for selected text on input and in messages
@@ -81,6 +83,7 @@ We regret that [Nekogram](https://github.com/Nekogram/Nekogram-issue-tracker) is
 - Dialog sorting is optional "Unread and can be prioritized for reminding" etc.
 - Allow to skip "regret within five seconds"
 - Unblock all users support
+- OpenKaychain client ( sign / verify / decrypt / import )
 - Google Cloud Translate / Yandex.Translate support
 - Custom cache directory (supports external storage)
 - Custom AppId and Hash (optional NekoX / Andorid / Android X or Manual input)
@@ -117,7 +120,7 @@ The default debug key is used, and placing yours is not needed.
 
 The difference between release and other build types is that it adds fcm and firebase crash analysis, if you don't like them, use releaseNoGcm.
 
-To compile the release version, please place your keysotre at TMessageProj/release.jks, and fill in KEYSTORE_PASS, ALIAS_NAME, ALIAS_PASS in local.properties, environment variables are also recommended
+To compile the release version, please place your keysotre at TMessageProj/release.keystore, and fill in KEYSTORE_PASS, ALIAS_NAME, ALIAS_PASS in local.properties, environment variables are also recommended
 
 If you don't use NekoX's APP_ID and APP_HASH, you need to register a physical firebase app and replace google-services.json to ensure fcm works
 
@@ -127,14 +130,19 @@ If you don't use NekoX's APP_ID and APP_HASH, you need to register a physical fi
 
 OK, a version without firebase cloud messaging and precompiled native libraries, maybe this makes you feel more free, or your phone does not have Google services.
 
-To compile the foss version, please refer to [build script](./update_jni.sh).
+To compile the foss version, please refer to [scripts](./bin).
 
 ### Build Variants
 
 Available variant list:
 
 `Full`
-`Mini` ( without ss/ssr/v2ray )
+`Mini` ( without ss/ssr/v2ray proxies )  
+  
+`AppleEmoji`  
+`NotoEmoji`  
+`FacebookEmoji`  
+`NoEmoji`
 
 ## Localization
 

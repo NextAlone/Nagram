@@ -50,7 +50,7 @@ configurations {
 def okHttpVersion = '4.8.0'
 def fcmVersion = '20.2.3'
 def crashlyticsVersion = '17.1.1'
-def playCoreVersion = '1.7.3'
+def playCoreVersion = '1.8.0'
 
 buildscript {
 
@@ -61,7 +61,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'cn.hutool:hutool-all:5.3.9'
+        classpath 'cn.hutool:hutool-all:5.3.10'
     }
 
 }
@@ -267,7 +267,6 @@ android {
             debuggable true
             jniDebuggable true
             multiDexEnabled true
-            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -278,16 +277,15 @@ android {
             minifyEnabled true
             shrinkResources true
             matchingFallbacks = ['debug']
+            signingConfig signingConfigs.release
         }
 
         release {
             initWith releaseNoGcm
-            matchingFallbacks = ['debug']
         }
 
         foss {
             initWith release
-            matchingFallbacks = ['debug']
         }
     }
 

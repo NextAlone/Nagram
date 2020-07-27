@@ -640,9 +640,9 @@ public class SharedConfig {
 
             }
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT < 23) {
 
-                throw new RuntimeException(LocaleController.getString("MinApi21Required", R.string.MinApi21Required));
+                throw new RuntimeException(LocaleController.getString("MinApi23Required", R.string.MinApi23Required));
 
             }
 

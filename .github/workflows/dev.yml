@@ -26,7 +26,10 @@ jobs:
       - name: Run Gradle Build
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          sudo bash <<EOF
+          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           ./gradlew assembleFullRelease
+          EOF
           echo ::set-env name=APK_FILE::$(find TMessagesProj/build/outputs/apk -name "*arm64-v8a*.apk")
           echo ::set-env name=APK_FILE_ARMV7::$(find TMessagesProj/build/outputs/apk -name "*armeabi*.apk")
           echo ::set-env name=APK_FILE_X86::$(find TMessagesProj/build/outputs/apk -name "*x86-*.apk")
@@ -43,6 +46,18 @@ jobs:
           to: ${{ secrets.CANARY_CHANNEL }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: ${{ env.APK_FILE_ARMV7 }}
+      - name: Upload Canary Apk ( x86 )
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CANARY_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ${{ env.APK_FILE_X86 }}
+      - name: Upload Canary Apk ( x64 )
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CANARY_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ${{ env.APK_FILE_X64 }}
   nativeBuild:
     name: Native Build
     runs-on: ubuntu-latest
@@ -70,25 +85,13 @@ jobs:
       - name: Build native libraries
         run: |
 
-          cd TMessagesProj/jni
-
           while :
           do
              sudo apt-get install -y ninja-build && break
              sleep 5
           done
 
-          export NDK=$ANDROID_HOME/ndk-bundle
-          export NINJA_PATH=/usr/bin/ninja
-          export PATH=`echo $ANDROID_HOME/cmake/*/bin`:$PATH
-
-          [ -d "ffmpeg/build" ] || ./build_ffmpeg_clang.sh
-
-          ./patch_ffmpeg.sh
-
-          ./patch_boringssl.sh
-
-          [ -d "boringssl/build" ] || ./build_boringssl.sh
+          bash bin/native_libs.sh
 
       - name: assemble
         run: |
