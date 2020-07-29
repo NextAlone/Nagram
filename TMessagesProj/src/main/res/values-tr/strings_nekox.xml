@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">İstediğine emin misin **tüm sunucuları sil**?</string>
     <string name="DeleteUnavailableServerConfirm">İstediğine emin misin **kullanılamayan sunucuları sil**?</string>
     <string name="MinApi21Required">Maalesef, en az Android 5\'e (API 21) ihtiyacınız var.</string>
+    <string name="MinApi23Required">Maalesef, en az Android 6\'ya (API23) ihtiyacınız var.</string>
     <string name="MiniVersionAlert">Maalesef mini sürüm bu tür bir proxy\'yi desteklemiyor, lütfen ayarlarda sürümü değiştirin.</string>
     <string name="ImportProxyFromClipboard">Panodan İçe Aktar</string>
     <string name="BrokenLink">Bilinmeyen / Bozuk Bağlantı</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">Genel Anahtarı İçe Aktar</string>
     <string name="PGPImportPrivate">Özel Anahtarı İçe Aktar</string>
     <string name="ShareMyKey">Ortak Anahtarımı Paylaş</string>
+    <string name="DisableVibration">Titreşimi Devre Dışı Bırak</string>
 </resources>

@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">Anda yakin ingin **menghapus semua server**?</string>
     <string name="DeleteUnavailableServerConfirm">Anda yakin ingin **menghapus semua server tidak tersedia**?</string>
     <string name="MinApi21Required">Maaf, anda memerlukan setidaknya Android 5 (API 21).</string>
+    <string name="MinApi23Required">Maaf, Anda memerlukan setidaknya Android 6 (API23).</string>
     <string name="MiniVersionAlert">Maaf, versi mini tidak mendukung jenis proxy ini, silakan alihkan versi dalam pengaturan.</string>
     <string name="ImportProxyFromClipboard">Impor Dari Papan Klip</string>
     <string name="BrokenLink">Tidak Dikenal / Tautan Rusak</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">Impor Kunci Publik</string>
     <string name="PGPImportPrivate">Impor Kunci Pribadi</string>
     <string name="ShareMyKey">Bagikan Kunci Publik Saya</string>
+    <string name="DisableVibration">Nonaktifkan Getaran</string>
 </resources>

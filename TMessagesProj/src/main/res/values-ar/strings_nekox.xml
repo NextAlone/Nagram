@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">هل أنت متأكد من أنك تريد **حذف جميع الخوادم**؟</string>
     <string name="DeleteUnavailableServerConfirm">هل أنت متأكد من أنك تريد **حذف الخوادم غير المتاحة**؟</string>
     <string name="MinApi21Required">عذراً، تحتاج على الأقل إلى أندرويد 5 (API21).</string>
+    <string name="MinApi23Required">عذراً، تحتاج على الأقل إلى أندرويد 6 (API23).</string>
     <string name="MiniVersionAlert">عذرا، إصدار صغير لا تدعم هذا النوع من الوكيل، يرجى التبديل الإصدار في الإعدادات.</string>
     <string name="ImportProxyFromClipboard">استيراد من الحافظة</string>
     <string name="BrokenLink">رابط غير معروف / مكسور</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">استيراد مفتاح عمومي</string>
     <string name="PGPImportPrivate">استيراد مفتاح خاص</string>
     <string name="ShareMyKey">شارك مفتاحي العام</string>
+    <string name="DisableVibration">تعطيل الاهتزاز</string>
 </resources>
