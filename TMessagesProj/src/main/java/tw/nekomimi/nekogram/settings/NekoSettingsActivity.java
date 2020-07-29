@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -33,8 +34,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ExternalGcm;
 
 @SuppressLint("RtlHardcoded")
 public class NekoSettingsActivity extends BaseFragment {
@@ -136,10 +136,18 @@ public class NekoSettingsActivity extends BaseFragment {
 
         aboutRow = rowCount++;
         channelRow = rowCount++;
-        googlePlayRow = -1;
+        if (ExternalGcm.checkPlayServices()) {
+            googlePlayRow = rowCount++;
+        } else {
+            googlePlayRow = -1;
+        }
         sourceCodeRow = rowCount++;
         translationRow = rowCount++;
-        donateRow = rowCount++;
+        if ("release".equals(BuildConfig.BUILD_TYPE)) {
+            donateRow = -1;
+        } else {
+            donateRow = rowCount++;
+        }
         about2Row = rowCount++;
 
         if (listAdapter != null) {
