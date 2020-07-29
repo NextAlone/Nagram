@@ -177,4 +177,5 @@
     <string name="PGPImport">استيراد مفتاح عمومي</string>
     <string name="PGPImportPrivate">استيراد مفتاح خاص</string>
     <string name="ShareMyKey">شارك مفتاحي العام</string>
+    <string name="DisableVibration">تعطيل الاهتزاز</string>
 </resources>

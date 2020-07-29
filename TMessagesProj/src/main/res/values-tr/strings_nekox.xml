@@ -177,4 +177,5 @@
     <string name="PGPImport">Genel Anahtarı İçe Aktar</string>
     <string name="PGPImportPrivate">Özel Anahtarı İçe Aktar</string>
     <string name="ShareMyKey">Ortak Anahtarımı Paylaş</string>
+    <string name="DisableVibration">Titreşimi Devre Dışı Bırak</string>
 </resources>

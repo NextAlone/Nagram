@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">Gesperrt</string>
     <string name="CustomApi">Benutzerdefinierte API</string>
     <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.\n\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
     <string name="CustomApiNo">Verwenden Sie keine benutzerdefinierte API</string>
@@ -165,4 +166,16 @@
     <string name="LoginSettings">Anmeldeeinstellungen</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">Plattform übersetzen</string>
+    <string name="UsePersianCalender">Verwenden Sie den persischen Kalender</string>
+    <string name="OpenKayChain">OpenPGP-Client</string>
+    <string name="OpenPGPApp">OpenPGP-Anbieter</string>
+    <string name="OpenPGPKey">OpenPGP-Schlüssel</string>
+    <string name="None">Keiner</string>
+    <string name="Sign">Schild</string>
+    <string name="PGPDecrypt">Nachricht entschlüsseln</string>
+    <string name="PGPVerify">Nachricht überprüfen</string>
+    <string name="PGPImport">Öffentlichen Schlüssel importieren</string>
+    <string name="PGPImportPrivate">Privaten Schlüssel importieren</string>
+    <string name="ShareMyKey">Public-Key teilen</string>
+    <string name="DisableVibration">Vibration deaktivieren</string>
 </resources>

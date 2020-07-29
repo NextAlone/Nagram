@@ -177,4 +177,5 @@
     <string name="PGPImport">ייבא מפתח ציבורי</string>
     <string name="PGPImportPrivate">ייבא מפתח פרטי</string>
     <string name="ShareMyKey">שתף את המפתח הציבורי שלי</string>
+    <string name="DisableVibration">השבת רטט</string>
 </resources>

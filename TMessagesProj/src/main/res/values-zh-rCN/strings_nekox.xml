@@ -177,4 +177,5 @@
     <string name="PGPImport">导入公钥</string>
     <string name="PGPImportPrivate">导入私钥</string>
     <string name="ShareMyKey">分享我的公钥</string>
+    <string name="DisableVibration">禁用振动</string>
 </resources>

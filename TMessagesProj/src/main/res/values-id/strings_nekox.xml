@@ -177,4 +177,5 @@
     <string name="PGPImport">Impor Kunci Publik</string>
     <string name="PGPImportPrivate">Impor Kunci Pribadi</string>
     <string name="ShareMyKey">Bagikan Kunci Publik Saya</string>
+    <string name="DisableVibration">Nonaktifkan Getaran</string>
 </resources>

@@ -177,4 +177,5 @@
     <string name="PGPImport">공개 키 가져 오기</string>
     <string name="PGPImportPrivate">개인 키 가져 오기</string>
     <string name="ShareMyKey">내 공개 키 공유</string>
+    <string name="DisableVibration">진동 비활성화</string>
 </resources>

@@ -177,4 +177,5 @@
     <string name="PGPImport">کلید عمومی را بارگذاری کن</string>
     <string name="PGPImportPrivate">کلید خصوصی را بارگذاری کن</string>
     <string name="ShareMyKey">کلید عمومی من را به اشتراک بگذار</string>
+    <string name="DisableVibration">لرزش را غیرفعال کن</string>
 </resources>

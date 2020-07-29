@@ -177,4 +177,5 @@
     <string name="PGPImport">公開鍵をインポート</string>
     <string name="PGPImportPrivate">プライベートキーをインポート</string>
     <string name="ShareMyKey">公開鍵を共有</string>
+    <string name="DisableVibration">バイブを無効にする</string>
 </resources>

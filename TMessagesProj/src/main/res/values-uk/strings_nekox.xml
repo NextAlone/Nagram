@@ -177,4 +177,5 @@
     <string name="PGPImport">Імпортувати відкритий ключ</string>
     <string name="PGPImportPrivate">Імпорт приватного ключа</string>
     <string name="ShareMyKey">Поділіться моїм публічним ключем</string>
+    <string name="DisableVibration">Вібрація вимкнено</string>
 </resources>

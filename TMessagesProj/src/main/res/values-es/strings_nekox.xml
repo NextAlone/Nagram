@@ -177,4 +177,5 @@
     <string name="PGPImport">Importar clave pública</string>
     <string name="PGPImportPrivate">Importar clave privada</string>
     <string name="ShareMyKey">Compartir Mi Clave Pública</string>
+    <string name="DisableVibration">Desactivar vibración</string>
 </resources>
