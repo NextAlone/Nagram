@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">Вы уверены, что хотите **удалить все серверы**?</string>
     <string name="DeleteUnavailableServerConfirm">Вы уверены, что хотите ** удалить недоступные**?</string>
     <string name="MinApi21Required">Требуется Android 5 (API21).</string>
+    <string name="MinApi23Required">Извините, вам нужен как минимум Android 6 (API23).</string>
     <string name="MiniVersionAlert">К сожалению, mini-версия не поддерживает этот тип прокси. Cменить версию можно в настройках.</string>
     <string name="ImportProxyFromClipboard">Импорт из буфера</string>
     <string name="BrokenLink">Неверная ссылка</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">Импорт открытого ключа</string>
     <string name="PGPImportPrivate">Импорт приватного ключа</string>
     <string name="ShareMyKey">Поделиться моим открытым ключом</string>
+    <string name="DisableVibration">Отключить вибрацию</string>
 </resources>

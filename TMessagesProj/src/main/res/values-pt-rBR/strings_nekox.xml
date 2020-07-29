@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">Tem certeza de que deseja **excluir todos os servidores**?</string>
     <string name="DeleteUnavailableServerConfirm">Tem certeza de que deseja **excluir servidores indisponíveis**?</string>
     <string name="MinApi21Required">Desculpe, você precisa pelo menos do Android 5 (API21).</string>
+    <string name="MinApi23Required">Você precisa pelo menos do Android 6 (API23).</string>
     <string name="MiniVersionAlert">Desculpe, a versão mini não é compatível com esse tipo de proxy. Altere a versão nas configurações.</string>
     <string name="ImportProxyFromClipboard">Importar da área de transferência</string>
     <string name="BrokenLink">Link desconhecido / quebrado</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">Importar chave pública</string>
     <string name="PGPImportPrivate">Importar Chave Privada</string>
     <string name="ShareMyKey">Compartilhar minha chave pública</string>
+    <string name="DisableVibration">Desativar vibração</string>
 </resources>

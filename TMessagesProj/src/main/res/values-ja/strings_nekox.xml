@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">**すべてのサーバーを削除**してもよろしいですか？</string>
     <string name="DeleteUnavailableServerConfirm">**使用できないサーバーを削除**してよろしいですか？</string>
     <string name="MinApi21Required">申し訳ありませんが、Android 5 (API21)以上が必要です</string>
+    <string name="MinApi23Required">申し訳ありませんが、Android 6（API23）以上が必要です。</string>
     <string name="MiniVersionAlert">申し訳ありませんが、ミニバージョンはこのタイプのプロキシをサポートしていません。設定でバージョンを切り替えてください。</string>
     <string name="ImportProxyFromClipboard">クリップボードからインポート</string>
     <string name="BrokenLink">不明/壊れたリンク</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">公開鍵をインポート</string>
     <string name="PGPImportPrivate">プライベートキーをインポート</string>
     <string name="ShareMyKey">公開鍵を共有</string>
+    <string name="DisableVibration">バイブを無効にする</string>
 </resources>

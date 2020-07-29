@@ -154,6 +154,7 @@
     <string name="DeleteAllServerConfirm">האם אתה בטוח שברצונך ** למחוק את כל השרתים **?</string>
     <string name="DeleteUnavailableServerConfirm">האם אתה בטוח שברצונך ** למחוק שרתים שלא זמינים **?</string>
     <string name="MinApi21Required">מצטערים, אתה זקוק לפחות ל- Android 5 (API21).</string>
+    <string name="MinApi23Required">מצטערים, אתה זקוק לפחות ל- Android 6 (API23).</string>
     <string name="MiniVersionAlert">מצטערים, גרסת מיני אינה תומכת בסוג זה של פרוקסי, אנא החלף גרסה בהגדרות.</string>
     <string name="ImportProxyFromClipboard">ייבא מלוח</string>
     <string name="BrokenLink">קישור לא ידוע / שבור</string>
@@ -177,4 +178,5 @@
     <string name="PGPImport">ייבא מפתח ציבורי</string>
     <string name="PGPImportPrivate">ייבא מפתח פרטי</string>
     <string name="ShareMyKey">שתף את המפתח הציבורי שלי</string>
+    <string name="DisableVibration">השבת רטט</string>
 </resources>
