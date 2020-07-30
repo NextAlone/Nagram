@@ -549,7 +549,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 case ACTION_TYPE_CHANGE_PHONE_NUMBER: {
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
                     builder.addTitle(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
-                    builder.addItem(LocaleController.getString("Change", R.string.Change), (i) -> {
+                    builder.addItem(LocaleController.getString("Change", R.string.Change),R.drawable.baseline_check_circle_24, i -> {
                         presentFragment(new ChangePhoneActivity(), true);
                         return Unit.INSTANCE;
                     });

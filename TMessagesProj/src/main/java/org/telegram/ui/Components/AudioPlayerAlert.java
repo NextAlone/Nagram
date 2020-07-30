@@ -210,8 +210,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 layoutParams = (LayoutParams) actionBarShadow.getLayoutParams();
                 layoutParams.topMargin = ActionBar.getCurrentActionBarHeight();
 
-                layoutParams = (LayoutParams) blurredView.getLayoutParams();
-                layoutParams.topMargin = -getPaddingTop();
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) blurredView.getLayoutParams();
+                lp.topMargin = -getPaddingTop();
 
                 int contentSize = AndroidUtilities.dp(179);
                 if (playlist.size() > 1) {

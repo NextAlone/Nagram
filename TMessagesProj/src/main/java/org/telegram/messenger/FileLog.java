@@ -10,26 +10,24 @@ package org.telegram.messenger;
 
 import android.util.Log;
 
-import org.telegram.messenger.time.FastDateFormat;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Locale;
-
-import cn.hutool.core.lang.caller.CallerUtil;
 import cn.hutool.core.lang.caller.StackTraceCaller;
+import cn.hutool.core.util.StrUtil;
 
 public class FileLog {
 
     private final static StackTraceCaller caller = new StackTraceCaller();
 
     public static String getNetworkLogPath() {
+        if (BuildVars.DEBUG_VERSION) return "/dev/null";
         return "";
     }
 
     private static String mkTag() {
-        return caller.getCaller(3).getSimpleName();
+
+        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+        return StrUtil.subAfter(stackTrace[2].getClassName(), ".", true);
+
     }
 
     private static String mkMessage(Throwable e) {
@@ -47,7 +45,7 @@ public class FileLog {
     }
 
     public static void e(final Throwable e) {
-        Log.e(mkTag(),mkMessage(e),e);
+        Log.e(mkTag(), mkMessage(e), e);
     }
 
     public static void d(final String message) {

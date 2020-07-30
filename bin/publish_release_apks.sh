@@ -10,7 +10,7 @@ if [ ! -x "$(command -v ghr)" ]; then
 
 fi
 
-rm -rf build/apks &&
-mkdir -p build/apks &&
-find TMessagesProj/build/outputs/apk -name "*.apk" -exec cp {} build/apks \; &&
-ghr -delete -n "$1" "$1" build/apks/
+rm -rf build/release &&
+mkdir -p build/release &&
+find TMessagesProj/build/outputs/apk -name "*.apk" -exec cp {} build/release \; &&
+ghr -delete -n "$1" "$1" build/release

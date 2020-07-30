@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.pm.ShortcutManagerCompat;
 
 import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
@@ -33,7 +34,6 @@ import org.telegram.tgnet.ConnectionsManager;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -50,13 +50,10 @@ import tw.nekomimi.nekogram.sub.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
-
-import androidx.core.content.pm.ShortcutManagerCompat;
 
 public class SharedConfig {
 
@@ -501,6 +498,16 @@ public class SharedConfig {
         public AngConfig.VmessBean bean;
         public VmessLoader loader;
 
+        {
+
+            if (BuildVars.isMini) {
+
+                throw new RuntimeException(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert));
+
+            }
+
+        }
+
         public VmessProxy(String vmessLink) {
 
             this(VmessLoader.parseVmessLink(vmessLink));
@@ -510,12 +517,6 @@ public class SharedConfig {
         public VmessProxy(AngConfig.VmessBean bean) {
 
             this.bean = bean;
-
-            if (BuildVars.isMini) {
-
-                throw new RuntimeException(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert));
-
-            }
 
         }
 
@@ -989,7 +990,7 @@ public class SharedConfig {
 
                 return new LinkedList<>(proxyList);
 
-            } catch (ConcurrentModificationException ignored) {
+            } catch (Exception ignored) {
             }
 
         }
@@ -1700,12 +1701,11 @@ public class SharedConfig {
         }
 
         if (!proxyList.isEmpty()) {
-            for (ProxyInfo proxyInfo : proxyList) {
+            for (ProxyInfo proxyInfo : getProxyList()) {
                 if (proxyInfo instanceof ExternalSocks5Proxy) {
                     ((ExternalSocks5Proxy) proxyInfo).stop();
                 }
             }
-            ThreadUtil.sleep(500L);
         }
 
         proxyListLoaded = true;
@@ -2002,10 +2002,15 @@ public class SharedConfig {
         proxyList.remove(proxyInfo);
         if (proxyInfo.subId != 0) {
             SubInfo sub = SubManager.getSubList().find(ObjectFilters.eq("id", proxyInfo.subId)).firstOrDefault();
-            sub.proxies.remove(proxyInfo.toUrl());
-            SubManager.getSubList().update(sub);
+            try {
+                if (sub.proxies.remove(proxyInfo.toUrl())) {
+                    SubManager.getSubList().update(sub);
+                }
+            } catch (UnsupportedOperationException ignored) {
+            }
+        } else {
+            saveProxyList();
         }
-        saveProxyList();
     }
 
     public static void deleteAllProxy() {
