@@ -304,7 +304,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.didUpdateConnectionState);
 
         final SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        useProxySettings = SharedConfig.proxyEnabled && !SharedConfig.proxyList.isEmpty();
+        useProxySettings = SharedConfig.proxyEnabled && !proxyList.isEmpty();
         useProxyForCalls = preferences.getBoolean("proxy_enabled_calls", false);
 
         updateRows(true);
@@ -728,7 +728,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 editor.putBoolean("proxy_enabled_calls", useProxyForCalls);
                 editor.apply();
             } else if (position >= proxyStartRow && position < proxyEndRow) {
-                SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
+                SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
                 useProxySettings = true;
                 SharedConfig.setCurrentProxy(info);
                 updateRows(true);
@@ -952,13 +952,14 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     private void updateRows(boolean notify) {
+        proxyList = SharedConfig.getProxyList();
         rowCount = 0;
         useProxyRow = rowCount++;
         useProxyDetailRow = rowCount++;
         connectionsHeaderRow = rowCount++;
-        if (!SharedConfig.proxyList.isEmpty()) {
+        if (!proxyList.isEmpty()) {
             proxyStartRow = rowCount;
-            rowCount += SharedConfig.proxyList.size();
+            rowCount += proxyList.size();
             proxyEndRow = rowCount;
         } else {
             proxyStartRow = -1;
@@ -1255,7 +1256,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             if (currentConnectionState != state) {
                 currentConnectionState = state;
                 if (listView != null && SharedConfig.currentProxy != null) {
-                    int idx = SharedConfig.proxyList.indexOf(SharedConfig.currentProxy);
+                    int idx = proxyList.indexOf(SharedConfig.currentProxy);
                     if (idx >= 0) {
                         RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(idx + proxyStartRow);
                         if (holder != null && holder.itemView instanceof TextDetailProxyCell) {
@@ -1271,7 +1272,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     updateRows(true);
                 } else {
                     SharedConfig.ProxyInfo proxyInfo = (SharedConfig.ProxyInfo) args[0];
-                    int idx = SharedConfig.proxyList.indexOf(proxyInfo);
+                    int idx = proxyList.indexOf(proxyInfo);
                     if (idx >= 0) {
                         RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(idx + proxyStartRow);
                         if (holder != null && holder.itemView instanceof TextDetailProxyCell) {
@@ -1336,9 +1337,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 }
                 case 5: {
                     TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
-                    SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
-                    cell.setProxy(info);
-                    cell.setChecked(SharedConfig.currentProxy == info);
+                    try {
+                        SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
+                        cell.setProxy(info);
+                        cell.setChecked(SharedConfig.currentProxy == info);
+                    } catch (IndexOutOfBoundsException e) {}
                     break;
                 }
             }

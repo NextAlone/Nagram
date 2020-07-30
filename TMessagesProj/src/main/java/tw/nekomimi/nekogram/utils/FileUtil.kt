@@ -206,6 +206,10 @@ object FileUtil {
 
                         FileLog.d("lib extracted with default abi$index ($abi): $execFile")
 
+                    }.onFailure {
+
+                        FileLog.d("$abi: ${it.message ?: it.javaClass.simpleName}")
+
                     }
 
                 }

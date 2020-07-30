@@ -23,9 +23,11 @@ fun mkDatabase(name: String): Nitrite {
                 .filePath(file.path)
                 .openOrCreate()!!
 
-    }
+    }.onFailure {
 
-    file.deleteRecursively()
+        file.deleteRecursively()
+
+    }
 
     return Nitrite.builder().compressed()
             .filePath(file.path)

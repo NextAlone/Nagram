@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.utils.EnvUtil;
+
 public class VoIPController{
 
 	public static final int NET_TYPE_UNKNOWN=0;
@@ -226,30 +228,11 @@ public class VoIPController{
 	}
 
 	private String getLogFilePath(String name){
-		Calendar c=Calendar.getInstance();
-		return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null),
-				String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_%s.txt",
-						c.get(Calendar.DATE), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR),
-						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND), name)).getAbsolutePath();
+		return new File(EnvUtil.getTelegramPath(),"logs/" + name + ".log").getPath();
 	}
 
 	private String getLogFilePath(long callID){
-		File dir=VoIPHelper.getLogsDir();
-		if(!BuildVars.DEBUG_VERSION){
-			File[] _logs=dir.listFiles();
-			ArrayList<File> logs=new ArrayList<>();
-			logs.addAll(Arrays.asList(_logs));
-			while(logs.size()>20){
-				File oldest=logs.get(0);
-				for(File file : logs){
-					if(file.getName().endsWith(".log") && file.lastModified()<oldest.lastModified())
-						oldest=file;
-				}
-				oldest.delete();
-				logs.remove(oldest);
-			}
-		}
-		return new File(dir, callID+".log").getAbsolutePath();
+		return new File(EnvUtil.getTelegramPath(),"logs/" + callID + ".log").getPath();
 	}
 
 	public String getDebugLog(){
