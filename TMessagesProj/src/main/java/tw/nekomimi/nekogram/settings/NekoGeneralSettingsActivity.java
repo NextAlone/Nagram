@@ -90,7 +90,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private int openKeyChainRow;
     private int pgpAppRow;
-    private int emailRow;
     private int keyRow;
     private int openKeyChain2Row;
 
@@ -124,6 +123,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int inappCameraRow;
     private int hideProxySponsorChannelRow;
     private int askBeforeCallRow;
+    private int autoPauseVideoRow;
     private int disableNumberRoundingRow;
     private int openArchiveOnPullRow;
     private int nameOrderRow;
@@ -222,6 +222,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.forceTablet);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == transparentStatusBarRow) {
                 NekoConfig.toggleTransparentStatusBar();
                 if (view instanceof TextCheckCell) {
@@ -258,6 +259,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }, (i, __) -> {
                     NekoConfig.setNameOrder(i + 1);
                     listAdapter.notifyItemChanged(position);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                     return Unit.INSTANCE;
                 });
 
@@ -291,6 +293,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                     NekoConfig.setActionBarDecoration(i);
                     listAdapter.notifyItemChanged(position);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
 
                     return null;
 
@@ -337,6 +340,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 NekoConfig.toggleNewYear();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.newYear);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
             } else if (position == translationProviderRow) {
 
@@ -740,6 +744,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         inappCameraRow = rowCount++;
         hideProxySponsorChannelRow = rowCount++;
         askBeforeCallRow = rowCount++;
+        autoPauseVideoRow = rowCount ++;
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
@@ -945,8 +950,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, eventTypeRow != -1);
                     } else if (position == usePersianCalenderRow) {
                         textCell.setTextAndCheck(LocaleController.getString("UsePersianCalender", R.string.UsePersianCalender), NekoConfig.usePersianCalender, false);
+                    } else if (position == autoPauseVideoRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
                     }
-                    break;
+                        break;
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;

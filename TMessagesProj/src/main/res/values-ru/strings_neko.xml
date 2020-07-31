@@ -21,6 +21,7 @@
     <string name="AddToSavedMessages">Сохранить сообщение</string>
     <string name="CreateMention">Создать упоминание</string>
     <string name="ForceTabletMode">Принудительный режим планшета</string>
+    <string name="Prpr">Peropero</string>
     <string name="TransparentStatusBar">Прозрачная строка уведомлений</string>
     <string name="EnableResidentNotification">Включить постоянное уведомление</string>
     <string name="DisableResidentNotification">Отключить постоянное уведомление</string>
@@ -40,7 +41,8 @@
     <string name="HideProxySponsorChannel">Скрыть спонсора прокси</string>
     <string name="ViewHistory">История сообщений</string>
     <string name="Nya">Мяу!</string>
-    <string name="SaveCacheToPrivateDirectory">Сохранять медиа в приватный каталог</string>
+    <string name="SaveCacheToExternalFilesDir">Изоляция хранилища</string>
+    <string name="SaveCacheToExternalFilesDirAbout">Сохраняйте содержимое папки \"Telegram\" на внешнее хранилище для экономии памяти устройства.</string>
     <string name="SensitiveDisableFiltering">Показывать деликатный контент</string>
     <string name="SensitiveAbout">Отображать деликатный контент в публичных каналах на всех ваших устройствах.</string>
     <string name="StickerSize">Размер стикеров</string>
@@ -54,14 +56,13 @@
     <string name="MessageDetails">Подробности</string>
     <string name="ExportAsJson">Экспорт в JSON</string>
     <string name="Translate">Перевести</string>
-    <string name="JoinedFormatted">вступил(а) в %1$s</string>
-    <string name="JoinedDateFormatted">вступил(а) %1$s</string>
     <string name="DeleteAccount">Удалить Telegram аккаунт</string>
     <string name="TranslateFailed">Ошибка сервера переводчика</string>
     <string name="TranslationProvider">Переводчик</string>
     <string name="ProviderGoogleTranslate">Google Переводчик</string>
     <string name="ProviderGoogleTranslateCN">Google Переводчик Китай</string>
     <string name="TranslateApiUnsupported">Выбранный переводчик не поддерживает ваш язык.</string>
+    <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Отменить перевод</string>
     <string name="DisablePhotoViewerSideAction">Пролистывать фото нажатием</string>
     <string name="BotToken">Токен</string>
@@ -86,7 +87,6 @@
     <string name="AskBeforeCalling">Подтверждать звонки</string>
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>
-    <string name="SetAsCurrent">Сделать аватаром</string>
     <string name="DisableNumberRounding">Не округлять числа</string>
     <string name="Categories">Настройки</string>
     <string name="OfficialChannel">Официальный канал</string>
@@ -96,8 +96,10 @@
     <string name="DonateAbout">Поддержите разработку проекта.</string>
     <string name="TranslationAbout">Помогите перевести Nekogram на ваш язык.</string>
     <string name="Translation">Перевести Nekogram</string>
+    <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Исходный код на Github</string>
     <string name="ResetStickerSize">Сбросить размер стикера</string>
+    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">Перезапустите приложение для применения настроек.</string>
     <string name="DisableAppBarShadow">Отключить тень заголовка</string>
     <string name="BetaWarning">Эти функции Telegram находятся в **бета** тестировании.</string>
@@ -106,4 +108,10 @@
     <string name="IdType">ID чата в профиле</string>
     <string name="IdTypeAbout">API Telegram выдает ID в его первоначальном виде, но Bot API добавляет в начало ID \"минус\" для групп и \"-100\" для каналов.</string>
     <string name="IdTypeHidden">Скрыть</string>
+    <string name="IdTypeAPI">Telegram API</string>
+    <string name="IdTypeBOTAPI">Bot API</string>
+    <string name="AutoPauseVideo">Авто-пауза видео</string>
+    <string name="AutoPauseVideoAbout">Останавливать воспроизведение видео при блокировке экрана или сворачивании приложения.</string>
+    <string name="DisableProximityEvents">Отключить датчик приближения</string>
+    <string name="CustomEmojiTypeface">Шрифт пользовательских эмодзи</string>
 </resources>

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -68,6 +69,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int skipOpenLinkConfirmRow;
     private int rearVideoMessagesRow;
     private int confirmAVRow;
+    private int disableProximityEventsRow;
     private int mapPreviewRow;
     private int messageMenuRow;
     private int chat2Row;
@@ -224,6 +226,12 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableVibration);
                 }
+            } else if (position == disableProximityEventsRow) {
+                NekoConfig.toggleDisableProximityEvents();
+                MediaController.getInstance().recreateProximityWakeLock();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableProximityEvents);
+                }
             }
         });
 
@@ -256,6 +264,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         skipOpenLinkConfirmRow = rowCount ++;
         rearVideoMessagesRow = rowCount++;
         confirmAVRow = rowCount++;
+        disableProximityEventsRow = rowCount ++;
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
         chat2Row = rowCount++;
@@ -587,6 +596,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("ConfirmAVMessage", R.string.ConfirmAVMessage), NekoConfig.confirmAVMessage, true);
                     } else if (position == disableVibrationRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), NekoConfig.disableVibration, true);
+                    } else if (position == disableProximityEventsRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableProximityEvents", R.string.DisableProximityEvents), NekoConfig.disableProximityEvents, true);
                     }
                     break;
                 }

@@ -2349,15 +2349,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 case 0: {
                     TLObject object = getItem(position);
                     TLRPC.User user;
-                    String joinDate = null;
                     if (object instanceof TLRPC.User) {
                         user = (TLRPC.User) object;
                     } else if (object instanceof TLRPC.ChannelParticipant) {
                         user = getMessagesController().getUser(((TLRPC.ChannelParticipant) object).user_id);
-                        joinDate = LocaleController.formatDateJoined(((TLRPC.ChannelParticipant) object).date);
                     } else if (object instanceof TLRPC.ChatParticipant) {
                         user = getMessagesController().getUser(((TLRPC.ChatParticipant) object).user_id);
-                        joinDate = LocaleController.formatDateJoined(((TLRPC.ChatParticipant) object).date);
                     } else {
                         return;
                     }
@@ -2436,7 +2433,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
                     ManageChatUserCell userCell = (ManageChatUserCell) holder.itemView;
                     userCell.setTag(position);
-                    userCell.setData(user, name, username != null ? username : joinDate, false);
+                    userCell.setData(user, name, username, false);
 
                     break;
                 }

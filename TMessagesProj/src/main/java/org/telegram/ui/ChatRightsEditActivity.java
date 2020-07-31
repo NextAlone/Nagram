@@ -1097,17 +1097,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     UserCell2 userCell2 = (UserCell2) holder.itemView;
-                    String status = null;
-                    if (participant instanceof TLRPC.TL_channelParticipantCreator) {
-                        status = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
-                    } else if (participant instanceof TLRPC.TL_channelParticipantAdmin) {
-                        status = LocaleController.formatDateJoined(((TLRPC.TL_channelParticipantAdmin) participant).date);
-                    } else if (participant instanceof TLRPC.TL_channelParticipant) {
-                        status = LocaleController.formatDateJoined(((TLRPC.TL_channelParticipant) participant).date);
-                    } else if (participant instanceof TLRPC.TL_chatChannelParticipant) {
-                        status = LocaleController.formatDateJoined(((TLRPC.TL_chatChannelParticipant) participant).date);
-                    }
-                    userCell2.setData(currentUser, null, status, 0);
+                    userCell2.setData(currentUser, null, null, 0);
                     break;
                 case 1:
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
