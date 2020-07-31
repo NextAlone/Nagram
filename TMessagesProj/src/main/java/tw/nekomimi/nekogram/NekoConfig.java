@@ -116,6 +116,8 @@ public class NekoConfig {
     public static long openPGPKeyId;
 
     public static boolean disableVibration;
+    public static boolean autoPauseVideo;
+    public static boolean disableProximityEvents;
 
     public static String getOpenPGPAppName() {
 
@@ -245,6 +247,7 @@ public class NekoConfig {
         openPGPKeyId = preferences.getLong("openPGPKeyId",0L);
 
         disableVibration = preferences.getBoolean("disableVibration", false);
+        autoPauseVideo = preferences.getBoolean("autoPauseVideo", false);
 
     }
 
@@ -761,6 +764,18 @@ public class NekoConfig {
     public static void toggleDisableVibration() {
 
         preferences.edit().putBoolean("disableVibration",disableVibration = !disableVibration).apply();
+
+    }
+
+    public static void toggleAutoPauseVideo() {
+
+        preferences.edit().putBoolean("autoPauseVideo",autoPauseVideo = !autoPauseVideo).apply();
+
+    }
+
+    public static void toggleDisableProximityEvents() {
+
+        preferences.edit().putBoolean("disableProximityEvents",disableProximityEvents = !disableProximityEvents).apply();
 
     }
 

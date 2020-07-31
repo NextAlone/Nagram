@@ -93,10 +93,15 @@ import tw.nekomimi.nekogram.NekoXConfig;
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
     private native int startRecord(String path, int sampleRate);
+
     private native int writeFrame(ByteBuffer frame, int len);
+
     private native void stopRecord();
+
     public static native int isOpusFile(String path);
+
     public native byte[] getWaveform(String path);
+
     public native byte[] getWaveform2(short[] array, int length);
 
     private static class AudioBuffer {
@@ -416,7 +421,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     private static final float VOLUME_NORMAL = 1.0f;
     private static final int AUDIO_NO_FOCUS_NO_DUCK = 0;
     private static final int AUDIO_NO_FOCUS_CAN_DUCK = 1;
-    private static final int AUDIO_FOCUSED  = 2;
+    private static final int AUDIO_FOCUSED = 2;
 
     private static class VideoConvertMessage {
         public MessageObject messageObject;
@@ -692,7 +697,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             Cursor cursor = null;
             try {
                 if (ApplicationLoader.applicationContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] {"COUNT(_id)"}, null, null, null);
+                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
                     if (cursor != null) {
                         if (cursor.moveToNext()) {
                             count += cursor.getInt(0);
@@ -708,7 +713,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
             try {
                 if (ApplicationLoader.applicationContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[] {"COUNT(_id)"}, null, null, null);
+                    cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
                     if (cursor != null) {
                         if (cursor.moveToNext()) {
                             count += cursor.getInt(0);
@@ -789,6 +794,21 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         return localInstance;
     }
 
+    public void recreateProximityWakeLock() {
+
+        if (NekoConfig.disableProximityEvents) {
+            proximityWakeLock = null;
+            return;
+        }
+
+        try {
+            PowerManager powerManager = (PowerManager) ApplicationLoader.applicationContext.getSystemService(Context.POWER_SERVICE);
+            proximityWakeLock = powerManager.newWakeLock(0x00000020, "proximity");
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
     public MediaController() {
         recordQueue = new DispatchQueue("recordQueue");
         recordQueue.setPriority(Thread.MAX_PRIORITY);
@@ -829,8 +849,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     gravitySensor = null;
                 }
                 proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-                PowerManager powerManager = (PowerManager) ApplicationLoader.applicationContext.getSystemService(Context.POWER_SERVICE);
-                proximityWakeLock = powerManager.newWakeLock(0x00000020, "proximity");
+                recreateProximityWakeLock();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -1338,7 +1357,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private boolean isNearToSensor(float value) {
-        return value < 5.0f && value != proximitySensor.getMaximumRange();
+        return !NekoConfig.disableProximityEvents && value < 5.0f && value != proximitySensor.getMaximumRange();
     }
 
     public boolean isRecordingOrListeningByProximity() {
@@ -2514,7 +2533,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     /*if (Build.VERSION.SDK_INT >= 26) {
                         ApplicationLoader.applicationContext.startForegroundService(intent);
                     } else {*/
-                        ApplicationLoader.applicationContext.startService(intent);
+                    ApplicationLoader.applicationContext.startService(intent);
                     //}
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2877,7 +2896,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 /*if (Build.VERSION.SDK_INT >= 26) {
                     ApplicationLoader.applicationContext.startForegroundService(intent);
                 } else {*/
-                    ApplicationLoader.applicationContext.startService(intent);
+                ApplicationLoader.applicationContext.startService(intent);
                 //}
             } catch (Throwable e) {
                 FileLog.e(e);
@@ -3241,7 +3260,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         final File sourceFile = file;
-        final boolean[] cancelled = new boolean[] {false};
+        final boolean[] cancelled = new boolean[]{false};
         if (sourceFile.exists()) {
             AlertDialog progressDialog = null;
             if (context != null && type != 0) {
@@ -4060,6 +4079,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public interface VideoConvertorListener {
         boolean checkConversionCanceled();
+
         void didWriteData(long availableSize, float progress);
     }
 }
