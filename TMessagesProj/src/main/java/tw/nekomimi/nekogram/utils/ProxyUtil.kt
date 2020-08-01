@@ -19,7 +19,6 @@ import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
-import com.v2ray.ang.V2RayConfig.RB_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
@@ -74,13 +73,13 @@ object ProxyUtil {
             it.forEach { line ->
 
                 if (line.startsWith("tg://proxy") ||
-                    line.startsWith("tg://socks") ||
-                    line.startsWith("https://t.me/proxy") ||
-                    line.startsWith("https://t.me/socks") ||
-                    line.startsWith(VMESS_PROTOCOL) ||
-                    line.startsWith(VMESS1_PROTOCOL) ||
-                    line.startsWith(SS_PROTOCOL) ||
-                    line.startsWith(SSR_PROTOCOL) /*||
+                        line.startsWith("tg://socks") ||
+                        line.startsWith("https://t.me/proxy") ||
+                        line.startsWith("https://t.me/socks") ||
+                        line.startsWith(VMESS_PROTOCOL) ||
+                        line.startsWith(VMESS1_PROTOCOL) ||
+                        line.startsWith(SS_PROTOCOL) ||
+                        line.startsWith(SSR_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line).toUrl()) }
@@ -111,13 +110,13 @@ object ProxyUtil {
             it.forEach { line ->
 
                 if (line.startsWith("tg://proxy") ||
-                    line.startsWith("tg://socks") ||
-                    line.startsWith("https://t.me/proxy") ||
-                    line.startsWith("https://t.me/socks") ||
-                    line.startsWith(VMESS_PROTOCOL) ||
-                    line.startsWith(VMESS1_PROTOCOL) ||
-                    line.startsWith(SS_PROTOCOL) ||
-                    line.startsWith(SSR_PROTOCOL) /*||
+                        line.startsWith("tg://socks") ||
+                        line.startsWith("https://t.me/proxy") ||
+                        line.startsWith("https://t.me/socks") ||
+                        line.startsWith(VMESS_PROTOCOL) ||
+                        line.startsWith(VMESS1_PROTOCOL) ||
+                        line.startsWith(SS_PROTOCOL) ||
+                        line.startsWith(SSR_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
@@ -176,9 +175,9 @@ object ProxyUtil {
 
             return
 
-        } else if (!error){
+        } else if (!error) {
 
-            AlertUtil.showSimpleAlert(ctx, LocaleController.getString("ImportedProxies",R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.title })
+            AlertUtil.showSimpleAlert(ctx, LocaleController.getString("ImportedProxies", R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.title })
 
         }
 
@@ -213,13 +212,9 @@ object ProxyUtil {
 
                 AndroidUtilities.showShadowsocksRAlert(ctx, SharedConfig.ShadowsocksRProxy(link))
 
-            } else if (link.startsWith(RB_PROTOCOL)) {
-
-                AndroidUtilities.showRelayBatonAlert(ctx, SharedConfig.RelayBatonProxy(link))
-
             } else {
 
-                val url = link.replace("tg://","https://t.me/").toHttpUrlOrNull()!!
+                val url = link.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
 
                 AndroidUtilities.showProxyAlert(ctx,
                         url.queryParameter("server"),
@@ -238,7 +233,7 @@ object ProxyUtil {
 
             FileLog.e(it)
 
-            if (BuildVars.LOGS_ENABLED){
+            if (BuildVars.LOGS_ENABLED) {
 
                 AlertUtil.showSimpleAlert(ctx, it)
 

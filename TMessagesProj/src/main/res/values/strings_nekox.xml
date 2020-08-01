@@ -168,9 +168,6 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
 
-    <string name="ProxyInfoRB">RelayBaton Proxy Settings</string>
-    <string name="ESNI">Encrypted SNI</string>
-
     <string name="ProxyRemarks">Remarks</string>
     <string name="RetestPing">Retest ping for all servers</string>
     <string name="ReorderByPing">Reorder servers by ping</string>

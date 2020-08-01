@@ -3,27 +3,20 @@ package tw.nekomimi.nekogram.sub;
 import androidx.annotation.NonNull;
 
 import org.dizitart.no2.Document;
-import org.dizitart.no2.NitriteId;
 import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
 import org.dizitart.no2.objects.Id;
 import org.dizitart.no2.objects.Index;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import javax.xml.transform.ErrorListener;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.RelayBatonLoader;
 import tw.nekomimi.nekogram.utils.HttpUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
@@ -46,13 +39,13 @@ public class SubInfo implements Mappable {
 
         if (name.length() < 10) return name;
 
-        return name.substring(0,10) + "...";
+        return name.substring(0, 10) + "...";
 
     }
 
     public List<String> reloadProxies() throws AllTriesFailed {
 
-        HashMap<String,Exception> exceptions = new HashMap<>();
+        HashMap<String, Exception> exceptions = new HashMap<>();
 
         for (String url : urls) {
 
@@ -64,7 +57,7 @@ public class SubInfo implements Mappable {
 
             } catch (Exception e) {
 
-                exceptions.put(url,e);
+                exceptions.put(url, e);
 
             }
 
@@ -76,13 +69,15 @@ public class SubInfo implements Mappable {
 
     public static class AllTriesFailed extends IOException {
 
-        public AllTriesFailed(HashMap<String,Exception> exceptions) {
+        public AllTriesFailed(HashMap<String, Exception> exceptions) {
             this.exceptions = exceptions;
         }
 
-        public HashMap<String,Exception> exceptions;
+        public HashMap<String, Exception> exceptions;
 
-        @NonNull @Override public String toString() {
+        @NonNull
+        @Override
+        public String toString() {
 
             StringBuilder errors = new StringBuilder();
 
@@ -126,7 +121,7 @@ public class SubInfo implements Mappable {
         document.put("id", id);
         document.put("name", name);
         document.put("urls", urls);
-        document.put("proxies",proxies);
+        document.put("proxies", proxies);
         document.put("lastFetch", lastFetch);
         document.put("enable", enable);
         document.put("internal", internal);
@@ -142,12 +137,11 @@ public class SubInfo implements Mappable {
         urls = (List<String>) document.get("urls");
         proxies = (List<String>) document.get("proxies");
 
-        lastFetch = document.get("lastFetch",Long.class);
-        enable = document.get("enable",Boolean.class);
-        internal = document.get("internal",Boolean.class);
+        lastFetch = document.get("lastFetch", Long.class);
+        enable = document.get("enable", Boolean.class);
+        internal = document.get("internal", Boolean.class);
 
     }
-
 
 
 }

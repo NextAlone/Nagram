@@ -41,7 +41,6 @@ import java.util.LinkedList;
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.ProxyManager;
-import tw.nekomimi.nekogram.RelayBatonLoader;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.VmessLoader;
@@ -861,121 +860,6 @@ public class SharedConfig {
         @Override
         public boolean equals(@Nullable Object obj) {
             return super.equals(obj) || (obj instanceof ShadowsocksRProxy && bean.equals(((ShadowsocksRProxy) obj).bean));
-        }
-
-    }
-
-    public static class RelayBatonProxy extends ExternalSocks5Proxy {
-
-        public RelayBatonLoader.Bean bean;
-        public RelayBatonLoader loader;
-
-        public RelayBatonProxy(String rbLink) {
-
-            this(RelayBatonLoader.Bean.Companion.parse(rbLink));
-
-        }
-
-        public RelayBatonProxy(RelayBatonLoader.Bean bean) {
-
-            this.bean = bean;
-
-            if (BuildVars.isMini) {
-
-                throw new RuntimeException(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert));
-
-            }
-
-        }
-
-        @Override
-        public String getAddress() {
-            return bean.getServer();
-        }
-
-        @Override
-        public boolean isStarted() {
-
-            return loader != null;
-
-        }
-
-        @Override
-        public void start() {
-
-            if (loader != null) return;
-
-            port = ProxyManager.mkPort();
-            RelayBatonLoader loader = new RelayBatonLoader();
-            loader.initConfig(bean, port);
-
-            loader.start();
-
-            this.loader = loader;
-
-            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
-
-                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
-
-            }
-
-        }
-
-        @Override
-        public void stop() {
-
-            if (loader != null) {
-
-                RelayBatonLoader loader = this.loader;
-
-                this.loader = null;
-
-                loader.stop();
-
-            }
-
-        }
-
-        @Override
-        public String toUrl() {
-            return bean.toString();
-        }
-
-        @Override
-        public String getRemarks() {
-            return bean.getRemarks();
-        }
-
-        @Override
-        public void setRemarks(String remarks) {
-            bean.setRemarks(remarks);
-        }
-
-        @Override
-        public String getType() {
-            return "RB";
-        }
-
-        @Override
-        public JSONObject toJsonInternal() throws JSONException {
-
-            JSONObject obj = new JSONObject();
-            obj.put("type", "shadowsocksr");
-            obj.put("link", toUrl());
-            return obj;
-
-        }
-
-        @Override
-        public int hashCode() {
-
-            return bean.hashCode();
-
-        }
-
-        @Override
-        public boolean equals(@Nullable Object obj) {
-            return super.equals(obj) || (obj instanceof RelayBatonProxy && bean.equals(((RelayBatonProxy) obj).bean));
         }
 
     }

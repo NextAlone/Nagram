@@ -89,7 +89,6 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.RelayBatonSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
 import tw.nekomimi.nekogram.SubSettingsActivity;
@@ -777,8 +776,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 presentFragment(new ShadowsocksRSettingsActivity((SharedConfig.ShadowsocksRProxy) info));
                             }
-                        } else if (info instanceof SharedConfig.RelayBatonProxy) {
-                            presentFragment(new RelayBatonSettingsActivity((SharedConfig.RelayBatonProxy) info));
                         } else {
                             presentFragment(new ProxySettingsActivity(info));
                         }
@@ -844,7 +841,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess),
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySS", R.string.AddProxySS),
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySSR", R.string.AddProxySSR),
-                LocaleController.getString("AddProxyRB", R.string.AddProxyRB),
                 LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard),
                 LocaleController.getString("ScanQRCode", R.string.ScanQRCode)
 
@@ -871,10 +867,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 presentFragment(new ShadowsocksRSettingsActivity());
 
             } else if (i == 5) {
-
-                presentFragment(new RelayBatonSettingsActivity());
-
-            } else if (i == 6) {
 
                 ProxyUtil.importFromClipboard(getParentActivity());
 
