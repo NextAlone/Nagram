@@ -2308,18 +2308,30 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     openAddMember();
                 } else if (position == usernameRow) {
                     if (currentChat != null) {
-                        try {
-                            Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setType("text/plain");
-                            if (!TextUtils.isEmpty(chatInfo.about)) {
-                                intent.putExtra(Intent.EXTRA_TEXT, currentChat.title + "\n" + chatInfo.about + "\nhttps://" + getMessagesController().linkPrefix + "/" + currentChat.username);
-                            } else {
-                                intent.putExtra(Intent.EXTRA_TEXT, currentChat.title + "\nhttps://" + getMessagesController().linkPrefix + "/" + currentChat.username);
-                            }
-                            getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
-                        } catch (Exception e) {
-                            FileLog.e(e);
+
+                        BottomBuilder builder = new BottomBuilder(getParentActivity());
+                        builder.addTitle("@" + currentChat.username);
+
+                        if (chatInfo != null && chatInfo.can_set_username) {
+                            builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                                ChatEditTypeActivity fragment = new ChatEditTypeActivity(chat_id, chatInfo.can_set_location);
+                                fragment.setInfo(chatInfo);
+                                presentFragment(fragment);
+                                return Unit.INSTANCE;
+                            });
                         }
+
+                        builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                            AlertUtil.copyAndAlert("@" + currentChat.username);
+                            return Unit.INSTANCE;
+                        });
+
+                        builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+                            AlertUtil.copyAndAlert("https://t.me/" + currentChat.username);
+                            return Unit.INSTANCE;
+                        });
+
+                        builder.show();
                     }
                 } else if (position == locationRow) {
                     if (chatInfo.location instanceof TLRPC.TL_channelLocation) {
@@ -6124,7 +6136,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             detailCell.setTextAndValue(text, LocaleController.getString("Username", R.string.Username), false);
                         } else if (currentChat != null) {
                             TLRPC.Chat chat = getMessagesController().getChat(chat_id);
-                            detailCell.setTextAndValue(getMessagesController().linkPrefix + "/" + chat.username, LocaleController.getString("InviteLink", R.string.InviteLink), false);
+                            if (chat != null && !TextUtils.isEmpty(chat.username)) {
+                                text = "@" + chat.username;
+                            } else {
+                                text = "-";
+                            }
+                            detailCell.setTextAndValue(text, LocaleController.getString("Username", R.string.Username), false);
                         }
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
