@@ -16,7 +16,6 @@ object V2RayConfig {
     const val VMESS1_PROTOCOL = "vmess1://"
     const val SS_PROTOCOL: String = "ss://"
     const val SSR_PROTOCOL: String = "ssr://"
-    const val RB_PROTOCOL: String = "rb://"
 
     const val SOCKS_PROTOCOL: String = "socks://"
     const val BROADCAST_ACTION_SERVICE = "com.v2ray.ang.action.service"
