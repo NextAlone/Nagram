@@ -103,6 +103,7 @@ public class NekoConfig {
 
     public static String ccToLang;
     public static String ccInputLang;
+    public static boolean increaseVoiceMessageQuality = false;
 
     public static boolean hideProxyByDefault;
     public static boolean useProxyItem;
@@ -262,6 +263,7 @@ public class NekoConfig {
         useChatAttachMediaMenu = preferences.getBoolean("useChatAttachMediaMenu", true);
         disableLinkPreviewByDefault = preferences.getBoolean("disableLinkPreviewByDefault", false);
         sendCommentAfterForward = preferences.getBoolean("sendCommentAfterForward", true);
+        increaseVoiceMessageQuality = preferences.getBoolean("increaseVoiceMessageQuality", true);
 
     }
 
@@ -823,5 +825,12 @@ public class NekoConfig {
 
     }
 
+    public static void toggleIncreaseVoiceMessageQuality() {
+        increaseVoiceMessageQuality = !increaseVoiceMessageQuality;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("increaseVoiceMessageQuality", increaseVoiceMessageQuality);
+        editor.commit();
+    }
 
 }

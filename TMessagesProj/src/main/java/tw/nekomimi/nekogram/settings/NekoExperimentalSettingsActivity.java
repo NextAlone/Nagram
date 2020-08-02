@@ -61,6 +61,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
     private int experimentRow;
     private int smoothKeyboardRow;
+    private int increaseVoiceMessageQualityRow;
     private int mediaPreviewRow;
     private int proxyAutoSwitchRow;
     private int disableFilteringRow;
@@ -236,6 +237,13 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.proxyAutoSwitch);
                 }
+            } else if (position == increaseVoiceMessageQualityRow) {
+                NekoConfig.toggleIncreaseVoiceMessageQuality();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.increaseVoiceMessageQuality);
+                }
+                tooltip.setInfoText(LocaleController.formatString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
+                tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             }
         });
 
@@ -259,6 +267,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         experimentRow = rowCount++;
         smoothKeyboardRow = !AndroidUtilities.isTablet() ? rowCount++ : -1;
+        increaseVoiceMessageQualityRow = rowCount++;
         mediaPreviewRow = rowCount++;
         proxyAutoSwitchRow = rowCount++;
         disableFilteringRow = rowCount++;
@@ -409,6 +418,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("MediaPreview", R.string.MediaPreview), NekoConfig.mediaPreview, true);
                     } else if (position == proxyAutoSwitchRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ProxyAutoSwitch", R.string.ProxyAutoSwitch), NekoConfig.proxyAutoSwitch, true);
+                    } else if (position == increaseVoiceMessageQualityRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("IncreaseVoiceMessageQuality", R.string.IncreaseVoiceMessageQuality), NekoConfig.increaseVoiceMessageQuality, true);
                     }
                     break;
                 }
