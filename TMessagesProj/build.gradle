@@ -7,8 +7,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def verName = "6.3.0.0-rc03"
-def verCode = 61
+def verName = "6.3.0.0"
+def verCode = 62
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -47,8 +47,8 @@ configurations {
     compile.exclude module: 'support-v4'
 }
 
-def okHttpVersion = '4.8.0'
-def fcmVersion = '20.2.3'
+def okHttpVersion = '4.8.1'
+def fcmVersion = '20.2.4'
 def crashlyticsVersion = '17.1.1'
 def playCoreVersion = '1.8.0'
 
@@ -111,7 +111,6 @@ dependencies {
 
     implementation 'org.tukaani:xz:1.8'
     implementation project(":openpgp-api")
-
 
     compileOnly files('libs/libv2ray.aar')
 
@@ -286,6 +285,7 @@ android {
 
         foss {
             initWith release
+            matchingFallbacks = ['debug']
         }
     }
 

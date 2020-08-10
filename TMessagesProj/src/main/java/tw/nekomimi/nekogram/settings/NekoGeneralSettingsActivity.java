@@ -521,6 +521,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                 requestKey(new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID));
 
+            } else if (position == autoPauseVideoRow) {
+                NekoConfig.toggleAutoPauseVideo();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.autoPauseVideo);
+                }
             }
 
         });

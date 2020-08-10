@@ -4,7 +4,7 @@ if [ ! -x "$(command -v go)" ]; then
 
 #  if [ ! -x "$(command -v gvm)" ]; then
 #
-#    apt install -y bison
+#    apt install -y bison binutils gcc make
 #
 #    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 #
@@ -39,6 +39,23 @@ if [ ! -x "$(command -v cmake)" ]; then
   echo "install cmake please!"
 
   exit 1
+
+fi
+
+if [ -z "$ANDROID_HOME" ]; then
+
+  if [ -d "$HOME/Android/Sdk" ]; then
+
+    export ANDROID_HOME=$HOME/Android/Sdk
+
+  else
+
+    echo "E: ANDROID_HOME not found."
+
+    exit 1
+
+  fi
+
 
 fi
 

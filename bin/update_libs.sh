@@ -33,6 +33,12 @@ if [ ! -x "$(command -v rustc)" ]; then
 
 fi
 
+if [ -z "$ANDROID_HOME" ]; then
+  if [ -d "$HOME/Android/Sdk" ]; then
+    export ANDROID_HOME="$HOME/Android/Sdk"
+  fi
+fi
+
 if [ ! -f "$ANDROID_HOME/ndk-bundle/source.properties" ]; then
 
   export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.3.6528147
