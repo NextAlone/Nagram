@@ -54,7 +54,6 @@ public class NekoXSettingActivity extends BaseFragment {
     private int disableStatusUpdateRow;
 
     private int fetchAndExportLangRow;
-    private int checkUpdateRepoForceRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -103,8 +102,6 @@ public class NekoXSettingActivity extends BaseFragment {
 
             if (position == fetchAndExportLangRow) {
                 fetchAndExportLang();
-            } else if (position == checkUpdateRepoForceRow) {
-                UpdateChecksKt.checkUpdate(getParentActivity(), true);
             }
 
             if (position == enableRow) {
@@ -152,7 +149,6 @@ public class NekoXSettingActivity extends BaseFragment {
         disableStatusUpdateRow = rowCount++;
 
         fetchAndExportLangRow = rowCount++;
-        checkUpdateRepoForceRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -304,8 +300,6 @@ public class NekoXSettingActivity extends BaseFragment {
                     }
                     if (position == fetchAndExportLangRow) {
                         textCell.setText("Export Builtin Languages", true);
-                    } else if (position == checkUpdateRepoForceRow) {
-                        textCell.setText("Force Update (Repo)", false);
                     }
                 }
 
@@ -355,7 +349,7 @@ public class NekoXSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == developerSettingsRow) {
                 return 4;
-            } else if (position == fetchAndExportLangRow || position == checkUpdateRepoForceRow) {
+            } else if (position == fetchAndExportLangRow) {
                 return 2;
             }
             return 3;

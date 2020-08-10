@@ -163,6 +163,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
@@ -2517,7 +2518,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         updateRowsIds();
                         return Unit.INSTANCE;
                     });
-                    if (!BuildVars.isUnknown) {
+                    if (ExternalGcm.checkPlayServices()) {
                         builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_system_update_24, (it) -> {
                             UpdateChecksKt.checkUpdate(ProfileActivity.this.getParentActivity());
                             return Unit.INSTANCE;
