@@ -56,6 +56,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.v2ray.ang.V2RayConfig;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.gms.common.api.Status;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -67,6 +72,8 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
@@ -81,6 +88,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
+import org.telegram.messenger.voip.VoIPPendingCall;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarLayout;
@@ -90,6 +98,8 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerActionCheckCell;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
@@ -111,6 +121,8 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
+import org.telegram.ui.Components.UpdateAppAlertDialog;
+import org.telegram.ui.Components.voip.VoIPPiPView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1174,6 +1186,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             boolean showDialogsList = false;
             boolean showPlayer = false;
             boolean showLocations = false;
+            boolean audioCallUser = false;
+            boolean videoCallUser = false;
 
             photoPathsArray = null;
             videoPath = null;
@@ -1803,7 +1817,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                     try (Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null)) {
                                         if (cursor != null) {
                                             if (cursor.moveToFirst()) {
-                                                int accountId = Utilities.parseInt(cursor.getString(cursor.getColumnIndex("account_name")));
+                                                int accountId = Utilities.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME)));
                                                 for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                                                     if (UserConfig.getInstance(a).getClientUserId() == accountId) {
                                                         intentAccount[0] = a;
@@ -1811,9 +1825,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                         break;
                                                     }
                                                 }
-                                                int userId = cursor.getInt(cursor.getColumnIndex("DATA4"));
+                                                int userId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Data.DATA4));
                                                 NotificationCenter.getInstance(intentAccount[0]).postNotificationName(NotificationCenter.closeChats);
                                                 push_user_id = userId;
+                                                String mimeType = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+                                                if (TextUtils.equals(mimeType, "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call")) {
+                                                    audioCallUser = true;
+                                                } else if (TextUtils.equals(mimeType, "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video")) {
+                                                    videoCallUser = true;
+                                                }
                                             }
                                         }
                                     } catch (Exception e) {
@@ -1852,14 +1872,21 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
             if (UserConfig.getInstance(currentAccount).isClientActivated()) {
                 if (push_user_id != 0) {
-                    Bundle args = new Bundle();
-                    args.putInt("user_id", push_user_id);
-                    if (push_msg_id != 0)
-                        args.putInt("message_id", push_msg_id);
-                    if (mainFragmentsStack.isEmpty() || MessagesController.getInstance(intentAccount[0]).checkCanOpenChat(args, mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
-                        ChatActivity fragment = new ChatActivity(args);
-                        if (actionBarLayout.presentFragment(fragment, false, true, true, false)) {
-                            pushOpened = true;
+                    if (audioCallUser) {
+                        VoIPPendingCall.startOrSchedule(this, push_user_id, false);
+                    } else if (videoCallUser) {
+                        VoIPPendingCall.startOrSchedule(this, push_user_id, true);
+                    } else {
+                        Bundle args = new Bundle();
+                        args.putInt("user_id", push_user_id);
+                        if (push_msg_id != 0) {
+                            args.putInt("message_id", push_msg_id);
+                        }
+                        if (mainFragmentsStack.isEmpty() || MessagesController.getInstance(intentAccount[0]).checkCanOpenChat(args, mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
+                            ChatActivity fragment = new ChatActivity(args);
+                            if (actionBarLayout.presentFragment(fragment, false, true, true, false)) {
+                                pushOpened = true;
+                            }
                         }
                     }
                 } else if (push_chat_id != 0) {
@@ -2042,6 +2069,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     layersActionBarLayout.showLastFragment();
                     rightActionBarLayout.showLastFragment();
                 }
+            }
+
+            if (intent.getAction() != null && intent.getAction().equals("voip")) {
+                VoIPFragment.show(this);
+
+                //Intent i = new Intent(this, VoIPActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) ;
+              //  startActivity(i);
             }
 
             intent.setAction(null);
@@ -3035,6 +3069,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
             }
         }
+
+        VoIPFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void showPermissionErrorAlert(String message) {
@@ -3080,6 +3116,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onPause();
+        }
+
+        if (VoIPFragment.getInstance() != null) {
+            VoIPFragment.onPause();
         }
     }
 
@@ -3194,6 +3234,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             showTosActivity(UserConfig.selectedAccount, UserConfig.getInstance(UserConfig.selectedAccount).unacceptedTermsOfService);
         } else if (UserConfig.getInstance(0).pendingAppUpdate != null) {
             showUpdateActivity(UserConfig.selectedAccount, UserConfig.getInstance(0).pendingAppUpdate, true);
+        }
+
+        if (VoIPFragment.getInstance() != null) {
+            VoIPFragment.getInstance().onResume();
         }
     }
 

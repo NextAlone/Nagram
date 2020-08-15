@@ -469,7 +469,7 @@ public class SecretChatHelper extends BaseController {
             reqSend.action.ttl_seconds = encryptedChat.ttl;
             message = createServiceSecretMessage(encryptedChat, reqSend.action);
 
-            MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
+            MessageObject newMsgObj = new MessageObject(currentAccount, message, false, false);
             newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
             newMsgObj.wasJustSent = true;
             ArrayList<MessageObject> objArr = new ArrayList<>();
@@ -499,7 +499,7 @@ public class SecretChatHelper extends BaseController {
             reqSend.action.random_ids = random_ids;
             message = createServiceSecretMessage(encryptedChat, reqSend.action);
 
-            MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
+            MessageObject newMsgObj = new MessageObject(currentAccount, message, false, false);
             newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
             newMsgObj.wasJustSent = true;
             ArrayList<MessageObject> objArr = new ArrayList<>();
@@ -1437,7 +1437,7 @@ public class SecretChatHelper extends BaseController {
                 AndroidUtilities.runOnUIThread(() -> {
                     for (int a = 0; a < messages.size(); a++) {
                         TLRPC.Message message = messages.get(a);
-                        MessageObject messageObject = new MessageObject(currentAccount, message, false);
+                        MessageObject messageObject = new MessageObject(currentAccount, message, false, true);
                         messageObject.resendAsIs = true;
                         getSendMessagesHelper().retrySendMessage(messageObject, true);
                     }

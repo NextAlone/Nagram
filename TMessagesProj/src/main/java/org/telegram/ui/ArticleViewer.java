@@ -3735,10 +3735,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     settingsContainer.addView(fontCells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
                 }
 
-                TextView textView = new TextView(parentActivity);
-                textView.setTextColor(0xff212121);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-
                 builder.setCustomView(settingsContainer);
                 showDialog(linkSheet = builder.create());
             }
@@ -5505,7 +5501,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 message.media.flags |= 3;
                 message.media.document = getDocumentWithId(blockAudio.audio_id);
                 message.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA | TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-                MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, message, false);
+                MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, message, false, true);
                 audioMessages.add(messageObject);
                 audioBlocks.put(blockAudio, messageObject);
 

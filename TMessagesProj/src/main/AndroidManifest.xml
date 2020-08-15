@@ -84,6 +84,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
     <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
@@ -165,6 +166,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -276,31 +279,18 @@
             android:resizeableActivity="false"
             android:taskAffinity=""
             android:theme="@style/Theme.TMessages.PopupNotification"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
-        <activity
-            android:name="org.telegram.ui.VoIPActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-            android:excludeFromRecents="true"
-            android:taskAffinity="${applicationId}.voip"
-            android:windowSoftInputMode="adjustNothing"></activity>
-        <activity
-            android:name="org.telegram.ui.VoIPGroupActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-            android:excludeFromRecents="true"
-            android:taskAffinity="${applicationId}.voip"
-            android:windowSoftInputMode="adjustNothing"></activity>
-        <activity
-            android:name="org.telegram.ui.VoIPPermissionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-            android:excludeFromRecents="true"
-            android:taskAffinity="${applicationId}.voip"
-            android:theme="@style/Theme.TMessages.Transparent" />
-        <activity
-            android:name="org.telegram.ui.VoIPFeedbackActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-            android:excludeFromRecents="true"
-            android:taskAffinity="${applicationId}.voip_feedback"
-            android:theme="@style/Theme.TMessages.TransparentWithAlerts" />
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+        <activity android:name="org.telegram.ui.VoIPPermissionActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+                  android:taskAffinity="${applicationId}.voip"
+                  android:excludeFromRecents="true"
+                android:theme="@style/Theme.TMessages.Transparent"/>
+        <activity android:name="org.telegram.ui.VoIPFeedbackActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+				  android:taskAffinity="${applicationId}.voip_feedback"
+                  android:excludeFromRecents="true"
+                android:theme="@style/Theme.TMessages.TransparentWithAlerts"/>
 
         <receiver
             android:name=".AutoMessageHeardReceiver"

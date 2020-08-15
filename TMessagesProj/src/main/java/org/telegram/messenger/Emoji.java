@@ -307,6 +307,16 @@ public class Emoji {
         public void setColorFilter(ColorFilter cf) {
 
         }
+
+        public boolean isLoaded() {
+            return emojiBmp[info.page][info.page2] != null;
+        }
+
+        public void preload() {
+            if (!isLoaded()) {
+                loadEmoji(info.page, info.page2);
+            }
+        }
     }
 
     private static class DrawableInfo {

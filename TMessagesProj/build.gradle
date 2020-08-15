@@ -1,14 +1,12 @@
 import cn.hutool.core.io.FileUtil
 import cn.hutool.json.JSONObject
 
-import java.security.MessageDigest
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def verName = "6.3.0.0"
-def verCode = 62
+def verName = "7.0-preview-01"
+def verCode = 63
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -126,6 +124,8 @@ dependencies {
     releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
 
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+
 }
 
 task writeUpdateInfo {
@@ -217,6 +217,8 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -320,11 +322,6 @@ android {
 
     }
 
-    def tgVoipDexFileName = "libtgvoip.dex"
-    def tgVoipDexClasses = ["AudioRecordJNI", "AudioTrackJNI", "NativeTgVoipDelegate", "NativeTgVoipInstance", "TgVoipNativeLoader", "Resampler", "VLog"]
-    def tgVoipDexClassesPath = "org/telegram/messenger/voip"
-    def dxUtilPath = "${sdkDirectory.path}/build-tools/${buildToolsVersion}/dx"
-
     if (System.getProperty("os.name").toLowerCase().contains("windows")) {
         dxUtilPath += ".bat"
     }
@@ -412,94 +409,8 @@ android {
         variant.outputs.all { output ->
             outputFileName = outputFileName.replace("TMessagesProj", "NekoX")
         }
-
-        def assembleTgVoipDexTaskName = "assemble${variant.name.capitalize()}TgVoipDex"
-
-        task "${assembleTgVoipDexTaskName}" {
-            doLast {
-                def sourceDir = (File) android.sourceSets.main.java.srcDirs[0]
-                def classesDir = "${buildDir}/intermediates/javac/${variant.name}/classes"
-                def javaDir = "${buildDir}/intermediates/java_tgvoip/${variant.name}/java"
-                def tgVoipDir = new File(classesDir, tgVoipDexClassesPath)
-                def javaVoipDirFile = new File(javaDir, tgVoipDexClassesPath)
-                def tgVoipDexJavaFile = new File(javaVoipDirFile, "TgVoipDex.java")
-                if (!javaVoipDirFile.exists()) {
-                    javaVoipDirFile.mkdirs()
-                }
-                def assetsDirFile = new File(buildDir, "intermediates/merged_assets/${variant.name}/out")
-                if (!assetsDirFile.exists()) {
-                    assetsDirFile.mkdirs()
-                }
-                def tgVoipDexFile = new File(assetsDirFile, tgVoipDexFileName)
-
-                def classes = tgVoipDir.list(new FilenameFilter() {
-                    @Override
-                    boolean accept(File dir, String name) {
-                        // handle inner and anonymous classes
-                        return tgVoipDexClasses.any { name == "${it}.class" || name.startsWith("${it}\$") && name.endsWith(".class") }
-                    }
-                }).collect { "${tgVoipDexClassesPath}/${it}" }
-
-                // 1. create libtgvoip.dex
-                exec {
-                    workingDir classesDir
-                    commandLine([dxUtilPath, "--dex", "--output=${tgVoipDexFile}"] + classes)
-                }
-
-                // 2. remove classes from the main dex
-                project.delete classes.collect { "${classesDir}/${it}" }
-
-                // 3. insert checksum of libtgvoip.dex into TgVoipDex.java
-                def digest = MessageDigest.getInstance("SHA1")
-                def fileInputStream = tgVoipDexFile.newInputStream()
-                def buffer = new byte[4096]
-                def len
-                while ((len = fileInputStream.read(buffer)) > 0) {
-                    digest.update(buffer, 0, len)
-                }
-                def dexChecksum = new String(Base64.getEncoder().encode(digest.digest())).trim()
-                tgVoipDexJavaFile.write(new String(new File(sourceDir, "${tgVoipDexClassesPath}/TgVoipDex.java").readBytes()).replace("\$CHECKSUM\$", dexChecksum))
-                exec {
-                    commandLine([findJavac(), "-d", classesDir, tgVoipDexJavaFile.absolutePath])
-                }
-            }
-        }
-
-        tasks.findByName("compile${variant.name.capitalize()}JavaWithJavac").finalizedBy(assembleTgVoipDexTaskName)
-        tasks.findByName("${assembleTgVoipDexTaskName}").mustRunAfter tasks.findByName("merge${variant.name.capitalize()}Assets")
     }
 
-}
-
-private static File findJavaHome() {
-    String javaPath = System.getProperty("java.home")
-    if (javaPath != null) {
-        File javaBase = new File(javaPath)
-        if (javaBase.exists()) {
-            if (javaBase.getName().equalsIgnoreCase("jre") && new File(javaBase.getParentFile(), System.getProperty("os.name").toLowerCase().contains("windows") ? "bin/java.exe" : "bin/java").exists()) {
-                return javaBase.getParentFile()
-            } else {
-                return javaBase
-            }
-        } else {
-            return null
-        }
-    } else {
-        return null
-    }
-}
-
-private static File findJavac() {
-    File javaHome = findJavaHome()
-    if (javaHome != null) {
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            return new File(javaHome.getParent(), "bin/javac.exe")
-        } else {
-            return new File(javaHome, "bin/javac")
-        }
-    } else {
-        return null
-    }
 }
 
 apply plugin: 'com.google.gms.google-services'
