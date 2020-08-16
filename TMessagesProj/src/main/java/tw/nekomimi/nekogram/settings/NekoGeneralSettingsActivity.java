@@ -726,7 +726,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         appearanceRow = rowCount++;
         typefaceRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? rowCount++ : -1;
         useDefaultThemeRow = rowCount++;
-        useSystemEmojiRow = EmojiProvider.noEmoji ? -1 : rowCount++;
+        useSystemEmojiRow = EmojiProvider.containsEmoji ? rowCount++ : -1;
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
         forceTabletRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
