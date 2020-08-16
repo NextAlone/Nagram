@@ -77,6 +77,4 @@
     <string name="SSRProtocolParams">Parametry protokołu</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
-    <string name="ProxyInfoRB">Ustawienia RelayBaton Proxy</string>
-    <string name="ESNI">Zaszyfrowany SNI</string>
 </resources>

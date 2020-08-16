@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">פרמטרי פרוטוקול</string>
     <string name="SSRObfs">אובסס</string>
     <string name="SSRObfsParam">אובפס פרם</string>
-    <string name="ProxyInfoRB">הגדרות פרוקסי של RelayBaton</string>
-    <string name="ESNI">SNI מוצפן</string>
     <string name="ProxyRemarks">הערות</string>
     <string name="RetestPing">בדוק מחדש את פינג לכל השרתים</string>
     <string name="ReorderByPing">סדר מחדש את השרתים באמצעות פינג</string>

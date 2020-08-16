@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">Protokollparameter</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs-Parameter</string>
-    <string name="ProxyInfoRB">RelayBaton Proxy-Einstellungen</string>
-    <string name="ESNI">Verschlüsselte SNI</string>
     <string name="ProxyRemarks">Bemerkungen</string>
     <string name="RetestPing">Ping für alle Server wiederholen</string>
     <string name="ReorderByPing">Server durch Ping neu sortieren</string>

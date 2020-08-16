@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">پارامترهای پروتکل</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
-    <string name="ProxyInfoRB">تنظیمات پروکسی RelayBaton</string>
-    <string name="ESNI"> SNI رمزگذاری شده</string>
     <string name="ProxyRemarks">نام دلخواه (ملاحضات)</string>
     <string name="RetestPing">آزمایش مجدد پینگ برای همه سرورها</string>
     <string name="ReorderByPing">مرتب سازی براساس پینگ</string>

@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">Protocol Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
-    <string name="ProxyInfoRB">Параметри проксі-сервера RelayBaton</string>
-    <string name="ESNI">Зашифрований SNI</string>
     <string name="ProxyRemarks">Зауваження</string>
     <string name="RetestPing">Повторне сканування для всіх серверів</string>
     <string name="ReorderByPing">Перевпорядкувати сервери пінг</string>

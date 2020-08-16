@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">بروتوكول Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
-    <string name="ProxyInfoRB">إعدادات البروكسي ريلاياباتون</string>
-    <string name="ESNI">تشفير SNI</string>
     <string name="ProxyRemarks">ملاحظـات</string>
     <string name="RetestPing">إعادة اختبار لجميع الخوادم</string>
     <string name="ReorderByPing">إعادة ترتيب الخوادم عن طريق بينغ</string>

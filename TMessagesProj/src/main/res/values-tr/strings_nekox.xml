@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">Protokol Parametreleri</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Parametre</string>
-    <string name="ProxyInfoRB">RelayBaton Proxy Ayarları</string>
-    <string name="ESNI">Şifreli SNI</string>
     <string name="ProxyRemarks">Uyarılar</string>
     <string name="RetestPing">Tüm sunucular için ping test et</string>
     <string name="ReorderByPing">Ping ile sunucuları yeniden sıralama</string>
