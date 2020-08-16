@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">協議參數</string>
     <string name="SSRObfs">混淆</string>
     <string name="SSRObfsParam">混淆參數</string>
-    <string name="ProxyInfoRB">RelayBaton代理設置</string>
-    <string name="ESNI">加密的SNI</string>
     <string name="ProxyRemarks">別名</string>
     <string name="RetestPing">重新測試所有 Ping 值</string>
     <string name="ReorderByPing">基於Ping值重新排序</string>

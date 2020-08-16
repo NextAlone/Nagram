@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">Parameter protokol</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Parameter Obfs</string>
-    <string name="ProxyInfoRB">Pengaturan Proxy RelayBaton</string>
-    <string name="ESNI">SNI terenkripsi</string>
     <string name="ProxyRemarks">Catatan</string>
     <string name="RetestPing">Test ulang ping ke semua server</string>
     <string name="ReorderByPing">Susun ulang server dari ping</string>

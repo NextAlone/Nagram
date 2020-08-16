@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">プロトコルパラメータ</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfsパラメータ</string>
-    <string name="ProxyInfoRB">RelayBaton プロキシ設定</string>
-    <string name="ESNI">暗号化されたSNI</string>
     <string name="ProxyRemarks">備考</string>
     <string name="RetestPing">すべてのサーバーのpingを再テストする</string>
     <string name="ReorderByPing">pingでサーバを並べ替え</string>

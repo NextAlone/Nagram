@@ -127,8 +127,6 @@
     <string name="SSRProtocolParams">프로토콜 매개 변수</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs 매개 변수</string>
-    <string name="ProxyInfoRB">RelayBaton 프록시 설정</string>
-    <string name="ESNI">암호화 된 SNI</string>
     <string name="ProxyRemarks">비고</string>
     <string name="RetestPing">모든 서버에 대한 핑 테스트</string>
     <string name="ReorderByPing">Ping 으로 서버 재정렬</string>
