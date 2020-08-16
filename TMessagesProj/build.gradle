@@ -115,11 +115,6 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
-    compileOnly 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
-    compileOnly 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
-    compileOnly 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
-    compileOnly 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
-
     releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
     releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
@@ -318,7 +313,7 @@ android {
     splits.abi {
 
         enable true
-        universalApk true
+        universalApk false
 
     }
 
@@ -338,30 +333,17 @@ android {
         miniAppleEmoji {
             versionNameSuffix '-mini-apple-emoji'
         }
-        miniNotoEmoji {
-            versionNameSuffix '-mini-noto-emoji'
-        }
         miniTwitterEmoji {
             versionNameSuffix '-mini-twitter-emoji'
         }
-        miniFacebookEmoji {
-            versionNameSuffix '-mini-facebook-emoji'
-        }
-        full {}
-        fullNoEmoji {
-            versionNameSuffix '-full-no-emoji'
+        full {
+            versionNameSuffix '-full'
         }
         fullAppleEmoji {
             versionNameSuffix '-full-apple-emoji'
         }
-        fullNotoEmoji {
-            versionNameSuffix '-full-noto-emoji'
-        }
         fullTwitterEmoji {
             versionNameSuffix '-full-twitter-emoji'
-        }
-        fullFacebookEmoji {
-            versionNameSuffix '-full-facebook-emoji'
         }
     }
 
@@ -375,21 +357,9 @@ android {
         }
         if (set.name.matches("(mini|full).*")) {
             if (set.name.contains("Apple")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-ios:0.7.0-SNAPSHOT'
-                }
-            } else if (set.name.contains("Noto")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-google:0.7.0-SNAPSHOT'
-                }
+                set.assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
             } else if (set.name.contains("Twitter")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-twitter:0.7.0-SNAPSHOT'
-                }
-            } else if (set.name.contains("Facebook")) {
-                set.dependencies {
-                    implementation 'com.vanniktech:emoji-facebook:0.7.0-SNAPSHOT'
-                }
+                set.assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
             } else if (!set.name.contains("NoEmoji")) {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/blob"]
             }
