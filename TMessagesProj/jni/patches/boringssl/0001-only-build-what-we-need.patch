@@ -6,13 +6,14 @@ Subject: [PATCH] only build what we need
 ---
  CMakeLists.txt        | 36 ---------------------
  crypto/CMakeLists.txt | 74 -------------------------------------------
- 2 files changed, 110 deletions(-)
+ ssl/CMakeLists.txt    | 18 ------------------
+ 3 files changed, 128 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index fd3532664..7fcfb1627 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -542,33 +542,7 @@ if(USE_CUSTOM_LIBCXX)
+@@ -562,44 +562,8 @@ if(USE_CUSTOM_LIBCXX)
    target_link_libraries(libcxx libcxxabi)
  endif()
  
@@ -27,17 +28,28 @@ index fd3532664..7fcfb1627 100644
 -# themselves as dependencies next to the target definition.
 -add_custom_target(all_tests)
 -
+-# On Windows, CRYPTO_TEST_DATA is too long to fit in command-line limits.
+-# TODO(davidben): CMake 3.12 has a list(JOIN) command. Use that when we've
+-# updated the minimum version.
+-set(EMBED_TEST_DATA_ARGS "")
+-foreach(arg ${CRYPTO_TEST_DATA})
+-  set(EMBED_TEST_DATA_ARGS "${EMBED_TEST_DATA_ARGS}${arg}\n")
+-endforeach()
+-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/embed_test_data_args.txt"
+-     "${EMBED_TEST_DATA_ARGS}")
+-
 -add_custom_command(
 -  OUTPUT crypto_test_data.cc
--  COMMAND ${GO_EXECUTABLE} run util/embed_test_data.go ${CRYPTO_TEST_DATA} >
--  ${CMAKE_CURRENT_BINARY_DIR}/crypto_test_data.cc
+-  COMMAND ${GO_EXECUTABLE} run util/embed_test_data.go -file-list
+-          "${CMAKE_CURRENT_BINARY_DIR}/embed_test_data_args.txt" >
+-          "${CMAKE_CURRENT_BINARY_DIR}/crypto_test_data.cc"
 -  DEPENDS util/embed_test_data.go ${CRYPTO_TEST_DATA}
 -  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 -
 -add_library(crypto_test_data OBJECT crypto_test_data.cc)
 -
  add_subdirectory(crypto)
--add_subdirectory(ssl)
+ add_subdirectory(ssl)
 -add_subdirectory(ssl/test)
 -add_subdirectory(tool)
 -add_subdirectory(util/fipstools/cavp)
@@ -73,7 +85,7 @@ index e940f7d5f..f5221d70d 100644
  
  if(FIPS_DELOCATE)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -461,93 +461,3 @@ endif()
+@@ -466,94 +466,3 @@ endif()
  if(USE_CUSTOM_LIBCXX)
    target_link_libraries(crypto libcxx)
  endif()
@@ -131,6 +143,7 @@ index e940f7d5f..f5221d70d 100644
 -  fipsmodule/rand/fork_detect_test.cc
 -  fipsmodule/sha/sha_test.cc
 -  hkdf/hkdf_test.cc
+-  hpke/hpke_test.cc
 -  hmac_extra/hmac_test.cc
 -  hrss/hrss_test.cc
 -  impl_dispatch_test.cc
@@ -167,6 +180,32 @@ index e940f7d5f..f5221d70d 100644
 -  target_link_libraries(crypto_test ws2_32)
 -endif()
 -add_dependencies(all_tests crypto_test)
--- 
+diff --git a/ssl/CMakeLists.txt b/ssl/CMakeLists.txt
+index 0fb532eae..f5cab9807 100644
+--- a/ssl/CMakeLists.txt
++++ b/ssl/CMakeLists.txt
+@@ -44,21 +44,3 @@ add_library(
+ add_dependencies(ssl global_target)
+
+ target_link_libraries(ssl crypto)
+-
+-add_executable(
+-  ssl_test
+-
+-  span_test.cc
+-  ssl_test.cc
+-  ssl_c_test.c
+-
+-  $<TARGET_OBJECTS:boringssl_gtest_main>
+-)
+-
+-add_dependencies(ssl_test global_target)
+-
+-target_link_libraries(ssl_test test_support_lib boringssl_gtest ssl crypto)
+-if(WIN32)
+-  target_link_libraries(ssl_test ws2_32)
+-endif()
+-add_dependencies(all_tests ssl_test)
+--
 2.20.1
 

@@ -2,11 +2,8 @@
 
 function assemble() {
 
-  ./gradlew TMessagesProj:assembleFullRelease \
-            TMessagesProj:assembleFullReleaseNoGcm \
-            TMessagesProj:assembleMiniRelease \
-            TMessagesProj:assembleMiniReleaseNoGcm \
-            TMessagesProj:assembleMiniNoEmojiReleaseNoGcm
+  ./gradlew TMessagesProj:assembleRelease \
+            TMessagesProj:assembleReleaseNoGcm
 
   return $?
 

@@ -59,7 +59,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'cn.hutool:hutool-all:5.3.10'
+        classpath 'cn.hutool:hutool-all:5.4.0'
     }
 
 }
@@ -104,8 +104,8 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.2.2'
     implementation 'org.dizitart:nitrite:3.4.2'
 
-    implementation 'cn.hutool:hutool-core:5.3.10'
-    implementation 'cn.hutool:hutool-crypto:5.3.10'
+    implementation 'cn.hutool:hutool-core:5.4.0'
+    implementation 'cn.hutool:hutool-crypto:5.4.0'
 
     implementation project(":openpgp-api")
 

@@ -131,7 +131,7 @@ endif
 
 include $(PREBUILT_STATIC_LIBRARY)
 
-include ./jni/TgCalls.mk
+include $(LOCAL_PATH)/TgCalls.mk
 
 include $(CLEAR_VARS)
 LOCAL_CPPFLAGS := -Wall -std=c++14 -DANDROID -frtti -DHAVE_PTHREAD -finline-functions -ffast-math -Os
@@ -519,7 +519,7 @@ $(LOCAL_PATH)/exoplayer/libFLAC/include \
 $(LOCAL_PATH)/intro \
 $(LOCAL_PATH)/rlottie/inc \
 $(LOCAL_PATH)/tgcalls/ \
-./jni/webrtc/ \
+$(LOCAL_PATH)/webrtc/ \
 $(LOCAL_PATH)/lz4
 
 LOCAL_SRC_FILES     += \
