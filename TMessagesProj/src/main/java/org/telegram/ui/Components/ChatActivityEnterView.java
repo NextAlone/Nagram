@@ -3132,7 +3132,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                     sendPopupWindow.dismiss();
                 }
-                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal);
+                sendMessageInternal(false, 0);
             });
             cell.setMinimumWidth(AndroidUtilities.dp(196));
             sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
