@@ -14,7 +14,6 @@ import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
 import org.webrtc.CapturerObserver;
 import org.webrtc.EglBase;
-import org.webrtc.Logging;
 import org.webrtc.SurfaceTextureHelper;
 
 @TargetApi(18)
@@ -45,8 +44,6 @@ public class VideoCameraCapturer {
         if (Build.VERSION.SDK_INT < 18) {
             return;
         }
-        Logging.enableLogToDebugOutput(Logging.Severity.LS_INFO);
-        Logging.d("VideoCameraCapturer", "device model = " + Build.MANUFACTURER + Build.MODEL);
         AndroidUtilities.runOnUIThread(() -> {
             instance = this;
             thread = new HandlerThread("CallThread");
