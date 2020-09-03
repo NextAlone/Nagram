@@ -132,6 +132,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -1569,6 +1570,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                         channelId = null;
                                                     }
                                                 }
+                                            } else if (path.startsWith("@id")) {
+                                                try {
+
+                                                    int userId = Utilities.parseInt(StringsKt.substringAfter(path, "@id", "0"));
+                                                    if (userId != 0) {
+                                                        push_user_id = userId;
+                                                    }
+                                                } catch (Exception e) {
+                                                    FileLog.e(e);
+                                                }
                                             } else if (path.length() >= 1) {
                                                 ArrayList<String> segments = new ArrayList<>(data.getPathSegments());
                                                 if (segments.size() > 0 && segments.get(0).equals("s")) {
@@ -1795,6 +1806,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                         } else if (url.contains("neko")) {
                                                 open_settings = 100;
                                             }
+                                    } else if (url.startsWith("tg:user") || url.startsWith("tg://user")) {
+                                        try {
+                                            url = url.replace("tg:user", "tg://telegram.org").replace("tg://user", "tg://telegram.org");
+                                            data = Uri.parse(url);
+                                            int userId = Utilities.parseInt(data.getQueryParameter("id"));
+                                            if (userId != 0) {
+                                                push_user_id = userId;
+                                            }
+                                        } catch (Exception e) {
+                                            FileLog.e(e);
+                                        }
                                     } else {
                                         unsupportedUrl = url.replace("tg://", "").replace("tg:", "");
                                         int index;

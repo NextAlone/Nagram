@@ -262,26 +262,39 @@ android {
             debuggable true
             jniDebuggable true
             multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         releaseNoGcm {
-            initWith debug
             debuggable false
             jniDebuggable false
             minifyEnabled true
             shrinkResources true
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
             signingConfig signingConfigs.release
         }
 
         release {
-            initWith releaseNoGcm
+            debuggable false
+            jniDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['debug']
+            signingConfig signingConfigs.release
         }
 
         foss {
-            initWith release
+            debuggable false
+            jniDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
+            signingConfig signingConfigs.release
         }
     }
 

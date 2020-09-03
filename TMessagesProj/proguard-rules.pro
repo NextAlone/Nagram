@@ -36,6 +36,7 @@
 -dontwarn com.google.common.primitives.**
 -dontwarn com.googlecode.mp4parser.**
 
+-keep class com.google.android.datatransport.** { *; }
 -keep class com.google.android.exoplayer2.ext.** { *; }
 -keep class com.google.android.exoplayer2.util.FlacStreamMetadata { *; }
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
