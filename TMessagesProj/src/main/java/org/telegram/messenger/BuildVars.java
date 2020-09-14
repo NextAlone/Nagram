@@ -31,7 +31,7 @@ public class BuildVars {
     public static String TGX_APP_HASH = "3e0cb5efcd52300aec5994fdfc5bdc16";
 
     public static boolean isUnknown = !BuildConfig.BUILD_TYPE.startsWith("release");
-    public static boolean isMini = "mini".equals(BuildConfig.FLAVOR);
+    public static boolean isMini = BuildConfig.FLAVOR.startsWith("mini");
 
     static {
 

@@ -2,8 +2,8 @@
 
 function assemble() {
 
-  ./gradlew TMessagesProj:assembleRelease \
-            TMessagesProj:assembleReleaseNoGcm
+  ./gradlew TMessagesProj:assembleRelease
+  ./gradlew TMessagesProj:assembleReleaseNoGcm
 
   return $?
 
@@ -12,5 +12,4 @@ function assemble() {
 #./gradlew TMessagesProj:assembleRelease \
 #          TMessagesProj:assembleReleaseNoGcm
 
-assemble &&
 assemble
