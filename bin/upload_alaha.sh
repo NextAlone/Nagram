@@ -2,10 +2,6 @@
 
 outPath="TMessagesProj/build/outputs/apk/full/release"
 
-#./gradlew TMessagesProj:assembleFullRelease || exit 1
-
-rm -f $outPath/*universal*
-
 for apk in $outPath/*.apk; do
 
     echo ">> Uploading $apk"
