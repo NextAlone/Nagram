@@ -24715,7 +24715,18 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 } catch (Exception ignore) {}
                 builder.setTitle(formattedUrl);
                 builder.setTitleMultipleLines(true);
-                builder.setItems(noforwards ? new CharSequence[] {LocaleController.getString("Open", R.string.Open)} : new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                final String http = "http://";
+                final String https = "https://";
+                final String open = LocaleController.getString("Open", R.string.Open);
+                final String copy = LocaleController.getString("Copy", R.string.Copy);
+                final String copyW =
+                    LocaleController.getString("CopyWithoutProtocol", R.string.CopyWithoutProtocol);
+                final CharSequence[] items = noforwards
+                    ? new CharSequence[]{open}
+                    : (formattedUrl.startsWith(http) || formattedUrl.startsWith(https))
+                    ? new CharSequence[]{open, copy, copyW}
+                    : new CharSequence[]{open, copy};
+                builder.setItems(items, (dialog, which) -> {
                     if (which == 0) {
                         processExternalUrl(1, urlFinal, false);
                     } else if (which == 1) {
@@ -24737,6 +24748,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                         } else {
                             undoView.showWithAction(0, UndoView.ACTION_LINK_COPIED, null);
                         }
+                    } else if (which == 2) {
+                        AndroidUtilities.addToClipboard(
+                            urlFinal.replace(http, "").replace(https, ""));
                     }
                 });
                 builder.setOnPreDismissListener(di -> {
