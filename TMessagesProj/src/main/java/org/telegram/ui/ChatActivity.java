@@ -23600,7 +23600,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (longPress) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
                 builder.setTitle(urlFinal);
-                builder.setItems(getMessagesController().isChatNoForwards(currentChat) ? new CharSequence[] {LocaleController.getString("Open", R.string.Open)} : new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                final String http = "http://";
+                final String https = "https://";
+                final String open = LocaleController.getString("Open", R.string.Open);
+                final String copy = LocaleController.getString("Copy", R.string.Copy);
+                final String copyW =
+                    LocaleController.getString("CopyWithoutProtocol", R.string.CopyWithoutProtocol);
+                CharSequence[] items = getMessagesController().isChatNoForwards(currentChat)
+                    ? new CharSequence[]{open}
+                    : (urlFinal.startsWith(http) || urlFinal.startsWith(https))
+                    ? new CharSequence[]{open, copy, copyW}
+                    : new CharSequence[]{open, copy};
+                builder.setItems(items, (dialog, which) -> {
                     if (which == 0) {
                         processExternalUrl(1, urlFinal, false);
                     } else if (which == 1) {
@@ -23622,6 +23633,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else {
                             undoView.showWithAction(0, UndoView.ACTION_LINK_COPIED, null);
                         }
+                    } else if (which == 2) {
+                        AndroidUtilities.addToClipboard(
+                            urlFinal.replace(http, "").replace(https, ""));
                     }
                 });
                 showDialog(builder.create());
