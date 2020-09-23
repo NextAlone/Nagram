@@ -472,9 +472,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                         last = position == sortedLanguages.size() - 1;
                     }
                     if (localeInfo.isLocal()) {
-                        textSettingsCell.setLanguage(localeInfo, String.format("%1$s (%2$s)", localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)), !last);
+                        textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, String.format("%1$s (%2$s)", localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)), !last);
                     } else {
-                        textSettingsCell.setLanguage(localeInfo, null, !last);
+                        textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, null, !last);
                     }
                     textSettingsCell.setLanguageSelected(localeInfo == LocaleController.getInstance().getCurrentLocaleInfo());
                     break;

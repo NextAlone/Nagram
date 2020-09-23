@@ -43,6 +43,7 @@
 <string name="PermissionOpenSettings">設定</string>
 <string name="Shuffle">隨機播放</string>
 <string name="PhoneNumberAlert">如果用戶在其手機通訊錄中有您的新手機號碼，或者您的隱私設定中允許其查看，則用戶會看到它。您可以在「設定」&gt;「隱私權與安全性」&gt;「電話號碼」中進行修改。</string>
+<string name="ClearTelegramCache">清除 Telegram 快取</string>
 <string name="Photos_one"></string>
 <string name="AddStickersCount">加入 %1$s</string>
 <string name="ChangeRecoveryEmail">變更備援 E-mail</string>
@@ -240,6 +241,7 @@
 <string name="LocalVideoCache">影片</string>
 <string name="ChatListDefault">兩行</string>
 <string name="EditAdminChannelTransfer">轉移頻道擁有權</string>
+<string name="PsaType_covid">COVID-19</string>
 <string name="GifCaption">GIF 說明文字</string>
 <string name="AutoDownloadOnAllChats">在所有對話中</string>
 <string name="FontSizePreviewLine2">現在是東京的早晨 😎</string>
@@ -261,6 +263,7 @@
 <string name="AccDescrProfilePicture">個人圖片</string>
 <string name="PermissionStorage">Telegram 需要存取您的儲存裝置，讓您可以傳送和儲存照片、影片、音樂和其它媒體。</string>
 <string name="PassportPostcode">郵遞區號</string>
+<string name="EnabledNotifications">已開啟通知</string>
 <string name="ChannelMute">關閉通知</string>
 <string name="CreateNewContact">建立新連絡人</string>
 <string name="SendingGame">正在玩遊戲…</string>
@@ -386,6 +389,7 @@
 <string name="PrivacyAddAnException">新增用戶或群組</string>
 <string name="NotificationActionPinnedText">%1$s 在 %3$s 群組中置頂了「%2$s」</string>
 <string name="ResetMyAccountText">如果您繼續重設您的帳號，您將失去所有的對話和訊息，連同任何您分享的媒體和檔案。</string>
+<string name="DeviceStorage">裝置儲存空間</string>
 <string name="FreeOfTotal">剩餘 %1$s，共 %2$s</string>
 <string name="OnlineCount_two"></string>
 <string name="ConvertGroupAlertWarning">警告</string>
@@ -962,8 +966,10 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="SearchMembers">搜尋成員</string>
 <string name="MasksRemovedInfo">%1$s 已不存在於您的面具中。</string>
 <string name="VoipRequesting">正在請求</string>
+<string name="PsaInfo_covid">這則訊息為您提供與 COVID-19 疫情相關的公告。
+更多訊息請訪問：https://telegram.org/blog/coronavirus</string>
 <string name="ApplyTheme">套用</string>
-<string name="SoftUserLimitAlert">在完成群組建立及轉換為超級群組後，您將能夠加入更多的用戶。</string>
+<string name="SoftUserLimitAlert">您可以在建立群組後加入更多成員</string>
 <string name="EventLogPromotedPinMessages">置頂訊息</string>
 <string name="ChannelPublicInfo">公開頻道可以用搜尋找到，且任何人都可以加入它們。</string>
 <string name="AddMasksInstalled">新面具已加入</string>
@@ -1442,7 +1448,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="Schedule">排程</string>
 <string name="WhoCanAddMembers">誰可以加入成員？</string>
 <string name="InvalidLastName">很抱歉，這個姓氏無法使用</string>
-<string name="ChannelDeleteAlert">等一下，刪除這個頻道會刪除所有使用者，所有訊息都會遺失。無論如何都要刪除這個頻道？</string>
+<string name="ChannelDeleteAlert">等等！刪除此頻道將刪除所有訂閱者，所有訊息將遺失。確定刪除頻道？</string>
 <string name="DeleteThemeTitle">刪除主題</string>
 <string name="MessageNotifications">訊息通知</string>
 <string name="PaintDuplicate">複製</string>
@@ -1486,6 +1492,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="LastSeenContactsMinusPlus">我的聯絡人 (-%1$d, +%2$d)</string>
 <string name="SharedMusicTab2">音訊</string>
 <string name="NotificationMessageGroupRound">%1$s 傳送了一則視訊訊息到 %2$s 群組</string>
+<string name="PsaMessage_covid">COVID-19 通知</string>
 <string name="ChatDeletedUndo">對話已刪除</string>
 <string name="ExternalFolderInfo">瀏覽外部儲存空間</string>
 <string name="Shares_two"></string>
@@ -1791,6 +1798,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="EventLogInfoTitle">什麼是最近操作？</string>
 <string name="EventLogEditedChannelPhoto">un1 設定了新的頻道圖片</string>
 <string name="NotificationMessageGroupDocument">%1$s 傳送一個檔案到 %2$s 群組</string>
+<string name="AddAnExplanationInfo">使用者選擇錯誤答案後，會看到這段文字，因此非常適合教育用途。</string>
 <string name="NotificationMessageVideo">%1$s 傳送了影片給您</string>
 <string name="FilterNew">新資料夾</string>
 <string name="SearchForPeople">搜尋用戶…</string>
@@ -2081,6 +2089,8 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="GroupName">群組名稱</string>
 <string name="MegaPrivate">私人群組</string>
 <string name="PassportAddAgreementInfo">上傳您的租約掃描</string>
+<string name="PsaMessageInfo_covid">這則訊息為您提供與 COVID-19 疫情相關的公告。
+更多訊息請訪問：https://telegram.org/blog/coronavirus</string>
 <string name="SyncContactsInfoOff">開啟此選項可以持續將本裝置中的聯絡人資訊與您的帳號同步。</string>
 <string name="LastSeen">上次上線</string>
 <string name="QuickReplyDefault4">我現在不方便講話，晚點再打來好嗎？</string>
@@ -2217,6 +2227,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="ArchiveHintHeader2">已關閉通知</string>
 <string name="ArchiveHintHeader1">這裡是您的封存對話</string>
 <string name="Media_many"></string>
+<string name="TotalDeviceFreeSize">%s 可用</string>
 <string name="RateCallInterruptions">對方消失了</string>
 <string name="EventLogEditedChannelTitle">un1 重命名頻道為「%1$s」</string>
 <string name="ActionPinnedGif">un1 置頂了一張 GIF</string>
@@ -2242,7 +2253,8 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="NotificationMessageSDVideo">%1$s 傳送了一個閱後即焚影片給您</string>
 <string name="StopLiveLocationAlertAllText">您要停止分享您的即時定位？</string>
 <string name="ChatsSelectedClear_other">%1$d 個對話</string>
-<string name="ChannelNotifyMembersInfoOn">當您發布文章時，關注者會收到通知</string>
+<string name="SharesPerPost">每則貼文的分享次數</string>
+<string name="ChannelNotifyMembersInfoOn">當您發表內容時，會通知訂閱者</string>
 <string name="YourEmailInfo">請新增您的有效 E-mail。 這是恢復忘記密碼的唯一方法。</string>
 <string name="YourPasswordSuccess">成功了！</string>
 <string name="NoSharedGifSecret">此對話的 GIF 將顯示在此處。</string>
@@ -2305,7 +2317,8 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="Chats_few"></string>
 <string name="Subscribers_two"></string>
 <string name="AskAQuestion">詢問問題</string>
-<string name="ChannelUserAddLimit">抱歉，您只能將前 200 名成員加入到一個頻道。但注意，透過頻道的邀請連結加入，則沒有人數限制。</string>
+<string name="ChannelUserAddLimit">抱歉，您只能在成員未滿 200 人前加入訂閱者。
+從現在開始，人們將需要透過您的邀請連結加入。</string>
 <string name="ChangePhoneHelp">我們將傳送一則包含驗證碼的簡訊到您的新電話號碼。</string>
 <string name="UseLessDataOnMobile">僅於行動數據</string>
 <string name="ShowVotes_many"></string>
@@ -2369,6 +2382,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="AutoDownloadOnMobileData">行動數據</string>
 <string name="RemovedFromFavorites">貼圖已從「最愛」中移除</string>
 <string name="PrivacyCallsP2PHelp">停用點對點傳輸（peer-to-peer）將改由 Telegram 伺服器傳遞所有通話，可避免洩露您的 IP 位址，但會稍微降低音訊品質。</string>
+<string name="StatisticOverview">總覽</string>
 <string name="Unblock">解除封鎖</string>
 <string name="MessageLifetimeYouRemoved">您停用了閱後即焚計時器</string>
 <string name="ThemeDark">黑色</string>
@@ -2767,6 +2781,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="ActionUserScoredInGame">un1 在 un2 中得到了 %1$s 分</string>
 <string name="SmartNotificationsAlert">音效提示頻率</string>
 <string name="SaveChangesAlertText">您要套用您所選的新顏色？</string>
+<string name="ViewsPerPost">每則貼文的瀏覽次數</string>
 <string name="EventLogEmptyTextSearch">沒有找到最近有包含「**%1$s**」的操作。</string>
 <string name="NoOtherWebSessions">沒有已登入的。</string>
 <string name="EventLogStopQuiz">un1 已停止測驗</string>
@@ -2883,6 +2898,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="AttachLiveLocation">即時定位</string>
 <string name="DeleteChatBackgroundsAlert">您確定要刪除所選背景嗎？</string>
 <string name="ReportSpamLocation">與地點無關的群組？</string>
+<string name="TelegramCacheSize">%s Telegram 快取</string>
 <string name="Back">返回</string>
 <string name="AddContact">新增聯絡人</string>
 <string name="NotificationActionPinnedGameScoreChannel">%1$s 置頂了一個遊戲分數</string>
@@ -3299,6 +3315,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="SecretWebPage">連結預覽</string>
 <string name="InviteLink">邀請連結</string>
 <string name="Purple">紫色</string>
+<string name="ChannelAddSubscribers">新增訂閱者</string>
 <string name="EncryptionRejected">秘密對話已取消</string>
 <string name="LocalDatabaseInfo">清除內部資料庫將刪除快取的訊息文字及壓縮資料庫以節省內部儲存空間的使用量。由於 Telegram 需要一些資料來工作，資料庫的大小將不會完全歸零。
 
@@ -3562,6 +3579,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="InactiveChannelSignature">頻道，已閒置  %1$s</string>
 <string name="LinkCopiedPrivate">連結已複製到剪貼簿。
 此連結僅適用於對話內的成員。</string>
+<string name="TotalDeviceSize">%s 其他資料</string>
 <string name="PassportLanguage_HR">克羅埃西亞文</string>
 <string name="GroupStickers">群組貼圖</string>
 <string name="PassportCorrectErrors">點擊以更正錯誤。</string>

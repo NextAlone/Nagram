@@ -352,9 +352,9 @@ public class LocaleController {
         languagesDict.put(localeInfo.shortName, localeInfo);
 
         localeInfo = new LocaleInfo();
-        localeInfo.name = "简体中文 ( NekoX )";
-        localeInfo.nameEnglish = "Simplified Chinese ( NekoX )";
-        localeInfo.shortName = "nekox_zh_cn";
+        localeInfo.name = "简体中文";
+        localeInfo.nameEnglish = "Simplified Chinese ( @cnmoe )";
+        localeInfo.shortName = "moecn";
         localeInfo.baseLangCode = "zh_hans_raw";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
@@ -364,18 +364,6 @@ public class LocaleController {
         languagesDict.put(localeInfo.getKey(), localeInfo);
         languagesDict.put("zh_cn", localeInfo);
         languagesDict.put("zh_sg", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "瓜体中文 \uD83D\uDE36";
-        localeInfo.nameEnglish = "Duangified Chinese (Simplified)";
-        localeInfo.shortName = "duang_zh_hans";
-        localeInfo.baseLangCode = "zh_hans_raw";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_duang";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
 
         localeInfo = new LocaleInfo();
         localeInfo.name = "正體中文";

@@ -5974,6 +5974,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         File path = new File(EnvUtil.getTelegramPath(), "logs");
 
+        path.mkdirs();
+
         File logcatFile = new File(path, "NekoX-" + System.currentTimeMillis() + ".log");
 
         FileUtil.delete(logcatFile);

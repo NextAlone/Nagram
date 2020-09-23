@@ -58,7 +58,7 @@ go get -v golang.org/x/mobile/cmd/... &&
 v2rayCore="$(go env GOPATH)/src/v2ray.com/core" &&
 rm -rf "$v2rayCore" &&
 mkdir -p "$v2rayCore" &&
-git clone https://github.com/v2fly/v2ray-core.git "$v2rayCore" &&
+git clone https://github.com/v2fly/v2ray-core.git "$v2rayCore" -b "v4.28.2" &&
 go get -d github.com/2dust/AndroidLibV2rayLite &&
 
 gomobile init &&
@@ -67,9 +67,9 @@ rm *-sources.jar &&
 
 cd  ../.. &&
 
-./gradlew TMessagesProj:externalNativeBuildFullFoss &&
+./gradlew TMessagesProj:stripFullFossDebugSymbols &&
 
-OUT=TMessagesProj/build/intermediates/ndkBuild/fullFoss/obj/local &&
+OUT=TMessagesProj/build/intermediates/stripped_native_libs/fullFoss/out/lib &&
 DIR=TMessagesProj/src/main/libs &&
 
 rm -rf $DIR/armeabi-v7a &&
