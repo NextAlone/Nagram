@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.utils
 
+import okhttp3.Dns
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.telegram.messenger.SharedConfig
@@ -19,16 +20,14 @@ fun Request.Builder.applyUserAgent(): Request.Builder {
 object HttpUtil {
 
     @JvmField
-    val okHttpClient = OkHttpClient().newBuilder()
+    val okHttpClient = OkHttpClient.Builder()
             .dns(DnsFactory)
-            .connectTimeout(2, TimeUnit.SECONDS)
-            .readTimeout(2, TimeUnit.SECONDS)
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
             .build()
 
-    val okHttpClientNoDoh = OkHttpClient()
-            .newBuilder()
-            .connectTimeout(2, TimeUnit.SECONDS)
-            .readTimeout(2, TimeUnit.SECONDS)
+    val okHttpClientNoDoh = okHttpClient.newBuilder()
+            .dns(Dns.SYSTEM)
             .build()
 
     @JvmStatic
@@ -50,13 +49,31 @@ object HttpUtil {
         }
 
     @JvmStatic
-    fun get(url: String): String {
+    @JvmOverloads
+    fun get(url: String, client: OkHttpClient = okHttpClient): String {
 
         val request = Request.Builder().url(url)
                 .applyUserAgent()
                 .build()
 
         okHttpClient.newCall(request).execute().apply {
+
+            val body = body
+
+            return body?.string() ?: error("HTTP ERROR $code")
+
+        }
+
+    }
+
+    @JvmStatic
+    fun getNoDoh(url: String): String {
+
+        val request = Request.Builder().url(url)
+                .applyUserAgent()
+                .build()
+
+        okHttpClientNoDoh.newCall(request).execute().apply {
 
             val body = body
 

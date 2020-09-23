@@ -23,3 +23,12 @@ upload
 outPath="TMessagesProj/build/outputs/apk/full/releaseNoGcm"
 
 upload
+
+outPath="TMessagesProj/build/outputs/apk/mini/release"
+
+upload
+
+
+outPath="TMessagesProj/build/outputs/apk/mini/releaseNoGcm"
+
+upload

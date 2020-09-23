@@ -31,15 +31,29 @@ object GoogleWebTranslator : Translator {
 
         if (!GoogleWebTranslator::tkk.isInitialized) {
 
-            val response = HttpUtil.get("https://translate.google." + if (NekoConfig.translationProvider == 2) "cn" else "com")
+            val url = "https://translate.google." + if (NekoConfig.translationProvider == 2) "cn" else "com"
 
-            if (TextUtils.isEmpty(response)) {
+            val response = runCatching {
+                (if (NekoConfig.translationProvider == 2) HttpUtil.okHttpClientNoDoh else HttpUtil.okHttpClient).newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+            }.recoverCatching {
+                HttpUtil.okHttpClientWithCurrProxy.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+            }.getOrThrow()
+
+            if (response.code != 200) {
+
+                error("HTTP ${response.code} : ${response.body?.string()}")
+
+            }
+
+            val html = response.body?.string()
+
+            if (html.isNullOrBlank()) {
 
                 error("Tkk init failed")
 
             }
 
-            val matcher = Pattern.compile("tkk\\s*[:=]\\s*['\"]([0-9]+)\\.([0-9]+)['\"]", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE).matcher(response)
+            val matcher = Pattern.compile("tkk\\s*[:=]\\s*['\"]([0-9]+)\\.([0-9]+)['\"]", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE).matcher(html)
 
             tkk = if (matcher.find() && matcher.group(1) != null && matcher.group(2) != null) {
                 longArrayOf(matcher.group(1).toLong(), matcher.group(2).toLong())
@@ -85,6 +99,4 @@ object GoogleWebTranslator : Translator {
             "sr", "st", "si", "eo", "sk", "sl", "sw", "gd", "ceb", "so", "tg", "te", "ta",
             "th", "tr", "cy", "ur", "uk", "uz", "es", "iw", "el", "haw", "sd", "hu", "sn",
             "hy", "ig", "it", "yi", "hi", "su", "id", "jw", "en", "yo", "vi", "zh-TW", "zh-CN", "zh")
-
-
 }

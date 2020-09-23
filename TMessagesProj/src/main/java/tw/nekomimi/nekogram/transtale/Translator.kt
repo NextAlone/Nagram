@@ -26,7 +26,7 @@ val String.code2Locale: Locale by receiveLazy<String, Locale> {
 
 val Locale.locale2code by receiveLazy<Locale, String> {
 
-    if (StrUtil.isBlank(getCountry())) {
+    if (StrUtil.isBlank(country)) {
         language
     } else {
         "$language-$country"
