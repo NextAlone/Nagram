@@ -53,9 +53,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.v2ray.ang.V2RayConfig;
 
@@ -207,57 +205,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     private AlertDialog loadingThemeProgressDialog;
 
     private Runnable lockRunnable;
-
-    private class DrawerItemTouchHelperCallback extends ItemTouchHelper.Callback {
-
-        @Override
-        public boolean isLongPressDragEnabled() {
-            return true;
-        }
-
-        @Override
-        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (viewHolder != null && viewHolder.getItemViewType() != 4) {
-                return makeMovementFlags(0, 0);
-            }
-            return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
-        }
-
-        @Override
-        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        }
-
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            if (viewHolder != null && viewHolder.getItemViewType() == 4 && actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-                sideMenu.cancelClickRunnables(false);
-                viewHolder.itemView.setPressed(true);
-            }
-            super.onSelectedChanged(viewHolder, actionState);
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
-        }
-
-        @Override
-        public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            viewHolder.itemView.setPressed(false);
-        }
-
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            if (viewHolder.getItemViewType() == 4 && target.getItemViewType() == 4 &&
-                    viewHolder.getAdapterPosition() != target.getAdapterPosition()) {
-                drawerLayoutAdapter.swapAccountPosition(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                return true;
-            }
-            return false;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -532,8 +479,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         sideMenu.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         sideMenu.setAllowItemsInteractionDuringAnimation(false);
         sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, itemAnimator));
-        ItemTouchHelper drawerItemTouchHelper = new ItemTouchHelper(new DrawerItemTouchHelperCallback());
-        drawerItemTouchHelper.attachToRecyclerView(sideMenu);
         drawerLayoutContainer.setDrawerLayout(sideMenu);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
         Point screenSize = AndroidUtilities.getRealScreenSize();
