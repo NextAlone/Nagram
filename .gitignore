@@ -11,3 +11,5 @@ local.properties
 CMakeLists.txt
 CMakeLists.txt.orig
 service_account_credentials.json
+*.aar
+*.so

@@ -46,9 +46,9 @@ configurations {
 }
 
 def okHttpVersion = '4.9.0'
-def fcmVersion = '20.2.4'
-def crashlyticsVersion = '17.2.1'
-def playCoreVersion = '1.8.0'
+def fcmVersion = '20.3.0'
+def crashlyticsVersion = '17.2.2'
+def playCoreVersion = '1.8.2'
 
 buildscript {
 
@@ -84,7 +84,7 @@ dependencies {
 
     // replace zxing with latest
     // TODO: fix problem with android L
-    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.google.zxing:core:3.4.1'
 
     compileOnly 'org.checkerframework:checker-qual:3.6.1'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
@@ -101,11 +101,11 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.2.2'
+    implementation 'dnsjava:dnsjava:3.3.0'
     implementation 'org.dizitart:nitrite:3.4.2'
 
-    implementation 'cn.hutool:hutool-core:5.4.3'
-    implementation 'cn.hutool:hutool-crypto:5.4.3'
+    implementation 'cn.hutool:hutool-core:5.4.4'
+    implementation 'cn.hutool:hutool-crypto:5.4.4'
 
     implementation project(":openpgp-api")
 
