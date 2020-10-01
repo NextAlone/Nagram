@@ -99,6 +99,17 @@ public class VoIPHelper {
 			return;
 		}
 
+        if (!confirmed && NekoConfig.askBeforeCall) {
+            new AlertDialog.Builder(activity)
+                    .setTitle(LocaleController.getString("ConfirmCall", R.string.ConfirmCall))
+                    .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallTo", R.string.CallTo,
+                            ContactsController.formatName(user.first_name, user.last_name))))
+                    .setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> startCall(user, videoCall, canVideoCall, activity, userFull, true))
+                    .setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+                    .show();
+            return;
+        }
+
 		if (Build.VERSION.SDK_INT >= 23) {
 			int code;
 			ArrayList<String> permissions = new ArrayList<>();
@@ -114,16 +125,6 @@ public class VoIPHelper {
 				activity.requestPermissions(permissions.toArray(new String[0]), videoCall ? 102 : 101);
 			}
 		} else {
-			if (!confirmed && NekoConfig.askBeforeCall) {
-				new AlertDialog.Builder(activity)
-						.setTitle(LocaleController.getString("ConfirmCall", R.string.ConfirmCall))
-						.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallTo", R.string.CallTo,
-								ContactsController.formatName(user.first_name, user.last_name))))
-						.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> startCall(user, videoCall, canVideoCall, activity, userFull, true))
-						.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
-						.show();
-				return;
-			}
 			initiateCall(user, null, videoCall, canVideoCall, false, activity);
 		}
 	}
