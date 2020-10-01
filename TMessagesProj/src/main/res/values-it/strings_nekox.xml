@@ -7,7 +7,7 @@
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Inserimento manuale</string>
-    <string name="CheckUpdate">Controlla Aggiornamento</string>
+    <string name="CheckUpdate">Controlla Aggiornamenti</string>
     <string name="SwitchVersion">Cambia Versione</string>
     <string name="NoUpdate">Nessun aggiornamento trovato</string>
     <string name="UpdateAvailable">Nuovo aggiornamento disponibile</string>
@@ -17,10 +17,10 @@
     <string name="Install">Installare</string>
     <string name="Ignore">Ignora</string>
     <string name="UpdateDownloaded">È stato appena scaricato un aggiornamento.</string>
-    <string name="ProxyAutoSwitch">Commutatore Automatico Proxy</string>
+    <string name="ProxyAutoSwitch">Switch Automatico Proxy</string>
     <string name="LinkedGroupChat">Gruppo Collegato</string>
     <string name="LinkedChannelChat">Canale Collegato</string>
-    <string name="DevModeTitle">**Il tuo account telegramma potrebbe essere bandito**</string>
+    <string name="DevModeTitle">**Il tuo account Telegram potrebbe essere bannato**</string>
     <string name="DevModeNotice">Non siamo responsabili per qualsiasi uso improprio di funzionalità di sviluppatore.</string>
     <string name="TapToDisable">Tocca per disabilitare. Non hai bisogno di questi.</string>
     <string name="PlaceHolder">Segnaposto - Disabilita</string>
@@ -52,7 +52,7 @@
     <string name="PrivacyNoticeP2p">È stato rilevato che non hai disattivato l\'impostazione \"Consenti chiamate P2p\", che potrebbe far sì che gli hacker controllati dal governo trovino la tua vera identità, per favore disattivala!</string>
     <string name="PrivacyNotice2fa">È stato rilevato che non hai impostato una password, il che potrebbe far sì che gli hacker controllati dal governo trovino la tua vera identità, ti preghiamo di impostarne una!</string>
     <string name="ApplySuggestion">OK, Applica</string>
-    <string name="DoNotRemindAgain">Non ricordarti di nuovo</string>
+    <string name="DoNotRemindAgain">Non ricordare di nuovo</string>
     <string name="RemoveTitleEmoji">Rimuovi emoji nel titolo</string>
     <string name="NekoXProxy">Proxy Pubblico Nekox</string>
     <string name="PublicPrefix">Pubblico</string>
@@ -75,7 +75,7 @@
     <string name="FilterNameUnreadDescription">Solo messaggi non letti</string>
     <string name="FilterNameUnmutedAndUnread">Smutato &amp; Non letto</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Solo messaggi non letti da chat non silenziate</string>
-    <string name="IgnoreMutedCount">Ignora il conteggio non letto disattivato nella scheda delle cartelle</string>
+    <string name="IgnoreMutedCount">Ignora il conteggio non letto nella scheda delle cartelle</string>
     <string name="DialogsSettings">Impostazioni Finestre</string>
     <string name="SortMenu">Finestra di dialogo Impostazioni ordinamento</string>
     <string name="SortByUnread">Ordina Per Non Letta</string>
@@ -83,7 +83,7 @@
     <string name="SortByUser">Ordina Per Utente</string>
     <string name="SortByContacts">Ordina Per Contatti</string>
     <string name="NekoXPushService">Servizio NekoX Push</string>
-    <string name="EnablePushAlert">Abilita \"Servizio Push NekoX\"</string>
+    <string name="EnablePushAlert">Attiva \"Servizio Push NekoX\"</string>
     <string name="DisablePushAlert">Disattiva \"Servizio Push NekoX\"</string>
     <string name="DisableUndo">Disabilita Annulla</string>
     <string name="DisableSystemAccount">Disabilita Account Di Sistema</string>
@@ -93,7 +93,7 @@
     <string name="HideProxyByDefault">Nascondi impostazioni proxy per impostazione predefinita</string>
     <string name="SkipOpenLinkConfirm">Salta conferma link aperto</string>
     <string name="DeleteAllInChat">Elimina tutto nella chat</string>
-    <string name="DeleteAllInChatAlert">Avvertimento! Questo ** eliminerà tutti i messaggi ** in questa chat per ** tutti ** i partecipanti.</string>
+    <string name="DeleteAllInChatAlert">Attenzione! Questo ** eliminerà tutti i messaggi ** in questa chat per ** tutti ** i partecipanti.</string>
     <string name="UnblockAll">Sblocca Tutto</string>
     <string name="UnblockAllWarn">Sei sicuro di voler sbloccare **tutti gli utenti e bot**?</string>
     <string name="BlockedListEmpty">Non hai bloccato nessuno :)</string>
@@ -165,7 +165,7 @@
     <string name="LoginSettings">Impostazioni Di Accesso</string>
     <string name="NekoXFaq">FAQ NekoX</string>
     <string name="TransSite">Traduci Piattaforma</string>
-    <string name="UsePersianCalender">Usa Il Calender Persiano</string>
+    <string name="UsePersianCalender">Usa il Calender Persiano</string>
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Provider OpenPGP</string>
     <string name="OpenPGPKey">Chiave OpenPGP</string>
