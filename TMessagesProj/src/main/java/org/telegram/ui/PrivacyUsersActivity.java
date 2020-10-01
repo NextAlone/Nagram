@@ -222,7 +222,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             } else if (position >= usersStartRow && position < usersEndRow) {
                 if (currentType == TYPE_BLOCKED) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", getMessagesController().blockedUsers.keyAt(position - usersStartRow));
+                    args.putInt("user_id", getMessagesController().blockePeers.keyAt(position - usersStartRow));
                     presentFragment(new ProfileActivity(args));
                 } else {
                     Bundle args = new Bundle();
@@ -240,7 +240,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         listView.setOnItemLongClickListener((view, position) -> {
             if (position >= usersStartRow && position < usersEndRow) {
                 if (currentType == TYPE_BLOCKED) {
-                    showUnblockAlert(getMessagesController().blockedUsers.keyAt(position - usersStartRow));
+                    showUnblockAlert(getMessagesController().blockePeers.keyAt(position - usersStartRow));
                 } else {
                     showUnblockAlert(uidArray.get(position - usersStartRow));
                 }
@@ -261,7 +261,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     int totalItemCount = recyclerView.getAdapter().getItemCount();
                     if (visibleItemCount > 0) {
                         if (layoutManager.findLastVisibleItemPosition() >= totalItemCount - 10) {
-                            getMessagesController().getBlockedUsers(false);
+                            getMessagesController().getBlockedPeers(false);
                         }
                     }
                 }
@@ -296,7 +296,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         builder.setItems(items, (dialogInterface, i) -> {
             if (i == 0) {
                 if (currentType == TYPE_BLOCKED) {
-                    getMessagesController().unblockUser(uid);
+                    getMessagesController().unblockPeer(uid);
                 } else {
                     uidArray.remove(uid);
                     updateRows();
@@ -320,7 +320,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
             int count;
             if (currentType == TYPE_BLOCKED) {
-                count = getMessagesController().blockedUsers.size();
+                count = getMessagesController().blockePeers.size();
             } else {
                 count = uidArray.size();
             }
@@ -381,7 +381,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         if (user == null) {
             return;
         }
-        getMessagesController().blockUser(user.id);
+        getMessagesController().blockPeer(user.id);
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
@@ -442,7 +442,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     ManageChatUserCell userCell = (ManageChatUserCell) holder.itemView;
                     int uid;
                     if (currentType == TYPE_BLOCKED) {
-                        uid = getMessagesController().blockedUsers.keyAt(position - usersStartRow);
+                        uid = getMessagesController().blockePeers.keyAt(position - usersStartRow);
                     } else {
                         uid = uidArray.get(position - usersStartRow);
                     }

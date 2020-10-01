@@ -1113,7 +1113,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     @Override
     public void onPause() {
         super.onPause();
-        AndroidUtilities.removeAdjustResize(getParentActivity(), classGuid, true);
         if (newAccount) {
             ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
         }
@@ -1125,7 +1124,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         if (newAccount) {
             ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         }
-        AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid, true);
+        AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
         try {
             if (currentViewNum >= 1 && currentViewNum <= 4 && views[currentViewNum] instanceof LoginActivitySmsView) {
                 int time = ((LoginActivitySmsView) views[currentViewNum]).openTime;

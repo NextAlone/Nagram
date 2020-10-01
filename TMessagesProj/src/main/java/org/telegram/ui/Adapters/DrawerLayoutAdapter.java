@@ -231,6 +231,23 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         return items.get(i) instanceof CheckItem ? 6 : 3;
     }
 
+    public void swapElements(int fromIndex, int toIndex) {
+        int idx1 = fromIndex - 2;
+        int idx2 = toIndex - 2;
+        if (idx1 < 0 || idx2 < 0 || idx1 >= accountNumbers.size() || idx2 >= accountNumbers.size()) {
+            return;
+        }
+        final UserConfig userConfig1 = UserConfig.getInstance(accountNumbers.get(idx1));
+        final UserConfig userConfig2 = UserConfig.getInstance(accountNumbers.get(idx2));
+        final int tempLoginTime = userConfig1.loginTime;
+        userConfig1.loginTime = userConfig2.loginTime;
+        userConfig2.loginTime = tempLoginTime;
+        userConfig1.saveConfig(false);
+        userConfig2.saveConfig(false);
+        Collections.swap(accountNumbers, idx1, idx2);
+        notifyItemMoved(fromIndex, toIndex);
+    }
+
     private void resetItems() {
         accountNumbers.clear();
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -300,6 +317,20 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         }
         Item item = items.get(position);
         return item != null ? item.id : -1;
+    }
+
+    public int getFirstAccountPosition() {
+        if (!accountsShown) {
+            return RecyclerView.NO_POSITION;
+        }
+        return 2;
+    }
+
+    public int getLastAccountPosition() {
+        if (!accountsShown) {
+            return RecyclerView.NO_POSITION;
+        }
+        return 1 + accountNumbers.size();
     }
 
     public CheckItem getItem(int position) {

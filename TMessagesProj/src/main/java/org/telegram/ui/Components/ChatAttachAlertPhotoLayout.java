@@ -13,6 +13,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -112,17 +113,20 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
     private boolean isHidden;
 
+    ValueAnimator paddingAnimator;
+    private int animateToPadding;
+
     private AnimatorSet cameraInitAnimation;
     private CameraView cameraView;
     private FrameLayout cameraIcon;
     private TextView recordTime;
     private ImageView[] flashModeButton = new ImageView[2];
     private boolean flashAnimationInProgress;
-    private int[] cameraViewLocation = new int[2];
+    private float[] cameraViewLocation = new float[2];
     private int[] viewPosition = new int[2];
-    private int cameraViewOffsetX;
-    private int cameraViewOffsetY;
-    private int cameraViewOffsetBottomY;
+    private float cameraViewOffsetX;
+    private float cameraViewOffsetY;
+    private float cameraViewOffsetBottomY;
     private boolean cameraOpened;
     private boolean canSaveCameraPreview;
     private boolean cameraAnimationInProgress;
@@ -177,6 +181,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private MediaController.AlbumEntry selectedAlbumEntry;
     private MediaController.AlbumEntry galleryAlbumEntry;
     private ArrayList<MediaController.AlbumEntry> dropDownAlbums;
+    private float currentPanTranslationY;
 
     private boolean loading = true;
 
@@ -492,8 +497,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 if (gridView.getChildCount() <= 0) {
                     return;
                 }
-                parentAlert.updateLayout(ChatAttachAlertPhotoLayout.this, true);
-                checkCameraViewPosition();
+                parentAlert.updateLayout(ChatAttachAlertPhotoLayout.this, true, dy);
+                if (dy != 0) {
+                    checkCameraViewPosition();
+                }
             }
 
             @Override
@@ -1536,8 +1543,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         cameraPanel.setVisibility(View.VISIBLE);
         cameraPanel.setTag(null);
         animateCameraValues[0] = 0;
-        animateCameraValues[1] = itemSize - cameraViewOffsetX;
-        animateCameraValues[2] = itemSize - cameraViewOffsetY - cameraViewOffsetBottomY;
+        animateCameraValues[1] = (int) (itemSize - cameraViewOffsetX);
+        animateCameraValues[2] = (int) (itemSize - cameraViewOffsetY - cameraViewOffsetBottomY);
         if (animated) {
             cameraAnimationInProgress = true;
             ArrayList<Animator> animators = new ArrayList<>();
@@ -1718,6 +1725,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 cameraIcon.setVisibility(GONE);
             }
             checkCameraViewPosition();
+            invalidate();
         }
         if (zoomControlView != null) {
             zoomControlView.setZoom(0.0f, false);
@@ -1895,8 +1903,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (takingPhoto || cameraView == null) {
             return;
         }
-        animateCameraValues[1] = itemSize - cameraViewOffsetX;
-        animateCameraValues[2] = itemSize - cameraViewOffsetY - cameraViewOffsetBottomY;
+        animateCameraValues[1] = (int) (itemSize - cameraViewOffsetX);
+        animateCameraValues[2] = (int) (itemSize - cameraViewOffsetY - cameraViewOffsetBottomY);
         if (zoomControlHideRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(zoomControlHideRunnable);
             zoomControlHideRunnable = null;
@@ -1987,8 +1995,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         float endWidth = parentAlert.getContainer().getWidth() - parentAlert.getLeftInset() - parentAlert.getRightInset();
         float endHeight = parentAlert.getContainer().getHeight() - parentAlert.getBottomInset();
         if (value == 0) {
-            cameraView.setClipTop(cameraViewOffsetY);
-            cameraView.setClipBottom(cameraViewOffsetBottomY);
+            cameraView.setClipTop((int) cameraViewOffsetY);
+            cameraView.setClipBottom((int) cameraViewOffsetBottomY);
             cameraView.setTranslationX(cameraViewLocation[0]);
             cameraView.setTranslationY(cameraViewLocation[1]);
             cameraIcon.setTranslationX(cameraViewLocation[0]);
@@ -2053,50 +2061,29 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         break;
                     }
                 }
-                child.getLocationInWindow(cameraViewLocation);
-                cameraViewLocation[0] -= parentAlert.getLeftInset();
-                float listViewX = gridView.getX() - parentAlert.getLeftInset();
-                if (cameraViewLocation[0] < listViewX) {
-                    cameraViewOffsetX = (int) (listViewX - cameraViewLocation[0]);
-                    if (cameraViewOffsetX >= itemSize) {
-                        cameraViewOffsetX = 0;
-                        cameraViewLocation[0] = AndroidUtilities.dp(-400);
-                        cameraViewLocation[1] = 0;
-                    } else {
-                        cameraViewLocation[0] += cameraViewOffsetX;
-                    }
-                } else {
-                    cameraViewOffsetX = 0;
-                }
-                int maxY = (Build.VERSION.SDK_INT >= 21 && !parentAlert.inBubbleMode ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
-                if (cameraViewLocation[1] < maxY) {
-                    cameraViewOffsetY = maxY - cameraViewLocation[1];
-                    if (cameraViewOffsetY >= itemSize) {
-                        cameraViewOffsetY = 0;
-                        cameraViewLocation[0] = AndroidUtilities.dp(-400);
-                        cameraViewLocation[1] = 0;
-                    } else {
-                        cameraViewLocation[1] += cameraViewOffsetY;
-                    }
+
+                float topLocal = child.getY() + gridView.getY() + getY();
+                float  top = topLocal + parentAlert.getSheetContainer().getY();
+                float left = child.getX() + gridView.getX() + getX() + parentAlert.getSheetContainer().getX();
+
+                float maxY = (Build.VERSION.SDK_INT >= 21 && !parentAlert.inBubbleMode ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
+                if (topLocal < maxY) {
+                    cameraViewOffsetY = maxY - topLocal;
                 } else {
                     cameraViewOffsetY = 0;
                 }
+
                 int containerHeight = parentAlert.getSheetContainer().getMeasuredHeight();
-                int keyboardSize = parentAlert.sizeNotifierFrameLayout.getKeyboardHeight();
-                if (!AndroidUtilities.isInMultiwindow && keyboardSize <= AndroidUtilities.dp(20)) {
-                    containerHeight -= parentAlert.commentTextView.getEmojiPadding();
-                }
-                maxY = (int) (containerHeight - parentAlert.buttonsRecyclerView.getMeasuredHeight() + parentAlert.buttonsRecyclerView.getTranslationY() + parentAlert.getSheetContainer().getTranslationY());
-                if (cameraViewLocation[1] + itemSize > maxY) {
-                    cameraViewOffsetBottomY = cameraViewLocation[1] + itemSize - maxY;
-                    if (cameraViewOffsetBottomY >= itemSize) {
-                        cameraViewOffsetBottomY = 0;
-                        cameraViewLocation[0] = AndroidUtilities.dp(-400);
-                        cameraViewLocation[1] = 0;
-                    }
+                maxY = (int) (containerHeight - parentAlert.buttonsRecyclerView.getMeasuredHeight() + parentAlert.buttonsRecyclerView.getTranslationY());
+
+                if (topLocal + child.getMeasuredHeight() > maxY) {
+                    cameraViewOffsetBottomY = topLocal + child.getMeasuredHeight() - maxY;
                 } else {
                     cameraViewOffsetBottomY = 0;
                 }
+
+                cameraViewLocation[0] = left;
+                cameraViewLocation[1] = top + cameraViewOffsetY;
                 applyCameraViewPosition();
                 return;
             }
@@ -2112,17 +2099,17 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (cameraView != null) {
             if (!cameraOpened) {
                 cameraView.setTranslationX(cameraViewLocation[0]);
-                cameraView.setTranslationY(cameraViewLocation[1]);
+                cameraView.setTranslationY(cameraViewLocation[1] + currentPanTranslationY);
             }
             cameraIcon.setTranslationX(cameraViewLocation[0]);
-            cameraIcon.setTranslationY(cameraViewLocation[1]);
-            int finalWidth = itemSize - cameraViewOffsetX;
-            int finalHeight = itemSize - cameraViewOffsetY - cameraViewOffsetBottomY;
+            cameraIcon.setTranslationY(cameraViewLocation[1] + currentPanTranslationY);
+            int finalWidth = (int) (itemSize - cameraViewOffsetX);
+            int finalHeight = (int) (itemSize - cameraViewOffsetY - cameraViewOffsetBottomY);
 
             LinearLayout.LayoutParams layoutParams;
             if (!cameraOpened) {
-                cameraView.setClipTop(cameraViewOffsetY);
-                cameraView.setClipBottom(cameraViewOffsetBottomY);
+                cameraView.setClipTop((int) cameraViewOffsetY);
+                cameraView.setClipBottom((int) cameraViewOffsetBottomY);
                 layoutParams = (LinearLayout.LayoutParams) cameraView.getLayoutParams();
                 if (layoutParams.height != finalHeight || layoutParams.width != finalWidth) {
                     layoutParams.width = finalWidth;
@@ -2464,6 +2451,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     @Override
     void onButtonsTranslationYUpdated() {
         checkCameraViewPosition();
+        invalidate();
     }
 
     @Override
@@ -2485,7 +2473,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
         super.setTranslationY(translationY);
         parentAlert.getSheetContainer().invalidate();
-        checkCameraViewPosition();
+        invalidate();
     }
 
     @Override
@@ -2626,8 +2614,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     @Override
-    void onContainerTranslationUpdated() {
+    void onContainerTranslationUpdated(float currentPanTranslationY) {
+        this.currentPanTranslationY = currentPanTranslationY;
         checkCameraViewPosition();
+        invalidate();
     }
 
     @Override
@@ -2676,7 +2666,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     public boolean onCustomMeasure(View view, int width, int height) {
         boolean isPortrait = width < height;
         if (view == cameraIcon) {
-            cameraIcon.measure(View.MeasureSpec.makeMeasureSpec(itemSize, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(itemSize - cameraViewOffsetBottomY - cameraViewOffsetY, View.MeasureSpec.EXACTLY));
+            cameraIcon.measure(View.MeasureSpec.makeMeasureSpec(itemSize, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec((int) (itemSize - cameraViewOffsetBottomY - cameraViewOffsetY), View.MeasureSpec.EXACTLY));
             return true;
         } else if (view == cameraView) {
             if (cameraOpened && !cameraAnimationInProgress) {
@@ -2840,6 +2830,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             needCamera = camera;
 
         }
+
         public void createCache() {
             for (int a = 0; a < 8; a++) {
                 viewsCache.add(createHolder());

@@ -201,7 +201,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         menuItem.addSubItem(1, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
-        sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
+        sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
             private int lastNotifyWidth;
             private boolean ignoreLayout;
@@ -449,9 +449,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             }
             TLRPC.Chat chat = chatActivity.getCurrentChat();
             TLRPC.User user = chatActivity.getCurrentUser();
-            if (chatActivity.getCurrentEncryptedChat() != null) {
-                return false;
-            }
 
             if (sendPopupLayout == null) {
                 sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
@@ -482,7 +479,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
                 itemCells = new ActionBarMenuSubItem[2];
                 for (int a = 0; a < 3; a++) {
-                    if (a == 2 && UserObject.isUserSelf(user)) {
+                    if (a == 0 && !chatActivity.canScheduleMessage() || a == 1 && UserObject.isUserSelf(user)) {
                         continue;
                     }
                     int num = a;

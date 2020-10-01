@@ -307,7 +307,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             autoRepeatPlayCount++;
                         }
                     } else {
-                        if (customEndFrame > 0 && playInDirectionOfCustomEndFrame) {
+                        if (customEndFrame >= 0 && playInDirectionOfCustomEndFrame) {
                             if (currentFrame > customEndFrame) {
                                 if (currentFrame - framesPerUpdates > customEndFrame) {
                                     currentFrame -= framesPerUpdates;
@@ -324,7 +324,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                 }
                             }
                         } else {
-                            if (currentFrame + framesPerUpdates < (customEndFrame > 0 ? customEndFrame : metaData[0])) {
+                            if (currentFrame + framesPerUpdates < (customEndFrame >= 0 ? customEndFrame : metaData[0])) {
                                 if (autoRepeat == 3) {
                                     nextFrameIsLast = true;
                                     autoRepeatPlayCount++;

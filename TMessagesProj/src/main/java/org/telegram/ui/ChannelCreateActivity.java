@@ -315,7 +315,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (currentStep == 0) {
             actionBar.setTitle(LocaleController.getString("NewChannel", R.string.NewChannel));
 
-            SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
+            SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
                 private boolean ignoreLayout;
 
@@ -329,7 +329,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
                     measureChildWithMargins(actionBar, widthMeasureSpec, 0, heightMeasureSpec, 0);
 
-                    int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+                    int keyboardSize = measureKeyboardHeight();
                     if (keyboardSize > AndroidUtilities.dp(20)) {
                         ignoreLayout = true;
                         nameTextView.hideEmojiView();
@@ -362,7 +362,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 protected void onLayout(boolean changed, int l, int t, int r, int b) {
                     final int count = getChildCount();
 
-                    int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+                    int keyboardSize = measureKeyboardHeight();
                     int paddingBottom = keyboardSize <= AndroidUtilities.dp(20) && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet() ? nameTextView.getEmojiPadding() : 0;
                     setBottomClip(paddingBottom);
 

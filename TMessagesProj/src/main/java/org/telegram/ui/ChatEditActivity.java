@@ -226,7 +226,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
-        AndroidUtilities.removeAdjustResize(getParentActivity(), classGuid, true);
         if (nameTextView != null) {
             nameTextView.onDestroy();
         }
@@ -239,7 +238,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             nameTextView.onResume();
             nameTextView.getEditText().requestFocus();
         }
-        AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid, true);
+        AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
         updateFields(true);
         imageUpdater.onResume();
     }
@@ -302,7 +301,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
         });
 
-        SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
+        SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
             private boolean ignoreLayout;
 
@@ -316,7 +315,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
                 measureChildWithMargins(actionBar, widthMeasureSpec, 0, heightMeasureSpec, 0);
 
-                int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+                int keyboardSize = measureKeyboardHeight();
                 if (keyboardSize > AndroidUtilities.dp(20)) {
                     ignoreLayout = true;
                     nameTextView.hideEmojiView();
@@ -349,7 +348,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             protected void onLayout(boolean changed, int l, int t, int r, int b) {
                 final int count = getChildCount();
 
-                int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+                int keyboardSize = measureKeyboardHeight();
                 int paddingBottom = keyboardSize <= AndroidUtilities.dp(20) && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet() ? nameTextView.getEmojiPadding() : 0;
                 setBottomClip(paddingBottom);
 
@@ -512,7 +511,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
 
         nameTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, this, EditTextEmoji.STYLE_FRAGMENT);
-        nameTextView.setAllowSmoothKeybord(false);
         if (isChannel) {
             nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
         } else {

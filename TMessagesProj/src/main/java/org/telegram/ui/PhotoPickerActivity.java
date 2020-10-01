@@ -573,7 +573,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
+        sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
             private int lastNotifyWidth;
             private boolean ignoreLayout;
@@ -630,7 +630,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 }
 
                 if (SharedConfig.smoothKeyboard && commentTextView != null && commentTextView.isPopupShowing()) {
-                    fragmentView.setTranslationY(getCurrentPanTranslationY());
+                    fragmentView.setTranslationY(0);
                     listView.setTranslationY(0);
                     emptyView.setTranslationY(0);
                 }
@@ -1041,9 +1041,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 }
                 TLRPC.Chat chat = chatActivity.getCurrentChat();
                 TLRPC.User user = chatActivity.getCurrentUser();
-                if (chatActivity.getCurrentEncryptedChat() != null) {
-                    return false;
-                }
 
                 if (sendPopupLayout == null) {
                     sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
@@ -1074,7 +1071,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
                     itemCells = new ActionBarMenuSubItem[2];
                     for (int a = 0; a < 3; a++) {
-                        if (a == 2 && UserObject.isUserSelf(user)) {
+                        if (a == 0 && !chatActivity.canScheduleMessage() || a == 1 && UserObject.isUserSelf(user)) {
                             continue;
                         }
                         int num = a;
@@ -1243,7 +1240,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     @Override
-    protected void onPanTranslationUpdate(int y) {
+    protected void onPanTranslationUpdate(float y) {
         if (listView == null) {
             return;
         }
@@ -1914,7 +1911,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     frameLayout.addView(progressBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
                     break;
                 case 2:
-                    view = new SharedDocumentCell(mContext, true);
+                    view = new SharedDocumentCell(mContext, SharedDocumentCell.VIEW_TYPE_PICKER);
                     break;
                 case 3: {
                     view = new TextCell(mContext, 23, true);

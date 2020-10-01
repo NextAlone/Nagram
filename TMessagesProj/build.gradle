@@ -140,7 +140,7 @@ tasks.findByName("preBuild").finalizedBy(writeUpdateInfo)
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.1'
+    buildToolsVersion '30.0.2'
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "nekox.messenger"
@@ -169,9 +169,9 @@ android {
         buildConfigField 'String', 'APP_HASH', "\"" + (appHash != null ? appHash : "355c91550b0d658cfb7ff89dcf91a08c") + "\""
 
         externalNativeBuild {
-            ndkBuild {
-                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8"
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            cmake {
+                version '3.10.2'
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-16', "-j=16"
             }
         }
 
@@ -184,8 +184,8 @@ android {
     }
 
     externalNativeBuild {
-        ndkBuild {
-            path "jni/Android.mk"
+        cmake {
+            path 'jni/CMakeLists.txt'
         }
     }
 
