@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
+import android.text.TextUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

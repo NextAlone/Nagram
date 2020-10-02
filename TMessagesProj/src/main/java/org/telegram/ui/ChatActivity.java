@@ -16448,10 +16448,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(90);
                                 icons.add(R.drawable.baseline_schedule_24);
                             }
-                            if ((StrUtil.isNotBlank(selectedObject.messageOwner.message) || selectedObject.isPoll()) && NekoConfig.showTranslate) {
-                                items.add(selectedObject.messageOwner.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
-                                options.add(88);
-                                icons.add(R.drawable.ic_translate);
+                            if (NekoConfig.showTranslate) {
+                                MessageObject messageObject = null;
+                                if (selectedObjectGroup != null && selectedObjectGroup.messages.size() != 0) {
+                                    if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
+                                        messageObject = selectedObjectGroup.messages.get(0);
+                                    }
+                                } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
+                                    messageObject = selectedObject;
+                                }
+                                if (messageObject != null) {
+                                    items.add(selectedObject.messageOwner.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
+                                    options.add(88);
+                                    icons.add(R.drawable.ic_translate);
+                                }
                             }
                             if (StrUtil.isNotBlank(selectedObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
                                 if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
@@ -17551,6 +17561,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case 88: {
+
+                MessageObject messageObject = null;
+                if (selectedObjectGroup != null && selectedObjectGroup.messages.size() != 0) {
+                    if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
+                        messageObject = selectedObjectGroup.messages.get(0);
+                    }
+                } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
+                    messageObject = selectedObject;
+                }
+                if (messageObject == null) {
+                    return;
+                }
 
                 MessageTransKt.translateMessages(this, new MessageObject[]{selectedObject});
 
