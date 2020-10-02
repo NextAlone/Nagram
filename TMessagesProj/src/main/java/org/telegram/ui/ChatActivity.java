@@ -16450,7 +16450,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             if (NekoConfig.showTranslate) {
                                 MessageObject messageObject = null;
-                                if (selectedObjectGroup != null && selectedObjectGroup.messages.size() != 0) {
+                                if (selectedObjectGroup != null) {
                                     if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
                                         messageObject = selectedObjectGroup.messages.get(0);
                                     }
@@ -17563,7 +17563,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case 88: {
 
                 MessageObject messageObject = null;
-                if (selectedObjectGroup != null && selectedObjectGroup.messages.size() != 0) {
+                if (selectedObjectGroup != null) {
                     if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
                         messageObject = selectedObjectGroup.messages.get(0);
                     }
@@ -17643,7 +17643,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return;
                 }
                 ArrayList<MessageObject> messages = new ArrayList<>();
-                messages.add(selectedObject);
+                if (selectedObjectGroup != null) {
+                    messages.addAll(selectedObjectGroup.messages);
+                } else {
+                    messages.add(selectedObject);
+                }
                 forwardMessages(messages, false, true, 0);
                 break;
             }
