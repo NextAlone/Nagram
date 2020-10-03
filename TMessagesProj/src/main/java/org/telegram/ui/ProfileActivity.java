@@ -2977,6 +2977,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         frameLayout.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.RIGHT | Gravity.TOP, 0, 0, 16, 0));
         writeButton.setOnClickListener(v -> {
+            if (writeButton.getTag() != null) {
+                return;
+            }
             if (user_id != 0) {
                 if (imageUpdater != null) {
                     presentFragment(new ChangeNameActivity());
@@ -5068,7 +5071,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         } else if (chat_id != 0) {
             if (chatInfo != null && (!TextUtils.isEmpty(chatInfo.about) || chatInfo.location instanceof TLRPC.TL_channelLocation) || !TextUtils.isEmpty(currentChat.username)) {
-                if (LocaleController.isRTL && ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatInfo.linked_chat_id != 0) {
+                if (LocaleController.isRTL && ChatObject.isChannel(currentChat) && chatInfo != null && !currentChat.megagroup && chatInfo.linked_chat_id != 0) {
                     emptyRow = rowCount++;
                 }
                 infoHeaderRow = rowCount++;

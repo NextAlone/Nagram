@@ -637,7 +637,9 @@ public class ActionBarMenuItem extends FrameLayout {
             if (!currentSearchFilters.isEmpty()) {
                 if (listener != null) {
                     for (int i = 0; i < currentSearchFilters.size(); i++) {
-                        listener.onSearchFilterCleared(currentSearchFilters.get(i));
+                        if ( currentSearchFilters.get(i).removable) {
+                            listener.onSearchFilterCleared(currentSearchFilters.get(i));
+                        }
                     }
                 }
                 clearSearchFilters();
@@ -669,6 +671,9 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void removeSearchFilter(FiltersView.MediaFilterData filter) {
+        if (!filter.removable) {
+            return;
+        }
         currentSearchFilters.remove(filter);
         if (selectedFilterIndex < 0 || selectedFilterIndex > currentSearchFilters.size() - 1) {
             selectedFilterIndex = currentSearchFilters.size() - 1;
@@ -683,7 +688,12 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void clearSearchFilters() {
-        currentSearchFilters.clear();
+        for (int i = 0; i < currentSearchFilters.size(); i++) {
+            if (currentSearchFilters.get(i).removable) {
+                currentSearchFilters.remove(i);
+                i--;
+            }
+        }
         onFiltersChanged();
     }
 
@@ -772,16 +782,19 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (selectedFilterIndex != index) {
                     selectedFilterIndex = index;
                     onFiltersChanged();
-                } else if (!searchFilterView.selectedForDelete) {
-                    searchFilterView.setSelectedForDelete(true);
-                } else {
-                    FiltersView.MediaFilterData filterToRemove = searchFilterView.getFilter();
-                    removeSearchFilter(filterToRemove);
-                    if (listener != null) {
-                        listener.onSearchFilterCleared(filterToRemove);
-                        listener.onTextChanged(searchField);
+                    return;
+                }
+                if (searchFilterView.getFilter().removable) {
+                    if (!searchFilterView.selectedForDelete) {
+                        searchFilterView.setSelectedForDelete(true);
+                    } else {
+                        FiltersView.MediaFilterData filterToRemove = searchFilterView.getFilter();
+                        removeSearchFilter(filterToRemove);
+                        if (listener != null) {
+                            listener.onSearchFilterCleared(filterToRemove);
+                            listener.onTextChanged(searchField);
+                        }
                     }
-
                 }
             });
             searchFilterLayout.addView(searchFilterView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0, 0, 0, 6, 0));
@@ -1046,8 +1059,8 @@ public class ActionBarMenuItem extends FrameLayout {
 
                 @Override
                 public boolean onKeyDown(int keyCode, KeyEvent event) {
-                    if (keyCode == KeyEvent.KEYCODE_DEL && searchField.length() == 0 && ((searchFieldCaption.getVisibility() == VISIBLE && searchFieldCaption.length() > 0) || !currentSearchFilters.isEmpty())) {
-                        if (!currentSearchFilters.isEmpty()) {
+                    if (keyCode == KeyEvent.KEYCODE_DEL && searchField.length() == 0 && ((searchFieldCaption.getVisibility() == VISIBLE && searchFieldCaption.length() > 0) || hasRemovableFilters())) {
+                        if (hasRemovableFilters()) {
                             FiltersView.MediaFilterData filterToRemove = currentSearchFilters.get(currentSearchFilters.size() - 1);
                             if (listener != null) {
                                 listener.onSearchFilterCleared(filterToRemove);
@@ -1176,10 +1189,10 @@ public class ActionBarMenuItem extends FrameLayout {
             clearButton.setOnClickListener(v -> {
                 if (searchField.length() != 0) {
                     searchField.setText("");
-                } else if (!currentSearchFilters.isEmpty()) {
+                } else if (hasRemovableFilters()) {
                     searchField.hideActionMode();
                     for (int i = 0; i < currentSearchFilters.size(); i++) {
-                        if (listener != null) {
+                        if (listener != null && currentSearchFilters.get(i).removable) {
                             listener.onSearchFilterCleared(currentSearchFilters.get(i));
                         }
                     }
@@ -1206,7 +1219,7 @@ public class ActionBarMenuItem extends FrameLayout {
 
     private void checkClearButton() {
         if (clearButton != null) {
-            if (currentSearchFilters.isEmpty() && TextUtils.isEmpty(searchField.getText()) &&
+            if (!hasRemovableFilters() && TextUtils.isEmpty(searchField.getText()) &&
                     (listener == null || !listener.forceShowClear()) &&
                     (searchFieldCaption == null || searchFieldCaption.getVisibility() != VISIBLE)) {
                 if (clearButton.getTag() != null) {
@@ -1240,6 +1253,18 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         }
+    }
+
+    private boolean hasRemovableFilters() {
+        if (currentSearchFilters.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < currentSearchFilters.size(); i++) {
+            if (currentSearchFilters.get(i).removable) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setShowSearchProgress(boolean show) {
@@ -1494,6 +1519,11 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void collapseSearchFilters() {
+        selectedFilterIndex = -1;
+        onFiltersChanged();
+    }
+
     private static class SearchFilterView extends FrameLayout {
 
         Drawable thumbDrawable;
@@ -1551,6 +1581,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 Theme.setCombinedDrawableColor(thumbDrawable, Theme.getColor(Theme.key_avatar_actionBarIconBlue), true);
             }
             avatarImageView.setAlpha(1f - selectedProgress);
+
+            if (data != null && (data.filterType == FiltersView.FILTER_TYPE_ARCHIVE)) {
+                setData(data);
+            }
             invalidate();
         }
 
@@ -1578,6 +1612,12 @@ public class ActionBarMenuItem extends FrameLayout {
                     avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16));
                     avatarImageView.getImageReceiver().setImage(ImageLocation.getForChat(chat, false), "50_50",thumbDrawable, null, chat, 0);
                 }
+            } else if (data.filterType == FiltersView.FILTER_TYPE_ARCHIVE) {
+                CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), R.drawable.chats_archive);
+                combinedDrawable.setIconSize(AndroidUtilities.dp(16), AndroidUtilities.dp(16));
+                Theme.setCombinedDrawableColor(combinedDrawable, Theme.getColor(Theme.key_avatar_backgroundArchived), false);
+                Theme.setCombinedDrawableColor(combinedDrawable, Theme.getColor(Theme.key_avatar_actionBarIconBlue), true);
+                avatarImageView.setImageDrawable(combinedDrawable);
             } else {
                 avatarImageView.setImageDrawable(thumbDrawable);
             }
