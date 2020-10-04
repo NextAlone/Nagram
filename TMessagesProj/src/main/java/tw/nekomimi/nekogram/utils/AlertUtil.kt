@@ -64,7 +64,6 @@ object AlertUtil {
     })
 
     @JvmStatic
-    @JvmOverloads
     fun showSimpleAlert(ctx: Context?, error: Throwable) {
 
         showSimpleAlert(ctx, null, error.message ?: error.javaClass.simpleName) {}

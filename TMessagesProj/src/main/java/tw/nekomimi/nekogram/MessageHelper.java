@@ -89,8 +89,8 @@ public class MessageHelper extends BaseController {
                             if (message.random_id != 0) {
                                 random_ids.add(message.random_id);
                             }
-                            if (message.to_id.channel_id != 0) {
-                                channelId = message.to_id.channel_id;
+                            if (message.peer_id.channel_id != 0) {
+                                channelId = message.peer_id.channel_id;
                             }
                             if (message.id > lastMessageId) {
                                 lastMessageId = message.id;
@@ -150,8 +150,8 @@ public class MessageHelper extends BaseController {
                         for (int a = 0; a < res.messages.size(); a++) {
                             TLRPC.Message message = res.messages.get(a);
                             ids.add(message.id);
-                            if (message.from_id > 0) {
-                                ids.add(message.from_id);
+                            if (message.from_id.user_id > 0) {
+                                ids.add(message.peer_id.user_id);
                             } else {
                                 msgIds.add(message.id);
                                 if (message.random_id != 0) {
@@ -180,7 +180,7 @@ public class MessageHelper extends BaseController {
 
     public void deleteUserChannelHistory(final TLRPC.Chat chat, int userId, int offset) {
         if (offset == 0) {
-            getMessagesStorage().deleteUserChannelHistory(chat.id, userId);
+            getMessagesStorage().deleteUserChatHistory(chat.id, chat.id, userId);
         }
         TLRPC.TL_channels_deleteUserHistory req = new TLRPC.TL_channels_deleteUserHistory();
         req.channel = getMessagesController().getInputChannel(chat.id);

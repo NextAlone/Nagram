@@ -373,27 +373,6 @@
             android:name=".NotificationRepeat"
             android:exported="false" />
         <service
-            android:name=".VideoEncodingService"
-            android:enabled="true" />
-        <service
-            android:name=".LocationSharingService"
-            android:enabled="true"
-            android:foregroundServiceType="location" />
-        <service
-            android:name=".voip.VoIPService"
-            android:enabled="true" />
-        <service
-            android:name=".MusicPlayerService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".MusicBrowserService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
-        <service
             android:name="tw.nekomimi.nekogram.NekoXPushService"
             android:enabled="true"
             android:label="@string/NekoXPushService"

@@ -758,8 +758,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private int currentFocusedVirtualView = -1;
 
     private boolean isBlockedUserMessage() {
-        return MessagesController.getInstance(currentAccount).blockedUsers.indexOfKey(
-                currentMessageObject.getFromId()) >= 0 && NekoConfig.ignoreBlocked;
+        return MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(
+                currentMessageObject.getFromChatId()) >= 0 && NekoConfig.ignoreBlocked;
     }
 
     public ChatMessageCell(Context context) {

@@ -352,7 +352,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
                                 MessagesController.getInstance(currentAccount).putUser(res.user, false);
                                 ContactsController.getInstance(currentAccount).checkAppAccount();
-                                MessagesController.getInstance(currentAccount).getBlockedUsers(true);
+                                MessagesController.getInstance(currentAccount).getBlockedPeers(true);
                                 MessagesController.getInstance(currentAccount).checkPromoInfo(true);
                                 ConnectionsManager.getInstance(currentAccount).updateDcSettings();
                                 needFinishActivity(false);

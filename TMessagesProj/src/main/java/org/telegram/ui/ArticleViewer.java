@@ -1935,7 +1935,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         return getText(page, parentView, parentRichText, richText, parentBlock, maxWidth, false);
     }
 
-    private CharSequence getText(TLRPC.WebPage page, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth, boolean noTranslate) {
+    public CharSequence getText(WebpageAdapter adapter, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth, boolean noTranslate) {
+        return getText(adapter.currentPage, parentView, parentRichText, richText, parentBlock, maxWidth, noTranslate);
+    }
+
+    public CharSequence getText(TLRPC.WebPage page, View parentView, TLRPC.RichText parentRichText, TLRPC.RichText richText, TLRPC.PageBlock parentBlock, int maxWidth, boolean noTranslate) {
         if (richText == null) {
             return null;
         }
@@ -1973,7 +1977,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (!noTranslate && StrUtil.isNotBlank(plainText) && adapter.trans && TranslateDb.currentTarget().contains(plainText)) {
+            if (!noTranslate && StrUtil.isNotBlank(plainText) && adapter[0].trans && TranslateDb.currentTarget().contains(plainText)) {
                 plainText = TranslateDb.currentTarget().query(plainText);
             }
             return plainText;
@@ -4823,7 +4827,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private class WebpageAdapter extends RecyclerListView.SelectionAdapter {
+    public class WebpageAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context context;
         private ArrayList<TLRPC.PageBlock> localBlocks = new ArrayList<>();

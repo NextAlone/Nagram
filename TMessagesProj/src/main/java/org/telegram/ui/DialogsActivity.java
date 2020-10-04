@@ -1537,7 +1537,7 @@ private int lastMeasuredTopPadding;
         super.onFragmentCreate();
 
         getConnectionsManager().updateDcSettings();
-        getMessagesController().getBlockedUsers(true);
+        getMessagesController().getBlockedPeers(true);
 
         if (getArguments() != null) {
             onlySelect = arguments.getBoolean("onlySelect", false);

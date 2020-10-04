@@ -1,6 +1,8 @@
 #!/bin/bash
 
-function upload {
+trap 'kill $(jobs -p)' SIGINT
+
+function upload() {
 
   for apk in $outPath/*.apk; do
 
@@ -10,8 +12,12 @@ function upload {
       -X POST \
       -F chat_id="$TELEGRAM_CHANNEL" \
       -F document="@$apk" \
-      --silent --show-error --fail >/dev/null
+      --silent --show-error --fail >/dev/null &
 
+  done
+
+  for job in $(jobs -p); do
+    wait $job
   done
 
 }
@@ -27,7 +33,6 @@ upload
 outPath="TMessagesProj/build/outputs/apk/mini/release"
 
 upload
-
 
 outPath="TMessagesProj/build/outputs/apk/mini/releaseNoGcm"
 

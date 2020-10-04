@@ -327,7 +327,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
         selectedFiles.clear();
 
-        sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
+        sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context,  parentLayout) {
 
             private int lastNotifyWidth;
             private boolean ignoreLayout;
@@ -353,12 +353,6 @@ public class DocumentSelectActivity extends BaseFragment {
                     ignoreLayout = true;
                     commentTextView.hideEmojiView();
                     ignoreLayout = false;
-                }
-
-                if (SharedConfig.smoothKeyboard && commentTextView != null && commentTextView.isPopupShowing()) {
-                    fragmentView.setTranslationY(getCurrentPanTranslationY());
-                    listView.setTranslationY(0);
-                    emptyView.setTranslationY(0);
                 }
 
                 int childCount = getChildCount();
@@ -885,21 +879,6 @@ public class DocumentSelectActivity extends BaseFragment {
 
         });
 
-    }
-
-    @Override
-    protected void onPanTranslationUpdate(int y) {
-        if (listView == null) {
-            return;
-        }
-        if (commentTextView.isPopupShowing()) {
-            fragmentView.setTranslationY(y);
-            listView.setTranslationY(0);
-            emptyView.setTranslationY(0);
-        } else {
-            listView.setTranslationY(y);
-            emptyView.setTranslationY(y);
-        }
     }
 
     private boolean onItemClick(View view, ListItem item) {
@@ -1541,7 +1520,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     view = headerCell;
                     break;
                 case 1:
-                    view = new SharedDocumentCell(mContext, true);
+                    view = new SharedDocumentCell(mContext, SharedDocumentCell.VIEW_TYPE_PICKER);
                     break;
                 case 2:
                 default:
@@ -1683,7 +1662,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = new SharedDocumentCell(mContext, true);
+            View view = new SharedDocumentCell(mContext, SharedDocumentCell.VIEW_TYPE_PICKER);
             return new RecyclerListView.Holder(view);
         }
 

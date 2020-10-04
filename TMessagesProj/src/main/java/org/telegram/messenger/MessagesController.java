@@ -3675,21 +3675,21 @@ public class MessagesController extends BaseController implements NotificationCe
 
         if (totalBlockedCount == 0) return;
 
-        if (blockedUsers.size() == 0) getBlockedUsers(true);
+        if (blockePeers.size() == 0) getBlockedPeers(true);
 
-        SparseIntArray blockedCopy = blockedUsers.clone();
+        SparseIntArray blockedCopy = blockePeers.clone();
 
         if (blockedCopy.size() == 0) return;
 
         for (int index = 0; index < blockedCopy.size(); index++) {
 
             TLRPC.TL_contacts_unblock req = new TLRPC.TL_contacts_unblock();
-            int user_id = blockedCopy.keyAt(index);
-            req.id = getInputUser(user_id);
+            int peer_id = blockedCopy.keyAt(index);
+            req.id = getInputPeer(peer_id);
             getConnectionsManager().sendRequest(req, (response, error) -> {
 
                 totalBlockedCount--;
-                blockedUsers.delete(user_id);
+                blockePeers.delete(peer_id);
 
                 UIUtil.runOnUIThread(() -> getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad));
 

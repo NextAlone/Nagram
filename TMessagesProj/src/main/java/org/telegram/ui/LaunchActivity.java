@@ -58,9 +58,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.appindexing.Action;
-import com.google.firebase.appindexing.FirebaseUserActions;
-import com.google.firebase.appindexing.builders.AssistActionBuilder;
 import com.v2ray.ang.V2RayConfig;
 
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -1559,7 +1556,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         Integer threadId = null;
                         Integer commentId = null;
                         boolean hasUrl = false;
-                        finalString scheme = data.getScheme();
+                        final String scheme = data.getScheme();
                         boolean internal = intent.getExtras() != null && intent.getExtras().get("internal") != null && (boolean) intent.getExtras().get("internal");
                         if (scheme != null) {
                             switch (scheme) {
@@ -2021,7 +2018,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 }
                             }
                         }
-                        if (intent.hasExtra(EXTRA_ACTION_TOKEN)) {
+                        /*if (intent.hasExtra(EXTRA_ACTION_TOKEN)) {
                             final boolean success = UserConfig.getInstance(currentAccount).isClientActivated() && "tg".equals(scheme) && unsupportedUrl == null;
                             final Action action = new AssistActionBuilder()
                                     .setActionToken(intent.getStringExtra(EXTRA_ACTION_TOKEN))
@@ -2029,7 +2026,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                     .build();
                             FirebaseUserActions.getInstance().end(action);
                             intent.removeExtra(EXTRA_ACTION_TOKEN);
-                        }
+                        }*/
                         if (code != null || UserConfig.getInstance(currentAccount).isClientActivated()) {
                             if (phone != null || phoneHash != null) {
                                 final Bundle args = new Bundle();
@@ -3979,7 +3976,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             if (!toDark) {
                                 darkThemeView.setVisibility(View.VISIBLE);
                             }
-                            DrawerProfileCell.switchingTheme = false;
                         }
                     });
                     anim.start();
@@ -3989,7 +3985,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     try {
                         themeSwitchImageView.setImageDrawable(null);
                         frameLayout.removeView(themeSwitchImageView);
-                        DrawerProfileCell.switchingTheme = false;
                     } catch (Exception e2) {
                         FileLog.e(e2);
                     }

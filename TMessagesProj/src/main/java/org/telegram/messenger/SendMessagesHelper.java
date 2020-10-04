@@ -1902,7 +1902,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     if (!messageObject.isGif() && (videoEditedInfo == null || !videoEditedInfo.muted)) {
                         uploadedDocument.nosound_video = true;
                         if (BuildVars.DEBUG_VERSION) {
-                            FileLog.e("nosound_video = true");
+                            FileLog.d("nosound_video = true");
                         }
                     }
                     if (document.access_hash == 0) {
@@ -5554,7 +5554,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             sendingMedia.geo = new TLRPC.TL_geoPoint();
             sendingMedia.geo.lat = location.getLatitude();
             sendingMedia.geo._long = location.getLongitude();
-            accountInstance.getSendMessagesHelper().sendMessage(sendingMedia, dialog_id, null, null, null, true, 0);
+            accountInstance.getSendMessagesHelper().sendMessage(sendingMedia, dialog_id, null, null, null, null, true, 0);
         })));
     }
 

@@ -1841,6 +1841,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 listView.stopScroll();
                 avatarContainer.setVisibility(expanded ? INVISIBLE : VISIBLE);
                 nameTextView[1].setVisibility(expanded ? INVISIBLE : VISIBLE);
+                idTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
                 onlineTextView[1].setVisibility(expanded ? INVISIBLE : VISIBLE);
                 onlineTextView[2].setVisibility(expanded ? INVISIBLE : VISIBLE);
                 callItem.setVisibility(expanded || !callItemVisible ? GONE : INVISIBLE);
@@ -4098,7 +4099,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setScaleY(nameScale);
                 }
 
-                if (diff > 0.85 && NekoConfig.showIdAndDc) {
+                if (diff > 0.85 && !searchMode && NekoConfig.showIdAndDc) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {
                     idTextView.setVisibility(View.GONE);
@@ -5785,6 +5786,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             avatarContainer.setAlpha(progressHalf);
             nameTextView[1].setAlpha(progressHalf);
             onlineTextView[1].setAlpha(progressHalf);
+            idTextView.setAlpha(progressHalf);
 
             searchItem.getSearchField().setAlpha(progressHalfEnd);
             if (enter && searchTransitionProgress < 0.7f) {
@@ -5846,6 +5848,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setAlpha(1f);
         nameTextView[1].setAlpha(1f);
         onlineTextView[1].setAlpha(1f);
+        idTextView.setAlpha(1f);
         searchItem.setAlpha(1f);
         listView.setAlpha(1f);
         searchListView.setAlpha(1f);
