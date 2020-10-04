@@ -177,7 +177,7 @@ CROSS_PREFIX=${TOOLCHAIN_PREFIX}/bin/arm-linux-androideabi-
 ARCH=arm
 CPU=armv7-a
 OPTIMIZE_CFLAGS="-marm -march=$CPU"
-PREFIX=./build/$CPU
+PREFIX=./build/armeabi-v7a
 ADDITIONAL_CONFIGURE_FLAG="--enable-neon"
 build_one
 
@@ -189,6 +189,6 @@ CROSS_PREFIX=${TOOLCHAIN_PREFIX}/bin/i686-linux-android-
 ARCH=x86
 CPU=i686
 OPTIMIZE_CFLAGS="-march=$CPU"
-PREFIX=./build/$CPU
+PREFIX=./build/x86
 ADDITIONAL_CONFIGURE_FLAG="--disable-x86asm --disable-inline-asm --disable-asm"
 build_one

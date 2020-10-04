@@ -6,40 +6,40 @@ set(CMAKE_ASM_FLAGS "${CFLAGS} -x assembler-with-cpp")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections -Wl,--exclude-libs,libtgvoip.a,libtgcalls.a,libtgcalls_tp.a,libtgnet.a,liblz4.a,libwebp.a,libflac.a,librlottie.a,libsqlite.a,
-${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libswscale.a,
-${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavformat.a,
-${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavcodec.a,
-${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavresample.a,
-${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavutil.a,
-${CMAKE_HOME_DIRECTORY}/boringssl/lib/libssl_${ANDROID_ABI}.a,
-${CMAKE_HOME_DIRECTORY}/boringssl/lib/libcrypto_${ANDROID_ABI}.a")
+${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libswscale.a,
+${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavformat.a,
+${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavcodec.a,
+${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavresample.a,
+${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavutil.a,
+${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/ssl/libssl.a,
+${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/crypto/libcrypto.a")
 
 if (${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a")
     enable_language(ASM)
-else()
+else ()
     enable_language(ASM_NASM)
-endif()
+endif ()
 
 add_library(avutil STATIC IMPORTED)
-set_target_properties(avutil PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavutil.a)
+set_target_properties(avutil PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavutil.a)
 
 add_library(avformat STATIC IMPORTED)
-set_target_properties(avformat PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavformat.a)
+set_target_properties(avformat PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavformat.a)
 
 add_library(avcodec STATIC IMPORTED)
-set_target_properties(avcodec PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavcodec.a)
+set_target_properties(avcodec PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavcodec.a)
 
 add_library(avresample STATIC IMPORTED)
-set_target_properties(avresample PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libavresample.a)
+set_target_properties(avresample PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavresample.a)
 
 add_library(swscale STATIC IMPORTED)
-set_target_properties(swscale PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libswscale.a)
+set_target_properties(swscale PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libswscale.a)
 
 add_library(crypto STATIC IMPORTED)
-set_target_properties(crypto PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/boringssl/lib/libcrypto_${ANDROID_ABI}.a)
+set_target_properties(crypto PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/crypto/libcrypto.a)
 
 add_library(ssl STATIC IMPORTED)
-set_target_properties(ssl PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/boringssl/lib/libssl_${ANDROID_ABI}.a)
+set_target_properties(ssl PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/ssl/libssl.a)
 
 #tgnet
 add_library(mozjpeg STATIC
@@ -70,13 +70,13 @@ if (${ANDROID_ABI} STREQUAL "armeabi-v7a")
             mozjpeg/simd/arm/jsimd.c)
     target_compile_definitions(mozjpeg PUBLIC
             SIZEOF_SIZE_T=4)
-elseif(${ANDROID_ABI} STREQUAL "arm64-v8a")
+elseif (${ANDROID_ABI} STREQUAL "arm64-v8a")
     target_sources(mozjpeg PRIVATE
             mozjpeg/simd/arm64/jsimd_neon.S
             mozjpeg/simd/arm64/jsimd.c)
     target_compile_definitions(mozjpeg PUBLIC
             SIZEOF_SIZE_T=8)
-elseif(${ANDROID_ABI} STREQUAL "x86")
+elseif (${ANDROID_ABI} STREQUAL "x86")
     set(CMAKE_ASM_NASM_COMPILER_ARG1 "${CMAKE_ASM_NASM_COMPILER_ARG1} -DPIC")
     target_sources(mozjpeg PRIVATE
             mozjpeg/simd/i386/jsimd.c
@@ -126,7 +126,7 @@ elseif(${ANDROID_ABI} STREQUAL "x86")
             mozjpeg/simd/i386/jquanti-avx2.asm)
     target_compile_definitions(mozjpeg PUBLIC
             SIZEOF_SIZE_T=4)
-elseif(${ANDROID_ABI} STREQUAL "x86_64")
+elseif (${ANDROID_ABI} STREQUAL "x86_64")
     set(CMAKE_ASM_NASM_COMPILER_ARG1 "${CMAKE_ASM_NASM_COMPILER_ARG1} -DPIC")
     set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -DELF")
     set(CMAKE_ASM_NASM_DEBUG_FORMAT "dwarf2")
@@ -162,7 +162,7 @@ elseif(${ANDROID_ABI} STREQUAL "x86_64")
             mozjpeg/simd/x86_64/jquanti-avx2.asm)
     target_compile_definitions(mozjpeg PUBLIC
             SIZEOF_SIZE_T=8)
-endif()
+endif ()
 
 #tgnet
 add_library(tgnet STATIC
@@ -250,14 +250,14 @@ if (${ANDROID_ABI} STREQUAL "armeabi-v7a")
             USE_ARM_NEON)
     target_sources(rlottie PRIVATE
             rlottie/src/vector/pixman/pixman-arm-neon-asm.S)
-elseif(${ANDROID_ABI} STREQUAL "arm64-v8a")
+elseif (${ANDROID_ABI} STREQUAL "arm64-v8a")
     target_compile_options(rlottie PUBLIC
             -fno-integrated-as)
     target_compile_definitions(rlottie PUBLIC
             USE_ARM_NEON __ARM64_NEON__)
     target_sources(rlottie PRIVATE
             rlottie/src/vector/pixman/pixman-arma64-neon-asm.S)
-endif()
+endif ()
 
 #flac
 add_library(flac STATIC
@@ -298,71 +298,119 @@ target_include_directories(flac PUBLIC
 
 #webp
 add_library(webp STATIC
-        libwebp/dec/alpha.c
-        libwebp/dec/buffer.c
-        libwebp/dec/frame.c
-        libwebp/dec/idec.c
-        libwebp/dec/io.c
-        libwebp/dec/quant.c
-        libwebp/dec/tree.c
-        libwebp/dec/vp8.c
-        libwebp/dec/vp8l.c
-        libwebp/dec/webp.c
-        libwebp/dsp/alpha_processing.c
-        libwebp/dsp/alpha_processing_sse2.c
-        libwebp/dsp/cpu.c
-        libwebp/dsp/dec.c
-        libwebp/dsp/dec_clip_tables.c
-        libwebp/dsp/dec_mips32.c
-        libwebp/dsp/dec_neon.c
-        libwebp/dsp/dec_sse2.c
-        libwebp/dsp/enc.c
-        libwebp/dsp/enc_avx2.c
-        libwebp/dsp/enc_mips32.c
-        libwebp/dsp/enc_neon.c
-        libwebp/dsp/enc_sse2.c
-        libwebp/dsp/lossless.c
-        libwebp/dsp/lossless_mips32.c
-        libwebp/dsp/lossless_neon.c
-        libwebp/dsp/lossless_sse2.c
-        libwebp/dsp/upsampling.c
-        libwebp/dsp/upsampling_neon.c
-        libwebp/dsp/upsampling_sse2.c
-        libwebp/dsp/yuv.c
-        libwebp/dsp/yuv_mips32.c
-        libwebp/dsp/yuv_sse2.c
-        libwebp/enc/alpha.c
-        libwebp/enc/analysis.c
-        libwebp/enc/backward_references.c
-        libwebp/enc/config.c
-        libwebp/enc/cost.c
-        libwebp/enc/filter.c
-        libwebp/enc/frame.c
-        libwebp/enc/histogram.c
-        libwebp/enc/iterator.c
-        libwebp/enc/picture.c
-        libwebp/enc/picture_csp.c
-        libwebp/enc/picture_psnr.c
-        libwebp/enc/picture_rescale.c
-        libwebp/enc/picture_tools.c
-        libwebp/enc/quant.c
-        libwebp/enc/syntax.c
-        libwebp/enc/token.c
-        libwebp/enc/tree.c
-        libwebp/enc/vp8l.c
-        libwebp/enc/webpenc.c
-        libwebp/utils/bit_reader.c
-        libwebp/utils/bit_writer.c
-        libwebp/utils/color_cache.c
-        libwebp/utils/filters.c
-        libwebp/utils/huffman.c
-        libwebp/utils/huffman_encode.c
-        libwebp/utils/quant_levels.c
-        libwebp/utils/quant_levels_dec.c
-        libwebp/utils/random.c
-        libwebp/utils/rescaler.c
-        libwebp/utils/thread.c
-        libwebp/utils/utils.c)
+        libwebp/src/dec/alpha_dec.c
+        libwebp/src/dec/buffer_dec.c
+        libwebp/src/dec/frame_dec.c
+        libwebp/src/dec/idec_dec.c
+        libwebp/src/dec/io_dec.c
+        libwebp/src/dec/quant_dec.c
+        libwebp/src/dec/tree_dec.c
+        libwebp/src/dec/vp8_dec.c
+        libwebp/src/dec/vp8l_dec.c
+        libwebp/src/dec/webp_dec.c
+        libwebp/src/demux/anim_decode.c
+        libwebp/src/demux/demux.c
+        libwebp/src/dsp/alpha_processing.c
+        libwebp/src/dsp/alpha_processing_mips_dsp_r2.c
+        libwebp/src/dsp/alpha_processing_neon.c
+        libwebp/src/dsp/alpha_processing_sse2.c
+        libwebp/src/dsp/alpha_processing_sse41.c
+        libwebp/src/dsp/cpu.c
+        libwebp/src/dsp/dec.c
+        libwebp/src/dsp/dec_clip_tables.c
+        libwebp/src/dsp/dec_mips32.c
+        libwebp/src/dsp/dec_mips_dsp_r2.c
+        libwebp/src/dsp/dec_msa.c
+        libwebp/src/dsp/dec_neon.c
+        libwebp/src/dsp/dec_sse2.c
+        libwebp/src/dsp/dec_sse41.c
+        libwebp/src/dsp/filters.c
+        libwebp/src/dsp/filters_mips_dsp_r2.c
+        libwebp/src/dsp/filters_msa.c
+        libwebp/src/dsp/filters_neon.c
+        libwebp/src/dsp/filters_sse2.c
+        libwebp/src/dsp/lossless.c
+        libwebp/src/dsp/lossless_mips_dsp_r2.c
+        libwebp/src/dsp/lossless_msa.c
+        libwebp/src/dsp/lossless_neon.c
+        libwebp/src/dsp/lossless_sse2.c
+        libwebp/src/dsp/rescaler.c
+        libwebp/src/dsp/rescaler_mips32.c
+        libwebp/src/dsp/rescaler_mips_dsp_r2.c
+        libwebp/src/dsp/rescaler_msa.c
+        libwebp/src/dsp/rescaler_neon.c
+        libwebp/src/dsp/rescaler_sse2.c
+        libwebp/src/dsp/upsampling.c
+        libwebp/src/dsp/upsampling_mips_dsp_r2.c
+        libwebp/src/dsp/upsampling_msa.c
+        libwebp/src/dsp/upsampling_neon.c
+        libwebp/src/dsp/upsampling_sse2.c
+        libwebp/src/dsp/upsampling_sse41.c
+        libwebp/src/dsp/yuv.c
+        libwebp/src/dsp/yuv_mips32.c
+        libwebp/src/dsp/yuv_mips_dsp_r2.c
+        libwebp/src/dsp/yuv_neon.c
+        libwebp/src/dsp/yuv_sse2.c
+        libwebp/src/dsp/yuv_sse41.c
+        libwebp/src/dsp/cost.c
+        libwebp/src/dsp/cost_mips32.c
+        libwebp/src/dsp/cost_mips_dsp_r2.c
+        libwebp/src/dsp/cost_sse2.c
+        libwebp/src/dsp/enc.c
+        libwebp/src/dsp/enc_mips32.c
+        libwebp/src/dsp/enc_mips_dsp_r2.c
+        libwebp/src/dsp/enc_msa.c
+        libwebp/src/dsp/enc_neon.c
+        libwebp/src/dsp/enc_sse2.c
+        libwebp/src/dsp/enc_sse41.c
+        libwebp/src/dsp/lossless_enc.c
+        libwebp/src/dsp/lossless_enc_mips32.c
+        libwebp/src/dsp/lossless_enc_mips_dsp_r2.c
+        libwebp/src/dsp/lossless_enc_msa.c
+        libwebp/src/dsp/lossless_enc_neon.c
+        libwebp/src/dsp/lossless_enc_sse2.c
+        libwebp/src/dsp/lossless_enc_sse41.c
+        libwebp/src/dsp/ssim.c
+        libwebp/src/dsp/ssim_sse2.c
+        libwebp/src/enc/alpha_enc.c
+        libwebp/src/enc/analysis_enc.c
+        libwebp/src/enc/backward_references_cost_enc.c
+        libwebp/src/enc/backward_references_enc.c
+        libwebp/src/enc/config_enc.c
+        libwebp/src/enc/cost_enc.c
+        libwebp/src/enc/filter_enc.c
+        libwebp/src/enc/frame_enc.c
+        libwebp/src/enc/histogram_enc.c
+        libwebp/src/enc/iterator_enc.c
+        libwebp/src/enc/near_lossless_enc.c
+        libwebp/src/enc/picture_enc.c
+        libwebp/src/enc/picture_csp_enc.c
+        libwebp/src/enc/picture_psnr_enc.c
+        libwebp/src/enc/picture_rescale_enc.c
+        libwebp/src/enc/picture_tools_enc.c
+        libwebp/src/enc/predictor_enc.c
+        libwebp/src/enc/quant_enc.c
+        libwebp/src/enc/syntax_enc.c
+        libwebp/src/enc/token_enc.c
+        libwebp/src/enc/tree_enc.c
+        libwebp/src/enc/vp8l_enc.c
+        libwebp/src/enc/webp_enc.c
+        libwebp/src/mux/anim_encode.c
+        libwebp/src/mux/muxedit.c
+        libwebp/src/mux/muxinternal.c
+        libwebp/src/mux/muxread.c
+        libwebp/src/utils/bit_reader_utils.c
+        libwebp/src/utils/color_cache_utils.c
+        libwebp/src/utils/filters_utils.c
+        libwebp/src/utils/huffman_utils.c
+        libwebp/src/utils/quant_levels_dec_utils.c
+        libwebp/src/utils/random_utils.c
+        libwebp/src/utils/rescaler_utils.c
+        libwebp/src/utils/thread_utils.c
+        libwebp/src/utils/utils.c
+        libwebp/src/utils/bit_writer_utils.c
+        libwebp/src/utils/huffman_encode_utils.c
+        libwebp/src/utils/quant_levels_utils.c)
 target_compile_options(webp PUBLIC
         -Wall -finline-functions -ffast-math -Os)
 set_target_properties(webp PROPERTIES
@@ -370,7 +418,7 @@ set_target_properties(webp PROPERTIES
 target_compile_definitions(webp PUBLIC
         HAVE_MALLOC_H HAVE_PTHREAD WEBP_USE_THREAD)
 target_include_directories(webp PUBLIC
-        libwebp/src)
+        libwebp libwebp/src)
 
 #lz4
 add_library(lz4 STATIC
@@ -429,15 +477,15 @@ if (${ANDROID_ABI} STREQUAL "armeabi-v7a")
     target_compile_definitions(tmessages.32 PUBLIC
             ANDROID_ARM_NEON=false)
     target_sources(tmessages.32 PRIVATE
-        third_party/libyuv/source/compare_neon.cc
-        third_party/libyuv/source/rotate_neon.cc
-        third_party/libyuv/source/row_neon.cc
-        third_party/libyuv/source/scale_neon.cc)
-else()
+            third_party/libyuv/source/compare_neon.cc
+            third_party/libyuv/source/rotate_neon.cc
+            third_party/libyuv/source/row_neon.cc
+            third_party/libyuv/source/scale_neon.cc)
+else ()
     set_target_properties(tmessages.32 PROPERTIES
             ANDROID_ARM_NEON FALSE
             ANDROID_ARM_MODE arm)
-endif()
+endif ()
 
 if (${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a")
     target_compile_definitions(tmessages.32 PUBLIC
@@ -454,10 +502,10 @@ if (${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a"
             opus/silk/fixed/arm/warped_autocorrelation_FIX_neon_intr.c
             )
 
-elseif(${ANDROID_ABI} STREQUAL "x86")
+elseif (${ANDROID_ABI} STREQUAL "x86")
     target_compile_definitions(tmessages.32 PUBLIC
             x86fix)
-endif()
+endif ()
 
 target_sources(tmessages.32 PRIVATE
 
@@ -651,7 +699,7 @@ target_include_directories(tmessages.32 PUBLIC
         opus/opusfile
         third_party/libyuv/include
         boringssl/include
-        ffmpeg/include
+        ffmpeg/build/${ANDROID_ABI}/include
         emoji
         exoplayer/include
         exoplayer/libFLAC/include
@@ -691,7 +739,7 @@ target_link_libraries(tmessages.32
 if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
     target_link_libraries(tmessages.32
             -Wl,--whole-archive libvpx_yasm -Wl,--no-whole-archive)
-endif()
+endif ()
 
 #if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
 #    target_link_libraries(tmessages.32
