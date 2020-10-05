@@ -46,6 +46,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Keep;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -80,13 +87,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-import androidx.annotation.Keep;
-import androidx.exifinterface.media.ExifInterface;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -2806,9 +2806,14 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 cameraAttachAdapter.notifyDataSetChanged();
                 if (!selectedPhotosOrder.isEmpty() && galleryAlbumEntry != null) {
                     for (int a = 0, N = selectedPhotosOrder.size(); a < N; a++) {
-                        int imageId = (Integer) selectedPhotosOrder.get(a);
+                        Integer imageId = (Integer) selectedPhotosOrder.get(a);
+                        Object currentEntry = selectedPhotos.get(imageId);
                         MediaController.PhotoEntry entry = galleryAlbumEntry.photosByIds.get(imageId);
                         if (entry != null) {
+                            if (currentEntry instanceof MediaController.PhotoEntry) {
+                                MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) currentEntry;
+                                entry.copyFrom(photoEntry);
+                            }
                             selectedPhotos.put(imageId, entry);
                         }
                     }

@@ -107,7 +107,6 @@ public class SharedConfig {
     public static boolean directShare = true;
     public static boolean inappCamera = true;
     public static boolean roundCamera16to9 = true;
-    public static boolean assistantSupport = false;
     public static boolean noSoundHintShowed = false;
     public static boolean streamMedia = true;
     public static boolean streamAllVideo = false;
@@ -981,7 +980,6 @@ public class SharedConfig {
             inappCamera = preferences.getBoolean("inappCamera", true);
             hasCameraCache = preferences.contains("cameraCache");
             roundCamera16to9 = true;//preferences.getBoolean("roundCamera16to9", false);
-            assistantSupport = preferences.getBoolean("assistantSupport", false);
             repeatMode = preferences.getInt("repeatMode", 0);
             fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 14 : 12);
             bubbleRadius = preferences.getInt("bubbleRadius", 3);
@@ -1476,14 +1474,6 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("inappCamera", inappCamera);
-        editor.commit();
-    }
-
-    public static void toggleAssistantSupport() {
-        assistantSupport = !assistantSupport;
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("assistantSupport", assistantSupport);
         editor.commit();
     }
 

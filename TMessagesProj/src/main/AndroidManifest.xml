@@ -524,6 +524,10 @@
             android:name="android.max_aspect"
             android:value="2.5" />
 
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/actions" />
+
     </application>
 
 </manifest>

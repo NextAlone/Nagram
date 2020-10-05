@@ -1805,7 +1805,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                     }
                 } else if (id == add_photo) {
-                    writeButton.callOnClick();
+                    onWriteButtonClick();
                 }
             }
         });
@@ -2313,7 +2313,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     getMessagesController().unblockPeer(user_id);
                     AlertsCreator.showSimpleToast(ProfileActivity.this, LocaleController.getString("UserUnblocked", R.string.UserUnblocked));
                 } else if (position == sendMessageRow) {
-                    writeButton.callOnClick();
+                    onWriteButtonClick();
                 } else if (position == reportRow) {
                     AlertsCreator.createReportAlert(getParentActivity(), getDialogId(), 0, ProfileActivity.this);
                 } else if (position >= membersStartRow && position < membersEndRow) {
@@ -2595,8 +2595,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
                                 SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
                                 BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
-                                Build.VERSION.SDK_INT >= 29 ? (SharedConfig.chatBubbles ? "Disable chat bubbles" : "Enable chat bubbles") : null,
-                                SharedConfig.assistantSupport ? "Disable Google Assistant support" : "Enable Google Assistant Support"
+                                Build.VERSION.SDK_INT >= 29 ? (SharedConfig.chatBubbles ? "Disable chat bubbles" : "Enable chat bubbles") : null
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -2641,8 +2640,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                             } else if (which == 13) {
                                 SharedConfig.toggleChatBubbles();
-                            } else if (which == 14) {
-                                SharedConfig.toggleAssistantSupport();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -2981,41 +2978,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (writeButton.getTag() != null) {
                 return;
             }
-            if (user_id != 0) {
-                if (imageUpdater != null) {
-                    presentFragment(new ChangeNameActivity());
-                } else {
-                    if (playProfileAnimation != 0 && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity && !AndroidUtilities.isTablet()) {
-                        finishFragment();
-                    } else {
-                        TLRPC.User user = getMessagesController().getUser(user_id);
-                        if (user == null || user instanceof TLRPC.TL_userEmpty) {
-                            return;
-                        }
-                        Bundle args = new Bundle();
-                        args.putInt("user_id", user_id);
-                        if (!getMessagesController().checkCanOpenChat(args, ProfileActivity.this)) {
-                            return;
-                        }
-                        if (!AndroidUtilities.isTablet()) {
-                            getNotificationCenter().removeObserver(ProfileActivity.this, NotificationCenter.closeChats);
-                            getNotificationCenter().postNotificationName(NotificationCenter.closeChats);
-                        }
-                        int distance = getArguments().getInt("nearby_distance", -1);
-                        if (distance >= 0) {
-                            args.putInt("nearby_distance", distance);
-                        }
-                        ChatActivity chatActivity = new ChatActivity(args);
-                        chatActivity.setPreloadedSticker(preloadedSticker);
-                        presentFragment(chatActivity, true);
-                        if (AndroidUtilities.isTablet()) {
-                            finishFragment();
-                        }
-                    }
-                }
-            } else {
-                openDiscussion();
-            }
+            onWriteButtonClick();
         });
         needLayout(false);
 
@@ -3209,6 +3172,44 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 PhotoViewer.getInstance().openPhotoWithVideo(chat.photo.photo_big, videoLocation, provider);
             }
+        }
+    }
+
+    private void onWriteButtonClick() {
+        if (user_id != 0) {
+            if (imageUpdater != null) {
+                presentFragment(new ChangeNameActivity());
+            } else {
+                if (playProfileAnimation != 0 && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity) {
+                    finishFragment();
+                } else {
+                    TLRPC.User user = getMessagesController().getUser(user_id);
+                    if (user == null || user instanceof TLRPC.TL_userEmpty) {
+                        return;
+                    }
+                    Bundle args = new Bundle();
+                    args.putInt("user_id", user_id);
+                    if (!getMessagesController().checkCanOpenChat(args, ProfileActivity.this)) {
+                        return;
+                    }
+                    if (!AndroidUtilities.isTablet()) {
+                        getNotificationCenter().removeObserver(ProfileActivity.this, NotificationCenter.closeChats);
+                        getNotificationCenter().postNotificationName(NotificationCenter.closeChats);
+                    }
+                    int distance = getArguments().getInt("nearby_distance", -1);
+                    if (distance >= 0) {
+                        args.putInt("nearby_distance", distance);
+                    }
+                    ChatActivity chatActivity = new ChatActivity(args);
+                    chatActivity.setPreloadedSticker(preloadedSticker);
+                    presentFragment(chatActivity, true);
+                    if (AndroidUtilities.isTablet()) {
+                        finishFragment();
+                    }
+                }
+            }
+        } else {
+            openDiscussion();
         }
     }
 

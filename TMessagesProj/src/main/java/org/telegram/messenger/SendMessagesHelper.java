@@ -10,7 +10,6 @@ package org.telegram.messenger;
 
 import android.content.ClipDescription;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -22,7 +21,6 @@ import android.location.LocationManager;
 import android.media.MediaCodecInfo;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +30,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.webkit.MimeTypeMap;
@@ -43,8 +40,6 @@ import android.widget.Toast;
 
 import androidx.annotation.UiThread;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
-
-import com.google.gson.Gson;
 
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.support.SparseLongArray;
@@ -59,12 +54,10 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.ChatRightsEditActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Point;
-import org.telegram.ui.TooManyCommunitiesActivity;
 import org.telegram.ui.TwoStepVerificationActivity;
 import org.telegram.ui.TwoStepVerificationSetupActivity;
 
@@ -1319,7 +1312,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         newMsg.fwd_from.flags |= 8;
                         newMsg.fwd_from.post_author = msgObj.messageOwner.fwd_from.post_author;
                     }
-                    if ((msgObj.messageOwner.fwd_from.flags & 16) != 0) {
+                    if ((msgObj.messageOwner.fwd_from.flags & 16) != 0 && !UserObject.isReplyUser(msgObj.getDialogId())) {
                         newMsg.fwd_from.flags |= 16;
                         newMsg.fwd_from.saved_from_peer = msgObj.messageOwner.fwd_from.saved_from_peer;
                         newMsg.fwd_from.saved_from_msg_id = msgObj.messageOwner.fwd_from.saved_from_msg_id;

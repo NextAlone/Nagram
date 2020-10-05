@@ -16,14 +16,11 @@
 
 package androidx.recyclerview.widget;
 
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +34,8 @@ import androidx.core.view.ViewCompat;
 import org.telegram.messenger.BuildVars;
 
 import java.util.List;
+
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 /**
  * A {@link RecyclerView.LayoutManager} implementation which provides
@@ -703,9 +702,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             mAnchorInfo.reset();
         }
         mLastStackFromEnd = mStackFromEnd;
-        if (DEBUG) {
-            validateChildOrder();
-        }
+//        if (DEBUG) {
+//            validateChildOrder();
+//        }
     }
 
     @Override
@@ -1612,9 +1611,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 break;
             }
         }
-        if (DEBUG) {
-            validateChildOrder();
-        }
+//        if (DEBUG) {
+//            validateChildOrder();
+//        }
         return start - layoutState.mAvailable;
     }
 

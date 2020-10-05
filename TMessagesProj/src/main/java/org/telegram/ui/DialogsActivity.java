@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.StateSet;
@@ -63,13 +62,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
@@ -147,10 +139,6 @@ import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.DialogsItemAnimator;
-import org.telegram.ui.Components.EmptyTextProgressView;
-import org.telegram.ui.Components.FilterTabsView;
-import org.telegram.ui.Components.FiltersListBottomSheet;
-import org.telegram.ui.Components.FragmentContextView;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.FilterTabsView;
 import org.telegram.ui.Components.FiltersListBottomSheet;
@@ -1788,7 +1776,7 @@ private int lastMeasuredTopPadding;
             @Override
             public void onTextChanged(EditText editText) {
                 String text = editText.getText().toString();
-                if (text.length() != 0 || searchViewPager.dialogsSearchAdapter != null && searchViewPager.dialogsSearchAdapter.hasRecentRearch()) {
+                if (text.length() != 0 || searchViewPager.dialogsSearchAdapter != null && searchViewPager.dialogsSearchAdapter.hasRecentSearch()) {
                     searchWas = true;
                     if (viewPages[0].listView.getVisibility() == View.VISIBLE) {
                         showSearch(true, true);
@@ -3737,7 +3725,7 @@ private int lastMeasuredTopPadding;
         searchIsShowed = show;
         if (show) {
             int dialogsCount = getMessagesController().getTotalDialogsCount();
-            boolean onlyDialogsAdapter = onlySelect || !searchViewPager.dialogsSearchAdapter.hasRecentRearch() || dialogsCount <= 10;
+            boolean onlyDialogsAdapter = onlySelect || !searchViewPager.dialogsSearchAdapter.hasRecentSearch() || dialogsCount <= 10;
             searchViewPager.showOnlyDialogsAdapter(onlyDialogsAdapter);
             whiteActionBar = !onlyDialogsAdapter;
             ContentView contentView = (ContentView) fragmentView;
@@ -3783,7 +3771,7 @@ private int lastMeasuredTopPadding;
             }
         }
 
-        if (animated && searchViewPager.dialogsSearchAdapter.hasRecentRearch()) {
+        if (animated && searchViewPager.dialogsSearchAdapter.hasRecentSearch()) {
             AndroidUtilities.setAdjustResizeToNothing(getParentActivity(), classGuid);
         } else {
             AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);

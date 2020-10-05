@@ -127,12 +127,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView {
 
@@ -8830,7 +8828,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             currentUser.first_name = fwd_from.from_name;
         } else {
             int fromId = currentMessageObject.getFromChatId();
-            if (fromId > 0) {
+            if (fromId > 0 && !currentMessageObject.messageOwner.post) {
                 currentUser = messagesController.getUser(fromId);
             } else if (fromId < 0) {
                 currentChat = messagesController.getChat(-fromId);
@@ -10423,7 +10421,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 endX += AndroidUtilities.dp(14);
                 buttonX -= AndroidUtilities.dp(10);
             }
-            commentButtonRect.set(buttonX, (int) buttonY, endX - AndroidUtilities.dp(14), (int) (layoutHeight - AndroidUtilities.dp(h)));
+            commentButtonRect.set(buttonX, (int) buttonY, endX - AndroidUtilities.dp(14), layoutHeight - AndroidUtilities.dp(h));
             if (selectorDrawable[1] != null && selectorDrawableMaskType[1] == 2) {
                 selectorDrawable[1].setBounds(commentButtonRect);
                 selectorDrawable[1].draw(canvas);
