@@ -57,6 +57,8 @@ import android.util.SparseArray;
 import android.util.StateSet;
 import android.view.View;
 
+import androidx.annotation.UiThread;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -104,8 +106,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-
-import androidx.annotation.UiThread;
 
 import tw.nekomimi.nekogram.NekoConfig;
 
@@ -3850,7 +3850,7 @@ public class Theme {
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
-        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "nekox-indigo.attheme";
+        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "indigo.attheme";
         themeInfo.previewBackgroundColor = -657931;
         themeInfo.previewInColor = NekoConfig.useDefaultTheme ? 0xffffffff : Color.parseColor("#c0ffffff");
         themeInfo.previewOutColor = NekoConfig.useDefaultTheme ? 0xffd0e6ff: Color.parseColor("#3f51b5");

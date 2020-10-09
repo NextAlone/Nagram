@@ -53,7 +53,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.v2ray.ang.V2RayConfig;
 
@@ -555,7 +557,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 14) {
                     NekoXConfig.toggleKeepOnlineStatus();
-                    ;
+
                     drawerLayoutAdapter.notifyDataSetChanged();
                 }
             } else {
@@ -3953,6 +3955,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             if (!toDark) {
                                 darkThemeView.setVisibility(View.VISIBLE);
                             }
+                            drawerLayoutAdapter.notifyDataSetChanged();
                         }
                     });
                     anim.start();
