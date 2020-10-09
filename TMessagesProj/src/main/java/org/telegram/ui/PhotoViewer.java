@@ -238,6 +238,8 @@ import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
+import tw.nekomimi.nekogram.MessageHelper;
+
 @SuppressWarnings("unchecked")
 public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener {
 
@@ -3472,9 +3474,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                     SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0);
                                 }
                                 if (id == gallery_menu_send_noquote) {
-                                    for (MessageObject object : fmessages) {
-                                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(object, did, true, true, 0);
-                                    }
+                                    MessageHelper.getInstance(currentAccount).processForwardFromMyName(fmessages, did, true, 0);
                                 } else {
                                     SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessages, did, true, 0);
                                 }

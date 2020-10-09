@@ -47,6 +47,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
+import tw.nekomimi.nekogram.MessageHelper;
 
 public class BaseFragment {
 
@@ -587,5 +588,9 @@ public class BaseFragment {
         if (parentLayout != null) {
             parentLayout.setFragmentPanTranslationOffset(offset);
         }
+    }
+
+    public MessageHelper getMessageHelper() {
+        return MessageHelper.getInstance(currentAccount);
     }
 }
