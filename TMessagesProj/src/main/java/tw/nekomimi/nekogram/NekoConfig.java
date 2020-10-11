@@ -119,6 +119,8 @@ public class NekoConfig {
     public static boolean autoPauseVideo;
     public static boolean disableProximityEvents;
 
+    public static boolean ignoreContentRestrictions;
+
     public static String getOpenPGPAppName() {
 
         if (StrUtil.isNotBlank(openPGPApp)) {
@@ -248,6 +250,8 @@ public class NekoConfig {
 
         disableVibration = preferences.getBoolean("disableVibration", false);
         autoPauseVideo = preferences.getBoolean("autoPauseVideo", false);
+
+        ignoreContentRestrictions = preferences.getBoolean("ignoreContentRestrictions", false);
 
     }
 
@@ -776,6 +780,12 @@ public class NekoConfig {
     public static void toggleDisableProximityEvents() {
 
         preferences.edit().putBoolean("disableProximityEvents",disableProximityEvents = !disableProximityEvents).apply();
+
+    }
+
+    public static void toggleIgnoreContentRestrictions() {
+
+        preferences.edit().putBoolean("ignoreContentRestrictions",ignoreContentRestrictions = !ignoreContentRestrictions).apply();
 
     }
 

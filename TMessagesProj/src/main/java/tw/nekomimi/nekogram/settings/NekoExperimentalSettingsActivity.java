@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -62,6 +64,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int mediaPreviewRow;
     private int proxyAutoSwitchRow;
     private int disableFilteringRow;
+    private int ignoreContentRestrictionsRow;
     private int unlimitedFavedStickersRow;
     private int unlimitedPinnedDialogsRow;
     private int deleteAccountRow;
@@ -124,6 +127,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
                     }
                 }));
+            } else if (position == ignoreContentRestrictionsRow) {
+                NekoConfig.toggleIgnoreContentRestrictions();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.ignoreContentRestrictions);
+                }
             } else if (position == unlimitedFavedStickersRow) {
                 NekoConfig.toggleUnlimitedFavedStickers();
                 if (view instanceof TextCheckCell) {
@@ -254,6 +262,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         mediaPreviewRow = rowCount++;
         proxyAutoSwitchRow = rowCount++;
         disableFilteringRow = rowCount++;
+        ignoreContentRestrictionsRow = !BuildConfig.VERSION_NAME.contains("play") || NekoXConfig.developerMode ? rowCount++ : -1;
         unlimitedFavedStickersRow = rowCount++;
         unlimitedPinnedDialogsRow = rowCount++;
         deleteAccountRow = rowCount++;
@@ -388,6 +397,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     if (position == disableFilteringRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("SensitiveDisableFiltering", R.string.SensitiveDisableFiltering), LocaleController.getString("SensitiveAbout", R.string.SensitiveAbout), sensitiveEnabled, true, true);
                         textCell.setEnabled(sensitiveCanChange, null);
+                    } else if (position == ignoreContentRestrictionsRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("IgnoreContentRestrictions", R.string.IgnoreContentRestrictions), LocaleController.getString("IgnoreContentRestrictionsNotice", R.string.IgnoreContentRestrictionsNotice), NekoConfig.ignoreContentRestrictions, true, true);
                     } else if (position == unlimitedFavedStickersRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedFavoredStickers", R.string.UnlimitedFavoredStickers), LocaleController.getString("UnlimitedFavoredStickersAbout", R.string.UnlimitedFavoredStickersAbout), NekoConfig.unlimitedFavedStickers, true, true);
                     } else if (position == smoothKeyboardRow) {

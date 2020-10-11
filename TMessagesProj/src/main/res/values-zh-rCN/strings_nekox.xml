@@ -177,4 +177,6 @@
     <string name="PGPImportPrivate">导入私钥</string>
     <string name="ShareMyKey">分享我的公钥</string>
     <string name="DisableVibration">禁用振动</string>
+    <string name="IgnoreContentRestrictions">忽略内容限制</string>
+    <string name="IgnoreContentRestrictionsNotice">在本机忽略消息针对 Android 平台的限制. 这可能在未来被服务器禁止, 您需要自行评估在当地的合法性.</string>
 </resources>

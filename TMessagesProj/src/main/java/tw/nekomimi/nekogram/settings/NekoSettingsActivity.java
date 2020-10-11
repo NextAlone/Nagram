@@ -54,7 +54,6 @@ public class NekoSettingsActivity extends BaseFragment {
     private int googlePlayRow;
     private int sourceCodeRow;
     private int translationRow;
-    private int donateRow;
     private int about2Row;
 
     @Override
@@ -104,8 +103,6 @@ public class NekoSettingsActivity extends BaseFragment {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
-            } else if (position == donateRow) {
-                Browser.openUrl(getParentActivity(), "https://patreon.com/NekoXDev");
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://nekox.crowdin.com/nekox");
             } else if (position == googlePlayRow) {
@@ -143,11 +140,6 @@ public class NekoSettingsActivity extends BaseFragment {
         }
         sourceCodeRow = rowCount++;
         translationRow = rowCount++;
-        if ("release".equals(BuildConfig.BUILD_TYPE)) {
-            donateRow = -1;
-        } else {
-            donateRow = rowCount++;
-        }
         about2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -253,13 +245,6 @@ public class NekoSettingsActivity extends BaseFragment {
                     }
                     break;
                 }
-                case 6: {
-                    TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
-                    if (position == donateRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Donate", R.string.Donate), LocaleController.getString("DonateAbout", R.string.DonateAbout), false);
-                    }
-                    break;
-                }
             }
         }
 
@@ -316,8 +301,6 @@ public class NekoSettingsActivity extends BaseFragment {
                 return 3;
             } else if (position == categoriesRow || position == aboutRow) {
                 return 4;
-            } else if (position == donateRow) {
-                return 6;
             }
             return 2;
         }

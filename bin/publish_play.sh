@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./gradlew TMessagesProj:publishFullRelease
+./gradlew TMessagesProj:publishFullPlayRelease
