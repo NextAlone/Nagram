@@ -2327,32 +2327,48 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == addMemberRow) {
                     openAddMember();
                 } else if (position == usernameRow) {
-                    if (currentChat != null) {
 
-                        BottomBuilder builder = new BottomBuilder(getParentActivity());
-                        builder.addTitle("@" + currentChat.username);
-
-                        if (chatInfo != null && chatInfo.can_set_username) {
-                            builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
-                                ChatEditTypeActivity fragment = new ChatEditTypeActivity(chat_id, chatInfo.can_set_location);
-                                fragment.setInfo(chatInfo);
-                                presentFragment(fragment);
-                                return Unit.INSTANCE;
-                            });
+                    final String username;
+                    if (user_id != 0) {
+                        final TLRPC.User user = getMessagesController().getUser(user_id);
+                        if (user == null || user.username == null) {
+                            return;
                         }
-
-                        builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
-                            AlertUtil.copyAndAlert("@" + currentChat.username);
-                            return Unit.INSTANCE;
-                        });
-
-                        builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
-                            AlertUtil.copyAndAlert("https://t.me/" + currentChat.username);
-                            return Unit.INSTANCE;
-                        });
-
-                        builder.show();
+                        username = user.username;
+                    } else if (chat_id != 0) {
+                        final TLRPC.Chat chat = getMessagesController().getChat(chat_id);
+                        if (chat == null || chat.username == null) {
+                            return;
+                        }
+                        username = chat.username;
+                    } else {
+                        return;
                     }
+
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+                    builder.addTitle("@" + username);
+
+                    if (chatInfo != null && chatInfo.can_set_username) {
+                        builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                            ChatEditTypeActivity fragment = new ChatEditTypeActivity(chat_id, chatInfo.can_set_location);
+                            fragment.setInfo(chatInfo);
+                            presentFragment(fragment);
+                            return Unit.INSTANCE;
+                        });
+                    }
+
+                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                        AlertUtil.copyAndAlert("@" + username);
+                        return Unit.INSTANCE;
+                    });
+
+                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+                        AlertUtil.copyAndAlert("https://t.me/" + username);
+                        return Unit.INSTANCE;
+                    });
+
+                    builder.show();
+
                 } else if (position == locationRow) {
                     if (chatInfo.location instanceof TLRPC.TL_channelLocation) {
                         LocationActivity fragment = new LocationActivity(LocationActivity.LOCATION_TYPE_GROUP_VIEW);
@@ -2465,6 +2481,30 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (userInfo != null) {
                         presentFragment(new ChangeBioActivity());
                     }
+                } else if (position == channelInfoRow || position == userInfoRow || position == locationRow) {
+
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                        try {
+                            String about;
+                            if (position == locationRow) {
+                                about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
+                            } else if (position == channelInfoRow) {
+                                about = chatInfo != null ? chatInfo.about : null;
+                            } else {
+                                about = userInfo != null ? userInfo.about : null;
+                            }
+                            if (!TextUtils.isEmpty(about)) {
+                                AlertUtil.copyAndAlert(about);
+                            }
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                        return Unit.INSTANCE;
+                    });
+                    builder.show();
+
                 } else if (position == numberRow) {
 
                     TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
@@ -2483,6 +2523,43 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
                         return Unit.INSTANCE;
                     });
+
+                    builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
+                        AlertUtil.call(user.phone);
+                        return Unit.INSTANCE;
+                    });
+
+                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                        AlertUtil.copyAndAlert(number);
+                        return Unit.INSTANCE;
+                    });
+
+                    builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
+                        Bundle args = new Bundle();
+                        args.putBoolean("onlySelect", true);
+                        args.putInt("dialogsType", 3);
+                        args.putString("selectAlertString", LocaleController.getString("SendContactToText", R.string.SendContactToText));
+                        args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", R.string.SendContactToGroupText));
+                        DialogsActivity fragment = new DialogsActivity(args);
+                        fragment.setDelegate(ProfileActivity.this);
+                        presentFragment(fragment);
+                        return Unit.INSTANCE;
+                    });
+
+                    showDialog(builder.create());
+
+                } else if (position == phoneRow) {
+                    final TLRPC.User user = getMessagesController().getUser(user_id);
+                    if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null
+                            || (NekoConfig.hidePhone && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
+                        return;
+                    }
+
+                    String number = PhoneFormat.getInstance().format("+" + user.phone);
+
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                    builder.addTitle(number);
 
                     builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
                         AlertUtil.call(user.phone);
@@ -2543,12 +2620,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             return Unit.INSTANCE;
                         });
                     }
-                    if (BuildConfig.BUILD_TYPE.startsWith("release")) {
-                        builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
-                            Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
-                            return Unit.INSTANCE;
-                        });
-                    }
+                    builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
+                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
+                        return Unit.INSTANCE;
+                    });
+
                     if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode) {
                         builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                             BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
@@ -3422,99 +3498,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private boolean processOnClickOrPress(final int position) {
-        if (position == usernameRow) {
-            final String username;
-            if (user_id != 0) {
-                final TLRPC.User user = getMessagesController().getUser(user_id);
-                if (user == null || user.username == null) {
-                    return false;
-                }
-                username = user.username;
-            } else if (chat_id != 0) {
-                final TLRPC.Chat chat = getMessagesController().getChat(chat_id);
-                if (chat == null || chat.username == null) {
-                    return false;
-                }
-                username = chat.username;
-            } else {
-                return false;
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
-                if (i == 0) {
-                    try {
-                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        android.content.ClipData clip = android.content.ClipData.newPlainText("label", "@" + username);
-                        clipboard.setPrimaryClip(clip);
-                        Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                }
-            });
-            showDialog(builder.create());
-            return true;
-        } else if (position == phoneRow) {
-            final TLRPC.User user = getMessagesController().getUser(user_id);
-            if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null
-                    || (NekoConfig.hidePhone && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
-                return false;
-            }
 
-            String number = PhoneFormat.getInstance().format("+" + user.phone);
+        // NekoX: move long lick actions to click
 
-            BottomBuilder builder = new BottomBuilder(getParentActivity());
-
-            builder.addTitle(number);
-
-            builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
-                AlertUtil.call(user.phone);
-                return Unit.INSTANCE;
-            });
-
-            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
-                AlertUtil.copyAndAlert(number);
-                return Unit.INSTANCE;
-            });
-
-            builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
-                Bundle args = new Bundle();
-                args.putBoolean("onlySelect", true);
-                args.putInt("dialogsType", 3);
-                args.putString("selectAlertString", LocaleController.getString("SendContactToText", R.string.SendContactToText));
-                args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", R.string.SendContactToGroupText));
-                DialogsActivity fragment = new DialogsActivity(args);
-                fragment.setDelegate(ProfileActivity.this);
-                presentFragment(fragment);
-                return Unit.INSTANCE;
-            });
-
-            showDialog(builder.create());
-            return true;
-        } else if (position == channelInfoRow || position == userInfoRow || position == locationRow) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
-                try {
-                    String about;
-                    if (position == locationRow) {
-                        about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
-                    } else if (position == channelInfoRow) {
-                        about = chatInfo != null ? chatInfo.about : null;
-                    } else {
-                        about = userInfo != null ? userInfo.about : null;
-                    }
-                    if (TextUtils.isEmpty(about)) {
-                        return;
-                    }
-                    AndroidUtilities.addToClipboard(about);
-                    Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-            });
-            showDialog(builder.create());
-            return true;
-        }
         return false;
     }
 
@@ -4940,6 +4926,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         privacyRow = -1;
         dataRow = -1;
         chatRow = -1;
+        stickersRow = -1;
         filtersRow = -1;
         devicesRow = -1;
         devicesSectionRow = -1;
@@ -5013,7 +5000,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 dataRow = rowCount++;
                 privacyRow = rowCount++;
                 chatRow = rowCount++;
-                stickersRow = rowCount++;
                 filtersRow = rowCount++;
                 nekoRow = rowCount++;
                 languageRow = rowCount++;
@@ -5478,20 +5464,33 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         if (id != 0) {
             int finalId = id;
-            idTextView.setOnLongClickListener(v -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
-                    if (i == 0) {
-                        try {
-                            AndroidUtilities.addToClipboard(String.valueOf(finalId));
-                            Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
-                    }
+            idTextView.setOnClickListener(v -> {
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                builder.addTitle(finalId + "");
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                    AlertUtil.copyAndAlert(finalId + "");
+                    return Unit.INSTANCE;
                 });
-                showDialog(builder.create());
-                return false;
+                if (finalId == user_id) {
+                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+                        AlertUtil.copyLinkAndAlert("tg://user?id=" + finalId);
+                        return Unit.INSTANCE;
+                    });
+                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (Android)", R.drawable.baseline_link_24, __ -> {
+                        AlertUtil.copyLinkAndAlert("tg://openmessage?user_id=" + finalId);
+                        return Unit.INSTANCE;
+                    });
+                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (IOS)", R.drawable.baseline_link_24, __ -> {
+                        AlertUtil.copyLinkAndAlert("https://t.me/@id" + finalId);
+                        return Unit.INSTANCE;
+                    });
+                } else {
+                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (Android)", R.drawable.baseline_link_24, __ -> {
+                        AlertUtil.copyLinkAndAlert("tg://openmessage?chat_id=" + finalId);
+                        return Unit.INSTANCE;
+                    });
+                }
+                builder.show();
             });
         }
     }

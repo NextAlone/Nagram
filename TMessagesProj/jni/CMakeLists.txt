@@ -355,6 +355,7 @@ add_library(webp STATIC
         libwebp/src/dsp/cost.c
         libwebp/src/dsp/cost_mips32.c
         libwebp/src/dsp/cost_mips_dsp_r2.c
+        libwebp/src/dsp/cost_neon.c
         libwebp/src/dsp/cost_sse2.c
         libwebp/src/dsp/enc.c
         libwebp/src/dsp/enc_mips32.c

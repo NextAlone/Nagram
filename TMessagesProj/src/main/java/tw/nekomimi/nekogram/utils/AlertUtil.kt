@@ -31,6 +31,15 @@ object AlertUtil {
     }
 
     @JvmStatic
+    fun copyLinkAndAlert(text: String) {
+
+        AndroidUtilities.addToClipboard(text)
+
+        AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied))
+
+    }
+
+    @JvmStatic
     fun call(number: String) {
 
         runCatching {
