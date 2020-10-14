@@ -354,8 +354,19 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                 }, (i, __) -> {
 
+                    boolean needReset = NekoConfig.translationProvider - 1 != i && (NekoConfig.translationProvider == 1 || i == 0);
+
                     NekoConfig.setTranslationProvider(i + 1);
-                    listAdapter.notifyItemChanged(translationProviderRow);
+
+                    if (needReset) {
+
+                        updateRows();
+
+                    } else {
+
+                        listAdapter.notifyItemChanged(translationProviderRow);
+
+                    }
 
                     return Unit.INSTANCE;
 
@@ -710,7 +721,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         translationProviderRow = rowCount++;
         translateToLangRow = rowCount++;
         translateInputToLangRow = rowCount++;
-        googleCloudTranslateKeyRow = rowCount++;
+        googleCloudTranslateKeyRow = NekoConfig.translationProvider == 1 ? rowCount++ : -1;
         trans2Row = rowCount++;
 
         openKeyChainRow = rowCount++;

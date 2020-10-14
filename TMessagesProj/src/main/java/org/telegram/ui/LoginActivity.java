@@ -104,13 +104,13 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.EditTextBoldCursor;
-import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -1795,7 +1795,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         private TextView textView;
         private TextView textView2;
         private CheckBoxCell checkBoxCell;
-        private CheckBoxCell allowFlashCallCell;
 
         private int countryState = 0;
 
@@ -2120,17 +2119,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 allowReadCallLog = Build.VERSION.SDK_INT < 28 || getParentActivity().checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
             }
             allowFlashCall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
-
-            allowFlashCallCell = new CheckBoxCell(context, 2);
-            allowFlashCallCell.setText(LocaleController.getString("AllowFlashCall", R.string.AllowFlashCall), "", allowFlashCall, false);
-            addView(allowFlashCallCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
-            allowFlashCallCell.setOnClickListener(v -> {
-                if (getParentActivity() == null) {
-                    return;
-                }
-                CheckBoxCell cell = (CheckBoxCell) v;
-                cell.setChecked(allowFlashCall = !allowFlashCall, true);
-            });
 
             HashMap<String, String> languageMap = new HashMap<>();
             try {
