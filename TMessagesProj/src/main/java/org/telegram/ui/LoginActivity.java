@@ -2114,6 +2114,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             boolean allowCancelCall = true;
             boolean allowReadCallLog = true;
             if (Build.VERSION.SDK_INT >= 23 && simcardAvailable) {
+
                 allowCall = getParentActivity().checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
                 allowCancelCall = getParentActivity().checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED;
                 allowReadCallLog = Build.VERSION.SDK_INT < 28 || getParentActivity().checkSelfPermission(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
