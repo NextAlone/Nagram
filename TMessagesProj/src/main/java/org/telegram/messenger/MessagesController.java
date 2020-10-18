@@ -3211,7 +3211,7 @@ public class MessagesController extends BaseController implements NotificationCe
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         boolean bar_hidden = !settings.report_spam && !settings.add_contact && !settings.block_contact && !settings.share_contact && !settings.report_geo;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("peer settings loaded for " + dialogId + " add = " + settings.add_contact + " block = " + settings.block_contact + " spam = " + settings.report_spam + " share = " + settings.share_contact + " geo = " + settings.report_geo +  " hide = " + bar_hidden + " distance = " + settings.geo_distance);
+            FileLog.d("peer settings loaded for " + dialogId + " add = " + settings.add_contact + " block = " + settings.block_contact + " spam = " + settings.report_spam + " share = " + settings.share_contact + " geo = " + settings.report_geo + " hide = " + bar_hidden + " distance = " + settings.geo_distance);
         }
         editor.putInt("dialog_bar_vis3" + dialogId, bar_hidden ? 1 : 2);
         editor.putBoolean("dialog_bar_share" + dialogId, settings.share_contact);
@@ -5745,7 +5745,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void processLoadedMessages(TLRPC.messages_Messages messagesRes, long dialogId, long mergeDialogId, int count, int max_id, int offset_date, boolean isCache, int classGuid,
-                                        int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, boolean isEnd, boolean scheduled, int threadMessageId, int loadIndex, boolean queryFromServer, int mentionsCount) {
+                                      int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, boolean isEnd, boolean scheduled, int threadMessageId, int loadIndex, boolean queryFromServer, int mentionsCount) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("processLoadedMessages size " + messagesRes.messages.size() + " in chat " + dialogId + " count " + count + " max_id " + max_id + " cache " + isCache + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " isChannel " + isChannel + " index " + loadIndex + " firstUnread " + first_unread + " unread_count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
         }
@@ -13304,7 +13304,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         if (reason != null) {
             showCantOpenAlert(fragment, reason);
-            return false;
+            if (!NekoConfig.ignoreContentRestrictions) return false;
         }
         if (messageId != 0 && originalMessage != null && chat != null && chat.access_hash == 0) {
             int did = (int) originalMessage.getDialogId();
@@ -13369,23 +13369,25 @@ public class MessagesController extends BaseController implements NotificationCe
                 closeLast = true;
             }
         }
-        if (reason != null && !NekoConfig.ignoreContentRestrictions) {
+        if (reason != null) {
             showCantOpenAlert(fragment, reason);
-        } else {
-            Bundle args = new Bundle();
-            if (chat != null) {
-                args.putInt("chat_id", chat.id);
-            } else {
-                args.putInt("user_id", user.id);
-            }
-            if (type == 0) {
-                fragment.presentFragment(new ProfileActivity(args));
-            } else if (type == 2) {
-                fragment.presentFragment(new ChatActivity(args), true, true);
-            } else {
-                fragment.presentFragment(new ChatActivity(args), closeLast);
-            }
+            if (!NekoConfig.ignoreContentRestrictions) return;
         }
+
+        Bundle args = new Bundle();
+        if (chat != null) {
+            args.putInt("chat_id", chat.id);
+        } else {
+            args.putInt("user_id", user.id);
+        }
+        if (type == 0) {
+            fragment.presentFragment(new ProfileActivity(args));
+        } else if (type == 2) {
+            fragment.presentFragment(new ChatActivity(args), true, true);
+        } else {
+            fragment.presentFragment(new ChatActivity(args), closeLast);
+        }
+
     }
 
     public void openByUserName(String username, final BaseFragment fragment, final int type) {

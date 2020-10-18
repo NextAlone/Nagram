@@ -44,6 +44,8 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class MessagesStorage extends BaseController {
@@ -10888,7 +10890,7 @@ public class MessagesStorage extends BaseController {
             }
 
             if (!usersToLoad.isEmpty()) {
-                cursor = getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, status, name FROM users WHERE uid IN(%s)", TextUtils.join(",", usersToLoad)));
+                cursor = getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, status, name, uid FROM users WHERE uid IN(%s)", TextUtils.join(",", usersToLoad)));
                 while (cursor.next()) {
                     String name = cursor.stringValue(2);
                     String tName = LocaleController.getInstance().getTranslitString(name);
@@ -10901,11 +10903,14 @@ public class MessagesStorage extends BaseController {
                         username = name.substring(usernamePos + 3);
                     }
                     int found = 0;
+                    int uid = cursor.intValue(3);
                     for (String q : search) {
                         if (name.startsWith(q) || name.contains(" " + q) || tName != null && (tName.startsWith(q) || tName.contains(" " + q))) {
                             found = 1;
                         } else if (username != null && username.startsWith(q)) {
                             found = 2;
+                        } else if (NumberUtil.isInteger(q) && (NumberUtil.parseInt(q) == uid || q.length() > 3 && StrUtil.utf8Str(uid).contains(q))) {
+                            found = 3;
                         }
                         if (found != 0) {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -10918,8 +10923,10 @@ public class MessagesStorage extends BaseController {
                                 }
                                 if (found == 1) {
                                     dialogSearchResult.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
-                                } else {
+                                } else if (found == 2) {
                                     dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
+                                } else {
+                                    dialogSearchResult.name = AndroidUtilities.generateSearchName("ID: " + uid, null, q);
                                 }
                                 dialogSearchResult.object = user;
                                 resultCount++;
@@ -10932,15 +10939,22 @@ public class MessagesStorage extends BaseController {
             }
 
             if (!chatsToLoad.isEmpty()) {
-                cursor = getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, name FROM chats WHERE uid IN(%s)", TextUtils.join(",", chatsToLoad)));
+                cursor = getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, name, uid FROM chats WHERE uid IN(%s)", TextUtils.join(",", chatsToLoad)));
                 while (cursor.next()) {
                     String name = cursor.stringValue(1);
                     String tName = LocaleController.getInstance().getTranslitString(name);
                     if (name.equals(tName)) {
                         tName = null;
                     }
+                    int chatId = cursor.intValue(2);
                     for (String q : search) {
+                        int found = 0;
                         if (name.startsWith(q) || name.contains(" " + q) || tName != null && (tName.startsWith(q) || tName.contains(" " + q))) {
+                            found = 1;
+                        } else if (NumberUtil.isInteger(q) && (NumberUtil.parseInt(q) == chatId || q.length() > 3 && StrUtil.utf8Str(chatId).contains(q))) {
+                            found = 2;
+                        }
+                        if (found > 0) {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
                             if (data != null) {
                                 TLRPC.Chat chat = TLRPC.Chat.TLdeserialize(data, data.readInt32(false), false);
@@ -10948,7 +10962,11 @@ public class MessagesStorage extends BaseController {
                                 if (!(chat == null || chat.deactivated || ChatObject.isChannel(chat) && ChatObject.isNotInChat(chat))) {
                                     long dialog_id = -chat.id;
                                     DialogsSearchAdapter.DialogSearchResult dialogSearchResult = dialogsResult.get(dialog_id);
-                                    dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
+                                    if (found == 1) {
+                                        dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
+                                    } else {
+                                        dialogSearchResult.name = AndroidUtilities.generateSearchName("ID: " + chatId, null, q);
+                                    }
                                     dialogSearchResult.object = chat;
                                     resultCount++;
                                 }
@@ -10974,6 +10992,8 @@ public class MessagesStorage extends BaseController {
                     if (usernamePos != -1) {
                         username = name.substring(usernamePos + 2);
                     }
+
+                    int user_id = cursor.intValue(2);
                     int found = 0;
                     for (int a = 0; a < search.length; a++) {
                         String q = search[a];
@@ -10981,6 +11001,8 @@ public class MessagesStorage extends BaseController {
                             found = 1;
                         } else if (username != null && username.startsWith(q)) {
                             found = 2;
+                        } else if (NumberUtil.isInteger(q) && (NumberUtil.parseInt(q) == user_id || q.length() > 3 && StrUtil.utf8Str(user_id).contains(q))) {
+                            found = 3;
                         }
 
                         if (found != 0) {
@@ -10998,7 +11020,7 @@ public class MessagesStorage extends BaseController {
                             }
                             if (chat != null && user != null) {
                                 DialogsSearchAdapter.DialogSearchResult dialogSearchResult = dialogsResult.get((long) chat.id << 32);
-                                chat.user_id = cursor.intValue(2);
+                                chat.user_id = user_id;
                                 chat.a_or_b = cursor.byteArrayValue(3);
                                 chat.auth_key = cursor.byteArrayValue(4);
                                 chat.ttl = cursor.intValue(5);
@@ -11026,8 +11048,10 @@ public class MessagesStorage extends BaseController {
                                 if (found == 1) {
                                     dialogSearchResult.name = new SpannableStringBuilder(ContactsController.formatName(user.first_name, user.last_name));
                                     ((SpannableStringBuilder) dialogSearchResult.name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_secretName)), 0, dialogSearchResult.name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                } else {
+                                } else if (found == 2) {
                                     dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
+                                } else {
+                                    dialogSearchResult.name = AndroidUtilities.generateSearchName("ID: " + user_id, null, q);
                                 }
                                 dialogSearchResult.object = chat;
                                 encUsers.add(user);
@@ -11086,6 +11110,8 @@ public class MessagesStorage extends BaseController {
                             found = 1;
                         } else if (username != null && username.startsWith(q)) {
                             found = 2;
+                        } else if (NumberUtil.isInteger(q) && (NumberUtil.parseInt(q) == uid || q.length() > 3 && StrUtil.utf8Str(uid).contains(q))) {
+                            found = 3;
                         }
                         if (found != 0) {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -11097,8 +11123,10 @@ public class MessagesStorage extends BaseController {
                                 }
                                 if (found == 1) {
                                     resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
-                                } else {
+                                } else if (found == 2) {
                                     resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
+                                } else {
+                                    resultArrayNames.add(AndroidUtilities.generateSearchName("ID: " + uid, null, q));
                                 }
                                 resultArray.add(user);
                             }

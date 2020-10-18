@@ -962,7 +962,13 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                     cell.useSeparator = (position != getItemCount() - 1 && position != localCount + phoneCount2 + localServerCount - 1 && position != localCount + globalCount + phoneCount + localServerCount - 1);
                     if (position < searchResult.size()) {
                         name = searchResultNames.get(position);
-                        if (name != null && user != null && user.username != null && user.username.length() > 0) {
+                        if (name != null && name.toString().startsWith("ID: ")) {
+                            username = name;
+                            name = null;
+                            if (username instanceof SpannableStringBuilder) {
+                                username = new SpannableStringBuilder(username);
+                            }
+                        } else if (name != null && user != null && user.username != null && user.username.length() > 0) {
                             if (name.toString().startsWith("@" + user.username)) {
                                 username = name;
                                 name = null;

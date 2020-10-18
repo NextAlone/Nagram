@@ -250,6 +250,7 @@ public class NekoConfig {
 
         disableVibration = preferences.getBoolean("disableVibration", false);
         autoPauseVideo = preferences.getBoolean("autoPauseVideo", false);
+        disableProximityEvents = preferences.getBoolean("disableProximityEvents", false);
 
         ignoreContentRestrictions = preferences.getBoolean("ignoreContentRestrictions", false);
 

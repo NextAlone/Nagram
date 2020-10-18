@@ -1,13 +1,12 @@
 #!/bin/bash
 
-./gradlew TMessagesProj:assembleFullRelease \
-          TMessagesProj:assembleFullReleaseNoGcm || exit 1
+./gradlew TMessagesProj:assembleFullRelease || exit 1
 
 trap 'kill $(jobs -p)' SIGINT
 
 function upload() {
 
-  for apk in $outPath/*.apk; do
+  for apk in $outPath/*arm64*.apk; do
 
     echo ">> Uploading $apk"
 
@@ -26,9 +25,5 @@ function upload() {
 }
 
 outPath="TMessagesProj/build/outputs/apk/full/release"
-
-upload
-
-outPath="TMessagesProj/build/outputs/apk/full/releaseNoGcm"
 
 upload
