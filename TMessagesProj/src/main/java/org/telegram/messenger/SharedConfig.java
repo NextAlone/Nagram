@@ -594,7 +594,17 @@ public class SharedConfig {
 
         @Override
         public String getType() {
-            return "Vmess";
+
+            if (bean.getConfigType() == V2RayConfig.EConfigType.Trojan) {
+
+                return "Trojan";
+
+            } else {
+
+                return "Vmess";
+
+            }
+
         }
 
         @Override
@@ -1742,7 +1752,7 @@ public class SharedConfig {
 
     public static ProxyInfo parseProxyInfo(String url) throws InvalidProxyException {
 
-        if (url.startsWith(V2RayConfig.VMESS_PROTOCOL) || url.startsWith(V2RayConfig.VMESS1_PROTOCOL)) {
+        if (url.startsWith(V2RayConfig.VMESS_PROTOCOL) || url.startsWith(V2RayConfig.VMESS1_PROTOCOL) || url.startsWith(V2RayConfig.TROJAN_PROTOCOL)) {
 
             try {
 

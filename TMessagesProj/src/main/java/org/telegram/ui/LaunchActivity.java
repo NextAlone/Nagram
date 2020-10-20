@@ -229,8 +229,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 url.startsWith(V2RayConfig.VMESS_PROTOCOL) ||
                                 url.startsWith(V2RayConfig.VMESS1_PROTOCOL) ||
                                 url.startsWith(V2RayConfig.SS_PROTOCOL) ||
-                                url.startsWith(V2RayConfig.SSR_PROTOCOL)
-                        ;
+                                url.startsWith(V2RayConfig.SSR_PROTOCOL) ||
+                                url.startsWith(V2RayConfig.TROJAN_PROTOCOL);
                     }
                 }
             }

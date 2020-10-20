@@ -37,6 +37,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.v2ray.ang.V2RayConfig;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -92,6 +94,7 @@ import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
 import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
 import tw.nekomimi.nekogram.SubSettingsActivity;
+import tw.nekomimi.nekogram.TrojanSettingsActivity;
 import tw.nekomimi.nekogram.VmessSettingsActivity;
 import tw.nekomimi.nekogram.parts.ProxyChecksKt;
 import tw.nekomimi.nekogram.sub.SubInfo;
@@ -664,6 +667,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         if (!BuildVars.isMini) {
 
             addItem.addSubItem(menu_add_input_vmess, LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess)).setOnClickListener((v) -> presentFragment(new VmessSettingsActivity()));
+            addItem.addSubItem(menu_add_input_vmess, LocaleController.getString("AddProxyVmess", R.string.AddProxyTrojan)).setOnClickListener((v) -> presentFragment(new TrojanSettingsActivity()));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 addItem.addSubItem(menu_add_input_ss, LocaleController.getString("AddProxySS", R.string.AddProxySS)).setOnClickListener((v) -> presentFragment(new ShadowsocksSettingsActivity()));
                 addItem.addSubItem(menu_add_input_ssr, LocaleController.getString("AddProxySSR", R.string.AddProxySSR)).setOnClickListener((v) -> presentFragment(new ShadowsocksRSettingsActivity()));
@@ -765,7 +769,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     if (i == 0) {
 
                         if (info instanceof SharedConfig.VmessProxy) {
-                            presentFragment(new VmessSettingsActivity((SharedConfig.VmessProxy) info));
+                            if (((SharedConfig.VmessProxy) info).bean.getConfigType() == V2RayConfig.EConfigType.Trojan) {
+                                presentFragment(new TrojanSettingsActivity((SharedConfig.VmessProxy) info));
+                            } else {
+                                presentFragment(new VmessSettingsActivity((SharedConfig.VmessProxy) info));
+                            }
                         } else if (info instanceof SharedConfig.ShadowsocksProxy) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 presentFragment(new ShadowsocksSettingsActivity((SharedConfig.ShadowsocksProxy) info));
@@ -837,6 +845,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5),
                 LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram),
                 LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess),
+                LocaleController.getString("AddProxyTrojan", R.string.AddProxyTrojan),
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySS", R.string.AddProxySS),
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySSR", R.string.AddProxySSR),
                 LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard),
@@ -858,13 +867,17 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (i == 3) {
 
-                presentFragment(new ShadowsocksSettingsActivity());
+                presentFragment(new TrojanSettingsActivity());
 
             } else if (i == 4) {
 
-                presentFragment(new ShadowsocksRSettingsActivity());
+                presentFragment(new ShadowsocksSettingsActivity());
 
             } else if (i == 5) {
+
+                presentFragment(new ShadowsocksRSettingsActivity());
+
+            } else if (i == 6) {
 
                 ProxyUtil.importFromClipboard(getParentActivity());
 

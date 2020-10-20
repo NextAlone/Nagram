@@ -4,7 +4,7 @@ import cn.hutool.core.codec.Base64
 import com.google.gson.Gson
 import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.V2RayConfig.SOCKS_PROTOCOL
-import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
+import com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
 import com.v2ray.ang.dto.AngConfig.VmessBean
@@ -12,12 +12,10 @@ import com.v2ray.ang.dto.VmessQRCode
 import com.v2ray.ang.util.Utils
 import com.v2ray.ang.util.V2rayConfigUtil
 import libv2ray.Libv2ray
-import libv2ray.V2RayPoint
 import libv2ray.V2RayVPNServiceSupportsSet
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.telegram.messenger.FileLog
-import org.telegram.messenger.LocaleController
-import org.telegram.messenger.R
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
@@ -134,35 +132,17 @@ class VmessLoader {
 
                     return parseVmess1Link(server)
 
-                } else if (server.startsWith(SS_PROTOCOL)) {
-                    var result = server.replace(SS_PROTOCOL, "")
-                    val indexSplit = result.indexOf("#")
-                    if (indexSplit > 0) {
-                        try {
-                            vmess.remarks = Utils.urlDecode(result.substring(indexSplit + 1, result.length))
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
+                } else if (server.startsWith(TROJAN_PROTOCOL)) {
 
-                        result = result.substring(0, indexSplit)
-                    }
+                    vmess.configType = V2RayConfig.EConfigType.Trojan
 
-                    //part decode
-                    val indexS = result.indexOf("@")
-                    if (indexS > 0) {
-                        result = Base64.decodeStr(result.substring(0, indexS)) + result.substring(indexS, result.length)
-                    } else {
-                        result = Base64.decodeStr(result)
-                    }
+                    val link = server.replace(TROJAN_PROTOCOL, "https://").toHttpUrlOrNull()
+                            ?: error("invalid trojan link $server")
 
-                    val legacyPattern = "^(.+?):(.*)@(.+?):(\\d+?)$".toRegex()
-                    val match = legacyPattern.matchEntire(result) ?: error("invalid protocol")
-                    vmess.security = match.groupValues[1].toLowerCase()
-                    vmess.id = match.groupValues[2]
-                    vmess.address = match.groupValues[3]
-                    if (vmess.address.firstOrNull() == '[' && vmess.address.lastOrNull() == ']')
-                        vmess.address = vmess.address.substring(1, vmess.address.length - 1)
-                    vmess.port = match.groupValues[4].toInt()
+                    vmess.address = link.host
+                    vmess.port = link.port
+                    vmess.id = link.username
+                    vmess.remarks = link.fragment ?: ""
 
                     return vmess
 
@@ -373,6 +353,8 @@ class VmessLoader {
                 val port = Random.nextInt(4096, 32768)
 
                 val conf = V2rayConfigUtil.getV2rayConfig(bean, port).content
+
+                FileLog.d(conf)
 
                 runCatching {
 

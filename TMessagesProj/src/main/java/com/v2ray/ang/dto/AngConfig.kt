@@ -3,8 +3,9 @@ package com.v2ray.ang.dto
 import cn.hutool.core.codec.Base64
 import com.google.gson.Gson
 import com.v2ray.ang.V2RayConfig
-import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
+import com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
+import com.v2ray.ang.util.Utils
 
 data class AngConfig(
         var index: Int,
@@ -56,15 +57,13 @@ data class AngConfig(
                 vmessQRCode.path = path
                 vmessQRCode.tls = streamSecurity
 
-                return VMESS_PROTOCOL + cn.hutool.core.codec.Base64.encode(Gson().toJson(vmessQRCode))
+                return VMESS_PROTOCOL + Base64.encode(Gson().toJson(vmessQRCode))
 
-            } else if (configType == V2RayConfig.EConfigType.Shadowsocks) {
+            } else if (configType == V2RayConfig.EConfigType.Trojan) {
 
-                val remark = "#" + Base64.encodeUrlSafe(remarks)
+                val remark = if (remarks.isNotBlank()) "#" + Utils.urlEncode(remarks) else ""
 
-                val url = String.format("%s:%s@%s:%s", security, id, address, port)
-
-                return SS_PROTOCOL + Base64.encode(url.toByteArray(charset("UTF-8"))) + remark
+                return TROJAN_PROTOCOL + Utils.urlEncode(id) + "@" + address + ":" + port + remark
 
             } else {
 

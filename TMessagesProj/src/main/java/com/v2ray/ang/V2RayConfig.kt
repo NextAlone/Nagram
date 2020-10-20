@@ -16,6 +16,7 @@ object V2RayConfig {
     const val VMESS1_PROTOCOL = "vmess1://"
     const val SS_PROTOCOL: String = "ss://"
     const val SSR_PROTOCOL: String = "ssr://"
+    const val TROJAN_PROTOCOL: String = "trojan://"
 
     const val SOCKS_PROTOCOL: String = "socks://"
     const val BROADCAST_ACTION_SERVICE = "com.v2ray.ang.action.service"
@@ -60,7 +61,7 @@ object V2RayConfig {
         val Vmess = 1
 
         @JvmField
-        val Shadowsocks = 3
+        val Trojan = 2
 
     }
 

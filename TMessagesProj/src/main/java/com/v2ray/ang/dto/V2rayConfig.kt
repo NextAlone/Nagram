@@ -39,8 +39,7 @@ data class V2rayConfig(
                             var mux: MuxBean?) {
 
         data class OutSettingsBean(var vnext: List<VnextBean>?,
-                                   var servers: List<ServersBean>?,
-                                   var response: Response) {
+                                   var servers: List<ServersBean>?) {
 
             data class VnextBean(var address: String,
                                  var port: Int,
@@ -53,13 +52,10 @@ data class V2rayConfig(
             }
 
             data class ServersBean(var address: String,
-                                   var method: String,
-                                   var ota: Boolean,
                                    var password: String,
                                    var port: Int,
-                                   var level: Int)
+                                   var email: String)
 
-            data class Response(var type: String)
         }
 
         data class StreamSettingsBean(var network: String,

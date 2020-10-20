@@ -21,6 +21,7 @@ import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
+import com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -79,7 +80,8 @@ object ProxyUtil {
                         line.startsWith(VMESS_PROTOCOL) ||
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL) /*||
+                        line.startsWith(SSR_PROTOCOL) ||
+                        line.startsWith(TROJAN_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line).toUrl()) }
@@ -203,6 +205,10 @@ object ProxyUtil {
             if (link.startsWith(VMESS_PROTOCOL) || link.startsWith(VMESS1_PROTOCOL)) {
 
                 AndroidUtilities.showVmessAlert(ctx, SharedConfig.VmessProxy(link))
+
+            } else if (link.startsWith(TROJAN_PROTOCOL)) {
+
+                AndroidUtilities.showTrojanAlert(ctx, SharedConfig.VmessProxy(link))
 
             } else if (link.startsWith(SS_PROTOCOL)) {
 
