@@ -18,7 +18,7 @@ class TranslateDb(val code: String) {
         val db = mkDatabase("translate_caches")
 
         val repo = HashMap<Locale, TranslateDb>()
-        val chat = db.getRepository(ChatLanguage::class.java)
+        val chat = db.getRepository("chat", ChatLanguage::class.java)
 
         @JvmStatic fun getChatLanguage(chatId: Int, default: Locale): Locale {
 
@@ -40,7 +40,10 @@ class TranslateDb(val code: String) {
 
         @JvmStatic fun clearAll() {
 
-            db.listRepositories().map { it.transDbByCode }.forEach { it.clear() }
+            db.listRepositories()
+                    .filter { it  != "chat" }
+                    .map { db.getCollection(it) }
+                    .forEach { it.drop() }
 
             repo.clear()
 
@@ -51,7 +54,6 @@ class TranslateDb(val code: String) {
     fun clear() = synchronized(this) {
 
         conn.drop()
-        conn = db.getRepository(code, TransItem::class.java)
 
     }
 

@@ -167,6 +167,7 @@ import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
+import tw.nekomimi.nekogram.parts.DialogTransKt;
 import tw.nekomimi.nekogram.parts.UpdateChecksKt;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -2503,6 +2504,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         return Unit.INSTANCE;
                     });
+
+                    builder.addItem(LocaleController.getString("Translate", R.string.Translate),R.drawable.ic_translate, __ -> {
+                        try {
+                            String about;
+                            if (position == locationRow) {
+                                about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
+                            } else if (position == channelInfoRow) {
+                                about = chatInfo != null ? chatInfo.about : null;
+                            } else {
+                                about = userInfo != null ? userInfo.about : null;
+                            }
+                            if (!TextUtils.isEmpty(about)) {
+                                DialogTransKt.startTrans(getParentActivity(), about);
+                            }
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                        return Unit.INSTANCE;
+                    });
+
                     builder.show();
 
                 } else if (position == numberRow) {

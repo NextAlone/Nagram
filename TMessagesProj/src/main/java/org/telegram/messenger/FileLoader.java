@@ -645,8 +645,10 @@ public class FileLoader extends BaseController {
             operation = new FileLoadOperation(document, parentObject);
             if (MessageObject.isVoiceDocument(document)) {
                 type = MEDIA_DIR_AUDIO;
-            } else if (MessageObject.isVideoDocument(document)) {
+            } else if (MessageObject.isVideoDocument(document) || MessageObject.isGifDocument(document)) {
                 type = MEDIA_DIR_VIDEO;
+            } else if (MessageObject.isStickerDocument(document)) {
+                type = MEDIA_DIR_CACHE;
             } else {
                 type = MEDIA_DIR_DOCUMENT;
             }
