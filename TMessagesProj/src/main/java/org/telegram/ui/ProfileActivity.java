@@ -2421,7 +2421,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == faqRow) {
                     Browser.openUrl(getParentActivity(), NekoXConfig.FAQ_URL);
                 } else if (position == policyRow) {
-                    Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl));
+                    Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX/wiki/Privacy-Policy");
                 } else if (position == sendLogsRow) {
                     sendLogs();
                 } else if (position == clearLogsRow) {
@@ -5026,6 +5026,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 languageRow = rowCount++;
                 helpHeaderRow = rowCount++;
                 faqRow = rowCount++;
+                policyRow = rowCount ++;
                 if (BuildVars.LOGS_ENABLED) {
                     helpSectionCell = rowCount++;
                     debugHeaderRow = rowCount++;
@@ -6402,6 +6403,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         textCell.setTextAndIcon(LocaleController.getString("NekoXUpdatesChannel", R.string.NekoXUpdatesChannel), R.drawable.baseline_bullhorn_24, true);
                     } else if (position == faqRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NekoXFaq", R.string.NekoXFaq), R.drawable.baseline_help_24, true);
+                    } else if (position == policyRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.baseline_security_24, true);
                     } else if (position == sendLogsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), R.drawable.baseline_bug_report_24, true);
                     } else if (position == clearLogsRow) {
