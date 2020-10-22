@@ -118,7 +118,8 @@ object ProxyUtil {
                         line.startsWith(VMESS_PROTOCOL) ||
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(SSR_PROTOCOL) /*||
+                        line.startsWith(SSR_PROTOCOL) ||
+                        line.startsWith(TROJAN_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
                     runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
@@ -150,8 +151,9 @@ object ProxyUtil {
                                 line.startsWith(VMESS_PROTOCOL) ||
                                 line.startsWith(VMESS1_PROTOCOL) ||
                                 line.startsWith(SS_PROTOCOL) ||
-                                line.startsWith(SSR_PROTOCOL) /*||
-                            line.startsWith(RB_PROTOCOL)*/) {
+                                line.startsWith(SSR_PROTOCOL) ||
+                                line.startsWith(TROJAN_PROTOCOL) /*||
+                    line.startsWith(RB_PROTOCOL)*/) {
 
                             runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
 

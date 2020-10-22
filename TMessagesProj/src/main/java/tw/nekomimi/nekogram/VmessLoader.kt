@@ -142,6 +142,15 @@ class VmessLoader {
                     vmess.address = link.host
                     vmess.port = link.port
                     vmess.id = link.username
+
+                    if (link.password.isNotBlank()) {
+
+                        // https://github.com/trojan-gfw/igniter/issues/318
+
+                        vmess.id += ":" + link.password
+
+                    }
+
                     vmess.remarks = link.fragment ?: ""
 
                     return vmess
