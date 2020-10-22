@@ -101,6 +101,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
+
 public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private ImageView locationButton;
@@ -1617,7 +1620,17 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             if (activity != null) {
                 checkPermission = false;
                 if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    activity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+                    BottomBuilder builder = new BottomBuilder(activity);
+                    builder.addTitle(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation), true);
+                    builder.addItem(LocaleController.getString("Ok", R.string.OK),R.drawable.baseline_check_circle_24, __ -> {
+                        activity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+                        return Unit.INSTANCE;
+                    });
+                    builder.addItem(LocaleController.getString("Decline", R.string.Decline), R.drawable.baseline_block_24, __ -> {
+                        parentAlert.dismiss();
+                        return Unit.INSTANCE;
+                    });
+                    builder.show();
                 }
             }
         }
