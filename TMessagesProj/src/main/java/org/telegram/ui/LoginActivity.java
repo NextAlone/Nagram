@@ -860,6 +860,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                                 return Unit.INSTANCE;
 
+                            } else {
+
+                                builder.dismiss();
+
                             }
 
                         }

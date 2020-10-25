@@ -248,7 +248,7 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addButton(text: String, red: Boolean = false, left: Boolean = false, listener: ((TextView) -> Unit)): TextView {
+    fun addButton(text: String, noAutoDismiss: Boolean = false, left: Boolean = false, listener: ((TextView) -> Unit)): TextView {
 
         return TextView(ctx).apply {
 
@@ -262,7 +262,7 @@ class BottomBuilder(val ctx: Context) {
             setText(text)
             typeface = AndroidUtilities.getTypeface("fonts/rmedium.ttf")
             (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.LEFT))
-            setOnClickListener { dismiss();listener(this) }
+            setOnClickListener { if (!noAutoDismiss) dismiss();listener(this) }
 
         }
 
