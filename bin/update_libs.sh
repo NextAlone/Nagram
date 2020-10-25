@@ -6,7 +6,7 @@ if [ ! -x "$(command -v go)" ]; then
 
   #  if [ ! -x "$(command -v gvm)" ]; then
   #
-  #    apt install -y bison
+  #    apt install -y bison gcc make
   #    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
   #    source "$HOME/.bashrc"
   #

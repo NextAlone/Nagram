@@ -6,10 +6,6 @@ obj/
 local.properties
 .externalNativeBuild
 .cxx
-/TMessagesProj/jni/ffmpeg/build/
-/TMessagesProj/jni/boringssl/build/
-CMakeLists.txt
-CMakeLists.txt.orig
 service_account_credentials.json
 *.aar
 *.so
