@@ -103,7 +103,7 @@
     <string name="AddProxyVmess">Vmess-прокси</string>
     <string name="AddProxySS">Shadowsocks-прокси</string>
     <string name="AddProxySSR">ShadowsocksR-прокси</string>
-    <string name="AddProxyRB">RelayBaton-прокси</string>
+    <string name="AddProxyTrojan">Добавить Trojan-прокси</string>
     <string name="SSPluginConflictingName">Некоторые плагины используют этот ID: %s.</string>
     <string name="EditProxy">Изменить прокси</string>
     <string name="ShareProxy">Поделиться прокси</string>
@@ -127,6 +127,7 @@
     <string name="SSRProtocolParams">Параметры протокола</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Параметры Obfs</string>
+    <string name="ProxyInfoTrojan">Настройки Trojan-прокси</string>
     <string name="ProxyRemarks">Примечания</string>
     <string name="RetestPing">Пересчитать все</string>
     <string name="ReorderByPing">Сортировать по пингу</string>
@@ -177,4 +178,6 @@
     <string name="PGPImportPrivate">Импорт приватного ключа</string>
     <string name="ShareMyKey">Поделиться моим открытым ключом</string>
     <string name="DisableVibration">Отключить вибрацию</string>
+    <string name="IgnoreContentRestrictions">Игнорировать ограничения контента</string>
+    <string name="IgnoreContentRestrictionsNotice">Локально игнорирует ограничения Android на сообщения. В будущем это может быть запрещено со стороны сервера, и вам нужно будет самостоятельно оценить законность этой опции.</string>
 </resources>
