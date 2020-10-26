@@ -5318,6 +5318,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             if (user.photo != null && user.photo.dc_id != 0) {
                 idTextView.setText("ID: " + user_id + ", DC: " + user.photo.dc_id);
+            } else if (UserObject.isUserSelf(user) && getMessagesController().thisDc > 0) {
+                idTextView.setText("ID: " + user.id + ", DC: " + getMessagesController().thisDc);
             } else {
                 idTextView.setText("ID: " + user_id);
             }

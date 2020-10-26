@@ -29,10 +29,15 @@ public class FileLoader extends BaseController {
 
     public interface FileLoaderDelegate {
         void fileUploadProgressChanged(String location, long uploadedSize, long totalSize, boolean isEncrypted);
+
         void fileDidUploaded(String location, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize);
+
         void fileDidFailedUpload(String location, boolean isEncrypted);
+
         void fileDidLoaded(String location, File finalFile, int type);
+
         void fileDidFailedLoad(String location, int state);
+
         void fileLoadProgressChanged(String location, long uploadedSize, long totalSize);
     }
 
@@ -86,6 +91,7 @@ public class FileLoader extends BaseController {
     private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap<>();
 
     private static volatile FileLoader[] Instance = new FileLoader[UserConfig.MAX_ACCOUNT_COUNT];
+
     public static FileLoader getInstance(int num) {
         FileLoader localInstance = Instance[num];
         if (localInstance == null) {
@@ -411,15 +417,15 @@ public class FileLoader extends BaseController {
                     int index = downloadQueue.indexOf(operation);
                     if (index >= 0) {
                         downloadQueue.remove(index);
-                            if (operation.start()) {
-                                count.put(datacenterId, count.get(datacenterId) + 1);
+                        if (operation.start()) {
+                            count.put(datacenterId, count.get(datacenterId) + 1);
+                        }
+                        if (queueType == QUEUE_TYPE_FILE) {
+                            if (operation.wasStarted() && !activeFileLoadOperation.contains(operation)) {
+                                pauseCurrentFileLoadOperations(operation);
+                                activeFileLoadOperation.add(operation);
                             }
-                            if (queueType == QUEUE_TYPE_FILE) {
-                                if (operation.wasStarted() && !activeFileLoadOperation.contains(operation)) {
-                                    pauseCurrentFileLoadOperations(operation);
-                                    activeFileLoadOperation.add(operation);
-                                }
-                            }
+                        }
                     } else {
                         pauseCurrentFileLoadOperations(operation);
                         operation.start();
@@ -787,7 +793,7 @@ public class FileLoader extends BaseController {
         final CountDownLatch semaphore = new CountDownLatch(1);
         final FileLoadOperation[] result = new FileLoadOperation[1];
         fileLoaderQueue.postRunnable(() -> {
-            result[0] = loadFileInternal(document, null, null, document == null && location != null ? location.location : null, location, parentObject, document == null && location != null ? "mp4" : null, document == null && location != null ? location.currentSize : 0, 1, stream, offset, priority,  document == null ? 1 : 0);
+            result[0] = loadFileInternal(document, null, null, document == null && location != null ? location.location : null, location, parentObject, document == null && location != null ? "mp4" : null, document == null && location != null ? location.currentSize : 0, 1, stream, offset, priority, document == null ? 1 : 0);
             semaphore.countDown();
         });
         try {
@@ -960,8 +966,10 @@ public class FileLoader extends BaseController {
                 } else {
                     if (MessageObject.isVoiceDocument(document)) {
                         dir = getDirectory(MEDIA_DIR_AUDIO);
-                    } else if (MessageObject.isVideoDocument(document)) {
+                    } else if (MessageObject.isVideoDocument(document) || MessageObject.isGifDocument(document)) {
                         dir = getDirectory(MEDIA_DIR_VIDEO);
+                    } else if (MessageObject.isStickerDocument(document)) {
+                        dir = getDirectory(MEDIA_DIR_CACHE);
                     } else {
                         dir = getDirectory(MEDIA_DIR_DOCUMENT);
                     }
@@ -1131,9 +1139,9 @@ public class FileLoader extends BaseController {
             TLRPC.Document document = (TLRPC.Document) attach;
             if (document.mime_type != null && (
                     document.mime_type.startsWith("application/x") ||
-                    document.mime_type.startsWith("audio/") ||
-                    document.mime_type.startsWith("video/") ||
-                    document.mime_type.startsWith("image/"))) {
+                            document.mime_type.startsWith("audio/") ||
+                            document.mime_type.startsWith("video/") ||
+                            document.mime_type.startsWith("image/"))) {
                 String docExt = getDocumentFileName(document);
                 int idx;
                 if (docExt == null || (idx = docExt.lastIndexOf('.')) == -1) {

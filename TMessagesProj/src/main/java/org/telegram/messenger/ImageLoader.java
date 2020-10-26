@@ -2347,8 +2347,10 @@ public class ImageLoader {
                             TLRPC.Document document = imageLocation.document;
                             if (document instanceof TLRPC.TL_documentEncrypted) {
                                 cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), url);
-                            } else if (MessageObject.isVideoDocument(document)) {
+                            } else if (MessageObject.isVideoDocument(document) || MessageObject.isGifDocument(document)) {
                                 cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_VIDEO), url);
+                            } else if (MessageObject.isStickerDocument(document)) {
+                                cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), url);
                             } else {
                                 cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_DOCUMENT), url);
                             }
