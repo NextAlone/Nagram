@@ -6,7 +6,8 @@
 -keep class org.webrtc.* { *; }
 -keep class org.webrtc.audio.* { *; }
 -keep class org.webrtc.voiceengine.* { *; }
--keep class org.telegram.messenger.* { *; }
+# -keep class org.telegram.messenger.* { *; }
+-keep class org.telegram.messenger.AnimatedFileDrawableStream { *; }
 -keep class org.telegram.messenger.camera.* { *; }
 -keep class org.telegram.messenger.secretmedia.* { *; }
 -keep class org.telegram.messenger.support.* { *; }
@@ -42,13 +43,14 @@
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleOutputBuffer { *; }
 
--keep class org.diztart.no2.** { *; }
+-keep class org.dizitart.no2.**  { *; }
 -keep class org.slf4j.** { *; }
 -keep class org.h2.** { *; }
 -keep class org.objenesis.** { *; }
 -keep class com.fasterxml.jackson.** { *; }
 
 -keepnames class * implements java.io.Serializable
+-keep class * implements org.dizitart.no2.mapper.Mappable { *; }
 
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -130,9 +132,10 @@
 
 # Use -keep to explicitly keep any other classes shrinking would remove
 # -dontoptimize
--dontobfuscate
 
 # https://github.com/osmdroid/osmdroid/issues/633
 -dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck
 # Osmdroid
 -dontwarn org.osmdroid.**
+
+-keepattributes LineNumberTable

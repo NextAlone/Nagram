@@ -173,7 +173,7 @@ public class NekoConfig {
         transparentStatusBar = preferences.getBoolean("transparentStatusBar", false);
         residentNotification = preferences.getBoolean("residentNotification", false);
         hideProxySponsorChannel = preferences.getBoolean("hideProxySponsorChannel", false);
-        showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", true);
+        showAddToSavedMessages = preferences.getBoolean("showAddToSavedMessages", false);
         showReport = preferences.getBoolean("showReport", false);
         showViewHistory = preferences.getBoolean("showViewHistory", true);
         showAdminActions = preferences.getBoolean("showAdminActions", true);
