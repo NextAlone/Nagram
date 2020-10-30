@@ -361,7 +361,7 @@ android {
     sourceSets.all { set ->
         if (set.name.startsWith("full")) {
             set.dependencies {
-                implementation files('libs/libv2ray.aar','libs/ss-rust-release.aar','libs/ssr-libev-release.aar')
+                implementation files('libs/libv2ray.aar', 'libs/ss-rust-release.aar', 'libs/ssr-libev-release.aar')
             }
         }
         if (set.name.matches("(mini|full).*")) {
