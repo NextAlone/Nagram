@@ -957,9 +957,16 @@ public class ActionBarLayout extends FrameLayout {
         layoutParams.width = LayoutHelper.MATCH_PARENT;
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         if (preview) {
+            int height = fragment.getPreviewHeight();
+            int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            if (height > 0 && height < getMeasuredHeight() - statusBarHeight) {
+                layoutParams.height = height;
+                layoutParams.topMargin = statusBarHeight + (getMeasuredHeight() - statusBarHeight - height) / 2;
+            } else {
+                layoutParams.topMargin = layoutParams.bottomMargin = AndroidUtilities.dp(46);
+                layoutParams.topMargin += AndroidUtilities.statusBarHeight;
+            }
             layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(8);
-            layoutParams.topMargin = layoutParams.bottomMargin = AndroidUtilities.dp(46);
-            layoutParams.topMargin += AndroidUtilities.statusBarHeight;
         } else {
             layoutParams.topMargin = layoutParams.bottomMargin = layoutParams.rightMargin = layoutParams.leftMargin = 0;
         }
@@ -1076,7 +1083,8 @@ public class ActionBarLayout extends FrameLayout {
                     fragment.onTransitionAnimationEnd(true, false);
                     fragment.onBecomeFullyVisible();
                 };
-                if (!fragment.needDelayOpenAnimation()) {
+                boolean noDelay;
+                if (noDelay = !fragment.needDelayOpenAnimation()) {
                     if (currentFragment != null) {
                         currentFragment.onTransitionAnimationStart(false, false);
                     }
@@ -1107,6 +1115,12 @@ public class ActionBarLayout extends FrameLayout {
                                     return;
                                 }
                                 waitingForKeyboardCloseRunnable = null;
+                                if (!noDelay) {
+                                    if (currentFragment != null) {
+                                        currentFragment.onTransitionAnimationStart(false, false);
+                                    }
+                                    fragment.onTransitionAnimationStart(true, false);
+                                }
                                 startLayoutAnimation(true, true, preview);
                             }
                         };
@@ -1192,6 +1206,7 @@ public class ActionBarLayout extends FrameLayout {
         fragment.setParentLayout(null);
         fragmentsStack.remove(fragment);
         containerViewBack.setVisibility(View.INVISIBLE);
+        containerViewBack.setTranslationY(0);
         bringChildToFront(containerView);
     }
 
@@ -1217,6 +1232,7 @@ public class ActionBarLayout extends FrameLayout {
             }
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fragment.fragmentView.getLayoutParams();
             layoutParams.topMargin = layoutParams.bottomMargin = layoutParams.rightMargin = layoutParams.leftMargin = 0;
+            layoutParams.height = LayoutHelper.MATCH_PARENT;
             fragment.fragmentView.setLayoutParams(layoutParams);
 
             presentFragmentInternalRemoveOld(false, prevFragment);

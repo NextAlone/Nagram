@@ -902,13 +902,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     // lazy detach occurs, it will receive invalid attach/detach sequencing.
                     child.clearAnimation();
                 }
-                if (VERBOSE_TRACING) {
-                    TraceCompat.beginSection("RV removeViewAt");
-                }
                 RecyclerView.this.removeViewAt(index);
-                if (VERBOSE_TRACING) {
-                    TraceCompat.endSection();
-                }
             }
 
             @Override
@@ -945,9 +939,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                         throw new IllegalArgumentException("Called attach on a child which is not"
                                 + " detached: " + vh + exceptionLabel());
                     }
-                    if (DEBUG) {
-                        Log.d(TAG, "reAttach " + vh);
-                    }
                     vh.clearTmpDetachFlag();
                 }
                 RecyclerView.this.attachViewToParent(child, index, layoutParams);
@@ -962,9 +953,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                         if (vh.isTmpDetached() && !vh.shouldIgnore()) {
                             throw new IllegalArgumentException("called detach on an already"
                                     + " detached child " + vh + exceptionLabel());
-                        }
-                        if (DEBUG) {
-                            Log.d(TAG, "tmpDetach " + vh);
                         }
                         vh.addFlags(ViewHolder.FLAG_TMP_DETACHED);
                     }
@@ -7564,7 +7552,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                     @Override
                     public int getParentStart() {
-                        return LayoutManager.this.getPaddingTop();
+                        return LayoutManager.this.getParentStart();
                     }
 
                     @Override
@@ -8841,6 +8829,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          */
         public void removeAndRecycleViewAt(int index, @NonNull Recycler recycler) {
             final View view = getChildAt(index);
+            ViewHolder holder = getChildViewHolderInt(view);
+            if (holder.shouldIgnore()) {
+                return;
+            }
             removeViewAt(index);
             recycler.recycleView(view);
         }
@@ -10597,6 +10589,22 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             /** {@link androidx.recyclerview.R.attr#stackFromEnd} */
             public boolean stackFromEnd;
         }
+
+        /**
+         *  Custom methods for ignoring padding
+         */
+        protected int getParentStart() {
+            return getPaddingTop();
+        }
+
+
+        public int getStartAfterPadding() {
+            return getPaddingTop();
+        }
+
+        public int getTotalSpace() {
+            return getHeight() - getPaddingTop() - getPaddingBottom();
+        }
     }
 
     /**
@@ -11036,7 +11044,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
         }
 
-        boolean shouldIgnore() {
+        public boolean shouldIgnore() {
             return (mFlags & FLAG_IGNORE) != 0;
         }
 

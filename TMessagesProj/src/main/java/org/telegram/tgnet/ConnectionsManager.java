@@ -231,6 +231,10 @@ public class ConnectionsManager extends BaseController {
         return native_getCurrentTime(currentAccount);
     }
 
+    public int getCurrentDatacenterId() {
+        return native_getCurrentDatacenterId(currentAccount);
+    }
+
     public int getTimeDifference() {
         return native_getTimeDifference(currentAccount);
     }
@@ -520,6 +524,9 @@ public class ConnectionsManager extends BaseController {
         int flags = 0;
         EmuDetector detector = EmuDetector.with(ApplicationLoader.applicationContext);
         if (detector.detect()) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("detected emu");
+            }
             flags |= 1024;
         }
         return flags;
@@ -538,7 +545,7 @@ public class ConnectionsManager extends BaseController {
             boolean networkOnline = ApplicationLoader.isNetworkOnline();
             Utilities.stageQueue.postRunnable(() -> {
 
-            if (currentTask != null || second == 0 && Math.abs(lastDnsRequestTime - System.currentTimeMillis()) < 10000 || !networkOnline) {
+                if (currentTask != null || second == 0 && Math.abs(lastDnsRequestTime - System.currentTimeMillis()) < 10000 || !networkOnline) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("don't start task, current task = " + currentTask + " next task = " + second + " time diff = " + Math.abs(lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ApplicationLoader.isNetworkOnline());
                     }
@@ -547,12 +554,12 @@ public class ConnectionsManager extends BaseController {
 
                 lastDnsRequestTime = System.currentTimeMillis();
 
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("start dns txt task");
-            }
-            DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
-            currentTask = task;
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("start dns txt task");
+                }
+                DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
+                currentTask = task;
 
             });
         });
@@ -656,6 +663,8 @@ public class ConnectionsManager extends BaseController {
     public static native long native_getCurrentTimeMillis(int currentAccount);
 
     public static native int native_getCurrentTime(int currentAccount);
+
+    public static native int native_getCurrentDatacenterId(int currentAccount);
 
     public static native int native_getTimeDifference(int currentAccount);
 

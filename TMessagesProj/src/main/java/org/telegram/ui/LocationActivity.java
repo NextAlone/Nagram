@@ -217,6 +217,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public final static int LOCATION_TYPE_SEND_WITH_LIVE = 1;
     public final static int LOCATION_TYPE_GROUP = 4;
     public final static int LOCATION_TYPE_GROUP_VIEW = 5;
+    public final static int LOCATION_TYPE_LIVE_VIEW = 6;
 
     private Runnable markAsReadRunnable;
 

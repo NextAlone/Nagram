@@ -454,6 +454,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return toolsView;
     }
 
+    public FrameLayout getCurtainView() {
+        return curtainView;
+    }
+
     public TextView getDoneTextView() {
         return doneTextView;
     }

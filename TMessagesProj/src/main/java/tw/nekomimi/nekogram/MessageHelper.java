@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -156,7 +157,7 @@ public class MessageHelper extends BaseController {
         req.q = "";
         req.offset_id = offset_id;
         if (user != null) {
-            req.from_id = getMessagesController().getInputUser(user);
+            req.from_id = MessagesController.getInputPeer(user);
             req.flags |= 1;
         }
         req.filter = new TLRPC.TL_inputMessagesFilterEmpty();

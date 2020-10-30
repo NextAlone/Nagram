@@ -92,6 +92,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.android.internal.telephony.ITelephony;
 
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestTimeDelegate;
 import org.telegram.tgnet.TLObject;
@@ -255,16 +256,22 @@ public class AndroidUtilities {
         return false;
     }
 
-    public static CharSequence ellipsizeCenterEnd(CharSequence str, String query, int availableWidth, TextPaint textPaint) {
+    public static CharSequence ellipsizeCenterEnd(CharSequence str, String query, int availableWidth, TextPaint textPaint, int maxSymbols) {
         try {
-            StaticLayout staticLayout = new StaticLayout(str, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             int lastIndex = str.length();
+            int startHighlightedIndex = str.toString().toLowerCase().indexOf(query);
+
+            if (lastIndex > maxSymbols) {
+                str = str.subSequence(Math.max(0, startHighlightedIndex - maxSymbols / 2), Math.min(lastIndex, startHighlightedIndex + maxSymbols / 2));
+                startHighlightedIndex -= Math.max(0, startHighlightedIndex - maxSymbols / 2);
+                lastIndex = str.length();
+            }
+            StaticLayout staticLayout = new StaticLayout(str, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             float endOfTextX = staticLayout.getPrimaryHorizontal(lastIndex);
             if (endOfTextX + textPaint.measureText("...") < availableWidth) {
                 return str;
             }
 
-            int startHighlightedIndex = str.toString().toLowerCase().indexOf(query);
             int i = startHighlightedIndex + 1;
             while (i < str.length() - 1 && !Character.isWhitespace(str.charAt(i))) {
                 i++;
@@ -372,7 +379,7 @@ public class AndroidUtilities {
         return url;
     }
 
-    private static void gatherLinks(ArrayList<LinkSpec> links, Spannable s, Pattern pattern, String[] schemes, Linkify.MatchFilter matchFilter) {
+    private static void gatherLinks(ArrayList<LinkSpec> links, Spannable s, Pattern pattern, String[] schemes, Linkify.MatchFilter matchFilter, boolean internalOnly) {
         Matcher m = pattern.matcher(s);
         while (m.find()) {
             int start = m.start();
@@ -381,7 +388,11 @@ public class AndroidUtilities {
             if (matchFilter == null || matchFilter.acceptMatch(s, start, end)) {
                 LinkSpec spec = new LinkSpec();
 
-                spec.url = makeUrl(m.group(0), schemes, m);
+                String url = makeUrl(m.group(0), schemes, m);
+                if (internalOnly && !Browser.isInternalUrl(url, true, null)) {
+                    continue;
+                }
+                spec.url = url;
                 spec.start = start;
                 spec.end = end;
 
@@ -410,7 +421,7 @@ public class AndroidUtilities {
             }
         }
         final ArrayList<LinkSpec> links = new ArrayList<>();
-        gatherLinks(links, text, LinkifyPort.PROXY_PATTERN, new String[]{VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL, TROJAN_PROTOCOL/*, RB_PROTOCOL*/}, sUrlMatchFilter);
+        gatherLinks(links, text, LinkifyPort.PROXY_PATTERN, new String[]{VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL, TROJAN_PROTOCOL/*, RB_PROTOCOL*/}, sUrlMatchFilter, false);
         pruneOverlaps(links);
         if (links.size() == 0) {
             return false;
@@ -429,6 +440,10 @@ public class AndroidUtilities {
     }
 
     public static boolean addLinks(Spannable text, int mask) {
+        return addLinks(text, mask, false);
+    }
+
+    public static boolean addLinks(Spannable text, int mask, boolean internalOnly) {
         if (text == null || containsUnsupportedCharacters(text.toString()) || mask == 0) {
             return false;
         }
@@ -437,11 +452,11 @@ public class AndroidUtilities {
             text.removeSpan(old[i]);
         }
         final ArrayList<LinkSpec> links = new ArrayList<>();
-        if ((mask & Linkify.PHONE_NUMBERS) != 0) {
+        if (!internalOnly && (mask & Linkify.PHONE_NUMBERS) != 0) {
             Linkify.addLinks(text, Linkify.PHONE_NUMBERS);
         }
         if ((mask & Linkify.WEB_URLS) != 0) {
-            gatherLinks(links, text, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter);
+            gatherLinks(links, text, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter, internalOnly);
         }
         pruneOverlaps(links);
         if (links.size() == 0) {
@@ -674,6 +689,14 @@ public class AndroidUtilities {
             return;
         }
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        adjustOwnerClassGuid = classGuid;
+    }
+
+    public static void requestAdjustNothing(Activity activity, int classGuid) {
+        if (activity == null || isTablet()) {
+            return;
+        }
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         adjustOwnerClassGuid = classGuid;
     }
 

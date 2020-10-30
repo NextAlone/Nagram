@@ -5,8 +5,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def verName = "7.1.3"
-def verCode = 88
+def verName = "7.2.0-preview01"
+def verCode = 90
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -98,7 +98,7 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.3.0'
+    implementation 'dnsjava:dnsjava:3.3.1'
     implementation 'org.dizitart:nitrite:3.4.2'
 
     implementation 'cn.hutool:hutool-core:5.4.6'
