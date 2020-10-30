@@ -6879,7 +6879,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private void searchUserMessages(TLRPC.User user, TLRPC.Chat chat) {
         searchingUserMessages = user;
         searchingChatMessages = chat;
-        if (searchingUserMessages == null && searchingChatMessages == null) {
+        if (searchItem == null || searchingUserMessages == null && searchingChatMessages == null) {
             return;
         }
         String name;
@@ -7170,7 +7170,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (!inPreviewMode && chatActivityEnterView != null) {
             if (chatActivityEnterView.getAnimatedTop() != 0) {
                 chatListViewPaddingTop += chatActivityEnterView.getHeightWithTopView() - AndroidUtilities.dp(51) - chatActivityEnterView.getAnimatedTop();
-            } else {
+            } else if (!chatActivityEnterView.pannelAniamationInProgress())  {
                 chatListViewPaddingTop -= chatListView.getTranslationY();
             }
         }
@@ -18703,6 +18703,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         messageObjects.add(selectedObject);
                     }
                     MediaController.saveFilesFromMessages(getParentActivity(), getAccountInstance(), messageObjects, (count) -> {
+                        if (getParentActivity() == null) {
+                            return;
+                        }
                         if (count > 0) {
                             BulletinFactory.of(this).createDownloadBulletin(isMusic ? BulletinFactory.FileType.AUDIOS : BulletinFactory.FileType.UNKNOWNS, count).show();
                         }
@@ -18726,6 +18729,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         path = FileLoader.getPathToMessage(selectedObject.messageOwner).toString();
                     }
                     MediaController.saveFile(path, getParentActivity(), 2, fileName, selectedObject.getDocument() != null ? selectedObject.getDocument().mime_type : "", () -> {
+                        if (getParentActivity() == null) {
+                            return;
+                        }
                         final BulletinFactory.FileType fileType;
                         if (photo) {
                             fileType = BulletinFactory.FileType.PHOTO_TO_DOWNLOADS;
