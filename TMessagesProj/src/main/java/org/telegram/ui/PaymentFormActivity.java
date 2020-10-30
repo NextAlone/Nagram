@@ -59,16 +59,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wallet.AutoResolveHelper;
-import com.google.android.gms.wallet.IsReadyToPayRequest;
-import com.google.android.gms.wallet.PaymentData;
-import com.google.android.gms.wallet.PaymentDataRequest;
-import com.google.android.gms.wallet.PaymentsClient;
-import com.google.android.gms.wallet.Wallet;
-import com.google.android.gms.wallet.WalletConstants;
+//import com.google.android.gms.common.api.Status;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
+//import com.google.android.gms.wallet.AutoResolveHelper;
+//import com.google.android.gms.wallet.IsReadyToPayRequest;
+//import com.google.android.gms.wallet.PaymentData;
+//import com.google.android.gms.wallet.PaymentDataRequest;
+//import com.google.android.gms.wallet.PaymentsClient;
+//import com.google.android.gms.wallet.Wallet;
+//import com.google.android.gms.wallet.WalletConstants;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.exception.APIConnectionException;
@@ -169,7 +169,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private HashMap<String, String> codesMap = new HashMap<>();
     private HashMap<String, String> phoneFormatMap = new HashMap<>();
 
-    private PaymentsClient paymentsClient;
+//    private PaymentsClient paymentsClient;
 
     private EditTextBoldCursor[] inputFields;
     private RadioCell[] radioCells;
@@ -2115,10 +2115,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 shippingAddressParameters.put("allowedCountryCodes", allowedCountryCodes);
                 paymentDataRequest.put("shippingAddressParameters", shippingAddressParameters);*/
 
-                PaymentDataRequest request = PaymentDataRequest.fromJson(paymentDataRequest.toString());
-                if (request != null) {
-                    AutoResolveHelper.resolveTask(paymentsClient.loadPaymentData(request), getParentActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE);
-                }
+//                PaymentDataRequest request = PaymentDataRequest.fromJson(paymentDataRequest.toString());
+//                if (request != null) {
+//                    AutoResolveHelper.resolveTask(paymentsClient.loadPaymentData(request), getParentActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE);
+//                }
             } catch (JSONException e) {
                 throw new RuntimeException("The price cannot be deserialized from the JSON object.");
             }
@@ -2311,37 +2311,37 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         if (Build.VERSION.SDK_INT < 19 || getParentActivity() == null) {
             return;
         }
-        Wallet.WalletOptions walletOptions = new Wallet.WalletOptions.Builder()
-                .setEnvironment(paymentForm.invoice.test ? WalletConstants.ENVIRONMENT_TEST : WalletConstants.ENVIRONMENT_PRODUCTION)
-                .setTheme(WalletConstants.THEME_LIGHT)
-                .build();
-        paymentsClient = Wallet.getPaymentsClient(context, walletOptions);
-
-        final Optional<JSONObject> isReadyToPayJson = getIsReadyToPayRequest();
-        if (!isReadyToPayJson.isPresent()) {
-            return;
-        }
-        IsReadyToPayRequest request = IsReadyToPayRequest.fromJson(isReadyToPayJson.get().toString());
-        if (request == null) {
-            return;
-        }
-
-        Task<Boolean> task = paymentsClient.isReadyToPay(request);
-        task.addOnCompleteListener(getParentActivity(),
-                (OnCompleteListener<Boolean>) task1 -> {
-                    if (task1.isSuccessful()) {
-                        if (androidPayContainer != null) {
-                            androidPayContainer.setVisibility(View.VISIBLE);
-                            AnimatorSet animatorSet = new AnimatorSet();
-                            animatorSet.playTogether(ObjectAnimator.ofFloat(androidPayContainer, View.ALPHA, 0.0f, 1.0f));
-                            animatorSet.setInterpolator(new DecelerateInterpolator());
-                            animatorSet.setDuration(180);
-                            animatorSet.start();
-                        }
-                    } else {
-                        FileLog.e("isReadyToPay failed", task1.getException());
-                    }
-                });
+//        Wallet.WalletOptions walletOptions = new Wallet.WalletOptions.Builder()
+//                .setEnvironment(paymentForm.invoice.test ? WalletConstants.ENVIRONMENT_TEST : WalletConstants.ENVIRONMENT_PRODUCTION)
+//                .setTheme(WalletConstants.THEME_LIGHT)
+//                .build();
+//        paymentsClient = Wallet.getPaymentsClient(context, walletOptions);
+//
+//        final Optional<JSONObject> isReadyToPayJson = getIsReadyToPayRequest();
+//        if (!isReadyToPayJson.isPresent()) {
+//            return;
+//        }
+//        IsReadyToPayRequest request = IsReadyToPayRequest.fromJson(isReadyToPayJson.get().toString());
+//        if (request == null) {
+//            return;
+//        }
+//
+//        Task<Boolean> task = paymentsClient.isReadyToPay(request);
+//        task.addOnCompleteListener(getParentActivity(),
+//                (OnCompleteListener<Boolean>) task1 -> {
+//                    if (task1.isSuccessful()) {
+//                        if (androidPayContainer != null) {
+//                            androidPayContainer.setVisibility(View.VISIBLE);
+//                            AnimatorSet animatorSet = new AnimatorSet();
+//                            animatorSet.playTogether(ObjectAnimator.ofFloat(androidPayContainer, View.ALPHA, 0.0f, 1.0f));
+//                            animatorSet.setInterpolator(new DecelerateInterpolator());
+//                            animatorSet.setDuration(180);
+//                            animatorSet.start();
+//                        }
+//                    } else {
+//                        FileLog.e("isReadyToPay failed", task1.getException());
+//                    }
+//                });
     }
 
     private String getTotalPriceString(ArrayList<TLRPC.TL_labeledPrice> prices) {
@@ -2448,8 +2448,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE) {
             AndroidUtilities.runOnUIThread(() -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    PaymentData paymentData = PaymentData.getFromIntent(data);
-                    final String paymentInfo = paymentData.toJson();
+//                    PaymentData paymentData = PaymentData.getFromIntent(data);
+                    final String paymentInfo = null;
                     if (paymentInfo == null) {
                         return;
                     }
@@ -2481,10 +2481,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         throw new RuntimeException("The selected garment cannot be parsed from the list of elements");
                     }
                 } else {
-                    if (resultCode == AutoResolveHelper.RESULT_ERROR) {
-                        Status status = AutoResolveHelper.getStatusFromIntent(data);
-                        FileLog.e("android pay error " + status.getStatusMessage());
-                    }
+//                    if (resultCode == AutoResolveHelper.RESULT_ERROR) {
+//                        Status status = AutoResolveHelper.getStatusFromIntent(data);
+//                        FileLog.e("android pay error " + status.getStatusMessage());
+//                    }
                 }
                 showEditDoneProgress(true, false);
                 setDonePressed(false);

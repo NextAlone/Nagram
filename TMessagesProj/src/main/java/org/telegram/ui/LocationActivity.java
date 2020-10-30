@@ -154,12 +154,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private boolean proximityAnimationInProgress;
 
-    private CameraUpdate moveToBounds;
+    private IGeoPoint moveToBounds;
     private MapView mapView;
     private IGeoPoint forceUpdate;
     private float yOffset;
 
-    private Circle proximityCircle;
+//    private Circle proximityCircle;
     private double previousRadius;
 
     private boolean scrolling;
@@ -896,10 +896,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
             if (info != null && info.proximityMeters > 0) {
                 proximityButton.setImageResource(R.drawable.msg_location_alert);
-                if (proximityCircle != null) {
-                    proximityCircle.remove();
-                    proximityCircle = null;
-                }
+//                if (proximityCircle != null) {
+//                    proximityCircle.remove();
+//                    proximityCircle = null;
+//                }
                 canUndo = true;
                 getUndoView().showWithAction(0, UndoView.ACTION_PROXIMITY_REMOVED, 0, null,
                         () -> {
@@ -1174,7 +1174,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 super.onLayout(changed, left, top, right, bottom);
                 AndroidUtilities.runOnUIThread(() -> {
                     if (moveToBounds != null) {
-                        googleMap.moveCamera(moveToBounds);
+//                        googleMap.moveCamera(moveToBounds);
                         moveToBounds = null;
                     }
                 });
@@ -1437,11 +1437,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void openProximityAlert() {
-        if (proximityCircle == null) {
-            createCircle(500);
-        } else {
-            previousRadius = proximityCircle.getRadius();
-        }
+//        if (proximityCircle == null) {
+//            createCircle(500);
+//        } else {
+//            previousRadius = proximityCircle.getRadius();
+//        }
 
         TLRPC.User user;
         if ((int) dialogId > 0) {
@@ -1450,12 +1450,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             user = null;
         }
         proximitySheet = new ProximitySheet(getParentActivity(), user, (move, radius) -> {
-            if (proximityCircle != null) {
-                proximityCircle.setRadius(radius);
-                if (move) {
-                    moveToBounds(radius, true, true);
-                }
-            }
+//            if (proximityCircle != null) {
+//                proximityCircle.setRadius(radius);
+//                if (move) {
+//                    moveToBounds(radius, true, true);
+//                }
+//            }
             if ((int) dialogId < 0) {
                 return true;
             }
@@ -1490,16 +1490,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             getLocationController().setProximityLocation(dialogId, radius, true);
             return true;
         }, () -> {
-            if (googleMap != null) {
-                googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
-            }
+//            if (googleMap != null) {
+//                googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
+//            }
             if (!proximitySheet.getRadiusSet()) {
-                if (previousRadius > 0) {
-                    proximityCircle.setRadius(previousRadius);
-                } else if (proximityCircle != null) {
-                    proximityCircle.remove();
-                    proximityCircle = null;
-                }
+//                if (previousRadius > 0) {
+//                    proximityCircle.setRadius(previousRadius);
+//                } else if (proximityCircle != null) {
+//                    proximityCircle.remove();
+//                    proximityCircle = null;
+//                }
             }
             proximitySheet = null;
         });
@@ -1658,19 +1658,19 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     liveLocation.marker = marker;
 
                     if (!UserObject.isUserSelf(liveLocation.user)) {
-                        MarkerOptions dirOptions = new MarkerOptions().position(latLng).flat(true);
-                        dirOptions.anchor(0.5f, 0.5f);
-                        liveLocation.directionMarker = googleMap.addMarker(dirOptions);
-
-                        if (message.media.heading != 0) {
-                            liveLocation.directionMarker.setRotation(message.media.heading);
-                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_cone2));
-                            liveLocation.hasRotation = true;
-                        } else {
-                            liveLocation.directionMarker.setRotation(0);
-                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
-                            liveLocation.hasRotation = false;
-                        }
+//                        MarkerOptions dirOptions = new MarkerOptions().position(latLng).flat(true);
+//                        dirOptions.anchor(0.5f, 0.5f);
+//                        liveLocation.directionMarker = googleMap.addMarker(dirOptions);
+//
+//                        if (message.media.heading != 0) {
+//                            liveLocation.directionMarker.setRotation(message.media.heading);
+//                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_cone2));
+//                            liveLocation.hasRotation = true;
+//                        } else {
+//                            liveLocation.directionMarker.setRotation(0);
+//                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
+//                            liveLocation.hasRotation = false;
+//                        }
                     }
 
                     markers.add(liveLocation);
@@ -1722,12 +1722,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 mapView.getOverlays().add(marker);
                 liveLocation.marker = marker;
 
-                if (!UserObject.isUserSelf(liveLocation.user)) {
-                    MarkerOptions dirOptions = new MarkerOptions().position(latLng).flat(true);
-                    dirOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
-                    dirOptions.anchor(0.5f, 0.5f);
-                    liveLocation.directionMarker = googleMap.addMarker(dirOptions);
-                }
+//                if (!UserObject.isUserSelf(liveLocation.user)) {
+//                    MarkerOptions dirOptions = new MarkerOptions().position(latLng).flat(true);
+//                    dirOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
+//                    dirOptions.anchor(0.5f, 0.5f);
+//                    liveLocation.directionMarker = googleMap.addMarker(dirOptions);
+//                }
 
                 markers.add(liveLocation);
                 markersMap.put(liveLocation.id, liveLocation);
@@ -1927,21 +1927,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void createCircle(int meters) {
-        List<PatternItem> PATTERN_POLYGON_ALPHA = Arrays.asList(new Gap(20), new Dash(20));
-
-        CircleOptions circleOptions = new CircleOptions();
-        circleOptions.center(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
-        circleOptions.radius(meters);
-        if (isActiveThemeDark()) {
-            circleOptions.strokeColor(0xffffffff);
-            circleOptions.fillColor(0x20ffffff);
-        } else {
-            circleOptions.strokeColor(0xff000000);
-            circleOptions.fillColor(0x20000000);
-        }
-        circleOptions.strokePattern(PATTERN_POLYGON_ALPHA);
-        circleOptions.strokeWidth(2);
-        proximityCircle = googleMap.addCircle(circleOptions);
+//        List<PatternItem> PATTERN_POLYGON_ALPHA = Arrays.asList(new Gap(20), new Dash(20));
+//
+//        CircleOptions circleOptions = new CircleOptions();
+//        circleOptions.center(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
+//        circleOptions.radius(meters);
+//        if (isActiveThemeDark()) {
+//            circleOptions.strokeColor(0xffffffff);
+//            circleOptions.fillColor(0x20ffffff);
+//        } else {
+//            circleOptions.strokeColor(0xff000000);
+//            circleOptions.fillColor(0x20000000);
+//        }
+//        circleOptions.strokePattern(PATTERN_POLYGON_ALPHA);
+//        circleOptions.strokeWidth(2);
+//        proximityCircle = googleMap.addCircle(circleOptions);
     }
 
     private void removeInfoView() {
@@ -2188,12 +2188,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
             List<String> providers = lm.getProviders(true);
             Location l = null;
-            for (int i = providers.size() - 1; i >= 0; i--) {
-                l = lm.getLastKnownLocation(providers.get(i));
-                if (l != null) {
-                    break;
-                }
-            }
+//            for (int i = providers.size() - 1; i >= 0; i--) {
+//                l = lm.getLastKnownLocation(providers.get(i));
+//                if (l != null) {
+//                    break;
+//                }
+//            }
             return l;
         }
     }
@@ -2238,9 +2238,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (proximitySheet != null) {
             proximitySheet.updateText(true, true);
         }
-        if (proximityCircle != null) {
-            proximityCircle.setCenter(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
-        }
+//        if (proximityCircle != null) {
+//            proximityCircle.setCenter(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
+//        }
     }
 
     public void setMessageObject(MessageObject message) {
@@ -2332,13 +2332,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
                     bounds = builder;
                     if (messages.size() > 1) {
-                        try {
-                            moveToBounds = CameraUpdateFactory.newLatLngBounds(bounds, AndroidUtilities.dp(80 + 33));
-                            mapView.zoomToBoundingBox(bounds, false,AndroidUtilities.dp(60));
-                            moveToBounds = null;
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
+//                        try {
+//                            moveToBounds = CameraUpdateFactory.newLatLngBounds(bounds, AndroidUtilities.dp(80 + 33));
+//                            mapView.zoomToBoundingBox(bounds, false,AndroidUtilities.dp(60));
+//                            moveToBounds = null;
+//                        } catch (Exception e) {
+//                            FileLog.e(e);
+//                        }
                     }
                 } catch (Exception ignore) {
 
@@ -2348,60 +2348,60 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void moveToBounds(int radius, boolean self, boolean animated) {
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
-        if (self) {
-            try {
-                radius = Math.max(radius, 250);
-                LatLngBounds bounds = builder.build();
-                LatLng center = bounds.getCenter();
-                LatLng northEast = move(center, radius, radius);
-                LatLng southWest = move(center, -radius, -radius);
-                builder.include(southWest);
-                builder.include(northEast);
-                bounds = builder.build();
-                try {
-                    int height = (int) (proximitySheet.getCustomView().getMeasuredHeight() - AndroidUtilities.dp(40) + mapViewClip.getTranslationY());
-                    googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
-                    if (animated) {
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), 500, null);
-                    } else {
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-                    }
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-            } catch (Exception ignore) {
-
-            }
-        } else {
-            int date = getConnectionsManager().getCurrentTime();
-            for (int a = 0, N = markers.size(); a < N; a++) {
-                TLRPC.Message message = markers.get(a).object;
-                if (message.date + message.media.period > date) {
-                    LatLng latLng = new LatLng(message.media.geo.lat, message.media.geo._long);
-                    builder.include(latLng);
-                }
-            }
-            try {
-                LatLngBounds bounds = builder.build();
-                LatLng center = bounds.getCenter();
-                LatLng northEast = move(center, 100, 100);
-                LatLng southWest = move(center, -100, -100);
-                builder.include(southWest);
-                builder.include(northEast);
-                bounds = builder.build();
-                try {
-                    int height = proximitySheet.getCustomView().getMeasuredHeight() - AndroidUtilities.dp(100);
-                    googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-            } catch (Exception ignore) {
-
-            }
-        }
+//        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//        builder.include(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
+//        if (self) {
+//            try {
+////                radius = Math.max(radius, 250);
+////                LatLngBounds bounds = builder.build();
+////                LatLng center = bounds.getCenter();
+////                LatLng northEast = move(center, radius, radius);
+////                LatLng southWest = move(center, -radius, -radius);
+////                builder.include(southWest);
+////                builder.include(northEast);
+////                bounds = builder.build();
+////                try {
+////                    int height = (int) (proximitySheet.getCustomView().getMeasuredHeight() - AndroidUtilities.dp(40) + mapViewClip.getTranslationY());
+////                    googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
+////                    if (animated) {
+////                        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), 500, null);
+////                    } else {
+////                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+////                    }
+////                } catch (Exception e) {
+////                    FileLog.e(e);
+////                }
+//            } catch (Exception ignore) {
+//
+//            }
+//        } else {
+//            int date = getConnectionsManager().getCurrentTime();
+//            for (int a = 0, N = markers.size(); a < N; a++) {
+//                TLRPC.Message message = markers.get(a).object;
+//                if (message.date + message.media.period > date) {
+//                    GeoPoint latLng = new GeoPoint(message.media.geo.lat, message.media.geo._long);
+//                    builder.include(latLng);
+//                }
+//            }
+//            try {
+////                LatLngBounds bounds = builder.build();
+////                LatLng center = bounds.getCenter();
+////                LatLng northEast = move(center, 100, 100);
+////                LatLng southWest = move(center, -100, -100);
+////                builder.include(southWest);
+////                builder.include(northEast);
+////                bounds = builder.build();
+////                try {
+////                    int height = proximitySheet.getCustomView().getMeasuredHeight() - AndroidUtilities.dp(100);
+////                    googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
+////                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+////                } catch (Exception e) {
+////                    FileLog.e(e);
+////                }
+//            } catch (Exception ignore) {
+//
+//            }
+//        }
     }
 
     private boolean getRecentLocations() {
@@ -2458,11 +2458,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return messages != null;
     }
 
-    private double bearingBetweenLocations(LatLng latLng1, LatLng latLng2) {
-        double lat1 = latLng1.latitude * Math.PI / 180;
-        double long1 = latLng1.longitude * Math.PI / 180;
-        double lat2 = latLng2.latitude * Math.PI / 180;
-        double long2 = latLng2.longitude * Math.PI / 180;
+    private double bearingBetweenLocations(GeoPoint latLng1, GeoPoint latLng2) {
+        double lat1 = latLng1.getLatitude() * Math.PI / 180;
+        double long1 = latLng1.getLongitude() * Math.PI / 180;
+        double lat2 = latLng2.getLatitude() * Math.PI / 180;
+        double long2 = latLng2.getLongitude() * Math.PI / 180;
         double dLon = (long2 - long1);
 
         double y = Math.sin(dLon) * Math.cos(lat2);
@@ -2509,10 +2509,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     int lowerId = (int) messageObject.getDialogId();
                     if (lowerId > 0) {
                         proximityButton.setImageResource(R.drawable.msg_location_alert);
-                        if (proximityCircle != null) {
-                            proximityCircle.remove();
-                            proximityCircle = null;
-                        }
+//                        if (proximityCircle != null) {
+//                            proximityCircle.remove();
+//                            proximityCircle = null;
+//                        }
                     }
                 }
             }
@@ -2539,20 +2539,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         GeoPoint latLng = new GeoPoint(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long);
                         liveLocation.marker.setPosition(latLng);
                         if (liveLocation.directionMarker != null) {
-                            LatLng oldLocation = liveLocation.directionMarker.getPosition();
+                            GeoPoint oldLocation = liveLocation.directionMarker.getPosition();
                             liveLocation.directionMarker.setPosition(latLng);
                             if (messageObject.messageOwner.media.heading != 0) {
                                 liveLocation.directionMarker.setRotation(messageObject.messageOwner.media.heading);
-                                if (!liveLocation.hasRotation) {
-                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_cone2));
-                                    liveLocation.hasRotation = true;
-                                }
+//                                if (!liveLocation.hasRotation) {
+//                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_cone2));
+//                                    liveLocation.hasRotation = true;
+//                                }
                             } else {
-                                if (liveLocation.hasRotation) {
-                                    liveLocation.directionMarker.setRotation(0);
-                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
-                                    liveLocation.hasRotation = false;
-                                }
+//                                if (liveLocation.hasRotation) {
+//                                    liveLocation.directionMarker.setRotation(0);
+//                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
+//                                    liveLocation.hasRotation = false;
+//                                }
                             }
                         }
                     }
@@ -2674,19 +2674,19 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (!currentMapStyleDark) {
                         currentMapStyleDark = true;
                         // TODO dark
-                        if (proximityCircle != null) {
-                            proximityCircle.setStrokeColor(0xffffffff);
-                            proximityCircle.setFillColor(0x20ffffff);
-                        }
+//                        if (proximityCircle != null) {
+//                            proximityCircle.setStrokeColor(0xffffffff);
+//                            proximityCircle.setFillColor(0x20ffffff);
+//                        }
                     }
                 } else {
                     if (currentMapStyleDark) {
                         currentMapStyleDark = false;
                         // TODO dark
-                        if (proximityCircle != null) {
-                            proximityCircle.setStrokeColor(0xff000000);
-                            proximityCircle.setFillColor(0x20000000);
-                        }
+//                        if (proximityCircle != null) {
+//                            proximityCircle.setStrokeColor(0xff000000);
+//                            proximityCircle.setFillColor(0x20000000);
+//                        }
                     }
                 }
             }
