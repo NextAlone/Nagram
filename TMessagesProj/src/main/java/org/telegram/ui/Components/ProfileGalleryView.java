@@ -419,7 +419,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public int getRealCount() {
-        return photos.size();
+        return photos.size() > 0 ? 1 : 0;
     }
 
     public int getRealPosition(int position) {

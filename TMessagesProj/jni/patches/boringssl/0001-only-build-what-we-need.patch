@@ -1,16 +1,5 @@
-From 02952ace408e331237a1ccd724f072b3e67ceb20 Mon Sep 17 00:00:00 2001
-From: thermatk <thermatk@thermatk.com>
-Date: Wed, 23 Jan 2019 22:16:34 +0100
-Subject: [PATCH] only build what we need
-
----
- CMakeLists.txt        | 36 ---------------------
- crypto/CMakeLists.txt | 74 -------------------------------------------
- ssl/CMakeLists.txt    | 18 ------------------
- 3 files changed, 128 deletions(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index fd3532664..7fcfb1627 100644
+index c266e1267..81d721df4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -562,44 +562,8 @@ if(USE_CUSTOM_LIBCXX)
@@ -58,7 +47,7 @@ index fd3532664..7fcfb1627 100644
  
  if(FUZZ)
    if(LIBFUZZER_FROM_DEPS)
-@@ -589,14 +564,3 @@ endif()
+@@ -616,14 +580,3 @@ endif()
  if(UNIX AND NOT APPLE AND NOT ANDROID)
    set(HANDSHAKER_ARGS "-handshaker-path" $<TARGET_FILE:handshaker>)
  endif()
@@ -74,7 +63,7 @@ index fd3532664..7fcfb1627 100644
 -    DEPENDS all_tests bssl_shim handshaker
 -    USES_TERMINAL)
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
-index e940f7d5f..f5221d70d 100644
+index 2771768f4..126817742 100644
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
 @@ -85,7 +85,6 @@ function(perlasm dest src)
@@ -83,12 +72,13 @@ index e940f7d5f..f5221d70d 100644
  add_subdirectory(fipsmodule)
 -add_subdirectory(test)
  
- if(FIPS_DELOCATE)
+ if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -466,94 +466,3 @@ endif()
+@@ -464,96 +463,4 @@ endif()
+ # simplify injecting it everywhere.
  if(USE_CUSTOM_LIBCXX)
    target_link_libraries(crypto libcxx)
- endif()
+-endif()
 -
 -# urandom_test is a separate binary because it needs to be able to observe the
 -# PRNG initialisation, which means that it can't have other tests running before
@@ -120,6 +110,7 @@ index e940f7d5f..f5221d70d 100644
 -  compiler_test.cc
 -  constant_time_test.cc
 -  cpu-arm-linux_test.cc
+-  crypto_test.cc
 -  curve25519/ed25519_test.cc
 -  curve25519/spake25519_test.cc
 -  curve25519/x25519_test.cc
@@ -180,13 +171,15 @@ index e940f7d5f..f5221d70d 100644
 -  target_link_libraries(crypto_test ws2_32)
 -endif()
 -add_dependencies(all_tests crypto_test)
++endif()
+\ No newline at end of file
 diff --git a/ssl/CMakeLists.txt b/ssl/CMakeLists.txt
 index 0fb532eae..f5cab9807 100644
 --- a/ssl/CMakeLists.txt
 +++ b/ssl/CMakeLists.txt
 @@ -44,21 +44,3 @@ add_library(
  add_dependencies(ssl global_target)
-
+ 
  target_link_libraries(ssl crypto)
 -
 -add_executable(
@@ -206,6 +199,3 @@ index 0fb532eae..f5cab9807 100644
 -  target_link_libraries(ssl_test ws2_32)
 -endif()
 -add_dependencies(all_tests ssl_test)
---
-2.20.1
-
