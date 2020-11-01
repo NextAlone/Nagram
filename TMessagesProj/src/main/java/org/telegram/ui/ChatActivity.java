@@ -20996,17 +20996,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (!AndroidUtilities.isGoogleMapsInstalled(ChatActivity.this)) {
                                 return;
                             }
-                            /*if (message.isLiveLocation()) {
+                            if (message.isLiveLocation()) {
                                 LocationActivity fragment = new LocationActivity(currentChat == null || ChatObject.canSendMessages(currentChat) || currentChat.megagroup ? 2 : LocationActivity.LOCATION_TYPE_LIVE_VIEW);
                                 fragment.setDelegate(ChatActivity.this);
                                 fragment.setMessageObject(message);
                                 presentFragment(fragment);
-                            } else {*/
+                            } else {
                                 LocationActivity fragment = new LocationActivity(currentEncryptedChat == null ? 3 : 0);
                                 fragment.setDelegate(ChatActivity.this);
                                 fragment.setMessageObject(message);
                                 presentFragment(fragment);
-                            //}
+                            }
                         } else if (message.type == 9 || message.type == 0) {
                             File locFile = null;
                             if (message.messageOwner.attachPath != null && message.messageOwner.attachPath.length() != 0) {
