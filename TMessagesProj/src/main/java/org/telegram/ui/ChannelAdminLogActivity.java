@@ -1712,7 +1712,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     @Override
     public void onTransitionAnimationStart(boolean isOpen, boolean backward) {
         if (isOpen) {
-            allowAnimationIndex = NotificationCenter.getInstance(currentAccount).setAnimationInProgress(allowAnimationIndex, new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload,
+            allowAnimationIndex = getNotificationCenter().setAnimationInProgress(allowAnimationIndex, new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload,
                     NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad/*, NotificationCenter.botInfoDidLoad*/});
             openAnimationEnded = false;
         }
@@ -1721,7 +1721,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     @Override
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            NotificationCenter.getInstance(currentAccount).onAnimationFinish(allowAnimationIndex);
+            getNotificationCenter().onAnimationFinish(allowAnimationIndex);
             openAnimationEnded = true;
         }
     }

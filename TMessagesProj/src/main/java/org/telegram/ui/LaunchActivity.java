@@ -2377,7 +2377,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
 
         if (isVoipIntent) {
-            VoIPFragment.show(this);
+            VoIPFragment.show(this, intentAccount[0]);
         }
 
         intent.setAction(null);

@@ -871,7 +871,9 @@ public boolean retriedToSend;
                             message.messageObjects.remove(index);
                             message.messages.remove(index);
                             message.originalPaths.remove(index);
-                            message.parentObjects.remove(index);
+                            if (!message.parentObjects.isEmpty()) {
+                                message.parentObjects.remove(index);
+                            }
                             if (message.sendRequest != null) {
                                 TLRPC.TL_messages_sendMultiMedia request = (TLRPC.TL_messages_sendMultiMedia) message.sendRequest;
                                 request.multi_media.remove(index);
@@ -5444,7 +5446,7 @@ public boolean retriedToSend;
                 docType[0] = 0;
             }
         }
-        if (groupId != null) {
+        if (!isEncrypted && groupId != null) {
             if (docType != null && prevType != null && prevType != docType[0]) {
                 finishGroup(accountInstance, groupId[0], scheduleDate);
                 groupId[0] = Utilities.random.nextLong();
@@ -5504,7 +5506,7 @@ public boolean retriedToSend;
                         enryptedLayer = AndroidUtilities.getPeerLayerVersion(encryptedChat.layer);
                     }
                 }
-                if ((!isEncrypted || enryptedLayer >= 73) && count > 1 && mediaCount % 10 == 0) {
+                if (!isEncrypted && count > 1 && mediaCount % 10 == 0) {
                     groupId = Utilities.random.nextLong();
                     mediaCount = 0;
                 }
