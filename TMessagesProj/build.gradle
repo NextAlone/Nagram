@@ -5,8 +5,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def verName = "7.2.1-preview06"
-def verCode = 100
+def verName = "7.2.1-rc01"
+def verCode = 102
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -57,7 +57,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'cn.hutool:hutool-all:5.4.6'
+        classpath 'cn.hutool:hutool-all:5.4.7'
     }
 
 }
@@ -101,8 +101,8 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.3.1'
     implementation 'org.dizitart:nitrite:3.4.2'
 
-    implementation 'cn.hutool:hutool-core:5.4.6'
-    implementation 'cn.hutool:hutool-crypto:5.4.6'
+    implementation 'cn.hutool:hutool-core:5.4.7'
+    implementation 'cn.hutool:hutool-crypto:5.4.7'
 
     implementation project(":openpgp-api")
 
@@ -119,21 +119,6 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
 
 }
-
-task writeUpdateInfo {
-
-    def info = new JSONObject()
-
-    info.set("version", verName)
-    info.set("versionCode", verCode)
-    info.set("defaultFlavor", "full")
-    info.set("defaultApkName", "NekoX-full-arm64-v8a-release.apk.xz")
-
-    FileUtil.writeUtf8String(info.toStringPretty(), new File("build/update.json"))
-
-}
-
-tasks.findByName("preBuild").finalizedBy(writeUpdateInfo)
 
 android {
     compileSdkVersion 30
