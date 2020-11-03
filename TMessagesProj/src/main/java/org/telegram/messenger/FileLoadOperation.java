@@ -736,7 +736,7 @@ public class FileLoadOperation {
         if (parentObject instanceof TLRPC.TL_theme) {
             TLRPC.TL_theme theme = (TLRPC.TL_theme) parentObject;
             cacheFileFinal = new File(ApplicationLoader.getFilesDirFixed(), "remote" + theme.id + ".attheme");
-        } else if (fileName != null) {
+        } else if (fileName != null && !encryptFile) {
             cacheFileFinal = new File(storePath, fileName);
         } else {
             cacheFileFinal = new File(storePath, fileNameFinal);
