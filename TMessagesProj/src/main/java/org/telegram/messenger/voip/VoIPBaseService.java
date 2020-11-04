@@ -90,6 +90,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 /**
  * Created by grishka on 21.07.17.
  */
@@ -921,6 +923,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
 	private void checkIsNear(boolean newIsNear) {
 		if (newIsNear != isProximityNear) {
+			if (NekoConfig.disableProximityEvents) return;
 			if (BuildVars.LOGS_ENABLED) {
 				FileLog.d("proximity " + newIsNear);
 			}
