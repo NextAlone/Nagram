@@ -102,6 +102,43 @@ https://telegra.ph/google-cloud-trans-key-04-26
 
 ## Compilation Guide
 
+**NOTE: Building on Windows is, unfortunately, not supported.
+Consider using a Linux VM or dual booting.**
+
+**Important:**
+
+1. Install Android Sdk and NDK ( default location is $HOME/Android/Sdk, otherwise you need to specify $ANDROID_HOME for it )
+
+It is recommended to use AndroidStudio to install.
+
+2. Install golang ( >= 1.15 ), and add GOPATH to the PATH variable.
+
+It is recommended to use gvm for the installation. if you are using the system package manager, don't forget to add environment variable.
+
+```shell
+apt install -y bison gcc make
+bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+source "$HOME/.bashrc"
+
+gvm install go1.15 -B
+gvm use go1.15 --default
+```
+
+3. Install rust and its stdlib for android abis, add environment variables for it.
+
+It is recommended to use the official script, otherwise you may not find rustup.
+
+```shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
+rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
+```
+
+(One command at a time)
+
+4. Build native dependencies: `bin/native_libs.sh`
+5. Build external libraries and native code: `bin/update_libs.sh`
+
 ### Specify APP_ID and APP_HASH
 
 Fill out TELEGRAM_APP_ID and TELEGRAM_APP_HASH in local.properties
@@ -140,8 +177,7 @@ Available variant list:
 `Mini` ( without ss/ssr/v2ray proxies )  
   
 `AppleEmoji`  
-`NotoEmoji`  
-`FacebookEmoji`  
+`TwitterEmoji`
 `NoEmoji`
 
 ## Localization

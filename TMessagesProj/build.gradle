@@ -1,12 +1,9 @@
-import cn.hutool.core.io.FileUtil
-import cn.hutool.json.JSONObject
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def verName = "7.2.1-rc01"
-def verCode = 102
+def verName = "7.2.1-rc03"
+def verCode = 108
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -32,10 +29,8 @@ void setupPlay(boolean beta) {
 
         track = beta ? "beta" : "production"
         defaultToAppBundles = true
-        userFraction = 1
 
     }
-
 
 }
 
@@ -44,23 +39,9 @@ configurations {
 }
 
 def okHttpVersion = '4.9.0'
-def fcmVersion = '20.3.0'
+def fcmVersion = '21.0.0'
 def crashlyticsVersion = '17.2.2'
 def playCoreVersion = '1.8.3'
-
-buildscript {
-
-    repositories {
-        jcenter()
-        mavenCentral()
-        google()
-    }
-
-    dependencies {
-        classpath 'cn.hutool:hutool-all:5.4.7'
-    }
-
-}
 
 repositories {
 
@@ -116,7 +97,7 @@ dependencies {
     releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.0'
 
 }
 
@@ -129,7 +110,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        //noinspection OldTargetApi
+        //noinspection ExpiredTargetSdkVersion,OldTargetApi
         targetSdkVersion 28
 
         versionName verName
@@ -258,6 +239,7 @@ android {
         }
 
         release {
+            isDefault true
             debuggable false
             jniDebuggable false
             minifyEnabled true
@@ -327,6 +309,7 @@ android {
             versionNameSuffix '-mini-twitter-emoji'
         }
         full {
+            isDefault true
         }
         fullPlay {
             versionNameSuffix '-play'

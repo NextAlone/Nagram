@@ -14,7 +14,7 @@ android {
         minSdkVersion(21)
         targetSdkVersion(30)
     }
-    buildToolsVersion = "30.0.1"
+    buildToolsVersion = "30.0.2"
 
 }
 
