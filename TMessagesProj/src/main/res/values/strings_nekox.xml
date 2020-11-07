@@ -5,6 +5,16 @@
 
     <string name="Locked">Locked</string>
 
+    <string name="AccDescrChatAttachEnterMenu">Chat input menu</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Record Video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Record Audio</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Disable Link Preview</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Enable Link Preview</string>
+    <string name="UseChatAttachEnterMenu">Use input menu</string>
+    <string name="UseChatAttachEnterMenuNotice">Change the record button to an input menu, and add a link preview switch.</string>
+    <string name="DisableLinkPreviewByDefault">Disable link preview by default</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Disable the link preview request during input by default to prevent the server from knowing that the link is shared through Telegram.</string>
+
     <string name="CustomApi">Custom API</string>
     <string name="UseCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="CustomApiNo">Don\'t use custom API</string>

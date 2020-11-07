@@ -2,18 +2,18 @@
 
 if [ ! -x "$(command -v go)" ]; then
 
-#  if [ ! -x "$(command -v gvm)" ]; then
-#
-#    apt install -y bison binutils gcc make
-#
-#    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-#
-#    source "$HOME/.bashrc"
-#
-#  fi
-#
-#  gvm install go1.15 -B
-#  gvm use go1.15 --default
+  #  if [ ! -x "$(command -v gvm)" ]; then
+  #
+  #    apt install -y bison binutils gcc make
+  #
+  #    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  #
+  #    source "$HOME/.bashrc"
+  #
+  #  fi
+  #
+  #  gvm install go1.15 -B
+  #  gvm use go1.15 --default
 
   echo "install golang please!"
 
@@ -21,10 +21,9 @@ if [ ! -x "$(command -v go)" ]; then
 
 fi
 
-
 if [ ! -x "$(command -v ninja)" ]; then
 
-#  apt install -y ninja-build
+  #  apt install -y ninja-build
 
   echo "install ninja-build please!"
 
@@ -34,7 +33,7 @@ fi
 
 if [ ! -x "$(command -v cmake)" ]; then
 
-#  apt install -y cmake
+  #  apt install -y cmake
 
   echo "install cmake please!"
 
@@ -55,7 +54,6 @@ if [ -z "$ANDROID_HOME" ]; then
     exit 1
 
   fi
-
 
 fi
 

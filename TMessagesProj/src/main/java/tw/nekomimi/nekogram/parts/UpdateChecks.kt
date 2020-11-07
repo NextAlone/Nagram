@@ -1,3 +1,4 @@
+
 package tw.nekomimi.nekogram.parts
 
 import android.app.Activity
@@ -8,6 +9,7 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import kotlinx.coroutines.delay
 import org.json.JSONObject
 import org.telegram.messenger.BuildConfig
 import org.telegram.messenger.LocaleController
@@ -30,7 +32,7 @@ fun Activity.checkUpdate() {
 
         val manager = AppUpdateManagerFactory.create(this)
 
-        manager.registerListener(InstallStateUpdatedListener {
+        manager.registerListener {
 
             if (it.installStatus() == InstallStatus.DOWNLOADED) {
 
@@ -50,7 +52,7 @@ fun Activity.checkUpdate() {
 
             }
 
-        })
+        }
 
         manager.appUpdateInfo.addOnSuccessListener {
 
@@ -67,7 +69,13 @@ fun Activity.checkUpdate() {
 
             } else {
 
-                AlertUtil.showToast(LocaleController.getString("NoUpdate", R.string.NoUpdate))
+                UIUtil.runOnIoDispatcher {
+
+                    delay(1000L)
+
+                    AlertUtil.showToast(LocaleController.getString("NoUpdate", R.string.NoUpdate))
+
+                }
 
             }
 

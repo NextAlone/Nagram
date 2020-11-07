@@ -69,6 +69,9 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int skipOpenLinkConfirmRow;
     private int rearVideoMessagesRow;
     private int confirmAVRow;
+    private int useChatAttachMediaMenuRow;
+    private int disableLinkPreviewByDefaultRow;
+
     private int disableProximityEventsRow;
     private int mapPreviewRow;
     private int messageMenuRow;
@@ -221,6 +224,16 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.confirmAVMessage);
                 }
+            } else if (position == useChatAttachMediaMenuRow) {
+                NekoConfig.toggleUseChatAttachMediaMenu();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.useChatAttachMediaMenu);
+                }
+            } else if (position == disableLinkPreviewByDefaultRow) {
+                NekoConfig.toggleDisableLinkPreviewByDefault();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableLinkPreviewByDefault);
+                }
             } else if (position == disableVibrationRow) {
                 NekoConfig.toggleDisableVibration();
                 if (view instanceof TextCheckCell) {
@@ -264,6 +277,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         skipOpenLinkConfirmRow = rowCount ++;
         rearVideoMessagesRow = rowCount++;
         confirmAVRow = rowCount++;
+        useChatAttachMediaMenuRow = rowCount ++;
+        disableLinkPreviewByDefaultRow = rowCount ++;
         disableProximityEventsRow = rowCount ++;
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -594,6 +609,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndValueAndCheck(LocaleController.getString("HideAllTab", R.string.HideAllTab), LocaleController.getString("HideAllTabAbout", R.string.HideAllTabAbout), NekoConfig.hideAllTab, true, true);
                     } else if (position == confirmAVRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ConfirmAVMessage", R.string.ConfirmAVMessage), NekoConfig.confirmAVMessage, true);
+                    } else if (position == useChatAttachMediaMenuRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("UseChatAttachEnterMenu", R.string.UseChatAttachEnterMenu), LocaleController.getString("UseChatAttachEnterMenuNotice", R.string.UseChatAttachEnterMenuNotice), NekoConfig.useChatAttachMediaMenu, true, true);
+                    } else if (position == disableLinkPreviewByDefaultRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("DisableLinkPreviewByDefault", R.string.DisableLinkPreviewByDefault), LocaleController.getString("DisableLinkPreviewByDefaultNotice", R.string.DisableLinkPreviewByDefaultNotice), NekoConfig.disableLinkPreviewByDefault, true, true);
                     } else if (position == disableVibrationRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), NekoConfig.disableVibration, true);
                     } else if (position == disableProximityEventsRow) {

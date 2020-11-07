@@ -6272,6 +6272,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
                 }
             }
+
+            @Override
+            public int getDisableLinkPreviewStatus() {
+                return disableLinkPreview ? 2 : 1;
+            }
+
+            @Override
+            public void toggleDisableLinkPreview() {
+                disableLinkPreview = !disableLinkPreview;
+            }
         });
         chatActivityEnterView.setDialogId(dialog_id, currentAccount);
         if (chatInfo != null) {
@@ -8132,6 +8142,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (getParentActivity() == null || fragmentView == null || hide && voiceHintTextView == null || chatMode != 0) {
             return;
         }
+        if (NekoConfig.useChatAttachMediaMenu) return;
         if (voiceHintTextView == null) {
             SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
             int index = frameLayout.indexOfChild(chatActivityEnterView);
@@ -9016,10 +9027,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return dialog != chatAttachAlert && super.dismissDialogOnPause(dialog);
     }
 
+    private boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault;
+
     private void searchLinks(final CharSequence charSequence, final boolean force) {
         if (currentEncryptedChat != null && (getMessagesController().secretWebpagePreview == 0 || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) < 46)) {
             return;
         }
+        if (disableLinkPreview) return;
         if (force && foundWebPage != null) {
             if (foundWebPage.url != null) {
                 int index = TextUtils.indexOf(charSequence, foundWebPage.url);

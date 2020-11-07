@@ -120,6 +120,8 @@ public class NekoConfig {
     public static boolean disableProximityEvents;
 
     public static boolean ignoreContentRestrictions;
+    public static boolean useChatAttachMediaMenu;
+    public static boolean disableLinkPreviewByDefault;
 
     public static String getOpenPGPAppName() {
 
@@ -253,6 +255,8 @@ public class NekoConfig {
         disableProximityEvents = preferences.getBoolean("disableProximityEvents", false);
 
         ignoreContentRestrictions = preferences.getBoolean("ignoreContentRestrictions", false);
+        useChatAttachMediaMenu = preferences.getBoolean("useChatAttachMediaMenu", true);
+        disableLinkPreviewByDefault = preferences.getBoolean("disableLinkPreviewByDefault", false);
 
     }
 
@@ -787,6 +791,18 @@ public class NekoConfig {
     public static void toggleIgnoreContentRestrictions() {
 
         preferences.edit().putBoolean("ignoreContentRestrictions",ignoreContentRestrictions = !ignoreContentRestrictions).apply();
+
+    }
+
+    public static void toggleUseChatAttachMediaMenu() {
+
+        preferences.edit().putBoolean("useChatAttachMediaMenu",useChatAttachMediaMenu = !useChatAttachMediaMenu).apply();
+
+    }
+
+    public static void toggleDisableLinkPreviewByDefault() {
+
+        preferences.edit().putBoolean("disableLinkPreviewByDefault",disableLinkPreviewByDefault = !disableLinkPreviewByDefault).apply();
 
     }
 

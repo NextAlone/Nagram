@@ -23,7 +23,7 @@ object UIUtil {
 
     }
 
-    fun runOnIoDispatcher(runnable: () -> Unit) {
+    fun runOnIoDispatcher(runnable: suspend () -> Unit) {
 
         GlobalScope.launch(Dispatchers.IO) {
 
