@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Locked">锁定</string>
+    <string name="Locked">已锁定</string>
+    <string name="AccDescrChatAttachEnterMenu">聊天输入菜单</string>
+    <string name="ChatAttachEnterMenuRecordVideo">录制视频</string>
+    <string name="ChatAttachEnterMenuRecordAudio">录制音频</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">禁用链接预览</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">启用链接预览</string>
+    <string name="UseChatAttachEnterMenu">使用输入菜单</string>
+    <string name="UseChatAttachEnterMenuNotice">将录制按钮更改为输入菜单，另增加一个链接预览开关。</string>
+    <string name="DisableLinkPreviewByDefault">默认禁用链接预览</string>
+    <string name="DisableLinkPreviewByDefaultNotice">默认情况下, 在输入过程中禁用链接预览请求，以防止服务器知道该链接在 Telegram 被分享。</string>
     <string name="CustomApi">自定义 API</string>
     <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
     <string name="CustomApiNo">不使用自定义 API</string>
@@ -103,7 +112,7 @@
     <string name="AddProxyVmess">添加 Vmess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>
     <string name="AddProxySSR">添加 ShadowsocksR 代理</string>
-    <string name="AddProxyRB">添加 RelayBaton 代理</string>
+    <string name="AddProxyTrojan">添加 Trojan 代理</string>
     <string name="SSPluginConflictingName">多个插件使用此ID： %s.</string>
     <string name="EditProxy">编辑代理</string>
     <string name="ShareProxy">分享代理</string>
@@ -127,6 +136,7 @@
     <string name="SSRProtocolParams">协议参数</string>
     <string name="SSRObfs">混淆</string>
     <string name="SSRObfsParam">混淆参数</string>
+    <string name="ProxyInfoTrojan">Trojan 代理设置</string>
     <string name="ProxyRemarks">别名</string>
     <string name="RetestPing">重新测试所有 Ping 值</string>
     <string name="ReorderByPing">基于 Ping 值重新排序</string>
@@ -178,5 +188,5 @@
     <string name="ShareMyKey">分享我的公钥</string>
     <string name="DisableVibration">禁用振动</string>
     <string name="IgnoreContentRestrictions">忽略内容限制</string>
-    <string name="IgnoreContentRestrictionsNotice">在本机忽略消息针对 Android 平台的限制. 这可能在未来被服务器禁止, 您需要自行评估在当地的合法性.</string>
+    <string name="IgnoreContentRestrictionsNotice">忽略本地消息的 Android 限制。 这可能会在将来被服务器禁止，您需要自己评估此选项的本地合法性。</string>
 </resources>

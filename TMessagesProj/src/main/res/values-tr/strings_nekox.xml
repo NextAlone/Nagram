@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Vmess Proxy Ekle</string>
     <string name="AddProxySS">Shadowsocks Proxy Ekle</string>
     <string name="AddProxySSR">ShadowsocksR Proxy Ekle</string>
-    <string name="AddProxyRB">RelayBaton Proxy Ekle</string>
     <string name="SSPluginConflictingName">Birkaç eklenti bu kimliği kullanır: %s.</string>
     <string name="EditProxy">Proxy Düzenle</string>
     <string name="ShareProxy">Proxy Paylaş</string>
@@ -177,4 +176,6 @@
     <string name="PGPImportPrivate">Özel Anahtarı İçe Aktar</string>
     <string name="ShareMyKey">Ortak Anahtarımı Paylaş</string>
     <string name="DisableVibration">Titreşimi Devre Dışı Bırak</string>
+    <string name="IgnoreContentRestrictions">İçerik Kısıtlamalarını Yoksay</string>
+    <string name="IgnoreContentRestrictionsNotice">Yerel olarak mesajlardaki android kısıtlamalarını yok sayar. Bu, gelecekte sunucu tarafından yasaklanabilir ve bu seçeneğin yerel yasallığını kendiniz değerlendirmeniz gerekecektir.</string>
 </resources>

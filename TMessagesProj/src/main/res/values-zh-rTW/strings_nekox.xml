@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">添加 Vmess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>
     <string name="AddProxySSR">添加 ShadowsocksR 代理</string>
-    <string name="AddProxyRB">添加RelayBaton代理</string>
     <string name="SSPluginConflictingName">多個插件使用此ID： %s。</string>
     <string name="EditProxy">編輯代理</string>
     <string name="ShareProxy">分享代理</string>

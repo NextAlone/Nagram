@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Ավելացնել Vmess վստահված անձը</string>
     <string name="AddProxySS">Ավելացնել Shadowsocks վստահված անձը</string>
     <string name="AddProxySSR">Ավելացնել ShadowsocksR վստահված անձ</string>
-    <string name="AddProxyRB">Ավելացրեք RelayBaton վստահված անձը</string>
     <string name="SSPluginConflictingName">Մի քանի ներդիրներ օգտագործում են այս ID- ն ՝ %s:</string>
     <string name="EditProxy">Փոխել վստահված անձը</string>
     <string name="ShareProxy">Համօգտագործել վստահված անձը</string>
@@ -177,4 +176,6 @@
     <string name="PGPImportPrivate">Ներմուծել անձնական բանալին</string>
     <string name="ShareMyKey">Share իմ հանրային բանալին</string>
     <string name="DisableVibration">Անջատեք թրթռումը</string>
+    <string name="IgnoreContentRestrictions">Անտեսեք բովանդակության սահմանափակումները</string>
+    <string name="IgnoreContentRestrictionsNotice">Անտեսում է հաղորդագրությունների տեղական android սահմանափակումները: Հետագայում դա կարող է արգելվել սերվերի կողմից, և դուք պետք է ինքներդ գնահատեք այս տարբերակի տեղական օրինականությունը:</string>
 </resources>

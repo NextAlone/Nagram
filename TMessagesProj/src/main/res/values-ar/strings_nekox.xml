@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">إضافة وكيل Vmess</string>
     <string name="AddProxySS">إضافة وكيل Shadowsock</string>
     <string name="AddProxySSR">إضافة وكيل ShadowsocksR</string>
-    <string name="AddProxyRB">إضافة وكيل RelayBaton</string>
     <string name="SSPluginConflictingName">العديد من الإضافات تستخدم هذا المعرف: %s.</string>
     <string name="EditProxy">تحرير البروكسي</string>
     <string name="ShareProxy">مشاركة البروكسي</string>
@@ -177,4 +176,6 @@
     <string name="PGPImportPrivate">استيراد مفتاح خاص</string>
     <string name="ShareMyKey">شارك مفتاحي العام</string>
     <string name="DisableVibration">تعطيل الاهتزاز</string>
+    <string name="IgnoreContentRestrictions">تجاهل قيود المحتوى</string>
+    <string name="IgnoreContentRestrictionsNotice">يتجاهل قيود android على الرسائل محليًا. قد يحظر الخادم هذا في المستقبل ، وسوف تحتاج إلى تقييم الشرعية المحلية لهذا الخيار بنفسك.</string>
 </resources>

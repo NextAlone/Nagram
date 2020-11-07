@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Vmessプロキシを追加</string>
     <string name="AddProxySS">Shadowsocksプロキシを追加</string>
     <string name="AddProxySSR">ShadowsocksRプロキシを追加</string>
-    <string name="AddProxyRB">RelayBaton プロキシを追加</string>
     <string name="SSPluginConflictingName">いくつかのプラグインがこのIDを使用しています: %s.</string>
     <string name="EditProxy">プロキシを編集</string>
     <string name="ShareProxy">プロキシを共有</string>

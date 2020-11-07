@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Vmess 프록시 추가</string>
     <string name="AddProxySS">Shadowsocks 프록시 추가</string>
     <string name="AddProxySSR">ShadowsocksR 프록시 추가</string>
-    <string name="AddProxyRB">RelayBaton 프록시 추가</string>
     <string name="SSPluginConflictingName">여러 플러그인에서이 ID를 사용합니다 : %s.</string>
     <string name="EditProxy">프록시 편집</string>
     <string name="ShareProxy">프록시 공유</string>

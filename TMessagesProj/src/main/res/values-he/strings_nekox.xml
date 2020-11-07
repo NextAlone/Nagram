@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">הוסף Vmess Proxy</string>
     <string name="AddProxySS">הוסף פרוקסי Shadowsocks</string>
     <string name="AddProxySSR">הוסף פרוקסי ShadowsocksR</string>
-    <string name="AddProxyRB">הוסף פרוקסי RelayBaton</string>
     <string name="SSPluginConflictingName">מספר תוספים משתמשים במזהה זה: %s.</string>
     <string name="EditProxy">ערוך פרוקסי</string>
     <string name="ShareProxy">שתף פרוקסי</string>

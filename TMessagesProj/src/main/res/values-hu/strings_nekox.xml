@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Adja hozzá a Vmess proxyt</string>
     <string name="AddProxySS">Adjon hozzá Shadowsocks Proxy-t</string>
     <string name="AddProxySSR">Adjon hozzá ShadowsocksR Proxy-t</string>
-    <string name="AddProxyRB">Adja hozzá a RelayBaton Proxy-t</string>
     <string name="SSPluginConflictingName">Több plugin használja ezt az azonosítót: %s.</string>
     <string name="EditProxy">Proxy szerkesztése</string>
     <string name="ShareProxy">Proxy megosztása</string>

@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Agregar proxy de Vmess</string>
     <string name="AddProxySS">Añadir proxy de Shadowsocks</string>
     <string name="AddProxySSR">Añadir proxy de ShadowsocksR</string>
-    <string name="AddProxyRB">Añadir proxy de RelayBaton</string>
     <string name="SSPluginConflictingName">Varios plugins utilizan esta id: %s.</string>
     <string name="EditProxy">Editar proxy</string>
     <string name="ShareProxy">Compartir proxy</string>

@@ -103,7 +103,6 @@
     <string name="AddProxyVmess">Додати проксі Vmess</string>
     <string name="AddProxySS">Додати Shadowsocks проксі</string>
     <string name="AddProxySSR">Додати ShadowsocksR проксі</string>
-    <string name="AddProxyRB">Додати проксі RelayBaton</string>
     <string name="SSPluginConflictingName">Кілька плагінів використовують цей ідентифікатор: %s.</string>
     <string name="EditProxy">Редагувати проксі</string>
     <string name="ShareProxy">Поділитися через проксі</string>
