@@ -270,11 +270,15 @@ public class ContentPreviewViewer {
                 ArrayList<CharSequence> items = new ArrayList<>();
                 final ArrayList<Integer> actions = new ArrayList<>();
                 ArrayList<Integer> icons = new ArrayList<>();
+                final int sendWithoutSound = 90;
 
                 if (delegate.needSend() && !delegate.isInScheduleMode()) {
                     items.add(LocaleController.getString("SendGifPreview", R.string.SendGifPreview));
                     icons.add(R.drawable.outline_send);
                     actions.add(0);
+                    items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
+                    icons.add(R.drawable.input_notify_off);
+                    actions.add(sendWithoutSound);
                 }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
@@ -305,8 +309,8 @@ public class ContentPreviewViewer {
                     if (parentActivity == null) {
                         return;
                     }
-                    if (actions.get(which) == 0) {
-                        delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, parentObject, true, 0);
+                    if (actions.get(which) == 0 || actions.get(which) == sendWithoutSound) {
+                        delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, parentObject, (actions.get(which) == 0), 0);
                     } else if (actions.get(which) == 1) {
                         MediaDataController.getInstance(currentAccount).removeRecentGif(currentDocument);
                         delegate.gifAddedOrDeleted();
