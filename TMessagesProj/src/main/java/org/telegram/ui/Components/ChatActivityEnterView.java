@@ -35,6 +35,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -327,8 +328,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private Drawable sendButtonDrawable;
     private Drawable inactinveSendButtonDrawable;
     private Drawable sendButtonInverseDrawable;
-    private ActionBarPopupWindow sendPopupWindow;
-    private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
     private ImageView cancelBotButton;
     private ImageView[] emojiButton = new ImageView[2];
     @SuppressWarnings("FieldCanBeLocal")
@@ -2729,9 +2728,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         audioSendButton.setImageResource(!NekoConfig.useChatAttachMediaMenu ? R.drawable.input_mic : R.drawable.ic_ab_other);
         audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
         audioSendButton.setContentDescription(!NekoConfig.useChatAttachMediaMenu ?
-                LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage)
-                :
+                LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage) :
                 LocaleController.getString("AccDescrChatAttachEnterMenu", R.string.AccDescrChatAttachEnterMenu));
+
+        if (Build.VERSION.SDK_INT >= 21 && NekoConfig.useChatAttachMediaMenu) {
+            attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
+        }
 
         audioSendButton.setFocusable(true);
         audioSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
@@ -3092,16 +3094,34 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return false;
     }
 
-    private ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayout;
+    private ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayoutDefault;
+    private ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayoutInput;
+    private ActionBarPopupWindow menuPopupWindowDefault;
+    private ActionBarPopupWindow menuPopupWindowInput;
     private ActionBarPopupWindow menuPopupWindow;
+    private boolean isInInput;
 
     private void onMenuClick(View view) {
         if (parentFragment == null) {
             return;
         }
+        ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayout;
+
+        if (isInInput) {
+            menuPopupLayout = menuPopupLayoutInput;
+            menuPopupWindow = menuPopupWindowInput;
+        } else {
+            menuPopupLayout = menuPopupLayoutDefault;
+            menuPopupWindow = menuPopupWindowDefault;
+        }
 
         if (menuPopupLayout == null) {
             menuPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity);
+            if (isInInput) {
+                menuPopupLayoutInput = menuPopupLayout;
+            } else {
+                menuPopupLayoutDefault = menuPopupLayout;
+            }
             menuPopupLayout.setAnimationEnabled(false);
             menuPopupLayout.setOnTouchListener(new OnTouchListener() {
 
@@ -3125,55 +3145,119 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
 
-            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.input_mic);
-            cell.setOnClickListener(v -> {
-                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                    menuPopupWindow.dismiss();
-                }
+            if (!isInInput) {
 
-                if (parentFragment != null) {
-                    TLRPC.Chat chat = parentFragment.getCurrentChat();
-                    if (chat != null && !ChatObject.canSendMedia(chat)) {
-                        delegate.needShowMediaBanHint();
-                        return;
+                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.input_mic);
+                cell.setOnClickListener(v -> {
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        menuPopupWindow.dismiss();
                     }
-                }
 
-                videoSendButton.setTag(null);
-                recordAudioVideoRunnable.run();
-                recordCircle.sendButtonVisible = true;
-                startLockTransition(false);
-
-            });
-
-            cell.setMinimumWidth(AndroidUtilities.dp(196));
-            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
-            cell = new ActionBarMenuSubItem(getContext());
-
-            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
-            cell.setOnClickListener(v -> {
-                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                    menuPopupWindow.dismiss();
-                }
-
-                if (parentFragment != null) {
-                    TLRPC.Chat chat = parentFragment.getCurrentChat();
-                    if (chat != null && !ChatObject.canSendMedia(chat)) {
-                        delegate.needShowMediaBanHint();
-                        return;
+                    if (parentFragment != null) {
+                        TLRPC.Chat chat = parentFragment.getCurrentChat();
+                        if (chat != null && !ChatObject.canSendMedia(chat)) {
+                            delegate.needShowMediaBanHint();
+                            return;
+                        }
                     }
+
+                    videoSendButton.setTag(null);
+                    recordAudioVideoRunnable.run();
+                    recordCircle.sendButtonVisible = true;
+                    startLockTransition(false);
+
+                });
+
+                cell.setMinimumWidth(AndroidUtilities.dp(196));
+                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+                cell = new ActionBarMenuSubItem(getContext());
+
+                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
+                cell.setOnClickListener(v -> {
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        menuPopupWindow.dismiss();
+                    }
+
+                    if (parentFragment != null) {
+                        TLRPC.Chat chat = parentFragment.getCurrentChat();
+                        if (chat != null && !ChatObject.canSendMedia(chat)) {
+                            delegate.needShowMediaBanHint();
+                            return;
+                        }
+                    }
+
+                    videoSendButton.setTag(1);
+                    recordAudioVideoRunnable.run();
+                    recordCircle.sendButtonVisible = true;
+                    startLockTransition(false);
+
+                });
+
+                cell.setMinimumWidth(AndroidUtilities.dp(196));
+                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+            } else {
+
+                if (StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+
+                    cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
+                    cell.setOnClickListener(v -> {
+                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                            menuPopupWindow.dismiss();
+                        }
+                        signComment(true);
+
+                    });
+                    cell.setOnLongClickListener(v -> {
+                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                            menuPopupWindow.dismiss();
+                        }
+                        signComment(false);
+                        return true;
+                    });
+                    cell.setMinimumWidth(AndroidUtilities.dp(196));
+                    menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+                    cell = new ActionBarMenuSubItem(getContext());
+
                 }
 
-                videoSendButton.setTag(1);
-                recordAudioVideoRunnable.run();
-                recordCircle.sendButtonVisible = true;
-                startLockTransition(false);
+                TLRPC.Chat chat = parentFragment.getCurrentChat();
+                TLRPC.User user = parentFragment.getCurrentUser();
 
-            });
+                int chatId;
+                if (chat != null) {
+                    chatId = chat.id;
+                } else if (user != null) {
+                    chatId = user.id;
+                } else {
+                    chatId = -1;
+                }
 
-            cell.setMinimumWidth(AndroidUtilities.dp(196));
-            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+                cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                cell.setOnClickListener(v -> {
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        menuPopupWindow.dismiss();
+                    }
+                    translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
+                });
+                ActionBarMenuSubItem finalCell = cell;
+                cell.setOnLongClickListener(v -> {
+                    Translator.showTargetLangSelect(finalCell, true, (locale) -> {
+                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                            menuPopupWindow.dismiss();
+                        }
+                        translateComment(locale);
+                        TranslateDb.saveChatLanguage(chatId, locale);
+                        return Unit.INSTANCE;
+                    });
+                    return true;
+                });
+                cell.setMinimumWidth(AndroidUtilities.dp(196));
+                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+            }
 
             int dlps = delegate.getDisableLinkPreviewStatus();
             if (dlps > 0) {
@@ -3213,6 +3297,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             menuPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
             menuPopupWindow.getContentView().setFocusableInTouchMode(true);
 
+            if (isInInput) {
+                menuPopupWindowInput = menuPopupWindow;
+            } else {
+                menuPopupWindowDefault = menuPopupWindow;
+            }
+
             if (delegate != null) {
                 delegate.onSendLongClick();
             }
@@ -3229,10 +3319,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             y = location[1] - menuPopupLayout.getMeasuredHeight() - AndroidUtilities.dp(2);
         }
         y += AndroidUtilities.dp(48);
-        menuPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - menuPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8), y);
+        int x = location[0] + view.getMeasuredWidth() - menuPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8);
+        if (isInInput) {
+            x += view.getMeasuredWidth();
+        }
+        menuPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, x, y);
         menuPopupWindow.dimBehind();
 
     }
+
+    private ActionBarPopupWindow sendPopupWindow;
+    private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
 
     private boolean onSendLongClick(View view) {
         if (parentFragment == null || isInScheduleMode()) {
@@ -3280,53 +3377,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             int a = 0;
 
             ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
-
-            if (StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
-
-                cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
-                cell.setOnClickListener(v -> {
-                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                        sendPopupWindow.dismiss();
-                    }
-                    signComment(true);
-
-                });
-                cell.setOnLongClickListener(v -> {
-                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                        sendPopupWindow.dismiss();
-                    }
-                    signComment(false);
-                    return true;
-                });
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
-                cell = new ActionBarMenuSubItem(getContext());
-
-            }
-
-            cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-            cell.setOnClickListener(v -> {
-                if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                    sendPopupWindow.dismiss();
-                }
-                translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
-            });
-            ActionBarMenuSubItem finalCell = cell;
-            cell.setOnLongClickListener(v -> {
-                Translator.showTargetLangSelect(finalCell, true, (locale) -> {
-                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                        sendPopupWindow.dismiss();
-                    }
-                    translateComment(locale);
-                    TranslateDb.saveChatLanguage(chatId, locale);
-                    return Unit.INSTANCE;
-                });
-                return true;
-            });
-            cell.setMinimumWidth(AndroidUtilities.dp(196));
-            sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
 
             if (parentFragment.canScheduleMessage()) {
                 cell = new ActionBarMenuSubItem(getContext());
@@ -3533,13 +3583,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (videoSendButton == null) {
             return;
         }
+        if (NekoConfig.useChatAttachMediaMenu) visible = animated = false;
+
         videoSendButton.setTag(visible ? 1 : null);
+
         if (audioVideoButtonAnimation != null) {
             audioVideoButtonAnimation.cancel();
             audioVideoButtonAnimation = null;
         }
-
-        if (NekoConfig.useChatAttachMediaMenu) visible = animated = false;
 
         if (animated) {
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
@@ -4236,6 +4287,59 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return messageWebPageSearch;
     }
 
+    private void setImageDrawableWithAnimation(ImageView imageView, int fromRes, int targetRes, int duration) {
+        Drawable currentDrawable = imageView.getDrawable();
+
+        if (currentDrawable == null) {
+            imageView.setImageResource(targetRes);
+            return;
+        }
+
+        TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
+                parentActivity.getResources().getDrawable(fromRes),
+                parentActivity.getResources().getDrawable(targetRes)
+        });
+        transitionDrawable.setCrossFadeEnabled(true);
+
+        imageView.setImageDrawable(transitionDrawable);
+        imageView.post(() -> transitionDrawable.startTransition(duration));
+    }
+
+    private void checkAttachButton(boolean use, int duration) {
+        int fromRes;
+        int targetRes;
+
+        isInInput = use;
+
+        if (use) {
+            if (duration == 0) botButton.setVisibility(View.GONE);
+
+            fromRes = R.drawable.deproko_baseline_attach_26;
+            targetRes = R.drawable.ic_ab_other;
+
+            attachButton.setOnClickListener(this::onMenuClick);
+            attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrChatAttachEnterMenu));
+        } else {
+            if (duration == 0) botButton.setVisibility(View.VISIBLE);
+
+            fromRes = R.drawable.ic_ab_other;
+            targetRes = R.drawable.deproko_baseline_attach_26;
+
+            attachButton.setOnClickListener(v -> {
+                if (adjustPanLayoutHelper != null && adjustPanLayoutHelper.animationInProgress()) {
+                    return;
+                }
+                delegate.didPressAttachButton();
+            });
+            attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
+        }
+        if (duration == 0) {
+            attachButton.setImageResource(targetRes);
+        } else {
+            setImageDrawableWithAnimation(attachButton, fromRes, targetRes, duration);
+        }
+    }
+
     private void hideRecordedAudioPanel(boolean wasSent) {
         if (recordPannelAnimation != null && recordPannelAnimation.isRunning()) {
             return;
@@ -4321,21 +4425,22 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             exitAnimation.setDuration(200);
 
-            AnimatorSet attachIconAnimator;
+            AnimatorSet attachIconAnimator = null;
             if (attachButton != null) {
-                attachButton.setAlpha(0f);
-                attachButton.setScaleX(0);
-                attachButton.setScaleY(0);
+                checkAttachButton(false, 150);
+                if (!attachButton.isShown()) {
+                    attachButton.setAlpha(0f);
+                    attachButton.setScaleX(0);
+                    attachButton.setScaleY(0);
 
-                attachIconAnimator = new AnimatorSet();
-                attachIconAnimator.playTogether(
-                        ObjectAnimator.ofFloat(attachButton, View.ALPHA, 1.0f),
-                        ObjectAnimator.ofFloat(attachButton, View.SCALE_X, 1.0f),
-                        ObjectAnimator.ofFloat(attachButton, View.SCALE_Y, 1.0f)
-                );
-                attachIconAnimator.setDuration(150);
-            } else {
-                attachIconAnimator = null;
+                    attachIconAnimator = new AnimatorSet();
+                    attachIconAnimator.playTogether(
+                            ObjectAnimator.ofFloat(attachButton, View.ALPHA, 1.0f),
+                            ObjectAnimator.ofFloat(attachButton, View.SCALE_X, 1.0f),
+                            ObjectAnimator.ofFloat(attachButton, View.SCALE_Y, 1.0f)
+                    );
+                    attachIconAnimator.setDuration(150);
+                }
             }
 
             emojiButton[0].setAlpha(0f);
@@ -4538,147 +4643,162 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
 
                     if (attachLayout != null) {
-                        runningAnimation2 = new AnimatorSet();
-                        ArrayList<Animator> animators = new ArrayList<>();
-                        animators.add(ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 0.0f));
-                        animators.add(ObjectAnimator.ofFloat(attachLayout, View.SCALE_X, 0.0f));
-                        scheduleButtonHidden = false;
-                        boolean hasScheduled = delegate != null && delegate.hasScheduledMessages();
-                        if (scheduledButton != null) {
-                            scheduledButton.setScaleY(1.0f);
-                            if (hasScheduled) {
-                                scheduledButton.setVisibility(VISIBLE);
-                                scheduledButton.setTag(1);
-                                scheduledButton.setPivotX(AndroidUtilities.dp(48));
-                                animators.add(ObjectAnimator.ofFloat(scheduledButton, View.TRANSLATION_X, AndroidUtilities.dp(botButton != null && botButton.getVisibility() == VISIBLE ? 96 : 48)));
-                                animators.add(ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 1.0f));
-                                animators.add(ObjectAnimator.ofFloat(scheduledButton, View.SCALE_X, 1.0f));
-                            } else {
-                                scheduledButton.setTranslationX(AndroidUtilities.dp(botButton != null && botButton.getVisibility() == VISIBLE ? 96 : 48));
-                                scheduledButton.setAlpha(1.0f);
-                                scheduledButton.setScaleX(1.0f);
+                        if (!NekoConfig.useChatAttachMediaMenu) {
+                            runningAnimation2 = new AnimatorSet();
+                            ArrayList<Animator> animators = new ArrayList<>();
+                            animators.add(ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 0.0f));
+                            animators.add(ObjectAnimator.ofFloat(attachLayout, View.SCALE_X, 0.0f));
+                            scheduleButtonHidden = false;
+                            boolean hasScheduled = delegate != null && delegate.hasScheduledMessages();
+                            if (scheduledButton != null) {
+                                scheduledButton.setScaleY(1.0f);
+                                if (hasScheduled) {
+                                    scheduledButton.setVisibility(VISIBLE);
+                                    scheduledButton.setTag(1);
+                                    scheduledButton.setPivotX(AndroidUtilities.dp(48));
+                                    animators.add(ObjectAnimator.ofFloat(scheduledButton, View.TRANSLATION_X, AndroidUtilities.dp(botButton != null && botButton.getVisibility() == VISIBLE ? 96 : 48)));
+                                    animators.add(ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 1.0f));
+                                    animators.add(ObjectAnimator.ofFloat(scheduledButton, View.SCALE_X, 1.0f));
+                                } else {
+                                    scheduledButton.setTranslationX(AndroidUtilities.dp(botButton != null && botButton.getVisibility() == VISIBLE ? 96 : 48));
+                                    scheduledButton.setAlpha(1.0f);
+                                    scheduledButton.setScaleX(1.0f);
+                                }
                             }
+                            runningAnimation2.playTogether(animators);
+                            runningAnimation2.setDuration(100);
+                            runningAnimation2.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    if (animation.equals(runningAnimation2)) {
+                                        attachLayout.setVisibility(GONE);
+                                        runningAnimation2 = null;
+                                    }
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    if (animation.equals(runningAnimation2)) {
+                                        runningAnimation2 = null;
+                                    }
+                                }
+                            });
+
+                            runningAnimation2.start();
+                            updateFieldRight(0);
+                            if (delegate != null && getVisibility() == VISIBLE) {
+                                delegate.onAttachButtonHidden();
+                            }
+                        } else {
+                            checkAttachButton(true, 150);
+                            updateFieldRight(1);
                         }
-                        runningAnimation2.playTogether(animators);
-                        runningAnimation2.setDuration(100);
-                        runningAnimation2.addListener(new AnimatorListenerAdapter() {
+
+                        runningAnimationType = 5;
+                        runningAnimation = new AnimatorSet();
+
+                        ArrayList<Animator> animators = new ArrayList<>();
+                        if (botButton.getVisibility() == VISIBLE) {
+                            animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 0.0f));
+                        } else if (audioVideoButtonContainer.getVisibility() == VISIBLE) {
+                            animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_X, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_Y, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 0.0f));
+                        }
+                        if (expandStickersButton.getVisibility() == VISIBLE) {
+                            animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.SCALE_X, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.SCALE_Y, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.ALPHA, 0.0f));
+                        }
+                        if (sendButton.getVisibility() == VISIBLE) {
+                            animators.add(ObjectAnimator.ofFloat(sendButton, View.SCALE_X, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(sendButton, View.SCALE_Y, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(sendButton, View.ALPHA, 0.0f));
+                        }
+                        if (cancelBotButton.getVisibility() == VISIBLE) {
+                            animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_X, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 0.1f));
+                            animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.ALPHA, 0.0f));
+                        }
+                        animators.add(ObjectAnimator.ofFloat(slowModeButton, View.SCALE_X, 1.0f));
+                        animators.add(ObjectAnimator.ofFloat(slowModeButton, View.SCALE_Y, 1.0f));
+                        animators.add(ObjectAnimator.ofFloat(slowModeButton, View.ALPHA, 1.0f));
+                        setSlowModeButtonVisible(true);
+                        runningAnimation.playTogether(animators);
+                        runningAnimation.setDuration(150);
+                        runningAnimation.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                if (animation.equals(runningAnimation2)) {
-                                    attachLayout.setVisibility(GONE);
-                                    runningAnimation2 = null;
+                                if (animation.equals(runningAnimation)) {
+                                    sendButton.setVisibility(GONE);
+                                    cancelBotButton.setVisibility(GONE);
+                                    audioVideoButtonContainer.setVisibility(GONE);
+                                    expandStickersButton.setVisibility(GONE);
+                                    runningAnimation = null;
+                                    runningAnimationType = 0;
                                 }
                             }
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
-                                if (animation.equals(runningAnimation2)) {
-                                    runningAnimation2 = null;
+                                if (animation.equals(runningAnimation)) {
+                                    runningAnimation = null;
                                 }
                             }
                         });
-                        runningAnimation2.start();
-                        updateFieldRight(0);
-                        if (delegate != null && getVisibility() == VISIBLE) {
-                            delegate.onAttachButtonHidden();
+                        runningAnimation.start();
+                    } else {
+                        slowModeButton.setScaleX(1.0f);
+                        slowModeButton.setScaleY(1.0f);
+                        slowModeButton.setAlpha(1.0f);
+                        setSlowModeButtonVisible(true);
+
+                        audioVideoButtonContainer.setScaleX(0.1f);
+                        audioVideoButtonContainer.setScaleY(0.1f);
+                        audioVideoButtonContainer.setAlpha(0.0f);
+                        audioVideoButtonContainer.setVisibility(GONE);
+
+                        sendButton.setScaleX(0.1f);
+                        sendButton.setScaleY(0.1f);
+                        sendButton.setAlpha(0.0f);
+                        sendButton.setVisibility(GONE);
+
+                        cancelBotButton.setScaleX(0.1f);
+                        cancelBotButton.setScaleY(0.1f);
+                        cancelBotButton.setAlpha(0.0f);
+                        cancelBotButton.setVisibility(GONE);
+
+                        if (expandStickersButton.getVisibility() == VISIBLE) {
+                            expandStickersButton.setScaleX(0.1f);
+                            expandStickersButton.setScaleY(0.1f);
+                            expandStickersButton.setAlpha(0.0f);
+                            expandStickersButton.setVisibility(GONE);
                         }
-                    }
-
-                    runningAnimationType = 5;
-                    runningAnimation = new AnimatorSet();
-
-                    ArrayList<Animator> animators = new ArrayList<>();
-                    if (audioVideoButtonContainer.getVisibility() == VISIBLE) {
-                        animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_X, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_Y, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 0.0f));
-                    }
-                    if (expandStickersButton.getVisibility() == VISIBLE) {
-                        animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.SCALE_X, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.SCALE_Y, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.ALPHA, 0.0f));
-                    }
-                    if (sendButton.getVisibility() == VISIBLE) {
-                        animators.add(ObjectAnimator.ofFloat(sendButton, View.SCALE_X, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(sendButton, View.SCALE_Y, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(sendButton, View.ALPHA, 0.0f));
-                    }
-                    if (cancelBotButton.getVisibility() == VISIBLE) {
-                        animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_X, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 0.1f));
-                        animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.ALPHA, 0.0f));
-                    }
-                    animators.add(ObjectAnimator.ofFloat(slowModeButton, View.SCALE_X, 1.0f));
-                    animators.add(ObjectAnimator.ofFloat(slowModeButton, View.SCALE_Y, 1.0f));
-                    animators.add(ObjectAnimator.ofFloat(slowModeButton, View.ALPHA, 1.0f));
-                    setSlowModeButtonVisible(true);
-                    runningAnimation.playTogether(animators);
-                    runningAnimation.setDuration(150);
-                    runningAnimation.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            if (animation.equals(runningAnimation)) {
-                                sendButton.setVisibility(GONE);
-                                cancelBotButton.setVisibility(GONE);
-                                audioVideoButtonContainer.setVisibility(GONE);
-                                expandStickersButton.setVisibility(GONE);
-                                runningAnimation = null;
-                                runningAnimationType = 0;
+                        if (attachLayout != null) {
+                            if (!NekoConfig.useChatAttachMediaMenu) {
+                                attachLayout.setVisibility(GONE);
+                                if (delegate != null && getVisibility() == VISIBLE) {
+                                    delegate.onAttachButtonHidden();
+                                }
+                                updateFieldRight(0);
+                            } else {
+                                checkAttachButton(true, 0);
+                                updateFieldRight(1);
                             }
                         }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                            if (animation.equals(runningAnimation)) {
-                                runningAnimation = null;
+                        scheduleButtonHidden = false;
+                        if (scheduledButton != null) {
+                            if (delegate != null && delegate.hasScheduledMessages()) {
+                                scheduledButton.setVisibility(VISIBLE);
+                                scheduledButton.setTag(1);
                             }
+                            scheduledButton.setTranslationX(AndroidUtilities.dp(botButton != null && botButton.getVisibility() == VISIBLE ? 96 : 48));
+                            scheduledButton.setAlpha(1.0f);
+                            scheduledButton.setScaleX(1.0f);
+                            scheduledButton.setScaleY(1.0f);
                         }
-                    });
-                    runningAnimation.start();
-                } else {
-                    slowModeButton.setScaleX(1.0f);
-                    slowModeButton.setScaleY(1.0f);
-                    slowModeButton.setAlpha(1.0f);
-                    setSlowModeButtonVisible(true);
-
-                    audioVideoButtonContainer.setScaleX(0.1f);
-                    audioVideoButtonContainer.setScaleY(0.1f);
-                    audioVideoButtonContainer.setAlpha(0.0f);
-                    audioVideoButtonContainer.setVisibility(GONE);
-
-                    sendButton.setScaleX(0.1f);
-                    sendButton.setScaleY(0.1f);
-                    sendButton.setAlpha(0.0f);
-                    sendButton.setVisibility(GONE);
-
-                    cancelBotButton.setScaleX(0.1f);
-                    cancelBotButton.setScaleY(0.1f);
-                    cancelBotButton.setAlpha(0.0f);
-                    cancelBotButton.setVisibility(GONE);
-
-                    if (expandStickersButton.getVisibility() == VISIBLE) {
-                        expandStickersButton.setScaleX(0.1f);
-                        expandStickersButton.setScaleY(0.1f);
-                        expandStickersButton.setAlpha(0.0f);
-                        expandStickersButton.setVisibility(GONE);
-                    }
-                    if (attachLayout != null) {
-                        attachLayout.setVisibility(GONE);
-                        if (delegate != null && getVisibility() == VISIBLE) {
-                            delegate.onAttachButtonHidden();
-                        }
-                        updateFieldRight(0);
-                    }
-                    scheduleButtonHidden = false;
-                    if (scheduledButton != null) {
-                        if (delegate != null && delegate.hasScheduledMessages()) {
-                            scheduledButton.setVisibility(VISIBLE);
-                            scheduledButton.setTag(1);
-                        }
-                        scheduledButton.setTranslationX(AndroidUtilities.dp(botButton != null && botButton.getVisibility() == VISIBLE ? 96 : 48));
-                        scheduledButton.setAlpha(1.0f);
-                        scheduledButton.setScaleX(1.0f);
-                        scheduledButton.setScaleY(1.0f);
                     }
                 }
             }
@@ -4708,56 +4828,67 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
 
                     if (attachLayout != null) {
-                        runningAnimation2 = new AnimatorSet();
-                        ArrayList<Animator> animators = new ArrayList<>();
-                        animators.add(ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 0.0f));
-                        animators.add(ObjectAnimator.ofFloat(attachLayout, View.SCALE_X, 0.0f));
-                        boolean hasScheduled = delegate != null && delegate.hasScheduledMessages();
-                        scheduleButtonHidden = true;
-                        if (scheduledButton != null) {
-                            scheduledButton.setScaleY(1.0f);
-                            if (hasScheduled) {
-                                scheduledButton.setTag(null);
-                                animators.add(ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 0.0f));
-                                animators.add(ObjectAnimator.ofFloat(scheduledButton, View.SCALE_X, 0.0f));
-                                animators.add(ObjectAnimator.ofFloat(scheduledButton, View.TRANSLATION_X, AndroidUtilities.dp(botButton == null || botButton.getVisibility() == GONE ? 48 : 96)));
-                            } else {
-                                scheduledButton.setAlpha(0.0f);
-                                scheduledButton.setScaleX(0.0f);
-                                scheduledButton.setTranslationX(AndroidUtilities.dp(botButton == null || botButton.getVisibility() == GONE ? 48 : 96));
-                            }
-                        }
-                        runningAnimation2.playTogether(animators);
-                        runningAnimation2.setDuration(100);
-                        runningAnimation2.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                if (animation.equals(runningAnimation2)) {
-                                    attachLayout.setVisibility(GONE);
-                                    if (hasScheduled) {
-                                        scheduledButton.setVisibility(GONE);
-                                    }
-                                    runningAnimation2 = null;
-                                }
-                            }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                if (animation.equals(runningAnimation2)) {
-                                    runningAnimation2 = null;
+                        if (!NekoConfig.useChatAttachMediaMenu) {
+                            runningAnimation2 = new AnimatorSet();
+                            ArrayList<Animator> animators = new ArrayList<>();
+                            animators.add(ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 0.0f));
+                            animators.add(ObjectAnimator.ofFloat(attachLayout, View.SCALE_X, 0.0f));
+                            boolean hasScheduled = delegate != null && delegate.hasScheduledMessages();
+                            scheduleButtonHidden = true;
+                            if (scheduledButton != null) {
+                                scheduledButton.setScaleY(1.0f);
+                                if (hasScheduled) {
+                                    scheduledButton.setTag(null);
+                                    animators.add(ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 0.0f));
+                                    animators.add(ObjectAnimator.ofFloat(scheduledButton, View.SCALE_X, 0.0f));
+                                    animators.add(ObjectAnimator.ofFloat(scheduledButton, View.TRANSLATION_X, AndroidUtilities.dp(botButton == null || botButton.getVisibility() == GONE ? 48 : 96)));
+                                } else {
+                                    scheduledButton.setAlpha(0.0f);
+                                    scheduledButton.setScaleX(0.0f);
+                                    scheduledButton.setTranslationX(AndroidUtilities.dp(botButton == null || botButton.getVisibility() == GONE ? 48 : 96));
                                 }
                             }
-                        });
-                        runningAnimation2.start();
-                        updateFieldRight(0);
-                        if (delegate != null && getVisibility() == VISIBLE) {
-                            delegate.onAttachButtonHidden();
+                            runningAnimation2.playTogether(animators);
+                            runningAnimation2.setDuration(100);
+                            runningAnimation2.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    if (animation.equals(runningAnimation2)) {
+                                        attachLayout.setVisibility(GONE);
+                                        if (hasScheduled) {
+                                            scheduledButton.setVisibility(GONE);
+                                        }
+                                        runningAnimation2 = null;
+                                    }
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    if (animation.equals(runningAnimation2)) {
+                                        runningAnimation2 = null;
+                                    }
+                                }
+                            });
+                            runningAnimation2.start();
+                            updateFieldRight(0);
+                            if (delegate != null && getVisibility() == VISIBLE) {
+                                delegate.onAttachButtonHidden();
+                            }
+                        } else {
+                            checkAttachButton(true, 150);
+                            updateFieldRight(1);
                         }
                     }
 
                     runningAnimation = new AnimatorSet();
 
                     ArrayList<Animator> animators = new ArrayList<>();
+                    if (botButton.getVisibility() == VISIBLE) {
+                        animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 0.1f));
+                        animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 0.1f));
+                        animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 0.0f));
+                    }
                     if (audioVideoButtonContainer.getVisibility() == VISIBLE) {
                         animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_X, 0.1f));
                         animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_Y, 0.1f));
@@ -4862,11 +4993,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         expandStickersButton.setVisibility(GONE);
                     }
                     if (attachLayout != null) {
-                        attachLayout.setVisibility(GONE);
-                        if (delegate != null && getVisibility() == VISIBLE) {
-                            delegate.onAttachButtonHidden();
+                        if (!NekoConfig.useChatAttachMediaMenu) {
+                            attachLayout.setVisibility(GONE);
+                            if (delegate != null && getVisibility() == VISIBLE) {
+                                delegate.onAttachButtonHidden();
+                            }
+                            updateFieldRight(0);
+                        } else {
+                            checkAttachButton(true, 0);
+                            updateFieldRight(1);
                         }
-                        updateFieldRight(0);
                     }
                     scheduleButtonHidden = true;
                     if (scheduledButton != null) {
@@ -4937,6 +5073,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                     });
                     runningAnimation2.start();
+                    checkAttachButton(false, 150);
                     updateFieldRight(1);
                     if (getVisibility() == VISIBLE) {
                         delegate.onAttachButtonShow();
@@ -4951,6 +5088,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.SCALE_X, 1.0f));
                 animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.SCALE_Y, 1.0f));
                 animators.add(ObjectAnimator.ofFloat(expandStickersButton, View.ALPHA, 1.0f));
+                if (botButton.getVisibility() == GONE) {
+                    animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f));
+                    animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f));
+                    animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 1f));
+                }
                 if (cancelBotButton.getVisibility() == VISIBLE) {
                     animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_X, 0.1f));
                     animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 0.1f));
@@ -5019,6 +5161,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         delegate.onAttachButtonShow();
                     }
                     attachLayout.setVisibility(VISIBLE);
+                    checkAttachButton(false, 0);
                     updateFieldRight(1);
                 }
                 scheduleButtonHidden = false;
@@ -5089,6 +5232,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                     });
                     runningAnimation2.start();
+                    checkAttachButton(false, 150);
                     updateFieldRight(1);
                     if (getVisibility() == VISIBLE) {
                         delegate.onAttachButtonShow();
@@ -5103,6 +5247,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_X, 1.0f));
                 animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_Y, 1.0f));
                 animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f));
+                if (botButton.getVisibility() == GONE) {
+                    animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f));
+                    animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f));
+                    animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 1f));
+                }
                 if (cancelBotButton.getVisibility() == VISIBLE) {
                     animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_X, 0.1f));
                     animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 0.1f));
@@ -5173,6 +5322,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     attachLayout.setAlpha(1.0f);
                     attachLayout.setScaleX(1.0f);
                     attachLayout.setVisibility(VISIBLE);
+                    checkAttachButton(false, 0);
                     updateFieldRight(1);
                 }
                 scheduleButtonHidden = false;
@@ -5643,9 +5793,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     audioVideoButtonContainer.setScaleX(0);
                     audioVideoButtonContainer.setScaleY(0);
 
-                    if (attachButton != null && attachButton.getVisibility() == View.VISIBLE) {
-                        attachButton.setScaleX(0);
-                        attachButton.setScaleY(0);
+                    if (attachButton != null) {
+                        if (NekoConfig.useChatAttachMediaMenu) {
+                            checkAttachButton(false, 150);
+                        } else if (attachButton.getVisibility() == View.VISIBLE) {
+                            attachButton.setScaleX(0);
+                            attachButton.setScaleY(0);
+                        }
                     }
 
                     if (botButton != null && botButton.getVisibility() == View.VISIBLE) {
@@ -6019,7 +6173,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             setSlowModeButtonVisible(false);
             cancelBotButton.setVisibility(GONE);
             audioVideoButtonContainer.setVisibility(GONE);
-            attachLayout.setVisibility(GONE);
+            if (!NekoConfig.useChatAttachMediaMenu) attachLayout.setVisibility(GONE);
             sendButtonContainer.setVisibility(GONE);
             if (scheduledButton != null) {
                 scheduledButton.setVisibility(GONE);
@@ -6029,6 +6183,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 AndroidUtilities.cancelRunOnUIThread(setTextFieldRunnable);
                 setTextFieldRunnable = null;
             }
+            doneButtonContainer.setVisibility(View.GONE);
             doneButtonContainer.setVisibility(View.GONE);
             messageEditText.setFilters(new InputFilter[0]);
             delegate.onMessageEditEnd(false);
@@ -6059,7 +6214,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 attachLayout.setScaleX(0.01f);
                 attachLayout.setAlpha(0.0f);
-                attachLayout.setVisibility(GONE);
+                if (!NekoConfig.useChatAttachMediaMenu) attachLayout.setVisibility(GONE);
                 audioVideoButtonContainer.setScaleX(0.1f);
                 audioVideoButtonContainer.setScaleY(0.1f);
                 audioVideoButtonContainer.setAlpha(0.0f);
@@ -6091,6 +6246,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (getVisibility() == VISIBLE) {
                 delegate.onAttachButtonShow();
             }
+            checkAttachButton(false, 150);
             updateFieldRight(1);
         }
         updateFieldHint();

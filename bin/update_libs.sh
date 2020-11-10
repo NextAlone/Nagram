@@ -1,6 +1,6 @@
 #!/bin/bash
 
-V2RAY_CORE_VERSION="4.32.0"
+V2RAY_CORE_VERSION="4.32.1"
 
 if [ ! -x "$(command -v go)" ]; then
 
@@ -12,8 +12,8 @@ if [ ! -x "$(command -v go)" ]; then
   #
   #  fi
   #
-  #  gvm install go1.15 -B
-  #  gvm use go1.15 --default
+  #  gvm install go1.15.4 -B
+  #  gvm use go1.15.4 --default
 
   echo "install golang please!"
 
