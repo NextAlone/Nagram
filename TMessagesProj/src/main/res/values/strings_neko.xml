@@ -98,26 +98,15 @@
     <string name="IgnoreBlockedAbout">You\'ll no longer see messages from blocked users in groups.</string>
     <string name="Donate">Donate</string>
     <string name="DonateAbout">Support our development.</string>
-    <string name="TranslationAbout">Help us to translate Nekogram to your language.</string>
-    <string name="Translation">Translate Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Source code on Github</string>
     <string name="ResetStickerSize">Reset sticker size</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">Restart the app to take effect.</string>
     <string name="DisableAppBarShadow">Disable title bar shadow</string>
-    <string name="SponsorTitle">dummy</string>
-    <string name="SponsorContent">dummy</string>
     <string name="BetaWarning">This is a **beta** feature implemented by **Telegram**.</string>
     <string name="MediaPreview">Media preview in dialog list</string>
     <string name="ProviderYandex">Yandex Translate</string>
-    <string name="IdType">Chat ID in profile</string>
-    <string name="IdTypeAbout">Telegram API uses IDs as-is, but Bot API adds minus in the beginning for groups, and -100 for channels and supergroups to fit it in one field.</string>
-    <string name="IdTypeHidden">Hide</string>
-    <string name="IdTypeAPI">Telegram API</string>
-    <string name="IdTypeBOTAPI">Bot API</string>
     <string name="AutoPauseVideo">Auto pause video</string>
     <string name="AutoPauseVideoAbout">When lock screen/switch to background.</string>
     <string name="DisableProximityEvents">Disable proximity events</string>
-    <string name="CustomEmojiTypeface">Custom emoji font</string>
 </resources>
