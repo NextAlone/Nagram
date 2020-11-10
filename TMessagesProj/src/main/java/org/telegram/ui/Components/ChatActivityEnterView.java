@@ -2732,7 +2732,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 LocaleController.getString("AccDescrChatAttachEnterMenu", R.string.AccDescrChatAttachEnterMenu));
 
         if (Build.VERSION.SDK_INT >= 21 && NekoConfig.useChatAttachMediaMenu) {
-            attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
+            audioSendButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
         }
 
         audioSendButton.setFocusable(true);
