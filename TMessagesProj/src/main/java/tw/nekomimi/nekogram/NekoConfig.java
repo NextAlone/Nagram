@@ -122,6 +122,7 @@ public class NekoConfig {
     public static boolean ignoreContentRestrictions;
     public static boolean useChatAttachMediaMenu;
     public static boolean disableLinkPreviewByDefault;
+    public static boolean sendCommentAfterForward;
 
     public static String getOpenPGPAppName() {
 
@@ -257,6 +258,7 @@ public class NekoConfig {
         ignoreContentRestrictions = preferences.getBoolean("ignoreContentRestrictions", false);
         useChatAttachMediaMenu = preferences.getBoolean("useChatAttachMediaMenu", true);
         disableLinkPreviewByDefault = preferences.getBoolean("disableLinkPreviewByDefault", false);
+        sendCommentAfterForward = preferences.getBoolean("sendCommentAfterForward", true);
 
     }
 
@@ -806,4 +808,9 @@ public class NekoConfig {
 
     }
 
+    public static void toggleSendCommentAfterForward() {
+
+        preferences.edit().putBoolean("sendCommentAfterForward",sendCommentAfterForward = !sendCommentAfterForward).apply();
+
+    }
 }

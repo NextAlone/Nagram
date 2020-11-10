@@ -245,8 +245,9 @@
     <string name="ShareMyKey">Share My Public Key</string>
 
     <string name="DisableVibration">Disable Vibration</string>
-    <string name="IgnoreContentRestrictions">Ignore Content Restrictions</string>
+    <string name="IgnoreContentRestrictions">Ignore content restrictions</string>
     <string name="IgnoreContentRestrictionsNotice">Ignores android restrictions on messages locally. This may be banned by the server in the future, and you will need to evaluate the local legality of this option yourself.</string>
+    <string name="SendCommentAfterForward">Send comment after forwarding</string>
 
 
 </resources>

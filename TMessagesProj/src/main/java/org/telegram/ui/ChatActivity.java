@@ -238,7 +238,6 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
-import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
@@ -2665,7 +2664,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 t = chatListViewPaddingTop - AndroidUtilities.dp(20);
                             }
 
-                            if (b > chatListView.getMeasuredHeight() +  AndroidUtilities.dp(20)) {
+                            if (b > chatListView.getMeasuredHeight() + AndroidUtilities.dp(20)) {
                                 b = chatListView.getMeasuredHeight() + AndroidUtilities.dp(20);
                             }
 
@@ -2763,7 +2762,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (backgroundColor != color) {
                         backgroundPaint.setColor(backgroundColor = color);
                     }
-                    canvas.drawRect(0,getMeasuredHeight() - fixedKeyboardHeight, getMeasuredWidth(), getMeasuredHeight(), backgroundPaint);
+                    canvas.drawRect(0, getMeasuredHeight() - fixedKeyboardHeight, getMeasuredWidth(), getMeasuredHeight(), backgroundPaint);
                 }
             }
 
@@ -3683,7 +3682,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             t = chatListViewPaddingTop - AndroidUtilities.dp(20);
                         }
 
-                        if (b > chatListView.getMeasuredHeight() +  AndroidUtilities.dp(20)) {
+                        if (b > chatListView.getMeasuredHeight() + AndroidUtilities.dp(20)) {
                             b = chatListView.getMeasuredHeight() + AndroidUtilities.dp(20);
                         }
 
@@ -4741,7 +4740,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     /*if (forceNextPinnedMessageId != 0 && chatListView.isFastScrollAnimationRunning()) {
                         currentPinned = findClosest(pinnedMessageIds, forceNextPinnedMessageId, currentPinnedMessageIndex);
                     } else {*/
-                        currentPinned = currentPinnedMessageId;
+                    currentPinned = currentPinnedMessageId;
                     //}
                     scrollToMessageId(currentPinned, 0, true, 0, true);
                     if (!pinnedMessageIds.isEmpty()) {
@@ -5957,6 +5956,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     updateScheduledInterface(false);
                 }
                 hideFieldPanel(notify, scheduleDate, true);
+            }
+
+            @Override
+            public void
+            beforeMessageSend(CharSequence message, boolean notify, int scheduleDate) {
+                ChatActivity.this.beforeMessageSend(notify, scheduleDate, true);
             }
 
             @Override
@@ -7183,7 +7188,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (!inPreviewMode && chatActivityEnterView != null) {
             if (chatActivityEnterView.getAnimatedTop() != 0) {
                 chatListViewPaddingTop += chatActivityEnterView.getHeightWithTopView() - AndroidUtilities.dp(51) - chatActivityEnterView.getAnimatedTop();
-            } else if (!chatActivityEnterView.pannelAniamationInProgress())  {
+            } else if (!chatActivityEnterView.pannelAniamationInProgress()) {
                 chatListViewPaddingTop += chatActivityEnterView.getHeightWithTopView() - AndroidUtilities.dp(51);
                 chatListViewPaddingTop -= chatListView.getTranslationY();
             }
@@ -9198,7 +9203,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (!fromMyName) {
             AlertsCreator.showSendMediaAlert(getSendMessagesHelper().sendMessage(arrayList, did == 0 ? dialog_id : did, notify, scheduleDate), this);
         } else {
-            getMessageHelper().processForwardFromMyName(arrayList,  did == 0 ? dialog_id : did, notify, scheduleDate);
+            getMessageHelper().processForwardFromMyName(arrayList, did == 0 ? dialog_id : did, notify, scheduleDate);
         }
     }
 
@@ -9244,6 +9249,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public void showFieldPanelForEdit(boolean show, MessageObject messageObjectToEdit) {
         showFieldPanel(show, null, messageObjectToEdit, null, null, true, 0, false, true);
+    }
+
+    public void beforeMessageSend(boolean notify, int scheduleDate, boolean beforeSend) {
+        if (beforeSend != NekoConfig.sendCommentAfterForward) return;
+        if (forwardingMessages != null) {
+            ArrayList<MessageObject> messagesToForward = forwardingMessages;
+            forwardingMessages = null;
+            forwardMessages(messagesToForward, noForwardQuote, notify, scheduleDate != 0 && scheduleDate != 0x7ffffffe ? scheduleDate + 1 : scheduleDate);
+        }
     }
 
     public void showFieldPanel(boolean show, MessageObject messageObjectToReply, MessageObject messageObjectToEdit, ArrayList<MessageObject> messageObjectsToForward, TLRPC.WebPage webPage, boolean notify, int scheduleDate, boolean cancel, boolean animated) {
@@ -9606,11 +9620,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return;
                 }
             }
-            if (forwardingMessages != null) {
-                ArrayList<MessageObject> messagesToForward = forwardingMessages;
-                forwardingMessages = null;
-                forwardMessages(messagesToForward, noForwardQuote, notify, scheduleDate != 0 && scheduleDate != 0x7ffffffe ? scheduleDate + 1 : scheduleDate);
-            }
+            beforeMessageSend(notify, scheduleDate, false);
             chatActivityEnterView.setForceShowSendButton(false, false);
             if (!waitingForSendingMessageLoad) {
                 chatActivityEnterView.hideTopView(animated);
@@ -19772,6 +19782,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (photoEntry == null) {
             return;
         }
+        beforeMessageSend(notify, scheduleDate, true);
         fillEditingMediaWithCaption(photoEntry.caption, photoEntry.entities);
         if (photoEntry.isVideo) {
             if (videoEditedInfo != null) {

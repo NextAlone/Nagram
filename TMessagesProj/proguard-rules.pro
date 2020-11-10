@@ -139,4 +139,4 @@
 # Osmdroid
 -dontwarn org.osmdroid.**
 
--keepattributes LineNumberTable
+-keepattributes SourceFile,LineNumberTable

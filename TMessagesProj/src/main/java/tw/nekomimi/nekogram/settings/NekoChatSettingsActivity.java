@@ -71,6 +71,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int confirmAVRow;
     private int useChatAttachMediaMenuRow;
     private int disableLinkPreviewByDefaultRow;
+    private int sendCommentAfterForwardRow;
 
     private int disableProximityEventsRow;
     private int mapPreviewRow;
@@ -234,6 +235,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableLinkPreviewByDefault);
                 }
+            } else if (position == sendCommentAfterForwardRow) {
+                NekoConfig.toggleSendCommentAfterForward();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.sendCommentAfterForward);
+                }
             } else if (position == disableVibrationRow) {
                 NekoConfig.toggleDisableVibration();
                 if (view instanceof TextCheckCell) {
@@ -279,6 +285,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         confirmAVRow = rowCount++;
         useChatAttachMediaMenuRow = rowCount ++;
         disableLinkPreviewByDefaultRow = rowCount ++;
+        sendCommentAfterForwardRow = rowCount ++;
         disableProximityEventsRow = rowCount ++;
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -613,6 +620,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndValueAndCheck(LocaleController.getString("UseChatAttachEnterMenu", R.string.UseChatAttachEnterMenu), LocaleController.getString("UseChatAttachEnterMenuNotice", R.string.UseChatAttachEnterMenuNotice), NekoConfig.useChatAttachMediaMenu, true, true);
                     } else if (position == disableLinkPreviewByDefaultRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("DisableLinkPreviewByDefault", R.string.DisableLinkPreviewByDefault), LocaleController.getString("DisableLinkPreviewByDefaultNotice", R.string.DisableLinkPreviewByDefaultNotice), NekoConfig.disableLinkPreviewByDefault, true, true);
+                    } else if (position == sendCommentAfterForwardRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("SendCommentAfterForward", R.string.SendCommentAfterForward), NekoConfig.sendCommentAfterForward, true);
                     } else if (position == disableVibrationRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), NekoConfig.disableVibration, true);
                     } else if (position == disableProximityEventsRow) {

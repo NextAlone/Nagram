@@ -3393,6 +3393,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     attributeAudio.duration = (int) (recordTimeCount / 1000);
                     audioToSend.attributes.add(attributeAudio);
                     if (duration > 700) {
+                        NotificationCenter.getInstance(recordingCurrentAccount).postNotificationName(NotificationCenter.beforeAudioDidSent, recordingGuid, send == 2 ? audioToSend : null, send == 2 ? recordingAudioFileToSend.getAbsolutePath() : null);
                         if (send == 1) {
                             SendMessagesHelper.getInstance(recordingCurrentAccount).sendMessage(audioToSend, null, recordingAudioFileToSend.getAbsolutePath(), recordDialogId, recordReplyingMsg, recordReplyingTopMsg, null, null, null, null, notify, scheduleDate, 0, null);
                         }

@@ -141,6 +141,8 @@ public class NotificationCenter {
     public static final int recordStopped = totalEvents++;
     public static final int screenshotTook = totalEvents++;
     public static final int albumsDidLoad = totalEvents++;
+
+    public static final int beforeAudioDidSent = totalEvents++;
     public static final int audioDidSent = totalEvents++;
     public static final int audioRecordTooShort = totalEvents++;
     public static final int audioRouteChanged = totalEvents++;
