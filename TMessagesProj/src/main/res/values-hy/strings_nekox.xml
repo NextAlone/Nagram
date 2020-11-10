@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Կողպված է</string>
+    <string name="AccDescrChatAttachEnterMenu">Chatրուցարանի մուտքագրման ընտրացանկ</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Տեսանյութի ձայնագրում</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Ձայնագրել աուդիո</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Անջատեք հղման նախադիտումը</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Միացնել հղման նախադիտումը</string>
+    <string name="UseChatAttachEnterMenu">Օգտագործեք մուտքագրման ընտրացանկը</string>
+    <string name="UseChatAttachEnterMenuNotice">Ձայնագրման կոճակը փոխեք մուտքային ընտրացանկի և ավելացրեք հղման նախադիտման անջատիչ:</string>
+    <string name="DisableLinkPreviewByDefault">Անջատեք հղման նախադիտումը լռելյայն</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Լռելյայնորեն անջատեք հղման նախադիտման հայցը լռելյայնորեն, որպեսզի սերվերը չիմանա, որ հղումը տարածվում է Telegram- ի միջոցով:</string>
     <string name="CustomApi">Հատուկ API</string>
     <string name="UseCustomApiNotice">Մուտք գործեք հատուկ api- ով, եթե չեք կարող գրանցվել կամ մուտք գործել, դա կարող է օգնել:\n\nՆշում. Fcm- ը չի աշխատի, եթե դուք օգտագործում եք թողարկման տարբերակը.</string>
     <string name="CustomApiNo">Մի օգտագործեք հատուկ API</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Ավելացնել Vmess վստահված անձը</string>
     <string name="AddProxySS">Ավելացնել Shadowsocks վստահված անձը</string>
     <string name="AddProxySSR">Ավելացնել ShadowsocksR վստահված անձ</string>
+    <string name="AddProxyTrojan">Ավելացնել Trojan վստահված անձ</string>
     <string name="SSPluginConflictingName">Մի քանի ներդիրներ օգտագործում են այս ID- ն ՝ %s:</string>
     <string name="EditProxy">Փոխել վստահված անձը</string>
     <string name="ShareProxy">Համօգտագործել վստահված անձը</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">Արձանագրության պարամներ</string>
     <string name="SSRObfs">Օբֆս</string>
     <string name="SSRObfsParam">Obfs Պարամ</string>
+    <string name="ProxyInfoTrojan">Trojan Proxy- ի կարգավորումներ</string>
     <string name="ProxyRemarks">Դիտողություններ</string>
     <string name="RetestPing">Կրկին փորձեք Ping- ը բոլոր սերվերների համար</string>
     <string name="ReorderByPing">Վերադասավորել սերվերները ping- ով</string>

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Заблокировано</string>
+    <string name="AccDescrChatAttachEnterMenu">Chat input menu</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Record Video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Record Audio</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Отключить предварительный просмотр ссылки</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Включить предварительный просмотр ссылки</string>
+    <string name="UseChatAttachEnterMenu">Использовать меню ввода</string>
+    <string name="UseChatAttachEnterMenuNotice">Измените кнопку записи на меню ввода и добавьте переключатель предварительного просмотра ссылки.</string>
+    <string name="DisableLinkPreviewByDefault">Отключить предварительный просмотр ссылки по умолчанию</string>
+    <string name="DisableLinkPreviewByDefaultNotice">По умолчанию отключите запрос предварительного просмотра ссылки во время ввода, чтобы сервер не знал, что ссылка передана через Telegram.</string>
     <string name="CustomApi">Пользовательский API</string>
     <string name="UseCustomApiNotice">Войдите с помощью пользовательского API, если вы не можете зарегистрироваться или войти в систему, это может помочь.\n\nПримечание: fcm не будет работать, если вы используете релизную версию.</string>
     <string name="CustomApiNo">Не использовать пользовательский API</string>

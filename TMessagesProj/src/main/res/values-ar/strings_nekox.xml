@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">مقفل</string>
+    <string name="AccDescrChatAttachEnterMenu">قائمة إدخال الدردشة</string>
+    <string name="ChatAttachEnterMenuRecordVideo">تسجيل الفيديو</string>
+    <string name="ChatAttachEnterMenuRecordAudio">تسجيل صوتي</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">تعطيل معاينة الارتباط</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">تمكين معاينة الرابط</string>
+    <string name="UseChatAttachEnterMenu">استخدم قائمة الإدخال</string>
+    <string name="UseChatAttachEnterMenuNotice">قم بتغيير زر التسجيل إلى قائمة إدخال ، وأضف مفتاح معاينة الارتباط.</string>
+    <string name="DisableLinkPreviewByDefault">تعطيل معاينة الارتباط بشكل افتراضي</string>
+    <string name="DisableLinkPreviewByDefaultNotice">قم بتعطيل طلب معاينة الرابط أثناء الإدخال بشكل افتراضي لمنع الخادم من معرفة أن الرابط مشترك عبر Telegram.</string>
     <string name="CustomApi">API مخصص</string>
     <string name="UseCustomApiNotice">تسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة، إذا كنت غير قادر على تسجيل أو تسجيل الدخول، قد يساعد هذا.nnNote: fcm لن تعمل إذا كنت تستخدم اهر الإصدار.</string>
     <string name="CustomApiNo">لا تستخدم API مخصص</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">إضافة وكيل Vmess</string>
     <string name="AddProxySS">إضافة وكيل Shadowsock</string>
     <string name="AddProxySSR">إضافة وكيل ShadowsocksR</string>
+    <string name="AddProxyTrojan">إضافة بروكسي تروجان</string>
     <string name="SSPluginConflictingName">العديد من الإضافات تستخدم هذا المعرف: %s.</string>
     <string name="EditProxy">تحرير البروكسي</string>
     <string name="ShareProxy">مشاركة البروكسي</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">بروتوكول Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyInfoTrojan">إعدادات البروكسي في تروجان</string>
     <string name="ProxyRemarks">ملاحظـات</string>
     <string name="RetestPing">إعادة اختبار لجميع الخوادم</string>
     <string name="ReorderByPing">إعادة ترتيب الخوادم عن طريق بينغ</string>

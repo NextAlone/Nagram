@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Kilitli</string>
+    <string name="AccDescrChatAttachEnterMenu">Sohbet giriş menüsü</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Video kaydetmek</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Ses kaydı</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Bağlantı Önizlemesini Devre Dışı Bırak</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Bağlantı Önizlemeyi Etkinleştir</string>
+    <string name="UseChatAttachEnterMenu">Giriş menüsünü kullan</string>
+    <string name="UseChatAttachEnterMenuNotice">Kayıt düğmesini bir giriş menüsüne değiştirin ve bir bağlantı önizleme anahtarı ekleyin.</string>
+    <string name="DisableLinkPreviewByDefault">Varsayılan olarak bağlantı önizlemesini devre dışı bırakın</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Sunucunun bağlantının Telegram aracılığıyla paylaşıldığını bilmesini önlemek için, giriş sırasında bağlantı önizleme isteğini varsayılan olarak devre dışı bırakın.</string>
     <string name="CustomApi">Özel API</string>
     <string name="UseCustomApiNotice">Özel API kullanarak giriş yapın, kayıt yapamaz veya giriş yapamıyorsanız, bu yardımcı olabilir.\n\nNot: Yayın sürümünü kullanıyorsanız fcm çalışmaz.</string>
     <string name="CustomApiNo">Özel API kullanma</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Vmess Proxy Ekle</string>
     <string name="AddProxySS">Shadowsocks Proxy Ekle</string>
     <string name="AddProxySSR">ShadowsocksR Proxy Ekle</string>
+    <string name="AddProxyTrojan">Trojan Proxy Ekle</string>
     <string name="SSPluginConflictingName">Birkaç eklenti bu kimliği kullanır: %s.</string>
     <string name="EditProxy">Proxy Düzenle</string>
     <string name="ShareProxy">Proxy Paylaş</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">Protokol Parametreleri</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Parametre</string>
+    <string name="ProxyInfoTrojan">Truva Atı Proxy Ayarları</string>
     <string name="ProxyRemarks">Uyarılar</string>
     <string name="RetestPing">Tüm sunucular için ping test et</string>
     <string name="ReorderByPing">Ping ile sunucuları yeniden sıralama</string>

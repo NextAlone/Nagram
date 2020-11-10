@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">قفل شده</string>
+    <string name="AccDescrChatAttachEnterMenu">منوی ورودی چت</string>
+    <string name="ChatAttachEnterMenuRecordVideo">ضبط ویدئو</string>
+    <string name="ChatAttachEnterMenuRecordAudio">ضبط صدا</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">پیشنمایش پیوند را غیرفعال کن</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">پیشنمایش پیوند را فعال کن</string>
+    <string name="UseChatAttachEnterMenu">از منوی ورودی استفاده کنید</string>
+    <string name="UseChatAttachEnterMenuNotice">دکمه ضبط را به یک منوی ورودی تغییر بده و یک سوییچ پیش نمایش پیوند اضافه کن.</string>
+    <string name="DisableLinkPreviewByDefault">پیش نمایش پیوند را به طور پیش فرض غیرفعال کن</string>
+    <string name="DisableLinkPreviewByDefaultNotice">در هنگام ورود به صورت پیش فرض درخواست پیش نمایش پیوند را غیرفعال کن تا سرور، از به اشتراک گذاشتن لینک از طریق تلگرام جلوگیری کند.</string>
     <string name="CustomApi">API سفارشی</string>
     <string name="UseCustomApiNotice">با استفاده از شناسه رسمی یا سایر شناسه ها وارد شوید، اگر قادر به ثبت نام یا ورود به سیستم نیستید، این ممکن است کمک کند. توجه: اگر از آخرین نسخه استفاده می کنید، fcm کار نخواهد کرد.</string>
     <string name="CustomApiNo">عدم استفاده از API سفارشی</string>
