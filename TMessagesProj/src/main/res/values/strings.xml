@@ -4129,6 +4129,7 @@
     <string name="RemindDayYearAt">\'Remind on\' MMM d yyyy \'at\' HH:mm</string>
     <!--FORK CLIENT-->
     <string name="FastForward">Fast Forward</string>
+    <string name="ForwardAsAlbum">Forward As Album</string>
     <string name="DateForward">Date</string>
     <string name="ShowTitle">Show title</string>
     <string name="HideTitle">Hide title</string>

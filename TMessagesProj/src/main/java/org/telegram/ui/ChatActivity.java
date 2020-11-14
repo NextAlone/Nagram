@@ -125,6 +125,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.forkgram.ForkUtils;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
@@ -273,6 +274,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private AnimatorSet bottomOverlayAnimation;
     private FrameLayout bottomOverlayChat;
     private FrameLayout bottomMessagesActionContainer;
+
+    private AnimatorSet groupMediaButtonnAnimation;
+    private TextView groupMediaButton;
+
     private TextView forwardButton;
     private TextView replyButton;
     private FrameLayout emptyViewContainer;
@@ -720,6 +725,126 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public FragmentContextView getFragmentContextView() {
         return fragmentContextView;
+    }
+
+    private boolean notSingleMediaSelected() {
+        int mediaCount = 0;
+        for (int a = 0; a < 2; a++) {
+            for (int b = 0, N = selectedMessagesIds[a].size(); b < N; b++) {
+                MessageObject message = selectedMessagesIds[a].valueAt(b);
+                if (ForkUtils.HasPhotoOrDocument(message)) {
+                    mediaCount++;
+                    if (mediaCount >= 2) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void showAnonymShareAlert(boolean groupMedia) {
+        ArrayList<MessageObject> messages = new ArrayList<MessageObject>();
+        for (int a = 1; a >= 0; a--) {
+            ArrayList<Integer> ids = new ArrayList<>();
+            for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                ids.add(selectedMessagesIds[a].keyAt(b));
+            }
+            Collections.sort(ids);
+            for (int b = 0; b < ids.size(); b++) {
+                Integer i = ids.get(b);
+                MessageObject messageObject = selectedMessagesIds[a].get(i);
+                if (messageObject != null) {
+                    messages.add(messageObject);
+                }
+            }
+            selectedMessagesCanCopyIds[a].clear();
+            selectedMessagesCanStarIds[a].clear();
+            selectedMessagesIds[a].clear();
+        }
+        hideActionMode();
+        updatePinnedMessageView(true);
+        updateVisibleRows();
+        ShareAlert alert = new ShareAlert(
+            getParentActivity(),
+            null,
+            messages,
+            "",
+            ChatObject.isChannel(currentChat),
+            null,
+            true,
+            groupMedia);
+        showDialog(alert);
+    }
+
+    private void createGroupMediaButton(Context context) {
+        groupMediaButton = new TextView(context);
+        groupMediaButton.setText(
+            LocaleController.getString(
+                "ForwardAsAlbum",
+                R.string.ForwardAsAlbum));
+        groupMediaButton.setGravity(Gravity.CENTER_VERTICAL);
+        groupMediaButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        groupMediaButton.setPadding(
+            AndroidUtilities.dp(21),
+            0,
+            AndroidUtilities.dp(21),
+            0);
+        groupMediaButton.setBackgroundDrawable(
+            Theme.createSelectorDrawable(
+                Theme.getColor(Theme.key_actionBarActionModeDefaultSelector),
+            3));
+        groupMediaButton.setTextColor(
+            Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        groupMediaButton.setTypeface(
+            AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        groupMediaButton.setOnClickListener(v -> {
+            showAnonymShareAlert(true);
+        });
+    }
+
+    private void animateGroupMediaButton(int visibility) {
+        if (groupMediaButton.getVisibility() == visibility) {
+            return;
+        }
+        if (groupMediaButtonnAnimation != null) {
+            groupMediaButtonnAnimation.cancel();
+        }
+        groupMediaButtonnAnimation = new AnimatorSet();
+        if (visibility == View.VISIBLE) {
+            groupMediaButton.setVisibility(visibility);
+            groupMediaButtonnAnimation.playTogether(
+                ObjectAnimator.ofFloat(groupMediaButton, View.ALPHA, 1.0f),
+                ObjectAnimator.ofFloat(groupMediaButton, View.SCALE_Y, 1.0f)
+            );
+        } else {
+            groupMediaButtonnAnimation.playTogether(
+                ObjectAnimator.ofFloat(groupMediaButton, View.ALPHA, 0.0f),
+                ObjectAnimator.ofFloat(groupMediaButton, View.SCALE_Y, 0.0f)
+            );
+        }
+        groupMediaButtonnAnimation.setDuration(100);
+        int visibilityFinal = visibility;
+        groupMediaButtonnAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (groupMediaButtonnAnimation != null
+                    && groupMediaButtonnAnimation.equals(animation)) {
+                    if (visibilityFinal == View.GONE) {
+                        groupMediaButton.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (groupMediaButtonnAnimation != null
+                    && groupMediaButtonnAnimation.equals(animation)) {
+                    groupMediaButtonnAnimation = null;
+                }
+            }
+        });
+        groupMediaButtonnAnimation.start();
     }
 
     private interface ChatActivityDelegate {
@@ -1778,28 +1903,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     // IS_ANONYMOUS_FORWARD = id == forward_anonym;
                     openForward();
                 } else if (id == forward_anonym) {
-                    ArrayList<MessageObject> messages = new ArrayList<MessageObject>();
-                    for (int a = 1; a >= 0; a--) {
-                        ArrayList<Integer> ids = new ArrayList<>();
-                        for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
-                            ids.add(selectedMessagesIds[a].keyAt(b));
-                        }
-                        Collections.sort(ids);
-                        for (int b = 0; b < ids.size(); b++) {
-                            Integer i = ids.get(b);
-                            MessageObject messageObject = selectedMessagesIds[a].get(i);
-                            if (messageObject != null) {
-                                messages.add(messageObject);
-                            }
-                        }
-                        selectedMessagesCanCopyIds[a].clear();
-                        selectedMessagesCanStarIds[a].clear();
-                        selectedMessagesIds[a].clear();
-                    }
-                    hideActionMode();
-                    updatePinnedMessageView(true);
-                    updateVisibleRows();
-                    showDialog(new ShareAlert(getParentActivity(), messages, "", ChatObject.isChannel(currentChat), null, true));
+                    showAnonymShareAlert(false);
                 } else if (id == save_to) {
                     ArrayList<MessageObject> messageObjects = new ArrayList<>();
                     for (int a = 1; a >= 0; a--) {
@@ -6860,6 +6964,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             updateVisibleRows();
         });
         bottomMessagesActionContainer.addView(replyButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+        
+        createGroupMediaButton(context);
+        bottomMessagesActionContainer.addView(groupMediaButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
 
         forwardButton = new TextView(context);
         forwardButton.setText(LocaleController.getString("Forward", R.string.Forward));
@@ -11271,6 +11378,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         allowChatActions = false;
                     }
 
+                    int groupButtonVisibility = View.GONE;
                     int newVisibility;
 
                     if (chatMode == MODE_SCHEDULED || !allowChatActions || selectedMessagesIds[0].size() != 0 && selectedMessagesIds[1].size() != 0) {
@@ -11294,6 +11402,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 break;
                             }
                         }
+                        /////////
+                        if (newVisibility == View.VISIBLE) {
+                            if (lastGroupId != 0) {
+                                MessageObject.GroupedMessages groupedMessages
+                                    = groupedMessagesMap.get(lastGroupId);
+                                if (groupedMessages != null
+                                    && groupedMessages.messages.size() > 1) {
+                                    if (selectedCount > 1 && selectedCount != groupedMessages.messages.size()) {
+                                        newVisibility = View.GONE;
+                                        groupButtonVisibility = View.VISIBLE;
+                                    }
+                                }
+                            }
+                        } else {
+                            if (notSingleMediaSelected()) {
+                                newVisibility = View.GONE;
+                                groupButtonVisibility = View.VISIBLE;
+                            }
+                        }
+                        /////////
                     }
                     if (threadMessageObjects != null && newVisibility == View.VISIBLE) {
                         for (int b = 0, N = selectedMessagesIds[0].size(); b < N; b++) {
@@ -11303,6 +11431,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                     }
+
+                    if (!allowChatActions) {
+                        if (notSingleMediaSelected()) {
+                            newVisibility = View.GONE;
+                            groupButtonVisibility = View.VISIBLE;
+                        }
+                    }
+                    if (newVisibility == View.VISIBLE) {
+                        groupButtonVisibility = View.GONE;
+                    }
+                    animateGroupMediaButton(groupButtonVisibility);
 
                     if (replyButton.getVisibility() != newVisibility) {
                         if (replyButtonAnimation != null) {
@@ -18882,7 +19021,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     messages.add(selectedObject);
                 }
-                showDialog(new ShareAlert(getParentActivity(), messages, "", ChatObject.isChannel(currentChat), null, true));
+                ShareAlert alert = new ShareAlert(
+                    getParentActivity(),
+                    null,
+                    messages,
+                    "",
+                    ChatObject.isChannel(currentChat),
+                    null,
+                    true);
+                showDialog(alert);
                 break;
             }
             case 3: {
