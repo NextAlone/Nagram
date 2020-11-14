@@ -6245,7 +6245,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             parentChatActivity.getFragmentView().requestLayout();
         }
         final boolean finalOpenKeyboardOnShareAlertClose = openKeyboardOnShareAlertClose;
-        ShareAlert alert = new ShareAlert(parentActivity, parentChatActivity, messages, null, null, false, null, null, false, true, null) {
+        ShareAlert alert = new ShareAlert(parentActivity, parentChatActivity, messages, null, null, false, null, null, false, true, null, false) {
             @Override
             protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count) {
                 AndroidUtilities.runOnUIThread(() -> {
