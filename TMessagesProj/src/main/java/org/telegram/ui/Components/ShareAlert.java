@@ -64,6 +64,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.forkgram.AsCopy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
@@ -290,6 +291,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     }
 
     public ShareAlert(final Context context, ChatActivity fragment, ArrayList<MessageObject> messages, final String text, boolean channel, final String copyLink, boolean fullScreen) {
+        this(context, fragment, messages, text, channel, copyLink, fullScreen, false);
+    }
+
+    public ShareAlert(final Context context, ChatActivity fragment, ArrayList<MessageObject> messages, final String text, boolean channel, final String copyLink, boolean fullScreen, boolean groupAnyItems) {
         super(context, true);
 
         if (context instanceof Activity) {
@@ -1017,7 +1022,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         };
         commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
         commentTextView.onResume();
-        frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 0, 0, isNeedToSkipAnon ? 84 : 200, 0));
+        final int sizeFrameLayout = isNeedToSkipAnon
+            ? 84
+            : groupAnyItems
+            ? 110
+            : 200;
+        frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 0, 0, sizeFrameLayout, 0));
         frameLayout2.setClipChildren(false);
         commentTextView.setClipChildren(false);
 
@@ -1051,7 +1061,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         writeButtonContainer.setScaleY(0.2f);
         writeButtonContainer.setAlpha(0.0f);
         //writeButtonContainer.setContentDescription(LocaleController.getString("Send", R.string.Send));
+        if (!groupAnyItems) {
         containerView.addView(writeButtonContainer, LayoutHelper.createFrame(size, size, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, offset, 10));
+        }
 
         ImageView writeButton = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
@@ -1103,13 +1115,23 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         writeButtonContainer.addView(createButton(R.drawable.attach_send, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
 
         // ANONYM FORWARD BUTTON.
+        int factor = groupAnyItems ? 0 : 1;
         anonymButtonContainer = new FrameLayout(context);
         anonymButtonContainer.setVisibility(View.INVISIBLE);
         anonymButtonContainer.setScaleX(0.2f);
         anonymButtonContainer.setScaleY(0.2f);
         anonymButtonContainer.setAlpha(0.0f);
         anonymButtonContainer.setContentDescription(LocaleController.getString("Send", R.string.Send));
-        containerView.addView(anonymButtonContainer, LayoutHelper.createFrame(size, size, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, size + offset * 2, 10));
+        containerView.addView(
+            anonymButtonContainer,
+            LayoutHelper.createFrame(
+                size,
+                size,
+                Gravity.RIGHT | Gravity.BOTTOM,
+                0,
+                0,
+                size * factor + offset * (factor + 1),
+                10));
         anonymButtonContainer.setOnClickListener(v -> {
             if (sendingMessageObjects != null) {
                 for (int a = 0; a < selectedDialogs.size(); a++) {
@@ -1117,9 +1139,22 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0);
                     }
-                    for (MessageObject msg : sendingMessageObjects) {
-                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(msg, key);
+                    if (groupAnyItems) {
+                        AsCopy.GroupItemsIntoAlbum(
+                            key,
+                            null,
+                            sendingMessageObjects,
+                            currentAccount,
+                            parentFragment);
+                        dismiss();
+                        return;
                     }
+                    AsCopy.PerformForwardFromMyName(
+                        key,
+                        null,
+                        sendingMessageObjects,
+                        currentAccount,
+                        parentFragment);
                 }
             } else if (sendingText != null) {
                 withSendingText.run();
@@ -1133,36 +1168,54 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         anonymButtonContainer.addView(createButton(R.drawable.anon_forward, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
         
         // ANONYM FORWARD WITHOUT TEXT BUTTON.
+        factor++;
         nonTextButtonContainer = new FrameLayout(context);
         nonTextButtonContainer.setVisibility(View.INVISIBLE);
         nonTextButtonContainer.setScaleX(0.2f);
         nonTextButtonContainer.setScaleY(0.2f);
         nonTextButtonContainer.setAlpha(0.0f);
         nonTextButtonContainer.setContentDescription(LocaleController.getString("Send", R.string.Send));
-        containerView.addView(nonTextButtonContainer, LayoutHelper.createFrame(size, size, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, size * 2 + offset * 3, 10));
+        containerView.addView(
+            nonTextButtonContainer,
+            LayoutHelper.createFrame(
+                size,
+                size,
+                Gravity.RIGHT | Gravity.BOTTOM,
+                0,
+                0,
+                size * factor + offset * (factor + 1),
+                10));
         nonTextButtonContainer.setOnClickListener(v -> {
-            if (sendingMessageObjects != null) {
-                for (int a = 0; a < selectedDialogs.size(); a++) {
-                    long key = selectedDialogs.keyAt(a);
-
-                    if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                        sendingMessageObjects.get(0).messageOwner.message = commentTextView.getText().toString();
-                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(sendingMessageObjects.get(0), key);
-                        sendingMessageObjects.remove(0);
-                    }
-
-                    for (MessageObject msg : sendingMessageObjects) {
-                        if (msg.messageOwner.media != null) {
-                            if (msg.messageOwner.media.photo instanceof TLRPC.TL_photo
-                            || msg.messageOwner.media.document instanceof TLRPC.TL_document) {
-                                msg.messageOwner.message = "";
-                            }
-                        }
-                        SendMessagesHelper.getInstance(currentAccount).processForwardFromMyName(msg, key);
-                    }
+            if (sendingMessageObjects == null) {
+                if (sendingText != null) {
+                    withSendingText.run();
                 }
-            } else if (sendingText != null) {
-                withSendingText.run();
+                dismiss();
+                return;
+            }
+            for (int a = 0; a < selectedDialogs.size(); a++) {
+                long key = selectedDialogs.keyAt(a);
+
+                String replaceText = "";
+                if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
+                    replaceText = commentTextView.getText().toString();
+                }
+                if (groupAnyItems) {
+                    AsCopy.GroupItemsIntoAlbum(
+                        key,
+                        replaceText,
+                        sendingMessageObjects,
+                        currentAccount,
+                        parentFragment);
+                    dismiss();
+                    return;
+                }
+                AsCopy.PerformForwardFromMyName(
+                    key,
+                    replaceText,
+                    sendingMessageObjects,
+                    currentAccount,
+                    parentFragment);
             }
             dismiss();
         });
