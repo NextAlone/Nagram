@@ -1421,10 +1421,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public void processForwardFromMyName(MessageObject messageObject, long did) {
+        processForwardFromMyName(messageObject, did, null);
+    }
+
+    public void processForwardFromMyName(MessageObject messageObject, long did, String overwriteText) {
         if (messageObject == null) {
             return;
         }
-        String messageOwnerMessage = messageObject.messageOwner.message;
+        String messageOwnerMessage = (overwriteText == null)
+            ? messageObject.messageOwner.message
+            : overwriteText;
 
         // Don't reply to message from previous chat.
         MessageObject emptyReplyMessageObject = null;
