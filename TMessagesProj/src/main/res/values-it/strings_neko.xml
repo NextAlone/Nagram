@@ -5,7 +5,7 @@
     <string name="MessageMenu">Menu messaggio</string>
     <string name="HidePhone">Nascondi il mio numero</string>
     <string name="Hide">Nascondi</string>
-    <string name="DeleteAllFromSelf">Elimina tutti i tuoi messaggi</string>
+    <string name="DeleteAllFromSelf">Elimina tutti i miei messaggi</string>
     <string name="DeleteAllFromSelfAlert">Attenzione! Questo eliminerà **tutti i tuoi messaggi** da questa chat per **tutti i partecipanti.**</string>
     <string name="BotLogin">Login con bot token</string>
     <string name="InvalidAccessToken">Accesso col token non valido</string>
@@ -16,7 +16,7 @@
     <string name="FirstLast">Dal primo all\'ultimo</string>
     <string name="LastFirst">Dall\'ultimo al primo</string>
     <string name="TypefaceUseDefault">Usa font predefinito di sistema</string>
-    <string name="NoQuoteForward">Inoltro senza citare</string>
+    <string name="NoQuoteForward">Inoltra senza citare</string>
     <string name="Repeat">Ripeti</string>
     <string name="AddToSavedMessages">Salva messaggio</string>
     <string name="CreateMention">Crea menzione</string>
@@ -27,7 +27,7 @@
     <string name="DisableResidentNotification">Disabilita notifica persistente</string>
     <string name="NekogramRunning">Nekogram è in esecuzione</string>
     <string name="EventType">Set di icone barra laterale</string>
-    <string name="ChristmasHat">Mostra il cappello di Natale ogni giorno</string>
+    <string name="ChristmasHat">Mostra cappello Natalizio ogni giorno</string>
     <string name="ActionBarDecoration">Decorazione barra del titolo</string>
     <string name="DependsOnDate">A seconda della data</string>
     <string name="Christmas">Natale</string>
@@ -35,7 +35,7 @@
     <string name="Snowflakes">Fiocchi di neve</string>
     <string name="Fireworks">Fuochi d\'artificio</string>
     <string name="DeleteDownloadedFile">Elimina il file scaricato</string>
-    <string name="TestBackend">Test Backend</string>
+    <string name="TestBackend">Test backend</string>
     <string name="TestBackendOn">Questo account si connetterà al server di test.</string>
     <string name="TestBackendOff">Questo account si connetterà al server principale.</string>
     <string name="HideProxySponsorChannel">Nascondi canale sponsor proxy</string>
@@ -45,14 +45,14 @@
     <string name="SaveCacheToExternalFilesDirAbout">Salva la cartella \"Telegram\" nella directory specifica dell\'app per mantenere la memoria condivisa in ordine.</string>
     <string name="SensitiveDisableFiltering">Disattiva il filtro dei contenuti sensibili</string>
     <string name="SensitiveAbout">Mostra i media sensibili nei canali pubblici su tutti i tuoi dispositivi.</string>
-    <string name="StickerSize">Dimensione dell\'adesivo</string>
+    <string name="StickerSize">Dimensione dello Sticker</string>
     <string name="StickerSizeDialogMessageBigOne">Uno grande</string>
     <string name="StickerSizeDialogMessageSmallOne">Uno piccolo</string>
     <string name="StickerSizeDialogMessageReplyTo">Miao</string>
     <string name="StickerSizeDialogName">Duang</string>
     <string name="Experiment">Sperimentale</string>
-    <string name="UnlimitedFavoredStickers">Adesivi preferiti illimitati</string>
-    <string name="UnlimitedFavoredStickersAbout">Aggiungi adesivi illimitati ai preferiti. Gli adesivi potrebbero non essere sincronizzati con altri dispositivi.</string>
+    <string name="UnlimitedFavoredStickers">Sticker preferiti illimitati</string>
+    <string name="UnlimitedFavoredStickersAbout">Aggiungi sticker illimitati ai preferiti. Gli sticker potrebbero non essere sincronizzati con altri dispositivi.</string>
     <string name="MessageDetails">Dettagli</string>
     <string name="ExportAsJson">Esporta come JSON</string>
     <string name="Translate">Traduci</string>
@@ -74,8 +74,8 @@
     <string name="UserRestrictionsSendGifs">Inviare GIF</string>
     <string name="UseAvatarAsDrawerBackground">Utilizza l\'avatar come sfondo del drawer</string>
     <string name="ShowTabsOnForward">Mostra le tab durante l\'inoltro</string>
-    <string name="CheckAllAdministrated">Aggiungi amministrate</string>
-    <string name="RearVideoMessages">Usa fotocamera posteriore in Video Messaggi</string>
+    <string name="CheckAllAdministrated">Aggiungi amministratore</string>
+    <string name="RearVideoMessages">Usa fotocamera posteriore nei Video Messaggi</string>
     <string name="HideAllTab">Nascondi la scheda \"Tutte le chat\"</string>
     <string name="HideAllTabAbout">Premi \"Indietro\" sulla home page per aprirlo.</string>
     <string name="TabTitleType">Mostra sulle schede</string>
@@ -94,8 +94,6 @@
     <string name="IgnoreBlockedAbout">Non vedrai più i messaggi degli utenti bloccati nei gruppi.</string>
     <string name="Donate">Dona</string>
     <string name="DonateAbout">Supporta lo sviluppo.</string>
-    <string name="TranslationAbout">Aiutaci a tradurre Nekogram nella tua lingua.</string>
-    <string name="Translation">Traduci Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Codice sorgente su Github</string>
     <string name="ResetStickerSize">Resetta dimensione sticker</string>
@@ -103,14 +101,8 @@
     <string name="DisableAppBarShadow">Disabilita l\'ombra della barra del titolo</string>
     <string name="BetaWarning">Questa è una funzione **beta** implementata da **Telegram**.</string>
     <string name="MediaPreview">Anteprima media nella lista chat</string>
-    <string name="ProviderYandex">Yandex Translate</string>
-    <string name="IdType">Chat ID nel profilo</string>
-    <string name="IdTypeAbout">L\'API di Telegram utilizza gli ID as-is, ma la Bot API aggiunge - all\'inizio per gruppi, e -100 per canali e supergruppi per adattarlo in un campo.</string>
-    <string name="IdTypeHidden">Nascondi</string>
-    <string name="IdTypeAPI">API Telegram</string>
-    <string name="IdTypeBOTAPI">Bot API</string>
+    <string name="ProviderYandex">Traduci Yandex</string>
     <string name="AutoPauseVideo">Pausa video automatica</string>
     <string name="AutoPauseVideoAbout">Quando in schermata di blocco/si passa allo sfondo.</string>
     <string name="DisableProximityEvents">Disabilita gli eventi di prossimità</string>
-    <string name="CustomEmojiTypeface">Font Emoji Personale</string>
 </resources>

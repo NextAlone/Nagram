@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Terkunci</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu masukan obrolan</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Merekam video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Suara rekaman</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Nonaktifkan Pratinjau Tautan</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Aktifkan Pratinjau Tautan</string>
+    <string name="UseChatAttachEnterMenu">Gunakan menu masukan</string>
+    <string name="UseChatAttachEnterMenuNotice">Ubah tombol rekam ke menu input, dan tambahkan sakelar pratinjau tautan.</string>
+    <string name="DisableLinkPreviewByDefault">Nonaktifkan pratinjau link secara default</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Nonaktifkan permintaan pratinjau tautan selama input secara default untuk mencegah server mengetahui bahwa tautan dibagikan melalui Telegram.</string>
     <string name="CustomApi">API Khusus</string>
     <string name="UseCustomApiNotice">Gunakan API khusus untuk masuk, ini mungkin bisa membantu Anda ketika tidak bisa mendaftar atau masuk.\n\nCatatan: FCM tidak akan bekerja jika Anda menggunakan versi rilis.</string>
     <string name="CustomApiNo">Jangan gunakan API khusus</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Tambahkan Proxy Vmess</string>
     <string name="AddProxySS">Tambahkan Proxy Shadowsocks</string>
     <string name="AddProxySSR">Tambahkan Proxy ShadowsocksR</string>
+    <string name="AddProxyTrojan">Tambahkan Proxy Trojan</string>
     <string name="SSPluginConflictingName">Beberapa plugin menggunakan ID ini: %s.</string>
     <string name="EditProxy">Edit Proxy</string>
     <string name="ShareProxy">Bagikan Proxy</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">Parameter Protokol</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Parameter Obfs</string>
+    <string name="ProxyInfoTrojan">Pengaturan Proxy Trojan</string>
     <string name="ProxyRemarks">Penanda Proxy</string>
     <string name="RetestPing">Uji ulang ping ke semua server</string>
     <string name="ReorderByPing">Urutkan server sesuai hasil ping</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">Impor Kunci Pribadi</string>
     <string name="ShareMyKey">Bagikan Kunci Publik Saya</string>
     <string name="DisableVibration">Matikan Fitur Getar</string>
+    <string name="IgnoreContentRestrictions">Abaikan batasan konten</string>
+    <string name="IgnoreContentRestrictionsNotice">Mengabaikan batasan android pada pesan secara lokal. Ini mungkin dilarang oleh server di masa mendatang, dan Anda perlu mengevaluasi sendiri legalitas lokal dari opsi ini.</string>
+    <string name="SendCommentAfterForward">Kirim komentar setelah meneruskan</string>
 </resources>

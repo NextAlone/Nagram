@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Bloccato</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu di input chat</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Registrazione Video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Registrazione Audio</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Disabilita Anteprima Collegamenti</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Abilita Anteprima Collegamenti</string>
+    <string name="UseChatAttachEnterMenu">Usa il menu di input</string>
+    <string name="UseChatAttachEnterMenuNotice">Cambia il pulsante del record in un menu di input e aggiungi un interruttore di anteprima collegamento.</string>
+    <string name="DisableLinkPreviewByDefault">Disabilita l\'anteprima del link per impostazione predefinita</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima link durante l\'input per impostazione predefinita per evitare che il server sappia che il collegamento è condiviso tramite Telegram.</string>
     <string name="CustomApi">API Personalizzata</string>
     <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto.\n\nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
     <string name="CustomApiNo">Non utilizzare l\'API personalizzata</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Aggiungi Proxy Vmess</string>
     <string name="AddProxySS">Aggiungi Proxy Shadowsocks</string>
     <string name="AddProxySSR">Aggiungi Proxy ShadowsocksR</string>
+    <string name="AddProxyTrojan">Aggiungi Proxy Trojan</string>
     <string name="SSPluginConflictingName">Diversi plugin usano questo id: %s.</string>
     <string name="EditProxy">Modifica Proxy</string>
     <string name="ShareProxy">Condividi Proxy</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">Protocol Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Parametro Obfs</string>
+    <string name="ProxyInfoTrojan">Impostazioni Del Proxy Trojan</string>
     <string name="ProxyRemarks">Osservazioni</string>
     <string name="RetestPing">Riprova il ping per tutti i server</string>
     <string name="ReorderByPing">Riordina server dal ping</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">Importa Chiave Privata</string>
     <string name="ShareMyKey">Condividi La Mia Chiave Pubblica</string>
     <string name="DisableVibration">Disabilita Vibrazione</string>
+    <string name="IgnoreContentRestrictions">Ignora le restrizioni di contenuto</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignora le restrizioni degli android sui messaggi localmente. Questo potrebbe essere bandito dal server in futuro, e sarà necessario valutare la legalità locale di questa opzione da solo.</string>
+    <string name="SendCommentAfterForward">Invia commenti dopo l\'inoltro</string>
 </resources>

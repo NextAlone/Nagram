@@ -189,4 +189,5 @@
     <string name="DisableVibration">تعطيل الاهتزاز</string>
     <string name="IgnoreContentRestrictions">تجاهل قيود المحتوى</string>
     <string name="IgnoreContentRestrictionsNotice">يتجاهل قيود android على الرسائل محليًا. قد يحظر الخادم هذا في المستقبل ، وسوف تحتاج إلى تقييم الشرعية المحلية لهذا الخيار بنفسك.</string>
+    <string name="SendCommentAfterForward">إرسال التعليق بعد إعادة توجيه</string>
 </resources>

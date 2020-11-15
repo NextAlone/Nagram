@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="Locked">Đã khóa</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu nhập trò chuyện</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Quay video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Quay audio</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Tắt xem trước liên kết</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Bật xem trước liên kết</string>
+    <string name="UseChatAttachEnterMenu">Sử dụng menu đầu vào</string>
+    <string name="UseChatAttachEnterMenuNotice">Thay đổi nút ghi thành menu đầu vào và thêm công tắc xem trước liên kết.</string>
+    <string name="DisableLinkPreviewByDefault">Tắt xem trước liên kết theo mặc định</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Theo mặc định, tắt yêu cầu xem trước liên kết trong khi nhập để ngăn máy chủ biết rằng liên kết được chia sẻ qua Telegram.</string>
+    <string name="CustomApi">API tùy chỉnh</string>
+    <string name="UseCustomApiNotice">Đăng nhập bằng api tùy chỉnh, nếu bạn không thể đăng ký hoặc đăng nhập, điều này có thể hữu ích.\n\nLưu ý: fcm sẽ không hoạt động nếu bạn đang sử dụng phiên bản phát hành.</string>
+    <string name="CustomApiNo">Không sử dụng API tùy chỉnh</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
+    <string name="CustomApiTGX">Telegram Android X</string>
+    <string name="CustomApiInput">Nhập thủ công</string>
+    <string name="CheckUpdate">Kiểm tra cập nhật</string>
+    <string name="SwitchVersion">Chuyển đổi phiên bản</string>
+    <string name="NoUpdate">Không tìm thấy bản cập nhật</string>
+    <string name="UpdateAvailable">Có bản cập nhật mới</string>
+    <string name="UpdateUpdate">Cập nhật</string>
+    <string name="UpdateLater">Một lát sau</string>
+    <string name="DownloadFailed">Tải xuống không thành công</string>
+    <string name="Install">Tải về</string>
+    <string name="Ignore">Làm lơ</string>
+</resources>

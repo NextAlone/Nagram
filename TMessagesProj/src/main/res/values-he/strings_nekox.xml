@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">נָעוּל</string>
+    <string name="AccDescrChatAttachEnterMenu">תפריט קלט צ\'אט</string>
+    <string name="ChatAttachEnterMenuRecordVideo">להקליט סרטון</string>
+    <string name="ChatAttachEnterMenuRecordAudio">הקלט אודיו</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">השבת תצוגה מקדימה של קישור</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">אפשר תצוגה מקדימה של קישור</string>
+    <string name="UseChatAttachEnterMenu">השתמש בתפריט קלט</string>
+    <string name="UseChatAttachEnterMenuNotice">שנה את לחצן ההקלטה לתפריט קלט והוסף מתג תצוגה מקדימה של קישור.</string>
+    <string name="DisableLinkPreviewByDefault">השבת תצוגה מקדימה של קישור כברירת מחדל</string>
+    <string name="DisableLinkPreviewByDefaultNotice">השבת את בקשת התצוגה המקדימה של הקישור במהלך הקלט כברירת מחדל כדי למנוע מהשרת לדעת שהקישור משותף באמצעות Telegram.</string>
     <string name="CustomApi">ממשק API מותאם אישית</string>
     <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.\n\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
     <string name="CustomApiNo">אל תשתמש בממשק API מותאם אישית</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">הוסף Vmess Proxy</string>
     <string name="AddProxySS">הוסף פרוקסי Shadowsocks</string>
     <string name="AddProxySSR">הוסף פרוקסי ShadowsocksR</string>
+    <string name="AddProxyTrojan">הוסף Proxy Trojan</string>
     <string name="SSPluginConflictingName">מספר תוספים משתמשים במזהה זה: %s.</string>
     <string name="EditProxy">ערוך פרוקסי</string>
     <string name="ShareProxy">שתף פרוקסי</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">פרמטרי פרוטוקול</string>
     <string name="SSRObfs">אובסס</string>
     <string name="SSRObfsParam">אובפס פרם</string>
+    <string name="ProxyInfoTrojan">הגדרות פרוקסי טרויאני</string>
     <string name="ProxyRemarks">הערות</string>
     <string name="RetestPing">בדוק מחדש את פינג לכל השרתים</string>
     <string name="ReorderByPing">סדר מחדש את השרתים באמצעות פינג</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">ייבא מפתח פרטי</string>
     <string name="ShareMyKey">שתף את המפתח הציבורי שלי</string>
     <string name="DisableVibration">השבת רטט</string>
+    <string name="IgnoreContentRestrictions">התעלם ממגבלות תוכן</string>
+    <string name="IgnoreContentRestrictionsNotice">מתעלם ממגבלות אנדרואיד על הודעות באופן מקומי. ייתכן שהשרת יאסר בעתיד, ותצטרך להעריך בעצמך את החוקיות המקומית של אפשרות זו.</string>
+    <string name="SendCommentAfterForward">שלח תגובה לאחר העברה</string>
 </resources>

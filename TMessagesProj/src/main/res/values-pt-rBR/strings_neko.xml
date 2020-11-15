@@ -94,24 +94,15 @@
     <string name="IgnoreBlockedAbout">Você não verá mais mensagens de usuários bloqueados em grupos.</string>
     <string name="Donate">Doar</string>
     <string name="DonateAbout">Apoie o nosso desenvolvimento.</string>
-    <string name="TranslationAbout">Ajude-nos a traduzir o Nekogram para o seu idioma.</string>
-    <string name="Translation">Traduzir Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Código fonte no Github</string>
     <string name="ResetStickerSize">Redefinir tamanho do sticker</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">Reinicie o aplicativo para tirar efeito.</string>
     <string name="DisableAppBarShadow">Desativar sombra da barra de título</string>
     <string name="BetaWarning">Esse é um recurso **beta** implementado pelo **Telegram**.</string>
     <string name="MediaPreview">Pré-visualizar mídia na lista de diálogo</string>
     <string name="ProviderYandex">Yandex Tradutor</string>
-    <string name="IdType">ID do chat no perfil</string>
-    <string name="IdTypeAbout">A API do Telegram usa IDs como está, mas o Bot API adiciona menos no início para grupos, e -100 para que os canais e supergrupos se encaixem em um campo.</string>
-    <string name="IdTypeHidden">Ocultar</string>
-    <string name="IdTypeAPI">API do Telegram</string>
-    <string name="IdTypeBOTAPI">Bot API</string>
     <string name="AutoPauseVideo">Pausar vídeo automaticamente</string>
     <string name="AutoPauseVideoAbout">Quando bloquear a tela/Alternar para segundo plano</string>
     <string name="DisableProximityEvents">Desativar eventos de proximidade</string>
-    <string name="CustomEmojiTypeface">Fonte emoji personalizada</string>
 </resources>

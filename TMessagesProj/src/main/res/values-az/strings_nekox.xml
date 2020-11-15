@@ -1,2 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="Locked">Kilidli</string>
+    <string name="AccDescrChatAttachEnterMenu">Çat giriş menyusu</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Video qeyd edin</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Audio qeyd edin</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Bağlantı Önizləməsini deaktiv edin</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Link Önizləməsini aktivləşdirin</string>
+    <string name="UseChatAttachEnterMenu">Giriş menyusundan istifadə edin</string>
+    <string name="UseChatAttachEnterMenuNotice">Qeyd düyməsini giriş menyusuna dəyişdirin və bir link önizləmə açarı əlavə edin.</string>
+    <string name="DisableLinkPreviewByDefault">Varsayılan olaraq link önizləməsini deaktiv edin</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Vərdiş olaraq serverin keçidin Telegram vasitəsilə paylaşıldığını bilməməsi üçün giriş zamanı önizləmə tələbini söndürün.</string>
+    <string name="CustomApi">Xüsusi API</string>
+    <string name="UseCustomApiNotice">Xüsusi api istifadə edərək daxil olun, qeydiyyatdan keçə və ya daxil ola bilmirsinizsə, bu kömək edə bilər.\n\nQeyd: buraxılış versiyasından istifadə edirsinizsə fcm işləməyəcəkdir.</string>
+    <string name="CustomApiNo">Xüsusi API istifadə etməyin</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
+    <string name="CustomApiTGX">Telegram Android X</string>
+    <string name="CustomApiInput">Əl ilə giriş</string>
+    <string name="CheckUpdate">Yeniləməni yoxlayın</string>
+    <string name="SwitchVersion">Versiyanı dəyişdirin</string>
+    <string name="NoUpdate">Yeniləmə tapılmadı</string>
+    <string name="UpdateAvailable">Yeni yeniləmə mövcuddur</string>
+</resources>

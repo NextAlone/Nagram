@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">잠김</string>
+    <string name="AccDescrChatAttachEnterMenu">채팅 입력 메뉴</string>
+    <string name="ChatAttachEnterMenuRecordVideo">비디오 녹화</string>
+    <string name="ChatAttachEnterMenuRecordAudio">오디오 녹음</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">링크 미리보기 비활성화</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">링크 미리보기 활성화</string>
+    <string name="UseChatAttachEnterMenu">입력 메뉴 사용</string>
+    <string name="UseChatAttachEnterMenuNotice">녹화 버튼을 입력 메뉴로 변경하고 링크 미리보기 스위치를 추가합니다.</string>
+    <string name="DisableLinkPreviewByDefault">기본적으로 링크 미리보기 비활성화</string>
+    <string name="DisableLinkPreviewByDefaultNotice">기본적으로 입력 중에 링크 미리보기 요청을 비활성화하여 서버가 Telegram을 통해 링크가 공유되었음을 알지 못하도록합니다.</string>
     <string name="CustomApi">사용자 정의 API</string>
     <string name="UseCustomApiNotice">사용자 정의 API를 사용하여 로그인 시, 등록하거나 로그인 할 수 없으면, 이 항목이 도움이 될 수 있습니다.\n\n참고: 정식 버전을 사용하는 경우 fcm이 작동하지 않습니다.</string>
     <string name="CustomApiNo">사용자 정의 API 사용하지 않기</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Vmess 프록시 추가</string>
     <string name="AddProxySS">Shadowsocks 프록시 추가</string>
     <string name="AddProxySSR">ShadowsocksR 프록시 추가</string>
+    <string name="AddProxyTrojan">트로이 목마 프록시 추가</string>
     <string name="SSPluginConflictingName">여러 플러그인에서이 ID를 사용합니다 : %s.</string>
     <string name="EditProxy">프록시 편집</string>
     <string name="ShareProxy">프록시 공유</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">프로토콜 매개 변수</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs 매개 변수</string>
+    <string name="ProxyInfoTrojan">트로이 목마 프록시 설정</string>
     <string name="ProxyRemarks">비고</string>
     <string name="RetestPing">모든 서버에 대한 핑 테스트</string>
     <string name="ReorderByPing">Ping 으로 서버 재정렬</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">개인 키 가져 오기</string>
     <string name="ShareMyKey">내 공개 키 공유</string>
     <string name="DisableVibration">진동 비활성화</string>
+    <string name="IgnoreContentRestrictions">콘텐츠 제한 무시</string>
+    <string name="IgnoreContentRestrictionsNotice">로컬에서 메시지에 대한 Android 제한을 무시합니다. 이는 향후 서버에 의해 금지 될 수 있으며이 옵션의 현지 적법성을 직접 평가해야합니다.</string>
+    <string name="SendCommentAfterForward">전달 후 댓글 보내기</string>
 </resources>

@@ -92,12 +92,12 @@
     <string name="IgnoreBlockedAbout">لن ترى بعد الآن رسائل من المستخدمين المحظورين في المجموعات.</string>
     <string name="Donate">تبرع</string>
     <string name="DonateAbout">دعم تطويرنا.</string>
-    <string name="TranslationAbout">ساعدنا على ترجمة نيكوغرام إلى لغتك.</string>
-    <string name="Translation">ترجمة نيكوغرام</string>
     <string name="GooglePlay">جوجل بلاي</string>
     <string name="SourceCode">مصدر التعليمات البرمجية على Github</string>
     <string name="ResetStickerSize">إعادة تعيين حجم ملصق</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">إعادة تشغيل التطبيق لتصبح سارية المفعول.</string>
     <string name="DisableAppBarShadow">تعطيل ظل شريط العنوان</string>
+    <string name="BetaWarning">هذه ميزة **بيتا** تم تنفيذها بواسطة **تيليجرام**.</string>
+    <string name="MediaPreview">معاينة الوسائط في قائمة الحوار</string>
+    <string name="ProviderYandex">ترجمة يانديكس</string>
 </resources>

@@ -189,4 +189,5 @@
     <string name="DisableVibration">غیرفعال کردن لرزش</string>
     <string name="IgnoreContentRestrictions">دور زدن محدودیت های محتوا</string>
     <string name="IgnoreContentRestrictionsNotice">محدودیت های پیامها در اندروید را بصورت محلی دور می زند. این ممکن است در آینده توسط سرور از کار بیفتد، و شما خودتان نیازمند بررسی قانونی بودن این قابلیت هستید.</string>
+    <string name="SendCommentAfterForward">ارسال نظر پس از ارسال</string>
 </resources>

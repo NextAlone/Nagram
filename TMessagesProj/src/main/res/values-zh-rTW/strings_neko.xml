@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">喵設定</string>
-    <string name="IPv6">優先嚐試使用 IPv6 連線</string>
+    <string name="IPv6">優先嘗試使用 IPv6 連線</string>
     <string name="MessageMenu">訊息選單</string>
     <string name="HidePhone">隱藏您的手機號碼</string>
     <string name="Hide">隱藏</string>
-    <string name="DeleteAllFromSelf">自閉</string>
+    <string name="DeleteAllFromSelf">刪除所有自己傳送的訊息</string>
     <string name="DeleteAllFromSelfAlert">警告！ 這將為此對話中的**所有人**刪除**所有您發送的訊息**。</string>
     <string name="BotLogin">機器人登入</string>
     <string name="InvalidAccessToken">Token 無效</string>
@@ -15,7 +15,7 @@
     <string name="NameOrder">姓名順序</string>
     <string name="FirstLast">名字 姓氏</string>
     <string name="LastFirst">姓氏 名字</string>
-    <string name="TypefaceUseDefault">使用系統默認字體</string>
+    <string name="TypefaceUseDefault">使用系統預設字體</string>
     <string name="NoQuoteForward">無引用轉發</string>
     <string name="Repeat">複讀</string>
     <string name="AddToSavedMessages">拿去自嗨</string>
@@ -92,11 +92,12 @@
     <string name="IgnoreBlockedAbout">您將不會再看到被遮蔽的使用者在群組中的訊息。</string>
     <string name="Donate">捐贈</string>
     <string name="DonateAbout">支援我們的開發。</string>
-    <string name="TranslationAbout">幫助我們將 Nekogram 翻譯成您的語言。</string>
-    <string name="Translation">翻譯 Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github 上的原始碼</string>
     <string name="ResetStickerSize">重置貼圖大小</string>
     <string name="RestartAppToTakeEffect">重啟應用以生效。</string>
     <string name="DisableAppBarShadow">禁用標題欄陰影</string>
+    <string name="BetaWarning">這是 **Telegram** 官方的 **測試中** 功能</string>
+    <string name="MediaPreview">在對話列表顯示媒體預覽</string>
+    <string name="ProviderYandex">Yandex 翻譯</string>
 </resources>

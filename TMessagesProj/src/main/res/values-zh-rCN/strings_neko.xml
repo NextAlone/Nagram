@@ -50,7 +50,7 @@
     <string name="StickerSizeDialogMessageSmallOne">一小只</string>
     <string name="StickerSizeDialogMessageReplyTo">喵</string>
     <string name="StickerSizeDialogName">呆瓜</string>
-    <string name="Experiment">实验性</string>
+    <string name="Experiment">实验性功能</string>
     <string name="UnlimitedFavoredStickers">无限的收藏贴纸</string>
     <string name="UnlimitedFavoredStickersAbout">向收藏夹添加无限贴纸，贴纸可能将不能同步到其它设备。</string>
     <string name="MessageDetails">详情</string>
@@ -94,26 +94,15 @@
     <string name="IgnoreBlockedAbout">您将不会再看到被屏蔽的用户在群组中的消息。</string>
     <string name="Donate">捐赠</string>
     <string name="DonateAbout">支持我们的开发。</string>
-    <string name="TranslationAbout">帮助我们将 Nekogram 翻译成您的语言。</string>
-    <string name="Translation">翻译 Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github 上的源代码</string>
     <string name="ResetStickerSize">重置贴纸大小</string>
-    <string name="OfficialChannelUsername">Zuragram</string>
     <string name="RestartAppToTakeEffect">重启应用以生效。</string>
     <string name="DisableAppBarShadow">禁用标题栏阴影</string>
-    <string name="SponsorTitle">赞助商</string>
-    <string name="SponsorContent">您可以使用 Argo Networks 来提供网络加速。</string>
     <string name="BetaWarning">这是由 **Telegram** 实现的**测试版**特性。</string>
     <string name="MediaPreview">对话列表中的媒体预览</string>
     <string name="ProviderYandex">Yandex 翻译</string>
-    <string name="IdType">个人资料中的 ID</string>
-    <string name="IdTypeAbout">Telegram API按原样使用 ID，但 Bot API 在群组的开头添加负号，在频道的开头添加 -100 使其合并为一个字段。</string>
-    <string name="IdTypeHidden">隐藏</string>
-    <string name="IdTypeAPI">Telegram API</string>
-    <string name="IdTypeBOTAPI">Bot API</string>
     <string name="AutoPauseVideo">自动暂停视频</string>
     <string name="AutoPauseVideoAbout">当锁定屏幕/切换到后台时。</string>
     <string name="DisableProximityEvents">禁用距离传感器事件</string>
-    <string name="CustomEmojiTypeface">自定义 Emoji 字体</string>
 </resources>

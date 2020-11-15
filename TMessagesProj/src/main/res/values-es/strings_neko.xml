@@ -11,7 +11,7 @@
     <string name="InvalidAccessToken">Tóken de acceso inválido</string>
     <string name="IgnoreBlocked">En grupos, ignorar usuarios bloqueados</string>
     <string name="Connection">Conexión</string>
-    <string name="Chat">Chat</string>
+    <string name="Chat">Chatear</string>
     <string name="NameOrder">Orden de nombres</string>
     <string name="FirstLast">Nombre Apellido</string>
     <string name="LastFirst">Apellido Nombre</string>
@@ -94,8 +94,6 @@
     <string name="IgnoreBlockedAbout">Ya no verás mensajes de usuarios bloqueados en grupos.</string>
     <string name="Donate">Donar</string>
     <string name="DonateAbout">Apoya nuestro desarrollo.</string>
-    <string name="TranslationAbout">Ayúdanos a traducir Nekogram a tu idioma.</string>
-    <string name="Translation">Traducir Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Código fuente en Github</string>
     <string name="ResetStickerSize">Restablecer tamaño del sticker</string>
@@ -104,13 +102,7 @@
     <string name="BetaWarning">Esta es una función **beta** implementada por **Telegram**.</string>
     <string name="MediaPreview">Vista previa de multimedia en la lista de diálogos</string>
     <string name="ProviderYandex">Traducción de Yandex</string>
-    <string name="IdType">ID del chat en el perfil</string>
-    <string name="IdTypeAbout">La API de Telegram utiliza IDs sin modificar, pero la API de Bot añade \"-\" al principio para grupos, y \"-100\" para canales y supergrupos para que encajen en un solo campo.</string>
-    <string name="IdTypeHidden">Ocultar</string>
-    <string name="IdTypeAPI">API de Telegram</string>
-    <string name="IdTypeBOTAPI">API de Bot</string>
     <string name="AutoPauseVideo">Pausar video automáticamente</string>
     <string name="AutoPauseVideoAbout">Cuando se bloquea la pantalla o se cambia al fondo.</string>
     <string name="DisableProximityEvents">Deshabilitar eventos de proximidad</string>
-    <string name="CustomEmojiTypeface">Fuente de emoji personalizada</string>
 </resources>

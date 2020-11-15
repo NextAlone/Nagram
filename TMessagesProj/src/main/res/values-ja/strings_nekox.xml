@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">ロックされています</string>
+    <string name="AccDescrChatAttachEnterMenu">チャット入力メニュー</string>
+    <string name="ChatAttachEnterMenuRecordVideo">録画映像</string>
+    <string name="ChatAttachEnterMenuRecordAudio">レコードオーディオ</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">リンクプレビューを無効化</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">リンクのプレビューを有効にする</string>
+    <string name="UseChatAttachEnterMenu">入力メニューを使用する</string>
+    <string name="UseChatAttachEnterMenuNotice">記録ボタンを入力メニューに変更し、リンクプレビュースイッチを追加します。</string>
+    <string name="DisableLinkPreviewByDefault">デフォルトではリンクプレビューを無効にします</string>
+    <string name="DisableLinkPreviewByDefaultNotice">サーバーがTelegramを通じてリンクが共有されていることを知らないようにするために、デフォルトでリンクのプレビュー要求を無効にします.</string>
     <string name="CustomApi">カスタムAPI</string>
-    <string name="UseCustomApiNotice">カスタムAPIを使用してログインします。登録やログインができない時には役に立つかもしれません。\n\n注意:リリースバージョンを使用しているとFCMは動作しません。</string>
+    <string name="UseCustomApiNotice">カスタムAPIを使用してログインします。登録やログインができない場合は、これが役に立つことがあります。\n\n注意: リリースバージョンを使用している場合、fcmは動作しません。</string>
     <string name="CustomApiNo">カスタムAPIを使用しない</string>
     <string name="CustomApiOfficial">テレグラムAndroid</string>
     <string name="CustomApiTGX">テレグラムAndroid X</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Vmessプロキシを追加</string>
     <string name="AddProxySS">Shadowsocksプロキシを追加</string>
     <string name="AddProxySSR">ShadowsocksRプロキシを追加</string>
+    <string name="AddProxyTrojan">トロイの木馬のプロキシを追加</string>
     <string name="SSPluginConflictingName">いくつかのプラグインがこのIDを使用しています: %s.</string>
     <string name="EditProxy">プロキシを編集</string>
     <string name="ShareProxy">プロキシを共有</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">プロトコルパラメータ</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfsパラメータ</string>
+    <string name="ProxyInfoTrojan">トロイの木馬プロキシの設定</string>
     <string name="ProxyRemarks">備考</string>
     <string name="RetestPing">すべてのサーバーのpingを再テストする</string>
     <string name="ReorderByPing">pingでサーバを並べ替え</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">プライベートキーをインポート</string>
     <string name="ShareMyKey">公開鍵を共有</string>
     <string name="DisableVibration">バイブを無効にする</string>
+    <string name="IgnoreContentRestrictions">コンテンツ制限を無視します</string>
+    <string name="IgnoreContentRestrictionsNotice">ローカルのメッセージに対するアンドロイド制限を無視します． これは将来サーバーによって禁止される可能性があり、このオプションのローカル合法性を評価する必要があります。</string>
+    <string name="SendCommentAfterForward">転送後にコメントを送信します</string>
 </resources>

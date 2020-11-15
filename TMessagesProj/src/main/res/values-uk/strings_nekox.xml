@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Заблоковано</string>
+    <string name="AccDescrChatAttachEnterMenu">Меню ввода в чат</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Записати відео</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Записувати аудіо</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Вимкнути попередній перегляд посилання</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути Предогляд посилання</string>
+    <string name="UseChatAttachEnterMenu">Використовать меню введення</string>
+    <string name="UseChatAttachEnterMenuNotice">Змініть кнопку запису на меню вводу і додайте перемикач попереднього перегляду посилань.</string>
+    <string name="DisableLinkPreviewByDefault">Відключити передогляд посилань за замовчуванням</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення за замовчуванням, щоб запобігти знанню сервера про те, що посилання передається через Telegram.</string>
     <string name="CustomApi">Користувацький API</string>
     <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.\n\nПримітка: fcm не буде працювати, якщо ви використовуєте версію релізу.</string>
     <string name="CustomApiNo">Не використовувати користувацький API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
-    <string name="CustomApiInput">Введення вручну</string>
-    <string name="CheckUpdate">Перевірити оновлення</string>
-    <string name="SwitchVersion">Версія Switch</string>
-    <string name="NoUpdate">Оновлення не знайдено</string>
-    <string name="UpdateAvailable">Доступне нове оновлення</string>
+    <string name="CustomApiInput">Ручний ввід</string>
+    <string name="CheckUpdate">Перевірити наявність оновлень</string>
+    <string name="SwitchVersion">Переключити версію</string>
+    <string name="NoUpdate">Оновлення не знайдені</string>
+    <string name="UpdateAvailable">Доступні нові оновлення</string>
     <string name="UpdateUpdate">Оновити</string>
-    <string name="UpdateLater">Пізніше</string>
-    <string name="DownloadFailed">Не вдалося завантажити</string>
-    <string name="Install">Інсталювати</string>
+    <string name="UpdateLater">Потім</string>
+    <string name="DownloadFailed">Збій завантаження</string>
+    <string name="Install">Установити</string>
     <string name="Ignore">Ігнорувати</string>
     <string name="UpdateDownloaded">Оновлення тільки що завантажено.</string>
-    <string name="ProxyAutoSwitch">Автоматичне перемикання проксі</string>
-    <string name="LinkedGroupChat">Пов\'язана група</string>
+    <string name="ProxyAutoSwitch">Авто-перемикання проксі</string>
+    <string name="LinkedGroupChat">Зв\'язана група</string>
     <string name="LinkedChannelChat">Пов\'язаний канал</string>
-    <string name="DevModeTitle">**Ваш обліковий запис Telegram може бути забанений**</string>
-    <string name="DevModeNotice">Ми не несемо відповідальності за будь-яке некоректне використання функцій розробника.</string>
-    <string name="TapToDisable">Торкніться, щоб вимкнути.</string>
+    <string name="DevModeTitle">**Ваш аккаунт в Telegram може бути забанений**</string>
+    <string name="DevModeNotice">Ми не несемо відповідальність за будь-яке некоректне використання функцій розробника.</string>
+    <string name="TapToDisable">Торкніться, щоб вимкнути. Вони вам не потрібні.</string>
     <string name="PlaceHolder">Заповнювач - Вимкнути</string>
     <string name="CustomBackend">Користувацький бекенд</string>
     <string name="CustomBackendNotice">Ця функція надається лише для користувачів експертів, якщо ви не знаєте, що представляють такі параметри, просто проігноруйте їх.</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Додати проксі Vmess</string>
     <string name="AddProxySS">Додати Shadowsocks проксі</string>
     <string name="AddProxySSR">Додати ShadowsocksR проксі</string>
+    <string name="AddProxyTrojan">Додати Proxy Trojan</string>
     <string name="SSPluginConflictingName">Кілька плагінів використовують цей ідентифікатор: %s.</string>
     <string name="EditProxy">Редагувати проксі</string>
     <string name="ShareProxy">Поділитися через проксі</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">Protocol Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyInfoTrojan">Налаштування Trojan Proxy</string>
     <string name="ProxyRemarks">Зауваження</string>
     <string name="RetestPing">Повторне сканування для всіх серверів</string>
     <string name="ReorderByPing">Перевпорядкувати сервери пінг</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">Імпорт приватного ключа</string>
     <string name="ShareMyKey">Поділіться моїм публічним ключем</string>
     <string name="DisableVibration">Вібрація вимкнено</string>
+    <string name="IgnoreContentRestrictions">Ігнорувати обмеження на контент</string>
+    <string name="IgnoreContentRestrictionsNotice">Локально ігнорує обмеження Android щодо повідомлень. Це може бути заборонено сервером у майбутньому, і вам потрібно буде оцінити локальну законність цієї опції самостійно.</string>
+    <string name="SendCommentAfterForward">Відправити коментар після перенаправлення</string>
 </resources>

@@ -94,24 +94,15 @@
     <string name="IgnoreBlockedAbout">그룹에서 차단된 사용자의 메시지를 더 이상 볼 수 없습니다.</string>
     <string name="Donate">기부하기</string>
     <string name="DonateAbout">개발자 지원하기</string>
-    <string name="TranslationAbout">네코그램 언어 번역 도와주기</string>
-    <string name="Translation">네코그램 번역</string>
     <string name="GooglePlay">구글플레이</string>
     <string name="SourceCode">Github 의 소스코드</string>
     <string name="ResetStickerSize">스티커 사이즈 초기화</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">변경된 설정 적용을 위해 앱을 재시작</string>
     <string name="DisableAppBarShadow">제목 표시줄 그림자 비활성화</string>
     <string name="BetaWarning">\"텔레그램\"의 \"베타\" 기능 입니다.</string>
     <string name="MediaPreview">대화목록 에서 미디어 미리보기</string>
     <string name="ProviderYandex">얀덱스 번역</string>
-    <string name="IdType">프로파일 내 채팅ID</string>
-    <string name="IdTypeAbout">텔레그램 API는 그대로의 ID를 사용하지만, 봇 API는 그룹의 시작 부분에 마이너스 (-)를 추가하고 채널 및 수퍼 그룹의 경우 하나의 필드에 맞게 -100을 추가합니다.</string>
-    <string name="IdTypeHidden">숨기기</string>
-    <string name="IdTypeAPI">텔레그램 API</string>
-    <string name="IdTypeBOTAPI">봇 API</string>
     <string name="AutoPauseVideo">비디오 자동 일시정지</string>
     <string name="AutoPauseVideoAbout">락스크린이 백그라운드로 변경될때</string>
     <string name="DisableProximityEvents">근접 이벤트 비활성화</string>
-    <string name="CustomEmojiTypeface">사용자 정의 이모지 폰트</string>
 </resources>

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Zárt</string>
+    <string name="AccDescrChatAttachEnterMenu">Csevegés beviteli menü</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Videofelvétel</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Audiofelvétel</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Letiltja a Linkelőnézetet</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Linkelőnézet engedélyezése</string>
+    <string name="UseChatAttachEnterMenu">Használja a beviteli menüt</string>
+    <string name="UseChatAttachEnterMenuNotice">Változtassa a rögzítés gombot egy beviteli menüre, és adjon hozzá egy linkelőnézeti kapcsolót.</string>
+    <string name="DisableLinkPreviewByDefault">Alapértelmezés szerint tiltsa le a link előnézetét</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Alapértelmezés szerint tiltsa le a link előnézeti kérését a bevitel során, hogy megakadályozza a kiszolgálót abban, hogy tudja, hogy a linket a Telegramon keresztül osztják meg.</string>
     <string name="CustomApi">Egyéni API</string>
     <string name="UseCustomApiNotice">Jelentkezzen be az egyéni api használatával, ha nem tud regisztrálni vagy bejelentkezni, ez segíthet.\n\nMegjegyzés: Az fcm nem fog működni, ha a kiadási verziót használja.</string>
     <string name="CustomApiNo">Ne használjon egyéni API-t</string>
@@ -103,6 +112,7 @@
     <string name="AddProxyVmess">Adja hozzá a Vmess proxyt</string>
     <string name="AddProxySS">Adjon hozzá Shadowsocks Proxy-t</string>
     <string name="AddProxySSR">Adjon hozzá ShadowsocksR Proxy-t</string>
+    <string name="AddProxyTrojan">Adja hozzá az Trojan Proxy-t</string>
     <string name="SSPluginConflictingName">Több plugin használja ezt az azonosítót: %s.</string>
     <string name="EditProxy">Proxy szerkesztése</string>
     <string name="ShareProxy">Proxy megosztása</string>
@@ -126,6 +136,7 @@
     <string name="SSRProtocolParams">Protokollparaméterek</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyInfoTrojan">Tojan Proxy beállítások</string>
     <string name="ProxyRemarks">Megjegyzések</string>
     <string name="RetestPing">Tesztelje újra az összes szerver pingjét</string>
     <string name="ReorderByPing">Rendezze át a szervereket pingeléssel</string>
@@ -176,4 +187,7 @@
     <string name="PGPImportPrivate">Privát kulcs importálása</string>
     <string name="ShareMyKey">Nyilvános kulcs megosztása</string>
     <string name="DisableVibration">Tiltsa le a rezgést</string>
+    <string name="IgnoreContentRestrictions">A tartalmi korlátozások figyelmen kívül hagyása</string>
+    <string name="IgnoreContentRestrictionsNotice">Figyelmen kívül hagyja az üzenetek helyi korlátozását az üzeneteknél. Ezt a jövőben a szerver betilthatja, és Önnek magának kell értékelnie ennek a lehetőségnek a helyi törvényességét.</string>
+    <string name="SendCommentAfterForward">Megjegyzés küldése továbbítás után</string>
 </resources>
