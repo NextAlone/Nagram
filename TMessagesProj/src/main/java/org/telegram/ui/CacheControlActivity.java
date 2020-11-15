@@ -9,7 +9,6 @@
 package org.telegram.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
@@ -19,12 +18,10 @@ import android.transition.Fade;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -551,6 +548,8 @@ public class CacheControlActivity extends BaseFragment {
             progressDialog.showDelayed(500);
             MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
                 try {
+                    TranslateDb.clearAll();
+
                     SQLiteDatabase database = MessagesStorage.getInstance(currentAccount).getDatabase();
                     ArrayList<Long> dialogsToCleanup = new ArrayList<>();
 
@@ -625,8 +624,6 @@ public class CacheControlActivity extends BaseFragment {
                     database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
                     database.executeFast("VACUUM").stepThis().dispose();
                     database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
-
-                    TranslateDb.clearAll();
 
                 } catch (Exception e) {
                     FileLog.e(e);

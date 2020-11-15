@@ -132,7 +132,7 @@
 -dontwarn javax.annotation.**
 
 # Use -keep to explicitly keep any other classes shrinking would remove
-# -dontoptimize
+-dontobfuscate
 
 # https://github.com/osmdroid/osmdroid/issues/633
 -dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck

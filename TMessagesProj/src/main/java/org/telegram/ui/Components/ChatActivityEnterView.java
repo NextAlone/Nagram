@@ -3101,34 +3101,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return false;
     }
 
-    private ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayoutDefault;
-    private ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayoutInput;
-    private ActionBarPopupWindow menuPopupWindowDefault;
-    private ActionBarPopupWindow menuPopupWindowInput;
-    private ActionBarPopupWindow menuPopupWindow;
     private boolean isInInput;
+    private ActionBarPopupWindow menuPopupWindow;
 
     private void onMenuClick(View view) {
         if (parentFragment == null) {
             return;
         }
-        ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayout;
+        ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity);
 
-        if (isInInput) {
-            menuPopupLayout = menuPopupLayoutInput;
-            menuPopupWindow = menuPopupWindowInput;
-        } else {
-            menuPopupLayout = menuPopupLayoutDefault;
-            menuPopupWindow = menuPopupWindowDefault;
-        }
 
-        if (menuPopupLayout == null) {
-            menuPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity);
-            if (isInInput) {
-                menuPopupLayoutInput = menuPopupLayout;
-            } else {
-                menuPopupLayoutDefault = menuPopupLayout;
-            }
             menuPopupLayout.setAnimationEnabled(false);
             menuPopupLayout.setOnTouchListener(new OnTouchListener() {
 
@@ -3304,16 +3286,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             menuPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
             menuPopupWindow.getContentView().setFocusableInTouchMode(true);
 
-            if (isInInput) {
-                menuPopupWindowInput = menuPopupWindow;
-            } else {
-                menuPopupWindowDefault = menuPopupWindow;
-            }
-
             if (delegate != null) {
                 delegate.onSendLongClick();
             }
-        }
+
 
         menuPopupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), MeasureSpec.AT_MOST));
         menuPopupWindow.setFocusable(true);
