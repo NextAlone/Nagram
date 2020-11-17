@@ -44,6 +44,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -101,9 +103,8 @@ import java.util.concurrent.CountDownLatch;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.JalaliCalendar;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
-
-import androidx.annotation.RequiresApi;
 
 public class AlertsCreator {
 
@@ -898,7 +899,7 @@ public class AlertsCreator {
             return;
         }
         long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
-        if (Browser.isInternalUrl(url, null) || !ask) {
+        if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm) {
             Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph);
         } else {
             String urlFinal;

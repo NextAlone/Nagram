@@ -1,20 +1,22 @@
 package tw.nekomimi.nekogram;
 
+import android.util.SparseArray;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Cells.ChatMessageCell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import java.util.HashMap;
 
 public class MessageHelper extends BaseController {
 
@@ -25,20 +27,16 @@ public class MessageHelper extends BaseController {
         super(num);
     }
 
-    public static void resetMessageContent(MessageObject messageObject) {
-        if (messageObject.caption != null) {
-            messageObject.caption = null;
-            messageObject.generateCaption();
-            messageObject.forceUpdate = true;
-        }
-        messageObject.applyNewText();
-        messageObject.resetLayout();
-    }
+    public void resetMessageContent(long dialog_id, MessageObject messageObject) {
+        TLRPC.Message message = messageObject.messageOwner;
+        final SparseArray<TLRPC.User> usersDict = new SparseArray<>();
+        final SparseArray<TLRPC.Chat> chatsDict = new SparseArray<>();
 
-    public static void resetMessageContent(ChatMessageCell chatMessageCell) {
-        chatMessageCell.onAttachedToWindow();
-        chatMessageCell.requestLayout();
-        chatMessageCell.invalidate();
+        MessageObject obj = new MessageObject(currentAccount, message, usersDict, chatsDict, true, true);
+
+        ArrayList<MessageObject> arrayList = new ArrayList<>();
+        arrayList.add(obj);
+        getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, dialog_id, arrayList, false);
     }
 
     public static MessageHelper getInstance(int num) {

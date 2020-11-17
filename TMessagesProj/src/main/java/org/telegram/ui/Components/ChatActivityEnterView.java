@@ -4297,7 +4297,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         isInInput = use;
 
-        if (duration == 0) botButton.setVisibility(use ? View.GONE : View.VISIBLE);
+        if (duration == 0 && (hasBotCommands || botReplyMarkup != null)) {
+            botButton.setVisibility(use ? View.GONE : View.VISIBLE);
+        }
 
         if (use) {
 
@@ -6181,12 +6183,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             setSlowModeButtonVisible(false);
             cancelBotButton.setVisibility(GONE);
             audioVideoButtonContainer.setVisibility(GONE);
-            if (!NekoConfig.useChatAttachMediaMenu) {
                 attachLayout.setVisibility(GONE);
-            } else {
-                checkAttachButton(true, 150);
-                updateFieldRight(1);
-            }
             sendButtonContainer.setVisibility(GONE);
             if (scheduledButton != null) {
                 scheduledButton.setVisibility(GONE);
@@ -6227,7 +6224,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 attachLayout.setScaleX(0.01f);
                 attachLayout.setAlpha(0.0f);
-                if (!NekoConfig.useChatAttachMediaMenu) attachLayout.setVisibility(GONE);
+                attachLayout.setVisibility(GONE);
                 audioVideoButtonContainer.setScaleX(0.1f);
                 audioVideoButtonContainer.setScaleY(0.1f);
                 audioVideoButtonContainer.setAlpha(0.0f);

@@ -1,6 +1,5 @@
 package tw.nekomimi.nekogram.parts
 
-import android.text.TextUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -8,9 +7,7 @@ import kotlinx.coroutines.withContext
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MessageObject
 import org.telegram.tgnet.TLRPC
-import org.telegram.ui.Cells.ChatMessageCell
 import org.telegram.ui.ChatActivity
-import tw.nekomimi.nekogram.MessageHelper
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
@@ -89,24 +86,7 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
             messageObject.messageOwner.translated = false
 
-            MessageHelper.resetMessageContent(messageObject);
-
-            for (index in 0 until chatListView.childCount) {
-
-                val cell = chatListView.getChildAt(index)
-                        .takeIf { it is ChatMessageCell && it.messageObject === messageObject } as ChatMessageCell?
-
-                if (cell != null) {
-
-                    MessageHelper.resetMessageContent(cell);
-
-                    break
-
-                }
-
-            }
-
-            chatAdapter.updateRowWithMessageObject(messageObject, true)
+            messageHelper.resetMessageContent(dialogId, messageObject)
 
         }
 
@@ -132,38 +112,13 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
             val isEnd = i == messages.size - 1
 
-            var messageCell: ChatMessageCell? = null
-
-            for (index in 0 until chatListView.childCount) {
-
-                val cell = chatListView.getChildAt(index)
-                        .takeIf { it is ChatMessageCell && it.messageObject === selectedObject } as ChatMessageCell?
-
-                if (cell != null) {
-
-                    messageCell = cell
-
-                    break
-
-                }
-
-            }
-
             if (selectedObject.translateFinished(target)) {
 
                 withContext(Dispatchers.Main) {
 
                     selectedObject.messageOwner.translated = true
 
-                    MessageHelper.resetMessageContent(selectedObject)
-
-                    messageCell?.also {
-
-                        MessageHelper.resetMessageContent(it)
-
-                    }
-
-                    chatAdapter.updateRowWithMessageObject(selectedObject, true)
+                    messageHelper.resetMessageContent(dialogId, selectedObject)
 
                     if (isEnd) status.dismiss()
 
@@ -299,15 +254,7 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
                     withContext(Dispatchers.Main) {
 
-                        MessageHelper.resetMessageContent(selectedObject)
-
-                        messageCell?.also {
-
-                            MessageHelper.resetMessageContent(it)
-
-                        }
-
-                        chatAdapter.updateRowWithMessageObject(selectedObject, true)
+                        messageHelper.resetMessageContent(dialogId, selectedObject)
 
                         if (isEnd) status.dismiss()
 

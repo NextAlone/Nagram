@@ -764,7 +764,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
-        usePersianCalenderRow = rowCount++;
+        usePersianCalenderRow = -1;
         general2Row = rowCount++;
 
         if (listAdapter != null) {

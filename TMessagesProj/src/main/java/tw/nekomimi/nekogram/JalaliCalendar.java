@@ -12,8 +12,6 @@ public class JalaliCalendar extends Calendar {
 
     public static Calendar mInstance() {
 
-        if (NekoConfig.usePersianCalender) return new JalaliCalendar();
-
         return Calendar.getInstance();
 
     }

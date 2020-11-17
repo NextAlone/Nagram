@@ -1723,8 +1723,7 @@ public class MessageObject {
     }
 
     public void applyNewText() {
-
-        if (StrUtil.isBlank(messageOwner.message) || (messageOwner.translated && StrUtil.isBlank(messageOwner.translatedMessage))) {
+        if (TextUtils.isEmpty(messageOwner.message)) {
             return;
         }
 
@@ -1733,11 +1732,7 @@ public class MessageObject {
             fromUser = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id.user_id);
         }
 
-        if (messageOwner.translated) {
-            messageText = messageOwner.translatedMessage;
-        } else {
             messageText = messageOwner.message;
-        }
 
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
@@ -2707,6 +2702,8 @@ public class MessageObject {
                         }
                     }
                 }
+            } else if (messageOwner.translated) {
+                messageText = messageOwner.translatedMessage;
             } else {
                 messageText = messageOwner.message;
             }
