@@ -236,6 +236,7 @@ import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -4817,8 +4818,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             pinnedListButton = new ImageView(context);
-            pinnedListButton.setImageResource(R.drawable.menu_pinnedlist);
-            pinnedListButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.MULTIPLY));
+            pinnedListButton.setImageResource(R.drawable.baseline_menu_24);
+            pinnedListButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.SRC_IN));
             pinnedListButton.setScaleType(ImageView.ScaleType.CENTER);
             pinnedListButton.setContentDescription(LocaleController.getString("AccPinnedMessagesList", R.string.AccPinnedMessagesList));
             pinnedListButton.setVisibility(View.INVISIBLE);
@@ -4826,10 +4827,47 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedListButton.setScaleX(0.4f);
             pinnedListButton.setScaleY(0.4f);
             if (Build.VERSION.SDK_INT >= 21) {
-                pinnedListButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_inappPlayerClose) & 0x19ffffff));
+                pinnedListButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
             }
             pinnedMessageView.addView(pinnedListButton, LayoutHelper.createFrame(36, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 7, 0));
             pinnedListButton.setOnClickListener(v -> openPinnedMessagesList(false));
+            pinnedListButton.setOnLongClickListener(v -> {
+                if (getParentActivity() == null) {
+                    return false;
+                }
+                boolean allowPin;
+                if (currentChat != null) {
+                    allowPin = ChatObject.canPinMessages(currentChat);
+                } else if (currentEncryptedChat == null) {
+                    if (userInfo != null) {
+                        allowPin = userInfo.can_pin_message;
+                    } else {
+                        allowPin = false;
+                    }
+                } else {
+                    allowPin = false;
+                }
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                if (allowPin) {
+                    builder.addItem(LocaleController.getString("UnpinMessagesAll", R.string.UnpinMessagesAll), R.drawable.deproko_baseline_pin_undo_24, true, c -> {
+                        getMessagesController().unpinAllMessages(currentChat, currentUser);
+                        return Unit.INSTANCE;
+                    });
+                }
+                builder.addItem(LocaleController.getString("DismissForYourself", R.string.DismissForYourself), R.drawable.baseline_close_24, c -> {
+                    SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+                    if (chatInfo != null) {
+                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
+                    } else if (userInfo != null) {
+                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
+                    }
+                    updatePinnedMessageView(true);
+                    return Unit.INSTANCE;
+                });
+                builder.addCancelItem();
+                builder.show();
+                return true;
+            });
 
             closePinned = new ImageView(context);
             closePinned.setImageResource(R.drawable.miniplayer_close);
@@ -4859,33 +4897,29 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     allowPin = false;
                 }
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
                 if (allowPin) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("UnpinMessageAlertTitle", R.string.UnpinMessageAlertTitle));
-                    builder.setMessage(LocaleController.getString("UnpinMessageAlert", R.string.UnpinMessageAlert));
-                    builder.setPositiveButton(LocaleController.getString("UnpinMessage", R.string.UnpinMessage), (dialogInterface, i) -> {
+                    builder.addItem(LocaleController.getString("UnpinMessageX", R.string.UnpinMessageX), R.drawable.deproko_baseline_pin_undo_24, true, c -> {
                         MessageObject messageObject = pinnedMessageObjects.get(currentPinnedMessageId);
                         if (messageObject == null) {
                             messageObject = messagesDict[0].get(currentPinnedMessageId);
                         }
                         unpinMessage(messageObject);
+                        return Unit.INSTANCE;
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setNeutralButton(LocaleController.getString("Hide", R.string.Hide), (dialogInterface, i) -> {
-                        SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                        if (chatInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
-                        } else if (userInfo != null) {
-                            preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
-                        }
-                        updatePinnedMessageView(true);
-                    });
-                    showDialog(builder.create());
-                } else if (!pinnedMessageIds.isEmpty()) {
-                    SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                    preferences.edit().putInt("pin_" + dialog_id, pinnedMessageIds.get(0)).commit();
-                    updatePinnedMessageView(true);
                 }
+                builder.addItem(LocaleController.getString("DismissForYourself", R.string.DismissForYourself), R.drawable.baseline_close_24, c -> {
+                    SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+                    if (chatInfo != null) {
+                        preferences.edit().putInt("pin_" + dialog_id, chatInfo.pinned_msg_id).apply();
+                    } else if (userInfo != null) {
+                        preferences.edit().putInt("pin_" + dialog_id, userInfo.pinned_msg_id).apply();
+                    }
+                    updatePinnedMessageView(true);
+                    return Unit.INSTANCE;
+                });
+                builder.addCancelItem();
+                builder.show();
             });
         }
 
