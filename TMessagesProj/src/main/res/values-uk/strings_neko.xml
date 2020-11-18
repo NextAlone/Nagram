@@ -41,6 +41,8 @@
     <string name="HideProxySponsorChannel">Приховати канал спонсора проксі</string>
     <string name="ViewHistory">Дивитися історію</string>
     <string name="Nya">Мяу!</string>
+    <string name="SaveCacheToExternalFilesDir">Ізоляція сховища</string>
+    <string name="SaveCacheToExternalFilesDirAbout">Збережіть папку \"Telegram\" у специфічному застосунку, щоб підтримувати зв\'язок спільного сховища.</string>
     <string name="SensitiveDisableFiltering">Вимкнути чутливе фільтрування вмісту</string>
     <string name="SensitiveAbout">Показує конфіденційні медіа в публічних каналах на всіх ваших пристроях.</string>
     <string name="StickerSize">Розмір наліпки</string>
@@ -100,4 +102,7 @@
     <string name="BetaWarning">Це **бета** функція, реалізована **Telegram**.</string>
     <string name="MediaPreview">Попередній перегляд медіа у списку діалогових вікон</string>
     <string name="ProviderYandex">Яндекс Перекладач</string>
+    <string name="AutoPauseVideo">Автопауза відео</string>
+    <string name="AutoPauseVideoAbout">Під час блокування екрану/переходу в фон.</string>
+    <string name="DisableProximityEvents">Вимкнути події наближення</string>
 </resources>

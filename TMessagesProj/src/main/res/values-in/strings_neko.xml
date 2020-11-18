@@ -41,6 +41,8 @@
     <string name="HideProxySponsorChannel">Sembunyikan kanal sponsor Proxy</string>
     <string name="ViewHistory">Lihat riwayat</string>
     <string name="Nya">Meong!</string>
+    <string name="SaveCacheToExternalFilesDir">Isolasi penyimpanan</string>
+    <string name="SaveCacheToExternalFilesDirAbout">Simpan folder \"Telegram\" ke direktori khusus aplikasi agar penyimpanan bersama tetap rapi.</string>
     <string name="SensitiveDisableFiltering">Nonaktifkan pemfilteran konten sensitif</string>
     <string name="SensitiveAbout">Tampilkan media sensitif pada kanal publik di semua perangkat anda.</string>
     <string name="StickerSize">Ukuran stiker</string>
@@ -100,4 +102,7 @@
     <string name="BetaWarning">Ini adalah fitur **beta** yang sedang diuji oleh **Telegram**.</string>
     <string name="MediaPreview">Pratinjau media pada daftar obrolan</string>
     <string name="ProviderYandex">Yandex</string>
+    <string name="AutoPauseVideo">Jeda otomatis video</string>
+    <string name="AutoPauseVideoAbout">Saat mengunci layar / beralih ke latar belakang.</string>
+    <string name="DisableProximityEvents">Nonaktifkan acara kedekatan</string>
 </resources>

@@ -41,6 +41,8 @@
     <string name="HideProxySponsorChannel">مخفی کردن کانال حامی پروکسی</string>
     <string name="ViewHistory">مشاهده تاریخچه</string>
     <string name="Nya">میو!</string>
+    <string name="SaveCacheToExternalFilesDir">ایزوله‌سازی ذخیره‌ساز</string>
+    <string name="SaveCacheToExternalFilesDirAbout">برای مرتب نگه داشتن فضای ذخیره سازی مشترک، پوشه‌ی «Telegram» را در پوشه‌ی خاص خود برنامه ذخیره می‌کند.</string>
     <string name="SensitiveDisableFiltering">غیرفعال کردن فیلتر محتوای حساس</string>
     <string name="SensitiveAbout">نمایش محتوا های حساس کانال های عمومی در همه دستگاها.</string>
     <string name="StickerSize">اندازه استیکر</string>
@@ -100,4 +102,7 @@
     <string name="BetaWarning">این یک ویژگی ** آزمایشی ** است که توسط ** تلگرام ** پیاده سازی شده است.</string>
     <string name="MediaPreview">پیش نمایش رسانه در لیست گفتگوها</string>
     <string name="ProviderYandex">مترجم یاندکس</string>
+    <string name="AutoPauseVideo">مکث خودکار ویدئو</string>
+    <string name="AutoPauseVideoAbout">هنگام قفل صفحه/جابجایی به پس زمینه.</string>
+    <string name="DisableProximityEvents">غیرفعال‌سازی رخدادهای مجاورت</string>
 </resources>

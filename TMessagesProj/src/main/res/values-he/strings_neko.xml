@@ -41,6 +41,8 @@
     <string name="HideProxySponsorChannel">הסתר ערוץ חסות פרוקסי</string>
     <string name="ViewHistory">צפה בהיסטוריה</string>
     <string name="Nya">מיאו!</string>
+    <string name="SaveCacheToExternalFilesDir">בידוד אחסון</string>
+    <string name="SaveCacheToExternalFilesDirAbout">שמור את תיקיית \"מברק\" בספריה הספציפית לאפליקציה כדי לשמור על אחסון משותף מסודר.</string>
     <string name="SensitiveDisableFiltering">השבת סינון תוכן רגיש</string>
     <string name="SensitiveAbout">הצג מדיה רגישה בערוצים ציבוריים בכל המכשירים שלך.</string>
     <string name="StickerSize">גודל מדבקה</string>
@@ -100,4 +102,7 @@
     <string name="BetaWarning">זוהי תכונה ** בטא ** המיושמת על ידי ** טלגרם **.</string>
     <string name="MediaPreview">תצוגה מקדימה של מדיה ברשימת הדיאלוג</string>
     <string name="ProviderYandex">Yandex תרגם</string>
+    <string name="AutoPauseVideo">השהה וידאו אוטומטית</string>
+    <string name="AutoPauseVideoAbout">כאשר נעילת מסך / מעבר לרקע.</string>
+    <string name="DisableProximityEvents">השבת אירועי קרבה</string>
 </resources>

@@ -41,6 +41,7 @@
     <string name="HideProxySponsorChannel">إخفاء قناة راعي البروكسي</string>
     <string name="ViewHistory">عرض المحفوظات</string>
     <string name="Nya">ماكيف!</string>
+    <string name="SaveCacheToExternalFilesDir">عزل التخزين</string>
     <string name="SensitiveDisableFiltering">تعطيل تصفية المحتوى الحساسة</string>
     <string name="SensitiveAbout">عرض الوسائط الحساسة في القنوات العامة على جميع أجهزتك.</string>
     <string name="StickerSize">حجم الملصق</string>

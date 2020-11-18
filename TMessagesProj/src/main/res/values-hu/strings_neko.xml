@@ -41,6 +41,8 @@
     <string name="HideProxySponsorChannel">Proxy szponzorcsatorna elrejtése</string>
     <string name="ViewHistory">Előzmények megtekintése</string>
     <string name="Nya">Miaú!</string>
+    <string name="SaveCacheToExternalFilesDir">Tárolási szigetelés</string>
+    <string name="SaveCacheToExternalFilesDirAbout">A megosztott tárolás rendben tartása érdekében mentse a „Távirat” mappát az alkalmazás-specifikus könyvtárba.</string>
     <string name="SensitiveDisableFiltering">Tiltsa le az érzékeny tartalom szűrését</string>
     <string name="SensitiveAbout">Az érzékeny adathordozókat nyilvános csatornákon jelenítse meg minden eszközén.</string>
     <string name="StickerSize">Matrica mérete</string>
@@ -100,4 +102,7 @@
     <string name="BetaWarning">Ez egy **béta** funkció, amelyet a **Telegram** hajtott végre.</string>
     <string name="MediaPreview">Média előnézet a párbeszédpanelen</string>
     <string name="ProviderYandex">Yandex Fordítás</string>
+    <string name="AutoPauseVideo">Videó automatikus szüneteltetése</string>
+    <string name="AutoPauseVideoAbout">Amikor lezárja a képernyőt / váltson háttérre.</string>
+    <string name="DisableProximityEvents">Tiltsa le a közelségi eseményeket</string>
 </resources>
