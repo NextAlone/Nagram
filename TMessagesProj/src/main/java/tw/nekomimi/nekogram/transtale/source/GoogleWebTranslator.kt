@@ -1,25 +1,23 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import android.text.TextUtils
 import cn.hutool.core.util.StrUtil
+import kotlinx.coroutines.delay
 import okhttp3.Request
 import org.json.JSONArray
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
-import tw.nekomimi.nekogram.NekoXPushService
 import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.utils.HttpUtil
 import tw.nekomimi.nekogram.utils.applyUserAgent
-import java.util.*
 import java.util.regex.Pattern
 
 object GoogleWebTranslator : Translator {
 
     lateinit var tkk: LongArray
 
-    override fun doTranslate(from: String, to: String, query: String): String {
+    override suspend fun doTranslate(from: String, to: String, query: String): String {
 
         if (NekoConfig.translationProvider != 2 && StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)) return GoogleCloudTranslator.doTranslate(from, to, query)
 
@@ -29,37 +27,49 @@ object GoogleWebTranslator : Translator {
 
         }
 
-        if (!GoogleWebTranslator::tkk.isInitialized) {
+        for (index in 0 until 4) {
 
-            val url = "https://translate.google." + if (NekoConfig.translationProvider == 2) "cn" else "com"
+            if (!GoogleWebTranslator::tkk.isInitialized) {
 
-            val response = runCatching {
-                (if (NekoConfig.translationProvider == 2) HttpUtil.okHttpClientNoDoh else HttpUtil.okHttpClient).newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
-            }.recoverCatching {
-                HttpUtil.okHttpClientWithCurrProxy.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
-            }.getOrThrow()
+                val url = "https://translate.google." + if (NekoConfig.translationProvider == 2) "cn" else "com"
 
-            if (response.code != 200) {
+                val response = runCatching {
+                    (if (NekoConfig.translationProvider == 2) HttpUtil.okHttpClientNoDoh else HttpUtil.okHttpClient).newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+                }.recoverCatching {
+                    HttpUtil.okHttpClientWithCurrProxy.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
+                }.getOrThrow()
 
-                error("HTTP ${response.code} : ${response.body?.string()}")
+                if (response.code != 200) {
+
+                    error("HTTP ${response.code} : ${response.body?.string()}")
+
+                }
+
+                val html = response.body?.string()
+
+                if (html.isNullOrBlank()) {
+
+                    error("Tkk init failed")
+
+                }
+
+                val matcher = Pattern.compile("tkk\\s*[:=]\\s*['\"]([0-9]+)\\.([0-9]+)['\"]", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE).matcher(html)
+
+                tkk = if (matcher.find() && matcher.group(1) != null && matcher.group(2) != null) {
+                    longArrayOf(matcher.group(1).toLong(), matcher.group(2).toLong())
+                } else {
+                    delay(1000L)
+                    continue
+                }
+
+                break
 
             }
-
-            val html = response.body?.string()
-
-            if (html.isNullOrBlank()) {
-
-                error("Tkk init failed")
-
-            }
-
-            val matcher = Pattern.compile("tkk\\s*[:=]\\s*['\"]([0-9]+)\\.([0-9]+)['\"]", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE).matcher(html)
-
-            tkk = if (matcher.find() && matcher.group(1) != null && matcher.group(2) != null) {
-                longArrayOf(matcher.group(1).toLong(), matcher.group(2).toLong())
-            } else error("Tkk match failed")
 
         }
+
+        if (!GoogleWebTranslator::tkk.isInitialized) error("Tkk match failed")
+
 
         val tk = TransUtils.signWeb(query, tkk[0], tkk[1])
 

@@ -4878,7 +4878,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 closePinned.setVisibility(View.GONE);
             }
             if (Build.VERSION.SDK_INT >= 21) {
-                closePinned.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_inappPlayerClose) & 0x19ffffff, 1, AndroidUtilities.dp(14)));
+                closePinned.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(14)));
             }
             pinnedMessageView.addView(closePinned, LayoutHelper.createFrame(36, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 2, 0));
             closePinned.setOnClickListener(v -> {

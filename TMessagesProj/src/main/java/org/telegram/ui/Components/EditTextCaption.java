@@ -45,14 +45,14 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 
+import java.util.List;
+
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-
-import java.util.List;
 
 public class EditTextCaption extends EditTextBoldCursor {
 
@@ -496,6 +496,9 @@ public class EditTextCaption extends EditTextBoldCursor {
             return true;
         } else if (itemId == R.id.menu_link) {
             makeSelectedUrl();
+            return true;
+        } else if (itemId == R.id.menu_mention) {
+            makeSelectedMention();
             return true;
         } else if (itemId == R.id.menu_strike) {
             makeSelectedStrike();

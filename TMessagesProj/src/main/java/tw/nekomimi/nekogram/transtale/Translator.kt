@@ -7,10 +7,10 @@ import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.PopupBuilder
 import tw.nekomimi.nekogram.transtale.source.GoogleWebTranslator
 import tw.nekomimi.nekogram.transtale.source.LingoTranslator
 import tw.nekomimi.nekogram.transtale.source.YandexTranslator
-import tw.nekomimi.nekogram.PopupBuilder
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
@@ -50,17 +50,16 @@ val String.transDbByCode by receive<String, TranslateDb> { code2Locale.transDb }
 
 interface Translator {
 
-    fun doTranslate(from: String, to: String, query: String): String
+    suspend fun doTranslate(from: String, to: String, query: String): String
 
     companion object {
 
         @Throws(Exception::class)
-        @JvmStatic
-        fun translate(query: String) = translate(NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale, query)
+        suspend fun translate(query: String) = translate(NekoConfig.translateToLang?.code2Locale
+                ?: LocaleController.getInstance().currentLocale, query)
 
         @Throws(Exception::class)
-        @JvmStatic
-        fun translate(to: Locale, query: String): String {
+        suspend fun translate(to: Locale, query: String): String {
 
             var toLang = to.language
 
@@ -173,7 +172,7 @@ interface Translator {
         @JvmOverloads
         fun translate(to: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale, query: String, translateCallBack: TranslateCallBack) {
 
-            UIUtil.runOnIoDispatcher(Runnable {
+            UIUtil.runOnIoDispatcher {
 
                 runCatching {
 
@@ -191,7 +190,7 @@ interface Translator {
 
                 }
 
-            })
+            }
 
         }
 

@@ -4,7 +4,6 @@ import cn.hutool.core.lang.UUID
 import okhttp3.FormBody
 import okhttp3.Request
 import org.json.JSONObject
-import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.utils.HttpUtil
 import tw.nekomimi.nekogram.utils.applyUserAgent
@@ -13,7 +12,7 @@ object YandexTranslator : Translator {
 
     val uuid = UUID.fastUUID().toString(true)
 
-    override fun doTranslate(from: String, to: String, query: String): String {
+    override suspend fun doTranslate(from: String, to: String, query: String): String {
 
         val uuid2 = UUID.fastUUID().toString(true)
 

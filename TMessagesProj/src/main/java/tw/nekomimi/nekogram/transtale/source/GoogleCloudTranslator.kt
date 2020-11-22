@@ -12,7 +12,7 @@ import tw.nekomimi.nekogram.utils.HttpUtil
 
 object GoogleCloudTranslator : Translator {
 
-    override fun doTranslate(from: String, to: String, query: String): String {
+    override suspend fun doTranslate(from: String, to: String, query: String): String {
 
         if (to !in targetLanguages) {
 

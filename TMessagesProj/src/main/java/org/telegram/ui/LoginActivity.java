@@ -921,17 +921,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         Locale current = ConfigurationCompat.getLocales(getParentActivity().getResources().getConfiguration()).get(0);
 
-        boolean disableAdvOptions = !NekoXConfig.developerMode && "cn".equals(current.getCountry().toLowerCase());
-
-        if (!disableAdvOptions) {
-            otherItem.addSubItem(4, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
-        }
-
+        otherItem.addSubItem(4, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
         otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
-
-        if (!disableAdvOptions) {
-            otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
-        }
+        otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
         actionBar.setAllowOverlayTitle(true);
         doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));

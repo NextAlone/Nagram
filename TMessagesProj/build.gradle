@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def verName = "7.2.1-rc08"
-def verCode = 115
+def verName = "7.2.1-rc09"
+def verCode = 116
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -225,6 +225,7 @@ android {
             debuggable true
             jniDebuggable true
             multiDexEnabled true
+            zipAlignEnabled true
         }
 
         releaseNoGcm {
@@ -233,6 +234,7 @@ android {
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
             signingConfig signingConfigs.release
@@ -245,6 +247,7 @@ android {
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
             signingConfig signingConfigs.release
@@ -256,6 +259,7 @@ android {
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
         }
