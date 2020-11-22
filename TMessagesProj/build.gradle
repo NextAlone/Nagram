@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 def verName = "7.2.1-rc09"
 def verCode = 116
@@ -222,10 +221,12 @@ android {
 
     buildTypes {
         debug {
+            isDefault true
             debuggable true
-            jniDebuggable true
+            jniDebuggable false
             multiDexEnabled true
             zipAlignEnabled true
+            signingConfig signingConfigs.release
         }
 
         releaseNoGcm {
@@ -241,7 +242,6 @@ android {
         }
 
         release {
-            isDefault true
             debuggable false
             jniDebuggable false
             minifyEnabled true

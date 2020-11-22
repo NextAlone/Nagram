@@ -3111,183 +3111,183 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity);
 
 
-            menuPopupLayout.setAnimationEnabled(false);
-            menuPopupLayout.setOnTouchListener(new OnTouchListener() {
+        menuPopupLayout.setAnimationEnabled(false);
+        menuPopupLayout.setOnTouchListener(new OnTouchListener() {
 
-                private android.graphics.Rect popupRect = new android.graphics.Rect();
+            private android.graphics.Rect popupRect = new android.graphics.Rect();
 
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                            v.getHitRect(popupRect);
-                            if (!popupRect.contains((int) event.getX(), (int) event.getY())) {
-                                menuPopupWindow.dismiss();
-                            }
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        v.getHitRect(popupRect);
+                        if (!popupRect.contains((int) event.getX(), (int) event.getY())) {
+                            menuPopupWindow.dismiss();
                         }
                     }
-                    return false;
                 }
+                return false;
+            }
+        });
+
+        int a = 0;
+
+        ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
+
+        if (!isInInput) {
+
+            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.input_mic);
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+
+                if (parentFragment != null) {
+                    TLRPC.Chat chat = parentFragment.getCurrentChat();
+                    if (chat != null && !ChatObject.canSendMedia(chat)) {
+                        delegate.needShowMediaBanHint();
+                        return;
+                    }
+                }
+
+                videoSendButton.setTag(null);
+                recordAudioVideoRunnable.run();
+                recordCircle.sendButtonVisible = true;
+                startLockTransition(false);
             });
 
-            int a = 0;
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
 
-            ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext());
+            cell = new ActionBarMenuSubItem(getContext());
 
-            if (!isInInput) {
-
-                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.input_mic);
-                cell.setOnClickListener(v -> {
-                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                        menuPopupWindow.dismiss();
-                    }
-
-                    if (parentFragment != null) {
-                        TLRPC.Chat chat = parentFragment.getCurrentChat();
-                        if (chat != null && !ChatObject.canSendMedia(chat)) {
-                            delegate.needShowMediaBanHint();
-                            return;
-                        }
-                    }
-
-                    videoSendButton.setTag(null);
-                    recordAudioVideoRunnable.run();
-                    recordCircle.sendButtonVisible = true;
-                    startLockTransition(false);
-                });
-
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
-                cell = new ActionBarMenuSubItem(getContext());
-
-                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
-                cell.setOnClickListener(v -> {
-                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                        menuPopupWindow.dismiss();
-                    }
-
-                    if (parentFragment != null) {
-                        TLRPC.Chat chat = parentFragment.getCurrentChat();
-                        if (chat != null && !ChatObject.canSendMedia(chat)) {
-                            delegate.needShowMediaBanHint();
-                            return;
-                        }
-                    }
-
-                    videoSendButton.setTag(1);
-                    recordAudioVideoRunnable.run();
-                    recordCircle.sendButtonVisible = true;
-                    startLockTransition(false);
-
-                });
-
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
-            } else {
-
-                if (StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
-
-                    cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
-                    cell.setOnClickListener(v -> {
-                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                            menuPopupWindow.dismiss();
-                        }
-                        signComment(true);
-
-                    });
-                    cell.setOnLongClickListener(v -> {
-                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                            menuPopupWindow.dismiss();
-                        }
-                        signComment(false);
-                        return true;
-                    });
-                    cell.setMinimumWidth(AndroidUtilities.dp(196));
-                    menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
-                    cell = new ActionBarMenuSubItem(getContext());
-
+            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
                 }
 
-                TLRPC.Chat chat = parentFragment.getCurrentChat();
-                TLRPC.User user = parentFragment.getCurrentUser();
-
-                int chatId;
-                if (chat != null) {
-                    chatId = chat.id;
-                } else if (user != null) {
-                    chatId = user.id;
-                } else {
-                    chatId = -1;
+                if (parentFragment != null) {
+                    TLRPC.Chat chat = parentFragment.getCurrentChat();
+                    if (chat != null && !ChatObject.canSendMedia(chat)) {
+                        delegate.needShowMediaBanHint();
+                        return;
+                    }
                 }
 
-                cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                videoSendButton.setTag(1);
+                recordAudioVideoRunnable.run();
+                recordCircle.sendButtonVisible = true;
+                startLockTransition(false);
+
+            });
+
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+        } else {
+
+            if (StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+
+                cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
                 cell.setOnClickListener(v -> {
                     if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                         menuPopupWindow.dismiss();
                     }
-                    translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
+                    signComment(true);
+
                 });
-                ActionBarMenuSubItem finalCell = cell;
                 cell.setOnLongClickListener(v -> {
-                    Translator.showTargetLangSelect(finalCell, true, (locale) -> {
-                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                            menuPopupWindow.dismiss();
-                        }
-                        translateComment(locale);
-                        TranslateDb.saveChatLanguage(chatId, locale);
-                        return Unit.INSTANCE;
-                    });
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        menuPopupWindow.dismiss();
+                    }
+                    signComment(false);
                     return true;
                 });
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
                 menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
 
-            }
-
-            int dlps = delegate.getDisableLinkPreviewStatus();
-            if (dlps > 0) {
                 cell = new ActionBarMenuSubItem(getContext());
 
-                cell.setTextAndIcon(dlps != 1 ?
-                        LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
-                        LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
+            }
 
-                ActionBarMenuSubItem finalCell = cell;
-                cell.setOnClickListener(v -> {
+            TLRPC.Chat chat = parentFragment.getCurrentChat();
+            TLRPC.User user = parentFragment.getCurrentUser();
+
+            int chatId;
+            if (chat != null) {
+                chatId = chat.id;
+            } else if (user != null) {
+                chatId = user.id;
+            } else {
+                chatId = -1;
+            }
+
+            cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+                translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang)));
+            });
+            ActionBarMenuSubItem finalCell = cell;
+            cell.setOnLongClickListener(v -> {
+                Translator.showTargetLangSelect(finalCell, true, (locale) -> {
                     if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                         menuPopupWindow.dismiss();
                     }
-
-                    delegate.toggleDisableLinkPreview();
-                    messageWebPageSearch = delegate.getDisableLinkPreviewStatus() == 1;
-
-                    finalCell.setTextAndIcon(delegate.getDisableLinkPreviewStatus() != 1 ?
-                            LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
-                            LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
-
+                    translateComment(locale);
+                    TranslateDb.saveChatLanguage(chatId, locale);
+                    return Unit.INSTANCE;
                 });
+                return true;
+            });
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
 
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-            }
+        }
 
-            menuPopupLayout.setupRadialSelectors(Theme.getColor(Theme.key_dialogButtonSelector));
+        int dlps = delegate.getDisableLinkPreviewStatus();
+        if (dlps > 0) {
+            cell = new ActionBarMenuSubItem(getContext());
 
-            menuPopupWindow = new ActionBarPopupWindow(menuPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
-            menuPopupWindow.setAnimationEnabled(false);
-            menuPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
-            menuPopupWindow.setOutsideTouchable(true);
-            menuPopupWindow.setClippingEnabled(true);
-            menuPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
-            menuPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
-            menuPopupWindow.getContentView().setFocusableInTouchMode(true);
+            cell.setTextAndIcon(dlps != 1 ?
+                    LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
+                    LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
 
-            if (delegate != null) {
-                delegate.onSendLongClick();
-            }
+            ActionBarMenuSubItem finalCell = cell;
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+
+                delegate.toggleDisableLinkPreview();
+                messageWebPageSearch = delegate.getDisableLinkPreviewStatus() == 1;
+
+                finalCell.setTextAndIcon(delegate.getDisableLinkPreviewStatus() != 1 ?
+                        LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
+                        LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
+
+            });
+
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+        }
+
+        menuPopupLayout.setupRadialSelectors(Theme.getColor(Theme.key_dialogButtonSelector));
+
+        menuPopupWindow = new ActionBarPopupWindow(menuPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
+        menuPopupWindow.setAnimationEnabled(false);
+        menuPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
+        menuPopupWindow.setOutsideTouchable(true);
+        menuPopupWindow.setClippingEnabled(true);
+        menuPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
+        menuPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        menuPopupWindow.getContentView().setFocusableInTouchMode(true);
+
+        if (delegate != null) {
+            delegate.onSendLongClick();
+        }
 
 
         menuPopupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), MeasureSpec.AT_MOST));
@@ -4296,8 +4296,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         isInInput = use;
 
-        if (duration == 0 && checkBotButton()) {
-            botButton.setVisibility(use ? View.GONE : View.VISIBLE);
+        if (duration == 0 && botButton != null) {
+            if (use) {
+                botButton.setVisibility(View.GONE);
+            } else if (checkBotButton()) {
+                updateBotButton();
+            }
         }
 
         if (use) {
@@ -4721,7 +4725,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 0.1f));
                             animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 0.1f));
                             animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 0.0f));
-                        } else if (audioVideoButtonContainer.getVisibility() == VISIBLE) {
+                        }
+                        if (audioVideoButtonContainer.getVisibility() == VISIBLE) {
                             animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_X, 0.1f));
                             animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.SCALE_Y, 0.1f));
                             animators.add(ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 0.0f));
@@ -4896,7 +4901,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                         } else {
                             checkAttachButton(true, 150);
-                            updateFieldRight(1);
                         }
                     }
 
@@ -4952,6 +4956,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(runningAnimation)) {
+                                if (NekoConfig.useChatAttachMediaMenu && botButton != null) {
+                                    botButton.setVisibility(View.GONE);
+                                    updateFieldRight(1);
+                                }
                                 if (caption != null) {
                                     cancelBotButton.setVisibility(VISIBLE);
                                     sendButton.setVisibility(GONE);
@@ -5233,7 +5241,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             scheduledButton.setTranslationX(0);
                         }
                     }
-                    if (checkBotButton()) {
+                    if (NekoConfig.useChatAttachMediaMenu && checkBotButton()) {
                         animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f));
                         animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f));
                         animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 1f));
@@ -5245,6 +5253,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(runningAnimation2)) {
                                 runningAnimation2 = null;
+                            }
+                            if (NekoConfig.useChatAttachMediaMenu && checkBotButton()) {
+                                updateBotButton();
+                                updateFieldRight(1);
                             }
                         }
 
@@ -6190,7 +6202,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             setSlowModeButtonVisible(false);
             cancelBotButton.setVisibility(GONE);
             audioVideoButtonContainer.setVisibility(GONE);
-                attachLayout.setVisibility(GONE);
+            attachLayout.setVisibility(GONE);
             sendButtonContainer.setVisibility(GONE);
             if (scheduledButton != null) {
                 scheduledButton.setVisibility(GONE);
@@ -6580,7 +6592,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         botCount = count;
         if (hasBotCommands != hasCommands) {
             hasBotCommands = hasCommands;
-            updateBotButton();
+            if (!hasText()) updateBotButton();
         }
     }
 
