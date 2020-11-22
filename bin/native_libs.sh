@@ -12,8 +12,8 @@ if [ ! -x "$(command -v go)" ]; then
   #
   #  fi
   #
-  #  gvm install go1.15 -B
-  #  gvm use go1.15 --default
+  #  gvm install go1.15.5 -B
+  #  gvm use go1.15.5 --default
 
   echo "install golang please!"
 

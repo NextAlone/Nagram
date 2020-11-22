@@ -1,6 +1,6 @@
 #!/bin/bash
 
-V2RAY_CORE_VERSION="4.32.1"
+V2RAY_CORE_VERSION="4.33.0"
 
 if [ ! -x "$(command -v go)" ]; then
 
@@ -12,8 +12,8 @@ if [ ! -x "$(command -v go)" ]; then
   #
   #  fi
   #
-  #  gvm install go1.15.4 -B
-  #  gvm use go1.15.4 --default
+  #  gvm install go1.15.5 -B
+  #  gvm use go1.15.5 --default
 
   echo "install golang please!"
 
@@ -51,12 +51,28 @@ rm -rf TMessagesProj/libs/*.aar
   ./gradlew ssr-libev:assembleRelease &&
   cp ssr-libev/build/outputs/aar/* TMessagesProj/libs &&
   cd TMessagesProj/libs &&
-  go get -v golang.org/x/mobile/cmd/... &&
-  v2rayCore="$(go env GOPATH)/src/v2ray.com/core" &&
-  rm -rf "$v2rayCore" &&
-  mkdir -p "$v2rayCore" &&
-  git clone https://github.com/v2fly/v2ray-core.git "$v2rayCore" -b "v$V2RAY_CORE_VERSION" &&
-  go get -d github.com/2dust/AndroidLibV2rayLite &&
+  go get -v golang.org/x/mobile/cmd/...
+
+v2rayCore="$(go env GOPATH)/src/v2ray.com/core"
+
+if [ ! -d "$v2rayCore" ]; then
+
+  mkdir -p "$v2rayCore"
+  git clone https://github.com/v2fly/v2ray-core.git "$v2rayCore" -b "v$V2RAY_CORE_VERSION"
+  cd "$v2rayCore"
+
+else
+
+  cd "$v2rayCore"
+  git fetch origin "v$V2RAY_CORE_VERSION"
+  git reset "v$V2RAY_CORE_VERSION" --hard
+
+fi
+
+go mod download
+cd "$OLDPWD"
+
+go get -d github.com/2dust/AndroidLibV2rayLite &&
   gomobile init &&
   gomobile bind -v -ldflags='-s -w' github.com/2dust/AndroidLibV2rayLite &&
   rm *-sources.jar &&
