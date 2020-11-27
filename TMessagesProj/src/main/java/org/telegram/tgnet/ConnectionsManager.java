@@ -690,6 +690,8 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setLayer(int currentAccount, int layer);
 
+    public static native void native_moveToDatacenter(int currentAccount, int datacenterId);
+
     public static native int native_getConnectionState(int currentAccount);
 
     public static native void native_setUserId(int currentAccount, int id);

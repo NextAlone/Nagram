@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.utils
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
@@ -349,13 +350,13 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun showQrDialog(ctx: Context, text: String) {
+    fun showQrDialog(ctx: Context, text: String): AlertDialog {
 
         val code = createQRCode(text)
 
         ctx.setTheme(R.style.Theme_TMessages)
 
-        android.app.AlertDialog.Builder(ctx).setView(LinearLayout(ctx).apply {
+        return AlertDialog.Builder(ctx).setView(LinearLayout(ctx).apply {
 
             addView(LinearLayout(ctx).apply {
 
@@ -461,27 +462,29 @@ object ProxyUtil {
     @JvmStatic
     fun tryReadQR(ctx: Activity, bitmap: Bitmap) {
 
-        val intArray = IntArray(bitmap.getWidth() * bitmap.getHeight())
-        bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
-        val source = RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray)
+        val intArray = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(intArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        val source = RGBLuminanceSource(bitmap.width, bitmap.height, intArray)
 
         try {
 
-            val result = qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)))
-
-            if (result == null || result.text.isBlank()) {
-
-                AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
-
-            } else {
-
-                showLinkAlert(ctx, result.text)
-
+            val result = try {
+                qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)))
+            } catch (e: NotFoundException) {
+                qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source.invert())))
             }
+
+            showLinkAlert(ctx, result.text)
+
+           val intArr =  arrayListOf<Int>().toIntArray()
 
         } catch (ex: NoSuchMethodError) {
 
             AlertUtil.showSimpleAlert(ctx, "很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
+
+        } catch (e: Throwable) {
+
+            AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
 
         }
 
@@ -495,7 +498,7 @@ object ProxyUtil {
         var isUrl = false
 
         runCatching {
-            text.toHttpUrlOrNull()!!
+            text.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
             if (Browser.isInternalUrl(text, booleanArrayOf(false))) {
                 Browser.openUrl(ctx, text)
                 return

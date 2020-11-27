@@ -12144,6 +12144,11 @@ public class MessagesController extends BaseController implements NotificationCe
                     updatesOnMainThread = new ArrayList<>();
                 }
                 updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof  TLRPC.TL_updateLoginToken) {
+                if (updatesOnMainThread == null) {
+                    updatesOnMainThread = new ArrayList<>();
+                }
+                updatesOnMainThread.add(baseUpdate);
             }
         }
         if (messages != null) {
@@ -12688,6 +12693,8 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else if (baseUpdate instanceof TLRPC.TL_updateReadChannelDiscussionOutbox) {
                         TLRPC.TL_updateReadChannelDiscussionOutbox update = (TLRPC.TL_updateReadChannelDiscussionOutbox) baseUpdate;
                         getNotificationCenter().postNotificationName(NotificationCenter.threadMessagesRead, (long) -update.channel_id, update.top_msg_id, 0, update.read_max_id);
+                    } else if (baseUpdate instanceof  TLRPC.TL_updateLoginToken) {
+                        getNotificationCenter().postNotificationName(NotificationCenter.updateLoginToken);
                     }
                 }
                 if (editor != null) {

@@ -32,6 +32,7 @@ import android.os.Parcelable;
 import android.os.StatFs;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
+import android.se.omapi.Session;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.ActionMode;
@@ -119,6 +120,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
+import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 import java.io.File;
@@ -129,7 +131,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kotlin.Unit;
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -2472,11 +2476,47 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             return;
         } else if (loginToken != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-            builder.setTitle(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient));
-            builder.setMessage(LocaleController.getString("AuthAnotherClientUrl", R.string.AuthAnotherClientUrl));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            showAlertDialog(builder);
+            BottomBuilder builder = new BottomBuilder(this);
+            builder.addTitle(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan), LocaleController.getString("QRLoginNotice",R.string.QRLoginNotice));
+            builder.addItem(LocaleController.getString("QRLoginConfirm", R.string.QRLoginConfirm), R.drawable.baseline_security_24, true, (c) -> {
+                AlertDialog progressDialog = new AlertDialog(this, 3);
+                progressDialog.setCanCacnel(false);
+                progressDialog.show();
+                byte[] token = Base64.decode(loginToken, Base64.URL_SAFE);
+                TLRPC.TL_auth_acceptLoginToken req = new TLRPC.TL_auth_acceptLoginToken();
+                req.token = token;
+                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                    try {
+                        progressDialog.dismiss();
+                    } catch (Exception ignore) {
+                    }
+                    if (response instanceof TLRPC.TL_authorization) {
+                        SessionsActivity fragment = new SessionsActivity(0);
+                        fragment.newAuthorizationToOpen = (TLRPC.TL_authorization) response;
+                        presentFragment(fragment, false, false);
+                        if (AndroidUtilities.isTablet()) {
+                            actionBarLayout.showLastFragment();
+                            rightActionBarLayout.showLastFragment();
+                            drawerLayoutContainer.setAllowOpenDrawer(false, false);
+                        } else {
+                            drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                        }
+                    } else {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            final String text;
+                            if (error.text.equals("AUTH_TOKEN_EXCEPTION")) {
+                                text = LocaleController.getString("AccountAlreadyLoggedIn", R.string.AccountAlreadyLoggedIn);
+                            } else {
+                                text = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text;
+                            }
+                            AlertUtil.showSimpleAlert(this,  LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), text);
+                        });
+                    }
+                }));
+                return Unit.INSTANCE;
+            });
+            builder.addCancelItem();
+            builder.show();
             return;
         }
         final AlertDialog progressDialog = new AlertDialog(this, 3);

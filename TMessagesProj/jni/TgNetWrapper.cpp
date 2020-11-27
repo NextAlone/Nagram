@@ -195,6 +195,12 @@ void setLayer(JNIEnv *env, jclass c, jint instanceNum, jint layer) {
 
 }
 
+void moveToDatacenter(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId) {
+
+    ConnectionsManager::getInstance(instanceNum).moveToDatacenter((uint32_t) datacenterId);
+
+}
+
 void saveDatacenters(JNIEnv *env, jclass c,jint instanceNum) {
 
     ConnectionsManager::getInstance(instanceNum).saveDatacenters();
@@ -478,6 +484,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_setDatacenterAddress", "(IILjava/lang/String;Ljava/lang/String;I)V", (void *) setDatacenterAddress},
         {"native_saveDatacenters", "(I)V", (void *) saveDatacenters},
         {"native_setLayer", "(II)V", (void *) setLayer},
+        {"native_moveToDatacenter", "(II)V", (void *) moveToDatacenter},
         {"native_setProxySettings", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *) setProxySettings},
         {"native_getConnectionState", "(I)I", (void *) getConnectionState},
         {"native_setUserId", "(II)V", (void *) setUserId},

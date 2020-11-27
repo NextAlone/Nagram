@@ -2189,7 +2189,7 @@ Telegram 团队</string>
 <string name="ConvertGroupAlert">此操作是不可逆的。超级群组不可能降级为普通群组。</string>
 <string name="EventLogDeletedMessages">un1 删除了这条消息：</string>
 <string name="KMetersAway">千米以外</string>
-<string name="AuthAnotherClient">通过二维码登录</string>
+<string name="QRLoginConfirm">通过二维码登录</string>
 <string name="VideoMessagesAutodownload">视频消息</string>
 <string name="NotificationMessageStickerEmoji">%1$s 给您发送了一个 %2$s 表情</string>
 <string name="StickersArchivedInfo">%1$s 已移动到您的归档中。</string>

@@ -13,7 +13,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -25,7 +24,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -35,14 +33,15 @@ import android.widget.TextView;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -63,7 +62,6 @@ import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 @TargetApi(18)
@@ -89,7 +87,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     //private BarcodeDetector visionQrReader;
 
     private boolean needGalleryButton;
-    private  boolean any;
+    private boolean any;
 
     private int currentType;
 
@@ -664,21 +662,27 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     text = null;
                 }
             } else {*/
-                LuminanceSource source;
-                if (bitmap != null) {
-                    int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
-                    bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-                    source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
-                } else {
-                    source = new PlanarYUVLuminanceSource(data, size.getWidth(), size.getHeight(), x, y, side, side, false);
-                }
-
-                Result result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
-                if (result == null) {
-                    onNoQrFound();
-                    return null;
-                }
-                text = result.getText();
+            LuminanceSource source;
+            if (bitmap != null) {
+                int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
+                bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+                source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
+            } else {
+                source = new PlanarYUVLuminanceSource(data, size.getWidth(), size.getHeight(), x, y, side, side, false);
+            }
+            Result result = null;
+            try {
+                result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+            } catch (NotFoundException e) {
+                try {
+                    result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source.invert())));
+                } catch (NotFoundException ignore) {}
+            }
+            if (result == null) {
+                onNoQrFound();
+                return null;
+            }
+            text = result.getText();
             //}
             if (TextUtils.isEmpty(text)) {
                 onNoQrFound();
@@ -692,11 +696,6 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 }
                 Uri uri = Uri.parse(text);
                 String path = uri.getPath().replace("/", "");
-            } else {
-                if (!text.startsWith("tg://login?token=")) {
-                    onNoQrFound();
-                    return null;
-                }
             }
             return text;
         } catch (Throwable ignore) {

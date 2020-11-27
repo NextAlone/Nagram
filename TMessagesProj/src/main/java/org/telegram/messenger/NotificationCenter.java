@@ -204,6 +204,8 @@ public class NotificationCenter {
     // custom
 
     public static final int updateUserStatus = totalEvents++;
+    public static final int updateLoginToken = totalEvents++;
+
 
     private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();

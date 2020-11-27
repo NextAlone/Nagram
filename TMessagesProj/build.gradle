@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.2.1"
-def verCode = 117
+def verName = "7.2.1.1"
+def verCode = 118
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 

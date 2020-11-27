@@ -1137,7 +1137,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         public Builder setMessage(CharSequence message) {
-            alertDialog.message = message;
+            alertDialog.message = message instanceof  String ? AndroidUtilities.replaceTags((String) message) : message;
             return this;
         }
 

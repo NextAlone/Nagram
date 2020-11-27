@@ -252,6 +252,8 @@
     <string name="UnpinMessageX">Unpin message</string>
     <string name="UnpinMessagesAll">Unpin all messages</string>
     <string name="DismissForYourself">Dismiss for yourself</string>
-
+    <string name="ImportLogin">QR Login</string>
+    <string name="QRLoginNotice">This QR code / link allows someone to log in to your Telegram account. Is this your own operation?</string>
+    <string name="QRLoginConfirm">Confirm Login</string>
 
 </resources>

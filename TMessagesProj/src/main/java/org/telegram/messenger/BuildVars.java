@@ -16,7 +16,7 @@ import android.content.pm.PackageManager;
 @SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
-    public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.VERSION_NAME.contains("preview");
+    public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean LOGS_ENABLED;
     public static boolean USE_CLOUD_STRINGS = true;

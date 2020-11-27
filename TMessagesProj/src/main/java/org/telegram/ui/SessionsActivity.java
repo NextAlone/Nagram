@@ -112,6 +112,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.newSessionReceived);
     }
 
+    TLRPC.TL_authorization newAuthorizationToOpen;
+
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -419,6 +421,10 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
             };
             frameLayout.addView(undoView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
+        }
+
+        if (newAuthorizationToOpen != null) {
+            AndroidUtilities.runOnUIThread(() -> undoView.showWithAction(0, UndoView.ACTION_QR_SESSION_ACCEPTED, newAuthorizationToOpen), 3000L);
         }
 
         return fragmentView;

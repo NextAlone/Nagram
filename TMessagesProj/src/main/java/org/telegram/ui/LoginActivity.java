@@ -135,6 +135,7 @@ import tw.nekomimi.nekogram.EditTextAutoFill;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.PKCS1Pub;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 @SuppressLint("HardwareIds")
@@ -277,6 +278,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private int menu_other = 5;
     private int menu_custom_api = 6;
     private int menu_custom_dc = 7;
+    private int menu_qr_login = 8;
+
+    TLRPC.TL_auth_exportLoginToken exportLoginTokenRequest = null;
+    AlertDialog exportLoginTokenProgress = null;
+    android.app.AlertDialog exportLoginTokenDialog = null;
 
     @Override
     public View createView(Context context) {
@@ -899,6 +905,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     });
 
                     builder.show();
+                } else if (id == menu_qr_login) {
+                    regenerateLoginToken(false);
                 }
 
             }
@@ -922,6 +930,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         Locale current = ConfigurationCompat.getLocales(getParentActivity().getResources().getConfiguration()).get(0);
 
         otherItem.addSubItem(4, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
+        otherItem.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin));
         otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
         otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
@@ -1080,6 +1089,128 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         return fragmentView;
     }
 
+    private void regenerateLoginToken(Boolean refresh) {
+
+        getNotificationCenter().removeObserver(this, NotificationCenter.updateLoginToken);
+
+        if (getParentActivity() == null || isFinished) return;
+
+        if (exportLoginTokenDialog != null && exportLoginTokenDialog.isShowing()) {
+            exportLoginTokenDialog.dismiss();
+        } else if (refresh) return;
+
+        exportLoginTokenProgress = new AlertDialog(getParentActivity(), 3);
+        exportLoginTokenProgress.setCanCacnel(false);
+        exportLoginTokenProgress.show();
+
+        if (exportLoginTokenRequest == null) {
+            exportLoginTokenRequest = new TLRPC.TL_auth_exportLoginToken();
+            exportLoginTokenRequest.api_id = NekoXConfig.currentAppId();
+            exportLoginTokenRequest.api_hash = NekoXConfig.currentAppHash();
+            exportLoginTokenRequest.except_ids = new ArrayList<>();
+            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                UserConfig userConfig = UserConfig.getInstance(a);
+                if (!userConfig.isClientActivated()) {
+                    continue;
+                }
+                exportLoginTokenRequest.except_ids.add(a);
+            }
+        }
+
+        getNotificationCenter().addObserver(this, NotificationCenter.updateLoginToken);
+
+        getConnectionsManager().sendRequest(exportLoginTokenRequest, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (getParentActivity() == null) return;
+
+            try {
+                exportLoginTokenProgress.dismiss();
+            } catch (Exception ignore) {
+            }
+            if (response instanceof TLRPC.TL_auth_loginToken) {
+                exportLoginTokenDialog = ProxyUtil.showQrDialog(getParentActivity(), "tg://login?token=" + Base64.encodeUrlSafe(((TLRPC.TL_auth_loginToken) response).token));
+                int delay = (int) (((TLRPC.TL_auth_loginToken) response).expires - System.currentTimeMillis() / 1000);
+                if (BuildVars.DEBUG_VERSION) {
+                    AlertUtil.showToast("Refresh after " + delay + "s");
+                }
+                AndroidUtilities.runOnUIThread(() -> regenerateLoginToken(true), ((TLRPC.TL_auth_loginToken) response).expires * 1000L - System.currentTimeMillis());
+            } else if (response instanceof TLRPC.TL_auth_loginTokenMigrateTo) {
+                checkMigrateTo((TLRPC.TL_auth_loginTokenMigrateTo) response);
+            } else if (response instanceof TLRPC.TL_auth_loginTokenSuccess) {
+                processLoginByTokenFinish((TLRPC.TL_auth_loginTokenSuccess) response);
+            } else {
+                if (error.text.contains("SESSION_PASSWORD_NEEDED")) {
+                    exportLoginTokenProgress.show();
+                    TLRPC.TL_account_getPassword req2 = new TLRPC.TL_account_getPassword();
+                    ConnectionsManager.getInstance(currentAccount).sendRequest(req2, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
+                        exportLoginTokenProgress.dismiss();
+                        showDoneButton(false, true);
+                        if (error1 == null) {
+                            TLRPC.TL_account_password password = (TLRPC.TL_account_password) response1;
+                            if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
+                                AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                return;
+                            }
+                            Bundle bundle = new Bundle();
+                            if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+                                TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow algo = (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) password.current_algo;
+                                bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
+                                bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
+                                bundle.putString("current_p", Utilities.bytesToHex(algo.p));
+                                bundle.putInt("current_g", algo.g);
+                                bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
+                                bundle.putLong("current_srp_id", password.srp_id);
+                                bundle.putInt("passwordType", 1);
+                            }
+                            bundle.putString("hint", password.hint != null ? password.hint : "");
+                            bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern != null ? password.email_unconfirmed_pattern : "");
+                            bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
+                            setPage(6, true, bundle, false);
+                        } else {
+                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
+                        }
+                    }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
+                } else {
+                    AlertUtil.showToast(error);
+                }
+            }
+        }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagTryDifferentDc | ConnectionsManager.RequestFlagEnableUnauthorized);
+
+    }
+
+    private void checkMigrateTo(TLRPC.TL_auth_loginTokenMigrateTo response) {
+        getNotificationCenter().removeObserver(this, NotificationCenter.updateLoginToken);
+        ConnectionsManager.native_moveToDatacenter(currentAccount, response.dc_id);
+        exportLoginTokenProgress.show();
+
+        TLRPC.TL_auth_importLoginToken request = new TLRPC.TL_auth_importLoginToken();
+        request.token = response.token;
+        getConnectionsManager().sendRequest(request, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
+            exportLoginTokenProgress.dismiss();
+            if (error1 != null) {
+                exportLoginTokenRequest = null;
+                regenerateLoginToken(false);
+            } else if (response1 instanceof TLRPC.TL_auth_loginTokenSuccess) {
+                processLoginByTokenFinish((TLRPC.TL_auth_loginTokenSuccess) response1);
+            }
+        }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagTryDifferentDc | ConnectionsManager.RequestFlagEnableUnauthorized);
+
+    }
+
+    private void processLoginByTokenFinish(TLRPC.TL_auth_loginTokenSuccess authLoginTokenSuccess) {
+        getNotificationCenter().removeObserver(this, NotificationCenter.updateLoginToken);
+
+        TLRPC.auth_Authorization authorization = authLoginTokenSuccess.authorization;
+        if (authorization instanceof TLRPC.TL_auth_authorizationSignUpRequired) {
+            TLRPC.TL_auth_authorizationSignUpRequired authorizationI = (TLRPC.TL_auth_authorizationSignUpRequired) authorization;
+            if (authorizationI.terms_of_service != null) {
+                currentTermsOfService = authorizationI.terms_of_service;
+            }
+            setPage(5, true, new Bundle(), false);
+        } else {
+            onAuthSuccess((TLRPC.TL_auth_authorization) authorization);
+        }
+    }
+
     private int currentConnectionState;
 
     @Override
@@ -1090,6 +1221,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 currentConnectionState = state;
                 updateProxyButton(true);
             }
+        } else if (id == NotificationCenter.updateLoginToken) {
+            regenerateLoginToken(false);
         }
     }
 
