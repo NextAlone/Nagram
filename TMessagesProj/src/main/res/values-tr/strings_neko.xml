@@ -5,14 +5,14 @@
     <string name="MessageMenu">Mesaj Menüsü Ögeleri</string>
     <string name="HidePhone">Telefon Numaramı Gizle</string>
     <string name="Hide">Gizle</string>
-    <string name="DeleteAllFromSelf">Sohbetteki tüm mesajları kendinden sil</string>
+    <string name="DeleteAllFromSelf">Mesajlarını sil</string>
     <string name="DeleteAllFromSelfAlert">Uyarı! Bu, bu sohbetteki **senden gelen tüm mesajları**, **tüm** katılımcılar için silecek.</string>
     <string name="BotLogin">Bot Girişi</string>
     <string name="InvalidAccessToken">Erişim anahtarı geçersiz</string>
     <string name="IgnoreBlocked">Engellenmiş Üyeleri Grupta Yok Say</string>
     <string name="Connection">Bağlantı</string>
     <string name="Chat">Sohbet</string>
-    <string name="NameOrder">İsim sırası</string>
+    <string name="NameOrder">İsim Sırası</string>
     <string name="FirstLast">Ad Soyad</string>
     <string name="LastFirst">Soyad Ad</string>
     <string name="TypefaceUseDefault">Sistem Varsayılan Yazı Tipini Kullan</string>
@@ -55,7 +55,7 @@
     <string name="UnlimitedFavoredStickersAbout">Favorilere sınırsız çıkartma ekleyin. Çıkartmalar diğer cihazlarla senkronize edilemeyebilir.</string>
     <string name="MessageDetails">Detaylar</string>
     <string name="ExportAsJson">JSON olarak dışa aktar</string>
-    <string name="Translate">Çeviri</string>
+    <string name="Translate">Çevir</string>
     <string name="DeleteAccount">Telegram Hesabını Sil</string>
     <string name="TranslateFailed">Çeviri Sunucusu Hatası</string>
     <string name="TranslationProvider">Çeviri Sağlayıcısı</string>
@@ -68,7 +68,7 @@
     <string name="BotToken">Anahtar</string>
     <string name="UnlimitedPinnedDialogs">Sınırsız Sabitlenmiş Sohbetler</string>
     <string name="UnlimitedPinnedDialogsAbout">Sabitlenmiş sohbetler senkronizasyonlarını kapatarak mesajları sınırsız sabitleyin.</string>
-    <string name="OpenArchiveOnPull">Arşivlenmiş Sohbetleri Aşağıya Kaydırarak Aç</string>
+    <string name="OpenArchiveOnPull">Arşivlenmiş Sohbetleri Aşağıya Kaydırdıktan Sonra Aç</string>
     <string name="HideKeyboardOnChatScroll">Sohbeti Kaydırırken Klavyeyi Gizle</string>
     <string name="UserRestrictionsSendStickers2">Çıkartma Gönder</string>
     <string name="UserRestrictionsSendGifs">GIF Gönder</string>

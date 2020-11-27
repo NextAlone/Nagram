@@ -190,4 +190,7 @@
     <string name="IgnoreContentRestrictions">Игнорировать ограничения контента</string>
     <string name="IgnoreContentRestrictionsNotice">Локально игнорирует ограничения Android на сообщения. В будущем это может быть запрещено со стороны сервера, и вам нужно будет самостоятельно оценить законность этой опции.</string>
     <string name="SendCommentAfterForward">Отправить комментарий после пересылки</string>
+    <string name="UnpinMessageX">Открепить сообщение</string>
+    <string name="UnpinMessagesAll">Открепить все сообщения</string>
+    <string name="DismissForYourself">Скрыть для себя</string>
 </resources>

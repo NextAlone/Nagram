@@ -27,8 +27,8 @@
     <string name="Ignore">Yok say</string>
     <string name="UpdateDownloaded">Bir güncelleme indirildi.</string>
     <string name="ProxyAutoSwitch">Otomatik proxy geçişi</string>
-    <string name="LinkedGroupChat">Bağlı Grup</string>
-    <string name="LinkedChannelChat">Bağlı Kanal</string>
+    <string name="LinkedGroupChat">Bağlı grup</string>
+    <string name="LinkedChannelChat">Bağlı kanal</string>
     <string name="DevModeTitle">**Telegram hesabınız yasaklanmış olabilir**</string>
     <string name="DevModeNotice">Geliştirici özelliklerinin uygunsuz kullanımından sorumlu değiliz.</string>
     <string name="TapToDisable">Devre dışı bırakmak için dokunun. Bunlara ihtiyacınız yok.</string>
@@ -52,7 +52,7 @@
     <string name="TransInputToLang">Çeviri Girişi Hedef Dili</string>
     <string name="More">Daha</string>
     <string name="NekoXUpdatesChannel">NekoX Güncellemeleri Kanalı</string>
-    <string name="ShowIdAndDc">Profilde ID ve DC Değerlerini Göster</string>
+    <string name="ShowIdAndDc">Profilde ID / DC Değerlerini Göster</string>
     <string name="UseDefaultTheme">Varsayılan Temayı Kullan *</string>
     <string name="NightMode">Gece Modu</string>
     <string name="PrivacyNotice">Gizlilik uyarısı</string>
@@ -62,7 +62,7 @@
     <string name="PrivacyNotice2fa">Devlet adına çalışan hackerların gerçek kimliğinizi bulmasına neden olabilmesini önleyecek bir şifre ayarlamadığınız tespit edildi, lütfen ayarlayın!</string>
     <string name="ApplySuggestion">Tamam, uygula</string>
     <string name="DoNotRemindAgain">Bir daha hatırlatma</string>
-    <string name="RemoveTitleEmoji">Başlıktaki 😶 Emojisini Kaldırın</string>
+    <string name="RemoveTitleEmoji">Başlıktaki 😶 Emojisini Kaldır</string>
     <string name="NekoXProxy">NekoX Genel Proxy</string>
     <string name="PublicPrefix">Genel</string>
     <string name="DisableChatAction">Giriş Durumumu (yazıyor, vb.) Gönderme</string>
@@ -84,7 +84,7 @@
     <string name="FilterNameUnreadDescription">Yalnızca okunmamış mesajlar</string>
     <string name="FilterNameUnmutedAndUnread">Sesli &amp; Okunmamış</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Yalnızca sesli sohbetlerden gelen okunmamış mesajlar</string>
-    <string name="IgnoreMutedCount">Klasör sekmesindeki sessiz ve okunmamış mesajları sayıma ekleme</string>
+    <string name="IgnoreMutedCount">Klasör Sekmesindeki Sessiz ve Okunmamış Mesajları Sayıma Ekleme</string>
     <string name="DialogsSettings">İletişim Ayarları</string>
     <string name="SortMenu">Mesajların Sıralanması</string>
     <string name="SortByUnread">Okunmamışlara Göre Sırala</string>

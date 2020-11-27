@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Заблоковано</string>
-    <string name="AccDescrChatAttachEnterMenu">Меню ввода в чат</string>
+    <string name="AccDescrChatAttachEnterMenu">Меню вводу в чат</string>
     <string name="ChatAttachEnterMenuRecordVideo">Записати відео</string>
     <string name="ChatAttachEnterMenuRecordAudio">Записувати аудіо</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Вимкнути попередній перегляд посилання</string>
-    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути Предогляд посилання</string>
-    <string name="UseChatAttachEnterMenu">Використовать меню введення</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути передогляд посилання</string>
+    <string name="UseChatAttachEnterMenu">Використовувати меню введення</string>
     <string name="UseChatAttachEnterMenuNotice">Змініть кнопку запису на меню вводу і додайте перемикач попереднього перегляду посилань.</string>
     <string name="DisableLinkPreviewByDefault">Відключити передогляд посилань за замовчуванням</string>
     <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення за замовчуванням, щоб запобігти знанню сервера про те, що посилання передається через Telegram.</string>
@@ -190,4 +190,7 @@
     <string name="IgnoreContentRestrictions">Ігнорувати обмеження на контент</string>
     <string name="IgnoreContentRestrictionsNotice">Локально ігнорує обмеження Android щодо повідомлень. Це може бути заборонено сервером у майбутньому, і вам потрібно буде оцінити локальну законність цієї опції самостійно.</string>
     <string name="SendCommentAfterForward">Відправити коментар після перенаправлення</string>
+    <string name="UnpinMessageX">Відкріпити повідомлення</string>
+    <string name="UnpinMessagesAll">Відкріпити всі повідомлення</string>
+    <string name="DismissForYourself">Сховати для себе</string>
 </resources>
