@@ -64,8 +64,7 @@ if [ ! -d "$v2rayCore" ]; then
 else
 
   cd "$v2rayCore"
-  git fetch origin "v$V2RAY_CORE_VERSION"
-  git reset "v$V2RAY_CORE_VERSION" --hard
+  git fetch origin "v$V2RAY_CORE_VERSION" && git reset "v$V2RAY_CORE_VERSION" --hard || git clone https://github.com/v2fly/v2ray-core.git "$v2rayCore" -b "v$V2RAY_CORE_VERSION"
 
 fi
 
