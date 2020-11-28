@@ -84,6 +84,8 @@ dependencies {
     implementation 'cn.hutool:hutool-core:5.5.1'
     implementation 'cn.hutool:hutool-crypto:5.5.1'
 
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
+
     implementation project(":openpgp-api")
 
     compileOnly files('libs/libv2ray.aar')

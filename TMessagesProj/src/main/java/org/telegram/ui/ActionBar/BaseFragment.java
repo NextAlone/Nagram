@@ -52,8 +52,8 @@ import tw.nekomimi.nekogram.MessageHelper;
 
 public class BaseFragment {
 
-    private boolean isFinished;
-    private boolean finishing;
+    protected boolean isFinished;
+    protected boolean finishing;
     protected Dialog visibleDialog;
     protected int currentAccount = UserConfig.selectedAccount;
 

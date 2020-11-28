@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.telegram.messenger.ApplicationLoader
 
@@ -13,9 +14,12 @@ object UIUtil {
     fun runOnUIThread(runnable: () -> Unit) = ApplicationLoader.applicationHandler.post(runnable)
 
     @JvmStatic
-    fun runOnIoDispatcher(runnable: Runnable) {
+    @JvmOverloads
+    fun runOnIoDispatcher(runnable: Runnable, delay: Long = 0) {
 
         GlobalScope.launch(Dispatchers.IO) {
+
+            delay(delay)
 
             runnable.run()
 

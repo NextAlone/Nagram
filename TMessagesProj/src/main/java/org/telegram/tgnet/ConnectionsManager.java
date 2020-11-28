@@ -510,7 +510,10 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
+    public static boolean reseting;
+
     public static void onLogout(final int currentAccount) {
+        if (reseting) return;
         AndroidUtilities.runOnUIThread(() -> {
             AccountInstance accountInstance = AccountInstance.getInstance(currentAccount);
             if (accountInstance.getUserConfig().getClientUserId() != 0) {

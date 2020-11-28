@@ -9,6 +9,7 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
@@ -27,9 +28,12 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
@@ -43,6 +47,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -70,6 +75,7 @@ import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class CacheControlActivity extends BaseFragment {
 
@@ -87,6 +93,8 @@ public class CacheControlActivity extends BaseFragment {
     private int storageUsageRow;
     private int keepMediaChooserRow;
     private int rowCount;
+
+    private int resetDataRow;
 
     private long databaseSize = -1;
     private long cacheSize = -1;
@@ -127,6 +135,8 @@ public class CacheControlActivity extends BaseFragment {
         cacheInfoRow = rowCount++;
         databaseRow = rowCount++;
         databaseInfoRow = rowCount++;
+
+        resetDataRow = rowCount++;
 
         databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
 
@@ -419,6 +429,8 @@ public class CacheControlActivity extends BaseFragment {
             }
             if (position == databaseRow) {
                 clearDatabase();
+            } else if (position == resetDataRow) {
+                resetData();
             } else if (position == storageUsageRow) {
                 if (totalSize <= 0 || getParentActivity() == null) {
                     return;
@@ -536,10 +548,42 @@ public class CacheControlActivity extends BaseFragment {
         return fragmentView;
     }
 
+    private void resetData() {
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+        builder.addTitle(LocaleController.getString("StorageResetInfo", R.string.StorageResetInfo));
+        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.baseline_delete_sweep_24, true, (i) -> {
+            if (getParentActivity() == null) {
+                return Unit.INSTANCE;
+            }
+            final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCacnel(false);
+            progressDialog.show();
+            ConnectionsManager.reseting = true;
+            UIUtil.runOnIoDispatcher(() -> {
+                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                    AccountInstance instance = AccountInstance.getInstance(a);
+                    if (instance.getUserConfig().isClientActivated()) {
+                        TLRPC.TL_auth_logOut req = new TLRPC.TL_auth_logOut();
+                        instance.getConnectionsManager().sendRequest(req, (response, error) -> {
+                        });
+                    }
+                }
+                FileUtil.delete(getParentActivity().getFilesDir().getParentFile());
+                AndroidUtilities.runOnUIThread(() -> {
+                    progressDialog.dismiss();
+                    ProcessPhoenix.triggerRebirth(getParentActivity(), new Intent(getParentActivity(), LaunchActivity.class));
+                }, 2000L);
+            });
+            return Unit.INSTANCE;
+        });
+        builder.addCancelItem();
+        builder.show();
+    }
+
     private void clearDatabase() {
         BottomBuilder builder = new BottomBuilder(getParentActivity());
-        builder.addTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle), LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
-        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear),R.drawable.baseline_delete_sweep_24, true, (i) -> {
+        builder.addTitle(LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
+        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.baseline_delete_sweep_24, true, (i) -> {
             if (getParentActivity() == null) {
                 return Unit.INSTANCE;
             }
@@ -666,7 +710,7 @@ public class CacheControlActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == databaseRow || (position == storageUsageRow && (totalSize > 0) && !calculating);
+            return position == databaseRow || position == resetDataRow || (position == storageUsageRow && (totalSize > 0) && !calculating);
         }
 
         @Override
@@ -734,6 +778,9 @@ public class CacheControlActivity extends BaseFragment {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == databaseRow) {
                         textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), false);
+                    } else if (position == resetDataRow) {
+                        textCell.setText(LocaleController.getString("StorageReset", R.string.StorageReset), false);
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
                     }
                     break;
                 case 1:

@@ -255,5 +255,7 @@
     <string name="ImportLogin">QR Login</string>
     <string name="QRLoginNotice">This QR code / link allows someone to log in to your Telegram account. Is this your own operation?</string>
     <string name="QRLoginConfirm">Confirm Login</string>
+    <string name="StorageReset">Clear Storage</string>
+    <string name="StorageResetInfo">All data of this application will be permanently deleted (and try to log out of all accounts first).</string>
 
 </resources>
