@@ -193,4 +193,9 @@
     <string name="UnpinMessageX">解除消息置顶</string>
     <string name="UnpinMessagesAll">解除置顶所有消息</string>
     <string name="DismissForYourself">暂时对自己隐藏</string>
+    <string name="ImportLogin">二维码登录</string>
+    <string name="QRLoginNotice">此 二维码/链接 允许某人登录到您的 Telegram 帐户, 这是您自己的操作吗？</string>
+    <string name="QRLoginConfirm">确认登录</string>
+    <string name="StorageReset">清除存储</string>
+    <string name="StorageResetInfo">该应用程序的所有数据将被永久删除（并先尝试登出所有帐户）。</string>
 </resources>
