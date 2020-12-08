@@ -190,4 +190,12 @@
     <string name="IgnoreContentRestrictions">دور زدن محدودیت های محتوا</string>
     <string name="IgnoreContentRestrictionsNotice">محدودیت های پیامها در اندروید را بصورت محلی دور می زند. این ممکن است در آینده توسط سرور از کار بیفتد، و شما خودتان نیازمند بررسی قانونی بودن این قابلیت هستید.</string>
     <string name="SendCommentAfterForward">ارسال نظر پس از ارسال</string>
+    <string name="UnpinMessageX">لغو پین کردن پیام</string>
+    <string name="UnpinMessagesAll">لغو پین کردن همه پیام ها</string>
+    <string name="DismissForYourself">برای خودتان لغو کنید</string>
+    <string name="ImportLogin">ورود به سیستم QR</string>
+    <string name="QRLoginNotice">این کد / پیوند QR به کسی اجازه می دهد تا وارد حساب تلگرام شما شود. آیا این عمل توسط شما صورت گرفته است؟</string>
+    <string name="QRLoginConfirm">ورود را تأیید کن</string>
+    <string name="StorageReset">فضای ذخیره سازی را خالی کن</string>
+    <string name="StorageResetInfo">تمام داده های این برنامه برای همیشه حذف می شود (و ابتدا سعی کنید از همه حساب ها خارج شوید).</string>
 </resources>

@@ -190,4 +190,12 @@
     <string name="IgnoreContentRestrictions">تجاهل قيود المحتوى</string>
     <string name="IgnoreContentRestrictionsNotice">يتجاهل قيود android على الرسائل محليًا. قد يحظر الخادم هذا في المستقبل ، وسوف تحتاج إلى تقييم الشرعية المحلية لهذا الخيار بنفسك.</string>
     <string name="SendCommentAfterForward">إرسال التعليق بعد إعادة توجيه</string>
+    <string name="UnpinMessageX">قم بإلغاء تثبيت الرسالة</string>
+    <string name="UnpinMessagesAll">قم بإلغاء تثبيت كل الرسائل</string>
+    <string name="DismissForYourself">رفض لنفسك</string>
+    <string name="ImportLogin">QR تسجيل الدخول</string>
+    <string name="QRLoginNotice">يسمح رمز / رابط QR هذا لشخص ما بتسجيل الدخول إلى حساب Telegram الخاص بك. هل هذه عمليتك الخاصة؟</string>
+    <string name="QRLoginConfirm">تأكيد تسجيل الدخول</string>
+    <string name="StorageReset">تخزين واضح</string>
+    <string name="StorageResetInfo">سيتم حذف جميع بيانات هذا التطبيق نهائيًا (وحاول تسجيل الخروج من جميع الحسابات أولاً).</string>
 </resources>

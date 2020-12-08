@@ -42,6 +42,7 @@
     <string name="ViewHistory">عرض المحفوظات</string>
     <string name="Nya">ماكيف!</string>
     <string name="SaveCacheToExternalFilesDir">عزل التخزين</string>
+    <string name="SaveCacheToExternalFilesDirAbout">حفظ مجلد \"تيليجرام\" إلى مجلد خاص بالتطبيق للحفاظ على ربط التخزين المشترك.</string>
     <string name="SensitiveDisableFiltering">تعطيل تصفية المحتوى الحساسة</string>
     <string name="SensitiveAbout">عرض الوسائط الحساسة في القنوات العامة على جميع أجهزتك.</string>
     <string name="StickerSize">حجم الملصق</string>
@@ -101,4 +102,7 @@
     <string name="BetaWarning">هذه ميزة **بيتا** تم تنفيذها بواسطة **تيليجرام**.</string>
     <string name="MediaPreview">معاينة الوسائط في قائمة الحوار</string>
     <string name="ProviderYandex">ترجمة يانديكس</string>
+    <string name="AutoPauseVideo">إيقاف تلقائي للفيديو</string>
+    <string name="AutoPauseVideoAbout">عند قفل الشاشة / التبديل إلى الخلفية.</string>
+    <string name="DisableProximityEvents">تعطيل أحداث التقارب</string>
 </resources>

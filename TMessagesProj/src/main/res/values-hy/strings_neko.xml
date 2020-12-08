@@ -41,6 +41,8 @@
     <string name="HideProxySponsorChannel">Թաքցնել վստահված անձի հովանավորի ալիքը</string>
     <string name="ViewHistory">Դիտեք պատմությունը</string>
     <string name="Nya">Meow!</string>
+    <string name="SaveCacheToExternalFilesDir">Պահեստի մեկուսացում</string>
+    <string name="SaveCacheToExternalFilesDirAbout">«Տելեգրամ» պանակը պահեք հավելվածին հատուկ գրացուցակում ՝ ընդհանուր պահվածքը կոկիկ պահելու համար:</string>
     <string name="SensitiveDisableFiltering">Անջատեք զգայուն բովանդակության զտումը</string>
     <string name="SensitiveAbout">Allուցադրել զգայուն մեդիան հանրային ալիքներում ձեր բոլոր սարքերում:</string>
     <string name="StickerSize">Կպչուկի չափը</string>
@@ -100,4 +102,7 @@
     <string name="BetaWarning">Սա ** բետա ** հատկություն է, որն իրականացվել է ** Telegram ** - ի կողմից:</string>
     <string name="MediaPreview">Մեդիայի նախադիտում երկխոսության ցուցակում</string>
     <string name="ProviderYandex">Yandex Translate</string>
+    <string name="AutoPauseVideo">Ավտոմատ դադար տեսանյութը</string>
+    <string name="AutoPauseVideoAbout">Երբ կողպեք էկրանը / անցնել ֆոնին:</string>
+    <string name="DisableProximityEvents">Անջատեք հարևանության իրադարձությունները</string>
 </resources>

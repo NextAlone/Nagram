@@ -190,4 +190,12 @@
     <string name="IgnoreContentRestrictions">Անտեսեք բովանդակության սահմանափակումները</string>
     <string name="IgnoreContentRestrictionsNotice">Անտեսում է հաղորդագրությունների տեղական android սահմանափակումները: Հետագայում դա կարող է արգելվել սերվերի կողմից, և դուք պետք է ինքներդ գնահատեք այս տարբերակի տեղական օրինականությունը:</string>
     <string name="SendCommentAfterForward">Ուղարկեք մեկնաբանություն փոխանցելուց հետո</string>
+    <string name="UnpinMessageX">Ապամոնտաժել հաղորդագրությունը</string>
+    <string name="UnpinMessagesAll">Ապամոնտաժել բոլոր հաղորդագրությունները</string>
+    <string name="DismissForYourself">Մերժեք ինքներդ ձեզ համար</string>
+    <string name="ImportLogin">QR մուտք</string>
+    <string name="QRLoginNotice">Այս QR կոդը / հղումը ինչ-որ մեկին թույլ է տալիս մուտք գործել ձեր Telegram հաշիվ: Սա՞ է ձեր սեփական գործողությունը:</string>
+    <string name="QRLoginConfirm">Հաստատեք մուտքը</string>
+    <string name="StorageReset">Մաքրել պահուստը</string>
+    <string name="StorageResetInfo">Այս ծրագրի բոլոր տվյալները ընդմիշտ կջնջվեն (և նախ փորձեք դուրս գալ բոլոր հաշիվներից):</string>
 </resources>

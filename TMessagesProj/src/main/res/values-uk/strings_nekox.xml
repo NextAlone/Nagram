@@ -193,4 +193,9 @@
     <string name="UnpinMessageX">Відкріпити повідомлення</string>
     <string name="UnpinMessagesAll">Відкріпити всі повідомлення</string>
     <string name="DismissForYourself">Сховати для себе</string>
+    <string name="ImportLogin">QR Login</string>
+    <string name="QRLoginNotice">Цей QR-код / посилання дозволяє комусь входити у ваш обліковий запис Telegram. Це ваша власна операція?</string>
+    <string name="QRLoginConfirm">Підтвердьте вхід</string>
+    <string name="StorageReset">Очистити сховище</string>
+    <string name="StorageResetInfo">Усі дані цієї програми буде остаточно видалено (і спробуйте спочатку вийти з усіх облікових записів).</string>
 </resources>

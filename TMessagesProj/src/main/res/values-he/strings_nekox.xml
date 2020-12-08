@@ -190,4 +190,12 @@
     <string name="IgnoreContentRestrictions">התעלם ממגבלות תוכן</string>
     <string name="IgnoreContentRestrictionsNotice">מתעלם ממגבלות אנדרואיד על הודעות באופן מקומי. ייתכן שהשרת יאסר בעתיד, ותצטרך להעריך בעצמך את החוקיות המקומית של אפשרות זו.</string>
     <string name="SendCommentAfterForward">שלח תגובה לאחר העברה</string>
+    <string name="UnpinMessageX">בטל הצמדה של הודעה</string>
+    <string name="UnpinMessagesAll">בטל את הצמדה של כל ההודעות</string>
+    <string name="DismissForYourself">דחה בעצמך</string>
+    <string name="ImportLogin">כניסה QR</string>
+    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך?</string>
+    <string name="QRLoginConfirm">אשר כניסה</string>
+    <string name="StorageReset">פנה אחסון</string>
+    <string name="StorageResetInfo">כל הנתונים של יישום זה יימחקו לצמיתות (ונסה קודם להתנתק מכל החשבונות).</string>
 </resources>
