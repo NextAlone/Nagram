@@ -1,7 +1,5 @@
 package tw.nekomimi.nekogram;
 
-import android.util.SparseArray;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
@@ -29,10 +27,8 @@ public class MessageHelper extends BaseController {
 
     public void resetMessageContent(long dialog_id, MessageObject messageObject) {
         TLRPC.Message message = messageObject.messageOwner;
-        final SparseArray<TLRPC.User> usersDict = new SparseArray<>();
-        final SparseArray<TLRPC.Chat> chatsDict = new SparseArray<>();
 
-        MessageObject obj = new MessageObject(currentAccount, message, usersDict, chatsDict, true, true);
+        MessageObject obj = new MessageObject(currentAccount, message, true, true);
 
         ArrayList<MessageObject> arrayList = new ArrayList<>();
         arrayList.add(obj);

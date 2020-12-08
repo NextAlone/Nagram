@@ -8,7 +8,7 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
-import tw.nekomimi.nekogram.transtale.source.GoogleWebTranslator
+import tw.nekomimi.nekogram.transtale.source.GoogleAppTranslator
 import tw.nekomimi.nekogram.transtale.source.LingoTranslator
 import tw.nekomimi.nekogram.transtale.source.YandexTranslator
 import tw.nekomimi.nekogram.utils.UIUtil
@@ -82,7 +82,7 @@ interface Translator {
             }
 
             val translator = when (NekoConfig.translationProvider) {
-                in 1..2 -> GoogleWebTranslator
+                in 1..2 -> GoogleAppTranslator
                 3 -> LingoTranslator
                 4 -> YandexTranslator
                 else -> throw IllegalArgumentException()

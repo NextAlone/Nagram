@@ -133,9 +133,7 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     private boolean useAdb() {
-
         return NekoConfig.avatarAsDrawerBackground && ImageLocation.isUserHasPhoto(user);
-
     }
 
     @Override
@@ -200,7 +198,11 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     public boolean isInAvatar(float x, float y) {
-        return x >= avatarImageView.getLeft() && x <= avatarImageView.getRight() && y >= avatarImageView.getTop() && y <= avatarImageView.getBottom();
+        if (useAdb()) {
+            return y <= arrowView.getTop();
+        } else {
+            return x >= avatarImageView.getLeft() && x <= avatarImageView.getRight() && y >= avatarImageView.getTop() && y <= avatarImageView.getBottom();
+        }
     }
 
     public boolean hasAvatar() {
@@ -238,7 +240,7 @@ public class DrawerProfileCell extends FrameLayout {
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
         if (useAdb()) {
-            avatarBackgroundView.setImage(ImageLocation.getForUser(user, true), "512_512", avatarDrawable, user);
+            avatarBackgroundView.setImage(ImageLocation.getForUser(user, true), "512_512", new ColorDrawable(0x00000000), user);
             avatarBackgroundView.setVisibility(VISIBLE);
             avatarImageView.setVisibility(INVISIBLE);
         } else {

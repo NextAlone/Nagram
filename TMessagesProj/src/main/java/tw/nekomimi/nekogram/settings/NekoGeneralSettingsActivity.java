@@ -201,6 +201,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.hidePhone);
                 }
+                parentLayout.rebuildAllFragmentViews(false, false);
+                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
             } else if (position == disableUndoRow) {
                 NekoConfig.toggleDisableUndo();
                 if (view instanceof TextCheckCell) {
