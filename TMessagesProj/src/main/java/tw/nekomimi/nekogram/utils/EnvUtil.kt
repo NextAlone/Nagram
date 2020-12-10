@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram.utils
 
 import android.content.Context
+import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
 import org.telegram.messenger.ApplicationLoader
@@ -44,7 +45,12 @@ object EnvUtil {
 
         if (NekoConfig.cachePath == null) {
 
-            NekoConfig.setCachePath(ApplicationLoader.applicationContext.getExternalFilesDir(null)!!.path)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // https://github.com/NekoX-Dev/NekoX/issues/284
+                NekoConfig.setCachePath(File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
+            } else {
+                NekoConfig.setCachePath(ApplicationLoader.applicationContext.getExternalFilesDir(null)!!.path)
+            }
 
         }
 
