@@ -1138,40 +1138,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             } else if (response instanceof TLRPC.TL_auth_loginTokenSuccess) {
                 processLoginByTokenFinish((TLRPC.TL_auth_loginTokenSuccess) response);
             } else {
-                if (error.text.contains("SESSION_PASSWORD_NEEDED")) {
-                    exportLoginTokenProgress.show();
-                    TLRPC.TL_account_getPassword req2 = new TLRPC.TL_account_getPassword();
-                    ConnectionsManager.getInstance(currentAccount).sendRequest(req2, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
-                        exportLoginTokenProgress.dismiss();
-                        showDoneButton(false, true);
-                        if (error1 == null) {
-                            TLRPC.TL_account_password password = (TLRPC.TL_account_password) response1;
-                            if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
-                                AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
-                                return;
-                            }
-                            Bundle bundle = new Bundle();
-                            if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-                                TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow algo = (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) password.current_algo;
-                                bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
-                                bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
-                                bundle.putString("current_p", Utilities.bytesToHex(algo.p));
-                                bundle.putInt("current_g", algo.g);
-                                bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
-                                bundle.putLong("current_srp_id", password.srp_id);
-                                bundle.putInt("passwordType", 1);
-                            }
-                            bundle.putString("hint", password.hint != null ? password.hint : "");
-                            bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern != null ? password.email_unconfirmed_pattern : "");
-                            bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
-                            setPage(6, true, bundle, false);
-                        } else {
-                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
-                        }
-                    }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
-                } else {
-                    AlertUtil.showToast(error);
-                }
+                processError(error);
             }
         }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagTryDifferentDc | ConnectionsManager.RequestFlagEnableUnauthorized);
 
@@ -1187,14 +1154,53 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         getConnectionsManager().sendRequest(request, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
             exportLoginTokenProgress.dismiss();
             if (error1 != null) {
-                exportLoginTokenRequest = null;
-                regenerateLoginToken(false);
+                processError(error1);
             } else if (response1 instanceof TLRPC.TL_auth_loginTokenSuccess) {
                 processLoginByTokenFinish((TLRPC.TL_auth_loginTokenSuccess) response1);
             }
         }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagTryDifferentDc | ConnectionsManager.RequestFlagEnableUnauthorized);
 
     }
+
+    private void processError(TLRPC.TL_error error) {
+        if (error.text.contains("SESSION_PASSWORD_NEEDED")) {
+            exportLoginTokenProgress.show();
+            TLRPC.TL_account_getPassword req2 = new TLRPC.TL_account_getPassword();
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req2, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
+                exportLoginTokenProgress.dismiss();
+                showDoneButton(false, true);
+                if (error1 == null) {
+                    TLRPC.TL_account_password password = (TLRPC.TL_account_password) response1;
+                    if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
+                        AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                        return;
+                    }
+                    Bundle bundle = new Bundle();
+                    if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+                        TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow algo = (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) password.current_algo;
+                        bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
+                        bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
+                        bundle.putString("current_p", Utilities.bytesToHex(algo.p));
+                        bundle.putInt("current_g", algo.g);
+                        bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
+                        bundle.putLong("current_srp_id", password.srp_id);
+                        bundle.putInt("passwordType", 1);
+                    }
+                    bundle.putString("hint", password.hint != null ? password.hint : "");
+                    bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern != null ? password.email_unconfirmed_pattern : "");
+                    bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
+                    setPage(6, true, bundle, false);
+                } else {
+                    needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
+                }
+            }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
+        } else {
+            AlertUtil.showToast(error);
+            exportLoginTokenRequest = null;
+            regenerateLoginToken(false);
+        }
+    }
+
 
     private void processLoginByTokenFinish(TLRPC.TL_auth_loginTokenSuccess authLoginTokenSuccess) {
         getNotificationCenter().removeObserver(this, NotificationCenter.updateLoginToken);
