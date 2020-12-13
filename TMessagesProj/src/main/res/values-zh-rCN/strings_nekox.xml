@@ -198,4 +198,6 @@
     <string name="QRLoginConfirm">确认登录</string>
     <string name="StorageReset">清除存储</string>
     <string name="StorageResetInfo">该应用程序的所有数据将被永久删除（并先尝试登出所有帐户）。</string>
+    <string name="FCTitle">关于本应用之更新</string>
+    <string name="FCInfo">要跟随我们的公告与更新频道吗 ？</string>
 </resources>

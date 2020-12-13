@@ -198,4 +198,6 @@
     <string name="QRLoginConfirm">Girişi Onayla</string>
     <string name="StorageReset">Depolama Alanını Temizle</string>
     <string name="StorageResetInfo">Bu uygulamanın tüm verileri kalıcı olarak silinecek (öncelikle tüm hesaplarınızdan çıkış yapmayı deneyin).</string>
+    <string name="FCTitle">Uygulama güncellemeleri hakkında</string>
+    <string name="FCInfo">Duyuru ve güncellemeler kanalımızı takip etmek ister misiniz?</string>
 </resources>
