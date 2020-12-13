@@ -32,7 +32,6 @@ import android.os.Parcelable;
 import android.os.StatFs;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
-import android.se.omapi.Session;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.ActionMode;
@@ -120,7 +119,6 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
-import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 import java.io.File;
@@ -141,7 +139,6 @@ import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -978,9 +975,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         if (UserConfig.getInstance(account).unacceptedTermsOfService != null) {
             showTosActivity(account, UserConfig.getInstance(account).unacceptedTermsOfService);
-        }
-        if (afterLogin) {
-            PrivacyUtil.postCheckAll(this, account);
         }
         updateCurrentConnectionState(currentAccount);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null);
@@ -2477,7 +2471,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             return;
         } else if (loginToken != null) {
             BottomBuilder builder = new BottomBuilder(this);
-            builder.addTitle(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan), LocaleController.getString("QRLoginNotice",R.string.QRLoginNotice));
+            builder.addTitle(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan), LocaleController.getString("QRLoginNotice", R.string.QRLoginNotice));
             builder.addItem(LocaleController.getString("QRLoginConfirm", R.string.QRLoginConfirm), R.drawable.baseline_security_24, true, (c) -> {
                 AlertDialog progressDialog = new AlertDialog(this, 3);
                 progressDialog.setCanCacnel(false);
@@ -2509,7 +2503,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             } else {
                                 text = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text;
                             }
-                            AlertUtil.showSimpleAlert(this,  LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), text);
+                            AlertUtil.showSimpleAlert(this, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), text);
                         });
                     }
                 }));

@@ -258,4 +258,7 @@
     <string name="StorageReset">Clear Storage</string>
     <string name="StorageResetInfo">All data of this application will be permanently deleted (and try to log out of all accounts first).</string>
 
+    <string name="FCTitle">About application updates</string>
+    <string name="FCInfo">Follow our announcements and updates channel?</string>
+
 </resources>

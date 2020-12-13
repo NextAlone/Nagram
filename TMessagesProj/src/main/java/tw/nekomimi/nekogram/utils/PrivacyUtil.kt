@@ -174,7 +174,7 @@ object PrivacyUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(LocaleController.getString("", R.string.PrivacyNotice))
+        builder.setTitle(LocaleController.getString("PrivacyNotice", R.string.PrivacyNotice))
 
         builder.setMessage(AndroidUtilities.replaceTags(when (type) {
             0 -> LocaleController.getString("PrivacyNoticePhoneVisible", R.string.PrivacyNoticePhoneVisible)
@@ -207,7 +207,7 @@ object PrivacyUtil {
 
         }
 
-        builder.setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
 
         builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
 
@@ -233,7 +233,7 @@ object PrivacyUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(LocaleController.getString("", R.string.PrivacyNotice))
+        builder.setTitle(LocaleController.getString("PrivacyNotice", R.string.PrivacyNotice))
 
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("PrivacyNotice2fa", R.string.PrivacyNotice2fa)))
 

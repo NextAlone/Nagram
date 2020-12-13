@@ -408,7 +408,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             true,
                             LocaleController.getString("UseCustomApiNotice", R.string.UseCustomApiNotice));
 
-                    builder.addRadioItem(LocaleController.getString("", R.string.CustomApiNo), NekoXConfig.customApi == 0, (cell) -> {
+                    builder.addRadioItem(LocaleController.getString("CustomApiNo", R.string.CustomApiNo), NekoXConfig.customApi == 0, (cell) -> {
 
                         targetApi.set(0);
 

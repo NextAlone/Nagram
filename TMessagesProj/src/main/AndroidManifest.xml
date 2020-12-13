@@ -120,6 +120,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="false"
         android:theme="@style/Theme.TMessages.Start"
+        android:requestLegacyExternalStorage="true"
         tools:replace="android:supportsRtl">
 
         <activity

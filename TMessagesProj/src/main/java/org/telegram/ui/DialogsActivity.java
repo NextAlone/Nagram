@@ -164,6 +164,7 @@ import java.util.ArrayList;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.UpdateUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -3052,6 +3053,7 @@ private int lastMeasuredTopPadding;
         }
 
         PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
+        UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
 
         return fragmentView;
     }

@@ -428,7 +428,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 if (!errors.isEmpty()) {
 
-                    status.append(LocaleController.getString("", R.string.ErrorsInImport));
+                    status.append(LocaleController.getString("ErrorsInImport", R.string.ErrorsInImport));
 
                     for (Map.Entry<String, String> error : errors.entrySet()) {
 
