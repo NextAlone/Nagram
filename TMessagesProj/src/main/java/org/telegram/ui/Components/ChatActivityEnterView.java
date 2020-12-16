@@ -3453,11 +3453,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             ((LaunchActivity) parentActivity).callbacks.put(115, result -> {
 
-                long keyId = result == null ? 0L : result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
+                if (result != null) {
 
-                if (save && keyId != 0L) NekoConfig.setOpenPGPKeyId(keyId);
+                    long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
 
-                signComment(result, save);
+                    if (save) NekoConfig.setOpenPGPKeyId(keyId);
+
+                    signComment(result, save);
+
+                }
 
             });
 
