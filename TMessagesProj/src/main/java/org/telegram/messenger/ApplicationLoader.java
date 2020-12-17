@@ -42,7 +42,6 @@ import java.util.Set;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.database.WarppedPref;
-import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -341,6 +340,12 @@ public class ApplicationLoader extends Application {
 
         if (applicationContext == null) {
             applicationContext = getApplicationContext();
+        }
+
+        try {
+            Class.forName("org.robolectric.android.internal.AndroidTestEnvironment");
+            return;
+        } catch (ClassNotFoundException e) {
         }
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);

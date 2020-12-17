@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
@@ -1402,7 +1401,7 @@ public class LocaleController {
 
     public static String formatDateChat(long date, boolean checkYear) {
         try {
-            Calendar calendar = JalaliCalendar.mInstance();
+            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             int currentYear = calendar.get(Calendar.YEAR);
             date *= 1000;
@@ -1421,7 +1420,7 @@ public class LocaleController {
     public static String formatDate(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(Calendar.DAY_OF_YEAR);
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
@@ -1446,7 +1445,7 @@ public class LocaleController {
     public static String formatDateAudio(long date, boolean shortFormat) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(Calendar.DAY_OF_YEAR);
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
@@ -1475,7 +1474,7 @@ public class LocaleController {
     public static String formatDateCallLog(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(Calendar.DAY_OF_YEAR);
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
@@ -1500,7 +1499,7 @@ public class LocaleController {
     public static String formatLocationUpdateDate(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(Calendar.DAY_OF_YEAR);
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
@@ -1549,7 +1548,7 @@ public class LocaleController {
     public static String formatDateOnline(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(Calendar.DAY_OF_YEAR);
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
@@ -1638,7 +1637,7 @@ public class LocaleController {
     public static String formatSectionDate(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
             int dateYear = rightNow.get(Calendar.YEAR);
@@ -1672,7 +1671,7 @@ public class LocaleController {
     public static String formatDateForBan(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int year = rightNow.get(Calendar.YEAR);
             rightNow.setTimeInMillis(date);
             int dateYear = rightNow.get(Calendar.YEAR);
@@ -1691,7 +1690,7 @@ public class LocaleController {
     public static String stringForMessageListDate(long date) {
         try {
             date *= 1000;
-            Calendar rightNow = JalaliCalendar.mInstance();
+            Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(Calendar.DAY_OF_YEAR);
             rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(Calendar.DAY_OF_YEAR);

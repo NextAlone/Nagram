@@ -237,7 +237,6 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -4612,7 +4611,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (floatingDateView.getAlpha() == 0 || actionBar.isActionModeShowed()) {
                 return;
             }
-            Calendar calendar = JalaliCalendar.mInstance();
+            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis((long) floatingDateView.getCustomDate() * 1000);
             int year = calendar.get(Calendar.YEAR);
             int monthOfYear = calendar.get(Calendar.MONTH);
@@ -4628,13 +4627,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return false;
             }
             AndroidUtilities.hideKeyboard(searchItem.getSearchField());
-            Calendar calendar = JalaliCalendar.mInstance();
+            Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int monthOfYear = calendar.get(Calendar.MONTH);
             int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             try {
                 DatePickerDialog dialog = new DatePickerDialog(getParentActivity(), (view1, year1, month, dayOfMonth1) -> {
-                    Calendar calendar1 = JalaliCalendar.mInstance();
+                    Calendar calendar1 = Calendar.getInstance();
                     calendar1.clear();
                     calendar1.set(year1, month, dayOfMonth1);
                     int date = (int) (calendar1.getTime().getTime() / 1000);
@@ -11967,7 +11966,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             dateMsg.message = LocaleController.formatDateChat(obj.messageOwner.date);
                         }
                         dateMsg.id = 0;
-                        Calendar calendar = JalaliCalendar.mInstance();
+                        Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(((long) obj.messageOwner.date) * 1000);
                         calendar.set(Calendar.HOUR_OF_DAY, 0);
                         calendar.set(Calendar.MINUTE, 0);

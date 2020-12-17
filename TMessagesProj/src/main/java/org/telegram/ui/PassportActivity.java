@@ -138,7 +138,6 @@ import java.util.TimerTask;
 
 import javax.crypto.Cipher;
 
-import tw.nekomimi.nekogram.JalaliCalendar;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class PassportActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -4164,7 +4163,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         return false;
                     }
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        Calendar calendar = JalaliCalendar.mInstance();
+                        Calendar calendar = Calendar.getInstance();
                         int year = calendar.get(Calendar.YEAR);
                         int monthOfYear = calendar.get(Calendar.MONTH);
                         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);

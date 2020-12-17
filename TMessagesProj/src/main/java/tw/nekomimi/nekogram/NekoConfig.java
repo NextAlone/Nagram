@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsService;
@@ -110,7 +108,6 @@ public class NekoConfig {
     public static boolean mediaPreview;
 
     public static boolean proxyAutoSwitch;
-    public static boolean usePersianCalender;
 
     public static String openPGPApp;
     public static long openPGPKeyId;
@@ -247,7 +244,7 @@ public class NekoConfig {
         mediaPreview = preferences.getBoolean("mediaPreview", false);
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
-        usePersianCalender = false;//preferences.getBoolean("usePersianCalender", false);
+        //preferences.getBoolean("usePersianCalender", false);
         openPGPApp = preferences.getString("openPGPApp","");
         openPGPKeyId = preferences.getLong("openPGPKeyId",0L);
 
@@ -751,12 +748,6 @@ public class NekoConfig {
     public static void toggleProxyAutoSwitch() {
 
         preferences.edit().putBoolean("proxy_auto_switch",proxyAutoSwitch = !proxyAutoSwitch).apply();
-
-    }
-
-    public static void toggleUsePersianCalender() {
-
-        preferences.edit().putBoolean("usePersianCalender",usePersianCalender = !usePersianCalender).apply();
 
     }
 
