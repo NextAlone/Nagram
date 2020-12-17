@@ -18,19 +18,18 @@ class PopupBuilder @JvmOverloads constructor(anchor: View, dialog: Boolean = fal
 
     }
 
-    fun setItems(items: Array<CharSequence>, listener: (Int,CharSequence) -> Unit) {
+    fun setItems(items: Array<CharSequence?>, listener: (Int, CharSequence) -> Unit) {
 
         removeAllSubItems()
 
-        items.forEachIndexed { i, v ->
-
-            addSubItem(i, v)
-
+        for (item in items) {
+            if (item == null) continue
+            addSubItem(items.indexOf(item), item)
         }
 
         setDelegate {
 
-            listener(it,items[it])
+            listener(it, items[it]!!)
 
         }
 

@@ -172,12 +172,13 @@ interface Translator {
         }
 
         @JvmStatic
-        fun showCCTargetSelect(anchor: View, callback: (String) -> Unit) {
+        @JvmOverloads
+        fun showCCTargetSelect(anchor: View, input: Boolean = true, callback: (String) -> Unit) {
 
             val builder = PopupBuilder(anchor)
 
             builder.setItems(arrayOf(
-                    LocaleController.getString("CCNo", R.string.CCNo),
+                    if (!input) LocaleController.getString("CCNo", R.string.CCNo) else null,
                     LocaleController.getString("CCSC", R.string.CCSC),
                     LocaleController.getString("CCSP", R.string.CCSP),
                     LocaleController.getString("CCTC", R.string.CCTC),

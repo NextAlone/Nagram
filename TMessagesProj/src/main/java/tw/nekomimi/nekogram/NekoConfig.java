@@ -235,8 +235,8 @@ public class NekoConfig {
         translateToLang = preferences.getString("trans_to_lang", null);
         translateInputLang = preferences.getString("trans_input_to_lang", "en");
 
-        translateToLang = preferences.getString("opencc_to_lang", null);
-        translateInputLang = preferences.getString("opencc_input_to_lang", null);
+        ccToLang = preferences.getString("opencc_to_lang", null);
+        ccInputLang = preferences.getString("opencc_input_to_lang", null);
 
         tabsTitleType = preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT);
         confirmAVMessage = preferences.getBoolean("confirmAVMessage", false);

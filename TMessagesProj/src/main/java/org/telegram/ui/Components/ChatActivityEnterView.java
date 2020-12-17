@@ -150,6 +150,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
@@ -3252,9 +3253,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             cell.setTextAndIcon(LocaleController.getString("Translate", R.string.OpenCC), R.drawable.ic_translate);
             ActionBarMenuSubItem finalCell1 = cell;
             cell.setOnClickListener(v -> {
-                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                    menuPopupWindow.dismiss();
-                }
                 String ccTarget = TranslateDb.getChatCCTarget(chatId, NekoConfig.ccInputLang);
                 if (ccTarget == null || StringsKt.isBlank(ccTarget)) {
                     Translator.showCCTargetSelect(finalCell1, (target) -> {
@@ -3266,6 +3264,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         return Unit.INSTANCE;
                     });
                     return;
+                }
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
                 }
                 ccComment(ccTarget);
             });
@@ -3602,8 +3603,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void ccComment(String target) {
         String text = messageEditText.getText().toString();
-        text = CCConverter.get(CCTarget.valueOf(target)).convert(text);
-        messageEditText.setText(text);
+        AlertDialog progress = AlertUtil.showProgress(parentActivity);
+        progress.show();
+        UIUtil.runOnIoDispatcher(() -> {
+            String ccText = CCConverter.get(CCTarget.valueOf(target)).convert(text);
+            UIUtil.runOnUIThread(() -> {
+                progress.dismiss();
+                messageEditText.setText(ccText);
+            });
+        });
     }
 
     public boolean isSendButtonVisible() {
