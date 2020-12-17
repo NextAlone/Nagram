@@ -226,8 +226,8 @@ object ProxyUtil {
                 val url = link.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
 
                 AndroidUtilities.showProxyAlert(ctx,
-                        url.queryParameter("server"),
-                        url.queryParameter("port"),
+                        url.queryParameter("server") ?: return false,
+                        url.queryParameter("port") ?: return false,
                         url.queryParameter("user"),
                         url.queryParameter("pass"),
                         url.queryParameter("secret"),
@@ -476,7 +476,7 @@ object ProxyUtil {
 
             showLinkAlert(ctx, result.text)
 
-           val intArr =  arrayListOf<Int>().toIntArray()
+            val intArr = arrayListOf<Int>().toIntArray()
 
         } catch (ex: NoSuchMethodError) {
 
