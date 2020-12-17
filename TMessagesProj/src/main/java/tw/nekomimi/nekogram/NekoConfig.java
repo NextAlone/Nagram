@@ -101,6 +101,9 @@ public class NekoConfig {
     public static String translateToLang;
     public static String translateInputLang;
 
+    public static String ccToLang;
+    public static String ccInputLang;
+
     public static boolean hideProxyByDefault;
     public static boolean useProxyItem;
 
@@ -231,6 +234,9 @@ public class NekoConfig {
 
         translateToLang = preferences.getString("trans_to_lang", null);
         translateInputLang = preferences.getString("trans_input_to_lang", "en");
+
+        translateToLang = preferences.getString("opencc_to_lang", null);
+        translateInputLang = preferences.getString("opencc_input_to_lang", null);
 
         tabsTitleType = preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT);
         confirmAVMessage = preferences.getBoolean("confirmAVMessage", false);
@@ -795,13 +801,27 @@ public class NekoConfig {
 
     public static void toggleDisableLinkPreviewByDefault() {
 
-        preferences.edit().putBoolean("disableLinkPreviewByDefault",disableLinkPreviewByDefault = !disableLinkPreviewByDefault).apply();
+        preferences.edit().putBoolean("disableLinkPreviewByDefault", disableLinkPreviewByDefault = !disableLinkPreviewByDefault).apply();
 
     }
 
     public static void toggleSendCommentAfterForward() {
 
-        preferences.edit().putBoolean("sendCommentAfterForward",sendCommentAfterForward = !sendCommentAfterForward).apply();
+        preferences.edit().putBoolean("sendCommentAfterForward", sendCommentAfterForward = !sendCommentAfterForward).apply();
 
     }
+
+    public static void setCCToLang(String toLang) {
+
+        preferences.edit().putString("opencc_to_lang", ccToLang = toLang).apply();
+
+    }
+
+    public static void setCCInputToLang(String toLang) {
+
+        preferences.edit().putString("opencc_input_to_lang", ccInputLang = toLang).apply();
+
+    }
+
+
 }

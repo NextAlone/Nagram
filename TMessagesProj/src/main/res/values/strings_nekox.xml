@@ -230,8 +230,6 @@
     <string name="NekoXFaq">NekoX FAQ</string>
 
     <string name="TransSite">Translate Platform</string>
-    <string name="UsePersianCalender">Use Persian Calender</string>
-
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>
     <string name="OpenPGPKey">OpenPGP Key</string>
@@ -260,5 +258,16 @@
 
     <string name="FCTitle">About application updates</string>
     <string name="FCInfo">Follow our announcements and updates channel?</string>
+
+    <string name="OpenCC" translatable="false">OpenCC</string>
+    <string name="CCTitle">OpenCC (Chinese Convert)</string>
+    <string name="CCTarget">Target</string>
+    <string name="CCNo">None</string>
+    <string name="CCTC">Traditional Chinese</string>
+    <string name="CCHK">Traditional Chinese (Hong Kong)</string>
+    <string name="CCTT">Traditional Chinese (Taiwan)</string>
+    <string name="CCSC">Simplified Chinese</string>
+    <string name="CCSP">Simplified Chinese (China)</string>
+    <string name="CCJP">New Japanese Kanji (Shinjitai)</string>
 
 </resources>

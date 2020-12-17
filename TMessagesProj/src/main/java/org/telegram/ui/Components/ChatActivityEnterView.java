@@ -141,7 +141,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.cc.CCConverter;
+import tw.nekomimi.nekogram.cc.CCTarget;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -3244,6 +3247,42 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
             cell.setMinimumWidth(AndroidUtilities.dp(196));
             menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+            cell = new ActionBarMenuSubItem(getContext());
+
+            cell.setTextAndIcon(LocaleController.getString("Translate", R.string.OpenCC), R.drawable.ic_translate);
+            ActionBarMenuSubItem finalCell1 = cell;
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+                String ccTarget = TranslateDb.getChatCCTarget(chatId, NekoConfig.ccInputLang);
+                if (ccTarget == null || StringsKt.isBlank(ccTarget)) {
+                    Translator.showCCTargetSelect(finalCell1, (target) -> {
+                        if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                            menuPopupWindow.dismiss();
+                        }
+                        ccComment(target);
+                        TranslateDb.saveChatCCTarget(chatId, target);
+                        return Unit.INSTANCE;
+                    });
+                    return;
+                }
+                ccComment(ccTarget);
+            });
+            cell.setOnLongClickListener(v -> {
+                Translator.showCCTargetSelect(finalCell1, (target) -> {
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        menuPopupWindow.dismiss();
+                    }
+                    ccComment(target);
+                    TranslateDb.saveChatCCTarget(chatId, target);
+                    return Unit.INSTANCE;
+                });
+                return true;
+            });
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
 
         }
 
@@ -3559,6 +3598,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         });
 
+    }
+
+    private void ccComment(String target) {
+        String text = messageEditText.getText().toString();
+        text = CCConverter.get(CCTarget.valueOf(target)).convert(text);
+        messageEditText.setText(text);
     }
 
     public boolean isSendButtonVisible() {

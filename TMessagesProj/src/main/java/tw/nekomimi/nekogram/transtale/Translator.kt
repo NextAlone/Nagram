@@ -8,6 +8,7 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
+import tw.nekomimi.nekogram.cc.CCTarget
 import tw.nekomimi.nekogram.transtale.source.GoogleAppTranslator
 import tw.nekomimi.nekogram.transtale.source.LingoTranslator
 import tw.nekomimi.nekogram.transtale.source.YandexTranslator
@@ -98,7 +99,9 @@ interface Translator {
 
         }
 
-        @JvmStatic @JvmOverloads fun showTargetLangSelect(anchor: View, input: Boolean = false, full: Boolean = false, callback: (Locale) -> Unit) {
+        @JvmStatic
+        @JvmOverloads
+        fun showTargetLangSelect(anchor: View, input: Boolean = false, full: Boolean = false, callback: (Locale) -> Unit) {
 
             val builder = PopupBuilder(anchor)
 
@@ -169,8 +172,38 @@ interface Translator {
         }
 
         @JvmStatic
+        fun showCCTargetSelect(anchor: View, callback: (String) -> Unit) {
+
+            val builder = PopupBuilder(anchor)
+
+            builder.setItems(arrayOf(
+                    LocaleController.getString("CCNo", R.string.CCNo),
+                    LocaleController.getString("CCSC", R.string.CCSC),
+                    LocaleController.getString("CCSP", R.string.CCSP),
+                    LocaleController.getString("CCTC", R.string.CCTC),
+                    LocaleController.getString("CCHK", R.string.CCHK),
+                    LocaleController.getString("CCTT", R.string.CCTT),
+                    LocaleController.getString("CCJP", R.string.CCJP)
+            )) { index: Int, _ ->
+                callback(when (index) {
+                    1 -> CCTarget.SC.name
+                    2 -> CCTarget.SP.name
+                    3 -> CCTarget.TC.name
+                    4 -> CCTarget.HK.name
+                    5 -> CCTarget.TT.name
+                    6 -> CCTarget.JP.name
+                    else -> ""
+                })
+            }
+
+            builder.show()
+
+        }
+
+        @JvmStatic
         @JvmOverloads
-        fun translate(to: Locale = NekoConfig.translateToLang?.code2Locale ?: LocaleController.getInstance().currentLocale, query: String, translateCallBack: TranslateCallBack) {
+        fun translate(to: Locale = NekoConfig.translateToLang?.code2Locale
+                ?: LocaleController.getInstance().currentLocale, query: String, translateCallBack: TranslateCallBack) {
 
             UIUtil.runOnIoDispatcher {
 
@@ -186,7 +219,8 @@ interface Translator {
 
                 }.onFailure {
 
-                    translateCallBack.onFailed(it is UnsupportedOperationException, it.message ?: it.javaClass.simpleName)
+                    translateCallBack.onFailed(it is UnsupportedOperationException, it.message
+                            ?: it.javaClass.simpleName)
 
                 }
 

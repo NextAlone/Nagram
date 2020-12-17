@@ -16,11 +16,14 @@
 package com.google.android.exoplayer2;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.source.SampleStream;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MediaClock;
-import java.io.IOException;
+
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
+import java.io.IOException;
 
 /**
  * A {@link Renderer} implementation whose track type is {@link C#TRACK_TYPE_NONE} and does not
@@ -28,7 +31,8 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
  */
 public abstract class NoSampleRenderer implements Renderer, RendererCapabilities {
 
-  @MonotonicNonNull private RendererConfiguration configuration;
+  @MonotonicNonNull
+  private RendererConfiguration configuration;
   private int index;
   private int state;
   @Nullable private SampleStream stream;
@@ -196,7 +200,7 @@ public abstract class NoSampleRenderer implements Renderer, RendererCapabilities
     return ADAPTIVE_NOT_SUPPORTED;
   }
 
-  // PlayerMessage.Target implementation.
+  // PlayerMessage.CCTarget implementation.
 
   @Override
   public void handleMessage(int what, @Nullable Object object) throws ExoPlaybackException {

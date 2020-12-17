@@ -967,7 +967,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == appBarShadowRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, eventTypeRow != -1);
                     } else if (position == usePersianCalenderRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UsePersianCalender", R.string.UsePersianCalender), false, false);
                     } else if (position == autoPauseVideoRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
                     }

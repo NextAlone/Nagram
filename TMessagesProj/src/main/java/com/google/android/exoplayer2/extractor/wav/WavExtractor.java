@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.extractor.wav;
 
 import android.util.Pair;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.ParserException;
@@ -30,9 +31,11 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.ParsableByteArray;
 import com.google.android.exoplayer2.util.Util;
-import java.io.IOException;
+
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
+import java.io.IOException;
 
 /**
  * Extracts data from WAV byte streams.
@@ -313,9 +316,11 @@ public final class WavExtractor implements Extractor {
 
     /** Number of frames per block of the input (yet to be decoded) data. */
     private final int framesPerBlock;
-    /** Target for the input (yet to be decoded) data. */
+    /**
+     * CCTarget for the input (yet to be decoded) data.
+     */
     private final byte[] inputData;
-    /** Target for decoded (yet to be output) data. */
+    /** CCTarget for decoded (yet to be output) data. */
     private final ParsableByteArray decodedData;
     /** The target size of each output sample, in frames. */
     private final int targetSampleSizeFrames;

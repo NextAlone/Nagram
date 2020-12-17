@@ -19,26 +19,49 @@ class TranslateDb(val code: String) {
 
         val repo = HashMap<Locale, TranslateDb>()
         val chat = db.getRepository("chat", ChatLanguage::class.java)
+        val ccTarget = db.getRepository("opencc", ChatCCTarget::class.java)
 
         @JvmStatic fun getChatLanguage(chatId: Int, default: Locale): Locale {
 
-            return chat.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.language?.code2Locale ?: default
+            return chat.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.language?.code2Locale
+                    ?: default
 
         }
 
-        @JvmStatic fun saveChatLanguage(chatId: Int, locale: Locale) = UIUtil.runOnIoDispatcher {
+        @JvmStatic
+        fun saveChatLanguage(chatId: Int, locale: Locale) = UIUtil.runOnIoDispatcher {
 
             chat.update(ChatLanguage(chatId, locale.locale2code), true)
 
         }
 
-        @JvmStatic fun currentTarget() = NekoConfig.translateToLang?.transDbByCode ?: LocaleController.getInstance().currentLocale.transDb
+        @JvmStatic
+        fun getChatCCTarget(chatId: Int, default: String?): String? {
 
-        @JvmStatic fun forLocale(locale: Locale) = locale.transDb
+            return ccTarget.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.ccTarget
+                    ?: default
 
-        @JvmStatic fun currentInputTarget() = NekoConfig.translateInputLang.transDbByCode
+        }
 
-        @JvmStatic fun clearAll() {
+        @JvmStatic
+        fun saveChatCCTarget(chatId: Int, target: String) = UIUtil.runOnIoDispatcher {
+
+            ccTarget.update(ChatCCTarget(chatId, target), true)
+
+        }
+
+        @JvmStatic
+        fun currentTarget() = NekoConfig.translateToLang?.transDbByCode
+                ?: LocaleController.getInstance().currentLocale.transDb
+
+        @JvmStatic
+        fun forLocale(locale: Locale) = locale.transDb
+
+        @JvmStatic
+        fun currentInputTarget() = NekoConfig.translateInputLang.transDbByCode
+
+        @JvmStatic
+        fun clearAll() {
 
             db.listRepositories()
                     .filter { it  != "chat" }

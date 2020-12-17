@@ -155,11 +155,11 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
                             if (parentActivity != null && !canceled.get()) {
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
-                                        ?: it.javaClass.simpleName, Runnable {
+                                        ?: it.javaClass.simpleName) {
 
                                     translateMessages(messages, target)
 
-                                })
+                                }
 
                             }
 
@@ -192,11 +192,11 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
                                 if (parentActivity != null && !canceled.get()) {
 
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, e.message
-                                            ?: e.javaClass.simpleName, Runnable {
+                                            ?: e.javaClass.simpleName) {
 
                                         translateMessages(messages, target)
 
-                                    })
+                                    }
 
                                 }
 
@@ -229,11 +229,11 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
                             if (parentActivity != null && !canceled.get()) {
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
-                                        ?: it.javaClass.simpleName, Runnable {
+                                        ?: it.javaClass.simpleName) {
 
                                     translateMessages(messages, target)
 
-                                })
+                                }
 
                             }
 
