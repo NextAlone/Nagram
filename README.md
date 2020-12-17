@@ -2,7 +2,7 @@
 
 NekoX is an **open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
-- ~~Google play store: (https://play.google.com/store/apps/details?id=nekox.messenger)~~
+- Google play store: (https://play.google.com/store/apps/details?id=nekox.messenger)
 - Update news : https://t.me/NekogramX
 - Feedback: https://github.com/NekoX-Dev/NekoX/issues
 - Chat Group (English / Chinese): https://t.me/NekoXChat 
@@ -13,9 +13,9 @@ The play store version is outdated [due to](https://developer.android.com/distri
 ## NekoX Changes
 
 - Most of Nekogram's features
+- OpenCC Chinese Convert
 - Built-in Vmess, Shadowsocks, SSR proxies support
-- Built-in public proxy list
-- Proxy subscription support.
+- Built-in public proxy list / Proxy subscription support.
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc.
 - Scan the qrcode (any link, can add a proxy).
 - The ( vemss / vmess1 / ss / ssr / rb ) proxy link in the message can be clicked.
@@ -125,4 +125,7 @@ Join project at https://nekox.crowdin.com/nekox.
     <li>AndroidLibV2rayLite: <a href="https://github.com/2dust/AndroidLibV2rayLite/blob/master/LICENSE">LGPLv3</a></li>
     <li>shadowsocks-android: <a href="https://github.com/shadowsocks/shadowsocks-android/blob/master/LICENSE">GPLv3</a></li>
     <li>shadowsocksRb-android: <a href="https://github.com/shadowsocksRb/shadowsocksRb-android/blob/master/LICENSE">GPLv3</a></li>
+    <li>HanLP: <a href="https://github.com/hankcs/HanLP/blob/1.x/LICENSE">Apache License 2.0</a></li>
+    <li>OpenCC: <a href="https://github.com/BYVoid/OpenCC/blob/master/LICENSE">Apache License 2.0</a></li>
+    <li>opencc-data: <a href="https://github.com/nk2028/opencc-data">Apache License 2.0</a></li>
 </ul>
