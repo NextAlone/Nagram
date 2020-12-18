@@ -10,6 +10,7 @@ package org.telegram.tgnet;
 
 import android.text.TextUtils;
 
+import org.osmdroid.util.TileSystemWebMercator;
 import org.telegram.messenger.Utilities;
 
 import java.util.ArrayList;
@@ -4386,15 +4387,26 @@ public class TLRPC {
                 case 0xb2a2f663:
                     result = new TL_geoPoint();
                     break;
-			}
-			if (result == null && exception) {
-				throw new RuntimeException(String.format("can't parse magic %x in GeoPoint", constructor));
-			}
-			if (result != null) {
-				result.readParams(stream, exception);
-			}
-			return result;
-		}
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in GeoPoint", constructor));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            // nekox: Fix crash when open invalid location
+            if (result.lat < TileSystemWebMercator.MinLatitude) {
+                result.lat = TileSystemWebMercator.MinLatitude;
+            } else if (result.lat > TileSystemWebMercator.MaxLatitude) {
+                result.lat = TileSystemWebMercator.MaxLatitude;
+            }
+            if (result._long < TileSystemWebMercator.MinLongitude) {
+                result._long = TileSystemWebMercator.MinLongitude;
+            } else if (result._long > TileSystemWebMercator.MaxLongitude) {
+                result._long = TileSystemWebMercator.MaxLongitude;
+            }
+            return result;
+        }
 	}
 
 	public static class TL_geoPoint_layer119 extends TL_geoPoint {
