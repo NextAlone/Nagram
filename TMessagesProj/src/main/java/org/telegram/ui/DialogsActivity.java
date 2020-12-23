@@ -38,6 +38,15 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.StateSet;
@@ -63,13 +72,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -151,6 +156,7 @@ import org.telegram.ui.Components.PacmanAnimation;
 import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -158,6 +164,7 @@ import org.telegram.ui.Components.SearchViewPager;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Components.ViewPagerFixed;
 
 import java.util.ArrayList;
 
@@ -169,7 +176,8 @@ import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
-    private ViewPagerFixed.TabsView searchTabsView;
+    private boolean canShowFilterTabsView;
+    private boolean filterTabsViewIsVisible;
 
     private class ViewPage extends FrameLayout {
         private DialogsRecyclerView listView;
@@ -195,6 +203,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    private ViewPagerFixed.TabsView searchTabsView;
     private ViewPage[] viewPages;
     private FiltersView filtersView;
     private ActionBarMenuItem passcodeItem;
@@ -205,7 +214,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ActionBarMenuItem searchItem;
     private ActionBarMenuItem doneItem;
     private ProxyDrawable proxyDrawable;
-    private ImageView floatingButton;
+    private RLottieImageView floatingButton;
     private FrameLayout floatingButtonContainer;
     private ChatAvatarContainer avatarContainer;
     private UndoView[] undoView = new UndoView[2];
@@ -332,7 +341,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private int topPadding;
 private int lastMeasuredTopPadding;
-
     private int folderId;
 
     private final static int pin = 100;
@@ -373,7 +381,13 @@ private int lastMeasuredTopPadding;
     private boolean searchWasFullyShowed;
     private boolean whiteActionBar;
     private float progressToActionMode;
-    ValueAnimator actionBarColorAnimator;
+    private ValueAnimator actionBarColorAnimator;
+
+    private ValueAnimator filtersTabAnimator;
+    private float filterTabsProgress;
+    private float filterTabsMoveFrom;
+    private float tabsYOffset;
+    private float scrollAdditionalOffset;
 
     public final Property<DialogsActivity, Float> SCROLL_Y = new AnimationProperties.FloatProperty<DialogsActivity>("animationValue") {
         @Override
@@ -470,7 +484,7 @@ private int lastMeasuredTopPadding;
             float h = actionBar.getHeight();
             float filtersTabsHeight = 0;
             if (filterTabsView != null && filterTabsView.getVisibility() != GONE) {
-                filtersTabsHeight = filterTabsView.getMeasuredHeight();
+                filtersTabsHeight = filterTabsView.getMeasuredHeight() - (1f - filterTabsProgress) * filterTabsView.getMeasuredHeight();
             }
             float searchTabsHeight = 0;
             if (searchTabsView != null && searchTabsView.getVisibility() != View.GONE) {
@@ -482,6 +496,9 @@ private int lastMeasuredTopPadding;
 
         @Override
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            if (child == fragmentContextView && fragmentContextView.getCurrentStyle() == 3) {
+                return true;
+            }
             boolean result;
             if (child == viewPages[0] || (viewPages.length > 1 && child == viewPages[1]) || child == fragmentContextView || child == fragmentLocationContextView) {
                 canvas.save();
@@ -569,11 +586,30 @@ private int lastMeasuredTopPadding;
                     canvas.drawRect(0, top, getMeasuredWidth(), top + actionBarHeight, actionBarDefaultPaint);
                 }
             }
+            tabsYOffset = 0;
+            if (filtersTabAnimator != null && filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
+                tabsYOffset = - (1f - filterTabsProgress) * filterTabsView.getMeasuredHeight();
+                filterTabsView.setTranslationY(actionBar.getTranslationY() + tabsYOffset);
+                filterTabsView.setAlpha(filterTabsProgress);
+                viewPages[0].setTranslationY(-(1f - filterTabsProgress) * filterTabsMoveFrom);
+            } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
+                filterTabsView.setTranslationY(actionBar.getTranslationY());
+                filterTabsView.setAlpha(1f);
+            }
+            updateContextViewPosition();
             super.dispatchDraw(canvas);
             if (whiteActionBar && searchAnimationProgress > 0 && searchAnimationProgress < 1f && searchTabsView != null) {
                 windowBackgroundPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                 windowBackgroundPaint.setAlpha((int) (windowBackgroundPaint.getAlpha() * searchAnimationProgress));
                 canvas.drawRect(0, top + actionBarHeight, getMeasuredWidth(), top + actionBar.getMeasuredHeight() + searchTabsView.getMeasuredHeight(), windowBackgroundPaint);
+            }
+            if (fragmentContextView != null && fragmentContextView.getCurrentStyle() == 3) {
+                canvas.save();
+                canvas.translate(fragmentContextView.getX(), fragmentContextView.getY());
+                fragmentContextView.setDrawOverlay(true);
+                fragmentContextView.draw(canvas);
+                fragmentContextView.setDrawOverlay(false);
+                canvas.restore();
             }
             if (scrimView != null) {
                 canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), scrimPaint);
@@ -647,6 +683,12 @@ private int lastMeasuredTopPadding;
                         h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - AndroidUtilities.dp(44) - topPadding;
                     } else {
                         h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - ((onlySelect && !(initialDialogsType == 3 && NekoConfig.showTabsOnForward)) ? 0 : actionBar.getMeasuredHeight()) - topPadding;
+                    }
+
+                    if (filtersTabAnimator != null && filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
+                        h += filterTabsMoveFrom;
+                    } else {
+                        child.setTranslationY(0);
                     }
                     child.measure(contentWidthSpec, View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h), View.MeasureSpec.EXACTLY));
                     child.setPivotX(child.getMeasuredWidth() / 2);
@@ -812,6 +854,8 @@ private int lastMeasuredTopPadding;
                             filterTabsView.selectTabWithId(viewPages[0].selectedType, 1f);
                             filterTabsView.selectTabWithId(viewPages[1].selectedType, additionalOffset / viewPages[0].getMeasuredWidth());
                             switchToCurrentSelectedMode(true);
+                            viewPages[0].dialogsAdapter.resume();
+                            viewPages[1].dialogsAdapter.pause();
                         }
                     } else {
                         if (startedTrackingX < viewPages[1].getMeasuredWidth() + viewPages[1].getTranslationX()) {
@@ -823,6 +867,8 @@ private int lastMeasuredTopPadding;
                             filterTabsView.selectTabWithId(viewPages[0].selectedType, 1f);
                             filterTabsView.selectTabWithId(viewPages[1].selectedType, -additionalOffset / viewPages[0].getMeasuredWidth());
                             switchToCurrentSelectedMode(true);
+                            viewPages[0].dialogsAdapter.resume();
+                            viewPages[1].dialogsAdapter.pause();
                         } else {
                             additionalOffset = viewPages[0].getTranslationX();
                         }
@@ -955,6 +1001,8 @@ private int lastMeasuredTopPadding;
                                     viewPages[1] = tempPage;
                                     filterTabsView.selectTabWithId(viewPages[0].selectedType, 1.0f);
                                     updateCounters(false);
+                                    viewPages[0].dialogsAdapter.resume();
+                                    viewPages[1].dialogsAdapter.pause();
                                 }
                                 if (parentLayout != null) {
                                     parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(viewPages[0].selectedType == filterTabsView.getFirstTabId() || searchIsShowed);
@@ -1002,6 +1050,8 @@ private int lastMeasuredTopPadding;
         private boolean ignoreLayout;
         private ViewPage parentPage;
         private int appliedPaddingTop;
+        private int lastTop;
+        private int lastListPadding;
 
         public DialogsRecyclerView(Context context, ViewPage page) {
             super(context);
@@ -1064,6 +1114,7 @@ private int lastMeasuredTopPadding;
             if (slidingView != null && pacmanAnimation != null) {
                 pacmanAnimation.draw(canvas, slidingView.getTop() + slidingView.getMeasuredHeight() / 2);
             }
+
         }
 
         @Override
@@ -1085,6 +1136,25 @@ private int lastMeasuredTopPadding;
         protected void onMeasure(int widthSpec, int heightSpec) {
             int t = 0;
             if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward) || !onlySelect) {
+                if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
+                    t = AndroidUtilities.dp(44);
+                } else {
+                    t = actionBar.getMeasuredHeight();
+                }
+            }
+
+            int pos = parentPage.layoutManager.findFirstVisibleItemPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                RecyclerView.ViewHolder holder = parentPage.listView.findViewHolderForAdapterPosition(pos);
+                if (holder != null) {
+                    int top = holder.itemView.getTop();
+
+                    ignoreLayout = true;
+                    parentPage.layoutManager.scrollToPositionWithOffset(pos, (int) (top - lastListPadding + scrollAdditionalOffset));
+                    ignoreLayout = false;
+                }
+            }
+            if (!onlySelect) {
                 ignoreLayout = true;
                 if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                     t = ActionBar.getCurrentActionBarHeight() + (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
@@ -1093,16 +1163,6 @@ private int lastMeasuredTopPadding;
                 }
                 setTopGlowOffset(t);
                 setPadding(0, t, 0, 0);
-                if (appliedPaddingTop != t) {
-                    int pos = parentPage.layoutManager.findFirstVisibleItemPosition();
-                    if (pos != RecyclerView.NO_POSITION) {
-                        RecyclerView.ViewHolder holder = parentPage.listView.findViewHolderForAdapterPosition(pos);
-                        if (holder != null) {
-                            int top = holder.itemView.getTop();
-                            parentPage.layoutManager.scrollToPositionWithOffset(pos, top - appliedPaddingTop);
-                        }
-                    }
-                }
                 ignoreLayout = false;
             }
 
@@ -1127,7 +1187,10 @@ private int lastMeasuredTopPadding;
         @Override
         protected void onLayout(boolean changed, int l, int t, int r, int b) {
             super.onLayout(changed, l, t, r, b);
-            appliedPaddingTop = getPaddingTop();
+            lastListPadding = getPaddingTop();
+            lastTop = t;
+            scrollAdditionalOffset = 0;
+
             if ((dialogRemoveFinished != 0 || dialogInsertFinished != 0 || dialogChangeFinished != 0) && !parentPage.dialogsItemAnimator.isRunning()) {
                 onDialogAnimationFinished();
             }
@@ -1583,6 +1646,8 @@ private int lastMeasuredTopPadding;
         getNotificationCenter().addObserver(this, NotificationCenter.messagesDeleted);
 
 
+        getNotificationCenter().addObserver(this, NotificationCenter.didDatabaseCleared);
+
         if (!dialogsLoaded[currentAccount]) {
             MessagesController messagesController = getMessagesController();
             messagesController.loadGlobalNotificationsSettings();
@@ -1634,6 +1699,8 @@ private int lastMeasuredTopPadding;
 
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
         }
+
+        getNotificationCenter().removeObserver(this, NotificationCenter.didDatabaseCleared);
         if (commentView != null) {
             commentView.onDestroy();
         }
@@ -1646,6 +1713,13 @@ private int lastMeasuredTopPadding;
     @Override
     protected ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context) {
+
+            @Override
+            public void setTranslationY(float translationY) {
+                super.setTranslationY(translationY);
+                fragmentView.invalidate();
+            }
+
             @Override
             protected boolean shouldClipChild(View child) {
                 return super.shouldClipChild(child) || child == doneItem;
@@ -1879,7 +1953,7 @@ private int lastMeasuredTopPadding;
             };
 
             filterTabsView.setVisibility(View.GONE);
-            filterTabsView.setTag(null);
+            canShowFilterTabsView = false;
             filterTabsView.setDelegate(new FilterTabsView.FilterTabsViewDelegate() {
 
                 private void showDeleteAlert(MessagesController.DialogFilter dialogFilter) {
@@ -1893,12 +1967,12 @@ private int lastMeasuredTopPadding;
                         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
 
                         }));
-                        if (getMessagesController().dialogFilters.size() > 1) {
-                            filterTabsView.beginCrossfade();
-                        }
+//                        if (getMessagesController().dialogFilters.size() > 1) {
+//                            filterTabsView.beginCrossfade();
+//                        }
                         getMessagesController().removeFilter(dialogFilter);
                         getMessagesStorage().deleteDialogFilter(dialogFilter);
-                        filterTabsView.commitCrossfade();
+                      //  filterTabsView.commitCrossfade();
                     });
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
@@ -1969,6 +2043,8 @@ private int lastMeasuredTopPadding;
                         showScrollbars(true);
                         updateCounters(false);
                         checkListLoad(viewPages[0]);
+                        viewPages[0].dialogsAdapter.resume();
+                        viewPages[1].dialogsAdapter.pause();
                     }
                 }
 
@@ -2059,7 +2135,7 @@ private int lastMeasuredTopPadding;
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
                     scrimPopupWindowItems = new ActionBarMenuSubItem[3];
                     for (int a = 0, N = (tabView.getId() == Integer.MAX_VALUE ? 2 : 3); a < N; a++) {
-                        ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity());
+                        ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == N - 1);
                         if (a == 0) {
                             if (getMessagesController().dialogFilters.size() <= 1) {
                                 continue;
@@ -2537,7 +2613,7 @@ private int lastMeasuredTopPadding;
                             }
                         }
                     }
-                    if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && recyclerView == viewPages[0].listView && !searching && !actionBar.isActionModeShowed() && !disableActionBarScrolling) {
+                    if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && recyclerView == viewPages[0].listView && !searching && !actionBar.isActionModeShowed() && !disableActionBarScrolling && filterTabsViewIsVisible) {
                         if (dy > 0 && hasHiddenArchive() && viewPages[0].dialogsType == 0) {
                             View child = recyclerView.getChildAt(0);
                             if (child != null) {
@@ -2781,7 +2857,7 @@ private int lastMeasuredTopPadding;
 
         floatingButtonContainer = new FrameLayout(context);
         floatingButtonContainer.setVisibility(onlySelect || folderId != 0 ? View.GONE : View.VISIBLE);
-        contentView.addView(floatingButtonContainer, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 14, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 4 : 0, 0, LocaleController.isRTL ? 0 : 4, 0));
+        contentView.addView(floatingButtonContainer, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 4 : 0, 0, LocaleController.isRTL ? 0 : 4, 0));
         floatingButtonContainer.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putBoolean("destroyAfterSelect", true);
@@ -2789,7 +2865,7 @@ private int lastMeasuredTopPadding;
         });
 
 
-        floatingButton = new ImageView(context);
+        floatingButton = new RLottieImageView(context);
         floatingButton.setScaleType(ImageView.ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
@@ -2801,7 +2877,7 @@ private int lastMeasuredTopPadding;
         }
         floatingButton.setBackgroundDrawable(drawable);
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN));
-        floatingButton.setImageResource(R.drawable.floating_pencil);
+        floatingButton.setAnimation(R.raw.write_contacts_fab_icon, 52, 52);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(floatingButton, View.TRANSLATION_Z, AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
@@ -2816,22 +2892,9 @@ private int lastMeasuredTopPadding;
             });
         }
         floatingButtonContainer.setContentDescription(LocaleController.getString("NewMessageTitle", R.string.NewMessageTitle));
-        floatingButtonContainer.addView(floatingButton, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60), (Build.VERSION.SDK_INT >= 21 ? 56 : 60), Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
+        floatingButtonContainer.addView(floatingButton, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60), (Build.VERSION.SDK_INT >= 21 ? 56 : 60), Gravity.LEFT | Gravity.TOP, 10, 6, 10, 0));
 
         searchTabsView = null;
-        if (searchString != null) {
-            showSearch(true, false);
-            actionBar.openSearchField(searchString, false);
-        } else if (initialSearchString != null) {
-            showSearch(true, false);
-            actionBar.openSearchField(initialSearchString, false);
-            initialSearchString = null;
-            if (filterTabsView != null) {
-                filterTabsView.setTranslationY(-AndroidUtilities.dp(44));
-            }
-        } else {
-            showSearch(false, false);
-        }
 
         if (!onlySelect && initialDialogsType == 0) {
             fragmentLocationContextView = new FragmentContextView(context, this, true);
@@ -3043,10 +3106,24 @@ private int lastMeasuredTopPadding;
             }
         }
 
-        updateFilterTabs(false);
+        updateFilterTabs(false, false);
+
+        if (searchString != null) {
+            showSearch(true, false);
+            actionBar.openSearchField(searchString, false);
+        } else if (initialSearchString != null) {
+            showSearch(true, false);
+            actionBar.openSearchField(initialSearchString, false);
+            initialSearchString = null;
+            if (filterTabsView != null) {
+                filterTabsView.setTranslationY(-AndroidUtilities.dp(44));
+            }
+        } else {
+            showSearch(false, false);
+        }
 
         if (folderId != 0) {
-            FiltersView.MediaFilterData filterData = new FiltersView.MediaFilterData(R.drawable.chats_archive, R.drawable.chats_archive, LocaleController.getString("Archive", R.string.Archive), null, FiltersView.FILTER_TYPE_ARCHIVE);
+            FiltersView.MediaFilterData filterData = new FiltersView.MediaFilterData(R.drawable.chats_archive, R.drawable.chats_archive, LocaleController.getString("ArchiveSearchFilter", R.string.ArchiveSearchFilter), null, FiltersView.FILTER_TYPE_ARCHIVE);
             filterData.removable = false;
             actionBar.setSearchFilter(filterData);
             searchItem.collapseSearchFilters();
@@ -3072,14 +3149,14 @@ private int lastMeasuredTopPadding;
             if (fragmentLocationContextView != null && fragmentLocationContextView.getVisibility() == View.VISIBLE) {
                 from += AndroidUtilities.dp(36);
             }
-            fragmentContextView.setTranslationY(from + fragmentContextView.getTopPadding() + actionBar.getTranslationY() + filtersTabsHeight * (1f - searchAnimationProgress) + searchTabsHeight * searchAnimationProgress);
+            fragmentContextView.setTranslationY(from + fragmentContextView.getTopPadding() + actionBar.getTranslationY() + filtersTabsHeight * (1f - searchAnimationProgress) + searchTabsHeight * searchAnimationProgress + tabsYOffset);
         }
         if (fragmentLocationContextView != null) {
             float from = 0;
-            if (fragmentContextView != null) {
-                from += fragmentContextView.getTopPadding();
+            if (fragmentContextView != null && fragmentContextView.getVisibility() == View.VISIBLE) {
+                from += AndroidUtilities.dp(fragmentContextView.getStyleHeight()) + fragmentContextView.getTopPadding();
             }
-            fragmentLocationContextView.setTranslationY(from + fragmentLocationContextView.getTopPadding() + actionBar.getTranslationY() + filtersTabsHeight * (1f - searchAnimationProgress) + searchTabsHeight * searchAnimationProgress);
+            fragmentLocationContextView.setTranslationY(from + fragmentLocationContextView.getTopPadding() + actionBar.getTranslationY() + filtersTabsHeight * (1f - searchAnimationProgress) + searchTabsHeight * searchAnimationProgress + tabsYOffset);
         }
     }
 
@@ -3364,7 +3441,7 @@ private int lastMeasuredTopPadding;
         updateCounters(false);
     }
 
-    private void updateFilterTabs(boolean force) {
+    private void updateFilterTabs(boolean force, boolean animated) {
         if (filterTabsView == null || inPreviewMode || searchIsShowed) {
             return;
         }
@@ -3376,32 +3453,40 @@ private int lastMeasuredTopPadding;
         SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
         if (!filters.isEmpty()) {
             if (force || filterTabsView.getVisibility() != View.VISIBLE) {
-                filterTabsView.setVisibility(View.VISIBLE);
-                filterTabsView.setTag(1);
+                boolean animatedUpdateItems = animated;
+                if (filterTabsView.getVisibility() != View.VISIBLE) {
+                    animatedUpdateItems = false;
+                }
+                canShowFilterTabsView = true;
+                updateFilterTabsVisibility(animated);
                 int id = filterTabsView.getCurrentTabId();
                 if (id != Integer.MAX_VALUE && id >= filters.size()) {
                     filterTabsView.resetTabId();
                 }
                 filterTabsView.removeTabs();
                 if (!NekoConfig.hideAllTab)
-                    filterTabsView.addTab(Integer.MAX_VALUE, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                    filterTabsView.addTab(Integer.MAX_VALUE, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
                     switch (NekoConfig.tabsTitleType) {
                         case NekoConfig.TITLE_TYPE_TEXT:
-                            filterTabsView.addTab(a, dialogFilter.name);
+                            filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.name);
                             break;
                         case NekoConfig.TITLE_TYPE_ICON:
-                            filterTabsView.addTab(a, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
+                            filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
                             break;
                         case NekoConfig.TITLE_TYPE_MIX:
-                            filterTabsView.addTab(a, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name);
+                            filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name);
                             break;
                     }
                 }
                 id = filterTabsView.getCurrentTabId();
+                boolean updateCurrentTab = false;
                 if (id >= 0) {
-                    viewPages[0].selectedType = id;
+                    if (viewPages[0].selectedType != id) {
+                        updateCurrentTab = true;
+                        viewPages[0].selectedType = id;
+                    }
                 }
                 for (int a = 0; a < viewPages.length; a++) {
                     if (viewPages[a].selectedType != Integer.MAX_VALUE && viewPages[a].selectedType >= filters.size()) {
@@ -3409,8 +3494,10 @@ private int lastMeasuredTopPadding;
                     }
                     viewPages[a].listView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING);
                 }
-                filterTabsView.finishAddingTabs();
-                switchToCurrentSelectedMode(false);
+                filterTabsView.finishAddingTabs(animatedUpdateItems);
+                if (updateCurrentTab) {
+                    switchToCurrentSelectedMode(false);
+                }
                 if (parentLayout != null) {
                     parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(id == filterTabsView.getFirstTabId());
                 }
@@ -3437,8 +3524,8 @@ private int lastMeasuredTopPadding;
                 viewPages[1].dialogsAdapter.setDialogsType(initialDialogsType);
                 viewPages[1].dialogsType = initialDialogsType;
                 viewPages[1].dialogsAdapter.notifyDataSetChanged();
-                filterTabsView.setVisibility(View.GONE);
-                filterTabsView.setTag(null);
+                canShowFilterTabsView = false;
+                updateFilterTabsVisibility(animated);
                 for (int a = 0; a < viewPages.length; a++) {
                     if (viewPages[a].dialogsType == 0 && viewPages[a].archivePullViewState == ARCHIVE_ITEM_STATE_HIDDEN && hasHiddenArchive()) {
                         int p = viewPages[a].layoutManager.findFirstVisibleItemPosition();
@@ -3583,12 +3670,20 @@ private int lastMeasuredTopPadding;
                 if (viewPages[a].dialogsType == 0 && viewPages[a].archivePullViewState == ARCHIVE_ITEM_STATE_HIDDEN && viewPages[a].layoutManager.findFirstVisibleItemPosition() == 0 && hasHiddenArchive()) {
                     viewPages[a].layoutManager.scrollToPositionWithOffset(1, 0);
                 }
+                if (a == 0) {
+                    viewPages[a].dialogsAdapter.resume();
+                } else {
+                    viewPages[a].dialogsAdapter.pause();
+                }
             }
         }
         showNextSupportedSuggestion();
         Bulletin.addDelegate(this, new Bulletin.Delegate() {
             @Override
             public void onOffsetChange(float offset) {
+                if (undoView[0] != null && undoView[0].getVisibility() == View.VISIBLE) {
+                    return;
+                }
                 additionalFloatingTranslation = offset;
                 if (additionalFloatingTranslation < 0) {
                     additionalFloatingTranslation = 0;
@@ -3597,10 +3692,30 @@ private int lastMeasuredTopPadding;
                     updateFloatingButtonOffset();
                 }
             }
+
+            @Override
+            public void onShow(Bulletin bulletin) {
+                if (undoView[0] != null && undoView[0].getVisibility() == View.VISIBLE) {
+                    undoView[0].hide(true, 2);
+                }
+            }
         });
         if (searchIsShowed) {
             AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
         }
+    }
+
+    @Override
+    public boolean presentFragment(BaseFragment fragment) {
+        boolean b = super.presentFragment(fragment);
+        if (b) {
+            if (viewPages != null) {
+                for (int a = 0; a < viewPages.length; a++) {
+                    viewPages[a].dialogsAdapter.pause();
+                }
+            }
+        }
+        return b;
     }
 
     @Override
@@ -3616,6 +3731,12 @@ private int lastMeasuredTopPadding;
             undoView[0].hide(true, 0);
         }
         Bulletin.removeDelegate(this);
+
+        if (viewPages != null) {
+            for (int a = 0; a < viewPages.length; a++) {
+                viewPages[a].dialogsAdapter.pause();
+            }
+        }
     }
 
     @Override
@@ -3656,7 +3777,7 @@ private int lastMeasuredTopPadding;
             }
             closeSearchFieldOnHide = false;
         }
-        if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
+        if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && filterTabsViewIsVisible) {
             int scrollY = (int) -actionBar.getTranslationY();
             int actionBarHeight = ActionBar.getCurrentActionBarHeight();
             if (scrollY != 0 && scrollY != actionBarHeight) {
@@ -3680,7 +3801,7 @@ private int lastMeasuredTopPadding;
             ((ViewGroup.MarginLayoutParams) actionBar.getLayoutParams()).topMargin = 0;
             actionBar.removeView(avatarContainer);
             avatarContainer = null;
-            updateFilterTabs(false);
+            updateFilterTabs(false, false);
             floatingButton.setVisibility(View.VISIBLE);
             final ContentView contentView = (ContentView) fragmentView;
             if (fragmentContextView != null) {
@@ -3714,7 +3835,7 @@ private int lastMeasuredTopPadding;
     }
 
     private void showSearch(boolean show, boolean animated) {
-        if (initialDialogsType != 0) {
+        if (initialDialogsType != 0 && initialDialogsType != 3) {
             animated = false;
         }
         if (searchAnimator != null) {
@@ -3779,7 +3900,7 @@ private int lastMeasuredTopPadding;
         } else {
             AndroidUtilities.requestAdjustResize(getParentActivity(), classGuid);
         }
-        if (!show && filterTabsView != null && filterTabsView.getTag() != null) {
+        if (!show && filterTabsView != null && canShowFilterTabsView) {
             filterTabsView.setVisibility(View.VISIBLE);
         }
         if (animated) {
@@ -3918,7 +4039,7 @@ private int lastMeasuredTopPadding;
                 filterTabsView.getTabsContainer().setAlpha(show ? 0.0f : 1.0f);
             }
             if (filterTabsView != null) {
-                if (filterTabsView.getTag() != null && !show) {
+                if (canShowFilterTabsView && !show) {
                     filterTabsView.setVisibility(View.VISIBLE);
                 } else {
                     filterTabsView.setVisibility(View.GONE);
@@ -3927,6 +4048,75 @@ private int lastMeasuredTopPadding;
             searchViewPager.setVisibility(show ? View.VISIBLE : View.GONE);
             setSearchAnimationProgress(show ? 1f : 0);
             fragmentView.invalidate();
+        }
+    }
+
+    private void updateFilterTabsVisibility(boolean animated) {
+        if (isPaused) {
+            animated = false;
+        }
+        if (searchIsShowed) {
+            if (filtersTabAnimator != null) {
+                filtersTabAnimator.cancel();
+            }
+            filterTabsViewIsVisible = canShowFilterTabsView;
+            filterTabsProgress = filterTabsViewIsVisible ? 1f : 0;
+            return;
+        }
+        boolean visible = canShowFilterTabsView;
+        if (filterTabsViewIsVisible != visible) {
+            if (filtersTabAnimator != null) {
+                filtersTabAnimator.cancel();
+            }
+            filterTabsViewIsVisible = visible;
+            if (animated) {
+                if (visible) {
+                    if (filterTabsView.getVisibility() != View.VISIBLE) {
+                        filterTabsView.setVisibility(View.VISIBLE);
+                    }
+                    filtersTabAnimator = ValueAnimator.ofFloat(0, 1f);
+                    filterTabsMoveFrom = AndroidUtilities.dp(44);
+                } else {
+                    filtersTabAnimator = ValueAnimator.ofFloat(1f, 0f);
+                    filterTabsMoveFrom = Math.max(0, AndroidUtilities.dp(44) + actionBar.getTranslationY());
+                }
+                float animateFromScrollY = actionBar.getTranslationY();
+                final int account = currentAccount;
+                filtersTabAnimator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        filtersTabAnimator = null;
+                        scrollAdditionalOffset = AndroidUtilities.dp(44) - filterTabsMoveFrom;
+                        if (!visible) {
+                            filterTabsView.setVisibility(View.GONE);
+                        }
+                        if (fragmentView != null) {
+                            fragmentView.requestLayout();
+                        }
+                        NotificationCenter.getInstance(account).onAnimationFinish(animationIndex);
+                    }
+                });
+                filtersTabAnimator.addUpdateListener(valueAnimator -> {
+                    filterTabsProgress = (float) valueAnimator.getAnimatedValue();
+                    if (!visible) {
+                        setScrollY(animateFromScrollY * filterTabsProgress);
+                    }
+                    if (fragmentView != null) {
+                        fragmentView.invalidate();
+                    }
+                });
+                filtersTabAnimator.setDuration(220);
+                filtersTabAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                animationIndex = NotificationCenter.getInstance(account).setAnimationInProgress(animationIndex, null);
+                filtersTabAnimator.start();
+                fragmentView.requestLayout();
+            } else {
+                filterTabsProgress = visible ? 1f : 0;
+                filterTabsView.setVisibility(visible ? View.VISIBLE : View.GONE);
+                if (fragmentView != null) {
+                    fragmentView.invalidate();
+                }
+            }
         }
     }
 
@@ -5608,7 +5798,7 @@ private int lastMeasuredTopPadding;
                 finishFragment();
             }
         } else if (id == NotificationCenter.dialogFiltersUpdated) {
-            updateFilterTabs(true);
+            updateFilterTabs(true, true);
         } else if (id == NotificationCenter.filterSettingsUpdated) {
             showFiltersHint();
         } else if (id == NotificationCenter.newSuggestionsAvailable) {
@@ -5618,6 +5808,10 @@ private int lastMeasuredTopPadding;
                 ArrayList<Integer> markAsDeletedMessages = (ArrayList<Integer>) args[0];
                 int channelId = (int) args[1];
                 searchViewPager.messagesDeleted(channelId, markAsDeletedMessages);
+            }
+        } else if (id == NotificationCenter.didDatabaseCleared) {
+            for (int a = 0; a < viewPages.length; a++) {
+                viewPages[a].dialogsAdapter.didDatabaseCleared();
             }
         }
     }
@@ -5968,6 +6162,10 @@ private int lastMeasuredTopPadding;
                 finishFragment();
             }
         }
+    }
+
+    public RLottieImageView getFloatingButton() {
+        return floatingButton;
     }
 
     @Override
@@ -6441,6 +6639,25 @@ private int lastMeasuredTopPadding;
         arrayList.add(new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_chat_messagePanelCursor));
         arrayList.add(new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_actionBarIconBlue));
         arrayList.add(new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_groupcreate_spanBackground));
+
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayGreen1));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayGreen2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayBlue1));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayBlue2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_topPanelGreen1));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_topPanelGreen2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_topPanelBlue1));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_topPanelBlue2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_topPanelGray));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayAlertGradientMuted));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayAlertGradientMuted2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayAlertGradientUnmuted));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayAlertGradientUnmuted2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_mutedByAdminGradient));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_mutedByAdminGradient2));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_mutedByAdminGradient3));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayAlertMutedByAdmin));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_voipgroup_overlayAlertMutedByAdmin2));
 
 
         if (filtersView != null) {

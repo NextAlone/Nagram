@@ -86,7 +86,7 @@ public class ImageLocation {
     }
 
     public static ImageLocation getForPhoto(TLRPC.PhotoSize photoSize, TLRPC.Photo photo) {
-        if (photoSize instanceof TLRPC.TL_photoStrippedSize) {
+        if (photoSize instanceof TLRPC.TL_photoStrippedSize || photoSize instanceof TLRPC.TL_photoPathSize) {
             ImageLocation imageLocation = new ImageLocation();
             imageLocation.photoSize = photoSize;
             return imageLocation;
@@ -160,7 +160,7 @@ public class ImageLocation {
     }
 
     public static ImageLocation getForSticker(TLRPC.PhotoSize photoSize, TLRPC.Document sticker) {
-        if (photoSize instanceof TLRPC.TL_photoStrippedSize) {
+        if (photoSize instanceof TLRPC.TL_photoStrippedSize || photoSize instanceof TLRPC.TL_photoPathSize) {
             ImageLocation imageLocation = new ImageLocation();
             imageLocation.photoSize = photoSize;
             return imageLocation;
@@ -200,7 +200,7 @@ public class ImageLocation {
     }
 
     public static ImageLocation getForDocument(TLRPC.PhotoSize photoSize, TLRPC.Document document) {
-        if (photoSize instanceof TLRPC.TL_photoStrippedSize) {
+        if (photoSize instanceof TLRPC.TL_photoStrippedSize || photoSize instanceof TLRPC.TL_photoPathSize) {
             ImageLocation imageLocation = new ImageLocation();
             imageLocation.photoSize = photoSize;
             return imageLocation;
@@ -299,7 +299,7 @@ public class ImageLocation {
     public String getKey(Object parentObject, Object fullObject, boolean url) {
         if (secureDocument != null) {
             return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.id;
-        } else if (photoSize instanceof TLRPC.TL_photoStrippedSize) {
+        } else if (photoSize instanceof TLRPC.TL_photoStrippedSize || photoSize instanceof TLRPC.TL_photoPathSize) {
             if (photoSize.bytes.length > 0) {
                 return getStippedKey(parentObject, fullObject, photoSize);
             }

@@ -1075,7 +1075,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             continue;
                         }
                         int num = a;
-                        itemCells[a] = new ActionBarMenuSubItem(getParentActivity());
+                        itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == 1);
                         if (num == 0) {
                             itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                         } else if (num == 1) {

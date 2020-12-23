@@ -9,6 +9,7 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -50,6 +52,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
     private boolean accountsShown;
     private DrawerProfileCell profileCell;
     private SideMenultItemAnimator itemAnimator;
+    private boolean hasGps;
 
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator) {
         mContext = context;
@@ -57,6 +60,11 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         accountsShown = MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
         Theme.createDialogsResources(context);
         resetItems();
+        try {
+            hasGps = ApplicationLoader.applicationContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+        } catch (Throwable e) {
+            hasGps = false;
+        }
     }
 
     private int getAccountRowsCount() {
@@ -271,7 +279,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         int savedIcon = R.drawable.baseline_bookmark_24;
         int settingsIcon = R.drawable.baseline_settings_24;
         int inviteIcon = R.drawable.baseline_person_add_24;
-        int helpIcon = R.drawable.baseline_help_24;
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));

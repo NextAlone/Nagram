@@ -61,7 +61,7 @@ object UpdateUtil {
             builder.setMessage(LocaleController.getString("FCInfo", R.string.FCInfo))
 
             builder.setPositiveButton(LocaleController.getString("ChannelJoin", R.string.ChannelJoin)) { _, _ ->
-                messagesCollector.addUserToChat(channel.id, userConfig.currentUser, null, 0, null, null, null)
+                messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
                 Browser.openUrl(ctx, "https://t.me/$channelUsername")
             }
 

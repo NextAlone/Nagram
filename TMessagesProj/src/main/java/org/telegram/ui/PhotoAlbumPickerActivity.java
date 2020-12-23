@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.InputFilter;
 import android.text.TextPaint;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -347,7 +348,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
         emptyView = new TextView(context);
         emptyView.setTextColor(0xff808080);
-        emptyView.setTextSize(20);
+        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         emptyView.setGravity(Gravity.CENTER);
         emptyView.setVisibility(View.GONE);
         emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
@@ -483,7 +484,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         continue;
                     }
                     int num = a;
-                    itemCells[a] = new ActionBarMenuSubItem(getParentActivity());
+                    itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a ==  1);
                     if (num == 0) {
                         itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                     } else if (num == 1) {

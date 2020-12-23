@@ -2422,6 +2422,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         return false;
     }
 
+    public float getCurrentVelocity() {
+        if (mVelocityTracker != null) {
+            mVelocityTracker.computeCurrentVelocity(1000, mMaxFlingVelocity);
+            return mVelocityTracker.getYVelocity();
+        }
+        return 0;
+    }
+
     /**
      * Stop any current scroll in progress, such as one started by
      * {@link #smoothScrollBy(int, int)}, {@link #fling(int, int)} or a touch-initiated fling.
