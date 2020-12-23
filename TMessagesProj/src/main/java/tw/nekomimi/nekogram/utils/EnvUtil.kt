@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
+import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.NekoConfig
@@ -14,11 +15,14 @@ object EnvUtil {
 
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    val rootDirectories by lazy {
+    val rootDirectories: List<File> by lazy {
 
-        val mStorageManager = ApplicationLoader.applicationContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
-
-        (mStorageManager.javaClass.getMethod("getVolumePaths").invoke(mStorageManager) as Array<String>).map { File(it) }
+        try {
+            val mStorageManager = ApplicationLoader.applicationContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+            (mStorageManager.javaClass.getMethod("getVolumePaths").invoke(mStorageManager) as Array<String>).map { File(it) }
+        } catch (e:  Throwable) {
+            AndroidUtilities.getRootDirs()
+        }
 
     }
 

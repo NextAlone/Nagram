@@ -1528,23 +1528,8 @@ public class AndroidUtilities {
     }
 
     public static File getCacheDir() {
-        String state = null;
         try {
-            File file;
-                if (Build.VERSION.SDK_INT >= 19) {
-                    File[] dirs = ApplicationLoader.applicationContext.getExternalCacheDirs();
-                    file = dirs[0];
-                    if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                        for (int a = 0; a < dirs.length; a++) {
-                            if (dirs[a] != null && dirs[a].getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                                file = dirs[a];
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    file = new File(EnvUtil.getTelegramPath(), "caches");
-                }
+            File file = new File(EnvUtil.getTelegramPath(), "caches");
             FileUtil.initDir(file);
             return file;
         } catch (Throwable e) {

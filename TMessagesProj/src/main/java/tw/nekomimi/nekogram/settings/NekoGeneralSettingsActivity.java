@@ -116,7 +116,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int privacy2Row;
 
     private int generalRow;
-    private int cachePathRow;
     private int hidePhoneRow;
     private int disableUndoRow;
     private int showIdAndDcRow;
@@ -298,41 +297,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
 
                     return null;
-
-                });
-
-                builder.show();
-
-            } else if (position == cachePathRow) {
-
-                BottomBuilder builder = new BottomBuilder(getParentActivity());
-
-                builder.addTitle(LocaleController.getString("CachePath", R.string.CachePath));
-
-                AtomicReference<String> target = new AtomicReference<>();
-
-                builder.addRadioItems(EnvUtil.getAvailableDirectories(),
-                        (index, path) -> path.equals(NekoConfig.cachePath), (__, path, cell) -> {
-
-                            target.set(path);
-                            builder.doRadioCheck(cell);
-
-                            return null;
-
-                        });
-
-                builder.addCancelButton();
-                builder.addOkButton((it) -> {
-
-                    if (target.get() != null) {
-
-                        NekoConfig.setCachePath(target.get());
-                        ImageLoader.getInstance().checkMediaPaths();
-                        listAdapter.notifyItemChanged(position);
-
-                    }
-
-                    return Unit.INSTANCE;
 
                 });
 
@@ -755,7 +719,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         privacy2Row = rowCount++;
 
         generalRow = rowCount++;
-        cachePathRow = rowCount++;
         hidePhoneRow = rowCount++;
         disableUndoRow = rowCount++;
         showIdAndDcRow = rowCount++;
@@ -914,8 +877,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
                     if (position == googleCloudTranslateKeyRow) {
                         textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice), false);
-                    } else if (position == cachePathRow) {
-                        textCell.setTextAndValue(LocaleController.getString("CachePath", R.string.CachePath), NekoConfig.cachePath, true);
                     }
                 }
                 break;
@@ -1049,7 +1010,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (position == connectionRow || position == transRow || position == dialogsRow ||
                     position == privacyRow || position == generalRow || position == appearanceRow || position == openKeyChainRow) {
                 return 4;
-            } else if (position == googleCloudTranslateKeyRow || position == cachePathRow) {
+            } else if (position == googleCloudTranslateKeyRow) {
                 return 6;
             }
             return 3;

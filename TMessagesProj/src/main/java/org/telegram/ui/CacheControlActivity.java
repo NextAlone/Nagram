@@ -174,22 +174,7 @@ public class CacheControlActivity extends BaseFragment {
             audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), 0);
             totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersSize;
 
-            File path;
-            if (Build.VERSION.SDK_INT >= 19) {
-                ArrayList<File> storageDirs = AndroidUtilities.getRootDirs();
-                String dir = (path = storageDirs.get(0)).getAbsolutePath();
-                if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                    for (int a = 0, N = storageDirs.size(); a < N; a++) {
-                        File file = storageDirs.get(a);
-                        if (file.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                            path = file;
-                            break;
-                        }
-                    }
-                }
-            } else {
-                path = new File(SharedConfig.storageCacheDir);
-            }
+            File path = EnvUtil.getTelegramPath();
             try {
                 StatFs stat = new StatFs(path.getPath());
                 long blockSize;
@@ -324,36 +309,21 @@ public class CacheControlActivity extends BaseFragment {
                     file = FileLoader.checkDirectory(type);
                 }
                 if (file != null) {
-                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, false);
+                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, true);
                 }
                 if (type == FileLoader.MEDIA_DIR_CACHE) {
                     cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), documentsMusicType);
                     imagesCleared = true;
 
                     try {
-
                         FileUtil.delete(new File(ApplicationLoader.getDataDirFixed(), "cache"));
-
                     } catch (Exception ignored) {
                     }
 
                     try {
-
                         FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"));
-
                     } catch (Exception ignored) {
                     }
-
-                    try {
-
-                        // :)
-
-                        FileUtil.delete(ApplicationLoader.applicationContext.getExternalFilesDir("Telegram"));
-                        FileUtil.delete(Environment.getExternalStoragePublicDirectory("Telegram"));
-
-                    } catch (Exception ignored) {
-                    }
-
                 } else if (type == FileLoader.MEDIA_DIR_AUDIO) {
                     audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), documentsMusicType);
                 } else if (type == FileLoader.MEDIA_DIR_DOCUMENT) {
