@@ -38,7 +38,7 @@ configurations {
 }
 
 def okHttpVersion = '4.9.0'
-def fcmVersion = '21.0.0'
+def fcmVersion = '21.0.1'
 def crashlyticsVersion = '17.3.0'
 def playCoreVersion = '1.9.0'
 
@@ -94,6 +94,9 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
+    debugImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
+    debugImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    debugImplementation "com.google.android.play:core:$playCoreVersion"
     releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
     releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
@@ -383,9 +386,9 @@ android {
     tasks.all { task ->
         if (task.name.startsWith('uploadCrashlyticsMappingFile')) {
             task.enabled = false
-        } else if (((task.name.contains('Crashlytics'))) && !task.name.endsWith("Release")) {
+        } else if (((task.name.contains('Crashlytics'))) && task.name.contains("NoGcm")) {
             task.enabled = false
-        } else if (((task.name.endsWith('GoogleServices'))) && !task.name.endsWith("ReleaseGoogleServices")) {
+        } else if (((task.name.endsWith('GoogleServices'))) && task.name.contains("NoGcm")) {
             task.enabled = false
         }
     }

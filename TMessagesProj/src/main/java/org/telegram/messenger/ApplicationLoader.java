@@ -73,7 +73,8 @@ public class ApplicationLoader extends Application {
 
     public static boolean hasPlayServices;
 
-    @Override public SharedPreferences getSharedPreferences(String name, int mode) {
+    @Override
+    public SharedPreferences getSharedPreferences(String name, int mode) {
         return new WarppedPref(super.getSharedPreferences(name, mode));
     }
 
@@ -280,6 +281,7 @@ public class ApplicationLoader extends Application {
         }
 
         SharedConfig.loadConfig();
+
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) { //TODO improve account
             final int finalA = a;
             Runnable initRunnable = () -> {
@@ -314,6 +316,7 @@ public class ApplicationLoader extends Application {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app initied");
         }
+
 
         MediaController.getInstance();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) { //TODO improve account
@@ -381,6 +384,10 @@ public class ApplicationLoader extends Application {
     }
 
     public static void startPushService() {
+        UIUtil.runOnIoDispatcher(ApplicationLoader::startPushServiceInternal);
+    }
+
+    private static void startPushServiceInternal() {
         if (ExternalGcm.checkPlayServices() || (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && isNotificationListenerEnabled())) {
             return;
         }
@@ -406,21 +413,23 @@ public class ApplicationLoader extends Application {
         }
         if (enabled) {
             try {
-                Log.d("TFOSS", "Starting push service...");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    applicationContext.startForegroundService(new Intent(applicationContext, NotificationsService.class));
-                } else {
-                    applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
-                }
+                UIUtil.runOnUIThread(() -> {
+                    Log.d("TFOSS", "Starting push service...");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        applicationContext.startForegroundService(new Intent(applicationContext, NotificationsService.class));
+                    } else {
+                        applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
+                    }
+                });
             } catch (Throwable e) {
                 Log.d("TFOSS", "Failed to start push service");
             }
-        } else {
+        } else UIUtil.runOnUIThread(() -> {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
             PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
             AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
             alarm.cancel(pintent);
-        }
+        });
     }
 
     public static boolean isNotificationListenerEnabled() {

@@ -16,6 +16,7 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.h2.util.IOUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
@@ -36,13 +37,13 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 public class ExternalGcm {
 
     @SuppressWarnings("ConstantConditions")
-    private static boolean noGcm = !"release".equals(BuildConfig.BUILD_TYPE);
+    private static boolean noGcm = BuildConfig.BUILD_TYPE.contains("NoGcm");
 
     private static Boolean hasPlayServices;
 
     public static void initPlayServices() {
 
-        AndroidUtilities.runOnUIThread(() -> {
+        UIUtil.runOnIoDispatcher(() -> {
             if (hasPlayServices = checkPlayServices()) {
                 final String currentPushString = SharedConfig.pushString;
                 if (!TextUtils.isEmpty(currentPushString)) {
@@ -79,7 +80,7 @@ public class ExternalGcm {
                 SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
                 ConnectionsManager.setRegId(null, SharedConfig.pushStringStatus);
             }
-        }, 1000);
+        }, 2300);
 
     }
 

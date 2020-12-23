@@ -71,7 +71,9 @@ object UpdateUtil {
                 MessagesController.getMainSettings(currentAccount).edit().putBoolean("update_channel_skip", true).apply()
             }
 
-            builder.show()
+            try {
+                builder.show()
+            } catch (ignored: Exception) {}
 
         }
 
