@@ -1154,7 +1154,7 @@ private int lastMeasuredTopPadding;
                     ignoreLayout = false;
                 }
             }
-            if (!onlySelect) {
+            if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward) || !onlySelect) {
                 ignoreLayout = true;
                 if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                     t = ActionBar.getCurrentActionBarHeight() + (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);

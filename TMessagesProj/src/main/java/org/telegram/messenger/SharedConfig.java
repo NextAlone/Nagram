@@ -1932,7 +1932,7 @@ public class SharedConfig {
     public static void checkSaveToGalleryFiles() {
         try {
             File telegramPath = EnvUtil.getTelegramPath();
-            File imagePath = new File(telegramPath, "");
+            File imagePath = new File(telegramPath, "images");
             imagePath.mkdirs();
             File videoPath = new File(telegramPath, "videos");
             videoPath.mkdirs();
