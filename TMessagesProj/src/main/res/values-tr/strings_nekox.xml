@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Katman</string>
     <string name="CustomBackendPublicKey">Genel Anahtar</string>
     <string name="CustomBackendFingerprint">Anahtar Parmak İzi</string>
-    <string name="CachePath">Önbellek Dizini</string>
     <string name="AllowFlashCall">Hızlı aramaya izin ver</string>
     <string name="ChangeTranslateProvider">Sağlayıcıyı Değiştir</string>
     <string name="ProviderYandexTranslate">Yandex.Çeviri</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Giriş Ayarları</string>
     <string name="NekoXFaq">NekoX SSS</string>
     <string name="TransSite">NekoX\'in Çevrilmesine Katkıda Bulunun</string>
-    <string name="UsePersianCalender">İran Takvimini Kullan</string>
     <string name="OpenKayChain">OpenPGP İstemcisi</string>
     <string name="OpenPGPApp">OpenPGP Sağlayıcısı</string>
     <string name="OpenPGPKey">OpenPGP Anahtarı</string>
@@ -200,4 +198,13 @@
     <string name="StorageResetInfo">Bu uygulamanın tüm verileri kalıcı olarak silinecek (öncelikle tüm hesaplarınızdan çıkış yapmayı deneyin).</string>
     <string name="FCTitle">Uygulama güncellemeleri hakkında</string>
     <string name="FCInfo">Duyuru ve güncellemeler kanalımızı takip etmek ister misiniz?</string>
+    <string name="CCTitle">OpenCC (Çince Dönüştürme)</string>
+    <string name="CCTarget">Hedef</string>
+    <string name="CCNo">Yok</string>
+    <string name="CCTC">Geleneksel çince</string>
+    <string name="CCHK">Geleneksel Çince (Hong Kong)</string>
+    <string name="CCTT">Geleneksel Çince (Tayvan)</string>
+    <string name="CCSC">Basitleştirilmiş Çince</string>
+    <string name="CCSP">Basitleştirilmiş Çince (Çin)</string>
+    <string name="CCJP">Yeni Japonca Kanji (Shinjitai)</string>
 </resources>

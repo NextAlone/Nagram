@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Շերտը</string>
     <string name="CustomBackendPublicKey">Հանրային բանալին</string>
     <string name="CustomBackendFingerprint">Հիմնական մատնահետք</string>
-    <string name="CachePath">Քեշի գրացուցակ</string>
     <string name="AllowFlashCall">Թույլատրել ֆլեշ զանգը</string>
     <string name="ChangeTranslateProvider">Փոխել մատակարարը</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Մուտքի կարգավորումներ</string>
     <string name="NekoXFaq">NekoX ՀՏՀ</string>
     <string name="TransSite">Թարգմանել պլատֆորմը</string>
-    <string name="UsePersianCalender">Օգտագործեք պարսկական օրացույց</string>
     <string name="OpenKayChain">OpenPGP հաճախորդ</string>
     <string name="OpenPGPApp">OpenPGP մատակարար</string>
     <string name="OpenPGPKey">OpenPGP բանալին</string>
@@ -198,4 +196,15 @@
     <string name="QRLoginConfirm">Հաստատեք մուտքը</string>
     <string name="StorageReset">Մաքրել պահուստը</string>
     <string name="StorageResetInfo">Այս ծրագրի բոլոր տվյալները ընդմիշտ կջնջվեն (և նախ փորձեք դուրս գալ բոլոր հաշիվներից):</string>
+    <string name="FCTitle">Դիմումների թարմացման մասին</string>
+    <string name="FCInfo">Հետևեք մեր հայտարարությունների և թարմացումների ալիքին</string>
+    <string name="CCTitle">OpenCC (չինական նորադարձ)</string>
+    <string name="CCTarget">Թիրախ</string>
+    <string name="CCNo">Ոչ ոք</string>
+    <string name="CCTC">Ավանդական չինարեն</string>
+    <string name="CCHK">Ավանդական չինարեն (Հոնկոնգ)</string>
+    <string name="CCTT">Ավանդական չինարեն (Թայվան)</string>
+    <string name="CCSC">Պարզեցված չինարեն</string>
+    <string name="CCSP">Պարզեցված չինարեն (Չինաստան)</string>
+    <string name="CCJP">Նոր ճապոնական կանջի (սինջիտայ)</string>
 </resources>

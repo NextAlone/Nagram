@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Livello</string>
     <string name="CustomBackendPublicKey">Chiave Pubblica</string>
     <string name="CustomBackendFingerprint">Impronta Digitale Chiave</string>
-    <string name="CachePath">Directory cache</string>
     <string name="AllowFlashCall">Consenti chiamata flash</string>
     <string name="ChangeTranslateProvider">Cambia Provider</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Impostazioni Di Accesso</string>
     <string name="NekoXFaq">FAQ NekoX</string>
     <string name="TransSite">Traduci Piattaforma</string>
-    <string name="UsePersianCalender">Usa il Calender Persiano</string>
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Provider OpenPGP</string>
     <string name="OpenPGPKey">Chiave OpenPGP</string>
@@ -190,4 +188,5 @@
     <string name="IgnoreContentRestrictions">Ignora le restrizioni di contenuto</string>
     <string name="IgnoreContentRestrictionsNotice">Ignora le restrizioni degli android sui messaggi localmente. Questo potrebbe essere bandito dal server in futuro, e sarà necessario valutare la legalità locale di questa opzione da solo.</string>
     <string name="SendCommentAfterForward">Invia commenti dopo l\'inoltro</string>
+    <string name="CCNo">Nessuno</string>
 </resources>

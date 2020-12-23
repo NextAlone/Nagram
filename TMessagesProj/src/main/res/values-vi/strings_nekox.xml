@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Lớp</string>
     <string name="CustomBackendPublicKey">Khóa công khai</string>
     <string name="CustomBackendFingerprint">Dấu vân tay chính</string>
-    <string name="CachePath">Thư mục bộ nhớ đệm</string>
     <string name="AllowFlashCall">Cho phép cuộc gọi nhanh</string>
     <string name="ChangeTranslateProvider">Thay đổi nhà cung cấp</string>
     <string name="ProviderYandexTranslate">Yandex.Dịch</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Cài đặt đăng nhập</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">Nền tảng Dịch</string>
-    <string name="UsePersianCalender">Sử dụng Lịch Ba Tư</string>
     <string name="OpenKayChain">Ứng dụng khách OpenPGP</string>
     <string name="OpenPGPApp">Nhà cung cấp OpenPGP</string>
     <string name="OpenPGPKey">Khóa OpenPGP</string>
@@ -200,4 +198,13 @@
     <string name="StorageResetInfo">Tất cả dữ liệu của ứng dụng này sẽ bị xóa vĩnh viễn (và hãy thử đăng xuất khỏi tất cả các tài khoản trước).</string>
     <string name="FCTitle">Thông tin về các bản cập nhật</string>
     <string name="FCInfo">Theo dõi kênh thông báo và cập nhật của chúng tôi?</string>
+    <string name="CCTitle">OpenCC (Dịch tiếng Trung)</string>
+    <string name="CCTarget">Mục tiêu</string>
+    <string name="CCNo">Không</string>
+    <string name="CCTC">Chữ Hán phồn thể</string>
+    <string name="CCHK">Chữ Hán phồn thể (Hồng Kông)</string>
+    <string name="CCTT">Chữ Hán phồn thể (Đài Loan)</string>
+    <string name="CCSC">Chữ Hán giản thể</string>
+    <string name="CCSP">Chữ Hán giản thể (Trung Quốc)</string>
+    <string name="CCJP">Chữ Kanji mới (Thể chữ mới)</string>
 </resources>

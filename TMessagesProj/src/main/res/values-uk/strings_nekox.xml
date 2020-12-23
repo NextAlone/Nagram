@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Шар</string>
     <string name="CustomBackendPublicKey">Публічний ключ</string>
     <string name="CustomBackendFingerprint">Ідентифікатор</string>
-    <string name="CachePath">Каталог кешу</string>
     <string name="AllowFlashCall">Дозволити спалах виклику</string>
     <string name="ChangeTranslateProvider">Змінити оператора</string>
     <string name="ProviderYandexTranslate">Яндекс.Перекладач</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Параметри входу</string>
     <string name="NekoXFaq">Питання NekoX</string>
     <string name="TransSite">Перекласти платформу</string>
-    <string name="UsePersianCalender">Використовувати перський календар</string>
     <string name="OpenKayChain">Клієнт OpenPGP</string>
     <string name="OpenPGPApp">OpenPGP постачальник</string>
     <string name="OpenPGPKey">Ключ OpenPGP</string>
@@ -198,4 +196,15 @@
     <string name="QRLoginConfirm">Підтвердьте вхід</string>
     <string name="StorageReset">Очистити сховище</string>
     <string name="StorageResetInfo">Усі дані цієї програми буде остаточно видалено (і спробуйте спочатку вийти з усіх облікових записів).</string>
+    <string name="FCTitle">Про оновлення програми</string>
+    <string name="FCInfo">Слідкуйте за нашими каналами оголошень та оновлень?</string>
+    <string name="CCTitle">OpenCC (китайська конвертація)</string>
+    <string name="CCTarget">Цільова</string>
+    <string name="CCNo">Без ефекту</string>
+    <string name="CCTC">Традиційний китайський</string>
+    <string name="CCHK">Традиційна китайська (Гонконг)</string>
+    <string name="CCTT">Традиційна китайська (Тайвань)</string>
+    <string name="CCSC">Спрощена Китайська</string>
+    <string name="CCSP">Спрощена китайська (Китай)</string>
+    <string name="CCJP">Новий японський кандзі (Сінджітай)</string>
 </resources>

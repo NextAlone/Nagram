@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Layer</string>
     <string name="CustomBackendPublicKey">Açıq açar</string>
     <string name="CustomBackendFingerprint">Açar barmaq izi</string>
-    <string name="CachePath">Önbellek kataloqu</string>
     <string name="AllowFlashCall">Flaş zəngə icazə verin</string>
     <string name="ChangeTranslateProvider">Təminatçını dəyişdirin</string>
     <string name="ProviderYandexTranslate">Yandex.Tərcümə edin</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Giriş Ayarları</string>
     <string name="NekoXFaq">NekoX ilə bağlı suallar</string>
     <string name="TransSite">Tərcümə Platforması</string>
-    <string name="UsePersianCalender">Fars Təqvimindən istifadə edin</string>
     <string name="OpenKayChain">OpenPGP Müştəri</string>
     <string name="OpenPGPApp">OpenPGP Təminatçısı</string>
     <string name="OpenPGPKey">OpenPGP açarı</string>
@@ -198,4 +196,15 @@
     <string name="QRLoginConfirm">Girişi təsdiq edin</string>
     <string name="StorageReset">Yaddaşı təmizləyin</string>
     <string name="StorageResetInfo">Bu tətbiqin bütün məlumatları həmişəlik silinəcəkdir (və əvvəlcə bütün hesablardan çıxmağa çalışın).</string>
+    <string name="FCTitle">Tətbiq yeniləmələri haqqında</string>
+    <string name="FCInfo">Elan və yeniləmə kanalımızı izləyin?</string>
+    <string name="CCTitle">OpenCC (Çin çevirmə)</string>
+    <string name="CCTarget">Hədəf</string>
+    <string name="CCNo">Yoxdur</string>
+    <string name="CCTC">Ənənəvi Çin</string>
+    <string name="CCHK">Ənənəvi Çin (Hong Kong)</string>
+    <string name="CCTT">Ənənəvi Çin (Tayvan)</string>
+    <string name="CCSC">Sadələşdirilmiş Çin dili</string>
+    <string name="CCSP">Sadələşdirilmiş Çin dili (Çin)</string>
+    <string name="CCJP">Yeni Yapon Kanji (Shinjitai)</string>
 </resources>

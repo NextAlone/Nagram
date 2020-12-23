@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Layer</string>
     <string name="CustomBackendPublicKey">Public Key</string>
     <string name="CustomBackendFingerprint">Key Fingerprint</string>
-    <string name="CachePath">Direktori cache</string>
     <string name="AllowFlashCall">Izinkan panggilan cepat</string>
     <string name="ChangeTranslateProvider">Ubah Penyedia</string>
     <string name="ProviderYandexTranslate">Penerjemah.Yandex</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Pengaturan Login</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">Platform Penterjemah</string>
-    <string name="UsePersianCalender">Gunakan Kalender Persia</string>
     <string name="OpenKayChain">Klien OpenPGP</string>
     <string name="OpenPGPApp">Penyedia OpenPGP</string>
     <string name="OpenPGPKey">Kunci OpenPGP</string>
@@ -190,4 +188,5 @@
     <string name="IgnoreContentRestrictions">Abaikan batasan konten</string>
     <string name="IgnoreContentRestrictionsNotice">Mengabaikan batasan android pada pesan secara lokal. Ini mungkin dilarang oleh server di masa mendatang, dan Anda perlu mengevaluasi sendiri legalitas lokal dari opsi ini.</string>
     <string name="SendCommentAfterForward">Kirim komentar setelah meneruskan</string>
+    <string name="CCNo">Kosong</string>
 </resources>

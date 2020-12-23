@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">레이어</string>
     <string name="CustomBackendPublicKey">공개 키</string>
     <string name="CustomBackendFingerprint">키 지문</string>
-    <string name="CachePath">캐시 디렉토리</string>
     <string name="AllowFlashCall">플래시 통화 허용</string>
     <string name="ChangeTranslateProvider">제공자 변경</string>
     <string name="ProviderYandexTranslate">Yandex. 번역</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">로그인 설정</string>
     <string name="NekoXFaq">NekoX 자주하는 질문</string>
     <string name="TransSite">플랫폼 번역</string>
-    <string name="UsePersianCalender">페르시아 달력 사용</string>
     <string name="OpenKayChain">OpenPGP 클라이언트</string>
     <string name="OpenPGPApp">OpenPGP 제공자</string>
     <string name="OpenPGPKey">OpenPGP 키</string>
@@ -190,4 +188,23 @@
     <string name="IgnoreContentRestrictions">콘텐츠 제한 무시</string>
     <string name="IgnoreContentRestrictionsNotice">로컬에서 메시지에 대한 Android 제한을 무시합니다. 이는 향후 서버에 의해 금지 될 수 있으며이 옵션의 현지 적법성을 직접 평가해야합니다.</string>
     <string name="SendCommentAfterForward">전달 후 댓글 보내기</string>
+    <string name="UnpinMessageX">메시지 고정 해제</string>
+    <string name="UnpinMessagesAll">모든 메시지 고정 해제</string>
+    <string name="DismissForYourself">스스로 해산</string>
+    <string name="ImportLogin">QR 로그인</string>
+    <string name="QRLoginNotice">이 QR 코드 / 링크를 통해 누군가가 귀하의 Telegram 계정에 로그인 할 수 있습니다. 이것은 당신 자신의 작업입니까?</string>
+    <string name="QRLoginConfirm">로그인 확인</string>
+    <string name="StorageReset">저장 공간을 비우기</string>
+    <string name="StorageResetInfo">이 응용 프로그램의 모든 데이터는 영구적으로 삭제됩니다 (먼저 모든 계정에서 로그 아웃).</string>
+    <string name="FCTitle">애플리케이션 업데이트 정보</string>
+    <string name="FCInfo">공지 사항 및 업데이트 채널을 따르시겠습니까?</string>
+    <string name="CCTitle">OpenCC (중국어 변환)</string>
+    <string name="CCTarget">표적</string>
+    <string name="CCNo">없음</string>
+    <string name="CCTC">중국어 번체</string>
+    <string name="CCHK">중국어 번체 (홍콩)</string>
+    <string name="CCTT">중국어 번체 (대만)</string>
+    <string name="CCSC">중국어 간체</string>
+    <string name="CCSP">중국어 간체 (중국)</string>
+    <string name="CCJP">새로운 일본어 한자 (신지 타이)</string>
 </resources>

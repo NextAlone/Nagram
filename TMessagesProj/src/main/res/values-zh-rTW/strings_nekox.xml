@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">層</string>
     <string name="CustomBackendPublicKey">公鑰</string>
     <string name="CustomBackendFingerprint">關鍵指紋</string>
-    <string name="CachePath">緩存目錄</string>
     <string name="AllowFlashCall">允許通話</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">登錄設定</string>
     <string name="NekoXFaq">NekoX 常見問題</string>
     <string name="TransSite">翻譯平台</string>
-    <string name="UsePersianCalender">使用波斯日曆</string>
     <string name="OpenKayChain">OpenPGP 客戶端</string>
     <string name="OpenPGPApp">OpenPGP 提供應用</string>
     <string name="OpenPGPKey">PGP 密鑰</string>
@@ -190,4 +188,5 @@
     <string name="IgnoreContentRestrictions">忽略內容限制</string>
     <string name="IgnoreContentRestrictionsNotice">忽略 Telegram 在 Android 本地對訊息的限制。這在將來可能會被伺服器禁止，且您需要自行驗證這個功能在本地的合法性。</string>
     <string name="SendCommentAfterForward">在轉發訊息之後送出留言</string>
+    <string name="CCNo">無</string>
 </resources>

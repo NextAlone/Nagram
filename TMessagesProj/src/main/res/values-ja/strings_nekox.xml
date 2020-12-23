@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">レイヤー</string>
     <string name="CustomBackendPublicKey">公開鍵</string>
     <string name="CustomBackendFingerprint">鍵のフィンガープリント</string>
-    <string name="CachePath">キャッシュディレクトリ</string>
     <string name="AllowFlashCall">フラッシュコールを許可</string>
     <string name="ChangeTranslateProvider">プロバイダを変更</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">ログイン設定</string>
     <string name="NekoXFaq">NekoX FAQ</string>
     <string name="TransSite">プラットフォームを翻訳</string>
-    <string name="UsePersianCalender">ペルシャ暦を使用する</string>
     <string name="OpenKayChain">OpenPGP クライアント</string>
     <string name="OpenPGPApp">OpenPGPプロバイダー</string>
     <string name="OpenPGPKey">OpenPGP キー</string>
@@ -190,4 +188,5 @@
     <string name="IgnoreContentRestrictions">コンテンツ制限を無視します</string>
     <string name="IgnoreContentRestrictionsNotice">ローカルのメッセージに対するアンドロイド制限を無視します． これは将来サーバーによって禁止される可能性があり、このオプションのローカル合法性を評価する必要があります。</string>
     <string name="SendCommentAfterForward">転送後にコメントを送信します</string>
+    <string name="CCNo">なし</string>
 </resources>

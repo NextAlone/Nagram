@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">שכבה</string>
     <string name="CustomBackendPublicKey">מפתח ציבורי</string>
     <string name="CustomBackendFingerprint">טביעת אצבע מפתח</string>
-    <string name="CachePath">ספריית מטמון</string>
     <string name="AllowFlashCall">אפשר שיחת פלאש</string>
     <string name="ChangeTranslateProvider">החלף ספק</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">הגדרות כניסה</string>
     <string name="NekoXFaq">שאלות נפוצות על NekoX</string>
     <string name="TransSite">תרגם פלטפורמה</string>
-    <string name="UsePersianCalender">השתמש בלוח השנה הפרסי</string>
     <string name="OpenKayChain">לקוח OpenPGP</string>
     <string name="OpenPGPApp">ספק OpenPGP</string>
     <string name="OpenPGPKey">מפתח OpenPGP</string>
@@ -198,4 +196,15 @@
     <string name="QRLoginConfirm">אשר כניסה</string>
     <string name="StorageReset">פנה אחסון</string>
     <string name="StorageResetInfo">כל הנתונים של יישום זה יימחקו לצמיתות (ונסה קודם להתנתק מכל החשבונות).</string>
+    <string name="FCTitle">אודות עדכוני יישומים</string>
+    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו?</string>
+    <string name="CCTitle">OpenCC (המרה סינית)</string>
+    <string name="CCTarget">יַעַד</string>
+    <string name="CCNo">אף אחד</string>
+    <string name="CCTC">סינית מסורתית</string>
+    <string name="CCHK">סינית מסורתית (הונג קונג)</string>
+    <string name="CCTT">סינית מסורתית (טייוואן)</string>
+    <string name="CCSC">סינית פשוטה</string>
+    <string name="CCSP">סינית מפושטת (סין)</string>
+    <string name="CCJP">קאנג\'י יפני חדש (שינג\'יטאי)</string>
 </resources>

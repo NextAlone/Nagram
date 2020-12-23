@@ -33,7 +33,6 @@
     <string name="CustomBackendLayer">Capa</string>
     <string name="CustomBackendPublicKey">Clave pública</string>
     <string name="CustomBackendFingerprint">Huella digital</string>
-    <string name="CachePath">Directorio de caché</string>
     <string name="AllowFlashCall">Permitir llamada flash</string>
     <string name="ChangeTranslateProvider">Cambiar proveedor</string>
     <string name="ProviderYandexTranslate">Yandex.Traducir</string>
@@ -164,7 +163,6 @@
     <string name="LoginSettings">Configuración de inicio de sesión</string>
     <string name="NekoXFaq">Preguntas frecuentes sobre NekoX</string>
     <string name="TransSite">Traducir plataforma</string>
-    <string name="UsePersianCalender">Usar el calendario persa</string>
     <string name="OpenKayChain">Cliente OpenPGP</string>
     <string name="OpenPGPApp">Proveedor OpenPGP</string>
     <string name="OpenPGPKey">Clave OpenPGP</string>
@@ -176,4 +174,5 @@
     <string name="PGPImportPrivate">Importar clave privada</string>
     <string name="ShareMyKey">Compartir Mi Clave Pública</string>
     <string name="DisableVibration">Desactivar vibración</string>
+    <string name="CCNo">Ninguna</string>
 </resources>

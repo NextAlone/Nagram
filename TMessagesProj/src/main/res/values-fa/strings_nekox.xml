@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">لایه</string>
     <string name="CustomBackendPublicKey">کلید عمومی</string>
     <string name="CustomBackendFingerprint">کلید اثر انگشت</string>
-    <string name="CachePath">محل ذخیره کش</string>
     <string name="AllowFlashCall">تماس flash call مجاز شود</string>
     <string name="ChangeTranslateProvider">تغییر ارائه دهنده خدمات</string>
     <string name="ProviderYandexTranslate">ترجمه با موتور \"یاندکس\"</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">تنظیمات ورود به سیستم</string>
     <string name="NekoXFaq">پرسش های متداول NekoX</string>
     <string name="TransSite">پلتفرم ترجمه</string>
-    <string name="UsePersianCalender">استفاده از تقویم فارسی</string>
     <string name="OpenKayChain">کلاینت OpenPGP</string>
     <string name="OpenPGPApp">ارائه دهنده OpenPGP</string>
     <string name="OpenPGPKey">کلید OpenPGP</string>
@@ -200,4 +198,13 @@
     <string name="StorageResetInfo">تمام داده های این برنامه برای همیشه حذف می شود (و ابتدا سعی کنید از همه حساب ها خارج شوید).</string>
     <string name="FCTitle">درباره به‌روزرسانی های برنامه</string>
     <string name="FCInfo">مایل به فالو کردن کانال اطلاع‌رسانی و به‌روزرسانی های ما هستید؟</string>
+    <string name="CCTitle">OpenCC (تبدیل چینی)</string>
+    <string name="CCTarget">هدف</string>
+    <string name="CCNo">هیچ کدام</string>
+    <string name="CCTC">چینی سنتی</string>
+    <string name="CCHK">چینی سنتی (هنگ کنگ)</string>
+    <string name="CCTT">چینی سنتی (تایوان)</string>
+    <string name="CCSC">چینی ساده شده</string>
+    <string name="CCSP">چینی ساده شده (چین)</string>
+    <string name="CCJP">کانجی ژاپنی جدید (Shinjitai)</string>
 </resources>

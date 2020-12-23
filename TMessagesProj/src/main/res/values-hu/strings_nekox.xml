@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Réteg</string>
     <string name="CustomBackendPublicKey">Nyilvános kulcs</string>
     <string name="CustomBackendFingerprint">Kulcs ujjlenyomat</string>
-    <string name="CachePath">Gyorsítótár könyvtár</string>
     <string name="AllowFlashCall">Villám-hívás engedélyezése</string>
     <string name="ChangeTranslateProvider">Szolgáltató módosítása</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Bejelentkezés beállításai</string>
     <string name="NekoXFaq">NekoX GYIK</string>
     <string name="TransSite">Fordítási platform</string>
-    <string name="UsePersianCalender">Használja a perzsa naptárat</string>
     <string name="OpenKayChain">OpenPGP kliens</string>
     <string name="OpenPGPApp">OpenPGP Szolgáltató</string>
     <string name="OpenPGPKey">OpenPGP kulcs</string>
@@ -190,4 +188,5 @@
     <string name="IgnoreContentRestrictions">A tartalmi korlátozások figyelmen kívül hagyása</string>
     <string name="IgnoreContentRestrictionsNotice">Figyelmen kívül hagyja az üzenetek helyi korlátozását az üzeneteknél. Ezt a jövőben a szerver betilthatja, és Önnek magának kell értékelnie ennek a lehetőségnek a helyi törvényességét.</string>
     <string name="SendCommentAfterForward">Megjegyzés küldése továbbítás után</string>
+    <string name="CCNo">Egyik sem</string>
 </resources>

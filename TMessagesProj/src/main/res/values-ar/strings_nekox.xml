@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">طبقة</string>
     <string name="CustomBackendPublicKey">المفتاح العمومي</string>
     <string name="CustomBackendFingerprint">بصمة المفتاح</string>
-    <string name="CachePath">دليل ذاكرة التخزين المؤقت</string>
     <string name="AllowFlashCall">السماح بإجراء مكالمة فلاش</string>
     <string name="ChangeTranslateProvider">تغيير المزود</string>
     <string name="ProviderYandexTranslate">ترجمة Yandex.Translate</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">إعدادات الدخول</string>
     <string name="NekoXFaq">أسئلة NekoX الشائعة</string>
     <string name="TransSite">ترجمة النظام الأساسي</string>
-    <string name="UsePersianCalender">استخدم التقويم الفارسي</string>
     <string name="OpenKayChain">عميل OpenPGP</string>
     <string name="OpenPGPApp">موفر OpenPGP</string>
     <string name="OpenPGPKey">مفتاح OpenPGP</string>
@@ -198,4 +196,15 @@
     <string name="QRLoginConfirm">تأكيد تسجيل الدخول</string>
     <string name="StorageReset">تخزين واضح</string>
     <string name="StorageResetInfo">سيتم حذف جميع بيانات هذا التطبيق نهائيًا (وحاول تسجيل الخروج من جميع الحسابات أولاً).</string>
+    <string name="FCTitle">حول تحديثات التطبيق</string>
+    <string name="FCInfo">اتبع إعلاناتنا و تحديثات القناة؟</string>
+    <string name="CCTitle">OpenCC (تحويل صيني)</string>
+    <string name="CCTarget">استهداف</string>
+    <string name="CCNo">لا شيء</string>
+    <string name="CCTC">الصينية التقليدية</string>
+    <string name="CCHK">الصينية التقليدية (هونغ كونغ)</string>
+    <string name="CCTT">الصينية التقليدية (تايوان)</string>
+    <string name="CCSC">الصينية المبسطة</string>
+    <string name="CCSP">الصينية المبسطة (الصين)</string>
+    <string name="CCJP">كانجي يابانية جديدة (شينجيتاي)</string>
 </resources>

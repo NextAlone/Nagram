@@ -42,7 +42,6 @@
     <string name="CustomBackendLayer">Слой</string>
     <string name="CustomBackendPublicKey">Открытый ключ</string>
     <string name="CustomBackendFingerprint">Отпечаток ключа</string>
-    <string name="CachePath">Папка кэширования</string>
     <string name="AllowFlashCall">Мигать фонариком при вызове</string>
     <string name="ChangeTranslateProvider">Изменить движок перевода</string>
     <string name="ProviderYandexTranslate">Яндекс.Переводчик</string>
@@ -175,7 +174,6 @@
     <string name="LoginSettings">Настройки входа</string>
     <string name="NekoXFaq">NekoX ЧАВО/FAQ (англ/кит)</string>
     <string name="TransSite">Помочь с переводом Neko ^*-*^</string>
-    <string name="UsePersianCalender">Использовать персидский календарь</string>
     <string name="OpenKayChain">Клиент OpenPGP</string>
     <string name="OpenPGPApp">Поставщик OpenPGP</string>
     <string name="OpenPGPKey">Ключ OpenPGP</string>
@@ -193,4 +191,20 @@
     <string name="UnpinMessageX">Открепить сообщение</string>
     <string name="UnpinMessagesAll">Открепить все сообщения</string>
     <string name="DismissForYourself">Скрыть для себя</string>
+    <string name="ImportLogin">Вход по QR коду</string>
+    <string name="QRLoginNotice">Этот QR-код / ссылка позволяет кому-то войти в вашу учетную запись Telegram. Это были вы?</string>
+    <string name="QRLoginConfirm">Подтвердить вход</string>
+    <string name="StorageReset">Очистить хранилище</string>
+    <string name="StorageResetInfo">Все данные этого приложения будут удалены (сначала попробуйте выйти из всех аккаунтов).</string>
+    <string name="FCTitle">Об обновлениях приложения</string>
+    <string name="FCInfo">Следите за нашим каналом анонсов и обновлений?</string>
+    <string name="CCTitle">OpenCC (китайский язык)</string>
+    <string name="CCTarget">Цель</string>
+    <string name="CCNo">Отсутствует</string>
+    <string name="CCTC">Традиционный китайский</string>
+    <string name="CCHK">Традиционный китайский (Гонконг)</string>
+    <string name="CCTT">Традиционный китайский (Тайвань)</string>
+    <string name="CCSC">Упрощенный китайский</string>
+    <string name="CCSP">Упрощенный китайский (Китай)</string>
+    <string name="CCJP">Новые японские кандзи (синдзитай)</string>
 </resources>
