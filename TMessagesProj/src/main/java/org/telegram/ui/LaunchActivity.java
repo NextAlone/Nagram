@@ -136,6 +136,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.BottomBuilder;
@@ -2873,16 +2874,27 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
         } else if (sticker != null) {
             if (!mainFragmentsStack.isEmpty()) {
-                TLRPC.TL_inputStickerSetShortName stickerset = new TLRPC.TL_inputStickerSetShortName();
-                stickerset.short_name = sticker;
+                TLRPC.InputStickerSet input;
+                if ("emoji".equals(sticker)) {
+                    input = new TLRPC.TL_inputStickerSetAnimatedEmoji();
+                } else if (sticker.startsWith("dice/")) {
+                    TLRPC.TL_inputStickerSetDice stickerset = new TLRPC.TL_inputStickerSetDice();
+                    stickerset.emoticon = StrUtil.subAfter(sticker, "dice/", true);
+                    input = stickerset;
+                } else {
+                    TLRPC.TL_inputStickerSetShortName stickerset = new TLRPC.TL_inputStickerSetShortName();
+                    stickerset.short_name = sticker;
+                    input = stickerset;
+                }
+
                 BaseFragment fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
                 StickersAlert alert;
                 if (fragment instanceof ChatActivity) {
                     ChatActivity chatActivity = (ChatActivity) fragment;
-                    alert = new StickersAlert(LaunchActivity.this, fragment, stickerset, null, chatActivity.getChatActivityEnterView());
+                    alert = new StickersAlert(LaunchActivity.this, fragment, input, null, chatActivity.getChatActivityEnterView());
                     alert.setCalcMandatoryInsets(chatActivity.isKeyboardVisible());
                 } else {
-                    alert = new StickersAlert(LaunchActivity.this, fragment, stickerset, null, null);
+                    alert = new StickersAlert(LaunchActivity.this, fragment, input, null, null);
                 }
                 fragment.showDialog(alert);
             }
