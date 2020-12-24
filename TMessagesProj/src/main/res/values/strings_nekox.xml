@@ -268,4 +268,7 @@
     <string name="CCSP">Simplified Chinese (China)</string>
     <string name="CCJP">New Japanese Kanji (Shinjitai)</string>
 
+    <string name="AcraText">Sorrt, this applacation crashed. Please send a report to the developers</string>
+    <string name="AcraChannel"></string>
+
 </resources>

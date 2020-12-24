@@ -32,6 +32,10 @@ import android.util.Log;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.multidex.MultiDex;
 
+import org.acra.ACRA;
+import org.acra.annotation.AcraCore;
+import org.acra.annotation.AcraMailSender;
+import org.acra.annotation.AcraNotification;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
@@ -51,6 +55,14 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static android.os.Build.VERSION.SDK_INT;
 
+@AcraCore(buildConfigClass = BuildConfig.class)
+@AcraMailSender(mailTo = "nekohashizuku@gmail.com")
+@AcraNotification(
+        resIcon = R.drawable.notification,
+        resTitle = R.string.NekoX,
+        resText = R.string.AcraText,
+        resChannelName = R.string.AcraChannel
+)
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
@@ -75,11 +87,6 @@ public class ApplicationLoader extends Application {
     public static boolean hasPlayServices;
 
     @Override
-    public SharedPreferences getSharedPreferences(String name, int mode) {
-        return new WarppedPref(super.getSharedPreferences(name, mode));
-    }
-
-    @Override
     protected void attachBaseContext(Context base) {
         if (SDK_INT >= Build.VERSION_CODES.P) {
             Reflection.unseal(base);
@@ -88,6 +95,7 @@ public class ApplicationLoader extends Application {
         if (SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             MultiDex.install(this);
         }
+        ACRA.init(this);
     }
 
     /**
