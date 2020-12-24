@@ -2,11 +2,11 @@ package tw.nekomimi.nekogram.sub;
 
 import androidx.annotation.NonNull;
 
-import org.dizitart.no2.Document;
+import org.dizitart.no2.collection.Document;
 import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
-import org.dizitart.no2.objects.Id;
-import org.dizitart.no2.objects.Index;
+import org.dizitart.no2.repository.annotations.Id;
+import org.dizitart.no2.repository.annotations.Index;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 
@@ -116,7 +116,7 @@ public class SubInfo implements Mappable {
     @Override
     public Document write(NitriteMapper mapper) {
 
-        Document document = new Document();
+        Document document = Document.createDocument();
 
         document.put("id", id);
         document.put("name", name);

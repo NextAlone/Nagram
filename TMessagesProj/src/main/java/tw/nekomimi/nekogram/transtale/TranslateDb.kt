@@ -1,7 +1,7 @@
 package tw.nekomimi.nekogram.transtale
 
-import org.dizitart.no2.objects.ObjectRepository
-import org.dizitart.no2.objects.filters.ObjectFilters
+import org.dizitart.no2.filters.FluentFilter.where
+import org.dizitart.no2.repository.ObjectRepository
 import org.telegram.messenger.LocaleController
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.database.mkDatabase
@@ -11,19 +11,20 @@ import kotlin.collections.HashMap
 
 class TranslateDb(val code: String) {
 
-    var conn: ObjectRepository<TransItem> = db.getRepository(code, TransItem::class.java)
+    var conn: ObjectRepository<TransItem> = db.getRepository(TransItem::class.java, code)
 
     companion object {
 
         val db = mkDatabase("translate_caches")
 
         val repo = HashMap<Locale, TranslateDb>()
-        val chat = db.getRepository("chat", ChatLanguage::class.java)
-        val ccTarget = db.getRepository("opencc", ChatCCTarget::class.java)
+        val chat = db.getRepository(ChatLanguage::class.java, "chat")
+        val ccTarget = db.getRepository(ChatCCTarget::class.java, "cc")
 
-        @JvmStatic fun getChatLanguage(chatId: Int, default: Locale): Locale {
+        @JvmStatic
+        fun getChatLanguage(chatId: Int, default: Locale): Locale {
 
-            return chat.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.language?.code2Locale
+            return chat.find(where("chatId").eq(chatId)).firstOrNull()?.language?.code2Locale
                     ?: default
 
         }
@@ -38,7 +39,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun getChatCCTarget(chatId: Int, default: String?): String? {
 
-            return ccTarget.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.ccTarget
+            return ccTarget.find(where("chatId").eq(chatId)).firstOrNull()?.ccTarget
                     ?: default
 
         }
@@ -64,7 +65,7 @@ class TranslateDb(val code: String) {
         fun clearAll() {
 
             db.listRepositories()
-                    .filter { it  != "chat" }
+                    .filter { it != "chat" }
                     .map { db.getCollection(it) }
                     .forEach { it.drop() }
 
@@ -80,7 +81,7 @@ class TranslateDb(val code: String) {
 
     }
 
-    fun contains(text: String) = synchronized(this) { conn.find(ObjectFilters.eq("text", text)).count() > 0 }
+    fun contains(text: String) = synchronized(this) { conn.find(where("text").eq(text)).count() > 0 }
 
     fun save(text: String, trans: String) = synchronized<Unit>(this) {
 
@@ -90,7 +91,7 @@ class TranslateDb(val code: String) {
 
     fun query(text: String) = synchronized(this) {
 
-        conn.find(ObjectFilters.eq("text", text)).firstOrDefault()?.trans
+        conn.find(where("text").eq(text)).firstOrNull()?.trans
 
     }
 

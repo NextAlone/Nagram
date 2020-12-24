@@ -28,7 +28,6 @@ import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
 import com.v2ray.ang.util.Utils;
 
-import org.dizitart.no2.objects.filters.ObjectFilters;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +54,7 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
+import static org.dizitart.no2.filters.FluentFilter.where;
 
 public class SharedConfig {
 
@@ -229,7 +229,7 @@ public class SharedConfig {
 
                 try {
 
-                    builder.append(SubManager.getSubList().find(ObjectFilters.eq("id", subId)).firstOrDefault().displayName());
+                    builder.append(SubManager.getSubList().find(where("id").eq(subId)).firstOrNull().displayName());
 
                 } catch (Exception e) {
 
@@ -1903,7 +1903,7 @@ public class SharedConfig {
         }
         proxyList.remove(proxyInfo);
         if (proxyInfo.subId != 0) {
-            SubInfo sub = SubManager.getSubList().find(ObjectFilters.eq("id", proxyInfo.subId)).firstOrDefault();
+            SubInfo sub = SubManager.getSubList().find(where("id").eq(proxyInfo.subId)).firstOrNull();
             try {
                 if (sub.proxies.remove(proxyInfo.toUrl())) {
                     SubManager.getSubList().update(sub);

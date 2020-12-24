@@ -1,59 +1,33 @@
 package tw.nekomimi.nekogram.database
 
 import org.dizitart.no2.Nitrite
+import org.dizitart.no2.mvstore.MVStoreModule
 import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
 fun mkDatabase(name: String): Nitrite {
 
-    File("${ApplicationLoader.getDataDirFixed()}/database").apply {
-
-        if (exists()) deleteRecursively()
-
-    }
-
     val file = File("${ApplicationLoader.getDataDirFixed()}/databases/$name.db")
 
     FileUtil.initDir(file.parentFile!!)
 
+    fun create() = Nitrite.builder()
+            .loadModule(MVStoreModule.withConfig()
+                    .filePath(file)
+                    .build())
+            .openOrCreate()!!
+
     runCatching {
-
-        return Nitrite.builder().compressed()
-                .filePath(file.path)
-                .openOrCreate()!!
-
+        return create()
     }.onFailure {
-
+        FileLog.e(it)
         file.deleteRecursively()
 
     }
 
-    return Nitrite.builder().compressed()
-            .filePath(file.path)
-            .openOrCreate()!!
-
-}
-
-fun mkCacheDatabase(name: String): Nitrite {
-
-    val file = File("${ApplicationLoader.getDataDirFixed()}/cache/$name.db")
-
-    FileUtil.initDir(file.parentFile!!)
-
-    runCatching {
-
-        return Nitrite.builder().compressed()
-                .filePath(file.path)
-                .openOrCreate()!!
-
-    }
-
-    file.deleteRecursively()
-
-    return Nitrite.builder().compressed()
-            .filePath(file.path)
-            .openOrCreate()!!
+    return create()
 
 }
 
@@ -64,9 +38,7 @@ private lateinit var mainSharedPreferencesDatabase: Nitrite
 fun openMainSharedPreference(name: String): DbPref {
 
     if (!::mainSharedPreferencesDatabase.isInitialized) {
-
         mainSharedPreferencesDatabase = mkDatabase("shared_preferences")
-
     }
 
     return mainSharedPreferencesDatabase.openSharedPreference(name)

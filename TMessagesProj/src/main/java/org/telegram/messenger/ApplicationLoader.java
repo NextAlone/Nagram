@@ -38,6 +38,7 @@ import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
