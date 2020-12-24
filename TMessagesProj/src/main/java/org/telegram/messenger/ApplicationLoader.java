@@ -84,6 +84,9 @@ public class ApplicationLoader extends Application {
         if (SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             MultiDex.install(this);
         }
+        Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
+            Log.e("nekox", "from " + thread.toString(), error);
+        });
     }
 
     /**

@@ -73,6 +73,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1173,7 +1174,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         subInfo.proxies = subInfo.reloadProxies();
                         subInfo.lastFetch = System.currentTimeMillis();
 
-                    } catch (SubInfo.AllTriesFailed allTriesFailed) {
+                    } catch (IOException allTriesFailed) {
 
                         if (canceled.get()) return;
 

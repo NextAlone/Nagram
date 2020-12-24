@@ -33,6 +33,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -265,7 +266,7 @@ public class SubSettingsActivity extends BaseFragment {
                 subInfo.proxies = subInfo.reloadProxies();
                 subInfo.lastFetch = System.currentTimeMillis();
 
-            } catch (SubInfo.AllTriesFailed allTriesFailed) {
+            } catch (IOException allTriesFailed) {
 
                 if (canceled.get()) return;
 

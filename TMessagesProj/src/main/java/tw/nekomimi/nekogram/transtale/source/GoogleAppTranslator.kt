@@ -29,22 +29,20 @@ object GoogleAppTranslator : Translator {
                 "&tl=" + to +
                 "&ie=UTF-8&oe=UTF-8&client=at&dt=t&otf=2"
 
-        val response = runCatching {
-            (if (NekoConfig.translationProvider == 2) HttpUtil.okHttpClientNoDoh else HttpUtil.okHttpClient).newCall(Request.Builder().url(url)
-                    .header("User-Agent", "GoogleTranslate/6.14.0.04.343003216 (Linux; U; Android 10; Redmi K20 Pro)").build()).execute()
-        }.recoverCatching {
-            HttpUtil.okHttpClientWithCurrProxy.newCall(Request.Builder().url(url).applyUserAgent().build()).execute()
-        }.getOrThrow()
+        val response = cn.hutool.http.HttpUtil
+                .createGet(url)
+                .header("User-Agent", "GoogleTranslate/6.14.0.04.343003216 (Linux; U; Android 10; Redmi K20 Pro)")
+                .execute()
 
-        if (response.code != 200) {
+        if (response.status != 200) {
 
-            error("HTTP ${response.code} : ${response.body?.string()}")
+            error("HTTP ${response.status} : ${response.body()}")
 
         }
 
         val result = StringBuilder()
 
-        val array = JSONObject(response.body!!.string()).getJSONArray("sentences")
+        val array = JSONObject(response.body()).getJSONArray("sentences")
         for (index in 0 until array.length()) {
             result.append(array.getJSONObject(index).getString("trans"))
         }

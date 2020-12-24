@@ -287,7 +287,10 @@ public class Emoji {
             String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
 
             if (!NekoConfig.useSystemEmoji && EmojiProvider.isFont) {
-                textPaint.setTypeface(EmojiProvider.getFont());
+                try {
+                    textPaint.setTypeface(EmojiProvider.getFont());
+                } catch (RuntimeException ignored) {
+                }
             }
 
             textPaint.setTextSize(b.height() * 0.8f);

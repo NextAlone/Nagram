@@ -129,6 +129,7 @@ import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -928,7 +929,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     SubManager.getSubList().update(subInfo, true);
                     SharedConfig.reloadProxyList();
 
-                } catch (SubInfo.AllTriesFailed allTriesFailed) {
+                } catch (IOException allTriesFailed) {
 
                     FileLog.e(allTriesFailed);
 

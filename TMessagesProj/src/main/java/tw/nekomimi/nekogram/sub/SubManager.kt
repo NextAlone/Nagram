@@ -16,7 +16,7 @@ object SubManager {
     @JvmStatic
     val subList by lazy {
 
-        database.getRepository(SubInfo::class.java, "proxy_sub").apply {
+        database.getRepository(SubInfo::class.java, "sub_list").apply {
 
             val public = find(where("id").eq(1L)).firstOrNull()
 

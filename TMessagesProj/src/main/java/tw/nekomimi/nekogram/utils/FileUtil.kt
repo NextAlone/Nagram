@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.utils
 
 import android.os.Build
 import cn.hutool.core.io.resource.ResourceUtil
+import okhttp3.internal.closeQuietly
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import java.io.File
@@ -95,9 +96,9 @@ object FileUtil {
 
         val libDirs = mutableListOf<String>()
 
-        ZipFile(ApplicationLoader.applicationContext.applicationInfo.sourceDir).use {
+        ZipFile(ApplicationLoader.applicationContext.applicationInfo.sourceDir).also {
 
-            it.getEntry("lib/") ?: return@use
+            it.getEntry("lib/") ?: return@also
 
             for (entry in it.entries()) {
 
@@ -108,6 +109,8 @@ object FileUtil {
                 }
 
             }
+
+            it.closeQuietly()
 
         }
 

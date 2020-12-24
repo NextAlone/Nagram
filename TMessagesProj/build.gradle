@@ -84,8 +84,11 @@ dependencies {
     implementation 'org.dizitart:nitrite'
     implementation 'org.dizitart:nitrite-mvstore-adapter'
 
-    implementation ('cn.hutool:hutool-crypto:5.5.4') {
+    implementation ('cn.hutool:hutool-http:5.5.4') {
         exclude group: "org.apache.poi"
+    }
+    implementation ('cn.hutool:hutool-crypto:5.5.4') {
+        exclude module: "hutool-core"
     }
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 

@@ -10,12 +10,12 @@ package org.telegram.messenger;
 
 import android.util.Log;
 
+import cn.hutool.core.exceptions.UtilException;
+import cn.hutool.core.lang.caller.CallerUtil;
 import cn.hutool.core.lang.caller.StackTraceCaller;
 import cn.hutool.core.util.StrUtil;
 
 public class FileLog {
-
-    private final static StackTraceCaller caller = new StackTraceCaller();
 
     public static String getNetworkLogPath() {
         if (BuildVars.DEBUG_VERSION) return "/dev/null";
@@ -25,8 +25,7 @@ public class FileLog {
     private static String mkTag() {
 
         final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-        return StrUtil.subAfter(stackTrace[2].getClassName(), ".", true);
+        return StrUtil.subAfter(stackTrace[4].getClassName(), ".", true);
 
     }
 
