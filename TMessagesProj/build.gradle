@@ -39,8 +39,8 @@ configurations {
 
 def okHttpVersion = '4.9.0'
 def fcmVersion = '21.0.1'
+def crashlyticsVersion = '17.3.0'
 def playCoreVersion = '1.9.0'
-def acraVersion = '5.7.0'
 
 repositories {
 
@@ -93,16 +93,15 @@ dependencies {
 
     compileOnly files('libs/libv2ray.aar')
     compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
+    compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
     debugImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
+    debugImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     debugImplementation "com.google.android.play:core:$playCoreVersion"
     releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
+    releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
-
-    implementation "ch.acra:acra-mail:$acraVersion"
-    implementation "ch.acra:acra-notification:$acraVersion"
-    implementation "ch.acra:acra-limiter:$acraVersion"
 
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'androidx.test:core:1.3.0'
