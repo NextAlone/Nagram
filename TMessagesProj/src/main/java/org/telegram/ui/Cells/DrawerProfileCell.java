@@ -31,6 +31,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
@@ -47,11 +48,11 @@ import tw.nekomimi.nekogram.NekoConfig;
 public class DrawerProfileCell extends FrameLayout {
 
     private BackupImageView avatarImageView;
-    private BackupImageView avatarBackgroundView;
     private TextView nameTextView;
     private TextView phoneTextView;
     private ImageView shadowView;
     private ImageView arrowView;
+    private final ImageReceiver imageReceiver;
 
     private Rect srcRect = new Rect();
     private Rect destRect = new Rect();
@@ -63,14 +64,16 @@ public class DrawerProfileCell extends FrameLayout {
     private boolean accountsShown;
     private int darkThemeBackgroundColor;
 
+
     private TLRPC.User user;
+    private boolean allowInvalidate = true;
 
     public DrawerProfileCell(Context context) {
         super(context);
 
-        avatarBackgroundView = new BackupImageView(context);
-        avatarBackgroundView.setVisibility(INVISIBLE);
-        addView(avatarBackgroundView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
+        imageReceiver = new ImageReceiver(this);
+        imageReceiver.setCrossfadeWithOldImage(true);
+        imageReceiver.setForceCrossfade(true);
 
         shadowView = new ImageView(context);
         shadowView.setVisibility(INVISIBLE);
@@ -160,7 +163,15 @@ public class DrawerProfileCell extends FrameLayout {
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
         phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
 
-        if (useAdb() || useImageBackground) {
+        if (useAdb()) {
+            phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
+            if (shadowView.getVisibility() != VISIBLE) {
+                shadowView.setVisibility(VISIBLE);
+            }
+            imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
+            imageReceiver.draw(canvas);
+        } else if (useImageBackground) {
+            phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             if (shadowView.getVisibility() != VISIBLE) {
                 shadowView.setVisibility(VISIBLE);
             }
@@ -240,11 +251,10 @@ public class DrawerProfileCell extends FrameLayout {
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
         if (useAdb()) {
-            avatarBackgroundView.setImage(ImageLocation.getForUser(user, true), "512_512", new ColorDrawable(0x00000000), user);
-            avatarBackgroundView.setVisibility(VISIBLE);
+            ImageLocation imageLocation = ImageLocation.getForUser(user, true);
+            imageReceiver.setImage(imageLocation, "512_512", null, null, new ColorDrawable(0x00000000), 0, null, user, 1);
             avatarImageView.setVisibility(INVISIBLE);
         } else {
-            avatarBackgroundView.setVisibility(INVISIBLE);
             avatarImageView.setVisibility(VISIBLE);
         }
 
@@ -276,5 +286,15 @@ public class DrawerProfileCell extends FrameLayout {
             arrowView.setRotation(rotation);
         }
         arrowView.setContentDescription(accountsShown ? LocaleController.getString("AccDescrHideAccounts", R.string.AccDescrHideAccounts) : LocaleController.getString("AccDescrShowAccounts", R.string.AccDescrShowAccounts));
+    }
+
+    @Override
+    public void invalidate() {
+        if (allowInvalidate) super.invalidate();
+    }
+
+    @Override
+    public void invalidate(int l, int t, int r, int b) {
+        if (allowInvalidate) super.invalidate(l, t, r, b);
     }
 }
