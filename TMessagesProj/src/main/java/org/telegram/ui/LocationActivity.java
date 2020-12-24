@@ -1955,11 +1955,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         proximityCircle.setPoints(Polygon.pointsAsCircle(proximityCircleCenter, meters));
 
         if (isActiveThemeDark()) {
-            proximityCircle.getOutlinePaint().setColor(0xffffffff);
-            proximityCircle.getFillPaint().setColor(0x20ffffff);
+            proximityCircle.getOutlinePaint().setColor(0x9666A3D7);
+            proximityCircle.getFillPaint().setColor(0x1c66A3D7);
         } else {
-            proximityCircle.getOutlinePaint().setColor(0xff000000);
-            proximityCircle.getOutlinePaint().setColor(0x20000000);
+            proximityCircle.getOutlinePaint().setColor(0x964286F5);
+            proximityCircle.getOutlinePaint().setColor(0x1c4286F5);
         }
 
         // TODO: set dash /gap
@@ -2819,7 +2819,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         themeDescriptions.add(new ThemeDescription(searchListView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));
 
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{SharingLiveLocationCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{SharingLiveLocationCell.class}, new String[]{"distanceTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{SharingLiveLocationCell.class}, new String[]{"distanceTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));
 
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle));
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));

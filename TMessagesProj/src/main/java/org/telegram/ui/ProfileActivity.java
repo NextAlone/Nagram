@@ -58,6 +58,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
@@ -2077,27 +2078,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     int currentPaddingTop = listView.getPaddingTop();
                     View view = null;
+                    int pos = RecyclerView.NO_POSITION;
                     for (int i = 0; i < listView.getChildCount(); i++) {
-                        if (listView.getChildAdapterPosition(listView.getChildAt(i)) == 0) {
+                        int p = listView.getChildAdapterPosition(listView.getChildAt(i));
+                        if (p != RecyclerView.NO_POSITION) {
                             view = listView.getChildAt(i);
+                            pos = p;
                             break;
                         }
                     }
-                    int pos = RecyclerView.NO_POSITION;
+
                     int top = 0;
                     if (view != null) {
-                        RecyclerView.ViewHolder holder = listView.findContainingViewHolder(view);
-                        pos = holder.getAdapterPosition();
-                        if (pos == RecyclerView.NO_POSITION) {
-                            pos = holder.getPosition();
-                        }
                         top = view.getTop();
                     }
                     boolean layout = false;
                     if (actionBar.isSearchFieldVisible()) {
                         layoutManager.scrollToPositionWithOffset(sharedMediaRow, -paddingTop);
                         layout = true;
-                    } else if ((!changed || !allowPullingDown) && pos != RecyclerView.NO_POSITION) {
+                    } else if ((!changed || !allowPullingDown) && view != null) {
                         layoutManager.scrollToPositionWithOffset(pos, top - paddingTop);
                         layout = true;
                     }
@@ -2310,12 +2309,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             int animationIndex = -1;
             int account;
-
-            @Override
-            protected void onAllAnimationsDone() {
-                super.onAllAnimationsDone();
-                NotificationCenter.getInstance(account = currentAccount).onAnimationFinish(animationIndex);
-            }
+//
+//            @Override
+//            protected void onAllAnimationsDone() {
+//                super.onAllAnimationsDone();
+//                getNotificationCenter().onAnimationFinish(animationIndex);
+//            }
 
             @Override
             public void runPendingAnimations() {
@@ -2328,7 +2327,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     valueAnimator.addUpdateListener(valueAnimator1 -> listView.invalidate());
                     valueAnimator.setDuration(getMoveDuration());
                     valueAnimator.start();
-                    animationIndex = NotificationCenter.getInstance(account = currentAccount).setAnimationInProgress(animationIndex, null);
+                    //animationIndex = getNotificationCenter().setAnimationInProgress(animationIndex, null);
                 }
                 super.runPendingAnimations();
             }
@@ -3070,7 +3069,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setPivotY(0);
         frameLayout.addView(avatarContainer, LayoutHelper.createFrame(42, 42, Gravity.TOP | Gravity.LEFT, 64, 0, 0, 0));
 
-        avatarImage = new AvatarImageView(context);
+        avatarImage = new AvatarImageView(context) {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+                super.onInitializeAccessibilityNodeInfo(info);
+                if (getImageReceiver().hasNotThumb()) {
+                    info.setText(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("Open", R.string.Open)));
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccDescrOpenInPhotoViewer", R.string.AccDescrOpenInPhotoViewer)));
+                    }
+                } else {
+                    info.setVisibleToUser(false);
+                }
+            }
+        };
         avatarImage.setRoundRadius(AndroidUtilities.dp(21));
         avatarImage.setPivotX(0);
         avatarImage.setPivotY(0);
@@ -3089,7 +3102,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 openAvatar();
             }
         });
-        avatarImage.setContentDescription(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
 
         avatarProgressView = new RadialProgressView(context) {
             private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -4641,6 +4653,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         invalidateIsInLandscapeMode();
         if (listAdapter != null) {
+            saveScrollPosition();
             listAdapter.notifyDataSetChanged();
         }
 
@@ -6780,6 +6793,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            if (holder.itemView instanceof UserCell) {
+                UserCell userCell = (UserCell) holder.itemView;
+                Object object = userCell.getCurrentObject();
+                if (object instanceof TLRPC.User) {
+                    TLRPC.User user = (TLRPC.User) object;
+                    if (UserObject.isUserSelf(user)) {
+                        return false;
+                    }
+                }
+            }
             int type = holder.getItemViewType();
             return type != 1 && type != 5 && type != 7 && type != 9 && type != 10 && type != 11 && type != 12 && type != 13;
         }
@@ -7543,6 +7566,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         updateRowsIds();
         diffCallback.fillPositions(diffCallback.newPositionToItem);
         DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(listAdapter);
+        saveScrollPosition();
+    }
+
+    private void saveScrollPosition() {
         if (listView != null && layoutManager != null && listView.getChildCount() > 0) {
             View view = null;
             int position = -1;

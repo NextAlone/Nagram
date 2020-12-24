@@ -3956,6 +3956,7 @@ public class MediaDataController extends BaseController {
 
             getMessagesStorage().getStorageQueue().postRunnable(() -> {
                 try {
+                    ArrayList<MessageObject> loadedMessages = new ArrayList<>();
                     SQLiteCursor cursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", TextUtils.join(",", replyMessages)));
                     while (cursor.next()) {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -3972,6 +3973,7 @@ public class MediaDataController extends BaseController {
                             replyMessageRandomOwners.remove(value);
                             if (arrayList != null) {
                                 MessageObject messageObject = new MessageObject(currentAccount, message, false, false);
+                                loadedMessages.add(messageObject);
                                 for (int b = 0; b < arrayList.size(); b++) {
                                     MessageObject object = arrayList.get(b);
                                     object.replyMessageObject = messageObject;
@@ -3993,7 +3995,7 @@ public class MediaDataController extends BaseController {
                             }
                         }
                     }
-                    AndroidUtilities.runOnUIThread(() -> getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, dialogId));
+                    AndroidUtilities.runOnUIThread(() -> getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, dialogId, loadedMessages));
                     if (callback != null) {
                         callback.run();
                     }
@@ -4215,7 +4217,7 @@ public class MediaDataController extends BaseController {
                 }
             }
             if (changed) {
-                getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, dialog_id);
+                getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, dialog_id, messageObjects);
             }
         });
     }

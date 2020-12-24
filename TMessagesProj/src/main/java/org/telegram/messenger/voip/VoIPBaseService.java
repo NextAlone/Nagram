@@ -137,6 +137,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 	protected int currentState = 0;
 	protected Notification ongoingCallNotification;
 	protected NativeInstance tgVoip;
+	protected boolean wasConnected;
 
 	protected TLRPC.Chat chat;
 
@@ -163,7 +164,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 	protected int spConnectingId;
 	protected int spPlayID;
 	protected boolean needPlayEndSound;
-	protected boolean haveAudioFocus;
+	protected boolean hasAudioFocus;
 	protected boolean micMute;
 	protected boolean unmutedByHold;
 	protected BluetoothAdapter btAdapter;
@@ -821,7 +822,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 				am.abandonAudioFocus(this);
 			}
 			am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
-			if (haveAudioFocus) {
+			if (hasAudioFocus) {
 				am.abandonAudioFocus(this);
 			}
 			Utilities.globalQueue.postRunnable(() -> soundPool.release());
@@ -1114,9 +1115,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
 	public void onAudioFocusChange(int focusChange) {
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-			haveAudioFocus = true;
+			hasAudioFocus = true;
 		} else {
-			haveAudioFocus = false;
+			hasAudioFocus = false;
 		}
 	}
 
