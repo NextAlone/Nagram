@@ -106,7 +106,7 @@ public class DrawerProfileCell extends FrameLayout {
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
         setArrowState(false);
 
-        if (Theme.getEventType() == 0) {
+        if (Theme.getEventType() == 0 || NekoConfig.eventType == 1) {
             snowflakesEffect = new SnowflakesEffect();
             snowflakesEffect.setColorKey(Theme.key_chats_menuName);
         }
