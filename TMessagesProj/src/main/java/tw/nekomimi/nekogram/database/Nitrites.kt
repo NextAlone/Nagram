@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram.database
 
 import org.dizitart.no2.Nitrite
+import org.dizitart.no2.collection.meta.Attributes
 import org.dizitart.no2.mvstore.MVStoreModule
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
@@ -13,18 +14,23 @@ fun mkDatabase(name: String): Nitrite {
 
     FileUtil.initDir(file.parentFile!!)
 
-    fun create() = Nitrite.builder()
-            .loadModule(MVStoreModule.withConfig()
-                    .filePath(file)
-                    .build())
-            .openOrCreate()!!
+    fun create(): Nitrite {
+        val nitrite = Nitrite.builder()
+                .loadModule(MVStoreModule.withConfig().filePath(file).build())
+                .openOrCreate()!!
+
+        val test = nitrite.openSharedPreference("shared_preferences")
+        test.connection.close()
+
+        return nitrite
+    }
 
     runCatching {
         return create()
+
     }.onFailure {
         FileLog.e(it)
         file.deleteRecursively()
-
     }
 
     return create()
