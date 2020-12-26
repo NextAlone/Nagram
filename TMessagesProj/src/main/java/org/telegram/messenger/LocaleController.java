@@ -1070,7 +1070,7 @@ public class LocaleController {
 
     public static String formatPluralString(String key, int plural) {
         if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
-            return "LOC_ERR:" + key;
+            return getString(key);
         }
         String param = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(plural));
         param = key + "_" + param;
