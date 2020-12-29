@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram.transtale
 import android.view.View
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
+import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
@@ -104,8 +105,7 @@ interface Translator {
 
             val builder = PopupBuilder(anchor)
 
-            var locales = (if (full) Locale.getISOLanguages()
-                    .map { Locale(it) }
+            var locales = (if (full) LocaleUtils.availableLocaleList()
                     .filter { it.variant.isBlank() } else LocaleController.getInstance()
                     .languages
                     .map { it.pluralLangCode }

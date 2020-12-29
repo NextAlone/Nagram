@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.util.HttpUtils;
 
-import org.dizitart.no2.collection.Document;
+import org.dizitart.no2.Document;
 import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
-import org.dizitart.no2.repository.annotations.Id;
-import org.dizitart.no2.repository.annotations.Index;
+import org.dizitart.no2.objects.Id;
+import org.dizitart.no2.objects.Index;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 
@@ -126,7 +126,7 @@ public class SubInfo implements Mappable {
     @Override
     public Document write(NitriteMapper mapper) {
 
-        Document document = Document.createDocument();
+        Document document = new Document();
 
         document.put("id", id);
         document.put("name", name);

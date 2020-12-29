@@ -13,8 +13,11 @@ import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.h2.util.IOUtils;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
@@ -25,6 +28,8 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
+
+import javax.validation.constraints.NotNull;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.utils.UIUtil;
@@ -96,6 +101,7 @@ public class ExternalGcm {
         if (!checkPlayServices()) return;
         GcmPushListenerService.sendRegistrationToServer(SharedConfig.pushString);
     }
+
 
     public static void checkUpdate(Activity ctx) {
         if (!checkPlayServices()) return;

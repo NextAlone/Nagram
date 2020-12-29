@@ -1,6 +1,6 @@
 package tw.nekomimi.nekogram.sub
 
-import org.dizitart.no2.filters.FluentFilter.where
+import org.dizitart.no2.objects.filters.ObjectFilters
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.database.mkDatabase
@@ -11,14 +11,14 @@ object SubManager {
 
     @JvmStatic
     val count
-        get() = subList.find().count()
+        get() = subList.find().totalCount()
 
     @JvmStatic
     val subList by lazy {
 
-        database.getRepository(SubInfo::class.java, "sub_list").apply {
+        database.getRepository("proxy_sub", SubInfo::class.java).apply {
 
-            val public = find(where("id").eq(1L)).firstOrNull()
+            val public = find(ObjectFilters.eq("id", 1L)).firstOrDefault()
 
             update(SubInfo().apply {
 

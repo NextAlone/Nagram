@@ -79,17 +79,11 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
     implementation 'dnsjava:dnsjava:3.3.1'
+    implementation 'org.dizitart:nitrite:3.4.3'
 
-    implementation(platform("org.dizitart:nitrite-bom:4.0.0-SNAPSHOT"))
-    implementation 'org.dizitart:nitrite'
-    implementation 'org.dizitart:nitrite-mvstore-adapter'
+    implementation 'cn.hutool:hutool-core:5.5.5'
+    implementation 'cn.hutool:hutool-crypto:5.5.5'
 
-    implementation('cn.hutool:hutool-http:5.5.4') {
-        exclude group: "org.apache.poi"
-    }
-    implementation('cn.hutool:hutool-crypto:5.5.4') {
-        exclude module: "hutool-core"
-    }
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
     implementation project(":openpgp-api")
