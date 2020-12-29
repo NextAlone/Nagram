@@ -1,14 +1,12 @@
 package tw.nekomimi.nekogram.transtale.source
 
 import cn.hutool.core.util.StrUtil
-import okhttp3.FormBody
-import okhttp3.Request
+import cn.hutool.http.HttpUtil
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
-import tw.nekomimi.nekogram.utils.HttpUtil
 
 object GoogleCloudTranslator : Translator {
 
@@ -22,31 +20,22 @@ object GoogleCloudTranslator : Translator {
 
         if (StrUtil.isBlank(NekoConfig.googleCloudTranslateKey)) error("Missing Cloud Translate Key")
 
-        val request = Request.Builder()
-                .url("https://translation.googleapis.com/language/translate/v2")
-                .post(FormBody.Builder()
-                        .add("q", query)
-                        .add("target", to)
-                        .add("format", "text")
-                        .add("key", NekoConfig.googleCloudTranslateKey)
-                        .apply {
-                            if (from != "auto") add("source", from)
-                        }
-                        .build()).build()
+        val response = HttpUtil.createPost("https://translation.googleapis.com/language/translate/v2")
+                .form("q", query)
+                .form("target", to)
+                .form("format", "text")
+                .form("key", NekoConfig.googleCloudTranslateKey)
+                .apply {
+                    if (from != "auto") form("source", from)
+                }.execute()
 
-        val response = runCatching {
-            HttpUtil.okHttpClient.newCall(request).execute()
-        }.recoverCatching {
-            HttpUtil.okHttpClientWithCurrProxy.newCall(request).execute()
-        }.getOrThrow()
+        if (response.status != 200) {
 
-        if (response.code != 200) {
-
-            error("HTTP ${response.code} : ${response.body?.string()}")
+            error("HTTP ${response.status} : ${response.body()}")
 
         }
 
-        var respObj = JSONObject(response.body!!.string())
+        var respObj = JSONObject(response.body())
 
         if (respObj.isNull("data")) error(respObj.toString(4))
 

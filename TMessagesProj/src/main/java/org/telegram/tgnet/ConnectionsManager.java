@@ -174,6 +174,11 @@ public class ConnectionsManager extends BaseController {
             deviceModel = Build.MANUFACTURER + Build.MODEL;
             PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             appVersion = pInfo.versionName + " (" + pInfo.versionCode + ")";
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                appVersion += " pbeta";
+            } else if (BuildVars.DEBUG_VERSION) {
+                appVersion += " beta";
+            }
             systemVersion = "SDK " + Build.VERSION.SDK_INT;
         } catch (Exception e) {
             systemLangCode = "en";
@@ -203,15 +208,7 @@ public class ConnectionsManager extends BaseController {
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
 
-        int layer = MessagesController.getMainSettings(currentAccount).getInt("layer", TLRPC.LAYER);
-
-        if (layer != TLRPC.LAYER) {
-
-            FileLog.d("use custom layer " + layer);
-
-        }
-
-        init(BuildVars.BUILD_VERSION, layer, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -257,9 +254,9 @@ public class ConnectionsManager extends BaseController {
 
     public int sendRequest(final TLObject object, final RequestDelegate onComplete, final QuickAckDelegate onQuickAck, final WriteToSocketDelegate onWriteToSocket, final int flags, final int datacenterId, final int connetionType, final boolean immediate) {
         final int requestToken = lastRequestToken.getAndIncrement();
-        UIUtil.runOnIoDispatcher(() -> {
+        Utilities.stageQueue.postRunnable(() -> {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("send request " + object.getClass().getSimpleName() + " with token = " + requestToken);
+                FileLog.d("send request " + object + " with token = " + requestToken);
             }
             try {
                 NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
@@ -279,14 +276,14 @@ public class ConnectionsManager extends BaseController {
                             error.code = errorCode;
                             error.text = errorText;
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.e(object.getClass().getSimpleName() + " got error " + error.code + " " + error.text + " with token = " + requestToken);
+                                FileLog.e(object + " got error " + error.code + " " + error.text);
                             }
                         }
                         if (resp != null) {
                             resp.networkType = networkType;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("java received " + resp + " error = " + (error == null ? "null" : (error.code + ": " + error.text)));
+                            FileLog.d("java received " + resp + " error = " + error);
                         }
                         final TLObject finalResponse = resp;
                         final TLRPC.TL_error finalError = error;
@@ -350,10 +347,12 @@ public class ConnectionsManager extends BaseController {
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection) {
 
         if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
-
+            if (SharedConfig.currentProxy instanceof SharedConfig.ExternalSocks5Proxy) {
+                ((SharedConfig.ExternalSocks5Proxy) SharedConfig.currentProxy).start();
+            }
             native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
-
         }
+
         String installer = "";
         try {
             installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());

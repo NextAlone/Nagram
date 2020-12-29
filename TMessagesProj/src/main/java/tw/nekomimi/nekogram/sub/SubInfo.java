@@ -1,10 +1,6 @@
 package tw.nekomimi.nekogram.sub;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-
-import com.google.android.gms.common.util.HttpUtils;
 
 import org.dizitart.no2.Document;
 import org.dizitart.no2.mapper.Mappable;
@@ -21,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.utils.HttpUtil;
+import cn.hutool.http.HttpUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 @Index("id")
@@ -55,15 +51,7 @@ public class SubInfo implements Mappable {
 
             try {
 
-                String source;
-
-                if (Build.VERSION.SDK_INT < 21) {
-                    source = cn.hutool.http.HttpUtil.get(url);
-                } else {
-                    source = HttpUtil.get(url);
-                }
-
-                return ProxyUtil.parseProxies(source);
+                return ProxyUtil.parseProxies(HttpUtil.get(url));
 
             } catch (Exception e) {
 
