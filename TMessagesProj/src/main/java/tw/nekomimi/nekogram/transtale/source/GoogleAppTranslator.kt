@@ -1,15 +1,12 @@
 package tw.nekomimi.nekogram.transtale.source
 
 import cn.hutool.core.util.StrUtil
-import okhttp3.Request
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
-import tw.nekomimi.nekogram.utils.HttpUtil
-import tw.nekomimi.nekogram.utils.applyUserAgent
 
 object GoogleAppTranslator : Translator {
 

@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.utils
 
+import android.os.Build
 import okhttp3.Dns
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -20,10 +21,14 @@ open class DnsFactory : Dns {
 
         init {
 
-            addProvider("https://mozilla.cloudflare-dns.com/dns-query")
-            addProvider("https://dns.google/dns-query")
-            addProvider("https://dns.twnic.tw/dns-query")
-            addProvider("https://dns.adguard.com/dns-query")
+            if (Build.VERSION.SDK_INT >= 21) {
+
+                addProvider("https://mozilla.cloudflare-dns.com/dns-query")
+                addProvider("https://dns.google/dns-query")
+                addProvider("https://dns.twnic.tw/dns-query")
+                addProvider("https://dns.adguard.com/dns-query")
+
+            }
 
         }
     }

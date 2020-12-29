@@ -1,12 +1,10 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
+import cn.hutool.http.HttpUtil
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.transtale.Translator
-import tw.nekomimi.nekogram.utils.HttpUtil
 import tw.nekomimi.nekogram.utils.applyUserAgent
 
 object LingoTranslator : Translator {
@@ -19,33 +17,23 @@ object LingoTranslator : Translator {
 
         }
 
-        val request = Request.Builder()
-                .url("https://api.interpreter.caiyunai.com/v1/translator")
+        val response = HttpUtil.createPost("https://api.interpreter.caiyunai.com/v1/translator")
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .header("X-Authorization", "token 9sdftiq37bnv410eon2l") // 白嫖
                 .applyUserAgent()
-                .post(JSONObject().apply {
+                .form("source", query)
+                .form("trans_type", "${from}2$to")
+                .form("request_id", System.currentTimeMillis().toString())
+                .form("detect", true)
+                .execute()
 
-                    put("source", query)
-                    put("trans_type", "${from}2$to")
-                    put("request_id", System.currentTimeMillis().toString())
-                    put("detect", true)
+        if (response.status != 200) {
 
-                }.toString().toRequestBody()).build()
-
-        val response = runCatching {
-            HttpUtil.okHttpClient.newCall(request).execute()
-        }.recoverCatching {
-            HttpUtil.okHttpClientWithCurrProxy.newCall(request).execute()
-        }.getOrThrow()
-
-        if (response.code != 200) {
-
-            error("HTTP ${response.code} : ${response.body?.string()}")
+            error("HTTP ${response.status} : ${response.body()}")
 
         }
 
-        return JSONObject(response.body!!.string()).getString("target")
+        return JSONObject(response.body()).getString("target")
 
     }
 

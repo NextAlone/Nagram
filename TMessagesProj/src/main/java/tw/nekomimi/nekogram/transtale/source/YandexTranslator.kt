@@ -1,11 +1,9 @@
 package tw.nekomimi.nekogram.transtale.source
 
 import cn.hutool.core.lang.UUID
-import okhttp3.FormBody
-import okhttp3.Request
+import cn.hutool.http.HttpUtil
 import org.json.JSONObject
 import tw.nekomimi.nekogram.transtale.Translator
-import tw.nekomimi.nekogram.utils.HttpUtil
 import tw.nekomimi.nekogram.utils.applyUserAgent
 
 object YandexTranslator : Translator {
@@ -16,29 +14,21 @@ object YandexTranslator : Translator {
 
         val uuid2 = UUID.fastUUID().toString(true)
 
-        val request = Request.Builder()
-                .url("https://translate.yandex.net/api/v1/tr.json/translate?srv=android&uuid=$uuid&id=$uuid2-9-0")
+        val response = HttpUtil.createPost("https://translate.yandex.net/api/v1/tr.json/translate?srv=android&uuid=$uuid&id=$uuid2-9-0")
                 .applyUserAgent()
-                .post(FormBody.Builder()
-                        .add("text", query)
-                        .add("lang", if (from == "auto") to else "$from-$to")
-                        .build()).build()
+                .form("text", query)
+                .form("lang", if (from == "auto") to else "$from-$to")
+                .execute()
 
-        val response = runCatching {
-            HttpUtil.okHttpClient.newCall(request).execute()
-        }.recoverCatching {
-            HttpUtil.okHttpClientWithCurrProxy.newCall(request).execute()
-        }.getOrThrow()
+        if (response.status != 200) {
 
-        if (response.code != 200) {
-
-            error("HTTP ${response.code} : ${response.body?.string()}")
+            error("HTTP ${response.status} : ${response.body()}")
 
         }
 
-        val respObj = JSONObject(response.body!!.string())
+        val respObj = JSONObject(response.body())
 
-        if (respObj.optInt("code",-1) != 200) error(respObj.toString(4))
+        if (respObj.optInt("code", -1) != 200) error(respObj.toString(4))
 
         return respObj.getJSONArray("text").getString(0)
 
