@@ -1,10 +1,7 @@
 package tw.nekomimi.nekogram.database
 
 import org.dizitart.no2.Nitrite
-import org.dizitart.no2.collection.meta.Attributes
-import org.dizitart.no2.mvstore.MVStoreModule
 import org.telegram.messenger.ApplicationLoader
-import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
@@ -16,7 +13,7 @@ fun mkDatabase(name: String): Nitrite {
 
     fun create(): Nitrite {
         val nitrite = Nitrite.builder()
-                .loadModule(MVStoreModule.withConfig().filePath(file).build())
+                .filePath(file)
                 .openOrCreate()!!
 
         val test = nitrite.openSharedPreference("shared_preferences")
@@ -27,9 +24,7 @@ fun mkDatabase(name: String): Nitrite {
 
     runCatching {
         return create()
-
     }.onFailure {
-        FileLog.e(it)
         file.deleteRecursively()
     }
 
@@ -44,7 +39,9 @@ private lateinit var mainSharedPreferencesDatabase: Nitrite
 fun openMainSharedPreference(name: String): DbPref {
 
     if (!::mainSharedPreferencesDatabase.isInitialized) {
+
         mainSharedPreferencesDatabase = mkDatabase("shared_preferences")
+
     }
 
     return mainSharedPreferencesDatabase.openSharedPreference(name)

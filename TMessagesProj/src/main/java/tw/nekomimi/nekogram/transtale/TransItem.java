@@ -1,10 +1,12 @@
 package tw.nekomimi.nekogram.transtale;
 
-import org.dizitart.no2.collection.Document;
+import org.dizitart.no2.Document;
+import org.dizitart.no2.IndexType;
 import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
-import org.dizitart.no2.repository.annotations.Id;
-import org.dizitart.no2.repository.annotations.Index;
+import org.dizitart.no2.objects.Id;
+import org.dizitart.no2.objects.Index;
+import org.dizitart.no2.objects.Indices;
 
 @Index(value = "text")
 public class TransItem implements Mappable {
@@ -23,7 +25,7 @@ public class TransItem implements Mappable {
 
     @Override
     public Document write(NitriteMapper mapper) {
-        Document document = Document.createDocument();
+        Document document = new Document();
         document.put("text",text);
         document.put("trans", trans);
         return document;

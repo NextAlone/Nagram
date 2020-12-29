@@ -1,10 +1,10 @@
 package tw.nekomimi.nekogram.transtale;
 
-import org.dizitart.no2.collection.Document;
+import org.dizitart.no2.Document;
 import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
-import org.dizitart.no2.repository.annotations.Id;
-import org.dizitart.no2.repository.annotations.Index;
+import org.dizitart.no2.objects.Id;
+import org.dizitart.no2.objects.Index;
 
 @Index("chatId")
 public class ChatCCTarget implements Mappable {
@@ -23,7 +23,7 @@ public class ChatCCTarget implements Mappable {
 
     @Override
     public Document write(NitriteMapper mapper) {
-        Document document = Document.createDocument();
+        Document document = new Document();
         document.put("chatId", chatId);
         document.put("ccTarget", ccTarget);
         return document;
