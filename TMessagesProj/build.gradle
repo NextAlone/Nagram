@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.3.1-rc01"
-def verCode = 132
+def verName = "7.3.1-rc02"
+def verCode = 134
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -317,30 +317,12 @@ android {
         mini {
             versionNameSuffix '-mini'
         }
-        miniNoEmoji {
-            versionNameSuffix '-mini-no-emoji'
-        }
-        miniAppleEmoji {
-            versionNameSuffix '-mini-apple-emoji'
-        }
-        miniTwitterEmoji {
-            versionNameSuffix '-mini-twitter-emoji'
-        }
         full {
             isDefault true
         }
         fullPlay {
             versionNameSuffix '-play'
             versionCode verCode - 1
-        }
-        fullNoEmoji {
-            versionNameSuffix '-full-no-emoji'
-        }
-        fullAppleEmoji {
-            versionNameSuffix '-full-apple-emoji'
-        }
-        fullTwitterEmoji {
-            versionNameSuffix '-full-twitter-emoji'
         }
     }
 
@@ -351,13 +333,13 @@ android {
             }
         }
         if (set.name.matches("(mini|full).*")) {
-            if (set.name.contains("Apple")) {
+            //if (set.name.contains("Apple")) {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
-            } else if (set.name.contains("Twitter")) {
+            /*} else if (set.name.contains("Twitter")) {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
-            } else if (!set.name.contains("NoEmoji")) {
+            } else {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/blob"]
-            }
+            }*/
         }
     }
 

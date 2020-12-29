@@ -9,11 +9,11 @@ object EmojiProvider {
     val type = BuildConfig.FLAVOR
 
     @JvmField
-    val containsEmoji = !type.contains("NoEmoji") && type.contains("Emoji")
+    val containsEmoji = true//type.contains("Emoji")
 
     // default use blob
     @JvmField
-    val isFont = !type.contains("Emoji")
+    val isFont = false//!type.contains("Emoji")
 
     @JvmStatic
     val font by lazy {

@@ -278,7 +278,7 @@ public class Emoji {
                 if (!isLoaded()) {
                     loadEmoji(info.page, info.page2);
                     canvas.drawRect(getBounds(), placeholderPaint);
-                } else {
+                } else if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
                     canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
                 }
                 return;
