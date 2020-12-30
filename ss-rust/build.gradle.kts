@@ -25,12 +25,9 @@ cargo {
     profile = findProperty("CARGO_PROFILE")?.toString() ?: "release"
     extraCargoBuildArguments = listOf("--bin", "sslocal")
     featureSpec.noDefaultBut(arrayOf(
-            "sodium",
-            "rc4",
-            "aes-cfb",
-            "aes-ctr",
-            "camellia-cfb",
-            "openssl-vendored"))
+            "single-threaded",
+            "local-flow-stat",
+            "local-dns"))
     exec = { spec, toolchain ->
         spec.environment("RUST_ANDROID_GRADLE_LINKER_WRAPPER_PY", "$projectDir/$module/../linker-wrapper.py")
         spec.environment("RUST_ANDROID_GRADLE_TARGET", "target/${toolchain.target}/$profile/lib$libname.so")
