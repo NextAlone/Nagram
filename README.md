@@ -83,6 +83,8 @@ It is recommended to use the official script, otherwise you may not find rustup.
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
+rustup toolchain install nightly-2020-12-20
+rustup override set nightly-2020-12-20
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 
@@ -94,7 +96,7 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 7. Replace TMessagesProj/google-services.json if you want fcm to work.
 8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties`
 
-`./gradlew assemble<Full/Mini>[AppleEmoji|TwitterEmoji|NoEmoji]<Debug/Release/ReleaseNoGcm>`
+`./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 
 ## Faq
 
