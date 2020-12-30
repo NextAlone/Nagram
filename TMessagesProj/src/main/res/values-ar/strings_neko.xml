@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">إيقاف تلقائي للفيديو</string>
     <string name="AutoPauseVideoAbout">عند قفل الشاشة / التبديل إلى الخلفية.</string>
     <string name="DisableProximityEvents">تعطيل أحداث التقارب</string>
+    <string name="IncreaseVoiceMessageQuality">زيادة جودة الرسائل الصوتية</string>
 </resources>

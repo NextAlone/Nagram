@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">Ավտոմատ դադար տեսանյութը</string>
     <string name="AutoPauseVideoAbout">Երբ կողպեք էկրանը / անցնել ֆոնին:</string>
     <string name="DisableProximityEvents">Անջատեք հարևանության իրադարձությունները</string>
+    <string name="IncreaseVoiceMessageQuality">Բարձրացնել ձայնային հաղորդագրությունների որակը</string>
 </resources>

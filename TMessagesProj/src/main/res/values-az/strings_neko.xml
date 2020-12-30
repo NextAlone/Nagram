@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">Videonu avtomatik dayandırın</string>
     <string name="AutoPauseVideoAbout">Ekranı kilidləyərkən / arxa plana keçin.</string>
     <string name="DisableProximityEvents">Yaxınlıq tədbirlərini deaktiv edin</string>
+    <string name="IncreaseVoiceMessageQuality">Səsli mesajların keyfiyyətini artırın</string>
 </resources>

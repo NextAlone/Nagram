@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">비디오 자동 일시정지</string>
     <string name="AutoPauseVideoAbout">락스크린이 백그라운드로 변경될때</string>
     <string name="DisableProximityEvents">근접 이벤트 비활성화</string>
+    <string name="IncreaseVoiceMessageQuality">음성 메시지 품질 향상</string>
 </resources>

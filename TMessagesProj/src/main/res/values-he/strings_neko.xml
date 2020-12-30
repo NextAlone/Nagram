@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">השהה וידאו אוטומטית</string>
     <string name="AutoPauseVideoAbout">כאשר נעילת מסך / מעבר לרקע.</string>
     <string name="DisableProximityEvents">השבת אירועי קרבה</string>
+    <string name="IncreaseVoiceMessageQuality">הגדל את איכות ההודעות הקוליות</string>
 </resources>

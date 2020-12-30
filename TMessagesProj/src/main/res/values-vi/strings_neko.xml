@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">Tự động tạm dừng video</string>
     <string name="AutoPauseVideoAbout">Khi khóa màn hình/chuyển sang nền.</string>
     <string name="DisableProximityEvents">Vô hiệu hóa các sự kiện lân cận</string>
+    <string name="IncreaseVoiceMessageQuality">Tăng chất lượng tin nhắn thoại</string>
 </resources>
