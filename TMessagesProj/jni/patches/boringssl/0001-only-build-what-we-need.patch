@@ -63,25 +63,21 @@ index c266e1267..81d721df4 100644
 -    DEPENDS all_tests bssl_shim handshaker
 -    USES_TERMINAL)
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
-index 2771768f4..126817742 100644
+index d23c02eee..d84f4c1b9 100644
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
 @@ -85,7 +85,6 @@ function(perlasm dest src)
  endfunction()
- 
+
  add_subdirectory(fipsmodule)
 -add_subdirectory(test)
- 
+
  if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -464,96 +463,4 @@ endif()
- # simplify injecting it everywhere.
- if(USE_CUSTOM_LIBCXX)
-   target_link_libraries(crypto libcxx)
--endif()
--
--# urandom_test is a separate binary because it needs to be able to observe the
--# PRNG initialisation, which means that it can't have other tests running before
+@@ -467,92 +466,4 @@ endif()
+
+ # urandom_test is a separate binary because it needs to be able to observe the
+ # PRNG initialisation, which means that it can't have other tests running before
 -# it does.
 -add_executable(
 -  urandom_test
@@ -115,7 +111,7 @@ index 2771768f4..126817742 100644
 -  curve25519/spake25519_test.cc
 -  curve25519/x25519_test.cc
 -  ecdh_extra/ecdh_test.cc
--  dh/dh_test.cc
+-  dh_extra/dh_test.cc
 -  digest_extra/digest_test.cc
 -  dsa/dsa_test.cc
 -  err/err_test.cc
@@ -171,7 +167,7 @@ index 2771768f4..126817742 100644
 -  target_link_libraries(crypto_test ws2_32)
 -endif()
 -add_dependencies(all_tests crypto_test)
-+endif()
++# it does.
 \ No newline at end of file
 diff --git a/ssl/CMakeLists.txt b/ssl/CMakeLists.txt
 index 0fb532eae..f5cab9807 100644
