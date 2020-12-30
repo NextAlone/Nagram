@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.3.1-rc02"
-def verCode = 134
+def verName = "7.3.1-rc04"
+def verCode = 138
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -81,9 +81,9 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.3.1'
     implementation 'org.dizitart:nitrite:3.4.3'
 
-    implementation 'cn.hutool:hutool-core:5.5.5'
-    implementation 'cn.hutool:hutool-crypto:5.5.5'
-    implementation 'cn.hutool:hutool-http:5.5.5'
+    implementation 'cn.hutool:hutool-core:5.5.6'
+    implementation 'cn.hutool:hutool-crypto:5.5.6'
+    implementation 'cn.hutool:hutool-http:5.5.6'
 
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
