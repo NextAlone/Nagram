@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Bloqueado</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu de entrada de bate-papo</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Gravar vídeo</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Gravar áudio</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Desativar visualização de link</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Habilitar pré-visualização de links</string>
+    <string name="UseChatAttachEnterMenu">Use o menu de entrada</string>
+    <string name="UseChatAttachEnterMenuNotice">Altere o botão de gravação para um menu de entrada e adicione uma chave de visualização de link.</string>
+    <string name="DisableLinkPreviewByDefault">Desativar a visualização do link por padrão</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Desative a solicitação de visualização do link durante a entrada por padrão para evitar que o servidor saiba que o link é compartilhado através do Telegram.</string>
     <string name="CustomApi">API Personalizada</string>
     <string name="UseCustomApiNotice">Efetue login usando a API personalizada. Se você não conseguir se registrar ou efetuar login, isso pode ajudar.\n\nNota: o fcm não vai funcionar se você estiver usando a versão de final.</string>
     <string name="CustomApiNo">Não use a API personalizada</string>
@@ -102,6 +111,7 @@
     <string name="AddProxyVmess">Adicionar Proxy Vmess</string>
     <string name="AddProxySS">Adicionar Shadowsocks Proxy</string>
     <string name="AddProxySSR">Adicionar ShadowsocksR Proxy</string>
+    <string name="AddProxyTrojan">Adicionar Trojan Proxy</string>
     <string name="SSPluginConflictingName">Vários plugins usam esse id: %s.</string>
     <string name="EditProxy">Editar Proxy</string>
     <string name="ShareProxy">Compartilhar Proxy</string>
@@ -125,6 +135,7 @@
     <string name="SSRProtocolParams">Parâmetros de protocolo</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyInfoTrojan">Configurações do Trojan Proxy</string>
     <string name="ProxyRemarks">Observações</string>
     <string name="RetestPing">Teste novamente o ping para todos os servidores</string>
     <string name="ReorderByPing">Reordenar servidores por ping</string>
@@ -174,5 +185,26 @@
     <string name="PGPImportPrivate">Importar Chave Privada</string>
     <string name="ShareMyKey">Compartilhar minha chave pública</string>
     <string name="DisableVibration">Desativar vibração</string>
+    <string name="IgnoreContentRestrictions">Ignore as restrições de conteúdo</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignora as restrições do Android em mensagens localmente. Isso pode ser banido pelo servidor no futuro, e você precisará avaliar a legalidade local dessa opção.</string>
+    <string name="SendCommentAfterForward">Enviar comentário após encaminhar</string>
+    <string name="UnpinMessageX">Desafixar mensagem</string>
+    <string name="UnpinMessagesAll">Desafixar todas as mensagens</string>
+    <string name="DismissForYourself">Recusar por você mesmo</string>
+    <string name="ImportLogin">QR Login</string>
+    <string name="QRLoginNotice">Este código QR / link permite que alguém acesse sua conta do Telegram. É você que está fazendo essa operação?</string>
+    <string name="QRLoginConfirm">Confirmar Login</string>
+    <string name="StorageReset">Limpar armazenamento</string>
+    <string name="StorageResetInfo">Todos os dados deste aplicativo serão excluídos permanentemente (e tente encerrar a sessão de todas as contas primeiro).</string>
+    <string name="FCTitle">Sobre atualizações do app</string>
+    <string name="FCInfo">Seguir nosso canal de novidades e atualizações?</string>
+    <string name="CCTitle">OpenCC (Convertido em Chinês)</string>
+    <string name="CCTarget">Alvo</string>
     <string name="CCNo">Nenhuma</string>
+    <string name="CCTC">Chinês tradicional</string>
+    <string name="CCHK">Chinês tradicional (Hong Kong)</string>
+    <string name="CCTT">Chinês Tradicional (Taiwan)</string>
+    <string name="CCSC">Chinês Simplificado</string>
+    <string name="CCSP">Chinês Simplificado (China)</string>
+    <string name="CCJP">Novo Kanji Japonês (Shinjitai)</string>
 </resources>

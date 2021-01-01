@@ -104,4 +104,6 @@
     <string name="ProviderYandex">Tłumaczenie Yandex</string>
     <string name="AutoPauseVideo">Automatycznie wstrzymaj wideo</string>
     <string name="AutoPauseVideoAbout">Gdy ekran jest blokady / przełącz na tło.</string>
+    <string name="DisableProximityEvents">Wyłącz zdarzenia zbliżeniowe</string>
+    <string name="IncreaseVoiceMessageQuality">Popraw jakość wiadomości głosowych</string>
 </resources>

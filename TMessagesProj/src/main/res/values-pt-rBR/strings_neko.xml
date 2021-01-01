@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">Pausar vídeo automaticamente</string>
     <string name="AutoPauseVideoAbout">Quando bloquear a tela/Alternar para segundo plano</string>
     <string name="DisableProximityEvents">Desativar eventos de proximidade</string>
+    <string name="IncreaseVoiceMessageQuality">Aumentar a qualidade das mensagens de voz</string>
 </resources>
