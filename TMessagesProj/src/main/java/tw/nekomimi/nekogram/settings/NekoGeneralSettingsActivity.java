@@ -105,7 +105,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int forceTabletRow;
     private int avatarAsDrawerBackgroundRow;
     private int removeTitleEmojiRow;
-    private int eventTypeRow;
     private int newYearRow;
     private int actionBarDecorationRow;
     private int appBarShadowRow;
@@ -266,22 +265,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                 builder.show();
 
-            } else if (position == eventTypeRow) {
-
-                PopupBuilder builder = new PopupBuilder(view);
-
-                builder.setItems(new String[]{
-                        LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
-                        LocaleController.getString("Christmas", R.string.Christmas),
-                        LocaleController.getString("Valentine", R.string.Valentine)
-                }, (i, __) -> {
-                    NekoConfig.setEventType(i);
-                    listAdapter.notifyItemChanged(position);
-                    return Unit.INSTANCE;
-                });
-
-                builder.show();
-
             } else if (position == actionBarDecorationRow) {
 
                 PopupBuilder builder = new PopupBuilder(view);
@@ -386,6 +369,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     if (StrUtil.isBlank(key)) key = null;
 
                     NekoConfig.setGoogleTranslateKey(key);
+
+                    listAdapter.notifyItemChanged(position);
 
                     return Unit.INSTANCE;
 
@@ -709,7 +694,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         avatarAsDrawerBackgroundRow = rowCount++;
         appBarShadowRow = rowCount++;
         removeTitleEmojiRow = rowCount++;
-        eventTypeRow = rowCount++;
         newYearRow = rowCount++;
         actionBarDecorationRow = rowCount++;
         appearance2Row = rowCount++;
@@ -813,20 +797,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                                 break;
                         }
                         textCell.setTextAndValue(LocaleController.getString("NameOrder", R.string.NameOrder), value, true);
-                    } else if (position == eventTypeRow) {
-                        String value;
-                        switch (NekoConfig.eventType) {
-                            case 1:
-                                value = LocaleController.getString("Christmas", R.string.Christmas);
-                                break;
-                            case 2:
-                                value = LocaleController.getString("Valentine", R.string.Valentine);
-                                break;
-                            case 0:
-                            default:
-                                value = LocaleController.getString("DependsOnDate", R.string.DependsOnDate);
-                        }
-                        textCell.setTextAndValue(LocaleController.getString("EventType", R.string.EventType), value, true);
                     } else if (position == actionBarDecorationRow) {
                         String value;
                         switch (NekoConfig.actionBarDecoration) {
@@ -876,7 +846,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 case 6: {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
                     if (position == googleCloudTranslateKeyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice), false);
+                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("CacheEmpty", R.string.CacheEmpty), false);
                     }
                 }
                 break;
@@ -925,8 +895,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("AskBeforeCalling", R.string.AskBeforeCalling), NekoConfig.askBeforeCall, true);
                     } else if (position == disableNumberRoundingRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("DisableNumberRounding", R.string.DisableNumberRounding), "4.8K -> 4777", NekoConfig.disableNumberRounding, true, true);
-                    } else if (position == appBarShadowRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, eventTypeRow != -1);
                     } else if (position == usePersianCalenderRow) {
                     } else if (position == autoPauseVideoRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
@@ -1004,7 +972,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     position == general2Row || position == appearance2Row || position == openKeyChain2Row) {
                 return 1;
             } else if (position == nameOrderRow || position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
-                    position == translationProviderRow || position == eventTypeRow || position == actionBarDecorationRow ||
+                    position == translationProviderRow || position == actionBarDecorationRow ||
                     position == pgpAppRow || position == keyRow) {
                 return 2;
             } else if (position == connectionRow || position == transRow || position == dialogsRow ||

@@ -415,14 +415,6 @@ public class NekoConfig {
         editor.apply();
     }
 
-    public static void setEventType(int type) {
-        eventType = type;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("eventType", eventType);
-        editor.apply();
-    }
-
     public static void setActionBarDecoration(int decoration) {
         actionBarDecoration = decoration;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);

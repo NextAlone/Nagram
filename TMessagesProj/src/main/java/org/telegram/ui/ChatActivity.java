@@ -245,6 +245,7 @@ import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
+import tw.nekomimi.nekogram.parts.PollTransUpdatesKt;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
@@ -13890,7 +13891,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     boolean isVoted = object.isVoted();
                     TLRPC.TL_messageMediaPoll media = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                     if (poll != null) {
-                        object.messageOwner.translated = false;
+                        if (object.messageOwner.translated) {
+                            PollTransUpdatesKt.postPollTrans(media, poll);
+                        }
                         media.poll = poll;
                         isQuiz = poll.quiz;
                     } else if (media.poll != null) {
