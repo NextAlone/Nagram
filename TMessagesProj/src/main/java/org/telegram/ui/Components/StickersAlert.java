@@ -45,6 +45,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -81,12 +82,15 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     public interface StickersAlertDelegate {
         void onStickerSelected(TLRPC.Document sticker, String query, Object parent, boolean clearsInputField, boolean notify, int scheduleDate);
+
         boolean canSchedule();
+
         boolean isInScheduleMode();
     }
 
     public interface StickersAlertInstallDelegate {
         void onStickerSetInstalled();
+
         void onStickerSetUninstalled();
     }
 
