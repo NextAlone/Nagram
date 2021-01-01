@@ -114,6 +114,10 @@ public class ChatRightsEditActivity extends BaseFragment {
     private int sendMessagesRow;
     private int sendMediaRow;
     private int sendStickersRow;
+
+    private int sendGamesRow;
+    private int sendInlineRow;
+
     private int sendGifsRow;
     private int sendPollsRow;
     private int embedLinksRow;
@@ -131,6 +135,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     public interface ChatRightsEditActivityDelegate {
         void didSetRights(int rights, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBanned, String rank);
+
         void didChangeOwner(TLRPC.User user);
     }
 
@@ -160,8 +165,8 @@ public class ChatRightsEditActivity extends BaseFragment {
         if (myAdminRights == null) {
             myAdminRights = new TLRPC.TL_chatAdminRights();
             myAdminRights.change_info = myAdminRights.post_messages = myAdminRights.edit_messages =
-            myAdminRights.delete_messages = myAdminRights.ban_users = myAdminRights.invite_users =
-            myAdminRights.pin_messages = myAdminRights.add_admins = true;
+                    myAdminRights.delete_messages = myAdminRights.ban_users = myAdminRights.invite_users =
+                            myAdminRights.pin_messages = myAdminRights.add_admins = true;
             if (!isChannel) {
                 myAdminRights.manage_call = true;
             }
@@ -199,17 +204,17 @@ public class ChatRightsEditActivity extends BaseFragment {
             if (defaultBannedRights == null) {
                 defaultBannedRights = new TLRPC.TL_chatBannedRights();
                 defaultBannedRights.view_messages = defaultBannedRights.send_media = defaultBannedRights.send_messages =
-                defaultBannedRights.embed_links = defaultBannedRights.send_stickers = defaultBannedRights.send_gifs =
-                defaultBannedRights.send_games = defaultBannedRights.send_inline = defaultBannedRights.send_polls =
-                defaultBannedRights.invite_users = defaultBannedRights.change_info = defaultBannedRights.pin_messages = false;
+                        defaultBannedRights.embed_links = defaultBannedRights.send_stickers = defaultBannedRights.send_gifs =
+                                defaultBannedRights.send_games = defaultBannedRights.send_inline = defaultBannedRights.send_polls =
+                                        defaultBannedRights.invite_users = defaultBannedRights.change_info = defaultBannedRights.pin_messages = false;
             }
 
             bannedRights = new TLRPC.TL_chatBannedRights();
             if (rightsBanned == null) {
                 bannedRights.view_messages = bannedRights.send_media = bannedRights.send_messages =
-                bannedRights.embed_links = bannedRights.send_stickers = bannedRights.send_gifs =
-                bannedRights.send_games = bannedRights.send_inline = bannedRights.send_polls =
-                bannedRights.invite_users = bannedRights.change_info = bannedRights.pin_messages = false;
+                        bannedRights.embed_links = bannedRights.send_stickers = bannedRights.send_gifs =
+                                bannedRights.send_games = bannedRights.send_inline = bannedRights.send_polls =
+                                        bannedRights.invite_users = bannedRights.change_info = bannedRights.pin_messages = false;
             } else {
                 bannedRights.view_messages = rightsBanned.view_messages;
                 bannedRights.send_messages = rightsBanned.send_messages;
@@ -537,7 +542,11 @@ public class ChatRightsEditActivity extends BaseFragment {
                     } else if (position == sendMediaRow) {
                         bannedRights.send_media = !bannedRights.send_media;
                     } else if (position == sendStickersRow) {
-                        bannedRights.send_stickers = bannedRights.send_games = bannedRights.send_inline = !bannedRights.send_stickers;
+                        bannedRights.send_stickers = !bannedRights.send_stickers;
+                    } else if (position == sendGamesRow) {
+                        bannedRights.send_games = !bannedRights.send_games;
+                    } else if (position == sendInlineRow) {
+                        bannedRights.send_inline = !bannedRights.send_inline;
                     } else if (position == sendGifsRow) {
                         bannedRights.send_gifs = !bannedRights.send_gifs;
                     } else if (position == embedLinksRow) {
@@ -568,8 +577,22 @@ public class ChatRightsEditActivity extends BaseFragment {
                             }
                         }
                         if ((bannedRights.view_messages || bannedRights.send_messages) && !bannedRights.send_stickers) {
-                            bannedRights.send_stickers = bannedRights.send_games = bannedRights.send_inline = true;
+                            bannedRights.send_stickers = true;
                             RecyclerListView.ViewHolder holder = listView.findViewHolderForAdapterPosition(sendStickersRow);
+                            if (holder != null) {
+                                ((TextCheckCell2) holder.itemView).setChecked(false);
+                            }
+                        }
+                        if ((bannedRights.view_messages || bannedRights.send_messages) && !bannedRights.send_games) {
+                            bannedRights.send_games = true;
+                            RecyclerListView.ViewHolder holder = listView.findViewHolderForAdapterPosition(sendGamesRow);
+                            if (holder != null) {
+                                ((TextCheckCell2) holder.itemView).setChecked(false);
+                            }
+                        }
+                        if ((bannedRights.view_messages || bannedRights.send_inline) && !bannedRights.send_inline) {
+                            bannedRights.send_inline = true;
+                            RecyclerListView.ViewHolder holder = listView.findViewHolderForAdapterPosition(sendInlineRow);
                             if (holder != null) {
                                 ((TextCheckCell2) holder.itemView).setChecked(false);
                             }
@@ -811,6 +834,8 @@ public class ChatRightsEditActivity extends BaseFragment {
         sendMessagesRow = -1;
         sendMediaRow = -1;
         sendStickersRow = -1;
+        sendGamesRow = -1;
+        sendInlineRow = -1;
         sendGifsRow = -1;
         sendPollsRow = -1;
         embedLinksRow = -1;
@@ -841,6 +866,8 @@ public class ChatRightsEditActivity extends BaseFragment {
             sendMessagesRow = rowCount++;
             sendMediaRow = rowCount++;
             sendStickersRow = rowCount++;
+            sendGamesRow = rowCount++;
+            sendInlineRow = rowCount++;
             sendGifsRow = rowCount++;
             sendPollsRow = rowCount++;
             embedLinksRow = rowCount++;
@@ -931,8 +958,8 @@ public class ChatRightsEditActivity extends BaseFragment {
             if (delegate != null) {
                 delegate.didSetRights(
                         adminRights.change_info || adminRights.post_messages || adminRights.edit_messages ||
-                        adminRights.delete_messages || adminRights.ban_users || adminRights.invite_users ||
-                        adminRights.pin_messages || adminRights.add_admins || adminRights.anonymous || adminRights.manage_call ? 1 : 0, adminRights, bannedRights, currentRank);
+                                adminRights.delete_messages || adminRights.ban_users || adminRights.invite_users ||
+                                adminRights.pin_messages || adminRights.add_admins || adminRights.anonymous || adminRights.manage_call ? 1 : 0, adminRights, bannedRights, currentRank);
             }
         } else if (currentType == TYPE_BANNED) {
             MessagesController.getInstance(currentAccount).setUserBannedRole(chatId, currentUser, bannedRights, isChannel, getFragmentForAlert(1));
@@ -1224,6 +1251,12 @@ public class ChatRightsEditActivity extends BaseFragment {
                     } else if (position == sendStickersRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendStickers2", R.string.UserRestrictionsSendStickers2), !bannedRights.send_stickers && !defaultBannedRights.send_stickers, true);
                         checkCell.setIcon(defaultBannedRights.send_stickers ? R.drawable.permission_locked : 0);
+                    } else if (position == sendGamesRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendGames", R.string.UserRestrictionsSendGames), !bannedRights.send_games && !defaultBannedRights.send_games, true);
+                        checkCell.setIcon(defaultBannedRights.send_stickers ? R.drawable.permission_locked : 0);
+                    } else if (position == sendInlineRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendInline", R.string.UserRestrictionsSendInline), !bannedRights.send_inline && !defaultBannedRights.send_inline, true);
+                        checkCell.setIcon(defaultBannedRights.send_stickers ? R.drawable.permission_locked : 0);
                     } else if (position == sendGifsRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendGifs", R.string.UserRestrictionsSendGifs), !bannedRights.send_gifs && !defaultBannedRights.send_gifs, true);
                         checkCell.setIcon(defaultBannedRights.send_gifs ? R.drawable.permission_locked : 0);
@@ -1235,7 +1268,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         checkCell.setIcon(defaultBannedRights.send_polls ? R.drawable.permission_locked : 0);
                     }
 
-                    if (position == sendMediaRow || position == sendStickersRow || position == sendGifsRow || position == embedLinksRow || position == sendPollsRow) {
+                    if (position == sendMediaRow || position == sendStickersRow || position == sendGamesRow || position == sendInlineRow || position == sendGifsRow || position == embedLinksRow || position == sendPollsRow) {
                         checkCell.setEnabled(!bannedRights.send_messages && !bannedRights.view_messages && !defaultBannedRights.send_messages && !defaultBannedRights.view_messages);
                     } else if (position == sendMessagesRow) {
                         checkCell.setEnabled(!bannedRights.view_messages && !defaultBannedRights.view_messages);
@@ -1307,8 +1340,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                 return 3;
             } else if (position == changeInfoRow || position == postMessagesRow || position == editMesagesRow || position == deleteMessagesRow ||
                     position == addAdminsRow || position == banUsersRow || position == addUsersRow || position == pinMessagesRow ||
-                    position == sendMessagesRow || position == sendMediaRow || position == sendStickersRow || position == sendGifsRow ||
-                    position == embedLinksRow || position == sendPollsRow || position == anonymousRow || position == startVoiceChatRow) {
+                    position == sendMessagesRow || position == sendMediaRow || position == sendStickersRow  || position == sendGamesRow || position == sendInlineRow ||
+                    position == sendGifsRow || position == embedLinksRow || position == sendPollsRow || position == anonymousRow || position == startVoiceChatRow) {
                 return 4;
             } else if (position == cantEditInfoRow || position == rankInfoRow) {
                 return 1;
