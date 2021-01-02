@@ -207,4 +207,6 @@
     <string name="CCSC">סינית פשוטה</string>
     <string name="CCSP">סינית מפושטת (סין)</string>
     <string name="CCJP">קאנג\'י יפני חדש (שינג\'יטאי)</string>
+    <string name="UserRestrictionsSendGames">שלח משחקים</string>
+    <string name="UserRestrictionsSendInline">שלח באמצעות בוטים מוטבעים</string>
 </resources>

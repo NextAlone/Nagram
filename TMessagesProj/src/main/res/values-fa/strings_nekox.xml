@@ -207,4 +207,6 @@
     <string name="CCSC">چینی ساده شده</string>
     <string name="CCSP">چینی ساده شده (چین)</string>
     <string name="CCJP">کانجی ژاپنی جدید (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">ارسال بازی ها</string>
+    <string name="UserRestrictionsSendInline">ارسال از طریق ربات های درون خطی</string>
 </resources>

@@ -207,4 +207,6 @@
     <string name="CCSC">الصينية المبسطة</string>
     <string name="CCSP">الصينية المبسطة (الصين)</string>
     <string name="CCJP">كانجي يابانية جديدة (شينجيتاي)</string>
+    <string name="UserRestrictionsSendGames">أرسل الألعاب</string>
+    <string name="UserRestrictionsSendInline">أرسل عبر Inline Bots</string>
 </resources>

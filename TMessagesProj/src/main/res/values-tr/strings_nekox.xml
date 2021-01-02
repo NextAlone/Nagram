@@ -207,4 +207,6 @@
     <string name="CCSC">Basitleştirilmiş Çince</string>
     <string name="CCSP">Basitleştirilmiş Çince (Çin)</string>
     <string name="CCJP">Yeni Japonca Kanji (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Oyunları Gönder</string>
+    <string name="UserRestrictionsSendInline">Satır İçi Botlar aracılığıyla gönder</string>
 </resources>

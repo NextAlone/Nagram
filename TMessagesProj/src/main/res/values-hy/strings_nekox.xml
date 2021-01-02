@@ -207,4 +207,6 @@
     <string name="CCSC">Պարզեցված չինարեն</string>
     <string name="CCSP">Պարզեցված չինարեն (Չինաստան)</string>
     <string name="CCJP">Նոր ճապոնական կանջի (սինջիտայ)</string>
+    <string name="UserRestrictionsSendGames">Ուղարկել խաղեր</string>
+    <string name="UserRestrictionsSendInline">Ուղարկել ներբանկային բոտերով</string>
 </resources>

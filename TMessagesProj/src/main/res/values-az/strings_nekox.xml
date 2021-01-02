@@ -207,4 +207,6 @@
     <string name="CCSC">Sadələşdirilmiş Çin dili</string>
     <string name="CCSP">Sadələşdirilmiş Çin dili (Çin)</string>
     <string name="CCJP">Yeni Yapon Kanji (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Oyunlar göndərin</string>
+    <string name="UserRestrictionsSendInline">Inline Botlarla göndərin</string>
 </resources>

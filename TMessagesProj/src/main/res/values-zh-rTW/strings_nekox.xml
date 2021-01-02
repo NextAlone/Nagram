@@ -188,5 +188,25 @@
     <string name="IgnoreContentRestrictions">忽略內容限制</string>
     <string name="IgnoreContentRestrictionsNotice">忽略 Telegram 在 Android 本地對訊息的限制。這在將來可能會被伺服器禁止，且您需要自行驗證這個功能在本地的合法性。</string>
     <string name="SendCommentAfterForward">在轉發訊息之後送出留言</string>
+    <string name="UnpinMessageX">取消固定訊息</string>
+    <string name="UnpinMessagesAll">取消固定所有消息</string>
+    <string name="DismissForYourself">暫時對自己隱藏</string>
+    <string name="ImportLogin">二維碼登入</string>
+    <string name="QRLoginNotice">此 二維碼/連結 允許某人登入到您的 Telegram 帳戶, 這是您自己的操作嗎？</string>
+    <string name="QRLoginConfirm">確認登錄</string>
+    <string name="StorageReset">清除存儲</string>
+    <string name="StorageResetInfo">該應用程序的所有數據將被永久刪除（並嘗試先註銷所有帳戶）。</string>
+    <string name="FCTitle">關於應用程序更新</string>
+    <string name="FCInfo">關注我們的公告和更新頻道？</string>
+    <string name="CCTitle">OpenCC（中文轉換）</string>
+    <string name="CCTarget">目標</string>
     <string name="CCNo">無</string>
+    <string name="CCTC">繁體中文</string>
+    <string name="CCHK">香港繁體</string>
+    <string name="CCTT">臺灣正體</string>
+    <string name="CCSC">簡體中文</string>
+    <string name="CCSP">簡體中文（中國）</string>
+    <string name="CCJP">新日文漢字（Shinjitai）</string>
+    <string name="UserRestrictionsSendGames">發送遊戲</string>
+    <string name="UserRestrictionsSendInline">通過內聯機器人發送</string>
 </resources>

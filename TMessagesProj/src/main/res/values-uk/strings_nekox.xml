@@ -207,4 +207,6 @@
     <string name="CCSC">Спрощена Китайська</string>
     <string name="CCSP">Спрощена китайська (Китай)</string>
     <string name="CCJP">Новий японський кандзі (Сінджітай)</string>
+    <string name="UserRestrictionsSendGames">Надіслати ігри</string>
+    <string name="UserRestrictionsSendInline">Надіслати через вбудованих ботів</string>
 </resources>

@@ -105,4 +105,5 @@
     <string name="AutoPauseVideo">自动暂停视频</string>
     <string name="AutoPauseVideoAbout">当锁定屏幕/切换到后台时。</string>
     <string name="DisableProximityEvents">禁用距离传感器事件</string>
+    <string name="IncreaseVoiceMessageQuality">提高语音消息质量</string>
 </resources>

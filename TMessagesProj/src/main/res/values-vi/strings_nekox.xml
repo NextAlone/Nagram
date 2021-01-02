@@ -207,4 +207,6 @@
     <string name="CCSC">Chữ Hán giản thể</string>
     <string name="CCSP">Chữ Hán giản thể (Trung Quốc)</string>
     <string name="CCJP">Chữ Kanji mới (Thể chữ mới)</string>
+    <string name="UserRestrictionsSendGames">Gửi trò chơi</string>
+    <string name="UserRestrictionsSendInline">Gửi qua Bot</string>
 </resources>
