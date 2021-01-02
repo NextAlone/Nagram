@@ -5,6 +5,7 @@ import okhttp3.Dns
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
+import org.telegram.messenger.FileLog
 import org.telegram.tgnet.ConnectionsManager
 import org.xbill.DNS.DohResolver
 import org.xbill.DNS.Lookup
@@ -53,9 +54,9 @@ open class DnsFactory : Dns {
         providers.forEach {
 
             runCatching {
-
                 return it.lookup(hostname)
-
+            }.onFailure {
+                FileLog.e(it)
             }
 
         }
@@ -79,9 +80,7 @@ open class DnsFactory : Dns {
             runCatching {
 
                 val lookup = Lookup(domain, Type.TXT)
-
                 lookup.setResolver(it)
-
                 lookup.run()
 
                 if (lookup.result == Lookup.SUCCESSFUL) {
