@@ -2500,7 +2500,7 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="AuthAnotherClientInfo2">執行 Telegram Desktop 以取得 QR 代碼 。</string>
 <string name="AuthAnotherClientInfo3">Scan the QR code to connect your account.</string>
 <string name="DeleteAll">全部刪除</string>
-<string name="AuthAnotherClientInfo1">從 *desktop.telegram.org* 下載 Telegrm</string>
+<string name="AuthAnotherClientInfo1">從 *desktop.telegram.org* 下載 Telegram 到您的電腦上。</string>
 <string name="NotificationsPriority">優先權</string>
 <string name="LoadingFullImage">正在載入完整圖片…</string>
 <string name="AndMoreTyping_few"></string>
