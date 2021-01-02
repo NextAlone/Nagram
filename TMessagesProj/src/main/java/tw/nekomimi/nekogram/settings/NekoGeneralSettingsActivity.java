@@ -846,7 +846,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 case 6: {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
                     if (position == googleCloudTranslateKeyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("CacheEmpty", R.string.CacheEmpty), false);
+                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty), false);
                     }
                 }
                 break;
