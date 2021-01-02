@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
@@ -60,6 +61,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckBoxCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
@@ -72,6 +74,7 @@ import org.telegram.ui.Components.UndoView;
 import java.io.File;
 import java.util.ArrayList;
 
+import cn.hutool.core.thread.ThreadUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
@@ -550,6 +553,7 @@ public class CacheControlActivity extends BaseFragment {
             progressDialog.show();
             ConnectionsManager.reseting = true;
             UIUtil.runOnIoDispatcher(() -> {
+                FileUtil.delete(EnvUtil.getTelegramPath());
                 for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                     AccountInstance instance = AccountInstance.getInstance(a);
                     if (instance.getUserConfig().isClientActivated()) {
@@ -579,10 +583,13 @@ public class CacheControlActivity extends BaseFragment {
             }
             final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
             progressDialog.setCanCacnel(false);
-            progressDialog.showDelayed(500);
+            progressDialog.showDelayed(233);
             MessagesController.getInstance(currentAccount).clearQueryTime();
             MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+                long start = SystemClock.elapsedRealtime();
+
                 try {
+
                     TranslateDb.clearAll();
 
                     SQLiteDatabase database = MessagesStorage.getInstance(currentAccount).getDatabase();
@@ -656,13 +663,15 @@ public class CacheControlActivity extends BaseFragment {
                     state5.dispose();
                     state6.dispose();
                     database.commitTransaction();
-                    database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
+                    database.executeFast("PRAGMA journal_mode = DELETE").stepThis().dispose();
+                    database.executeFast("PRAGMA wal_checkpoint(FULL)").stepThis().dispose();
                     database.executeFast("VACUUM").stepThis().dispose();
-                    database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
-
+                    database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
+                    database.executeFast("PRAGMA journal_size_limit = 1048576").stepThis().dispose();
                 } catch (Exception e) {
                     FileLog.e(e);
                 } finally {
+                    ThreadUtil.sleep(2333L - (SystemClock.elapsedRealtime() - start));
                     AndroidUtilities.runOnUIThread(() -> {
                         try {
                             progressDialog.dismiss();
@@ -755,6 +764,9 @@ public class CacheControlActivity extends BaseFragment {
                     }
                     slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 1), LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever));
                     break;
+                case 5:
+                    view = new ShadowSectionCell(mContext);
+                    break;
                 case 1:
                 default:
                     view = new TextInfoPrivacyCell(mContext);
@@ -780,10 +792,7 @@ public class CacheControlActivity extends BaseFragment {
                     if (position == databaseInfoRow) {
                         privacyCell.setText(LocaleController.getString("LocalDatabaseInfo", R.string.LocalDatabaseInfo));
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    } else if (position == cacheInfoRow) {
-                        privacyCell.setText("");
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    } else if (position == keepMediaInfoRow) {
+                   } else if (position == keepMediaInfoRow) {
                         privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", R.string.KeepMediaInfo)));
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
@@ -805,7 +814,7 @@ public class CacheControlActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int i) {
-            if (i == databaseInfoRow || i == cacheInfoRow || i == keepMediaInfoRow) {
+            if (i == databaseInfoRow || i == keepMediaInfoRow) {
                 return 1;
             }
             if (i == storageUsageRow) {
@@ -816,6 +825,9 @@ public class CacheControlActivity extends BaseFragment {
             }
             if (i == keepMediaChooserRow) {
                 return 4;
+            }
+            if (i == cacheInfoRow) {
+                return  5;
             }
             return 0;
         }

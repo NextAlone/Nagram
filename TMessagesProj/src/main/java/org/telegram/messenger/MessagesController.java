@@ -56,12 +56,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
+import cn.hutool.core.thread.ThreadUtil;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.ThreadUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
