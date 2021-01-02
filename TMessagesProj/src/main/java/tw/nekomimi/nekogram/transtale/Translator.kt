@@ -82,10 +82,12 @@ interface Translator {
 
             }
 
+            if (toLang == "in") toLang = "id"
+
             val translator = when (NekoConfig.translationProvider) {
                 in 1..2 -> GoogleAppTranslator
-                3 -> LingoTranslator
-                4 -> YandexTranslator
+                3 -> YandexTranslator
+                4 -> LingoTranslator
                 else -> throw IllegalArgumentException()
             }
 
