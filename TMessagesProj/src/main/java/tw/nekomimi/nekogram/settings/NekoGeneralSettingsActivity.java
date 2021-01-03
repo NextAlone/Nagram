@@ -95,6 +95,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private int dialogsRow;
     private int sortMenuRow;
+    private int acceptSecretChatRow;
     private int dialogs2Row;
 
     private int appearanceRow;
@@ -488,6 +489,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.autoPauseVideo);
                 }
+            } else if (position == acceptSecretChatRow) {
+                NekoConfig.toggleAcceptSecretChat();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.acceptSecretChat);
+                }
             }
 
         });
@@ -683,6 +689,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         dialogsRow = rowCount++;
         sortMenuRow = rowCount++;
+        acceptSecretChatRow = rowCount++;
         dialogs2Row = rowCount++;
 
         appearanceRow = rowCount++;
@@ -709,7 +716,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         inappCameraRow = rowCount++;
         hideProxySponsorChannelRow = rowCount++;
         askBeforeCallRow = rowCount++;
-        autoPauseVideoRow = rowCount ++;
+        autoPauseVideoRow = rowCount++;
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
@@ -812,7 +819,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         }
                         textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, false);
                     } else if (position == sortMenuRow) {
-                        textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), false);
+                        textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
                     } else if (position == translateToLangRow) {
                         textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
                     } else if (position == translateInputToLangRow) {
@@ -900,8 +907,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == usePersianCalenderRow) {
                     } else if (position == autoPauseVideoRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
+                    } else if (position == acceptSecretChatRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("AcceptSecretChat", R.string.AcceptSecretChat), NekoConfig.acceptSecretChat, false);
                     }
-                        break;
+                    break;
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;

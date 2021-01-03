@@ -271,4 +271,6 @@
     <string name="UserRestrictionsSendGames">Send Games</string>
     <string name="UserRestrictionsSendInline">Send via Inline Bots</string>
 
+    <string name="AcceptSecretChat">Accept new secret chat</string>
+
 </resources>

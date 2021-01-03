@@ -2861,7 +2861,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
-                                NekoConfig.residentNotification ? LocaleController.getString("DisableResidentNotification", R.string.DisableResidentNotification) : LocaleController.getString("EnableResidentNotification", R.string.EnableResidentNotification),
+                                null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Check for app updates" : null,
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
                                 SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),

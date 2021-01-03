@@ -103,7 +103,7 @@ public class NekoConfig {
 
     public static String ccToLang;
     public static String ccInputLang;
-    public static boolean increaseVoiceMessageQuality = false;
+    public static boolean increaseVoiceMessageQuality;
 
     public static boolean hideProxyByDefault;
     public static boolean useProxyItem;
@@ -124,6 +124,7 @@ public class NekoConfig {
     public static boolean useChatAttachMediaMenu;
     public static boolean disableLinkPreviewByDefault;
     public static boolean sendCommentAfterForward;
+    public static boolean acceptSecretChat;
 
     public static String getOpenPGPAppName() {
 
@@ -139,7 +140,7 @@ public class NekoConfig {
 
         }
 
-        return LocaleController.getString("None",R.string.None);
+        return LocaleController.getString("None", R.string.None);
 
     }
 
@@ -252,8 +253,8 @@ public class NekoConfig {
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
         //preferences.getBoolean("usePersianCalender", false);
-        openPGPApp = preferences.getString("openPGPApp","");
-        openPGPKeyId = preferences.getLong("openPGPKeyId",0L);
+        openPGPApp = preferences.getString("openPGPApp", "");
+        openPGPKeyId = preferences.getLong("openPGPKeyId", 0L);
 
         disableVibration = preferences.getBoolean("disableVibration", false);
         autoPauseVideo = preferences.getBoolean("autoPauseVideo", false);
@@ -264,6 +265,7 @@ public class NekoConfig {
         disableLinkPreviewByDefault = preferences.getBoolean("disableLinkPreviewByDefault", false);
         sendCommentAfterForward = preferences.getBoolean("sendCommentAfterForward", true);
         increaseVoiceMessageQuality = preferences.getBoolean("increaseVoiceMessageQuality", true);
+        acceptSecretChat = preferences.getBoolean("acceptSecretChat", true);
 
     }
 
@@ -487,28 +489,12 @@ public class NekoConfig {
         editor.apply();
     }
 
-    /*public static void toggleShowHiddenFeature() {
-        showHiddenFeature = !showHiddenFeature;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("showHiddenFeature", showHiddenFeature);
-        editor.commit();
-    } */
-
     public static void toggleHideKeyboardOnChatScroll() {
-        hideKeyboardOnChatScroll = !hideKeyboardOnChatScroll;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("hideKeyboardOnChatScroll", hideKeyboardOnChatScroll);
-        editor.apply();
+        preferences.edit().putBoolean("hideKeyboardOnChatScroll", hideKeyboardOnChatScroll = !hideKeyboardOnChatScroll).apply();
     }
 
     public static void toggleAvatarAsDrawerBackground() {
-        avatarAsDrawerBackground = !avatarAsDrawerBackground;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("avatarAsDrawerBackground", avatarAsDrawerBackground);
-        editor.apply();
+        preferences.edit().putBoolean("avatarAsDrawerBackground", avatarAsDrawerBackground = !avatarAsDrawerBackground).apply();
     }
 
     public static void toggleUseSystemEmoji() {
@@ -520,309 +506,206 @@ public class NekoConfig {
     }
 
     public static void toggleSortByUnread() {
-
         preferences.edit().putBoolean("sort_by_unread", sortByUnread = !sortByUnread).apply();
-
     }
 
     public static void toggleShowTabsOnForward() {
-        showTabsOnForward = !showTabsOnForward;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("showTabsOnForward", showTabsOnForward);
-        editor.apply();
+        preferences.edit().putBoolean("showTabsOnForward", showTabsOnForward = !showTabsOnForward).apply();
     }
 
     public static void toggleRearVideoMessages() {
-        rearVideoMessages = !rearVideoMessages;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("rearVideoMessages", rearVideoMessages);
-        editor.apply();
+        preferences.edit().putBoolean("rearVideoMessages", rearVideoMessages = !rearVideoMessages).apply();
     }
 
     public static void toggleHideAllTab() {
-        hideAllTab = !hideAllTab;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("hideAllTab", hideAllTab);
-        editor.apply();
+        preferences.edit().putBoolean("hideAllTab", hideAllTab = !hideAllTab).apply();
     }
 
     public static void toggleSortByUnmuted() {
-
         preferences.edit().putBoolean("sort_by_unmuted", sortByUnmuted = !sortByUnmuted).apply();
-
     }
 
     public static void toggleSortByUser() {
-
         preferences.edit().putBoolean("sort_by_user", sortByUser = !sortByUser).apply();
-
     }
 
     public static void toggleSortByContacts() {
-
         preferences.edit().putBoolean("sort_by_contacts", sortByContacts = !sortByContacts).apply();
-
     }
 
     public static void toggleDisableUndo() {
-
         preferences.edit().putBoolean("disable_undo", disableUndo = !disableUndo).apply();
-
     }
 
     public static void toggleFilterUsers() {
-
         preferences.edit().putBoolean("filter_users", filterUsers = !filterUsers).apply();
-
     }
 
     public static void toggleFilterContacts() {
-
         preferences.edit().putBoolean("filter_contacts", filterContacts = !filterContacts).apply();
-
     }
 
     public static void toggleFilterGroups() {
-
         preferences.edit().putBoolean("filterGroups", filterGroups = !filterGroups).apply();
-
     }
 
     public static void toggleFilterChannels() {
-
         preferences.edit().putBoolean("filter_channels", filterChannels = !filterChannels).apply();
-
     }
 
     public static void toggleFilterBots() {
-
         preferences.edit().putBoolean("filter_bots", filterBots = !filterBots).apply();
-
     }
 
     public static void toggleFilterAdmins() {
-
         preferences.edit().putBoolean("filter_admins", filterAdmins = !filterAdmins).apply();
-
     }
 
     public static void toggleFilterUnmuted() {
-
         preferences.edit().putBoolean("filter_unmuted", filterUnmuted = !filterUnmuted).apply();
-
     }
 
     public static void toggleDisableFilterUnread() {
-
         preferences.edit().putBoolean("filter_unread", filterUnread = !filterUnread).apply();
-
     }
 
     public static void toggleFilterUnmutedAndUnread() {
-
         preferences.edit().putBoolean("filter_unmuted_and_unread", filterUnmutedAndUnread = !filterUnmutedAndUnread).apply();
-
     }
 
     public static void toggleDisableSystemAccount() {
-
         preferences.edit().putBoolean("disable_system_account", disableSystemAccount = !disableSystemAccount).apply();
-
     }
 
     public static void toggleDisableProxyWhenVpnEnabled() {
-
         preferences.edit().putBoolean("disable_proxy_when_vpn_enabled", disableProxyWhenVpnEnabled = !disableProxyWhenVpnEnabled).apply();
-
     }
 
     public static void toggleSkipOpenLinkConfirm() {
-
         preferences.edit().putBoolean("skip_open_link_confirm", skipOpenLinkConfirm = !skipOpenLinkConfirm).apply();
-
     }
 
     public static void toggleRemoveTitleEmoji() {
-
         preferences.edit().putBoolean("remove_title_emoji", removeTitleEmoji = !removeTitleEmoji).apply();
-
     }
 
     public static void toggleIgnoredMutedCount() {
-
         preferences.edit().putBoolean("ignore_muted_count", ignoreMutedCount = !ignoreMutedCount).apply();
-
     }
 
     public static void toggleUseDefaultTheme() {
-
         preferences.edit().putBoolean("use_default_theme", useDefaultTheme = !useDefaultTheme).apply();
-
     }
 
     public static void toggleShowIdAndDc() {
-
         preferences.edit().putBoolean("show_id_and_dc", showIdAndDc = !showIdAndDc).apply();
-
     }
 
     public static void setGoogleTranslateKey(String key) {
-
         preferences.edit().putString("google_cloud_translate_key", googleCloudTranslateKey = key).apply();
-
     }
 
     public static void setCachePath(String cachePath) {
-
         preferences.edit().putString("cache_path", NekoConfig.cachePath = cachePath).apply();
-
     }
 
     public static void setTranslateToLang(String toLang) {
-
         preferences.edit().putString("trans_to_lang", translateToLang = toLang).apply();
-
     }
 
     public static void setTranslateInputToLang(String toLang) {
-
         preferences.edit().putString("trans_input_to_lang", translateInputLang = toLang).apply();
-
     }
 
     public static void setTabsTitleType(int type) {
-
         preferences.edit().putInt("tabsTitleType", tabsTitleType = type).apply();
-
     }
 
     public static void toggleConfirmAVMessage() {
-
         preferences.edit().putBoolean("confirmAVMessage", confirmAVMessage = !confirmAVMessage).apply();
-
     }
 
     public static void toggleAskBeforeCall() {
-
         preferences.edit().putBoolean("askBeforeCall", askBeforeCall = !askBeforeCall).apply();
-
     }
 
     public static void toggleHideProxyByDefault() {
-
         preferences.edit().putBoolean("hide_proxy_by_default", hideProxyByDefault = !hideProxyByDefault).apply();
-
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
     }
 
     public static void toggleUseProxyItem() {
-
-        preferences.edit().putBoolean("use_proxy_item",useProxyItem = !useProxyItem).apply();
-
+        preferences.edit().putBoolean("use_proxy_item", useProxyItem = !useProxyItem).apply();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
     }
 
     public static void toggleDisableNumberRounding() {
-
-        preferences.edit().putBoolean("disableNumberRounding",disableNumberRounding = !disableNumberRounding).apply();
-
+        preferences.edit().putBoolean("disableNumberRounding", disableNumberRounding = !disableNumberRounding).apply();
     }
 
     public static void toggleDisableAppBarShadow() {
-
-        preferences.edit().putBoolean("disableAppBarShadow",disableAppBarShadow = !disableAppBarShadow).apply();
-
+        preferences.edit().putBoolean("disableAppBarShadow", disableAppBarShadow = !disableAppBarShadow).apply();
     }
 
     public static void toggleMediaPreview() {
-
-        preferences.edit().putBoolean("mediaPreview",mediaPreview = !mediaPreview).apply();
-
+        preferences.edit().putBoolean("mediaPreview", mediaPreview = !mediaPreview).apply();
     }
 
     public static void toggleProxyAutoSwitch() {
-
-        preferences.edit().putBoolean("proxy_auto_switch",proxyAutoSwitch = !proxyAutoSwitch).apply();
-
+        preferences.edit().putBoolean("proxy_auto_switch", proxyAutoSwitch = !proxyAutoSwitch).apply();
     }
 
     public static void setOpenPGPApp(String packageName) {
-
-         preferences.edit().putString("openPGPApp",openPGPApp = packageName).apply();
-
+        preferences.edit().putString("openPGPApp", openPGPApp = packageName).apply();
     }
 
     public static void setOpenPGPKeyId(long keyId) {
-
-        preferences.edit().putLong("openPGPKeyId",openPGPKeyId = keyId).apply();
-
+        preferences.edit().putLong("openPGPKeyId", openPGPKeyId = keyId).apply();
     }
 
     public static void toggleDisableVibration() {
-
-        preferences.edit().putBoolean("disableVibration",disableVibration = !disableVibration).apply();
-
+        preferences.edit().putBoolean("disableVibration", disableVibration = !disableVibration).apply();
     }
 
     public static void toggleAutoPauseVideo() {
-
-        preferences.edit().putBoolean("autoPauseVideo",autoPauseVideo = !autoPauseVideo).apply();
-
+        preferences.edit().putBoolean("autoPauseVideo", autoPauseVideo = !autoPauseVideo).apply();
     }
 
     public static void toggleDisableProximityEvents() {
-
-        preferences.edit().putBoolean("disableProximityEvents",disableProximityEvents = !disableProximityEvents).apply();
-
+        preferences.edit().putBoolean("disableProximityEvents", disableProximityEvents = !disableProximityEvents).apply();
     }
 
     public static void toggleIgnoreContentRestrictions() {
-
-        preferences.edit().putBoolean("ignoreContentRestrictions",ignoreContentRestrictions = !ignoreContentRestrictions).apply();
-
+        preferences.edit().putBoolean("ignoreContentRestrictions", ignoreContentRestrictions = !ignoreContentRestrictions).apply();
     }
 
     public static void toggleUseChatAttachMediaMenu() {
-
-        preferences.edit().putBoolean("useChatAttachMediaMenu",useChatAttachMediaMenu = !useChatAttachMediaMenu).apply();
-
+        preferences.edit().putBoolean("useChatAttachMediaMenu", useChatAttachMediaMenu = !useChatAttachMediaMenu).apply();
     }
 
     public static void toggleDisableLinkPreviewByDefault() {
-
         preferences.edit().putBoolean("disableLinkPreviewByDefault", disableLinkPreviewByDefault = !disableLinkPreviewByDefault).apply();
-
     }
 
     public static void toggleSendCommentAfterForward() {
-
         preferences.edit().putBoolean("sendCommentAfterForward", sendCommentAfterForward = !sendCommentAfterForward).apply();
-
     }
 
     public static void setCCToLang(String toLang) {
-
         preferences.edit().putString("opencc_to_lang", ccToLang = toLang).apply();
-
     }
 
     public static void setCCInputToLang(String toLang) {
-
         preferences.edit().putString("opencc_input_to_lang", ccInputLang = toLang).apply();
-
     }
 
     public static void toggleIncreaseVoiceMessageQuality() {
-        increaseVoiceMessageQuality = !increaseVoiceMessageQuality;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("increaseVoiceMessageQuality", increaseVoiceMessageQuality);
-        editor.commit();
+        preferences.edit().putBoolean("increaseVoiceMessageQuality", increaseVoiceMessageQuality = !increaseVoiceMessageQuality).apply();
+    }
+
+    public static void toggleAcceptSecretChat() {
+        preferences.edit().putBoolean("acceptSecretChat", acceptSecretChat = !acceptSecretChat).apply();
+
     }
 
 }

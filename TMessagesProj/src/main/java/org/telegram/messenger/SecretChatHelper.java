@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class SecretChatHelper extends BaseController {
@@ -187,6 +188,11 @@ public class SecretChatHelper extends BaseController {
         TLRPC.EncryptedChat existingChat = getMessagesController().getEncryptedChatDB(newChat.id, false);
 
         if (newChat instanceof TLRPC.TL_encryptedChatRequested && existingChat == null) {
+            if (!NekoConfig.acceptSecretChat) {
+                declineSecretChat(newChat.id);
+                return;
+            }
+
             int user_id = newChat.participant_id;
             if (user_id == getUserConfig().getClientUserId()) {
                 user_id = newChat.admin_id;
