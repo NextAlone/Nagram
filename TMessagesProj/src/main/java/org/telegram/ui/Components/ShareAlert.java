@@ -1115,6 +1115,63 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         writeButtonContainer.addView(createButton(R.drawable.attach_send, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
 
         // ANONYM FORWARD BUTTON.
+        java.util.function.BiConsumer<Boolean, Boolean> performAsCopySend = (
+                Boolean notify,
+                Boolean nonText) -> {
+            if (sendingMessageObjects != null) {
+                final int account = currentAccount;
+                for (int a = 0; a < selectedDialogs.size(); a++) {
+                    long key = selectedDialogs.keyAt(a);
+
+                    final boolean hasComment = (frameLayout2.getTag() != null
+                        && commentTextView.length() > 0);
+                    final String maybeReplaceText = nonText
+                        ? (hasComment
+                            ? commentTextView.getText().toString()
+                            : "")
+                        : null;
+                    if (hasComment && !nonText) {
+                        SendMessagesHelper.getInstance(account).sendMessage(
+                            commentTextView.getText().toString(),
+                            key,
+                            null,
+                            null,
+                            null,
+                            true,
+                            null,
+                            null,
+                            null,
+                            notify,
+                            0);
+                    }
+                    if (groupAnyItems) {
+                        AsCopy.GroupItemsIntoAlbum(
+                            key,
+                            maybeReplaceText,
+                            sendingMessageObjects,
+                            account,
+                            parentFragment,
+                            notify);
+                        dismiss();
+                        return;
+                    }
+                    AsCopy.PerformForwardFromMyName(
+                        key,
+                        maybeReplaceText,
+                        sendingMessageObjects,
+                        account,
+                        parentFragment,
+                        notify);
+                }
+            } else if (sendingText != null) {
+                withSendingText.run();
+            }
+            if (delegate != null) {
+                delegate.didShare();
+            }
+            dismiss();
+        };
+
         int factor = groupAnyItems ? 0 : 1;
         anonymButtonContainer = new FrameLayout(context);
         anonymButtonContainer.setVisibility(View.INVISIBLE);
@@ -1133,36 +1190,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 size * factor + offset * (factor + 1),
                 10));
         anonymButtonContainer.setOnClickListener(v -> {
-            if (sendingMessageObjects != null) {
-                for (int a = 0; a < selectedDialogs.size(); a++) {
-                    long key = selectedDialogs.keyAt(a);
-                    if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0);
-                    }
-                    if (groupAnyItems) {
-                        AsCopy.GroupItemsIntoAlbum(
-                            key,
-                            null,
-                            sendingMessageObjects,
-                            currentAccount,
-                            parentFragment);
-                        dismiss();
-                        return;
-                    }
-                    AsCopy.PerformForwardFromMyName(
-                        key,
-                        null,
-                        sendingMessageObjects,
-                        currentAccount,
-                        parentFragment);
-                }
-            } else if (sendingText != null) {
-                withSendingText.run();
-            }
-            if (delegate != null) {
-                delegate.didShare();
-            }
-            dismiss();
+            performAsCopySend.accept(true, false);
+        });
+        anonymButtonContainer.setLongClickable(true);
+        anonymButtonContainer.setOnLongClickListener(v -> {
+            performAsCopySend.accept(false, false);
+            return true;
         });
 
         anonymButtonContainer.addView(createButton(R.drawable.anon_forward, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
@@ -1186,38 +1219,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 size * factor + offset * (factor + 1),
                 10));
         nonTextButtonContainer.setOnClickListener(v -> {
-            if (sendingMessageObjects == null) {
-                if (sendingText != null) {
-                    withSendingText.run();
-                }
-                dismiss();
-                return;
-            }
-            for (int a = 0; a < selectedDialogs.size(); a++) {
-                long key = selectedDialogs.keyAt(a);
-
-                String replaceText = "";
-                if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                    replaceText = commentTextView.getText().toString();
-                }
-                if (groupAnyItems) {
-                    AsCopy.GroupItemsIntoAlbum(
-                        key,
-                        replaceText,
-                        sendingMessageObjects,
-                        currentAccount,
-                        parentFragment);
-                    dismiss();
-                    return;
-                }
-                AsCopy.PerformForwardFromMyName(
-                    key,
-                    replaceText,
-                    sendingMessageObjects,
-                    currentAccount,
-                    parentFragment);
-            }
-            dismiss();
+            performAsCopySend.accept(true, true);
+        });
+        nonTextButtonContainer.setLongClickable(true);
+        nonTextButtonContainer.setOnLongClickListener(v -> {
+            performAsCopySend.accept(false, true);
+            return true;
         });
 
         nonTextButtonContainer.addView(createButton(R.drawable.nontext_forward, context), LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Build.VERSION.SDK_INT >= 21 ? sizeButton : size, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
