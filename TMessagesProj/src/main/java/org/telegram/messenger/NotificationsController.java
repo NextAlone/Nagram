@@ -42,6 +42,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.Person;
@@ -50,6 +51,7 @@ import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
@@ -61,6 +63,7 @@ import org.json.JSONObject;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BubbleActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PopupNotificationActivity;
@@ -73,6 +76,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class NotificationsController extends BaseController {
 
@@ -138,7 +143,7 @@ public class NotificationsController extends BaseController {
         }
         audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(Context.AUDIO_SERVICE);
     }
-    
+
     private static volatile NotificationsController[] Instance = new NotificationsController[UserConfig.MAX_ACCOUNT_COUNT];
 
     public static NotificationsController getInstance(int num) {
@@ -156,7 +161,7 @@ public class NotificationsController extends BaseController {
 
     public NotificationsController(int instance) {
         super(instance);
-        
+
         notificationId = currentAccount + 1;
         notificationGroup = "messages" + (currentAccount == 0 ? "" : currentAccount);
         SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
@@ -3509,7 +3514,7 @@ public class NotificationsController extends BaseController {
                     .setGroupSummary(true)
                     .setShowWhen(true)
                     .setWhen(((long) lastMessageObject.messageOwner.date) * 1000)
-                    .setColor(0xff11acfa);
+                    .setColor(getNotificationColor());
 
             long[] vibrationPattern = null;
             Uri sound = null;
@@ -4197,7 +4202,7 @@ public class NotificationsController extends BaseController {
                     .setContentText(text.toString())
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
-                    .setColor(0xff11acfa)
+                    .setColor(getNotificationColor())
                     .setGroupSummary(false)
                     .setWhen(date)
                     .setShowWhen(true)
@@ -4595,5 +4600,16 @@ public class NotificationsController extends BaseController {
         } else {
             return "EnableChannel2";
         }
+    }
+
+    private int getNotificationColor() {
+        int color = 0;
+        if (Theme.getActiveTheme().hasAccentColors()) {
+            color = Theme.getActiveTheme().getAccentColor(Theme.getActiveTheme().currentAccentId);
+        }
+        if (color == 0) {
+            color = Theme.getColor(Theme.key_actionBarDefault) | 0xff000000;
+        }
+        return color;
     }
 }
