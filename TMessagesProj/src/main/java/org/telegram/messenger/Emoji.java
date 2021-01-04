@@ -23,6 +23,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -165,7 +166,7 @@ public class Emoji {
             if (ch >= 0xD83C && ch <= 0xD83E) {
                 if (ch == 0xD83C && a < length - 1) {
                     ch = emoji.charAt(a + 1);
-                    if (ch == 0xDE2F || ch == 0xDC04 || ch == 0xDE1A || ch == 0xDD7F) {
+                    if (ch >= 0xDC04 && ch <= 0xDE51) {
                         emoji = emoji.substring(0, a + 2) + "\uFE0F" + emoji.substring(a + 2);
                         length++;
                         a += 2;
@@ -177,12 +178,12 @@ public class Emoji {
                 }
             } else if (ch == 0x20E3) {
                 return emoji;
-            } else if (ch >= 0x203C && ch <= 0x3299) {
-                if (EmojiData.emojiToFE0FMap.containsKey(ch)) {
+            } else if (ch >= 0x00A9 && ch <= 0x3299) {
+                //if (EmojiData.emojiToFE0FMap.containsKey(ch)) {
                     emoji = emoji.substring(0, a + 1) + "\uFE0F" + emoji.substring(a + 1);
                     length++;
                     a++;
-                }
+                //}
             }
         }
         return emoji;
