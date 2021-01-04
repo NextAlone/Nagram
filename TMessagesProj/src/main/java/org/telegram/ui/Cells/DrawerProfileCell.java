@@ -169,7 +169,7 @@ public class DrawerProfileCell extends FrameLayout {
             shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
         }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
-        phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
+        phoneTextView.getTextView().setTextColor(Theme.getColor(Theme.key_chats_menuName));
 
         if (useAdb()) {
             phoneTextView.getTextView().setTextColor(Theme.getColor(Theme.key_chats_menuPhone));

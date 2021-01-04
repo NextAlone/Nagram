@@ -184,7 +184,7 @@ public class Emoji {
                     emoji = emoji.substring(0, a + 1) + "\uFE0F" + emoji.substring(a + 1);
                     length++;
                     a++;
-                //}
+                }
             }
         }
         return emoji;
