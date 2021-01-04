@@ -1421,10 +1421,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public void processForwardFromMyName(MessageObject messageObject, long did) {
-        processForwardFromMyName(messageObject, did, null);
+        processForwardFromMyName(messageObject, did, null, true);
     }
 
-    public void processForwardFromMyName(MessageObject messageObject, long did, String overwriteText) {
+    public void processForwardFromMyName(MessageObject messageObject, long did, String overwriteText, boolean notify) {
         if (messageObject == null) {
             return;
         }
@@ -1442,22 +1442,22 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 params.put("parentObject", "sent_" + messageObject.messageOwner.peer_id.channel_id + "_" + messageObject.getId());
             }
             if (messageObject.messageOwner.media.photo instanceof TLRPC.TL_photo) {
-                sendMessage((TLRPC.TL_photo) messageObject.messageOwner.media.photo, null, did, emptyReplyMessageObject, null, messageOwnerMessage, messageObject.messageOwner.entities, null, params, true, 0, messageObject.messageOwner.media.ttl_seconds, messageObject);
+                sendMessage((TLRPC.TL_photo) messageObject.messageOwner.media.photo, null, did, emptyReplyMessageObject, null, messageOwnerMessage, messageObject.messageOwner.entities, null, params, notify, 0, messageObject.messageOwner.media.ttl_seconds, messageObject);
             } else if (messageObject.messageOwner.media.document instanceof TLRPC.TL_document) {
-                sendMessage((TLRPC.TL_document) messageObject.messageOwner.media.document, null, messageObject.messageOwner.attachPath, did, emptyReplyMessageObject, null, messageOwnerMessage, messageObject.messageOwner.entities, null, params, true, 0, messageObject.messageOwner.media.ttl_seconds, messageObject, null);
+                sendMessage((TLRPC.TL_document) messageObject.messageOwner.media.document, null, messageObject.messageOwner.attachPath, did, emptyReplyMessageObject, null, messageOwnerMessage, messageObject.messageOwner.entities, null, params, notify, 0, messageObject.messageOwner.media.ttl_seconds, messageObject, null);
             } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo) {
-                sendMessage(messageObject.messageOwner.media, did, emptyReplyMessageObject, null, null, null, true, 0);
+                sendMessage(messageObject.messageOwner.media, did, emptyReplyMessageObject, null, null, null, notify, 0);
             } else if (messageObject.messageOwner.media.phone_number != null) {
                 TLRPC.User user = new TLRPC.TL_userContact_old2();
                 user.phone = messageObject.messageOwner.media.phone_number;
                 user.first_name = messageObject.messageOwner.media.first_name;
                 user.last_name = messageObject.messageOwner.media.last_name;
                 user.id = messageObject.messageOwner.media.user_id;
-                sendMessage(user, did, emptyReplyMessageObject, null, null, null, true, 0);
+                sendMessage(user, did, emptyReplyMessageObject, null, null, null, notify, 0);
             } else if (!DialogObject.isEncryptedDialog(did)) {
                 ArrayList<MessageObject> arrayList = new ArrayList<>();
                 arrayList.add(messageObject);
-                sendMessage(arrayList, did, true, false, true, 0);
+                sendMessage(arrayList, did, true, false, notify, 0);
             }
         } else if (messageObject.messageOwner.message != null) {
             TLRPC.WebPage webPage = null;
@@ -1481,11 +1481,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             } else {
                 entities = null;
             }
-            sendMessage(messageObject.messageOwner.message, did, emptyReplyMessageObject, null, webPage, true, entities, null, null, true, 0, null);
+            sendMessage(messageObject.messageOwner.message, did, emptyReplyMessageObject, null, webPage, true, entities, null, null, notify, 0, null);
         } else if (DialogObject.isEncryptedDialog(did)) {
             ArrayList<MessageObject> arrayList = new ArrayList<>();
             arrayList.add(messageObject);
-            sendMessage(arrayList, did, true, false, true, 0);
+            sendMessage(arrayList, did, true, false, notify, 0);
         }
     }
 
