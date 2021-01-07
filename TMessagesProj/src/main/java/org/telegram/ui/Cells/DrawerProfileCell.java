@@ -38,6 +38,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -50,7 +51,7 @@ public class DrawerProfileCell extends FrameLayout {
 
     private BackupImageView avatarImageView;
     private TextView nameTextView;
-    private TextView phoneTextView;
+    private AudioPlayerAlert.ClippingTextViewSwitcher phoneTextView;
     private ImageView shadowView;
     private ImageView arrowView;
     private final ImageReceiver imageReceiver;
@@ -96,12 +97,18 @@ public class DrawerProfileCell extends FrameLayout {
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 28));
 
-        phoneTextView = new TextView(context);
-        phoneTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        phoneTextView.setLines(1);
-        phoneTextView.setMaxLines(1);
-        phoneTextView.setSingleLine(true);
-        phoneTextView.setGravity(Gravity.LEFT);
+        phoneTextView = new AudioPlayerAlert.ClippingTextViewSwitcher(context) {
+            @Override
+            protected TextView createTextView() {
+                TextView textView = new TextView(context);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                textView.setLines(1);
+                textView.setMaxLines(1);
+                textView.setSingleLine(true);
+                textView.setGravity(Gravity.LEFT);
+                return textView;
+            }
+        };
         addView(phoneTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 76, 9));
 
         arrowView = new ImageView(context);
@@ -165,14 +172,14 @@ public class DrawerProfileCell extends FrameLayout {
         phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
 
         if (useAdb()) {
-            phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
+            phoneTextView.getTextView().setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             if (shadowView.getVisibility() != VISIBLE) {
                 shadowView.setVisibility(VISIBLE);
             }
             imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
             imageReceiver.draw(canvas);
         } else if (useImageBackground) {
-            phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
+            phoneTextView.getTextView().setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             if (shadowView.getVisibility() != VISIBLE) {
                 shadowView.setVisibility(VISIBLE);
             }
