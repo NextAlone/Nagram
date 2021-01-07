@@ -2,11 +2,11 @@
 
 NekoX is an **open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
-- Google play store: (https://play.google.com/store/apps/details?id=nekox.messenger)
-- Update news : https://t.me/NekogramX
-- Feedback: https://github.com/NekoX-Dev/NekoX/issues
-- Chat Group (English / Chinese): https://t.me/NekoXChat 
-- Chat Group (Persian): https://t.me/NekogramX_Persian
+- [Google Play Store](https://play.google.com/store/apps/details?id=nekox.messenger)
+- [Update News Telegram](https://t.me/NekogramX)
+- [GitHub Feedback](https://github.com/NekoX-Dev/NekoX/issues)
+- [Group Chat (English / Chinese)](https://t.me/NekoXChat) 
+- [Group Chat (Persian)](https://t.me/NekogramX_Persian)
 
 The play store version is outdated [due to](https://developer.android.com/distribute/best-practices/develop/target-sdk) the target api level 29 is not supported yet. Otherwise, the play version won't be able to read photos and files (like other 3rd apps do).
 
@@ -61,18 +61,23 @@ Consider using a Linux VM or dual booting.**
 
 1. Install Android Sdk and NDK ( default location is $HOME/Android/Sdk, otherwise you need to specify $ANDROID_HOME for it )
 
-It is recommended to use AndroidStudio to install.
+It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.  [here is how to install AndroidStudio](https://developer.android.com/studio/install).
 
 2. Install golang ( >= 1.15.4 ), and add GOPATH to the PATH variable.
 
 It is recommended to use gvm for the installation. if you are using the system package manager, don't forget to add environment variable.
 
+(Run one command at a time)
+
 ```shell
 apt install -y bison gcc make
+
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+
 source "$HOME/.bashrc"
 
 gvm install go1.15.4 -B
+
 gvm use go1.15.4 --default
 ```
 
@@ -82,13 +87,15 @@ It is recommended to use the official script, otherwise you may not find rustup.
 
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
 echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
+
 rustup toolchain install nightly-2020-12-20
+
 rustup override set nightly-2020-12-20
+
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
-
-(One command at a time)
 
 4. Build native dependencies: `bin/native_libs.sh`
 5. Build external libraries and native code: `bin/update_libs.sh`
@@ -98,7 +105,7 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 
 `./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 
-## Faq
+## FAQ
 
 #### What is the relationship between NekoX and Nekogram?
 
@@ -106,17 +113,15 @@ More features, **without** [additional trackers](https://gitlab.com/search?utf8=
 
 #### What is the difference between Full and Mini version?
 
-The full version comes with built-in proxy support for v2ray, shadowsocks, and shadowsocksr, which is usually provided to advanced users to help friends who have no computer knowledge in mainland China to bypass censorship, so don't complain about imperfect functions or ask to add other rare proxy types, you can use their clients directly.
+The full version comes with built-in proxy support for v2ray, shadowsocks, and shadowsocksr, which is usually provided to advanced users to help friends who have no computer knowledge in mainland China to bypass censorship. Don't complain about imperfect functions or ask to add other rare proxy types, you can use their clients directly.
 
-#### Proxy? I don't need
+#### What if I don't need a proxy?
 
-It is recommended that use the `Mini` version.
+Then it is recommended to use the `Mini` version.
 
-#### 
+#### How can I help with Localization?
 
-## Localization
-
-Join project at https://nekox.crowdin.com/nekox.
+Join the project at https://nekox.crowdin.com/nekox.
 
 ## Credits
 
