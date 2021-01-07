@@ -62,6 +62,7 @@ class CCConverter(val target: CCTarget) {
                         CCDict.JPVariantsRev,
                         CCDict.HKVariantsRev,
                         CCDict.HKVariantsRevPhrases,
+                        CCDict.TWVariantsRev,
                         CCDict.TWPhrasesRev,
                         CCDict.TWVariantsRevPhrases
                 ))

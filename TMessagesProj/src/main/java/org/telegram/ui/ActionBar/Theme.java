@@ -4583,7 +4583,7 @@ public class Theme {
     public static Drawable getCurrentHolidayDrawable() {
         if ((System.currentTimeMillis() - lastHolidayCheckTime) >= 60 * 1000) {
             lastHolidayCheckTime = System.currentTimeMillis();
-            if (getEventType() == 0 || NekoConfig.actionBarDecoration == 1) {
+            if (getEventType() == 0) {
                 canStartHolidayAnimation = true;
             } else {
                 canStartHolidayAnimation = false;

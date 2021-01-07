@@ -186,17 +186,15 @@ public class ActionBar extends FrameLayout {
             Drawable drawable = Theme.getCurrentHolidayDrawable();
             if (drawable != null && drawable.getBounds().contains((int) ev.getX(), (int) ev.getY())) {
                 manualStart = true;
-                if (snowflakesEffect == null) {
-                    fireworksEffect = null;
-                    snowflakesEffect = new SnowflakesEffect();
-                    titleTextView[0].invalidate();
-                    invalidate();
-                } else {
+                if (snowflakesEffect != null) {
                     snowflakesEffect = null;
                     fireworksEffect = new FireworksEffect();
-                    titleTextView[0].invalidate();
-                    invalidate();
+                } else {
+                    fireworksEffect = null;
+                    snowflakesEffect = new SnowflakesEffect();
                 }
+                titleTextView[0].invalidate();
+                invalidate();
             }
         }
         return super.onInterceptTouchEvent(ev);
@@ -234,27 +232,27 @@ public class ActionBar extends FrameLayout {
                         invalidate();
                     }
                 }
-                if (NekoConfig.actionBarDecoration == 2) {
-                    if (fireworksEffect == null) {
-                        fireworksEffect = new FireworksEffect();
-                    }
-                } else if (Theme.canStartHolidayAnimation()) {
-                    if (snowflakesEffect == null) {
-                        snowflakesEffect = new SnowflakesEffect();
-                    }
-                } else if (!manualStart) {
-                    if (snowflakesEffect != null) {
-                        snowflakesEffect = null;
-                    }
-                    if (fireworksEffect != null) {
-                        fireworksEffect = null;
-                    }
+            }
+            if (NekoConfig.actionBarDecoration == 2) {
+                if (fireworksEffect == null) {
+                    fireworksEffect = new FireworksEffect();
                 }
+            } else if (NekoConfig.actionBarDecoration == 1 || Theme.canStartHolidayAnimation()) {
+                if (snowflakesEffect == null) {
+                    snowflakesEffect = new SnowflakesEffect();
+                }
+            } else if (!manualStart) {
                 if (snowflakesEffect != null) {
-                    snowflakesEffect.onDraw(this, canvas);
-                } else if (fireworksEffect != null) {
-                    fireworksEffect.onDraw(this, canvas);
+                    snowflakesEffect = null;
                 }
+                if (fireworksEffect != null) {
+                    fireworksEffect = null;
+                }
+            }
+            if (snowflakesEffect != null) {
+                snowflakesEffect.onDraw(this, canvas);
+            } else if (fireworksEffect != null) {
+                fireworksEffect.onDraw(this, canvas);
             }
         }
         if (clip) {

@@ -21,7 +21,7 @@ import kotlin.random.Random
 
 class VmessLoader {
 
-    private val point = Libv2ray.newV2RayPoint(EmptyCallback(), true)
+    private val point = Libv2ray.newV2RayPoint(EmptyCallback(), false)
 
     companion object {
 
