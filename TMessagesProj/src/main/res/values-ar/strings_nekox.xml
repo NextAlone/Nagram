@@ -209,4 +209,5 @@
     <string name="CCJP">كانجي يابانية جديدة (شينجيتاي)</string>
     <string name="UserRestrictionsSendGames">أرسل الألعاب</string>
     <string name="UserRestrictionsSendInline">أرسل عبر Inline Bots</string>
+    <string name="AcceptSecretChat">قبول الدردشة السرية الجديدة</string>
 </resources>

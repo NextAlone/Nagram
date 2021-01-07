@@ -209,4 +209,5 @@
     <string name="CCJP">Новий японський кандзі (Сінджітай)</string>
     <string name="UserRestrictionsSendGames">Надіслати ігри</string>
     <string name="UserRestrictionsSendInline">Надіслати через вбудованих ботів</string>
+    <string name="AcceptSecretChat">Прийняти новий секретний чат</string>
 </resources>

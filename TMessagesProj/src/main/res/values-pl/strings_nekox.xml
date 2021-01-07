@@ -207,4 +207,7 @@
     <string name="CCSC">Uproszczony chiński</string>
     <string name="CCSP">Uproszczony chiński (Chiny)</string>
     <string name="CCJP">Nowy japoński Kanji (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Wyślij gry</string>
+    <string name="UserRestrictionsSendInline">Wyślij za pośrednictwem botów wbudowanych</string>
+    <string name="AcceptSecretChat">Zaakceptuj nowy tajny czat</string>
 </resources>

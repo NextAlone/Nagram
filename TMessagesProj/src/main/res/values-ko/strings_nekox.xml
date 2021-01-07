@@ -207,4 +207,7 @@
     <string name="CCSC">중국어 간체</string>
     <string name="CCSP">중국어 간체 (중국)</string>
     <string name="CCJP">새로운 일본어 한자 (신지 타이)</string>
+    <string name="UserRestrictionsSendGames">게임 보내기</string>
+    <string name="UserRestrictionsSendInline">인라인 봇을 통해 보내기</string>
+    <string name="AcceptSecretChat">새로운 비밀 채팅 수락</string>
 </resources>

@@ -209,4 +209,5 @@
     <string name="CCJP">日文新字體</string>
     <string name="UserRestrictionsSendGames">发送游戏</string>
     <string name="UserRestrictionsSendInline">通过内联机器人发送</string>
+    <string name="AcceptSecretChat">接受新的加密对话</string>
 </resources>

@@ -209,4 +209,5 @@
     <string name="CCJP">Նոր ճապոնական կանջի (սինջիտայ)</string>
     <string name="UserRestrictionsSendGames">Ուղարկել խաղեր</string>
     <string name="UserRestrictionsSendInline">Ուղարկել ներբանկային բոտերով</string>
+    <string name="AcceptSecretChat">Ընդունեք նոր գաղտնի զրույց</string>
 </resources>

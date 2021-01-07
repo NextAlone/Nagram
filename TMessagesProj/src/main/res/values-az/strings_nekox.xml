@@ -209,4 +209,5 @@
     <string name="CCJP">Yeni Yapon Kanji (Shinjitai)</string>
     <string name="UserRestrictionsSendGames">Oyunlar göndərin</string>
     <string name="UserRestrictionsSendInline">Inline Botlarla göndərin</string>
+    <string name="AcceptSecretChat">Yeni gizli sohbeti qəbul edin</string>
 </resources>

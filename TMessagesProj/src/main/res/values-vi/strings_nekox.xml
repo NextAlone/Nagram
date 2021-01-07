@@ -209,4 +209,5 @@
     <string name="CCJP">Chữ Kanji mới (Thể chữ mới)</string>
     <string name="UserRestrictionsSendGames">Gửi trò chơi</string>
     <string name="UserRestrictionsSendInline">Gửi qua Bot</string>
+    <string name="AcceptSecretChat">Chấp nhận cuộc trò chuyện bí mật mới</string>
 </resources>

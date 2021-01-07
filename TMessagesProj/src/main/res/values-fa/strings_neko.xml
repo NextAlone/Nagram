@@ -105,5 +105,5 @@
     <string name="AutoPauseVideo">مکث خودکار ویدئو</string>
     <string name="AutoPauseVideoAbout">هنگام قفل صفحه/جابجایی به پس زمینه.</string>
     <string name="DisableProximityEvents">غیرفعال‌سازی سنسور مجاورتی</string>
-    <string name="IncreaseVoiceMessageQuality">کیفیت پیام های صوتی را افزایش بده</string>
+    <string name="IncreaseVoiceMessageQuality">افزایش کیفیت پیام های صوتی</string>
 </resources>

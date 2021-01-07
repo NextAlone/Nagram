@@ -209,4 +209,5 @@
     <string name="CCJP">קאנג\'י יפני חדש (שינג\'יטאי)</string>
     <string name="UserRestrictionsSendGames">שלח משחקים</string>
     <string name="UserRestrictionsSendInline">שלח באמצעות בוטים מוטבעים</string>
+    <string name="AcceptSecretChat">קבל צ\'אט סודי חדש</string>
 </resources>
