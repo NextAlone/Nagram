@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.3.1-rc11"
-def verCode = 152
+def verName = "7.3.1-rc12"
+def verCode = 154
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -65,7 +65,7 @@ dependencies {
     // TODO: fix problem with android L
     implementation 'com.google.zxing:core:3.4.1'
 
-    compileOnly 'org.checkerframework:checker-qual:3.8.0'
+    compileOnly 'org.checkerframework:checker-qual:3.9.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
 
     // don't change this :)
@@ -82,9 +82,9 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.3.1'
     implementation 'org.dizitart:nitrite:3.4.3'
 
-    implementation 'cn.hutool:hutool-core:5.5.6'
-    implementation 'cn.hutool:hutool-crypto:5.5.6'
-    implementation 'cn.hutool:hutool-http:5.5.6'
+    implementation 'cn.hutool:hutool-core:5.5.7'
+    implementation 'cn.hutool:hutool-crypto:5.5.7'
+    implementation 'cn.hutool:hutool-http:5.5.7'
 
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
