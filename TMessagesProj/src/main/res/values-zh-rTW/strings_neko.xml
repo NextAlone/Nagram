@@ -106,4 +106,5 @@
     <string name="AutoPauseVideoAbout">當鎖定螢幕/切換到後臺時。</string>
     <string name="DisableProximityEvents">禁用距離感測器事件</string>
     <string name="IncreaseVoiceMessageQuality">提高語音訊息質量</string>
+    <string name="SelectBetween">選擇之間的</string>
 </resources>
