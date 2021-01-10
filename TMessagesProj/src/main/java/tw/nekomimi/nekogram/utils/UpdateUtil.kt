@@ -28,12 +28,10 @@ object UpdateUtil {
             }) { response: TLObject?, error: TLRPC.TL_error? ->
                 if (error == null) {
                     val res = response as TLRPC.TL_contacts_resolvedPeer
-                    if (res.chats.isEmpty()) {
-                        return@sendRequest
-                    }
+                    val chat = res.chats.find { it.username == channelUsername } ?: return@sendRequest
                     messagesCollector.putChats(res.chats, false)
                     messagesStorage.putUsersAndChats(res.users, res.chats, false, true)
-                    checkFollowChannel(ctx, currentAccount, res.chats.find { it.username == channelUsername }!!)
+                    checkFollowChannel(ctx, currentAccount, chat)
                 }
             }
         }
