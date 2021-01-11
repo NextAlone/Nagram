@@ -11462,7 +11462,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 if (saveItem != null) {
                     actionModeOtherItem.setSubItemVisibility(save_to, ((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0);
-                    saveItem.setContentDescription(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                    saveItem.setText(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                 }
 
                 int copyVisible = copyItem.getVisibility();
@@ -18983,6 +18983,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (undoView != null) {
                 undoView.hide(true, 1);
+            }
+            if (chatActivityEnterView != null) {
+                chatActivityEnterView.getEditField().setAllowDrawCursor(false);
             }
             return;
         }
