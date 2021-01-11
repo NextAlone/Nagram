@@ -18038,7 +18038,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (chatActivityEnterView.getVisibility() == View.VISIBLE) {
                 editTextCaption.requestFocus();
             }
-            editTextCaption.setAllowDrawCursor(true);
         }
 
         if (textSelectionHelper != null) {
@@ -19016,15 +19015,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (stickersPanel != null && stickersPanel.getVisibility() == View.VISIBLE) {
                 views.add(stickersPanel);
             }
-            actionBar.showActionMode(bottomMessagesActionContainer, null, views.toArray(new View[0]), new boolean[]{false, true, true}, chatListView, translationY);
+            actionBar.showActionMode(null, null, null, new boolean[]{false, true, true}, chatListView, translationY);
             if (getParentActivity() instanceof LaunchActivity) {
                 ((LaunchActivity) getParentActivity()).hideVisibleActionMode();
             }
-            chatActivityEnterView.getEditField().setAllowDrawCursor(false);
         } else if (bottomOverlayChat.getVisibility() == View.VISIBLE) {
-            actionBar.showActionMode(bottomMessagesActionContainer, null, new View[]{bottomOverlayChat}, new boolean[]{true}, chatListView, translationY);
+            actionBar.showActionMode(null, null, null, new boolean[]{true}, chatListView, translationY);
         } else {
-            actionBar.showActionMode(bottomMessagesActionContainer, null, null, null, chatListView, translationY);
+            actionBar.showActionMode(null, null, null, null, chatListView, translationY);
         }
         if (scrimPopupWindow != null) {
             scrimPopupWindow.dismiss();
