@@ -9960,7 +9960,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             replyObjectTextView.setLayoutParams(layoutParams2);
             chatActivityEnterView.showTopView(true, openKeyboard);
         } else {
-            if (replyingMessageObject == null && forwardingMessages == null && foundWebPage == null && editingMessageObject == null) {
+            if (replyingMessageObject == null && forwardingMessages == null && foundWebPage == null && editingMessageObject == null && !chatActivityEnterView.forceShowSendButton) {
                 return;
             }
             if (replyingMessageObject != null && replyingMessageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyKeyboardForceReply) {

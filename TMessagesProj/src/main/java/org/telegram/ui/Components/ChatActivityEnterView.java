@@ -428,7 +428,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private float distCanMove = AndroidUtilities.dp(80);
     private boolean recordingAudioVideo;
     private int recordingGuid;
-    private boolean forceShowSendButton;
+    public boolean forceShowSendButton;
     private boolean allowStickers;
     private boolean allowGifs;
 
