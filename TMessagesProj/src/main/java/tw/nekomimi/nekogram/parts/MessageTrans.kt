@@ -14,6 +14,7 @@ import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.transtale.code2Locale
 import tw.nekomimi.nekogram.utils.AlertUtil
 import tw.nekomimi.nekogram.utils.uDismiss
+import tw.nekomimi.nekogram.utils.uUpdate
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -44,7 +45,7 @@ fun MessageObject.toRawString(): String {
 
 }
 
-fun MessageObject.translateFinished(locale: Locale): Boolean {
+fun MessageObject.translateFinished(locale: Locale): Int {
 
     val db = TranslateDb.forLocale(locale)
 
@@ -52,13 +53,13 @@ fun MessageObject.translateFinished(locale: Locale): Boolean {
 
         val pool = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
 
-        val question = db.query(pool.question) ?: return false
+        val question = db.query(pool.question) ?: return 0
 
         pool.translatedQuestion = pool.question + "\n\n--------\n\n" + question
 
         pool.answers.forEach {
 
-            val answer = db.query(it.text) ?: return false
+            val answer = db.query(it.text) ?: return 0
 
             it.translatedText = it.text + " | " + answer
 
@@ -66,13 +67,13 @@ fun MessageObject.translateFinished(locale: Locale): Boolean {
 
     } else {
 
-        val text = db.query(messageOwner.message) ?: return false
+        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1) ?: return 0
 
         messageOwner.translatedMessage = messageOwner.message + "\n\n--------\n\n" + text
 
     }
 
-    return true
+    return 2
 
 }
 
@@ -95,7 +96,6 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
     }
 
     val status = AlertUtil.showProgress(parentActivity)
-
     val canceled = AtomicBoolean()
 
     status.setOnCancelListener {
@@ -112,7 +112,13 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
 
             val isEnd = i == messages.size - 1
 
-            if (selectedObject.translateFinished(target)) {
+            val state = selectedObject.translateFinished(target)
+
+            if (messages.size > 1) status.uUpdate("${i + 1} / ${messages.size}")
+
+            if (state == 1) {
+                return@forEachIndexed
+            } else if (state == 2) {
 
                 withContext(Dispatchers.Main) {
 
