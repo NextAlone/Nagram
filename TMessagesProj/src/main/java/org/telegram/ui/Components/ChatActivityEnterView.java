@@ -2290,7 +2290,27 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         audioVideoButtonContainer.setSoundEffectsEnabled(false);
         sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(48, 48));
         if (NekoConfig.useChatAttachMediaMenu) {
-            audioVideoButtonContainer.setOnClickListener(this::onMenuClick);
+            audioVideoButtonContainer.setOnClickListener(v -> {
+                if (recordCircle.isSendButtonVisible()) {
+                    if (!hasRecordVideo || calledRecordRunnable) {
+                        startedDraggingX = -1;
+                        if (hasRecordVideo && videoSendButton.getTag() != null) {
+                            delegate.needStartRecordVideo(1, true, 0);
+                        } else {
+                            if (recordingAudioVideo && isInScheduleMode()) {
+                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
+                            }
+                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                            delegate.needStartRecordAudio(0);
+                        }
+                        recordingAudioVideo = false;
+                        updateRecordIntefrace(RECORD_STATE_SENDING);
+
+                    }
+                    return;
+                }
+                onMenuClick(v);
+            });
         } else {
             audioVideoButtonContainer.setOnTouchListener((view, motionEvent) -> {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -2298,23 +2318,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (!hasRecordVideo || calledRecordRunnable) {
                             startedDraggingX = -1;
                             if (hasRecordVideo && videoSendButton.getTag() != null) {
-                                delegate.needStartRecordVideo(NekoConfig.confirmAVMessage ? 3 : 1, true, 0);
-                            } else {
-                                if (NekoConfig.confirmAVMessage) {
-                                    MediaController.getInstance().stopRecording(2, true, 0);
+                            delegate.needStartRecordVideo(1, true, 0);
                                 } else {
                                     if (recordingAudioVideo && isInScheduleMode()) {
                                         AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
                                     }
                                     MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
-                                }
                                 delegate.needStartRecordAudio(0);
                             }
-                            if (!NekoConfig.confirmAVMessage) {
                                 recordingAudioVideo = false;
                                 updateRecordIntefrace(RECORD_STATE_SENDING);
                             }
-                        }
                         return false;
                     }
                     if (parentFragment != null) {
@@ -2878,6 +2892,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                 videoSendButton.setTag(null);
                 recordAudioVideoRunnable.run();
+                delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
+                setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
+                if (!NekoConfig.disableVibration) {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                }
                 recordCircle.sendButtonVisible = true;
                 startLockTransition(false);
             });
@@ -2903,6 +2922,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                 videoSendButton.setTag(1);
                 recordAudioVideoRunnable.run();
+                delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
+                setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
+                if (!NekoConfig.disableVibration) {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                }
                 recordCircle.sendButtonVisible = true;
                 startLockTransition(false);
 

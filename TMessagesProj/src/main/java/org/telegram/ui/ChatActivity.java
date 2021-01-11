@@ -1064,6 +1064,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int search = 40;
 
     private final static int linked_chat = 60;
+    private final static int action_mode_other = 61;
+    private ActionBarMenuItem actionModeOtherItem;
 
     private final static int id_chat_compose_panel = 1000;
 
@@ -2371,23 +2373,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
         actionModeViews.add(actionMode.addItemWithWidth(select_between, R.drawable.ic_select_between, AndroidUtilities.dp(54), LocaleController.getString("SelectBetween", R.string.SelectBetween)));
-        actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.baseline_favorite_20, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
         actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.baseline_content_copy_24, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
 
         if (currentEncryptedChat == null) {
-            actionModeViews.add(actionMode.addItemWithWidth(save_to, R.drawable.msg_download, AndroidUtilities.dp(54), LocaleController.getString("SaveToMusic", R.string.SaveToMusic)));
-            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
-            actionModeViews.add(actionMode.addItemWithWidth(forward_noquote, R.drawable.msg_forward_noquote, AndroidUtilities.dp(54), LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward)));
+            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.baseline_forward_24, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
         }
 
-        actionModeViews.add(actionMode.addItemWithWidth(translate, R.drawable.ic_translate, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Translate)));
         actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+        actionModeViews.add(actionModeOtherItem = actionMode.addItemWithWidth(action_mode_other, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("MessageMenu", R.string.MessageMenu)));
+
+        if (currentEncryptedChat == null || NekoXConfig.disableFlagSecure) {
+            actionModeOtherItem.addSubItem(forward_noquote, R.drawable.msg_forward_noquote, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
+            actionModeOtherItem.addSubItem(star, R.drawable.baseline_favorite_20, LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+            actionModeOtherItem.addSubItem(save_to, R.drawable.msg_download, LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
+        }
+
+        actionModeOtherItem.addSubItem(translate, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
 
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(copy).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(star).setVisibility(View.GONE);
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(translate).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 1 ? View.VISIBLE : View.GONE);
+
+        actionModeOtherItem.setSubItemVisibility(star, selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0);
 
         checkActionBarMenu();
 
@@ -11415,14 +11422,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 hideActionMode();
                 updatePinnedMessageView(true);
             } else {
-                ActionBarMenuItem saveItem = actionBar.createActionMode().getItem(save_to);
                 ActionBarMenuItem copyItem = actionBar.createActionMode().getItem(copy);
-                ActionBarMenuItem starItem = actionBar.createActionMode().getItem(star);
                 ActionBarMenuItem editItem = actionBar.createActionMode().getItem(edit);
                 ActionBarMenuItem forwardItem = actionBar.createActionMode().getItem(forward);
                 ActionBarMenuItem selectItem = actionBar.createActionMode().getItem(select_between);
 
-                ActionBarMenuItem translateItem = actionBar.createActionMode().getItem(translate);
+                ActionBarMenuSubItem starItem = actionModeOtherItem.getSubItem(star);
+                ActionBarMenuSubItem saveItem = actionModeOtherItem.getSubItem(save_to);
 
                 if (prevCantForwardCount == 0 && cantForwardMessagesCount != 0 || prevCantForwardCount != 0 && cantForwardMessagesCount == 0) {
                     forwardButtonAnimation = new AnimatorSet();
@@ -11455,14 +11461,41 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
                 if (saveItem != null) {
-                    saveItem.setVisibility(((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0 ? View.VISIBLE : View.GONE);
+                    actionModeOtherItem.setSubItemVisibility(save_to, ((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0);
                     saveItem.setContentDescription(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                 }
 
                 int copyVisible = copyItem.getVisibility();
                 int starVisible = starItem.getVisibility();
                 copyItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
-                selectItem.setVisibility(selectedMessagesIds[0].size() > 1 ? View.VISIBLE : View.GONE);
+                actionModeOtherItem.setSubItemVisibility(star, getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount);
+                if (selectItem != null) {
+                    ArrayList<Integer> ids = new ArrayList<>();
+                    for (int a = 1; a >= 0; a--) {
+                        for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                            ids.add(selectedMessagesIds[a].keyAt(b));
+                        }
+                    }
+                    Collections.sort(ids);
+                    Integer begin = ids.get(0);
+                    Integer end = ids.get(ids.size() - 1);
+                    boolean selectable = false;
+                    for (int i = 0; i < messages.size(); i++) {
+                        int msgId = messages.get(i).getId();
+                        if (msgId > begin && msgId < end && selectedMessagesIds[0].indexOfKey(msgId) < 0) {
+                            MessageObject message = messages.get(i);
+                            int type = getMessageType(message);
+
+                            if (type < 2 || type == 20) {
+                                continue;
+                            }
+
+                            selectable = true;
+                            break;
+                        }
+                    }
+                    selectItem.setVisibility(selectable ? View.VISIBLE : View.GONE);
+                }
                 int newCopyVisible = copyItem.getVisibility();
                 int newStarVisible = starItem.getVisibility();
                 actionBar.createActionMode().getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
@@ -11613,9 +11646,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
 
-                if (translateItem != null) {
-                    translateItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 1 ? View.VISIBLE : View.GONE);
-                }
+                actionModeOtherItem.setSubItemVisibility(translate, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 1);
             }
         }
     }
@@ -13376,11 +13407,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Integer msgId = (Integer) args[0];
             MessageObject obj = messagesDict[0].get(msgId);
             if (isThreadChat() && pendingSendMessagesDict.size() > 0) {
-                 MessageObject object = pendingSendMessagesDict.get(msgId);
-                 if (object != null) {
-                     Integer newMsgId = (Integer) args[1];
-                     pendingSendMessagesDict.put(newMsgId, object);
-                 }
+                MessageObject object = pendingSendMessagesDict.get(msgId);
+                if (object != null) {
+                    Integer newMsgId = (Integer) args[1];
+                    pendingSendMessagesDict.put(newMsgId, object);
+                }
             }
             if (obj != null) {
                 if (obj.shouldRemoveVideoEditedInfo) {
@@ -18968,10 +18999,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (item != null) {
             item.setVisibility(View.VISIBLE);
         }
-        item = actionMode.getItem(forward_noquote);
-        if (item != null) {
-            item.setVisibility(View.VISIBLE);
-        }
+        actionModeOtherItem.showSubItem(forward_noquote);
         item = actionMode.getItem(delete);
         if (item != null) {
             item.setVisibility(View.VISIBLE);
@@ -23491,7 +23519,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (action == 1 && (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_chatParticipantAdmin)) {
             AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
-                builder2.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+            builder2.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
             builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
             builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
                 if (channelParticipant != null) {
