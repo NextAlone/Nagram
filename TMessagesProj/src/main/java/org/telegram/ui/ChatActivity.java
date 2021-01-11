@@ -18038,6 +18038,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (chatActivityEnterView.getVisibility() == View.VISIBLE) {
                 editTextCaption.requestFocus();
             }
+            editTextCaption.setAllowDrawCursor(true);
         }
 
         if (textSelectionHelper != null) {
@@ -18982,9 +18983,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (undoView != null) {
                 undoView.hide(true, 1);
-            }
-            if (chatActivityEnterView != null) {
-                chatActivityEnterView.getEditField().setAllowDrawCursor(false);
             }
             return;
         }
