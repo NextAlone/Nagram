@@ -273,4 +273,7 @@
 
     <string name="AcceptSecretChat">Accept new secret chat</string>
 
+    <string name="TabletMode">Tablet mode</string>
+    <string name="TabletModeDefault">Depends on device</string>
+
 </resources>

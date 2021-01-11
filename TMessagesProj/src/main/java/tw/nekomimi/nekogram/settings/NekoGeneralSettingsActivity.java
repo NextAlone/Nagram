@@ -24,7 +24,6 @@ import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -53,7 +52,6 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
@@ -63,7 +61,6 @@ import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 
 @SuppressLint("RtlHardcoded")
@@ -103,12 +100,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int useDefaultThemeRow;
     private int useSystemEmojiRow;
     private int transparentStatusBarRow;
-    private int forceTabletRow;
     private int avatarAsDrawerBackgroundRow;
-    private int removeTitleEmojiRow;
     private int newYearRow;
     private int actionBarDecorationRow;
     private int appBarShadowRow;
+    private int tabletModeRow;
     private int appearance2Row;
 
     private int privacyRow;
@@ -212,18 +208,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.useDefaultTheme);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (position == inappCameraRow) {
                 SharedConfig.toggleInappCamera();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.inappCamera);
                 }
-
-            } else if (position == forceTabletRow) {
-                NekoConfig.toggleForceTablet();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.forceTablet);
-                }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == transparentStatusBarRow) {
                 NekoConfig.toggleTransparentStatusBar();
                 if (view instanceof TextCheckCell) {
@@ -260,7 +250,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }, (i, __) -> {
                     NekoConfig.setNameOrder(i + 1);
                     listAdapter.notifyItemChanged(position);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
                     return Unit.INSTANCE;
                 });
 
@@ -278,7 +268,27 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                     NekoConfig.setActionBarDecoration(i);
                     listAdapter.notifyItemChanged(position);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+
+                    return null;
+
+                });
+
+                builder.show();
+
+            } else if (position == tabletModeRow) {
+
+                PopupBuilder builder = new PopupBuilder(view);
+
+                builder.setItems(new String[]{
+                        LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
+                        LocaleController.getString("Enable", R.string.Enable),
+                        LocaleController.getString("Disable", R.string.Disable)
+                }, (i, __) -> {
+
+                    NekoConfig.setTabletMode(i);
+                    listAdapter.notifyItemChanged(position);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
 
                     return null;
 
@@ -290,7 +300,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 NekoConfig.toggleNewYear();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.newYear);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
                 }
             } else if (position == translationProviderRow) {
 
@@ -407,12 +417,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.avatarAsDrawerBackground);
                 }
-            } else if (position == removeTitleEmojiRow) {
-                NekoConfig.toggleRemoveTitleEmoji();
-                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.removeTitleEmoji);
-                }
             } else if (position == showIdAndDcRow) {
                 NekoConfig.toggleShowIdAndDc();
                 if (view instanceof TextCheckCell) {
@@ -499,7 +503,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         });
 
         restartTooltip = new UndoView(context);
-        restartTooltip.setInfoText(LocaleController.formatString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
         frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
@@ -697,12 +700,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         useDefaultThemeRow = rowCount++;
         useSystemEmojiRow = !BuildConfig.FLAVOR.contains("No") ? rowCount++ : -1;
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
-        forceTabletRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
         appBarShadowRow = rowCount++;
-        removeTitleEmojiRow = rowCount++;
         newYearRow = rowCount++;
         actionBarDecorationRow = rowCount++;
+        tabletModeRow = rowCount ++;
         appearance2Row = rowCount++;
 
         privacyRow = rowCount++;
@@ -817,7 +819,21 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             default:
                                 value = LocaleController.getString("DependsOnDate", R.string.DependsOnDate);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, true);
+                    } else if (position == tabletModeRow) {
+                        String value;
+                        switch (NekoConfig.tabletMode) {
+                            case 0:
+                                value = LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault);
+                                break;
+                            case 1:
+                                value = LocaleController.getString("Enable", R.string.Enable);
+                                break;
+                            case 2:
+                            default:
+                                value = LocaleController.getString("Disable", R.string.Disable);
+                        }
+                        textCell.setTextAndValue(LocaleController.getString("TabletMode", R.string.TabletMode), value, false);
                     } else if (position == sortMenuRow) {
                         textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
                     } else if (position == translateToLangRow) {
@@ -884,8 +900,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), NekoConfig.useSystemEmoji, true);
                     } else if (position == typefaceRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TypefaceUseDefault", R.string.TypefaceUseDefault), NekoConfig.typeface == 1, true);
-                    } else if (position == forceTabletRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ForceTabletMode", R.string.ForceTabletMode), NekoConfig.forceTablet, true);
                     } else if (position == newYearRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ChristmasHat", R.string.ChristmasHat), NekoConfig.newYear, true);
                     } else if (position == openArchiveOnPullRow) {
@@ -894,8 +908,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DisableSystemAccount", R.string.DisableSystemAccount), NekoConfig.disableSystemAccount, false);
                     } else if (position == avatarAsDrawerBackgroundRow) {
                         textCell.setTextAndCheck(LocaleController.getString("UseAvatarAsDrawerBackground", R.string.UseAvatarAsDrawerBackground), NekoConfig.avatarAsDrawerBackground, true);
-                    } else if (position == removeTitleEmojiRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("RemoveTitleEmoji", R.string.RemoveTitleEmoji), NekoConfig.removeTitleEmoji, true);
                     } else if (position == showIdAndDcRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ShowIdAndDc", R.string.ShowIdAndDc), NekoConfig.showIdAndDc, true);
                     } else if (position == askBeforeCallRow) {
@@ -984,7 +996,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == nameOrderRow || position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
                     position == translationProviderRow || position == actionBarDecorationRow ||
-                    position == pgpAppRow || position == keyRow) {
+                    position == pgpAppRow || position == keyRow || position == tabletModeRow) {
                 return 2;
             } else if (position == connectionRow || position == transRow || position == dialogsRow ||
                     position == privacyRow || position == generalRow || position == appearanceRow || position == openKeyChainRow) {

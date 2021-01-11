@@ -1714,8 +1714,16 @@ public class AndroidUtilities {
     }
 
     public static boolean isTablet() {
-        if (isTablet == null) {
-            isTablet = NekoConfig.forceTablet || ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
+        if (isTablet == null) switch (NekoConfig.tabletMode) {
+            case 0:
+                isTablet = ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
+                break;
+            case 1:
+                isTablet = true;
+                break;
+            case 2:
+                isTablet = false;
+                break;
         }
         return isTablet;
     }
@@ -2595,7 +2603,7 @@ public class AndroidUtilities {
         if (num_ < 0.1) {
             return "0";
         } else {
-            if ((num_ * 10)== (int) (num_ * 10)) {
+            if ((num_ * 10) == (int) (num_ * 10)) {
                 return String.format(Locale.ENGLISH, "%s%s", AndroidUtilities.formatCount((int) num_), numbersSignatureArray[count]);
             } else {
                 return String.format(Locale.ENGLISH, "%.1f%s", (int) (num_ * 10) / 10f, numbersSignatureArray[count]);
@@ -2779,7 +2787,7 @@ public class AndroidUtilities {
             if (Build.VERSION.SDK_INT >= 26 && realMimeType != null && realMimeType.equals("application/vnd.android.package-archive") && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
                 BottomBuilder builder = new BottomBuilder(activity);
                 builder.addTitle(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-                builder.addItem(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), R.drawable.baseline_settings_24,(i) -> {
+                builder.addItem(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), R.drawable.baseline_settings_24, (i) -> {
                     try {
                         activity.startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + activity.getPackageName())));
                     } catch (Exception e) {
@@ -3992,7 +4000,7 @@ public class AndroidUtilities {
                     flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
                     if (!SharedConfig.noStatusBar && !NekoConfig.transparentStatusBar) {
-                            window.setStatusBarColor(0x33000000);
+                        window.setStatusBarColor(0x33000000);
                     }
                 }
             }

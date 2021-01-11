@@ -14,13 +14,13 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.R;
 
-import java.util.Locale;
-
-import cn.hutool.core.util.StrUtil;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cn.hutool.core.util.StrUtil;
 
 public class NekoConfig {
 
@@ -60,7 +60,7 @@ public class NekoConfig {
     public static boolean hidePhone;
     public static int typeface;
     public static boolean transparentStatusBar;
-    public static boolean forceTablet;
+    public static int tabletMode;
     public static boolean openArchiveOnPull;
     public static boolean avatarAsDrawerBackground;
     public static boolean showTabsOnForward;
@@ -96,7 +96,6 @@ public class NekoConfig {
     public static boolean disableProxyWhenVpnEnabled;
     public static boolean skipOpenLinkConfirm;
 
-    public static boolean removeTitleEmoji;
     public static boolean useDefaultTheme;
     public static boolean showIdAndDc;
 
@@ -179,7 +178,18 @@ public class NekoConfig {
         useIPv6 = preferences.getBoolean("useIPv6", false);
         hidePhone = preferences.getBoolean("hidePhone", true);
         ignoreBlocked = preferences.getBoolean("ignoreBlocked", false);
-        forceTablet = preferences.getBoolean("forceTablet", false);
+
+        boolean forceTablet = preferences.getBoolean("forceTablet", false);
+        if (forceTablet) {
+            tabletMode = 1;
+            preferences.edit()
+                    .remove("forceTablet")
+                    .putInt("tabletMode", 1)
+                    .apply();
+        } else {
+            tabletMode = preferences.getInt("tabletMode", 0);
+        }
+
         typeface = preferences.getInt("typeface", 0);
         nameOrder = preferences.getInt("nameOrder", 1);
         mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
@@ -234,7 +244,6 @@ public class NekoConfig {
         disableProxyWhenVpnEnabled = preferences.getBoolean("disable_proxy_when_vpn_enabled", false);
         skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
 
-        removeTitleEmoji = preferences.getBoolean("remove_title_emoji", true);
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
         useDefaultTheme = preferences.getBoolean("use_default_theme", false);
         showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
@@ -362,14 +371,6 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("ignoreBlocked", ignoreBlocked);
-        editor.apply();
-    }
-
-    public static void toggleForceTablet() {
-        forceTablet = !forceTablet;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("forceTablet", forceTablet);
         editor.apply();
     }
 
@@ -593,10 +594,6 @@ public class NekoConfig {
         preferences.edit().putBoolean("skip_open_link_confirm", skipOpenLinkConfirm = !skipOpenLinkConfirm).apply();
     }
 
-    public static void toggleRemoveTitleEmoji() {
-        preferences.edit().putBoolean("remove_title_emoji", removeTitleEmoji = !removeTitleEmoji).apply();
-    }
-
     public static void toggleIgnoredMutedCount() {
         preferences.edit().putBoolean("ignore_muted_count", ignoreMutedCount = !ignoreMutedCount).apply();
     }
@@ -714,6 +711,10 @@ public class NekoConfig {
     public static void toggleAcceptSecretChat() {
         preferences.edit().putBoolean("acceptSecretChat", acceptSecretChat = !acceptSecretChat).apply();
 
+    }
+
+    public static void setTabletMode(int mode) {
+        preferences.edit().putInt("tabletMode", tabletMode = mode).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

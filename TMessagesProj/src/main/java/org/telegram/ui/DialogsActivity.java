@@ -1912,7 +1912,7 @@ private int lastMeasuredTopPadding;
             if (folderId != 0) {
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
             } else {
-                actionBar.setTitle(getNekoTitle(LocaleController.getString("NekoX", R.string.NekoX)));
+                actionBar.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
             }
             if (folderId == 0) {
                 actionBar.setSupportsHolidayImage(true);
@@ -5659,22 +5659,6 @@ private int lastMeasuredTopPadding;
                 showFiltersHint();
             }
         }
-    }
-
-    private String getNekoTitle(String title) {
-
-        if (!NekoConfig.removeTitleEmoji) {
-
-            title = LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
-
-        }
-
-        return title;
-
-        //if (FilterPopup.getInstance(currentAccount).getTotalUnreadCount() == 0) {
-        //    return LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
-        //}
-        //return LocaleController.getString("NekogramEmojiDialogsUnread", R.string.NekogramEmojiDialogsUnread) + " " + title;
     }
 
     @SuppressWarnings("unchecked")

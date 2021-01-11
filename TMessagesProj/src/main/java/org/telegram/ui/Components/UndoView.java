@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -31,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Emoji;
@@ -43,8 +46,10 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.LaunchActivity;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class UndoView extends FrameLayout {
@@ -116,6 +121,8 @@ public class UndoView extends FrameLayout {
     public final static int ACTION_VOIP_REMOVED = 32;
     public final static int ACTION_VOIP_LINK_COPIED = 33;
     public final static int ACTION_VOIP_INVITED = 34;
+
+    public final static int ACTION_NEED_RESATRT = 100;
 
     private CharSequence infoText;
 
@@ -246,7 +253,7 @@ public class UndoView extends FrameLayout {
                 currentAction == ACTION_OWNER_TRANSFERED_GROUP || currentAction == ACTION_QUIZ_CORRECT || currentAction == ACTION_QUIZ_INCORRECT || currentAction == ACTION_CACHE_WAS_CLEARED ||
                 currentAction == ACTION_ADDED_TO_FOLDER || currentAction == ACTION_REMOVED_FROM_FOLDER || currentAction == ACTION_PROFILE_PHOTO_CHANGED ||
                 currentAction == ACTION_CHAT_UNARCHIVED || currentAction == ACTION_VOIP_MUTED || currentAction == ACTION_VOIP_UNMUTED || currentAction == ACTION_VOIP_REMOVED ||
-                currentAction == ACTION_VOIP_LINK_COPIED || currentAction == ACTION_VOIP_INVITED;
+                currentAction == ACTION_VOIP_LINK_COPIED || currentAction == ACTION_VOIP_INVITED || currentAction == ACTION_NEED_RESATRT;
     }
 
     private boolean hasSubInfo() {
@@ -341,7 +348,7 @@ public class UndoView extends FrameLayout {
         if (currentActionRunnable != null) {
             currentActionRunnable.run();
         }
-        if (NekoConfig.disableUndo && action < ACTION_QUIZ_CORRECT) {
+        if (NekoConfig.disableUndo && !isTooltipAction()) {
             if (actionRunnable != null) actionRunnable.run();
             return;
         }
@@ -373,7 +380,28 @@ public class UndoView extends FrameLayout {
 
         infoTextView.setMinHeight(0);
 
-        if (isTooltipAction()) {
+        if (currentAction == ACTION_NEED_RESATRT) {
+            infoTextView.setText(LocaleController.getString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
+
+            layoutParams.leftMargin = AndroidUtilities.dp(58);
+            layoutParams.topMargin = AndroidUtilities.dp(13);
+            layoutParams.rightMargin = 0;
+
+            infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            undoButton.setVisibility(VISIBLE);
+            infoTextView.setTypeface(Typeface.DEFAULT);
+            subinfoTextView.setVisibility(GONE);
+
+            leftImageView.setVisibility(VISIBLE);
+            leftImageView.setAnimation(R.raw.chats_infotip, 36, 36);
+            leftImageView.setProgress(0);
+            leftImageView.playAnimation();
+            undoImageView.setVisibility(GONE);
+
+            undoTextView.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme));
+            currentCancelRunnable = () -> ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
+
+        } else if (isTooltipAction()) {
             CharSequence infoText;
             String subInfoText;
             int icon;
@@ -680,7 +708,7 @@ public class UndoView extends FrameLayout {
             if ("\uD83C\uDFB2".equals(emoji)) {
                 infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DiceInfo2", R.string.DiceInfo2)));
                 leftImageView.setImageResource(R.drawable.dice);
-            } else{
+            } else {
                 if ("\uD83C\uDFAF".equals(emoji)) {
                     infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DartInfo", R.string.DartInfo)));
                 } else {
