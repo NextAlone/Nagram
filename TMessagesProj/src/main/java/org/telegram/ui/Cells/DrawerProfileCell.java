@@ -28,6 +28,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.palette.graphics.Palette;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -36,6 +38,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AudioPlayerAlert;
@@ -53,7 +56,7 @@ public class DrawerProfileCell extends FrameLayout {
     private TextView nameTextView;
     private AudioPlayerAlert.ClippingTextViewSwitcher phoneTextView;
     private ImageView shadowView;
-    private ImageView arrowView;
+    protected ImageView arrowView;
     private final ImageReceiver imageReceiver;
 
     private Rect srcRect = new Rect();
@@ -67,6 +70,7 @@ public class DrawerProfileCell extends FrameLayout {
     private int darkThemeBackgroundColor;
 
 
+    private Bitmap lastBitmap;
     private TLRPC.User user;
     private boolean allowInvalidate = true;
 
@@ -76,6 +80,48 @@ public class DrawerProfileCell extends FrameLayout {
         imageReceiver = new ImageReceiver(this);
         imageReceiver.setCrossfadeWithOldImage(true);
         imageReceiver.setForceCrossfade(true);
+        imageReceiver.setDelegate((imageReceiver, set, thumb, memCache) -> {
+            if (NekoConfig.avatarBackgroundDarken || NekoConfig.avatarBackgroundBlur) {
+                if (thumb || allowInvalidate) {
+                    return;
+                }
+                ImageReceiver.BitmapHolder bmp = imageReceiver.getBitmapSafe();
+                if (bmp != null) {
+                    new Thread(() -> {
+                        if (lastBitmap != null) {
+                            imageReceiver.setCrossfadeWithOldImage(false);
+                            imageReceiver.setImageBitmap(new BitmapDrawable(null, lastBitmap), false);
+                        }
+                        int width = NekoConfig.avatarBackgroundBlur ? 150 : bmp.bitmap.getWidth();
+                        int height = NekoConfig.avatarBackgroundBlur ? 150 : bmp.bitmap.getHeight();
+                        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bitmap);
+                        canvas.drawBitmap(bmp.bitmap, null, new Rect(0, 0, width, height), new Paint(Paint.FILTER_BITMAP_FLAG));
+                        if (NekoConfig.avatarBackgroundBlur) {
+                            try {
+                                Utilities.stackBlurBitmap(bitmap, 3);
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                        }
+                        if (NekoConfig.avatarBackgroundDarken) {
+                            final Palette palette = Palette.from(bmp.bitmap).generate();
+                            Paint paint = new Paint();
+                            paint.setColor((palette.getDarkMutedColor(0xFF547499) & 0x00FFFFFF) | 0x44000000);
+                            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+                        }
+                        AndroidUtilities.runOnUIThread(() ->  {
+                            allowInvalidate = true;
+                            imageReceiver.setCrossfadeWithOldImage(true);
+                            imageReceiver.setImageBitmap(new BitmapDrawable(null, bitmap), false);
+                            lastBitmap = bitmap;
+                        });
+                    }).start();
+                }
+            } else {
+                lastBitmap = null;
+            }
+        });
 
         shadowView = new ImageView(context);
         shadowView.setVisibility(INVISIBLE);
@@ -258,8 +304,9 @@ public class DrawerProfileCell extends FrameLayout {
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
-        if (useAdb()) {
+        if (NekoConfig.avatarAsDrawerBackground) {
             ImageLocation imageLocation = ImageLocation.getForUser(user, true);
+            allowInvalidate = !useAdb() || !(NekoConfig.avatarBackgroundDarken || NekoConfig.avatarBackgroundBlur);
             imageReceiver.setImage(imageLocation, "512_512", null, null, new ColorDrawable(0x00000000), 0, null, user, 1);
             avatarImageView.setVisibility(INVISIBLE);
         } else {

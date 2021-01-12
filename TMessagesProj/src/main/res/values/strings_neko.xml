@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Nekogram" translatable="false">Nekogram</string>
-    <string name="NekogramBeta" translatable="false">Nekogram Beta</string>
-    <string name="NekogramWithEmoji" translatable="false">&#128566; Nekogram</string>
-    <string name="NekogramEmojiDialogs" translatable="false">&#128566;</string>
     <string name="NekoSettings">Neko Settings</string>
-    <string name="IPv6">Try connecting through IPv6</string>
+    <string name="IPv6">Connecting through IPv6</string>
     <string name="MessageMenu">Message menu</string>
     <string name="HidePhone">Hide my phone number</string>
     <string name="Hide">Hide</string>
@@ -76,7 +72,6 @@
     <string name="HideKeyboardOnChatScroll">Hide keyboard on chat scroll</string>
     <string name="UserRestrictionsSendStickers2">Send Stickers</string>
     <string name="UserRestrictionsSendGifs">Send GIFs</string>
-    <string name="UseAvatarAsDrawerBackground">Use avatar as drawer background</string>
     <string name="ShowTabsOnForward">Show tabs on forward</string>
     <string name="CheckAllAdministrated">Add administrated</string>
     <string name="RearVideoMessages">Rear camera in Video Messages</string>
@@ -96,8 +91,6 @@
     <string name="OfficialChannel">Official channel</string>
     <string name="About">About</string>
     <string name="IgnoreBlockedAbout">You\'ll no longer see messages from blocked users in groups.</string>
-    <string name="Donate">Donate</string>
-    <string name="DonateAbout">Support our development.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Source code on Github</string>
     <string name="ResetStickerSize">Reset sticker size</string>
@@ -105,10 +98,12 @@
     <string name="DisableAppBarShadow">Disable title bar shadow</string>
     <string name="BetaWarning">This is a **beta** feature implemented by **Telegram**.</string>
     <string name="MediaPreview">Media preview in dialog list</string>
-    <string name="ProviderYandex">Yandex Translate</string>
     <string name="AutoPauseVideo">Auto pause video</string>
     <string name="AutoPauseVideoAbout">When lock screen/switch to background.</string>
     <string name="DisableProximityEvents">Disable proximity events</string>
     <string name="IncreaseVoiceMessageQuality">Increase voice messages quality</string>
     <string name="SelectBetween">Select between</string>
+    <string name="AvatarAsBackground">Profile picture as background</string>
+    <string name="BlurAvatarBackground">Blur profile picture</string>
+    <string name="DarkenAvatarBackground">Darken profile picture</string>
 </resources>

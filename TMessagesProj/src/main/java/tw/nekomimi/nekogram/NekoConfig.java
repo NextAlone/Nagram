@@ -133,6 +133,9 @@ public class NekoConfig {
     public static boolean sendCommentAfterForward;
     public static boolean acceptSecretChat;
 
+    public static boolean avatarBackgroundBlur;
+    public static boolean avatarBackgroundDarken;
+
     public static String getOpenPGPAppName() {
 
         if (StrUtil.isNotBlank(openPGPApp)) {
@@ -217,7 +220,9 @@ public class NekoConfig {
         //showHiddenFeature = preferences.getBoolean("showHiddenFeature", false);
         hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
         avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
-        useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
+        avatarBackgroundBlur = preferences.getBoolean("avatarBackgroundBlur", false);
+            avatarBackgroundDarken = preferences.getBoolean("avatarBackgroundDarken", false);
+            useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
         showTabsOnForward = preferences.getBoolean("showTabsOnForward", false);
         rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
         hideAllTab = preferences.getBoolean("hideAllTab", false);
@@ -504,6 +509,22 @@ public class NekoConfig {
 
     public static void toggleAvatarAsDrawerBackground() {
         preferences.edit().putBoolean("avatarAsDrawerBackground", avatarAsDrawerBackground = !avatarAsDrawerBackground).apply();
+    }
+
+    public static void toggleAvatarBackgroundBlur() {
+        avatarBackgroundBlur = !avatarBackgroundBlur;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("avatarBackgroundBlur", avatarBackgroundBlur);
+        editor.commit();
+    }
+
+    public static void toggleAvatarBackgroundDarken() {
+        avatarBackgroundDarken = !avatarBackgroundDarken;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("avatarBackgroundDarken", avatarBackgroundDarken);
+        editor.commit();
     }
 
     public static void toggleUseSystemEmoji() {
