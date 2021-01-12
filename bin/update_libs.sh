@@ -1,6 +1,6 @@
 #!/bin/bash
 
-V2RAY_CORE_VERSION="4.33.0"
+V2RAY_CORE_VERSION="4.34.0"
 
 if [ ! -x "$(command -v go)" ]; then
 
