@@ -676,8 +676,8 @@ public class AlertsCreator {
 
         int[] icons = new int[]{
                 R.drawable.baseline_notifications_24,
-                R.drawable.deproko_baseline_clock_24,
-                R.drawable.deproko_baseline_clock_24,
+                R.drawable.baseline_notifications_paused_24,
+                R.drawable.baseline_notifications_paused_24,
                 R.drawable.baseline_settings_24,
                 R.drawable.baseline_notifications_off_24
         };

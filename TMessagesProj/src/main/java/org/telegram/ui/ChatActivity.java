@@ -2310,7 +2310,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 headerItem.addSubItem(clear_history, R.drawable.baseline_delete_sweep_24, LocaleController.getString("ClearHistory", R.string.ClearHistory));
             }
             if (currentUser == null || !currentUser.self) {
-                muteItem = headerItem.addSubItem(mute, R.drawable.msg_mute, null);
+                muteItem = headerItem.addSubItem(mute, R.drawable.baseline_volume_off_24_white, null);
             }
 
             if (ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) {
