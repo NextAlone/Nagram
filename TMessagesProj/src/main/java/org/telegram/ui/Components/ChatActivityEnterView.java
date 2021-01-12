@@ -5651,7 +5651,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 });
 
             } else if (recordState == RECORD_STATE_CANCEL || recordState == RECORD_STATE_CANCEL_BY_GESTURE) {
-                if (videoSendButton != null && isInVideoMode()) {
+                if (videoSendButton != null && isInVideoMode() && !NekoConfig.useChatAttachMediaMenu) {
                     videoSendButton.setVisibility(View.VISIBLE);
                 } else if (audioSendButton != null) {
                     audioSendButton.setVisibility(View.VISIBLE);
