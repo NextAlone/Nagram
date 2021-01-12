@@ -33,7 +33,6 @@ public:
     ByteArray *getPendingAuthKey();
     int64_t getPendingAuthKeyId();
     TLObject *getCurrentHandshakeRequest();
-    void clearServerPublicKey();
 
 private:
 
@@ -63,7 +62,6 @@ private:
     static void loadCdnConfig(Datacenter *datacenter);
 
     inline Connection *getConnection();
-
 };
 
 #endif

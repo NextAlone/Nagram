@@ -191,17 +191,6 @@ Datacenter::Datacenter(int32_t instance, NativeByteBuffer *data) {
         currentPortNumIpv6Download = 0;
         currentAddressNumIpv6Download = 0;
     }
-    if (permConfig == nullptr) {
-        permConfig = new Config(instanceNum, "dc" + to_string_int32(datacenterId) + "perm.dat");
-    }
-    NativeByteBuffer *permBuffer = permConfig->readConfig();
-    if (permBuffer != nullptr) {
-        publicKey = permBuffer->readString(nullptr);
-        keyFingerprint = permBuffer->readUint64(nullptr);
-        permBuffer->reuse();
-    } else {
-        publicKey = "";
-    }
 }
 
 TcpAddress *Datacenter::getCurrentAddress(uint32_t flags) {
@@ -490,37 +479,6 @@ void Datacenter::storeCurrentAddressAndPortNum() {
     buffer->writeInt32(currentAddressNumIpv6Download);
     config->writeConfig(buffer);
     buffer->reuse();
-}
-
-void Datacenter::storePermConfig() {
-
-    if (permConfig == nullptr) {
-        permConfig = new Config(instanceNum, "dc" + to_string_int32(datacenterId) + "perm.dat");
-    }
-
-    if (sizeCalculator == nullptr) {
-        sizeCalculator = new NativeByteBuffer(true);
-    }
-
-    sizeCalculator->clearCapacity();
-    sizeCalculator->writeString(publicKey);
-    sizeCalculator->writeInt64(keyFingerprint);
-
-    NativeByteBuffer *buffer = BuffersStorage::getInstance().getFreeBuffer(sizeCalculator->capacity());
-    sizeCalculator->clearCapacity();
-
-    buffer->writeString(publicKey);
-    buffer->writeInt64(keyFingerprint);
-
-    permConfig->writeConfig(buffer);
-
-    buffer->reuse();
-
-    for (std::vector<std::unique_ptr<Handshake>>::iterator iter = handshakes.begin(); iter != handshakes.end(); iter++) {
-        Handshake *handshake = iter->get();
-        handshake->clearServerPublicKey();
-    }
-
 }
 
 void Datacenter::resetAddressAndPortNum() {

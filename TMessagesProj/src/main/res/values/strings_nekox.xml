@@ -47,12 +47,6 @@
     <string name="CustomBackendNotice">This function is only provided for expert users, if you don\'t know what the following options represent, just ignore it.</string>
     <string name="CustomBackendProduction">Official Production DataCenter</string>
     <string name="CustomBackendTestDC">Official Test DataCenter</string>
-    <string name="CustomBackendIpv4">Ipv4 Address</string>
-    <string name="CustomBackendIpv6">Ipv6 Address</string>
-    <string name="CustomBackendLayer">Layer</string>
-    <string name="CustomBackendPublicKey">Public Key</string>
-    <string name="CustomBackendFingerprint">Key Fingerprint</string>
-
     <string name="AllowFlashCall">Allow flash call</string>
 
     <string name="ChangeTranslateProvider">Change Provider</string>

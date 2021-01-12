@@ -55,10 +55,6 @@ public:
     void cancelRequestsForGuid(int32_t guid);
     void bindRequestToGuid(int32_t requestToken, int32_t guid);
     void applyDatacenterAddress(uint32_t datacenterId, std::string ipAddress, uint32_t port);
-    void setDatacenterPublicKey(uint32_t datacenterId, std::string publicKey, uint64_t fingerprint);
-    void setDatacenterAddress(uint32_t datacenterId, std::string ipv4Address, std::string ipv6Address,uint32_t port);
-    void setLayer(uint32_t layer);
-    void saveDatacenters();
     void setDelegate(ConnectiosManagerDelegate *connectiosManagerDelegate);
     ConnectionState getConnectionState();
     void setUserId(int32_t userId);

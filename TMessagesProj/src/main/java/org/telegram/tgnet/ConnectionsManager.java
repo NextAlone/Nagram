@@ -15,6 +15,7 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BaseController;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.EmuDetector;
 import org.telegram.messenger.FileLog;
@@ -26,7 +27,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.BuildConfig;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -51,7 +51,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 //import org.telegram.messenger.BuildConfig;
 
@@ -683,14 +682,6 @@ public class ConnectionsManager extends BaseController {
     public static native void native_bindRequestToGuid(int currentAccount, int requestToken, int guid);
 
     public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port);
-
-    public static native void native_setDatacenterAddress(int currentAccount, int datacenterId, String ipv4Address, String ipv6Address, int port);
-
-    public static native void native_setDatacenterPublicKey(int currentAccount, int datacenterId, String publicKey, long fingerprint);
-
-    public static native void native_saveDatacenters(int currentAccount);
-
-    public static native void native_setLayer(int currentAccount, int layer);
 
     public static native void native_moveToDatacenter(int currentAccount, int datacenterId);
 
