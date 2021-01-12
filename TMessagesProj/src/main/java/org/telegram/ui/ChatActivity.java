@@ -17271,7 +17271,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
 
-        if (shareKeyItem != null) {
+        if (currentChat != null && ChatObject.canSendMessages(currentChat) && shareKeyItem != null) {
             if (StrUtil.isBlank(NekoConfig.openPGPApp)) {
                 shareKeyItem.setVisibility(View.GONE);
             } else {
