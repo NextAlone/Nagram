@@ -25,7 +25,8 @@ cargo {
     profile = findProperty("CARGO_PROFILE")?.toString() ?: "release"
     extraCargoBuildArguments = listOf("--bin", "sslocal")
     featureSpec.noDefaultBut(arrayOf(
-            "single-threaded",
+            "stream-cipher",
+            "logging",
             "local-flow-stat",
             "local-dns"))
     exec = { spec, toolchain ->

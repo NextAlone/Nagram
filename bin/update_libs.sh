@@ -51,7 +51,7 @@ rm -rf TMessagesProj/libs/*.aar
   ./gradlew ssr-libev:assembleRelease &&
   cp ssr-libev/build/outputs/aar/* TMessagesProj/libs &&
   cd TMessagesProj/libs &&
-  go get -v golang.org/x/mobile/cmd/...
+  go get -v golang.org/x/mobile/cmd/... || exit 1
 
 v2rayCore="$(go env GOPATH)/src/v2ray.com/core"
 
