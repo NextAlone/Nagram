@@ -2783,15 +2783,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == setAvatarRow) {
                 } else if (position == versionRow) {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
-                    pressCount++;
-                    if (pressCount == 8) {
-                        NekoXConfig.developerModeEntrance = true;
-                    }
+                    if (BuildVars.LOGS_ENABLED) pressCount++;
+                    if (pressCount == 8) NekoXConfig.developerModeEntrance = true;
+
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
                     String message = cell.getTextView().getText().toString();
                     try {
                         if (!BuildVars.isMini) {
-                            message += "\n" + Libv2ray.checkVersionX();
+                            message += "\n" + Libv2ray.checkVersionX()
+                                    .replace("Lib", "AndroidLibV2rayLite")
+                                    .replace("Core", "v2ray-core");
                         }
                     } catch (Exception ignored) {
                     }
@@ -2806,7 +2807,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
                         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
-                        updateRowsIds();
+
+                        updateListAnimated();
                         return Unit.INSTANCE;
                     });
                     if (ExternalGcm.checkPlayServices()) {
@@ -2884,8 +2886,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
                                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
                                 sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
-                                updateRowsIds();
-                                listAdapter.notifyDataSetChanged();
+                                updateListAnimated();
                             } else if (which == 5) {
                                 SharedConfig.toggleInappCamera();
                             } else if (which == 6) {
@@ -3716,8 +3717,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                             if (changed) {
                                 updateOnlineCount();
-                                updateRowsIds();
-                                listAdapter.notifyDataSetChanged();
+                                updateListAnimated();
                             }
                         }
                     }
