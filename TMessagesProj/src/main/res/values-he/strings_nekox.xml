@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">פונקציה זו ניתנת רק למשתמשים מומחים, אם אינך יודע מה האפשרויות הבאות מייצגות, פשוט התעלם ממנה.</string>
     <string name="CustomBackendProduction">DataCenter הרשמי לייצור</string>
     <string name="CustomBackendTestDC">DataCenter רשמי לבדיקה</string>
-    <string name="CustomBackendIpv4">כתובת Ipv4</string>
-    <string name="CustomBackendIpv6">כתובת Ipv6</string>
-    <string name="CustomBackendLayer">שכבה</string>
-    <string name="CustomBackendPublicKey">מפתח ציבורי</string>
-    <string name="CustomBackendFingerprint">טביעת אצבע מפתח</string>
     <string name="AllowFlashCall">אפשר שיחת פלאש</string>
     <string name="ChangeTranslateProvider">החלף ספק</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">喵設置</string>
-    <string name="IPv6">優先嚐試使用 IPv6 連接</string>
     <string name="MessageMenu">消息菜單</string>
     <string name="HidePhone">隱藏咱的手機號</string>
     <string name="Hide">隱藏</string>
@@ -70,5 +69,4 @@
     <string name="HideKeyboardOnChatScroll">當滾動瀏覽對話時隱藏鍵盤</string>
     <string name="UserRestrictionsSendStickers2">傳送貼圖</string>
     <string name="UserRestrictionsSendGifs">發送動圖</string>
-    <string name="UseAvatarAsDrawerBackground">使用頭像作為程式集背景</string>
 </resources>

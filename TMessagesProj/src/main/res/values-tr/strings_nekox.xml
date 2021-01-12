@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Bu işlev yalnızca uzman kullanıcılar için sağlanır, aşağıdaki seçeneklerin neyi temsil ettiğini bilmiyorsanız, dikkate almayın.</string>
     <string name="CustomBackendProduction">Resmi Üretim Veri Merkezi</string>
     <string name="CustomBackendTestDC">Resmi Test Veri Merkezi</string>
-    <string name="CustomBackendIpv4">IPv4 Adresi</string>
-    <string name="CustomBackendIpv6">IPv6 Adresi</string>
-    <string name="CustomBackendLayer">Katman</string>
-    <string name="CustomBackendPublicKey">Genel Anahtar</string>
-    <string name="CustomBackendFingerprint">Anahtar Parmak İzi</string>
     <string name="AllowFlashCall">Hızlı aramaya izin ver</string>
     <string name="ChangeTranslateProvider">Sağlayıcıyı Değiştir</string>
     <string name="ProviderYandexTranslate">Yandex.Çeviri</string>

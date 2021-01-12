@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Chức năng này chỉ được cung cấp cho người dùng chuyên nghiệp, nếu bạn không biết các tùy chọn sau đại diện cho điều gì, hãy bỏ qua nó.</string>
     <string name="CustomBackendProduction">Trung tâm dữ liệu sản xuất chính thức</string>
     <string name="CustomBackendTestDC">Trung tâm dữ liệu thử nghiệm chính thức</string>
-    <string name="CustomBackendIpv4">Địa chỉ Ipv4</string>
-    <string name="CustomBackendIpv6">Địa chỉ Ipv6</string>
-    <string name="CustomBackendLayer">Lớp</string>
-    <string name="CustomBackendPublicKey">Khóa công khai</string>
-    <string name="CustomBackendFingerprint">Dấu vân tay chính</string>
     <string name="AllowFlashCall">Cho phép cuộc gọi nhanh</string>
     <string name="ChangeTranslateProvider">Thay đổi nhà cung cấp</string>
     <string name="ProviderYandexTranslate">Yandex.Dịch</string>
@@ -210,4 +205,6 @@
     <string name="UserRestrictionsSendGames">Gửi trò chơi</string>
     <string name="UserRestrictionsSendInline">Gửi qua Bot</string>
     <string name="AcceptSecretChat">Chấp nhận cuộc trò chuyện bí mật mới</string>
+    <string name="TabletMode">Chế độ máy tính bảng</string>
+    <string name="TabletModeDefault">Phụ thuộc vào thiết bị</string>
 </resources>

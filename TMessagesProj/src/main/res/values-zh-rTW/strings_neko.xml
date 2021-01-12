@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">喵設定</string>
-    <string name="IPv6">優先嘗試使用 IPv6 連線</string>
+    <string name="IPv6">通過 IPv6 連接</string>
     <string name="MessageMenu">訊息選單</string>
     <string name="HidePhone">隱藏您的手機號碼</string>
     <string name="Hide">隱藏</string>
@@ -72,7 +72,6 @@
     <string name="HideKeyboardOnChatScroll">當滾動瀏覽對話時隱藏鍵盤</string>
     <string name="UserRestrictionsSendStickers2">傳送貼紙</string>
     <string name="UserRestrictionsSendGifs">傳送 GIF</string>
-    <string name="UseAvatarAsDrawerBackground">使用頭像作為抽屜背景</string>
     <string name="ShowTabsOnForward">在轉發頁面顯示資料夾</string>
     <string name="CheckAllAdministrated">新增管理的群組與頻道</string>
     <string name="RearVideoMessages">影片留言預設使用後置攝像頭</string>
@@ -92,8 +91,6 @@
     <string name="OfficialChannel">官方頻道</string>
     <string name="About">關於</string>
     <string name="IgnoreBlockedAbout">您將不會再看到被遮蔽的使用者在群組中的訊息。</string>
-    <string name="Donate">捐贈</string>
-    <string name="DonateAbout">支援我們的開發。</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github 上的原始碼</string>
     <string name="ResetStickerSize">重置貼紙大小</string>
@@ -101,10 +98,12 @@
     <string name="DisableAppBarShadow">禁用標題欄陰影</string>
     <string name="BetaWarning">這是由 **Telegram** 實現的**測試版**特性。</string>
     <string name="MediaPreview">對話列表中的媒體預覽</string>
-    <string name="ProviderYandex">Yandex 翻譯</string>
     <string name="AutoPauseVideo">自動暫停影片</string>
     <string name="AutoPauseVideoAbout">當鎖定螢幕/切換到後臺時。</string>
     <string name="DisableProximityEvents">禁用距離感測器事件</string>
     <string name="IncreaseVoiceMessageQuality">提高語音訊息質量</string>
     <string name="SelectBetween">選擇之間的</string>
+    <string name="AvatarAsBackground">使用頭像作為背景</string>
+    <string name="BlurAvatarBackground">模糊頭像</string>
+    <string name="DarkenAvatarBackground">暗色頭像</string>
 </resources>

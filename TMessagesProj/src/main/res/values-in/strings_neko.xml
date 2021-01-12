@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Pengaturan Neko</string>
-    <string name="IPv6">Coba koneksikan melalui IPv6</string>
     <string name="MessageMenu">Menu Perpesanan</string>
     <string name="HidePhone">Sembunyikan nomor telepon saya</string>
     <string name="Hide">Sembunyikan</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Sembunyikan keyboard saat menggulir obrolan</string>
     <string name="UserRestrictionsSendStickers2">Kirim Stiker</string>
     <string name="UserRestrictionsSendGifs">Kirim GIF (gambar bergerak)</string>
-    <string name="UseAvatarAsDrawerBackground">Gunakan avatar sebagai latar belakang</string>
     <string name="ShowTabsOnForward">Tampilkan tab saat meneruskan pesan</string>
     <string name="CheckAllAdministrated">Tambahkan Pengelola</string>
     <string name="RearVideoMessages">Pakai kamera belakang ketika mengirim pesan video</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Kanal resmi</string>
     <string name="About">Tentang</string>
     <string name="IgnoreBlockedAbout">Anda tidak akan lagi melihat pesan dari pengguna yang diblokir dalam grup.</string>
-    <string name="Donate">Donasi</string>
-    <string name="DonateAbout">Dukung perkembangan kami.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Kode sumber pada Github.com</string>
     <string name="ResetStickerSize">Atur ulang ukuran stiker</string>
@@ -101,8 +97,8 @@
     <string name="DisableAppBarShadow">Matikan bayangan pada judul bar</string>
     <string name="BetaWarning">Ini adalah fitur **beta** yang sedang diuji oleh **Telegram**.</string>
     <string name="MediaPreview">Pratinjau media pada daftar obrolan</string>
-    <string name="ProviderYandex">Yandex</string>
     <string name="AutoPauseVideo">Jeda otomatis video</string>
     <string name="AutoPauseVideoAbout">Saat mengunci layar / beralih ke latar belakang.</string>
     <string name="DisableProximityEvents">Nonaktifkan acara kedekatan</string>
+    <string name="IncreaseVoiceMessageQuality">Tingkatkan kualitas pesan suara</string>
 </resources>

@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Эта функция предназначена только для опытных пользователей, если вы не знаете, зачем это нужно - не используйте её.</string>
     <string name="CustomBackendProduction">Основной DC</string>
     <string name="CustomBackendTestDC">Тестовый DC</string>
-    <string name="CustomBackendIpv4">IPv4-адрес</string>
-    <string name="CustomBackendIpv6">IPv6-адрес</string>
-    <string name="CustomBackendLayer">Слой</string>
-    <string name="CustomBackendPublicKey">Открытый ключ</string>
-    <string name="CustomBackendFingerprint">Отпечаток ключа</string>
     <string name="AllowFlashCall">Мигать фонариком при вызове</string>
     <string name="ChangeTranslateProvider">Изменить движок перевода</string>
     <string name="ProviderYandexTranslate">Яндекс.Переводчик</string>

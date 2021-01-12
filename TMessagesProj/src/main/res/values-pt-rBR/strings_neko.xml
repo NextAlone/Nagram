@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Configurações Neko</string>
-    <string name="IPv6">Tentar conexão via IPv6</string>
     <string name="MessageMenu">Menu de mensagens</string>
     <string name="HidePhone">Ocultar meu número de telefone</string>
     <string name="Hide">Ocultar</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Ocultar teclado na rolagem do chat</string>
     <string name="UserRestrictionsSendStickers2">Enviar Stickers</string>
     <string name="UserRestrictionsSendGifs">Enviar GIFs</string>
-    <string name="UseAvatarAsDrawerBackground">Usar minha foto de perfil como fundo do menu lateral</string>
     <string name="ShowTabsOnForward">Mostrar pastas ao encaminhar</string>
     <string name="CheckAllAdministrated">Adicionar administrado</string>
     <string name="RearVideoMessages">Câmera traseira em mensagens de vídeo</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Canal oficial</string>
     <string name="About">Sobre</string>
     <string name="IgnoreBlockedAbout">Você não verá mais mensagens de usuários bloqueados em grupos.</string>
-    <string name="Donate">Doar</string>
-    <string name="DonateAbout">Apoie o nosso desenvolvimento.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Código fonte no Github</string>
     <string name="ResetStickerSize">Redefinir tamanho do sticker</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Desativar sombra da barra de título</string>
     <string name="BetaWarning">Esse é um recurso **beta** implementado pelo **Telegram**.</string>
     <string name="MediaPreview">Pré-visualizar mídia na lista de diálogo</string>
-    <string name="ProviderYandex">Yandex Tradutor</string>
     <string name="AutoPauseVideo">Pausar vídeo automaticamente</string>
     <string name="AutoPauseVideoAbout">Quando bloquear a tela/Alternar para segundo plano</string>
     <string name="DisableProximityEvents">Desativar eventos de proximidade</string>

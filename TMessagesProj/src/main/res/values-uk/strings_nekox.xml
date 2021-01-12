@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Ця функція надається лише для користувачів експертів, якщо ви не знаєте, що представляють такі параметри, просто проігноруйте їх.</string>
     <string name="CustomBackendProduction">Офіційний звіт про виробництво</string>
     <string name="CustomBackendTestDC">Офіційний тестовий центр даних</string>
-    <string name="CustomBackendIpv4">Ipv4 адреса</string>
-    <string name="CustomBackendIpv6">Ipv6 Адреса</string>
-    <string name="CustomBackendLayer">Шар</string>
-    <string name="CustomBackendPublicKey">Публічний ключ</string>
-    <string name="CustomBackendFingerprint">Ідентифікатор</string>
     <string name="AllowFlashCall">Дозволити спалах виклику</string>
     <string name="ChangeTranslateProvider">Змінити оператора</string>
     <string name="ProviderYandexTranslate">Яндекс.Перекладач</string>

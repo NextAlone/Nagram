@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko Ayarları</string>
-    <string name="IPv6">IPv6 Aracılığıyla Bağlanmayı Dene</string>
     <string name="MessageMenu">Mesaj Menüsü Ögeleri</string>
     <string name="HidePhone">Telefon Numaramı Gizle</string>
     <string name="Hide">Gizle</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Sohbeti Kaydırırken Klavyeyi Gizle</string>
     <string name="UserRestrictionsSendStickers2">Çıkartma Gönder</string>
     <string name="UserRestrictionsSendGifs">GIF Gönder</string>
-    <string name="UseAvatarAsDrawerBackground">Profil Resmini Çekmece Arkaplanı Olarak Kullan</string>
     <string name="ShowTabsOnForward">Mesaj İletme Kısmında Klasörleri Göster</string>
     <string name="CheckAllAdministrated">Yönetilen grup ve kanalları ekle</string>
     <string name="RearVideoMessages">Görüntülü Mesajlarda Arka Kamerayı Kullan</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Resmi Telegram Kanalı</string>
     <string name="About">Hakkında</string>
     <string name="IgnoreBlockedAbout">Artık gruplarda, engellediğiniz kullanıcılardan gelen mesajları görmeyeceksiniz.</string>
-    <string name="Donate">Bağış yap</string>
-    <string name="DonateAbout">Gelişimimizi destekleyin.</string>
     <string name="GooglePlay">Play Store Bağlantısı</string>
     <string name="SourceCode">Kaynak Kodunu GitHub\'da Görüntüleyin</string>
     <string name="ResetStickerSize">Çıkartma Boyutunu Sıfırla</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Başlık Çubuğu Gölgesini Devre Dışı Bırak</string>
     <string name="BetaWarning">Bu, **Telegram** tarafından uygulanan **beta** bir özelliktir.</string>
     <string name="MediaPreview">Sohbet Listesinde Medya Önizlemesi</string>
-    <string name="ProviderYandex">Yandex.Çeviri</string>
     <string name="AutoPauseVideo">Videoyu Otomatik Duraklat</string>
     <string name="AutoPauseVideoAbout">Kilit ekranına veya arka plana geçildiğinde.</string>
     <string name="DisableProximityEvents">Yakınlık Olaylarını Devre Dışı Bırak</string>

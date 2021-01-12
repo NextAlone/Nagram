@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">이 기능은 전문 사용자 에게만 제공되며, 아래 옵션의 기능을 모르면 무시하십시오.</string>
     <string name="CustomBackendProduction">공식 생산 데이터 센터</string>
     <string name="CustomBackendTestDC">공식 테스트 데이터 센터</string>
-    <string name="CustomBackendIpv4">IPv4 주소</string>
-    <string name="CustomBackendIpv6">IPv6 주소</string>
-    <string name="CustomBackendLayer">레이어</string>
-    <string name="CustomBackendPublicKey">공개 키</string>
-    <string name="CustomBackendFingerprint">키 지문</string>
     <string name="AllowFlashCall">플래시 통화 허용</string>
     <string name="ChangeTranslateProvider">제공자 변경</string>
     <string name="ProviderYandexTranslate">Yandex. 번역</string>

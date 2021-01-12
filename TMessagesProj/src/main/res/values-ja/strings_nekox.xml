@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">この機能はエキスパートユーザーにのみ提供されます。次のオプションの意味がわからない場合は無視してください。</string>
     <string name="CustomBackendProduction">公式の本番データセンター</string>
     <string name="CustomBackendTestDC">公式のテストデータセンター</string>
-    <string name="CustomBackendIpv4">IPv4アドレス</string>
-    <string name="CustomBackendIpv6">IPv6アドレス</string>
-    <string name="CustomBackendLayer">レイヤー</string>
-    <string name="CustomBackendPublicKey">公開鍵</string>
-    <string name="CustomBackendFingerprint">鍵のフィンガープリント</string>
     <string name="AllowFlashCall">フラッシュコールを許可</string>
     <string name="ChangeTranslateProvider">プロバイダを変更</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

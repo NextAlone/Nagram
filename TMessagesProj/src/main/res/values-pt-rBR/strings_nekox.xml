@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Essa função é fornecida apenas para usuários experientes; se você não souber o que as elas representam, apenas ignore.</string>
     <string name="CustomBackendProduction">Data Center de Produção Oficial</string>
     <string name="CustomBackendTestDC">DataCenter Oficial de Teste</string>
-    <string name="CustomBackendIpv4">Endereço Ipv4</string>
-    <string name="CustomBackendIpv6">Endereço Ipv6</string>
-    <string name="CustomBackendLayer">Camada</string>
-    <string name="CustomBackendPublicKey">Chave pública</string>
-    <string name="CustomBackendFingerprint">Chave Impressão digital</string>
     <string name="AllowFlashCall">Permitir chamada rápida</string>
     <string name="ChangeTranslateProvider">Alterar Provedor</string>
     <string name="ProviderYandexTranslate">Yandex.Tradutor</string>

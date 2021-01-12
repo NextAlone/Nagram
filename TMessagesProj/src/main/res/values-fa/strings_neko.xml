@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">تنظیمات Neko</string>
-    <string name="IPv6">تلاش برای اتصال از طریق IPv6</string>
     <string name="MessageMenu">منوی پیام</string>
     <string name="HidePhone">شماره تلفن من را مخفی کن</string>
     <string name="Hide">پنهان کردن</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">مخفی کردن صفحه کلید هنگام پیمایش گفتگو</string>
     <string name="UserRestrictionsSendStickers2">ارسال استیکر ها</string>
     <string name="UserRestrictionsSendGifs">ارسال گیف ها</string>
-    <string name="UseAvatarAsDrawerBackground">استفاده از عکس پروفایل به عنوان پس زمینه منوی کناری</string>
     <string name="ShowTabsOnForward">نمایش پوشه ها هنگام فروارد</string>
     <string name="CheckAllAdministrated">افزودن مدیریت</string>
     <string name="RearVideoMessages">دوربین پشت در پیام های ویدیویی</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">کانال رسمی</string>
     <string name="About">درباره ما</string>
     <string name="IgnoreBlockedAbout">دیگر پیامهای کاربران مسدود شده را در گروه مشاهده نخواهید کرد.</string>
-    <string name="Donate">حمایت</string>
-    <string name="DonateAbout">از توسعه ما حمایت کنید.</string>
     <string name="GooglePlay">گوگل پلی</string>
     <string name="SourceCode">کد منبع در گیت‌هاب</string>
     <string name="ResetStickerSize">تنظیم مجدد اندازه استیکر</string>
@@ -101,9 +97,9 @@
     <string name="DisableAppBarShadow">غیرفعال کردن سایه نوار عنوان</string>
     <string name="BetaWarning">این یک ویژگی ** آزمایشی ** است که توسط ** تلگرام ** پیاده سازی شده است.</string>
     <string name="MediaPreview">پیش نمایش رسانه در لیست گفتگوها</string>
-    <string name="ProviderYandex">مترجم یاندکس</string>
     <string name="AutoPauseVideo">مکث خودکار ویدئو</string>
     <string name="AutoPauseVideoAbout">هنگام قفل صفحه/جابجایی به پس زمینه.</string>
     <string name="DisableProximityEvents">غیرفعال‌سازی سنسور مجاورتی</string>
     <string name="IncreaseVoiceMessageQuality">افزایش کیفیت پیام های صوتی</string>
+    <string name="SelectBetween">انتخاب بین</string>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Impostazioni Neko</string>
-    <string name="IPv6">Prova a connetterti via IPv6</string>
     <string name="MessageMenu">Menu messaggio</string>
     <string name="HidePhone">Nascondi il mio numero</string>
     <string name="Hide">Nascondi</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Nascondi la tastiera quando scorri la chat</string>
     <string name="UserRestrictionsSendStickers2">Inviare Sticker</string>
     <string name="UserRestrictionsSendGifs">Inviare GIF</string>
-    <string name="UseAvatarAsDrawerBackground">Utilizza l\'avatar come sfondo del drawer</string>
     <string name="ShowTabsOnForward">Mostra le tab durante l\'inoltro</string>
     <string name="CheckAllAdministrated">Aggiungi amministratore</string>
     <string name="RearVideoMessages">Usa fotocamera posteriore nei Video Messaggi</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Canale ufficiale</string>
     <string name="About">Informazioni</string>
     <string name="IgnoreBlockedAbout">Non vedrai più i messaggi degli utenti bloccati nei gruppi.</string>
-    <string name="Donate">Dona</string>
-    <string name="DonateAbout">Supporta lo sviluppo.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Codice sorgente su Github</string>
     <string name="ResetStickerSize">Resetta dimensione sticker</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Disabilita l\'ombra della barra del titolo</string>
     <string name="BetaWarning">Questa è una funzione **beta** implementata da **Telegram**.</string>
     <string name="MediaPreview">Anteprima media nella lista chat</string>
-    <string name="ProviderYandex">Traduci Yandex</string>
     <string name="AutoPauseVideo">Pausa video automatica</string>
     <string name="AutoPauseVideoAbout">Quando in schermata di blocco/si passa allo sfondo.</string>
     <string name="DisableProximityEvents">Disabilita gli eventi di prossimità</string>

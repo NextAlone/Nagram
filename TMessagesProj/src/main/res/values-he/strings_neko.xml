@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">הגדרות Neko</string>
-    <string name="IPv6">נסה להתחבר דרך IPv6</string>
     <string name="MessageMenu">תפריט הודעה</string>
     <string name="HidePhone">הסתר את מספר הטלפון שלי</string>
     <string name="Hide">להתחבא</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">הסתר את המקלדת במגילת הצ\'אט</string>
     <string name="UserRestrictionsSendStickers2">שלח מדבקות</string>
     <string name="UserRestrictionsSendGifs">שלח GIFs</string>
-    <string name="UseAvatarAsDrawerBackground">השתמש באווטאר כרקע מגירה</string>
     <string name="ShowTabsOnForward">הצג כרטיסיות בהעברה</string>
     <string name="CheckAllAdministrated">הוסף מנוהל</string>
     <string name="RearVideoMessages">מצלמה אחורית בהודעות וידאו</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">ערוץ רשמי</string>
     <string name="About">על אודות</string>
     <string name="IgnoreBlockedAbout">לא תראה עוד הודעות ממשתמשים חסומים בקבוצות.</string>
-    <string name="Donate">לִתְרוֹם</string>
-    <string name="DonateAbout">תמכו בפיתוח שלנו.</string>
     <string name="GooglePlay">גוגל פליי</string>
     <string name="SourceCode">קוד המקור ב- Github</string>
     <string name="ResetStickerSize">אפס גודל מדבקה</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">השבת את צל סרגל הכותרת</string>
     <string name="BetaWarning">זוהי תכונה ** בטא ** המיושמת על ידי ** טלגרם **.</string>
     <string name="MediaPreview">תצוגה מקדימה של מדיה ברשימת הדיאלוג</string>
-    <string name="ProviderYandex">Yandex תרגם</string>
     <string name="AutoPauseVideo">השהה וידאו אוטומטית</string>
     <string name="AutoPauseVideoAbout">כאשר נעילת מסך / מעבר לרקע.</string>
     <string name="DisableProximityEvents">השבת אירועי קרבה</string>

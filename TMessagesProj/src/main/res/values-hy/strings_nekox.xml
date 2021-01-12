@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Այս գործառույթը տրամադրվում է միայն փորձառու օգտվողների համար, եթե չգիտեք, թե հետևյալ ընտրանքներն ինչ են ներկայացնում, պարզապես անտեսեք այն.</string>
     <string name="CustomBackendProduction">Արտադրության պաշտոնական տվյալների կենտրոն</string>
     <string name="CustomBackendTestDC">Պաշտոնական թեստային տվյալների կենտրոն</string>
-    <string name="CustomBackendIpv4">Ipv4 հասցե</string>
-    <string name="CustomBackendIpv6">Ipv6 հասցե</string>
-    <string name="CustomBackendLayer">Շերտը</string>
-    <string name="CustomBackendPublicKey">Հանրային բանալին</string>
-    <string name="CustomBackendFingerprint">Հիմնական մատնահետք</string>
     <string name="AllowFlashCall">Թույլատրել ֆլեշ զանգը</string>
     <string name="ChangeTranslateProvider">Փոխել մատակարարը</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

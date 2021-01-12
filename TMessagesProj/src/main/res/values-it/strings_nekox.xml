@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Questa funzione è disponibile solo per utenti esperti, se non sai cosa rappresentano le seguenti opzioni, ignorala.</string>
     <string name="CustomBackendProduction">DataCenter ufficiale di produzione</string>
     <string name="CustomBackendTestDC">DataCenter test ufficiale</string>
-    <string name="CustomBackendIpv4">Indirizzo Ipv4</string>
-    <string name="CustomBackendIpv6">Indirizzo Ipv6</string>
-    <string name="CustomBackendLayer">Livello</string>
-    <string name="CustomBackendPublicKey">Chiave Pubblica</string>
-    <string name="CustomBackendFingerprint">Impronta Digitale Chiave</string>
     <string name="AllowFlashCall">Consenti chiamata flash</string>
     <string name="ChangeTranslateProvider">Cambia Provider</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

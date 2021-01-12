@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">네코그램 설정</string>
-    <string name="IPv6">IPv6 를 통한 접속</string>
     <string name="MessageMenu">메세지 메뉴</string>
     <string name="HidePhone">내 번호 숨기기</string>
     <string name="Hide">숨기기</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">대화창 스크롤시 키보드 숨기기</string>
     <string name="UserRestrictionsSendStickers2">스티커 보내기</string>
     <string name="UserRestrictionsSendGifs">GIF 보내기</string>
-    <string name="UseAvatarAsDrawerBackground">아바타를 서랍 배경으로 사용</string>
     <string name="ShowTabsOnForward">전달에서 탭 표시</string>
     <string name="CheckAllAdministrated">관리 추가</string>
     <string name="RearVideoMessages">비디오 메세지에 후면 카메라 사용</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">공식 채널</string>
     <string name="About">대하여</string>
     <string name="IgnoreBlockedAbout">그룹에서 차단된 사용자의 메시지를 더 이상 볼 수 없습니다.</string>
-    <string name="Donate">기부하기</string>
-    <string name="DonateAbout">개발자 지원하기</string>
     <string name="GooglePlay">구글플레이</string>
     <string name="SourceCode">Github 의 소스코드</string>
     <string name="ResetStickerSize">스티커 사이즈 초기화</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">제목 표시줄 그림자 비활성화</string>
     <string name="BetaWarning">\"텔레그램\"의 \"베타\" 기능 입니다.</string>
     <string name="MediaPreview">대화목록 에서 미디어 미리보기</string>
-    <string name="ProviderYandex">얀덱스 번역</string>
     <string name="AutoPauseVideo">비디오 자동 일시정지</string>
     <string name="AutoPauseVideoAbout">락스크린이 백그라운드로 변경될때</string>
     <string name="DisableProximityEvents">근접 이벤트 비활성화</string>

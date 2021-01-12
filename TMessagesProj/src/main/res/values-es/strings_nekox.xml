@@ -28,11 +28,6 @@
     <string name="CustomBackendNotice">Esta función solo se proporciona para usuarios expertos, si no sabe lo que representan las siguientes opciones, simplemente ignórela.</string>
     <string name="CustomBackendProduction">Centro de datos de producción oficial</string>
     <string name="CustomBackendTestDC">Centro Oficial de pruebas</string>
-    <string name="CustomBackendIpv4">Dirección Ipv4</string>
-    <string name="CustomBackendIpv6">Dirección Ipv6</string>
-    <string name="CustomBackendLayer">Capa</string>
-    <string name="CustomBackendPublicKey">Clave pública</string>
-    <string name="CustomBackendFingerprint">Huella digital</string>
     <string name="AllowFlashCall">Permitir llamada flash</string>
     <string name="ChangeTranslateProvider">Cambiar proveedor</string>
     <string name="ProviderYandexTranslate">Yandex.Traducir</string>

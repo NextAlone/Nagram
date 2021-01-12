@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko Beállítás</string>
-    <string name="IPv6">Próbálja meg az IPv6-on keresztül csatlakozni</string>
     <string name="MessageMenu">Üzenet menü</string>
     <string name="HidePhone">Telefonszámom elrejtése</string>
     <string name="Hide">Elrejt</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Billentyűzet elrejtése a csevegés görgetésén</string>
     <string name="UserRestrictionsSendStickers2">Matricák küldése</string>
     <string name="UserRestrictionsSendGifs">Küldjön GIF-eket</string>
-    <string name="UseAvatarAsDrawerBackground">Használja az avatart fiók háttereként</string>
     <string name="ShowTabsOnForward">Lapok megjelenítése előre</string>
     <string name="CheckAllAdministrated">Adja hozzá az adminisztrátort</string>
     <string name="RearVideoMessages">Hátsó kamera a Video Messages alkalmazásban</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Hivatalos csatorna</string>
     <string name="About">Rólunk</string>
     <string name="IgnoreBlockedAbout">A továbbiakban nem jelennek meg csoportokban letiltott felhasználóktól érkező üzenetek.</string>
-    <string name="Donate">Adományoz</string>
-    <string name="DonateAbout">Támogassa fejlődésünket.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Forráskód a Githubon</string>
     <string name="ResetStickerSize">A matrica méretének visszaállítása</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Tiltsa le a címsor árnyékát</string>
     <string name="BetaWarning">Ez egy **béta** funkció, amelyet a **Telegram** hajtott végre.</string>
     <string name="MediaPreview">Média előnézet a párbeszédpanelen</string>
-    <string name="ProviderYandex">Yandex Fordítás</string>
     <string name="AutoPauseVideo">Videó automatikus szüneteltetése</string>
     <string name="AutoPauseVideoAbout">Amikor lezárja a képernyőt / váltson háttérre.</string>
     <string name="DisableProximityEvents">Tiltsa le a közelségi eseményeket</string>

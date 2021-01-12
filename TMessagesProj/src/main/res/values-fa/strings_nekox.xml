@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">این عملکرد فقط برای کاربران حرفه ‌ای ارائه شده است، اگر نمی دانید گزینه های زیر چه کاری انجام می دهد، لطفا دستکاری نکنید.</string>
     <string name="CustomBackendProduction">دیتاسنتر رسمی</string>
     <string name="CustomBackendTestDC">دیتاسنتر رسمی آزمایشی</string>
-    <string name="CustomBackendIpv4">آدرس Ipv4</string>
-    <string name="CustomBackendIpv6">آدرس Ipv6</string>
-    <string name="CustomBackendLayer">لایه</string>
-    <string name="CustomBackendPublicKey">کلید عمومی</string>
-    <string name="CustomBackendFingerprint">کلید اثر انگشت</string>
     <string name="AllowFlashCall">تماس flash call مجاز شود</string>
     <string name="ChangeTranslateProvider">تغییر ارائه دهنده خدمات</string>
     <string name="ProviderYandexTranslate">ترجمه با موتور \"یاندکس\"</string>
@@ -210,4 +205,6 @@
     <string name="UserRestrictionsSendGames">ارسال بازی ها</string>
     <string name="UserRestrictionsSendInline">ارسال از طریق ربات های اینلاین</string>
     <string name="AcceptSecretChat">گفتگوی محرمانه جدید را بپذیر</string>
+    <string name="TabletMode">حالت تبلت</string>
+    <string name="TabletModeDefault">بر اساس دستگاه</string>
 </resources>

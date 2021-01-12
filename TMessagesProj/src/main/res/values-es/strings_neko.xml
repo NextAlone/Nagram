@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Configuraciones de Neko</string>
-    <string name="IPv6">Intentar conectarse a través de IPv6</string>
     <string name="MessageMenu">Menú contextual</string>
     <string name="HidePhone">Ocultar mi número de teléfono</string>
     <string name="Hide">Ocultar</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Ocultar teclado al desplazar el chat</string>
     <string name="UserRestrictionsSendStickers2">Enviar Stickers</string>
     <string name="UserRestrictionsSendGifs">Enviar GIFs</string>
-    <string name="UseAvatarAsDrawerBackground">Avatar de fondo en menú lateral</string>
     <string name="ShowTabsOnForward">Mostrar carpetas al reenviar</string>
     <string name="CheckAllAdministrated">Añadir chats que administras</string>
     <string name="RearVideoMessages">Usar cámara trasera en Mensajes de Vídeo</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Canal oficial</string>
     <string name="About">Acerca de</string>
     <string name="IgnoreBlockedAbout">Ya no verás mensajes de usuarios bloqueados en grupos.</string>
-    <string name="Donate">Donar</string>
-    <string name="DonateAbout">Apoya nuestro desarrollo.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Código fuente en Github</string>
     <string name="ResetStickerSize">Restablecer tamaño del sticker</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Deshabilitar sombra de la barra de título</string>
     <string name="BetaWarning">Esta es una función **beta** implementada por **Telegram**.</string>
     <string name="MediaPreview">Vista previa de multimedia en la lista de diálogos</string>
-    <string name="ProviderYandex">Traducción de Yandex</string>
     <string name="AutoPauseVideo">Pausar video automáticamente</string>
     <string name="AutoPauseVideoAbout">Cuando se bloquea la pantalla o se cambia al fondo.</string>
     <string name="DisableProximityEvents">Deshabilitar eventos de proximidad</string>

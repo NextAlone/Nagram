@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko-Einstellungen</string>
-    <string name="IPv6">Verbindung über IPv6 versuchen</string>
     <string name="MessageMenu">Nachrichtenmenü</string>
     <string name="HidePhone">Meine Telefonnummer ausblenden</string>
     <string name="Hide">Verstecken</string>
@@ -70,7 +69,6 @@
     <string name="HideKeyboardOnChatScroll">Tastatur bei Chat-Scrollen ausblenden</string>
     <string name="UserRestrictionsSendStickers2">Sticker senden</string>
     <string name="UserRestrictionsSendGifs">GIFs senden</string>
-    <string name="UseAvatarAsDrawerBackground">Avatar als Hintergrund verwenden</string>
     <string name="ShowTabsOnForward">Tabs bei Weiterleitung anzeigen</string>
     <string name="CheckAllAdministrated">Verwaltet hinzufügen</string>
     <string name="RearVideoMessages">Rückkamera in Videonachrichten</string>
@@ -90,8 +88,6 @@
     <string name="OfficialChannel">Offizieller Kanal</string>
     <string name="About">Über</string>
     <string name="IgnoreBlockedAbout">Nachrichten von blockierten Benutzern werden in Gruppen nicht mehr angezeigt.</string>
-    <string name="Donate">Spenden</string>
-    <string name="DonateAbout">Unterstützen Sie unsere Entwicklung.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Quellcode auf Github</string>
     <string name="ResetStickerSize">Aufklebergröße zurücksetzen</string>
@@ -99,5 +95,4 @@
     <string name="DisableAppBarShadow">Schatten der Titelleiste deaktivieren</string>
     <string name="BetaWarning">Dies ist eine **beta** Funktion, die von **Telegram** implementiert wurde.</string>
     <string name="MediaPreview">Medienvorschau in der Dialogliste</string>
-    <string name="ProviderYandex">Yandex übersetzen</string>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko կայանքներ</string>
-    <string name="IPv6">Փորձեք միանալ IPv6- ի միջոցով</string>
     <string name="MessageMenu">Հաղորդագրության ընտրացանկ</string>
     <string name="HidePhone">Թաքցրեք իմ հեռախոսահամարը</string>
     <string name="Hide">Թաքցնել</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Թաքցնել ստեղնաշարը զրույցի ոլորման վրա</string>
     <string name="UserRestrictionsSendStickers2">Ուղարկել պիտակները</string>
     <string name="UserRestrictionsSendGifs">Ուղարկել GIF- ներ</string>
-    <string name="UseAvatarAsDrawerBackground">Օգտագործեք ավատարը որպես գզրոցի ֆոն</string>
     <string name="ShowTabsOnForward">Tabույց տալ ներդիրները առաջ</string>
     <string name="CheckAllAdministrated">Ավելացնել կառավարվող</string>
     <string name="RearVideoMessages">Հետևի տեսախցիկ ՝ Տեսահաղորդագրություններում</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Պաշտոնական ալիք</string>
     <string name="About">Մասին</string>
     <string name="IgnoreBlockedAbout">Դուք այլևս չեք տեսնի խմբերի արգելափակված օգտվողների հաղորդագրությունները:</string>
-    <string name="Donate">Նվիրաբերել</string>
-    <string name="DonateAbout">Աջակցեք մեր զարգացմանը:</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Աղբյուրի կոդը Github- ում</string>
     <string name="ResetStickerSize">Վերակայել կպչուկի չափը</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Անջատել վերնագրի տողի ստվերը</string>
     <string name="BetaWarning">Սա ** բետա ** հատկություն է, որն իրականացվել է ** Telegram ** - ի կողմից:</string>
     <string name="MediaPreview">Մեդիայի նախադիտում երկխոսության ցուցակում</string>
-    <string name="ProviderYandex">Yandex Translate</string>
     <string name="AutoPauseVideo">Ավտոմատ դադար տեսանյութը</string>
     <string name="AutoPauseVideoAbout">Երբ կողպեք էկրանը / անցնել ֆոնին:</string>
     <string name="DisableProximityEvents">Անջատեք հարևանության իրադարձությունները</string>

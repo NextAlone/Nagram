@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Ez a funkció csak szakértő felhasználók számára biztosított, ha nem tudja, mit jelentenek a következő opciók, akkor hagyja figyelmen kívül.</string>
     <string name="CustomBackendProduction">Hivatalos gyártási adatközpont</string>
     <string name="CustomBackendTestDC">Hivatalos teszt Adatközpont</string>
-    <string name="CustomBackendIpv4">Ipv4 cím</string>
-    <string name="CustomBackendIpv6">Ipv6 cím</string>
-    <string name="CustomBackendLayer">Réteg</string>
-    <string name="CustomBackendPublicKey">Nyilvános kulcs</string>
-    <string name="CustomBackendFingerprint">Kulcs ujjlenyomat</string>
     <string name="AllowFlashCall">Villám-hívás engedélyezése</string>
     <string name="ChangeTranslateProvider">Szolgáltató módosítása</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

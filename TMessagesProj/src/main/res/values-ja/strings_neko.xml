@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">喵設定</string>
-    <string name="IPv6">IPv6 で接続することを優先する</string>
     <string name="MessageMenu">メッセージメニュー</string>
     <string name="HidePhone">あなたの携帯電話番号を隠す</string>
     <string name="Hide">隠す</string>
@@ -70,7 +69,6 @@
     <string name="HideKeyboardOnChatScroll">チャットスクロールでキーボードを非表示にする</string>
     <string name="UserRestrictionsSendStickers2">ステッカーの送信</string>
     <string name="UserRestrictionsSendGifs">GIFの送信</string>
-    <string name="UseAvatarAsDrawerBackground">アバターをドロワーの背景として使う</string>
     <string name="ShowTabsOnForward">タブを前方に表示</string>
     <string name="CheckAllAdministrated">管理されたものを追加</string>
     <string name="RearVideoMessages">ビデオメッセージでリアカメラを使用する</string>
@@ -90,8 +88,6 @@
     <string name="OfficialChannel">公式チャンネル</string>
     <string name="About">約</string>
     <string name="IgnoreBlockedAbout">ブロックされたユーザーからのメッセージがグループに表示されなくなります。</string>
-    <string name="Donate">寄付</string>
-    <string name="DonateAbout">私たちの開発をサポートしてください。</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github のソース コード</string>
     <string name="ResetStickerSize">ステッカーのサイズをリセット</string>
@@ -99,5 +95,4 @@
     <string name="DisableAppBarShadow">タイトルバーの影を無効にする</string>
     <string name="BetaWarning">これは**Telegram**によって実装された**ベータ**機能です。</string>
     <string name="MediaPreview">ダイアログリストのメディアプレビュー</string>
-    <string name="ProviderYandex">Yandex 翻訳</string>
 </resources>

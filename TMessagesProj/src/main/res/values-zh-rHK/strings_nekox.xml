@@ -28,11 +28,6 @@
     <string name="CustomBackendNotice">此功能僅提供給專業用戶，如果您不知道以下選項代表什麼，請忽略它。</string>
     <string name="CustomBackendProduction">官方生產數據中心</string>
     <string name="CustomBackendTestDC">官方測試數據中心</string>
-    <string name="CustomBackendIpv4">ipv4地址</string>
-    <string name="CustomBackendIpv6">ipv6地址</string>
-    <string name="CustomBackendLayer">層</string>
-    <string name="CustomBackendPublicKey">公鑰</string>
-    <string name="CustomBackendFingerprint">關鍵指紋</string>
     <string name="AllowFlashCall">允許通話</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

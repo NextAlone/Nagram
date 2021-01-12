@@ -28,11 +28,6 @@
     <string name="CustomBackendNotice">Diese Funktion richtet sich nur an erfahrene Benutzer. Wenn Du nicht weißt, was die folgenden Optionen bedeuten, ignoriere sie einfach.</string>
     <string name="CustomBackendProduction">Offizielle Produktionsdatenbank</string>
     <string name="CustomBackendTestDC">Offizielle Testdatenbank</string>
-    <string name="CustomBackendIpv4">IPv4-Adresse</string>
-    <string name="CustomBackendIpv6">IPv6-Adresse</string>
-    <string name="CustomBackendLayer">Ebene</string>
-    <string name="CustomBackendPublicKey">Öffentlicher Schlüssel</string>
-    <string name="CustomBackendFingerprint">Schlüsselfingerabdruck</string>
     <string name="AllowFlashCall">Flash-Anruf zulassen</string>
     <string name="ChangeTranslateProvider">Anbieter wechseln</string>
     <string name="ProviderYandexTranslate">Yandex.Übersetzen</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko Ayarları</string>
-    <string name="IPv6">IPv6 ilə əlaqə qurmağa çalışın</string>
     <string name="MessageMenu">Mesaj menyusu</string>
     <string name="HidePhone">Telefon nömrəmi gizlədin</string>
     <string name="Hide">Gizlədin</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Söhbətin gedişində klaviaturanı gizlədin</string>
     <string name="UserRestrictionsSendStickers2">Etiket göndərin</string>
     <string name="UserRestrictionsSendGifs">GIF göndərin</string>
-    <string name="UseAvatarAsDrawerBackground">Avatarı çekmece fonu kimi istifadə edin</string>
     <string name="ShowTabsOnForward">Nişanları irəli göstərin</string>
     <string name="CheckAllAdministrated">İdarəetmə əlavə edin</string>
     <string name="RearVideoMessages">Video mesajlarında arxa kamera</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Rəsmi kanal</string>
     <string name="About">Haqqında</string>
     <string name="IgnoreBlockedAbout">Artıq qruplarda bloklanmış istifadəçilərdən gələn mesajları görməyəcəksiniz.</string>
-    <string name="Donate">Bağış edin</string>
-    <string name="DonateAbout">İnkişafımızı dəstəkləyin.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Github-da mənbə kodu</string>
     <string name="ResetStickerSize">Etiket ölçüsünü sıfırlayın</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Başlıq çubuğunun kölgəsini deaktiv edin</string>
     <string name="BetaWarning">Bu ** Telegram ** tərəfindən tətbiq olunan ** beta ** xüsusiyyətdir.</string>
     <string name="MediaPreview">Dialoq siyahısında media önizləməsi</string>
-    <string name="ProviderYandex">Yandex Tərcümə</string>
     <string name="AutoPauseVideo">Videonu avtomatik dayandırın</string>
     <string name="AutoPauseVideoAbout">Ekranı kilidləyərkən / arxa plana keçin.</string>
     <string name="DisableProximityEvents">Yaxınlıq tədbirlərini deaktiv edin</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Налаштування Neko</string>
-    <string name="IPv6">Спробуйте підключитися через IPv6</string>
     <string name="MessageMenu">Меню повідомлення</string>
     <string name="HidePhone">Сховати мій номер телефону</string>
     <string name="Hide">Приховати</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Приховати клавіатуру на прокрутці чату</string>
     <string name="UserRestrictionsSendStickers2">Надіслати наліпки</string>
     <string name="UserRestrictionsSendGifs">Надіслати GIF</string>
-    <string name="UseAvatarAsDrawerBackground">Використовувати аватар в якості фону меню</string>
     <string name="ShowTabsOnForward">Показувати вкладки вперед</string>
     <string name="CheckAllAdministrated">Додати адміністративну</string>
     <string name="RearVideoMessages">Задня камера в відеоповідомленнях</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Офіційний канал новин</string>
     <string name="About">Про програму</string>
     <string name="IgnoreBlockedAbout">Ви більше не будете бачити повідомлення від заблокованих користувачів в групі.</string>
-    <string name="Donate">Пожертвувати</string>
-    <string name="DonateAbout">Підтримайте наш розвиток</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Джерельний код на Github</string>
     <string name="ResetStickerSize">Скинути розмір стікерів</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Вимкнути тінь панелі заголовків</string>
     <string name="BetaWarning">Це **бета** функція, реалізована **Telegram**.</string>
     <string name="MediaPreview">Попередній перегляд медіа у списку діалогових вікон</string>
-    <string name="ProviderYandex">Яндекс Перекладач</string>
     <string name="AutoPauseVideo">Автопауза відео</string>
     <string name="AutoPauseVideoAbout">Під час блокування екрану/переходу в фон.</string>
     <string name="DisableProximityEvents">Вимкнути події наближення</string>

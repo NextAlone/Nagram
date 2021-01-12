@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Ustawienia Neko</string>
-    <string name="IPv6">Spróbuj połączyć się za pomocą protokołu IPv6</string>
     <string name="MessageMenu">Menu wiadomości</string>
     <string name="HidePhone">Ukryj mój numer telefonu</string>
     <string name="Hide">Ukryj</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Ukryj klawiaturę podczas przewijania czatu</string>
     <string name="UserRestrictionsSendStickers2">Wyślij naklejki</string>
     <string name="UserRestrictionsSendGifs">Wyślij GIFy</string>
-    <string name="UseAvatarAsDrawerBackground">Użyj awatara jako tła szuflady</string>
     <string name="ShowTabsOnForward">Pokaż zakładki przy przekazywaniu</string>
     <string name="CheckAllAdministrated">Dodaj administrowane</string>
     <string name="RearVideoMessages">Tylna kamera w wiadomościach wideo</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Oficjalny kanał</string>
     <string name="About">O</string>
     <string name="IgnoreBlockedAbout">Nie będziesz już widział wiadomości od zablokowanych użytkowników w grupach.</string>
-    <string name="Donate">Wesprzyj</string>
-    <string name="DonateAbout">Wesprzyj nasz rozwój.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Kod źródłowy na Githubie</string>
     <string name="ResetStickerSize">Zresetuj rozmiar naklejki</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Wyłącz cień paska tytułu</string>
     <string name="BetaWarning">Jest to funkcja **beta** zaimplementowana przez **Telegram**.</string>
     <string name="MediaPreview">Podgląd mediów na liście dialogowej</string>
-    <string name="ProviderYandex">Tłumaczenie Yandex</string>
     <string name="AutoPauseVideo">Automatycznie wstrzymaj wideo</string>
     <string name="AutoPauseVideoAbout">Gdy ekran jest blokady / przełącz na tło.</string>
     <string name="DisableProximityEvents">Wyłącz zdarzenia zbliżeniowe</string>

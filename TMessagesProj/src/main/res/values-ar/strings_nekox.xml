@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">هذه الوظيفة متوفرة فقط للمستخدمين الخبراء، إذا كنت لا تعرف ما الذي تمثله الخيارات التالية، فقط تجاهلها.</string>
     <string name="CustomBackendProduction">مركز بيانات الإنتاج الرسمي</string>
     <string name="CustomBackendTestDC">مركز بيانات الاختبار الرسمي</string>
-    <string name="CustomBackendIpv4">عنوان Ipv4</string>
-    <string name="CustomBackendIpv6">عنوان Ipv6</string>
-    <string name="CustomBackendLayer">طبقة</string>
-    <string name="CustomBackendPublicKey">المفتاح العمومي</string>
-    <string name="CustomBackendFingerprint">بصمة المفتاح</string>
     <string name="AllowFlashCall">السماح بإجراء مكالمة فلاش</string>
     <string name="ChangeTranslateProvider">تغيير المزود</string>
     <string name="ProviderYandexTranslate">ترجمة Yandex.Translate</string>

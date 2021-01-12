@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Ta funkcja jest dostępna tylko dla zaawansowanych użytkowników, jeśli nie wiesz, co oznaczają poniższe opcje, po prostu ją zignoruj.</string>
     <string name="CustomBackendProduction">Oficjalne centrum danych produkcyjnych</string>
     <string name="CustomBackendTestDC">Oficjalne centrum testowe</string>
-    <string name="CustomBackendIpv4">Adres Ipv4</string>
-    <string name="CustomBackendIpv6">Adres Ipv6</string>
-    <string name="CustomBackendLayer">Warstwa</string>
-    <string name="CustomBackendPublicKey">Klucz publiczny</string>
-    <string name="CustomBackendFingerprint">Odcisk klucza</string>
     <string name="AllowFlashCall">Zezwalaj na połączenie flash</string>
     <string name="ChangeTranslateProvider">Zmień dostawcę</string>
     <string name="ProviderYandexTranslate">Tłumaczenie Yandexa</string>

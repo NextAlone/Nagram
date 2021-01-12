@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Настройки Neko</string>
-    <string name="IPv6">Пробовать подключиться через IPv6</string>
     <string name="MessageMenu">Меню сообщения</string>
     <string name="HidePhone">Скрыть мой номер телефона</string>
     <string name="Hide">Скрыть</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">Скрыть клавиатуру при прокрутке</string>
     <string name="UserRestrictionsSendStickers2">Отправка стикеров</string>
     <string name="UserRestrictionsSendGifs">Отправка GIF</string>
-    <string name="UseAvatarAsDrawerBackground">Аватар как фон в боковом меню</string>
     <string name="ShowTabsOnForward">Показывать вкладки при пересылке</string>
     <string name="CheckAllAdministrated">Добавить управляемые</string>
     <string name="RearVideoMessages">Использовать основную камеру в видеосообщениях</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">Официальный канал</string>
     <string name="About">О проекте</string>
     <string name="IgnoreBlockedAbout">Вы больше не будете видеть сообщения от заблокированных пользователей в группах.</string>
-    <string name="Donate">Поддержите Nekogram, позязя :3</string>
-    <string name="DonateAbout">Поддержите разработку проекта.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Исходный код на Github</string>
     <string name="ResetStickerSize">Сбросить размер стикера</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">Отключить тень заголовка</string>
     <string name="BetaWarning">Эта функция **Telegram** находятся в состоянии **бета-тестирования**.</string>
     <string name="MediaPreview">Предпросмотр медиа в списке чатов</string>
-    <string name="ProviderYandex">Яндекс.Переводчик</string>
     <string name="AutoPauseVideo">Авто-пауза видео</string>
     <string name="AutoPauseVideoAbout">Останавливать воспроизведение видео при блокировке экрана или сворачивании приложения.</string>
     <string name="DisableProximityEvents">Отключить датчик приближения</string>

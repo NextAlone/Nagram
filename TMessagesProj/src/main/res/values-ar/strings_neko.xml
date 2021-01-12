@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">نيكو الإعدادات</string>
-    <string name="IPv6">حاول الاتصال عبر IPv6</string>
     <string name="MessageMenu">قائمة الرسائل</string>
     <string name="HidePhone">إخفاء رقم هاتفي</string>
     <string name="Hide">إخفاء</string>
@@ -72,7 +71,6 @@
     <string name="HideKeyboardOnChatScroll">إخفاء لوحة المفاتيح على تمرير المحادثة</string>
     <string name="UserRestrictionsSendStickers2">إرسال ملصقات</string>
     <string name="UserRestrictionsSendGifs">إرسال GIFs</string>
-    <string name="UseAvatarAsDrawerBackground">استخدام الصورة الرمزية كخلفية درج</string>
     <string name="ShowTabsOnForward">إظهار علامات التبويب للأمام</string>
     <string name="CheckAllAdministrated">إضافة ادارة</string>
     <string name="RearVideoMessages">الكاميرا الخلفية في رسائل الفيديو</string>
@@ -92,8 +90,6 @@
     <string name="OfficialChannel">القناة الرسمية</string>
     <string name="About">حول</string>
     <string name="IgnoreBlockedAbout">لن ترى بعد الآن رسائل من المستخدمين المحظورين في المجموعات.</string>
-    <string name="Donate">تبرع</string>
-    <string name="DonateAbout">دعم تطويرنا.</string>
     <string name="GooglePlay">جوجل بلاي</string>
     <string name="SourceCode">مصدر التعليمات البرمجية على Github</string>
     <string name="ResetStickerSize">إعادة تعيين حجم ملصق</string>
@@ -101,7 +97,6 @@
     <string name="DisableAppBarShadow">تعطيل ظل شريط العنوان</string>
     <string name="BetaWarning">هذه ميزة **بيتا** تم تنفيذها بواسطة **تيليجرام**.</string>
     <string name="MediaPreview">معاينة الوسائط في قائمة الحوار</string>
-    <string name="ProviderYandex">ترجمة يانديكس</string>
     <string name="AutoPauseVideo">إيقاف تلقائي للفيديو</string>
     <string name="AutoPauseVideoAbout">عند قفل الشاشة / التبديل إلى الخلفية.</string>
     <string name="DisableProximityEvents">تعطيل أحداث التقارب</string>

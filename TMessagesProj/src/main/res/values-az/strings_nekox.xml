@@ -37,11 +37,6 @@
     <string name="CustomBackendNotice">Bu funksiya yalnız mütəxəssis istifadəçilər üçün təmin edilir, əgər aşağıdakı seçimlərin nəyi təmsil etdiyini bilmirsinizsə, sadəcə nəzərə alın.</string>
     <string name="CustomBackendProduction">Rəsmi İstehsal Məlumat Mərkəzi</string>
     <string name="CustomBackendTestDC">Rəsmi Test DataCenter</string>
-    <string name="CustomBackendIpv4">IPv4 Ünvanı</string>
-    <string name="CustomBackendIpv6">IPv6 Ünvanı</string>
-    <string name="CustomBackendLayer">Layer</string>
-    <string name="CustomBackendPublicKey">Açıq açar</string>
-    <string name="CustomBackendFingerprint">Açar barmaq izi</string>
     <string name="AllowFlashCall">Flaş zəngə icazə verin</string>
     <string name="ChangeTranslateProvider">Təminatçını dəyişdirin</string>
     <string name="ProviderYandexTranslate">Yandex.Tərcümə edin</string>
