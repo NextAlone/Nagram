@@ -106,4 +106,7 @@
     <string name="AvatarAsBackground">使用头像作为背景</string>
     <string name="BlurAvatarBackground">模糊头像</string>
     <string name="DarkenAvatarBackground">暗色头像</string>
+    <string name="ProviderDeepLTranslate">DeepL 翻译</string>
+    <string name="ProviderMicrosoftTranslator">微软翻译</string>
+    <string name="ProviderYouDao">有道翻译</string>
 </resources>

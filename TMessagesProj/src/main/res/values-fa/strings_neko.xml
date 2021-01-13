@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">تنظیمات Neko</string>
+    <string name="IPv6">اتصال از طریق IPv6</string>
     <string name="MessageMenu">منوی پیام</string>
     <string name="HidePhone">شماره تلفن من را مخفی کن</string>
     <string name="Hide">پنهان کردن</string>
@@ -102,4 +103,7 @@
     <string name="DisableProximityEvents">غیرفعال‌سازی سنسور مجاورتی</string>
     <string name="IncreaseVoiceMessageQuality">افزایش کیفیت پیام های صوتی</string>
     <string name="SelectBetween">انتخاب بین</string>
+    <string name="AvatarAsBackground">عکس پروفایل به عنوان پس‌زمینه</string>
+    <string name="BlurAvatarBackground">تار کردن عکس پروفایل</string>
+    <string name="DarkenAvatarBackground">تاریک کردن عکس پروفایل</string>
 </resources>

@@ -131,6 +131,7 @@
     <string name="SSRObfs">混淆</string>
     <string name="SSRObfsParam">混淆引數</string>
     <string name="ProxyInfoTrojan">Trojan 代理設定</string>
+    <string name="TrojanSNI">SNI (可選)</string>
     <string name="ProxyRemarks">別名</string>
     <string name="RetestPing">重新測試所有 Ping 值</string>
     <string name="ReorderByPing">基於 Ping 值重新排序</string>
