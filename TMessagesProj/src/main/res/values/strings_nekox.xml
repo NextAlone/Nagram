@@ -271,7 +271,4 @@
     <string name="TabletMode">Tablet mode</string>
     <string name="TabletModeDefault">Depends on device</string>
 
-    <string name="PersonalNotifications">Local Notifications</string>
-    <string name="PersonalNotificationsInfo">Pinned message</string>
-
 </resources>

@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.transtale.source
 
+import android.os.SystemClock
 import cn.hutool.http.HttpUtil
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
@@ -21,10 +22,12 @@ object LingoTranslator : Translator {
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .header("X-Authorization", "token 9sdftiq37bnv410eon2l") // 白嫖
                 .applyUserAgent()
-                .form("source", query)
-                .form("trans_type", "${from}2$to")
-                .form("request_id", System.currentTimeMillis().toString())
-                .form("detect", true)
+                .body(JSONObject().apply {
+                    put("source", query)
+                    put("trans_type", "${from}2$to")
+                    put("request_id", SystemClock.elapsedRealtime().toString())
+                    put("detect", true)
+                }.toString())
                 .execute()
 
         if (response.status != 200) {

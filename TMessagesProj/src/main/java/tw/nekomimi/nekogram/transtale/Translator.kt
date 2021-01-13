@@ -9,9 +9,7 @@ import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
 import tw.nekomimi.nekogram.cc.CCTarget
-import tw.nekomimi.nekogram.transtale.source.GoogleAppTranslator
-import tw.nekomimi.nekogram.transtale.source.LingoTranslator
-import tw.nekomimi.nekogram.transtale.source.YandexTranslator
+import tw.nekomimi.nekogram.transtale.source.*
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
@@ -59,41 +57,54 @@ interface Translator {
         suspend fun translate(query: String) = translate(NekoConfig.translateToLang?.code2Locale
                 ?: LocaleController.getInstance().currentLocale, query)
 
+        const val providerGoogle = 1
+        const val providerGoogleCN = 2
+        const val providerYandex = 3
+        const val providerLingo = 4
+        const val providerMicrosoft = 5
+        const val providerYouDao = 6
+        const val providerDeepL = 7
+
         @Throws(Exception::class)
         suspend fun translate(to: Locale, query: String): String {
 
-            var toLang = to.language
+            var language = to.language
+            var country = to.country
 
-            val country = to.country
+            if (language == "in") language = "id"
+            if (country.toLowerCase() == "duang") country = "CN"
 
-            if (country.toLowerCase() == "duang") {
-
-                country == "CN"
-
-            }
-
-            if (NekoConfig.translationProvider < 3) {
-
-                if (to.language == "zh" && (country.toUpperCase() == "CN" || country.toUpperCase() == "TW")) {
-                    toLang = to.language + "-" + country.toUpperCase()
-                } else if (to.language == "pt" && country in arrayOf("PT", "BR")) {
-                    toLang = to.language + "-" + country.toUpperCase()
+            val provider = NekoConfig.translationProvider
+            when (provider) {
+                providerYouDao -> if (language == "zh") {
+                    language = "zh-CHS"
+                }
+                providerDeepL -> language = language.toUpperCase()
+                providerMicrosoft,
+                providerGoogle,
+                providerGoogleCN -> if (language == "zh") {
+                    val countryUpperCase = country.toUpperCase()
+                    if (countryUpperCase == "CN" || countryUpperCase == "DUANG") {
+                        language = if (provider == providerMicrosoft) "zh-Hans" else "zh-CN"
+                    } else if (countryUpperCase == "TW" || countryUpperCase == "HK") {
+                        language = if (provider == providerMicrosoft) "zh-HanT" else "zh-TW"
+                    }
                 }
 
             }
-
-            if (toLang == "in") toLang = "id"
-
-            val translator = when (NekoConfig.translationProvider) {
-                in 1..2 -> GoogleAppTranslator
-                3 -> YandexTranslator
-                4 -> LingoTranslator
+            val translator = when (provider) {
+                providerGoogle, providerGoogleCN -> GoogleAppTranslator
+                providerYandex -> YandexTranslator
+                providerLingo -> LingoTranslator
+                providerMicrosoft -> MicrosoftTranslator
+                providerYouDao -> YouDaoTranslator
+                providerDeepL -> DeepLTranslator
                 else -> throw IllegalArgumentException()
             }
 
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
-            return translator.doTranslate("auto", toLang, query).also {
+            return translator.doTranslate("auto", language, query).also {
 
                 to.transDb.save(query, it)
 

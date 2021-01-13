@@ -106,4 +106,8 @@
     <string name="AvatarAsBackground">Profile picture as background</string>
     <string name="BlurAvatarBackground">Blur profile picture</string>
     <string name="DarkenAvatarBackground">Darken profile picture</string>
+    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderYouDao">YouDao Translate</string>
+
 </resources>

@@ -324,7 +324,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                         LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
                         LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
-                        LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud)
+                        LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
+                        LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
+                        LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
+                        LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderDeepLTranslate)
 
                 }, (i, __) -> {
 
@@ -903,6 +906,15 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                                 break;
                             case 4:
                                 value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
+                                break;
+                            case 5:
+                                value = LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator);
+                                break;
+                            case 6:
+                                value = LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao);
+                                break;
+                            case 7:
+                                value = LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate);
                                 break;
                             default:
                                 value = "Unknown";
