@@ -2904,36 +2904,40 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             cell.setMinimumWidth(AndroidUtilities.dp(196));
             menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
 
-            cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
+            if (SharedConfig.inappCamera) {
 
-            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
-            cell.setOnClickListener(v -> {
-                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
-                    menuPopupWindow.dismiss();
-                }
+                cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
 
-                if (parentFragment != null) {
-                    TLRPC.Chat chat = parentFragment.getCurrentChat();
-                    if (chat != null && !ChatObject.canSendMedia(chat)) {
-                        delegate.needShowMediaBanHint();
-                        return;
+                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
+                cell.setOnClickListener(v -> {
+                    if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                        menuPopupWindow.dismiss();
                     }
-                }
 
-                videoSendButton.setTag(1);
-                recordAudioVideoRunnable.run();
-                delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
-                setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
-                if (!NekoConfig.disableVibration) {
-                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
-                }
-                recordCircle.sendButtonVisible = true;
-                startLockTransition(false);
+                    if (parentFragment != null) {
+                        TLRPC.Chat chat = parentFragment.getCurrentChat();
+                        if (chat != null && !ChatObject.canSendMedia(chat)) {
+                            delegate.needShowMediaBanHint();
+                            return;
+                        }
+                    }
 
-            });
+                    videoSendButton.setTag(1);
+                    recordAudioVideoRunnable.run();
+                    delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
+                    setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
+                    if (!NekoConfig.disableVibration) {
+                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                    }
+                    recordCircle.sendButtonVisible = true;
+                    startLockTransition(false);
 
-            cell.setMinimumWidth(AndroidUtilities.dp(196));
-            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+                });
+
+                cell.setMinimumWidth(AndroidUtilities.dp(196));
+                menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+
+            }
 
         } else {
 
@@ -4153,7 +4157,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         videoToSendMessageObject = null;
         videoTimelineView.destroy();
 
-        if (videoSendButton != null && isInVideoMode()) {
+        boolean revButton = NekoConfig.useChatAttachMediaMenu;
+
+        if (videoSendButton != null && isInVideoMode() && !revButton) {
             videoSendButton.setVisibility(View.VISIBLE);
         } else if (audioSendButton != null) {
             audioSendButton.setVisibility(View.VISIBLE);
@@ -5273,6 +5279,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     private void updateRecordIntefrace(int recordState) {
+
+        boolean revButton = NekoConfig.useChatAttachMediaMenu;
+
         if (recordingAudioVideo) {
             if (recordInterfaceState == 1) {
                 return;
@@ -5437,8 +5446,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             runningAnimationAudio = new AnimatorSet();
             //EXIT TRANSITION
+
             if (shouldShowFastTransition || recordState == RECORD_STATE_CANCEL_BY_TIME) {
-                if (videoSendButton != null && isInVideoMode()) {
+                if (videoSendButton != null && isInVideoMode() && !revButton) {
                     videoSendButton.setVisibility(View.VISIBLE);
                 } else if (audioSendButton != null) {
                     audioSendButton.setVisibility(View.VISIBLE);
@@ -5464,12 +5474,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (audioSendButton != null) {
                     audioSendButton.setScaleX(1f);
                     audioSendButton.setScaleY(1f);
-                    runningAnimationAudio.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                    runningAnimationAudio.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 0 : 1));
                 }
                 if (videoSendButton != null) {
                     videoSendButton.setScaleX(1f);
                     videoSendButton.setScaleY(1f);
-                    runningAnimationAudio.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                    runningAnimationAudio.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 1 : 0));
                 }
                 if (scheduledButton != null) {
                     runningAnimationAudio.playTogether(
@@ -5575,14 +5585,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 );
                 if (videoSendButton != null) {
                     iconsAnimator.playTogether(
-                            ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0),
+                            ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 1 : 0),
                             ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1),
                             ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1)
                     );
                 }
                 if (audioSendButton != null) {
                     iconsAnimator.playTogether(
-                            ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1),
+                            ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 0 : 1),
                             ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1),
                             ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1)
                     );
@@ -5651,7 +5661,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 });
 
             } else if (recordState == RECORD_STATE_CANCEL || recordState == RECORD_STATE_CANCEL_BY_GESTURE) {
-                if (videoSendButton != null && isInVideoMode() && !NekoConfig.useChatAttachMediaMenu) {
+                if (videoSendButton != null && isInVideoMode() && !revButton) {
                     videoSendButton.setVisibility(View.VISIBLE);
                 } else if (audioSendButton != null) {
                     audioSendButton.setVisibility(View.VISIBLE);
@@ -5718,12 +5728,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         );
                     }
                     if (videoSendButton != null) {
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 1 : 0));
                         iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
                         iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
                     }
                     if (audioSendButton != null) {
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 0 : 1));
                         iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
                         iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
                     }
@@ -5758,10 +5768,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
                             if (audioSendButton != null) {
-                                audioSendButton.setAlpha(isInVideoMode() ? 0 : 1f);
+                                audioSendButton.setAlpha(isInVideoMode() ^ revButton ? 0 : 1f);
                             }
                             if (videoSendButton != null) {
-                                videoSendButton.setAlpha(isInVideoMode() ? 1f : 0);
+                                videoSendButton.setAlpha(isInVideoMode() ^ revButton ? 1f : 0);
                             }
                         }
                     });
@@ -5803,7 +5813,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 recordDot.playDeleteAnimation();
             } else {
 
-                if (videoSendButton != null && isInVideoMode()) {
+                if (videoSendButton != null && isInVideoMode() && !revButton) {
                     videoSendButton.setVisibility(View.VISIBLE);
                 } else if (audioSendButton != null) {
                     audioSendButton.setVisibility(View.VISIBLE);
@@ -5826,12 +5836,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (audioSendButton != null) {
                     audioSendButton.setScaleX(1f);
                     audioSendButton.setScaleY(1f);
-                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 0 : 1));
                 }
                 if (videoSendButton != null) {
                     videoSendButton.setScaleX(1f);
                     videoSendButton.setScaleY(1f);
-                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ^ revButton ? 1 : 0));
                 }
                 if (attachLayout != null) {
                     iconsAnimator.playTogether(
