@@ -54,6 +54,7 @@ public class TrojanSettingsActivity extends BaseFragment {
     private EditTextBoldCursor ipField;
     private EditTextBoldCursor portField;
     private EditTextBoldCursor passwordField;
+    private EditTextBoldCursor sniField;
     private EditTextBoldCursor remarksField;
 
     private ScrollView scrollView;
@@ -191,6 +192,7 @@ public class TrojanSettingsActivity extends BaseFragment {
                     currentBean.setAddress(ipField.getText().toString());
                     currentBean.setPort(Utilities.parseInt(portField.getText().toString()));
                     currentBean.setId(passwordField.getText().toString());
+                    currentBean.setRequestHost(sniField.getText().toString());
                     currentBean.setRemarks(remarksField.getText().toString());
 
                     if (currentProxyInfo == null) {
@@ -237,9 +239,9 @@ public class TrojanSettingsActivity extends BaseFragment {
         }
         linearLayout2.addView(inputFieldsContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        inputFields =  new EditTextBoldCursor[7];
+        inputFields = new EditTextBoldCursor[5];
 
-        for (int a = 0; a < 4; a++) {
+        for (int a = 0; a < 5; a++) {
             FrameLayout container = new FrameLayout(context);
             EditTextBoldCursor cursor = mkCursor();
             inputFields[a] = cursor;
@@ -263,11 +265,17 @@ public class TrojanSettingsActivity extends BaseFragment {
                     cursor.setHintText(LocaleController.getString("SSPassword", R.string.SSPassword));
                     cursor.setText(currentBean.getId());
                     break;
-               case 3:
+                case 3:
                     remarksField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("ProxyRemarks", R.string.ProxyRemarks));
                     cursor.setText(currentBean.getRemarks());
+                    break;
+                case 4:
+                    sniField = cursor;
+                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    cursor.setHintText(LocaleController.getString("TrojanSNI", R.string.TrojanSNI));
+                    cursor.setText(currentBean.getRequestHost());
                     break;
             }
             cursor.setSelection(cursor.length());
@@ -280,6 +288,7 @@ public class TrojanSettingsActivity extends BaseFragment {
         inputFieldsContainer.addView((View) ipField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
         inputFieldsContainer.addView((View) portField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
         inputFieldsContainer.addView((View) passwordField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+        inputFieldsContainer.addView((View) sniField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
         inputFieldsContainer.addView((View) remarksField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         bottomCell = new TextInfoPrivacyCell(context);

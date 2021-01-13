@@ -8,6 +8,8 @@ import com.google.gson.JsonObject
 import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.dto.AngConfig.VmessBean
 import com.v2ray.ang.dto.V2rayConfig
+import com.v2ray.ang.dto.V2rayConfig.OutboundBean.OutSettingsBean
+import com.v2ray.ang.dto.V2rayConfig.OutboundBean.StreamSettingsBean.TlssettingsBean
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -126,16 +128,12 @@ object V2rayConfigUtil {
 
                     outbound.streamSettings = V2rayConfig.OutboundBean.StreamSettingsBean(
                             "tcp",
-                            "tls",
-                            null,null,null,null,
-                            V2rayConfig.OutboundBean.StreamSettingsBean.TlssettingsBean(
-                                    false
-                            ),null
-                    )
+                            "tls", null,null,null,null,
+                            TlssettingsBean(vmess.requestHost), null)
 
                     outbound.settings?.vnext = null
 
-                    outbound.settings = V2rayConfig.OutboundBean.OutSettingsBean(null, listOf(V2rayConfig.OutboundBean.OutSettingsBean.ServersBean(
+                    outbound.settings = OutSettingsBean(null, listOf(OutSettingsBean.ServersBean(
                             vmess.address,
                             vmess.id,
                             vmess.port,
@@ -146,6 +144,7 @@ object V2rayConfigUtil {
                     outbound.mux?.enabled = false
 
                     outbound.protocol = "trojan"
+
                 }
                 else -> {
                 }
@@ -205,7 +204,7 @@ object V2rayConfigUtil {
                     }
                     streamSettings.wssettings = wssettings
 
-                    val tlssettings = V2rayConfig.OutboundBean.StreamSettingsBean.TlssettingsBean()
+                    val tlssettings = TlssettingsBean()
                     tlssettings.allowInsecure = true
                     if (!TextUtils.isEmpty(host)) {
                         tlssettings.serverName = host
@@ -223,7 +222,7 @@ object V2rayConfigUtil {
                     httpsettings.path = path
                     streamSettings.httpsettings = httpsettings
 
-                    val tlssettings = V2rayConfig.OutboundBean.StreamSettingsBean.TlssettingsBean()
+                    val tlssettings = TlssettingsBean()
                     tlssettings.allowInsecure = true
                     streamSettings.tlssettings = tlssettings
                 }

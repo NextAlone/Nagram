@@ -94,8 +94,9 @@ data class V2rayConfig(
 
             data class HttpsettingsBean(var host: List<String> = ArrayList(), var path: String = "")
 
-            data class TlssettingsBean(var allowInsecure: Boolean = true,
-                                       var serverName: String = "")
+            data class TlssettingsBean(var serverName: String = "",
+                                       var allowInsecure: Boolean = false,
+                                       var allowInsecureCiphers: Boolean = false)
 
             data class QuicsettingBean(var security: String = "none",
                                         var key: String = "",

@@ -151,6 +151,7 @@ class VmessLoader {
 
                     }
 
+                    vmess.requestHost = link.queryParameter("sni") ?: vmess.requestHost
                     vmess.remarks = link.fragment ?: ""
 
                     return vmess

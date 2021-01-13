@@ -171,6 +171,7 @@
     <string name="SSRObfsParam">Obfs Param</string>
 
     <string name="ProxyInfoTrojan">Trojan Proxy Settings</string>
+    <string name="TrojanSNI">SNI (Optional)</string>
 
     <string name="ProxyRemarks">Remarks</string>
     <string name="RetestPing">Retest ping for all servers</string>
@@ -269,5 +270,8 @@
 
     <string name="TabletMode">Tablet mode</string>
     <string name="TabletModeDefault">Depends on device</string>
+
+    <string name="PersonalNotifications">Local Notifications</string>
+    <string name="PersonalNotificationsInfo">Pinned message</string>
 
 </resources>

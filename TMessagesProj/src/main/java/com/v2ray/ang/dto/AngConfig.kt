@@ -61,9 +61,10 @@ data class AngConfig(
 
             } else if (configType == V2RayConfig.EConfigType.Trojan) {
 
+                val params = if (requestHost.isNotBlank()) "?sni=" + Utils.urlEncode(requestHost) else ""
                 val remark = if (remarks.isNotBlank()) "#" + Utils.urlEncode(remarks) else ""
 
-                return TROJAN_PROTOCOL + Utils.urlEncode(id) + "@" + address + ":" + port + remark
+                return TROJAN_PROTOCOL + Utils.urlEncode(id) + "@" + address + ":" + port + params + remark
 
             } else {
 
