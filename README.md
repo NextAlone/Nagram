@@ -63,22 +63,10 @@ Consider using a Linux VM or dual booting.**
 
 It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.  [here is how to install AndroidStudio](https://developer.android.com/studio/install).
 
-2. Install golang ( >= 1.15.4 ), and add GOPATH to the PATH variable.
-
-It is recommended to use gvm for the installation. if you are using the system package manager, don't forget to add environment variable.
-
-(Run one command at a time)
+2. Install golang ( >= 1.15.5 ).
 
 ```shell
-apt install -y bison gcc make
-
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-
-source "$HOME/.bashrc"
-
-gvm install go1.15.4 -B
-
-gvm use go1.15.4 --default
+apt install -y golang
 ```
 
 3. Install rust and its stdlib for android abis, add environment variables for it.
@@ -86,18 +74,18 @@ gvm use go1.15.4 --default
 It is recommended to use the official script, otherwise you may not find rustup.
 
 ```shell
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
 echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
+
 cd ss-rust/src/main/rust/shadowsocks-rust
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 
-4. Build native dependencies: `bin/native_libs.sh`
-5. Build external libraries and native code: `bin/update_libs.sh`
+4. Build native dependencies: `./run init libs`
+5. Build external libraries and native code: `./run libs update`
 6. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
 7. Replace TMessagesProj/google-services.json if you want fcm to work.
-8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties`
+8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a non-debug build.
 
 `./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 

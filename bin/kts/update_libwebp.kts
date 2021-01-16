@@ -1,7 +1,7 @@
 import java.io.File
 import kotlin.system.exitProcess
 
-val projectRoot = File("..")
+val projectRoot = File("../..")
 
 val webpSources = File(projectRoot, "TMessagesProj/jni/libwebp/Android.mk")
         .readLines()

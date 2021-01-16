@@ -1,0 +1,7 @@
+#!/bin/bash
+
+TARGET="bin"
+for e in $@; do
+  TARGET="$TARGET/$e"
+done
+exec ${TARGET}.sh

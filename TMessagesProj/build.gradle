@@ -110,6 +110,32 @@ dependencies {
 
 }
 
+def keystorePwd = null
+def alias = null
+def pwd = null
+Properties properties
+
+if (project.rootProject.file('local.properties').exists()) {
+    properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+} else {
+    def base64 = System.getenv("LOCAL_PROPERTIES")
+    if (base64 != null && !base64.isBlank()) {
+        properties = new Properties()
+        properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
+    }
+}
+
+if (properties != null) {
+    keystorePwd = properties.getProperty("KEYSTORE_PASS")
+    alias = properties.getProperty("ALIAS_NAME")
+    pwd = properties.getProperty("ALIAS_PASS")
+}
+
+keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
+alias = alias ?: System.getenv("ALIAS_NAME")
+pwd = pwd ?: System.getenv("ALIAS_PASS")
+
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
@@ -125,20 +151,18 @@ android {
         versionName verName
         versionCode verCode
 
-        def appId = null
-        def appHash = null
+        def appId = "1391584"
+        def appHash = "355c91550b0d658cfb7ff89dcf91a08c"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
-        if (project.rootProject.file('local.properties').exists()) {
-            Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID")
-            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH")
+        if (properties != null) {
+            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID") ?: appId
+            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH") ?: appHash
         }
 
-        buildConfigField 'int', 'APP_ID', appId != null ? appId : "1391584"
-        buildConfigField 'String', 'APP_HASH', "\"" + (appHash != null ? appHash : "355c91550b0d658cfb7ff89dcf91a08c") + "\""
+        buildConfigField 'int', 'APP_ID', appId
+        buildConfigField 'String', 'APP_HASH', "\"" + appHash + "\""
 
         externalNativeBuild {
             cmake {
@@ -197,40 +221,12 @@ android {
     }
 
     signingConfigs {
-        def keystorePwd = null
-        def alias = null
-        def pwd = null
-        Properties properties
-
-        if (project.rootProject.file('local.properties').exists()) {
-            properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        } else {
-            def base64 = System.getenv("LOCAL_PROPERTIES")
-            if (base64 != null && !base64.isBlank()) {
-                properties = new Properties()
-                properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
-            }
-        }
-
-        if (properties != null) {
-            keystorePwd = properties.getProperty("KEYSTORE_PASS")
-            alias = properties.getProperty("ALIAS_NAME")
-            pwd = properties.getProperty("ALIAS_PASS")
-        }
-
-        keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
-        alias = alias ?: System.getenv("ALIAS_NAME")
-        pwd = pwd ?: System.getenv("ALIAS_PASS")
-
         release {
-
             storeFile project.file('release.keystore')
             storePassword keystorePwd
             keyAlias alias
             keyPassword pwd
         }
-
     }
 
     buildTypes {
@@ -240,7 +236,7 @@ android {
             jniDebuggable false
             multiDexEnabled true
             zipAlignEnabled true
-            signingConfig signingConfigs.release
+            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
         }
 
         releaseNoGcm {
