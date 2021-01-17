@@ -1768,13 +1768,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return false;
             }
 
-            @Override
+            /*@Override
             public boolean dispatchKeyEvent(KeyEvent event) {
                 if (preventInput) {
                     return false;
                 }
                 return super.dispatchKeyEvent(event);
-            }
+            }*/
 
             @Override
             protected void onSelectionChanged(int selStart, int selEnd) {
