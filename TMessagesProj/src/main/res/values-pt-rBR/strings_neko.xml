@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Configurações Neko</string>
+    <string name="IPv6">Conexão via IPv6</string>
     <string name="MessageMenu">Menu de mensagens</string>
     <string name="HidePhone">Ocultar meu número de telefone</string>
     <string name="Hide">Ocultar</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">Quando bloquear a tela/Alternar para segundo plano</string>
     <string name="DisableProximityEvents">Desativar eventos de proximidade</string>
     <string name="IncreaseVoiceMessageQuality">Aumentar a qualidade das mensagens de voz</string>
+    <string name="SelectBetween">Selecione entre</string>
+    <string name="AvatarAsBackground">Imagem do perfil como plano de fundo</string>
+    <string name="BlurAvatarBackground">Desfocar foto de perfil</string>
+    <string name="DarkenAvatarBackground">Escurecer a foto do perfil</string>
+    <string name="ProviderDeepLTranslate">Traduzir DeepL</string>
+    <string name="ProviderMicrosoftTranslator">Tradutor Microsoft</string>
+    <string name="ProviderYouDao">Traduzir YouDao</string>
 </resources>

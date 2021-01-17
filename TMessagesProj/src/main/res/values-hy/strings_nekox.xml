@@ -131,6 +131,7 @@
     <string name="SSRObfs">Օբֆս</string>
     <string name="SSRObfsParam">Obfs Պարամ</string>
     <string name="ProxyInfoTrojan">Trojan Proxy- ի կարգավորումներ</string>
+    <string name="TrojanSNI">SNI (ըստ ցանկության)</string>
     <string name="ProxyRemarks">Դիտողություններ</string>
     <string name="RetestPing">Կրկին փորձեք Ping- ը բոլոր սերվերների համար</string>
     <string name="ReorderByPing">Վերադասավորել սերվերները ping- ով</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">Ուղարկել խաղեր</string>
     <string name="UserRestrictionsSendInline">Ուղարկել ներբանկային բոտերով</string>
     <string name="AcceptSecretChat">Ընդունեք նոր գաղտնի զրույց</string>
+    <string name="TabletMode">Պլանշետային ռեժիմ</string>
+    <string name="TabletModeDefault">Կախված է սարքից</string>
 </resources>

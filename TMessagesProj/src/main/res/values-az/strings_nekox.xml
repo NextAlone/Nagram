@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">Trojan Proxy Ayarları</string>
+    <string name="TrojanSNI">SNI (Könüllü)</string>
     <string name="ProxyRemarks">Qeydlər</string>
     <string name="RetestPing">Bütün serverlər üçün pinqi yenidən sınayın</string>
     <string name="ReorderByPing">Serverləri ping ilə yenidən düzəldin</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">Oyunlar göndərin</string>
     <string name="UserRestrictionsSendInline">Inline Botlarla göndərin</string>
     <string name="AcceptSecretChat">Yeni gizli sohbeti qəbul edin</string>
+    <string name="TabletMode">Tablet rejimi</string>
+    <string name="TabletModeDefault">Cihazdan asılıdır</string>
 </resources>

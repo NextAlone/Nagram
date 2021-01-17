@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">إعدادات البروكسي في تروجان</string>
+    <string name="TrojanSNI">SNI (اختياري)</string>
     <string name="ProxyRemarks">ملاحظـات</string>
     <string name="RetestPing">إعادة اختبار لجميع الخوادم</string>
     <string name="ReorderByPing">إعادة ترتيب الخوادم عن طريق بينغ</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">أرسل الألعاب</string>
     <string name="UserRestrictionsSendInline">أرسل عبر Inline Bots</string>
     <string name="AcceptSecretChat">قبول الدردشة السرية الجديدة</string>
+    <string name="TabletMode">وضع الكمبيوتر اللوحي</string>
+    <string name="TabletModeDefault">يعتمد على الجهاز</string>
 </resources>

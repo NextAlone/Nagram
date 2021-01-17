@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Parameter Obfs</string>
     <string name="ProxyInfoTrojan">Pengaturan Proxy Trojan</string>
+    <string name="TrojanSNI">SNI (Opsional)</string>
     <string name="ProxyRemarks">Penanda Proxy</string>
     <string name="RetestPing">Uji ulang ping ke semua server</string>
     <string name="ReorderByPing">Urutkan server sesuai hasil ping</string>
@@ -193,5 +194,18 @@
     <string name="StorageResetInfo">Semua data di aplikasi ini akan dihapus selamanya (dan coba untuk keluar dari semua akun terlebih dahulu).</string>
     <string name="FCTitle">Tentang pembaruan aplikasi</string>
     <string name="FCInfo">Ikuti kanal pengumuman dan pembaruan kami?</string>
+    <string name="CCTitle">OpenCC (Konversi Cina)</string>
+    <string name="CCTarget">Target</string>
     <string name="CCNo">Kosong</string>
+    <string name="CCTC">Cina tradisional</string>
+    <string name="CCHK">China Aksara Tradisional (Hong Kong)</string>
+    <string name="CCTT">China Aksara Tradisional (Taiwan)</string>
+    <string name="CCSC">Cina disederhanakan</string>
+    <string name="CCSP">China Aksara Sederhana (China)</string>
+    <string name="CCJP">Kanji Jepang Baru (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Kirim Game</string>
+    <string name="UserRestrictionsSendInline">Kirim melalui Bot Inline</string>
+    <string name="AcceptSecretChat">Terima obrolan rahasia baru</string>
+    <string name="TabletMode">Mode tablet</string>
+    <string name="TabletModeDefault">Tergantung perangkat</string>
 </resources>

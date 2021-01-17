@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Cài đặt Neko</string>
+    <string name="IPv6">Kết nối qua IPv6</string>
     <string name="MessageMenu">Menu tin nhắn</string>
     <string name="HidePhone">Ẩn số điện thoại của tôi</string>
     <string name="Hide">Ẩn</string>
@@ -102,4 +103,10 @@
     <string name="DisableProximityEvents">Vô hiệu hóa các sự kiện lân cận</string>
     <string name="IncreaseVoiceMessageQuality">Tăng chất lượng tin nhắn thoại</string>
     <string name="SelectBetween">Chọn giữa</string>
+    <string name="AvatarAsBackground">Ảnh hồ sơ làm nền</string>
+    <string name="BlurAvatarBackground">Làm mờ ảnh hồ sơ</string>
+    <string name="DarkenAvatarBackground">Làm mờ ảnh hồ sơ</string>
+    <string name="ProviderDeepLTranslate">Dịch DeepL</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderYouDao">YouDao Dịch</string>
 </resources>

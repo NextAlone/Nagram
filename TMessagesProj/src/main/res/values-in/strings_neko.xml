@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Pengaturan Neko</string>
+    <string name="IPv6">Menghubungkan melalui IPv6</string>
     <string name="MessageMenu">Menu Perpesanan</string>
     <string name="HidePhone">Sembunyikan nomor telepon saya</string>
     <string name="Hide">Sembunyikan</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">Saat mengunci layar / beralih ke latar belakang.</string>
     <string name="DisableProximityEvents">Nonaktifkan acara kedekatan</string>
     <string name="IncreaseVoiceMessageQuality">Tingkatkan kualitas pesan suara</string>
+    <string name="SelectBetween">Pilih di antara</string>
+    <string name="AvatarAsBackground">Gambar profil sebagai latar belakang</string>
+    <string name="BlurAvatarBackground">Buramkan gambar profil</string>
+    <string name="DarkenAvatarBackground">Gelapkan gambar profil</string>
+    <string name="ProviderDeepLTranslate">Terjemahan DeepL</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderYouDao">Terjemahan YouDao</string>
 </resources>

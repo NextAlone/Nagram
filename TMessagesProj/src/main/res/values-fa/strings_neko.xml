@@ -106,4 +106,7 @@
     <string name="AvatarAsBackground">عکس پروفایل به عنوان پس‌زمینه</string>
     <string name="BlurAvatarBackground">تار کردن عکس پروفایل</string>
     <string name="DarkenAvatarBackground">تاریک کردن عکس پروفایل</string>
+    <string name="ProviderDeepLTranslate">مترجم DeepL</string>
+    <string name="ProviderMicrosoftTranslator">مترجم مایکروسافت</string>
+    <string name="ProviderYouDao">مترجم YouDao</string>
 </resources>

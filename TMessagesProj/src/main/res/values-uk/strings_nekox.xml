@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">Налаштування Trojan Proxy</string>
+    <string name="TrojanSNI">SNI (необов\'язково)</string>
     <string name="ProxyRemarks">Зауваження</string>
     <string name="RetestPing">Повторне сканування для всіх серверів</string>
     <string name="ReorderByPing">Перевпорядкувати сервери пінг</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">Надіслати ігри</string>
     <string name="UserRestrictionsSendInline">Надіслати через вбудованих ботів</string>
     <string name="AcceptSecretChat">Прийняти новий секретний чат</string>
+    <string name="TabletMode">Режим планшета</string>
+    <string name="TabletModeDefault">Залежить від пристрою</string>
 </resources>

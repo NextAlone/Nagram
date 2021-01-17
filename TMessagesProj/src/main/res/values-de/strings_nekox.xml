@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Gesperrt</string>
+    <string name="AccDescrChatAttachEnterMenu">Chat-Eingabemenü</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Video aufnehmen</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Audio aufnehmen</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Linkvorschau deaktivieren</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Linkvorschau aktivieren</string>
+    <string name="DisableLinkPreviewByDefault">Deaktiviere standardmäßig die Linkvorschau</string>
     <string name="CustomApi">Benutzerdefinierte API</string>
     <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.\n\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
     <string name="CustomApiNo">Verwenden Sie keine benutzerdefinierte API</string>
@@ -169,5 +175,22 @@
     <string name="PGPImportPrivate">Privaten Schlüssel importieren</string>
     <string name="ShareMyKey">Public-Key teilen</string>
     <string name="DisableVibration">Vibration deaktivieren</string>
+    <string name="IgnoreContentRestrictions">Ignoriere Inhaltsbeschränkungen</string>
+    <string name="SendCommentAfterForward">Sende Kommentar nach der Weiterleitung</string>
+    <string name="UnpinMessageX">Nachricht lösen</string>
+    <string name="UnpinMessagesAll">Alle Nachrichten lösen</string>
+    <string name="ImportLogin">QR Anmeldung</string>
+    <string name="QRLoginConfirm">Anmeldung bestätigen</string>
+    <string name="StorageResetInfo">Alle Daten dieser Anwendung werden dauerhaft gelöscht (versuchen Sie zuerst, sich von allen Konten abzumelden).</string>
+    <string name="FCInfo">Folgen Sie unseren Ankündigungen- und Aktualisierungskanal?</string>
+    <string name="CCTitle">OpenCC (Chinesische Konvertierung)</string>
+    <string name="CCTarget">Ziel</string>
     <string name="CCNo">Keiner</string>
+    <string name="CCTC">Traditionelles Chinesisch</string>
+    <string name="CCHK">Traditionelles Chinesisch (Hong Kong)</string>
+    <string name="CCTT">Traditionelles Chinesisch (Taiwan)</string>
+    <string name="CCSC">Vereinfachtes Chinesisch</string>
+    <string name="CCSP">Vereinfachtes Chinesisch (China)</string>
+    <string name="AcceptSecretChat">Neuen geheimen Chat annehmen</string>
+    <string name="TabletMode">Tablet-Modus</string>
 </resources>

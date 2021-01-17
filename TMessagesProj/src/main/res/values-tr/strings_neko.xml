@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko Ayarları</string>
+    <string name="IPv6">IPv6 Aracılığıyla Bağlanmayı Dene</string>
     <string name="MessageMenu">Mesaj Menüsü Ögeleri</string>
     <string name="HidePhone">Telefon Numaramı Gizle</string>
     <string name="Hide">Gizle</string>
@@ -100,5 +101,12 @@
     <string name="AutoPauseVideo">Videoyu Otomatik Duraklat</string>
     <string name="AutoPauseVideoAbout">Kilit ekranına veya arka plana geçildiğinde.</string>
     <string name="DisableProximityEvents">Yakınlık Olaylarını Devre Dışı Bırak</string>
-    <string name="IncreaseVoiceMessageQuality">Sesli mesajların kalitesini artırın</string>
+    <string name="IncreaseVoiceMessageQuality">Sesli Mesajların Kalitesini Artırın</string>
+    <string name="SelectBetween">Aralarından seçim yapın</string>
+    <string name="AvatarAsBackground">Profil Fotoğrafını Arka Plan Olarak Kullan</string>
+    <string name="BlurAvatarBackground">Profil Fotoğrafını Bulanıklaştır</string>
+    <string name="DarkenAvatarBackground">Profil Fotoğrafını Karart</string>
+    <string name="ProviderDeepLTranslate">DeepL Çeviri</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Tercüman</string>
+    <string name="ProviderYouDao">YouDao Çeviri</string>
 </resources>

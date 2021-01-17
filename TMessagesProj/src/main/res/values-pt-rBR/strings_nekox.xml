@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">Configurações do Trojan Proxy</string>
+    <string name="TrojanSNI">SNI (Opcional)</string>
     <string name="ProxyRemarks">Observações</string>
     <string name="RetestPing">Teste novamente o ping para todos os servidores</string>
     <string name="ReorderByPing">Reordenar servidores por ping</string>
@@ -202,4 +203,9 @@
     <string name="CCSC">Chinês Simplificado</string>
     <string name="CCSP">Chinês Simplificado (China)</string>
     <string name="CCJP">Novo Kanji Japonês (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Enviar jogos</string>
+    <string name="UserRestrictionsSendInline">Enviar via Inline Bots</string>
+    <string name="AcceptSecretChat">Aceitar novo chat secreto</string>
+    <string name="TabletMode">Modo Tablet</string>
+    <string name="TabletModeDefault">Depende do dispositivo</string>
 </resources>

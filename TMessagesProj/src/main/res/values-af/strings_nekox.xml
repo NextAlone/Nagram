@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="AccDescrChatAttachEnterMenu">Kletsinvoer-menu</string>
+    <string name="ChatAttachEnterMenuRecordVideo">تسجيل الفيديو</string>
+    <string name="ChatAttachEnterMenuRecordAudio">تسجيل صوتي</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">تعطيل معاينة الارتباط</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">تمكين معاينة الرابط</string>
+    <string name="UseChatAttachEnterMenu">استخدم قائمة الإدخال</string>
+    <string name="UseChatAttachEnterMenuNotice">قم بتغيير زر التسجيل إلى قائمة إدخال ، وأضف مفتاح معاينة الارتباط.</string>
+    <string name="DisableLinkPreviewByDefault">تعطيل معاينة الارتباط بشكل افتراضي</string>
+    <string name="DisableLinkPreviewByDefaultNotice">قم بتعطيل طلب معاينة الرابط أثناء الإدخال بشكل افتراضي لمنع الخادم من معرفة أن الرابط مشترك عبر Telegram.</string>
+    <string name="CustomApi">API مخصص</string>
+    <string name="ProviderYandexTranslate">ترجمة Yandex.Translate</string>
+    <string name="GoogleCloudTransKey">مفتاح ترجمة سحابة Google</string>
+    <string name="GoogleCloudTransKeyNotice">إذا قمت بإعداد Google Cloud Trans Key ، فسيتم استدعاء API للترجمة السحابية بدلاً من إرسال نموذج مزيف إلى إصدار الويب عند الترجمة (حركة مرور أسرع وثابتة وحفظها).</string>
+    <string name="TransToLang">اللغة الهدف للترجمة</string>
+    <string name="TransInputToLang">اللغة الهدف للترجمة</string>
+    <string name="More">المزيد</string>
+    <string name="NekoXUpdatesChannel">قناة تحديثات Nekox</string>
+    <string name="ShowIdAndDc">Toon ID / DC in profiel</string>
+    <string name="UseDefaultTheme">Use default theme *</string>
     <string name="PrivacyNotice">هشدار حریم خصوصی</string>
     <string name="PrivacyNoticePhoneVisible">تشخیص داده شده است که شماره تلفن همراه شما برای همه قابل رویت است ، و این ممکن است باعث شود هکرهای تحت کنترل دولت هویت واقعی شما را پیدا کنند ، لطفا آن را خاموش کنید!</string>
     <string name="ApplySuggestion">قبول،اعمال کن</string>

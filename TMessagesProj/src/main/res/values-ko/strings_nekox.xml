@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs 매개 변수</string>
     <string name="ProxyInfoTrojan">트로이 목마 프록시 설정</string>
+    <string name="TrojanSNI">SNI (선택 사항)</string>
     <string name="ProxyRemarks">비고</string>
     <string name="RetestPing">모든 서버에 대한 핑 테스트</string>
     <string name="ReorderByPing">Ping 으로 서버 재정렬</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">게임 보내기</string>
     <string name="UserRestrictionsSendInline">인라인 봇을 통해 보내기</string>
     <string name="AcceptSecretChat">새로운 비밀 채팅 수락</string>
+    <string name="TabletMode">태블릿 모드</string>
+    <string name="TabletModeDefault">기기에 따라 다름</string>
 </resources>

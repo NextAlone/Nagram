@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">نيكو الإعدادات</string>
+    <string name="IPv6">الاتصال من خلال IPv6</string>
     <string name="MessageMenu">قائمة الرسائل</string>
     <string name="HidePhone">إخفاء رقم هاتفي</string>
     <string name="Hide">إخفاء</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">عند قفل الشاشة / التبديل إلى الخلفية.</string>
     <string name="DisableProximityEvents">تعطيل أحداث التقارب</string>
     <string name="IncreaseVoiceMessageQuality">زيادة جودة الرسائل الصوتية</string>
+    <string name="SelectBetween">حدد بين</string>
+    <string name="AvatarAsBackground">صورة الملف الشخصي كخلفية</string>
+    <string name="BlurAvatarBackground">طمس صورة الملف الشخصي</string>
+    <string name="DarkenAvatarBackground">تعتيم صورة الملف الشخصي</string>
+    <string name="ProviderDeepLTranslate">ترجمة DeepL</string>
+    <string name="ProviderMicrosoftTranslator">مترجم مايكروسوفت</string>
+    <string name="ProviderYouDao">ترجمة YouDao</string>
 </resources>

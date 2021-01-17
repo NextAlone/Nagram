@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko կայանքներ</string>
+    <string name="IPv6">Միացում IPv6- ի միջոցով</string>
     <string name="MessageMenu">Հաղորդագրության ընտրացանկ</string>
     <string name="HidePhone">Թաքցրեք իմ հեռախոսահամարը</string>
     <string name="Hide">Թաքցնել</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">Երբ կողպեք էկրանը / անցնել ֆոնին:</string>
     <string name="DisableProximityEvents">Անջատեք հարևանության իրադարձությունները</string>
     <string name="IncreaseVoiceMessageQuality">Բարձրացնել ձայնային հաղորդագրությունների որակը</string>
+    <string name="SelectBetween">Ընտրեք միջեւ</string>
+    <string name="AvatarAsBackground">Պրոֆիլի նկարը որպես ֆոն</string>
+    <string name="BlurAvatarBackground">Պղտոր պրոֆիլի նկարը</string>
+    <string name="DarkenAvatarBackground">Մութացնել պրոֆիլի նկարը</string>
+    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft- ի թարգմանիչ</string>
+    <string name="ProviderYouDao">YouDao Translate</string>
 </resources>

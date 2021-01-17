@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">Ustawienia Trojan Proxy</string>
+    <string name="TrojanSNI">SNI (opcjonalnie)</string>
     <string name="ProxyRemarks">Uwagi</string>
     <string name="RetestPing">Ponownie przetestuj ping dla wszystkich serwerów</string>
     <string name="ReorderByPing">Zmień kolejność serwerów na podstawie pingu</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">Wyślij gry</string>
     <string name="UserRestrictionsSendInline">Wyślij za pośrednictwem botów wbudowanych</string>
     <string name="AcceptSecretChat">Zaakceptuj nowy tajny czat</string>
+    <string name="TabletMode">Tryb tabletu</string>
+    <string name="TabletModeDefault">Zależy od urządzenia</string>
 </resources>

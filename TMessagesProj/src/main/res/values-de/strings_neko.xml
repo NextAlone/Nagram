@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Neko-Einstellungen</string>
+    <string name="IPv6">Über IPv6 verbinden</string>
     <string name="MessageMenu">Nachrichtenmenü</string>
     <string name="HidePhone">Meine Telefonnummer ausblenden</string>
     <string name="Hide">Verstecken</string>
@@ -40,6 +41,8 @@
     <string name="HideProxySponsorChannel">Proxy Sponsor ausblenden</string>
     <string name="ViewHistory">Verlauf anzeigen</string>
     <string name="Nya">Miau!</string>
+    <string name="SaveCacheToExternalFilesDir">Speicher-Isolation</string>
+    <string name="SaveCacheToExternalFilesDirAbout">Speichere den \"Telegram\" Ordner in einem app-spezifischen Verzeichnis, um den gemeinsam genutzten Speicher sauber zu halten.</string>
     <string name="SensitiveDisableFiltering">Empfindliche Inhaltsfilterung deaktivieren</string>
     <string name="SensitiveAbout">Zeige sensible Medien in öffentlichen Kanälen auf all Ihren Geräten.</string>
     <string name="StickerSize">Aufklebergröße</string>
@@ -95,4 +98,13 @@
     <string name="DisableAppBarShadow">Schatten der Titelleiste deaktivieren</string>
     <string name="BetaWarning">Dies ist eine **beta** Funktion, die von **Telegram** implementiert wurde.</string>
     <string name="MediaPreview">Medienvorschau in der Dialogliste</string>
+    <string name="AutoPauseVideo">Video automatisch anhalten</string>
+    <string name="DisableProximityEvents">Näherungssensorereignisse deaktivieren</string>
+    <string name="IncreaseVoiceMessageQuality">Erhöhe die Qualität von Sprachnachrichten</string>
+    <string name="SelectBetween">Wähle zwischen</string>
+    <string name="AvatarAsBackground">Profilbild als Hintergrund</string>
+    <string name="DarkenAvatarBackground">Profilbild abdunkeln</string>
+    <string name="ProviderDeepLTranslate">DeepL-Übersetzung</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Übersetzer</string>
+    <string name="ProviderYouDao">YouDao Übersetzer</string>
 </resources>

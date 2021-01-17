@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Parametro Obfs</string>
     <string name="ProxyInfoTrojan">Impostazioni Del Proxy Trojan</string>
+    <string name="TrojanSNI">SNI (Opzionale)</string>
     <string name="ProxyRemarks">Osservazioni</string>
     <string name="RetestPing">Riprova il ping per tutti i server</string>
     <string name="ReorderByPing">Riordina server dal ping</string>
@@ -183,5 +184,28 @@
     <string name="IgnoreContentRestrictions">Ignora le restrizioni di contenuto</string>
     <string name="IgnoreContentRestrictionsNotice">Ignora le restrizioni degli android sui messaggi localmente. Questo potrebbe essere bandito dal server in futuro, e sarà necessario valutare la legalità locale di questa opzione da solo.</string>
     <string name="SendCommentAfterForward">Invia commenti dopo l\'inoltro</string>
+    <string name="UnpinMessageX">Togli Messaggio Fissato</string>
+    <string name="UnpinMessagesAll">Togli tutti i messaggi fissati</string>
+    <string name="DismissForYourself">Togli per te stesso</string>
+    <string name="ImportLogin">Login QR</string>
+    <string name="QRLoginNotice">Questo codice / collegamento QR consente a qualcuno di accedere al tuo account Telegram. Questa è una tua operazione?</string>
+    <string name="QRLoginConfirm">Conferma Login</string>
+    <string name="StorageReset">Pulisci Database</string>
+    <string name="StorageResetInfo">Tutti i dati di questa applicazione verranno eliminati definitivamente (prima prova a disconnettersi da tutti gli account).</string>
+    <string name="FCTitle">Info update applicazione</string>
+    <string name="FCInfo">Seguire il nostro canale di annunci e aggiornamenti?</string>
+    <string name="CCTitle">OpenCC (Conversione Cinese)</string>
+    <string name="CCTarget">Bersaglio</string>
     <string name="CCNo">Nessuno</string>
+    <string name="CCTC">Cinese Tradizionale</string>
+    <string name="CCHK">Cinese Tradizionale (Hong Kong)</string>
+    <string name="CCTT">Cinese Tradizionale (Taiwan)</string>
+    <string name="CCSC">Cinese semplificato</string>
+    <string name="CCSP">Cinese semplificato (Cina)</string>
+    <string name="CCJP">Nuovo Kanji Giapponese (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Invia Giochi</string>
+    <string name="UserRestrictionsSendInline">Invia tramite Inline Bot</string>
+    <string name="AcceptSecretChat">Accetta nuove chat segrete</string>
+    <string name="TabletMode">Modalità Tablet</string>
+    <string name="TabletModeDefault">Dipende dal dispositivo</string>
 </resources>

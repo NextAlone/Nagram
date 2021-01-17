@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">הגדרות Neko</string>
+    <string name="IPv6">מתחבר דרך IPv6</string>
     <string name="MessageMenu">תפריט הודעה</string>
     <string name="HidePhone">הסתר את מספר הטלפון שלי</string>
     <string name="Hide">להתחבא</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">כאשר נעילת מסך / מעבר לרקע.</string>
     <string name="DisableProximityEvents">השבת אירועי קרבה</string>
     <string name="IncreaseVoiceMessageQuality">הגדל את איכות ההודעות הקוליות</string>
+    <string name="SelectBetween">בחר בין</string>
+    <string name="AvatarAsBackground">תמונת פרופיל כרקע</string>
+    <string name="BlurAvatarBackground">טשטש תמונת פרופיל</string>
+    <string name="DarkenAvatarBackground">תמונת פרופיל כהה יותר</string>
+    <string name="ProviderDeepLTranslate">תרגום DeepL</string>
+    <string name="ProviderMicrosoftTranslator">מתרגם מיקרוסופט</string>
+    <string name="ProviderYouDao">YouDao Translate</string>
 </resources>

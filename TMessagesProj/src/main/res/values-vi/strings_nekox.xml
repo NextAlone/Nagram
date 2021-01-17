@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Thông số Obfs</string>
     <string name="ProxyInfoTrojan">Cài đặt Trojan Proxy</string>
+    <string name="TrojanSNI">SNI (Tùy chọn)</string>
     <string name="ProxyRemarks">Nhận xét</string>
     <string name="RetestPing">Kiểm tra lại ping cho tất cả các máy chủ</string>
     <string name="ReorderByPing">Sắp xếp lại máy chủ bằng cách ping</string>

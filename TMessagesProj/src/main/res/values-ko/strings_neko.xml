@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">네코그램 설정</string>
+    <string name="IPv6">IPv6를 통해 연결</string>
     <string name="MessageMenu">메세지 메뉴</string>
     <string name="HidePhone">내 번호 숨기기</string>
     <string name="Hide">숨기기</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">락스크린이 백그라운드로 변경될때</string>
     <string name="DisableProximityEvents">근접 이벤트 비활성화</string>
     <string name="IncreaseVoiceMessageQuality">음성 메시지 품질 향상</string>
+    <string name="SelectBetween">선택</string>
+    <string name="AvatarAsBackground">배경으로 프로필 사진</string>
+    <string name="BlurAvatarBackground">프로필 사진 흐림</string>
+    <string name="DarkenAvatarBackground">프로필 사진 어둡게</string>
+    <string name="ProviderDeepLTranslate">DeepL 번역</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft 번역기</string>
+    <string name="ProviderYouDao">YouDao 번역</string>
 </resources>

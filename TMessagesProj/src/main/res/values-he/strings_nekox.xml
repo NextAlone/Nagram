@@ -131,6 +131,7 @@
     <string name="SSRObfs">אובסס</string>
     <string name="SSRObfsParam">אובפס פרם</string>
     <string name="ProxyInfoTrojan">הגדרות פרוקסי טרויאני</string>
+    <string name="TrojanSNI">SNI (אופציונלי)</string>
     <string name="ProxyRemarks">הערות</string>
     <string name="RetestPing">בדוק מחדש את פינג לכל השרתים</string>
     <string name="ReorderByPing">סדר מחדש את השרתים באמצעות פינג</string>
@@ -205,4 +206,6 @@
     <string name="UserRestrictionsSendGames">שלח משחקים</string>
     <string name="UserRestrictionsSendInline">שלח באמצעות בוטים מוטבעים</string>
     <string name="AcceptSecretChat">קבל צ\'אט סודי חדש</string>
+    <string name="TabletMode">מצב טאבלט</string>
+    <string name="TabletModeDefault">תלוי במכשיר</string>
 </resources>

@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">تنظیمات پروکسی Trojan</string>
+    <string name="TrojanSNI">SNI (اختیاری)</string>
     <string name="ProxyRemarks">نام نمایشی دلخواه</string>
     <string name="RetestPing">آزمایش مجدد پینگ برای همه سرورها</string>
     <string name="ReorderByPing">مرتب سازی براساس پینگ</string>

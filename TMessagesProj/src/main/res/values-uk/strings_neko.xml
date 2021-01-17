@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Налаштування Neko</string>
+    <string name="IPv6">Підключення через IPv6</string>
     <string name="MessageMenu">Меню повідомлення</string>
     <string name="HidePhone">Сховати мій номер телефону</string>
     <string name="Hide">Приховати</string>
@@ -101,4 +102,11 @@
     <string name="AutoPauseVideoAbout">Під час блокування екрану/переходу в фон.</string>
     <string name="DisableProximityEvents">Вимкнути події наближення</string>
     <string name="IncreaseVoiceMessageQuality">Підвищити якість голосових повідомлень</string>
+    <string name="SelectBetween">Вибрати між</string>
+    <string name="AvatarAsBackground">Профіль зображення у вигляді фону</string>
+    <string name="BlurAvatarBackground">Розмиття зображення профілю</string>
+    <string name="DarkenAvatarBackground">Затемніть зображення профілю</string>
+    <string name="ProviderDeepLTranslate">DeepL переклад</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Перекладач</string>
+    <string name="ProviderYouDao">YouDao Переклад</string>
 </resources>
