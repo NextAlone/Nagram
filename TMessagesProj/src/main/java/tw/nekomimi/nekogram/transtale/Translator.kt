@@ -8,6 +8,7 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
+import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
 import tw.nekomimi.nekogram.transtale.source.*
 import tw.nekomimi.nekogram.utils.UIUtil
@@ -104,11 +105,22 @@ interface Translator {
 
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
-            return translator.doTranslate("auto", language, query).also {
+            val result =  translator.doTranslate("auto", language, query).also {
 
                 to.transDb.save(query, it)
 
             }
+
+            if (language == "zh") {
+                val countryUpperCase = country.toUpperCase()
+                if (countryUpperCase == "CN") {
+                    return CCConverter.get(CCTarget.SP).convert(result)
+                } else if (countryUpperCase == "TW") {
+                    return CCConverter.get(CCTarget.TT).convert(result)
+                }
+            }
+
+            return result
 
         }
 

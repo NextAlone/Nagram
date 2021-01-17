@@ -240,6 +240,7 @@ import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -491,7 +492,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private MessageObject selectedObjectToEditCaption;
     private MessageObject selectedObject;
-    private MessageObject.GroupedMessages selectedObjectGroup;
+    public MessageObject.GroupedMessages selectedObjectGroup;
     private ArrayList<MessageObject> forwardingMessages;
     private MessageObject forwardingMessage;
     private MessageObject.GroupedMessages forwardingMessageGroup;
@@ -18571,9 +18572,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                         if (chatMode != MODE_SCHEDULED) {
-                            boolean allowPrpr = currentUser != null
-                                    || (currentChat != null && ChatObject.canSendMessages(currentChat) && !currentChat.broadcast &&
-                                    message.isFromUser());
                             boolean allowViewHistory = currentUser == null
                                     && (currentChat != null && !currentChat.broadcast && message.isFromUser());
 
@@ -18582,17 +18580,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(90);
                                 icons.add(R.drawable.baseline_schedule_24);
                             }
-                            MessageObject messageObject = null;
-                            if (selectedObjectGroup != null) {
-                                if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
-                                    messageObject = selectedObjectGroup.messages.get(0);
+                            MessageObject messageObject = getMessageForTranslate();
+                            boolean docsWithMessages = false;
+                            if (selectedObjectGroup != null && selectedObjectGroup.isDocuments) {
+                                for (MessageObject object : selectedObjectGroup.messages) {
+                                    if (StrUtil.isNotBlank(object.messageOwner.message)) {
+                                        docsWithMessages = true;
+                                    }
                                 }
-                            } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
-                                messageObject = selectedObject;
                             }
                             if (NekoConfig.showTranslate) {
-                                if (messageObject != null) {
-                                    items.add(messageObject.messageOwner.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
+                                if (messageObject != null || docsWithMessages) {
+                                    boolean td;
+                                    if (messageObject != null) {
+                                        td = messageObject.messageOwner.translated;
+                                    } else {
+                                        td = selectedObjectGroup.messages.get(0).messageOwner.translated;
+                                    }
+                                    items.add(td ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
                                     options.add(88);
                                     icons.add(R.drawable.ic_translate);
                                 }
@@ -19264,6 +19269,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
+    public MessageObject getMessageForTranslate() {
+        MessageObject messageObject = null;
+        if (selectedObjectGroup != null && !selectedObjectGroup.isDocuments) {
+            for (MessageObject object : selectedObjectGroup.messages) {
+                if (!TextUtils.isEmpty(object.messageOwner.message)) {
+                    if (messageObject != null) {
+                        messageObject = null;
+                        break;
+                    } else {
+                        messageObject = object;
+                    }
+                }
+            }
+        } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
+            messageObject = selectedObject;
+        }
+        return messageObject;
+    }
+
     private void processSelectedOption(int option) {
         if (selectedObject == null || getParentActivity() == null) {
             return;
@@ -19839,19 +19863,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case 88: {
 
-                MessageObject messageObject = null;
-                if (selectedObjectGroup != null) {
-                    if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
-                        messageObject = selectedObjectGroup.messages.get(0);
-                    }
-                } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
-                    messageObject = selectedObject;
-                }
-                if (messageObject == null) {
-                    return;
-                }
-
-                MessageTransKt.translateMessages(this, new MessageObject[]{messageObject});
+                MessageTransKt.translateMessages(this);
 
                 break;
 
@@ -20107,7 +20119,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         scrimPopupWindowItems = null;
                     }
 
-                    MessageTransKt.translateMessages(this, new MessageObject[]{selectedObject}, locale);
+                    MessageTransKt.translateMessages(this, locale);
 
                     return Unit.INSTANCE;
 

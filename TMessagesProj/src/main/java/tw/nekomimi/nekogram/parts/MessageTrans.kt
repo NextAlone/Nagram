@@ -67,7 +67,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
     } else {
 
-        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1) ?: return 0
+        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)
+                ?: return 0
 
         messageOwner.translatedMessage = messageOwner.message + "\n\n--------\n\n" + text
 
@@ -77,9 +78,19 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
 }
 
-@JvmOverloads
-fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Locale = NekoConfig.translateToLang?.code2Locale
-        ?: LocaleController.getInstance().currentLocale) {
+@JvmName("translateMessages")
+fun ChatActivity.translateMessages1() = translateMessages()
+
+@JvmName("translateMessages")
+fun ChatActivity.translateMessages2(target: Locale) = translateMessages(target)
+
+@JvmName("translateMessages")
+fun ChatActivity.translateMessages3(messages: Array<MessageObject>) = translateMessages(messages = messages)
+
+fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.code2Locale
+        ?: LocaleController.getInstance().currentLocale, messages: Array<MessageObject> = messageForTranslate?.let { arrayOf(it) }
+        ?: selectedObjectGroup?.messages?.toTypedArray()
+        ?: emptyArray()) {
 
     if (messages.all { it.messageOwner.translated }) {
 
@@ -163,7 +174,7 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
                                         ?: it.javaClass.simpleName) {
 
-                                    translateMessages(messages, target)
+                                    translateMessages(target, messages)
 
                                 }
 
@@ -200,7 +211,7 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, e.message
                                             ?: e.javaClass.simpleName) {
 
-                                        translateMessages(messages, target)
+                                        translateMessages(target, messages)
 
                                     }
 
@@ -237,7 +248,7 @@ fun ChatActivity.translateMessages(messages: Array<MessageObject>, target: Local
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
                                         ?: it.javaClass.simpleName) {
 
-                                    translateMessages(messages, target)
+                                    translateMessages(target, messages)
 
                                 }
 
