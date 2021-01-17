@@ -1994,7 +1994,7 @@ public class SecretChatHelper extends BaseController {
                         });
                     } else {
                         delayedEncryptedChatUpdates.clear();
-                        AlertUtil.showToast(error);
+                        AlertUtil.showToast(error1);
                     }
                 }, ConnectionsManager.RequestFlagFailOnServerErrors);
             } else {
