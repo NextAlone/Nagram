@@ -10,4 +10,4 @@ function flavor() {
 flavor Full
 flavor FullAppleEmoji
 flavor Mini
-flavor MiniAppletEmoji
+flavor MiniAppleEmoji
