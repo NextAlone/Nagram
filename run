@@ -3,5 +3,8 @@
 TARGET="bin"
 for e in $@; do
   TARGET="$TARGET/$e"
+  shift
+  if [ -x "${TARGET}.sh" ]; then
+    exec "${TARGET}.sh" $@
+  fi
 done
-exec ${TARGET}.sh
