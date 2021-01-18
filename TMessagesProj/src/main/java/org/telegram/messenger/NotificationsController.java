@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -4604,16 +4605,22 @@ public class NotificationsController extends BaseController {
 
     private int getNotificationColor() {
         int color = 0;
-        if (Theme.getActiveTheme().hasAccentColors()) {
-            color = Theme.getActiveTheme().getAccentColor(Theme.getActiveTheme().currentAccentId);
-        }
-        if (color == 0) {
-            color = Theme.getColor(Theme.key_actionBarDefault) | 0xff000000;
-        }
+        Configuration configuration = ApplicationLoader.applicationContext.getResources().getConfiguration();
+        boolean isDark = (configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        if (isDark) {
+            color = 0xffffffff;
+        } else {
+            if (Theme.getActiveTheme().hasAccentColors()) {
+                color = Theme.getActiveTheme().getAccentColor(Theme.getActiveTheme().currentAccentId);
+            }
+            if (Theme.getActiveTheme().isDark() || color == 0) {
+                color = Theme.getColor(Theme.key_actionBarDefault);
+            }
             // too bright
             if (AndroidUtilities.computePerceivedBrightness(color) >= 0.721f) {
                 color = Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader) | 0xff000000;
             }
+        }
         return color;
     }
 }

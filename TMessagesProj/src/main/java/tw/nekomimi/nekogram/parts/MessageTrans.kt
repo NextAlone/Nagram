@@ -92,6 +92,8 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
         ?: selectedObjectGroup?.messages?.toTypedArray()
         ?: emptyArray()) {
 
+    // TODO: Fix file group
+
     if (messages.all { it.messageOwner.translated }) {
 
         messages.forEach { messageObject ->

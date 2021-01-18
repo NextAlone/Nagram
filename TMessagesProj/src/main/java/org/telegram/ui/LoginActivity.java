@@ -577,16 +577,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                     });
 
-                    builder.addRadioItem(LocaleController.getString("CustomApiInput", R.string.CustomApiInput), dcType == 2, (cell) -> {
-
-                        targetDc.set(2);
-
-                        builder.doRadioCheck(cell);
-
-                        return Unit.INSTANCE;
-
-                    });
-
                     builder.addCancelButton();
 
                     builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {

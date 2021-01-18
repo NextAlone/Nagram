@@ -1773,7 +1773,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         selectedMessagesCanCopyIds[a].clear();
                         selectedMessagesCanStarIds[a].clear();
                     }
-                    hideActionMode();
+                    clearSelectionMode();
                     if (messageObject != null && (messageObject.messageOwner.id > 0 || messageObject.messageOwner.id < 0 && currentEncryptedChat != null)) {
                         showFieldPanelForReply(messageObject);
                     }
