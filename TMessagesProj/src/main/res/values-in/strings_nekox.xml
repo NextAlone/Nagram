@@ -32,7 +32,7 @@
     <string name="DevModeTitle">**Akun telegram Anda mungkin diblokir **</string>
     <string name="DevModeNotice">Kami tidak bertanggung jawab atas penyalahgunaan fitur pengembang.</string>
     <string name="TapToDisable">Sentuh untuk mematikan. Jika anda tidak membutuhkan ini.</string>
-    <string name="PlaceHolder">Placeholder - Harap Nonaktifkan</string>
+    <string name="PlaceHolder">Placeholder - Harap Matikan</string>
     <string name="CustomBackend">Backend Khusus</string>
     <string name="CustomBackendNotice">Fungsi ini hanya tersedia untuk pengguna profesional, jika anda tidak tahu apa fungsi opsi-opsi berikut ini, abaikan saja.</string>
     <string name="CustomBackendProduction">Official Production DataCenter</string>
