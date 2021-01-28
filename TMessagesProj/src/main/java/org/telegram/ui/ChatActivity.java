@@ -20076,6 +20076,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ArrayList<MessageObject> messages = new ArrayList<>();
                 messages.add(selectedObject);
                 forwardMessages(messages, false, true, 0, UserConfig.getInstance(currentAccount).getClientUserId());
+                undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
                 break;
             }
             case 94: {
