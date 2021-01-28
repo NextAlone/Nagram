@@ -131,6 +131,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Параметры Obfs</string>
     <string name="ProxyInfoTrojan">Настройки Trojan-прокси</string>
+    <string name="TrojanSNI">SNI (опционально)</string>
     <string name="ProxyRemarks">Примечания</string>
     <string name="RetestPing">Пересчитать все</string>
     <string name="ReorderByPing">Сортировать по пингу</string>
@@ -182,17 +183,17 @@
     <string name="DisableVibration">Отключить вибрацию</string>
     <string name="IgnoreContentRestrictions">Игнорировать ограничения контента</string>
     <string name="IgnoreContentRestrictionsNotice">Локально игнорирует ограничения Android на сообщения. В будущем это может быть запрещено со стороны сервера, и вам нужно будет самостоятельно оценить законность этой опции.</string>
-    <string name="SendCommentAfterForward">Отправить комментарий после пересылки</string>
+    <string name="SendCommentAfterForward">Комментарий после пересылаемого</string>
     <string name="UnpinMessageX">Открепить сообщение</string>
     <string name="UnpinMessagesAll">Открепить все сообщения</string>
     <string name="DismissForYourself">Скрыть для себя</string>
     <string name="ImportLogin">Вход по QR коду</string>
-    <string name="QRLoginNotice">Этот QR-код / ссылка позволяет кому-то войти в вашу учетную запись Telegram. Это были вы?</string>
+    <string name="QRLoginNotice">Будьте внимательны, с помощью этого кода любой сможет войти в ваш аккаунт!</string>
     <string name="QRLoginConfirm">Подтвердить вход</string>
     <string name="StorageReset">Очистить хранилище</string>
-    <string name="StorageResetInfo">Все данные этого приложения будут удалены (сначала попробуйте выйти из всех аккаунтов).</string>
+    <string name="StorageResetInfo">Все данные будут удалены (также вы выйдете из всех аккаунтов).</string>
     <string name="FCTitle">Об обновлениях приложения</string>
-    <string name="FCInfo">Следите за нашим каналом анонсов и обновлений?</string>
+    <string name="FCInfo">Подписаться на канал с обновлениями?</string>
     <string name="CCTitle">OpenCC (китайский язык)</string>
     <string name="CCTarget">Цель</string>
     <string name="CCNo">Отсутствует</string>
@@ -202,4 +203,9 @@
     <string name="CCSC">Упрощенный китайский</string>
     <string name="CCSP">Упрощенный китайский (Китай)</string>
     <string name="CCJP">Новые японские кандзи (синдзитай)</string>
+    <string name="UserRestrictionsSendGames">Отправка игр</string>
+    <string name="UserRestrictionsSendInline">Отправка через ботов</string>
+    <string name="AcceptSecretChat">Разрешить секретные чаты</string>
+    <string name="TabletMode">Режим планшета</string>
+    <string name="TabletModeDefault">Зависит от устройства</string>
 </resources>

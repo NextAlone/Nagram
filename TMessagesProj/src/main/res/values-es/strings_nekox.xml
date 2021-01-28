@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Bloqueado</string>
+    <string name="AccDescrChatAttachEnterMenu">Menú de entrada de chat</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Grabar video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Grabar audio</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Deshabilitar la vista previa del enlace</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Habilitar la vista previa del enlace</string>
+    <string name="UseChatAttachEnterMenu">Usar el menú de entrada</string>
+    <string name="UseChatAttachEnterMenuNotice">Cambie el botón de grabación a un menú de entrada y agregue un interruptor para la vista previa del enlace.</string>
+    <string name="DisableLinkPreviewByDefault">Deshabilitar la vista previa del enlace de forma predeterminada</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Desactive la solicitud de vista previa del enlace durante la entrada de forma predeterminada para evitar que el servidor sepa que el enlace se comparte a través de Telegram.</string>
     <string name="CustomApi">API personalizada</string>
     <string name="UseCustomApiNotice">Inicie sesión con la Api personalizada, si no puede registrarse o iniciar sesión, esto puede ayudar.\n\n Nota: fcm no funcionará si está utilizando la versión de lanzamiento.</string>
     <string name="CustomApiNo">No usar API personalizada</string>
@@ -97,6 +106,7 @@
     <string name="AddProxyVmess">Agregar proxy de Vmess</string>
     <string name="AddProxySS">Añadir proxy de Shadowsocks</string>
     <string name="AddProxySSR">Añadir proxy de ShadowsocksR</string>
+    <string name="AddProxyTrojan">Añadir proxy Troyano</string>
     <string name="SSPluginConflictingName">Varios plugins utilizan esta id: %s.</string>
     <string name="EditProxy">Editar proxy</string>
     <string name="ShareProxy">Compartir proxy</string>
@@ -120,6 +130,8 @@
     <string name="SSRProtocolParams">Parámetros de protocolo</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
+    <string name="ProxyInfoTrojan">Configuración del Proxy Trojan</string>
+    <string name="TrojanSNI">SNI (opcional)</string>
     <string name="ProxyRemarks">Comentarios</string>
     <string name="RetestPing">Vuelva a probar el ping para todos los servidores</string>
     <string name="ReorderByPing">Reordenar servidores por ping</string>
@@ -169,5 +181,31 @@
     <string name="PGPImportPrivate">Importar clave privada</string>
     <string name="ShareMyKey">Compartir Mi Clave Pública</string>
     <string name="DisableVibration">Desactivar vibración</string>
+    <string name="IgnoreContentRestrictions">Ignorar las restricciones de contenido</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignora las restricciones de Android en los mensajes de forma local. Esto puede ser prohibido por el servidor en el futuro, y usted mismo deberá evaluar la legalidad local de esta opción.</string>
+    <string name="SendCommentAfterForward">Enviar comentario después de reenviar</string>
+    <string name="UnpinMessageX">Desanclar mensaje</string>
+    <string name="UnpinMessagesAll">Desanclar todos los mensajes</string>
+    <string name="DismissForYourself">Descartar para ti mismo</string>
+    <string name="ImportLogin">Iniciar sesión con QR</string>
+    <string name="QRLoginNotice">Este código / enlace QR permite que alguien inicie sesión en su cuenta de Telegram. ¿Es esta tu propia operación?</string>
+    <string name="QRLoginConfirm">Confirmar inicio de sesión</string>
+    <string name="StorageReset">Limpiar almacenamiento</string>
+    <string name="StorageResetInfo">Todos los datos de esta aplicación se eliminarán de forma permanente (e intente cerrar sesión en todas las cuentas primero).</string>
+    <string name="FCTitle">Acerca de las actualizaciones de la aplicación</string>
+    <string name="FCInfo">¿Sigue nuestro canal de anuncios y actualizaciones?</string>
+    <string name="CCTitle">OpenCC (conversión de chino)</string>
+    <string name="CCTarget">Objetivo</string>
     <string name="CCNo">Ninguna</string>
+    <string name="CCTC">Chino tradicional</string>
+    <string name="CCHK">Chino tradicional (Hong Kong)</string>
+    <string name="CCTT">Chino tradicional (Taiwán)</string>
+    <string name="CCSC">Chino simplificado</string>
+    <string name="CCSP">Chino simplificado (China)</string>
+    <string name="CCJP">Nuevo kanji japonés (Shinjitai)</string>
+    <string name="UserRestrictionsSendGames">Enviar juegos</string>
+    <string name="UserRestrictionsSendInline">Enviar mediante bots inline</string>
+    <string name="AcceptSecretChat">Aceptar nuevo chat secreto</string>
+    <string name="TabletMode">Modo tablet</string>
+    <string name="TabletModeDefault">Depende del dispositivo</string>
 </resources>
