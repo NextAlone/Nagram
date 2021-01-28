@@ -11442,7 +11442,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 ActionBarMenuItem replyItem = actionBar.createActionMode().getItem(reply);
                 if (replyItem != null) {
-                    replyItem.setVisibility(ChatObject.canSendMessages(currentChat) &&
+                    replyItem.setVisibility(chatMode != MODE_PINNED && ChatObject.canSendMessages(currentChat) &&
                             selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
                 }
                 ActionBarMenuItem copyItem = actionBar.createActionMode().getItem(copy);
@@ -11489,7 +11489,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 int copyVisible = copyItem.getVisibility();
-                int starVisible = starItem.getVisibility();
                 copyItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
                 actionModeOtherItem.setSubItemVisibility(star, getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount);
                 if (selectItem != null) {
@@ -11520,22 +11519,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectItem.setVisibility(selectable ? View.VISIBLE : View.GONE);
                 }
                 int newCopyVisible = copyItem.getVisibility();
-                int newStarVisible = starItem.getVisibility();
                 actionBar.createActionMode().getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
                 hasUnfavedSelected = false;
-                for (int a = 0; a < 2; a++) {
-                    for (int b = 0; b < selectedMessagesCanStarIds[a].size(); b++) {
-                        MessageObject msg = selectedMessagesCanStarIds[a].valueAt(b);
-                        if (!getMediaDataController().isStickerInFavorites(msg.getDocument())) {
-                            hasUnfavedSelected = true;
+                boolean starChanged = false;
+                if (starItem != null) {
+                    int starVisible = starItem.getVisibility();
+                    actionModeOtherItem.setSubItemVisibility(star, selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0);
+                    starChanged = starVisible != starItem.getVisibility();
+                    for (int a = 0; a < 2; a++) {
+                        for (int b = 0; b < selectedMessagesCanStarIds[a].size(); b++) {
+                            MessageObject msg = selectedMessagesCanStarIds[a].valueAt(b);
+                            if (!getMediaDataController().isStickerInFavorites(msg.getDocument())) {
+                                hasUnfavedSelected = true;
+                                break;
+                            }
+                        }
+                        if (hasUnfavedSelected) {
                             break;
                         }
                     }
-                    if (hasUnfavedSelected) {
-                        break;
-                    }
                 }
-                starItem.setIcon(hasUnfavedSelected ? R.drawable.baseline_star_24 : R.drawable.baseline_star_24);
                 final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 ? View.VISIBLE : View.GONE;
                 if (replyButton != null) {
                     boolean allowChatActions = true;
@@ -11619,7 +11622,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 if (editItem != null) {
-                    if (copyVisible != newCopyVisible || starVisible != newStarVisible) {
+                    if (copyVisible != newCopyVisible || starChanged) {
                         if (newEditVisibility == View.VISIBLE) {
                             editItem.setAlpha(1.0f);
                             editItem.setScaleX(1.0f);
