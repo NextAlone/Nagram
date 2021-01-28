@@ -61,7 +61,7 @@
     <string name="PublicPrefix">ציבורי</string>
     <string name="DisableChatAction">אל תשלח את סטטוס הקלט שלי</string>
     <string name="FakeScreenshot">העמד פנים כמו צילום מסך</string>
-    <string name="Import">יבוא</string>
+    <string name="ImportPxy">יבוא</string>
     <string name="FilterNameUsers">משתמשים</string>
     <string name="FilterNameUsersDescription">רק הודעות מצ\'אטים פרטיים</string>
     <string name="FilterNameContacts">אנשי קשר</string>

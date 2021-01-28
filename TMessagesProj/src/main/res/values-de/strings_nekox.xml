@@ -58,7 +58,7 @@
     <string name="PublicPrefix">Öffentlich</string>
     <string name="DisableChatAction">Meinen Eingabestatus nicht senden</string>
     <string name="FakeScreenshot">Screenshot verhindern</string>
-    <string name="Import">Importieren</string>
+    <string name="ImportPxy">Importieren</string>
     <string name="FilterNameUsers">Nutzer</string>
     <string name="FilterNameUsersDescription">Nur Nachrichten aus privaten Chats</string>
     <string name="FilterNameContacts">Kontakte</string>

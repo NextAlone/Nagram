@@ -1,7 +1,9 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.CheckResult;
 
@@ -17,12 +19,26 @@ public final class BulletinFactory {
         return new BulletinFactory(fragment);
     }
 
-    public static BulletinFactory of(FrameLayout containerLayout) {
+    public static BulletinFactory of(ViewGroup containerLayout) {
         return new BulletinFactory(containerLayout);
     }
 
     public static boolean canShowBulletin(BaseFragment fragment) {
         return fragment != null && fragment.getParentActivity() != null && fragment.getLayoutContainer() != null;
+    }
+
+    public Bulletin createMembersNotifyInfo(boolean on) {
+        if (on) {
+            final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext());
+            layout.setAnimation(R.raw.silent_unmute, 36, 36, "NULL BODY", "BODY", "Waves R", "Waves L", "Bottom");
+            layout.textView.setText(LocaleController.getString("ChannelNotifyMembersInfoOn", R.string.ChannelNotifyMembersInfoOn));
+            return create(layout, Bulletin.DURATION_SHORT);
+        } else {
+            final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext());
+            layout.setAnimation(R.raw.silent_mute, 36, 36, "NULL BODY", "BODY", "Pieces", "Line Cross", "Bottom");
+            layout.textView.setText(LocaleController.getString("ChannelNotifyMembersInfoOff", R.string.ChannelNotifyMembersInfoOff));
+            return create(layout, Bulletin.DURATION_SHORT);
+        }
     }
 
     public enum FileType {
@@ -95,18 +111,19 @@ public final class BulletinFactory {
         }
     }
 
-    private final BaseFragment fragment;
-    private final FrameLayout containerLayout;
+    private BaseFragment fragment;
+    private ViewGroup containerLayout;
 
     private BulletinFactory(BaseFragment fragment) {
         this.fragment = fragment;
         this.containerLayout = null;
     }
 
-    private BulletinFactory(FrameLayout containerLayout) {
+    private BulletinFactory(ViewGroup containerLayout) {
         this.containerLayout = containerLayout;
         this.fragment = null;
     }
+
 
     @CheckResult
     public Bulletin createDownloadBulletin(FileType fileType) {
@@ -287,6 +304,11 @@ public final class BulletinFactory {
     @CheckResult
     public static Bulletin createCopyLinkBulletin(BaseFragment fragment) {
         return of(fragment).createCopyLinkBulletin();
+    }
+
+    @CheckResult
+    public static Bulletin createCopyLinkBulletin(ViewGroup containerView) {
+        return of(containerView).createCopyLinkBulletin();
     }
 
     @CheckResult

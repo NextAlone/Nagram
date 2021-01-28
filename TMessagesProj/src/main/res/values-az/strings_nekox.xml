@@ -61,7 +61,7 @@
     <string name="PublicPrefix">İctimai</string>
     <string name="DisableChatAction">Giriş statusumu göndərməyin</string>
     <string name="FakeScreenshot">Ekran görüntüsü kimi göstərin</string>
-    <string name="Import">İdxal</string>
+    <string name="ImportPxy">İdxal</string>
     <string name="FilterNameUsers">İstifadəçilər</string>
     <string name="FilterNameUsersDescription">Yalnız şəxsi söhbətlərdən gələn mesajlar</string>
     <string name="FilterNameContacts">Əlaqə</string>

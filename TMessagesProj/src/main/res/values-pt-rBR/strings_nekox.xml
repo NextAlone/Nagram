@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Público</string>
     <string name="DisableChatAction">Não enviar meu status de entrada</string>
     <string name="FakeScreenshot">Simular captura de tela</string>
-    <string name="Import">Importar</string>
+    <string name="ImportPxy">Importar</string>
     <string name="FilterNameUsers">Usuários</string>
     <string name="FilterNameUsersDescription">Apenas mensagens de conversas privadas</string>
     <string name="FilterNameContacts">Contatos</string>

@@ -20,6 +20,7 @@ import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL
@@ -432,10 +433,12 @@ object ProxyUtil {
 
     }
 
+    @JvmStatic
     fun createQRCode(text: String, size: Int = 800): Bitmap? {
         try {
             val hints = HashMap<EncodeHintType, Any>()
             hints[EncodeHintType.CHARACTER_SET] = "utf-8"
+            hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.M
             //hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
             val bitMatrix = QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints)
             val pixels = IntArray(size * size)

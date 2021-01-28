@@ -80,7 +80,7 @@
     <string name="DisableChatAction">Don\'t send my input status</string>
     <string name="FakeScreenshot">Pretend screenshot</string>
 
-    <string name="Import">Import</string>
+    <string name="ImportPxy">Import</string>
 
     <string name="FilterNameUsers">Users</string>
     <string name="FilterNameUsersDescription">Only messages from private chats</string>

@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Publiczna</string>
     <string name="DisableChatAction">Nie wysyłaj mojego statusu wprowadzania</string>
     <string name="FakeScreenshot">Upresuj zrzut ekranu</string>
-    <string name="Import">Importowanie</string>
+    <string name="ImportPxy">Importowanie</string>
     <string name="FilterNameUsers">Użytkownik</string>
     <string name="FilterNameUsersDescription">Tylko wiadomości z czatów prywatnych</string>
     <string name="FilterNameContacts">Kontakty</string>

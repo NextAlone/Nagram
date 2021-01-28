@@ -61,7 +61,7 @@
     <string name="PublicPrefix">عمومی</string>
     <string name="DisableChatAction">وضعیت مرا ارسال نکن</string>
     <string name="FakeScreenshot">تظاهر کردن عکس از صفحه</string>
-    <string name="Import">وارد كردن</string>
+    <string name="ImportPxy">وارد كردن</string>
     <string name="FilterNameUsers">کاربران</string>
     <string name="FilterNameUsersDescription">فقط پیام های چت های خصوصی</string>
     <string name="FilterNameContacts">مخاطبین</string>

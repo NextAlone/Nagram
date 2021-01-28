@@ -49,7 +49,7 @@
     <string name="NekoXProxy">Public Proxy al NekoX</string>
     <string name="PublicPrefix">Public</string>
     <string name="DisableChatAction">Nu trimiteți starea de intrare</string>
-    <string name="Import">Import</string>
+    <string name="ImportPxy">Import</string>
     <string name="FilterNameUsers">Utilizatori</string>
     <string name="FilterNameUsersDescription">Doar mesaje din conversații private</string>
     <string name="FilterNameContacts">Contacte</string>

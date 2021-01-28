@@ -251,6 +251,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private NumberTextView captionLimitView;
     private int currentLimit = -1;
     private int codePointCount;
+    CrossOutDrawable notifySilentDrawable;
 
 
     private class SeekBarWaveformView extends View {
@@ -383,6 +384,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     protected int animatedTop;
     public ValueAnimator currentTopViewAnimation;
     private ReplaceableIconDrawable botButtonDrawablel;
+
+    private boolean isPaste;
 
     private boolean destroyed;
 
@@ -1806,6 +1809,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 isInitLineCount = false;
             }
+
+            @Override
+            public boolean onTextContextMenuItem(int id) {
+                if (id == android.R.id.paste) {
+                    isPaste = true;
+                }
+                return super.onTextContextMenuItem(id);
+            }
         };
         messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
 
@@ -1836,7 +1847,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         messageEditText.setWindowView(parentActivity.getWindow().getDecorView());
         TLRPC.EncryptedChat encryptedChat = parentFragment != null ? parentFragment.getCurrentEncryptedChat() : null;
         messageEditText.setAllowTextEntitiesIntersection(supportsSendingNewEntities());
-        updateFieldHint();
+        updateFieldHint(false);
         int flags = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
         if (encryptedChat != null) {
             flags |= 0x01000000; //EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING;
@@ -1932,9 +1943,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (innerTextChange == 1) {
                     return;
                 }
-                if (sendByEnter && editingMessageObject == null && count > before && charSequence.length() > 0 && count == 1 && before == 0 && charSequence.length() == start + count && charSequence.charAt(charSequence.length() - 1) == '\n') {
+                if (sendByEnter && !isPaste && editingMessageObject == null && count > before && charSequence.length() > 0 && charSequence.length() == start + count && charSequence.charAt(charSequence.length() - 1) == '\n') {
                     nextChangeIsSend = true;
                 }
+                isPaste = false;
                 checkSendButton(true);
                 CharSequence message = AndroidUtilities.getTrimmedString(charSequence.toString());
                 if (delegate != null) {
@@ -2092,7 +2104,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
 
             notifyButton = new ImageView(context);
-            notifyButton.setImageResource(silent ? R.drawable.input_notify_off : R.drawable.input_notify_on);
+            notifySilentDrawable = new CrossOutDrawable(context, R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
+            notifyButton.setImageDrawable(notifySilentDrawable);
+            notifySilentDrawable.setCrossOut(silent, false);
             notifyButton.setContentDescription(silent ? LocaleController.getString("AccDescrChanSilentOn", R.string.AccDescrChanSilentOn) : LocaleController.getString("AccDescrChanSilentOff", R.string.AccDescrChanSilentOff));
             notifyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
             notifyButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -2108,7 +2122,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 @Override
                 public void onClick(View v) {
                     silent = !silent;
-                    notifyButton.setImageResource(silent ? R.drawable.input_notify_off : R.drawable.input_notify_on);
+                    if (notifySilentDrawable == null) {
+                        notifySilentDrawable = new CrossOutDrawable(context, R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
+                    }
+                    notifySilentDrawable.setCrossOut(silent, true);
+                    notifyButton.setImageDrawable(notifySilentDrawable);
                     MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, silent).commit();
                     NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(dialog_id);
                     try {
@@ -2118,15 +2136,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
-                    if (silent) {
-                        visibleToast = Toast.makeText(parentActivity, LocaleController.getString("ChannelNotifyMembersInfoOff", R.string.ChannelNotifyMembersInfoOff), Toast.LENGTH_SHORT);
-                        visibleToast.show();
-                    } else {
-                        visibleToast = Toast.makeText(parentActivity, LocaleController.getString("ChannelNotifyMembersInfoOn", R.string.ChannelNotifyMembersInfoOn), Toast.LENGTH_SHORT);
-                        visibleToast.show();
-                    }
+                    BulletinFactory.of(fragment).createMembersNotifyInfo(!silent).show();
                     notifyButton.setContentDescription(silent ? LocaleController.getString("AccDescrChanSilentOn", R.string.AccDescrChanSilentOn) : LocaleController.getString("AccDescrChanSilentOff", R.string.AccDescrChanSilentOff));
-                    updateFieldHint();
+                    updateFieldHint(true);
                 }
             });
 
@@ -3967,7 +3979,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         updateScheduleButton(false);
         checkRoundVideo();
-        updateFieldHint();
+        updateFieldHint(false);
     }
 
     public void setChatInfo(TLRPC.ChatFull chatInfo) {
@@ -4028,7 +4040,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return hasRecordVideo;
     }
 
-    private void updateFieldHint() {
+    private void updateFieldHint(boolean animated) {
         if (editingMessageObject != null) {
             messageEditText.setHintText(editingCaption ? LocaleController.getString("Caption", R.string.Caption) : LocaleController.getString("TypeMessage", R.string.TypeMessage));
         } else {
@@ -4050,9 +4062,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 } else if (isChannel) {
                     if (silent) {
-                        messageEditText.setHintText(LocaleController.getString("ChannelSilentBroadcast", R.string.ChannelSilentBroadcast));
+                        messageEditText.setHintText(LocaleController.getString("ChannelSilentBroadcast", R.string.ChannelSilentBroadcast), animated);
                     } else {
-                        messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", R.string.ChannelBroadcast));
+                        messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", R.string.ChannelBroadcast), animated);
                     }
                 } else {
                     messageEditText.setHintText(LocaleController.getString("TypeMessage", R.string.TypeMessage));
@@ -6140,7 +6152,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             checkAttachButton(false, 0);
             updateFieldRight(1);
         }
-        updateFieldHint();
+        updateFieldHint(false);
     }
 
     public ImageView getAttachButton() {
@@ -6340,7 +6352,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             canWriteToChannel = ChatObject.isChannel(currentChat) && (currentChat.creator || currentChat.admin_rights != null && currentChat.admin_rights.post_messages) && !currentChat.megagroup;
             if (notifyButton != null) {
                 notifyVisible = canWriteToChannel;
-                notifyButton.setImageResource(silent ? R.drawable.input_notify_off : R.drawable.input_notify_on);
+                if (notifySilentDrawable == null) {
+                    notifySilentDrawable = new CrossOutDrawable(getContext(), R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
+                }
+                notifySilentDrawable.setCrossOut(silent, false);
+                notifyButton.setImageDrawable(notifySilentDrawable);
             }
             if (attachLayout != null) {
                 updateFieldRight(attachLayout.getVisibility() == VISIBLE ? 1 : 0);

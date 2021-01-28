@@ -34,6 +34,7 @@ public class TextCell extends FrameLayout {
     private boolean needDivider;
     private int offsetFromImage = 71;
     private int imageLeft = 21;
+    private boolean inDialogs;
 
     public TextCell(Context context) {
         this(context, 23, false);
@@ -69,6 +70,10 @@ public class TextCell extends FrameLayout {
         addView(valueImageView);
 
         setFocusable(true);
+    }
+
+    public void setIsInDialogs() {
+        inDialogs = true;
     }
 
     public SimpleTextView getTextView() {

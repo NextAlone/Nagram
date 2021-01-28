@@ -53,7 +53,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
 
     private int chat_id;
     private boolean loading;
-    private TLRPC.ExportedChatInvite invite;
+    private TLRPC.TL_chatInviteExported invite;
 
     private int linkRow;
     private int linkInfoRow;
@@ -177,7 +177,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
             int guid = (int) args[1];
             if (info.id == chat_id && guid == classGuid) {
                 invite = MessagesController.getInstance(currentAccount).getExportedInvite(chat_id);
-                if (!(invite instanceof TLRPC.TL_chatInviteExported)) {
+                if (invite == null) {
                     generateLink(false);
                 } else {
                     loading = false;
@@ -203,7 +203,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         req.peer = MessagesController.getInstance(currentAccount).getInputPeer(-chat_id);
         final int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (error == null) {
-                invite = (TLRPC.ExportedChatInvite) response;
+                invite = (TLRPC.TL_chatInviteExported) response;
                 if (newRequest) {
                     if (getParentActivity() == null) {
                         return;

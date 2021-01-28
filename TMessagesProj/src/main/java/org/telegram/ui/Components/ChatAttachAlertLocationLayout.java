@@ -1630,11 +1630,13 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         }
         onResumeCalled = true;
         fixLayoutInternal(true);
-        if (checkPermission && Build.VERSION.SDK_INT >= 23) {
-            Activity activity = getParentActivity();
-            if (activity != null) {
-                checkPermission = false;
-                if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        boolean keyboardVisible = parentAlert.delegate.needEnterComment();
+        AndroidUtilities.runOnUIThread(() -> {
+            if (checkPermission && Build.VERSION.SDK_INT >= 23) {
+                Activity activity = getParentActivity();
+                if (activity != null) {
+                    checkPermission = false;
+                    if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     BottomBuilder builder = new BottomBuilder(activity);
                     builder.addTitle(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation), true);
                     builder.addItem(LocaleController.getString("Ok", R.string.OK),R.drawable.baseline_check_circle_24, __ -> {
@@ -1646,9 +1648,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                         return Unit.INSTANCE;
                     });
                     builder.show();
+                    }
                 }
             }
-        }
+        }, keyboardVisible ? 200 : 0);
+
         layoutManager.scrollToPositionWithOffset(0, 0);
 
         updateClipView();

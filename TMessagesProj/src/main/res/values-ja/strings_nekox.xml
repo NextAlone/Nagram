@@ -61,7 +61,7 @@
     <string name="PublicPrefix">パブリック</string>
     <string name="DisableChatAction">入力ステータスを送信しない</string>
     <string name="FakeScreenshot">スクリーンショットのプレビュー</string>
-    <string name="Import">インポート</string>
+    <string name="ImportPxy">インポート</string>
     <string name="FilterNameUsers">ユーザー</string>
     <string name="FilterNameUsersDescription">プライベートチャットからのメッセージのみ</string>
     <string name="FilterNameContacts">連絡先</string>

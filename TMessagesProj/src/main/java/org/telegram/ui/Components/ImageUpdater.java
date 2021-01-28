@@ -11,6 +11,7 @@ package org.telegram.ui.Components;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -141,13 +142,13 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         delegate = imageUpdaterDelegate;
     }
 
-    public void openMenu(boolean hasAvatar, Runnable onDeleteAvatar) {
+    public void openMenu(boolean hasAvatar, Runnable onDeleteAvatar, DialogInterface.OnDismissListener onDismiss) {
         if (parentFragment == null || parentFragment.getParentActivity() == null) {
             return;
         }
 
         if (useAttachMenu) {
-            openAttachMenu();
+            openAttachMenu(onDismiss);
             return;
         }
 
@@ -172,7 +173,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
 
         builder.addItem(LocaleController.getString("UploadImage", R.string.UploadImage), R.drawable.baseline_image_24, __ -> {
-            openAttachMenu();;
+            openAttachMenu(onDismiss);
             return Unit.INSTANCE;
         });
 
@@ -195,6 +196,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
 
         BottomSheet sheet = builder.create();
+        sheet.setOnHideListener(onDismiss);
         parentFragment.showDialog(sheet);
     }
 
@@ -292,7 +294,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         parentFragment.presentFragment(fragment);
     }
 
-    private void openAttachMenu() {
+    private void openAttachMenu(DialogInterface.OnDismissListener onDismissListener) {
         if (parentFragment == null || parentFragment.getParentActivity() == null) {
             return;
         }
@@ -304,6 +306,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             AndroidUtilities.hideKeyboard(parentFragment.getFragmentView().findFocus());
         }
         chatAttachAlert.init();
+        chatAttachAlert.setOnHideListener(onDismissListener);
         parentFragment.showDialog(chatAttachAlert);
     }
 
@@ -870,7 +873,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 return;
             }
             uploadingVideo = (String) args[1];
-            parentFragment.getFileLoader().uploadFile(uploadingVideo, false, false, (int) convertingVideo.videoEditedInfo.estimatedSize, ConnectionsManager.FileTypeVideo);
+            parentFragment.getFileLoader().uploadFile(uploadingVideo, false, false, (int) convertingVideo.videoEditedInfo.estimatedSize, ConnectionsManager.FileTypeVideo, false);
         }
     }
 }

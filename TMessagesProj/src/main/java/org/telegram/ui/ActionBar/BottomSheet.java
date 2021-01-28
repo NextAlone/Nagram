@@ -145,6 +145,8 @@ public class BottomSheet extends Dialog {
     protected String navBarColorKey = Theme.key_windowBackgroundGray;
     protected int navBarColor;
 
+    private OnDismissListener onHideListener;
+
     public void setDisableScroll(boolean b) {
         disableScroll = b;
     }
@@ -731,7 +733,11 @@ public class BottomSheet extends Dialog {
             container.setOnApplyWindowInsetsListener((v, insets) -> {
                 lastInsets = insets;
                 v.requestLayout();
-                return insets.consumeSystemWindowInsets();
+                if (Build.VERSION.SDK_INT >= 30) {
+                    return WindowInsets.CONSUMED;
+                } else {
+                    return insets.consumeSystemWindowInsets();
+                }
             });
             container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
@@ -744,6 +750,9 @@ public class BottomSheet extends Dialog {
         super.onCreate(savedInstanceState);
 
         Window window = getWindow();
+        /*if (Build.VERSION.SDK_INT >= 30) {
+            window.setDecorFitsSystemWindows(true);
+        }*/
         window.setWindowAnimations(R.style.DialogNoAnimation);
         setContentView(container, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -1009,6 +1018,10 @@ public class BottomSheet extends Dialog {
         }
     }
 
+    public void setOnHideListener(OnDismissListener listener) {
+        onHideListener = listener;
+    }
+
     private void startOpenAnimation() {
         if (dismissed) {
             return;
@@ -1183,6 +1196,9 @@ public class BottomSheet extends Dialog {
             return;
         }
         dismissed = true;
+        if (onHideListener != null) {
+            onHideListener.onDismiss(this);
+        }
         cancelSheetAnimation();
         if (!allowCustomAnimation || !onCustomCloseAnimation()) {
             currentSheetAnimationType = 2;

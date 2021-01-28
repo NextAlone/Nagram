@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Из списка</string>
     <string name="DisableChatAction">Не отправлять статус написания</string>
     <string name="FakeScreenshot">Притворяться скриншотом</string>
-    <string name="Import">Импорт</string>
+    <string name="ImportPxy">Импорт</string>
     <string name="FilterNameUsers">Пользователи</string>
     <string name="FilterNameUsersDescription">Сообщения только из личных чатов</string>
     <string name="FilterNameContacts">Контакты</string>

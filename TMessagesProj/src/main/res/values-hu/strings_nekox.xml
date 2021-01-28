@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Nyilvános</string>
     <string name="DisableChatAction">Ne küldje el a bemeneti állapotomat</string>
     <string name="FakeScreenshot">Úgy tesz, mintha képernyőkép lenne</string>
-    <string name="Import">Importálás</string>
+    <string name="ImportPxy">Importálás</string>
     <string name="FilterNameUsers">Felhasználók</string>
     <string name="FilterNameUsersDescription">Csak privát beszélgetésekből származó üzenetek</string>
     <string name="FilterNameContacts">Névjegyek</string>

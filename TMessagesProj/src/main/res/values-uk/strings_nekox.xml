@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Загальнодоступна</string>
     <string name="DisableChatAction">Не надсилати мій статус вводу</string>
     <string name="FakeScreenshot">Зробіть знімок екрану</string>
-    <string name="Import">Імпорт</string>
+    <string name="ImportPxy">Імпорт</string>
     <string name="FilterNameUsers">Спільноти</string>
     <string name="FilterNameUsersDescription">Лише повідомлення з приватних чатів</string>
     <string name="FilterNameContacts">Контакти</string>

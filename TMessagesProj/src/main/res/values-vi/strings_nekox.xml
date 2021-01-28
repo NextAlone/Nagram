@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Mở</string>
     <string name="DisableChatAction">Không gửi trạng thái đầu vào của tôi</string>
     <string name="FakeScreenshot">Ảnh chụp màn hình giả vờ</string>
-    <string name="Import">Nhập</string>
+    <string name="ImportPxy">Nhập</string>
     <string name="FilterNameUsers">Người dùng</string>
     <string name="FilterNameUsersDescription">Chỉ tin nhắn từ các cuộc trò chuyện riêng tư</string>
     <string name="FilterNameContacts">Liên lạc</string>

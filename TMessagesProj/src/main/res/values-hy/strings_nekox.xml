@@ -61,7 +61,7 @@
     <string name="PublicPrefix">Հանրային</string>
     <string name="DisableChatAction">Մի ուղարկեք իմ մուտքագրման կարգավիճակը</string>
     <string name="FakeScreenshot">Պատկերացրեք սքրինշոթը</string>
-    <string name="Import">Ներմուծում</string>
+    <string name="ImportPxy">Ներմուծում</string>
     <string name="FilterNameUsers">Օգտագործողներ</string>
     <string name="FilterNameUsersDescription">Միայն հաղորդագրությունները անձնական զրույցներից</string>
     <string name="FilterNameContacts">Կապ</string>
