@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -453,7 +454,7 @@ public class UserCell extends FrameLayout {
 
         if (currentName != null) {
             lastName = null;
-            nameTextView.setText(currentName);
+            nameTextView.setText(Emoji.replaceEmoji(currentName, Theme.chat_namePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false));
         } else {
             if (currentUser != null) {
                 lastName = newName == null ? UserObject.getUserName(currentUser) : newName;
@@ -462,7 +463,7 @@ public class UserCell extends FrameLayout {
             } else {
                 lastName = "";
             }
-            nameTextView.setText(lastName);
+            nameTextView.setText(Emoji.replaceEmoji(lastName, Theme.chat_namePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false));
         }
         if (currentStatus != null) {
             statusTextView.setTextColor(statusColor);

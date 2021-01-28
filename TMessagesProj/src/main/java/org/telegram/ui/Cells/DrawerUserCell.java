@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
@@ -89,7 +90,7 @@ public class DrawerUserCell extends FrameLayout {
             return;
         }
         avatarDrawable.setInfo(user);
-        textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+        textView.setText(Emoji.replaceEmoji(ContactsController.formatName(user.first_name, user.last_name), textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(15), false));
         imageView.getImageReceiver().setCurrentAccount(account);
         imageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
         checkBox.setVisibility(account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
