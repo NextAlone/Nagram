@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.3.1-rc17"
-def verCode = 164
+def verName = "7.3.1"
+def verCode = 166
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -39,7 +39,7 @@ configurations {
 
 def okHttpVersion = '4.9.0'
 def fcmVersion = '21.0.1'
-def crashlyticsVersion = '17.3.0'
+def crashlyticsVersion = '17.3.1'
 def playCoreVersion = '1.9.1'
 
 repositories {
