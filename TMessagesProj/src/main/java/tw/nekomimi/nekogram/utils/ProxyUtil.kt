@@ -455,8 +455,8 @@ object ProxyUtil {
             bitmap.setPixels(pixels, 0, size, 0, 0, size, size)
             return bitmap
         } catch (e: WriterException) {
-            e.printStackTrace()
-            return null
+            FileLog.e(e);
+            return Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         }
     }
 

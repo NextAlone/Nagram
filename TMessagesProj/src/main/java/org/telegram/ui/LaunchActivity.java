@@ -2640,6 +2640,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     }
                     actionBarLayout.presentFragment(fragment, removeLast, false, true, false);
                 } else {
+                    AlertUtil.showToast(error);
                     if (documentsUrisArray == null) {
                         documentsUrisArray = new ArrayList<>();
                     }
