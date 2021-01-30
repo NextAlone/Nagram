@@ -1259,8 +1259,12 @@ public class RecyclerListView extends RecyclerView {
             }
         } else {
             emptyViewAnimateToVisibility = -1;
-            checkIfEmpty(isAttachedToWindow());
+            checkIfEmpty(updateEmptyViewAnimated());
         }
+    }
+
+    protected boolean updateEmptyViewAnimated() {
+        return isAttachedToWindow();
     }
 
     public View getEmptyView() {

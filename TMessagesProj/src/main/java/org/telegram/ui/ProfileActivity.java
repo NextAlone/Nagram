@@ -148,6 +148,8 @@ import org.telegram.ui.Components.IdenticonDrawable;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProfileGalleryView;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ScamDrawable;
@@ -199,7 +201,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private SimpleTextView[] onlineTextView = new SimpleTextView[2];
     private AudioPlayerAlert.ClippingTextViewSwitcher mediaCounterTextView;
     private SimpleTextView idTextView;
-    private ImageView writeButton;
+    private RLottieImageView writeButton;
     private AnimatorSet writeButtonAnimation;
     private Drawable lockIconDrawable;
     private Drawable verifiedDrawable;
@@ -212,6 +214,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private EmptyTextProgressView emptyView;
     private boolean sharedMediaLayoutAttached;
     private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
+
+    private RLottieDrawable cameraDrawable;
 
     private FrameLayout avatarContainer;
     private AvatarImageView avatarImage;
@@ -3273,7 +3277,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         frameLayout.addView(mediaCounterTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 8, 0));
         updateProfileData();
 
-        writeButton = new ImageView(context);
+        writeButton = new RLottieImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
@@ -3287,7 +3291,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (imageUpdater != null) {
                 writeButton.setImageResource(R.drawable.baseline_edit_24);
                 writeButton.setContentDescription(LocaleController.getString("AccDescrChangeProfilePicture", R.string.AccDescrChangeProfilePicture));
-                writeButton.setPadding(AndroidUtilities.dp(2), AndroidUtilities.dp(2), 0, 0);
+                writeButton.setPadding(AndroidUtilities.dp(2), 0, 0, AndroidUtilities.dp(2));
             } else {
                 writeButton.setImageResource(R.drawable.profile_newmsg);
                 writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
@@ -5152,7 +5156,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             if (notify && listAdapter != null && membersStartRow > 0) {
-                listAdapter.notifyItemRangeChanged(membersStartRow, sortedUsers.size());
+                try {
+                    listAdapter.notifyItemRangeChanged(membersStartRow, sortedUsers.size());
+                } catch (Exception e) {
+                    FileLog.e(e);
+                    listAdapter.notifyDataSetChanged();
+                }
             }
             if (sharedMediaLayout != null && sharedMediaRow != -1 && (sortedUsers.size() > 5 || usersForceShowingIn == 2) && usersForceShowingIn != 1) {
                 sharedMediaLayout.setChatUsers(sortedUsers, chatInfo);

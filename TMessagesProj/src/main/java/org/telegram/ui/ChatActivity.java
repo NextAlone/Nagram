@@ -8179,6 +8179,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return dialog_id;
     }
 
+    public UndoView getUndoView() {
+        return undoView;
+    }
+
     public long getMergeDialogId() {
         return mergeDialogId;
     }
@@ -20647,7 +20651,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (editTextItem != null) {
                 editTextItem.setVisibility(View.GONE);
             }
-            if (threadMessageId == 0) {
+            if (threadMessageId == 0 && searchItem != null) {
                 searchItem.setVisibility(View.VISIBLE);
             }
             searchItemVisible = true;
@@ -20656,10 +20660,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (threadMessageId == 0 && !UserObject.isReplyUser(currentUser)) {
             openSearchKeyboard = text == null;
-            searchItem.openSearch(openSearchKeyboard);
+            if (searchItem != null) {
+                searchItem.openSearch(openSearchKeyboard);
+            }
         }
         if (text != null) {
-            searchItem.setSearchFieldText(text, false);
+            if (searchItem != null) {
+                searchItem.setSearchFieldText(text, false);
+            }
             getMediaDataController().searchMessagesInChat(text, dialog_id, mergeDialogId, classGuid, 0, threadMessageId, searchingUserMessages, searchingChatMessages);
         }
         updatePinnedMessageView(true);
