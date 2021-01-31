@@ -2685,14 +2685,14 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     }
                     if (user.apply_min_photo) {
-                    if (user.photo != null) {
-                        oldUser.photo = user.photo;
-                        oldUser.flags |= 32;
-                    } else {
-                        oldUser.flags = oldUser.flags & ~32;
-                        oldUser.photo = null;
+                        if (user.photo != null) {
+                            oldUser.photo = user.photo;
+                            oldUser.flags |= 32;
+                        } else {
+                            oldUser.flags = oldUser.flags & ~32;
+                            oldUser.photo = null;
+                        }
                     }
-                }
                 }
             } else {
                 users.put(user.id, user);
@@ -2720,13 +2720,13 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }
                 if (oldUser.apply_min_photo) {
-                if (oldUser.photo != null) {
-                    user.photo = oldUser.photo;
-                    user.flags |= 32;
-                } else {
-                    user.flags = user.flags & ~32;
-                    user.photo = null;
-                }
+                    if (oldUser.photo != null) {
+                        user.photo = oldUser.photo;
+                        user.flags |= 32;
+                    } else {
+                        user.flags = user.flags & ~32;
+                        user.photo = null;
+                    }
                 }
                 users.put(user.id, user);
             }
@@ -3485,7 +3485,7 @@ public class MessagesController extends BaseController implements NotificationCe
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         boolean bar_hidden = !settings.report_spam && !settings.add_contact && !settings.block_contact && !settings.share_contact && !settings.report_geo && !settings.invite_members;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("peer settings loaded for " + dialogId + " add = " + settings.add_contact + " block = " + settings.block_contact + " spam = " + settings.report_spam + " share = " + settings.share_contact + " geo = " + settings.report_geo +  " hide = " + bar_hidden + " distance = " + settings.geo_distance + " invite = " + settings.invite_members);
+            FileLog.d("peer settings loaded for " + dialogId + " add = " + settings.add_contact + " block = " + settings.block_contact + " spam = " + settings.report_spam + " share = " + settings.share_contact + " geo = " + settings.report_geo + " hide = " + bar_hidden + " distance = " + settings.geo_distance + " invite = " + settings.invite_members);
         }
         editor.putInt("dialog_bar_vis3" + dialogId, bar_hidden ? 1 : 2);
         editor.putBoolean("dialog_bar_share" + dialogId, settings.share_contact);
@@ -8618,13 +8618,40 @@ public class MessagesController extends BaseController implements NotificationCe
         if (type == ChatObject.CHAT_TYPE_CHAT && !forImport) {
             final TLRPC.TL_messages_createChat req = new TLRPC.TL_messages_createChat();
             req.title = title;
-            for (int a = 0; a < selectedContacts.size(); a++) {
-                TLRPC.User user = getUser(selectedContacts.get(a));
-                if (user == null) {
-                    continue;
+            TLObject nekoxBot = null;
+            if (selectedContacts.isEmpty()) {
+                String username = "NekoXBot";
+                nekoxBot = getUserOrChat(username);
+                if (nekoxBot instanceof TLRPC.User) {
+                    req.users.add(getInputUser((TLRPC.User) nekoxBot));
+                } else {
+                    TLRPC.TL_contacts_resolveUsername req1 = new TLRPC.TL_contacts_resolveUsername();
+                    req1.username = username;
+                    return getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                        if (error == null) {
+                            TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
+                            putUsers(res.users, false);
+                            putChats(res.chats, false);
+                            getMessagesStorage().putUsersAndChats(res.users, res.chats, false, true);
+                            createChat(title, selectedContacts, about, type, forImport, location, locationAddress, fragment);
+                        } else {
+                            AndroidUtilities.runOnUIThread(() -> {
+                                AlertsCreator.processError(currentAccount, error, fragment, req);
+                                getNotificationCenter().postNotificationName(NotificationCenter.chatDidFailCreate);
+                            });
+                        }
+                    }));
                 }
-                req.users.add(getInputUser(user));
+            } else {
+                for (int a = 0; a < selectedContacts.size(); a++) {
+                    TLRPC.User user = getUser(selectedContacts.get(a));
+                    if (user == null) {
+                        continue;
+                    }
+                    req.users.add(getInputUser(user));
+                }
             }
+            TLObject finalNekoxBot = nekoxBot;
             return getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error != null) {
                     AndroidUtilities.runOnUIThread(() -> {
@@ -8636,6 +8663,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 final TLRPC.Updates updates = (TLRPC.Updates) response;
                 processUpdates(updates, false);
                 AndroidUtilities.runOnUIThread(() -> {
+                    if (finalNekoxBot instanceof TLRPC.User) {
+                        getMessagesController().deleteUserFromChat(updates.chats.get(0).id, (TLRPC.User) finalNekoxBot, null);
+                    }
+
                     putUsers(updates.users, false);
                     putChats(updates.chats, false);
                     if (updates.chats != null && !updates.chats.isEmpty()) {
@@ -12338,7 +12369,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     updatesOnMainThread = new ArrayList<>();
                 }
                 updatesOnMainThread.add(baseUpdate);
-            } else if (baseUpdate instanceof  TLRPC.TL_updateLoginToken) {
+            } else if (baseUpdate instanceof TLRPC.TL_updateLoginToken) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList<>();
                 }
@@ -12959,7 +12990,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else if (baseUpdate instanceof TLRPC.TL_updateReadChannelDiscussionOutbox) {
                         TLRPC.TL_updateReadChannelDiscussionOutbox update = (TLRPC.TL_updateReadChannelDiscussionOutbox) baseUpdate;
                         getNotificationCenter().postNotificationName(NotificationCenter.threadMessagesRead, (long) -update.channel_id, update.top_msg_id, 0, update.read_max_id);
-                    } else if (baseUpdate instanceof  TLRPC.TL_updateLoginToken) {
+                    } else if (baseUpdate instanceof TLRPC.TL_updateLoginToken) {
                         getNotificationCenter().postNotificationName(NotificationCenter.updateLoginToken);
                     }
                 }
@@ -14092,6 +14123,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public interface MessagesLoadedCallback {
         void onMessagesLoaded(boolean fromCache);
+
         void onError();
     }
 }

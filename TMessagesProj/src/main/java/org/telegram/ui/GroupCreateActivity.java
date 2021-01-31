@@ -818,12 +818,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
         frameLayout.addView(floatingButton);
         floatingButton.setOnClickListener(v -> onDonePressed(true));
-        if (chatType != ChatObject.CHAT_TYPE_CHANNEL) {
-            floatingButton.setVisibility(View.INVISIBLE);
-            floatingButton.setScaleX(0.0f);
-            floatingButton.setScaleY(0.0f);
-            floatingButton.setAlpha(0.0f);
-        }
         floatingButton.setContentDescription(LocaleController.getString("Next", R.string.Next));
 
         updateHint();
@@ -974,9 +968,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     }
 
     private boolean onDonePressed(boolean alert) {
-        if (selectedContacts.size() == 0 && chatType != ChatObject.CHAT_TYPE_CHANNEL) {
-            return false;
-        }
         if (alert && addToGroup) {
             if (getParentActivity() == null) {
                 return false;
@@ -1049,9 +1040,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 args2.putInt("chat_id", chatId);
                 presentFragment(new ChatActivity(args2), true);
             } else {
-                if (!doneButtonVisible || selectedContacts.size() == 0) {
-                    return false;
-                }
                 if (addToGroup) {
                     onAddToGroupDone(0);
                 } else {
@@ -1099,38 +1087,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     String str = LocaleController.getPluralString("MembersCountSelected", selectedContacts.size());
                     actionBar.setSubtitle(String.format(str, selectedContacts.size(), maxCount));
                 }
-            }
-        }
-        if (chatType != ChatObject.CHAT_TYPE_CHANNEL) {
-            if (doneButtonVisible && allSpans.isEmpty()) {
-                if (currentDoneButtonAnimation != null) {
-                    currentDoneButtonAnimation.cancel();
-                }
-                currentDoneButtonAnimation = new AnimatorSet();
-                currentDoneButtonAnimation.playTogether(ObjectAnimator.ofFloat(floatingButton, View.SCALE_X, 0.0f),
-                        ObjectAnimator.ofFloat(floatingButton, View.SCALE_Y, 0.0f),
-                        ObjectAnimator.ofFloat(floatingButton, View.ALPHA, 0.0f));
-                currentDoneButtonAnimation.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        floatingButton.setVisibility(View.INVISIBLE);
-                    }
-                });
-                currentDoneButtonAnimation.setDuration(180);
-                currentDoneButtonAnimation.start();
-                doneButtonVisible = false;
-            } else if (!doneButtonVisible && !allSpans.isEmpty()) {
-                if (currentDoneButtonAnimation != null) {
-                    currentDoneButtonAnimation.cancel();
-                }
-                currentDoneButtonAnimation = new AnimatorSet();
-                floatingButton.setVisibility(View.VISIBLE);
-                currentDoneButtonAnimation.playTogether(ObjectAnimator.ofFloat(floatingButton, View.SCALE_X, 1.0f),
-                        ObjectAnimator.ofFloat(floatingButton, View.SCALE_Y, 1.0f),
-                        ObjectAnimator.ofFloat(floatingButton, View.ALPHA, 1.0f));
-                currentDoneButtonAnimation.setDuration(180);
-                currentDoneButtonAnimation.start();
-                doneButtonVisible = true;
             }
         }
     }

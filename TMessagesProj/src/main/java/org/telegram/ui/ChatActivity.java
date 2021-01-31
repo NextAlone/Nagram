@@ -231,6 +231,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.lang.reflect.Array;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -704,7 +705,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             NotificationCenter.didUpdateConnectionState,
             NotificationCenter.updateInterfaces,
             NotificationCenter.closeChats,
-           // NotificationCenter.contactsDidLoad,
+            // NotificationCenter.contactsDidLoad,
             NotificationCenter.chatInfoCantLoad,
             NotificationCenter.userInfoDidLoad,
             NotificationCenter.pinnedInfoDidLoad,
@@ -4875,7 +4876,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     boolean result;
                     if (child == pinnedMessageTextView[0] || child == pinnedMessageTextView[1]) {
                         canvas.save();
-                        canvas.clipRect(0,0,getMeasuredWidth() - AndroidUtilities.dp(38),getMeasuredHeight());
+                        canvas.clipRect(0, 0, getMeasuredWidth() - AndroidUtilities.dp(38), getMeasuredHeight());
                         result = super.drawChild(canvas, child, drawingTime);
                         canvas.restore();
                     } else {
@@ -12671,6 +12672,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         continue;
                     }
 
+
+                    if (messArr.size() == 2 &&
+                            obj.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser &&
+                            obj.messageOwner.from_id instanceof TLRPC.TL_peerUser &&
+                            obj.messageOwner.from_id.user_id == getUserConfig().getClientUserId()) {
+                        TLObject nekoxBot = getMessagesController().getUserOrChat("NekoXBot");
+                        if (nekoxBot instanceof TLRPC.User &&
+                                action.user_id == ((TLRPC.User) nekoxBot).id) {
+                            ArrayList<Integer> mids = new ArrayList<>();
+                            mids.add(obj.messageOwner.id);
+                            getMessagesController().deleteMessages(mids, null, null, dialog_id, 0, true, false);
+                            continue;
+                        }
+                    }
+
                     if (needAnimateToMessage != null && needAnimateToMessage.getId() == messageId && messageId < 0 && obj.type == MessageObject.TYPE_ROUND_VIDEO && chatMode != MODE_SCHEDULED) {
                         obj = needAnimateToMessage;
                         animatingMessageObjects.add(obj);
@@ -13257,6 +13273,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == NotificationCenter.didReceiveNewMessages) {
             long did = (Long) args[0];
             ArrayList<MessageObject> arr = (ArrayList<MessageObject>) args[1];
+            if (arr.size() == 1) {
+                MessageObject fst = arr.get(0);
+                TLRPC.MessageAction action = fst.messageOwner.action;
+                if (action instanceof TLRPC.TL_messageActionChatDeleteUser &&
+                        fst.messageOwner.from_id instanceof TLRPC.TL_peerUser &&
+                        fst.messageOwner.from_id.user_id == getUserConfig().getClientUserId()) {
+                    TLObject nekoxBot = getMessagesController().getUserOrChat("NekoXBot");
+                    if (nekoxBot instanceof TLRPC.User &&
+                            action.user_id == ((TLRPC.User) nekoxBot).id) {
+                        ArrayList<Integer> mids = new ArrayList<>();
+                        mids.add(fst.messageOwner.id);
+                        getMessagesController().deleteMessages(mids, null, null, dialog_id, 0, true, false);
+                        return;
+                    }
+                }
+            }
             if (did == dialog_id) {
                 boolean scheduled = (Boolean) args[2];
                 if (scheduled != (chatMode == MODE_SCHEDULED)) {
