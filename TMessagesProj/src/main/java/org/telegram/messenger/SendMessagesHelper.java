@@ -138,7 +138,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         }
                     });
                 }
-            });
+            }, ConnectionsManager.RequestFlagFailOnServerErrors);
         }
 
         public long getUploadedCount() {
@@ -235,7 +235,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         }
                     });
                 }
-            });
+            }, ConnectionsManager.RequestFlagFailOnServerErrors);
         }
 
         private void startImport() {
