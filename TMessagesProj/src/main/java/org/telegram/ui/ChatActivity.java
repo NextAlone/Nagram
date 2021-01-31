@@ -1051,6 +1051,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int show_pinned = 102;
     private final static int share_key = 103;
     private final static int reply = 104;
+    private final static int upgrade = 105;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -1966,6 +1967,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                     });
+                } else if (id == upgrade) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
+                    builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> getMessagesController().convertToMegaGroup(getParentActivity(), currentChat.id, ChatActivity.this, chatNew -> {
+                        if (chatNew != 0) {
+                            getMessagesController().toogleChannelInvitesHistory(chatNew, false);
+                        }
+                    }));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    showDialog(builder.create());
                 } else if (id == share_contact) {
                     if (currentUser == null || getParentActivity() == null) {
                         return;
@@ -1979,9 +1991,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         presentFragment(new ContactAddActivity(args));
                     }
                 } else if (id == share_key) {
-
                     selectAndShareMyKey(new Intent());
-
                 } else if (id == mute) {
                     toggleMute(false);
                 } else if (id == add_shortcut) {
@@ -2349,6 +2359,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) {
                 headerItem.addSubItem(delete_history, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
             }
+
+            if (currentChat != null && !ChatObject.isChannel(currentChat) && currentChat.creator) {
+                headerItem.addSubItem(upgrade, R.drawable.baseline_arrow_upward_24, LocaleController.getString("UpgradeGroup",  R.string.UpgradeGroup));
+            }
+
             if (ChatObject.isChannel(currentChat)) {
                 if (!ChatObject.isNotInChat(currentChat)) {
                     if (currentChat.megagroup) {
