@@ -1110,21 +1110,17 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         for (SubInfo sub : SubManager.getSubList().find()) {
 
-            TextCheckCell subItem = builder.addCheckItem(sub.name, sub.enable, true, (it) -> {
+            TextCheckCell subItem = builder.addCheckItem(sub.name, sub.enable, true, (it, target) -> {
 
-                boolean curr = (toChange.containsKey(sub) ? toChange.get(sub) : sub.enable);
-
-                if (curr != sub.enable) {
+                if (target == sub.enable) {
 
                     toChange.remove(sub);
 
                 } else {
 
-                    toChange.put(sub, !sub.enable);
+                    toChange.put(sub, target);
 
                 }
-
-                it.setChecked(!curr);
 
                 return Unit.INSTANCE;
 

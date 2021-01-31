@@ -43,7 +43,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
+import kotlin.collections.ArraysKt;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.parts.LocFiltersKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 public class LocaleController {
@@ -1024,6 +1028,8 @@ public class LocaleController {
         }
         if (value == null) {
             value = "LOC_ERR:" + key;
+        } else {
+            value = LocFiltersKt.filter(value);
         }
         return value;
     }

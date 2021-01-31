@@ -45,8 +45,8 @@ public class TextCheckCell extends FrameLayout {
 
     private TextView textView;
     private TextView valueTextView;
-    private Switch checkBox;
-    private CheckBoxSquare checkBoxSquare;
+    public Switch checkBox;
+    public CheckBoxSquare checkBoxSquare;
     private boolean needDivider;
     private boolean isMultiline;
     private int height = 50;

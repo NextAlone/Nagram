@@ -14,6 +14,7 @@ import org.telegram.ui.Cells.HeaderCell
 import org.telegram.ui.Cells.RadioButtonCell
 import org.telegram.ui.Cells.TextCell
 import org.telegram.ui.Cells.TextCheckCell
+import org.telegram.ui.Components.CheckBoxSquare
 import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
@@ -108,7 +109,7 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addCheckItem(text: String, value: Boolean, switch: Boolean = false, valueText: String? = null, listener: (cell: TextCheckCell) -> Unit): TextCheckCell {
+    fun addCheckItem(text: String, value: Boolean, switch: Boolean = false, valueText: String? = null, listener: ((cell: TextCheckCell, isChecked: Boolean) -> Unit)?): TextCheckCell {
 
         val checkBoxCell = TextCheckCell(ctx, 21, !switch)
         checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
@@ -116,19 +117,21 @@ class BottomBuilder(val ctx: Context) {
         rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
 
         if (valueText == null) {
-
             checkBoxCell.setTextAndCheck(text, value, true)
-
         } else {
-
             checkBoxCell.setTextAndValueAndCheck(text, valueText, value, true, true)
-
         }
 
         checkBoxCell.setOnClickListener {
+            val target = !checkBoxCell.isChecked
+            checkBoxCell.isChecked = target
+            listener?.invoke(checkBoxCell, target)
+        }
 
-            listener.invoke(checkBoxCell)
-
+        if (checkBoxCell.checkBox != null) {
+            checkBoxCell.checkBox.setOnClickListener { checkBoxCell.performClick() }
+        } else {
+            checkBoxCell.checkBoxSquare.setOnClickListener { checkBoxCell.performClick() }
         }
 
         return checkBoxCell
@@ -136,18 +139,14 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addCheckItems(text: Array<String>, value: (Int) -> Boolean, switch: Boolean = false, valueText: ((Int) -> String)? = null, listener: (index: Int, text: String, cell: TextCheckCell) -> Unit): List<TextCheckCell> {
+    fun addCheckItems(text: Array<String>, value: (Int) -> Boolean, switch: Boolean = false, valueText: ((Int) -> String)? = null, listener: (index: Int, text: String, cell: TextCheckCell, isChecked: Boolean) -> Unit): List<TextCheckCell> {
 
         val list = mutableListOf<TextCheckCell>()
 
         text.forEachIndexed { index, textI ->
-
-            list.add(addCheckItem(textI, value(index), switch, valueText?.invoke(index)) { cell ->
-
-                listener(index, textI, cell)
-
+            list.add(addCheckItem(textI, value(index), switch, valueText?.invoke(index)) { cell, isChecked ->
+                listener(index, textI, cell, isChecked)
             })
-
         }
 
         return list
@@ -241,9 +240,9 @@ class BottomBuilder(val ctx: Context) {
 
 
     @JvmOverloads
-    fun addOkButton(listener: ((TextView) -> Unit)) {
+    fun addOkButton(listener: ((TextView) -> Unit), noAutoDismiss: Boolean = false) {
 
-        addButton(LocaleController.getString("OK", R.string.OK)) { listener(it); }
+        addButton(LocaleController.getString("OK", R.string.OK), noAutoDismiss) { listener(it); }
 
     }
 
@@ -310,13 +309,13 @@ class BottomBuilder(val ctx: Context) {
     }
 
     @JvmOverloads
-    fun addItems(text: Array<String>, icon: (Int) -> Int = { 0 }, listener: (index: Int, text: String, cell: TextCell) -> Unit): List<TextCell> {
+    fun addItems(text: Array<String?>, icon: (Int) -> Int = { 0 }, listener: (index: Int, text: String, cell: TextCell) -> Unit): List<TextCell> {
 
         val list = mutableListOf<TextCell>()
 
         text.forEachIndexed { index, textI ->
 
-            list.add(addItem(textI, icon(index)) { cell ->
+            list.add(addItem(textI ?: return@forEachIndexed, icon(index)) { cell ->
 
                 listener(index, textI, cell)
 
@@ -341,7 +340,7 @@ class BottomBuilder(val ctx: Context) {
             isFocusable = true
             setBackgroundDrawable(null)
 
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, if (LocaleController.isRTL) Gravity.RIGHT else Gravity.LEFT, AndroidUtilities.dp(8F), 0, 0, 0))
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, if (LocaleController.isRTL) Gravity.RIGHT else Gravity.LEFT, AndroidUtilities.dp(6F), 0, 0, 0))
 
         }
 

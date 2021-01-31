@@ -282,7 +282,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		ActionBarMenu menu = actionBar.createMenu();
 		otherItem = menu.addItem(10, R.drawable.ic_ab_other);
 		otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-		otherItem.addSubItem(delete_all_calls, R.drawable.msg_delete, LocaleController.getString("DeleteAllCalls", R.string.DeleteAllCalls));
+		otherItem.addSubItem(delete_all_calls, R.drawable.baseline_delete_sweep_24, LocaleController.getString("DeleteAllCalls", R.string.DeleteAllCalls));
 
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));

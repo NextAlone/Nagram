@@ -270,5 +270,9 @@
 
     <string name="TabletMode">Tablet mode</string>
     <string name="TabletModeDefault">Depends on device</string>
+    <string name="ReplaceText">Replace Text</string>
+    <string name="TextOrigin">Origin</string>
+    <string name="TextReplace">Replace</string>
+    <string name="ReplaceRegex">Use regex</string>
 
 </resources>

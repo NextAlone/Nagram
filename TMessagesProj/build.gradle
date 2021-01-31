@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-preview-2227"
-def verCode = 171
+def verName = "7.4.2-preview-5"
+def verCode = 172
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -37,7 +37,7 @@ configurations {
     compile.exclude module: 'support-v4'
 }
 
-def okHttpVersion = '4.9.0'
+def okHttpVersion = '5.0.0-alpha.2'
 def fcmVersion = '21.0.1'
 def crashlyticsVersion = '17.3.1'
 def playCoreVersion = '1.9.1'
@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
 
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.osmdroid:osmdroid-android:6.1.8'
+    implementation 'org.osmdroid:osmdroid-android:6.1.10'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21-2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 

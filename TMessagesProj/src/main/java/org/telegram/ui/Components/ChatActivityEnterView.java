@@ -70,6 +70,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -121,6 +122,7 @@ import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupStickersActivity;
@@ -137,9 +139,11 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.cc.CCConverter;
 import tw.nekomimi.nekogram.cc.CCTarget;
@@ -2330,17 +2334,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (!hasRecordVideo || calledRecordRunnable) {
                             startedDraggingX = -1;
                             if (hasRecordVideo && videoSendButton.getTag() != null) {
-                            delegate.needStartRecordVideo(1, true, 0);
-                                } else {
-                                    if (recordingAudioVideo && isInScheduleMode()) {
-                                        AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
-                                    }
-                                    MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                                delegate.needStartRecordVideo(1, true, 0);
+                            } else {
+                                if (recordingAudioVideo && isInScheduleMode()) {
+                                    AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0));
+                                }
+                                MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
                                 delegate.needStartRecordAudio(0);
                             }
-                                recordingAudioVideo = false;
-                                updateRecordIntefrace(RECORD_STATE_SENDING);
-                            }
+                            recordingAudioVideo = false;
+                            updateRecordIntefrace(RECORD_STATE_SENDING);
+                        }
                         return false;
                     }
                     if (parentFragment != null) {
@@ -3045,7 +3049,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
             cell.setMinimumWidth(AndroidUtilities.dp(196));
             menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+            cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
 
+
+            cell.setTextAndIcon(LocaleController.getString("ReplaceText", R.string.ReplaceText), R.drawable.baseline_edit_24);
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+                showReplace();
+            });
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
 
         }
 
@@ -3315,13 +3330,21 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void translateComment(Locale target) {
 
+        int start = messageEditText.getSelectionStart();
+        int end = messageEditText.getSelectionEnd();
+        CharSequence text = messageEditText.getText();
+        if (start != end) {
+            text = text.subSequence(start, end);
+        }
+
         TranslateDb db = TranslateDb.forLocale(target);
-        String origin = messageEditText.getText().toString();
+        String origin = text.toString();
 
         if (db.contains(origin)) {
 
             String translated = db.query(origin);
-            messageEditText.setText(translated);
+            if (start == end) messageEditText.setText(translated);
+            else messageEditText.getText().replace(start, end, translated);
 
             return;
 
@@ -3345,7 +3368,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             @Override
             public void onSuccess(@NotNull String translation) {
                 status.dismiss();
-                messageEditText.setText(translation);
+                if (start == end) messageEditText.setText(translation);
+                else messageEditText.getText().replace(start, end, translation);
             }
 
             @Override
@@ -3363,16 +3387,76 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     private void ccComment(String target) {
-        String text = messageEditText.getText().toString();
+        int start = messageEditText.getSelectionStart();
+        int end = messageEditText.getSelectionEnd();
+        CharSequence text = messageEditText.getText();
+        if (start != end) {
+            text = text.subSequence(start, end);
+        }
         AlertDialog progress = AlertUtil.showProgress(parentActivity);
         progress.show();
+        String finalText = text.toString();
         UIUtil.runOnIoDispatcher(() -> {
-            String ccText = CCConverter.get(CCTarget.valueOf(target)).convert(text);
+            String ccText = CCConverter.get(CCTarget.valueOf(target)).convert(finalText);
             UIUtil.runOnUIThread(() -> {
                 progress.dismiss();
-                messageEditText.setText(ccText);
+                if (start == end) messageEditText.setText(ccText);
+                else messageEditText.getText().replace(start, end, ccText);
             });
         });
+    }
+
+    private void showReplace() {
+        int start = messageEditText.getSelectionStart();
+        int end = messageEditText.getSelectionEnd();
+        CharSequence text = messageEditText.getText();
+        if (start != end) {
+            text = text.subSequence(start, end);
+        }
+
+        BottomBuilder builder = new BottomBuilder(getContext());
+
+        builder.addTitle(LocaleController.getString("ReplaceText", R.string.ReplaceText), true);
+
+        TextCheckCell regex = builder.addCheckItem(LocaleController.getString("ReplaceRegex", R.string.ReplaceRegex), false, false, null);
+        EditText origin = builder.addEditText(LocaleController.getString("TextOrigin", R.string.TextOrigin));
+        EditText replace = builder.addEditText(LocaleController.getString("TextReplace", R.string.TextReplace));
+
+
+        String finalText = text.toString();
+        builder.addButton(LocaleController.getString("TextReplace", R.string.TextReplace), true, it -> {
+
+            String originText = origin.getText().toString();
+            String replaceText = replace.getText().toString();
+
+            if (originText.isEmpty()) {
+                AndroidUtilities.showKeyboard(origin);
+            }
+
+            boolean useRegex = regex.isChecked();
+            AlertDialog progress = AlertUtil.showProgress(getContext());
+            progress.show();
+            UIUtil.runOnIoDispatcher(() -> {
+                String replaced;
+                if (useRegex) {
+                    replaced = ReUtil.replaceAll(finalText, originText, replaceText);
+                } else {
+                    replaced = StrUtil.replace(finalText, originText, replaceText);
+                }
+                UIUtil.runOnUIThread(() -> {
+                    if (start == end) messageEditText.setText(replaced);
+                    else messageEditText.getText().replace(start, end, replaced);
+                    progress.dismiss();
+                    builder.dismiss();
+                });
+            });
+
+            return Unit.INSTANCE;
+        });
+
+        builder.addCancelButton();
+        builder.show();
+
     }
 
     public boolean isSendButtonVisible() {
@@ -4121,6 +4205,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         int fromRes;
         int targetRes;
 
+        Object oldStatus = attachButton.getTag();
+        if (oldStatus != null) {
+            int osi = (int) oldStatus;
+            if (use && osi == 1) return;
+            if (!use & osi == 2) return;
+        }
+
         isInInput = use;
 
         if (duration == 0 && botButton != null) {
@@ -4132,13 +4223,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         if (use) {
+            attachButton.setTag(1);
 
             fromRes = R.drawable.deproko_baseline_attach_26;
             targetRes = R.drawable.ic_ab_other;
 
             attachButton.setOnClickListener(this::onMenuClick);
             attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrChatAttachEnterMenu));
+
         } else {
+            attachButton.setTag(2);
 
             fromRes = R.drawable.ic_ab_other;
             targetRes = R.drawable.deproko_baseline_attach_26;
@@ -6437,10 +6531,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     private void updateBotButton() {
-        if (botButton == null) {
-            return;
-        }
-        if (hasBotCommands || botReplyMarkup != null) {
+        if (!checkBotButton()) return;
+        boolean textBlank = StrUtil.isBlank(AndroidUtilities.getTrimmedString(messageEditText.getText()));
+        if ((hasBotCommands || botReplyMarkup != null) && textBlank) {
             if (botButton.getVisibility() != VISIBLE) {
                 botButton.setVisibility(VISIBLE);
             }

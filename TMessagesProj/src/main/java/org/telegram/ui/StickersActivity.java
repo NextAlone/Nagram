@@ -482,41 +482,15 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         builder.addCheckItems(new String[]{
                 LocaleController.getString("StickerSets", R.string.StickerSets),
                 LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers)
-        }, (__) -> true, false, (index, text, cell) -> {
+        }, (__) -> true, false, (index, text, cell, isChecked) -> {
 
-            boolean export;
-
-            switch (index) {
-
-                case 0: {
-
-                    export = exportSets.get();
-                    exportSets.set(export = !export);
-
-                }
-                break;
-
-                default: {
-
-                    export = exportArchived.get();
-                    exportArchived.set(export = !export);
-
-                }
-                break;
-
-            }
-
-            cell.setChecked(export);
-
-            if (!exportSets.get() && !exportArchived.get()) {
-
-                exportButton.get().setEnabled(false);
-
+            if (index == 0) {
+                exportSets.set(isChecked);
             } else {
-
-                exportButton.get().setEnabled(true);
-
+                exportArchived.set(isChecked);
             }
+
+            exportButton.get().setEnabled(exportSets.get() || exportArchived.get());
 
             return Unit.INSTANCE;
 

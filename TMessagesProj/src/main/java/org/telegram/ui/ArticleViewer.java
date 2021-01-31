@@ -1979,6 +1979,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             String plainText = ((TLRPC.TL_textPlain) richText).text;
             if (!noTranslate && StrUtil.isNotBlank(plainText) && adapter[0].trans && TranslateDb.currentTarget().contains(plainText)) {
                 plainText = TranslateDb.currentTarget().query(plainText);
+                if (plainText == null) {
+                    plainText = ((TLRPC.TL_textPlain) richText).text + " (Not translated)";
+                }
             }
             return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
