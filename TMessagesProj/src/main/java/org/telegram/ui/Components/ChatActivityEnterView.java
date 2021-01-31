@@ -4955,11 +4955,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             scheduledButton.setTranslationX(0);
                         }
                     }
-                    if (checkBotButton()) {
-                        animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f));
-                        animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f));
-                        animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 1f));
-                    }
                     runningAnimation2.playTogether(animators);
                     runningAnimation2.setDuration(100);
                     runningAnimation2.addListener(new AnimatorListenerAdapter() {
