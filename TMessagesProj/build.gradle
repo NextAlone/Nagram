@@ -1,8 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-preview-5"
-def verCode = 172
+def verName = "7.4.2-preview-6"
+def verCode = 174
+
+def officialVer = "7.4.2"
+def officialCode = 2227
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -161,6 +164,9 @@ android {
             appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH") ?: appHash
         }
 
+
+        buildConfigField 'String', 'OFFICIAL_VERSION', "\"" + officialVer + "\""
+        buildConfigField 'int', 'OFFICIAL_VERSION_CODE', officialCode + ""
         buildConfigField 'int', 'APP_ID', appId
         buildConfigField 'String', 'APP_HASH', "\"" + appHash + "\""
 

@@ -66,6 +66,7 @@ public class UserConfig extends BaseController {
     public long lastUpdateCheckTime;
     public long autoDownloadConfigLoadTime;
     public boolean isBot;
+    public boolean official;
 
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
@@ -151,6 +152,8 @@ public class UserConfig extends BaseController {
                 editor.putInt("sharingMyLocationUntil", sharingMyLocationUntil);
                 editor.putInt("lastMyLocationShareTime", lastMyLocationShareTime);
                 editor.putBoolean("isBot", isBot);
+                editor.putBoolean("official", official);
+
                 editor.putBoolean("filtersLoaded", filtersLoaded);
                 if (tonEncryptedData != null) {
                     editor.putString("tonEncryptedData", tonEncryptedData);
@@ -303,6 +306,7 @@ public class UserConfig extends BaseController {
             autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
             hasValidDialogLoadIds = preferences.contains("2dialogsLoadOffsetId") || preferences.getBoolean("hasValidDialogLoadIds", false);
             isBot = preferences.getBoolean("isBot",false);
+            official = preferences.getBoolean("official", false);
             tonEncryptedData = preferences.getString("tonEncryptedData", null);
             tonPublicKey = preferences.getString("tonPublicKey", null);
             tonKeyName = preferences.getString("tonKeyName", "walletKey" + currentAccount);

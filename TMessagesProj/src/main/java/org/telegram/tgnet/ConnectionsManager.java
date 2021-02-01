@@ -2,7 +2,6 @@ package org.telegram.tgnet;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.SystemClock;
@@ -51,8 +50,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
-
-//import org.telegram.messenger.BuildConfig;
 
 public class ConnectionsManager extends BaseController {
 
@@ -171,21 +168,34 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = LocaleController.getLocaleStringIso639().toLowerCase();
             deviceModel = Build.MANUFACTURER + Build.MODEL;
-            PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            appVersion = pInfo.versionName + " (" + pInfo.versionCode + ")";
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                appVersion += " pbeta";
-            } else if (BuildVars.DEBUG_VERSION) {
-                appVersion += " beta";
-            }
             systemVersion = "SDK " + Build.VERSION.SDK_INT;
         } catch (Exception e) {
             systemLangCode = "en";
             langCode = "";
             deviceModel = "Android unknown";
-            appVersion = "App version unknown";
             systemVersion = "SDK " + Build.VERSION.SDK_INT;
         }
+
+        getUserConfig().loadConfig();
+
+        int version;
+        int appId;
+        String fingerprint;
+        if (getUserConfig().official || !getUserConfig().isClientActivated()) {
+            fingerprint = "49C1522548EBACD46CE322B6FD47F6092BB745D0F88082145CAF35E14DCC38E1";
+            version = BuildConfig.OFFICIAL_VERSION_CODE;
+            appId = BuildVars.OFFICAL_APP_ID;
+            appVersion = BuildConfig.OFFICIAL_VERSION + " (" + BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9 + ")";
+            if (BuildVars.DEBUG_VERSION) {
+                appVersion += " beta";
+            }
+        } else {
+            fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
+            version = BuildConfig.VERSION_CODE;
+            appId = BuildConfig.APP_ID;
+            appVersion = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
+        }
+
         if (systemLangCode.trim().length() == 0) {
             systemLangCode = "en";
         }
@@ -198,16 +208,13 @@ public class ConnectionsManager extends BaseController {
         if (systemVersion.trim().length() == 0) {
             systemVersion = "SDK Unknown";
         }
-        getUserConfig().loadConfig();
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             pushString = SharedConfig.pushStringStatus;
         }
-        String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
-
-        init(BuildVars.BUILD_VERSION, TLRPC.LAYER, BuildConfig.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+        init(version, TLRPC.LAYER, appId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
     }
 
     public boolean isPushConnectionEnabled() {

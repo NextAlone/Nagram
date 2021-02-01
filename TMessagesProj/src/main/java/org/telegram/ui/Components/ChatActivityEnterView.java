@@ -3439,7 +3439,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             UIUtil.runOnIoDispatcher(() -> {
                 String replaced;
                 if (useRegex) {
-                    replaced = ReUtil.replaceAll(finalText, originText, replaceText);
+                    try {
+                        replaced = ReUtil.replaceAll(finalText, originText, replaceText);
+                    } catch (Exception e) {
+                        UIUtil.runOnUIThread(progress::dismiss);
+                        AlertUtil.showToast(e);
+                        return;
+                    }
                 } else {
                     replaced = StrUtil.replace(finalText, originText, replaceText);
                 }

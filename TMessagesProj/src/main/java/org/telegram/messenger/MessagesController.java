@@ -7604,7 +7604,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     migratingDialogs = false;
                     getNotificationCenter().postNotificationName(NotificationCenter.needReloadRecentDialogsSearch);
                 } else {
-                    generateUpdateMessage();
+                    // generateUpdateMessage();
                     if (!added && loadType == DIALOGS_LOAD_TYPE_CACHE && dialogsEndReached.get(folderId)) {
                         loadDialogs(folderId, 0, count, false);
                     }

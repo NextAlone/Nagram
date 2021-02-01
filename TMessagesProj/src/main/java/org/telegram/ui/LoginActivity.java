@@ -111,7 +111,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
-import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -810,12 +809,14 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             exportLoginTokenRequest.api_id = NekoXConfig.currentAppId();
             exportLoginTokenRequest.api_hash = NekoXConfig.currentAppHash();
             exportLoginTokenRequest.except_ids = new ArrayList<>();
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                UserConfig userConfig = UserConfig.getInstance(a);
-                if (!userConfig.isClientActivated()) {
-                    continue;
+            if (NekoXConfig.customApi == 0) {
+                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                    UserConfig userConfig = UserConfig.getInstance(a);
+                    if (!userConfig.isClientActivated()) {
+                        continue;
+                    }
+                    exportLoginTokenRequest.except_ids.add(a);
                 }
-                exportLoginTokenRequest.except_ids.add(a);
             }
         }
 
@@ -1551,6 +1552,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         ConnectionsManager.getInstance(currentAccount).setUserId(res.user.id);
         UserConfig.getInstance(currentAccount).clearConfig();
         MessagesController.getInstance(currentAccount).cleanup();
+        UserConfig.getInstance(currentAccount).official = NekoXConfig.currentAppId() == BuildVars.OFFICAL_APP_ID;
         UserConfig.getInstance(currentAccount).syncContacts = syncContacts;
         UserConfig.getInstance(currentAccount).setCurrentUser(res.user);
         UserConfig.getInstance(currentAccount).saveConfig(true);
