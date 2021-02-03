@@ -212,4 +212,5 @@
     <string name="TextOrigin">原文</string>
     <string name="TextReplace">替换</string>
     <string name="ReplaceRegex">正则表达式</string>
+    <string name="DisableTrending">禁用趋势推荐</string>
 </resources>

@@ -207,5 +207,10 @@
     <string name="UserRestrictionsSendInline">透過內聯機器人傳送</string>
     <string name="AcceptSecretChat">接受新的加密對話</string>
     <string name="TabletMode">平板模式</string>
-    <string name="TabletModeDefault">基於設備</string>
+    <string name="TabletModeDefault">基於裝置</string>
+    <string name="ReplaceText">替換文字</string>
+    <string name="TextOrigin">原文</string>
+    <string name="TextReplace">替換</string>
+    <string name="ReplaceRegex">正規表示式</string>
+    <string name="DisableTrending">禁用趨勢推薦</string>
 </resources>

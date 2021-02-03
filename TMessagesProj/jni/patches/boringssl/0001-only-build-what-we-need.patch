@@ -1,11 +1,11 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c266e1267..81d721df4 100644
+index f58e853cd..a56305ce5 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -562,44 +562,8 @@ if(USE_CUSTOM_LIBCXX)
+@@ -564,44 +564,8 @@ if(USE_CUSTOM_LIBCXX)
    target_link_libraries(libcxx libcxxabi)
  endif()
- 
+
 -# Add minimal googletest targets. The provided one has many side-effects, and
 -# googletest has a very straightforward build.
 -add_library(boringssl_gtest third_party/googletest/src/gtest-all.cc)
@@ -44,13 +44,38 @@ index c266e1267..81d721df4 100644
 -add_subdirectory(util/fipstools/cavp)
 -add_subdirectory(util/fipstools/acvp/modulewrapper)
 -add_subdirectory(decrepit)
- 
+
  if(FUZZ)
    if(LIBFUZZER_FROM_DEPS)
-@@ -616,14 +580,3 @@ endif()
+@@ -617,39 +581,4 @@ endif()
+
  if(UNIX AND NOT APPLE AND NOT ANDROID)
    set(HANDSHAKER_ARGS "-handshaker-path" $<TARGET_FILE:handshaker>)
- endif()
+-endif()
+-
+-if(FIPS)
+-  add_custom_target(
+-    acvp_tests
+-    COMMAND ${GO_EXECUTABLE} build -o ${CMAKE_BINARY_DIR}/acvptool
+-            boringssl.googlesource.com/boringssl/util/fipstools/acvp/acvptool
+-    COMMAND ${GO_EXECUTABLE} build -o ${CMAKE_BINARY_DIR}/testmodulewrapper
+-            boringssl.googlesource.com/boringssl/util/fipstools/acvp/acvptool/testmodulewrapper
+-    COMMAND cd util/fipstools/acvp/acvptool/test &&
+-            ${GO_EXECUTABLE} run check_expected.go
+-            -tool ${CMAKE_BINARY_DIR}/acvptool
+-            -module-wrappers modulewrapper:$<TARGET_FILE:modulewrapper>,testmodulewrapper:${CMAKE_BINARY_DIR}/testmodulewrapper
+-            -tests tests.json
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-    DEPENDS modulewrapper
+-    USES_TERMINAL)
+-
+-  add_custom_target(
+-    fips_specific_tests_if_any
+-    DEPENDS acvp_tests
+-  )
+-else()
+-  add_custom_target(fips_specific_tests_if_any)
+-endif()
 -
 -add_custom_target(
 -    run_tests
@@ -60,13 +85,15 @@ index c266e1267..81d721df4 100644
 -            ${GO_EXECUTABLE} test -shim-path $<TARGET_FILE:bssl_shim>
 -              ${HANDSHAKER_ARGS} ${RUNNER_ARGS}
 -    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
--    DEPENDS all_tests bssl_shim handshaker
+-    DEPENDS all_tests bssl_shim handshaker fips_specific_tests_if_any
 -    USES_TERMINAL)
++endif()
+\ No newline at end of file
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
-index d23c02eee..d84f4c1b9 100644
+index cde92b591..1807d036a 100644
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
-@@ -85,7 +85,6 @@ function(perlasm dest src)
+@@ -91,7 +91,6 @@ function(perlasm dest src)
  endfunction()
 
  add_subdirectory(fipsmodule)
@@ -74,7 +101,7 @@ index d23c02eee..d84f4c1b9 100644
 
  if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -467,92 +466,4 @@ endif()
+@@ -475,93 +474,4 @@ endif()
 
  # urandom_test is a separate binary because it needs to be able to observe the
  # PRNG initialisation, which means that it can't have other tests running before
@@ -96,8 +123,9 @@ index d23c02eee..d84f4c1b9 100644
 -  abi_self_test.cc
 -  asn1/asn1_test.cc
 -  base64/base64_test.cc
--  buf/buf_test.cc
 -  bio/bio_test.cc
+-  blake2/blake2_test.cc
+-  buf/buf_test.cc
 -  bytestring/bytestring_test.cc
 -  chacha/chacha_test.cc
 -  cipher_extra/aead_test.cc
