@@ -8,9 +8,7 @@ object DataCenter {
     fun applyOfficalDataCanter(account: Int) {
 
         if (ConnectionsManager.native_isTestBackend(account) != 0) {
-
             ConnectionsManager.getInstance(account).switchBackend()
-
         }
 
         ConnectionsManager.native_cleanUp(account, true)
@@ -21,9 +19,7 @@ object DataCenter {
     fun applyTestDataCenter(account: Int) {
 
         if (ConnectionsManager.native_isTestBackend(account) == 0) {
-
             ConnectionsManager.getInstance(account).switchBackend()
-
         }
 
     }
