@@ -3256,7 +3256,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         Intent intent = new Intent();
 
-        if (NekoConfig.openPGPKeyId != 0L && save)
+        if (NekoConfig.openPGPKeyId > 0L && save)
             intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NekoConfig.openPGPKeyId);
 
         signComment(intent, save);

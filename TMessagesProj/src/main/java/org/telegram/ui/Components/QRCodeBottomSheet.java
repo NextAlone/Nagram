@@ -104,7 +104,10 @@ public class QRCodeBottomSheet extends BottomSheet {
 
     public Bitmap createQR(Context context, String key, Bitmap oldBitmap) {
         try {
-            ProxyUtil.createQRCode(key, 768);
+            HashMap<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+            hints.put(EncodeHintType.MARGIN, 0);
+            return new QRCodeWriter().encode(key, BarcodeFormat.QR_CODE, 768, 768, hints, oldBitmap, context);
         } catch (Exception e) {
             FileLog.e(e);
         }

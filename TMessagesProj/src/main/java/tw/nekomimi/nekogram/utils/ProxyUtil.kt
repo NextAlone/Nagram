@@ -9,13 +9,18 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Build
 import android.os.Environment
 import android.util.Base64
 import android.view.Gravity
+import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.setPadding
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
@@ -34,6 +39,7 @@ import java.io.File
 import java.net.NetworkInterface
 import java.util.*
 import kotlin.collections.HashMap
+
 
 object ProxyUtil {
 
@@ -351,19 +357,26 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun showQrDialog(ctx: Context, text: String): AlertDialog {
+    @JvmOverloads
+    fun showQrDialog(ctx: Context, text: String, icon: ((Int) -> Bitmap)? = null): AlertDialog {
 
-        val code = createQRCode(text)
+        val code = createQRCode(text, icon = icon)
 
         ctx.setTheme(R.style.Theme_TMessages)
 
         return AlertDialog.Builder(ctx).setView(LinearLayout(ctx).apply {
 
+            gravity = Gravity.CENTER
+            setBackgroundColor(Color.TRANSPARENT)
+
             addView(LinearLayout(ctx).apply {
+                val root = this
 
                 gravity = Gravity.CENTER
+                setBackgroundColor(Color.WHITE)
+                setPadding(AndroidUtilities.dp(16f))
 
-                val width = AndroidUtilities.dp(330f)
+                val width = AndroidUtilities.dp(260f)
 
                 addView(ImageView(ctx).apply {
 
@@ -405,12 +418,16 @@ object ProxyUtil {
 
                                     saveTo.outputStream().use {
 
-                                        code?.compress(Bitmap.CompressFormat.JPEG, 100, it);
+                                        loadBitmapFromView(root).compress(Bitmap.CompressFormat.JPEG, 100, it);
 
                                     }
 
                                     AndroidUtilities.addMediaToGallery(saveTo.path)
+                                    AlertUtil.showToast(LocaleController.getString("PhotoSavedHint", R.string.PhotoSavedHint))
 
+                                }.onFailure {
+                                    FileLog.e(it)
+                                    AlertUtil.showToast(it)
                                 }
 
                             }
@@ -423,40 +440,38 @@ object ProxyUtil {
 
                 }, LinearLayout.LayoutParams(width, width))
 
-            }, LinearLayout.LayoutParams(-1, -1).apply {
+            }, LinearLayout.LayoutParams(-2, -2).apply {
 
                 gravity = Gravity.CENTER
 
             })
 
-        }).show()
+        }).create().apply {
+
+            show()
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        }
 
     }
 
+    private fun loadBitmapFromView(v: View): Bitmap {
+        val b = Bitmap.createBitmap(v.width, v.height, Bitmap.Config.ARGB_8888)
+        val c = Canvas(b)
+        v.layout(v.left, v.top, v.right, v.bottom)
+        v.draw(c)
+        return b
+    }
+
     @JvmStatic
-    fun createQRCode(text: String, size: Int = 800): Bitmap? {
-        try {
+    fun createQRCode(text: String, size: Int = 768, icon: ((Int) -> Bitmap)? = null): Bitmap {
+        return try {
             val hints = HashMap<EncodeHintType, Any>()
-            hints[EncodeHintType.CHARACTER_SET] = "utf-8"
             hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.M
-            //hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
-            val bitMatrix = QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints)
-            val pixels = IntArray(size * size)
-            for (y in 0 until size) {
-                for (x in 0 until size) {
-                    if (bitMatrix.get(x, y)) {
-                        pixels[y * size + x] = 0xff000000.toInt()
-                    } else {
-                        pixels[y * size + x] = 0xffffffff.toInt()
-                    }
-                }
-            }
-            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-            bitmap.setPixels(pixels, 0, size, 0, 0, size, size)
-            return bitmap
+            QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints, null, null, icon)
         } catch (e: WriterException) {
             FileLog.e(e);
-            return Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         }
     }
 
@@ -471,23 +486,11 @@ object ProxyUtil {
 
         try {
 
-            val result = try {
-                qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), mapOf(
-                        DecodeHintType.TRY_HARDER to true
-                ))
-            } catch (e: NotFoundException) {
-                qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source.invert())), mapOf(
-                        DecodeHintType.TRY_HARDER to true
-                ))
-            }
+            val result = qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), mapOf(
+                    DecodeHintType.TRY_HARDER to true
+            ))
 
             showLinkAlert(ctx, result.text)
-
-            val intArr = arrayListOf<Int>().toIntArray()
-
-        } catch (ex: NoSuchMethodError) {
-
-            AlertUtil.showSimpleAlert(ctx, "很抱歉, 這是一個已知的問題, 但您現在無法掃碼, 因爲您正在使用糟糕的Android系統, 直到 Google Zxing 為您的設備做出優化.")
 
         } catch (e: Throwable) {
 

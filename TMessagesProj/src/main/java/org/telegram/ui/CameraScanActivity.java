@@ -670,14 +670,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             } else {
                 source = new PlanarYUVLuminanceSource(data, size.getWidth(), size.getHeight(), x, y, side, side, false);
             }
-            Result result = null;
-            try {
-                result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
-            } catch (NotFoundException e) {
-                try {
-                    result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source.invert())));
-                } catch (NotFoundException ignore) {}
-            }
+            Result result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
             if (result == null) {
                 onNoQrFound();
                 return null;

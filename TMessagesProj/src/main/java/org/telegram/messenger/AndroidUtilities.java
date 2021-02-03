@@ -2971,6 +2971,8 @@ public class AndroidUtilities {
         String link = data.toString();
         if (link.startsWith("tg://proxy") ||
                 link.startsWith("tg://socks") ||
+                link.startsWith("http://t.me/proxy?") ||
+                link.startsWith("http://t.me/socks?") ||
                 link.startsWith("https://t.me/proxy?") ||
                 link.startsWith("https://t.me/socks?") ||
                 link.startsWith(VMESS_PROTOCOL) ||

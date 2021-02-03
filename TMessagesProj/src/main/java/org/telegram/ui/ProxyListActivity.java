@@ -850,7 +850,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard),
                 LocaleController.getString("ScanQRCode", R.string.ScanQRCode)
 
-        }, (i,t,c) -> {
+        }, null, (i,t,c) -> {
 
             if (i == 0) {
 

@@ -170,9 +170,13 @@ import java.util.List;
 import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_BOTTOM;
 import static org.telegram.messenger.MessageObject.POSITION_FLAG_LEFT;
@@ -1182,48 +1186,54 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             linkSheet = null;
         }
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity);
-        builder.setTitle(urlFinal);
-        builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
-            if (parentActivity == null) {
-                return;
-            }
-            if (which == 0) {
-                int index;
-                if ((index = urlFinal.lastIndexOf('#')) != -1) {
-                    String webPageUrl;
-                    if (!TextUtils.isEmpty(adapter[0].currentPage.cached_page.url)) {
-                        webPageUrl = adapter[0].currentPage.cached_page.url.toLowerCase();
-                    } else {
-                        webPageUrl = adapter[0].currentPage.url.toLowerCase();
-                    }
-                    String anchor;
-                    try {
-                        anchor = URLDecoder.decode(urlFinal.substring(index + 1), "UTF-8");
-                    } catch (Exception ignore) {
-                        anchor = "";
-                    }
-                    if (urlFinal.toLowerCase().contains(webPageUrl)) {
-                        if (TextUtils.isEmpty(anchor)) {
-                            layoutManager[0].scrollToPositionWithOffset(0, 0);
-                            checkScrollAnimated();
-                        } else {
-                            scrollToAnchor(anchor);
+        BottomBuilder builder = new BottomBuilder(parentActivity);
+        builder.addTitle(urlFinal);
+        builder.addItems(
+                new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
+                new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, cell) -> {
+                    if (parentActivity == null) return Unit.INSTANCE;
+                    if (which == 0 || which == 2) {
+                        int index;
+                        if ((index = urlFinal.lastIndexOf('#')) != -1) {
+                            String webPageUrl;
+                            if (!TextUtils.isEmpty(adapter[0].currentPage.cached_page.url)) {
+                                webPageUrl = adapter[0].currentPage.cached_page.url.toLowerCase();
+                            } else {
+                                webPageUrl = adapter[0].currentPage.url.toLowerCase();
+                            }
+                            String anchor;
+                            try {
+                                anchor = URLDecoder.decode(urlFinal.substring(index + 1), "UTF-8");
+                            } catch (Exception ignore) {
+                                anchor = "";
+                            }
+                            if (urlFinal.toLowerCase().contains(webPageUrl)) {
+                                if (TextUtils.isEmpty(anchor)) {
+                                    layoutManager[0].scrollToPositionWithOffset(0, 0);
+                                    checkScrollAnimated();
+                                } else {
+                                    scrollToAnchor(anchor);
+                                }
+                                return Unit.INSTANCE;
+                            }
                         }
-                        return;
+                        if (which == 0 ) {
+                            Browser.openUrl(parentActivity, urlFinal);
+                        } else {
+                            ProxyUtil.showQrDialog(parentActivity, urlFinal);
+                        }
+                    } else if (which == 1) {
+                        String url = urlFinal;
+                        if (url.startsWith("mailto:")) {
+                            url = url.substring(7);
+                        } else if (url.startsWith("tel:")) {
+                            url = url.substring(4);
+                        }
+                        AndroidUtilities.addToClipboard(url);
+                        AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied));
                     }
-                }
-                Browser.openUrl(parentActivity, urlFinal);
-            } else if (which == 1) {
-                String url = urlFinal;
-                if (url.startsWith("mailto:")) {
-                    url = url.substring(7);
-                } else if (url.startsWith("tel:")) {
-                    url = url.substring(4);
-                }
-                AndroidUtilities.addToClipboard(url);
-            }
-        });
+                    return Unit.INSTANCE;
+                });
         BottomSheet sheet = builder.create();
         showDialog(sheet);
     }

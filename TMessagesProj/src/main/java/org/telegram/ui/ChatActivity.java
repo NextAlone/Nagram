@@ -255,6 +255,7 @@ import tw.nekomimi.nekogram.parts.PollTransUpdatesKt;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -21202,9 +21203,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         messageCell.setChecked(true, groupedMessages == null, animated);
     }
 
-    private void openClickableLink(String str) {
+    private void openClickableLink(String str, boolean qr) {
         if (str.startsWith("@")) {
             String username = str.substring(1).toLowerCase();
+            if (qr) {
+                ProxyUtil.showQrDialog(getParentActivity(), "https://t.me/" + username);
+                return;
+            }
             if (currentChat != null && !TextUtils.isEmpty(currentChat.username) && username.equals(currentChat.username.toLowerCase()) ||
                     currentUser != null && !TextUtils.isEmpty(currentUser.username) && username.equals(currentUser.username.toLowerCase())) {
                 Bundle args = new Bundle();
@@ -21238,6 +21243,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 presentFragment(fragment);
             }
         } else {
+            if (qr) {
+                ProxyUtil.showQrDialog(getParentActivity(), str);
+                return;
+            }
             if (AndroidUtilities.shouldShowUrlInAlert(str)) {
                 AlertsCreator.showOpenUrlAlert(ChatActivity.this, str, true, true, true);
             } else {
@@ -21353,42 +21362,54 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }, 500);
             } else {
                 if (longPress) {
-                    BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-                    builder.setTitle(str);
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
-                        if (which == 0) {
-                            openClickableLink(str);
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+                    builder.addTitle(str);
+                    builder.addItems(
+                            new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), str.startsWith("#") || str.startsWith("$") ? null : LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
+                            new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, __) -> {
+                                if (which == 0 || which == 2) {
+                                    openClickableLink(str, which == 2);
+
                         } else if (which == 1) {
                             AndroidUtilities.addToClipboard(str);
                         }
+                                return Unit.INSTANCE;
                     });
                     showDialog(builder.create());
                 } else {
-                    openClickableLink(str);
+                    openClickableLink(str, false);
                 }
             }
         } else {
             final String urlFinal = ((URLSpan) url).getURL();
             if (longPress) {
-                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-                builder.setTitle(urlFinal);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
-                    if (which == 0) {
-                        if (AndroidUtilities.shouldShowUrlInAlert(urlFinal)) {
-                            AlertsCreator.showOpenUrlAlert(ChatActivity.this, urlFinal, true, true, false);
-                        } else {
-                            Browser.openUrl(getParentActivity(), urlFinal, inlineReturn == 0, false);
-                        }
-                    } else if (which == 1) {
-                        String url1 = urlFinal;
-                        if (url1.startsWith("mailto:")) {
-                            url1 = url1.substring(7);
-                        } else if (url1.startsWith("tel:")) {
-                            url1 = url1.substring(4);
-                        }
-                        AndroidUtilities.addToClipboard(url1);
-                    }
-                });
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                builder.addTitle(urlFinal);
+                builder.addItems(
+                        new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
+                        new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, __) -> {
+                            if (which == 0 || which == 2) {
+                                if (which == 0) {
+                                    if (AndroidUtilities.shouldShowUrlInAlert(urlFinal)) {
+                                        AlertsCreator.showOpenUrlAlert(ChatActivity.this, urlFinal, true, true, false);
+                                    } else {
+                                        Browser.openUrl(getParentActivity(), urlFinal, inlineReturn == 0, false);
+                                    }
+                                } else {
+                                    ProxyUtil.showQrDialog(getParentActivity(), urlFinal);
+                                }
+                            } else if (which == 1) {
+                                String url1 = urlFinal;
+                                if (url1.startsWith("mailto:")) {
+                                    url1 = url1.substring(7);
+                                } else if (url1.startsWith("tel:")) {
+                                    url1 = url1.substring(4);
+                                }
+                                AndroidUtilities.addToClipboard(url1);
+                                AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied));
+                            }
+                            return Unit.INSTANCE;
+                        });
                 showDialog(builder.create());
             } else {
                 boolean punycode = false;

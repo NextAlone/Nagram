@@ -115,8 +115,11 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class ChannelAdminLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1547,7 +1550,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             int checkLoadCount;
             if (scroll) {
                 checkLoadCount = 25;
-            } else  {
+            } else {
                 checkLoadCount = 5;
             }
             if (firstVisibleItem <= checkLoadCount && !loading && !endReached) {
@@ -2023,21 +2026,29 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         } else {
                             final String urlFinal = ((URLSpan) url).getURL();
                             if (longPress) {
-                                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-                                builder.setTitle(urlFinal);
-                                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
-                                    if (which == 0) {
-                                        Browser.openUrl(getParentActivity(), urlFinal, true);
-                                    } else if (which == 1) {
-                                        String url1 = urlFinal;
-                                        if (url1.startsWith("mailto:")) {
-                                            url1 = url1.substring(7);
-                                        } else if (url1.startsWith("tel:")) {
-                                            url1 = url1.substring(4);
-                                        }
-                                        AndroidUtilities.addToClipboard(url1);
-                                    }
-                                });
+                                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                                builder.addTitle(urlFinal);
+                                builder.addItems(
+                                        new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
+                                        new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, __) -> {
+                                            if (which == 0 || which == 2) {
+                                                if (which == 0) {
+                                                    Browser.openUrl(getParentActivity(), urlFinal);
+                                                } else {
+                                                    ProxyUtil.showQrDialog(getParentActivity(), urlFinal);
+                                                }
+                                            } else if (which == 1) {
+                                                String url1 = urlFinal;
+                                                if (url1.startsWith("mailto:")) {
+                                                    url1 = url1.substring(7);
+                                                } else if (url1.startsWith("tel:")) {
+                                                    url1 = url1.substring(4);
+                                                }
+                                                AndroidUtilities.addToClipboard(url1);
+                                                AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied));
+                                            }
+                                            return Unit.INSTANCE;
+                                        });
                                 showDialog(builder.create());
                             } else {
                                 if (url instanceof URLSpanReplacement) {
@@ -2639,7 +2650,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         themeDescriptions.add(new ThemeDescription(avatarContainer != null ? avatarContainer.getTimeItem() : null, 0, null, null, null, null, Theme.key_chat_secretTimerBackground));
         themeDescriptions.add(new ThemeDescription(avatarContainer != null ? avatarContainer.getTimeItem() : null, 0, null, null, null, null, Theme.key_chat_secretTimerText));
-        
+
         return themeDescriptions;
     }
 }
