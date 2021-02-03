@@ -208,4 +208,8 @@
     <string name="AcceptSecretChat">Chấp nhận cuộc trò chuyện bí mật mới</string>
     <string name="TabletMode">Chế độ máy tính bảng</string>
     <string name="TabletModeDefault">Phụ thuộc vào thiết bị</string>
+    <string name="ReplaceText">Thay thế văn bản</string>
+    <string name="TextOrigin">Gốc</string>
+    <string name="TextReplace">Thay thế</string>
+    <string name="ReplaceRegex">Sử dụng biểu thức chính quy</string>
 </resources>

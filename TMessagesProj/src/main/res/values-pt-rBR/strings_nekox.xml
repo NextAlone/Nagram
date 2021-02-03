@@ -2,8 +2,8 @@
 <resources>
     <string name="Locked">Bloqueado</string>
     <string name="AccDescrChatAttachEnterMenu">Menu de entrada do chat</string>
-    <string name="ChatAttachEnterMenuRecordVideo">Gravar vídeo</string>
-    <string name="ChatAttachEnterMenuRecordAudio">Gravar áudio</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Gravar Vídeo</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Gravar Áudio</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Desativar Prévia de Link</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Ativar Prévia de Link</string>
     <string name="UseChatAttachEnterMenu">Usar menu de entrada</string>
@@ -21,7 +21,7 @@
     <string name="NoUpdate">Nenhuma atualização encontrada</string>
     <string name="UpdateAvailable">Nova atualização disponível</string>
     <string name="UpdateUpdate">Atualizar</string>
-    <string name="UpdateLater">Mais tarde</string>
+    <string name="UpdateLater">Depois</string>
     <string name="DownloadFailed">Falha no Download</string>
     <string name="Install">Instalar</string>
     <string name="Ignore">Ignorar</string>

@@ -61,7 +61,6 @@
     <string name="PublicPrefix">공개</string>
     <string name="DisableChatAction">내 입력 상태 보여주지 않기</string>
     <string name="FakeScreenshot">스크린샷 요청</string>
-    <string name="ImportPxy">가져오기</string>
     <string name="FilterNameUsers">사용자</string>
     <string name="FilterNameUsersDescription">비공개 채팅 메시지만</string>
     <string name="FilterNameContacts">연락처</string>

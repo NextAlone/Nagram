@@ -61,7 +61,6 @@
     <string name="PublicPrefix">Genel</string>
     <string name="DisableChatAction">Giriş Durumumu (yazıyor, vb.) Gönderme</string>
     <string name="FakeScreenshot">Ekran görüntüsü gibi davran</string>
-    <string name="ImportPxy">İçe aktar</string>
     <string name="FilterNameUsers">Kullanıcılar</string>
     <string name="FilterNameUsersDescription">Yalnızca özel sohbetlerden gelen iletiler</string>
     <string name="FilterNameContacts">Kişiler</string>

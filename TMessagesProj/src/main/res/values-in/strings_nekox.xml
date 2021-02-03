@@ -61,7 +61,6 @@
     <string name="PublicPrefix">Publik</string>
     <string name="DisableChatAction">Jangan kirim status masukan saya</string>
     <string name="FakeScreenshot">Palsukan tangkapan layar</string>
-    <string name="ImportPxy">Impor</string>
     <string name="FilterNameUsers">Pengguna</string>
     <string name="FilterNameUsersDescription">Hanya pesan dari obrolan pribadi</string>
     <string name="FilterNameContacts">Kontak</string>

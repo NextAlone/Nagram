@@ -208,4 +208,8 @@
     <string name="AcceptSecretChat">گفتگوی محرمانه جدید را بپذیر</string>
     <string name="TabletMode">حالت تبلت</string>
     <string name="TabletModeDefault">بر اساس دستگاه</string>
+    <string name="ReplaceText">جایگزینی متن</string>
+    <string name="TextOrigin">اصلی</string>
+    <string name="TextReplace">جایگزین</string>
+    <string name="ReplaceRegex">استفاده از regex</string>
 </resources>

@@ -52,7 +52,6 @@
     <string name="PublicPrefix">公共</string>
     <string name="DisableChatAction">不要發送我的輸入狀態</string>
     <string name="FakeScreenshot">假裝截屏</string>
-    <string name="ImportPxy">導入</string>
     <string name="FilterNameUsers">用戶</string>
     <string name="FilterNameUsersDescription">僅來自私聊的消息</string>
     <string name="FilterNameContacts">聯係人</string>
