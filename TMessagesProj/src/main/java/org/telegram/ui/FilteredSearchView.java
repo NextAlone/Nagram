@@ -45,7 +45,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.FiltersView;
@@ -1087,7 +1086,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     builder.addTitle(urlFinal);
                     builder.addItems(
                             new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                            new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, __) -> {
+                            new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
                                 if (which == 0 || which == 2) {
                                     if (which == 0) {
                                         openUrl(urlFinal);

@@ -48,6 +48,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -82,9 +86,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ShareAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1063,19 +1065,29 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             if (sendingMessageObjects != null) {
                 for (int a = 0; a < selectedDialogs.size(); a++) {
                     long key = selectedDialogs.keyAt(a);
+                    if (NekoConfig.sendCommentAfterForward) {
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, true, 0);
+                    }
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0);
                     }
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, true, 0);
+                    if (!NekoConfig.sendCommentAfterForward) {
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, true, 0);
+                    }
                 }
                 onSend(selectedDialogs, sendingMessageObjects.size());
             } else if (sendingText != null) {
                 for (int a = 0; a < selectedDialogs.size(); a++) {
                     long key = selectedDialogs.keyAt(a);
+                    if (NekoConfig.sendCommentAfterForward) {
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText, key, null, null, null, true, null, null, null, true, 0);
+                    }
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0);
                     }
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText, key, null, null, null, true, null, null, null, true, 0);
+                    if (!NekoConfig.sendCommentAfterForward) {
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText, key, null, null, null, true, null, null, null, true, 0);
+                    }
                 }
             }
             if (delegate != null) {

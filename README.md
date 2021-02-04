@@ -53,9 +53,11 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - Option to block others from starting a secret chat with you
 - Allow create group without invite
 - Option to upgrade group to supergroup
+- Mark dialogs as read using tab menu
 - Improved session dialog
 - Improved link long click menu
 - Text replacer
+- Option to disable trending
 - Tgx style message unpin menu
 - Built-in Material Design themes / Telegram X style icons
 

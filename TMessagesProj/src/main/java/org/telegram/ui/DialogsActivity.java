@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.SparseArray;
@@ -105,7 +104,6 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -166,6 +164,8 @@ import org.telegram.ui.Components.ViewPagerFixed;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -2192,22 +2192,23 @@ private int lastMeasuredTopPadding;
 
                     linearLayout.setMinimumWidth(AndroidUtilities.dp(200));
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    scrimPopupWindowItems = new ActionBarMenuSubItem[3];
-                    for (int a = 0, N = (tabView.getId() == Integer.MAX_VALUE ? 2 : 3); a < N; a++) {
+                    scrimPopupWindowItems = new ActionBarMenuSubItem[4];
+                    for (int a = 0, N = (tabView.getId() == Integer.MAX_VALUE ? 3 : 4); a < 4; a++) {
                         ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == N - 1);
                         if (a == 0) {
-                            if (getMessagesController().dialogFilters.size() <= 1) {
-                                continue;
-                            }
+                            if (getMessagesController().dialogFilters.size() <= 1) continue;
                             cell.setTextAndIcon(LocaleController.getString("FilterReorder", R.string.FilterReorder), R.drawable.tabs_reorder);
                         } else if (a == 1) {
-                            if (N == 2) {
+                            if (N == 3) {
                                 cell.setTextAndIcon(LocaleController.getString("FilterEditAll", R.string.FilterEditAll), R.drawable.baseline_edit_24);
                             } else {
                                 cell.setTextAndIcon(LocaleController.getString("FilterEdit", R.string.FilterEdit), R.drawable.baseline_edit_24);
                             }
-                        } else {
+                        } else if (a == 2) {
+                            if (N == 3) continue;
                             cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.baseline_delete_24);
+                        } else {
+                            cell.setTextAndIcon(LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead), R.drawable.baseline_done_all_24);
                         }
                         scrimPopupWindowItems[a] = cell;
                         linearLayout.addView(cell);
@@ -2225,6 +2226,8 @@ private int lastMeasuredTopPadding;
                                 }
                             } else if (i == 2) {
                                 showDeleteAlert(dialogFilter);
+                            } else {
+                                getMessagesStorage().readAllDialogs(tabView.getId());
                             }
                             if (scrimPopupWindow != null) {
                                 scrimPopupWindow.dismiss();
@@ -3378,9 +3381,9 @@ private int lastMeasuredTopPadding;
         ActionBarMenuItem otherItem = actionMode.addItemWithWidth(0, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         archiveItem = otherItem.addSubItem(archive, R.drawable.baseline_archive_24, LocaleController.getString("Archive", R.string.Archive));
         pin2Item = otherItem.addSubItem(pin2, R.drawable.deproko_baseline_pin_24, LocaleController.getString("DialogPin", R.string.DialogPin));
-        addToFolderItem = otherItem.addSubItem(add_to_folder, R.drawable.msg_addfolder, LocaleController.getString("FilterAddTo", R.string.FilterAddTo));
-        removeFromFolderItem = otherItem.addSubItem(remove_from_folder, R.drawable.msg_removefolder, LocaleController.getString("FilterRemoveFrom", R.string.FilterRemoveFrom));
-        readItem = otherItem.addSubItem(read, R.drawable.deproko_baseline_check_double_24, LocaleController.getString("MarkAsRead", R.string.MarkAsRead));
+        addToFolderItem = otherItem.addSubItem(add_to_folder, R.drawable.baseline_folder_24, LocaleController.getString("FilterAddTo", R.string.FilterAddTo));
+        removeFromFolderItem = otherItem.addSubItem(remove_from_folder, R.drawable.baseline_folder_open_24, LocaleController.getString("FilterRemoveFrom", R.string.FilterRemoveFrom));
+        readItem = otherItem.addSubItem(read, R.drawable.baseline_done_all_24, LocaleController.getString("MarkAsRead", R.string.MarkAsRead));
         clearItem = otherItem.addSubItem(clear, R.drawable.baseline_delete_sweep_24, LocaleController.getString("ClearHistory", R.string.ClearHistory));
         blockItem = otherItem.addSubItem(block, R.drawable.baseline_block_24, LocaleController.getString("BlockUser", R.string.BlockUser));
 
@@ -4618,18 +4621,18 @@ private int lastMeasuredTopPadding;
         } else {
             if (dialog instanceof TLRPC.TL_dialogFolder) {
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
                 final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
                 int[] icons = new int[]{
-                        hasUnread ? R.drawable.deproko_baseline_check_double_24 : 0,
+                        hasUnread ? R.drawable.baseline_done_all_24 : 0,
                         SharedConfig.archiveHidden ? R.drawable.deproko_baseline_pin_24 : R.drawable.deproko_baseline_pin_undo_24,
                 };
-                CharSequence[] items = new CharSequence[]{
+                String[] items = new String[]{
                         hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
                         SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
                 };
-                builder.setItems(items, icons, (d, which) -> {
+                builder.addItems(items, icons, (which, t, c) -> {
                     if (which == 0) {
                         getMessagesStorage().readAllDialogs(1);
                     } else if (which == 1 && viewPages != null) {
@@ -4645,6 +4648,7 @@ private int lastMeasuredTopPadding;
                             viewPages[a].listView.toggleArchiveHidden(true, dialogCell);
                         }
                     }
+                    return Unit.INSTANCE;
                 });
                 showDialog(builder.create());
                 return false;
@@ -5438,7 +5442,7 @@ private int lastMeasuredTopPadding;
             muteItem.setContentDescription(LocaleController.getString("ChatsMute", R.string.ChatsMute));
         }
         if (canReadCount != 0) {
-            readItem.setTextAndIcon(LocaleController.getString("MarkAsRead", R.string.MarkAsRead), R.drawable.deproko_baseline_check_double_24);
+            readItem.setTextAndIcon(LocaleController.getString("MarkAsRead", R.string.MarkAsRead), R.drawable.baseline_done_all_24);
         } else {
             readItem.setTextAndIcon(LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread), R.drawable.baseline_unsubscribe_24);
         }

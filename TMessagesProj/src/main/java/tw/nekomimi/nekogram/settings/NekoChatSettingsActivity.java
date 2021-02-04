@@ -72,8 +72,9 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int useChatAttachMediaMenuRow;
     private int disableLinkPreviewByDefaultRow;
     private int sendCommentAfterForwardRow;
-
     private int disableProximityEventsRow;
+    private int disableTrendingRow;
+
     private int mapPreviewRow;
     private int messageMenuRow;
     private int chat2Row;
@@ -251,6 +252,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableProximityEvents);
                 }
+            } else if (position == disableTrendingRow) {
+                NekoConfig.toggleDisableTrending();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableTrending);
+                }
             }
         });
 
@@ -279,14 +285,16 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
-        disableVibrationRow = rowCount ++;
-        skipOpenLinkConfirmRow = rowCount ++;
+        disableVibrationRow = rowCount++;
+        skipOpenLinkConfirmRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
         confirmAVRow = rowCount++;
-        useChatAttachMediaMenuRow = rowCount ++;
-        disableLinkPreviewByDefaultRow = rowCount ++;
-        sendCommentAfterForwardRow = rowCount ++;
-        disableProximityEventsRow = rowCount ++;
+        useChatAttachMediaMenuRow = rowCount++;
+        disableLinkPreviewByDefaultRow = rowCount++;
+        sendCommentAfterForwardRow = rowCount++;
+        disableProximityEventsRow = rowCount++;
+        disableTrendingRow = rowCount++;
+
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
         chat2Row = rowCount++;
@@ -626,6 +634,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), NekoConfig.disableVibration, true);
                     } else if (position == disableProximityEventsRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableProximityEvents", R.string.DisableProximityEvents), NekoConfig.disableProximityEvents, true);
+                    } else if (position == disableTrendingRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableTrending", R.string.DisableTrending), NekoConfig.disableTrending, true);
                     }
                     break;
                 }

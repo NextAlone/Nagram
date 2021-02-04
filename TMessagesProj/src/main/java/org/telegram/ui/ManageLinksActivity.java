@@ -845,23 +845,23 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
 
                 if (invite.revoked) {
                     items.add(LocaleController.getString("Delete", R.string.Delete));
-                    icons.add(R.drawable.msg_delete);
+                    icons.add(R.drawable.baseline_delete_24);
                     actions.add(4);
                 } else {
                     items.add(LocaleController.getString("Copy", R.string.Copy));
-                    icons.add(R.drawable.msg_copy);
+                    icons.add(R.drawable.baseline_content_copy_24);
                     actions.add(0);
 
                     items.add(LocaleController.getString("Share", R.string.ShareLink));
-                    icons.add(R.drawable.msg_share);
+                    icons.add(R.drawable.baseline_forward_24);
                     actions.add(1);
 
                     items.add(LocaleController.getString("Edit", R.string.Edit));
-                    icons.add(R.drawable.msg_edit);
+                    icons.add(R.drawable.baseline_edit_24);
                     actions.add(2);
 
                     items.add(LocaleController.getString("RevokeLink", R.string.RevokeLink));
-                    icons.add(R.drawable.msg_delete);
+                    icons.add(R.drawable.baseline_delete_24);
                     actions.add(3);
                 }
 

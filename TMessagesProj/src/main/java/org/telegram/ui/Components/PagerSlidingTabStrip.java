@@ -14,9 +14,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
-
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.view.View;
@@ -26,6 +23,9 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -138,14 +138,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 super.setSelected(selected);
                 Drawable background = getBackground();
                 if (Build.VERSION.SDK_INT >= 21 && background != null) {
-                    int color = Theme.getColor(selected ? Theme.key_chat_emojiPanelIconSelected : Theme.key_chat_emojiBottomPanelIcon);
+                    int color = Theme.getColor(selected ? Theme.key_chat_emojiPanelIconSelected : Theme.key_chat_messagePanelIcons);
                     Theme.setSelectorDrawableColor(background, Color.argb(30, Color.red(color), Color.green(color), Color.blue(color)), true);
                 }
             }
         };
         tab.setFocusable(true);
         if (Build.VERSION.SDK_INT >= 21) {
-            RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(Theme.getColor(Theme.key_chat_emojiBottomPanelIcon));
+            RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(Theme.getColor(Theme.key_chat_messagePanelIcons));
             Theme.setRippleDrawableForceSoftware(rippleDrawable);
             tab.setBackground(rippleDrawable);
         }

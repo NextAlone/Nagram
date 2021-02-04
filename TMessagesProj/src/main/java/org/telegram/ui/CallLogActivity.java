@@ -66,9 +66,6 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
-
 public class CallLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listViewAdapter;
@@ -502,18 +499,18 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 	private void createActionMode() {
 		if (actionBar.actionModeIsExist(null)) {
 			return;
-		}
-		final ActionBarMenu actionMode = actionBar.createActionMode();
+        }
+        final ActionBarMenu actionMode = actionBar.createActionMode();
 
-		selectedDialogsCountTextView = new NumberTextView(actionMode.getContext());
-		selectedDialogsCountTextView.setTextSize(18);
-		selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-		selectedDialogsCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
-		actionMode.addView(selectedDialogsCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
-		selectedDialogsCountTextView.setOnTouchListener((v, event) -> true);
+        selectedDialogsCountTextView = new NumberTextView(actionMode.getContext());
+        selectedDialogsCountTextView.setTextSize(18);
+        selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        selectedDialogsCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        actionMode.addView(selectedDialogsCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
+        selectedDialogsCountTextView.setOnTouchListener((v, event) -> true);
 
-		actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
-	}
+        actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+    }
 
 	private boolean addOrRemoveSelectedDialog(ArrayList<TLRPC.Message> messages, CustomCell cell) {
 		if (messages.isEmpty()) {

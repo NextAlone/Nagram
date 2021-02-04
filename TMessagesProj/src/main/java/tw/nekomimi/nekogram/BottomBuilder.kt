@@ -14,7 +14,6 @@ import org.telegram.ui.Cells.HeaderCell
 import org.telegram.ui.Cells.RadioButtonCell
 import org.telegram.ui.Cells.TextCell
 import org.telegram.ui.Cells.TextCheckCell
-import org.telegram.ui.Components.CheckBoxSquare
 import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
@@ -23,10 +22,9 @@ class BottomBuilder(val ctx: Context) {
     val builder = BottomSheet.Builder(ctx, true)
 
     private val rootView = LinearLayout(ctx).apply {
-
         orientation = LinearLayout.VERTICAL
-
     }
+    private val rtl = (if (LocaleController.isRTL) Gravity.RIGHT else Gravity.LEFT)
 
     private val _root = LinearLayout(ctx).apply {
 
@@ -51,7 +49,7 @@ class BottomBuilder(val ctx: Context) {
 
             this@BottomBuilder.rootView.addView(this, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT or Gravity.BOTTOM))
 
-            addView(rightButtonsView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.RIGHT));
+            addView(rightButtonsView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.RIGHT))
 
         }
 
@@ -62,7 +60,6 @@ class BottomBuilder(val ctx: Context) {
         LinearLayout(ctx).apply {
 
             orientation = LinearLayout.HORIZONTAL
-
             weightSum = 1F
 
         }
@@ -224,7 +221,6 @@ class BottomBuilder(val ctx: Context) {
 
     }
 
-    @JvmOverloads
     fun addCancelItem() {
 
         addItem(LocaleController.getString("Cancel", R.string.Cancel), R.drawable.baseline_cancel_24) {}
@@ -260,18 +256,8 @@ class BottomBuilder(val ctx: Context) {
             setPadding(AndroidUtilities.dp(18f), 0, AndroidUtilities.dp(18f), 0)
             setText(text)
             typeface = AndroidUtilities.getTypeface("fonts/rmedium.ttf")
-            (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP or Gravity.LEFT))
+            (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, rtl))
             setOnClickListener { if (!noAutoDismiss) dismiss();listener(this) }
-
-        }
-
-    }
-
-    fun addItem(): TextCell {
-
-        return TextCell(ctx).apply {
-
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT or Gravity.TOP))
 
         }
 
@@ -282,33 +268,25 @@ class BottomBuilder(val ctx: Context) {
 
         return TextCell(ctx).apply {
 
-            textView.setGravity(Gravity.LEFT)
-
             background = Theme.getSelectorDrawable(false)
-
             setTextAndIcon(text, icon, false)
 
             setOnClickListener {
-
                 dismiss()
-
                 listener?.invoke(this)
-
             }
 
             if (red) {
-
                 setColors("key_dialogTextRed2", "key_dialogTextRed2")
-
             }
 
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT or Gravity.TOP))
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, rtl))
 
         }
 
     }
 
-    fun addItems(text: Array<String?>, icon: Array<Int>?, listener: (index: Int, text: String, cell: TextCell) -> Unit): List<TextCell> {
+    fun addItems(text: Array<String?>, icon: IntArray?, listener: (index: Int, text: String, cell: TextCell) -> Unit): List<TextCell> {
 
         val list = mutableListOf<TextCell>()
 
@@ -339,7 +317,7 @@ class BottomBuilder(val ctx: Context) {
             isFocusable = true
             setBackgroundDrawable(null)
 
-            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, if (LocaleController.isRTL) Gravity.RIGHT else Gravity.LEFT, AndroidUtilities.dp(6F), 0, 0, 0))
+            this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, -2, rtl, AndroidUtilities.dp(6F), 0, 0, 0))
 
         }
 

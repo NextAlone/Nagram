@@ -26,7 +26,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.Html;
 import android.text.InputType;
@@ -109,6 +108,7 @@ import java.util.concurrent.CountDownLatch;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class AlertsCreator {
@@ -121,7 +121,7 @@ public class AlertsCreator {
             TLRPC.InputPeer peer;
             if (request instanceof TLRPC.TL_messages_initHistoryImport) {
                 peer = ((TLRPC.TL_messages_initHistoryImport) request).peer;
-            } else  if (request instanceof TLRPC.TL_messages_startHistoryImport) {
+            } else if (request instanceof TLRPC.TL_messages_startHistoryImport) {
                 peer = ((TLRPC.TL_messages_startHistoryImport) request).peer;
             } else {
                 peer = null;
@@ -2385,31 +2385,36 @@ public class AlertsCreator {
             return null;
         }
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications), true);
-        CharSequence[] items = new CharSequence[]{
+        BottomBuilder builder = new BottomBuilder(fragment.getParentActivity());
+        builder.addTitle(LocaleController.getString("Notifications", R.string.Notifications), true);
+        String[] items = new String[]{
                 LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
                 LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
                 LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
                 LocaleController.getString("MuteDisable", R.string.MuteDisable)
         };
-        builder.setItems(items, (dialogInterface, i) -> {
-                    int setting;
-                    if (i == 0) {
-                        setting = NotificationsController.SETTING_MUTE_HOUR;
-                    } else if (i == 1) {
-                        setting = NotificationsController.SETTING_MUTE_8_HOURS;
-                    } else if (i == 2) {
-                        setting = NotificationsController.SETTING_MUTE_2_DAYS;
-                    } else {
-                        setting = NotificationsController.SETTING_MUTE_FOREVER;
-                    }
-                    NotificationsController.getInstance(UserConfig.selectedAccount).setDialogNotificationsSettings(dialog_id, setting);
-                    if (BulletinFactory.canShowBulletin(fragment)) {
-                        BulletinFactory.createMuteBulletin(fragment, setting).show();
-                    }
-                }
-        );
+        builder.addItems(items, new int[]{
+                R.drawable.baseline_notifications_paused_24,
+                R.drawable.baseline_notifications_paused_24,
+                R.drawable.baseline_notifications_paused_24,
+                R.drawable.baseline_notifications_paused_24
+        }, (i, text, cell) -> {
+            int setting;
+            if (i == 0) {
+                setting = NotificationsController.SETTING_MUTE_HOUR;
+            } else if (i == 1) {
+                setting = NotificationsController.SETTING_MUTE_8_HOURS;
+            } else if (i == 2) {
+                setting = NotificationsController.SETTING_MUTE_2_DAYS;
+            } else {
+                setting = NotificationsController.SETTING_MUTE_FOREVER;
+            }
+            NotificationsController.getInstance(UserConfig.selectedAccount).setDialogNotificationsSettings(dialog_id, setting);
+            if (BulletinFactory.canShowBulletin(fragment)) {
+                BulletinFactory.createMuteBulletin(fragment, setting).show();
+            }
+            return Unit.INSTANCE;
+        });
         return builder.create();
     }
 
@@ -2418,11 +2423,11 @@ public class AlertsCreator {
             return;
         }
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(context);
-        builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat), true);
-        CharSequence[] items;
+        BottomBuilder builder = new BottomBuilder(context);
+        builder.addTitle(LocaleController.getString("ReportChat", R.string.ReportChat), true);
+        String[] items;
         if (messageId != 0) {
-            items = new CharSequence[]{
+            items = new String[]{
                     LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam),
                     LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence),
                     LocaleController.getString("ReportChatChild", R.string.ReportChatChild),
@@ -2430,7 +2435,7 @@ public class AlertsCreator {
                     LocaleController.getString("ReportChatOther", R.string.ReportChatOther)
             };
         } else {
-            items = new CharSequence[]{
+            items = new String[]{
                     LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam),
                     LocaleController.getString("ReportChatFakeAccount", R.string.ReportChatFakeAccount),
                     LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence),
@@ -2439,13 +2444,13 @@ public class AlertsCreator {
                     LocaleController.getString("ReportChatOther", R.string.ReportChatOther)
             };
         }
-        builder.setItems(items, (dialogInterface, i) -> {
+        builder.addItems(items, null, (i, text, cell) -> {
                     if (i == 4) {
                         Bundle args = new Bundle();
                         args.putLong("dialog_id", dialog_id);
                         args.putLong("message_id", messageId);
                         parentFragment.presentFragment(new ReportOtherActivity(args));
-                        return;
+                        return Unit.INSTANCE;
                     }
                     TLObject req;
                     TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) dialog_id);
@@ -2479,10 +2484,10 @@ public class AlertsCreator {
                         }
                         req = request;
                     }
-                    ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, (response, error) -> {
-
-                    });
+                    ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, (response, error) -> AlertUtil.showToast(error));
                     Toast.makeText(context, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), Toast.LENGTH_SHORT).show();
+
+                    return Unit.INSTANCE;
                 }
         );
         BottomSheet sheet = builder.create();
@@ -3026,7 +3031,7 @@ public class AlertsCreator {
         background.setBackground(new BitmapDrawable(SvgHelper.getBitmap(svg, AndroidUtilities.dp(320), AndroidUtilities.dp(320 * aspectRatio), false)));
         frameLayout.addView(background, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, -1, -1, -1, -1));
 
-        frameLayout.addView(button, LayoutHelper.createFrame(117,117));
+        frameLayout.addView(button, LayoutHelper.createFrame(117, 117));
 
         builder.setTopView(frameLayout);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCallTitle", R.string.PermissionDrawAboveOtherAppsGroupCallTitle));

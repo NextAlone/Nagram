@@ -135,6 +135,7 @@ public class NekoConfig {
 
     public static boolean avatarBackgroundBlur;
     public static boolean avatarBackgroundDarken;
+    public static boolean disableTrending;
 
     public static String getOpenPGPAppName() {
 
@@ -288,6 +289,7 @@ public class NekoConfig {
         sendCommentAfterForward = preferences.getBoolean("sendCommentAfterForward", true);
         increaseVoiceMessageQuality = preferences.getBoolean("increaseVoiceMessageQuality", true);
         acceptSecretChat = preferences.getBoolean("acceptSecretChat", true);
+        disableTrending = preferences.getBoolean("disableTrending", true);
 
     }
 
@@ -731,11 +733,14 @@ public class NekoConfig {
 
     public static void toggleAcceptSecretChat() {
         preferences.edit().putBoolean("acceptSecretChat", acceptSecretChat = !acceptSecretChat).apply();
-
     }
 
     public static void setTabletMode(int mode) {
         preferences.edit().putInt("tabletMode", tabletMode = mode).apply();
+    }
+
+    public static void toggleDisableTrending() {
+        preferences.edit().putBoolean("disableTrending", disableTrending = !disableTrending).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

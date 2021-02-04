@@ -17,6 +17,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+
 import androidx.core.content.FileProvider;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -29,12 +30,14 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.PhotoAlbumPickerActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
 
 public class WallpaperUpdater {
 
@@ -57,20 +60,20 @@ public class WallpaperUpdater {
     }
 
     public void showAlert(final boolean fromTheme) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity);
-        builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
+        BottomBuilder builder = new BottomBuilder(parentActivity);
+        builder.addTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
 
-        CharSequence[] items;
+        String[] items;
         int[] icons;
         if (fromTheme) {
-            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default)};
+            items = new String[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default)};
             icons = null;
         } else {
-            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery)};
+            items = new String[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery)};
             icons = new int[]{R.drawable.baseline_camera_alt_24, R.drawable.baseline_image_24};
         }
 
-        builder.setItems(items, icons, (dialogInterface, i) -> {
+        builder.addItems(items, icons, (i, t, c) -> {
             try {
                 if (i == 0) {
                     try {
@@ -102,6 +105,7 @@ public class WallpaperUpdater {
             } catch (Exception e) {
                 FileLog.e(e);
             }
+            return Unit.INSTANCE;
         });
         builder.show();
     }

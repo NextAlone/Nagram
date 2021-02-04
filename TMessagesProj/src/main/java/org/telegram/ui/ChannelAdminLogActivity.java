@@ -84,7 +84,6 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -2030,7 +2029,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 builder.addTitle(urlFinal);
                                 builder.addItems(
                                         new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                                        new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, __) -> {
+                                        new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
                                             if (which == 0 || which == 2) {
                                                 if (which == 0) {
                                                     Browser.openUrl(getParentActivity(), urlFinal);

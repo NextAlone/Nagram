@@ -36,6 +36,10 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
@@ -70,10 +74,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
-
-import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
-import androidx.core.graphics.drawable.IconCompat;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -1019,7 +1019,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadFeaturedStickers(boolean cache, boolean force) {
-        /*if (loadingFeaturedStickers) {
+        if (loadingFeaturedStickers || NekoConfig.disableTrending) {
             return;
         }
         loadingFeaturedStickers = true;
@@ -1074,7 +1074,7 @@ public class MediaDataController extends BaseController {
                     processLoadedFeaturedStickers(null, null, false, (int) (System.currentTimeMillis() / 1000), req.hash);
                 }
             }));
-        }*/
+        }
     }
 
     private void processLoadedFeaturedStickers(final ArrayList<TLRPC.StickerSetCovered> res, final ArrayList<Long> unreadStickers, final boolean cache, final int date, final int hash) {

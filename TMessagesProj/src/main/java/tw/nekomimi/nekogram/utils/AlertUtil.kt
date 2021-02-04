@@ -60,7 +60,10 @@ object AlertUtil {
     fun showToast(e: Throwable) = showToast(e.message ?: e.javaClass.simpleName)
 
     @JvmStatic
-    fun showToast(e: TLRPC.TL_error) = showToast("${e.code}: ${e.text}")
+    fun showToast(e: TLRPC.TL_error?) {
+        if (e == null) return
+        showToast("${e.code}: ${e.text}")
+    }
 
     @JvmStatic
     fun showToast(text: String) = UIUtil.runOnUIThread(Runnable {

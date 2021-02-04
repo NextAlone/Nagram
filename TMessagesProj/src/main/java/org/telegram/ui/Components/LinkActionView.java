@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -90,7 +89,7 @@ public class LinkActionView extends LinearLayout {
         copyView = new TextView(context);
         copyView.setGravity(Gravity.CENTER_HORIZONTAL);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_copy_filled)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.baseline_content_copy_24)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("CopyLink", R.string.CopyLink));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
@@ -104,7 +103,7 @@ public class LinkActionView extends LinearLayout {
         shareView = new TextView(context);
         shareView.setGravity(Gravity.CENTER_HORIZONTAL);
         spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_share_filled)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.baseline_forward_24)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("ShareLink", R.string.ShareLink));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
@@ -120,7 +119,7 @@ public class LinkActionView extends LinearLayout {
         removeView = new TextView(context);
         removeView.setGravity(Gravity.CENTER_HORIZONTAL);
         spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_delete)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.baseline_delete_24)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("DeleteLink", R.string.DeleteLink));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
@@ -201,7 +200,7 @@ public class LinkActionView extends LinearLayout {
             ActionBarMenuSubItem subItem;
             if (!permanent) {
                 subItem = new ActionBarMenuSubItem(context, true, false);
-                subItem.setTextAndIcon(LocaleController.getString("Edit", R.string.Edit), R.drawable.msg_edit);
+                subItem.setTextAndIcon(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24);
                 layout.addView(subItem, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 subItem.setOnClickListener(view12 -> {
                     delegate.editLink();
@@ -219,7 +218,7 @@ public class LinkActionView extends LinearLayout {
 //            });
 
             subItem = new ActionBarMenuSubItem(context, false, true);
-            subItem.setTextAndIcon(LocaleController.getString("RevokeLink", R.string.RevokeLink), R.drawable.msg_delete);
+            subItem.setTextAndIcon(LocaleController.getString("RevokeLink", R.string.RevokeLink), R.drawable.baseline_delete_24);
             subItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteRedText), Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
             subItem.setOnClickListener(view1 -> {
                 revokeLink();

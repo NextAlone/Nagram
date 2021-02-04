@@ -7,7 +7,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -347,7 +346,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
 
             gotoItem = actionMode.addItemWithWidth(gotoItemId, R.drawable.msg_message, AndroidUtilities.dp(54), LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
-            forwardItem = actionMode.addItemWithWidth(forwardItemId, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward));
+            forwardItem = actionMode.addItemWithWidth(forwardItemId, R.drawable.baseline_forward_24, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward));
         }
         if (parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
             parent.getActionBar().setBackButtonDrawable(new BackDrawable(false));

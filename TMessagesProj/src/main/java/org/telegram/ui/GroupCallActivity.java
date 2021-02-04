@@ -26,8 +26,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.TypedValue;
@@ -92,8 +92,8 @@ import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.FillLastLinearLayoutManager;
-import org.telegram.ui.Components.GroupVoipInviteAlert;
 import org.telegram.ui.Components.GroupCallPip;
+import org.telegram.ui.Components.GroupVoipInviteAlert;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
@@ -2847,7 +2847,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 options.add(5);
             }
             items.add(LocaleController.getString("VoipGroupOpenProfile", R.string.VoipGroupOpenProfile));
-            icons.add(R.drawable.msg_openprofile);
+            icons.add(R.drawable.book_user);
             options.add(6);
         }
 

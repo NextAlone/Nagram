@@ -28,22 +28,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
-
-import androidx.annotation.IntDef;
-import androidx.annotation.MainThread;
-import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -66,19 +54,30 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DocumentObject;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
@@ -323,8 +322,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     public interface DragListener {
         void onDragStart();
+
         void onDragEnd(float velocity);
+
         void onDragCancel();
+
         void onDrag(int offset);
     }
 
@@ -386,6 +388,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     };
 
     private static final Field superListenerField;
+
     static {
         Field f = null;
         try {
@@ -999,43 +1002,45 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public EmojiView(boolean needStickers, boolean needGif, final Context context, boolean needSearch, final TLRPC.ChatFull chatFull) {
         super(context);
 
-        int color = Theme.getColor(Theme.key_chat_emojiBottomPanelIcon);
+        int color = Theme.getColor(Theme.key_chat_messagePanelIcons);
         color = Color.argb(30, Color.red(color), Color.green(color), Color.blue(color));
 
         searchFieldHeight = AndroidUtilities.dp(64);
         needEmojiSearch = needSearch;
 
+        // TODO: replace with baseline icons
+
         tabIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_tab_smiles, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_tab_gif, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_tab_stickers, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected))
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_emoticon_outline_24, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.deproko_baseline_gif_24, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.msg_sticker, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected))
         };
 
         emojiIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_recent, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_smiles, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_cat, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_food, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_activities, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_travel, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_objects, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_other, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_flags, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_recent, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_smiles, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_cat, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_food, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_activities, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_travel, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_objects, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_other, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_panel_flags, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
         };
 
         stickerIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_recent, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_favorites, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_trending3, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_recent, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_favorites, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_trending3, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
                 new LayerDrawable(new Drawable[]{
-                        Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_trending1, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                        Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_trending1, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
                         Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_trending2, Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelectorLine), Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelectorLine))
                 })
         };
 
         gifIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_recent, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_gifs_trending, Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_recent, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_gifs_trending, Theme.getColor(Theme.key_chat_messagePanelIcons), Theme.getColor(Theme.key_chat_emojiPanelIconSelected)),
         };
 
         emojiTitles = new String[]{
@@ -1364,7 +1369,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         emojiTabs.setShouldExpand(true);
         emojiTabs.setIndicatorHeight(-1);
         emojiTabs.setUnderlineHeight(-1);
-        emojiTabs.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        emojiTabs.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
         emojiContainer.addView(emojiTabs, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38));
         emojiTabs.setDelegate(new ScrollSlidingTabStrip.ScrollSlidingTabStripDelegate() {
             @Override
@@ -1509,7 +1514,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 gifTabs.setUnderlineHeight(AndroidUtilities.getShadowHeight());
                 gifTabs.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelectorLine));
                 gifTabs.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
-                gifTabs.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+                gifTabs.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
                 gifContainer.addView(gifTabs, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP));
                 updateGifTabs();
 
@@ -1653,7 +1658,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             stickersTab.setUnderlineHeight(AndroidUtilities.getShadowHeight());
             stickersTab.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelectorLine));
             stickersTab.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
-            stickersTab.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+            stickersTab.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
             stickersContainer.addView(stickersTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP));
             updateStickerTabs();
             stickersTab.setDelegate(page -> {
@@ -1796,7 +1801,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         };
         backspaceButton.setImageResource(R.drawable.smiles_tab_clear);
-        backspaceButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.SRC_IN));
+        backspaceButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
         backspaceButton.setScaleType(ImageView.ScaleType.CENTER);
         backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", R.string.AccDescrBackspace));
         backspaceButton.setFocusable(true);
@@ -1833,7 +1838,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
             stickerSettingsButton = new ImageView(context);
             stickerSettingsButton.setImageResource(R.drawable.smiles_tab_settings);
-            stickerSettingsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.SRC_IN));
+            stickerSettingsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
             stickerSettingsButton.setScaleType(ImageView.ScaleType.CENTER);
             stickerSettingsButton.setFocusable(true);
             if (Build.VERSION.SDK_INT >= 21) {
@@ -1920,7 +1925,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
             searchButton = new ImageView(context);
             searchButton.setImageResource(R.drawable.smiles_tab_search);
-            searchButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.SRC_IN));
+            searchButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
             searchButton.setScaleType(ImageView.ScaleType.CENTER);
             searchButton.setContentDescription(LocaleController.getString("Search", R.string.Search));
             searchButton.setFocusable(true);
@@ -2052,7 +2057,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (parent != null) {
                 float y = getY() - parent.getHeight();
                 if (getLayoutParams().height > 0) {
-                    y +=  getLayoutParams().height;
+                    y += getLayoutParams().height;
                 } else {
                     y += getMeasuredHeight();
                 }
@@ -2628,9 +2633,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     private ScrollSlidingTabStrip getTabsForType(@Type int type) {
         switch (type) {
-            case Type.STICKERS: return stickersTab;
-            case Type.EMOJIS: return emojiTabs;
-            case Type.GIFS: return gifTabs;
+            case Type.STICKERS:
+                return stickersTab;
+            case Type.EMOJIS:
+                return emojiTabs;
+            case Type.GIFS:
+                return gifTabs;
             default:
                 throw new IllegalArgumentException("Unexpected argument: " + type);
         }
@@ -2638,9 +2646,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     private RecyclerListView getListViewForType(@Type int type) {
         switch (type) {
-            case Type.STICKERS: return stickersGridView;
-            case Type.EMOJIS: return emojiGridView;
-            case Type.GIFS: return gifGridView;
+            case Type.STICKERS:
+                return stickersGridView;
+            case Type.EMOJIS:
+                return emojiGridView;
+            case Type.GIFS:
+                return gifGridView;
             default:
                 throw new IllegalArgumentException("Unexpected argument: " + type);
         }
@@ -2648,9 +2659,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     private GridLayoutManager getLayoutManagerForType(@Type int type) {
         switch (type) {
-            case Type.STICKERS: return stickersLayoutManager;
-            case Type.EMOJIS: return emojiLayoutManager;
-            case Type.GIFS: return gifLayoutManager;
+            case Type.STICKERS:
+                return stickersLayoutManager;
+            case Type.EMOJIS:
+                return emojiLayoutManager;
+            case Type.GIFS:
+                return gifLayoutManager;
             default:
                 throw new IllegalArgumentException("Unexpected argument: " + type);
         }
@@ -2658,9 +2672,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     private SearchField getSearchFieldForType(@Type int type) {
         switch (type) {
-            case Type.STICKERS: return stickersSearchField;
-            case Type.EMOJIS: return emojiSearchField;
-            case Type.GIFS: return gifSearchField;
+            case Type.STICKERS:
+                return stickersSearchField;
+            case Type.EMOJIS:
+                return emojiSearchField;
+            case Type.GIFS:
+                return gifSearchField;
             default:
                 throw new IllegalArgumentException("Unexpected argument: " + type);
         }
@@ -3039,8 +3056,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             gifTabs.addIconTab(0, gifIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", R.string.RecentStickers));
         }
 
-        gifTrendingTabNum = gifTabsCount++;
-        gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", R.string.FeaturedGifs));
+        if (!NekoConfig.disableTrending) {
+            gifTrendingTabNum = gifTabsCount++;
+            gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", R.string.FeaturedGifs));
+        }
 
         gifFirstEmojiTabNum = gifTabsCount;
         final int hPadding = AndroidUtilities.dp(13);
@@ -3114,7 +3133,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         } else {
             setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
             if (needEmojiSearch) {
-                bottomTabContainerBackground.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+                bottomTabContainerBackground.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
             }
         }
 
@@ -3159,12 +3178,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (stickersTab != null) {
             stickersTab.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelectorLine));
             stickersTab.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
-            stickersTab.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+            stickersTab.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
         }
         if (gifTabs != null) {
             gifTabs.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelectorLine));
             gifTabs.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
-            gifTabs.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+            gifTabs.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
         }
         if (backspaceButton != null) {
             backspaceButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.SRC_IN));
@@ -3193,19 +3212,19 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         for (int a = 0; a < tabIcons.length; a++) {
-            Theme.setEmojiDrawableColor(tabIcons[a], Theme.getColor(Theme.key_chat_emojiBottomPanelIcon), false);
+            Theme.setEmojiDrawableColor(tabIcons[a], Theme.getColor(Theme.key_chat_messagePanelIcons), false);
             Theme.setEmojiDrawableColor(tabIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIconSelected), true);
         }
         for (int a = 0; a < emojiIcons.length; a++) {
-            Theme.setEmojiDrawableColor(emojiIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIcon), false);
+            Theme.setEmojiDrawableColor(emojiIcons[a], Theme.getColor(Theme.key_chat_messagePanelIcons), false);
             Theme.setEmojiDrawableColor(emojiIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIconSelected), true);
         }
         for (int a = 0; a < stickerIcons.length; a++) {
-            Theme.setEmojiDrawableColor(stickerIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIcon), false);
+            Theme.setEmojiDrawableColor(stickerIcons[a], Theme.getColor(Theme.key_chat_messagePanelIcons), false);
             Theme.setEmojiDrawableColor(stickerIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIconSelected), true);
         }
         for (int a = 0; a < gifIcons.length; a++) {
-            Theme.setEmojiDrawableColor(gifIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIcon), false);
+            Theme.setEmojiDrawableColor(gifIcons[a], Theme.getColor(Theme.key_chat_messagePanelIcons), false);
             Theme.setEmojiDrawableColor(gifIcons[a], Theme.getColor(Theme.key_chat_emojiPanelIconSelected), true);
         }
     }
@@ -3223,7 +3242,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 setBackgroundResource(R.drawable.smiles_popup);
                 getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackground), PorterDuff.Mode.SRC_IN));
                 if (needEmojiSearch) {
-                    bottomTabContainerBackground.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+                    bottomTabContainerBackground.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
                 }
                 currentBackgroundType = 1;
             }
@@ -3236,7 +3255,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
                 setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
                 if (needEmojiSearch) {
-                    bottomTabContainerBackground.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+                    bottomTabContainerBackground.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
                 }
                 currentBackgroundType = 0;
             }
@@ -4300,7 +4319,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public CharSequence getPageTitle(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return LocaleController.getString("Emoji", R.string.Emoji);
                 case 1:

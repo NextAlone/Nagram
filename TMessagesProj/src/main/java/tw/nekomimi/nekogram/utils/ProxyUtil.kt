@@ -16,7 +16,6 @@ import android.os.Environment
 import android.util.Base64
 import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -34,7 +33,8 @@ import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
-import org.telegram.ui.ActionBar.BottomSheet
+import tw.nekomimi.nekogram.BottomBuilder
+import tw.nekomimi.nekogram.utils.AlertUtil.showToast
 import java.io.File
 import java.net.NetworkInterface
 import java.util.*
@@ -134,7 +134,7 @@ object ProxyUtil {
 
                         error = true
 
-                        AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
+                        showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
 
                     }
 
@@ -167,7 +167,7 @@ object ProxyUtil {
 
                                 error = true
 
-                                AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
+                                showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
 
                             }
 
@@ -183,7 +183,7 @@ object ProxyUtil {
 
         if (proxies.isNullOrEmpty()) {
 
-            if (!error) AlertUtil.showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
+            if (!error) showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
 
             return
 
@@ -255,7 +255,7 @@ object ProxyUtil {
 
             } else {
 
-                AlertUtil.showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
+                showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
 
             }
 
@@ -386,7 +386,9 @@ object ProxyUtil {
 
                     setOnLongClickListener {
 
-                        BottomSheet.Builder(ctx).setItems(arrayOf(
+                        val builder = BottomBuilder(ctx)
+
+                        builder.addItems(arrayOf(
 
                                 LocaleController.getString("SaveToGallery", R.string.SaveToGallery),
                                 LocaleController.getString("Cancel", R.string.Cancel)
@@ -396,7 +398,7 @@ object ProxyUtil {
                                 R.drawable.baseline_image_24,
                                 R.drawable.baseline_cancel_24
 
-                        )) { _, i ->
+                        )) { i, _, _ ->
 
                             if (i == 0) {
 
@@ -404,7 +406,7 @@ object ProxyUtil {
 
                                     getOwnerActivity(ctx).requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 4)
 
-                                    return@setItems
+                                    return@addItems
 
                                 }
 
@@ -423,16 +425,18 @@ object ProxyUtil {
                                     }
 
                                     AndroidUtilities.addMediaToGallery(saveTo.path)
-                                    AlertUtil.showToast(LocaleController.getString("PhotoSavedHint", R.string.PhotoSavedHint))
+                                    showToast(LocaleController.getString("PhotoSavedHint", R.string.PhotoSavedHint))
 
                                 }.onFailure {
                                     FileLog.e(it)
-                                    AlertUtil.showToast(it)
+                                    showToast(it)
                                 }
 
                             }
 
-                        }.show()
+                        }
+
+                        builder.show()
 
                         return@setOnLongClickListener true
 
@@ -494,40 +498,45 @@ object ProxyUtil {
 
         } catch (e: Throwable) {
 
-            AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
+            showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
 
         }
 
     }
 
     @JvmStatic
-    fun showLinkAlert(ctx: Activity, text: String) {
+    @JvmOverloads
+    fun showLinkAlert(ctx: Activity, text: String, tryInternal: Boolean = true) {
 
-        val builder = BottomSheet.Builder(ctx)
+        val builder = BottomBuilder(ctx)
 
-        var isUrl = false
-
-        runCatching {
-            text.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
-            if (Browser.isInternalUrl(text, booleanArrayOf(false))) {
-                Browser.openUrl(ctx, text)
-                return
+        if (tryInternal) {
+            runCatching {
+                if (Browser.isInternalUrl(text, booleanArrayOf(false))) {
+                    Browser.openUrl(ctx, text)
+                    return
+                }
             }
-            isUrl = true
         }
 
-        builder.setTitle(text)
+        builder.addTitle(text)
 
-        builder.setItems(arrayOf(
-                if (isUrl) LocaleController.getString("Open", R.string.OpenUrlTitle) else null,
+        builder.addItems(arrayOf(
+                LocaleController.getString("Open", R.string.Open),
                 LocaleController.getString("Copy", R.string.Copy),
-                LocaleController.getString("Cancel", R.string.Cancel)
-        )) { _, i ->
-            if (i == 0) {
-                Browser.openUrl(ctx, text)
-            } else if (i == 1) {
-                AndroidUtilities.addToClipboard(text)
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_LONG).show()
+                LocaleController.getString("ShareQRCode", R.string.ShareQRCode)
+        ), intArrayOf(
+                R.drawable.baseline_open_in_browser_24,
+                R.drawable.baseline_content_copy_24,
+                R.drawable.wallet_qr
+        )) { which, _, _ ->
+            when (which) {
+                0 -> Browser.openUrl(ctx, text)
+                1 -> {
+                    AndroidUtilities.addToClipboard(text)
+                    showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied))
+                }
+                else -> showQrDialog(ctx, text)
             }
         }
 

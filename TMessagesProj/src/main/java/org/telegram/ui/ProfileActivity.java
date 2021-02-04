@@ -77,7 +77,6 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -121,7 +120,6 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Adapters.SearchAdapter;
 import org.telegram.ui.Cells.AboutLinkCell;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.GraySectionCell;
@@ -174,7 +172,6 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import kotlin.text.StringsKt;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.ExternalGcm;
@@ -5924,12 +5921,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     otherItem.addSubItem(delete_contact, R.drawable.baseline_delete_24, LocaleController.getString("DeleteContact", R.string.DeleteContact));
                 }
                 if (!UserObject.isDeleted(user) && !isBot && currentEncryptedChat == null && !userBlocked && user_id != 333000 && user_id != 777000 && user_id != 42777) {
-                    otherItem.addSubItem(start_secret_chat, R.drawable.msg_start_secret, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
+                    otherItem.addSubItem(start_secret_chat, R.drawable.baseline_lock_24, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
                 }
                 if (StrUtil.isNotBlank(user.username)) {
                     otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
                 }
-                otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString("AddShortcut", R.string.AddShortcut));
+                otherItem.addSubItem(add_shortcut, R.drawable.baseline_home_24, LocaleController.getString("AddShortcut", R.string.AddShortcut));
             }
         } else if (chat_id != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chat_id);
@@ -5966,7 +5963,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                 } else {
                     if (!TextUtils.isEmpty(chat.username)) {
-                        otherItem.addSubItem(share, R.drawable.msg_share, LocaleController.getString("BotShare", R.string.BotShare));
+                        otherItem.addSubItem(share, R.drawable.baseline_forward_24, LocaleController.getString("BotShare", R.string.BotShare));
                     }
                     if (!currentChat.creator && !currentChat.left && !currentChat.kicked) {
                         otherItem.addSubItem(leave_group, R.drawable.baseline_exit_to_app_24, LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu));
@@ -6004,7 +6001,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             otherItem.addSubItem(set_as_main, R.drawable.menu_private, LocaleController.getString("SetAsMain", R.string.SetAsMain));
             otherItem.addSubItem(gallery_menu_save, R.drawable.baseline_image_24, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
             //otherItem.addSubItem(edit_avatar, R.drawable.photo_paint, LocaleController.getString("EditPhoto", R.string.EditPhoto));
-            otherItem.addSubItem(delete_avatar, R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete));
+            otherItem.addSubItem(delete_avatar, R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete));
         }
         if (!isPulledDown) {
             otherItem.hideSubItem(gallery_menu_save);

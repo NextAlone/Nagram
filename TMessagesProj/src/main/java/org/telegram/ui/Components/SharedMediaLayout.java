@@ -58,7 +58,6 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
@@ -71,7 +70,6 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
@@ -871,7 +869,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             gotoItem.setOnClickListener(v -> onActionBarItemClick(gotochat));
 
             forwardNoQuoteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardNoQuoteItem.setIcon(R.drawable.msg_forward_noquote);
+            forwardNoQuoteItem.setIcon(R.drawable.baseline_forward_24);
             forwardNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
             forwardNoQuoteItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardNoQuoteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -879,7 +877,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             forwardNoQuoteItem.setOnClickListener(v -> onActionBarItemClick(forward_noquote));
 
             forwardItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardItem.setIcon(R.drawable.msg_forward);
+            forwardItem.setIcon(R.drawable.baseline_forward_24);
             forwardItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
             forwardItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -887,7 +885,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             forwardItem.setOnClickListener(v -> onActionBarItemClick(forward));
         }
         deleteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-        deleteItem.setIcon(R.drawable.msg_delete);
+        deleteItem.setIcon(R.drawable.baseline_delete_24);
         deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
         deleteItem.setDuplicateParentStateEnabled(false);
         actionModeLayout.addView(deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -3082,7 +3080,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 builder.addTitle(urlFinal);
                 builder.addItems(
                         new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                        new Integer[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24,R.drawable.wallet_qr }, (which, text, __) -> {
+                        new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
                             if (which == 0 || which == 2) {
                                 if (which == 0) {
                                     openUrl(urlFinal);

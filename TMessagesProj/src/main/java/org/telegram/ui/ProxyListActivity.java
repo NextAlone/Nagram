@@ -60,7 +60,6 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
@@ -605,56 +604,14 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 @Override
                 public void didFindQr(String text) {
 
-                    BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-
-                    boolean isUrl = false;
-
                     try {
-
                         HttpUrl.parse(text);
-
-                        isUrl = true;
-
                         Browser.openUrl(getParentActivity(), text);
-
                         return;
-
                     } catch (Exception ignored) {
                     }
 
-                    builder.setTitle(text);
-
-                    builder.setItems(new String[]{
-
-                            LocaleController.getString("Copy", R.string.Copy),
-                            LocaleController.getString("Cancel", R.string.Cancel)
-
-                    }, (v, i) -> {
-
-                        if (i == 0) {
-
-                            if (Build.VERSION.SDK_INT >= 23) {
-                                if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                    getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
-                                    return;
-                                }
-                            }
-
-                            CameraScanActivity.showAsSheet(ProxyListActivity.this, new CameraScanActivity.CameraScanActivityDelegate() {
-
-                                @Override
-                                public void didFindQr(String text) {
-
-                                    ProxyUtil.showLinkAlert(getParentActivity(), text);
-
-                                }
-                            });
-
-                        }
-
-                    });
-
-                    showDialog(builder.create());
+                    AlertUtil.showCopyAlert(getParentActivity(), text);
 
                 }
 
@@ -743,9 +700,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             if (position >= proxyStartRow && position < proxyEndRow) {
                 final SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
 
-                BottomSheet.Builder builder = new BottomSheet.Builder(context);
+                BottomBuilder builder = new BottomBuilder(context);
 
-                builder.setItems(new String[]{
+                builder.addItems(new String[]{
 
                         info.subId == 1 ? null : LocaleController.getString("EditProxy", R.string.EditProxy),
                         info.subId == 1 ? null : LocaleController.getString("ShareProxy", R.string.ShareProxy),
@@ -763,7 +720,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         R.drawable.baseline_delete_24,
                         R.drawable.baseline_cancel_24
 
-                }, (v, i) -> {
+                }, (i, text, cell) -> {
 
                     if (i == 0) {
 
@@ -813,6 +770,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                                 });
 
                     }
+
+                    return Unit.INSTANCE;
 
                 });
 
@@ -882,62 +841,26 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else {
 
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
+                        return Unit.INSTANCE;
+                    }
+                }
+
                 CameraScanActivity.showAsSheet(this, new CameraScanActivity.CameraScanActivityDelegate() {
 
                     @Override
                     public void didFindQr(String text) {
 
-                        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-
-                        boolean isUrl = false;
-
                         try {
-
                             HttpUrl.parse(text);
-
-                            isUrl = true;
-
                             Browser.openUrl(getParentActivity(), text);
-
                             return;
-
                         } catch (Exception ignored) {
                         }
 
-                        builder.setTitle(text);
-
-                        builder.setItems(new String[]{
-
-                                LocaleController.getString("Copy", R.string.Copy),
-                                LocaleController.getString("Cancel", R.string.Cancel)
-
-                        }, (v, i) -> {
-
-                            if (i == 0) {
-
-                                if (Build.VERSION.SDK_INT >= 23) {
-                                    if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                        getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
-                                        return;
-                                    }
-                                }
-
-                                CameraScanActivity.showAsSheet(ProxyListActivity.this, new CameraScanActivity.CameraScanActivityDelegate() {
-
-                                    @Override
-                                    public void didFindQr(String text) {
-
-                                        ProxyUtil.showLinkAlert(getParentActivity(), text);
-
-                                    }
-                                });
-
-                            }
-
-                        });
-
-                        showDialog(builder.create());
-
+                        AlertUtil.showCopyAlert(getParentActivity(), text);
 
                     }
 

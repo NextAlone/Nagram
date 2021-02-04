@@ -43,6 +43,9 @@ import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.MediaActionDrawable;
 import org.telegram.ui.Components.RadialProgress2;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
+
 public class AvatarPreviewer {
 
     private static AvatarPreviewer INSTANCE;
@@ -450,18 +453,20 @@ public class AvatarPreviewer {
         }
 
         private void showBottomSheet() {
-            final CharSequence[] labels = new CharSequence[menuItems.length];
+            final String[] labels = new String[menuItems.length];
             final int[] icons = new int[menuItems.length];
             for (int i = 0; i < menuItems.length; i++) {
                 labels[i] = LocaleController.getString(menuItems[i].labelKey, menuItems[i].labelResId);
                 icons[i] = menuItems[i].iconResId;
             }
-            visibleSheet = new BottomSheet.Builder(getContext())
-                    .setItems(labels, icons, (dialog, which) -> {
-                        callback.onMenuClick(menuItems[which]);
-                        setShowing(false);
-                    })
-                    .setDimBehind(false);
+            BottomBuilder visibleSheetBuilder = new BottomBuilder(getContext());
+            visibleSheetBuilder.addItems(labels, icons, (which, text, cell) -> {
+                callback.onMenuClick(menuItems[which]);
+                setShowing(false);
+                return Unit.INSTANCE;
+            });
+            visibleSheet = visibleSheetBuilder.create();
+            visibleSheet.setDimBehind(false);
             visibleSheet.setOnDismissListener(dialog -> {
                 visibleSheet = null;
                 setShowing(false);
