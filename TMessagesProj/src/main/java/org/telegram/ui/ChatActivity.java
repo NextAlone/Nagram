@@ -12689,7 +12689,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
 
-                    if (messArr.size() == 2 &&
+                    if (messArr.size() <= 3 &&
                             obj.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser &&
                             obj.messageOwner.from_id instanceof TLRPC.TL_peerUser &&
                             obj.messageOwner.from_id.user_id == getUserConfig().getClientUserId()) {
@@ -13289,7 +13289,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == NotificationCenter.didReceiveNewMessages) {
             long did = (Long) args[0];
             ArrayList<MessageObject> arr = (ArrayList<MessageObject>) args[1];
-            if (arr.size() == 1) {
+            if (arr.size() <= 2) {
                 MessageObject fst = arr.get(0);
                 TLRPC.MessageAction action = fst.messageOwner.action;
                 if (action instanceof TLRPC.TL_messageActionChatDeleteUser &&

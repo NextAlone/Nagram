@@ -1,18 +1,18 @@
 # NekoX
 
-NekoX is an **open source** third-party Telegram client, based on Telegram-FOSS with features added.
+NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
 - [Google Play Store](https://play.google.com/store/apps/details?id=nekox.messenger)
 - [Update News Telegram](https://t.me/NekogramX)
 - [GitHub Feedback](https://github.com/NekoX-Dev/NekoX/issues)
 - [Group Chat (English / Chinese)](https://t.me/NekoXChat) 
 - [Group Chat (Persian)](https://t.me/NekogramX_Persian)
-
-The play store version is outdated [due to](https://developer.android.com/distribute/best-practices/develop/target-sdk) the target api level 29 is not supported yet. Otherwise, the play version won't be able to read photos and files (like other 3rd apps do).
+- [Group Chat (Indonesia)](https://t.me/NekoxID)
 
 ## NekoX Changes
 
 - Most of Nekogram's features
+- Max account limit set to 32
 - OpenCC Chinese Convert
 - Built-in Vmess, Shadowsocks, SSR proxies support
 - Built-in public proxy list / Proxy subscription support.
@@ -23,6 +23,7 @@ The play store version is outdated [due to](https://developer.android.com/distri
 - Proxy automatic switcher
 - Add stickers without sticker pack
 - Allow disable vibration
+- Allow clicking on links in self profile
 - Sticker set list backup / restore / share
 - Full InstantView translation support
 - Translation support for selected text on input and in messages
@@ -30,8 +31,8 @@ The play store version is outdated [due to](https://developer.android.com/distri
 - Dialog sorting is optional "Unread and can be prioritized for reminding" etc.
 - Allow to skip "regret within five seconds"
 - Unblock all users support
-- Login via QR code
-- Scan and confirm the login QR code directly
+- Login via qrcode
+- Scan and confirm the login qrcode directly
 - Allow clear application data
 - Option to not send comment first when forwarding
 - 0ption to use nekox chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
@@ -44,11 +45,17 @@ The play store version is outdated [due to](https://developer.android.com/distri
 - Custom server (official, test DC or Manual input)
 - Keep the original file name when downloading files
 - View the data center you belong to when you don't have an avatar
-- Proxies, groups, channels, sticker packs are able to shared as QRCodes.
+- Proxies, groups, channels, sticker packs are able to shared as qrcodes.
 - Force English emoji keywords to be loaded
 - Add "@Name" when long press @ user option
 - Enhanced notification service, optional version without Google Services.
 - Don't alert "Proxy unavailable" for non-current account
+- Option to block others from starting a secret chat with you
+- Allow create group without invite
+- Option to upgrade group to supergroup
+- Improved session dialog
+- Improved link long click menu
+- Text replacer
 - Tgx style message unpin menu
 - Built-in Material Design themes / Telegram X style icons
 
@@ -64,7 +71,6 @@ Consider using a Linux VM or dual booting.**
 It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.  [here is how to install AndroidStudio](https://developer.android.com/studio/install).
 
 2. Install golang ( >= 1.15.5 ).
-
 ```shell
 apt install -y golang
 ```
@@ -103,9 +109,23 @@ The full version comes with built-in proxy support for v2ray, shadowsocks, and s
 
 Then it is recommended to use the `Mini` version.
 
+#### I've encountered a bug!
+
+First, make sure you have the latest version installed (check the channel, play store updates usually have a delay).
+
+Then, if the issue appears on the official telegram as well, please submit it to the officials, ( but be careful not to show NekoX in the description and screenshots, the official developers don't like us! ).
+
+Then, please *detail* your issue, create an issue or submit it to our [group](https://t.me/NekoXChat) with #bug.
+
+If you experience a *crash*, you also need to click on the version number at the bottom of the settings and select "Enable Log" and send it to us.
+
 #### How can I help with Localization?
 
 Join the project at https://nekox.crowdin.com/nekox.
+
+##### My language is not in the translation platform / needs to be improved !
+
+Same as submitting a bug, plus you need to submit your nekox.crowdin.com account.
 
 ## Credits
 

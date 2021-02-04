@@ -183,9 +183,9 @@ public class ConnectionsManager extends BaseController {
         String fingerprint;
         if (getUserConfig().official || !getUserConfig().isClientActivated()) {
             fingerprint = "49C1522548EBACD46CE322B6FD47F6092BB745D0F88082145CAF35E14DCC38E1";
-            version = BuildConfig.OFFICIAL_VERSION_CODE;
+            version = BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9;
             appId = BuildVars.OFFICAL_APP_ID;
-            appVersion = BuildConfig.OFFICIAL_VERSION + " (" + BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9 + ")";
+            appVersion = BuildConfig.OFFICIAL_VERSION + " (" + (BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9) + ")";
             if (BuildVars.DEBUG_VERSION) {
                 appVersion += " beta";
             }

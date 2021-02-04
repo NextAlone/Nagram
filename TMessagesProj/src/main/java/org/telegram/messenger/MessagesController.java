@@ -8627,7 +8627,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else {
                     TLRPC.TL_contacts_resolveUsername req1 = new TLRPC.TL_contacts_resolveUsername();
                     req1.username = username;
-                    return getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                    return getConnectionsManager().sendRequest(req1, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                         if (error == null) {
                             TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
                             putUsers(res.users, false);
