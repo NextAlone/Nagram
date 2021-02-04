@@ -274,5 +274,6 @@
     <string name="TextOrigin">Origin</string>
     <string name="TextReplace">Replace</string>
     <string name="ReplaceRegex">Use regex</string>
+    <string name="DisableTrending">Disable Trending</string>
 
 </resources>
