@@ -356,7 +356,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean canDeletePsaSelected;
 
     private int topPadding;
-private int lastMeasuredTopPadding;
+    private int lastMeasuredTopPadding;
     private int folderId;
 
     private final static int pin = 100;
@@ -609,7 +609,7 @@ private int lastMeasuredTopPadding;
             }
             tabsYOffset = 0;
             if (filtersTabAnimator != null && filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
-                tabsYOffset = - (1f - filterTabsProgress) * filterTabsView.getMeasuredHeight();
+                tabsYOffset = -(1f - filterTabsProgress) * filterTabsView.getMeasuredHeight();
                 filterTabsView.setTranslationY(actionBar.getTranslationY() + tabsYOffset);
                 filterTabsView.setAlpha(filterTabsProgress);
                 viewPages[0].setTranslationY(-(1f - filterTabsProgress) * filterTabsMoveFrom);
@@ -1924,7 +1924,7 @@ private int lastMeasuredTopPadding;
                 searchViewPager.removeSearchFilter(filterData);
                 searchViewPager.onTextChanged(searchItem.getSearchField().getText().toString());
 
-                updateFiltersView(true, null, null,true);
+                updateFiltersView(true, null, null, true);
             }
 
             @Override
@@ -2031,7 +2031,7 @@ private int lastMeasuredTopPadding;
 //                        }
                         getMessagesController().removeFilter(dialogFilter);
                         getMessagesStorage().deleteDialogFilter(dialogFilter);
-                      //  filterTabsView.commitCrossfade();
+                        //  filterTabsView.commitCrossfade();
                     });
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
@@ -2219,7 +2219,7 @@ private int lastMeasuredTopPadding;
                                 filterTabsView.setIsEditing(true);
                                 showDoneItem(true);
                             } else if (i == 1) {
-                                if (N == 2) {
+                                if (N == 3) {
                                     presentFragment(new FiltersSetupActivity());
                                 } else {
                                     presentFragment(new FilterCreateActivity(dialogFilter));
@@ -2227,7 +2227,17 @@ private int lastMeasuredTopPadding;
                             } else if (i == 2) {
                                 showDeleteAlert(dialogFilter);
                             } else {
-                                getMessagesStorage().readAllDialogs(tabView.getId());
+                                if (dialogFilter == null) {
+                                    int folderId = tabView.getId() == Integer.MAX_VALUE ? -1 : -1;
+                                    getMessagesStorage().readAllDialogs(folderId);
+                                } else {
+                                    for (TLRPC.Dialog dialog : dialogFilter.dialogs) {
+                                        if (dialog.unread_count == 0 && dialog.unread_mentions_count == 0)
+                                            continue;
+                                        getMessagesController().markDialogAsRead(dialog.id, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, dialog.unread_count, true, 0);
+                                    }
+                                }
+
                             }
                             if (scrimPopupWindow != null) {
                                 scrimPopupWindow.dismiss();
@@ -4032,7 +4042,7 @@ private int lastMeasuredTopPadding;
                 editText.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
                 editText.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
             }
-            searchViewPager.setKeyboardHeight(((ContentView)fragmentView).getKeyboardHeight());
+            searchViewPager.setKeyboardHeight(((ContentView) fragmentView).getKeyboardHeight());
             parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(true);
         } else {
             if (filterTabsView != null) {
@@ -4052,7 +4062,7 @@ private int lastMeasuredTopPadding;
             if (show) {
                 searchViewPager.setVisibility(View.VISIBLE);
                 searchViewPager.reset();
-                updateFiltersView(true, null, null,false);
+                updateFiltersView(true, null, null, false);
                 if (searchTabsView != null) {
                     searchTabsView.hide(false, false);
                     searchTabsView.setVisibility(View.VISIBLE);
@@ -6065,6 +6075,7 @@ private int lastMeasuredTopPadding;
     }
 
     private String showingSuggestion;
+
     private void showNextSupportedSuggestion() {
         if (showingSuggestion != null) {
             return;

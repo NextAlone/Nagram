@@ -18945,6 +18945,47 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.baseline_call_24);
                             }
                         }
+                        MessageObject messageObject = getMessageForTranslate();
+                        boolean docsWithMessages = false;
+                        if (selectedObjectGroup != null && selectedObjectGroup.isDocuments) {
+                            for (MessageObject object : selectedObjectGroup.messages) {
+                                if (StrUtil.isNotBlank(object.messageOwner.message)) {
+                                    docsWithMessages = true;
+                                }
+                            }
+                        }
+                        if (NekoConfig.showTranslate) {
+                            if (messageObject != null || docsWithMessages) {
+                                boolean td;
+                                if (messageObject != null) {
+                                    td = messageObject.messageOwner.translated;
+                                } else {
+                                    td = selectedObjectGroup.messages.get(0).messageOwner.translated;
+                                }
+                                items.add(td ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
+                                options.add(88);
+                                icons.add(R.drawable.ic_translate);
+                            }
+                        }
+                        if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+                            if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
+                                items.add(LocaleController.getString("PGPVerify", R.string.PGPVerify));
+                                options.add(200);
+                                icons.add(R.drawable.baseline_vpn_key_24);
+                            } else if (PgpHelper.PGP_MESSAGE.matcher(selectedObject.messageOwner.message).matches()) {
+                                items.add(LocaleController.getString("PGPDecrypt", R.string.PGPDecrypt));
+                                options.add(201);
+                                icons.add(R.drawable.baseline_vpn_key_24);
+                            } else if (PgpHelper.PGP_PRIVATE_KEY.matcher(selectedObject.messageOwner.message).matches()) {
+                                items.add(LocaleController.getString("PGPImportPrivate", R.string.PGPImportPrivate));
+                                options.add(202);
+                                icons.add(R.drawable.baseline_vpn_key_24);
+                            } else if (PgpHelper.PGP_PUBLIC_KEY.matcher(selectedObject.messageOwner.message).matches()) {
+                                items.add(LocaleController.getString("PGPImport", R.string.PGPImport));
+                                options.add(203);
+                                icons.add(R.drawable.baseline_vpn_key_24);
+                            }
+                        }
                         items.add(LocaleController.getString("Delete", R.string.Delete));
                         options.add(1);
                         icons.add(R.drawable.baseline_delete_24);
@@ -20400,10 +20441,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (dids.size() > 1 || dids.get(0) == getUserConfig().getClientUserId() || message != null) {
             for (int a = 0; a < dids.size(); a++) {
                 long did = dids.get(a);
-                if (message != null) {
+                if (message != null && !NekoConfig.sendCommentAfterForward) {
                     getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0);
                 }
                 forwardMessages(fmessages, noForwardQuote, true, 0, did);
+                if (message != null && NekoConfig.sendCommentAfterForward) {
+                    getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0);
+                }
             }
             fragment.finishFragment();
             if (dids.size() == 1) {
