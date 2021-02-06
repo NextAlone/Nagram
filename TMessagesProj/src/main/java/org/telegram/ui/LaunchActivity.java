@@ -137,7 +137,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -256,7 +255,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (fromIntro) {
                 preferences.edit().putLong("intro_crashed_time", 0).apply();
             }
-            if (!isProxy && Math.abs(crashed_time - System.currentTimeMillis()) >= 60 * 2 * 1000 && intent != null && !fromIntro) {
+            /*if (!isProxy && Math.abs(crashed_time - System.currentTimeMillis()) >= 60 * 2 * 1000 && intent != null && !fromIntro) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", MODE_PRIVATE);
                 Map<String, ?> state = preferences.getAll();
                 if (state.isEmpty()) {
@@ -267,7 +266,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     finish();
                     return;
                 }
-            }
+            }*/
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTheme(R.style.Theme_TMessages);
