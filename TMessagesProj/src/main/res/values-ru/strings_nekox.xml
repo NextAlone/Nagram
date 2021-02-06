@@ -126,7 +126,7 @@
     <string name="SSPlugin">Plugin</string>
     <string name="SSPluginOpts">Plugin Configuration</string>
     <string name="ProxyInfoSSR">Настройки ShadowsocksR-прокси</string>
-    <string name="SSRProtocol">Protocol</string>
+    <string name="SSRProtocol">Протокол</string>
     <string name="SSRProtocolParams">Параметры протокола</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Параметры Obfs</string>
@@ -212,4 +212,5 @@
     <string name="TextOrigin">Найти</string>
     <string name="TextReplace">Заменить на</string>
     <string name="ReplaceRegex">Регуляр. выражен.</string>
+    <string name="DisableTrending">Отключить тренды</string>
 </resources>

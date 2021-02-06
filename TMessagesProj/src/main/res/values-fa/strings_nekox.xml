@@ -212,4 +212,5 @@
     <string name="TextOrigin">اصلی</string>
     <string name="TextReplace">جایگزین</string>
     <string name="ReplaceRegex">استفاده از regex</string>
+    <string name="DisableTrending">غیرفعال کردن بخش محبوب‌ها</string>
 </resources>

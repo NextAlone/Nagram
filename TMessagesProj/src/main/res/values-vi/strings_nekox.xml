@@ -212,4 +212,5 @@
     <string name="TextOrigin">Gốc</string>
     <string name="TextReplace">Thay thế</string>
     <string name="ReplaceRegex">Sử dụng biểu thức chính quy</string>
+    <string name="DisableTrending">Vô hiệu hóa xu hướng</string>
 </resources>
