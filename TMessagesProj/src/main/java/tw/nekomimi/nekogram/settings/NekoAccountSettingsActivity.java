@@ -1,24 +1,21 @@
 package tw.nekomimi.nekogram.settings;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -33,38 +30,26 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.MessageHelper;
 
 @SuppressLint("RtlHardcoded")
-public class NekoExperimentalSettingsActivity extends BaseFragment {
+public class NekoAccountSettingsActivity extends BaseFragment {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
-    private AnimatorSet animatorSet;
-
-    private boolean sensitiveCanChange = false;
-    private boolean sensitiveEnabled = false;
 
     private int rowCount;
 
-    private int experimentRow;
-    private int smoothKeyboardRow;
-    private int increaseVoiceMessageQualityRow;
-    private int mediaPreviewRow;
-    private int proxyAutoSwitchRow;
-    private int disableFilteringRow;
-    private int ignoreContentRestrictionsRow;
-    private int unlimitedFavedStickersRow;
-    private int unlimitedPinnedDialogsRow;
-    private int experiment2Row;
+    private int accountRow;
+    private int uploadDeviceInfoRow;
+    private int deleteAccountRow;
+    private int account2Row;
 
     private UndoView tooltip;
 
@@ -81,7 +66,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("Experiment", R.string.Experiment));
+        actionBar.setTitle(LocaleController.getString("Account", R.string.Account));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -107,69 +92,81 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == disableFilteringRow) {
-                sensitiveEnabled = !sensitiveEnabled;
-                TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
-                req.sensitive_enabled = sensitiveEnabled;
-                AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-                progressDialog.show();
-                getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                    progressDialog.dismiss();
-                    if (error == null) {
-                        if (response instanceof TLRPC.TL_boolTrue && view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(sensitiveEnabled);
-                        }
-                    } else {
-                        AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
-                    }
-                }));
-            } else if (position == ignoreContentRestrictionsRow) {
-                NekoConfig.toggleIgnoreContentRestrictions();
+            if (position == uploadDeviceInfoRow) {
+                getUserConfig().deviceInfo = !getUserConfig().deviceInfo;
+                getUserConfig().saveConfig(true);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.ignoreContentRestrictions);
-                }
-            } else if (position == unlimitedFavedStickersRow) {
-                NekoConfig.toggleUnlimitedFavedStickers();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.unlimitedFavedStickers);
-                }
-            } else if (position == smoothKeyboardRow) {
-                SharedConfig.toggleSmoothKeyboard();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.smoothKeyboard);
-                }
-                if (SharedConfig.smoothKeyboard && getParentActivity() != null) {
-                    getParentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                }
-                if (SharedConfig.smoothKeyboard) {
-                    tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
-                    tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-                }
-            } else if (position == unlimitedPinnedDialogsRow) {
-                NekoConfig.toggleUnlimitedPinnedDialogs();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.unlimitedPinnedDialogs);
-                }
-            } else if (position == mediaPreviewRow) {
-                NekoConfig.toggleMediaPreview();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.mediaPreview);
-                }
-                if (NekoConfig.mediaPreview) {
-                    tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
-                    tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-                }
-            } else if (position == proxyAutoSwitchRow) {
-                NekoConfig.toggleProxyAutoSwitch();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.proxyAutoSwitch);
-                }
-            } else if (position == increaseVoiceMessageQualityRow) {
-                NekoConfig.toggleIncreaseVoiceMessageQuality();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.increaseVoiceMessageQuality);
+                    ((TextCheckCell) view).setChecked(getUserConfig().deviceInfo);
                 }
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (position == deleteAccountRow) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
+                builder.setTitle(LocaleController.getString("DeleteAccount", R.string.DeleteAccount));
+                builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), (dialog, which) -> {
+                    ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(getMessagesController().getAllDialogs());
+                    for (TLRPC.Dialog TLdialog : dialogs) {
+                        if (TLdialog instanceof TLRPC.TL_dialogFolder) {
+                            continue;
+                        }
+                        TLRPC.Peer peer = getMessagesController().getPeer((int) TLdialog.id);
+                        if (peer.channel_id != 0) {
+                            TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
+                            if (!chat.broadcast) {
+                                MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(TLdialog.id, getMessagesController().getUser(getUserConfig().clientUserId));
+                            }
+                        }
+                        if (peer.user_id != 0) {
+                            getMessagesController().deleteDialog(TLdialog.id, 0, true);
+                        }
+                    }
+                    AlertDialog.Builder builder12 = new AlertDialog.Builder(getParentActivity());
+                    builder12.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
+                    builder12.setTitle(LocaleController.getString("DeleteAccount", R.string.DeleteAccount));
+                    builder12.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), (dialogInterface, i) -> {
+                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+                        progressDialog.setCanCacnel(false);
+
+                        TLRPC.TL_account_deleteAccount req = new TLRPC.TL_account_deleteAccount();
+                        req.reason = "Meow";
+                        getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                            try {
+                                progressDialog.dismiss();
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                            if (response instanceof TLRPC.TL_boolTrue) {
+                                getMessagesController().performLogout(0);
+                            } else if (error == null || error.code != -1000) {
+                                String errorText = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred);
+                                if (error != null) {
+                                    errorText += "\n" + error.text;
+                                }
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
+                                builder1.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder1.setMessage(errorText);
+                                builder1.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder1.show();
+                            }
+                        }));
+                        progressDialog.show();
+                    });
+                    builder12.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    AlertDialog dialog12 = builder12.create();
+                    showDialog(dialog12);
+                    TextView button = (TextView) dialog12.getButton(DialogInterface.BUTTON_POSITIVE);
+                    if (button != null) {
+                        button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                    }
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.show();
+                AlertDialog dialog = builder.create();
+                showDialog(dialog);
+                TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                if (button != null) {
+                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                }
             }
         });
 
@@ -183,7 +180,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (listAdapter != null) {
-            checkSensitive();
             listAdapter.notifyDataSetChanged();
         }
     }
@@ -191,16 +187,10 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private void updateRows() {
         rowCount = 0;
 
-        experimentRow = rowCount++;
-        smoothKeyboardRow = !AndroidUtilities.isTablet() ? rowCount++ : -1;
-        increaseVoiceMessageQualityRow = rowCount++;
-        mediaPreviewRow = rowCount++;
-        proxyAutoSwitchRow = rowCount++;
-        disableFilteringRow = rowCount++;
-        ignoreContentRestrictionsRow = !BuildConfig.VERSION_NAME.contains("play") || NekoXConfig.developerMode ? rowCount++ : -1;
-        unlimitedFavedStickersRow = rowCount++;
-        unlimitedPinnedDialogsRow = rowCount++;
-        experiment2Row = rowCount++;
+        accountRow = rowCount++;
+        uploadDeviceInfoRow = rowCount++;
+        deleteAccountRow = rowCount++;
+        account2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -247,50 +237,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         return themeDescriptions;
     }
 
-    private void checkSensitive() {
-        TLRPC.TL_account_getContentSettings req = new TLRPC.TL_account_getContentSettings();
-        getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-            if (error == null) {
-                TLRPC.TL_account_contentSettings settings = (TLRPC.TL_account_contentSettings) response;
-                sensitiveEnabled = settings.sensitive_enabled;
-                sensitiveCanChange = settings.sensitive_can_change;
-                int count = listView.getChildCount();
-                ArrayList<Animator> animators = new ArrayList<>();
-                for (int a = 0; a < count; a++) {
-                    View child = listView.getChildAt(a);
-                    RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.getChildViewHolder(child);
-                    int position = holder.getAdapterPosition();
-                    if (position == disableFilteringRow) {
-                        TextCheckCell checkCell = (TextCheckCell) holder.itemView;
-                        checkCell.setChecked(sensitiveEnabled);
-                        checkCell.setEnabled(sensitiveCanChange, animators);
-                        if (sensitiveCanChange) {
-                            if (!animators.isEmpty()) {
-                                if (animatorSet != null) {
-                                    animatorSet.cancel();
-                                }
-                                animatorSet = new AnimatorSet();
-                                animatorSet.playTogether(animators);
-                                animatorSet.addListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animator) {
-                                        if (animator.equals(animatorSet)) {
-                                            animatorSet = null;
-                                        }
-                                    }
-                                });
-                                animatorSet.setDuration(150);
-                                animatorSet.start();
-                            }
-                        }
-
-                    }
-                }
-            } else {
-                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
-            }
-        }));
-    }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
@@ -309,40 +255,34 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1: {
-                    if (position == experiment2Row) {
+                    if (position == account2Row) {
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
+                case 2: {
+                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    if (position == deleteAccountRow) {
+                        textCell.setText(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), false);
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                    }
+                    break;
+                }
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
-                    if (position == disableFilteringRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("SensitiveDisableFiltering", R.string.SensitiveDisableFiltering), LocaleController.getString("SensitiveAbout", R.string.SensitiveAbout), sensitiveEnabled, true, true);
-                        textCell.setEnabled(sensitiveCanChange, null);
-                    } else if (position == ignoreContentRestrictionsRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("IgnoreContentRestrictions", R.string.IgnoreContentRestrictions), LocaleController.getString("IgnoreContentRestrictionsNotice", R.string.IgnoreContentRestrictionsNotice), NekoConfig.ignoreContentRestrictions, true, true);
-                    } else if (position == unlimitedFavedStickersRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedFavoredStickers", R.string.UnlimitedFavoredStickers), LocaleController.getString("UnlimitedFavoredStickersAbout", R.string.UnlimitedFavoredStickersAbout), NekoConfig.unlimitedFavedStickers, true, true);
-                    } else if (position == smoothKeyboardRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard), SharedConfig.smoothKeyboard, true);
-                    } else if (position == unlimitedPinnedDialogsRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedPinnedDialogs", R.string.UnlimitedPinnedDialogs), LocaleController.getString("UnlimitedPinnedDialogsAbout", R.string.UnlimitedPinnedDialogsAbout), NekoConfig.unlimitedPinnedDialogs, true, false);
-                    } else if (position == mediaPreviewRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("MediaPreview", R.string.MediaPreview), NekoConfig.mediaPreview, true);
-                    } else if (position == proxyAutoSwitchRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ProxyAutoSwitch", R.string.ProxyAutoSwitch), NekoConfig.proxyAutoSwitch, true);
-                    } else if (position == increaseVoiceMessageQualityRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("IncreaseVoiceMessageQuality", R.string.IncreaseVoiceMessageQuality), NekoConfig.increaseVoiceMessageQuality, true);
+                    if (position == uploadDeviceInfoRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UploadDeviceInfo", R.string.UploadDeviceInfo), getUserConfig().deviceInfo, true);
                     }
                     break;
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    if (position == experimentRow) {
-                        headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
+                    if (position == accountRow) {
+                        headerCell.setText(LocaleController.getString("Account", R.string.Account));
                     }
                     break;
                 }
@@ -352,7 +292,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 3;
+            return type == 2 || type == 3;
         }
 
         @Override
@@ -361,6 +301,10 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             switch (viewType) {
                 case 1:
                     view = new ShadowSectionCell(mContext);
+                    break;
+                case 2:
+                    view = new TextSettingsCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
                     view = new TextCheckCell(mContext);
@@ -390,9 +334,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == experiment2Row) {
+            if (position == account2Row) {
                 return 1;
-            } else if (position == experimentRow) {
+            } else if (position == deleteAccountRow) {
+                return 2;
+            } else if (position == accountRow) {
                 return 4;
             }
             return 3;

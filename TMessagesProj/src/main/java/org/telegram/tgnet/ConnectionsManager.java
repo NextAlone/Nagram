@@ -164,19 +164,24 @@ public class ConnectionsManager extends BaseController {
         }
         String configPath = config.toString();
         boolean enablePushConnection = isPushConnectionEnabled();
+        getUserConfig().loadConfig();
+
         try {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = LocaleController.getLocaleStringIso639().toLowerCase();
-            deviceModel = Build.MANUFACTURER + Build.MODEL;
-            systemVersion = "SDK " + Build.VERSION.SDK_INT;
-        } catch (Exception e) {
-            systemLangCode = "en";
+            if (getUserConfig().deviceInfo) {
+                deviceModel = Build.MANUFACTURER + Build.MODEL;
+                systemVersion = "SDK " + Build.VERSION.SDK_INT;
+            } else {
+                deviceModel = "";
+                systemVersion = "";
+            }
+        } catch (Exception ignored) {
+            systemLangCode = "";
             langCode = "";
-            deviceModel = "Android unknown";
-            systemVersion = "SDK " + Build.VERSION.SDK_INT;
+            deviceModel = "";
+            systemVersion = "";
         }
-
-        getUserConfig().loadConfig();
 
         int version;
         int appId;
@@ -200,13 +205,10 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = "en";
         }
         if (deviceModel.trim().length() == 0) {
-            deviceModel = "Android unknown";
-        }
-        if (appVersion.trim().length() == 0) {
-            appVersion = "App version unknown";
+            deviceModel = "Unknown";
         }
         if (systemVersion.trim().length() == 0) {
-            systemVersion = "SDK Unknown";
+            systemVersion = "Unknown";
         }
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {

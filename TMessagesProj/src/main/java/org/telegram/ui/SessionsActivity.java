@@ -25,18 +25,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -54,9 +58,6 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
@@ -310,11 +311,17 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
 
                     String title = authorization.app_name + " " + authorization.app_version + "\n";
-                    title += authorization.device_model + ", " + authorization.system_version + "\n";
+                    title += authorization.device_model + ", " + authorization.platform + " " + authorization.system_version + "\n";
                     title += "Login: " + LocaleController.getInstance().chatFullDate.format(authorization.date_created * 1000L) + "\n";
                     title += "Active: " + LocaleController.getInstance().chatFullDate.format(authorization.date_active * 1000L) + "\n";
                     if (!authorization.official_app) {
-                        title += "Unofficial application " + authorization.api_id + "\n";
+                        title += "Unofficial application ";
+                        if (authorization.api_id == BuildConfig.APP_ID) {
+                            title += "Nekogram X";
+                        } else {
+                            title += authorization.api_id;
+                        }
+                        title += "\n";
                     }
                     title += authorization.ip + " - " + authorization.region + " " + authorization.country;
 

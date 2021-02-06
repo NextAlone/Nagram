@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -164,7 +165,7 @@ public class SessionCell extends FrameLayout {
                 }
             }
 
-            if (!session.official_app) {
+            if (!session.official_app && session.api_id != BuildConfig.APP_ID) {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }

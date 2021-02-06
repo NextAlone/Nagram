@@ -275,5 +275,9 @@
     <string name="TextReplace">Replace</string>
     <string name="ReplaceRegex">Use regex</string>
     <string name="DisableTrending">Disable Trending</string>
+    <string name="UploadDeviceInfo">Upload device info</string>
+    <string name="UploadDeviceInfoOn">Device info will be uploaded the second time after logging in.</string>
+    <string name="UploadDeviceInfoOff">You can change this in the settings later.</string>
+
 
 </resources>
