@@ -2228,9 +2228,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 showDeleteAlert(dialogFilter);
                             } else {
                                 if (dialogFilter == null) {
-                                    int folderId = tabView.getId() == Integer.MAX_VALUE ? -1 : -1;
+                                    int folderId = tabView.getId() == Integer.MAX_VALUE ? 0 : -1;
                                     getMessagesStorage().readAllDialogs(folderId);
                                 } else {
+                                    if (dialogFilter.dialogs.isEmpty()) {
+                                        getMessagesController().loadTabDialogs(dialogFilter);
+                                    }
                                     for (TLRPC.Dialog dialog : dialogFilter.dialogs) {
                                         if (dialog.unread_count == 0 && dialog.unread_mentions_count == 0)
                                             continue;
@@ -2244,6 +2247,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             }
                         });
                     }
+
                     scrollView.addView(linearLayout, LayoutHelper.createScroll(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
                     scrimPopupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
                         @Override

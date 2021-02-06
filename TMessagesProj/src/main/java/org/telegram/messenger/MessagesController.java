@@ -13647,6 +13647,29 @@ public class MessagesController extends BaseController implements NotificationCe
         return clearingHistoryDialogs.get(did) != null;
     }
 
+    public void loadTabDialogs(MessagesController.DialogFilter dialogFilter) {
+        sortingDialogFilter = dialogFilter;
+        Collections.sort(allDialogs, dialogDateComparator);
+        ArrayList<TLRPC.Dialog> dialogsByFilter = sortingDialogFilter.dialogs;
+        for (int a = 0, N = allDialogs.size(); a < N; a++) {
+            TLRPC.Dialog d = allDialogs.get(a);
+            if (d instanceof TLRPC.TL_dialog) {
+                int high_id = (int) (d.id >> 32);
+                int lower_id = (int) d.id;
+                if (lower_id == 0 && high_id != 0) {
+                    TLRPC.EncryptedChat encryptedChat = getEncryptedChat(high_id);
+                    if (encryptedChat != null) {
+                        lower_id = encryptedChat.user_id;
+                    }
+                }
+                if (sortingDialogFilter.includesDialog(getAccountInstance(), lower_id, d)) {
+                    dialogsByFilter.add(d);
+                }
+            }
+        }
+
+    }
+
     public void sortDialogs(SparseArray<TLRPC.Chat> chatsDict) {
         dialogsServerOnly.clear();
         dialogsCanAddUsers.clear();
