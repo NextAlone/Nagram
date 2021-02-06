@@ -67,6 +67,7 @@ public class UserConfig extends BaseController {
     public long autoDownloadConfigLoadTime;
     public boolean isBot;
     public boolean official;
+    public boolean deviceInfo;
 
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
@@ -153,6 +154,7 @@ public class UserConfig extends BaseController {
                 editor.putInt("lastMyLocationShareTime", lastMyLocationShareTime);
                 editor.putBoolean("isBot", isBot);
                 editor.putBoolean("official", official);
+                editor.putBoolean("deviceInfo", deviceInfo);
 
                 editor.putBoolean("filtersLoaded", filtersLoaded);
                 if (tonEncryptedData != null) {
@@ -305,8 +307,10 @@ public class UserConfig extends BaseController {
             notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
             autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
             hasValidDialogLoadIds = preferences.contains("2dialogsLoadOffsetId") || preferences.getBoolean("hasValidDialogLoadIds", false);
-            isBot = preferences.getBoolean("isBot",false);
+            isBot = preferences.getBoolean("isBot", false);
             official = preferences.getBoolean("official", false);
+            deviceInfo = preferences.getBoolean("deviceInfo", true);
+
             tonEncryptedData = preferences.getString("tonEncryptedData", null);
             tonPublicKey = preferences.getString("tonPublicKey", null);
             tonKeyName = preferences.getString("tonKeyName", "walletKey" + currentAccount);

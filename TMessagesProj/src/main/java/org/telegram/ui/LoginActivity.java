@@ -102,15 +102,15 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.EditTextBoldCursor;
-import org.telegram.ui.Components.RLottieDrawable;
-import org.telegram.ui.Components.RLottieImageView;
-import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProxyDrawable;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -1553,6 +1553,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         UserConfig.getInstance(currentAccount).clearConfig();
         MessagesController.getInstance(currentAccount).cleanup();
         UserConfig.getInstance(currentAccount).official = NekoXConfig.currentAppId() == BuildVars.OFFICAL_APP_ID;
+        UserConfig.getInstance(currentAccount).deviceInfo = uploadDeviceInfo;
         UserConfig.getInstance(currentAccount).syncContacts = syncContacts;
         UserConfig.getInstance(currentAccount).setCurrentUser(res.user);
         UserConfig.getInstance(currentAccount).saveConfig(true);
@@ -1633,7 +1634,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
     private TLRPC.TL_help_termsOfService currentTermsOfService;
 
-    private boolean allowFlashCall;
+    private boolean allowFlashCall = false;
+    private boolean uploadDeviceInfo = true;
 
     public class PhoneView extends SlideView implements AdapterView.OnItemSelectedListener {
 
@@ -1643,7 +1645,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         private View view;
         private TextView textView;
         private TextView textView2;
-        private CheckBoxCell checkBoxCell;
+
+        private CheckBoxCell syncCell;
+        private CheckBoxCell infoCell;
 
         private int countryState = 0;
 
@@ -1921,10 +1925,40 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             textView2.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 28, 0, 10));
 
-            checkBoxCell = new CheckBoxCell(context, 2);
-            checkBoxCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), "", syncContacts, false);
-            addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
-            checkBoxCell.setOnClickListener(new OnClickListener() {
+            infoCell = new CheckBoxCell(context, 2);
+            infoCell.setText(LocaleController.getString("UploadDeviceInfo", R.string.UploadDeviceInfo), "", uploadDeviceInfo, false);
+            addView(infoCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+            infoCell.setOnClickListener(new OnClickListener() {
+
+                private Toast visibleToast;
+
+                @Override
+                public void onClick(View v) {
+                    if (getParentActivity() == null) {
+                        return;
+                    }
+                    infoCell.setChecked(uploadDeviceInfo = !uploadDeviceInfo, true);
+                    try {
+                        if (visibleToast != null) {
+                            visibleToast.cancel();
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                    if (uploadDeviceInfo) {
+                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("UploadDeviceInfoOn", R.string.UploadDeviceInfoOn), Toast.LENGTH_SHORT);
+                        visibleToast.show();
+                    } else {
+                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("UploadDeviceInfoOff", R.string.UploadDeviceInfoOff), Toast.LENGTH_SHORT);
+                        visibleToast.show();
+                    }
+                }
+            });
+
+            syncCell = new CheckBoxCell(context, 2);
+            syncCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), "", syncContacts, false);
+            addView(syncCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+            syncCell.setOnClickListener(new OnClickListener() {
 
                 private Toast visibleToast;
 
@@ -2324,8 +2358,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         public void onShow() {
             super.onShow();
             fillNumber();
-            if (checkBoxCell != null) {
-                checkBoxCell.setChecked(syncContacts, false);
+            if (syncCell != null) {
+                syncCell.setChecked(syncContacts, false);
             }
             AndroidUtilities.runOnUIThread(() -> {
                 if (phoneField != null) {

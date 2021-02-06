@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -45,6 +44,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int categoriesRow;
     private int generalRow;
+    private int accountRow;
     private int chatRow;
     private int experimentRow;
     private int categories2Row;
@@ -99,6 +99,8 @@ public class NekoSettingsActivity extends BaseFragment {
                 presentFragment(new NekoChatSettingsActivity());
             } else if (position == generalRow) {
                 presentFragment(new NekoGeneralSettingsActivity());
+            } else if (position == accountRow) {
+                presentFragment(new NekoAccountSettingsActivity());
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
@@ -127,6 +129,7 @@ public class NekoSettingsActivity extends BaseFragment {
         rowCount = 0;
         categoriesRow = rowCount++;
         generalRow = rowCount++;
+        accountRow = rowCount++;
         chatRow = rowCount++;
         experimentRow = rowCount++;
         categories2Row = rowCount++;
@@ -220,6 +223,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.baseline_palette_24, true);
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.baseline_star_24, false);
+                    } else if (position == accountRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.baseline_person_24, true);
                     }
                     break;
                 }
