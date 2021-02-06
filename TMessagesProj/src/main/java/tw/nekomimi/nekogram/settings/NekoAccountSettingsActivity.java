@@ -96,7 +96,7 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                 getUserConfig().deviceInfo = !getUserConfig().deviceInfo;
                 getUserConfig().saveConfig(true);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(getUserConfig().deviceInfo);
+                    ((TextCheckCell) view).setChecked(!getUserConfig().deviceInfo);
                 }
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (position == deleteAccountRow) {
@@ -275,7 +275,7 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
                     if (position == uploadDeviceInfoRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UploadDeviceInfo", R.string.UploadDeviceInfo), getUserConfig().deviceInfo, true);
+                        textCell.setTextAndCheck(LocaleController.getString("HideDeviceInfo", R.string.HideDeviceInfo), !getUserConfig().deviceInfo, true);
                     }
                     break;
                 }

@@ -1925,36 +1925,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             textView2.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 28, 0, 10));
 
-            infoCell = new CheckBoxCell(context, 2);
-            infoCell.setText(LocaleController.getString("UploadDeviceInfo", R.string.UploadDeviceInfo), "", uploadDeviceInfo, false);
-            addView(infoCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
-            infoCell.setOnClickListener(new OnClickListener() {
-
-                private Toast visibleToast;
-
-                @Override
-                public void onClick(View v) {
-                    if (getParentActivity() == null) {
-                        return;
-                    }
-                    infoCell.setChecked(uploadDeviceInfo = !uploadDeviceInfo, true);
-                    try {
-                        if (visibleToast != null) {
-                            visibleToast.cancel();
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    if (uploadDeviceInfo) {
-                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("UploadDeviceInfoOn", R.string.UploadDeviceInfoOn), Toast.LENGTH_SHORT);
-                        visibleToast.show();
-                    } else {
-                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("UploadDeviceInfoOff", R.string.UploadDeviceInfoOff), Toast.LENGTH_SHORT);
-                        visibleToast.show();
-                    }
-                }
-            });
-
             syncCell = new CheckBoxCell(context, 2);
             syncCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), "", syncContacts, false);
             addView(syncCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
@@ -1982,6 +1952,36 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         visibleToast.show();
                     } else {
                         visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff), Toast.LENGTH_SHORT);
+                        visibleToast.show();
+                    }
+                }
+            });
+
+            infoCell = new CheckBoxCell(context, 2);
+            infoCell.setText(LocaleController.getString("HideDevieInfo", R.string.HideDeviceInfo), "", !uploadDeviceInfo, false);
+            addView(infoCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+            infoCell.setOnClickListener(new OnClickListener() {
+
+                private Toast visibleToast;
+
+                @Override
+                public void onClick(View v) {
+                    if (getParentActivity() == null) {
+                        return;
+                    }
+                    infoCell.setChecked(!(uploadDeviceInfo = !uploadDeviceInfo), true);
+                    try {
+                        if (visibleToast != null) {
+                            visibleToast.cancel();
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                    if (!uploadDeviceInfo) {
+                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("HideDeviceInfoOn", R.string.HideDeviceInfoOn), Toast.LENGTH_SHORT);
+                        visibleToast.show();
+                    } else {
+                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("HideDeviceInfoOff", R.string.HideDeviceInfoOff), Toast.LENGTH_SHORT);
                         visibleToast.show();
                     }
                 }
