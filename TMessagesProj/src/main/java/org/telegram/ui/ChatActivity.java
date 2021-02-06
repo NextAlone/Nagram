@@ -18824,11 +18824,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(89);
                             icons.add(R.drawable.menu_info);
                         }
-//                        if (message.messageOwner.forwards > 0 && (BuildVars.DEBUG_PRIVATE_VERSION || ChatObject.hasAdminRights(getCurrentChat()))) {
-//                            items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
-//                            options.add(28);
-//                            icons.add(R.drawable.msg_stats);
-//                        }
+                        if (message.messageOwner.views > 0 && ChatObject.hasAdminRights(getCurrentChat())) {
+                            items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
+                            options.add(28);
+                            icons.add(R.drawable.msg_stats);
+                        }
                         if (allowUnpin) {
                             items.add(LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
                             options.add(14);
