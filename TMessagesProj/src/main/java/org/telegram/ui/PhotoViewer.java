@@ -1739,12 +1739,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate);
 
         void replaceButtonPressed(int index, VideoEditedInfo videoEditedInfo);
+
         boolean canReplace(int index);
+
         int getSelectedCount();
 
         void updatePhotoAtIndex(int index);
 
         boolean allowSendingSubmenu();
+
         boolean allowCaption();
 
         boolean scaleToFill();
@@ -1772,8 +1775,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         CharSequence getTitleFor(int index);
 
         CharSequence getSubtitleFor(int index);
+
         MessageObject getEditingMessageObject();
+
         void onCaptionChanged(CharSequence caption);
+
         boolean closeKeyboard();
     }
 
@@ -3163,55 +3169,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         showAlertDialog(builder);
     }
 
-    private void onScanPressed() {
-        if (parentActivity == null) {
-            return;
-        }
-        try {
-            File f = null;
-            boolean isVideo = false;
-
-            if (currentMessageObject != null) {
-                isVideo = currentMessageObject.isVideo();
-                        /*if (currentMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
-                            AndroidUtilities.openUrl(parentActivity, currentMessageObject.messageOwner.media.webpage.url);
-                            return;
-                        }*/
-                if (!TextUtils.isEmpty(currentMessageObject.messageOwner.attachPath)) {
-                    f = new File(currentMessageObject.messageOwner.attachPath);
-                    if (!f.exists()) {
-                        f = null;
-                    }
-                }
-                if (f == null) {
-                    f = FileLoader.getPathToMessage(currentMessageObject.messageOwner);
-                }
-            } else if (currentFileLocation != null) {
-                f = FileLoader.getPathToAttach(currentFileLocation.location, avatarsDialogId != 0 || isEvent);
-            }
-
-            Bitmap bitmap;
-
-            if (isVideo) {
-
-                bitmap = videoTextureView.getBitmap();
-
-            } else if (f != null && f.exists()) {
-
-                bitmap = ImageLoader.loadBitmap(f.getPath(), null, -1f, -1f, false);
-
-            } else {
-                showDownloadAlert();
-                return;
-            }
-
-            ProxyUtil.tryReadQR(parentActivity, bitmap);
-
-        } catch (Exception ignored) {
-            AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound));
-        }
-    }
-
     private void onSharePressed() {
         if (parentActivity == null || !allowShare) {
             return;
@@ -3615,7 +3572,39 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         showDownloadAlert();
                     }
                 } else if (id == gallery_menu_scan) {
-                    onScanPressed();
+                    File f = null;
+                    final boolean isVideo;
+                    if (currentMessageObject != null) {
+                        if (currentMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && currentMessageObject.messageOwner.media.webpage != null && currentMessageObject.messageOwner.media.webpage.document == null) {
+                            TLObject fileLocation = getFileLocation(currentIndex, null);
+                            f = FileLoader.getPathToAttach(fileLocation, true);
+                        } else {
+                            f = FileLoader.getPathToMessage(currentMessageObject.messageOwner);
+                        }
+                        isVideo = currentMessageObject.isVideo();
+                    } else if (currentFileLocationVideo != null) {
+                        f = FileLoader.getPathToAttach(getFileLocation(currentFileLocationVideo), getFileLocationExt(currentFileLocationVideo), avatarsDialogId != 0 || isEvent);
+                        isVideo = false;
+                    } else if (pageBlocksAdapter != null) {
+                        f = pageBlocksAdapter.getFile(currentIndex);
+                        isVideo = pageBlocksAdapter.isVideo(currentIndex);
+                    } else {
+                        isVideo = false;
+                    }
+                    try {
+                        Bitmap bitmap;
+                        if (isVideo) {
+                            bitmap = videoTextureView.getBitmap();
+                        } else if (f != null && f.exists()) {
+                            bitmap = ImageLoader.loadBitmap(f.getPath(), null, -1f, -1f, false);
+                        } else {
+                            showDownloadAlert();
+                            return;
+                        }
+                        ProxyUtil.tryReadQR(parentActivity, bitmap);
+                    } catch (Exception ignored) {
+                        AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound));
+                    }
                 } else if (id == gallery_menu_showall) {
                     if (currentDialogId != 0) {
                         disableShowCheck = true;
@@ -4754,7 +4743,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             sendPopupLayout.setBackgroundColor(0xf9222222);
 
             final boolean canReplace = placeProvider != null && placeProvider.canReplace(currentIndex);
-            final int[] order = {3, 2, 0, 1,4};
+            final int[] order = {3, 2, 0, 1, 4};
             for (int i = 0; i < 5; i++) {
                 final int a = order[i];
                 if (a != 2 && a != 3 && a != 4 && canReplace) {
