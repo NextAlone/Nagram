@@ -1051,6 +1051,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int share_key = 103;
     private final static int reply = 104;
     private final static int upgrade = 105;
+    private final static int unpin = 106;
+    private final static int save = 107;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -1703,6 +1705,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     }
 
+    private ArrayList<MessageObject> getSelectedMessages1() {
+
+        ArrayList<MessageObject> fmessages = new ArrayList<>();
+
+        for (int a = 1; a >= 0; a--) {
+            for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                MessageObject messageObject = selectedMessagesIds[a].get(selectedMessagesIds[a].keyAt(b));
+                if (messageObject != null) {
+                    fmessages.add(messageObject);
+                }
+            }
+
+        }
+
+        return fmessages;
+
+    }
+
     @Override
     public View createView(Context context) {
         textSelectionHelper = new TextSelectionHelper.ChatListTextSelectionHelper();
@@ -1822,6 +1842,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     clearSelectionMode();
                 } else if (id == translate) {
                     MessageTransKt.translateMessages(ChatActivity.this, getSelectedMessages().toArray(new MessageObject[0]));
+                } else if (id == unpin) {
+                    for (MessageObject selectedMessage : getSelectedMessages()) {
+                        if (selectedMessage.messageOwner.pinned) {
+                            unpinMessage(selectedMessage);
+                        }
+                    }
                 } else if (id == delete) {
                     if (getParentActivity() == null) {
                         return;
@@ -2360,7 +2386,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             if (currentChat != null && !ChatObject.isChannel(currentChat) && currentChat.creator) {
-                headerItem.addSubItem(upgrade, R.drawable.baseline_arrow_upward_24, LocaleController.getString("UpgradeGroup",  R.string.UpgradeGroup));
+                headerItem.addSubItem(upgrade, R.drawable.baseline_arrow_upward_24, LocaleController.getString("UpgradeGroup", R.string.UpgradeGroup));
             }
 
             if (ChatObject.isChannel(currentChat)) {
@@ -2431,6 +2457,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
         actionModeViews.add(actionModeOtherItem = actionMode.addItemWithWidth(action_mode_other, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("MessageMenu", R.string.MessageMenu)));
 
+        if (currentEncryptedChat == null) {
+            actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("Forward", R.string.Forward));
+        }
+
         if (currentEncryptedChat == null || NekoXConfig.disableFlagSecure) {
             actionModeOtherItem.addSubItem(forward_noquote, R.drawable.baseline_forward_24, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
             actionModeOtherItem.addSubItem(star, R.drawable.baseline_favorite_20, LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
@@ -2438,6 +2468,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         actionModeOtherItem.addSubItem(translate, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
+        actionModeOtherItem.addSubItem(unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
+        actionModeOtherItem.addSubItem(save, R.drawable.baseline_bookmark_24, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
 
         actionMode.getItem(reply).setVisibility(ChatObject.canSendMessages(currentChat) && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
@@ -11516,9 +11548,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     cantSaveMessagesCount--;
                 }
             } else {
-                //if (selectedMessagesIds[0].size() + selectedMessagesIds[1].size() >= 100) {
-                //    return;
-                //}
+                if (selectedMessagesIds[0].size() + selectedMessagesIds[1].size() >= 100) {
+                    return;
+                }
                 selectedMessagesIds[index].put(messageObject.getId(), messageObject);
                 if (messageObject.type == 0 || messageObject.isAnimatedEmoji() || messageObject.caption != null) {
                     selectedMessagesCanCopyIds[index].put(messageObject.getId(), messageObject);
@@ -11562,7 +11594,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ActionBarMenuItem replyItem = actionBar.createActionMode().getItem(reply);
                 if (replyItem != null) {
                     replyItem.setVisibility(chatMode != MODE_PINNED && ChatObject.canSendMessages(currentChat) &&
-                            selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
+                            selectedCount == 1 ? View.VISIBLE : View.GONE);
                 }
                 ActionBarMenuItem copyItem = actionBar.createActionMode().getItem(copy);
                 ActionBarMenuItem editItem = actionBar.createActionMode().getItem(edit);
@@ -11572,36 +11604,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ActionBarMenuSubItem starItem = actionModeOtherItem.getSubItem(star);
                 ActionBarMenuSubItem saveItem = actionModeOtherItem.getSubItem(save_to);
 
-                if (prevCantForwardCount == 0 && cantForwardMessagesCount != 0 || prevCantForwardCount != 0 && cantForwardMessagesCount == 0) {
-                    forwardButtonAnimation = new AnimatorSet();
-                    ArrayList<Animator> animators = new ArrayList<>();
-                    if (forwardItem != null) {
-                        forwardItem.setEnabled(cantForwardMessagesCount == 0);
-                        animators.add(ObjectAnimator.ofFloat(forwardItem, View.ALPHA, cantForwardMessagesCount == 0 ? 1.0f : 0.5f));
-                    }
-                    if (forwardButton != null) {
-                        forwardButton.setEnabled(cantForwardMessagesCount == 0);
-                        animators.add(ObjectAnimator.ofFloat(forwardButton, View.ALPHA, cantForwardMessagesCount == 0 ? 1.0f : 0.5f));
-                    }
-                    forwardButtonAnimation.playTogether(animators);
-                    forwardButtonAnimation.setDuration(100);
-                    forwardButtonAnimation.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            forwardButtonAnimation = null;
-                        }
-                    });
-                    forwardButtonAnimation.start();
-                } else {
-                    if (forwardItem != null) {
-                        forwardItem.setEnabled(cantForwardMessagesCount == 0);
-                        forwardItem.setAlpha(cantForwardMessagesCount == 0 ? 1.0f : 0.5f);
-                    }
-                    if (forwardButton != null) {
-                        forwardButton.setEnabled(cantForwardMessagesCount == 0);
-                        forwardButton.setAlpha(cantForwardMessagesCount == 0 ? 1.0f : 0.5f);
-                    }
+                if (forwardItem != null) {
+                    forwardItem.setVisibility(canForwardMessagesCount > 0 && !(canEditMessagesCount == 1 && selectedCount == 1) ? View.VISIBLE : View.GONE);
+                    actionModeOtherItem.setSubItemVisibility(forward, canForwardMessagesCount == 1 && canEditMessagesCount == 1 && selectedCount == 1);
                 }
+
                 if (saveItem != null) {
                     actionModeOtherItem.setSubItemVisibility(save_to, ((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0);
                     saveItem.setText(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
@@ -11792,6 +11799,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 actionModeOtherItem.setSubItemVisibility(translate, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 0);
+
+                boolean allowPin = false;
+                if (currentChat != null) {
+                    allowPin = ChatObject.canPinMessages(currentChat);
+                } else if (currentEncryptedChat == null && userInfo != null) {
+                    allowPin = userInfo.can_pin_message;
+                }
+                if (allowPin) {
+                    allowPin = false;
+                    ArrayList<MessageObject> selected = getSelectedMessages1();
+                    for (MessageObject selectedMessage : selected) {
+                        if (selectedMessage.messageOwner.pinned) {
+                            allowPin = true;
+                            break;
+                        }
+                    }
+                }
+                actionModeOtherItem.setSubItemVisibility(unpin, allowPin);
             }
         }
     }
@@ -20164,8 +20189,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case 93: {
-                ArrayList<MessageObject> messages = new ArrayList<>();
-                messages.add(selectedObject);
+                ArrayList<MessageObject> messages = getSelectedMessages();
                 forwardMessages(messages, false, true, 0, UserConfig.getInstance(currentAccount).getClientUserId());
                 undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
                 break;
