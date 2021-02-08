@@ -213,4 +213,7 @@
     <string name="TextReplace">جایگزین</string>
     <string name="ReplaceRegex">استفاده از regex</string>
     <string name="DisableTrending">غیرفعال کردن بخش محبوب‌ها</string>
+    <string name="HideDeviceInfo">پنهان کردن مدل دستگاه</string>
+    <string name="HideDeviceInfoOff">پس از ورود به حسابتان وقتی بار دوم وارد برنامه شوید مدل دستگاه ارسال می شود.</string>
+    <string name="HideDeviceInfoOn">بعدا می توانید این مورد را در تنظیمات تغییر دهید.</string>
 </resources>

@@ -1,2 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="NekoSettings">Paramètres Neko</string>
+    <string name="IPv6">Connexion via IPv6</string>
+    <string name="MessageMenu">Menu des messages</string>
+    <string name="HidePhone">Cacher mon numéro de téléphone</string>
+    <string name="Hide">Cacher</string>
+    <string name="BotLogin">Connexion au Bot</string>
+    <string name="InvalidAccessToken">Token d\'accès invalide</string>
+    <string name="Connection">Connexion</string>
+    <string name="Chat">Chat</string>
+    <string name="NameOrder">Ordre des noms</string>
+    <string name="FirstLast">Premier Dernier</string>
+    <string name="LastFirst">Dernier Premier</string>
+    <string name="Repeat">Répéter</string>
+    <string name="AddToSavedMessages">Enregistrer le message</string>
+    <string name="Nya">Miaou!</string>
+    <string name="StickerSizeDialogMessageReplyTo">Miaou</string>
+    <string name="ProviderGoogleTranslate">Google Traduction</string>
+    <string name="ProviderGoogleTranslateCN">Google Traduction CN</string>
+    <string name="TranslateApiUnsupported">Le fournisseur de traduction que vous avez sélectionné ne prend pas en charge votre langue.</string>
+    <string name="ProviderLingocloud">Lingocloud</string>
+    <string name="UndoTranslate">Annuler la traduction</string>
+    <string name="BotToken">Jeton</string>
+    <string name="UnlimitedPinnedDialogs">Dialogues épinglés illimités</string>
+    <string name="UnlimitedPinnedDialogsAbout">Épingler des dialogues illimités en désactivant leur synchronisation.</string>
+    <string name="HideKeyboardOnChatScroll">Cacher le clavier lors du défilement du chat</string>
+    <string name="UserRestrictionsSendStickers2">Envoyer des autocollants</string>
+    <string name="UserRestrictionsSendGifs">Envoyer des GIFs</string>
+    <string name="HideAllTabAbout">Appuyez sur \"Retour\" sur la page d\'accueil pour l\'ouvrir.</string>
+    <string name="TabTitleType">Afficher sur les onglets</string>
+    <string name="TabTitleTypeTip">Les émoticônes sont synchronisées par Telegram.</string>
+    <string name="TabTitleTypeText">Titres</string>
+    <string name="TabTitleTypeIcon">Émoticônes</string>
+    <string name="TabTitleTypeMix">Émoticônes avec titres</string>
+    <string name="ConfirmAVMessage">Confirmer l\'envoi d\'un message vidéo/vocal</string>
+    <string name="AskBeforeCalling">Demander avant d\'appeler</string>
+    <string name="ConfirmCall">Confirmer l\'appel</string>
+    <string name="CallTo">Appeler **%1$s**?</string>
+    <string name="DisableNumberRounding">Désactiver l\'arrondi des nombres</string>
+    <string name="Categories">Catégories</string>
+    <string name="OfficialChannel">Canal officiel</string>
+    <string name="About">À propos</string>
+    <string name="IgnoreBlockedAbout">Vous ne verrez plus les messages des utilisateurs bloqués dans les groupes.</string>
+    <string name="GooglePlay">Google Play</string>
+    <string name="SourceCode">Code source sur Github</string>
+    <string name="BetaWarning">Il s\'agit d\'une fonctionnalité ** bêta ** implémentée par ** Telegram **.</string>
+    <string name="AvatarAsBackground">Image de profil comme arrière-plan</string>
+    <string name="BlurAvatarBackground">Flouter l\'image de profil</string>
+    <string name="DarkenAvatarBackground">Assombrir la photo de profil</string>
+    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderYouDao">YouDao Translate</string>
+</resources>
