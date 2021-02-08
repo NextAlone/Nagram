@@ -58,6 +58,7 @@ import android.util.StateSet;
 import android.view.View;
 
 import androidx.annotation.UiThread;
+import androidx.core.graphics.ColorUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -75,6 +76,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.time.SunDate;
@@ -95,7 +97,6 @@ import org.telegram.ui.Components.RoundStatusDrawable;
 import org.telegram.ui.Components.ScamDrawable;
 import org.telegram.ui.Components.SendingFileDrawable;
 import org.telegram.ui.Components.StatusDrawable;
-import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.TypingDotsDrawable;
 
@@ -116,7 +117,6 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import androidx.core.graphics.ColorUtils;
 
 public class Theme {
 
@@ -4496,6 +4496,43 @@ public class Theme {
             defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.SRC_IN));
         }
         Drawable pressedDrawable = resources.getDrawable(resource).mutate();
+        if (pressedColor != 0) {
+            pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.SRC_IN));
+        }
+        StateListDrawable stateListDrawable = new StateListDrawable() {
+            @Override
+            public boolean selectDrawable(int index) {
+                if (Build.VERSION.SDK_INT < 21) {
+                    Drawable drawable = Theme.getStateDrawable(this, index);
+                    ColorFilter colorFilter = null;
+                    if (drawable instanceof BitmapDrawable) {
+                        colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();
+                    } else if (drawable instanceof NinePatchDrawable) {
+                        colorFilter = ((NinePatchDrawable) drawable).getPaint().getColorFilter();
+                    }
+                    boolean result = super.selectDrawable(index);
+                    if (colorFilter != null) {
+                        drawable.setColorFilter(colorFilter);
+                    }
+                    return result;
+                }
+                return super.selectDrawable(index);
+            }
+        };
+        stateListDrawable.setEnterFadeDuration(1);
+        stateListDrawable.setExitFadeDuration(200);
+        stateListDrawable.addState(new int[]{android.R.attr.state_selected}, pressedDrawable);
+        stateListDrawable.addState(new int[]{}, defaultDrawable);
+        return stateListDrawable;
+    }
+
+    public static Drawable createEmojiIconSelectorDrawable(Context context, int resource, int pressedResource, int defaultColor, int pressedColor) {
+        Resources resources = context.getResources();
+        Drawable defaultDrawable = resources.getDrawable(resource).mutate();
+        if (defaultColor != 0) {
+            defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.SRC_IN));
+        }
+        Drawable pressedDrawable = resources.getDrawable(pressedResource).mutate();
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.SRC_IN));
         }

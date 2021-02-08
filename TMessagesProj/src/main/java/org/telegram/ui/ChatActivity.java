@@ -2287,7 +2287,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentUser != null) {
                 headerItem.addSubItem(call, R.drawable.baseline_call_24, LocaleController.getString("Call", R.string.Call));
                 if (Build.VERSION.SDK_INT >= 18) {
-                    headerItem.addSubItem(video_call, R.drawable.msg_videocall, LocaleController.getString("VideoCall", R.string.VideoCall));
+                    headerItem.addSubItem(video_call, R.drawable.calls_accept_video, LocaleController.getString("VideoCall", R.string.VideoCall));
                 }
                 TLRPC.UserFull userFull = getMessagesController().getUserFull(currentUser.id);
                 if (userFull != null && userFull.phone_calls_available) {
@@ -2366,7 +2366,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             if (currentUser != null) {
-                addContactItem = headerItem.addSubItem(share_contact, R.drawable.msg_addcontact, "");
+                addContactItem = headerItem.addSubItem(share_contact, R.drawable.baseline_person_24, "");
             }
 
             shareKeyItem = headerItem.addSubItem(share_key, R.drawable.baseline_vpn_key_24, LocaleController.getString("ShareMyKey", R.string.ShareMyKey));
@@ -17498,10 +17498,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
 
-        if (currentChat != null && ChatObject.canSendMessages(currentChat) && StrUtil.isNotBlank(NekoConfig.openPGPApp) && shareKeyItem != null) {
-            shareKeyItem.setVisibility(View.VISIBLE);
-        } else {
-            shareKeyItem.setVisibility(View.GONE);
+        if (shareKeyItem != null) {
+            if (currentChat != null && ChatObject.canSendMessages(currentChat) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+                shareKeyItem.setVisibility(View.VISIBLE);
+            } else {
+                shareKeyItem.setVisibility(View.GONE);
+            }
         }
 
         if (userBlocked || addToContactsButton.getVisibility() == View.GONE && reportSpamButton.getVisibility() == View.GONE) {
@@ -18481,7 +18483,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (!isThreadChat() && chatMode != MODE_SCHEDULED && message.hasReplies() && currentChat.megagroup && message.canViewThread()) {
                             items.add(LocaleController.formatPluralString("ViewReplies", message.getRepliesCount()));
                             options.add(27);
-                            icons.add(R.drawable.msg_viewreplies);
+                            icons.add(R.drawable.floating_message);
                         }
                         if (allowUnpin) {
                             items.add(LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
@@ -18559,7 +18561,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 items.add(LocaleController.getString("ViewThread", R.string.ViewThread));
                             }
                             options.add(27);
-                            icons.add(R.drawable.msg_viewreplies);
+                            icons.add(R.drawable.baseline_forum_24);
                         }
                         if (chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
                             items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
@@ -18907,7 +18909,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 items.add(LocaleController.getString("ViewThread", R.string.ViewThread));
                             }
                             options.add(27);
-                            icons.add(R.drawable.msg_viewreplies);
+                            icons.add(R.drawable.baseline_forum_24);
                         }
                         if (type == 4) {
                             if (selectedObject.isVideo()) {
@@ -19043,7 +19045,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                             if (canEditAdmin && NekoConfig.showAdminActions) {
                                 items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
-                                icons.add(R.drawable.baseline_stars_18);
+                                icons.add(R.drawable.baseline_stars_24);
                                 options.add(97);
                                 selectedParticipant = participant;
                             }

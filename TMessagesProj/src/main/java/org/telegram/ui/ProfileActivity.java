@@ -3318,11 +3318,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 writeButton.setContentDescription(LocaleController.getString("AccDescrChangeProfilePicture", R.string.AccDescrChangeProfilePicture));
                 writeButton.setPadding(AndroidUtilities.dp(2), 0, 0, AndroidUtilities.dp(2));
             } else {
-                writeButton.setImageResource(R.drawable.profile_newmsg);
+                writeButton.setImageResource(R.drawable.baseline_chat_bubble_24);
                 writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
             }
         } else {
-            writeButton.setImageResource(R.drawable.profile_discuss);
+            writeButton.setImageResource(R.drawable.baseline_chat_bubble_24);
             writeButton.setContentDescription(LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
         }
         writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN));
@@ -3639,7 +3639,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return true;
                 }
                 items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
-                icons.add(R.drawable.baseline_stars_18);
+                icons.add(R.drawable.baseline_stars_24);
                 actions.add(0);
             }
             if (canRestrict) {

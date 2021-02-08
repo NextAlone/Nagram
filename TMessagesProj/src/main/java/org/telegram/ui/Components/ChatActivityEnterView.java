@@ -2487,7 +2487,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         audioSendButton = new ImageView(context);
         audioSendButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         audioSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
-        audioSendButton.setImageResource(!NekoConfig.useChatAttachMediaMenu ? R.drawable.input_mic : R.drawable.ic_ab_other);
+        audioSendButton.setImageResource(!NekoConfig.useChatAttachMediaMenu ? R.drawable.baseline_mic_24 : R.drawable.ic_ab_other);
         audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
         audioSendButton.setContentDescription(!NekoConfig.useChatAttachMediaMenu ?
                 LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage) :
@@ -2505,7 +2505,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             videoSendButton = new ImageView(context);
             videoSendButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             videoSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
-            videoSendButton.setImageResource(R.drawable.input_video);
+            videoSendButton.setImageResource(R.drawable.baseline_camera_alt_24);
             videoSendButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
             videoSendButton.setContentDescription(LocaleController.getString("AccDescrVideoMessage", R.string.AccDescrVideoMessage));
             videoSendButton.setFocusable(true);
@@ -2892,7 +2892,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         if (!isInInput) {
 
-            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.input_mic);
+            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.baseline_mic_24);
             cell.setOnClickListener(v -> {
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                     menuPopupWindow.dismiss();
@@ -2924,7 +2924,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                 cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
 
-                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.input_video);
+                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.baseline_camera_alt_24);
                 cell.setOnClickListener(v -> {
                     if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                         menuPopupWindow.dismiss();
@@ -6440,7 +6440,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public void updateScheduleButton(boolean animated) {
         boolean notifyVisible = false;
-        if ((int) dialog_id < 0) {
+        /*if ((int) dialog_id < 0) {
             TLRPC.Chat currentChat = accountInstance.getMessagesController().getChat(-(int) dialog_id);
             silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + dialog_id, false);
             canWriteToChannel = ChatObject.isChannel(currentChat) && (currentChat.creator || currentChat.admin_rights != null && currentChat.admin_rights.post_messages) && !currentChat.megagroup;
@@ -6455,7 +6455,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (attachLayout != null) {
                 updateFieldRight(attachLayout.getVisibility() == VISIBLE ? 1 : 0);
             }
-        }
+        }*/
         boolean hasScheduled = delegate != null && !isInScheduleMode() && delegate.hasScheduledMessages();
         boolean visible = hasScheduled && !scheduleButtonHidden && !recordingAudioVideo;
         if (scheduledButton != null) {

@@ -85,12 +85,6 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-
-import tw.nekomimi.nekogram.NekoConfig;
-
 public class ChatUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listViewAdapter;
@@ -1693,7 +1687,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return true;
                 }
                 items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
-                icons.add(R.drawable.baseline_stars_18);
+                icons.add(R.drawable.baseline_stars_24);
                 actions.add(0);
             }
             boolean hasRemove = false;
@@ -1777,7 +1771,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             LocaleController.getString("EditAdminRights", R.string.EditAdminRights),
                             LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
                     icons = new int[]{
-                            R.drawable.baseline_stars_18,
+                            R.drawable.baseline_stars_24,
                             R.drawable.baseline_remove_circle_24};
                 } else {
                     items = new CharSequence[]{
@@ -3125,7 +3119,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                             actionCell.setText(LocaleController.getString("ChannelAddException", R.string.ChannelAddException), null, R.drawable.baseline_person_add_24, participantsStartRow != -1);
                         } else if (type == TYPE_BANNED) {
-                            actionCell.setText(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser), null, R.drawable.actions_removed, false);
+                            actionCell.setText(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser), null, R.drawable.baseline_remove_circle_24, false);
                         } else if (type == TYPE_ADMIN) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                             boolean showDivider = !(loadingUsers && !firstLoaded);
