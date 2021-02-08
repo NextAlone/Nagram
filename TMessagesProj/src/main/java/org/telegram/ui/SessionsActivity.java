@@ -432,7 +432,33 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
                 }
 
-                if (newAuthorizationToOpen != null) {
+                if (currentType == 0) {
+                    undoView = new UndoView(context) {
+                        @Override
+                        public void hide(boolean apply, int animated) {
+                            if (!apply) {
+                                TLRPC.TL_authorization authorization = (TLRPC.TL_authorization) getCurrentInfoObject();
+                                TLRPC.TL_account_resetAuthorization req = new TLRPC.TL_account_resetAuthorization();
+                                req.hash = authorization.hash;
+                                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                                    if (error == null) {
+                                        sessions.remove(authorization);
+                                        passwordSessions.remove(authorization);
+                                        updateRows();
+                                        if (listAdapter != null) {
+                                            listAdapter.notifyDataSetChanged();
+                                        }
+                                        loadSessions(true);
+                                    }
+                                }));
+                            }
+                            super.hide(apply, animated);
+                        }
+                    };
+                    frameLayout.addView(undoView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
+                }
+
+                if (newAuthorizationToOpen != null && undoView != null) {
                     AndroidUtilities.runOnUIThread(() -> undoView.showWithAction(0, UndoView.ACTION_QR_SESSION_ACCEPTED, newAuthorizationToOpen), 3000L);
                 }
             }

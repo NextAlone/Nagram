@@ -17498,12 +17498,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
 
-        if (currentChat != null && ChatObject.canSendMessages(currentChat) && shareKeyItem != null) {
-            if (StrUtil.isBlank(NekoConfig.openPGPApp)) {
-                shareKeyItem.setVisibility(View.GONE);
-            } else {
-                shareKeyItem.setVisibility(View.VISIBLE);
-            }
+        if (currentChat != null && ChatObject.canSendMessages(currentChat) && StrUtil.isNotBlank(NekoConfig.openPGPApp) && shareKeyItem != null) {
+            shareKeyItem.setVisibility(View.VISIBLE);
+        } else {
+            shareKeyItem.setVisibility(View.GONE);
         }
 
         if (userBlocked || addToContactsButton.getVisibility() == View.GONE && reportSpamButton.getVisibility() == View.GONE) {
