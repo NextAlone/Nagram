@@ -7,6 +7,8 @@ function flavor() {
   done
 }
 
+rm -r TMessagesProj/build/outputs/apk
+
 flavor Full
 flavor FullAppleEmoji
 flavor Mini

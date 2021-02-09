@@ -26,7 +26,7 @@ object SubManager {
                 enable = public?.enable ?: true
 
                 urls = listOf(
-                        "http://cdn.jsdelivr.net/gh/nekox-dev/ProxyList/proxy_list",
+                        "https://cdn.jsdelivr.net/gh/nekox-dev/ProxyList/proxy_list",
                         "https://nekox-dev.github.io/ProxyList/proxy_list"
                 )
 

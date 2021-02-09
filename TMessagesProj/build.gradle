@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-rc05"
-def verCode = 184
+def verName = "7.4.2-rc06"
+def verCode = 186
 
 def officialVer = "7.4.2"
 def officialCode = 2227
