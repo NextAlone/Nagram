@@ -210,7 +210,7 @@
     <string name="TabletModeDefault">بر اساس دستگاه</string>
     <string name="ReplaceText">جایگزینی متن</string>
     <string name="TextOrigin">اصلی</string>
-    <string name="TextReplace">جایگزین</string>
+    <string name="TextReplace">جایگزین کن</string>
     <string name="ReplaceRegex">استفاده از regex</string>
     <string name="DisableTrending">غیرفعال کردن بخش محبوب‌ها</string>
     <string name="HideDeviceInfo">پنهان کردن مدل دستگاه</string>

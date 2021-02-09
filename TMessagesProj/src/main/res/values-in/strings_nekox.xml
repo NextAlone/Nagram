@@ -61,6 +61,7 @@
     <string name="PublicPrefix">Publik</string>
     <string name="DisableChatAction">Jangan kirim status masukan saya</string>
     <string name="FakeScreenshot">Palsukan tangkapan layar</string>
+    <string name="ImportPxy">Impor</string>
     <string name="FilterNameUsers">Pengguna</string>
     <string name="FilterNameUsersDescription">Hanya pesan dari obrolan pribadi</string>
     <string name="FilterNameContacts">Kontak</string>
@@ -207,4 +208,12 @@
     <string name="AcceptSecretChat">Terima obrolan rahasia baru</string>
     <string name="TabletMode">Mode tablet</string>
     <string name="TabletModeDefault">Tergantung perangkat</string>
+    <string name="ReplaceText">Ganti Teks</string>
+    <string name="TextOrigin">Asal</string>
+    <string name="TextReplace">Menggantikan</string>
+    <string name="ReplaceRegex">Gunakan regex</string>
+    <string name="DisableTrending">Nonaktifkan Trending</string>
+    <string name="HideDeviceInfo">Sembunyikan model perangkat</string>
+    <string name="HideDeviceInfoOff">Model perangkat akan diunggah untuk kedua kalinya aplikasi dimulai setelah masuk.</string>
+    <string name="HideDeviceInfoOn">Anda dapat mengubahnya di pengaturan nanti.</string>
 </resources>

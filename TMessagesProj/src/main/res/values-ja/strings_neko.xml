@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">喵設定</string>
+    <string name="IPv6">IPv6を介した接続</string>
     <string name="MessageMenu">メッセージメニュー</string>
     <string name="HidePhone">あなたの携帯電話番号を隠す</string>
     <string name="Hide">隠す</string>
@@ -40,6 +41,8 @@
     <string name="HideProxySponsorChannel">Proxy sponsor channelを非表示</string>
     <string name="ViewHistory">履歴を見る</string>
     <string name="Nya">にゃ!</string>
+    <string name="SaveCacheToExternalFilesDir">ストレージの分離</string>
+    <string name="SaveCacheToExternalFilesDirAbout">「Telegram」フォルダをアプリ固有のディレクトリに保存して、共有ストレージを整理します。</string>
     <string name="SensitiveDisableFiltering">Sensitiveな内容のfilteringを無効にする</string>
     <string name="SensitiveAbout">公開チャンネルに投稿されたセンシティブな内容をすべてあなたの端末に表示します。</string>
     <string name="StickerSize">ステッカーのサイズ</string>
@@ -95,4 +98,15 @@
     <string name="DisableAppBarShadow">タイトルバーの影を無効にする</string>
     <string name="BetaWarning">これは**Telegram**によって実装された**ベータ**機能です。</string>
     <string name="MediaPreview">ダイアログリストのメディアプレビュー</string>
+    <string name="AutoPauseVideo">ビデオの自動一時停止</string>
+    <string name="AutoPauseVideoAbout">画面をロックするとき/バックグラウンドに切り替えるとき。</string>
+    <string name="DisableProximityEvents">近接イベントを無効にする</string>
+    <string name="IncreaseVoiceMessageQuality">音声メッセージの品質を向上させる</string>
+    <string name="SelectBetween">から選択</string>
+    <string name="AvatarAsBackground">背景としてのプロフィール写真</string>
+    <string name="BlurAvatarBackground">プロフィール写真をぼかす</string>
+    <string name="DarkenAvatarBackground">プロフィール写真を暗くする</string>
+    <string name="ProviderDeepLTranslate">DeepL翻訳</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderYouDao">YouDao 翻訳</string>
 </resources>

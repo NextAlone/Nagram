@@ -208,4 +208,12 @@
     <string name="AcceptSecretChat">Yeni gizli sohbeti qəbul edin</string>
     <string name="TabletMode">Tablet rejimi</string>
     <string name="TabletModeDefault">Cihazdan asılıdır</string>
+    <string name="ReplaceText">Mətni dəyişdirin</string>
+    <string name="TextOrigin">Mənşə</string>
+    <string name="TextReplace">Dəyişdirin</string>
+    <string name="ReplaceRegex">Regex istifadə edin</string>
+    <string name="DisableTrending">Trendləri deaktiv edin</string>
+    <string name="HideDeviceInfo">Cihaz modelini gizlədin</string>
+    <string name="HideDeviceInfoOff">Cihaz modeli tətbiq daxil olduqdan sonra ikinci dəfə başlayanda yüklənəcəkdir.</string>
+    <string name="HideDeviceInfoOn">Bunu daha sonra ayarlarda dəyişə bilərsiniz.</string>
 </resources>

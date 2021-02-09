@@ -208,4 +208,12 @@
     <string name="AcceptSecretChat">קבל צ\'אט סודי חדש</string>
     <string name="TabletMode">מצב טאבלט</string>
     <string name="TabletModeDefault">תלוי במכשיר</string>
+    <string name="ReplaceText">החלף טקסט</string>
+    <string name="TextOrigin">מָקוֹר</string>
+    <string name="TextReplace">החלף</string>
+    <string name="ReplaceRegex">השתמש ב- regex</string>
+    <string name="DisableTrending">השבת מגמות</string>
+    <string name="HideDeviceInfo">הסתר את דגם המכשיר</string>
+    <string name="HideDeviceInfoOff">דגם המכשיר יעלה בפעם השנייה שהאפליקציה מתחילה לאחר הכניסה.</string>
+    <string name="HideDeviceInfoOn">תוכל לשנות זאת בהגדרות מאוחר יותר.</string>
 </resources>

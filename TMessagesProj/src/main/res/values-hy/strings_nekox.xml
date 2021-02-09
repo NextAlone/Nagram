@@ -208,4 +208,12 @@
     <string name="AcceptSecretChat">Ընդունեք նոր գաղտնի զրույց</string>
     <string name="TabletMode">Պլանշետային ռեժիմ</string>
     <string name="TabletModeDefault">Կախված է սարքից</string>
+    <string name="ReplaceText">Փոխարինեք տեքստը</string>
+    <string name="TextOrigin">Ծագում</string>
+    <string name="TextReplace">Փոխարինեք</string>
+    <string name="ReplaceRegex">Օգտագործեք regex</string>
+    <string name="DisableTrending">Անջատել Թրենդները</string>
+    <string name="HideDeviceInfo">Թաքցնել սարքի մոդելը</string>
+    <string name="HideDeviceInfoOff">Մուտք գործելուց հետո հավելվածը երկրորդ անգամ կբեռնվի սարքի մոդելը:</string>
+    <string name="HideDeviceInfoOn">Դա կարող եք ավելի ուշ փոխել կարգավորումներում:</string>
 </resources>

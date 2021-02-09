@@ -61,6 +61,7 @@
     <string name="PublicPrefix">공개</string>
     <string name="DisableChatAction">내 입력 상태 보여주지 않기</string>
     <string name="FakeScreenshot">스크린샷 요청</string>
+    <string name="ImportPxy">수입</string>
     <string name="FilterNameUsers">사용자</string>
     <string name="FilterNameUsersDescription">비공개 채팅 메시지만</string>
     <string name="FilterNameContacts">연락처</string>
@@ -207,4 +208,12 @@
     <string name="AcceptSecretChat">새로운 비밀 채팅 수락</string>
     <string name="TabletMode">태블릿 모드</string>
     <string name="TabletModeDefault">기기에 따라 다름</string>
+    <string name="ReplaceText">텍스트 교체</string>
+    <string name="TextOrigin">유래</string>
+    <string name="TextReplace">바꾸다</string>
+    <string name="ReplaceRegex">정규식 사용</string>
+    <string name="DisableTrending">트렌드 비활성화</string>
+    <string name="HideDeviceInfo">장치 모델 숨기기</string>
+    <string name="HideDeviceInfoOff">로그인 후 앱이 두 번째로 시작되면 기기 모델이 업로드됩니다.</string>
+    <string name="HideDeviceInfoOn">나중에 설정에서 변경할 수 있습니다.</string>
 </resources>

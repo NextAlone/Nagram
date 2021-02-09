@@ -208,4 +208,12 @@
     <string name="AcceptSecretChat">Прийняти новий секретний чат</string>
     <string name="TabletMode">Режим планшета</string>
     <string name="TabletModeDefault">Залежить від пристрою</string>
+    <string name="ReplaceText">Замінити текст</string>
+    <string name="TextOrigin">Походження</string>
+    <string name="TextReplace">Заміняти</string>
+    <string name="ReplaceRegex">Використовуйте регулярний вираз</string>
+    <string name="DisableTrending">Вимкнути тенденцію</string>
+    <string name="HideDeviceInfo">Сховати модель пристрою</string>
+    <string name="HideDeviceInfoOff">Модель пристрою буде завантажена вдруге, коли програма запуститься після входу в систему.</string>
+    <string name="HideDeviceInfoOn">Ви можете змінити це в налаштуваннях пізніше.</string>
 </resources>

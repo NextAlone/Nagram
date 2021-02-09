@@ -61,6 +61,7 @@
     <string name="PublicPrefix">عامة</string>
     <string name="DisableChatAction">لا تقم بإرسال حالة الإدخال</string>
     <string name="FakeScreenshot">لقطة شاشة مخرجة</string>
+    <string name="ImportPxy">استيراد</string>
     <string name="FilterNameUsers">المستخدمون</string>
     <string name="FilterNameUsersDescription">فقط الرسائل من المحادثات الخاصة</string>
     <string name="FilterNameContacts">جهات الاتصال</string>
@@ -207,4 +208,12 @@
     <string name="AcceptSecretChat">قبول الدردشة السرية الجديدة</string>
     <string name="TabletMode">وضع الكمبيوتر اللوحي</string>
     <string name="TabletModeDefault">يعتمد على الجهاز</string>
+    <string name="ReplaceText">استبدال النص</string>
+    <string name="TextOrigin">الأصل</string>
+    <string name="TextReplace">يحل محل</string>
+    <string name="ReplaceRegex">استخدم regex</string>
+    <string name="DisableTrending">تعطيل الاتجاه</string>
+    <string name="HideDeviceInfo">إخفاء طراز الجهاز</string>
+    <string name="HideDeviceInfoOff">سيتم تحميل طراز الجهاز في المرة الثانية التي يبدأ فيها التطبيق بعد تسجيل الدخول.</string>
+    <string name="HideDeviceInfoOn">يمكنك تغيير هذا في الإعدادات لاحقًا.</string>
 </resources>
