@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.parts.ProxyLoadsKt;
 
 @Index("id")
 @SuppressWarnings("unchecked")
@@ -47,18 +46,9 @@ public class SubInfo implements Mappable {
 
         HashMap<String, Exception> exceptions = new HashMap<>();
 
-        for (String url : urls) {
-
-            try {
-
-                return ProxyUtil.parseProxies(HttpUtil.get(url));
-
-            } catch (Exception e) {
-
-                exceptions.put(url, e);
-
-            }
-
+        try {
+            return ProxyLoadsKt.loadProxies(urls, exceptions);
+        } catch (Exception ignored) {
         }
 
         throw new AllTriesFailed(exceptions);
