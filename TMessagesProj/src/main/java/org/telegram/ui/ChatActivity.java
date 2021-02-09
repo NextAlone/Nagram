@@ -1697,6 +1697,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             selectedMessagesCanStarIds[a].clear();
             selectedMessagesIds[a].clear();
         }
+
         hideActionMode();
         updatePinnedMessageView(true);
         updateVisibleRows();
@@ -1848,6 +1849,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             unpinMessage(selectedMessage);
                         }
                     }
+                } else if (id == save) {
+                    ArrayList<MessageObject> messages = getSelectedMessages();
+                    forwardMessages(messages, false, true, 0, UserConfig.getInstance(currentAccount).getClientUserId());
+                    undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
                 } else if (id == delete) {
                     if (getParentActivity() == null) {
                         return;
@@ -20189,8 +20194,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case 93: {
-                ArrayList<MessageObject> messages = getSelectedMessages();
-                forwardMessages(messages, false, true, 0, UserConfig.getInstance(currentAccount).getClientUserId());
+                ArrayList<MessageObject> messages = new ArrayList<>();
+                if (selectedObjectGroup != null) {
+                    messages.addAll(selectedObjectGroup.messages);
+                } else {
+                    messages.add(selectedObject);
+                }
+                forwardMessages(messages, false, true, 0, getUserConfig().getClientUserId());
                 undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
                 break;
             }
