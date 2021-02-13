@@ -10,7 +10,6 @@ package org.telegram.messenger;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
@@ -1523,8 +1521,6 @@ public class SharedConfig {
     public static boolean proxyEnabled;
 
     static {
-
-        loadProxyList();
 
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
 

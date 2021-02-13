@@ -38,15 +38,11 @@ import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.database.WarppedPref;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -302,21 +298,10 @@ public class ApplicationLoader extends Application {
             else UIUtil.runOnIoDispatcher(initRunnable);
         }
 
-        if (ProxyUtil.isVPNEnabled()) {
-
-            if (NekoConfig.disableProxyWhenVpnEnabled) {
-
-                SharedConfig.setProxyEnable(false);
-
-            }
-
-        }
-
         ExternalGcm.initPlayServices();
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app initied");
         }
-
 
         MediaController.getInstance();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) { //TODO improve account

@@ -46,12 +46,6 @@ import android.provider.CallLog;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
-
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.telephony.TelephonyManager;
 import android.text.Layout;
 import android.text.Selection;
@@ -95,6 +89,7 @@ import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.internal.telephony.ITelephony;
@@ -1708,6 +1703,7 @@ public class AndroidUtilities {
     }
 
     public static void runOnUIThread(Runnable runnable, long delay) {
+        if (ApplicationLoader.applicationHandler == null) return;
         if (delay == 0) {
             ApplicationLoader.applicationHandler.post(runnable);
         } else {

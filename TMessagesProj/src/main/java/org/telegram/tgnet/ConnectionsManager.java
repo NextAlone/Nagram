@@ -354,6 +354,8 @@ public class ConnectionsManager extends BaseController {
 
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection) {
 
+        SharedConfig.loadProxyList();
+
         if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
             if (SharedConfig.currentProxy instanceof SharedConfig.ExternalSocks5Proxy) {
                 ((SharedConfig.ExternalSocks5Proxy) SharedConfig.currentProxy).start();
