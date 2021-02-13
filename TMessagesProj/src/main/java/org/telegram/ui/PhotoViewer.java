@@ -4097,7 +4097,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         pipItem.setContentDescription(LocaleController.getString("AccDescrPipMode", R.string.AccDescrPipMode));
         pipItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
 
-        sendNoQuoteItem = menu.addItem(gallery_menu_send_noquote, R.drawable.baseline_forward_24);
+        sendNoQuoteItem = menu.addItem(gallery_menu_send_noquote, R.drawable.baseline_fast_forward_24);
         sendNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.Forward));
         sendNoQuoteItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
 

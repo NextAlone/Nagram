@@ -2467,7 +2467,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (currentEncryptedChat == null || NekoXConfig.disableFlagSecure) {
-            actionModeOtherItem.addSubItem(forward_noquote, R.drawable.baseline_forward_24, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
+            actionModeOtherItem.addSubItem(forward_noquote, R.drawable.baseline_fast_forward_24, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
             actionModeOtherItem.addSubItem(star, R.drawable.baseline_favorite_20, LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
             actionModeOtherItem.addSubItem(save_to, R.drawable.msg_download, LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
         }
