@@ -3458,12 +3458,34 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         return;
                     }
                     DialogsActivityDelegate oldDelegate = delegate;
-                    LaunchActivity launchActivity = (LaunchActivity) getParentActivity();
-                    launchActivity.switchToAccount(id - 10, true);
+
+                    if (getParentActivity() instanceof LaunchActivity) {
+
+                        LaunchActivity launchActivity = (LaunchActivity) getParentActivity();
+                        launchActivity.switchToAccount(id - 10, true);
+
+                    } else {
+
+                        FeedWidgetConfigActivity feedActivity = (FeedWidgetConfigActivity) getParentActivity();
+                        feedActivity.switchToAccount(id - 10);
+
+                    }
 
                     DialogsActivity dialogsActivity = new DialogsActivity(arguments);
                     dialogsActivity.setDelegate(oldDelegate);
-                    launchActivity.presentFragment(dialogsActivity, false, true);
+
+                    if (getParentActivity() instanceof LaunchActivity) {
+
+                        LaunchActivity launchActivity = (LaunchActivity) getParentActivity();
+                        launchActivity.presentFragment(dialogsActivity, false, true);
+
+                    } else {
+
+                        FeedWidgetConfigActivity feedActivity = (FeedWidgetConfigActivity) getParentActivity();
+                        feedActivity.presentFragment(dialogsActivity, false, true);
+
+                    }
+
                 } else if (id == add_to_folder) {
                     FiltersListBottomSheet sheet = new FiltersListBottomSheet(DialogsActivity.this, selectedDialogs);
                     sheet.setDelegate(filter -> {
