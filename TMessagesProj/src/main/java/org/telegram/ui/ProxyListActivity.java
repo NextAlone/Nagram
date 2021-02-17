@@ -705,10 +705,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 builder.addItems(new String[]{
 
                         info.subId == 1 ? null : LocaleController.getString("EditProxy", R.string.EditProxy),
-                        info.subId == 1 ? null : LocaleController.getString("ShareProxy", R.string.ShareProxy),
-                        info.subId == 1 ? null : LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                        info.subId == 1 ? null : LocaleController.getString("CopyLink", R.string.CopyLink),
-                        LocaleController.getString("ProxyDelete", R.string.ProxyDelete),
+                        LocaleController.getString("ShareProxy", R.string.ShareProxy),
+                        LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
+                        LocaleController.getString("CopyLink", R.string.CopyLink),
+                        info.subId == 1 ? null : LocaleController.getString("ProxyDelete", R.string.ProxyDelete),
                         LocaleController.getString("Cancel", R.string.Cancel)
 
                 }, new int[]{
@@ -803,13 +803,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5),
                 LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram),
                 BuildVars.isMini ? null : LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess),
-                BuildVars.isMini ? null :LocaleController.getString("AddProxyTrojan", R.string.AddProxyTrojan),
+                BuildVars.isMini ? null : LocaleController.getString("AddProxyTrojan", R.string.AddProxyTrojan),
                 BuildVars.isMini || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySS", R.string.AddProxySS),
                 BuildVars.isMini || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySSR", R.string.AddProxySSR),
                 LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard),
                 LocaleController.getString("ScanQRCode", R.string.ScanQRCode)
 
-        }, null, (i,t,c) -> {
+        }, null, (i, t, c) -> {
 
             if (i == 0) {
 
@@ -1053,7 +1053,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 if (sub.internal) return false;
 
+                builder.dismiss();
+
                 presentFragment(new SubSettingsActivity(sub));
+
 
                 return true;
 
@@ -1262,7 +1265,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                         SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
                         cell.setProxy(info);
                         cell.setChecked(SharedConfig.currentProxy == info);
-                    } catch (IndexOutOfBoundsException e) {}
+                    } catch (IndexOutOfBoundsException e) {
+                    }
                     break;
                 }
             }
