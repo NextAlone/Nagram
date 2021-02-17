@@ -18782,7 +18782,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (!selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                             items.add(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
                             options.add(95);
-                            icons.add(R.drawable.baseline_forward_24);
+                            icons.add(R.drawable.baseline_fast_forward_24);
                         }
                         if (chatMode != MODE_SCHEDULED) {
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages) {

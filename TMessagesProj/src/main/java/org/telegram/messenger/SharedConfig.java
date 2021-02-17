@@ -1520,18 +1520,6 @@ public class SharedConfig {
 
     public static boolean proxyEnabled;
 
-    static {
-
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-
-        boolean proxyEnabledValue = preferences.getBoolean("proxy_enabled", false);
-
-        if (proxyEnabledValue && currentProxy == null) proxyEnabledValue = false;
-
-        proxyEnabled = proxyEnabledValue;
-
-    }
-
     public static void setProxyEnable(boolean enable) {
 
         proxyEnabled = enable;
@@ -1759,6 +1747,14 @@ public class SharedConfig {
         }
 
         if (error) saveProxyList();
+
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+
+        boolean proxyEnabledValue = preferences.getBoolean("proxy_enabled", false);
+
+        if (proxyEnabledValue && currentProxy == null) proxyEnabledValue = false;
+
+        proxyEnabled = proxyEnabledValue;
 
     }
 

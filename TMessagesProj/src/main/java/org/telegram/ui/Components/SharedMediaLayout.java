@@ -869,7 +869,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             gotoItem.setOnClickListener(v -> onActionBarItemClick(gotochat));
 
             forwardNoQuoteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardNoQuoteItem.setIcon(R.drawable.baseline_forward_24);
+            forwardNoQuoteItem.setIcon(R.drawable.baseline_fast_forward_24);
             forwardNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
             forwardNoQuoteItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardNoQuoteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
