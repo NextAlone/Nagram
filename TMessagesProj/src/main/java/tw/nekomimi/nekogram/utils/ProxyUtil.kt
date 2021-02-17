@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package tw.nekomimi.nekogram.utils
 
 import android.Manifest
@@ -20,20 +22,28 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.setPadding
+import com.github.shadowsocks.plugin.PluginOptions
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+import com.v2ray.ang.V2RayConfig
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
+import com.v2ray.ang.dto.AngConfig
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import org.json.JSONArray
+import org.json.JSONException
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
+import org.yaml.snakeyaml.Yaml
 import tw.nekomimi.nekogram.BottomBuilder
+import tw.nekomimi.nekogram.ShadowsocksLoader
+import tw.nekomimi.nekogram.ShadowsocksRLoader
 import tw.nekomimi.nekogram.utils.AlertUtil.showToast
 import java.io.File
 import java.net.NetworkInterface
@@ -66,16 +76,112 @@ object ProxyUtil {
     fun parseProxies(_text: String): MutableList<String> {
 
         val text = runCatching {
-
             String(Base64.decode(_text, Base64.NO_PADDING))
-
         }.recover {
-
             _text
-
         }.getOrThrow()
 
         val proxies = mutableListOf<String>()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                // sip008
+                val ssArray = JSONArray(text)
+                for (index in 0..ssArray.length()) {
+                    proxies.add(ShadowsocksLoader.Bean.parseJson(ssArray.getJSONObject(index)).toString())
+                }
+                return proxies
+            } catch (ignored: JSONException) {
+            }
+
+            if (text.contains("proxies:\n")) {
+                // clash
+
+                for (proxy in (Yaml().loadAs(text, Map::class.java)["proxies"] as List<Map<String, Any?>>)) {
+                    val type = proxy["type"] as String
+                    when (type) {
+                        "ss" -> {
+                            var pluginStr = ""
+                            if (proxy.contains("plugin")) {
+                                val opts = PluginOptions()
+                                opts.id = proxy["plugin"] as String
+                                opts.putAll(proxy["plugin-opts"] as Map<String, String?>)
+                                pluginStr = opts.toString(false)
+                            }
+                            proxies.add(ShadowsocksLoader.Bean(
+                                    proxy["server"] as String,
+                                    proxy["port"] as Int,
+                                    proxy["password"] as String,
+                                    proxy["cipher"] as String,
+                                    pluginStr,
+                                    proxy["name"] as String
+                            ).toString())
+                        }
+                        "vmess" -> {
+                            val opts = AngConfig.VmessBean()
+                            for (opt in proxy) {
+                                when (opt.key) {
+                                    "name" -> opts.remarks = opt.value as String
+                                    "server" -> opts.address = opt.value as String
+                                    "port" -> opts.port = opt.value as Int
+                                    "uuid" -> opts.id = opt.value as String
+                                    "alterId" -> opts.alterId = opt.value as Int
+                                    "cipher" -> opts.security = opt.value as String
+                                    "network" -> opts.network = opt.value as String
+                                    "tls" -> opts.streamSecurity = if (opt.value?.toString() == "true") "tls" else opts.streamSecurity
+                                    "ws-path" -> opts.path = opt.value as String
+                                    "servername" -> opts.requestHost = opt.value as String
+                                    "h2-opts" -> for (h2Opt in (opt.value as Map<String, Any>)) {
+                                        when (h2Opt.key) {
+                                            "host" -> opts.requestHost = (h2Opt.value as List<String>).first()
+                                            "path" -> opts.path = h2Opt.value as String
+                                        }
+                                    }
+                                    "http-opts" -> for (httpOpt in (opt.value as Map<String, Any>)) {
+                                        when (httpOpt.key) {
+                                            "path" -> opts.path = (httpOpt.value as List<String>).first()
+                                        }
+                                    }
+                                }
+                            }
+                            proxies.add(opts.toString())
+                        }
+                        "trojan" -> {
+                            val opts = AngConfig.VmessBean()
+                            opts.configType = V2RayConfig.EConfigType.Trojan
+                            for (opt in proxy) {
+                                when (opt.key) {
+                                    "name" -> opts.remarks = opt.value as String
+                                    "server" -> opts.address = opt.value as String
+                                    "port" -> opts.port = opt.value as Int
+                                    "password" -> opts.id = opt.value as String
+                                    "sni" -> opts.requestHost = opt.value as String
+                                }
+                            }
+                            proxies.add(opts.toString())
+                        }
+                        "ssr" -> {
+                            val opts = ShadowsocksRLoader.Bean()
+                            for (opt in proxy) {
+                                when (opt.key) {
+                                    "name" -> opts.remarks = opt.value as String
+                                    "server" -> opts.host = opt.value as String
+                                    "port" -> opts.remotePort = opt.value as Int
+                                    "cipher" -> opts.method = opt.value as String
+                                    "password" -> opts.password = opt.value as String
+                                    "obfs" -> opts.obfs = opt.value as String
+                                    "protocol" -> opts.protocol = opt.value as String
+                                    "obfs-param" -> opts.obfs_param = opt.value as String
+                                    "protocol-param" -> opts.protocol_param = opt.value as String
+                                }
+                            }
+                            proxies.add(opts.toString())
+                        }
+                    }
+                }
+                return proxies
+            }
+        }
 
         text.split('\n').map { it.split(" ") }.forEach {
 

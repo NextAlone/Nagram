@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-rc06"
-def verCode = 186
+def verName = "7.4.2-rc07"
+def verCode = 188
 
 def officialVer = "7.4.2"
 def officialCode = 2227
@@ -85,6 +85,7 @@ dependencies {
     implementation 'cn.hutool:hutool-crypto:5.5.8'
     implementation 'cn.hutool:hutool-http:5.5.8'
 
+    implementation 'org.yaml:snakeyaml:1.27'
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
     implementation project(":openpgp-api")
@@ -138,7 +139,7 @@ pwd = pwd ?: System.getenv("ALIAS_PASS")
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
-    ndkVersion rootProject.ext.ndkVersion
+    ndkVersion '21.3.6528147'
 
     defaultConfig.applicationId = "nekox.messenger"
 

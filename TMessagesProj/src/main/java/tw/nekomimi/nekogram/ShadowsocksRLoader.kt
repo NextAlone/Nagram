@@ -99,7 +99,7 @@ class ShadowsocksRLoader {
             var remarks: String? = null
     ) {
 
-        val hash = (host + remotePort + password + protocol + obfs + method).hashCode()
+        val hash get() = (host + remotePort + password + protocol + obfs + method).hashCode()
 
         override fun equals(other: Any?): Boolean {
             return super.equals(other) || (other is Bean && hash == other.hash)

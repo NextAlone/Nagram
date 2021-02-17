@@ -16,7 +16,7 @@ buildscript {
     }
 }
 
-static String detectNdkVersion() {
+/*static String detectNdkVersion() {
 
     def version = "21.3.6528147"
 
@@ -40,7 +40,7 @@ ext {
 
     ndkVersion = detectNdkVersion()
 
-}
+}*/
 
 allprojects {
     repositories {

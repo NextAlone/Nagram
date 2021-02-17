@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import cn.hutool.core.codec.Base64
 import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.PluginManager
+import com.github.shadowsocks.plugin.PluginOptions
 import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl
@@ -106,15 +107,28 @@ class ShadowsocksLoader {
 
             val pl = PluginConfiguration(plugin)
 
-            if (pl.selected.contains("v2ray") && pl.selected != "v2ray") {
+            if (pl.selected.contains("v2ray") && pl.selected != "v2ray-plugin") {
 
-                pl.pluginsOptions["v2ray"] = pl.getOptions()
+                pl.pluginsOptions["v2ray-plugin"] = pl.getOptions().apply { id = "v2ray-plugin" }
                 pl.pluginsOptions.remove(pl.selected)
-                pl.selected = "v2ray"
+                pl.selected = "v2ray-plugin"
 
                 // reslove v2ray plugin
 
             }
+
+            if (pl.selected == "obfs") {
+
+                pl.pluginsOptions["obfs-local"] = pl.getOptions().apply { id = "obfs-local" }
+                pl.pluginsOptions.remove(pl.selected)
+                pl.selected = "obfs-local"
+
+                // reslove clash obfs
+
+            }
+
+            plugin = pl.toString()
+
 
         }
 
@@ -150,6 +164,23 @@ class ShadowsocksLoader {
 
         companion object {
 
+            fun parseJson(ssObj: JSONObject): Bean {
+                var pluginStr = ""
+                val pId = ssObj.optString("plugin")
+                if (!pId.isNullOrBlank()) {
+                    val plugin = PluginOptions(pId, ssObj.optString("plugin_opts"))
+                    pluginStr = plugin.toString(false)
+                }
+                return Bean(
+                        ssObj.getString("server"),
+                        ssObj.getInt("server_port"),
+                        ssObj.getString("password"),
+                        ssObj.getString("method"),
+                        pluginStr,
+                        ssObj.optString("remarks")
+                )
+            }
+
             fun parse(url: String): Bean {
 
                 if (url.contains("@")) {
@@ -157,7 +188,7 @@ class ShadowsocksLoader {
                     // ss-android style
 
                     val link = url.replace(SS_PROTOCOL, "https://").toHttpUrlOrNull()
-                        ?: error("invalid ss-android link $url")
+                            ?: error("invalid ss-android link $url")
 
                     if (link.password.isNotBlank()) {
 

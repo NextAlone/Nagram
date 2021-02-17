@@ -32,16 +32,17 @@ import org.telegram.messenger.R
     init {
         add(NoPlugin)
         addAll(ApplicationLoader.applicationContext.packageManager.queryIntentContentProviders(
-                Intent(PluginContract.ACTION_NATIVE_PLUGIN), PackageManager.GET_META_DATA).map { NativePlugin(it) })
+                Intent(PluginContract.ACTION_NATIVE_PLUGIN), PackageManager.GET_META_DATA)
+                .map { NativePlugin(it) })
     }
 
     val lookup = mutableMapOf<String, Plugin>().apply {
         for (plugin in this@PluginList) {
             fun check(old: Plugin?) = check(old == null || old === plugin) { LocaleController.formatString("SSPluginConflictingName",R.string.SSPluginConflictingName,plugin.id) }
             check(put(plugin.id, plugin))
-            for (alias in plugin.idAliases) check(put(alias, plugin))
         }
     }
+
     val lookupNames get() = lookup.values.map {
         if (it.label.isNotBlank() && it.id.isNotBlank()) {
             "${it.label} (${it.id})"
