@@ -18040,10 +18040,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }, 700);
                 }
             }
-        } else if (canClear && draftMessage == null) {
+        } /*else if (canClear && draftMessage == null) {
             chatActivityEnterView.setFieldText("");
             hideFieldPanel(true);
-        }
+        }*/
         if (replyingMessageObject == null && draftReplyMessage != null) {
             replyingMessageObject = new MessageObject(currentAccount, draftReplyMessage, getMessagesController().getUsers(), false, false);
             showFieldPanelForReply(replyingMessageObject);
