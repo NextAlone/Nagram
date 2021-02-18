@@ -2,6 +2,8 @@
 
 NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
+[![Continuous integration](https://github.com/NekoX-Dev/NekoX/workflows/Debug%20build/badge.svg?branch=main)](https://github.com/NekoX-Dev/NekoX/actions)
+
 - [Google Play Store](https://play.google.com/store/apps/details?id=nekox.messenger)
 - [Update News Telegram](https://t.me/NekogramX)
 - [GitHub Feedback](https://github.com/NekoX-Dev/NekoX/issues)

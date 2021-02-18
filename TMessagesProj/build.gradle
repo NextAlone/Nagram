@@ -1,7 +1,14 @@
+import cn.hutool.core.util.RuntimeUtil
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 def verName = "7.4.2-rc07"
+
+if (System.getenv("DEBUG_BUILD") == "true") {
+    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
+}
+
 def verCode = 188
 
 def officialVer = "7.4.2"
@@ -115,15 +122,13 @@ def alias = null
 def pwd = null
 Properties properties
 
-if (project.rootProject.file('local.properties').exists()) {
+def base64 = System.getenv("LOCAL_PROPERTIES")
+if (base64 != null && !base64.isBlank()) {
+    properties = new Properties()
+    properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
+} else if (project.rootProject.file('local.properties').exists()) {
     properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-} else {
-    def base64 = System.getenv("LOCAL_PROPERTIES")
-    if (base64 != null && !base64.isBlank()) {
-        properties = new Properties()
-        properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
-    }
 }
 
 if (properties != null) {
@@ -139,7 +144,7 @@ pwd = pwd ?: System.getenv("ALIAS_PASS")
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
-    ndkVersion '21.3.6528147'
+    ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "nekox.messenger"
 

@@ -7,7 +7,7 @@ plugins {
 
 android {
 
-    ndkVersion = "21.3.6528147"
+    ndkVersion = rootProject.extra.get("ndkVersion").toString()
 
     compileSdkVersion(30)
     defaultConfig {

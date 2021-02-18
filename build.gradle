@@ -13,16 +13,18 @@ buildscript {
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.0'
         classpath 'gradle.plugin.org.mozilla.rust-android-gradle:plugin:0.8.3'
         classpath 'com.github.triplet.gradle:play-publisher:3.0.0'
+        classpath 'cn.hutool:hutool-core:5.5.8'
     }
 }
 
-/*static String detectNdkVersion() {
+static String detectNdkVersion() {
 
     def version = "21.3.6528147"
 
     def androidHome = System.getenv("ANDROID_HOME")
 
     if (androidHome == null) return version
+    if (new File(androidHome, "ndk/$version").isDirectory()) return version
 
     def versionFile = new File(androidHome,"ndk-bundle/source.properties")
 
@@ -40,7 +42,7 @@ ext {
 
     ndkVersion = detectNdkVersion()
 
-}*/
+}
 
 allprojects {
     repositories {
