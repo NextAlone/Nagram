@@ -3,13 +3,13 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-rc07"
+def verName = "7.4.2-rc08"
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
 }
 
-def verCode = 188
+def verCode = 190
 
 def officialVer = "7.4.2"
 def officialCode = 2227
@@ -84,7 +84,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:$okHttpVersion"
     implementation 'dnsjava:dnsjava:3.3.1'
     implementation 'org.dizitart:nitrite:3.4.3'
 

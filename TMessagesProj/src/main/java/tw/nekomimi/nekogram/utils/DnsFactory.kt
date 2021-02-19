@@ -1,107 +1,79 @@
 package tw.nekomimi.nekogram.utils
 
-import android.os.Build
+import cn.hutool.core.util.ArrayUtil
 import okhttp3.Dns
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.dnsoverhttps.DnsOverHttps
 import org.telegram.messenger.FileLog
 import org.telegram.tgnet.ConnectionsManager
-import org.xbill.DNS.DohResolver
-import org.xbill.DNS.Lookup
-import org.xbill.DNS.TXTRecord
-import org.xbill.DNS.Type
+import org.xbill.DNS.*
 import java.net.InetAddress
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
+
 open class DnsFactory : Dns {
+
+    val providers = LinkedList<DohResolver>()
 
     companion object : DnsFactory() {
 
         init {
 
-            if (Build.VERSION.SDK_INT >= 21) {
-
-                addProvider("https://mozilla.cloudflare-dns.com/dns-query")
-                addProvider("https://dns.google/dns-query")
-                addProvider("https://dns.twnic.tw/dns-query")
-                addProvider("https://dns.adguard.com/dns-query")
-
-            }
+            addProvider("https://dns.twnic.tw/dns-query")
+            addProvider("https://mozilla.cloudflare-dns.com/dns-query")
+            addProvider("https://dns.google/dns-query")
 
         }
     }
 
-    val providers = LinkedList<DnsOverHttps>()
-    val dnsJavaProviders = LinkedList<DohResolver>()
 
-    val client = OkHttpClient.Builder().connectTimeout(3,TimeUnit.SECONDS).build()
+    fun addProvider(url: String) = providers.add(DohResolver(url))
 
-    fun addProvider(url: String) {
+    override fun lookup(domain: String): List<InetAddress> {
 
-        providers.add(DnsOverHttps.Builder()
-                .client(client)
-                .url(url.toHttpUrl())
-                .includeIPv6(ConnectionsManager.useIpv6Address())
-                .build())
+        FileLog.d("Lookup $domain")
 
-    }
+        for (provider in providers) {
+            FileLog.d("Provider ${provider.uriTemplate}")
 
-    override fun lookup(hostname: String): List<InetAddress> {
+            val lookup = Lookup(Name.fromConstantString(domain), if (!ConnectionsManager.useIpv6Address()) Type.A else Type.AAAA)
+            lookup.setSearchPath(* emptyArray<String>())
+            lookup.setCache(null)
+            lookup.setResolver(provider)
+            lookup.run()
 
-        providers.forEach { provider ->
+            if (lookup.result != Lookup.SUCCESSFUL) continue
 
-            runCatching {
-                return provider.lookup(hostname)
-            }.onFailure {
-                FileLog.e(it)
-            }
-
+            FileLog.d("Results: " + ArrayUtil.toString(lookup.answers))
+            return lookup.answers.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
         }
 
-        runCatching {
-
-            return Dns.SYSTEM.lookup(hostname)
-
-        }
-
+        runCatching { return InetAddress.getAllByName(domain).toList() }
         return listOf()
 
     }
 
-    fun getTxts(domain: String): ArrayList<String> {
+    fun getTxts(domain: String): List<String> {
 
-        val results = ArrayList<String>()
+        FileLog.d("Lookup $domain for txts")
 
-        dnsJavaProviders.forEach {
+        for (provider in providers) {
+            FileLog.d("Provider ${provider.uriTemplate}")
 
-            runCatching {
+            val lookup = Lookup(Name.fromConstantString(domain), Type.TXT)
+            lookup.setSearchPath(* emptyArray<String>())
+            lookup.setCache(null)
+            lookup.setResolver(provider)
+            lookup.run()
 
-                val lookup = Lookup(domain, Type.TXT)
-                lookup.setResolver(it)
-                lookup.run()
+            if (lookup.result != Lookup.SUCCESSFUL) continue
+            FileLog.d("Results: " + ArrayUtil.toString(lookup.answers))
 
-                if (lookup.result == Lookup.SUCCESSFUL) {
-
-                    lookup.answers.forEach {
-
-                        (it as TXTRecord).strings.forEach {
-
-                            results.add(it)
-
-                        }
-
-                    }
-
-                }
-
-            }
-
+            val result = ArrayList<String>()
+            for (record in lookup.answers.filterIsInstance<TXTRecord>()) result.addAll(record.strings)
+            return result
         }
 
-        return results
+        return listOf()
 
     }
 
