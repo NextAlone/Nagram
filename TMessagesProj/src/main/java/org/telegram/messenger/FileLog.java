@@ -10,9 +10,6 @@ package org.telegram.messenger;
 
 import android.util.Log;
 
-import cn.hutool.core.exceptions.UtilException;
-import cn.hutool.core.lang.caller.CallerUtil;
-import cn.hutool.core.lang.caller.StackTraceCaller;
 import cn.hutool.core.util.StrUtil;
 
 public class FileLog {
@@ -31,7 +28,7 @@ public class FileLog {
 
     private static String mkMessage(Throwable e) {
         String message = e.getMessage();
-        if (message != null) return message;
+        if (message != null) return e.getClass().getSimpleName() + ": " + message;
         return e.getClass().getSimpleName();
     }
 

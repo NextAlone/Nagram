@@ -51,10 +51,10 @@ open class DnsFactory : Dns {
 
     override fun lookup(hostname: String): List<InetAddress> {
 
-        providers.forEach {
+        providers.forEach { provider ->
 
             runCatching {
-                return it.lookup(hostname)
+                return provider.lookup(hostname)
             }.onFailure {
                 FileLog.e(it)
             }

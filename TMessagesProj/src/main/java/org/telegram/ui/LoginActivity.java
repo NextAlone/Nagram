@@ -832,10 +832,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             if (response instanceof TLRPC.TL_auth_loginToken) {
                 exportLoginTokenDialog = ProxyUtil.showQrDialog(getParentActivity(), "tg://login?token=" + Base64.encodeUrlSafe(((TLRPC.TL_auth_loginToken) response).token));
                 int delay = (int) (((TLRPC.TL_auth_loginToken) response).expires - System.currentTimeMillis() / 1000);
+                if (delay < 0 || delay > 20) delay = 20;
                 if (BuildVars.DEBUG_VERSION) {
                     AlertUtil.showToast("Refresh after " + delay + "s");
                 }
-                AndroidUtilities.runOnUIThread(() -> regenerateLoginToken(true), ((TLRPC.TL_auth_loginToken) response).expires * 1000L - System.currentTimeMillis());
+                AndroidUtilities.runOnUIThread(() -> regenerateLoginToken(true), delay * 1000L);
             } else if (response instanceof TLRPC.TL_auth_loginTokenMigrateTo) {
                 checkMigrateTo((TLRPC.TL_auth_loginTokenMigrateTo) response);
             } else if (response instanceof TLRPC.TL_auth_loginTokenSuccess) {

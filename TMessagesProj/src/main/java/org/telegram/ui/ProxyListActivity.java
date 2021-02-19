@@ -1034,42 +1034,26 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         for (SubInfo sub : SubManager.getSubList().find()) {
 
             TextCheckCell subItem = builder.addCheckItem(sub.name, sub.enable, true, (it, target) -> {
-
                 if (target == sub.enable) {
-
                     toChange.remove(sub);
-
                 } else {
-
                     toChange.put(sub, target);
-
                 }
-
                 return Unit.INSTANCE;
-
             });
 
             subItem.setOnLongClickListener((it) -> {
-
                 if (sub.internal) return false;
-
                 builder.dismiss();
-
                 presentFragment(new SubSettingsActivity(sub));
-
-
                 return true;
-
             });
 
         }
 
         builder.addButton(LocaleController.getString("Add", R.string.Add), false, true, (it) -> {
-
             presentFragment(new SubSettingsActivity());
-
             return Unit.INSTANCE;
-
         });
 
         String updateStr = LocaleController.getString("Update", R.string.Update);
@@ -1088,6 +1072,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             UIUtil.runOnIoDispatcher(() -> {
 
                 for (SubInfo subInfo : SubManager.getSubList().find()) {
+                    if (!subInfo.enable) continue;
 
                     try {
 

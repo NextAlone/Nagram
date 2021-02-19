@@ -924,7 +924,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
             for (SubInfo subInfo : SubManager.getSubList().find()) {
 
-                if (subInfo == null) continue;
+                if (subInfo == null || !subInfo.enable) continue;
 
                 try {
 

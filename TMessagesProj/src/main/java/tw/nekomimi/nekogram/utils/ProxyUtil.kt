@@ -73,13 +73,13 @@ object ProxyUtil {
     }
 
     @JvmStatic
-    fun parseProxies(_text: String): MutableList<String> {
+    @JvmOverloads
+    fun parseProxies(text: String, tryDecode: Boolean = true): MutableList<String> {
 
-        val text = runCatching {
-            String(Base64.decode(_text, Base64.NO_PADDING))
-        }.recover {
-            _text
-        }.getOrThrow()
+        try {
+            return parseProxies(String(Base64.decode(text, Base64.NO_PADDING)), false)
+        } catch (ignored: Exception) {
+        }
 
         val proxies = mutableListOf<String>()
 
