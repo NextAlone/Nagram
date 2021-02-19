@@ -278,7 +278,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         stickerSize2Row = rowCount++;
 
         chatRow = rowCount++;
-        ignoreBlockedRow = rowCount++;
+        ignoreBlockedRow = NekoConfig.ignoreBlocked || NekoXConfig.developerMode ? rowCount++ : -1;
 
         ignoreMutedCountRow = rowCount++;
         disableChatActionRow = rowCount++;
@@ -608,7 +608,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndValueAndCheck(LocaleController.getString("IgnoreBlocked", R.string.IgnoreBlocked), LocaleController.getString("IgnoreBlockedAbout", R.string.IgnoreBlockedAbout), NekoConfig.ignoreBlocked, true, true);
                     } else if (position == ignoreMutedCountRow) {
                         textCell.setTextAndCheck(LocaleController.getString("IgnoreMutedCount", R.string.IgnoreMutedCount), NekoConfig.ignoreMutedCount, true);
-                   } else if (position == skipOpenLinkConfirmRow) {
+                    } else if (position == skipOpenLinkConfirmRow) {
                         textCell.setTextAndCheck(LocaleController.getString("SkipOpenLinkConfirm", R.string.SkipOpenLinkConfirm), NekoConfig.skipOpenLinkConfirm, true);
                     } else if (position == disableChatActionRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableChatAction", R.string.DisableChatAction), NekoConfig.disableChatAction, true);
