@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">Настройки Neko</string>
-    <string name="IPv6">Пробовать подключиться через IPv6</string>
+    <string name="IPv6">Предпочитать IPv6 соединение</string>
     <string name="MessageMenu">Меню действий с сообщением</string>
     <string name="HidePhone">Скрыть мой номер телефона</string>
     <string name="Hide">Скрыть</string>
@@ -9,7 +9,7 @@
     <string name="DeleteAllFromSelfAlert">Внимание! Это удалит **все ваши сообщения** в этом чате для **всех**.</string>
     <string name="BotLogin">Вход по токену</string>
     <string name="InvalidAccessToken">Токен недействителен. Получите корректный у @BotFather.</string>
-    <string name="IgnoreBlocked">Скрыть сообщения заблокированных в группах</string>
+    <string name="IgnoreBlocked">Скрыть сообщения заблокированных</string>
     <string name="Connection">Соединение</string>
     <string name="Chat">Чат</string>
     <string name="NameOrder">Сортировать контакты</string>
@@ -58,13 +58,13 @@
     <string name="Translate">Перевести</string>
     <string name="DeleteAccount">Удаление аккаунта</string>
     <string name="TranslateFailed">Переводчик вернул ошибку</string>
-    <string name="TranslationProvider">Движок перевода</string>
+    <string name="TranslationProvider">Сервис перевода</string>
     <string name="ProviderGoogleTranslate">Google</string>
     <string name="ProviderGoogleTranslateCN">Google (кит.)</string>
     <string name="TranslateApiUnsupported">Выбранный движок не поддерживает ваш язык.</string>
     <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Скрыть перевод</string>
-    <string name="DisablePhotoViewerSideAction">Не листать фото нажатием</string>
+    <string name="DisablePhotoViewerSideAction">Не листать медиа тапом</string>
     <string name="BotToken">Токен</string>
     <string name="UnlimitedPinnedDialogs">Не лимитировать закрепленные диалоги</string>
     <string name="UnlimitedPinnedDialogsAbout">Закрепляйте более 5 диалогов в общем списке чатов. Они не будут синхронизированы с другими устройствами.</string>
@@ -75,8 +75,8 @@
     <string name="ShowTabsOnForward">Показывать вкладки при пересылке</string>
     <string name="CheckAllAdministrated">Добавить управляемые</string>
     <string name="RearVideoMessages">Задняя камера для видеосообщений</string>
-    <string name="HideAllTab">Скрыть вкладку \"Все\"</string>
-    <string name="HideAllTabAbout">Нажмите \"Назад\", чтобы открыть вкладку \"Все\" снова.</string>
+    <string name="HideAllTab">Скрыть вкладку «Все»</string>
+    <string name="HideAllTabAbout">Нажмите «Назад», чтобы открыть вкладку «Все» снова.</string>
     <string name="TabTitleType">Показывать на вкладках</string>
     <string name="TabTitleTypeTip">Эмодзи синхронизируются с Telegram.</string>
     <string name="TabTitleTypeText">Названия</string>
@@ -90,18 +90,18 @@
     <string name="Categories">Настройки</string>
     <string name="OfficialChannel">Официальный канал</string>
     <string name="About">О проекте</string>
-    <string name="IgnoreBlockedAbout">Сообщения от пользователей в чёрном списке будут скрыты.</string>
+    <string name="IgnoreBlockedAbout">Сообщения в группах будут скрыты.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Исходный код на Github</string>
     <string name="ResetStickerSize">Размер стикеров по умолчанию</string>
-    <string name="RestartAppToTakeEffect">Перезапустите приложение для применения настроек.</string>
+    <string name="RestartAppToTakeEffect">Перезапустите приложение.</string>
     <string name="DisableAppBarShadow">Отключить тень заголовка</string>
     <string name="BetaWarning">Эта функция **Telegram** находятся в **бета-тесте**.</string>
     <string name="MediaPreview">Предпросмотр медиа в списке чатов</string>
     <string name="AutoPauseVideo">Останавливать воспроизведение автоматически</string>
     <string name="AutoPauseVideoAbout">При блокировке экрана или сворачивании приложения.</string>
     <string name="DisableProximityEvents">Отключить датчик приближения</string>
-    <string name="IncreaseVoiceMessageQuality">Повысить качество голосовых сообщений</string>
+    <string name="IncreaseVoiceMessageQuality">Повысить качество голосовых</string>
     <string name="SelectBetween">Выбрать между</string>
     <string name="AvatarAsBackground">Аватар на фоне в боковом меню</string>
     <string name="BlurAvatarBackground">Размыть аватар</string>
