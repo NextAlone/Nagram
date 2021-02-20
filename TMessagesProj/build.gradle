@@ -3,13 +3,13 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-rc08"
+def verName = "7.4.2-rc09"
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
 }
 
-def verCode = 190
+def verCode = 192
 
 def officialVer = "7.4.2"
 def officialCode = 2227
@@ -53,10 +53,14 @@ def crashlyticsVersion = '17.3.1'
 def playCoreVersion = '1.9.1'
 
 repositories {
-
     jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-
+    maven {
+        url "https://maven.pkg.github.com/nekohasekai/dnsjava"
+        credentials {
+            username "nekox"
+            password System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -84,7 +88,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.3.1'
+    implementation 'dnsjava:dnsjava:3.4.0-SNAPSHOT'
     implementation 'org.dizitart:nitrite:3.4.3'
 
     implementation 'cn.hutool:hutool-core:5.5.8'
