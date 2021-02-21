@@ -824,7 +824,7 @@ public class ConnectionsManager extends BaseController {
             InetAddress[] result;
 
             try {
-                result = DnsFactory.Companion.lookup(currentHostName).toArray(new InetAddress[0]);
+                result = DnsFactory.lookup(currentHostName).toArray(new InetAddress[0]);
             } catch (Exception e) {
                 result = new InetAddress[0];
             }
@@ -864,7 +864,7 @@ public class ConnectionsManager extends BaseController {
 
             String domain = native_isTestBackend(currentAccount) != 0 ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
             try {
-                List<String> arrayList = DnsFactory.Companion.getTxts(domain);
+                List<String> arrayList = DnsFactory.getTxts(domain);
                 Collections.sort(arrayList, (o1, o2) -> {
                     int l1 = o1.length();
                     int l2 = o2.length();

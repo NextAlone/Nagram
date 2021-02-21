@@ -1,50 +1,68 @@
 package tw.nekomimi.nekogram.utils
 
-import cn.hutool.core.util.ArrayUtil
-import okhttp3.Dns
+import cn.hutool.http.Header
+import cn.hutool.http.HttpUtil
 import org.telegram.messenger.FileLog
 import org.telegram.tgnet.ConnectionsManager
 import org.xbill.DNS.*
 import java.net.InetAddress
-import java.util.*
-import kotlin.collections.ArrayList
 
 
-open class DnsFactory : Dns {
+object DnsFactory {
 
-    val providers = LinkedList<DohResolver>()
+    val providers = arrayOf(
+            "https://dns.twnic.tw/dns-query",
+            "https://mozilla.cloudflare-dns.com/dns-query",
+            "https://dns.google/dns-query"
+    )
 
-    companion object : DnsFactory() {
+    val cache = Cache()
 
-        init {
-
-            addProvider("https://dns.twnic.tw/dns-query")
-            addProvider("https://mozilla.cloudflare-dns.com/dns-query")
-            addProvider("https://dns.google/dns-query")
-
-        }
-    }
-
-
-    fun addProvider(url: String) = providers.add(DohResolver(url))
-
-    override fun lookup(domain: String): List<InetAddress> {
+    @JvmStatic
+    fun lookup(domain: String): List<InetAddress> {
 
         FileLog.d("Lookup $domain")
 
-        for (provider in providers) {
-            FileLog.d("Provider ${provider.uriTemplate}")
+        val type = if (!ConnectionsManager.useIpv6Address()) Type.A else Type.AAAA
+        val dc = DClass.IN
 
-            val lookup = Lookup(Name.fromConstantString(domain), if (!ConnectionsManager.useIpv6Address()) Type.A else Type.AAAA)
-            lookup.setSearchPath(* emptyArray<String>())
-            lookup.setCache(null)
-            lookup.setResolver(provider)
-            lookup.run()
+        val name = Name.fromConstantString("$domain.")
+        val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
+        var sr = cache.lookupRecords(name, type, dc)
 
-            if (lookup.result != Lookup.SUCCESSFUL) continue
+        if (!sr.isSuccessful) for (provider in providers) {
+            FileLog.d("Provider $provider")
 
-            FileLog.d("Results: " + ArrayUtil.toString(lookup.answers))
-            return lookup.answers.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
+            try {
+
+                val response = HttpUtil.createPost(provider)
+                        .contentType("application/dns-message")
+                        .header(Header.ACCEPT, "application/dns-message")
+                        .body(message)
+                        .execute()
+                if (!response.isOk) continue
+                val result = Message(response.bodyBytes())
+                val rcode = result.header.rcode
+                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN) continue
+                cache.addMessage(result)
+                sr = cache.lookupRecords(name, type, dc)
+                if (sr == null) sr = cache.lookupRecords(name, type, dc)
+                if (sr.isSuccessful || sr.isNXDOMAIN) break
+            } catch (e: Exception) {
+            }
+        }
+
+        if (sr.isSuccessful) {
+            val records = ArrayList<Record>()
+            for (set in sr.answers()) {
+                records.addAll(set.rrs(true))
+            }
+            val addresses = records.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
+            FileLog.d(addresses.toString())
+            return addresses
+        } else if (sr.isNXDOMAIN) {
+            FileLog.d("NXDOMAIN")
+            return listOf()
         }
 
         runCatching { return InetAddress.getAllByName(domain).toList() }
@@ -52,25 +70,49 @@ open class DnsFactory : Dns {
 
     }
 
+    @JvmStatic
     fun getTxts(domain: String): List<String> {
 
         FileLog.d("Lookup $domain for txts")
 
-        for (provider in providers) {
-            FileLog.d("Provider ${provider.uriTemplate}")
+        val type = Type.TXT
+        val dc = DClass.IN
 
-            val lookup = Lookup(Name.fromConstantString(domain), Type.TXT)
-            lookup.setSearchPath(* emptyArray<String>())
-            lookup.setCache(null)
-            lookup.setResolver(provider)
-            lookup.run()
+        val name = Name.fromConstantString("$domain.")
+        val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
+        var sr = cache.lookupRecords(name, type, dc)
 
-            if (lookup.result != Lookup.SUCCESSFUL) continue
-            FileLog.d("Results: " + ArrayUtil.toString(lookup.answers))
+        if (!sr.isSuccessful) for (provider in providers) {
+            FileLog.d("Provider $provider")
 
-            val result = ArrayList<String>()
-            for (record in lookup.answers.filterIsInstance<TXTRecord>()) result.addAll(record.strings)
-            return result
+            try {
+
+                val response = HttpUtil.createPost(provider)
+                        .contentType("application/dns-message")
+                        .header(Header.ACCEPT, "application/dns-message")
+                        .body(message)
+                        .execute()
+                if (!response.isOk) continue
+                val result = Message(response.bodyBytes())
+                val rcode = result.header.rcode
+                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN) continue
+                cache.addMessage(result)
+                sr = cache.lookupRecords(name, type, dc)
+                if (sr == null) sr = cache.lookupRecords(name, type, dc)
+                if (sr.isSuccessful || sr.isNXDOMAIN) break
+            } catch (e: Exception) {
+                FileLog.e(e)
+            }
+        }
+
+        if (sr.isSuccessful) {
+            val txts = ArrayList<String>().apply {
+                sr.answers().forEach { rRset -> rRset.rrs(true).filterIsInstance<TXTRecord>().forEach { addAll(it.strings) } }
+            }
+            FileLog.d(txts.toString())
+        } else if (sr.isNXDOMAIN) {
+            FileLog.d("NXDOMAIN")
+            return listOf()
         }
 
         return listOf()

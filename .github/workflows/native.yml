@@ -34,8 +34,6 @@ jobs:
       - name: Fix Gradle Memoery
         run: sed -i -e "s/16384/6144/g" gradle.properties
       - name: Native Build
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
           test -f TMessagesProj/libs/libv2ray.aar && exit 0
           ./run init action
