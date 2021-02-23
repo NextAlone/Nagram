@@ -1432,9 +1432,9 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 inviteLinksCell.setVisibility(View.GONE);
             } else {
                 if (info.invitesCount > 0) {
-                    inviteLinksCell.setTextAndValueAndIcon(LocaleController.getString("InviteLinks", R.string.InviteLinks), Integer.toString(info.invitesCount), R.drawable.actions_link, true);
+                    inviteLinksCell.setTextAndValue(LocaleController.getString("InviteLinks", R.string.InviteLinks), Integer.toString(info.invitesCount), true);
                 } else {
-                    inviteLinksCell.setTextAndValueAndIcon(LocaleController.getString("InviteLinks", R.string.InviteLinks), "1", R.drawable.actions_link, true);
+                    inviteLinksCell.setTextAndValue(LocaleController.getString("InviteLinks", R.string.InviteLinks), "1", true);
                 }
             }
         }
