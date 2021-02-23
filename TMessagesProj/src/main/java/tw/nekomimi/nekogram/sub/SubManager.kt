@@ -26,8 +26,8 @@ object SubManager {
                 enable = public?.enable ?: true
 
                 urls = listOf(
+                        "https://github.com/NekoX-Dev/ProxyList/blob/master/proxy_list@js-file-line\">@<",
                         "https://cdn.jsdelivr.net/gh/nekox-dev/ProxyList/proxy_list",
-                        "https://raw.githubusercontent.com/nekox-dev/ProxyList/master/proxy_list",
                         "https://nekox-dev.github.io/ProxyList/proxy_list",
                         "https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list"
                 )

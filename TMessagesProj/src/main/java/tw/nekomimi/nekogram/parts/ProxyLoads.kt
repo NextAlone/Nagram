@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.ProxyUtil.parseProxies
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -24,14 +25,32 @@ fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): 
             for (url in urls) {
                 launch(Dispatchers.IO) {
                     try {
-                        val proxies = parseProxies(HttpUtil.get(url))
-                        if (url.contains("https://gitee.com/") && cl.decrementAndGet() > 0) {
+                        var subX = ""
+                        var subY = ""
+                        var urlFinal = url
+                        if (url.count { it == '@' } == 2) {
+                            subX = url.substringAfter("@")
+                                    .substringBefore("@")
+                            subY = url.substringAfterLast("@")
+                            urlFinal = url.substringBefore("@")
+                        }
+                        var content = HttpUtil.get(urlFinal)
+                        if (subX.isNotBlank()) {
+                            content = content.substringAfter(subX)
+                                    .substringBefore(subY)
+                        }
+                        val proxies = parseProxies(content)
+                        if (urlFinal.contains("https://gitee.com/") && cl.decrementAndGet() > 0) {
                             defer = proxies
                         } else {
                             if (ret.getAndSet(true)) return@launch
                             it.resume(proxies)
                         }
+                        FileLog.d(url)
+                        FileLog.d("Success")
                     } catch (e: Exception) {
+                        FileLog.d(url)
+                        FileLog.e(e)
                         exceptions[url] = e
                         if (cl.decrementAndGet() == 0) {
                             if (defer != null) {
