@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import androidx.core.content.FileProvider;
+
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 
@@ -21,8 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
-import androidx.core.content.FileProvider;
 
 public class FeedWidgetService extends RemoteViewsService {
     @Override
@@ -44,7 +44,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
     public FeedRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        SharedPreferences preferences = context.getSharedPreferences("feed_widget", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences("shortcut_widget", Activity.MODE_PRIVATE);
         int accountId = preferences.getInt("account" + appWidgetId, -1);
         if (accountId >= 0) {
             dialogId = preferences.getLong("dialogId" + appWidgetId, 0);

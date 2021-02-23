@@ -16,9 +16,9 @@ import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.RandomAccessFile;
-import java.io.File;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1218,7 +1218,12 @@ public class FileLoadOperation {
                             FileLog.e(e);
                         }
                     } else {
-                        renameResult = cacheFileTemp.renameTo(cacheFileFinal);
+                        try {
+                            renameResult = cacheFileTemp.renameTo(cacheFileFinal);
+                        } catch (Exception e) {
+                            renameResult = false;
+                            FileLog.e(e);
+                        }
                     }
                     if (!renameResult) {
                         if (BuildVars.LOGS_ENABLED) {

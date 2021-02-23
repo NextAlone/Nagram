@@ -26,16 +26,13 @@ import android.graphics.drawable.GradientDrawable;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
-import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SvgHelper;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.RLottieDrawable;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -48,22 +45,24 @@ import java.util.function.Function;
  */
 public final class QRCodeWriter {
 
-    private static final int QUIET_ZONE_SIZE = 4;
-    private ByteMatrix input;
-    private float[] radii = new float[8];
-    private int imageBloks;
-    private int imageBlockX;
-    private int sideQuadSize;
+  private static final int QUIET_ZONE_SIZE = 4;
+  private ByteMatrix input;
+  private float[] radii = new float[8];
+  private int imageBloks;
+  private int imageBlockX;
+  private int sideQuadSize;
 
-    public Bitmap encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints, Bitmap bitmap, Context context) throws WriterException {
-        return encode(contents, format, width, height, hints, bitmap, context, null);
+  private int imageSize;
+
+  public Bitmap encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints, Bitmap bitmap, Context context) throws WriterException {
+    return encode(contents, format, width, height, hints, bitmap, context, null);
+  }
+
+  public Bitmap encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints, Bitmap bitmap, Context context, Function<Integer, Bitmap> iconF) throws WriterException {
+
+    if (contents.isEmpty()) {
+      throw new IllegalArgumentException("Found empty contents");
     }
-
-    public Bitmap encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints, Bitmap bitmap, Context context, Function<Integer, Bitmap> iconF) throws WriterException {
-
-        if (contents.isEmpty()) {
-            throw new IllegalArgumentException("Found empty contents");
-        }
 
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' + height);
@@ -123,8 +122,8 @@ public final class QRCodeWriter {
         if (imageBloks % 2 != inputWidth % 2) {
             imageBloks++;
         }
-        imageBlockX = (inputWidth - imageBloks) / 2;
-        int imageSize = imageBloks * multiple - 24;
+    imageBlockX = (inputWidth - imageBloks) / 2;
+    imageSize = imageBloks * multiple - 24;
         int imageX = (size - imageSize) / 2;
 
         for (int a = 0; a < 3; a++) {
@@ -233,14 +232,18 @@ public final class QRCodeWriter {
 
     private boolean has(int x, int y) {
         if (x >= imageBlockX && x < imageBlockX + imageBloks && y >= imageBlockX && y < imageBlockX + imageBloks) {
-            return false;
+          return false;
         }
-        if ((x < sideQuadSize || x >= input.getWidth() - sideQuadSize) && y < sideQuadSize) {
-            return false;
-        }
-        if (x < sideQuadSize && y >= input.getHeight() - sideQuadSize) {
-            return false;
-        }
-        return x >= 0 && y >= 0 && x < input.getWidth() && y < input.getHeight() && input.get(x, y) == 1;
+      if ((x < sideQuadSize || x >= input.getWidth() - sideQuadSize) && y < sideQuadSize) {
+        return false;
+      }
+      if (x < sideQuadSize && y >= input.getHeight() - sideQuadSize) {
+        return false;
+      }
+      return x >= 0 && y >= 0 && x < input.getWidth() && y < input.getHeight() && input.get(x, y) == 1;
     }
+
+  public int getImageSize() {
+    return imageSize;
+  }
 }

@@ -8,10 +8,10 @@
 
 package org.telegram.messenger;
 
-import androidx.annotation.UiThread;
-
 import android.os.SystemClock;
 import android.util.SparseArray;
+
+import androidx.annotation.UiThread;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -214,6 +214,7 @@ public class NotificationCenter {
     public static final int voipServiceCreated = totalEvents++;
     public static final int webRtcMicAmplitudeEvent = totalEvents++;
     public static final int webRtcSpeakerAmplitudeEvent = totalEvents++;
+    public static final int showBulletin = totalEvents++;
 
     // custom
 
