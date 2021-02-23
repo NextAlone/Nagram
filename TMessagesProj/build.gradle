@@ -3,13 +3,13 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.4.2-rc10"
+def verName = "7.4.2-rc11"
+def verCode = 196
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
 }
 
-def verCode = 194
 
 def officialVer = "7.4.2"
 def officialCode = 2227
@@ -88,7 +88,7 @@ dependencies {
     implementation 'cn.hutool:hutool-crypto:5.5.8'
     implementation 'cn.hutool:hutool-http:5.5.8'
 
-    implementation 'org.yaml:snakeyaml:1.27'
+    implementation 'org.yaml:snakeyaml:1.28'
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
     implementation project(":openpgp-api")
