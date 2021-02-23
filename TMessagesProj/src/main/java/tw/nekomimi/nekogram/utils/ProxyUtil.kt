@@ -596,9 +596,15 @@ object ProxyUtil {
 
         try {
 
-            val result = qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), mapOf(
-                    DecodeHintType.TRY_HARDER to true
-            ))
+            val result = try {
+                qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source)), mapOf(
+                        DecodeHintType.TRY_HARDER to true
+                ))
+            } catch (e: NotFoundException) {
+                qrReader.decode(BinaryBitmap(GlobalHistogramBinarizer(source.invert())), mapOf(
+                        DecodeHintType.TRY_HARDER to true
+                ))
+            }
 
             showLinkAlert(ctx, result.text)
 

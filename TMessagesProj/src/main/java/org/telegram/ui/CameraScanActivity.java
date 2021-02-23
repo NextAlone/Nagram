@@ -38,7 +38,6 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
-import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -670,7 +669,15 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             } else {
                 source = new PlanarYUVLuminanceSource(data, size.getWidth(), size.getHeight(), x, y, side, side, false);
             }
-            Result result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+            Result result = null;
+            try {
+                result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+            } catch (NotFoundException e) {
+                try {
+                    result = qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source.invert())));
+                } catch (NotFoundException ignore) {
+                }
+            }
             if (result == null) {
                 onNoQrFound();
                 return null;
