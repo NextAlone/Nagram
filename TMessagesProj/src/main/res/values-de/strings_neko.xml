@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko-Einstellungen</string>
+    <string name="NekoSettings">Neko Einstellungen</string>
     <string name="IPv6">Über IPv6 verbinden</string>
     <string name="MessageMenu">Nachrichtenmenü</string>
-    <string name="HidePhone">Meine Telefonnummer ausblenden</string>
-    <string name="Hide">Verstecken</string>
+    <string name="HidePhone">Telefonnummer ausblenden</string>
+    <string name="Hide">Ausblenden</string>
     <string name="DeleteAllFromSelf">Alles von sich selbst löschen</string>
-    <string name="DeleteAllFromSelfAlert">Warnung! Dadurch werden alle Nachrichten in diesem Chat für alle Teilnehmer gelöscht.</string>
+    <string name="DeleteAllFromSelfAlert">Warnung! Dadurch werden alle Nachrichten von dir in diesem Chat für alle Teilnehmer gelöscht.</string>
     <string name="BotLogin">Bot Login</string>
     <string name="InvalidAccessToken">Ungültiger Zugriffstoken</string>
     <string name="IgnoreBlocked">Blockierte Benutzer in Gruppe ignorieren</string>
     <string name="Connection">Verbindung</string>
-    <string name="Chat">Plaudern</string>
+    <string name="Chat">Chat</string>
     <string name="NameOrder">Namenbestellung</string>
     <string name="FirstLast">Erster</string>
     <string name="LastFirst">Zuletzt zuerst</string>
     <string name="TypefaceUseDefault">Standardschriftart verwenden</string>
-    <string name="NoQuoteForward">NoQuote weiterleiten</string>
+    <string name="NoQuoteForward">Ohne Zitat weiterleiten</string>
     <string name="Repeat">Wiederholen</string>
     <string name="AddToSavedMessages">Nachricht speichern</string>
     <string name="CreateMention">Erwähnung erstellen</string>
-    <string name="ForceTabletMode">Tablet-Modus erzwingen</string>
+    <string name="ForceTabletMode">Tablet Modus erzwingen</string>
     <string name="Prpr">Peroper</string>
     <string name="TransparentStatusBar">Transparente Statusleiste</string>
     <string name="EnableResidentNotification">Zeige eine Resident-Benachrichtigung</string>
@@ -103,6 +103,7 @@
     <string name="IncreaseVoiceMessageQuality">Erhöhe die Qualität von Sprachnachrichten</string>
     <string name="SelectBetween">Wähle zwischen</string>
     <string name="AvatarAsBackground">Profilbild als Hintergrund</string>
+    <string name="BlurAvatarBackground">Profilbild verwischen</string>
     <string name="DarkenAvatarBackground">Profilbild abdunkeln</string>
     <string name="ProviderDeepLTranslate">DeepL-Übersetzung</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Übersetzer</string>
