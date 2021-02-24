@@ -76,9 +76,11 @@ object ProxyUtil {
     @JvmOverloads
     fun parseProxies(text: String, tryDecode: Boolean = true): MutableList<String> {
 
-        try {
-            return parseProxies(String(Base64.decode(text, Base64.NO_PADDING)), false)
-        } catch (ignored: Exception) {
+        if (tryDecode) {
+            try {
+                return parseProxies(String(Base64.decode(text, Base64.NO_PADDING)), false)
+            } catch (ignored: Exception) {
+            }
         }
 
         val proxies = mutableListOf<String>()
