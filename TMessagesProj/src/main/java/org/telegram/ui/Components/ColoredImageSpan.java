@@ -13,11 +13,20 @@ import androidx.annotation.Nullable;
 public class ColoredImageSpan extends ReplacementSpan {
 
     int drawableColor;
+    boolean override;
     Drawable drawable;
 
     public ColoredImageSpan(@NonNull Drawable drawable) {
         this.drawable = drawable;
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+    }
+
+    public ColoredImageSpan(@NonNull Drawable drawable, int drawableColor) {
+        this.drawable = drawable;
+        this.drawableColor = drawableColor;
+        this.override = true;
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.SRC_IN));
     }
 
     @Override
@@ -28,8 +37,12 @@ public class ColoredImageSpan extends ReplacementSpan {
     @Override
     public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
         if (drawableColor != paint.getColor()) {
-            drawableColor = paint.getColor();
-            drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.MULTIPLY));
+            if (override) {
+                paint.setColor(drawableColor);
+            } else {
+                drawableColor = paint.getColor();
+                drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.SRC_IN));
+            }
         }
         int lineHeight = bottom - top;
         int drawableHeight = drawable.getIntrinsicHeight();
