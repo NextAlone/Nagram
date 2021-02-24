@@ -9,6 +9,7 @@ function flavor() {
 
 source bin/app/build.sh
 
+rm -r TMessagesProj/build/outputs/apk
 flavor Full
 flavor Mini &
 upload full/release

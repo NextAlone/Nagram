@@ -4705,6 +4705,8 @@ public class MessagesController extends BaseController implements NotificationCe
             if (response != null) {
                 TLRPC.Updates updates = (TLRPC.Updates) response;
                 processUpdates(updates, false);
+            } else {
+                AlertUtil.showToast(error);
             }
         });
         int lowerId = (int) did;

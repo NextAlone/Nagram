@@ -24,7 +24,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -45,6 +44,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DialogCell;
 
 import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.parts.DrawableLoadsKt;
 
 public class LinkActionView extends LinearLayout {
 
@@ -89,7 +90,7 @@ public class LinkActionView extends LinearLayout {
 
         frameLayout.addView(linkView);
         optionsView = new ImageView(context);
-        optionsView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ab_other));
+        optionsView.setImageDrawable(DrawableLoadsKt.getDrawable(context, R.drawable.ic_ab_other));
         optionsView.setScaleType(ImageView.ScaleType.CENTER);
         frameLayout.addView(optionsView, LayoutHelper.createFrame(40, 48, Gravity.RIGHT | Gravity.CENTER_VERTICAL));
         addView(frameLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, 4, 0));
@@ -100,7 +101,7 @@ public class LinkActionView extends LinearLayout {
         copyView = new TextView(context);
         copyView.setGravity(Gravity.CENTER_HORIZONTAL);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.baseline_content_copy_24)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(DrawableLoadsKt.getDrawable(context, R.drawable.baseline_content_copy_24).mutate()), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("LinkActionCopy", R.string.LinkActionCopy));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
@@ -114,7 +115,7 @@ public class LinkActionView extends LinearLayout {
         shareView = new TextView(context);
         shareView.setGravity(Gravity.CENTER_HORIZONTAL);
         spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.baseline_forward_24)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(DrawableLoadsKt.getDrawable(context, R.drawable.baseline_forward_24)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("LinkActionShare", R.string.LinkActionShare));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
@@ -130,7 +131,7 @@ public class LinkActionView extends LinearLayout {
         removeView = new TextView(context);
         removeView.setGravity(Gravity.CENTER_HORIZONTAL);
         spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.baseline_delete_24)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(DrawableLoadsKt.getDrawable(context, R.drawable.baseline_delete_24)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("DeleteLink", R.string.DeleteLink));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
@@ -419,7 +420,7 @@ public class LinkActionView extends LinearLayout {
         if (hideRevokeOption != b) {
             hideRevokeOption = b;
             optionsView.setVisibility(View.VISIBLE);
-            optionsView.setImageDrawable(ContextCompat.getDrawable(optionsView.getContext(), R.drawable.ic_ab_other));
+            optionsView.setImageDrawable(DrawableLoadsKt.getDrawable(optionsView.getContext(), R.drawable.ic_ab_other));
         }
     }
 
