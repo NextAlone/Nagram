@@ -21408,6 +21408,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     AlertDialog alertDialog = builder.create();
                                     showDialog(builder.create());
                                 }
+                                AndroidUtilities.cancelRunOnUIThread(progressRunnable);
+                                commentLoadingMessageId = 0;
+                                chatListView.invalidateViews();
                                 return;
                             }
                             savedNoHistory = true;

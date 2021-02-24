@@ -31,14 +31,22 @@
 #define MAX_ACCOUNT_COUNT 32
 #define USE_DELEGATE_HOST_RESOLVE
 
+#define USE_IPV4_ONLY 0
+#define USE_IPV6_ONLY 1
+#define USE_IPV4_IPV6_RANDOM 2
+
 #define NETWORK_TYPE_MOBILE 0
 #define NETWORK_TYPE_WIFI 1
 #define NETWORK_TYPE_ROAMING 2
 
 class TLObject;
+
 class TL_error;
+
 class Request;
+
 class TL_message;
+
 class TL_config;
 class NativeByteBuffer;
 class Handshake;

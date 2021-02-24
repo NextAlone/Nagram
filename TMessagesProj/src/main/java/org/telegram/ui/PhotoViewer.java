@@ -3056,7 +3056,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 ArrayList<MessageObject> arr = (ArrayList<MessageObject>) args[2];
                 endReached[loadIndex] = (Boolean) args[5];
                 if (needSearchImageInArr) {
-                    if (arr.isEmpty() && (loadIndex != 0 || mergeDialogId == 0)) {
+                    if (arr.isEmpty() && (loadIndex != 0 || mergeDialogId == 0) || currentIndex < 0 || currentIndex >= imagesArr.size()) {
                         needSearchImageInArr = false;
                         return;
                     }
@@ -3236,7 +3236,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                         setImageIndex(index);
                     } else {
-                        closePhoto(false, false);
+                        closePhoto(false, true);
                     }
                 }
             }

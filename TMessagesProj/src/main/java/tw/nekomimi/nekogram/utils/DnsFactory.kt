@@ -23,7 +23,7 @@ object DnsFactory {
 
         FileLog.d("Lookup $domain")
 
-        val type = if (!ConnectionsManager.useIpv6Address()) Type.A else Type.AAAA
+        val type = if (ConnectionsManager.getIpStrategy() != ConnectionsManager.USE_IPV6_ONLY) Type.A else Type.AAAA
         val dc = DClass.IN
 
         val name = Name.fromConstantString("$domain.")

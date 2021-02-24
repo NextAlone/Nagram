@@ -1594,6 +1594,9 @@ public boolean retriedToSend;
                     newMsg.flags |= 8388608;
                 }
                 newMsg.message = msgObj.messageOwner.message;
+                if (newMsg.message == null) {
+                    newMsg.message = "";
+                }
                 newMsg.fwd_msg_id = msgObj.getId();
                 newMsg.attachPath = msgObj.messageOwner.attachPath;
                 newMsg.entities = msgObj.messageOwner.entities;

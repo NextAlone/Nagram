@@ -186,7 +186,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }
                 for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
-                        ConnectionsManager.native_setUseIpv6(a, NekoConfig.useIPv6);
+                        ConnectionsManager.native_setIpStrategy(a, ConnectionsManager.getIpStrategy());
                     }
                 }
             } else if (position == disableProxyWhenVpnEnabledRow) {

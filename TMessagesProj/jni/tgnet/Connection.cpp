@@ -286,14 +286,27 @@ void Connection::connect() {
         ConnectionsManager::getInstance(currentDatacenter->instanceNum).onConnectionClosed(this, 0);
         return;
     }
-    if (connectionState == TcpConnectionStageConnected || connectionState == TcpConnectionStageConnecting) {
+    if (connectionState == TcpConnectionStageConnected ||
+        connectionState == TcpConnectionStageConnecting) {
         return;
     }
     connectionInProcess = true;
     connectionState = TcpConnectionStageConnecting;
     isMediaConnection = false;
-    uint32_t ipv6 = ConnectionsManager::getInstance(currentDatacenter->instanceNum).isIpv6Enabled() ? TcpAddressFlagIpv6 : 0;
-    uint32_t isStatic = connectionType == ConnectionTypeProxy || !ConnectionsManager::getInstance(currentDatacenter->instanceNum).proxyAddress.empty() ? TcpAddressFlagStatic : 0;
+    uint8_t strategy = ConnectionsManager::getInstance(
+            currentDatacenter->instanceNum).getIpStratagy();
+    uint32_t ipv6;
+    if (strategy == USE_IPV6_ONLY) {
+        ipv6 = TcpAddressFlagIpv6;
+    } else if (strategy == USE_IPV4_IPV6_RANDOM) {
+        uint8_t value;
+        RAND_bytes(&value, 1);
+        ipv6 = value % 2 == 0 ? TcpAddressFlagIpv6 : 0;
+    } else {
+        ipv6 = 0;
+    }
+    uint32_t isStatic = connectionType == ConnectionTypeProxy || !ConnectionsManager::getInstance(
+            currentDatacenter->instanceNum).proxyAddress.empty() ? TcpAddressFlagStatic : 0;
     TcpAddress *tcpAddress = nullptr;
     if (isMediaConnectionType(connectionType)) {
         currentAddressFlags = TcpAddressFlagDownload | isStatic;
