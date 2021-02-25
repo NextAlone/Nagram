@@ -3,7 +3,6 @@ name: Debug build
 on:
   push:
     branches:
-      - main
       - dev
     paths-ignore:
       - '**.md'
@@ -119,6 +118,7 @@ jobs:
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.3.6528147" >> local.properties
       - name: Fix BoringSSL
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           cd TMessagesProj/jni
           ./patch_boringssl.sh

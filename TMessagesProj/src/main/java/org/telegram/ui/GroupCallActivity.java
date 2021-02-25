@@ -107,6 +107,8 @@ import org.telegram.ui.Components.voip.VoIPToggleButton;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class GroupCallActivity extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, VoIPBaseService.StateListener {
 
     private static final int eveyone_can_speak_item = 1;
@@ -226,7 +228,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         if (!scheduled || VoIPService.getSharedInstance() == null) {
             return;
         }
-        muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        if (!NekoConfig.disableVibration) {
+            muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        }
         updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
         AndroidUtilities.runOnUIThread(unmuteRunnable, 80);
         scheduled = false;
@@ -1700,7 +1704,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         updateMuteButton(MUTE_BUTTON_STATE_UNMUTE, true);
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().setMicMute(true, true, false);
-                            muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            if (!NekoConfig.disableVibration) {
+                                muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            }
                         }
                         pressed = false;
                         MotionEvent cancel = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
@@ -1747,11 +1753,15 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             if (muteButtonState == MUTE_BUTTON_STATE_UNMUTE) {
                 updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
                 VoIPService.getSharedInstance().setMicMute(false, false, true);
-                muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (!NekoConfig.disableVibration) {
+                    muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
             } else {
                 updateMuteButton(MUTE_BUTTON_STATE_UNMUTE, true);
                 VoIPService.getSharedInstance().setMicMute(true, false, true);
-                muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (!NekoConfig.disableVibration) {
+                    muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
             }
         });
 

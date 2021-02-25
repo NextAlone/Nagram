@@ -45,6 +45,7 @@ import org.telegram.ui.Components.RadialProgress2;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class AvatarPreviewer {
 
@@ -435,7 +436,9 @@ public class AvatarPreviewer {
                     } else {
                         moveProgress = Math.max(-1, Math.min(0f, (event.getY() - downY) / AndroidUtilities.dp(56)));
                         if (moveProgress == -1) {
-                            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            if (!NekoConfig.disableVibration) {
+                                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            }
                             moveAnimator = ValueAnimator.ofFloat(moveProgress, 0);
                             moveAnimator.setDuration(200);
                             moveAnimator.addUpdateListener(a -> {
