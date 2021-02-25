@@ -818,7 +818,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             presentFragment(fragment);
         });
 
-        if (ChatObject.isChannel(currentChat) || currentChat.gigagroup) {
+        if ((ChatObject.isChannel(currentChat) || currentChat.gigagroup) && ChatObject.hasAdminRights(currentChat)) {
             logCell = new TextCell(context);
             logCell.setText(LocaleController.getString("EventLog", R.string.EventLog), false);
             logCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
