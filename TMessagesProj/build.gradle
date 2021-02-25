@@ -59,7 +59,7 @@ repositories {
 dependencies {
 
     implementation "androidx.browser:browser:1.3.0"
-    implementation 'androidx.core:core-ktx:1.5.0-beta01'
+    implementation 'androidx.core:core-ktx:1.5.0-beta02'
     implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.3.2'
@@ -93,7 +93,8 @@ dependencies {
 
     implementation project(":openpgp-api")
 
-    compileOnly files('libs/libv2ray.aar')
+    compileOnly fileTree("libs")
+
     compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
@@ -336,7 +337,7 @@ android {
     sourceSets.all { set ->
         if (set.name.startsWith("full")) {
             set.dependencies {
-                implementation files('libs/libv2ray.aar', 'libs/ss-rust-release.aar', 'libs/ssr-libev-release.aar')
+                implementation fileTree("libs")
             }
         }
         if (set.name.matches("(mini|full).*")) {
