@@ -253,7 +253,9 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
-            signingConfig signingConfigs.release
+            if (keystorePwd != null) {
+                signingConfig signingConfigs.release
+            }
         }
 
         release {
