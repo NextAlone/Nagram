@@ -12897,9 +12897,11 @@ public class MessagesController extends BaseController implements NotificationCe
                                     }*/
                                 }
                                 if ((update.notify_settings.flags & 4) != 0) {
-                                    editor.putInt("EnableGroup2", update.notify_settings.mute_until);
-                                    editor.putBoolean("overwrite_group", true);
-                                    AndroidUtilities.runOnUIThread(() -> getNotificationsController().deleteNotificationChannelGlobal(NotificationsController.TYPE_GROUP));
+                                    if (notificationsPreferences.getInt("EnableGroup2", 0) != update.notify_settings.mute_until) {
+                                        editor.putInt("EnableGroup2", update.notify_settings.mute_until);
+                                        editor.putBoolean("overwrite_group", true);
+                                        AndroidUtilities.runOnUIThread(() -> getNotificationsController().deleteNotificationChannelGlobal(NotificationsController.TYPE_GROUP));
+                                    }
                                 }
                             } else if (update.peer instanceof TLRPC.TL_notifyUsers) {
                                 if ((update.notify_settings.flags & 1) != 0) {
@@ -12913,9 +12915,11 @@ public class MessagesController extends BaseController implements NotificationCe
                                     }*/
                                 }
                                 if ((update.notify_settings.flags & 4) != 0) {
-                                    editor.putInt("EnableAll2", update.notify_settings.mute_until);
-                                    editor.putBoolean("overwrite_private", true);
-                                    AndroidUtilities.runOnUIThread(() -> getNotificationsController().deleteNotificationChannelGlobal(NotificationsController.TYPE_PRIVATE));
+                                    if (notificationsPreferences.getInt("EnableAll2", 0) != update.notify_settings.mute_until) {
+                                        editor.putInt("EnableAll2", update.notify_settings.mute_until);
+                                        editor.putBoolean("overwrite_private", true);
+                                        AndroidUtilities.runOnUIThread(() -> getNotificationsController().deleteNotificationChannelGlobal(NotificationsController.TYPE_PRIVATE));
+                                    }
                                 }
                             } else if (update.peer instanceof TLRPC.TL_notifyBroadcasts) {
                                 if ((update.notify_settings.flags & 1) != 0) {
@@ -12929,9 +12933,11 @@ public class MessagesController extends BaseController implements NotificationCe
                                     }*/
                                 }
                                 if ((update.notify_settings.flags & 4) != 0) {
-                                    editor.putInt("EnableChannel2", update.notify_settings.mute_until);
-                                    editor.putBoolean("overwrite_channel", true);
-                                    AndroidUtilities.runOnUIThread(() -> getNotificationsController().deleteNotificationChannelGlobal(NotificationsController.TYPE_CHANNEL));
+                                    if (notificationsPreferences.getInt("EnableChannel2", 0) != update.notify_settings.mute_until) {
+                                        editor.putInt("EnableChannel2", update.notify_settings.mute_until);
+                                        editor.putBoolean("overwrite_channel", true);
+                                        AndroidUtilities.runOnUIThread(() -> getNotificationsController().deleteNotificationChannelGlobal(NotificationsController.TYPE_CHANNEL));
+                                    }
                                 }
                             }
                             getMessagesStorage().updateMutedDialogsFiltersCounters();

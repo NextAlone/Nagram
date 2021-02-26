@@ -107,6 +107,8 @@ public class NotificationsController extends BaseController {
     private int lastBadgeCount = -1;
     private String launcherClassName;
 
+    public long lastNotificationChannelCreateTime;
+
     private Boolean groupsCreated;
 
     public static long globalSecretChatId = -(1L << 32);
@@ -3182,6 +3184,8 @@ public class NotificationsController extends BaseController {
                 FileLog.d("create new channel group " + keyGroup);
                 FileLog.d("create new channel " + channelId);
             }
+            lastNotificationChannelCreateTime = SystemClock.elapsedRealtime();
+            systemNotificationManager.createNotificationChannel(notificationChannel);
             preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).commit();
         }
         return channelId;

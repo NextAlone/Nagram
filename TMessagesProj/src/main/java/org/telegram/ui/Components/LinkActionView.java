@@ -301,6 +301,7 @@ public class LinkActionView extends LinearLayout {
                     }
                 });
                 actionBarPopupWindow.setOutsideTouchable(true);
+                actionBarPopupWindow.setFocusable(true);
                 actionBarPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 actionBarPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                 actionBarPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -415,7 +416,7 @@ public class LinkActionView extends LinearLayout {
         optionsView.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
-    public void showRevokeOption(boolean b) {
+    public void hideRevokeOption(boolean b) {
         if (hideRevokeOption != b) {
             hideRevokeOption = b;
             optionsView.setVisibility(View.VISIBLE);
