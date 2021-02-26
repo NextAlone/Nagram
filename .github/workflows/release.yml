@@ -165,7 +165,7 @@ jobs:
         uses: actions/setup-go@v2
         if: steps.cache.outputs.cache-hit != 'true'
         with:
-          go-version: ^1.15
+          go-version: 1.15
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs v2ray

@@ -8,7 +8,7 @@ export GO111MOUDLE=on
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 cd "$PROJECT/build"
-[ -d "v2ray" ] || git clone https://github.com/2dust/AndroidLibV2rayLite v2ray
+[ -d "v2ray" ] || git clone https://github.com/2dust/AndroidLibV2rayLite v2ray || exit 1
 cd v2ray
 git reset --hard && git clean -fdx
 sed -i -e "s|go 1.14|go 1.16|g" go.mod
