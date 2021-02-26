@@ -1,12 +1,13 @@
 #!/bin/bash
 
-// v4.34.0
+# v4.34.0
 V2RAY_CORE_VERSION="a6efb4d60b86789a68ed8ac8d52cfcec2d80229a"
 
 source "bin/init/env.sh"
 export GO111MOUDLE=on
 export PATH="$PATH:$(go env GOPATH)/bin"
 
+mkdir -p "$PROJECT/build"
 cd "$PROJECT/build"
 [ -d "v2ray" ] || git clone https://github.com/2dust/AndroidLibV2rayLite v2ray || exit 1
 cd v2ray
