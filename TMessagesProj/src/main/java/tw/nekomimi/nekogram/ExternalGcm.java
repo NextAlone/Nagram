@@ -37,7 +37,7 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 public class ExternalGcm {
 
     @SuppressWarnings("ConstantConditions")
-    private static boolean noGcm = BuildConfig.BUILD_TYPE.contains("NoGcm");
+    private static boolean noGcm = BuildConfig.BUILD_TYPE.contains("NoGcm") || BuildConfig.BUILD_TYPE.contains("Foss");
 
     private static Boolean hasPlayServices;
 
