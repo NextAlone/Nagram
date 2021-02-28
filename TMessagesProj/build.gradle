@@ -75,8 +75,6 @@ if (!gradle.startParameter.taskNames.isEmpty()) {
             targetAbi = "arm"
             verCode -= 1
         }
-    } else {
-        targetAbi = "~"
     }
 }
 
@@ -167,8 +165,6 @@ android {
                     exclude 'x86', 'x86_64', 'armeabi-v7a'
                 } else if (targetAbi == "arm") {
                     exclude 'x86', 'x86_64', 'arm64-v8a'
-                } else {
-                    exclude 'x86', 'x86_64'
                 }
             }
         }
@@ -359,6 +355,18 @@ android {
         }
 
         foss {
+            jni {
+                srcDirs = ['./jni/']
+            }
+        }
+
+        fdroidArmRelease {
+            jni {
+                srcDirs = ['./jni/']
+            }
+        }
+
+        fdroidArm64Release {
             jni {
                 srcDirs = ['./jni/']
             }

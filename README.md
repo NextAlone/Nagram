@@ -88,7 +88,7 @@ It is recommended to use the official script, otherwise you may not find rustup.
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
 echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
 
-cd ss-rust/src/main/rust/shadowsocks-rust
+rustup install $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 

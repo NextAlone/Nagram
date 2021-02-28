@@ -14,8 +14,6 @@ if (gradle.startParameter.taskNames.isNotEmpty()) {
         } else if (targetTask.contains("arm")) {
             targetAbi = "arm"
         }
-    } else {
-        targetAbi = "~"
     }
 }
 
@@ -36,13 +34,6 @@ android {
             "arm64" -> arrayOf("x86", "x86_64", "armeabi-v7a")
             else -> arrayOf("x86", "x86_64")
         })
-    }
-
-    productFlavors {
-        flavorDimensions.add("abi")
-
-        create("arm")
-        create("arm64")
     }
 
 }
