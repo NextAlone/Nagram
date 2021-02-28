@@ -19,15 +19,10 @@ def serviceAccountCredentialsFile = rootProject.file("service_account_credential
 def beta = verName.contains("preview")
 
 if (serviceAccountCredentialsFile.isFile()) {
-
     setupPlay(beta)
-
     play.serviceAccountCredentials = serviceAccountCredentialsFile
-
 } else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
-
     setupPlay(beta)
-
 }
 
 void setupPlay(boolean beta) {
@@ -35,10 +30,8 @@ void setupPlay(boolean beta) {
     apply plugin: 'com.github.triplet.play'
 
     play {
-
         track = beta ? "beta" : "production"
         defaultToAppBundles = true
-
     }
 
 }
@@ -51,10 +44,6 @@ def okHttpVersion = '5.0.0-alpha.2'
 def fcmVersion = '21.0.1'
 def crashlyticsVersion = '17.3.1'
 def playCoreVersion = '1.9.1'
-
-repositories {
-    jcenter()
-}
 
 dependencies {
 
@@ -117,7 +106,6 @@ dependencies {
 def keystorePwd = null
 def alias = null
 def pwd = null
-def ignoreX86 = false
 
 Properties properties
 def base64 = System.getenv("LOCAL_PROPERTIES")
@@ -133,12 +121,25 @@ if (properties != null) {
     keystorePwd = properties.getProperty("KEYSTORE_PASS")
     alias = properties.getProperty("ALIAS_NAME")
     pwd = properties.getProperty("ALIAS_PASS")
-    ignoreX86 = properties.getProperty("IGNORE_X86") == "true"
 }
 
 keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
 alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
+
+def targetAbi = ""
+if (!gradle.startParameter.taskNames.isEmpty()) {
+    if (gradle.startParameter.taskNames.size == 1) {
+        def targetTask = gradle.startParameter.taskNames[0].toLowerCase()
+        if (targetTask.contains("arm64")) {
+            targetAbi = "arm64"
+        } else if (targetTask.contains("arm")) {
+            targetAbi = "arm"
+        }
+    } else {
+        targetAbi = "~"
+    }
+}
 
 android {
     compileSdkVersion 30
@@ -154,11 +155,17 @@ android {
             enable true
             universalApk false
 
-            if (ignoreX86) {
-                exclude 'x86', 'x86_64'
+            if (!targetAbi.isBlank()) {
+                if (targetAbi == "arm64") {
+                    exclude 'x86', 'x86_64', 'armeabi-v7a'
+                } else if (targetAbi == "arm") {
+                    exclude 'x86', 'x86_64', 'arm64-v8a'
+                } else {
+                    exclude 'x86', 'x86_64'
+                }
             }
-
         }
+
     }
 
     defaultConfig {
@@ -269,9 +276,7 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
-            if (keystorePwd != null) {
-                signingConfig signingConfigs.release
-            }
+            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
         }
 
         release {
@@ -286,7 +291,7 @@ android {
             signingConfig signingConfigs.release
         }
 
-        fossRelease {
+        foss {
             debuggable false
             jniDebuggable false
             minifyEnabled true
@@ -295,6 +300,14 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['debug']
+        }
+
+        fdroidArmRelease {
+            initWith foss
+        }
+
+        fdroidArm64Release {
+            initWith foss
         }
     }
 
@@ -336,7 +349,7 @@ android {
             }
         }
 
-        fossRelease {
+        foss {
             jni {
                 srcDirs = ['./jni/']
             }
@@ -383,7 +396,7 @@ android {
     }
 
     tasks.all { task ->
-        if (((task.name.endsWith('Ndk') || task.name.startsWith('generateJsonModel') || task.name.startsWith('externalNativeBuild'))) && !task.name.contains("Foss")) {
+        if (((task.name.endsWith('Ndk') || task.name.startsWith('generateJsonModel') || task.name.startsWith('externalNativeBuild'))) && !(task.name.contains("Foss") || task.name.contains("Fdroid"))) {
             task.enabled = false
         }
         if (task.name.contains("uploadCrashlyticsMappingFile")) {

@@ -1,30 +1,23 @@
-import cn.hutool.core.codec.Base64
 import com.android.build.gradle.internal.tasks.factory.dependsOn
-import org.apache.tools.ant.filters.StringInputStream
-import java.util.*
-import java.io.*
 
 plugins {
     id("com.android.library")
     id("org.mozilla.rust-android-gradle.rust-android")
 }
 
-var ignoreX86 = false
-
-lateinit var properties: Properties
-val base64 = System.getenv("LOCAL_PROPERTIES")
-if (!base64.isNullOrBlank()) {
-    properties = Properties()
-    properties.load(ByteArrayInputStream(Base64.decode(base64)))
-} else if (project.rootProject.file("local.properties").exists()) {
-    properties = Properties()
-    properties.load(StringInputStream(project.rootProject.file("local.properties").readText()))
+var targetAbi = ""
+if (gradle.startParameter.taskNames.isNotEmpty()) {
+    if (gradle.startParameter.taskNames.size == 1) {
+        val targetTask = gradle.startParameter.taskNames[0].toLowerCase()
+        if (targetTask.contains("arm64")) {
+            targetAbi = "arm64"
+        } else if (targetTask.contains("arm")) {
+            targetAbi = "arm"
+        }
+    } else {
+        targetAbi = "~"
+    }
 }
-
-if (::properties.isInitialized) {
-    ignoreX86 = properties.getProperty("IGNORE_X86") == "true"
-}
-
 
 android {
 
@@ -37,10 +30,12 @@ android {
     }
     buildToolsVersion = "30.0.3"
 
-    if (ignoreX86) {
-        splits.abi {
-            exclude("x86", "x86_64")
-        }
+    if (targetAbi.isNotBlank()) {
+        splits.abi.exclude(* when (targetAbi) {
+            "arm" -> arrayOf("x86", "x86_64", "arm64-v8a")
+            "arm64" -> arrayOf("x86", "x86_64", "armeabi-v7a")
+            else -> arrayOf("x86", "x86_64")
+        })
     }
 
 }
@@ -48,10 +43,11 @@ android {
 cargo {
     module = "src/main/rust/shadowsocks-rust"
     libname = "ss-local"
-    targets = if (ignoreX86) {
-        listOf("arm", "arm64")
-    } else {
-        listOf("arm", "arm64", "x86", "x86_64")
+    targets = when {
+        targetAbi.isBlank() -> listOf("arm", "arm64", "x86", "x86_64")
+        targetAbi == "arm" -> listOf("arm")
+        targetAbi == "arm64" -> listOf("arm64")
+        else -> listOf("arm", "arm64")
     }
     profile = findProperty("CARGO_PROFILE")?.toString() ?: "release"
     extraCargoBuildArguments = listOf("--bin", "sslocal")
