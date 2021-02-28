@@ -282,7 +282,7 @@ android {
             multiDexEnabled true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            matchingFallbacks = ['debug']
+            matchingFallbacks = ['release', 'debug']
             signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
         }
 
@@ -294,7 +294,7 @@ android {
             multiDexEnabled true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            matchingFallbacks = ['debug']
+            matchingFallbacks = ['release', 'debug']
             signingConfig signingConfigs.release
         }
 
@@ -306,15 +306,17 @@ android {
             multiDexEnabled true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            matchingFallbacks = ['debug']
+            matchingFallbacks = ['release', 'debug']
         }
 
         fdroidArmRelease {
             initWith foss
+            matchingFallbacks = ['release', 'debug']
         }
 
         fdroidArm64Release {
             initWith foss
+            matchingFallbacks = ['release', 'debug']
         }
     }
 
