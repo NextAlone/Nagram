@@ -117,8 +117,9 @@ dependencies {
 def keystorePwd = null
 def alias = null
 def pwd = null
-Properties properties
+def ignoreX86 = false
 
+Properties properties
 def base64 = System.getenv("LOCAL_PROPERTIES")
 if (base64 != null && !base64.isBlank()) {
     properties = new Properties()
@@ -132,6 +133,7 @@ if (properties != null) {
     keystorePwd = properties.getProperty("KEYSTORE_PASS")
     alias = properties.getProperty("ALIAS_NAME")
     pwd = properties.getProperty("ALIAS_PASS")
+    ignoreX86 = properties.getProperty("IGNORE_X86") == "true"
 }
 
 keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
@@ -144,6 +146,20 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "nekox.messenger"
+
+    splits {
+
+        abi {
+
+            enable true
+            universalApk false
+
+            if (ignoreX86) {
+                exclude 'x86', 'x86_64'
+            }
+
+        }
+    }
 
     defaultConfig {
         minSdkVersion 16
@@ -325,13 +341,6 @@ android {
                 srcDirs = ['./jni/']
             }
         }
-
-    }
-
-    splits.abi {
-
-        enable true
-        universalApk false
 
     }
 
