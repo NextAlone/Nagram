@@ -127,7 +127,7 @@ jobs:
         run: |
           ./run libs native
   v2ray:
-    name: Native Build (V2ray)
+    name: Native Build ( V2ray )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -157,7 +157,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs v2ray
   shadowsocks:
-    name: Native Build (Shadowsocks)
+    name: Native Build ( Shadowsocks )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -187,7 +187,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs shadowsocks
   shadowsocksr:
-    name: Native Build (ShadowsocksR)
+    name: Native Build ( ShadowsocksR )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -213,8 +213,8 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs ssr
-  debug:
-    name: Debug Build
+  build:
+    name: Gradle Build
     runs-on: ubuntu-latest
     needs:
       - native

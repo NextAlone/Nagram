@@ -2,9 +2,7 @@
 
 source "bin/init/env.sh"
 
-[ -f gradlew ] && CMD="./gradlew" || CMD="gradle"
-
-$CMD TMessagesProj:stripFullFossReleaseDebugSymbols || exit 1
+./gradlew TMessagesProj:stripFullFossDebugSymbols || exit 1
 
 OUT=TMessagesProj/build/intermediates/stripped_native_libs/fullFossRelease/out/lib
 DIR=TMessagesProj/src/main/libs

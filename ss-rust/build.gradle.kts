@@ -38,6 +38,13 @@ android {
         })
     }
 
+    productFlavors {
+        flavorDimensions.add("abi")
+
+        create("arm")
+        create("arm64")
+    }
+
 }
 
 cargo {
