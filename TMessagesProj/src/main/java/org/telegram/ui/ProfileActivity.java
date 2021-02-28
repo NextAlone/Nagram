@@ -175,12 +175,10 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
-import tw.nekomimi.nekogram.parts.UpdateChecksKt;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
@@ -2908,12 +2906,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         updateListAnimated(false);
                         return Unit.INSTANCE;
                     });
-                    if (ExternalGcm.checkPlayServices()) {
-                        builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_system_update_24, (it) -> {
-                            UpdateChecksKt.checkUpdate(ProfileActivity.this.getParentActivity());
-                            return Unit.INSTANCE;
-                        });
-                    }
                     builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
                         Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
                         return Unit.INSTANCE;

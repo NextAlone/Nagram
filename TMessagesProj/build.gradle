@@ -77,7 +77,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.osmdroid:osmdroid-android:6.1.10'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.30'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
@@ -285,25 +285,45 @@ android {
     sourceSets {
 
         main {
-            jni.srcDirs = []
+            jni {
+                srcDirs = []
+            }
         }
 
         debug {
-            jniLibs.srcDir 'src/main/libs'
-            manifest.srcFile 'src/gservcies/AndroidManifest.xml'
+            java {
+                srcDirs 'src/main/java', 'src/gservcies/java'
+            }
+            jniLibs {
+                srcDir 'src/main/libs'
+            }
+            manifest {
+                srcFile 'src/gservcies/AndroidManifest.xml'
+            }
         }
 
         releaseNoGcm {
-            jniLibs.srcDir 'src/main/libs'
+            jniLibs {
+                srcDir 'src/main/libs'
+            }
         }
 
         release {
-            jniLibs.srcDir 'src/main/libs'
-            manifest.srcFile 'src/gservcies/AndroidManifest.xml'
+            java {
+                srcDirs 'src/main/java', 'src/gservcies/java'
+            }
+            jniLibs {
+                srcDir 'src/main/libs'
+            }
+            manifest {
+                srcFile 'src/gservcies/AndroidManifest.xml'
+            }
         }
 
         fossRelease {
-            jni.srcDirs = ['./jni/']
+            jni {
+                srcDirs = ['./jni/']
+            }
         }
 
     }
