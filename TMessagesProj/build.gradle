@@ -73,6 +73,7 @@ if (!gradle.startParameter.taskNames.isEmpty()) {
             targetAbi = "arm64"
         } else if (targetTask.contains("arm")) {
             targetAbi = "arm"
+            verCode -= 1
         }
     } else {
         targetAbi = "~"
@@ -380,7 +381,7 @@ android {
         }
         fullPlay {
             versionNameSuffix '-play'
-            versionCode verCode - 1
+            versionCode verCode - 2
         }
     }
 
