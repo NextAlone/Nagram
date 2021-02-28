@@ -2,6 +2,8 @@
 
 source "bin/init/env.sh"
 
+[ -f gradlew ] && CMD="./gradlew" || CMD="gradle"
+
 git submodule update --init ss-rust/src/main/rust/shadowsocks-rust
-./gradlew ss-rust:assembleRelease || exit 1
+$CMD ss-rust:assembleRelease || exit 1
 cp ss-rust/build/outputs/aar/* TMessagesProj/libs
