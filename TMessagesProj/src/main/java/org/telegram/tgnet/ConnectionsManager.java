@@ -47,7 +47,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.parts.DeviceInfosKt;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 
@@ -195,24 +197,26 @@ public class ConnectionsManager extends BaseController {
             version = BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9;
             appId = BuildVars.OFFICAL_APP_ID;
             appVersion = BuildConfig.OFFICIAL_VERSION + " (" + (BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9) + ")";
-            if (BuildVars.DEBUG_VERSION) {
-                appVersion += " beta";
-            }
         } else {
             fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
             version = BuildConfig.VERSION_CODE;
             appId = BuildConfig.APP_ID;
-            appVersion = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
+            String versionName = BuildConfig.VERSION_NAME;
+            if (versionName.contains("-")) {
+                versionName = StrUtil.subBefore(versionName, "-", false);
+            }
+            appVersion = versionName + " (" + BuildConfig.VERSION_CODE + ")";
         }
 
         if (systemLangCode.trim().length() == 0) {
             systemLangCode = "en";
         }
+
         if (deviceModel.trim().length() == 0) {
-            deviceModel = "Unknown";
+            deviceModel = DeviceInfosKt.randomDevice();
         }
         if (systemVersion.trim().length() == 0) {
-            systemVersion = "Unknown";
+            systemVersion = DeviceInfosKt.randomSystemVersion();
         }
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
