@@ -2,7 +2,8 @@
 
 NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
-[![Continuous integration](https://github.com/NekoX-Dev/NekoX/workflows/Debug%20build/badge.svg?branch=main)](https://github.com/NekoX-Dev/NekoX/actions)
+[![Continuous integration](https://github.com/NekoX-Dev/NekoX/workflows/Debug%20build/badge.svg?branch=main)](https://github.com/NekoX-Dev/NekoX/actions) 
+[![Translation status](https://hosted.weblate.org/widgets/nekox/-/svg-badge.svg)](https://hosted.weblate.org/engage/nekox/)
 
 - [Google Play Store](https://play.google.com/store/apps/details?id=nekox.messenger)
 - [Update News Telegram](https://t.me/NekogramX)
@@ -75,8 +76,9 @@ Consider using a Linux VM or dual booting.**
 
 It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.  [here is how to install AndroidStudio](https://developer.android.com/studio/install).
 
-2. Install golang ( >= 1.15.5 ).
+2. Install golang ( 1.15.8 ).
 ```shell
+# debian sid
 apt install -y golang
 ```
 
@@ -126,11 +128,7 @@ If you experience a *crash*, you also need to click on the version number at the
 
 #### How can I help with Localization?
 
-Join the project at https://nekox.crowdin.com/nekox.
-
-##### My language is not in the translation platform / needs to be improved !
-
-Same as submitting a bug, plus you need to submit your nekox.crowdin.com account.
+Join the project at https://hosted.weblate.org/projects/nekox/
 
 ## Credits
 
@@ -144,4 +142,7 @@ Same as submitting a bug, plus you need to submit your nekox.crowdin.com account
     <li>HanLP: <a href="https://github.com/hankcs/HanLP/blob/1.x/LICENSE">Apache License 2.0</a></li>
     <li>OpenCC: <a href="https://github.com/BYVoid/OpenCC/blob/master/LICENSE">Apache License 2.0</a></li>
     <li>opencc-data: <a href="https://github.com/nk2028/opencc-data">Apache License 2.0</a></li>
+    <li>android-device-list: <a href="https://github.com/pbakondy/android-device-list/blob/master/LICENSE">MIT</a> </li>
 </ul>
+
+[![Translation status](https://hosted.weblate.org/widgets/nekox/-/multi-auto.svg)](https://hosted.weblate.org/engage/nekox/)
