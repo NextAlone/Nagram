@@ -29,6 +29,8 @@ echo "NDK Found: $_NDK"
 echo "sdk.dir=$ANDROID_HOME" >> local.properties
 echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
 
+bin/libs/v2ray/init.sh
+
 ## Remove unused non-free dependencies
 pushd TMessagesProj
 

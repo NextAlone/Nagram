@@ -140,7 +140,7 @@ jobs:
         run: |
           ./run libs native
   v2ray:
-    name: Native Build (V2ray)
+    name: Native Build ( V2ray )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -151,7 +151,7 @@ jobs:
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray.sh') }}
+          key: ${{ hashFiles('bin/libs/v2ray/*') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -170,7 +170,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs v2ray
   shadowsocks:
-    name: Native Build (Shadowsocks)
+    name: Native Build ( Shadowsocks )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -200,7 +200,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs shadowsocks
   shadowsocksr:
-    name: Native Build (ShadowsocksR)
+    name: Native Build ( ShadowsocksR )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -267,7 +267,7 @@ jobs:
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray.sh') }}
+          key: ${{ hashFiles('bin/libs/v2ray/*') }}
       - name: Shadowsocks Cache
         uses: actions/cache@v2
         with:
@@ -383,7 +383,7 @@ jobs:
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray.sh') }}
+          key: ${{ hashFiles('bin/libs/v2ray/*') }}
       - name: Shadowsocks Cache
         uses: actions/cache@v2
         with:
