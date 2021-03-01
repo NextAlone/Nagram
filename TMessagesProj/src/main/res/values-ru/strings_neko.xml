@@ -98,7 +98,7 @@
     <string name="DisableAppBarShadow">Отключить тень заголовка</string>
     <string name="BetaWarning">Эта функция **Telegram** находятся в **бета-тесте**.</string>
     <string name="MediaPreview">Предпросмотр медиа в списке чатов</string>
-    <string name="AutoPauseVideo">Останавливать воспроизведение автоматически</string>
+    <string name="AutoPauseVideo">Останавливать видео</string>
     <string name="AutoPauseVideoAbout">При блокировке экрана или сворачивании приложения.</string>
     <string name="DisableProximityEvents">Отключить датчик приближения</string>
     <string name="IncreaseVoiceMessageQuality">Повысить качество голосовых</string>
