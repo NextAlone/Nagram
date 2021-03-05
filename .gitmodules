@@ -33,3 +33,6 @@
 [submodule "ssr-libev/src/main/jni/re2"]
 	path = ssr-libev/src/main/jni/re2
 	url = https://github.com/google/re2.git
+[submodule "v2ray"]
+	path = v2ray
+	url = https://github.com/nekohasekai/AndroidLibV2rayLite

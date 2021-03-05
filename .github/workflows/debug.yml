@@ -268,10 +268,11 @@ jobs:
           path: |
             TMessagesProj/libs/ssr-libev-release.aar
           key: ${{ hashFiles('shadowsocksr_status') }}
-      - name: Fix Gradle Memoery
+      - name: Configure Gradle
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
+          echo "sdk.dir=${ANDROID_HOME}" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" >> local.properties
       - name: Gradle cache
         uses: actions/cache@v2
         with:
