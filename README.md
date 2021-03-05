@@ -83,10 +83,10 @@ Consider using a Linux VM or dual booting.**
 
 It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.
 
-2. Install golang ( 1.15 ).
+2. Install golang ( 1.16 ).
 ```shell
 # debian sid
-apt install -y golang
+apt install -y golang-1.16
 ```
 
 3. Install Rust and its stdlib for Android ABIs, and add environment variables for it.
