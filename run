@@ -5,6 +5,7 @@ for e in $@; do
   TARGET="$TARGET/$e"
   shift
   if [ -x "${TARGET}.sh" ]; then
+    echo ">> ${TARGET}.sh"
     exec "${TARGET}.sh" $@
   fi
 done
