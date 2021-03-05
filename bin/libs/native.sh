@@ -4,7 +4,7 @@ source "bin/init/env.sh"
 
 ./gradlew TMessagesProj:stripFullFossDebugSymbols || exit 1
 
-OUT=TMessagesProj/build/intermediates/stripped_native_libs/fullFossRelease/out/lib
+OUT=TMessagesProj/build/intermediates/stripped_native_libs/fullFoss/out/lib
 DIR=TMessagesProj/src/main/libs
 rm -rf $DIR/armeabi-v7a
 mkdir -p $DIR/armeabi-v7a
