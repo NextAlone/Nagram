@@ -24,13 +24,19 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.hutool.core.util.StrUtil;
+
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
     public interface FileDownloadProgressListener {
         void onFailedDownload(String fileName, boolean canceled);
+
         void onSuccessDownload(String fileName);
+
         void onProgressDownload(String fileName, long downloadSize, long totalSize);
+
         void onProgressUpload(String fileName, long downloadSize, long totalSize, boolean isEncrypted);
+
         int getObserverTag();
     }
 
@@ -145,17 +151,17 @@ public class DownloadController extends BaseController implements NotificationCe
                 if (settings.photo_size_max != 0 && !settings.disabled) {
                     mask[a] |= AUTODOWNLOAD_TYPE_PHOTO;
                 } else {
-                    mask[a] &=~ AUTODOWNLOAD_TYPE_PHOTO;
+                    mask[a] &= ~AUTODOWNLOAD_TYPE_PHOTO;
                 }
                 if (settings.video_size_max != 0 && !settings.disabled) {
                     mask[a] |= AUTODOWNLOAD_TYPE_VIDEO;
                 } else {
-                    mask[a] &=~ AUTODOWNLOAD_TYPE_VIDEO;
+                    mask[a] &= ~AUTODOWNLOAD_TYPE_VIDEO;
                 }
                 if (settings.file_size_max != 0 && !settings.disabled) {
                     mask[a] |= AUTODOWNLOAD_TYPE_DOCUMENT;
                 } else {
-                    mask[a] &=~ AUTODOWNLOAD_TYPE_DOCUMENT;
+                    mask[a] &= ~AUTODOWNLOAD_TYPE_DOCUMENT;
                 }
             }
         }
@@ -207,7 +213,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public int currentMobilePreset;
     public int currentWifiPreset;
     public int currentRoamingPreset;
-    
+
     private static volatile DownloadController[] Instance = new DownloadController[UserConfig.MAX_ACCOUNT_COUNT];
 
     public static DownloadController getInstance(int num) {
@@ -568,6 +574,12 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public boolean canDownloadMedia(MessageObject messageObject) {
+        if (messageObject.getDocument() != null) {
+            String documentName = messageObject.getDocument().file_name;
+            if (StrUtil.endWithAny(documentName, ".cmd", ".bat", ".exe", ".lha", ".lzh", ".apk", ".zip", ".7z")) {
+                return false;
+            }
+        }
         return canDownloadMedia(messageObject.messageOwner) == 1;
     }
 
