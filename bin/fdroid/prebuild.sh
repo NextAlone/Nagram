@@ -14,10 +14,11 @@ echo "rust.pythonCommand=/usr/bin/python3" >>local.properties
 
 # Install Golang
 curl -o golang.tar.gz https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz
-tar -C "/usr/local/lib/go-1.16" --strip-components=1 -xzf golang.tar.gz
+mkdir "$HOME/.go"
+tar -C "$HOME/.go" --strip-components=1 -xzf golang.tar.gz
 rm golang.tar.gz
-export PATH="$PATH:/usr/local/lib/go-1.16/bin"
-go version
+export PATH="$PATH:$HOME/.go/bin"
+go version || exit 1
 
 echo "sdk.dir=$ANDROID_HOME" >>local.properties
 echo "ndk.dir=$ANDROID_NDK_HOME" >>local.properties
