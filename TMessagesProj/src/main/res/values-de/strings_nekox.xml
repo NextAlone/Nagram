@@ -193,4 +193,26 @@
     <string name="CCSP">Vereinfachtes Chinesisch (China)</string>
     <string name="AcceptSecretChat">Neuen geheimen Chat annehmen</string>
     <string name="TabletMode">Tablet-Modus</string>
+    <string name="TrojanSNI">SNI (Optional)</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignoriert Android-Einschränkungen für Nachrichten lokal. Dies wird möglicherweise in Zukunft vom Server gesperrt und Sie müssen die lokale Legalität dieser Option selbst prüfen.</string>
+    <string name="HideDeviceInfoOn">Sie können dies später in den Einstellungen ändern.</string>
+    <string name="HideDeviceInfoOff">Das Gerätemodell wird beim zweiten Start der App nach dem Anmelden hochgeladen.</string>
+    <string name="HideDeviceInfo">Gerätemodell ausblenden</string>
+    <string name="DisableTrending">Trend deaktivieren</string>
+    <string name="ReplaceRegex">Verwenden Sie Regex</string>
+    <string name="TextReplace">Ersetzen</string>
+    <string name="TextOrigin">Ursprung</string>
+    <string name="ReplaceText">Text ersetzen</string>
+    <string name="TabletModeDefault">Abhängig vom Gerät</string>
+    <string name="UserRestrictionsSendInline">Senden über Inline-Bots</string>
+    <string name="UserRestrictionsSendGames">Spiele senden</string>
+    <string name="CCJP">Neues japanisches Kanji (Shinjitai)</string>
+    <string name="FCTitle">Über Anwendungs-Updates</string>
+    <string name="StorageReset">Speicherplatz bereinigen</string>
+    <string name="QRLoginNotice">Mit diesem QR-Code / Link können sich Personen bei Ihrem Telegrammkonto anmelden. Ist das Ihre eigene Operation\?</string>
+    <string name="ProxyInfoTrojan">Trojaner-Proxy-Einstellungen</string>
+    <string name="AddProxyTrojan">Trojaner-Proxy hinzufügen</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Deaktivieren Sie die Linkvorschau-Anforderung standardmäßig während der Eingabe, um zu verhindern, dass der Server weiß, dass der Link über Telegram freigegeben wird.</string>
+    <string name="UseChatAttachEnterMenuNotice">Ändern Sie die Aufnahmetaste in ein Eingabemenü und fügen Sie einen Linkvorschau-Toggle hinzu.</string>
+    <string name="UseChatAttachEnterMenu">Verwenden Sie das Eingabemenü</string>
 </resources>

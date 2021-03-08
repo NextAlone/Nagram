@@ -61,7 +61,7 @@
     <string name="TranslationProvider">Сервис перевода</string>
     <string name="ProviderGoogleTranslate">Google</string>
     <string name="ProviderGoogleTranslateCN">Google (кит.)</string>
-    <string name="TranslateApiUnsupported">Выбранный движок не поддерживает ваш язык.</string>
+    <string name="TranslateApiUnsupported">Выбранный сервис не поддерживает ваш язык.</string>
     <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Скрыть перевод</string>
     <string name="DisablePhotoViewerSideAction">Не листать медиа тапом</string>

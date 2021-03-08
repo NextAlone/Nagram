@@ -35,8 +35,8 @@
     <string name="PlaceHolder">Placeholder - Harap Matikan</string>
     <string name="CustomBackend">Backend Khusus</string>
     <string name="CustomBackendNotice">Fungsi ini hanya tersedia untuk pengguna profesional, jika anda tidak tahu apa fungsi opsi-opsi berikut ini, abaikan saja.</string>
-    <string name="CustomBackendProduction">Official Production DataCenter</string>
-    <string name="CustomBackendTestDC">Official Test DataCenter</string>
+    <string name="CustomBackendProduction">Pusat Data Produksi Resmi</string>
+    <string name="CustomBackendTestDC">DataCenter Uji Resmi</string>
     <string name="AllowFlashCall">Izinkan panggilan cepat</string>
     <string name="ChangeTranslateProvider">Ubah Penyedia</string>
     <string name="ProviderYandexTranslate">Penerjemah.Yandex</string>
@@ -108,7 +108,7 @@
     <string name="AddProxySSR">Tambahkan Proxy ShadowsocksR</string>
     <string name="AddProxyTrojan">Tambahkan Proxy Trojan</string>
     <string name="SSPluginConflictingName">Beberapa plugin menggunakan ID ini: %s.</string>
-    <string name="EditProxy">Edit Proxy</string>
+    <string name="EditProxy">Edit Proksi</string>
     <string name="ShareProxy">Bagikan Proxy</string>
     <string name="ProxyDelete">Hapus Proxy</string>
     <string name="ProxyInfoVmess">Pengaturan Proxy Vmess</string>
@@ -118,7 +118,7 @@
     <string name="VmessNetwork">Jaringan</string>
     <string name="VmessHeadType">Head Type</string>
     <string name="VmessRequestHost">Meminta Keamanan Host / QUIC</string>
-    <string name="VmessPath">Path / QUIC Key</string>
+    <string name="VmessPath">Jalur / Kunci QUIC</string>
     <string name="VmessTls">Gunakan TLS</string>
     <string name="ProxyInfoSS">Pengaturan Proxy Shadowsocks</string>
     <string name="SSPassword">Kata Sandi</string>

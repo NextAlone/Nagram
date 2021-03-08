@@ -30,8 +30,8 @@
     <string name="LinkedGroupChat">Привязанная группа</string>
     <string name="LinkedChannelChat">Привязанный канал</string>
     <string name="DevModeTitle">** Ваш аккаунт может быть заблокирован **</string>
-    <string name="DevModeNotice">Мы не несем ответственности за использование функций разработчика</string>
-    <string name="TapToDisable">Нажмите, чтобы скрыть. Вам это не нужно</string>
+    <string name="DevModeNotice">Мы не несем ответственности за использование функций разработчика.</string>
+    <string name="TapToDisable">Нажмите, чтобы скрыть. Вам это не нужно.</string>
     <string name="PlaceHolder">Бесполезное уведомление - пожалуйста, отключите</string>
     <string name="CustomBackend">Выбрать DC</string>
     <string name="CustomBackendNotice">Только для опытных пользователей! При одновременном логине на разных DC ваш аккаунт может быть удален, а номер заблокирован.</string>
@@ -76,7 +76,7 @@
     <string name="FilterNameUnmutedDescription">Сообщения из чатов с уведомлениями</string>
     <string name="FilterNameUnread2">Непрочитанные</string>
     <string name="FilterNameUnreadDescription">Только непрочитанные сообщения</string>
-    <string name="FilterNameUnmutedAndUnread">Новые &amp; Со звуком</string>
+    <string name="FilterNameUnmutedAndUnread">Новые со звуком</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Только новые с увед.</string>
     <string name="IgnoreMutedCount">Не считать приглушенные во вкладках</string>
     <string name="DialogsSettings">Настройки чатов</string>
@@ -156,8 +156,8 @@
     <string name="DeleteUnavailableServer">Удалить недоступные</string>
     <string name="DeleteAllServerConfirm">Вы уверены, что хотите **удалить все прокси**?</string>
     <string name="DeleteUnavailableServerConfirm">Вы уверены, что хотите ** удалить недоступные**?</string>
-    <string name="MinApi21Required">Требуется Android 5 и выше (API21)</string>
-    <string name="MinApi23Required">Требуется Android 6 и выше (API23)</string>
+    <string name="MinApi21Required">Требуется Android 5 и выше (API21).</string>
+    <string name="MinApi23Required">Требуется Android 6 и выше (API23).</string>
     <string name="MiniVersionAlert">Mini-версия не поддерживает этот тип прокси. Скачайте full-версию.</string>
     <string name="ImportProxyFromClipboard">Импорт из буфера</string>
     <string name="BrokenLink">Неверная ссылка</string>

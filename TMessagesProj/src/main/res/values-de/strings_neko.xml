@@ -12,9 +12,9 @@
     <string name="IgnoreBlocked">Blockierte Benutzer in Gruppe ignorieren</string>
     <string name="Connection">Verbindung</string>
     <string name="Chat">Chat</string>
-    <string name="NameOrder">Namenbestellung</string>
+    <string name="NameOrder">Namensreihenfolge</string>
     <string name="FirstLast">Erster</string>
-    <string name="LastFirst">Zuletzt zuerst</string>
+    <string name="LastFirst">Letzter zuerst</string>
     <string name="TypefaceUseDefault">Standardschriftart verwenden</string>
     <string name="NoQuoteForward">Ohne Zitat weiterleiten</string>
     <string name="Repeat">Wiederholen</string>
@@ -45,14 +45,14 @@
     <string name="SaveCacheToExternalFilesDirAbout">Speichere den \"Telegram\" Ordner in einem app-spezifischen Verzeichnis, um den gemeinsam genutzten Speicher sauber zu halten.</string>
     <string name="SensitiveDisableFiltering">Empfindliche Inhaltsfilterung deaktivieren</string>
     <string name="SensitiveAbout">Zeige sensible Medien in öffentlichen Kanälen auf all Ihren Geräten.</string>
-    <string name="StickerSize">Aufklebergröße</string>
-    <string name="StickerSizeDialogMessageBigOne">Ein grosser</string>
-    <string name="StickerSizeDialogMessageSmallOne">Ein kleines</string>
+    <string name="StickerSize">Stickergröße</string>
+    <string name="StickerSizeDialogMessageBigOne">Ein großer</string>
+    <string name="StickerSizeDialogMessageSmallOne">Ein kleiner</string>
     <string name="StickerSizeDialogMessageReplyTo">Miau</string>
     <string name="StickerSizeDialogName">Duang</string>
     <string name="Experiment">Experimentell</string>
-    <string name="UnlimitedFavoredStickers">Unbegrenzte favorisierte Aufkleber</string>
-    <string name="UnlimitedFavoredStickersAbout">Fügen Sie unbegrenzte Aufkleber zu Favoriten hinzu. Sticker werden möglicherweise nicht mit anderen Geräten synchronisiert.</string>
+    <string name="UnlimitedFavoredStickers">Unbegrenzte favorisierte Sticker</string>
+    <string name="UnlimitedFavoredStickersAbout">Fügen Sie unbegrenzte Sticker zu Favoriten hinzu. Sticker werden möglicherweise nicht mit anderen Geräten synchronisiert.</string>
     <string name="MessageDetails">Details</string>
     <string name="ExportAsJson">Als JSON exportieren</string>
     <string name="Translate">Übersetzen</string>
@@ -93,7 +93,7 @@
     <string name="IgnoreBlockedAbout">Nachrichten von blockierten Benutzern werden in Gruppen nicht mehr angezeigt.</string>
     <string name="GooglePlay">Google Play</string>
     <string name="SourceCode">Quellcode auf Github</string>
-    <string name="ResetStickerSize">Aufklebergröße zurücksetzen</string>
+    <string name="ResetStickerSize">Stickergröße zurücksetzen</string>
     <string name="RestartAppToTakeEffect">Starte die App neu, um wirksam zu werden.</string>
     <string name="DisableAppBarShadow">Schatten der Titelleiste deaktivieren</string>
     <string name="BetaWarning">Dies ist eine **beta** Funktion, die von **Telegram** implementiert wurde.</string>
@@ -108,4 +108,5 @@
     <string name="ProviderDeepLTranslate">DeepL-Übersetzung</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Übersetzer</string>
     <string name="ProviderYouDao">YouDao Übersetzer</string>
+    <string name="AutoPauseVideoAbout">Beim Sperren des Bildschirms / Umschalten auf Hintergrund.</string>
 </resources>
