@@ -38,7 +38,7 @@
     <string name="TestBackend">Kiểm tra cuối</string>
     <string name="TestBackendOn">Tài khoản này sẽ kết nối với phụ trợ thử nghiệm.</string>
     <string name="TestBackendOff">Tài khoản này sẽ kết nối với phụ trợ sản xuất.</string>
-    <string name="HideProxySponsorChannel">Hide proxy sponsor channel</string>
+    <string name="HideProxySponsorChannel">Ẩn kênh nhà tài trợ proxy</string>
     <string name="ViewHistory">Xem lịch sử</string>
     <string name="Nya">Meo!</string>
     <string name="SaveCacheToExternalFilesDir">Cách ly lưu trữ</string>
@@ -70,7 +70,7 @@
     <string name="UnlimitedPinnedDialogsAbout">Ghim các hộp thoại không giới hạn bằng cách tắt đồng bộ hóa của chúng.</string>
     <string name="OpenArchiveOnPull">Kéo xuống để mở Lưu trữ</string>
     <string name="HideKeyboardOnChatScroll">Ẩn bàn phím khi cuộn trò chuyện</string>
-    <string name="UserRestrictionsSendStickers2">Send Stickers</string>
+    <string name="UserRestrictionsSendStickers2">Gửi nhãn dán</string>
     <string name="UserRestrictionsSendGifs">Gửi ảnh GIF</string>
     <string name="ShowTabsOnForward">Hiển thị các tab về phía trước</string>
     <string name="CheckAllAdministrated">Thêm quản trị viên</string>
@@ -91,7 +91,7 @@
     <string name="OfficialChannel">Kênh chính thức</string>
     <string name="About">Thông tin thêm</string>
     <string name="IgnoreBlockedAbout">Bạn sẽ không còn thấy tin nhắn từ những người dùng bị chặn trong các nhóm.</string>
-    <string name="GooglePlay">Google Play</string>
+    <string name="GooglePlay">CH Play</string>
     <string name="SourceCode">Mã nguồn trên Github</string>
     <string name="ResetStickerSize">Đặt lại kích thước nhãn dán</string>
     <string name="RestartAppToTakeEffect">Khởi động lại ứng dụng để có hiệu lực.</string>
@@ -107,6 +107,6 @@
     <string name="BlurAvatarBackground">Làm mờ ảnh hồ sơ</string>
     <string name="DarkenAvatarBackground">Làm mờ ảnh hồ sơ</string>
     <string name="ProviderDeepLTranslate">Dịch DeepL</string>
-    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Dịch</string>
     <string name="ProviderYouDao">YouDao Dịch</string>
 </resources>

@@ -70,7 +70,7 @@
     <string name="FilterNameGroupsDescription">Chỉ tin nhắn từ các cuộc trò chuyện nhóm</string>
     <string name="FilterNameChannels">Kênh</string>
     <string name="FilterNameChannelsDescription">Chỉ tin nhắn từ các kênh</string>
-    <string name="FilterNameBots">Bots</string>
+    <string name="FilterNameBots">Bot</string>
     <string name="FilterNameBotsDescription">Chỉ những tin nhắn từ bot</string>
     <string name="FilterNameUnmuted">Bật tiếng</string>
     <string name="FilterNameUnmutedDescription">Chỉ tin nhắn từ các cuộc trò chuyện chưa được bật thông báo</string>

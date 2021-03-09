@@ -118,7 +118,7 @@
     <string name="VmessNetwork">Rede</string>
     <string name="VmessHeadType">Tipo de cabeça</string>
     <string name="VmessRequestHost">Host do Pedido / Segurança QUIC</string>
-    <string name="VmessPath">Path / QUIC Key</string>
+    <string name="VmessPath">Caminho / Chave QUIC</string>
     <string name="VmessTls">Usar TLS</string>
     <string name="ProxyInfoSS">Configurações do Proxy Shadowsocks</string>
     <string name="SSPassword">Senha</string>
@@ -129,7 +129,7 @@
     <string name="SSRProtocol">Protocolo</string>
     <string name="SSRProtocolParams">Parâmetros de protocolo</string>
     <string name="SSRObfs">Obfs</string>
-    <string name="SSRObfsParam">Obfs Param</string>
+    <string name="SSRObfsParam">Parâm. Obfs</string>
     <string name="ProxyInfoTrojan">Configurações do Trojan Proxy</string>
     <string name="TrojanSNI">SNI (Opcional)</string>
     <string name="ProxyRemarks">Observações</string>
@@ -211,5 +211,9 @@
     <string name="ReplaceText">Substituir Texto</string>
     <string name="TextOrigin">Origem</string>
     <string name="TextReplace">Substituir</string>
-    <string name="ReplaceRegex">Use regex</string>
+    <string name="ReplaceRegex">Usar regex</string>
+    <string name="HideDeviceInfoOn">Você pode mudar isso nas configurações depois.</string>
+    <string name="HideDeviceInfoOff">O modelo do dispositivo será enviado na segunda vez que o app for iniciado após o login.</string>
+    <string name="HideDeviceInfo">Ocultar modelo do dispositivo</string>
+    <string name="DisableTrending">Desativar Tendências</string>
 </resources>
