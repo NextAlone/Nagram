@@ -284,4 +284,11 @@
     <string name="Win32ExecutableFiles">Win32 executable files</string>
     <string name="ArchiveFiles">Archive files</string>
 
+    <string name="EnableStickerPin">Enable Pinning Sticker</string>
+    <string name="EnableStickerPinAbout">Pin Stickers and sync with cloud even when adding new stickers.\nPaired with Disable Favorite and Recent.</string>
+    <string name="EnableStickerPinTip">This function is still under development, syncing with cloud may not work as thought.</string>
+
+    <string name="PinSticker">Pin</string>
+    <string name="UnpinSticker">Unpin</string>
+
 </resources>

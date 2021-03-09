@@ -23,6 +23,8 @@ public class NekoXConfig {
     public static boolean disableStatusUpdate = preferences.getBoolean("disable_status_update", false);
     public static boolean keepOnlineStatus = preferences.getBoolean("keepOnlineStatus", false);
 
+    public static boolean enableStickerPin = preferences.getBoolean("enableStickerPin", false);
+
 
     public static void toggleDeveloperMode() {
 
@@ -135,6 +137,12 @@ public class NekoXConfig {
         preferences.edit().putBoolean("keepOnlineStatus", keepOnlineStatus = !keepOnlineStatus).apply();
 
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null);
+
+    }
+
+    public static void toggleEnableStickerPin() {
+
+        preferences.edit().putBoolean("enableStickerPin", enableStickerPin = !enableStickerPin).apply();
 
     }
 

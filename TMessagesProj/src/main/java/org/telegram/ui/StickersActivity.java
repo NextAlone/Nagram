@@ -92,6 +92,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.PinnedStickerHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
@@ -103,6 +105,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private static final int MENU_ARCHIVE = 0;
     private static final int MENU_DELETE = 1;
     private static final int MENU_EXPORT = 5;
+    private static final int MENU_TOGGLE_PIN = 100;
 
 
     private RecyclerListView listView;
@@ -156,7 +159,34 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (source.getItemViewType() != target.getItemViewType()) {
                 return false;
             }
-            listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
+            if (NekoXConfig.enableStickerPin && currentType == MediaDataController.TYPE_IMAGE) {
+                int from = source.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                if (from < stickersStartRow + listAdapter.pinnedStickersCount) {
+                    // drag a pinned sticker
+                    if (to >= stickersStartRow + listAdapter.pinnedStickersCount) {// to a unpinned sticker
+                        return false;
+                    }
+                } else {
+                    // drag a unpinned sticker
+                    if (to < stickersStartRow + listAdapter.pinnedStickersCount) {
+                        // to a pinned sticker
+                        return false;
+                    } else {
+                        // to a unpinned sticker, like normal
+                        listAdapter.swapElements(from, to);
+                        return true;
+                    }
+                }
+                // pinned to pinned
+                if (from == to)
+                    return false;
+                int index1 = from - stickersStartRow;
+                int index2 = to - stickersStartRow;
+                PinnedStickerHelper.getInstance(currentAccount).swap(index1, index2);
+                listAdapter.swapElements(from, to);
+            } else
+                listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
             return true;
         }
 
@@ -598,6 +628,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
         final List<TLRPC.TL_messages_stickerSet> newList = mediaDataController.getStickerSets(currentType);
 
+        if (MediaDataController.TYPE_IMAGE == currentType && NekoXConfig.enableStickerPin) {
+            PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(newList);
+        }
+
         DiffUtil.DiffResult diffResult = null;
 
         if (listAdapter != null) {
@@ -629,7 +663,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     }
                 });
             }
-            listAdapter.setStickerSets(newList);
+            listAdapter.setStickerSets(newList, false); // NekoX: dont reorder here
         }
 
         rowCount = 0;
@@ -743,12 +777,35 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         private Context mContext;
 
+        private int pinnedStickersCount = 0; // to count how many stickers are pinned, used in notifyItemMoved, need to be updated when pin/unpin
+
         public ListAdapter(Context context, List<TLRPC.TL_messages_stickerSet> stickerSets) {
             mContext = context;
+            List<TLRPC.TL_messages_stickerSet> temp = new ArrayList<>(stickerSets);
+            if (MediaDataController.TYPE_IMAGE == currentType && NekoXConfig.enableStickerPin) {
+                if (PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(stickerSets)) {
+                    // Sync is needed
+//                    AndroidUtilities.runOnUIThread(() -> {
+//                        needReorder = true;
+//                        sendReorder();
+//                    }, 400);
+                    PinnedStickerHelper.getInstance(currentAccount).sendOrderSync(stickerSets);
+                }
+                this.pinnedStickersCount = PinnedStickerHelper.getInstance(currentAccount).pinnedList.size();
+            }
             this.stickerSets.addAll(stickerSets);
         }
 
         public void setStickerSets(List<TLRPC.TL_messages_stickerSet> stickerSets) {
+            this.stickerSets.clear();
+//            if (MediaDataController.TYPE_IMAGE == currentType && NekoXConfig.enableStickerPin) {
+//                pinnedStickersCount = PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(stickerSets);
+//            }
+            this.stickerSets.addAll(stickerSets);
+            this.pinnedStickersCount = PinnedStickerHelper.getInstance(currentAccount).pinnedList.size();
+        }
+
+        public void setStickerSets(List<TLRPC.TL_messages_stickerSet> stickerSets, boolean nekoxReorder) {
             this.stickerSets.clear();
             this.stickerSets.addAll(stickerSets);
         }
@@ -861,8 +918,17 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         private void processSelectionOption(int which, TLRPC.TL_messages_stickerSet stickerSet) {
             if (which == MENU_ARCHIVE) {
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), stickerSet, !stickerSet.set.archived ? 1 : 2, StickersActivity.this, true, true);
+                if (NekoXConfig.enableStickerPin && currentType == MediaDataController.TYPE_IMAGE) {
+                    // Sticker will be removed from local list in toggleStickerSet
+                    pinnedStickersCount--;
+                    setStickerSetCellPinnedMarkVisibility(stickerSet.set.id, false);
+                }
             } else if (which == MENU_DELETE) {
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), stickerSet, 0, StickersActivity.this, true, true);
+                if (NekoXConfig.enableStickerPin && currentType == MediaDataController.TYPE_IMAGE) {
+                    pinnedStickersCount--;
+                    setStickerSetCellPinnedMarkVisibility(stickerSet.set.id, false);
+                }
             } else if (which == 2) {
                 try {
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -886,7 +952,38 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 if (index >= 0) {
                     listAdapter.toggleSelected(stickersStartRow + index);
                 }
+            } else if (which == MENU_TOGGLE_PIN && NekoXConfig.enableStickerPin && currentType == MediaDataController.TYPE_IMAGE) {
+                final PinnedStickerHelper ins = PinnedStickerHelper.getInstance(currentAccount);
+                final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
+                if (ins.isPinned(stickerSet.set.id)) {
+                    // unpin
+                    ins.removePinnedStickerLocal(stickerSet.set.id);
+                    pinnedStickersCount--;
+                    setStickerSetCellPinnedMarkVisibility(stickerSet.set.id, false);
+                    moveElements(stickersStartRow + this.stickerSets.indexOf(stickerSet), stickersStartRow + pinnedStickersCount);
+                    // use swapElements and native notifier and observer to make pin/unpin work like a simple move, sync works perfectly
+                } else {
+                    // pin
+                    ins.pinNewSticker(stickerSet.set.id);
+                    pinnedStickersCount++;
+                    setStickerSetCellPinnedMarkVisibility(stickerSet.set.id, true);
+                    moveElements(stickersStartRow + this.stickerSets.indexOf(stickerSet), stickersStartRow);
+                }
+                needReorder = true;
+                sendReorder();
             }
+        }
+
+        @Nullable
+        private StickerSetCell setStickerSetCellPinnedMarkVisibility(long id, boolean visible) {
+            for (int i = 0; i < listView.getChildCount(); i++) {
+                View view = listView.getChildAt(i);
+                if (view instanceof StickerSetCell) {
+                    if (((StickerSetCell) view).getStickersSet().set.id == id)
+                        ((StickerSetCell) view).setPinnedMarkVisibility(visible);
+                }
+            }
+            return null;
         }
 
         @Override
@@ -1030,21 +1127,43 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                             };
                             icons = new int[]{R.drawable.baseline_archive_24, R.drawable.msg_reorder};
                         } else {
-                            options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE};
-                            items = new CharSequence[]{
-                                    LocaleController.getString("StickersHide", R.string.StickersHide),
-                                    LocaleController.getString("StickersCopy", R.string.StickersCopy),
-                                    LocaleController.getString("StickersReorder", R.string.StickersReorder),
-                                    LocaleController.getString("StickersShare", R.string.StickersShare),
-                                    LocaleController.getString("StickersRemove", R.string.StickersRemove),
-                            };
-                            icons = new int[]{
-                                    R.drawable.baseline_archive_24,
-                                    R.drawable.baseline_link_24,
-                                    R.drawable.msg_reorder,
-                                    R.drawable.baseline_forward_24,
-                                    R.drawable.baseline_delete_24
-                            };
+                            if (NekoXConfig.enableStickerPin && currentType == MediaDataController.TYPE_IMAGE) {
+                                options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE, MENU_TOGGLE_PIN};
+                                items = new CharSequence[]{
+                                        LocaleController.getString("StickersHide", R.string.StickersHide),
+                                        LocaleController.getString("StickersCopy", R.string.StickersCopy),
+                                        LocaleController.getString("StickersReorder", R.string.StickersReorder),
+                                        LocaleController.getString("StickersShare", R.string.StickersShare),
+                                        LocaleController.getString("StickersRemove", R.string.StickersRemove),
+                                        PinnedStickerHelper.getInstance(currentAccount).isPinned(stickerSet.set.id) ?
+                                                LocaleController.getString("UnpinSticker", R.string.UnpinSticker) :
+                                                LocaleController.getString("PinSticker", R.string.PinSticker)
+                                };
+                                icons = new int[]{
+                                        R.drawable.baseline_archive_24,
+                                        R.drawable.baseline_link_24,
+                                        R.drawable.msg_reorder,
+                                        R.drawable.baseline_forward_24,
+                                        R.drawable.baseline_delete_24,
+                                        R.drawable.deproko_baseline_pin_24
+                                };
+                            } else {
+                                options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE};
+                                items = new CharSequence[]{
+                                        LocaleController.getString("StickersHide", R.string.StickersHide),
+                                        LocaleController.getString("StickersCopy", R.string.StickersCopy),
+                                        LocaleController.getString("StickersReorder", R.string.StickersReorder),
+                                        LocaleController.getString("StickersShare", R.string.StickersShare),
+                                        LocaleController.getString("StickersRemove", R.string.StickersRemove)
+                                };
+                                icons = new int[]{
+                                        R.drawable.baseline_archive_24,
+                                        R.drawable.baseline_link_24,
+                                        R.drawable.msg_reorder,
+                                        R.drawable.baseline_forward_24,
+                                        R.drawable.baseline_delete_24
+                                };
+                            }
                         }
                         builder.setItems(items, icons, (dialog, which) -> processSelectionOption(options[which], stickerSet));
 
@@ -1111,6 +1230,32 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 notifyItemRangeChanged(fromIndex, UPDATE_DIVIDER);
                 notifyItemRangeChanged(toIndex, UPDATE_DIVIDER);
             }
+        }
+
+        private void moveElements(int fromIndex, int toIndex) {
+
+            final int index1 = fromIndex - stickersStartRow;
+            final int index2 = toIndex - stickersStartRow;
+
+            moveListElements(stickerSets, index1, index2);
+            moveListElements(MediaDataController.getInstance(currentAccount).getStickerSets(currentType), index1, index2);
+
+            notifyItemMoved(fromIndex, toIndex);
+            if (fromIndex == stickersEndRow - 1 || toIndex == stickersEndRow - 1) {
+                notifyItemRangeChanged(fromIndex, UPDATE_DIVIDER);
+                notifyItemRangeChanged(toIndex, UPDATE_DIVIDER);
+            }
+        }
+
+        /**
+         * Move element(index1) to specific index
+         *
+         * @param index2 index when the element(index1) is removed
+         */
+        private void moveListElements(List<TLRPC.TL_messages_stickerSet> stickerSets, int index1, int index2) {
+            final TLRPC.TL_messages_stickerSet temp = stickerSets.get(index1);
+            stickerSets.remove(index1);
+            stickerSets.add(index2, temp);
         }
 
         private void swapListElements(List<TLRPC.TL_messages_stickerSet> list, int index1, int index2) {

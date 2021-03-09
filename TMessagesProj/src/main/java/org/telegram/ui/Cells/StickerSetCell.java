@@ -31,6 +31,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -41,6 +42,9 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 
 import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.PinnedStickerHelper;
 
 public class StickerSetCell extends FrameLayout {
 
@@ -53,6 +57,7 @@ public class StickerSetCell extends FrameLayout {
     private CheckBox2 checkBox;
     private boolean needDivider;
     private ImageView optionsButton;
+    private ImageView pinnedImageView;      // NekoX: Pinned Sticker Mark
     private ImageView reorderButton;
     private TLRPC.TL_messages_stickerSet stickersSet;
     private Rect rect = new Rect();
@@ -100,6 +105,13 @@ public class StickerSetCell extends FrameLayout {
                 optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.SRC_IN));
                 optionsButton.setImageResource(R.drawable.msg_actions);
                 addView(optionsButton, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL));
+
+                // NekoX: Pinned Sticker Mark
+                pinnedImageView = new ImageView(context);
+                pinnedImageView.setImageResource(R.drawable.msg_pin_mini);
+                pinnedImageView.setColorFilter(0xFF808080);
+                addView(pinnedImageView, LayoutHelper.createFrame(20, 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 0.0f, 0.0f, 40.0f, 0.0f));
+                pinnedImageView.setVisibility(INVISIBLE);
 
                 reorderButton = new ImageView(context);
                 reorderButton.setAlpha(0f);
@@ -176,6 +188,13 @@ public class StickerSetCell extends FrameLayout {
             imageView.setAlpha(1.0f);
         }
 
+        // NekoX: Pinned Sticker Mark
+        if (NekoXConfig.enableStickerPin && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(set.set.id)) {
+            pinnedImageView.setVisibility(VISIBLE);
+        } else {
+            pinnedImageView.setVisibility(INVISIBLE);
+        }
+
         ArrayList<TLRPC.Document> documents = set.documents;
         if (documents != null && !documents.isEmpty()) {
             valueTextView.setText(LocaleController.formatPluralString("Stickers", documents.size()));
@@ -210,6 +229,19 @@ public class StickerSetCell extends FrameLayout {
         } else {
             valueTextView.setText(LocaleController.formatPluralString("Stickers", 0));
             imageView.setImageDrawable(null);
+        }
+    }
+
+    // NekoX: Pinned Sticker Mark -> Change Visibility
+    public void setPinnedMarkVisibility(boolean visible) {
+        if (!NekoXConfig.enableStickerPin) {
+            pinnedImageView.setVisibility(INVISIBLE);
+            return;
+        }
+        if (visible) {
+            pinnedImageView.setVisibility(VISIBLE);
+        } else {
+            pinnedImageView.setVisibility(INVISIBLE);
         }
     }
 
@@ -275,6 +307,9 @@ public class StickerSetCell extends FrameLayout {
                 optionsButton.setScaleX(scaleValues[1]);
                 optionsButton.setScaleY(scaleValues[1]);
             }
+
+            ((LayoutParams) pinnedImageView.getLayoutParams()).rightMargin = AndroidUtilities.dp(reorderable ? 58 : 40);
+            pinnedImageView.requestLayout();
         }
     }
 

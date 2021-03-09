@@ -34,6 +34,7 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
+import android.widget.Toast;
 
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -73,6 +74,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.PinnedStickerHelper;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -80,6 +83,7 @@ public class MediaDataController extends BaseController {
     public static String SHORTCUT_CATEGORY = "org.telegram.messenger.SHORTCUT_SHARE";
 
     private static volatile MediaDataController[] Instance = new MediaDataController[UserConfig.MAX_ACCOUNT_COUNT];
+
     public static MediaDataController getInstance(int num) {
         MediaDataController localInstance = Instance[num];
         if (localInstance == null) {
@@ -1321,7 +1325,7 @@ public class MediaDataController extends BaseController {
                 archivedStickersCount[type] = count;
                 getNotificationCenter().postNotificationName(NotificationCenter.archivedStickersCountDidLoad, type);
             }
-        } else if(!UserConfig.getInstance(currentAccount).isBot)  {
+        } else if (!UserConfig.getInstance(currentAccount).isBot) {
             TLRPC.TL_messages_getArchivedStickers req = new TLRPC.TL_messages_getArchivedStickers();
             req.limit = 0;
             req.masks = type == TYPE_MASK;
@@ -1343,7 +1347,18 @@ public class MediaDataController extends BaseController {
             processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
         } else {
             final LongSparseArray<TLRPC.TL_messages_stickerSet> newStickerSets = new LongSparseArray<>();
-            for (int a = 0; a < res.sets.size(); a++) {
+            // NekoX: Pin Sticker
+            if (NekoXConfig.enableStickerPin && type == MediaDataController.TYPE_IMAGE) {
+                PinnedStickerHelper ins = PinnedStickerHelper.getInstance(UserConfig.selectedAccount);
+                if (ins.reorderPinnedStickersForSS(res.sets, true))
+                    AndroidUtilities.runOnUIThread(() -> {
+                        if (BuildVars.DEBUG_VERSION) {
+                            Toast.makeText(ApplicationLoader.applicationContext, "Reorder loaded stickers, sync now. Pinned: " + ins.pinnedList.size(), Toast.LENGTH_SHORT).show();
+                        }
+                        ins.sendOrderSyncForSS(res.sets);
+                    });
+            }
+            for (int a = 0; a < res.sets.size(); a++) { // reload all sitckers here
                 final TLRPC.StickerSet stickerSet = res.sets.get(a);
 
                 TLRPC.TL_messages_stickerSet oldSet = stickerSetsById.get(stickerSet.id);
@@ -1359,10 +1374,10 @@ public class MediaDataController extends BaseController {
                     }
                     continue;
                 }
+                // oldset == null, new sticker comes here
 
                 newStickerArray.add(null);
                 final int index = a;
-
                 TLRPC.TL_messages_getStickerSet req = new TLRPC.TL_messages_getStickerSet();
                 req.stickerset = new TLRPC.TL_inputStickerSetID();
                 req.stickerset.id = stickerSet.id;
@@ -1543,7 +1558,7 @@ public class MediaDataController extends BaseController {
                 }
                 processLoadedStickers(type, newStickerArray, true, date, hash);
             });
-        } else if(!UserConfig.getInstance(currentAccount).isBot)  {
+        } else if (!UserConfig.getInstance(currentAccount).isBot) {
             if (type == TYPE_FEATURED) {
                 TLRPC.TL_messages_allStickers response = new TLRPC.TL_messages_allStickers();
                 response.hash = loadFeaturedHash;
@@ -1826,7 +1841,9 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    /** @param toggle 0 - remove, 1 - archive, 2 - add */
+    /**
+     * @param toggle 0 - remove, 1 - archive, 2 - add
+     */
     public void toggleStickerSet(Context context, final TLObject stickerSetObject, final int toggle, final BaseFragment baseFragment, final boolean showSettings, boolean showTooltip) {
         final TLRPC.StickerSet stickerSet;
         final TLRPC.TL_messages_stickerSet messages_stickerSet;
@@ -1849,6 +1866,10 @@ public class MediaDataController extends BaseController {
         }
 
         final int type = stickerSet.masks ? TYPE_MASK : TYPE_IMAGE;
+
+        if (NekoXConfig.enableStickerPin && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
+            PinnedStickerHelper.getInstance(currentAccount).removePinnedStickerLocal(stickerSet.id);
+        }
 
         stickerSet.archived = toggle == 1;
 
@@ -1883,7 +1904,10 @@ public class MediaDataController extends BaseController {
             toggleStickerSetInternal(context, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, false);
         } else {
             final StickerSetBulletinLayout bulletinLayout = new StickerSetBulletinLayout(context, stickerSetObject, toggle);
-            final int finalCurrentIndex = currentIndex;
+            final int finalCurrentIndex = NekoXConfig.enableStickerPin && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
+                    ? PinnedStickerHelper.getInstance(UserConfig.selectedAccount).pinnedList.size()
+                    : currentIndex;
+            // NekoX: Pin Sticker, Fix undo for Archiving and Deleting
             Context finalContext = context;
             final Bulletin.UndoButton undoButton = new Bulletin.UndoButton(context, false).setUndoAction(() -> {
                 stickerSet.archived = false;
@@ -1933,7 +1957,9 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    /** @param toggle 0 - uninstall, 1 - archive, 2 - unarchive */
+    /**
+     * @param toggle 0 - uninstall, 1 - archive, 2 - unarchive
+     */
     public void toggleStickerSets(final ArrayList<TLRPC.StickerSet> stickerSetList, final int type, final int toggle, final BaseFragment baseFragment, final boolean showSettings) {
         final int stickerSetListSize = stickerSetList.size();
         final ArrayList<TLRPC.InputStickerSet> inputStickerSets = new ArrayList<>(stickerSetListSize);
@@ -2300,7 +2326,7 @@ public class MediaDataController extends BaseController {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("load media did " + uid + " count = " + count + " max_id " + max_id + " type = " + type + " cache = " + fromCache + " classGuid = " + classGuid);
         }
-        int lower_part = (int)uid;
+        int lower_part = (int) uid;
         if (fromCache != 0 || lower_part == 0) {
             loadMediaDatabase(uid, count, max_id, type, classGuid, isChannel, fromCache, skipPhotos);
         } else {
@@ -2309,8 +2335,8 @@ public class MediaDataController extends BaseController {
             req.offset_id = max_id;
             if (type == MEDIA_PHOTOVIDEO) {
                 req.filter = skipPhotos
-                    ? new TLRPC.TL_inputMessagesFilterVideo()
-                    : new TLRPC.TL_inputMessagesFilterPhotoVideo();
+                        ? new TLRPC.TL_inputMessagesFilterVideo()
+                        : new TLRPC.TL_inputMessagesFilterPhotoVideo();
             } else if (type == MEDIA_FILE) {
                 req.filter = new TLRPC.TL_inputMessagesFilterDocument();
             } else if (type == MEDIA_AUDIO) {
@@ -2341,9 +2367,9 @@ public class MediaDataController extends BaseController {
     public void getMediaCounts(final long uid, final int classGuid) {
         getMessagesStorage().getStorageQueue().postRunnable(() -> {
             try {
-                int[] counts = new int[] {-1, -1, -1, -1, -1, -1};
-                int[] countsFinal = new int[] {-1, -1, -1, -1, -1, -1};
-                int[] old = new int[] {0, 0, 0, 0, 0, 0};
+                int[] counts = new int[]{-1, -1, -1, -1, -1, -1};
+                int[] countsFinal = new int[]{-1, -1, -1, -1, -1, -1};
+                int[] old = new int[]{0, 0, 0, 0, 0, 0};
                 SQLiteCursor cursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT type, count, old FROM media_counts_v2 WHERE uid = %d", uid));
                 while (cursor.next()) {
                     int type = cursor.intValue(0);
@@ -2440,7 +2466,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void getMediaCount(final long uid, final int type, final int classGuid, boolean fromCache) {
-        int lower_part = (int)uid;
+        int lower_part = (int) uid;
         if (fromCache || lower_part == 0) {
             getMediaCountDatabase(uid, type, classGuid);
         } else {
@@ -2544,7 +2570,7 @@ public class MediaDataController extends BaseController {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("process load media did " + uid + " count = " + count + " max_id " + max_id + " type = " + type + " cache = " + fromCache + " classGuid = " + classGuid);
         }
-        int lower_part = (int)uid;
+        int lower_part = (int) uid;
         if (fromCache != 0 && res.messages.isEmpty() && lower_part != 0) {
             if (fromCache == 2) {
                 return;
@@ -2566,7 +2592,7 @@ public class MediaDataController extends BaseController {
                 final ArrayList<MessageObject> objects = new ArrayList<>();
                 for (int a = 0; a < res.messages.size(); a++) {
                     TLRPC.Message message = res.messages.get(a);
-                    
+
                     if (skipPhotos && message.media != null && message.media.photo != null) {
                         continue;
                     }
@@ -2628,7 +2654,7 @@ public class MediaDataController extends BaseController {
                     old = cursor.intValue(1);
                 }
                 cursor.dispose();
-                int lower_part = (int)uid;
+                int lower_part = (int) uid;
                 if (count == -1 && lower_part == 0) {
                     cursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM media_v2 WHERE uid = %d AND type = %d LIMIT 1", uid, type));
                     if (cursor.next()) {
@@ -3848,7 +3874,7 @@ public class MediaDataController extends BaseController {
                             }
                         }
                         if (!ok) {
-                            getMessagesStorage().updatePinnedMessages(dialogId, req.id,  false, -1, 0, false, null);
+                            getMessagesStorage().updatePinnedMessages(dialogId, req.id, false, -1, 0, false, null);
                         }
                     });
                 }
