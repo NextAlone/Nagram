@@ -290,5 +290,6 @@
 
     <string name="PinSticker">Pin</string>
     <string name="UnpinSticker">Unpin</string>
+    <string name="SetPinnedSuffix">(Pinned)</string>
 
 </resources>

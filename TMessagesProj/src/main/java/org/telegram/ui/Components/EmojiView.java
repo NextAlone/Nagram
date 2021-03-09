@@ -107,6 +107,7 @@ import java.util.List;
 import java.util.Map;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.PinnedStickerHelper;
 
 public class EmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1404,6 +1405,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 emojiLayoutManager.scrollToPositionWithOffset(emojiAdapter.sectionToPosition.get(page), 0);
                 checkEmojiTabY(null, 0);
             }
+
         });
 
         emojiTabsShadow = new View(context);
@@ -2922,7 +2924,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
 
-        if (!mediaDataController.getFeaturedStickerSets().isEmpty()) {
+        if (!NekoConfig.disableTrending && !mediaDataController.getFeaturedStickerSets().isEmpty()) {
             final int id = mediaDataController.getUnreadStickerSets().isEmpty() ? 2 : 3;
             final ImageView trendingStickersTabView = stickersTab.addIconTab(id, stickerIcons[id]);
             trendingStickersTabView.setContentDescription(LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers));
@@ -3875,7 +3877,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         if (object instanceof TLRPC.TL_messages_stickerSet) {
                             TLRPC.TL_messages_stickerSet set = (TLRPC.TL_messages_stickerSet) object;
                             if (set.set != null) {
-                                cell.setText(set.set.title, 0);
+                                String title = set.set.title;
+                                if (PinnedStickerHelper.getInstance(currentAccount).isPinned(set.set.id)) {
+                                    title += " " + LocaleController.getString("SetPinnedSuffix", R.string.SetPinnedSuffix);
+                                }
+                                cell.setText(title, 0);
                             }
                         } else if (object == recentStickers) {
                             cell.setText(LocaleController.getString("RecentStickers", R.string.RecentStickers), 0);
