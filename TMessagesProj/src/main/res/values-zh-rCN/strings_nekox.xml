@@ -216,4 +216,7 @@
     <string name="HideDeviceInfo">隐藏设备型号</string>
     <string name="HideDeviceInfoOff">设备型号将在登录后的应用第二次启动时上载。</string>
     <string name="HideDeviceInfoOn">您可以稍后在设置中进行更改此。</string>
+    <string name="ArchiveFiles">压缩文件</string>
+    <string name="Win32ExecutableFiles">Win32 可执行文件</string>
+    <string name="AutoDownload">自动下载</string>
 </resources>
