@@ -274,9 +274,14 @@
     <string name="TextOrigin">Origin</string>
     <string name="TextReplace">Replace</string>
     <string name="ReplaceRegex">Use regex</string>
+
     <string name="DisableTrending">Disable Trending</string>
     <string name="HideDeviceInfo">Hide device model</string>
     <string name="HideDeviceInfoOff">Device model will be uploaded the second time the app starts after logging in.</string>
     <string name="HideDeviceInfoOn">You can change this in the settings later.</string>
+
+    <string name="AutoDownload">AutoDownload</string>
+    <string name="Win32ExecutableFiles">Win32 executable files</string>
+    <string name="ArchiveFiles">Archive files</string>
 
 </resources>

@@ -137,6 +137,9 @@ public class NekoConfig {
     public static boolean avatarBackgroundDarken;
     public static boolean disableTrending;
 
+    public static boolean disableAutoDownloadingWin32Executable;
+    public static boolean disableAutoDownloadingArchive;
+
     public static String getOpenPGPAppName() {
 
         if (StrUtil.isNotBlank(openPGPApp)) {
@@ -222,8 +225,8 @@ public class NekoConfig {
         hideKeyboardOnChatScroll = preferences.getBoolean("hideKeyboardOnChatScroll", false);
         avatarAsDrawerBackground = preferences.getBoolean("avatarAsDrawerBackground", true);
         avatarBackgroundBlur = preferences.getBoolean("avatarBackgroundBlur", false);
-            avatarBackgroundDarken = preferences.getBoolean("avatarBackgroundDarken", false);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
+        avatarBackgroundDarken = preferences.getBoolean("avatarBackgroundDarken", false);
+        useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
         showTabsOnForward = preferences.getBoolean("showTabsOnForward", false);
         rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
         hideAllTab = preferences.getBoolean("hideAllTab", false);
@@ -290,6 +293,9 @@ public class NekoConfig {
         increaseVoiceMessageQuality = preferences.getBoolean("increaseVoiceMessageQuality", true);
         acceptSecretChat = preferences.getBoolean("acceptSecretChat", true);
         disableTrending = preferences.getBoolean("disableTrending", true);
+
+        disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
+        disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
 
     }
 
@@ -741,6 +747,14 @@ public class NekoConfig {
 
     public static void toggleDisableTrending() {
         preferences.edit().putBoolean("disableTrending", disableTrending = !disableTrending).apply();
+    }
+
+    public static void toggleDisableAutoDownloadingWin32Executable() {
+        preferences.edit().putBoolean("disableAutoDownloadingWin32Executable", disableAutoDownloadingWin32Executable = !disableAutoDownloadingWin32Executable).apply();
+    }
+
+    public static void toggleDisableAutoDownloadingArchive() {
+        preferences.edit().putBoolean("disableAutoDownloadingArchive", disableAutoDownloadingArchive = !disableAutoDownloadingArchive).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

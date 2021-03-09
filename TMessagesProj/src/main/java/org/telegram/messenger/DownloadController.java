@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -576,8 +577,13 @@ public class DownloadController extends BaseController implements NotificationCe
     public boolean canDownloadMedia(MessageObject messageObject) {
         if (messageObject.getDocument() != null) {
             String documentName = messageObject.getDocument().file_name;
-            if (StrUtil.endWithAny(documentName, ".cmd", ".bat", ".exe", ".lha", ".lzh", ".apk", ".zip", ".7z")) {
-                return false;
+            if (StrUtil.isNotBlank(documentName)) {
+                if ((NekoConfig.disableAutoDownloadingWin32Executable &&
+                        documentName.toLowerCase().matches(".*\\.(cmd|bat|com|exe|lnk|msi|ps1|reg|vb|vbe|vbs|vbscript)")
+                ) || (NekoConfig.disableAutoDownloadingArchive &&
+                        documentName.toLowerCase().matches(".*\\.(apk|zip|7z|tar|gz|zst|iso|xz|lha|lzh)")
+                )
+                ) return false;
             }
         }
         return canDownloadMedia(messageObject.messageOwner) == 1;

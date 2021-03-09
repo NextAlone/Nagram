@@ -79,6 +79,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int messageMenuRow;
     private int chat2Row;
 
+    private int downloadRow;
+    private int win32Row;
+    private int archiveRow;
+    private int download2Row;
+
     private int foldersRow;
     private int showTabsOnForwardRow;
     private int hideAllTabRow;
@@ -257,6 +262,16 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableTrending);
                 }
+            } else if (position == win32Row) {
+                NekoConfig.toggleDisableAutoDownloadingWin32Executable();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(!NekoConfig.disableAutoDownloadingWin32Executable);
+                }
+            } else if (position == archiveRow) {
+                NekoConfig.toggleDisableAutoDownloadingArchive();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(!NekoConfig.disableAutoDownloadingArchive);
+                }
             }
         });
 
@@ -298,6 +313,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
         chat2Row = rowCount++;
+
+        downloadRow = rowCount++;
+        win32Row = rowCount++;
+        archiveRow = rowCount++;
+        download2Row = rowCount++;
 
         foldersRow = rowCount++;
         showTabsOnForwardRow = rowCount++;
@@ -636,6 +656,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("DisableProximityEvents", R.string.DisableProximityEvents), NekoConfig.disableProximityEvents, true);
                     } else if (position == disableTrendingRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableTrending", R.string.DisableTrending), NekoConfig.disableTrending, true);
+                    } else if (position == win32Row) {
+                        textCell.setTextAndCheck(LocaleController.getString("Win32ExecutableFiles", R.string.Win32ExecutableFiles), !NekoConfig.disableAutoDownloadingWin32Executable, true);
+                    } else if (position == archiveRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("ArchiveFiles", R.string.ArchiveFiles), !NekoConfig.disableAutoDownloadingArchive, false);
                     }
                     break;
                 }
@@ -645,6 +669,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
                     } else if (position == foldersRow) {
                         headerCell.setText(LocaleController.getString("Folder", R.string.Folder));
+                    } else if (position == downloadRow) {
+                        headerCell.setText(LocaleController.getString("AutoDownload", R.string.AutoDownload));
                     } else if (position == stickerSizeHeaderRow) {
                         headerCell.setText(LocaleController.getString("StickerSize", R.string.StickerSize));
                     }
@@ -702,11 +728,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
         @Override
         public int getItemViewType(int position) {
-            if (position == chat2Row || position == folders2Row || position == stickerSize2Row) {
+            if (position == chat2Row || position == folders2Row || position == download2Row || position == stickerSize2Row) {
                 return 1;
             } else if (position == mapPreviewRow || position == messageMenuRow || position == tabsTitleTypeRow) {
                 return 2;
-            } else if (position == chatRow || position == foldersRow || position == stickerSizeHeaderRow) {
+            } else if (position == chatRow || position == foldersRow || position == downloadRow || position == stickerSizeHeaderRow) {
                 return 4;
             } else if (position == stickerSizeRow) {
                 return 8;
