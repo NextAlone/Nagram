@@ -2841,7 +2841,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
             }
             items.add(LocaleController.getString("VoipGroupOpenProfile", R.string.VoipGroupOpenProfile));
-            icons.add(R.drawable.msg_openprofile);
+            icons.add(R.drawable.baseline_person_24);
             options.add(6);
             if (!isAdmin && ChatObject.canBlockUsers(currentChat)) {
                 items.add(LocaleController.getString("VoipGroupUserRemove", R.string.VoipGroupUserRemove));
@@ -2859,7 +2859,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 options.add(5);
             }
             items.add(LocaleController.getString("VoipGroupOpenProfile", R.string.VoipGroupOpenProfile));
-            icons.add(R.drawable.book_user);
+            icons.add(R.drawable.baseline_person_24);
             options.add(6);
         }
 
