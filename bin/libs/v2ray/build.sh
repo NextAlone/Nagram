@@ -8,4 +8,5 @@ cd "$PROJECT/v2ray"
 gomobile init
 gomobile bind -v -ldflags='-s -w' . || exit 1
 
+mkdir -p "$PROJECT/TMessagesProj/libs"
 /bin/cp -f libv2ray.aar "$PROJECT/TMessagesProj/libs"
