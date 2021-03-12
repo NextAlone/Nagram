@@ -254,8 +254,6 @@ public class LocaleController {
                 }
             }
         }
-        if (localInstance.formatterDay == null || localInstance.chatFullDate == null)
-            localInstance.recreateFormatters();
         return localInstance;
     }
 

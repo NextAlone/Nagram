@@ -51,7 +51,7 @@ public class GcmImpl implements ExternalGcm.Interface {
 
     @Override
     public void initPlayServices() {
-        UIUtil.runOnIoDispatcher(() -> {
+        Utilities.stageQueue.postRunnable(() -> {
             if (hasPlayServices = checkPlayServices()) {
                 final String currentPushString = SharedConfig.pushString;
                 if (!TextUtils.isEmpty(currentPushString)) {

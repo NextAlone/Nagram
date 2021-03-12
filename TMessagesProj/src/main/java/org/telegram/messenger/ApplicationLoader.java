@@ -216,7 +216,7 @@ public class ApplicationLoader extends Application {
         }
         applicationInited = true;
 
-        UIUtil.runOnIoDispatcher(() -> {
+        Utilities.stageQueue.postRunnable(() -> {
 
             try {
                 LocaleController.getInstance(); //TODO improve
@@ -295,7 +295,7 @@ public class ApplicationLoader extends Application {
                 }
             };
             if (finalA == UserConfig.selectedAccount) initRunnable.run();
-            else UIUtil.runOnIoDispatcher(initRunnable);
+            else  Utilities.stageQueue.postRunnable(initRunnable);
         }
 
         ExternalGcm.initPlayServices();
@@ -311,7 +311,7 @@ public class ApplicationLoader extends Application {
                 DownloadController.getInstance(finalA);
             };
             if (finalA == UserConfig.selectedAccount) initRunnable.run();
-            else UIUtil.runOnIoDispatcher(initRunnable);
+            else  Utilities.stageQueue.postRunnable(initRunnable);
         }
 
     }
@@ -369,7 +369,7 @@ public class ApplicationLoader extends Application {
     }
 
     public static void startPushService() {
-        UIUtil.runOnIoDispatcher(ApplicationLoader::startPushServiceInternal);
+        Utilities.stageQueue.postRunnable(ApplicationLoader::startPushServiceInternal);
     }
 
     private static void startPushServiceInternal() {

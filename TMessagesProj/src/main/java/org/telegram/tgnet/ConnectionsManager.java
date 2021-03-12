@@ -362,27 +362,31 @@ public class ConnectionsManager extends BaseController {
 
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection) {
 
-        SharedConfig.loadProxyList();
+        Utilities.stageQueue.postRunnable(() -> {
 
-        if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
-            if (SharedConfig.currentProxy instanceof SharedConfig.ExternalSocks5Proxy) {
-                ((SharedConfig.ExternalSocks5Proxy) SharedConfig.currentProxy).start();
+            SharedConfig.loadProxyList();
+
+            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
+                if (SharedConfig.currentProxy instanceof SharedConfig.ExternalSocks5Proxy) {
+                    ((SharedConfig.ExternalSocks5Proxy) SharedConfig.currentProxy).start();
+                }
+                native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
             }
-            native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
-        }
 
-        String installer = "";
-        try {
-            installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-        } catch (Throwable ignore) {
+            String installer = "";
+            try {
+                installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+            } catch (Throwable ignore) {
 
-        }
-        if (installer == null) {
-            installer = "";
-        }
+            }
+            if (installer == null) {
+                installer = "";
+            }
 
-        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
-        checkConnection();
+            native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+            checkConnection();
+
+        });
 
     }
 
