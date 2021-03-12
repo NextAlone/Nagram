@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.ProxyManager;
@@ -142,9 +143,12 @@ public class SharedConfig {
 
     public static int distanceSystemType;
 
-    public static HashSet<Integer> activeAccounts;
-
+    public static ConcurrentHashSet<Integer> activeAccounts;
     public static int loginingAccount = -1;
+
+    static {
+        loadConfig();
+    }
 
     public static class ProxyInfo implements Comparable<ProxyInfo> {
 
@@ -1040,7 +1044,7 @@ public class SharedConfig {
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
-            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(HashSet::new));
+            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(ConcurrentHashSet::new));
 
             if (!preferences.contains("accounts_loaded")) {
                 int maxAccounts;
