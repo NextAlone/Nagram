@@ -68,11 +68,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
     }
 
     private int getAccountRowsCount() {
-        int count = accountNumbers.size() + 1;
-        if (accountNumbers.size() < UserConfig.MAX_ACCOUNT_COUNT) {
-            count++;
-        }
-        return count;
+        return accountNumbers.size() + 2;
     }
 
     @Override
@@ -215,16 +211,10 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             if (i < accountNumbers.size()) {
                 return 4;
             } else {
-                if (accountNumbers.size() < UserConfig.MAX_ACCOUNT_COUNT) {
-                    if (i == accountNumbers.size()) {
-                        return 5;
-                    } else if (i == accountNumbers.size() + 1) {
-                        return 2;
-                    }
-                } else {
-                    if (i == accountNumbers.size()) {
-                        return 2;
-                    }
+                if (i == accountNumbers.size()) {
+                    return 5;
+                } else if (i == accountNumbers.size() + 1) {
+                    return 2;
                 }
             }
             i -= getAccountRowsCount();
@@ -254,7 +244,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
 
     private void resetItems() {
         accountNumbers.clear();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             if (UserConfig.getInstance(a).isClientActivated()) {
                 accountNumbers.add(a);
             }

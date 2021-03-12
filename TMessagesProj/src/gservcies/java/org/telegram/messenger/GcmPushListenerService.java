@@ -134,7 +134,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                         }
                     }
                     int account = UserConfig.selectedAccount;
-                    for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+
+                    for (int a : SharedConfig.activeAccounts) {
                         if (UserConfig.getInstance(a).getClientUserId() == accountUserId) {
                             account = a;
                             break;
@@ -1083,7 +1084,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     }
 
     private void onDecryptError() {
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             if (UserConfig.getInstance(a).isClientActivated()) {
                 ConnectionsManager.onInternalPushReceived(a);
                 ConnectionsManager.getInstance(a).resumeNetworkMaybe();
@@ -1110,7 +1111,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                 return;
             }
             SharedConfig.pushString = token;
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            for (int a : SharedConfig.activeAccounts) {
                 UserConfig userConfig = UserConfig.getInstance(a);
                 userConfig.registeredForPush = false;
                 userConfig.saveConfig(false);

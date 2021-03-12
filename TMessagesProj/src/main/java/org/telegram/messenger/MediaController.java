@@ -948,19 +948,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         fileBuffer = ByteBuffer.allocateDirect(1920);
 
-        AndroidUtilities.runOnUIThread(() -> {
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.httpFileDidLoad);
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.didReceiveNewMessages);
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.messagesDeleted);
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.removeAllMessagesFromDialog);
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.musicDidLoad);
-                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.mediaDidLoad);
-                NotificationCenter.getGlobalInstance().addObserver(MediaController.this, NotificationCenter.playerDidStartPlaying);
-            }
-        });
-
         mediaProjections = new String[]{
                 MediaStore.Images.ImageColumns.DATA,
                 MediaStore.Images.ImageColumns.DISPLAY_NAME,
@@ -992,6 +979,19 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         } catch (Exception e) {
             FileLog.e(e);
         }
+    }
+
+    public void init(int a) {
+        AndroidUtilities.runOnUIThread(() -> {
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.httpFileDidLoad);
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.didReceiveNewMessages);
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.messagesDeleted);
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.removeAllMessagesFromDialog);
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.musicDidLoad);
+            NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.mediaDidLoad);
+            NotificationCenter.getGlobalInstance().addObserver(MediaController.this, NotificationCenter.playerDidStartPlaying);
+        });
     }
 
     @Override
@@ -1127,7 +1127,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         cleanupPlayer(true, true);
         audioInfo = null;
         playMusicAgain = false;
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             DownloadController.getInstance(a).cleanup();
         }
         videoConvertQueue.clear();

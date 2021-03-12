@@ -1672,9 +1672,9 @@ public class ImageLoader {
         AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
 
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        FileLoader.delegateFactory = (a) -> {
             final int currentAccount = a;
-            FileLoader.getInstance(a).setDelegate(new FileLoader.FileLoaderDelegate() {
+            return new FileLoader.FileLoaderDelegate() {
                 @Override
                 public void fileUploadProgressChanged(FileUploadOperation operation, final String location, long uploadedSize, long totalSize, final boolean isEncrypted) {
                     fileProgresses.put(location, new long[]{uploadedSize, totalSize});
@@ -1734,8 +1734,9 @@ public class ImageLoader {
                         AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, location, uploadedSize, totalSize));
                     }
                 }
-            });
-        }
+            };
+        };
+
         FileLoader.setMediaDirs(mediaDirs);
 
         BroadcastReceiver receiver = new BroadcastReceiver() {

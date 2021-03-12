@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.SparseArray;
 
 import com.v2ray.ang.util.Utils;
 
@@ -21,6 +22,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
@@ -140,15 +142,19 @@ public class ConnectionsManager extends BaseController {
 
     private static int lastClassGuid = 1;
 
-    private static volatile ConnectionsManager[] Instance = new ConnectionsManager[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<ConnectionsManager> Instance = new SparseArray<>();
 
     public static ConnectionsManager getInstance(int num) {
-        ConnectionsManager localInstance = Instance[num];
+        ConnectionsManager localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (ConnectionsManager.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new ConnectionsManager(num);
+                    Instance.put(num, localInstance = new ConnectionsManager(num));
+
+                    if (_enabled == Boolean.TRUE) {
+                        native_setProxySettings(num, _address, _port, _username, _password, _secret);
+                    }
                 }
             }
         }
@@ -172,9 +178,10 @@ public class ConnectionsManager extends BaseController {
         boolean enablePushConnection = isPushConnectionEnabled();
         getUserConfig().loadConfig();
 
+
         try {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
-            langCode = LocaleController.getLocaleStringIso639().toLowerCase();
+            langCode = MessagesController.getGlobalMainSettings().getString("lang_code", systemLangCode);
             if (getUserConfig().deviceInfo) {
                 deviceModel = Build.MANUFACTURER + Build.MODEL;
                 systemVersion = "SDK " + Build.VERSION.SDK_INT;
@@ -392,9 +399,10 @@ public class ConnectionsManager extends BaseController {
 
     public static void setLangCode(String langCode) {
         langCode = langCode.replace('_', '-').toLowerCase();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             native_setLangCode(a, langCode);
         }
+        MessagesController.getGlobalMainSettings().edit().putString("lang_code", langCode).apply();
     }
 
     public static void setRegId(String regId, String status) {
@@ -402,14 +410,14 @@ public class ConnectionsManager extends BaseController {
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(status)) {
             pushString = status;
         }
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             native_setRegId(a, pushString);
         }
     }
 
     public static void setSystemLangCode(String langCode) {
         langCode = langCode.replace('_', '-').toLowerCase();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             native_setSystemLangCode(a, langCode);
         }
     }
@@ -646,6 +654,13 @@ public class ConnectionsManager extends BaseController {
         KeepAliveJob.startJob();
     }
 
+    private static Boolean _enabled;
+    private static String _address;
+    private static Integer _port;
+    private static String _username;
+    private static String _password;
+    private static String _secret;
+
     public static void setProxySettings(boolean enabled, String address, int port, String username, String password, String secret) {
         if (address == null) {
             address = "";
@@ -659,7 +674,16 @@ public class ConnectionsManager extends BaseController {
         if (secret == null) {
             secret = "";
         }
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        _enabled = enabled;
+        if (_enabled) {
+            _address = address;
+            _port = port;
+            _username = username;
+            _password = password;
+            _secret = secret;
+        }
+
+        for (int a : SharedConfig.activeAccounts) {
             if (enabled && !TextUtils.isEmpty(address)) {
                 native_setProxySettings(a, address, port, username, password, secret);
             } else {

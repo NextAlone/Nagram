@@ -34,14 +34,16 @@ import androidx.multidex.MultiDex;
 
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
-import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -216,22 +218,10 @@ public class ApplicationLoader extends Application {
         }
         applicationInited = true;
 
-        Utilities.stageQueue.postRunnable(() -> {
+        SharedConfig.loadConfig();
+        UserConfig.getInstance(0).loadConfig();
 
-            try {
-                LocaleController.getInstance(); //TODO improve
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                EnvUtil.doTest();
-            } catch (Exception e) {
-                FileLog.e("EnvUtil test Failed", e);
-
-            }
-
-        });
+        LinkedList<Runnable> postRun = new LinkedList<>();
 
         try {
             connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -245,9 +235,14 @@ public class ApplicationLoader extends Application {
                     }
 
                     boolean isSlow = isConnectionSlow();
-                    for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                    for (int a : SharedConfig.activeAccounts) {
                         ConnectionsManager.getInstance(a).checkConnection();
                         FileLoader.getInstance(a).onNetworkChanged(isSlow);
+                    }
+
+                    if (SharedConfig.loginingAccount != -1) {
+                        ConnectionsManager.getInstance(SharedConfig.loginingAccount).checkConnection();
+                        FileLoader.getInstance(SharedConfig.loginingAccount).onNetworkChanged(isSlow);
                     }
                 }
             };
@@ -276,44 +271,46 @@ public class ApplicationLoader extends Application {
             FileLog.e(e);
         }
 
-        SharedConfig.loadConfig();
-
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) { //TODO improve account
+        for (int a : SharedConfig.activeAccounts) {
             final int finalA = a;
-            Runnable initRunnable = () -> {
-                UserConfig.getInstance(finalA).loadConfig();
-                MessagesController.getInstance(finalA);
-                if (finalA == 0) {
-                    SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(finalA).getCurrentTime() + "__";
-                } else {
-                    ConnectionsManager.getInstance(finalA);
-                }
-                TLRPC.User user = UserConfig.getInstance(finalA).getCurrentUser();
-                if (user != null) {
-                    MessagesController.getInstance(finalA).putUser(user, true);
-                    SendMessagesHelper.getInstance(finalA).checkUnsentMessages();
-                }
-            };
+            Runnable initRunnable = () -> loadAccount(finalA);
             if (finalA == UserConfig.selectedAccount) initRunnable.run();
-            else  Utilities.stageQueue.postRunnable(initRunnable);
+            else postRun.add(initRunnable);
         }
 
-        ExternalGcm.initPlayServices();
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app initied");
         }
+        for (Runnable runnable : postRun) {
+            Utilities.stageQueue.postRunnable(runnable);
+        }
+        Utilities.stageQueue.postRunnable(ExternalGcm::initPlayServices);
+    }
 
-        MediaController.getInstance();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) { //TODO improve account
-            final int finalA = a;
-            Runnable initRunnable = () -> {
-                ContactsController.getInstance(finalA).checkAppAccount();
-                DownloadController.getInstance(finalA);
-            };
-            if (finalA == UserConfig.selectedAccount) initRunnable.run();
-            else  Utilities.stageQueue.postRunnable(initRunnable);
+    private static final HashSet<Integer> loadedAccounts = new HashSet<>();
+
+    public static void loadAccount(int account) {
+        if (!loadedAccounts.add(account)) return;
+        UserConfig.getInstance(account).loadConfig();
+        MessagesController.getInstance(account);
+        if (account == 0) {
+            SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(account).getCurrentTime() + "__";
+        } else {
+            ConnectionsManager.getInstance(account);
+        }
+        TLRPC.User user = UserConfig.getInstance(account).getCurrentUser();
+        if (user != null) {
+            MessagesController.getInstance(account).putUser(user, true);
         }
 
+        MediaController.getInstance().init(account);
+
+        Utilities.stageQueue.postRunnable(() -> {
+            Theme.init(account);
+            SendMessagesHelper.getInstance(account).checkUnsentMessages();
+            ContactsController.getInstance(account).checkAppAccount();
+            DownloadController.getInstance(account);
+        });
     }
 
     public ApplicationLoader() {

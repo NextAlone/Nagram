@@ -24,11 +24,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 
 public class FileLoader extends BaseController {
 
     public interface FileLoaderDelegate {
         void fileUploadProgressChanged(FileUploadOperation operation, String location, long uploadedSize, long totalSize, boolean isEncrypted);
+
         void fileDidUploaded(String location, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize);
 
         void fileDidFailedUpload(String location, boolean isEncrypted);
@@ -84,20 +86,30 @@ public class FileLoader extends BaseController {
     private String forceLoadingFile;
 
     private static SparseArray<File> mediaDirs = null;
+
+    public static Function<Integer, FileLoaderDelegate> delegateFactory;
     private FileLoaderDelegate delegate = null;
+
+    private FileLoaderDelegate getDelegate() {
+        if (delegate != null) return delegate;
+        if (delegateFactory != null) {
+            delegate = delegateFactory.apply(currentAccount);
+        }
+        return delegate;
+    }
 
     private int lastReferenceId;
     private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap<>();
 
-    private static volatile FileLoader[] Instance = new FileLoader[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<FileLoader> Instance = new SparseArray<>();
 
     public static FileLoader getInstance(int num) {
-        FileLoader localInstance = Instance[num];
+        FileLoader localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (FileLoader.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new FileLoader(num);
+                    Instance.put(num, localInstance = new FileLoader(num));
                 }
             }
         }
@@ -268,7 +280,7 @@ public class FileLoader extends BaseController {
                 }
             }
             FileUploadOperation operation = new FileUploadOperation(currentAccount, location, encrypted, esimated, type);
-            if (delegate != null && estimatedSize != 0) {
+            if (getDelegate() != null && estimatedSize != 0) {
                 delegate.fileUploadProgressChanged(operation, location, 0, estimatedSize, encrypted);
             }
             if (encrypted) {
@@ -307,7 +319,7 @@ public class FileLoader extends BaseController {
                                 }
                             }
                         }
-                        if (delegate != null) {
+                        if (getDelegate() != null) {
                             delegate.fileDidUploaded(location, inputFile, inputEncryptedFile, key, iv, operation.getTotalFileSize());
                         }
                     });
@@ -321,7 +333,7 @@ public class FileLoader extends BaseController {
                         } else {
                             uploadOperationPaths.remove(location);
                         }
-                        if (delegate != null) {
+                        if (getDelegate() != null) {
                             delegate.fileDidFailedUpload(location, encrypted);
                         }
                         if (small) {
@@ -348,7 +360,7 @@ public class FileLoader extends BaseController {
 
                 @Override
                 public void didChangedUploadProgress(FileUploadOperation operation, long uploadedSize, long totalSize) {
-                    if (delegate != null) {
+                    if (getDelegate() != null) {
                         delegate.fileUploadProgressChanged(operation, location, uploadedSize, totalSize, encrypted);
                     }
                 }
@@ -418,15 +430,15 @@ public class FileLoader extends BaseController {
                 int index = downloadQueue.indexOf(operation);
                 if (index >= 0) {
                     downloadQueue.remove(index);
-                        if (operation.start()) {
-                            count.put(datacenterId, count.get(datacenterId) + 1);
+                    if (operation.start()) {
+                        count.put(datacenterId, count.get(datacenterId) + 1);
+                    }
+                    if (queueType == QUEUE_TYPE_FILE) {
+                        if (operation.wasStarted() && !activeFileLoadOperation.contains(operation)) {
+                            pauseCurrentFileLoadOperations(operation);
+                            activeFileLoadOperation.add(operation);
                         }
-                        if (queueType == QUEUE_TYPE_FILE) {
-                            if (operation.wasStarted() && !activeFileLoadOperation.contains(operation)) {
-                                pauseCurrentFileLoadOperations(operation);
-                                activeFileLoadOperation.add(operation);
-                            }
-                        }
+                    }
                 } else {
                     pauseCurrentFileLoadOperations(operation);
                     operation.start();
@@ -706,7 +718,7 @@ public class FileLoader extends BaseController {
                 }
                 if (!operation.isPreloadVideoOperation()) {
                     loadOperationPathsUI.remove(fileName);
-                    if (delegate != null) {
+                    if (getDelegate() != null) {
                         delegate.fileDidLoaded(fileName, finalFile, finalType);
                     }
                 }
@@ -717,14 +729,14 @@ public class FileLoader extends BaseController {
             public void didFailedLoadingFile(FileLoadOperation operation, int reason) {
                 loadOperationPathsUI.remove(fileName);
                 checkDownloadQueue(operation.getDatacenterId(), queueType, fileName);
-                if (delegate != null) {
+                if (getDelegate() != null) {
                     delegate.fileDidFailedLoad(fileName, reason);
                 }
             }
 
             @Override
             public void didChangedLoadProgress(FileLoadOperation operation, long uploadedSize, long totalSize) {
-                if (delegate != null) {
+                if (getDelegate() != null) {
                     delegate.fileLoadProgressChanged(operation, fileName, uploadedSize, totalSize);
                 }
             }
@@ -864,10 +876,6 @@ public class FileLoader extends BaseController {
                 }
             }
         });
-    }
-
-    public void setDelegate(FileLoaderDelegate fileLoaderDelegate) {
-        delegate = fileLoaderDelegate;
     }
 
     public static String getMessageFileName(TLRPC.Message message) {

@@ -52,7 +52,6 @@ public class ExternalGcm {
 
     public static void initPlayServices() {
         impl.initPlayServices();
-        ;
     }
 
     public static boolean checkPlayServices() {

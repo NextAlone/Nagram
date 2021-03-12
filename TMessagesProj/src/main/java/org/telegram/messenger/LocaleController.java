@@ -43,9 +43,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
-import kotlin.collections.ArraysKt;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.LocFiltersKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -439,42 +436,47 @@ public class LocaleController {
 
         systemDefaultLocale = Locale.getDefault();
         is24HourFormat = DateFormat.is24HourFormat(ApplicationLoader.applicationContext);
-        LocaleInfo currentInfo = null;
-        boolean override = false;
 
-        try {
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-            String lang = preferences.getString("language", null);
-            if (lang != null) {
-                currentInfo = getLanguageFromDict(lang);
-                if (currentInfo != null) {
-                    override = true;
+        Utilities.stageQueue.postRunnable(() -> {
+            LocaleInfo currentInfo = null;
+            boolean override = false;
+
+            try {
+                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                String lang = preferences.getString("language", null);
+                if (lang != null) {
+                    currentInfo = getLanguageFromDict(lang);
+                    if (currentInfo != null) {
+                        override = true;
+                    }
                 }
-            }
 
-            if (currentInfo == null && systemDefaultLocale.getLanguage() != null) {
-                currentInfo = getLanguageFromDict(systemDefaultLocale.getLanguage());
-            }
-            if (currentInfo == null) {
-                currentInfo = getLanguageFromDict(getLocaleString(systemDefaultLocale));
+                if (currentInfo == null && systemDefaultLocale.getLanguage() != null) {
+                    currentInfo = getLanguageFromDict(systemDefaultLocale.getLanguage());
+                }
                 if (currentInfo == null) {
-                    currentInfo = getLanguageFromDict("en");
+                    currentInfo = getLanguageFromDict(getLocaleString(systemDefaultLocale));
+                    if (currentInfo == null) {
+                        currentInfo = getLanguageFromDict("en");
+                    }
                 }
+
+                applyLanguage(currentInfo, override, true, UserConfig.selectedAccount);
+            } catch (Exception e) {
+                FileLog.e(e);
             }
 
-            applyLanguage(currentInfo, override, true, UserConfig.selectedAccount);
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
+            try {
+                IntentFilter timezoneFilter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
+                ApplicationLoader.applicationContext.registerReceiver(new TimeZoneChangedReceiver(), timezoneFilter);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
 
-        try {
-            IntentFilter timezoneFilter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
-            ApplicationLoader.applicationContext.registerReceiver(new TimeZoneChangedReceiver(), timezoneFilter);
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
+            AndroidUtilities.runOnUIThread(() -> currentSystemLocale = getSystemLocaleStringIso639());
 
-        AndroidUtilities.runOnUIThread(() -> currentSystemLocale = getSystemLocaleStringIso639());
+        });
+
     }
 
     public LocaleInfo getLanguageFromDict(String key) {
@@ -561,7 +563,10 @@ public class LocaleController {
         return result.toString();
     }
 
+    private static String cached639;
+
     public static String getSystemLocaleStringIso639() {
+        if (cached639 != null) return cached639;
         Locale locale = getInstance().getSystemDefaultLocale();
         if (locale == null) {
             return "en";
@@ -582,7 +587,8 @@ public class LocaleController {
             result.append('_');
         }
         result.append(variantCode);
-        return result.toString();
+        cached639 = result.toString();
+        return cached639;
     }
 
     public static String getLocaleStringIso639() {
@@ -2078,9 +2084,7 @@ public class LocaleController {
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             } else {
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                    ConnectionsManager.setLangCode(localeInfo.getLangCode());
-                }
+                ConnectionsManager.setLangCode(localeInfo.getLangCode());
                 TLRPC.TL_langpack_getLangPack req = new TLRPC.TL_langpack_getLangPack();
                 req.lang_code = localeInfo.getLangCode();
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {

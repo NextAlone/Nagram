@@ -1,5 +1,7 @@
 package tw.nekomimi.nekogram;
 
+import android.util.SparseArray;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
@@ -18,7 +20,7 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class MessageHelper extends BaseController {
 
-    private static volatile MessageHelper[] Instance = new MessageHelper[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<MessageHelper> Instance = new SparseArray<>();
     private int lastReqId;
 
     public MessageHelper(int num) {
@@ -36,12 +38,13 @@ public class MessageHelper extends BaseController {
     }
 
     public static MessageHelper getInstance(int num) {
-        MessageHelper localInstance = Instance[num];
+        MessageHelper localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (MessageHelper.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new MessageHelper(num);
+                    Instance.put(num, localInstance = new MessageHelper(num));
+
                 }
             }
         }

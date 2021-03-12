@@ -67,11 +67,8 @@ public class LogoutActivity extends BaseFragment {
 
         rowCount = 0;
         alternativeHeaderRow = rowCount++;
-        if (UserConfig.getActivatedAccountsCount() < UserConfig.MAX_ACCOUNT_COUNT) {
-            addAccountRow = rowCount++;
-        } else {
-            addAccountRow = -1;
-        }
+        addAccountRow = rowCount++;
+
         if (SharedConfig.passcodeHash.length() <= 0) {
             passcodeRow = rowCount++;
         } else {
@@ -118,9 +115,9 @@ public class LogoutActivity extends BaseFragment {
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == addAccountRow) {
                 int freeAccount = -1;
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                    if (!UserConfig.getInstance(a).isClientActivated()) {
-                        freeAccount = a;
+                for (int account = 0;account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                    if (!SharedConfig.activeAccounts.contains(account)) {
+                        freeAccount = account;
                         break;
                     }
                 }

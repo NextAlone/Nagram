@@ -26,6 +26,7 @@ import com.v2ray.ang.V2RayConfig;
 import com.v2ray.ang.dto.AngConfig;
 import com.v2ray.ang.util.Utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.objects.filters.ObjectFilters;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,9 +35,12 @@ import org.telegram.tgnet.ConnectionsManager;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
@@ -137,6 +141,10 @@ public class SharedConfig {
     public static boolean archiveHidden;
 
     public static int distanceSystemType;
+
+    public static HashSet<Integer> activeAccounts;
+
+    public static int loginingAccount = -1;
 
     public static class ProxyInfo implements Comparable<ProxyInfo> {
 
@@ -924,7 +932,7 @@ public class SharedConfig {
                 editor.putInt("lockRecordAudioVideoHint", lockRecordAudioVideoHint);
                 editor.putBoolean("disableVoiceAudioEffects", disableVoiceAudioEffects);
                 editor.putString("storageCacheDir", !TextUtils.isEmpty(storageCacheDir) ? storageCacheDir : "");
-                editor.commit();
+                editor.apply();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -937,6 +945,12 @@ public class SharedConfig {
             value = lastLocalId--;
         }
         return value;
+    }
+
+    public static void saveAccounts() {
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit()
+                .putString("active_accounts", StringUtils.join(activeAccounts, ","))
+                .apply();
     }
 
     public static void loadConfig() {
@@ -1026,6 +1040,38 @@ public class SharedConfig {
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
+            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(HashSet::new));
+
+            if (!preferences.contains("account_list_loaded")) {
+                int maxAccounts;
+
+                File sharedPrefs = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "shared_prefs");
+                if (new File(sharedPrefs, "userconfig31.xml").isFile()) {
+                    maxAccounts = 32;
+                } else if (new File(sharedPrefs, "userconfig15.xml").isFile()) {
+                    maxAccounts = 16;
+                } else {
+                    maxAccounts = -1;
+                }
+
+                for (int i = 0; i < maxAccounts; i++) {
+                    SharedPreferences perf;
+                    if (i == 0) {
+                        perf = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                    } else {
+                        perf = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + i, Context.MODE_PRIVATE);
+                    }
+                    if (StrUtil.isNotBlank(perf.getString("user", null))) {
+                        activeAccounts.add(i);
+                    }
+                }
+
+                if (!SharedConfig.activeAccounts.isEmpty()) {
+                    preferences.edit().putString("active_accounts", StringUtils.join(activeAccounts, ",")).apply();
+                }
+
+                preferences.edit().putBoolean("account_list_loaded", true).apply();
+            }
 
             configLoaded = true;
 

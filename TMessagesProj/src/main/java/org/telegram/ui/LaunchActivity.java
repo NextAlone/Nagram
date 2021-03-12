@@ -514,9 +514,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerAddCell) {
                 int freeAccount = -1;
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                    if (!UserConfig.getInstance(a).isClientActivated()) {
-                        freeAccount = a;
+                for (int account = 0;account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                    if (!SharedConfig.activeAccounts.contains(account)) {
+                        freeAccount = account;
                         break;
                     }
                 }
@@ -921,8 +921,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             FileLog.e(e);
         }
         MediaController.getInstance().setBaseActivity(this, true);
-        ExternalGcm.checkUpdate(this);
+
         UIUtil.runOnIoDispatcher(() -> {
+
+            ExternalGcm.checkUpdate(this);
 
             for (SubInfo subInfo : SubManager.getSubList().find()) {
 
@@ -1030,7 +1032,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     private void switchToAvailableAccountOrLogout() {
         int account = -1;
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             if (UserConfig.getInstance(a).isClientActivated()) {
                 account = a;
                 break;
@@ -1255,7 +1257,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             return true;
         }
         //FileLog.d("UI create13 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
-        if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
+        if (isNew && PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             if (intent == null || !Intent.ACTION_MAIN.equals(intent.getAction())) {
                 PhotoViewer.getInstance().closePhoto(false, true);
             }
@@ -2111,7 +2113,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                     if (cursor != null) {
                                         if (cursor.moveToFirst()) {
                                             int accountId = Utilities.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME)));
-                                            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                                            for (int a : SharedConfig.activeAccounts) {
                                                 if (UserConfig.getInstance(a).getClientUserId() == accountId) {
                                                     intentAccount[0] = a;
                                                     switchToAccount(intentAccount[0], true);

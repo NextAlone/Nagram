@@ -54,6 +54,8 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
+import android.util.SparseBooleanArray;
+import android.util.SparseIntArray;
 import android.util.StateSet;
 import android.view.View;
 
@@ -1934,9 +1936,9 @@ public class Theme {
 
     private static int loadingCurrentTheme;
     private static int lastLoadingCurrentThemeTime;
-    private static boolean[] loadingRemoteThemes = new boolean[UserConfig.MAX_ACCOUNT_COUNT];
-    private static int[] lastLoadingThemesTime = new int[UserConfig.MAX_ACCOUNT_COUNT];
-    private static int[] remoteThemesHash = new int[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseBooleanArray loadingRemoteThemes = new SparseBooleanArray();
+    private static SparseIntArray lastLoadingThemesTime = new SparseIntArray();
+    private static SparseIntArray remoteThemesHash = new SparseIntArray();
 
     public static ArrayList<ThemeInfo> themes;
     private static ArrayList<ThemeInfo> otherThemes;
@@ -4164,10 +4166,6 @@ public class Theme {
 
         String themesString = themeConfig.getString("themes2", null);
 
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            remoteThemesHash[a] = themeConfig.getInt("remoteThemesHash" + (a != 0 ? a : ""), 0);
-            lastLoadingThemesTime[a] = themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0);
-        }
         if (!TextUtils.isEmpty(themesString)) {
             try {
                 JSONArray jsonArray = new JSONArray(themesString);
@@ -4439,6 +4437,12 @@ public class Theme {
         }
         applyTheme(applyingTheme, false, false, switchToTheme == 2);
         AndroidUtilities.runOnUIThread(Theme::checkAutoNightThemeConditions);
+    }
+
+    public static void init(int a) {
+        SharedPreferences themeConfig = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        remoteThemesHash.put(a, themeConfig.getInt("remoteThemesHash" + (a != 0 ? a : ""), 0));
+        lastLoadingThemesTime.put(a, themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0));
     }
 
     private static Method StateListDrawable_getStateDrawableMethod;
@@ -5650,13 +5654,13 @@ public class Theme {
             }
             editor.putString("themes2", array.toString());
         }
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            editor.putInt("remoteThemesHash" + (a != 0 ? a : ""), remoteThemesHash[a]);
-            editor.putInt("lastLoadingThemesTime" + (a != 0 ? a : ""), lastLoadingThemesTime[a]);
+        for (int a : SharedConfig.activeAccounts) {
+            editor.putInt("remoteThemesHash" + (a != 0 ? a : ""), remoteThemesHash.get(a, 0));
+            editor.putInt("lastLoadingThemesTime" + (a != 0 ? a : ""), lastLoadingThemesTime.get(a, 0));
         }
 
         editor.putInt("lastLoadingCurrentThemeTime", lastLoadingCurrentThemeTime);
-        editor.commit();
+        editor.apply();
 
         if (full) {
             for (int b = 0; b < 5; b++) {
@@ -6188,19 +6192,19 @@ public class Theme {
     }
 
     public static void loadRemoteThemes(final int currentAccount, boolean force) {
-        if (loadingRemoteThemes[currentAccount] || !force && Math.abs(System.currentTimeMillis() / 1000 - lastLoadingThemesTime[currentAccount]) < 60 * 60 || !UserConfig.getInstance(currentAccount).isClientActivated()) {
+        if (loadingRemoteThemes.get(currentAccount) || !force && Math.abs(System.currentTimeMillis() / 1000 - lastLoadingThemesTime.get(currentAccount)) < 60 * 60 || !UserConfig.getInstance(currentAccount).isClientActivated()) {
             return;
         }
-        loadingRemoteThemes[currentAccount] = true;
+        loadingRemoteThemes.put(currentAccount, true);
         TLRPC.TL_account_getThemes req = new TLRPC.TL_account_getThemes();
         req.format = "android";
-        req.hash = remoteThemesHash[currentAccount];
+        req.hash = remoteThemesHash.get(currentAccount);
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-            loadingRemoteThemes[currentAccount] = false;
+            loadingRemoteThemes.put(currentAccount, false);
             if (response instanceof TLRPC.TL_account_themes) {
                 TLRPC.TL_account_themes res = (TLRPC.TL_account_themes) response;
-                remoteThemesHash[currentAccount] = res.hash;
-                lastLoadingThemesTime[currentAccount] = (int) (System.currentTimeMillis() / 1000);
+                remoteThemesHash.put(currentAccount, res.hash);
+                lastLoadingThemesTime.put(currentAccount, (int) (System.currentTimeMillis() / 1000));
                 ArrayList<Object> oldServerThemes = new ArrayList<>();
                 for (int a = 0, N = themes.size(); a < N; a++) {
                     ThemeInfo info = themes.get(a);

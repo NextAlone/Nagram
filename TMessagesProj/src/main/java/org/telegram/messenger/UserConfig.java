@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.SystemClock;
 import android.util.Base64;
+import android.util.SparseArray;
 
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
@@ -83,14 +84,15 @@ public class UserConfig extends BaseController {
     public String tonKeyName;
     public boolean tonCreationFinished;
 
-    private static volatile UserConfig[] Instance = new UserConfig[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<UserConfig> Instance = new SparseArray<>();
+
     public static UserConfig getInstance(int num) {
-        UserConfig localInstance = Instance[num];
+        UserConfig localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (UserConfig.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new UserConfig(num);
+                    Instance.put(num, localInstance = new UserConfig(num));
                 }
             }
         }
@@ -99,7 +101,7 @@ public class UserConfig extends BaseController {
 
     public static int getActivatedAccountsCount() {
         int count = 0;
-        for (int a = 0; a < MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             if (AccountInstance.getInstance(a).getUserConfig().isClientActivated()) {
                 count++;
             }
@@ -462,7 +464,7 @@ public class UserConfig extends BaseController {
     }
 
     public void clearConfig() {
-        getPreferences().edit().clear().commit();
+        getPreferences().edit().clear().apply();
         clearTonConfig();
 
         sharingMyLocationUntil = 0;
@@ -499,7 +501,7 @@ public class UserConfig extends BaseController {
         isBot = false;
         resetSavedPassword();
         boolean hasActivated = false;
-        for (int a = 0; a < MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             if (AccountInstance.getInstance(a).getUserConfig().isClientActivated()) {
                 hasActivated = true;
                 break;

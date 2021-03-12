@@ -82,6 +82,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SRPHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -262,10 +263,16 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 views[a].onDestroyActivity();
             }
         }
+
+        SharedConfig.loginingAccount = -1;
     }
 
     @Override
     public boolean onFragmentCreate() {
+
+        SharedConfig.loginingAccount = currentAccount;
+
+        ApplicationLoader.loadAccount(currentAccount);
 
         currentConnectionState = getConnectionsManager().getConnectionState();
 
@@ -810,7 +817,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             exportLoginTokenRequest.api_hash = NekoXConfig.currentAppHash();
             exportLoginTokenRequest.except_ids = new ArrayList<>();
             if (NekoXConfig.customApi == 0) {
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     UserConfig userConfig = UserConfig.getInstance(a);
                     if (!userConfig.isClientActivated()) {
                         continue;
@@ -1548,6 +1555,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     private void onAuthSuccess(TLRPC.TL_auth_authorization res, boolean afterSignup) {
+        SharedConfig.activeAccounts.add(currentAccount);
+        SharedConfig.saveAccounts();
         ConnectionsManager.getInstance(currentAccount).setUserId(res.user.id);
         UserConfig.getInstance(currentAccount).clearConfig();
         MessagesController.getInstance(currentAccount).cleanup();
@@ -1564,6 +1573,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         ContactsController.getInstance(currentAccount).checkAppAccount();
         MessagesController.getInstance(currentAccount).checkPromoInfo(true);
         ConnectionsManager.getInstance(currentAccount).updateDcSettings();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.accountLogin, currentAccount);
         needFinishActivity(afterSignup);
     }
 
@@ -2132,7 +2142,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
             if (getParentActivity() instanceof LaunchActivity) {
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     UserConfig userConfig = UserConfig.getInstance(a);
                     if (!userConfig.isClientActivated()) {
                         continue;

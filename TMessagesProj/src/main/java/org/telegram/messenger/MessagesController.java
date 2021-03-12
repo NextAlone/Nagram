@@ -710,15 +710,15 @@ public class MessagesController extends BaseController implements NotificationCe
         return 0;
     };
 
-    private static volatile MessagesController[] Instance = new MessagesController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<MessagesController> Instance = new SparseArray<>();
 
     public static MessagesController getInstance(int num) {
-        MessagesController localInstance = Instance[num];
+        MessagesController localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (MessagesController.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new MessagesController(num);
+                    Instance.put(num, localInstance = new MessagesController(num));
                 }
             }
         }
@@ -2449,7 +2449,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
         showFiltersTooltip = false;
 
-        DialogsActivity.dialogsLoaded[currentAccount] = false;
+        DialogsActivity.dialogsLoaded.put(currentAccount, false);
 
         SharedPreferences.Editor editor = notificationsPreferences.edit();
         editor.clear().commit();
@@ -9369,7 +9369,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC.TL_account_unregisterDevice req = new TLRPC.TL_account_unregisterDevice();
             req.token = SharedConfig.pushString;
             req.token_type = 2;
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            for (int a : SharedConfig.activeAccounts) {
                 UserConfig userConfig = UserConfig.getInstance(a);
                 if (a != currentAccount && userConfig.isClientActivated()) {
                     req.other_uids.add(userConfig.getClientUserId());
@@ -9398,6 +9398,8 @@ public class MessagesController extends BaseController implements NotificationCe
             ConnectionsManager.native_switchBackend(currentAccount);
         }
         MessagesController.getMainSettings(currentAccount).edit().remove("custom_dc").apply();
+        SharedConfig.activeAccounts.remove(currentAccount);
+        SharedConfig.saveAccounts();
     }
 
     private boolean gettingAppChangelog;
@@ -9439,7 +9441,7 @@ public class MessagesController extends BaseController implements NotificationCe
         req.token = regid;
         req.no_muted = false;
         req.secret = SharedConfig.pushAuthKey;
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a : SharedConfig.activeAccounts) {
             UserConfig userConfig = UserConfig.getInstance(a);
             if (a != currentAccount && userConfig.isClientActivated()) {
                 int uid = userConfig.getClientUserId();

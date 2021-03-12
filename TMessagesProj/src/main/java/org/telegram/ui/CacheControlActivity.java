@@ -554,7 +554,7 @@ public class CacheControlActivity extends BaseFragment {
             ConnectionsManager.reseting = true;
             UIUtil.runOnIoDispatcher(() -> {
                 FileUtil.delete(EnvUtil.getTelegramPath());
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     AccountInstance instance = AccountInstance.getInstance(a);
                     if (instance.getUserConfig().isClientActivated()) {
                         TLRPC.TL_auth_logOut req = new TLRPC.TL_auth_logOut();

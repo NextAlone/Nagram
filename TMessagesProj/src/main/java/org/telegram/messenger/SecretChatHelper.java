@@ -80,15 +80,15 @@ public class SecretChatHelper extends BaseController {
     private ArrayList<Long> pendingEncMessagesToDelete = new ArrayList<>();
     private boolean startingSecretChat = false;
 
-    private static volatile SecretChatHelper[] Instance = new SecretChatHelper[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<SecretChatHelper> Instance = new SparseArray<>();
 
     public static SecretChatHelper getInstance(int num) {
-        SecretChatHelper localInstance = Instance[num];
+        SecretChatHelper localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (SecretChatHelper.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new SecretChatHelper(num);
+                    Instance.put(num, localInstance = new SecretChatHelper(num));
                 }
             }
         }

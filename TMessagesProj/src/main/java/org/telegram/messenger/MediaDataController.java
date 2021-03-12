@@ -82,15 +82,16 @@ public class MediaDataController extends BaseController {
 
     public static String SHORTCUT_CATEGORY = "org.telegram.messenger.SHORTCUT_SHARE";
 
-    private static volatile MediaDataController[] Instance = new MediaDataController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<MediaDataController> Instance = new SparseArray<>();
 
     public static MediaDataController getInstance(int num) {
-        MediaDataController localInstance = Instance[num];
+        MediaDataController localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (MediaDataController.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new MediaDataController(num);
+                    Instance.put(num, localInstance = new MediaDataController(num));
+
                 }
             }
         }

@@ -184,7 +184,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.useIPv6);
                 }
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         ConnectionsManager.native_setIpStrategy(a, ConnectionsManager.getIpStrategy());
                     }
@@ -239,7 +239,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.hideProxySponsorChannel);
                 }
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         MessagesController.getInstance(a).checkPromoInfo(true);
                     }
@@ -421,7 +421,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (NekoConfig.disableSystemAccount) {
                     getContactsController().deleteUnknownAppAccounts();
                 } else {
-                    for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                    for (int a : SharedConfig.activeAccounts) {
                         ContactsController.getInstance(a).checkAppAccount();
                     }
                 }

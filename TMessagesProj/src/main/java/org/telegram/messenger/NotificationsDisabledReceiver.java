@@ -38,7 +38,8 @@ public class NotificationsDisabledReceiver extends BroadcastReceiver {
         }
         ApplicationLoader.postInitApplication();
         int account = Utilities.parseInt(args[0]);
-        if (account < 0 || account >= UserConfig.MAX_ACCOUNT_COUNT) {
+        if (!SharedConfig.activeAccounts.contains(account)) {
+            FileLog.w("Unknown account in notif receiver: " + account);
             return;
         }
         if (BuildVars.LOGS_ENABLED) {

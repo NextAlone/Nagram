@@ -92,16 +92,16 @@ public class MessagesStorage extends BaseController {
 
     private CountDownLatch openSync = new CountDownLatch(1);
 
-    private static volatile MessagesStorage[] Instance = new MessagesStorage[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<MessagesStorage> Instance = new SparseArray();
     private final static int LAST_DB_VERSION = 77;
 
     public static MessagesStorage getInstance(int num) {
-        MessagesStorage localInstance = Instance[num];
+        MessagesStorage localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (MessagesStorage.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new MessagesStorage(num);
+                    Instance.put(num, localInstance = new MessagesStorage(num));
                 }
             }
         }
@@ -1781,6 +1781,7 @@ public class MessagesStorage extends BaseController {
     private int[] mentionGroups = new int[2];
     private LongSparseArray<Integer> dialogsWithMentions = new LongSparseArray<>();
     private LongSparseArray<Integer> dialogsWithUnread = new LongSparseArray<>();
+
     private void calcUnreadCounters(boolean apply) {
         try {
             for (int a = 0; a < 2; a++) {
@@ -2622,7 +2623,7 @@ public class MessagesStorage extends BaseController {
     public void saveDialogFiltersOrderInternal() {
         try {
             SQLitePreparedStatement state = database.executeFast("UPDATE dialog_filter_neko SET ord = ?, flags = ? WHERE id = ?");
-            for (int a = 0, N = dialogFilters.size(); a < N ;a++) {
+            for (int a = 0, N = dialogFilters.size(); a < N; a++) {
                 MessagesController.DialogFilter filter = dialogFilters.get(a);
                 state.requery();
                 state.bindInteger(1, filter.order);
@@ -3464,7 +3465,7 @@ public class MessagesStorage extends BaseController {
                                     message.media.photo = new TLRPC.TL_photoEmpty();
                                 }
                             }
-                            message.media.flags = message.media.flags &~ 1;
+                            message.media.flags = message.media.flags & ~1;
                             message.id = cursor.intValue(1);
                             message.date = cursor.intValue(2);
                             message.dialog_id = cursor.longValue(3);
@@ -4817,7 +4818,7 @@ public class MessagesStorage extends BaseController {
             TLObject result = null;
             try {
                 database.executeFast("DELETE FROM botcache WHERE date < " + currentDate).stepThis().dispose();
-                SQLiteCursor cursor = database.queryFinalized( "SELECT data FROM botcache WHERE id = ?", key);
+                SQLiteCursor cursor = database.queryFinalized("SELECT data FROM botcache WHERE id = ?", key);
                 if (cursor.next()) {
                     try {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -7898,9 +7899,9 @@ public class MessagesStorage extends BaseController {
     private int getMessageMediaType(TLRPC.Message message) {
         if (message instanceof TLRPC.TL_message_secret) {
             if ((message.media instanceof TLRPC.TL_messageMediaPhoto || MessageObject.isGifMessage(message)) && message.ttl > 0 && message.ttl <= 60 ||
-                            MessageObject.isVoiceMessage(message) ||
-                            MessageObject.isVideoMessage(message) ||
-                            MessageObject.isRoundVideoMessage(message)) {
+                    MessageObject.isVoiceMessage(message) ||
+                    MessageObject.isVideoMessage(message) ||
+                    MessageObject.isRoundVideoMessage(message)) {
                 return 1;
             } else if (message.media instanceof TLRPC.TL_messageMediaPhoto || MessageObject.isVideoMessage(message)) {
                 return 0;

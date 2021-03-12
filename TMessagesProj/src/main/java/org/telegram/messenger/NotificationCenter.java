@@ -220,14 +220,15 @@ public class NotificationCenter {
 
     public static final int updateUserStatus = totalEvents++;
     public static final int updateLoginToken = totalEvents++;
+    public static final int accountLogin = totalEvents++;
 
 
     private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();
     private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
-    private ArrayList<Runnable> delayedRunnables  = new ArrayList<>(10);
-    private ArrayList<Runnable> delayedRunnablesTmp  = new ArrayList<>(10);
+    private ArrayList<Runnable> delayedRunnables = new ArrayList<>(10);
+    private ArrayList<Runnable> delayedRunnablesTmp = new ArrayList<>(10);
     private ArrayList<DelayedPost> delayedPostsTmp = new ArrayList<>(10);
     private ArrayList<PostponeNotificationCallback> postponeCallbackList = new ArrayList<>(10);
 
@@ -259,17 +260,18 @@ public class NotificationCenter {
 
     private int currentAccount;
     private int currentHeavyOperationFlags;
-    private static volatile NotificationCenter[] Instance = new NotificationCenter[UserConfig.MAX_ACCOUNT_COUNT];
     private static volatile NotificationCenter globalInstance;
+    private static SparseArray<NotificationCenter> Instance = new SparseArray<>();
 
     @UiThread
     public static NotificationCenter getInstance(int num) {
-        NotificationCenter localInstance = Instance[num];
+        NotificationCenter localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (NotificationCenter.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new NotificationCenter(num);
+                    Instance.put(num, localInstance = new NotificationCenter(num));
+
                 }
             }
         }

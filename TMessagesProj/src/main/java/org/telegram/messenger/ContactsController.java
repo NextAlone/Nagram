@@ -85,10 +85,14 @@ public class ContactsController extends BaseController {
     private class MyContentObserver extends ContentObserver {
 
         private Runnable checkRunnable = () -> {
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            for (int a : SharedConfig.activeAccounts) {
                 if (UserConfig.getInstance(a).isClientActivated()) {
                     ConnectionsManager.getInstance(a).resumeNetworkMaybe();
                     ContactsController.getInstance(a).checkContacts();
+                }
+                if (SharedConfig.loginingAccount != -1) {
+                    ConnectionsManager.getInstance(SharedConfig.loginingAccount).resumeNetworkMaybe();
+                    ContactsController.getInstance(SharedConfig.loginingAccount).checkContacts();
                 }
             }
         };
@@ -180,14 +184,15 @@ public class ContactsController extends BaseController {
 
     private int completedRequestsCount;
 
-    private static volatile ContactsController[] Instance = new ContactsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<ContactsController> Instance = new SparseArray();
+
     public static ContactsController getInstance(int num) {
-        ContactsController localInstance = Instance[num];
+        ContactsController localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (ContactsController.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new ContactsController(num);
+                    Instance.put(num, localInstance = new ContactsController(num));
                 }
             }
         }
@@ -315,35 +320,6 @@ public class ContactsController extends BaseController {
 
     public void checkAppAccount() {
         AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
-        try {
-            Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
-            systemAccount = null;
-            for (int a = 0; a < accounts.length; a++) {
-                Account acc = accounts[a];
-                boolean found = false;
-                for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
-                    TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
-                    if (user != null) {
-                        if (acc.name.equals(formatName(user.first_name, user.last_name))) {
-                            if (b == currentAccount) {
-                                systemAccount = acc;
-                            }
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (!found || NekoConfig.disableSystemAccount) {
-                    try {
-                        am.removeAccount(accounts[a], null, null);
-                    } catch (Exception ignore) {
-                    }
-                }
-
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
         if (getUserConfig().isClientActivated()) {
             readContacts();
             if (systemAccount == null && !NekoConfig.disableSystemAccount) {
@@ -373,7 +349,7 @@ public class ContactsController extends BaseController {
                     }
                 } else {
                     boolean found = false;
-                    for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
+                    for (int b : SharedConfig.activeAccounts) {
                         TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
                         if (user != null) {
                             if (acc.name.equals(formatName(user.first_name, user.last_name))) {
@@ -450,7 +426,7 @@ public class ContactsController extends BaseController {
                         systemAccount = null;
                         for (int a = 0; a < accounts.length; a++) {
                             Account acc = accounts[a];
-                            for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
+                            for (int b : SharedConfig.activeAccounts) {
                                 TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
                                 if (user != null) {
                                     if (acc.name.equals("" + user.id)) {
