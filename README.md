@@ -14,7 +14,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 ## NekoX Changes
 
 - Most of Nekogram's features
-- Max account limit set to 16
+- Unlimited login accounts
 - OpenCC Chinese Convert
 - Built-in VMess, Shadowsocks, SSR, Trojan-GFW proxies support
 - Built-in public proxy list / Proxy subscription support

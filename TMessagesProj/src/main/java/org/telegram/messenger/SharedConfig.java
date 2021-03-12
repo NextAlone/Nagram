@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
@@ -143,7 +144,7 @@ public class SharedConfig {
 
     public static int distanceSystemType;
 
-    public static ConcurrentHashSet<Integer> activeAccounts;
+    public static CopyOnWriteArraySet<Integer> activeAccounts;
     public static int loginingAccount = -1;
 
     static {
@@ -1044,7 +1045,7 @@ public class SharedConfig {
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
-            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(ConcurrentHashSet::new));
+            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
             if (!preferences.contains("accounts_loaded")) {
                 int maxAccounts;
