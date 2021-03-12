@@ -163,6 +163,7 @@ public class ConnectionsManager extends BaseController {
 
     public ConnectionsManager(int instance) {
         super(instance);
+        ConnectionsManager.native_setJava(instance);
         connectionState = native_getConnectionState(currentAccount);
         String deviceModel;
         String systemLangCode;
@@ -747,6 +748,8 @@ public class ConnectionsManager extends BaseController {
     public static native void native_setSystemLangCode(int currentAccount, String langCode);
 
     public static native void native_setJava(boolean useJavaByteBuffers);
+
+    public static native void native_setJava(int instanceNum);
 
     public static native void native_setPushConnectionEnabled(int currentAccount, boolean value);
 

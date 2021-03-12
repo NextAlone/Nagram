@@ -35,7 +35,7 @@
 #include <jni.h>
 JavaVM *javaVm = nullptr;
 //JNIEnv *jniEnv[MAX_ACCOUNT_COUNT];
-std::vector<JNIEnv*> jniEnv(MAX_ACCOUNT_COUNT);
+std::vector<JNIEnv*> jniEnv(10);
 jclass jclass_ByteBuffer = nullptr;
 jmethodID jclass_ByteBuffer_allocateDirect = 0;
 #endif
@@ -133,10 +133,14 @@ ConnectionsManager::~ConnectionsManager() {
     pthread_mutex_destroy(&mutex);
 }
 
-std::vector<ConnectionsManager*> ConnectionsManager::_instances = std::vector<ConnectionsManager*>(MAX_ACCOUNT_COUNT);
+std::vector<ConnectionsManager*> ConnectionsManager::_instances = std::vector<ConnectionsManager*>(10);
 
 ConnectionsManager& ConnectionsManager::getInstance(int32_t instanceNum) {
     static std::mutex _new_mutex;
+
+    if (instanceNum >= _instances.capacity()) {
+        _instances.resize(instanceNum + 10, nullptr);
+    }
 
     if(_instances[instanceNum] == nullptr) {
         _new_mutex.lock();

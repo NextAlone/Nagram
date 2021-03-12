@@ -513,8 +513,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 switchToAccount(((DrawerUserCell) view).getAccountNumber(), true);
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerAddCell) {
-                int freeAccount = -1;
-                for (int account = 0;account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                int freeAccount;
+                for (int account = 0;; account++) {
                     if (!SharedConfig.activeAccounts.contains(account)) {
                         freeAccount = account;
                         break;

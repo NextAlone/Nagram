@@ -1042,7 +1042,7 @@ public class SharedConfig {
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
             activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(HashSet::new));
 
-            if (!preferences.contains("account_list_loaded")) {
+            if (!preferences.contains("accounts_loaded")) {
                 int maxAccounts;
 
                 File sharedPrefs = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "shared_prefs");
@@ -1070,7 +1070,7 @@ public class SharedConfig {
                     preferences.edit().putString("active_accounts", StringUtils.join(activeAccounts, ",")).apply();
                 }
 
-                preferences.edit().putBoolean("account_list_loaded", true).apply();
+                preferences.edit().putBoolean("accounts_loaded", true).apply();
             }
 
             configLoaded = true;

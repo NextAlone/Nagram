@@ -7177,8 +7177,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(500, LocaleController.getString("EditName", R.string.EditName), 0, () -> presentFragment(new ChangeNameActivity())),
                 new SearchResult(501, LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), 0, () -> presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER))),
                 new SearchResult(502, LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), 0, () -> {
-                    int freeAccount = -1;
-                    for (int account = 0;account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                    int freeAccount;
+                    for (int account = 0;; account++) {
                         if (!SharedConfig.activeAccounts.contains(account)) {
                             freeAccount = account;
                             break;
@@ -7617,8 +7617,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         if (stringBuilder != null && i == searchArgs.length - 1) {
                             if (result.guid == 502) {
-                                int freeAccount = -1;
-                                for (int account = 0;account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                                int freeAccount;
+                                for (int account = 0;; account++) {
                                     if (!SharedConfig.activeAccounts.contains(account)) {
                                         freeAccount = account;
                                         break;

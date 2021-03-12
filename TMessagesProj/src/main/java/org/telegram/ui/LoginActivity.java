@@ -1534,6 +1534,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
     private void needFinishActivity(boolean afterSignup) {
         clearCurrentState();
+        SharedConfig.activeAccounts.add(currentAccount);
+        SharedConfig.saveAccounts();
         if (getParentActivity() instanceof LaunchActivity) {
             if (newAccount) {
                 newAccount = false;
@@ -1555,8 +1557,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     private void onAuthSuccess(TLRPC.TL_auth_authorization res, boolean afterSignup) {
-        SharedConfig.activeAccounts.add(currentAccount);
-        SharedConfig.saveAccounts();
         ConnectionsManager.getInstance(currentAccount).setUserId(res.user.id);
         UserConfig.getInstance(currentAccount).clearConfig();
         MessagesController.getInstance(currentAccount).cleanup();

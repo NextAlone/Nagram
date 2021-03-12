@@ -79,6 +79,10 @@ public class ApplicationLoader extends Application {
             Reflection.unseal(base);
         }
         super.attachBaseContext(base);
+        try {
+            applicationContext = getApplicationContext();
+        } catch (Throwable ignore) {
+        }
         if (SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             MultiDex.install(this);
         }
@@ -291,7 +295,14 @@ public class ApplicationLoader extends Application {
 
     public static void loadAccount(int account) {
         if (!loadedAccounts.add(account)) return;
-        UserConfig.getInstance(account).loadConfig();
+        UserConfig inst = UserConfig.getInstance(account);
+        inst.loadConfig();
+        if (!inst.isClientActivated()) {
+            if (SharedConfig.activeAccounts.remove(account)) {
+                SharedConfig.saveAccounts();
+            }
+        }
+
         MessagesController.getInstance(account);
         if (account == 0) {
             SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(account).getCurrentTime() + "__";

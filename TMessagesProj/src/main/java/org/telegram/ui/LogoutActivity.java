@@ -114,8 +114,8 @@ public class LogoutActivity extends BaseFragment {
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == addAccountRow) {
-                int freeAccount = -1;
-                for (int account = 0;account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                int freeAccount;
+                for (int account = 0;; account++) {
                     if (!SharedConfig.activeAccounts.contains(account)) {
                         freeAccount = account;
                         break;
