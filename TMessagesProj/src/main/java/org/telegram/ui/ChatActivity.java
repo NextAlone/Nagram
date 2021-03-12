@@ -1927,6 +1927,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 continue;
                             }
 
+                            if (selectedMessagesIds[0].size() + selectedMessagesIds[1].size() >= 100) {
+                                if (message.getId() != begin) {
+                                    for (int x = 0; x < messages.size(); x++) {
+                                        MessageObject msg = messages.get(x);
+                                        if (msg.getId() == begin) {
+                                            addToSelectedMessages(msg, false, false);
+                                            addToSelectedMessages(message, true);
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
                             addToSelectedMessages(message, true);
                         }
                     }
