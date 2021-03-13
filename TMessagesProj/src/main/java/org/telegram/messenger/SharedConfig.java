@@ -1043,8 +1043,6 @@ public class SharedConfig {
             scheduledOrNoSoundHintShows = preferences.getInt("scheduledOrNoSoundHintShows", 0);
             lockRecordAudioVideoHint = preferences.getInt("lockRecordAudioVideoHint", 0);
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
-            preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
-            showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
             activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
             if (!preferences.contains("activeAccountsLoaded")) {
@@ -1077,6 +1075,9 @@ public class SharedConfig {
 
                 preferences.edit().putBoolean("activeAccountsLoaded", true).apply();
             }
+
+            preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+            showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
 
             configLoaded = true;
 
