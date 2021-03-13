@@ -44,6 +44,8 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -344,6 +346,12 @@ public class ApplicationLoader extends Application {
         if (applicationContext == null) {
             applicationContext = getApplicationContext();
         }
+
+        // Since static init is thread-safe, no lock is needed there.
+        Utilities.stageQueue.postRunnable(() -> {
+            NekoConfig.preferences.contains("qwq");
+            NekoXConfig.preferences.contains("qwq");
+        });
 
         try {
             Class.forName("org.robolectric.android.internal.AndroidTestEnvironment");
