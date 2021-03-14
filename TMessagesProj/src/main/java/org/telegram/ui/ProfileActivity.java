@@ -1935,7 +1935,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 listView.stopScroll();
                 avatarContainer.setVisibility(expanded ? INVISIBLE : VISIBLE);
                 nameTextView[1].setVisibility(expanded ? INVISIBLE : VISIBLE);
-                idTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
+                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc)
+                    idTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
                 onlineTextView[1].setVisibility(expanded ? INVISIBLE : VISIBLE);
                 mediaCounterTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
                 callItem.setVisibility(expanded || !callItemVisible ? GONE : INVISIBLE);
@@ -6323,7 +6324,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setVisibility(View.VISIBLE);
         nameTextView[1].setVisibility(View.VISIBLE);
         onlineTextView[1].setVisibility(View.VISIBLE);
-        idTextView.setVisibility(View.VISIBLE);
+        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc)
+            idTextView.setVisibility(View.VISIBLE);
 
         actionBar.onSearchFieldVisibilityChanged(searchTransitionProgress > 0.5f);
         if (otherItem != null) {
