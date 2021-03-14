@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.5.0-rc09"
-def verCode = 200 + 3 * 8
+def verName = "7.5.0-rc10"
+def verCode = 200 + 3 * 9
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
@@ -204,7 +204,7 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['release', 'debug']
             signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
         }
@@ -216,7 +216,7 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['release', 'debug']
             signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
         }
@@ -228,7 +228,7 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             matchingFallbacks = ['release', 'debug']
         }
 
