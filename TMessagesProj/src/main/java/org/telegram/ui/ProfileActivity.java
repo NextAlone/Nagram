@@ -16,6 +16,7 @@ import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -81,6 +82,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -2958,7 +2962,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
                                 BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
-                                Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null
+                                Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
+                                "Scan accounts"
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -3011,6 +3016,34 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                         getParentActivity().getWindow().setStatusBarColor(0x33000000);
                                     }
                                 }
+                            } else if (which == 15) {
+                                SharedConfig.activeAccounts.clear();
+                                int maxAccounts;
+
+                                File filesDir = ApplicationLoader.applicationContext.getFilesDir();
+                                if (new File(filesDir, "account31").isDirectory()) {
+                                    maxAccounts = 32;
+                                } else {
+                                    maxAccounts = 16;
+                                }
+
+                                for (int i = 0; i < maxAccounts; i++) {
+                                    SharedPreferences perf;
+                                    if (i == 0) {
+                                        perf = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                                    } else {
+                                        perf = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + i, Context.MODE_PRIVATE);
+                                    }
+                                    if (StrUtil.isNotBlank(perf.getString("user", null))) {
+                                        SharedConfig.activeAccounts.add(i);
+                                    }
+                                }
+
+                                ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit()
+                                        .putString("active_accounts", StringUtils.join(SharedConfig.activeAccounts, ","))
+                                        .commit();
+
+                                ProcessPhoenix.triggerRebirth(getParentActivity(), new Intent(getParentActivity(), LaunchActivity.class));
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -7178,7 +7211,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(501, LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), 0, () -> presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER))),
                 new SearchResult(502, LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), 0, () -> {
                     int freeAccount;
-                    for (int account = 0;; account++) {
+                    for (int account = 0; ; account++) {
                         if (!SharedConfig.activeAccounts.contains(account)) {
                             freeAccount = account;
                             break;
@@ -7618,7 +7651,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (stringBuilder != null && i == searchArgs.length - 1) {
                             if (result.guid == 502) {
                                 int freeAccount;
-                                for (int account = 0;; account++) {
+                                for (int account = 0; ; account++) {
                                     if (!SharedConfig.activeAccounts.contains(account)) {
                                         freeAccount = account;
                                         break;
