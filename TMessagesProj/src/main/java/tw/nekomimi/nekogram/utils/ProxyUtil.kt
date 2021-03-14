@@ -97,6 +97,11 @@ object ProxyUtil {
             }
 
             if (text.contains("proxies:\n")) {
+
+                if (BuildVars.isMini) {
+                    error(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert))
+                }
+
                 // clash
 
                 for (proxy in (Yaml().loadAs(text, Map::class.java)["proxies"] as List<Map<String, Any?>>)) {
