@@ -221,10 +221,10 @@ public class ConnectionsManager extends BaseController {
         }
 
         if (deviceModel.trim().length() == 0) {
-            deviceModel = DeviceInfosKt.randomDevice();
+            deviceModel = DeviceInfosKt.randomDevice(currentAccount);
         }
         if (systemVersion.trim().length() == 0) {
-            systemVersion = DeviceInfosKt.randomSystemVersion();
+            systemVersion = DeviceInfosKt.randomSystemVersion(currentAccount);
         }
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {

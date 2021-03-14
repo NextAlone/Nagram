@@ -9397,7 +9397,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
             ConnectionsManager.native_switchBackend(currentAccount);
         }
-        MessagesController.getMainSettings(currentAccount).edit().remove("custom_dc").apply();
+        MessagesController.getMainSettings(currentAccount).edit().clear().apply();
         SharedConfig.activeAccounts.remove(currentAccount);
         SharedConfig.saveAccounts();
     }
