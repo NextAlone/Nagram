@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram;
 
+import android.content.Context;
 import android.util.SparseArray;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -7,16 +8,19 @@ import org.telegram.messenger.BaseController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import tw.nekomimi.nekogram.utils.AlertUtil;
+
+import static tw.nekomimi.nekogram.utils.LangsKt.uDismiss;
+import static tw.nekomimi.nekogram.utils.LangsKt.uUpdate;
 
 public class MessageHelper extends BaseController {
 
@@ -140,14 +144,20 @@ public class MessageHelper extends BaseController {
         }
     }
 
-    public void deleteUserChannelHistoryWithSearch(final long dialog_id, final TLRPC.User user) {
-        deleteUserChannelHistoryWithSearch(dialog_id, user, 0);
+    public void deleteUserChannelHistoryWithSearch(Context ctx, final long dialog_id, final TLRPC.User user) {
+        AlertDialog progress = null;
+        if (ctx != null) {
+            progress = AlertUtil.showProgress(ctx);
+            progress.show();
+        }
+        deleteUserChannelHistoryWithSearch(progress, dialog_id, user, 0, 0);
     }
 
-    public void deleteUserChannelHistoryWithSearch(final long dialog_id, final TLRPC.User user, final int offset_id) {
+    public void deleteUserChannelHistoryWithSearch(AlertDialog progress, final long dialog_id, final TLRPC.User user, final int offset_id, int index) {
         final TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
         req.peer = getMessagesController().getInputPeer((int) dialog_id);
         if (req.peer == null) {
+            if (progress != null) uDismiss(progress);
             return;
         }
         req.limit = 100;
@@ -158,39 +168,44 @@ public class MessageHelper extends BaseController {
             req.flags |= 1;
         }
         req.filter = new TLRPC.TL_inputMessagesFilterEmpty();
-        final int currentReqId = ++lastReqId;
-        getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+        getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 int lastMessageId = offset_id;
-                if (currentReqId == lastReqId) {
-                    if (response != null) {
-                        TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
-                        int size = res.messages.size();
-                        if (size == 0) {
-                            return;
-                        }
-                        ArrayList<Integer> ids = new ArrayList<>();
-                        ArrayList<Long> random_ids = new ArrayList<>();
-                        int channelId = 0;
-                        for (int a = 0; a < res.messages.size(); a++) {
-                            TLRPC.Message message = res.messages.get(a);
-                            ids.add(message.id);
-                            if (message.random_id != 0) {
-                                random_ids.add(message.random_id);
-                            }
-                            if (message.peer_id.channel_id != 0) {
-                                channelId = message.peer_id.channel_id;
-                            }
-                            if (message.id > lastMessageId) {
-                                lastMessageId = message.id;
-                            }
-                        }
-                        getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, channelId, true, false);
-                        deleteUserChannelHistoryWithSearch(dialog_id, user, lastMessageId);
+                TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                ArrayList<Integer> ids = new ArrayList<>();
+                ArrayList<Long> random_ids = new ArrayList<>();
+                int channelId = 0;
+                int indey = index;
+                for (int a = 0; a < res.messages.size(); a++) {
+                    TLRPC.Message message = res.messages.get(a);
+                    if (!message.out || message instanceof TLRPC.TL_messageService) {
+                        continue;
                     }
+                    ids.add(message.id);
+                    if (message.random_id != 0) {
+                        random_ids.add(message.random_id);
+                    }
+                    if (message.peer_id.channel_id != 0) {
+                        channelId = message.peer_id.channel_id;
+                    }
+                    if (message.id > lastMessageId) {
+                        lastMessageId = message.id;
+                    }
+                    indey++;
                 }
+                if (ids.size() == 0) {
+                    if (progress != null) uDismiss(progress);
+                    return;
+                }
+                int finalChannelId = channelId;
+                AndroidUtilities.runOnUIThread(() -> getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, finalChannelId, true, false));
+                if (progress != null) uUpdate(progress, ">> " + indey);
+                deleteUserChannelHistoryWithSearch(progress, dialog_id, user, lastMessageId, indey);
+            } else {
+                if (progress != null) uDismiss(progress);
+                AlertUtil.showToast(error);
             }
-        }), ConnectionsManager.RequestFlagFailOnServerErrors);
+        }, ConnectionsManager.RequestFlagFailOnServerErrors);
     }
 
     public void deleteChannelHistory(final long dialog_id, TLRPC.Chat chat, final int offset_id) {

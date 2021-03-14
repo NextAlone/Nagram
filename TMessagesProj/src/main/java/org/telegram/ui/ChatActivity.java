@@ -2010,7 +2010,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (ChatObject.isChannel(currentChat) && currentChat.megagroup && ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
                             getMessagesController().deleteUserChannelHistory(currentChat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
                         } else {
-                            getMessageHelper().deleteUserChannelHistoryWithSearch(dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
+                            getMessageHelper().deleteUserChannelHistoryWithSearch(getParentActivity(), dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

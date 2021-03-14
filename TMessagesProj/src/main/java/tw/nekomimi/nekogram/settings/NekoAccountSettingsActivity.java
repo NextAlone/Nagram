@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -113,7 +115,11 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                         if (peer.channel_id != 0) {
                             TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
                             if (!chat.broadcast) {
-                                MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(TLdialog.id, getMessagesController().getUser(getUserConfig().clientUserId));
+                                if (ChatObject.isChannel(chat) && chat.megagroup && ChatObject.canUserDoAction(chat, ChatObject.ACTION_DELETE_MESSAGES)) {
+                                    getMessagesController().deleteUserChannelHistory(chat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
+                                } else {
+                                    MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(null, TLdialog.id, getMessagesController().getUser(getUserConfig().clientUserId));
+                                }
                             }
                         }
                         if (peer.user_id != 0) {
