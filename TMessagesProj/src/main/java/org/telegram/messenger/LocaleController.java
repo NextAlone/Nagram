@@ -1410,6 +1410,9 @@ public class LocaleController {
     }
 
     public static String formatDateChat(long date, boolean checkYear) {
+        if (getInstance().chatDate == null) {
+            getInstance().recreateFormatters();
+        }
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
