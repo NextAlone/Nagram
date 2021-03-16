@@ -354,7 +354,7 @@ public class LocaleController {
 
         localeInfo = new LocaleInfo();
         localeInfo.name = "简体中文";
-        localeInfo.nameEnglish = "Simplified Chinese ( @cnmoe )";
+        localeInfo.nameEnglish = "Simplified Chinese";
         localeInfo.shortName = "moecn";
         localeInfo.baseLangCode = "zh_hans_raw";
         localeInfo.isRtl = false;
