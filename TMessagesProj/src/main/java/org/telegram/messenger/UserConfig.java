@@ -102,7 +102,7 @@ public class UserConfig extends BaseController {
     public static int getActivatedAccountsCount() {
         int count = 0;
         for (int a : SharedConfig.activeAccounts) {
-            if (AccountInstance.getInstance(a).getUserConfig().isClientActivated()) {
+            if (getInstance(a).isClientActivated()) {
                 count++;
             }
         }
