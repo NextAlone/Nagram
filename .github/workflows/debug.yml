@@ -132,13 +132,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Fetch Status
+        run: git submodule status v2ray > v2ray_status
       - name: V2ray Cache
         id: cache
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray/*') }}
+          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -243,6 +245,7 @@ jobs:
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
           git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
           git submodule status 'ssr-libev/*' > shadowsocksr_status
+          git submodule status v2ray > v2ray_status
       - name: Native Cache
         id: cache
         uses: actions/cache@v2
@@ -255,7 +258,7 @@ jobs:
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray/*') }}
+          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
       - name: Shadowsocks Cache
         uses: actions/cache@v2
         with:
