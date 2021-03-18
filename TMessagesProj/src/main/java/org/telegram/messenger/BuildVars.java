@@ -32,6 +32,7 @@ public class BuildVars {
 
     public static boolean isUnknown = !BuildConfig.BUILD_TYPE.startsWith("release");
     public static boolean isMini = BuildConfig.FLAVOR.startsWith("mini");
+    public static boolean isPlay = BuildConfig.FLAVOR.endsWith("Play");
 
     static {
 
