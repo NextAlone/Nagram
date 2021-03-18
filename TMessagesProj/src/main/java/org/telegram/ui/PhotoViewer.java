@@ -4175,23 +4175,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         ActionBarMenu menu = actionBar.createMenu();
         masksItem = menu.addItem(gallery_menu_masks, R.drawable.deproko_baseline_masks_24);
         masksItem.setContentDescription(LocaleController.getString("Masks", R.string.Masks));
-        masksItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
+        masksItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
 
         pipItem = menu.addItem(gallery_menu_pip, R.drawable.ic_goinline);
         pipItem.setContentDescription(LocaleController.getString("AccDescrPipMode", R.string.AccDescrPipMode));
-        pipItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
+        pipItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
 
         sendNoQuoteItem = menu.addItem(gallery_menu_send_noquote, R.drawable.baseline_fast_forward_24);
         sendNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.Forward));
-        sendNoQuoteItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
+        sendNoQuoteItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
 
         sendItem = menu.addItem(gallery_menu_send, R.drawable.baseline_forward_24);
         sendItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
-        sendItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
+        sendItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
 
         shareItem = menu.addItem(gallery_menu_share2, R.drawable.share);
         shareItem.setContentDescription(LocaleController.getString("ShareFile", R.string.ShareFile));
-        shareItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultIcon));
+        shareItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
 
         menuItem = menu.addItem(0, R.drawable.ic_ab_other);
         menuItem.addSubItem(gallery_menu_openin, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);

@@ -953,6 +953,7 @@ public class SharedConfig {
     }
 
     public static void saveAccounts() {
+        FileLog.e("Save accounts: " + activeAccounts, new Exception());
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit()
                 .putString("active_accounts", StringUtils.join(activeAccounts, ","))
                 .apply();

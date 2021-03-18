@@ -293,7 +293,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         stickerSize2Row = rowCount++;
 
         chatRow = rowCount++;
-        ignoreBlockedRow = NekoConfig.ignoreBlocked || NekoXConfig.developerMode ? rowCount++ : -1;
+        ignoreBlockedRow = rowCount++;
 
         ignoreMutedCountRow = rowCount++;
         disableChatActionRow = rowCount++;

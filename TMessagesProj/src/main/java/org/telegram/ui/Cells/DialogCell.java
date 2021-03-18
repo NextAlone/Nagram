@@ -1912,6 +1912,9 @@ public class DialogCell extends BaseCell {
                     if (mask == 0) {
                         clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
                         message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
+                        if (message != null && NekoConfig.ignoreBlocked && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
+                            message = null;
+                        }
                         lastUnreadState = message != null && message.isUnread();
                         if (dialog instanceof TLRPC.TL_dialogFolder) {
                             unreadCount = MessagesStorage.getInstance(currentAccount).getArchiveUnreadCount();

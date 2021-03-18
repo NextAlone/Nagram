@@ -15,7 +15,7 @@ import cn.hutool.core.util.StrUtil;
 public class FileLog {
 
     public static String getNetworkLogPath() {
-        if (BuildVars.DEBUG_VERSION) return "/dev/null";
+        if (BuildVars.DEBUG_PRIVATE_VERSION) return "/dev/null";
         return "";
     }
 

@@ -77,6 +77,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class NotificationsController extends BaseController {
 
     public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
@@ -145,8 +147,9 @@ public class NotificationsController extends BaseController {
     }
 
     private static SparseArray<NotificationsController> Instance = new SparseArray<>();
+
     public static NotificationsController getInstance(int num) {
-        NotificationsController localInstance =Instance.get(num);
+        NotificationsController localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (NotificationsController.class) {
                 localInstance = Instance.get(num);
@@ -702,6 +705,10 @@ public class NotificationsController extends BaseController {
                 if (messageObject.messageOwner != null && (messageObject.isImportedForward() || messageObject.messageOwner.silent && (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined))) {
                     continue;
                 }
+                if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                    continue;
+                }
+
                 long mid = messageObject.getId();
                 long random_id = messageObject.isFcmMessage() ? messageObject.messageOwner.random_id : 0;
                 long dialog_id = messageObject.getDialogId();
@@ -4028,6 +4035,9 @@ public class NotificationsController extends BaseController {
             }
             for (int a = messageObjects.size() - 1; a >= 0; a--) {
                 MessageObject messageObject = messageObjects.get(a);
+                if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                    continue;
+                }
                 String message = getShortStringForMessage(messageObject, senderName, preview);
                 if (dialog_id == selfUserId) {
                     senderName[0] = name;

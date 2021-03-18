@@ -22,7 +22,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
@@ -183,7 +182,7 @@ public class ConnectionsManager extends BaseController {
         try {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = MessagesController.getGlobalMainSettings().getString("lang_code", systemLangCode);
-            if (getUserConfig().deviceInfo) {
+            if (getUserConfig().deviceInfo && getUserConfig().isClientActivated()) {
                 deviceModel = Build.MANUFACTURER + Build.MODEL;
                 systemVersion = "SDK " + Build.VERSION.SDK_INT;
             } else {

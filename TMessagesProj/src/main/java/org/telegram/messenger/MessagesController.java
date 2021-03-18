@@ -58,6 +58,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.thread.ThreadUtil;
 import tw.nekomimi.nekogram.ExternalGcm;
@@ -4053,6 +4054,9 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 loadingBlockedPeers = false;
                 getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
+                if (!reset && !blockedEndReached && NekoConfig.ignoreBlocked) {
+                    getBlockedPeers(false);
+                }
             }
         }));
     }
@@ -5768,12 +5772,17 @@ public class MessagesController extends BaseController implements NotificationCe
                 newStrings.put(key, newPrintingStrings);
                 newTypes.put(key, newPrintingStringsTypes);
 
+                if (NekoConfig.ignoreBlocked) {
+                    arr = arr.stream().filter(it -> getMessagesController().blockePeers.indexOfKey(it.userId) == -1).collect(Collectors.toCollection(ArrayList::new));
+                }
+
                 if (lower_id > 0 || lower_id == 0 || arr.size() == 1) {
                     PrintingUser pu = arr.get(0);
                     TLRPC.User user = getUser(pu.userId);
                     if (user == null) {
                         continue;
                     }
+
                     if (pu.action instanceof TLRPC.TL_sendMessageRecordAudioAction) {
                         if (lower_id < 0) {
                             newPrintingStrings.put(threadId, LocaleController.formatString("IsRecordingAudio", R.string.IsRecordingAudio, getUserNameForTyping(user)));
@@ -7442,6 +7451,9 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC.Message lastMessage = null;
             for (int a = 0; a < dialogsRes.messages.size(); a++) {
                 TLRPC.Message message = dialogsRes.messages.get(a);
+                if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(message.peer_id.user_id) >= 0) {
+                    continue;
+                }
                 if (lastMessage == null || message.date < lastMessage.date) {
                     lastMessage = message;
                 }
@@ -9382,6 +9394,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void performLogout(int type) {
+        FileLog.e("performLogout", new Exception());
         if (type == 1) {
             unregistedPush();
             TLRPC.TL_auth_logOut req = new TLRPC.TL_auth_logOut();
