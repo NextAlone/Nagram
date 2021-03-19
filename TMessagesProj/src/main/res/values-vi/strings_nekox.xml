@@ -216,4 +216,14 @@
     <string name="HideDeviceInfoOn">Bạn có thể thay đổi nó ở cài đặt sau.</string>
     <string name="HideDeviceInfoOff">Thiết bị sẽ được tải lên lần thứ hai khi ứng dụng khởi động sau khi đăng nhập.</string>
     <string name="HideDeviceInfo">Ẩn thiết bị</string>
+    <string name="EnableStickerPinAbout">Ghim Hình dán và đồng bộ hóa với đám mây ngay cả khi đang thêm hình dán mới.
+\nĐược ghép nối với Tắt yêu thích và Gần đây.</string>
+    <string name="SetPinnedSuffix">(Đã ghim)</string>
+    <string name="UnpinSticker">Bỏ ghim</string>
+    <string name="PinSticker">Ghim</string>
+    <string name="EnableStickerPinTip">Chức năng này vẫn đang được phát triển, đồng bộ hóa với đám mây có thể không hoạt động.</string>
+    <string name="EnableStickerPin">Bật ghim nhãn dán</string>
+    <string name="ArchiveFiles">Tập tin lưu trữ</string>
+    <string name="Win32ExecutableFiles">Tập tin thực thi Win32</string>
+    <string name="AutoDownload">Tự động tải</string>
 </resources>

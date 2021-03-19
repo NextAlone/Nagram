@@ -219,4 +219,11 @@
     <string name="ArchiveFiles">压缩文件</string>
     <string name="Win32ExecutableFiles">Win32 可执行文件</string>
     <string name="AutoDownload">自动下载</string>
+    <string name="SetPinnedSuffix">(置顶)</string>
+    <string name="UnpinSticker">取消置顶</string>
+    <string name="PinSticker">置顶</string>
+    <string name="EnableStickerPinTip">此功能仍在开发中，云同步可能无法正常工作。</string>
+    <string name="EnableStickerPinAbout">固定贴纸并在添加新贴纸时与云同步。
+\n与 \"禁用收藏夹和最近\" 配对。</string>
+    <string name="EnableStickerPin">启用贴纸集置顶</string>
 </resources>

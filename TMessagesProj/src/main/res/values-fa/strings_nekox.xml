@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">غیرفعال کردن پیش نمایش لینک بصورت پیش‌فرض</string>
     <string name="DisableLinkPreviewByDefaultNotice">درخواست پیش‌نمایش لینک هنگام ارسال یک لینک بصورت پیشفرض غیرفعال می شود تا سرور لینک مورد نظر از ارسال آن لینک توسط تلگرام آگاه نشود.</string>
     <string name="CustomApi">API سفارشی</string>
-    <string name="UseCustomApiNotice">با استفاده از شناسه رسمی یا سایر شناسه ها وارد شوید، اگر قادر به ثبت نام یا ورود به سیستم نیستید، این ممکن است کمک کند. توجه: اگر از آخرین نسخه استفاده می کنید، fcm کار نخواهد کرد.</string>
+    <string name="UseCustomApiNotice">با استفاده از شناسه رسمی یا سایر شناسه ها وارد شوید، اگر قادر به ثبت نام یا ورود به سیستم نیستید، این ممکن است کمک کند.
+\n
+\nتوجه: اگر از آخرین نسخه استفاده می کنید، fcm کار نخواهد کرد.</string>
     <string name="CustomApiNo">عدم استفاده از API سفارشی</string>
     <string name="CustomApiOfficial">تلگرام اندروید</string>
     <string name="CustomApiTGX">تلگرام ایکس اندروید</string>
@@ -104,8 +106,8 @@
     <string name="AddProxySocks5">افزودن پروکسی Socks5</string>
     <string name="AddProxyTelegram">افزودن پروکسی MTProto</string>
     <string name="AddProxyVmess">افزودن پروکسی Vmess</string>
-    <string name="AddProxySS">افزودن پروکسی شادوساکس SS</string>
-    <string name="AddProxySSR">افزودن پروکسی شادوساکس SSR</string>
+    <string name="AddProxySS">افزودن پروکسی شدوساکس</string>
+    <string name="AddProxySSR">افزودن پروکسی شدوساکس آر</string>
     <string name="AddProxyTrojan">افزودن پروکسی Trojan</string>
     <string name="SSPluginConflictingName">چندین افزونه از این شناسه استفاده می کنند: %s.</string>
     <string name="EditProxy">ویرایش پروکسی</string>
@@ -114,12 +116,12 @@
     <string name="ProxyInfoVmess">تنظیمات پروکسی Vmess</string>
     <string name="VmessUserId">آیدی کاربر</string>
     <string name="VmessAlterId">آیدی عددی</string>
-    <string name="VmessSecurity">Security</string>
-    <string name="VmessNetwork">Network</string>
-    <string name="VmessHeadType">Head Type</string>
-    <string name="VmessRequestHost">Request Host / QUIC Security</string>
-    <string name="VmessPath">Path / QUIC Key</string>
-    <string name="VmessTls">از TLS استفاده کن</string>
+    <string name="VmessSecurity">امنیت</string>
+    <string name="VmessNetwork">شبکه</string>
+    <string name="VmessHeadType">نوع Head</string>
+    <string name="VmessRequestHost">درخواست هاست / QUIC امنیتی</string>
+    <string name="VmessPath">کلید مسیر / QUIC</string>
+    <string name="VmessTls">از لایه انتقال امن استفاده کن</string>
     <string name="ProxyInfoSS">تنظیمات پراکسی شادوساکس SS</string>
     <string name="SSPassword">گذرواژه</string>
     <string name="SSMethod">نوع رمز گذاری</string>
@@ -128,8 +130,8 @@
     <string name="ProxyInfoSSR">تنظیمات پراکسی شادوساکس آر SSR</string>
     <string name="SSRProtocol">پروتکل</string>
     <string name="SSRProtocolParams">پارامترهای پروتکل</string>
-    <string name="SSRObfs">Obfs</string>
-    <string name="SSRObfsParam">Obfs Param</string>
+    <string name="SSRObfs">مبهم‌سازی</string>
+    <string name="SSRObfsParam">پارامتر مبهم‌سازی</string>
     <string name="ProxyInfoTrojan">تنظیمات پروکسی Trojan</string>
     <string name="TrojanSNI">SNI (اختیاری)</string>
     <string name="ProxyRemarks">نام نمایشی دلخواه</string>
@@ -216,4 +218,14 @@
     <string name="HideDeviceInfo">پنهان کردن مدل دستگاه</string>
     <string name="HideDeviceInfoOff">پس از ورود به حسابتان وقتی بار دوم وارد برنامه شوید مدل دستگاه ارسال می شود.</string>
     <string name="HideDeviceInfoOn">بعدا می توانید این مورد را در تنظیمات تغییر دهید.</string>
+    <string name="AutoDownload">دانلود خودکار</string>
+    <string name="SetPinnedSuffix">(پین شده)</string>
+    <string name="UnpinSticker">عدم پین</string>
+    <string name="PinSticker">پین</string>
+    <string name="EnableStickerPinTip">این عملکرد هنوز درحال توسعه است، همگام‌سازی ابری ممکن است آن‌طور که مورد انتظار است کار نکند.</string>
+    <string name="EnableStickerPinAbout">استیکر ها حتی هنگام افزودن استیکر‌های جدید پین و همگام‌سازی ابری می‌شوند.
+\nبا خاموش‌کردن علاقمندی و اخیر جفت شده است.</string>
+    <string name="EnableStickerPin">فعالسازی پین‌کردن استیکر</string>
+    <string name="ArchiveFiles">فایل‌های آرشیو</string>
+    <string name="Win32ExecutableFiles">فایل‌های قابل اجرای Win32</string>
 </resources>
