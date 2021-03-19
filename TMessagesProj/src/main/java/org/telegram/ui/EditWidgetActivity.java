@@ -931,7 +931,7 @@ public class EditWidgetActivity extends BaseFragment {
             switch (viewType) {
                 case 0:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 1:
                     view = new TextCell(mContext);
@@ -942,7 +942,7 @@ public class EditWidgetActivity extends BaseFragment {
                     break;
                 case 3:
                 default:
-                    GroupCreateUserCell cell = new GroupCreateUserCell(mContext, false, 0, false);
+                    GroupCreateUserCell cell = new GroupCreateUserCell(mContext, 0, 0, false);
                     ImageView sortImageView = new ImageView(mContext);
                     sortImageView.setImageResource(R.drawable.list_reorder);
                     sortImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -974,7 +974,7 @@ public class EditWidgetActivity extends BaseFragment {
                             builder.append(LocaleController.getString("EditWidgetContactsInfo", R.string.EditWidgetContactsInfo));
                         }
                         if (SharedConfig.passcodeHash.length() > 0) {
-                            builder.append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscode", R.string.WidgetPasscode)));
+                            builder.append("\n\n").append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscode2", R.string.WidgetPasscode2)));
                         }
                         cell.setText(builder);
                     }

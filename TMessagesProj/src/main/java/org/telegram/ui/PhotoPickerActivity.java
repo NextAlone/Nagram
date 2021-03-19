@@ -1067,7 +1067,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             sendPopupWindow.dismiss();
                         }
                     });
-                    sendPopupLayout.setShowedFromBotton(false);
+                    sendPopupLayout.setShownFromBotton(false);
 
                     itemCells = new ActionBarMenuSubItem[2];
                     for (int a = 0; a < 3; a++) {

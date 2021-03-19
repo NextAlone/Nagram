@@ -215,6 +215,7 @@ public class NotificationCenter {
     public static final int webRtcMicAmplitudeEvent = totalEvents++;
     public static final int webRtcSpeakerAmplitudeEvent = totalEvents++;
     public static final int showBulletin = totalEvents++;
+    public static final int greetingsStickerLoaded = totalEvents++;
 
     // custom
 
@@ -408,6 +409,10 @@ public class NotificationCenter {
 
     public int getCurrentHeavyOperationFlags() {
         return currentHeavyOperationFlags;
+    }
+
+    public ArrayList<NotificationCenterDelegate> getObservers(int id) {
+        return observers.get(id);
     }
 
     public void postNotificationName(int id, Object... args) {

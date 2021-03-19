@@ -710,7 +710,6 @@ public class DocumentSelectActivity extends BaseFragment {
                         sendPopupWindow.dismiss();
                     }
                 });
-                sendPopupLayout.setShowedFromBotton(false);
 
                 itemCells = new ActionBarMenuSubItem[3];
                 for (int a = 0; a < 3; a++) {

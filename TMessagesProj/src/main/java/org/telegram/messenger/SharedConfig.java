@@ -32,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.SerializedData;
+import org.telegram.ui.SwipeGestureSettingsView;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -59,6 +61,8 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
+
+import com.google.android.exoplayer2.util.Log;
 
 public class SharedConfig {
 
@@ -141,6 +145,8 @@ public class SharedConfig {
     public static boolean drawDialogIcons;
     public static boolean useThreeLinesLayout;
     public static boolean archiveHidden;
+
+    private static int chatSwipeAction;
 
     public static int distanceSystemType;
 
@@ -1044,6 +1050,7 @@ public class SharedConfig {
             scheduledOrNoSoundHintShows = preferences.getInt("scheduledOrNoSoundHintShows", 0);
             lockRecordAudioVideoHint = preferences.getInt("lockRecordAudioVideoHint", 0);
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
+            chatSwipeAction = preferences.getInt("ChatSwipeAction", -1);
             activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
             if (!preferences.contains("activeAccountsLoaded")) {
@@ -2010,6 +2017,25 @@ public class SharedConfig {
         } catch (Throwable e) {
             FileLog.e(e);
         }
+    }
+
+    public static int getChatSwipeAction(int currentAccount) {
+        if (chatSwipeAction >= 0) {
+            if (chatSwipeAction == SwipeGestureSettingsView.SWIPE_GESTURE_FOLDERS && MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
+                return SwipeGestureSettingsView.SWIPE_GESTURE_ARCHIVE;
+            }
+            return chatSwipeAction;
+        } else if (!MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
+            return SwipeGestureSettingsView.SWIPE_GESTURE_FOLDERS;
+
+        }
+        return SwipeGestureSettingsView.SWIPE_GESTURE_ARCHIVE;
+    }
+
+    public static void updateChatListSwipeSetting(int newAction) {
+        chatSwipeAction = newAction;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        preferences.edit().putInt("ChatSwipeAction", chatSwipeAction).apply();
     }
 
     public final static int PERFORMANCE_CLASS_LOW = 0;

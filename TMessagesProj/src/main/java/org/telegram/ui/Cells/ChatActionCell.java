@@ -36,9 +36,11 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.PhotoViewer;
 
 public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener {
@@ -57,6 +59,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         }
 
         default void didPressReplyMessage(ChatActionCell cell, int id) {
+        }
+
+        default void needOpenInviteLink(TLRPC.TL_chatInviteExported invite) {
+
         }
     }
 
@@ -302,7 +308,14 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                                 if (link[0] == pressedLink) {
                                     if (delegate != null) {
                                         String url = link[0].getURL();
-                                        if (url.startsWith("game")) {
+                                        if (url.startsWith("invite") && pressedLink instanceof URLSpanNoUnderline) {
+                                            URLSpanNoUnderline spanNoUnderline = (URLSpanNoUnderline) pressedLink;
+                                            TLObject object = spanNoUnderline.getObject();
+                                            if (object instanceof TLRPC.TL_chatInviteExported) {
+                                                TLRPC.TL_chatInviteExported invite = (TLRPC.TL_chatInviteExported) object;
+                                                delegate.needOpenInviteLink(invite);
+                                            }
+                                        } else if (url.startsWith("game")) {
                                             delegate.didPressReplyMessage(this, currentMessageObject.getReplyMsgId());
                                             /*TLRPC.KeyboardButton gameButton = null;
                                             MessageObject messageObject = currentMessageObject.replyMessageObject;

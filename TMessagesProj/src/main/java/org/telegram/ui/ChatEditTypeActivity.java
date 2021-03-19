@@ -31,6 +31,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -65,6 +66,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private HeaderCell headerCell2;
     private TextInfoPrivacyCell checkTextView;
     private LinearLayout linearLayout;
+    private ActionBarMenuItem doneButton;
 
     private LinearLayout linearLayoutTypeContainer;
     private RadioButtonCell radioButtonCell1;
@@ -203,7 +205,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         fragmentView = new ScrollView(context) {
             @Override
@@ -343,7 +345,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                checkDoneButton();
             }
         });
 
@@ -608,6 +610,17 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         radioButtonCell1.setChecked(!isPrivate, true);
         radioButtonCell2.setChecked(isPrivate, true);
         usernameTextView.clearFocus();
+        checkDoneButton();
+    }
+
+    private void checkDoneButton() {
+        if (isPrivate || usernameTextView.length() > 0) {
+            doneButton.setEnabled(true);
+            doneButton.setAlpha(1.0f);
+        } else {
+            doneButton.setEnabled(false);
+            doneButton.setAlpha(0.5f);
+        }
     }
 
     private boolean checkUserName(final String name) {
