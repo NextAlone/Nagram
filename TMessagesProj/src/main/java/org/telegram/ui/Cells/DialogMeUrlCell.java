@@ -118,7 +118,7 @@ public class DialogMeUrlCell extends BaseCell {
                 drawNameGroup = true;
                 nameLockTop = AndroidUtilities.dp(17.5f);
             }
-            drawVerified = chat.verified;
+            drawVerified = chat.verifiedExtended();
 
             if (!LocaleController.isRTL) {
                 nameLockLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -149,7 +149,7 @@ public class DialogMeUrlCell extends BaseCell {
                         nameLeft = AndroidUtilities.dp(14);
                     }
                 }
-                drawVerified = user.verified;
+                drawVerified = user.verifiedExtended();
             }
             nameString = UserObject.getUserName(user);
             avatarDrawable.setInfo(user);
@@ -179,7 +179,7 @@ public class DialogMeUrlCell extends BaseCell {
                     drawNameGroup = true;
                     nameLockTop = AndroidUtilities.dp(17.5f);
                 }
-                drawVerified = recentMeUrl.chat_invite.chat.verified;
+                drawVerified = recentMeUrl.chat_invite.chat.verifiedExtended();
                 avatarImage.setImage(ImageLocation.getForChat(recentMeUrl.chat_invite.chat, false), "50_50", avatarDrawable, null, recentMeUrl, 0);
             } else {
                 nameString = recentMeUrl.chat_invite.title;

@@ -5799,7 +5799,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                 } else if (user.scam || user.fake) {
                     rightIcon = getScamDrawable(user.scam ? 0 : 1);
-                } else if (user.verified) {
+                } else if (user.verifiedExtended()) {
                     rightIcon = getVerifiedCrossfadeDrawable();
                 }
                 nameTextView[a].setLeftDrawable(leftIcon);
@@ -5899,7 +5899,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (a != 0) {
                     if (chat.scam || chat.fake) {
                         nameTextView[a].setRightDrawable(getScamDrawable(chat.scam ? 0 : 1));
-                    } else if (chat.verified) {
+                    } else if (chat.verifiedExtended()) {
                         nameTextView[a].setRightDrawable(getVerifiedCrossfadeDrawable());
                     } else {
                         nameTextView[a].setRightDrawable(null);

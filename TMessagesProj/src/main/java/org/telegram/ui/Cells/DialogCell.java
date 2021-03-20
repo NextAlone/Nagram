@@ -778,7 +778,7 @@ public class DialogCell extends BaseCell {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
                         } else {
-                            drawVerified = chat.verified;
+                            drawVerified = chat.verifiedExtended();
                         }
                         if (SharedConfig.drawDialogIcons) {
                             if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
@@ -823,7 +823,7 @@ public class DialogCell extends BaseCell {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
                         } else {
-                            drawVerified = user.verified;
+                            drawVerified = user.verifiedExtended();
                         }
                         if (SharedConfig.drawDialogIcons && user.bot) {
                             drawNameBot = true;

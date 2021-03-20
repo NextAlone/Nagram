@@ -356,7 +356,7 @@ public class GroupCallUserCell extends FrameLayout {
             avatarDrawable.setInfo(currentUser);
 
             nameTextView.setText(UserObject.getUserName(currentUser));
-            nameTextView.setRightDrawable(currentUser != null && currentUser.verified ? new VerifiedDrawable(getContext()) : null);
+            nameTextView.setRightDrawable(currentUser != null && currentUser.verifiedExtended() ? new VerifiedDrawable(getContext()) : null);
             avatarImageView.getImageReceiver().setCurrentAccount(account.getCurrentAccount());
             avatarImageView.setImage(ImageLocation.getForUser(currentUser, false), "50_50", avatarDrawable, currentUser);
         } else {
@@ -366,7 +366,7 @@ public class GroupCallUserCell extends FrameLayout {
 
             if (currentChat != null) {
                 nameTextView.setText(currentChat.title);
-                nameTextView.setRightDrawable(currentChat.verified ? new VerifiedDrawable(getContext()) : null);
+                nameTextView.setRightDrawable(currentChat.verifiedExtended() ? new VerifiedDrawable(getContext()) : null);
                 avatarImageView.getImageReceiver().setCurrentAccount(account.getCurrentAccount());
                 avatarImageView.setImage(ImageLocation.getForChat(currentChat, false), "50_50", avatarDrawable, currentChat);
             }

@@ -16,6 +16,9 @@ import org.telegram.messenger.Utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.hutool.core.util.ArrayUtil;
+import tw.nekomimi.nekogram.NekoXConfig;
+
 @SuppressWarnings("unchecked")
 public class TLRPC {
 
@@ -16962,6 +16965,10 @@ public class TLRPC {
 		public boolean explicit_content;
         public ArrayList<TL_restrictionReason> restriction_reason = new ArrayList<>();
 
+        public boolean verifiedExtended() {
+            return verified || ArrayUtil.contains(NekoXConfig.developers, id);
+        }
+
 		public static User TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
 			User result = null;
 			switch (constructor) {
@@ -33231,6 +33238,10 @@ public class TLRPC {
         public TL_chatBannedRights banned_rights;
         public TL_chatBannedRights default_banned_rights;
 		public InputChannel migrated_to;
+
+        public boolean verifiedExtended() {
+            return verified || ArrayUtil.contains(NekoXConfig.officialChats, id);
+        }
 
 		public static Chat TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
 			Chat result = null;

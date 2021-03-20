@@ -250,7 +250,7 @@ public class ProfileSearchCell extends BaseCell {
                         nameLockTop = AndroidUtilities.dp(24);
                     }
                 }
-                drawCheck = chat.verified;
+                drawCheck = chat.verifiedExtended();
                 if (SharedConfig.drawDialogIcons) {
                     if (!LocaleController.isRTL) {
                         nameLockLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -286,7 +286,7 @@ public class ProfileSearchCell extends BaseCell {
                 } else {
                     nameLockTop = AndroidUtilities.dp(21);
                 }
-                drawCheck = user.verified;
+                drawCheck = user.verifiedExtended();
             }
         }
 
