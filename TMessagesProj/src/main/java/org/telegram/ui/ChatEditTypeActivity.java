@@ -78,7 +78,6 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private LinkActionView permanentLinkView;
     private TextCell manageLinksTextView;
     private TextInfoPrivacyCell manageLinksInfoCell;
-    private TextSettingsCell shareQRCell;
     private ShadowSectionCell sectionCell2;
     private TextInfoPrivacyCell infoCell;
     private TextSettingsCell textCell;
@@ -368,17 +367,6 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         });
         permanentLinkView.setUsers(0, null);
         privateContainer.addView(permanentLinkView);
-
-        shareQRCell = new TextSettingsCell(context);
-        shareQRCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        shareQRCell.setText(LocaleController.getString("ShareQRCode", R.string.ShareQRCode), false);
-        privateContainer.addView(shareQRCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        shareQRCell.setOnClickListener(v -> {
-            if (invite == null) {
-                return;
-            }
-            ProxyUtil.showQrDialog(getParentActivity(),invite.link);
-        });
 
         checkTextView = new TextInfoPrivacyCell(context);
         checkTextView.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
