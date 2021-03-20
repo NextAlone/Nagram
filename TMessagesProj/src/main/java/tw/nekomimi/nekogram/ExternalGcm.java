@@ -1,12 +1,15 @@
 package tw.nekomimi.nekogram;
 
 import android.app.Activity;
+import android.content.Context;
 
 import org.telegram.messenger.FileLog;
 
 public class ExternalGcm {
 
     interface Interface {
+        boolean checkSplit(Context ctx);
+
         boolean checkPlayServices();
 
         void initPlayServices();
@@ -17,6 +20,11 @@ public class ExternalGcm {
     }
 
     static class NoImpl implements Interface {
+
+        @Override
+        public boolean checkSplit(Context ctx) {
+            return false;
+        }
 
         @Override
         public boolean checkPlayServices() {
@@ -48,6 +56,10 @@ public class ExternalGcm {
             impl = new NoImpl();
             FileLog.e(e);
         }
+    }
+
+    public static boolean checkSplit(Context ctx) {
+        return impl.checkSplit(ctx);
     }
 
     public static void initPlayServices() {

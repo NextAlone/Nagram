@@ -32,8 +32,6 @@ import android.util.Log;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.multidex.MultiDex;
 
-import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory;
-
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -340,8 +338,7 @@ public class ApplicationLoader extends Application {
         } catch (Throwable ignore) {
         }
 
-        //noinspection deprecation
-        if (BuildVars.isPlay && MissingSplitsManagerFactory.create(this).disableAppIfMissingRequiredSplits()) {
+        if (BuildVars.isPlay && ExternalGcm.checkSplit(this)) {
             return; // Skip app initialization.
         }
 

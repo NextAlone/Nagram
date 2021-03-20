@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.IntentSender;
 import android.text.TextUtils;
 import android.view.WindowManager;
@@ -15,6 +16,7 @@ import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.ApplicationLoader;
@@ -47,6 +49,12 @@ public class GcmImpl implements ExternalGcm.Interface {
             FileLog.e(e);
         }
         return hasPlayServices;
+    }
+
+    @Override
+    public boolean checkSplit(Context ctx) {
+        //noinspection deprecation
+        return MissingSplitsManagerFactory.create(ctx).disableAppIfMissingRequiredSplits();
     }
 
     @Override
