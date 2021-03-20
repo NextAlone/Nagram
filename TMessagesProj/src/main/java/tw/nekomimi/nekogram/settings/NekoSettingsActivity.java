@@ -51,6 +51,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int aboutRow;
     private int channelRow;
+    private int fdroidRow;
     private int googlePlayRow;
     private int sourceCodeRow;
     private int translationRow;
@@ -106,7 +107,9 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
             } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://nekox.crowdin.com/nekox");
+                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox/");
+            } else if (position == fdroidRow) {
+                Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/nekox.messenger");
             } else if (position == googlePlayRow) {
                 Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {
@@ -136,6 +139,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         aboutRow = rowCount++;
         channelRow = rowCount++;
+        fdroidRow = rowCount ++;
         if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {
@@ -232,6 +236,8 @@ public class NekoSettingsActivity extends BaseFragment {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
                         textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@NekogramX", true);
+                    } else if (position == fdroidRow) {
+                        textCell.setText(LocaleController.getString("AppLinkFDroid", R.string.AppLinkFDroid), true);
                     } else if (position == googlePlayRow) {
                         textCell.setText(LocaleController.getString("GooglePlay", R.string.GooglePlay), true);
                     } else if (position == sourceCodeRow) {
@@ -300,14 +306,12 @@ public class NekoSettingsActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == categories2Row || position == about2Row) {
                 return 1;
-            } else if (position == chatRow || position == generalRow || position == experimentRow) {
+            } else if (position == chatRow || position == accountRow || position == generalRow || position == experimentRow) {
                 return 2;
-            } else if (position == googlePlayRow || position == channelRow || position == sourceCodeRow || position == translationRow) {
-                return 3;
             } else if (position == categoriesRow || position == aboutRow) {
                 return 4;
             }
-            return 2;
+            return 3;
         }
     }
 }

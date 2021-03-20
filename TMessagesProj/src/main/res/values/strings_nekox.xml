@@ -292,4 +292,6 @@
     <string name="UnpinSticker">Unpin</string>
     <string name="SetPinnedSuffix">(Pinned)</string>
 
+    <string name="AppLinkFDroid">F-Droid</string>
+
 </resources>
