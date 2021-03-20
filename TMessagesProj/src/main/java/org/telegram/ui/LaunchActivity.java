@@ -518,7 +518,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerAddCell) {
                 int freeAccount;
-                for (int account = 0;; account++) {
+                for (int account = 0; ; account++) {
                     if (!SharedConfig.activeAccounts.contains(account)) {
                         freeAccount = account;
                         break;
@@ -2120,8 +2120,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 if (message != null && message.startsWith("@")) {
                                     message = " " + message;
                                 }
-                                // NekoX-TODO: Check Chnage
-                                runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, theme, voicechat, 0);
+                                runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, theme, voicechat, internal ? 3 : 0);
                             } else {
                                 try (Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null)) {
                                     if (cursor != null) {
@@ -2767,7 +2766,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (account != intentAccount) {
                     switchToAccount(account, true);
                 }
-                // NekoX-TODO: Check Chnage
                 runLinkRequest(account, username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, theme, voicechat, 1);
             }).show();
             return;
