@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="GooglePlay">ගූගල් ප්ලේ</string>
+    <string name="StickerSizeDialogMessageSmallOne">කුඩා එකක්</string>
+    <string name="StickerSizeDialogMessageBigOne">ලොකු එකක්</string>
+    <string name="StickerSizeDialogName">ඩුආං</string>
+    <string name="Experiment">පර්යේෂණාත්මක</string>
+    <string name="StickerSizeDialogMessageReplyTo">මියාව්</string>
+    <string name="Christmas">නත්තල්</string>
+    <string name="Valentine">ආදරවන්තයන්ගේ දිනය</string>
+    <string name="Nya">මියාව්!</string>
+    <string name="HidePhone">මගේ දුරකථන අංකය සඟවන්න</string>
+    <string name="Hide">සඟවන්න</string>
+    <string name="NekoSettings">නෙකෝ සැකසුම්</string>
+</resources>

@@ -6,7 +6,7 @@
     <string name="HidePhone">إخفاء رقم هاتفي</string>
     <string name="Hide">إخفاء</string>
     <string name="DeleteAllFromSelf">حذف جميع من نفسك</string>
-    <string name="DeleteAllFromSelfAlert">تحذير! سيؤدي هذا إلى **حذف جميع الرسائل منك** في هذه المحادثة لـ **جميع** المشاركين.</string>
+    <string name="DeleteAllFromSelfAlert">تحذير! سيؤدي هذا إلى **حذف جميع الرسائل منك** في هذه المحادثة ل **جميع** المشاركين.</string>
     <string name="BotLogin">تسجيل دخول بوت</string>
     <string name="InvalidAccessToken">رمز الوصول غير صالح</string>
     <string name="IgnoreBlocked">تجاهل المستخدمين المحظورين في المجموعة</string>
@@ -49,12 +49,12 @@
     <string name="StickerSizeDialogMessageBigOne">واحد كبير</string>
     <string name="StickerSizeDialogMessageSmallOne">واحد صغير</string>
     <string name="StickerSizeDialogMessageReplyTo">ماكيف</string>
-    <string name="StickerSizeDialogName">Duang</string>
+    <string name="StickerSizeDialogName">دوانج</string>
     <string name="Experiment">تجريبية</string>
     <string name="UnlimitedFavoredStickers">ملصقات مفضلة غير محدودة</string>
     <string name="UnlimitedFavoredStickersAbout">إضافة ملصقات غير محدودة إلى المفضلة. الملصقات قد لا تكون متزامنة مع الأجهزة الأخرى.</string>
     <string name="MessageDetails">التفاصيل</string>
-    <string name="ExportAsJson">تصدير كـ JSON</string>
+    <string name="ExportAsJson">تصدير ك JSON</string>
     <string name="Translate">ترجم</string>
     <string name="DeleteAccount">حذف حساب تيليجرام</string>
     <string name="TranslateFailed">خطأ في ترجمة الخادم</string>
@@ -85,7 +85,7 @@
     <string name="ConfirmAVMessage">تأكيد إرسال فيديو/رسالة صوتية</string>
     <string name="AskBeforeCalling">اسأل قبل الاتصال</string>
     <string name="ConfirmCall">تأكيد المكالمة</string>
-    <string name="CallTo">الاتصال بـ **%1$s**؟</string>
+    <string name="CallTo">الاتصال ب **%1$s**؟</string>
     <string name="DisableNumberRounding">تعطيل تقريب الأرقام</string>
     <string name="Categories">الأقسام</string>
     <string name="OfficialChannel">القناة الرسمية</string>

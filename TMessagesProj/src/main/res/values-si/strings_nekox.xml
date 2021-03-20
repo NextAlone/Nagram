@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="UpdateDownloaded">යාවත්කාලීනයක් දැන් බාගත කර ඇත.</string>
+    <string name="Ignore">නොසලකන්න</string>
+    <string name="MinApi23Required">කණගාටුයි, ඔබට ඇන්ඩ්‍රොයිඩ් 6 (යෙ.ක්‍ර. මු. 23) වත් අවශ්‍ය වේ.</string>
+    <string name="MinApi21Required">කණගාටුයි, ඔබට ඇන්ඩ්‍රොයිඩ් 5 (යෙ.ක්‍ර. මු. 21) වත් අවශ්‍ය වේ.</string>
+    <string name="CustomApi">අභිරුචි යෙ.ක්‍ර. අ.මු.</string>
+    <string name="FilterNameBots">ස්වයං ක්‍රමලේඛ</string>
+    <string name="GoogleCloudTransKeyNotice">ඔබ ගූගල් ක්ලවුඩ් පරිවර්තන යතුරක් සකසන්නේ නම් පරිවර්තනය කිරීමේදී ව්‍යාජ ආකෘතිපත්‍රයක් වියමන අනුවාදයට ඉදිරිපත් කිරීම වෙනුවට වලාකුළු පරිවර්තන යෙ.ක්‍ර. අ.මු. (API) යොදාගනු ලැබේ (වේගවත්, ස්ථාවර සහ ගමනාගමන ඉතිරිය).</string>
+    <string name="GoogleCloudTransKey">ගූගල් ක්ලවුඩ් පරිවර්තන යතුර</string>
+    <string name="ProviderYandexTranslate">යාන්ඩෙක්ස්.ට්‍රාන්ස්ලේට්</string>
+    <string name="NekoXUpdatesChannel">නෙකෝඑක්ස් යාවත්කාලීන නාලිකාව</string>
+    <string name="AutoDownload">ස්වයං බාගතවීම</string>
+    <string name="ArchiveFiles">ගොනු සංරක්ෂණය කරන්න</string>
+    <string name="NekoXFaq">නෙකෝඑක්ස් නිති අසන පැන</string>
+    <string name="LoginSettings">පිවිසීමේ සැකසුම්</string>
+    <string name="DeveloperSettings">සංවර්ධක සැකසුම්</string>
+    <string name="SSRProtocol">කෙටුම්පත</string>
+    <string name="FilterNameUnreadDescription">නොකියවූ පණිවිඩ පමණි</string>
+    <string name="FilterNameChannelsDescription">නාලිකා වලින් ලැබෙන පණිවිඩ පමණි</string>
+    <string name="FilterNameChannels">නාලිකා</string>
+    <string name="FilterNameGroups">සමූහ</string>
+    <string name="FilterNameUsers">පරිශීලකයින්</string>
+    <string name="DoNotRemindAgain">නැවත මතක් නොකරන්න</string>
+    <string name="ApplySuggestion">හරි, එය යොදන්න</string>
+    <string name="More">තව</string>
+    <string name="TapToDisable">අබල කිරීමට තට්ටු කරන්න. ඔබට මේවා අවශ්‍ය නැත.</string>
+    <string name="DevModeTitle">**ඔබගේ ටෙලිග්‍රෑම් ගිණුම තහනම් විය හැකිය**</string>
+    <string name="LinkedChannelChat">සබැඳූ නාලිකාව</string>
+    <string name="LinkedGroupChat">සබැඳූ සමූහය</string>
+    <string name="Install">ස්ථාපනය කරන්න</string>
+    <string name="DownloadFailed">බාගතවීම අසාර්ථකයි</string>
+    <string name="UpdateLater">පසුව</string>
+    <string name="UpdateUpdate">යාවත්කාල කරන්න</string>
+    <string name="UpdateAvailable">නව යාවත්කාලයක් ඇත</string>
+    <string name="NoUpdate">යාවත්කාල හමු නොවිණි</string>
+    <string name="SwitchVersion">අනුවාදය මාරු කරන්න</string>
+    <string name="CheckUpdate">යාවත්කාල පරීක්ෂා කරන්න</string>
+    <string name="CustomApiTGX">ටෙලිග්‍රෑම් ඇන්ඩ්‍රොයිඩ් එක්ස්</string>
+    <string name="CustomApiOfficial">ටෙලිග්‍රෑම් ඇන්ඩ්‍රොයිඩ්</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">සබැඳි පෙරදසුන් සබල කරන්න</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">සබැඳි පෙරදසුන් අබල කරන්න</string>
+</resources>

@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">تعطيل معاينة الارتباط بشكل افتراضي</string>
     <string name="DisableLinkPreviewByDefaultNotice">قم بتعطيل طلب معاينة الرابط أثناء الإدخال بشكل افتراضي لمنع الخادم من معرفة أن الرابط مشترك عبر Telegram.</string>
     <string name="CustomApi">API مخصص</string>
-    <string name="UseCustomApiNotice">تسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة، إذا كنت غير قادر على تسجيل أو تسجيل الدخول، قد يساعد هذا.nnNote: fcm لن تعمل إذا كنت تستخدم اهر الإصدار.</string>
+    <string name="UseCustomApiNotice">قم بتسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة ، إذا كنت غير قادر على التسجيل أو تسجيل الدخول ، فقد يساعدك ذلك.
+\n
+\nملاحظة: لن يعمل fcm إذا كنت تستخدم نسخة الإصدار.</string>
     <string name="CustomApiNo">لا تستخدم API مخصص</string>
     <string name="CustomApiOfficial">تيليجرام أندرويد</string>
     <string name="CustomApiTGX">تيليجرام أندرويد X</string>
@@ -96,7 +98,7 @@
     <string name="HideProxyByDefault">إخفاء إعدادات الوكيل بشكل افتراضي</string>
     <string name="SkipOpenLinkConfirm">تخطي تأكيد فتح الرابط</string>
     <string name="DeleteAllInChat">احذف الكل في الدردشة</string>
-    <string name="DeleteAllInChatAlert">تحذير! سيؤدي هذا إلى **حذف جميع الرسائل** في هذه المحادثة لـ **جميع** المشاركين.</string>
+    <string name="DeleteAllInChatAlert">تحذير! سيؤدي هذا إلى **حذف جميع الرسائل** في هذه المحادثة ل **جميع** المشاركين.</string>
     <string name="UnblockAll">إلغاء حظر الكل</string>
     <string name="UnblockAllWarn">هل أنت متأكد من أنك تريد إلغاء حظر **جميع المستخدمين والبوتات**؟</string>
     <string name="BlockedListEmpty">لم تقم بحظر أي شخص :)</string>
@@ -132,7 +134,7 @@
     <string name="SSRObfsParam">Obfs Param</string>
     <string name="ProxyInfoTrojan">إعدادات البروكسي في تروجان</string>
     <string name="TrojanSNI">SNI (اختياري)</string>
-    <string name="ProxyRemarks">ملاحظـات</string>
+    <string name="ProxyRemarks">ملاحظات</string>
     <string name="RetestPing">إعادة اختبار لجميع الخوادم</string>
     <string name="ReorderByPing">إعادة ترتيب الخوادم عن طريق بينغ</string>
     <string name="ExportProxies">تصدير الخوادم إلى ملف</string>
@@ -216,4 +218,14 @@
     <string name="HideDeviceInfo">إخفاء طراز الجهاز</string>
     <string name="HideDeviceInfoOff">سيتم تحميل طراز الجهاز في المرة الثانية التي يبدأ فيها التطبيق بعد تسجيل الدخول.</string>
     <string name="HideDeviceInfoOn">يمكنك تغيير هذا في الإعدادات لاحقًا.</string>
+    <string name="SetPinnedSuffix">(مثبت)</string>
+    <string name="UnpinSticker">ألغِ التثبيت</string>
+    <string name="PinSticker">تثبيت</string>
+    <string name="EnableStickerPinTip">لا تزال هذه الوظيفة قيد التطوير ، وقد لا تعمل المزامنة مع السحابة كما يعتقد.</string>
+    <string name="EnableStickerPinAbout">قم بتثبيت الملصقات والمزامنة مع السحابة حتى عند إضافة ملصقات جديدة.
+\nيقترن بتعطيل المفضلة والحديثة.</string>
+    <string name="EnableStickerPin">تفعيل تثبيت الملصق</string>
+    <string name="ArchiveFiles">ملفات الأرشيف</string>
+    <string name="Win32ExecutableFiles">ملفات Win32 القابلة للتنفيذ</string>
+    <string name="AutoDownload">التحميل التلقائي</string>
 </resources>
