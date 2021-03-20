@@ -1,1 +1,1 @@
-NekoX is an third-party Telegram client, based on Telegram-FOSS with features added.
+The third-party Telegram android app.

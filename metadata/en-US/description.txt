@@ -47,6 +47,7 @@ NekoX is an third-party Telegram client, based on Telegram-FOSS with features ad
 - Option to hide device info
 - Improved session dialog
 - Improved link long click menu
+- Improved hide messages from blocked users feature
 - Text replacer
 - Option to disable trending
 - Telegram X style menu for unpinning messages

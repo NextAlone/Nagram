@@ -2,7 +2,7 @@
 
 NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
-[![Get it on F-Droid](https://i.imgur.com/HDicnzz.png)](https://f-droid.org/en/packages/nekox.messenger/)
+[![Get it on F-Droid](https://i.imgur.com/HDicnzz.png)](https://f-droid.org/packages/nekox.messenger)
 [![Get it on Google Play](https://imgur.com/YQzmZi9.png)](https://play.google.com/store/apps/details?id=nekox.messenger)
 
 - [Update News Telegram](https://t.me/NekogramX)
@@ -60,6 +60,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - Option to hide device info
 - Improved session dialog
 - Improved link long click menu
+- Improved hide messages from blocked users feature
 - Text replacer
 - Option to disable trending
 - Telegram X style menu for unpinning messages
@@ -96,7 +97,7 @@ It is recommended to use the official script, otherwise you may not find rustup.
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
 echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
 
-cd ss-rust/src/main/rust/shadowsocks-rust
+rustup install $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 
