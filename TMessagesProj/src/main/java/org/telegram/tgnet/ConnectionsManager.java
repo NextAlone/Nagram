@@ -219,11 +219,11 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = "en";
         }
 
-        if (deviceModel.trim().length() == 0) {
-            deviceModel = DeviceInfosKt.randomDevice(currentAccount);
+        if (deviceModel.trim().length() == 0 && getUserConfig().isClientActivated()) {
+            deviceModel = DeviceInfosKt.randomDevice();
         }
-        if (systemVersion.trim().length() == 0) {
-            systemVersion = DeviceInfosKt.randomSystemVersion(currentAccount);
+        if (systemVersion.trim().length() == 0 && getUserConfig().isClientActivated()) {
+            systemVersion = DeviceInfosKt.randomSystemVersion();
         }
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
