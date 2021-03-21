@@ -4277,23 +4277,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         ActionBarMenu menu = actionBar.createMenu();
         masksItem = menu.addItem(gallery_menu_masks, R.drawable.deproko_baseline_masks_24);
         masksItem.setContentDescription(LocaleController.getString("Masks", R.string.Masks));
-        masksItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        masksItem.setIconColor(0xfffafafa);
 
         pipItem = menu.addItem(gallery_menu_pip, R.drawable.ic_goinline);
         pipItem.setContentDescription(LocaleController.getString("AccDescrPipMode", R.string.AccDescrPipMode));
-        pipItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        pipItem.setIconColor(0xfffafafa);
 
         sendNoQuoteItem = menu.addItem(gallery_menu_send_noquote, R.drawable.baseline_fast_forward_24);
         sendNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.Forward));
-        sendNoQuoteItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        sendNoQuoteItem.setIconColor(0xfffafafa);
 
         sendItem = menu.addItem(gallery_menu_send, R.drawable.baseline_forward_24);
         sendItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
-        sendItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        sendItem.setIconColor(0xfffafafa);
 
         shareItem = menu.addItem(gallery_menu_share2, R.drawable.share);
         shareItem.setContentDescription(LocaleController.getString("ShareFile", R.string.ShareFile));
-        shareItem.setIconColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
+        shareItem.setIconColor(0xfffafafa);
 
         menuItem = menu.addItem(0, R.drawable.ic_ab_other);
         menuItem.addSubItem(gallery_menu_openin, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
