@@ -568,14 +568,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     TLRPC.DocumentAttribute attribute = selectedSticker.attributes.get(a);
                     if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
                         if (attribute.alt != null && attribute.alt.length() > 0) {
-                            stickerEmojiTextView.setText(Emoji.replaceEmoji(attribute.alt, stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(30), false));
+                            stickerEmojiTextView.setText(attribute.alt);
                             set = true;
                         }
                         break;
                     }
                 }
                 if (!set) {
-                    stickerEmojiTextView.setText(Emoji.replaceEmoji(MediaDataController.getInstance(currentAccount).getEmojiForSticker(selectedSticker.id), stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(30), false));
+                    stickerEmojiTextView.setText(MediaDataController.getInstance(currentAccount).getEmojiForSticker(selectedSticker.id));
                 }
 
                 TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(selectedSticker.thumbs, 90);
@@ -663,7 +663,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         stickerImageView.setLayerNum(7);
         stickerPreviewLayout.addView(stickerImageView);
 
-        stickerEmojiTextView = new TextView(context);
+        stickerEmojiTextView = new EmojiTextView(context);
         stickerEmojiTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
         stickerEmojiTextView.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
         stickerPreviewLayout.addView(stickerEmojiTextView);

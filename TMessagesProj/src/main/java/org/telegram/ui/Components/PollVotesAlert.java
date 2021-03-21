@@ -150,7 +150,7 @@ public class PollVotesAlert extends BottomSheet {
 
             setBackgroundColor(Theme.getColor(Theme.key_graySection));
 
-            textView = new TextView(getContext());
+            textView = new EmojiTextView(getContext());
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setTextColor(Theme.getColor(Theme.key_graySectionText));
@@ -211,7 +211,7 @@ public class PollVotesAlert extends BottomSheet {
         }
 
         public void setText(String left, int percent, int votesCount, int collapsed) {
-            textView.setText(Emoji.replaceEmoji(left, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+            textView.setText(left);
             String p = String.format("%d", percent);
             SpannableStringBuilder builder;
             if (LocaleController.isRTL) {
@@ -838,13 +838,13 @@ public class PollVotesAlert extends BottomSheet {
             }
         });
 
-        titleTextView = new TextView(context);
+        titleTextView = new EmojiTextView(context);
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         titleTextView.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(5), AndroidUtilities.dp(14), AndroidUtilities.dp(21));
         titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleTextView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-        titleTextView.setText(Emoji.replaceEmoji(poll.question, titleTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(18), false));
+        titleTextView.setText(poll.question);
 
         actionBar = new ActionBar(context) {
             @Override

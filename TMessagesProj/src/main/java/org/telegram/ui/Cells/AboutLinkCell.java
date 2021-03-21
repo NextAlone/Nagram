@@ -36,6 +36,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.ActionBar.Theme;
@@ -61,7 +62,7 @@ public class AboutLinkCell extends FrameLayout {
 
         parentFragment = fragment;
 
-        valueTextView = new TextView(context);
+        valueTextView = new EmojiTextView(context);
         valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         valueTextView.setLines(1);
@@ -96,7 +97,6 @@ public class AboutLinkCell extends FrameLayout {
         oldText = text;
         stringBuilder = new SpannableStringBuilder(oldText);
         MessageObject.addLinks(false, stringBuilder, false, false, !parseLinks);
-        Emoji.replaceEmoji(stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
         if (TextUtils.isEmpty(value)) {
             valueTextView.setVisibility(GONE);
         } else {

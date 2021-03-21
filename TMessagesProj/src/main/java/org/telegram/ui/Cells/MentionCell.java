@@ -24,6 +24,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class MentionCell extends LinearLayout {
@@ -45,7 +46,7 @@ public class MentionCell extends LinearLayout {
         imageView.setRoundRadius(AndroidUtilities.dp(14));
         addView(imageView, LayoutHelper.createLinear(28, 28, 12, 4, 0, 0));
 
-        nameTextView = new TextView(context);
+        nameTextView = new EmojiTextView(context);
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         nameTextView.setSingleLine(true);
@@ -53,7 +54,7 @@ public class MentionCell extends LinearLayout {
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(nameTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 12, 0, 0, 0));
 
-        usernameTextView = new TextView(context);
+        usernameTextView = new EmojiTextView(context);
         usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         usernameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         usernameTextView.setSingleLine(true);
@@ -132,7 +133,7 @@ public class MentionCell extends LinearLayout {
         stringBuilder.append(suggestion.emoji);
         stringBuilder.append("   :");
         stringBuilder.append(suggestion.keyword);
-        nameTextView.setText(Emoji.replaceEmoji(stringBuilder, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
+        nameTextView.setText(stringBuilder);
     }
 
     public void setBotCommand(String command, String help, TLRPC.User user) {
@@ -149,7 +150,7 @@ public class MentionCell extends LinearLayout {
         }
         usernameTextView.setVisibility(VISIBLE);
         nameTextView.setText(command);
-        usernameTextView.setText(Emoji.replaceEmoji(help, usernameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
+        usernameTextView.setText(help);
     }
 
     public void setIsDarkTheme(boolean isDarkTheme) {

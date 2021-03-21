@@ -24,6 +24,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -114,7 +115,7 @@ public class JoinCallAlert extends BottomSheet {
             addView(background, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
 
             for (int a = 0; a < 2; a++) {
-                textView[a] = new TextView(context);
+                textView[a] = new EmojiTextView(context);
                 textView[a].setLines(1);
                 textView[a].setSingleLine(true);
                 textView[a].setGravity(Gravity.CENTER_HORIZONTAL);

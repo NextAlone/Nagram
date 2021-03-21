@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -30,6 +31,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class AccountSelectCell extends FrameLayout {
@@ -52,7 +54,7 @@ public class AccountSelectCell extends FrameLayout {
         imageView.setRoundRadius(AndroidUtilities.dp(18));
         addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 10, 10, 0, 0));
 
-        textView = new TextView(context);
+        textView = new EmojiTextView(context);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setLines(1);
@@ -66,7 +68,7 @@ public class AccountSelectCell extends FrameLayout {
             textView.setTextColor(Theme.getColor(Theme.key_voipgroup_nameText));
             textView.setText(LocaleController.getString("VoipGroupDisplayAs", R.string.VoipGroupDisplayAs));
 
-            infoTextView = new TextView(context);
+            infoTextView = new EmojiTextView(context);
             infoTextView.setTextColor(Theme.getColor(Theme.key_voipgroup_lastSeenText));
             infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             infoTextView.setLines(1);
@@ -81,9 +83,9 @@ public class AccountSelectCell extends FrameLayout {
             textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
 
             checkImageView = new ImageView(context);
-        checkImageView.setImageResource(R.drawable.baseline_check_24);
+            checkImageView.setImageResource(R.drawable.baseline_check_24);
             checkImageView.setScaleType(ImageView.ScaleType.CENTER);
-        checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemCheck), PorterDuff.Mode.SRC_IN));
+            checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemCheck), PorterDuff.Mode.SRC_IN));
             addView(checkImageView, LayoutHelper.createFrame(40, LayoutHelper.MATCH_PARENT, Gravity.RIGHT | Gravity.TOP, 0, 0, 6, 0));
         }
     }
@@ -125,7 +127,7 @@ public class AccountSelectCell extends FrameLayout {
         avatarDrawable.setInfo(user);
         textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         imageView.getImageReceiver().setCurrentAccount(account);
-        imageView.setImage(ImageLocation.getForUser(user,false), "50_50", avatarDrawable, user);
+        imageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
         checkImageView.setVisibility(check && account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
     }
 

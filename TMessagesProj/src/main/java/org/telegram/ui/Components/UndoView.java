@@ -188,14 +188,14 @@ public class UndoView extends FrameLayout {
         super(context);
         fromTop = top;
 
-        infoTextView = new TextView(context);
+        infoTextView = new EmojiTextView(context);
         infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         infoTextView.setTextColor(Theme.getColor(Theme.key_undo_infoColor));
         infoTextView.setLinkTextColor(Theme.getColor(Theme.key_undo_cancelColor));
         infoTextView.setMovementMethod(new LinkMovementMethodMy());
         addView(infoTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 45, 13, 0, 0));
 
-        subinfoTextView = new TextView(context);
+        subinfoTextView = new EmojiTextView(context);
         subinfoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         subinfoTextView.setTextColor(Theme.getColor(Theme.key_undo_infoColor));
         subinfoTextView.setLinkTextColor(Theme.getColor(Theme.key_undo_cancelColor));
@@ -1042,9 +1042,9 @@ public class UndoView extends FrameLayout {
                 } else {
                     String info = LocaleController.getServerString("DiceEmojiInfo_" + emoji);
                     if (!TextUtils.isEmpty(info)) {
-                        infoTextView.setText(Emoji.replaceEmoji(info, infoTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+                        infoTextView.setText(info);
                     } else {
-                        infoTextView.setText(Emoji.replaceEmoji(LocaleController.formatString("DiceEmojiInfo", R.string.DiceEmojiInfo, emoji), infoTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+                        infoTextView.setText(LocaleController.formatString("DiceEmojiInfo", R.string.DiceEmojiInfo, emoji));
                     }
                 }
                 leftImageView.setImageDrawable(Emoji.getEmojiDrawable(emoji));

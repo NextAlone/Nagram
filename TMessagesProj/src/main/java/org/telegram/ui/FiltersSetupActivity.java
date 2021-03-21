@@ -37,6 +37,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Components.CombinedDrawable;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProgressButton;
 import org.telegram.ui.Components.RLottieImageView;
@@ -257,7 +258,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             moveImageView.setClickable(true);
             addView(moveImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 6, 0, 6, 0));
 
-            textView = new TextView(context);
+            textView = new EmojiTextView(context);
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             textView.setLines(1);
@@ -342,7 +343,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 info.append(LocaleController.getString("FilterNoChats", R.string.FilterNoChats));
             }
 
-            textView.setText(Emoji.replaceEmoji(filter.name, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
+            textView.setText(filter.name);
             valueTextView.setText(info);
             //valueTextView.setVisibility(VISIBLE);
             needDivider = divider;

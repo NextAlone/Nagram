@@ -103,14 +103,14 @@ public class BotKeyboardView extends LinearLayout {
                 float weight = 1.0f / row.buttons.size();
                 for (int b = 0; b < row.buttons.size(); b++) {
                     TLRPC.KeyboardButton button = row.buttons.get(b);
-                    TextView textView = new TextView(getContext());
+                    TextView textView = new EmojiTextView(getContext());
                     textView.setTag(button);
                     textView.setTextColor(Theme.getColor(Theme.key_chat_botKeyboardButtonText));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     textView.setGravity(Gravity.CENTER);
                     textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_chat_botKeyboardButtonBackground), Theme.getColor(Theme.key_chat_botKeyboardButtonBackgroundPressed)));
                     textView.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
-                    textView.setText(Emoji.replaceEmoji(button.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16), false));
+                    textView.setText(button.text);
                     layout.addView(textView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, weight, 0, 0, b != row.buttons.size() - 1 ? 10 : 0, 0));
                     textView.setOnClickListener(v -> delegate.didPressedButton((TLRPC.KeyboardButton) v.getTag()));
                     buttonViews.add(textView);

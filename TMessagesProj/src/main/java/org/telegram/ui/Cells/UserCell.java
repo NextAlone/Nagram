@@ -454,7 +454,7 @@ public class UserCell extends FrameLayout {
 
         if (currentName != null) {
             lastName = null;
-            nameTextView.setText(Emoji.replaceEmoji(currentName, Theme.chat_namePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false));
+            nameTextView.setText(currentName);
         } else {
             if (currentUser != null) {
                 lastName = newName == null ? UserObject.getUserName(currentUser) : newName;
@@ -463,7 +463,7 @@ public class UserCell extends FrameLayout {
             } else {
                 lastName = "";
             }
-            nameTextView.setText(Emoji.replaceEmoji(lastName, Theme.chat_namePaint.getFontMetricsInt(), AndroidUtilities.dp(16), false));
+            nameTextView.setText(lastName);
         }
         if (currentStatus != null) {
             statusTextView.setTextColor(statusColor);

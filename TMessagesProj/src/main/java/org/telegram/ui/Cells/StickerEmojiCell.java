@@ -31,6 +31,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.messenger.SvgHelper;
 
@@ -61,7 +62,7 @@ public class StickerEmojiCell extends FrameLayout {
         imageView.setLayerNum(1);
         addView(imageView, LayoutHelper.createFrame(66, 66, Gravity.CENTER));
 
-        emojiTextView = new TextView(context);
+        emojiTextView = new EmojiTextView(context);
         emojiTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         addView(emojiTextView, LayoutHelper.createFrame(28, 28, Gravity.BOTTOM | Gravity.RIGHT));
         setFocusable(true);
@@ -116,7 +117,7 @@ public class StickerEmojiCell extends FrameLayout {
             }
 
             if (emoji != null) {
-                emojiTextView.setText(Emoji.replaceEmoji(emoji, emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16), false));
+                emojiTextView.setText(emoji);
                 emojiTextView.setVisibility(VISIBLE);
             } else if (showEmoji) {
                 boolean set = false;
@@ -124,14 +125,14 @@ public class StickerEmojiCell extends FrameLayout {
                     TLRPC.DocumentAttribute attribute = document.attributes.get(a);
                     if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
                         if (attribute.alt != null && attribute.alt.length() > 0) {
-                            emojiTextView.setText(Emoji.replaceEmoji(attribute.alt, emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16), false));
+                            emojiTextView.setText(attribute.alt);
                             set = true;
                         }
                         break;
                     }
                 }
                 if (!set) {
-                    emojiTextView.setText(Emoji.replaceEmoji(MediaDataController.getInstance(currentAccount).getEmojiForSticker(sticker.id), emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16), false));
+                    emojiTextView.setText(MediaDataController.getInstance(currentAccount).getEmojiForSticker(sticker.id));
                 }
                 emojiTextView.setVisibility(VISIBLE);
             } else {
@@ -220,7 +221,7 @@ public class StickerEmojiCell extends FrameLayout {
                 TLRPC.DocumentAttribute attribute = sticker.attributes.get(a);
                 if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
                     if (attribute.alt != null && attribute.alt.length() > 0) {
-                        emojiTextView.setText(Emoji.replaceEmoji(attribute.alt, emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16), false));
+                        emojiTextView.setText(attribute.alt);
                         descr = attribute.alt + " " + descr;
                     }
                     break;

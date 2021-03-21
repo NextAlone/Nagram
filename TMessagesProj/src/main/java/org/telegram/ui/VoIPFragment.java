@@ -74,6 +74,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.voip.AcceptDeclineView;
@@ -701,7 +702,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         callingUserPhotoViewMini.setRoundRadius(AndroidUtilities.dp(135) / 2);
         callingUserPhotoViewMini.setVisibility(View.GONE);
 
-        callingUserTitle = new TextView(context);
+        callingUserTitle = new EmojiTextView(context);
         callingUserTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
         callingUserTitle.setText(ContactsController.formatName(callingUser.first_name, callingUser.last_name));
         callingUserTitle.setShadowLayer(AndroidUtilities.dp(3), 0, AndroidUtilities.dp(.666666667f), 0x4C000000);

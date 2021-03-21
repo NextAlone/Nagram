@@ -405,7 +405,6 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             if (message.length() > 150) {
                 message = message.subSequence(0, 150);
             }
-            message = Emoji.replaceEmoji(message, avatarContainer.getSubtitleTextView().getTextPaint().getFontMetricsInt(), AndroidUtilities.dp(17), false);
         } else {
             message = messageObject.messageText;
         }

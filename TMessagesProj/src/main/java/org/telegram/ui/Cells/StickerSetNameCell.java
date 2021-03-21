@@ -27,6 +27,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.ColorSpanUnderline;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -58,7 +59,7 @@ public class StickerSetNameCell extends FrameLayout {
 
         FrameLayout.LayoutParams lp;
 
-        textView = new TextView(context);
+        textView = new EmojiTextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelStickerSetName));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -134,7 +135,7 @@ public class StickerSetNameCell extends FrameLayout {
             if (searchLength != 0) {
                 updateTextSearchSpan();
             } else {
-                textView.setText(Emoji.replaceEmoji(text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+                textView.setText(text);
             }
             if (resId != 0) {
                 buttonView.setImageResource(resId);
@@ -152,7 +153,7 @@ public class StickerSetNameCell extends FrameLayout {
                 builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chat_emojiPanelStickerSetNameHighlight)), stickerSetNameSearchIndex, stickerSetNameSearchIndex + stickerSetNameSearchLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch (Exception ignore) {
             }
-            textView.setText(Emoji.replaceEmoji(builder, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+            textView.setText(builder);
         }
     }
 

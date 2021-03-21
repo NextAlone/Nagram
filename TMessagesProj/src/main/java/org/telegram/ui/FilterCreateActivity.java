@@ -279,7 +279,7 @@ public class FilterCreateActivity extends BaseFragment {
         } else {
             TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             paint.setTextSize(AndroidUtilities.dp(20));
-            actionBar.setTitle(Emoji.replaceEmoji(filter.name, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false));
+            actionBar.setTitle(filter.name);
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override

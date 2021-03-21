@@ -5782,7 +5782,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     String phoneString = PhoneFormat.getInstance().format("+" + user.phone);
                     nameTextView[a].setText(phoneString);
                 } else {
-                    nameTextView[a].setText(Emoji.replaceEmoji(newString, nameTextView[a].getPaint().getFontMetricsInt(), AndroidUtilities.dp(18), false));
+                    nameTextView[a].setText(newString);
                 }
                 if (a == 0 && onlineTextOverride != null) {
                     onlineTextView[a].setText(onlineTextOverride);
