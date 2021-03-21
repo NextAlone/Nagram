@@ -91,6 +91,9 @@ public class StickerSetCell extends FrameLayout {
         imageView.setLayerNum(1);
         addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 13, 9, LocaleController.isRTL ? 13 : 0, 0));
 
+        pinnedImageView = new ImageView(context);
+        pinnedImageView.setVisibility(GONE);
+
         if (option == 2) {
             progressView = new RadialProgressView(getContext());
             progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
@@ -107,7 +110,6 @@ public class StickerSetCell extends FrameLayout {
                 addView(optionsButton, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL));
 
                 // NekoX: Pinned Sticker Mark
-                pinnedImageView = new ImageView(context);
                 pinnedImageView.setImageResource(R.drawable.msg_pin_mini);
                 pinnedImageView.setColorFilter(0xFF808080);
                 addView(pinnedImageView, LayoutHelper.createFrame(20, 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 0.0f, 0.0f, 40.0f, 0.0f));
