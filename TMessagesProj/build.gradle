@@ -305,16 +305,13 @@ android {
 
     productFlavors {
         mini {
-            versionNameSuffix '-mini'
         }
         miniAppleEmoji {
-            versionNameSuffix '-mini'
         }
         full {
             isDefault true
         }
         fullAppleEmoji {
-            versionNameSuffix '-full-apple-emoji'
         }
         fullPlay {
             versionNameSuffix '-play'
@@ -323,11 +320,6 @@ android {
     }
 
     sourceSets.all { set ->
-        if (set.name.startsWith("full")) {
-            set.dependencies {
-                implementation fileTree("libs")
-            }
-        }
         if (set.name.matches("(mini|full).*")) {
             if (set.name.contains("Apple")) {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
@@ -355,8 +347,6 @@ android {
     }
 
 }
-
-
 
 def okHttpVersion = '5.0.0-alpha.2'
 def fcmVersion = '21.0.1'
@@ -402,6 +392,7 @@ dependencies {
     implementation project(":openpgp-api")
 
     compileOnly fileTree("libs")
+    fullImplementation fileTree("libs")
 
     compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
@@ -426,7 +417,6 @@ dependencies {
     }
 
 }
-
 
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
