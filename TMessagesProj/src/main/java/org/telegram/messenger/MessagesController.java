@@ -5854,7 +5854,9 @@ public class MessagesController extends BaseController implements NotificationCe
                     arr = arr.stream().filter(it -> getMessagesController().blockePeers.indexOfKey(it.userId) == -1).collect(Collectors.toCollection(ArrayList::new));
                 }
 
-                if (lower_id > 0 || lower_id == 0 || arr.size() == 1) {
+                if (arr.isEmpty()) continue;
+
+                if (arr.size() == 1) {
                     PrintingUser pu = arr.get(0);
                     TLRPC.User user = getUser(pu.userId);
                     if (user == null) {
