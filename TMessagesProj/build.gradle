@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.6.0-rc03"
-def verCode = 200 + 3 * 15
+def verName = "7.6.0-rc04"
+def verCode = 200 + 3 * 16
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
@@ -320,6 +320,11 @@ android {
     }
 
     sourceSets.all { set ->
+        if (set.name.startsWith("full")) {
+            set.dependencies {
+                implementation fileTree("libs")
+            }
+        }
         if (set.name.matches("(mini|full).*")) {
             if (set.name.contains("Apple")) {
                 set.assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
@@ -392,7 +397,6 @@ dependencies {
     implementation project(":openpgp-api")
 
     compileOnly fileTree("libs")
-    fullImplementation fileTree("libs")
 
     compileOnly "com.google.firebase:firebase-messaging:$fcmVersion"
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
