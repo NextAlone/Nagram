@@ -1561,7 +1561,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         UserConfig.getInstance(currentAccount).clearConfig();
         MessagesController.getInstance(currentAccount).cleanup();
         UserConfig.getInstance(currentAccount).official = NekoXConfig.currentAppId() == BuildVars.OFFICAL_APP_ID;
-        UserConfig.getInstance(currentAccount).deviceInfo = uploadDeviceInfo;
         UserConfig.getInstance(currentAccount).syncContacts = syncContacts;
         UserConfig.getInstance(currentAccount).setCurrentUser(res.user);
         UserConfig.getInstance(currentAccount).saveConfig(true);
@@ -1644,7 +1643,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private TLRPC.TL_help_termsOfService currentTermsOfService;
 
     private boolean allowFlashCall = false;
-    private boolean uploadDeviceInfo = true;
 
     public class PhoneView extends SlideView implements AdapterView.OnItemSelectedListener {
 
@@ -1961,36 +1959,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         visibleToast.show();
                     } else {
                         visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff), Toast.LENGTH_SHORT);
-                        visibleToast.show();
-                    }
-                }
-            });
-
-            infoCell = new CheckBoxCell(context, 2);
-            infoCell.setText(LocaleController.getString("HideDevieInfo", R.string.HideDeviceInfo), "", !uploadDeviceInfo, false);
-            addView(infoCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
-            infoCell.setOnClickListener(new OnClickListener() {
-
-                private Toast visibleToast;
-
-                @Override
-                public void onClick(View v) {
-                    if (getParentActivity() == null) {
-                        return;
-                    }
-                    infoCell.setChecked(!(uploadDeviceInfo = !uploadDeviceInfo), true);
-                    try {
-                        if (visibleToast != null) {
-                            visibleToast.cancel();
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    if (!uploadDeviceInfo) {
-                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("HideDeviceInfoOn", R.string.HideDeviceInfoOn), Toast.LENGTH_SHORT);
-                        visibleToast.show();
-                    } else {
-                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("HideDeviceInfoOff", R.string.HideDeviceInfoOff), Toast.LENGTH_SHORT);
                         visibleToast.show();
                     }
                 }

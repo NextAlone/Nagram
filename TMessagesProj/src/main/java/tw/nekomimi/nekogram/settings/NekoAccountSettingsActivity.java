@@ -194,7 +194,7 @@ public class NekoAccountSettingsActivity extends BaseFragment {
         rowCount = 0;
 
         accountRow = rowCount++;
-        uploadDeviceInfoRow = rowCount++;
+        uploadDeviceInfoRow = -1;
         deleteAccountRow = rowCount++;
         account2Row = rowCount++;
         if (listAdapter != null) {
@@ -280,9 +280,6 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
-                    if (position == uploadDeviceInfoRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("HideDeviceInfo", R.string.HideDeviceInfo), !getUserConfig().deviceInfo, true);
-                    }
                     break;
                 }
                 case 4: {

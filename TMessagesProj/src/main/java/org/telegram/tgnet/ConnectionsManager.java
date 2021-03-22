@@ -50,7 +50,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.parts.DeviceInfosKt;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 
@@ -178,17 +177,11 @@ public class ConnectionsManager extends BaseController {
         boolean enablePushConnection = isPushConnectionEnabled();
         getUserConfig().loadConfig();
 
-
         try {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = MessagesController.getGlobalMainSettings().getString("lang_code", systemLangCode);
-            if (getUserConfig().deviceInfo && getUserConfig().isClientActivated()) {
-                deviceModel = Build.MANUFACTURER + Build.MODEL;
-                systemVersion = "SDK " + Build.VERSION.SDK_INT;
-            } else {
-                deviceModel = "";
-                systemVersion = "";
-            }
+            deviceModel = Build.MANUFACTURER + Build.MODEL;
+            systemVersion = "SDK " + Build.VERSION.SDK_INT;
         } catch (Exception ignored) {
             systemLangCode = "";
             langCode = "";
@@ -219,12 +212,6 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = "en";
         }
 
-        if (deviceModel.trim().length() == 0 && getUserConfig().isClientActivated()) {
-            deviceModel = DeviceInfosKt.randomDevice();
-        }
-        if (systemVersion.trim().length() == 0 && getUserConfig().isClientActivated()) {
-            systemVersion = DeviceInfosKt.randomSystemVersion();
-        }
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             pushString = SharedConfig.pushStringStatus;
