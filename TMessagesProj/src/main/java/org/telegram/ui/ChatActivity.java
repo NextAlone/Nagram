@@ -21756,7 +21756,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (type == 1) {
                 Browser.openUrl(getParentActivity(), url, inlineReturn == 0, false);
             } else if (type == 2) {
-                Browser.openUrl(getParentActivity(), url, inlineReturn == 0);
+                // NekoX: Fix skipOpenLinkConfirm broken in 7.6.0, since processExternalUrl is imported in 7.6.0
+                if (NekoConfig.skipOpenLinkConfirm)
+                    Browser.openUrl(getParentActivity(), url, inlineReturn == 0);
+                else
+                    AlertsCreator.showOpenUrlAlert(ChatActivity.this, url, true, true, true);
             }
         }
     }
