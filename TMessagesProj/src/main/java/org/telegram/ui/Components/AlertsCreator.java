@@ -1278,7 +1278,7 @@ public class AlertsCreator {
             revokeTimeLimit = MessagesController.getInstance(account).revokeTimeLimit;
         }
         boolean canDeleteInbox = !secret && user != null && canRevokeInbox && revokeTimeLimit == 0x7fffffff;
-        final boolean[] deleteForAll = {true};
+        final boolean[] deleteForAll = new boolean[1];
         boolean deleteChatForAll = false;
 
         if (!second && (secret && !clear || canDeleteInbox) && !UserObject.isDeleted(user) || (deleteChatForAll = checkDeleteForAll && !clear && chat != null && chat.creator)) {
@@ -1291,8 +1291,10 @@ public class AlertsCreator {
                     cell[0].setText(LocaleController.getString("DeleteGroupForAll", R.string.DeleteGroupForAll), "", deleteForAll[0], false);
                 }
             } else if (clear) {
+                deleteForAll[0] = true;
                 cell[0].setText(LocaleController.formatString("ClearHistoryOptionAlso", R.string.ClearHistoryOptionAlso, UserObject.getFirstName(user)), "", deleteForAll[0], false);
             } else {
+                deleteForAll[0] = true;
                 cell[0].setText(LocaleController.formatString("DeleteMessagesOptionAlso", R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", deleteForAll[0], false);
             }
             cell[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
