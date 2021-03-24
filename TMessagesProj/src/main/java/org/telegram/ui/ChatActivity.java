@@ -1921,6 +1921,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     Integer end = ids.get(ids.size() - 1);
                     for (int i = 0; i < messages.size(); i++) {
                         int msgId = messages.get(i).getId();
+                        if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
+                            continue;
                         if (msgId > begin && msgId < end && selectedMessagesIds[0].indexOfKey(msgId) < 0) {
                             MessageObject message = messages.get(i);
                             int type = getMessageType(message);
