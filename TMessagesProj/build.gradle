@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.6.0-rc04"
-def verCode = 200 + 3 * 16
+def verName = "7.6.0-rc05"
+def verCode = 200 + 3 * 17
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
@@ -379,7 +379,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.osmdroid:osmdroid-android:6.1.10'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
