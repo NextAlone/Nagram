@@ -92,7 +92,6 @@ import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -169,8 +168,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Random;
-import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
@@ -6778,7 +6775,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     cell.getTextView().setMovementMethod(null);
                     cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
 
-                    cell.setText("Nekogram X v" + BuildConfig.VERSION_NAME + " " + FileUtil.getAbi() + " " + BuildConfig.BUILD_TYPE);
+                    cell.setText("Nekogram X v" + BuildConfig.VERSION_NAME + " " + FileUtil.getAbi() + " " + BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE);
 
                     cell.getTextView().setPadding(0, AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14));
                     view = cell;
