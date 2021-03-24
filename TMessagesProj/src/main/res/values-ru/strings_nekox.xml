@@ -225,4 +225,5 @@
     <string name="SetPinnedSuffix">Закреплено</string>
     <string name="UnpinSticker">Открепить</string>
     <string name="PinSticker">Закрепить</string>
+    <string name="AppLinkFDroid">F-Droid</string>
 </resources>

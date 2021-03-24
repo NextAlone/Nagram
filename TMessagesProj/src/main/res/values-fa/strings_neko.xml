@@ -3,12 +3,12 @@
     <string name="NekoSettings">تنظیمات Neko</string>
     <string name="IPv6">اتصال از طریق IPv6</string>
     <string name="MessageMenu">منوی پیام</string>
-    <string name="HidePhone">شماره تلفن من را مخفی کن</string>
+    <string name="HidePhone">مخفی کردن شماره تلفن</string>
     <string name="Hide">پنهان کردن</string>
     <string name="DeleteAllFromSelf">حذف کردن همه پیامهای خود</string>
     <string name="DeleteAllFromSelfAlert">هشدار! با این کار، تمام پیام های شما در **این گفتگو** برای **همه** مشترکان حذف می شود.</string>
     <string name="BotLogin">ورود ربات</string>
-    <string name="InvalidAccessToken">کد دسترسی نامعتبر</string>
+    <string name="InvalidAccessToken">کد توکن نامعتبر</string>
     <string name="IgnoreBlocked">نادیده گرفتن کاربران مسدود شده در گروه</string>
     <string name="Connection">اتصال</string>
     <string name="Chat">گفتگو</string>
@@ -20,7 +20,7 @@
     <string name="Repeat">تکرار</string>
     <string name="AddToSavedMessages">ذخیره پیام</string>
     <string name="CreateMention">ساختن منشن</string>
-    <string name="ForceTabletMode">حالت اجباری تبلت</string>
+    <string name="ForceTabletMode">حالت تبلت اجباری</string>
     <string name="Prpr">پروپرو</string>
     <string name="TransparentStatusBar">نوار وضعیت شفاف</string>
     <string name="EnableResidentNotification">نشان دادن اعلان ساکن</string>
@@ -44,7 +44,7 @@
     <string name="SaveCacheToExternalFilesDir">جدا سازی حافظه</string>
     <string name="SaveCacheToExternalFilesDirAbout">برای مرتب نگه‌داشتن فضای ذخیره سازی مشترک، پوشه‌ی \"Telegram\" را در پوشه‌ی خاص خود برنامه ذخیره می‌کند.</string>
     <string name="SensitiveDisableFiltering">غیرفعال کردن فیلتر محتوای حساس</string>
-    <string name="SensitiveAbout">نمایش محتوا های حساس کانال های عمومی در همه دستگاها.</string>
+    <string name="SensitiveAbout">نمایش محتوا های حساس کانال های عمومی در همه دستگاه ها.</string>
     <string name="StickerSize">اندازه استیکر</string>
     <string name="StickerSizeDialogMessageBigOne">یکی از بزرگاش</string>
     <string name="StickerSizeDialogMessageSmallOne">یکی از کوچیکاش</string>
@@ -57,11 +57,11 @@
     <string name="ExportAsJson">استخراج به عنوان JSON</string>
     <string name="Translate">ترجمه</string>
     <string name="DeleteAccount">حذف اکانت تلگرام</string>
-    <string name="TranslateFailed">ترجمه خطای سرور</string>
+    <string name="TranslateFailed">خطای سرور مترجم</string>
     <string name="TranslationProvider">ارائه دهنده ترجمه</string>
     <string name="ProviderGoogleTranslate">مترجم گوگل</string>
     <string name="ProviderGoogleTranslateCN">مترجم گوگل CN</string>
-    <string name="TranslateApiUnsupported">ارائه دهنده ترجمه ای که شما انتخاب کردید از زبان شما پشتیبانی نمی کند.</string>
+    <string name="TranslateApiUnsupported">سرویس ترجمه ای که شما انتخاب کرده اید از زبان شما پشتیبانی نمی کند.</string>
     <string name="ProviderLingocloud">لینگوکلود</string>
     <string name="UndoTranslate">واگرد ترجمه</string>
     <string name="DisablePhotoViewerSideAction">غیرفعال کردن پیمایش بین تصاویر با ضربه</string>
@@ -84,7 +84,7 @@
     <string name="TabTitleTypeMix">شکلک ها با عناوین</string>
     <string name="ConfirmAVMessage">تایید ارسال پیامهای صوتی / ویدیویی</string>
     <string name="AskBeforeCalling">پرسش قبل از تماس</string>
-    <string name="ConfirmCall">تایید قبل از برقراری تماس</string>
+    <string name="ConfirmCall">تایید تماس</string>
     <string name="CallTo">با **%1$s** تماس گرفته شود؟</string>
     <string name="DisableNumberRounding">نمایش دقیق اعداد رند شده</string>
     <string name="Categories">دسته بندی ها</string>

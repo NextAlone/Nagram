@@ -228,4 +228,5 @@
     <string name="ArchiveFiles">ملفات الأرشيف</string>
     <string name="Win32ExecutableFiles">ملفات Win32 القابلة للتنفيذ</string>
     <string name="AutoDownload">التحميل التلقائي</string>
+    <string name="AppLinkFDroid">اف-درويد</string>
 </resources>
