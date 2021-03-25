@@ -71,6 +71,7 @@ import org.telegram.ui.SwipeGestureSettingsView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class DialogCell extends BaseCell {
@@ -1942,7 +1943,8 @@ public class DialogCell extends BaseCell {
                         clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
                         message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
                         if (message != null && NekoConfig.ignoreBlocked && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
-                            message = null;
+                            message = MessageHelper.getInstance(currentAccount).getLastMessageFromUnblock(dialog.id);
+                            // Username show may be abnormal if User who send `message` is not loaded in (never enter chat since boot, esp after cold starting)
                         }
                         lastUnreadState = message != null && message.isUnread();
                         if (dialog instanceof TLRPC.TL_dialogFolder) {

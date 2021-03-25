@@ -3,19 +3,24 @@ package tw.nekomimi.nekogram;
 import android.content.Context;
 import android.util.SparseArray;
 
+import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.SQLite.SQLiteException;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
@@ -298,6 +303,35 @@ public class MessageHelper extends BaseController {
                 getMessagesController().processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
             }
         });
+    }
+
+    public MessageObject getLastMessageFromUnblock(long dialogId) {
+        SQLiteCursor cursor;
+        MessageObject ret = null;
+        try {
+            cursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data,send_state,mid,date FROM messages WHERE uid = %d ORDER BY date DESC LIMIT %d,%d", dialogId, 0, 10));
+            while (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data == null)
+                    continue;
+                TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                data.reuse();
+                if (getMessagesController().blockePeers.indexOfKey(message.from_id.user_id) < 0) {
+                    // valid message
+                    ret = new MessageObject(currentAccount, message, true, true);
+                    message.send_state = cursor.intValue(1);
+                    message.id = cursor.intValue(2);
+                    message.date = cursor.intValue(3);
+                    message.dialog_id = dialogId;
+                    break;
+                }
+            }
+            cursor.dispose();
+        } catch (SQLiteException sqLiteException) {
+            FileLog.e("NekoX, ignoreBlocked, SQLiteException when read last message from unblocked user", sqLiteException);
+            return null;
+        }
+        return ret;
     }
 
 }
