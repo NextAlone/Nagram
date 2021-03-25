@@ -323,6 +323,12 @@ public class MessageHelper extends BaseController {
                     message.id = cursor.intValue(2);
                     message.date = cursor.intValue(3);
                     message.dialog_id = dialogId;
+                    // Fix username show
+                    if (getMessagesController().getUser(ret.getSenderId()) == null) {
+                        TLRPC.User user = getMessagesStorage().getUser(ret.getSenderId());
+                        if (user != null)
+                            getMessagesController().putUser(user, true);
+                    }
                     break;
                 }
             }

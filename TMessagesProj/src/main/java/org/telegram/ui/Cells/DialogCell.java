@@ -2427,7 +2427,7 @@ public class DialogCell extends BaseCell {
             }
 
 //            if (width / 2 < AndroidUtilities.dp(40)) {
-         //       canvas.drawText(swipeMessage, getMeasuredWidth() - AndroidUtilities.dp(43) - width / 2, AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 62 : 59), Theme.dialogs_archiveTextPaint);
+            //       canvas.drawText(swipeMessage, getMeasuredWidth() - AndroidUtilities.dp(43) - width / 2, AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 62 : 59), Theme.dialogs_archiveTextPaint);
 //            }
 
             canvas.restore();
