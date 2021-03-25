@@ -56,6 +56,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -99,6 +100,8 @@ public class MessagesController extends BaseController implements NotificationCe
     public ConcurrentHashMap<Long, Integer> dialogs_read_outbox_max = new ConcurrentHashMap<>(100, 1.0f, 2);
     public LongSparseArray<TLRPC.Dialog> dialogs_dict = new LongSparseArray<>();
     public LongSparseArray<MessageObject> dialogMessage = new LongSparseArray<>();
+    // NekoX: ignoreBlocked, Messages cache for Dialog Cell
+    public LongSparseArray<MessageObject> dialogMessageFromUnblocked = new LongSparseArray<>();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray<>();
     public LongSparseArray<Integer> deletedHistory = new LongSparseArray<>();
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray<>();
@@ -6326,7 +6329,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }));
         }
     }
-
+    
     public void processLoadedMessages(TLRPC.messages_Messages messagesRes, int resCount, long dialogId, long mergeDialogId, int count, int max_id, int offset_date, boolean isCache, int classGuid,
                                       int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, boolean isEnd, int mode, int threadMessageId, int loadIndex, boolean queryFromServer, int mentionsCount, boolean needProcess) {
         if (BuildVars.LOGS_ENABLED) {
@@ -13997,6 +14000,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 dialog.top_message = lastMessage.getId();
                 dialog.last_message_date = lastMessage.messageOwner.date;
                 changed = true;
+                if(NekoConfig.ignoreBlocked && blockePeers.indexOfKey(lastMessage.getSenderId())>=0){
+                    MessageObject preMsg = dialogMessage.get(uid);
+                    if(blockePeers.indexOfKey(preMsg.getSenderId())<0)
+                        dialogMessageFromUnblocked.put(uid, preMsg);
+                }
                 dialogMessage.put(uid, lastMessage);
                 if (lastMessage.messageOwner.peer_id.channel_id == 0) {
                     dialogMessagesByIds.put(lastMessage.getId(), lastMessage);
@@ -14004,6 +14012,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         dialogMessagesByRandomIds.put(lastMessage.messageOwner.random_id, lastMessage);
                     }
                 }
+
             }
         }
 

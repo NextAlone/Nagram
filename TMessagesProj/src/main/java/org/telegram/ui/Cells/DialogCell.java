@@ -1943,7 +1943,12 @@ public class DialogCell extends BaseCell {
                         clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
                         message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
                         if (message != null && NekoConfig.ignoreBlocked && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
-                            message = MessageHelper.getInstance(currentAccount).getLastMessageFromUnblock(dialog.id);
+                            if (MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id) != null)
+                                message = MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id);
+                            else {
+                                message = MessageHelper.getInstance(currentAccount).getLastMessageFromUnblock(dialog.id);
+                                MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.put(dialog.id, message);
+                            }
                             // Username show may be abnormal if User who send `message` is not loaded in (never enter chat since boot, esp after cold starting)
                         }
                         lastUnreadState = message != null && message.isUnread();
