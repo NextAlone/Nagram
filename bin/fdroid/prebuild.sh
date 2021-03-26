@@ -32,7 +32,7 @@ sed -i -e /play:core/d build.gradle
 sed -i -e /firebase/d build.gradle
 sed -i -e /gms/d build.gradle
 
-rm -r jni/boringssl/fuzz
+rm -rf jni/boringssl/fuzz
 rm jni/libwebp/swig/libwebp.jar
 rm jni/libwebp/gradle/wrapper/gradle-wrapper.jar
 rm jni/boringssl/util/ar/testdata/mac/libsample.a
@@ -40,6 +40,6 @@ rm jni/boringssl/util/ar/testdata/linux/libsample.a
 
 popd
 
-rm -r ssr-libev/src/main/jni/pcre/dist/testdata
-rm -r ssr-libev/src/main/jni/mbedtls/programs/fuzz/corpuses
-rm -r ssr-libev/src/main/jni/mbedtls/tests/data_files
+rm -rf ssr-libev/src/main/jni/pcre/dist/testdata
+rm -rf ssr-libev/src/main/jni/mbedtls/programs/fuzz/corpuses
+rm -rf ssr-libev/src/main/jni/mbedtls/tests/data_files

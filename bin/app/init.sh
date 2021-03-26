@@ -7,7 +7,7 @@ function flavor() {
   done
 }
 
-rm -r TMessagesProj/build/outputs/apk
+rm -rf TMessagesProj/build/outputs/apk
 
 flavor Full
 flavor FullAppleEmoji

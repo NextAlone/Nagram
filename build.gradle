@@ -19,7 +19,7 @@ buildscript {
 
 static String detectNdkVersion() {
 
-    def version = "21.3.6528147"
+    def version = "21.4.7075529"
 
     def androidHome = System.getenv("ANDROID_HOME")
 
