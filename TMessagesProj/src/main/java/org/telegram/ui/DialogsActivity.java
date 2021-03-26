@@ -157,13 +157,13 @@ import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
+import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SearchViewPager;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
-import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 
 import java.util.ArrayList;
 
@@ -711,7 +711,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             viewPages[a].setTranslationY(0);
                         }
                     }
-                    if (!onlySelect) {
+                    if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward) || !onlySelect) {
                         actionBar.setTranslationY(0);
                     }
                     searchViewPager.setTranslationY(0);
@@ -1177,7 +1177,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                     if ((view instanceof DialogCell && ((DialogCell) view).isMoving()) || (view instanceof DialogsAdapter.LastEmptyView && ((DialogsAdapter.LastEmptyView) view).moving)) {
                         if (view.getAlpha() != 1f) {
-                            rectF.set(view.getX(), view.getY(), view.getX() + view.getMeasuredWidth(), view.getY() +  view.getMeasuredHeight());
+                            rectF.set(view.getX(), view.getY(), view.getX() + view.getMeasuredWidth(), view.getY() + view.getMeasuredHeight());
                             canvas.saveLayerAlpha(rectF, (int) (255 * view.getAlpha()), Canvas.ALL_SAVE_FLAG);
                         } else {
                             canvas.save();
@@ -1788,7 +1788,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             getNotificationCenter().addObserver(this, NotificationCenter.dialogsNeedReload);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
-            if (!onlySelect) {
+            if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward) || !onlySelect) {
                 NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.closeSearchByActiveAction);
                 NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxySettingsChanged);
                 getNotificationCenter().addObserver(this, NotificationCenter.filterSettingsUpdated);
@@ -1843,14 +1843,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
 
-
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         if (searchString == null) {
             getNotificationCenter().removeObserver(this, NotificationCenter.dialogsNeedReload);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
-            if (!onlySelect) {
+            if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward) || !onlySelect) {
                 NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.closeSearchByActiveAction);
                 NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
                 getNotificationCenter().removeObserver(this, NotificationCenter.filterSettingsUpdated);
@@ -2486,7 +2485,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     AccountSelectCell cell = new AccountSelectCell(context, false);
                     cell.setAccount(a, true);
                     switchItem.addSubItem(10 + accounts, cell, AndroidUtilities.dp(230), AndroidUtilities.dp(48));
-                    accounts ++;
+                    accounts++;
                 }
             }
             this.accounts = accounts;
@@ -3500,7 +3499,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void updateFiltersView(boolean showMediaFilters, ArrayList<TLObject> users, ArrayList<FiltersView.DateData> dates, boolean animated) {
-        if (!searchIsShowed || onlySelect) {
+        if (!searchIsShowed || onlySelect && !(initialDialogsType == 3 && NekoConfig.showTabsOnForward)) {
             return;
         }
         boolean hasMediaFilter = false;
@@ -4310,7 +4309,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (searchAnimationTabsDelayedCrossfade) {
                         tabsAlphaAnimator.setStartDelay(80);
                         tabsAlphaAnimator.setDuration(100);
-                    } else {  tabsAlphaAnimator.setDuration(show ? 200 : 180);
+                    } else {
+                        tabsAlphaAnimator.setDuration(show ? 200 : 180);
 
                     }
                 }
@@ -5301,7 +5301,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (isDialogPinned(dialog)) {
                         continue;
                     }
-                    pinDialog(selectedDialog, true, filter, minPinnedNum,count == 1);
+                    pinDialog(selectedDialog, true, filter, minPinnedNum, count == 1);
                     if (filter != null) {
                         minPinnedNum++;
                         if (encryptedChat != null) {
@@ -5318,7 +5318,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (!isDialogPinned(dialog)) {
                         continue;
                     }
-                    pinDialog(selectedDialog, false, filter, minPinnedNum,count == 1);
+                    pinDialog(selectedDialog, false, filter, minPinnedNum, count == 1);
 
                 }
             } else if (action == read) {
@@ -6400,6 +6400,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         preferences.edit().putBoolean("filterhint", true).apply();
         AndroidUtilities.runOnUIThread(() -> getUndoView().showWithAction(0, UndoView.ACTION_FILTERS_AVAILABLE, null, () -> presentFragment(new FiltersSetupActivity())), 1000);
     }
+
     private void setDialogsListFrozen(boolean frozen, boolean notify) {
         if (viewPages == null || dialogsListFrozen == frozen) {
             return;
