@@ -368,6 +368,18 @@ public class ConnectionsManager extends BaseController {
 
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, int userId, boolean enablePushConnection) {
 
+        String installer = "";
+        try {
+            installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+        } catch (Throwable ignore) {
+
+        }
+        if (installer == null) {
+            installer = "";
+        }
+
+        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+
         Utilities.stageQueue.postRunnable(() -> {
 
             SharedConfig.loadProxyList();
@@ -379,17 +391,6 @@ public class ConnectionsManager extends BaseController {
                 native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
             }
 
-            String installer = "";
-            try {
-                installer = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-            } catch (Throwable ignore) {
-
-            }
-            if (installer == null) {
-                installer = "";
-            }
-
-            native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
             checkConnection();
 
         });
