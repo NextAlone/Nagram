@@ -172,6 +172,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
@@ -2913,7 +2914,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
 
-                    if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode) {
+                    if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode || ArrayUtil.contains(NekoXConfig.developers, getUserConfig().clientUserId)) {
                         builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                             BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
                             devBuilder.addTitle(LocaleController.getString("DevModeTitle", R.string.DevModeTitle), LocaleController.getString("DevModeNotice", R.string.DevModeNotice));
