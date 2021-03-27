@@ -216,4 +216,8 @@
     <string name="HideDeviceInfo">Cihaz modelini gizle</string>
     <string name="HideDeviceInfoOff">Cihaz modeli, oturum açtıktan sonra uygulama ikinci kez başlatıldığında yüklenecektir.</string>
     <string name="HideDeviceInfoOn">Bunu daha sonra ayarlarda değiştirebilirsiniz.</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="ArchiveFiles">Arşiv dosyaları</string>
+    <string name="Win32ExecutableFiles">Win32 çalıştırılabilir dosyalar</string>
+    <string name="AutoDownload">Otomatik İndirme</string>
 </resources>

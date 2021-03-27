@@ -208,4 +208,9 @@
     <string name="AcceptSecretChat">Accetta nuove chat segrete</string>
     <string name="TabletMode">Modalità Tablet</string>
     <string name="TabletModeDefault">Dipende dal dispositivo</string>
+    <string name="DisableTrending">Disabilita Statistiche</string>
+    <string name="ReplaceRegex">Usa regex</string>
+    <string name="TextReplace">Sostituisci</string>
+    <string name="TextOrigin">Origine</string>
+    <string name="ReplaceText">Sostituisci Testo</string>
 </resources>

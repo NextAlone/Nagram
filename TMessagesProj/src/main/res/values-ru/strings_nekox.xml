@@ -217,8 +217,8 @@
     <string name="HideDeviceInfoOff">Модель устройства будет обновлена при втором запуске приложения после входа в аккаунт.</string>
     <string name="HideDeviceInfoOn">Влияет на информацию в \"Активных сеансах\". Можно отключить позже.</string>
     <string name="EnableStickerPinTip">Функция в разработке, синхронизация может работать с ошибками.</string>
-    <string name="EnableStickerPinAbout">Закрепляйте стикеры (до 5), чтобы синхронизировать их после включения «Неограниченных избранных».</string>
-    <string name="EnableStickerPin">Включить закрепление стикеров</string>
+    <string name="EnableStickerPinAbout">Перейдите в «Стикеры и маски», чтобы закрепить стикерпак. Закреплённые всегда отображаются в начале списка стикеров.</string>
+    <string name="EnableStickerPin">Включить закрепление стикерпаков</string>
     <string name="ArchiveFiles">Архивы</string>
     <string name="Win32ExecutableFiles">Исполняемые файлы Win32</string>
     <string name="AutoDownload">Автозагрузка</string>
