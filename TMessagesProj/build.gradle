@@ -355,7 +355,7 @@ android {
 
 def okHttpVersion = '5.0.0-alpha.2'
 def fcmVersion = '21.0.1'
-def crashlyticsVersion = '17.4.0'
+def crashlyticsVersion = '17.4.1'
 def playCoreVersion = '1.10.0'
 
 dependencies {
