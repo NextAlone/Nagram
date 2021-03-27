@@ -373,24 +373,24 @@ void Connection::connect() {
     hasSomeDataSinceLastConnect = false;
     openConnection(hostAddress, hostPort, secret, ipv6 != 0, ConnectionsManager::getInstance(currentDatacenter->instanceNum).currentNetworkType);
     if (connectionType == ConnectionTypeProxy) {
-        setTimeout(5);
+        setTimeout(50);
     } else if (connectionType == ConnectionTypePush) {
         if (isTryingNextPort) {
-            setTimeout(20);
+            setTimeout(40);
         } else {
-            setTimeout(30);
+            setTimeout(60);
         }
     } else if (connectionType == ConnectionTypeUpload) {
         if (ConnectionsManager::getInstance(currentDatacenter->instanceNum).networkSlow) {
-            setTimeout(40);
+            setTimeout(80);
         } else {
-            setTimeout(25);
+            setTimeout(50);
         }
     } else {
         if (isTryingNextPort) {
-            setTimeout(8);
+            setTimeout(100);
         } else {
-            setTimeout(12);
+            setTimeout(200);
         }
     }
     connectionInProcess = false;
