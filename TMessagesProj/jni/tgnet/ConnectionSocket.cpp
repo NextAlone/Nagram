@@ -364,15 +364,20 @@ void ConnectionSocket::openConnection(std::string address, uint16_t port, std::s
     std::string *proxyAddress = &overrideProxyAddress;
     std::string *proxySecret = &overrideProxySecret;
     uint16_t proxyPort = overrideProxyPort;
+    bool isProxyIpv6 = false;
     if (proxyAddress->empty()) {
         proxyAddress = &ConnectionsManager::getInstance(instanceNum).proxyAddress;
         proxyPort = ConnectionsManager::getInstance(instanceNum).proxyPort;
         proxySecret = &ConnectionsManager::getInstance(instanceNum).proxySecret;
+
+        // NekoX: Check whether proxyAddress is an ipv6 addr
+        struct sockaddr_in6 addr;
+        isProxyIpv6 = inet_pton(AF_INET6, proxyAddress->c_str(), &(addr.sin6_addr)) != 0;
     }
 
     if (!proxyAddress->empty()) {
-        if (LOGS_ENABLED) DEBUG_D("connection(%p) connecting via proxy %s:%d secret[%d]", this, proxyAddress->c_str(), proxyPort, (int) proxySecret->size());
-        if ((socketFd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        if (LOGS_ENABLED) DEBUG_D("connection(%p) connecting via proxy %s:%d secret[%d] ipv6:%d", this, proxyAddress->c_str(), proxyPort, (int) proxySecret->size(), isProxyIpv6);
+        if ((socketFd = socket(isProxyIpv6 ? AF_INET6 : AF_INET, SOCK_STREAM, 0)) < 0) {
             if (LOGS_ENABLED) DEBUG_E("connection(%p) can't create proxy socket", this);
             closeSocket(1, -1);
             return;
@@ -415,6 +420,8 @@ void ConnectionSocket::openConnection(std::string address, uint16_t port, std::s
             } else {
                 ipv6 = true;
                 continueCheckAddress = false;
+                socketAddress6.sin6_family = AF_INET6;
+                socketAddress6.sin6_port = htons(proxyPort);
             }
             if (continueCheckAddress) {
 #ifdef USE_DELEGATE_HOST_RESOLVE
