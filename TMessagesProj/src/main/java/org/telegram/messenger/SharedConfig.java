@@ -32,20 +32,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.SwipeGestureSettingsView;
 
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
 import tw.nekomimi.nekogram.ProxyManager;
@@ -61,8 +58,6 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
-
-import com.google.android.exoplayer2.util.Log;
 
 public class SharedConfig {
 
@@ -1631,11 +1626,15 @@ public class SharedConfig {
 
     public static void setCurrentProxy(@Nullable ProxyInfo info) {
 
+        if (currentProxy instanceof ExternalSocks5Proxy && !currentProxy.equals(info)) {
+            ((ExternalSocks5Proxy) currentProxy).stop();
+        }
+
         currentProxy = info;
 
         MessagesController.getGlobalMainSettings().edit()
                 .putInt("current_proxy", info == null ? 0 : info.hashCode())
-                .commit();
+                .apply();
 
         setProxyEnable(info != null);
 
