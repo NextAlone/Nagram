@@ -508,6 +508,8 @@ void ConnectionSocket::openConnectionInternal(bool ipv6) {
         return;
     }
 
+    if(LOGS_ENABLED) DEBUG_D("connection(%p) socketAddress6, port: %d, family:%d", this, socketAddress6.sin6_port, socketAddress6.sin6_family);
+
     if (connect(socketFd, (ipv6 ? (sockaddr *) &socketAddress6 : (sockaddr *) &socketAddress), (socklen_t) (ipv6 ? sizeof(sockaddr_in6) : sizeof(sockaddr_in))) == -1 && errno != EINPROGRESS) {
         closeSocket(1, -1);
     } else {
@@ -1042,6 +1044,8 @@ void ConnectionSocket::onHostNameResolved(std::string host, std::string ip, bool
                     closeSocket(1, -1);
                     return;
                 }
+                socketAddress6.sin6_port = htons(ConnectionsManager::getInstance(instanceNum).proxyPort);
+                socketAddress6.sin6_family = AF_INET6;
             }
             openConnectionInternal(ipv6);
         }
