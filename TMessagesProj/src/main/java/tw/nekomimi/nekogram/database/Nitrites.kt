@@ -5,11 +5,14 @@ import org.telegram.messenger.ApplicationLoader
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
-fun mkDatabase(name: String): Nitrite {
+@JvmOverloads
+fun mkDatabase(name: String, delete: Boolean = true): Nitrite {
 
     val file = File("${ApplicationLoader.getDataDirFixed()}/databases/$name.db")
-
     FileUtil.initDir(file.parentFile!!)
+    if (delete) {
+        file.deleteRecursively()
+    }
 
     fun create(): Nitrite {
         val nitrite = Nitrite.builder()
@@ -36,14 +39,23 @@ fun Nitrite.openSharedPreference(name: String) = DbPref(getCollection(name))
 
 private lateinit var mainSharedPreferencesDatabase: Nitrite
 
-fun openMainSharedPreference(name: String): DbPref {
+@JvmOverloads
+fun openMainSharedPreference(name: String, delete: Boolean = false): DbPref {
 
-    if (!::mainSharedPreferencesDatabase.isInitialized) {
+    if (!::mainSharedPreferencesDatabase.isInitialized || delete) {
 
-        mainSharedPreferencesDatabase = mkDatabase("shared_preferences")
+        mainSharedPreferencesDatabase = mkDatabase("shared_preferences", delete)
 
     }
 
-    return mainSharedPreferencesDatabase.openSharedPreference(name)
+    return try {
+
+        mainSharedPreferencesDatabase.openSharedPreference(name)
+
+    } catch (e: IllegalStateException) {
+
+        openMainSharedPreference(name, true)
+
+    }
 
 }
