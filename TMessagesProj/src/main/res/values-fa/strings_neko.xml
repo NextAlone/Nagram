@@ -27,7 +27,7 @@
     <string name="DisableResidentNotification">غیرفعال کردن اعلان ساکن</string>
     <string name="NekogramRunning">نكوگرام در حال اجرا است</string>
     <string name="EventType">مجموعه آیکون های نوار کناری</string>
-    <string name="ChristmasHat">کلاه کریسمس را هر روز نشان بده</string>
+    <string name="ChristmasHat">نمایش همیشگی کلاه کریسمس</string>
     <string name="ActionBarDecoration">دکوراسیون نوار عنوان</string>
     <string name="DependsOnDate">بر اساس تاریخ</string>
     <string name="Christmas">کریسمس</string>
@@ -90,7 +90,7 @@
     <string name="Categories">دسته بندی ها</string>
     <string name="OfficialChannel">کانال رسمی</string>
     <string name="About">درباره ما</string>
-    <string name="IgnoreBlockedAbout">دیگر پیامهای کاربران مسدود شده را در گروه مشاهده نخواهید کرد.</string>
+    <string name="IgnoreBlockedAbout">پیام‌های کاربران مسدود شده در گروه‌ها نمایش داده نمی‌شود.</string>
     <string name="GooglePlay">گوگل پلی</string>
     <string name="SourceCode">کد منبع در گیت‌هاب</string>
     <string name="ResetStickerSize">تنظیم مجدد اندازه استیکر</string>
@@ -99,7 +99,7 @@
     <string name="BetaWarning">این یک ویژگی ** آزمایشی ** است که توسط ** تلگرام ** پیاده سازی شده است.</string>
     <string name="MediaPreview">پیش نمایش رسانه در لیست گفتگوها</string>
     <string name="AutoPauseVideo">مکث خودکار ویدئو</string>
-    <string name="AutoPauseVideoAbout">هنگام قفل صفحه/جابجایی به پس زمینه.</string>
+    <string name="AutoPauseVideoAbout">هنگام قفل صفحه / جابجایی به پس زمینه.</string>
     <string name="DisableProximityEvents">غیرفعال‌سازی سنسور مجاورتی</string>
     <string name="IncreaseVoiceMessageQuality">افزایش کیفیت پیام های صوتی</string>
     <string name="SelectBetween">انتخاب بین</string>

@@ -2,15 +2,15 @@
 <resources>
     <string name="Locked">Bloccato</string>
     <string name="AccDescrChatAttachEnterMenu">Menu di input chat</string>
-    <string name="ChatAttachEnterMenuRecordVideo">Registrazione Video</string>
-    <string name="ChatAttachEnterMenuRecordAudio">Registrazione Audio</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Registrazione video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Registrazione audio</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Disabilita Anteprima Collegamenti</string>
-    <string name="ChatAttachEnterMenuEnableLinkPreview">Abilita Anteprima Collegamenti</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Abilita l\'anteprima collegamenti</string>
     <string name="UseChatAttachEnterMenu">Usa il menu di input</string>
     <string name="UseChatAttachEnterMenuNotice">Cambia il pulsante del record in un menu di input e aggiungi un interruttore di anteprima collegamento.</string>
-    <string name="DisableLinkPreviewByDefault">Disabilita l\'anteprima del link per impostazione predefinita</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima link durante l\'input per impostazione predefinita per evitare che il server sappia che il collegamento è condiviso tramite Telegram.</string>
-    <string name="CustomApi">API Personalizzata</string>
+    <string name="DisableLinkPreviewByDefault">Disabilita l\'anteprima del collegamento per impostazione predefinita</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima dei ollegamenti durante l\'input per impostazione predefinita per evitare che il server sappia che il collegamento è condiviso tramite Telegram.</string>
+    <string name="CustomApi">API personalizzata</string>
     <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto.\n\nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
     <string name="CustomApiNo">Non utilizzare l\'API personalizzata</string>
     <string name="CustomApiOfficial">Telegram Android</string>
@@ -140,7 +140,7 @@
     <string name="ImportProxyList">Importa server proxy</string>
     <string name="ProxySubscription">Abbonamento Proxy</string>
     <string name="ProxySubDetails">Dettagli Abbonamento</string>
-    <string name="SubscriptionUrls">Urls</string>
+    <string name="SubscriptionUrls">URLs</string>
     <string name="SubscriptionUpdating">Aggiornamento Abbonamento</string>
     <string name="SubscriptionDelete">Elimina Abbonamento</string>
     <string name="ExportStickers">Esporta Adesivi</string>

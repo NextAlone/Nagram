@@ -6,7 +6,7 @@
     <string name="ChatAttachEnterMenuRecordAudio">Audio aufnehmen</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Linkvorschau deaktivieren</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Linkvorschau aktivieren</string>
-    <string name="DisableLinkPreviewByDefault">Deaktiviere standardmäßig die Linkvorschau</string>
+    <string name="DisableLinkPreviewByDefault">Standardmäßig die Linkvorschau deaktivieren</string>
     <string name="CustomApi">Benutzerdefinierte API</string>
     <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.\n\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
     <string name="CustomApiNo">Verwenden Sie keine benutzerdefinierte API</string>
@@ -215,4 +215,8 @@
     <string name="DisableLinkPreviewByDefaultNotice">Deaktivieren Sie die Linkvorschau-Anforderung standardmäßig während der Eingabe, um zu verhindern, dass der Server weiß, dass der Link über Telegram freigegeben wird.</string>
     <string name="UseChatAttachEnterMenuNotice">Ändern Sie die Aufnahmetaste in ein Eingabemenü und fügen Sie einen Linkvorschau-Toggle hinzu.</string>
     <string name="UseChatAttachEnterMenu">Verwenden Sie das Eingabemenü</string>
+    <string name="SetPinnedSuffix">(Angeheftet)</string>
+    <string name="UnpinSticker">Loslösen</string>
+    <string name="PinSticker">Anheften</string>
+    <string name="AppLinkFDroid">F-Droid</string>
 </resources>

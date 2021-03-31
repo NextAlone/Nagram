@@ -101,7 +101,7 @@
     <string name="UnblockAllWarn">您确定要解除屏蔽**所有用户和机器人**吗？</string>
     <string name="BlockedListEmpty">您还没有屏蔽任何人 :)</string>
     <string name="ProxyTypeVmess">Vmess 代理</string>
-    <string name="AddProxySocks5">添加 Socks5 代理</string>
+    <string name="AddProxySocks5">添加 SOCKS5 代理</string>
     <string name="AddProxyTelegram">添加 MTProto 代理</string>
     <string name="AddProxyVmess">添加 Vmess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>
@@ -226,4 +226,5 @@
     <string name="EnableStickerPinAbout">固定贴纸并在添加新贴纸时与云同步。
 \n与 \"禁用收藏夹和最近\" 配对。</string>
     <string name="EnableStickerPin">启用贴纸集置顶</string>
+    <string name="AppLinkFDroid">F-Droid</string>
 </resources>

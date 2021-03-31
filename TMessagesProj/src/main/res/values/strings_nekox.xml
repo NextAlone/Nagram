@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="NekoX" translatable="false">Nekogram X</string>
-
     <string name="Locked">Locked</string>
-
     <string name="AccDescrChatAttachEnterMenu">Chat input menu</string>
     <string name="ChatAttachEnterMenuRecordVideo">Record Video</string>
     <string name="ChatAttachEnterMenuRecordAudio">Record Audio</string>
@@ -14,14 +11,12 @@
     <string name="UseChatAttachEnterMenuNotice">Change the record button to an input menu, and add a link preview switch.</string>
     <string name="DisableLinkPreviewByDefault">Disable link preview by default</string>
     <string name="DisableLinkPreviewByDefaultNotice">Disable the link preview request during input by default to prevent the server from knowing that the link is shared through Telegram.</string>
-
     <string name="CustomApi">Custom API</string>
     <string name="UseCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="CustomApiNo">Don\'t use custom API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Manual input</string>
-
     <string name="CheckUpdate">Check Update</string>
     <string name="SwitchVersion">Switch Version</string>
     <string name="NoUpdate">No update found</string>
@@ -33,166 +28,127 @@
     <string name="Ignore">Ignore</string>
     <string name="UpdateDownloaded">An update has just been downloaded.</string>
     <string name="ProxyAutoSwitch">Proxy Auto Switch</string>
-
     <string name="LinkedGroupChat">Linked Group</string>
     <string name="LinkedChannelChat">Linked Channel</string>
-
-    <string name="DevModeTitle">**Your telegram account may be banned**</string>
+    <string name="DevModeTitle">**Your Telegram account may be banned**</string>
     <string name="DevModeNotice">We are not responsible for any improper use of developer features.</string>
-
     <string name="TapToDisable">Tap to disable. You don\'t need these.</string>
     <string name="PlaceHolder">Placeholder - Please Disable</string>
-
     <string name="CustomBackend">Custom Backend</string>
     <string name="CustomBackendNotice">This function is only provided for expert users, if you don\'t know what the following options represent, just ignore it.</string>
     <string name="CustomBackendProduction">Official Production DataCenter</string>
     <string name="CustomBackendTestDC">Official Test DataCenter</string>
     <string name="AllowFlashCall">Allow flash call</string>
-
     <string name="ChangeTranslateProvider">Change Provider</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
     <string name="GoogleCloudTransKeyNotice">If you set up a Google Cloud Trans Key, the cloud translation API will be called instead of submitting a fake form to the web version when translating (faster, stable and saving traffic).</string>
-
     <string name="TransToLang">Translation target language</string>
     <string name="TransInputToLang">Translation input target language</string>
     <string name="More">More</string>
-
     <string name="NekoXUpdatesChannel">NekoX Updates Channel</string>
     <string name="ShowIdAndDc">Show ID / DC in profile</string>
     <string name="UseDefaultTheme">Use default theme *</string>
     <string name="NightMode">Night Mode</string>
-
     <string name="PrivacyNotice">Privacy warning</string>
     <string name="PrivacyNoticePhoneVisible">It is detected that your mobile phone number is visible to anyone, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
     <string name="PrivacyNoticeAddByPhone">It is detected that you are not turned off the \"Allow find me through phone number\" Setting, which may cause a government-controlled hacker to find your true identity, please turn it off!</string>
     <string name="PrivacyNoticeP2p">It is detected that you have not turned off the \"Allow P2p calls\" Setting, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
     <string name="PrivacyNotice2fa">It is detected that you have not set a password, which may cause government-controlled hackers to find your true identity, please set one!</string>
-
     <string name="ApplySuggestion">OK, Apply it</string>
     <string name="DoNotRemindAgain">Don\'t remind again</string>
-
     <string name="RemoveTitleEmoji">Remove emoji in title</string>
-
     <string name="NekoXProxy">NekoX Public Proxy</string>
     <string name="PublicPrefix">Public</string>
-
     <string name="DisableChatAction">Don\'t send my input status</string>
     <string name="FakeScreenshot">Pretend screenshot</string>
-
     <string name="ImportPxy">Import</string>
-
     <string name="FilterNameUsers">Users</string>
     <string name="FilterNameUsersDescription">Only messages from private chats</string>
-
     <string name="FilterNameContacts">Contacts</string>
     <string name="FilterNameContactsDescription">Only messages from saved users</string>
-
     <string name="FilterNameGroups">Groups</string>
     <string name="FilterNameGroupsDescription">Only messages from group chats</string>
-
     <string name="FilterNameChannels">Channels</string>
     <string name="FilterNameChannelsDescription">Only messages from channels</string>
-
     <string name="FilterNameBots">Bots</string>
     <string name="FilterNameBotsDescription">Only messages from bots</string>
-
     <string name="FilterNameUnmuted">Unmuted</string>
     <string name="FilterNameUnmutedDescription">Only messages from unmuted chats</string>
-
     <string name="FilterNameUnread2">Unread</string>
     <string name="FilterNameUnreadDescription">Only unread messages</string>
-
     <string name="FilterNameUnmutedAndUnread">Unmuted &amp; Unread</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Only unread messages from unmuted chats</string>
-
     <string name="IgnoreMutedCount">Ignore muted unread count in folder tab</string>
-
     <string name="DialogsSettings">Dialogs Settings</string>
     <string name="SortMenu">Dialog Sort Settings</string>
     <string name="SortByUnread">Sort By Unread</string>
     <string name="SortByUnmuted">Sort By Unmuted</string>
     <string name="SortByUser">Sort By User</string>
     <string name="SortByContacts">Sort By Contacts</string>
-
     <string name="NekoXPushService">NekoX Push Service</string>
     <string name="EnablePushAlert">Please enable "NekoX Push Service"</string>
     <string name="DisablePushAlert">Please disable "NekoX Push Service"</string>
-
     <string name="DisableUndo">Disable Undo</string>
     <string name="DisableSystemAccount">Disable System Account</string>
     <string name="FilterMenu">Dialogs Filter Menu</string>
-
     <string name="DisableProxyWhenVpnEnabled">Disable proxy when VPN enabled</string>
     <string name="UseProxyItem">Use sidebar proxy item instead of button</string>
     <string name="HideProxyByDefault">Hide proxy settings by default</string>
     <string name="SkipOpenLinkConfirm">Skip open link confirm</string>
-
     <string name="DeleteAllInChat">Delete all in chat</string>
     <string name="DeleteAllInChatAlert">Warning! This will **delete all messages** in this chat for **all** participants.</string>
-
     <string name="UnblockAll">Unblock All</string>
     <string name="UnblockAllWarn">Are you sure you want to unblock **all users and bots**?</string>
     <string name="BlockedListEmpty">You haven\'t blocked anyone :)</string>
-
     <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Add Socks5 Proxy</string>
+    <string name="AddProxySocks5">Add SOCKS5 Proxy</string>
     <string name="AddProxyTelegram">Add MTProto Proxy</string>
     <string name="AddProxyVmess">Add Vmess Proxy</string>
     <string name="AddProxySS">Add Shadowsocks Proxy</string>
     <string name="AddProxySSR">Add ShadowsocksR Proxy</string>
     <string name="AddProxyTrojan">Add Trojan Proxy</string>
     <string name="SSPluginConflictingName">Several plugins use this id: %s.</string>
-
     <string name="EditProxy">Edit Proxy</string>
     <string name="ShareProxy">Share Proxy</string>
     <string name="ProxyDelete">Delete Proxy</string>
-
     <string name="ProxyInfoVmess">Vmess Proxy Settings</string>
-    <string name="VmessUserId">User Id</string>
-    <string name="VmessAlterId">Alter Id</string>
+    <string name="VmessUserId">User ID</string>
+    <string name="VmessAlterId">Alter ID</string>
     <string name="VmessSecurity">Security</string>
     <string name="VmessNetwork">Network</string>
     <string name="VmessHeadType">Head Type</string>
     <string name="VmessRequestHost">Request Host / QUIC Security</string>
     <string name="VmessPath">Path / QUIC Key</string>
     <string name="VmessTls">Use TLS</string>
-
     <string name="ProxyInfoSS">Shadowsocks Proxy Settings</string>
     <string name="SSPassword">Password</string>
     <string name="SSMethod">Encrypt Method</string>
     <string name="SSPlugin">Plugin</string>
     <string name="SSPluginOpts">Plugin Configuration</string>
-
     <string name="ProxyInfoSSR">ShadowsocksR Proxy Settings</string>
     <string name="SSRProtocol">Protocol</string>
     <string name="SSRProtocolParams">Protocol Params</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Obfs Param</string>
-
     <string name="ProxyInfoTrojan">Trojan Proxy Settings</string>
     <string name="TrojanSNI">SNI (Optional)</string>
-
     <string name="ProxyRemarks">Remarks</string>
     <string name="RetestPing">Retest ping for all servers</string>
     <string name="ReorderByPing">Reorder servers by ping</string>
     <string name="ExportProxies">Export servers to file</string>
     <string name="ImportProxies">Import servers from file</string>
     <string name="ImportProxyList">Import proxy servers</string>
-
     <string name="ProxySubscription">Proxy Subscription</string>
     <string name="ProxySubDetails">Subscription Details</string>
-    <string name="SubscriptionUrls">Urls</string>
+    <string name="SubscriptionUrls">URLs</string>
     <string name="SubscriptionUpdating">Updating Subscription</string>
     <string name="SubscriptionDelete">Delete Subscription</string>
-
     <string name="ExportStickers">Export Stickers</string>
     <string name="ImportStickers">Import stickers from file</string>
     <string name="ImportStickersList">Import stickers</string>
-
     <string name="StickerSets">Sticker Sets</string>
     <string name="InvalidStickersFile">Invalid stickers file: </string>
-
     <string name="InvalidProxyFile">Invalid proxy list file: </string>
     <string name="ImportedProxies">Imported proxy servers: </string>
     <string name="ErrorsInImport">Import errors: </string>
@@ -201,45 +157,34 @@
     <string name="DeleteUnavailableServer">Delete unavailable servers</string>
     <string name="DeleteAllServerConfirm">Are you sure you want to **delete all servers**?</string>
     <string name="DeleteUnavailableServerConfirm">Are you sure you want to **delete unavailable servers**?</string>
-
     <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
     <string name="MinApi23Required">Sorry, you need at least Android 6 (API23).</string>
-
     <string name="MiniVersionAlert">Sorry, mini version not support this type of proxy, please switch version in settings.</string>
-
     <string name="ImportProxyFromClipboard">Import From Clipboard</string>
     <string name="BrokenLink">Unknown / Broken Link</string>
-
     <string name="ShareQRCode">QR Code</string>
     <string name="ScanQRCode">Scan QR Code</string>
-
     <string name="NoQrFound">No QR Code found</string>
-
     <string name="EnableDeveloperMode">Enable Developer Mode</string>
     <string name="DisableDeveloperMode">Disable Developer Mode</string>
     <string name="DeveloperSettings">Developer Settings</string>
     <string name="LoginSettings">Login Settings</string>
-
     <string name="NekoXFaq">NekoX FAQ</string>
-
     <string name="TransSite">Translate Platform</string>
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>
     <string name="OpenPGPKey">OpenPGP Key</string>
     <string name="None">None</string>
     <string name="Sign">Sign</string>
-
     <string name="PGPDecrypt">Decrypt Message</string>
     <string name="PGPVerify">Verify Message</string>
     <string name="PGPImport">Import Public Key</string>
     <string name="PGPImportPrivate">Import Private Key</string>
     <string name="ShareMyKey">Share My Public Key</string>
-
     <string name="DisableVibration">Disable Vibration</string>
     <string name="IgnoreContentRestrictions">Ignore content restrictions</string>
     <string name="IgnoreContentRestrictionsNotice">Ignores android restrictions on messages locally. This may be banned by the server in the future, and you will need to evaluate the local legality of this option yourself.</string>
     <string name="SendCommentAfterForward">Send comment after forwarding</string>
-
     <string name="UnpinMessageX">Unpin message</string>
     <string name="UnpinMessagesAll">Unpin all messages</string>
     <string name="DismissForYourself">Dismiss for yourself</string>
@@ -248,10 +193,8 @@
     <string name="QRLoginConfirm">Confirm Login</string>
     <string name="StorageReset">Clear Storage</string>
     <string name="StorageResetInfo">All data of this application will be permanently deleted (and try to log out of all accounts first).</string>
-
     <string name="FCTitle">About application updates</string>
     <string name="FCInfo">Follow our announcements and updates channel?</string>
-
     <string name="OpenCC" translatable="false">OpenCC</string>
     <string name="CCTitle">OpenCC (Chinese Convert)</string>
     <string name="CCTarget">Target</string>
@@ -262,33 +205,24 @@
     <string name="CCSC">Simplified Chinese</string>
     <string name="CCSP">Simplified Chinese (China)</string>
     <string name="CCJP">New Japanese Kanji (Shinjitai)</string>
-
     <string name="UserRestrictionsSendGames">Send Games</string>
     <string name="UserRestrictionsSendInline">Send via Inline Bots</string>
-
     <string name="AcceptSecretChat">Accept new secret chat</string>
-
     <string name="TabletMode">Tablet mode</string>
     <string name="TabletModeDefault">Depends on device</string>
     <string name="ReplaceText">Replace Text</string>
     <string name="TextOrigin">Origin</string>
     <string name="TextReplace">Replace</string>
     <string name="ReplaceRegex">Use regex</string>
-
     <string name="DisableTrending">Disable Trending</string>
-
     <string name="AutoDownload">AutoDownload</string>
     <string name="Win32ExecutableFiles">Win32 executable files</string>
     <string name="ArchiveFiles">Archive files</string>
-
     <string name="EnableStickerPin">Enable Pinning Sticker</string>
     <string name="EnableStickerPinAbout">Pin Stickers and sync with cloud even when adding new stickers.\nPaired with Disable Favorite and Recent.</string>
     <string name="EnableStickerPinTip">This function is still under development, syncing with cloud may not work as thought.</string>
-
     <string name="PinSticker">Pin</string>
     <string name="UnpinSticker">Unpin</string>
     <string name="SetPinnedSuffix">(Pinned)</string>
-
     <string name="AppLinkFDroid">F-Droid</string>
-
 </resources>

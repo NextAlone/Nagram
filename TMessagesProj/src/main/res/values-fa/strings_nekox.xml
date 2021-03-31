@@ -24,7 +24,7 @@
     <string name="UpdateAvailable">به روز رسانی جدید موجود است</string>
     <string name="UpdateUpdate">به روز رسانی</string>
     <string name="UpdateLater">بعدا</string>
-    <string name="DownloadFailed">بارگیری با شکست مواجه شد</string>
+    <string name="DownloadFailed">بارگیری شکست خورد</string>
     <string name="Install">نصب</string>
     <string name="Ignore">نادیده گرفتن</string>
     <string name="UpdateDownloaded">یک آپدیت به تازگی بارگیری شده است.</string>
@@ -48,8 +48,8 @@
     <string name="TransInputToLang">زبان ترجمه پیام ورودی</string>
     <string name="More">بیشتر</string>
     <string name="NekoXUpdatesChannel">کانال بروزرسانی NekoX</string>
-    <string name="ShowIdAndDc">نمایش شناسه/DC کاربر در پروفایل</string>
-    <string name="UseDefaultTheme">استفاده تم پیشفرض</string>
+    <string name="ShowIdAndDc">نمایش شناسه / DC کاربر در پروفایل</string>
+    <string name="UseDefaultTheme">بکارگیری پوستۀ پیشـگزیده *</string>
     <string name="NightMode">حالت شب</string>
     <string name="PrivacyNotice">هشدار حریم خصوصی</string>
     <string name="PrivacyNoticePhoneVisible">بنظر می رسد شماره تلفن شما برای همه قابل مشاهده است، و این ممکن باعث شود که هکرهای دولتی هویت واقعی شما را پیدا کنند. لطفا آن را خاموش کنید!</string>
@@ -60,15 +60,15 @@
     <string name="DoNotRemindAgain">دیگر یادآوری نشود</string>
     <string name="RemoveTitleEmoji">حذف ایموجی کنار اسم Nekogram X</string>
     <string name="NekoXProxy">پروکسی عمومی NekoX</string>
-    <string name="PublicPrefix">عمومی</string>
-    <string name="DisableChatAction">وضعیت مرا ارسال نکن</string>
+    <string name="PublicPrefix">همگانی</string>
+    <string name="DisableChatAction">عدم ارسال وضعیت ورودی</string>
     <string name="FakeScreenshot">تظاهر کردن عکس از صفحه</string>
     <string name="ImportPxy">وارد كردن</string>
     <string name="FilterNameUsers">کاربران</string>
     <string name="FilterNameUsersDescription">فقط پیام های چت های خصوصی</string>
     <string name="FilterNameContacts">مخاطبین</string>
     <string name="FilterNameContactsDescription">فقط پیام های کاربران ذخیره شده</string>
-    <string name="FilterNameGroups">گروه ها</string>
+    <string name="FilterNameGroups">گروه‌ها</string>
     <string name="FilterNameGroupsDescription">فقط پیام های گفتگو های گروهی</string>
     <string name="FilterNameChannels">کانال ها</string>
     <string name="FilterNameChannelsDescription">فقط پیام های کانال ها</string>
@@ -80,7 +80,7 @@
     <string name="FilterNameUnreadDescription">فقط پیام های خوانده نشده</string>
     <string name="FilterNameUnmutedAndUnread">صدا دار&amp; خوانده نشده</string>
     <string name="FilterNameUnmutedAndUnreadDescription">فقط پیام های خوانده نشده از گفتگو های صدادار</string>
-    <string name="IgnoreMutedCount">نمایش ندادن شمارشگر چت های خوانده نشده در پوشه ی تب ها</string>
+    <string name="IgnoreMutedCount">عدم شمارش چت‌های بی‌صدا در تب پوشه‌ها</string>
     <string name="DialogsSettings">تنظیمات گفتگو ها</string>
     <string name="SortMenu">تنظیمات مرتب سازی گفتگو</string>
     <string name="SortByUnread">ترتیب بر اساس خوانده نشده</string>
@@ -94,8 +94,8 @@
     <string name="DisableSystemAccount">غیرفعال کردن حساب کاربری سیستم</string>
     <string name="FilterMenu">منوی فیلتر گفتگو ها</string>
     <string name="DisableProxyWhenVpnEnabled">غیرفعال کردن پروکسی هنگام فعال بودن VPN</string>
-    <string name="UseProxyItem">نمایش دکمه پروکسی در منوی کناری به جای نوار بالا</string>
-    <string name="HideProxyByDefault">مخفی کردن دکمه تنظیمات پروکسی بطور پیش فرض</string>
+    <string name="UseProxyItem">دکمه پروکسی در منوی کناری بجای صفحه اصلی</string>
+    <string name="HideProxyByDefault">‌مخفی کردن دکمه پروکسی بطور پیش‌فرض</string>
     <string name="SkipOpenLinkConfirm">غیرفعال کردن کادر تایید باز شدن لینک</string>
     <string name="DeleteAllInChat">حذف همه در این گفتگو</string>
     <string name="DeleteAllInChatAlert">هشدار! با این کار ، **تمام پیام ها** در این گفتگو برای همه شرکت کنندگان حذف می شود.</string>
@@ -106,8 +106,8 @@
     <string name="AddProxySocks5">افزودن پروکسی Socks5</string>
     <string name="AddProxyTelegram">افزودن پروکسی MTProto</string>
     <string name="AddProxyVmess">افزودن پروکسی Vmess</string>
-    <string name="AddProxySS">افزودن پروکسی شدوساکس</string>
-    <string name="AddProxySSR">افزودن پروکسی شدوساکس آر</string>
+    <string name="AddProxySS">افزودن پروکسی Shadowsocks</string>
+    <string name="AddProxySSR">افزودن پروکسی ShadowsocksR</string>
     <string name="AddProxyTrojan">افزودن پروکسی Trojan</string>
     <string name="SSPluginConflictingName">چندین افزونه از این شناسه استفاده می کنند: %s.</string>
     <string name="EditProxy">ویرایش پروکسی</string>
@@ -162,7 +162,7 @@
     <string name="MinApi23Required">متأسفیم ، حداقل به (Android 6 (API23 نیاز دارید.</string>
     <string name="MiniVersionAlert">متأسفیم، نسخه سبک (مینی) از این نوع پروکسی پشتیبانی نمی کند. لطفاً نسخه را در تنظیمات تغییر دهید.</string>
     <string name="ImportProxyFromClipboard">وارد کردن از کلیپ بورد</string>
-    <string name="BrokenLink">لینک خراب/ناشناخته</string>
+    <string name="BrokenLink">لینک خراب / ناشناخته</string>
     <string name="ShareQRCode">کد QR</string>
     <string name="ScanQRCode">اسکن کد QR</string>
     <string name="NoQrFound">هیچ کد QR یافت نشد</string>
@@ -223,8 +223,8 @@
     <string name="UnpinSticker">عدم پین</string>
     <string name="PinSticker">پین</string>
     <string name="EnableStickerPinTip">این عملکرد هنوز درحال توسعه است، همگام‌سازی ابری ممکن است آن‌طور که مورد انتظار است کار نکند.</string>
-    <string name="EnableStickerPinAbout">استیکر ها حتی هنگام افزودن استیکر‌های جدید پین و همگام‌سازی ابری می‌شوند.
-\nبا خاموش‌کردن علاقمندی و اخیر جفت شده است.</string>
+    <string name="EnableStickerPinAbout">استیکر ها حتی هنگام افزودن استیکر‌های جدید، پین و همگام‌سازی ابری می‌شوند.
+\nاین گزینه با خاموش‌کردن علاقمندی و استیکر‌های اخیر جفت شده است.</string>
     <string name="EnableStickerPin">فعالسازی پین‌کردن استیکر</string>
     <string name="ArchiveFiles">فایل‌های آرشیو</string>
     <string name="Win32ExecutableFiles">فایل‌های قابل اجرای Win32</string>

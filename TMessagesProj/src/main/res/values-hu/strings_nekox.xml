@@ -139,7 +139,7 @@
     <string name="ImportProxyList">Importálja a proxy szervereket</string>
     <string name="ProxySubscription">Proxy előfizetés</string>
     <string name="ProxySubDetails">Előfizetés részletei</string>
-    <string name="SubscriptionUrls">Url-ek</string>
+    <string name="SubscriptionUrls">URL-ek</string>
     <string name="SubscriptionUpdating">Az előfizetés frissítése</string>
     <string name="SubscriptionDelete">Előfizetés törlése</string>
     <string name="ExportStickers">Matricák exportálása</string>

@@ -197,4 +197,10 @@
     <string name="ReplaceRegex">Utiliser regex</string>
     <string name="DisableTrending">Désactiver les tendances</string>
     <string name="HideDeviceInfo">Cacher le modèle de l\'appareil</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(Épinglé)</string>
+    <string name="UnpinSticker">Désépingler</string>
+    <string name="PinSticker">Épingler</string>
+    <string name="UseChatAttachEnterMenuNotice">Remplacez le bouton d\'enregistrement par un menu de saisie et ajoutez un commutateur d\'aperçu de lien.</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu de saisie de la discussion</string>
 </resources>

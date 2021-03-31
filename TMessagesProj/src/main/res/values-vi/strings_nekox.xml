@@ -140,7 +140,7 @@
     <string name="ImportProxyList">Nhập máy chủ proxy</string>
     <string name="ProxySubscription">Đăng ký proxy</string>
     <string name="ProxySubDetails">Chi tiết Đăng ký</string>
-    <string name="SubscriptionUrls">Urls</string>
+    <string name="SubscriptionUrls">URLs</string>
     <string name="SubscriptionUpdating">Đang cập nhật đăng ký</string>
     <string name="SubscriptionDelete">Xóa đăng ký</string>
     <string name="ExportStickers">Xuất nhãn dán</string>
