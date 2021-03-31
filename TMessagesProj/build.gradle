@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def verName = "7.6.0"
-def verCode = 200 + 3 * 19
+def verName = "7.6.0-1"
+def verCode = 200 + 3 * 20
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
@@ -386,9 +386,9 @@ dependencies {
     implementation 'dnsjava:dnsjava:3.3.1'
     implementation 'org.dizitart:nitrite:3.4.3'
 
-    implementation 'cn.hutool:hutool-core:5.6.1'
-    implementation 'cn.hutool:hutool-crypto:5.6.1'
-    implementation 'cn.hutool:hutool-http:5.6.1'
+    implementation 'cn.hutool:hutool-core:5.6.2'
+    implementation 'cn.hutool:hutool-crypto:5.6.2'
+    implementation 'cn.hutool:hutool-http:5.6.2'
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
     compileOnly 'org.yaml:snakeyaml:1.28'
