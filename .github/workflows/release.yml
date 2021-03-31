@@ -90,6 +90,13 @@ jobs:
     needs:
       - ffmpeg
       - boringssl
+    strategy:
+      matrix:
+        flavor:
+          - armeabi-v7a
+          - arm64-v8a
+          - x86
+          - x86_64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -103,7 +110,7 @@ jobs:
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-${{ matrix.flavor }}
       - name: Checkout Library
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -139,6 +146,7 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          export NATIVE_TARGET="${{ matrix.flavor }}"
           ./run libs native
   v2ray:
     name: Native Build (V2ray)
@@ -263,12 +271,30 @@ jobs:
           git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
           git submodule status 'ssr-libev/*' > shadowsocksr_status
           git submodule status v2ray > v2ray_status
-      - name: Native Cache
+      - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
+      - name: Native Cache (arm64-v8a)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
+      - name: Native Cache (x86)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
+      - name: Native Cache (x86_64)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
       - name: V2ray Cache
         uses: actions/cache@v2
         with:

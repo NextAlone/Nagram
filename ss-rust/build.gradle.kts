@@ -28,10 +28,11 @@ android {
     }
     buildToolsVersion = "30.0.3"
 
-    if (targetAbi.isNotBlank()) {
-        splits.abi.exclude(* when (targetAbi) {
-            "arm" -> arrayOf("x86", "x86_64", "arm64-v8a")
-            "arm64" -> arrayOf("x86", "x86_64", "armeabi-v7a")
+    if (targetAbi.isNotBlank()) splits.abi {
+        reset()
+        include(* when (targetAbi) {
+            "arm" -> arrayOf("armeabi-v7a")
+            "arm64" -> arrayOf("arm64-v8a")
             else -> arrayOf("x86", "x86_64")
         })
     }
