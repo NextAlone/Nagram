@@ -1034,7 +1034,7 @@ void ConnectionSocket::onHostNameResolved(std::string host, std::string ip, bool
             // NekoX: ipv6 Proxy with domain resolved, fix socket
             // Since default socket type is IPv4 (isProxyIPv6 == false)
             if (!ConnectionsManager::getInstance(instanceNum).proxyAddress.empty() && ipv6) {
-                if (LOGS_ENABLED) DEBUG_D("connection(%p) recreate proxy socket when use resolved ipv6 address, host:%s, ip:%s, port:%d isIPv6: %d", this, host.c_str(), ip.c_str(), overrideProxyPort, ipv6);
+                if (LOGS_ENABLED) DEBUG_D("connection(%p) recreate proxy socket when use resolved ipv6 address, host:%s, ip:%s, port:%d isIPv6: %d", this, host.c_str(), ip.c_str(), ConnectionsManager::getInstance(instanceNum).proxyPort, ipv6);
                 // recreate socket
                 close(socketFd);
                 if ((socketFd = socket(AF_INET6 , SOCK_STREAM, 0)) < 0) {
