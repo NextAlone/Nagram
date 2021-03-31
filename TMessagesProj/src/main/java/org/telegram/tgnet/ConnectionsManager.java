@@ -774,11 +774,18 @@ public class ConnectionsManager extends BaseController {
         });
     }
 
+    private static byte ipStrategy = -1;
+    public static boolean hasIpv4;
+    public static boolean hasStrangeIpv4;
+    public static boolean hasIpv6;
+
     @SuppressLint("NewApi")
     public static byte getIpStrategy() {
         if (Build.VERSION.SDK_INT < 19) {
             return USE_IPV4_ONLY;
         }
+        if (ipStrategy != -1) return ipStrategy;
+
         if (BuildVars.LOGS_ENABLED) {
             try {
                 NetworkInterface networkInterface;
@@ -804,9 +811,6 @@ public class ConnectionsManager extends BaseController {
         try {
             NetworkInterface networkInterface;
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-            boolean hasIpv4 = false;
-            boolean hasIpv6 = false;
-            boolean hasStrangeIpv4 = false;
             while (networkInterfaces.hasMoreElements()) {
                 networkInterface = networkInterfaces.nextElement();
                 if (!networkInterface.isUp() || networkInterface.isLoopback()) {
@@ -833,20 +837,22 @@ public class ConnectionsManager extends BaseController {
             }
             if (hasIpv6) {
                 if (hasStrangeIpv4) {
-                    return USE_IPV4_IPV6_RANDOM;
+                    ipStrategy = USE_IPV4_IPV6_RANDOM;
                 }
                 if (!hasIpv4) {
-                    return USE_IPV6_ONLY;
+                    ipStrategy = USE_IPV6_ONLY;
                 }
                 if (NekoConfig.useIPv6) {
-                    return USE_IPV4_IPV6_RANDOM;
+                    ipStrategy = USE_IPV4_IPV6_RANDOM;
                 }
+                return ipStrategy;
             }
         } catch (Throwable e) {
             FileLog.e(e);
         }
 
-        return USE_IPV4_ONLY;
+        ipStrategy = USE_IPV4_ONLY;
+        return ipStrategy;
     }
 
     private static class ResolveHostByNameTask extends AsyncTask<Void, Void, ResolvedDomain> {

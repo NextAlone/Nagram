@@ -5,27 +5,37 @@ import cn.hutool.http.HttpUtil
 import org.telegram.messenger.FileLog
 import org.telegram.tgnet.ConnectionsManager
 import org.xbill.DNS.*
+import tw.nekomimi.nekogram.NekoConfig
 import java.net.InetAddress
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 object DnsFactory {
 
     val providers = arrayOf(
-            "https://dns.twnic.tw/dns-query",
             "https://mozilla.cloudflare-dns.com/dns-query",
-            "https://dns.google/dns-query"
+            "https://dns.adguard.com/dns-query",
+            if (Locale.getDefault().country == "CN") "https://dns.alidns.com/dns-query" else "https://dns.google/dns-query",
     )
 
     val cache = Cache()
 
     @JvmStatic
-    fun lookup(domain: String): List<InetAddress> {
+    @JvmOverloads
+    fun lookup(domain: String, fallback: Boolean = false): List<InetAddress> {
 
         FileLog.d("Lookup $domain")
 
-        val type = if (ConnectionsManager.getIpStrategy() != ConnectionsManager.USE_IPV6_ONLY) Type.A else Type.AAAA
-        val dc = DClass.IN
+        ConnectionsManager.getIpStrategy()
 
+        val noFallback = !ConnectionsManager.hasIpv4 || !ConnectionsManager.hasIpv6
+
+        val type = if (noFallback) {
+            if (ConnectionsManager.hasIpv4) Type.A else Type.AAAA
+        } else if (NekoConfig.useIPv6 xor !fallback) Type.A else Type.AAAA
+
+        val dc = DClass.IN
         val name = Name.fromConstantString("$domain.")
         val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
         var sr = cache.lookupRecords(name, type, dc)
@@ -34,20 +44,20 @@ object DnsFactory {
             FileLog.d("Provider $provider")
 
             try {
-
                 val response = HttpUtil.createPost(provider)
                         .contentType("application/dns-message")
                         .header(Header.ACCEPT, "application/dns-message")
                         .body(message)
+                        .setConnectionTimeout(5000)
                         .execute()
                 if (!response.isOk) continue
                 val result = Message(response.bodyBytes())
                 val rcode = result.header.rcode
-                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN) continue
+                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN && rcode != Rcode.NXRRSET) continue
                 cache.addMessage(result)
                 sr = cache.lookupRecords(name, type, dc)
                 if (sr == null) sr = cache.lookupRecords(name, type, dc)
-                if (sr.isSuccessful || sr.isNXDOMAIN) break
+                break
             } catch (e: Exception) {
             }
         }
@@ -60,14 +70,23 @@ object DnsFactory {
             val addresses = records.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
             FileLog.d(addresses.toString())
             return addresses
-        } else if (sr.isNXDOMAIN) {
-            FileLog.d("NXDOMAIN")
-            return listOf()
         }
 
-        runCatching { return InetAddress.getAllByName(domain).toList() }
-        return listOf()
+        FileLog.d(sr.toString())
 
+        if (sr.isNXRRSET && !noFallback && !fallback) {
+            return lookup(domain, true)
+        }
+
+        FileLog.d("Try system dns")
+
+        try {
+            return InetAddress.getAllByName(domain).toList()
+        } catch (e: Exception) {
+            FileLog.d("System dns fail: ${e.message ?: e.javaClass.simpleName}")
+        }
+
+        return listOf()
     }
 
     @JvmStatic
@@ -91,15 +110,16 @@ object DnsFactory {
                         .contentType("application/dns-message")
                         .header(Header.ACCEPT, "application/dns-message")
                         .body(message)
+                        .setConnectionTimeout(5000)
                         .execute()
                 if (!response.isOk) continue
                 val result = Message(response.bodyBytes())
                 val rcode = result.header.rcode
-                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN) continue
+                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN && rcode != Rcode.NXRRSET) continue
                 cache.addMessage(result)
                 sr = cache.lookupRecords(name, type, dc)
                 if (sr == null) sr = cache.lookupRecords(name, type, dc)
-                if (sr.isSuccessful || sr.isNXDOMAIN) break
+                break
             } catch (e: Exception) {
                 FileLog.e(e)
             }
@@ -110,10 +130,9 @@ object DnsFactory {
                 sr.answers().forEach { rRset -> rRset.rrs(true).filterIsInstance<TXTRecord>().forEach { addAll(it.strings) } }
             }
             FileLog.d(txts.toString())
-        } else if (sr.isNXDOMAIN) {
-            FileLog.d("NXDOMAIN")
-            return listOf()
         }
+
+        FileLog.d(sr.toString())
 
         return listOf()
 
