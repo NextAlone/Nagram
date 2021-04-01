@@ -279,7 +279,7 @@ public class NekoConfig {
         mediaPreview = preferences.getBoolean("mediaPreview", true);
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
-        usePersianCalender = preferences.getBoolean("usePersianCalender", false);
+        usePersianCalender = preferences.getBoolean("usePersianCalender", LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode.contentEquals("fa"));
         openPGPApp = preferences.getString("openPGPApp", "");
         openPGPKeyId = preferences.getLong("openPGPKeyId", 0L);
 
