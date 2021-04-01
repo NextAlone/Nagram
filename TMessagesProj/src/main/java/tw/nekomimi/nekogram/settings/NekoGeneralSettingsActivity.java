@@ -481,10 +481,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 ActionBarLayout.headerShadowDrawable = NekoConfig.disableAppBarShadow ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
             } else if (position == usePersianCalenderRow) {
-               /* NekoConfig.toggleUsePersianCalender();
+                NekoConfig.toggleUsePersianCalender();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.usePersianCalender);
-                }*/
+                }
             } else if (position == pgpAppRow) {
 
                 PopupBuilder builder = new PopupBuilder(view);
@@ -774,7 +774,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
-        usePersianCalenderRow = -1;
+        usePersianCalenderRow = rowCount ++;
         general2Row = rowCount++;
 
         if (notify && listAdapter != null) {
@@ -978,6 +978,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == appBarShadowRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, true);
                     } else if (position == usePersianCalenderRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("UsePersianCalender", R.string.UsePersianCalender), LocaleController.getString("UsePersianCalenderInfo", R.string.UsePersianCalenderInfo), NekoConfig.usePersianCalender, true, true);
                     } else if (position == autoPauseVideoRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
                     } else if (position == acceptSecretChatRow) {
