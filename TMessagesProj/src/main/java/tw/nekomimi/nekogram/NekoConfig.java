@@ -119,7 +119,8 @@ public class NekoConfig {
     public static boolean mediaPreview;
 
     public static boolean proxyAutoSwitch;
-    public static boolean usePersianCalender;
+
+    public static int usePersianCalendar;
 
     public static String openPGPApp;
     public static long openPGPKeyId;
@@ -279,7 +280,8 @@ public class NekoConfig {
         mediaPreview = preferences.getBoolean("mediaPreview", true);
 
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
-        usePersianCalender = preferences.getBoolean("usePersianCalender", LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode.contentEquals("fa"));
+
+        usePersianCalendar = preferences.getInt("persian_calendar", 0);
         openPGPApp = preferences.getString("openPGPApp", "");
         openPGPKeyId = preferences.getLong("openPGPKeyId", 0L);
 
@@ -691,7 +693,7 @@ public class NekoConfig {
     }
 
     public static void toggleUsePersianCalender() {
-        preferences.edit().putBoolean("usePersianCalender", usePersianCalender = !usePersianCalender).apply();
+        preferences.edit().putInt("persian_calendar", usePersianCalendar = usePersianCalendar > 1 ? 1 : 2).apply();
     }
 
     public static void setOpenPGPApp(String packageName) {
