@@ -694,7 +694,7 @@ public class NekoConfig {
         preferences.edit().putBoolean("proxy_auto_switch", proxyAutoSwitch = !proxyAutoSwitch).apply();
     }
 
-    public static void toggleUsePersianCalender() {
+    public static void toggleUsePersiancalendar() {
         preferences.edit().putInt("persian_calendar", usePersianCalendar = usePersianCalendar > 1 ? 1 : 2).apply();
     }
 

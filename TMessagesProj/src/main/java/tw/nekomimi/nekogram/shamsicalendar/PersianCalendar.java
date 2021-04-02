@@ -53,6 +53,14 @@ public class PersianCalendar extends GregorianCalendar {
         return this.persianYear;
     }
 
+    public String getPersianYearName() {
+        if (NekoConfig.displayPersianCalendarByLatin) {
+            return getPersianYear() + "";
+        } else {
+            return LanguageUtils.getPersianNumbers(String.valueOf(this.persianYear));
+        }
+    }
+
     public int getPersianMonth() {
         return this.persianMonth;
     }
@@ -77,6 +85,7 @@ public class PersianCalendar extends GregorianCalendar {
         }
     }
 
+
     public String getPersianWeekDayName() {
         switch (get(7)) {
             case 1:
@@ -97,17 +106,17 @@ public class PersianCalendar extends GregorianCalendar {
     }
 
     public String getPersianLongDate() {
-        return getPersianWeekDayName() + "  " + getPersianDayName() + "  " + getPersianMonthName() + "  " + this.persianYear;
+        return getPersianWeekDayName() + " " + getPersianDayName() + " " + getPersianMonthName() + " " + this.persianYear;
     }
 
 
     public String getPersianNormalDate() {
-        return getPersianDayName() + "  " + getPersianMonthName() + "  " + getPersianDayName();
+        return getPersianDayName() + " " + getPersianMonthName() + " " + getPersianYearName();
     }
 
     //like 9 شهریور
     public String getPersianMonthDay() {
-        return getPersianDayName() + "  " + getPersianMonthName();
+        return getPersianDayName() + " " + getPersianMonthName();
     }
 
     public String getPersianLongDateAndTime() {

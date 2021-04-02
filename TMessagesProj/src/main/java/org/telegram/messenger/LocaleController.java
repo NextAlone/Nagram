@@ -1456,7 +1456,7 @@ public class LocaleController {
                 }
             } else {
                 if (usePersianCalendar) {
-                    return persianCalendar.getPersianYear() + "" + persianCalendar.getPersianMonthDay();
+                    return persianCalendar.getPersianMonthDay() + " " + persianCalendar.getPersianYear();
                 } else {
                     return getInstance().chatFullDate.format(date);
                 }

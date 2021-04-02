@@ -482,7 +482,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 ActionBarLayout.headerShadowDrawable = NekoConfig.disableAppBarShadow ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
             } else if (position == usePersianCalendarRow) {
-                NekoConfig.toggleUsePersianCalender();
+                NekoConfig.toggleUsePersiancalendar();
                 LocaleController.reloadPersianCalendarConfig();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(LocaleController.usePersianCalendar);
@@ -986,7 +986,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == appBarShadowRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, true);
                     } else if (position == usePersianCalendarRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("UsePersianCalender", R.string.UsePersianCalender), LocaleController.getString("UsePersianCalenderInfo", R.string.UsePersianCalenderInfo), LocaleController.usePersianCalendar, true, true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("UsePersiancalendar", R.string.UsePersiancalendar), LocaleController.getString("UsePersiancalendarInfo", R.string.UsePersiancalendarInfo), LocaleController.usePersianCalendar, true, true);
                     } else if (position == displayPersianCalendarByLatinRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisplayPersianCalendarByLatin", R.string.DisplayPersianCalendarByLatin), NekoConfig.displayPersianCalendarByLatin, false);
                     } else if (position == autoPauseVideoRow) {

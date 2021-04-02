@@ -225,7 +225,7 @@
     <string name="UnpinSticker">Unpin</string>
     <string name="SetPinnedSuffix">(Pinned)</string>
     <string name="AppLinkFDroid">F-Droid</string>
-    <string name="UsePersianCalender">Use persian calender</string>
-    <string name="UsePersianCalenderInfo">Display date with Solar Hijri calendar</string>
+    <string name="UsePersiancalendar">Use persian calendar</string>
+    <string name="UsePersiancalendarInfo">Display date with Solar Hijri calendar</string>
     <string name="DisplayPersianCalendarByLatin">Display persian calendar by latin characters</string>
 </resources>
