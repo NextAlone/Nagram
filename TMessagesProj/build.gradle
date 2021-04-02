@@ -377,7 +377,7 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.sharetarget:sharetarget:1.1.0"
 
-    compileOnly "org.checkerframework:checker-qual:3.11.0"
+    compileOnly "org.checkerframework:checker-qual:3.12.0"
     compileOnly "org.checkerframework:checker-compat-qual:2.5.5"
 
     // don"t change this :)
