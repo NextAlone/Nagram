@@ -283,7 +283,7 @@ public class NekoConfig {
         proxyAutoSwitch = preferences.getBoolean("proxy_auto_switch", false);
 
         usePersianCalendar = preferences.getInt("persian_calendar", 0);
-        displayPersianCalendarByLatin = preferences.getBoolean("diaplayPersianCalendarByLatin", false);
+        displayPersianCalendarByLatin = preferences.getBoolean("displayPersianCalendarByLatin", false);
         openPGPApp = preferences.getString("openPGPApp", "");
         openPGPKeyId = preferences.getLong("openPGPKeyId", 0L);
 
@@ -699,7 +699,7 @@ public class NekoConfig {
     }
 
     public static void toggleDisplayPersianCalendarByLatin() {
-        preferences.edit().putBoolean("displayPersianCalendarByLatin", displayPersianCalendarByLatin =  !displayPersianCalendarByLatin).apply();
+        preferences.edit().putBoolean("displayPersianCalendarByLatin", displayPersianCalendarByLatin = !displayPersianCalendarByLatin).apply();
     }
 
     public static void setOpenPGPApp(String packageName) {
