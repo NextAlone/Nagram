@@ -202,6 +202,7 @@ android {
             multiDexEnabled true
             zipAlignEnabled true
             signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
+            ndk.debugSymbolLevel = 'FULL'
         }
 
         releaseNoGcm {
