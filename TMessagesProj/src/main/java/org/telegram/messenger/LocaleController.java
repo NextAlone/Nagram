@@ -22,6 +22,9 @@ import android.text.format.DateFormat;
 import android.util.Xml;
 import android.view.Gravity;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.telegram.messenger.support.ArrayUtils;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
@@ -47,6 +50,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.LocFiltersKt;
 import tw.nekomimi.nekogram.shamsicalendar.PersianCalendar;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.GsonUtil;
 
 public class LocaleController {
 
@@ -2054,6 +2058,7 @@ public class LocaleController {
                         TLRPC.TL_langPackLanguage language = (TLRPC.TL_langPackLanguage) res.objects.get(a);
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.d("loaded lang " + language.name);
+                            FileLog.d(GsonUtil.formatObject(language));
                         }
                         LocaleInfo localeInfo = new LocaleInfo();
                         localeInfo.nameEnglish = language.name;

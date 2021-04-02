@@ -3,6 +3,8 @@ package tw.nekomimi.nekogram.shamsicalendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class PersianCalendar extends GregorianCalendar {
     private static final long serialVersionUID = 5541422440580682494L;
     private String delimiter = "/";
@@ -56,15 +58,23 @@ public class PersianCalendar extends GregorianCalendar {
     }
 
     public String getPersianMonthName() {
-        return PersianCalendarConstants.persianMonthNames[this.persianMonth];
+        if (NekoConfig.displayPersianCalendarByLatin) {
+            return PersianCalendarConstants.persianMonthNamesLatin[this.persianMonth];
+        } else {
+            return PersianCalendarConstants.persianMonthNames[this.persianMonth];
+        }
     }
 
     public int getPersianDay() {
         return this.persianDay;
     }
 
-    public String getPersianDayfanum() {
-        return LanguageUtils.getPersianNumbers(String.valueOf(this.persianDay));
+    public String getPersianDayName() {
+        if (NekoConfig.displayPersianCalendarByLatin) {
+            return getPersianDay() + "";
+        } else {
+            return LanguageUtils.getPersianNumbers(String.valueOf(this.persianDay));
+        }
     }
 
     public String getPersianWeekDayName() {
@@ -87,17 +97,17 @@ public class PersianCalendar extends GregorianCalendar {
     }
 
     public String getPersianLongDate() {
-        return getPersianWeekDayName() + "  " + getPersianDayfanum() + "  " + getPersianMonthName() + "  " + this.persianYear;
+        return getPersianWeekDayName() + "  " + getPersianDayName() + "  " + getPersianMonthName() + "  " + this.persianYear;
     }
 
 
     public String getPersianNormalDate() {
-        return getPersianDayfanum() + "  " + getPersianMonthName() + "  " + getPersianDayfanum();
+        return getPersianDayName() + "  " + getPersianMonthName() + "  " + getPersianDayName();
     }
 
     //like 9 شهریور
     public String getPersianMonthDay() {
-        return getPersianDayfanum() + "  " + getPersianMonthName();
+        return getPersianDayName() + "  " + getPersianMonthName();
     }
 
     public String getPersianLongDateAndTime() {

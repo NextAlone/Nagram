@@ -133,6 +133,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int openArchiveOnPullRow;
     private int nameOrderRow;
     private int usePersianCalendarRow;
+    private int displayPersianCalendarByLatinRow;
     private int general2Row;
 
     private UndoView restartTooltip;
@@ -486,6 +487,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(LocaleController.usePersianCalendar);
                 }
+            } else if (position == displayPersianCalendarByLatinRow) {
+                NekoConfig.toggleDisplayPersianCalendarByLatin();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.displayPersianCalendarByLatin);
+                }
             } else if (position == pgpAppRow) {
 
                 PopupBuilder builder = new PopupBuilder(view);
@@ -775,7 +781,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
-        usePersianCalendarRow = rowCount ++;
+        usePersianCalendarRow = rowCount++;
+        displayPersianCalendarByLatinRow = rowCount++;
         general2Row = rowCount++;
 
         if (notify && listAdapter != null) {
@@ -980,6 +987,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, true);
                     } else if (position == usePersianCalendarRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("UsePersianCalender", R.string.UsePersianCalender), LocaleController.getString("UsePersianCalenderInfo", R.string.UsePersianCalenderInfo), LocaleController.usePersianCalendar, true, true);
+                    } else if (position == displayPersianCalendarByLatinRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisplayPersianCalendarByLatin", R.string.DisplayPersianCalendarByLatin), NekoConfig.displayPersianCalendarByLatin, false);
                     } else if (position == autoPauseVideoRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
                     } else if (position == acceptSecretChatRow) {
