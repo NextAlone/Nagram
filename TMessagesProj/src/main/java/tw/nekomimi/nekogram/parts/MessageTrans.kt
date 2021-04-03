@@ -1,9 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MessageObject
 import org.telegram.tgnet.TLRPC
@@ -13,10 +10,12 @@ import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.transtale.code2Locale
 import tw.nekomimi.nekogram.utils.AlertUtil
+import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.uDismiss
 import tw.nekomimi.nekogram.utils.uUpdate
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 fun MessageObject.toRawString(): String {
 
@@ -109,45 +108,50 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
     }
 
     val status = AlertUtil.showProgress(parentActivity)
-    val canceled = AtomicBoolean()
+
+    val cancel = AtomicBoolean()
 
     status.setOnCancelListener {
-
-        canceled.set(true)
-
+        cancel.set(true)
     }
 
     status.show()
 
+    val deferreds = LinkedList<Deferred<Unit>>()
+    val taskCount = AtomicInteger(messages.size)
+    val transPool = newFixedThreadPoolContext(5, "Message Trans Pool")
+
+    suspend fun next() {
+        val index = taskCount.decrementAndGet()
+        if (index == 0) {
+            status.uDismiss()
+        } else if (messages.size > 1) {
+            status.uUpdate("${messages.size - index} / ${messages.size}")
+        }
+    }
+
     GlobalScope.launch(Dispatchers.IO) {
 
-        messages.forEachIndexed { i, selectedObject ->
-
-            val isEnd = i == messages.size - 1
+        messages.forEachIndexed { _, selectedObject ->
 
             val state = selectedObject.translateFinished(target)
 
-            if (messages.size > 1) status.uUpdate("${i + 1} / ${messages.size}")
-
             if (state == 1) {
+                next()
                 return@forEachIndexed
             } else if (state == 2) {
+                next()
 
                 withContext(Dispatchers.Main) {
-
                     selectedObject.messageOwner.translated = true
-
                     messageHelper.resetMessageContent(dialogId, selectedObject)
-
-                    if (isEnd) status.dismiss()
-
                 }
 
                 return@forEachIndexed
 
             }
 
-            withContext(Dispatchers.IO) trans@{
+            deferreds.add(async(transPool) trans@{
 
                 val db = TranslateDb.forLocale(target)
 
@@ -159,7 +163,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
 
                     if (question == null) {
 
-                        if (canceled.get()) return@trans
+                        if (cancel.get()) return@trans
 
                         runCatching {
 
@@ -171,7 +175,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
 
                             val parentActivity = parentActivity
 
-                            if (parentActivity != null && !canceled.get()) {
+                            if (parentActivity != null && !cancel.get()) {
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
                                         ?: it.javaClass.simpleName) {
@@ -196,7 +200,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
 
                         if (answer == null) {
 
-                            if (canceled.get()) return@trans
+                            if (cancel.get()) return@trans
 
                             runCatching {
 
@@ -208,7 +212,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
 
                                 val parentActivity = parentActivity
 
-                                if (parentActivity != null && !canceled.get()) {
+                                if (parentActivity != null && !cancel.get()) {
 
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, e.message
                                             ?: e.javaClass.simpleName) {
@@ -245,7 +249,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
 
                             val parentActivity = parentActivity
 
-                            if (parentActivity != null && !canceled.get()) {
+                            if (parentActivity != null && !cancel.get()) {
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
                                         ?: it.javaClass.simpleName) {
@@ -267,21 +271,30 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.
 
                 }
 
-                if (!canceled.get()) {
+                if (!cancel.get()) {
 
                     selectedObject.messageOwner.translated = true
+
+                    next()
 
                     withContext(Dispatchers.Main) {
 
                         messageHelper.resetMessageContent(dialogId, selectedObject)
 
-                        if (isEnd) status.dismiss()
-
                     }
 
                 } else return@trans
 
-            }
+            })
+
+        }
+
+        deferreds.awaitAll()
+        transPool.cancel()
+
+        UIUtil.runOnUIThread {
+
+            if (!cancel.get()) status.uDismiss()
 
         }
 
