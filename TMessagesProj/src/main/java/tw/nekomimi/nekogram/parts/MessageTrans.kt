@@ -84,12 +84,12 @@ fun ChatActivity.translateMessages1() = translateMessages()
 fun ChatActivity.translateMessages2(target: Locale) = translateMessages(target)
 
 @JvmName("translateMessages")
-fun ChatActivity.translateMessages3(messages: Array<MessageObject>) = translateMessages(messages = messages)
+fun ChatActivity.translateMessages3(messages: List<MessageObject>) = translateMessages(messages = messages)
 
 fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang?.code2Locale
-        ?: LocaleController.getInstance().currentLocale, messages: Array<MessageObject> = messageForTranslate?.let { arrayOf(it) }
-        ?: selectedObjectGroup?.messages?.toTypedArray()
-        ?: emptyArray()) {
+        ?: LocaleController.getInstance().currentLocale, messages: List<MessageObject> = messageForTranslate?.let { listOf(it) }
+        ?: selectedObjectGroup?.messages
+        ?: emptyList()) {
 
     // TODO: Fix file group
 

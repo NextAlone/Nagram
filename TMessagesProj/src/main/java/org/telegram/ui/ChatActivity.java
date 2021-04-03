@@ -1893,7 +1893,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     clearSelectionMode();
                 } else if (id == translate) {
-                    MessageTransKt.translateMessages(ChatActivity.this, getSelectedMessages().toArray(new MessageObject[0]));
+                    MessageTransKt.translateMessages(ChatActivity.this, getSelectedMessages());
                 } else if (id == unpin) {
                     for (MessageObject selectedMessage : getSelectedMessages()) {
                         if (selectedMessage.messageOwner.pinned) {
