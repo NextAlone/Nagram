@@ -11,6 +11,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - [Group Chat (Persian)](https://t.me/NekogramX_Persian)
 - [Group Chat (Indonesia)](https://t.me/NekoxID)
 - [Group Chat (Russian)](https://t.me/NekoXRussia)
+- [Group Chat (Hindi)](https://t.me/NekoXHindi)
 
 ## NekoX Changes
 
