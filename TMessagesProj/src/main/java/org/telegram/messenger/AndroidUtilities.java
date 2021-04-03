@@ -1527,9 +1527,6 @@ public class AndroidUtilities {
         if (result == null) {
             result = new ArrayList<>();
         }
-        if (result.isEmpty()) {
-            result.add(Environment.getExternalStorageDirectory());
-        }
         return result;
     }
 

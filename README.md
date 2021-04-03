@@ -10,6 +10,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - [Group Chat (English / Chinese)](https://t.me/NekoXChat) 
 - [Group Chat (Persian)](https://t.me/NekogramX_Persian)
 - [Group Chat (Indonesia)](https://t.me/NekoxID)
+- [Group Chat (Russian)](https://t.me/NekoXRussia)
 
 ## NekoX Changes
 
@@ -18,6 +19,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - OpenCC Chinese Convert
 - Built-in VMess, Shadowsocks, SSR, Trojan-GFW proxies support
 - Built-in public proxy list / Proxy subscription support
+- Ipv6 MTProxy support
 - Able to parse all proxy subscription format: SIP008, ssr, v2rayN, vmess1, shit ios app formats, clash config and more
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc
 - Scan the QR code (any link, can add a proxy)
@@ -38,13 +40,13 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - Scan and confirm the login QR code directly
 - Allow clearing app data
 - Option to not send comment first when forwarding
-- 0ption to use nekox chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
+- Option to use nekox chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
 - Option to disable link preview by default: to prevent the server from knowing that the link is shared through Telegram.
 - Option to ignore Android-only content restrictions (except for the Play Store version).
-- OpenKaychain client (sign / verify / decrypt / import)
+- OpenKeychain client (sign / verify / decrypt / import)
 - Google Cloud Translate / Yandex.Translate support
 - Custom cache directory (supports external storage)
-- Custom app ID and Hash (optional NekoX / Andorid / Android X or Manual input)
+- Custom app ID and Hash (optional NekoX / Android / Android X or Manual input)
 - Custom server (official, test DC)
 - Keep the original file name when downloading files
 - View the data center you belong to when you don't have an avatar
@@ -61,6 +63,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - Improved link long click menu
 - Improved hide messages from blocked users feature
 - Text replacer
+- Persian calendar support
 - Option to disable trending
 - Telegram X style menu for unpinning messages
 - Built-in Material Design themes / Telegram X style icons
@@ -104,15 +107,15 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 5. Build external libraries and native code: `./run libs update`
 6. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
 7. Replace TMessagesProj/google-services.json if you want fcm to work.
-8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a non-debug build.
+8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
 
 `./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 
 ## FAQ
 
-#### What is the relationship between NekoX and Nekogram?
+#### What is the differences between NekoX and Nekogram?
 
-More features, **without** [additional trackers](https://gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=&repository_ref=master&search=AnalyticsHelper&group_id=10273976&project_id=22804922).
+Developed by different developers, read the feature list above to understand the differences.
 
 #### What is the difference between the Full and Mini version?
 
@@ -121,6 +124,10 @@ The full version comes with built-in proxy support for v2ray, shadowsocks, shado
 #### What if I don't need a proxy?
 
 Then it is recommended to use the `Mini` version.
+
+#### What is the noGcm version?
+
+Google Cloud Messaging, also known as gcm / fcm, message push service by google used by original Telegram android app, it requires your device to have Google Service Framework (non-free) installed.
 
 #### I've encountered a bug!
 
