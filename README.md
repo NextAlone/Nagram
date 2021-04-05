@@ -177,3 +177,6 @@ You can [open an issue to](https://github.com/NekoX-Dev/NekoX/issues/new?&templa
     <li>opencc-data: <a href="https://github.com/nk2028/opencc-data">Apache License 2.0</a></li>
     <li>android-device-list: <a href="https://github.com/pbakondy/android-device-list/blob/master/LICENSE">MIT</a> </li>
 </ul>
+
+Thanks to JetBrains for allocating free open-source licences for IDEs.  
+[<img src=".github/jetbrains-variant-3.png" width="200"/>](https://jb.gg/OpenSource)
