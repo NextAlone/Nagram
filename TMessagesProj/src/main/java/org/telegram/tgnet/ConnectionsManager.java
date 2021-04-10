@@ -49,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
@@ -770,6 +771,10 @@ public class ConnectionsManager extends BaseController {
             isUpdating = value;
             if (connectionState == ConnectionStateConnected) {
                 AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
+            } else if (connectionState == ConnectionStateConnectingToProxy) {
+                if (native_getCurrentDatacenterId(currentAccount) == 4 && SharedConfig.currentProxy != null && SharedConfig.currentProxy instanceof SharedConfig.WsProxy) {
+                    AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.needShowAlert, 3, Unit.INSTANCE);
+                }
             }
         });
     }

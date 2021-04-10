@@ -4272,7 +4272,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             } else if (reason == 3) {
                 builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
-                builder.setMessage(LocaleController.getString("UseProxyTelegramError", R.string.UseProxyTelegramError));
+                if (args.length > 1) {
+                    builder.setMessage(LocaleController.getString("WsNoDC4", R.string.WsNoDC4));
+                } else {
+                    builder.setMessage(LocaleController.getString("UseProxyTelegramError", R.string.UseProxyTelegramError));
+                }
                 builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                 proxyErrorDialog = showAlertDialog(builder);
                 return;
