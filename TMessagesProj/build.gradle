@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "7.6.0-rc10"
-def verCode = 200 + 3 * 25
+def verName = "7.6.0-rc11"
+def verCode = 200 + 3 * 26
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
@@ -397,7 +397,6 @@ dependencies {
     implementation "cn.hutool:hutool-crypto:5.6.2"
     implementation "cn.hutool:hutool-http:5.6.2"
     implementation "com.jakewharton:process-phoenix:2.0.0"
-    //implementation "com.neovisionaries:nv-websocket-client:2.14"
 
     compileOnly "org.yaml:snakeyaml:1.28"
     fullImplementation "org.yaml:snakeyaml:1.28"
