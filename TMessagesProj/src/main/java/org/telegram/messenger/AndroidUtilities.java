@@ -3619,7 +3619,7 @@ public class AndroidUtilities {
                 detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
             } else if (a == 1) {
                 text = info.bean.getTls() ? "Y" : "N";
-                detail = LocaleController.getString("UseProxyPort", R.string.VmessTls);
+                detail = LocaleController.getString("VmessTls", R.string.VmessTls);
             } else {
                 text = LocaleController.getString("Checking", R.string.Checking);
                 detail = LocaleController.getString("Checking", R.string.Checking);

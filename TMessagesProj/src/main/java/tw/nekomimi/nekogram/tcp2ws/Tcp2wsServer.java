@@ -30,6 +30,7 @@ public class Tcp2wsServer extends Thread {
         mapper.put("95.161.76.100", 2);
         mapper.put("149.154.175.100", 3);
         mapper.put("149.154.167.91", 4);
+        mapper.put("149.154.167.92", 4);
         mapper.put("149.154.171.5", 5);
         mapper.put("2001:b28:f23d:f001:0000:0000:0000:000a", 1);
         mapper.put("2001:67c:4e8:f002:0000:0000:0000:000a", 2);
