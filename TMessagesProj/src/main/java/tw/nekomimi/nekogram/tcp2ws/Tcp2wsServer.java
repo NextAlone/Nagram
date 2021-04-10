@@ -23,10 +23,7 @@ public class Tcp2wsServer extends Thread {
     public static final HashMap<String, Integer> mapper = new HashMap<>();
 
     static {
-        mapper.put("149.154.175.50", 1);
-        mapper.put("149.154.175.53", 1);
-        mapper.put("149.154.175.55", 1);
-        mapper.put("149.154.167.51", 2);
+        mapper.put("149.154.175.5", 1);
         mapper.put("95.161.76.100", 2);
         mapper.put("149.154.175.100", 3);
         mapper.put("149.154.167.91", 4);
@@ -37,7 +34,6 @@ public class Tcp2wsServer extends Thread {
         mapper.put("2001:b28:f23d:f003:0000:0000:0000:000a", 3);
         mapper.put("2001:67c:4e8:f004:0000:0000:0000:000a", 4);
         mapper.put("2001:b28:f23f:f005:0000:0000:0000:000a", 5);
-        mapper.put("149.154.175.5", 1);
         mapper.put("149.154.161.144", 2);
         mapper.put("149.154.167.", 2);
         mapper.put("149.154.175.1", 3);

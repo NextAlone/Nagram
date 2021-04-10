@@ -123,8 +123,8 @@ public class ProxyHandler implements Runnable {
         }
 
         Integer target = mapper.get(server);
-        if (target == null) {
-            target = mapper.get(StrUtil.subBefore(server, ".", true) + ".");
+        for (int i = 1; target == null && i < 4; i++) {
+            target = mapper.get(server.substring(0, server.length() - i));
         }
         if (target == null) {
             FileLog.e("No route for ip " + server);
