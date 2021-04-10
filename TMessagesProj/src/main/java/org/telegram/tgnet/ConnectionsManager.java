@@ -49,7 +49,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.hutool.core.util.StrUtil;
-import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
@@ -691,6 +690,17 @@ public class ConnectionsManager extends BaseController {
                 native_setProxySettings(a, "", 1080, "", "", "");
             }
             AccountInstance accountInstance = AccountInstance.getInstance(a);
+            if (accountInstance.getUserConfig().isClientActivated()) {
+                accountInstance.getMessagesController().checkPromoInfo(true);
+            }
+        }
+        if (SharedConfig.loginingAccount != -1) {
+            if (enabled && !TextUtils.isEmpty(address)) {
+                native_setProxySettings(SharedConfig.loginingAccount, address, port, username, password, secret);
+            } else {
+                native_setProxySettings(SharedConfig.loginingAccount, "", 1080, "", "", "");
+            }
+            AccountInstance accountInstance = AccountInstance.getInstance(SharedConfig.loginingAccount);
             if (accountInstance.getUserConfig().isClientActivated()) {
                 accountInstance.getMessagesController().checkPromoInfo(true);
             }
