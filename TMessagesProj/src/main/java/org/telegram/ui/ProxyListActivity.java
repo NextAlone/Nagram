@@ -623,7 +623,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         addItem.addSubItem(menu_add_input_socks, LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity(0)));
         addItem.addSubItem(menu_add_input_telegram, LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity(1)));
-        addItem.addSubItem(menu_add_input_ws, LocaleController.getString("AddProxyWs", R.string.AddProxyWs)).setOnClickListener((v) -> presentFragment(new WsSettingsActivity()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            addItem.addSubItem(menu_add_input_ws, LocaleController.getString("AddProxyWs", R.string.AddProxyWs)).setOnClickListener((v) -> presentFragment(new WsSettingsActivity()));
+        }
 
         if (!BuildVars.isMini) {
 

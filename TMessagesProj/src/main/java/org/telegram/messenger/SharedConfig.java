@@ -901,6 +901,10 @@ public class SharedConfig {
         }
 
         public WsProxy(WsLoader.Bean bean) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                throw new RuntimeException(LocaleController.getString("MinApi21Required", R.string.MinApi21Required));
+            }
+
             this.bean = bean;
         }
 
