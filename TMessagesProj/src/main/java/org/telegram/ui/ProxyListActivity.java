@@ -708,9 +708,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 builder.addItems(new String[]{
 
                         info.subId == 1 ? null : LocaleController.getString("EditProxy", R.string.EditProxy),
-                        LocaleController.getString("ShareProxy", R.string.ShareProxy),
-                        LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                        LocaleController.getString("CopyLink", R.string.CopyLink),
+                        info.subId == 1 && info instanceof SharedConfig.WsProxy ? null : LocaleController.getString("ShareProxy", R.string.ShareProxy),
+                        info.subId == 1 && info instanceof SharedConfig.WsProxy ? null : LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
+                        info.subId == 1 && info instanceof SharedConfig.WsProxy ? null : LocaleController.getString("CopyLink", R.string.CopyLink),
                         info.subId == 1 ? null : LocaleController.getString("ProxyDelete", R.string.ProxyDelete),
                         LocaleController.getString("Cancel", R.string.Cancel)
 
