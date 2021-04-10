@@ -97,6 +97,7 @@ import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
 import tw.nekomimi.nekogram.SubSettingsActivity;
 import tw.nekomimi.nekogram.TrojanSettingsActivity;
 import tw.nekomimi.nekogram.VmessSettingsActivity;
+import tw.nekomimi.nekogram.WsSettingsActivity;
 import tw.nekomimi.nekogram.parts.ProxyChecksKt;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
@@ -331,6 +332,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int menu_add_input_vmess = 4;
     private int menu_add_input_ss = 7;
     private int menu_add_input_ssr = 8;
+    private int menu_add_input_ws = 9;
     private int menu_add_input_rb = 17;
 
     private int menu_add_import_from_clipboard = 5;
@@ -621,6 +623,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         addItem.addSubItem(menu_add_input_socks, LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity(0)));
         addItem.addSubItem(menu_add_input_telegram, LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity(1)));
+        addItem.addSubItem(menu_add_input_ws, LocaleController.getString("AddProxyWs", R.string.AddProxyWs)).setOnClickListener((v) -> presentFragment(new WsSettingsActivity()));
 
         if (!BuildVars.isMini) {
 
@@ -738,6 +741,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 presentFragment(new ShadowsocksRSettingsActivity((SharedConfig.ShadowsocksRProxy) info));
                             }
+                        } else if (info instanceof SharedConfig.WsProxy) {
+                            presentFragment(new WsSettingsActivity((SharedConfig.WsProxy) info));
                         } else {
                             presentFragment(new ProxySettingsActivity(info));
                         }
@@ -802,6 +807,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5),
                 LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram),
+                LocaleController.getString("AddProxyWs", R.string.AddProxyWs),
                 BuildVars.isMini ? null : LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess),
                 BuildVars.isMini ? null : LocaleController.getString("AddProxyTrojan", R.string.AddProxyTrojan),
                 BuildVars.isMini || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySS", R.string.AddProxySS),
@@ -821,21 +827,25 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (i == 2) {
 
-                presentFragment(new VmessSettingsActivity());
+                presentFragment(new WsSettingsActivity());
 
             } else if (i == 3) {
 
-                presentFragment(new TrojanSettingsActivity());
+                presentFragment(new VmessSettingsActivity());
 
             } else if (i == 4) {
 
-                presentFragment(new ShadowsocksSettingsActivity());
+                presentFragment(new TrojanSettingsActivity());
 
             } else if (i == 5) {
 
-                presentFragment(new ShadowsocksRSettingsActivity());
+                presentFragment(new ShadowsocksSettingsActivity());
 
             } else if (i == 6) {
+
+                presentFragment(new ShadowsocksRSettingsActivity());
+
+            } else if (i == 7) {
 
                 ProxyUtil.importFromClipboard(getParentActivity());
 

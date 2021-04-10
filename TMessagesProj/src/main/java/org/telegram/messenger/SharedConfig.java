@@ -49,6 +49,7 @@ import tw.nekomimi.nekogram.ProxyManager;
 import tw.nekomimi.nekogram.ShadowsocksLoader;
 import tw.nekomimi.nekogram.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.VmessLoader;
+import tw.nekomimi.nekogram.WsLoader;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -58,6 +59,8 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
+import static com.v2ray.ang.V2RayConfig.WSS_PROTOCOL;
+import static com.v2ray.ang.V2RayConfig.WS_PROTOCOL;
 
 public class SharedConfig {
 
@@ -337,14 +340,6 @@ public class SharedConfig {
 
         }
 
-        public JSONObject toJson() throws JSONException {
-
-            JSONObject object = toJsonInternal();
-
-            return object;
-
-        }
-
         public JSONObject toJsonInternal() throws JSONException {
 
             JSONObject obj = new JSONObject();
@@ -439,6 +434,14 @@ public class SharedConfig {
                 case "shadowsocksr": {
 
                     info = new ShadowsocksRProxy(obj.optString("link"));
+
+                    break;
+
+                }
+
+                case "ws": {
+
+                    info = new WsProxy(obj.optString("link"));
 
                     break;
 
@@ -884,6 +887,79 @@ public class SharedConfig {
         @Override
         public boolean equals(@Nullable Object obj) {
             return super.equals(obj) || (obj instanceof ShadowsocksRProxy && bean.equals(((ShadowsocksRProxy) obj).bean));
+        }
+
+    }
+
+    public static class WsProxy extends ExternalSocks5Proxy {
+
+        public WsLoader.Bean bean;
+        public WsLoader loader;
+
+        public WsProxy(String url) {
+            this(WsLoader.Companion.parse(url));
+        }
+
+        public WsProxy(WsLoader.Bean bean) {
+            this.bean = bean;
+        }
+
+        @Override
+        public boolean isStarted() {
+            return loader != null;
+        }
+
+        @Override
+        public void start() {
+            if (loader != null) return;
+            loader = new WsLoader();
+            port = ProxyManager.mkPort();
+            loader.init(bean, port);
+            loader.start();
+
+            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
+            }
+        }
+
+        @Override
+        public void stop() {
+            if (loader == null) return;
+            loader.stop();
+            loader = null;
+        }
+
+        @Override
+        public String getAddress() {
+            return bean.getServer();
+        }
+
+        @Override
+        public String toUrl() {
+            return bean.toString();
+        }
+
+        @Override
+        public String getRemarks() {
+            return bean.getRemarks();
+        }
+
+        @Override
+        public void setRemarks(String remarks) {
+            bean.setRemarks(remarks);
+        }
+
+        @Override
+        public String getType() {
+            return "WS";
+        }
+
+        @Override
+        public JSONObject toJsonInternal() throws JSONException {
+            JSONObject obj = new JSONObject();
+            obj.put("type", "ws");
+            obj.put("link", toUrl());
+            return obj;
         }
 
     }
@@ -1773,24 +1849,21 @@ public class SharedConfig {
 
                         if (info instanceof ExternalSocks5Proxy) {
 
-                            if (info instanceof ExternalSocks5Proxy) {
+                            UIUtil.runOnIoDispatcher(() -> {
 
-                                UIUtil.runOnIoDispatcher(() -> {
+                                try {
 
-                                    try {
+                                    ((ExternalSocks5Proxy) info).start();
 
-                                        ((ExternalSocks5Proxy) info).start();
+                                } catch (Exception e) {
 
-                                    } catch (Exception e) {
+                                    FileLog.e(e);
+                                    AlertUtil.showToast(e);
 
-                                        FileLog.e(e);
-                                        AlertUtil.showToast(e);
+                                }
 
-                                    }
+                            });
 
-                                });
-
-                            }
                         }
 
                     }
@@ -1860,6 +1933,18 @@ public class SharedConfig {
             try {
 
                 return new ShadowsocksRProxy(url);
+
+            } catch (Exception ex) {
+
+                throw new InvalidProxyException(ex);
+
+            }
+
+        } else if (url.startsWith(WS_PROTOCOL) || url.startsWith(WSS_PROTOCOL)) {
+
+            try {
+
+                return new WsProxy(url);
 
             } catch (Exception ex) {
 

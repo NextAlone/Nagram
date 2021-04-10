@@ -397,6 +397,7 @@ dependencies {
     implementation "cn.hutool:hutool-crypto:5.6.2"
     implementation "cn.hutool:hutool-http:5.6.2"
     implementation "com.jakewharton:process-phoenix:2.0.0"
+    //implementation "com.neovisionaries:nv-websocket-client:2.14"
 
     compileOnly "org.yaml:snakeyaml:1.28"
     fullImplementation "org.yaml:snakeyaml:1.28"
