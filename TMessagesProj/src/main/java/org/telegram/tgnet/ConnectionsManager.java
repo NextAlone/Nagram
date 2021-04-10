@@ -763,6 +763,8 @@ public class ConnectionsManager extends BaseController {
         return lastClassGuid++;
     }
 
+    public boolean alertShowed;
+
     public void setIsUpdating(final boolean value) {
         AndroidUtilities.runOnUIThread(() -> {
             if (isUpdating == value) {
@@ -771,11 +773,12 @@ public class ConnectionsManager extends BaseController {
             isUpdating = value;
             if (connectionState == ConnectionStateConnected) {
                 AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
-            } else if (connectionState == ConnectionStateConnectingToProxy) {
-                if (native_getCurrentDatacenterId(currentAccount) == 4 && SharedConfig.currentProxy != null && SharedConfig.currentProxy instanceof SharedConfig.WsProxy) {
+            } /*else if (connectionState == ConnectionStateConnectingToProxy && !alertShowed) {
+                if (getCurrentDatacenterId() == 4 && SharedConfig.currentProxy instanceof SharedConfig.WsProxy) {
+                    alertShowed = true;
                     AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.needShowAlert, 3, Unit.INSTANCE);
                 }
-            }
+            }*/
         });
     }
 
