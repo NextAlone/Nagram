@@ -198,9 +198,10 @@ android {
         debug {
             isDefault true
             debuggable true
-            jniDebuggable false
+            jniDebuggable true
             multiDexEnabled true
-            zipAlignEnabled true; signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
+            zipAlignEnabled true;
+            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
             ndk.debugSymbolLevel = 'FULL'
         }
 
@@ -262,8 +263,8 @@ android {
             java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
-            jniLibs {
-                srcDir "src/main/libs"
+            jni {
+                srcDirs = ["./jni/"]
             }
             manifest {
                 srcFile "src/gservcies/AndroidManifest.xml"
@@ -344,7 +345,7 @@ android {
     }
 
     tasks.all { task ->
-        if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !(task.name.contains("Foss") || task.name.contains("Fdroid"))) {
+        if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !(task.name.contains("Debug") || task.name.contains("Foss") || task.name.contains("Fdroid"))) {
             task.enabled = false
         }
         if (task.name.contains("uploadCrashlyticsMappingFile")) {
