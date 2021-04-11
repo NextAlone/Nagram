@@ -22,6 +22,8 @@ import android.provider.Settings;
 
 import androidx.core.app.NotificationCompat;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class NotificationsService extends Service {
 
     @Override
@@ -45,7 +47,7 @@ public class NotificationsService extends Service {
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.notification)
-                    .setColor(0xff11acfa)
+                    .setColor(NekoConfig.getNotificationColor())
                     .setContentTitle(LocaleController.getString("NekogramRunning", R.string.NekogramRunning))
                     .setContentText(LocaleController.getString("TapToDisable",R.string.TapToDisable))
                     .setContentIntent(pendingIntent)

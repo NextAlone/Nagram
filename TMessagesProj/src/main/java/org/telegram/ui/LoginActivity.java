@@ -355,7 +355,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 ConnectionsManager.getInstance(currentAccount).setUserId(res.user.id);
                                 UserConfig.getInstance(currentAccount).clearConfig();
                                 MessagesController.getInstance(currentAccount).cleanup();
-                                UserConfig.getInstance(currentAccount).isBot = true;
                                 UserConfig.getInstance(currentAccount).syncContacts = syncContacts;
                                 UserConfig.getInstance(currentAccount).setCurrentUser(res.user);
                                 UserConfig.getInstance(currentAccount).saveConfig(true);
@@ -364,9 +363,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 users.add(res.user);
                                 MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
                                 MessagesController.getInstance(currentAccount).putUser(res.user, false);
-                                ContactsController.getInstance(currentAccount).checkAppAccount();
-                                MessagesController.getInstance(currentAccount).getBlockedPeers(true);
-                                MessagesController.getInstance(currentAccount).checkPromoInfo(true);
                                 ConnectionsManager.getInstance(currentAccount).updateDcSettings();
                                 needFinishActivity(false);
                             } else {

@@ -3539,7 +3539,7 @@ public class NotificationsController extends BaseController {
                     .setGroupSummary(true)
                     .setShowWhen(true)
                     .setWhen(((long) lastMessageObject.messageOwner.date) * 1000)
-                    .setColor(getNotificationColor());
+                    .setColor(NekoConfig.getNotificationColor());
 
             long[] vibrationPattern = null;
             Uri sound = null;
@@ -4282,7 +4282,7 @@ public class NotificationsController extends BaseController {
                     .setContentText(text.toString())
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
-                    .setColor(getNotificationColor())
+                    .setColor(NekoConfig.getNotificationColor())
                     .setGroupSummary(false)
                     .setWhen(date)
                     .setShowWhen(true)
@@ -4684,24 +4684,4 @@ public class NotificationsController extends BaseController {
         }
     }
 
-    private int getNotificationColor() {
-        int color = 0;
-        Configuration configuration = ApplicationLoader.applicationContext.getResources().getConfiguration();
-        boolean isDark = (configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-        if (isDark) {
-            color = 0xffffffff;
-        } else {
-            if (Theme.getActiveTheme().hasAccentColors()) {
-                color = Theme.getActiveTheme().getAccentColor(Theme.getActiveTheme().currentAccentId);
-            }
-            if (Theme.getActiveTheme().isDark() || color == 0) {
-                color = Theme.getColor(Theme.key_actionBarDefault);
-            }
-            // too bright
-            if (AndroidUtilities.computePerceivedBrightness(color) >= 0.721f) {
-                color = Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader) | 0xff000000;
-            }
-        }
-        return color;
-    }
 }
