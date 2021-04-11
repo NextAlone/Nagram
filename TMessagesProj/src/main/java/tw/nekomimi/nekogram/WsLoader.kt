@@ -7,7 +7,6 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tw.nekomimi.nekogram.tcp2ws.Tcp2wsServer
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class WsLoader {
 
     lateinit var server: Tcp2wsServer

@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
-import cn.hutool.core.util.StrUtil;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -157,7 +156,23 @@ public class ProxyHandler implements Runnable {
 
                     @Override
                     public void onMessage(@NotNull okhttp3.WebSocket webSocket, @NotNull ByteString bytes) {
+                        FileLog.d("[" + webSocket.request().url() + "] Reveived " + bytes.size() + " bytes");
                         ProxyHandler.this.sendToClient(bytes.toByteArray());
+                    }
+
+                    @Override
+                    public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
+                        FileLog.d("[" + webSocket.request().url() + "] Reveived text: " + text);
+                    }
+
+                    @Override
+                    public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+                        FileLog.d("[" + webSocket.request().url() + "] Closed: " + code + " " + reason);
+                    }
+
+                    @Override
+                    public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+                        FileLog.d("[" + webSocket.request().url() + "] Closing: " + code + " " + reason);
                     }
                 });
     }
@@ -235,6 +250,7 @@ public class ProxyHandler implements Runnable {
                     }
                 }
                 if (error != null) throw new RuntimeException(error);
+                FileLog.d("[" + m_ServerSocket.request().url() + "] Send " + dlen + " bytes");
                 this.m_ServerSocket.send(ByteString.of(Arrays.copyOf(this.m_Buffer, dlen)));
             }
         }

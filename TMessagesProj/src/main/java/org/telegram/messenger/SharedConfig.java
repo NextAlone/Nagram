@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.pm.ShortcutManagerCompat;
 
 import com.v2ray.ang.V2RayConfig;
@@ -27,6 +28,8 @@ import com.v2ray.ang.dto.AngConfig;
 import com.v2ray.ang.util.Utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.dizitart.no2.objects.filters.ObjectFilters;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -956,6 +959,11 @@ public class SharedConfig {
         @Override
         public String getType() {
             return "WS";
+        }
+
+        @Override
+        public int hashCode() {
+            return bean.hashCode();
         }
 
         @Override
