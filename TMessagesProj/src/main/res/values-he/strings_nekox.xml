@@ -100,8 +100,8 @@
     <string name="UnblockAll">בטל את חסימת הכל</string>
     <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **?</string>
     <string name="BlockedListEmpty">לא חסמת אף אחד :)</string>
-    <string name="ProxyTypeVmess">Vmess פרוקסי</string>
-    <string name="AddProxySocks5">הוסף Socks5 Proxy</string>
+    <string name="ProxyTypeVmess">VMess פרוקסי</string>
+    <string name="AddProxySocks5">הוסף SOCKS5 Proxy</string>
     <string name="AddProxyTelegram">הוסף פרוקסי MTProto</string>
     <string name="AddProxyVmess">הוסף Vmess Proxy</string>
     <string name="AddProxySS">הוסף פרוקסי Shadowsocks</string>

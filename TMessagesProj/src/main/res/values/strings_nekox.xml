@@ -101,7 +101,7 @@
     <string name="UnblockAll">Unblock All</string>
     <string name="UnblockAllWarn">Are you sure you want to unblock **all users and bots**?</string>
     <string name="BlockedListEmpty">You haven\'t blocked anyone :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Add SOCKS5 Proxy</string>
     <string name="AddProxyTelegram">Add MTProto Proxy</string>
     <string name="AddProxyVmess">Add Vmess Proxy</string>
@@ -225,9 +225,9 @@
     <string name="UnpinSticker">Unpin</string>
     <string name="SetPinnedSuffix">(Pinned)</string>
     <string name="AppLinkFDroid">F-Droid</string>
-    <string name="UsePersiancalendar">Use persian calendar</string>
+    <string name="UsePersiancalendar">Use Persian calendar</string>
     <string name="UsePersiancalendarInfo">Display date with Solar Hijri calendar</string>
-    <string name="DisplayPersianCalendarByLatin">Display persian calendar by latin characters</string>
+    <string name="DisplayPersianCalendarByLatin">Display Persian calendar by Latin</string>
     <string name="AddProxyWs">Add WebSocket Relay</string>
     <string name="ProxyInfoWS">WebSocket Relay Settings</string>
     <string name="WsPayload">Payload</string>

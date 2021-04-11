@@ -102,8 +102,8 @@
     <string name="UnblockAll">إلغاء حظر الكل</string>
     <string name="UnblockAllWarn">هل أنت متأكد من أنك تريد إلغاء حظر **جميع المستخدمين والبوتات**؟</string>
     <string name="BlockedListEmpty">لم تقم بحظر أي شخص :)</string>
-    <string name="ProxyTypeVmess">وكيل Vmess</string>
-    <string name="AddProxySocks5">إضافة وكيل Socks5</string>
+    <string name="ProxyTypeVmess">وكيل VMess</string>
+    <string name="AddProxySocks5">إضافة وكيل SOCKS5</string>
     <string name="AddProxyTelegram">إضافة MTProxy</string>
     <string name="AddProxyVmess">إضافة وكيل Vmess</string>
     <string name="AddProxySS">إضافة وكيل Shadowsock</string>
@@ -229,4 +229,7 @@
     <string name="Win32ExecutableFiles">ملفات Win32 القابلة للتنفيذ</string>
     <string name="AutoDownload">التحميل التلقائي</string>
     <string name="AppLinkFDroid">اف-درويد</string>
+    <string name="DisplayPersianCalendarByLatin">عرض التقويم الفارسي حسب اللغة اللاتينية</string>
+    <string name="UsePersiancalendarInfo">عرض التاريخ مع التقويم الهجري الشمسي</string>
+    <string name="UsePersiancalendar">استخدام التقويم الفارسي</string>
 </resources>

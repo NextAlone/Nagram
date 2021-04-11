@@ -99,4 +99,8 @@
     <string name="ChatAttachEnterMenuEnableLinkPreview">Lenkeforhåndsvisning</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Ingen lenkeforhåndsvisning</string>
     <string name="AccDescrChatAttachEnterMenu">Sludreinndatameny</string>
+    <string name="ProxyTypeVmess">VMess-mellomtjener</string>
+    <string name="BlockedListEmpty">Du har ikke blokkert noen :)</string>
+    <string name="FilterNameUnmutedDescription">Kun meldinger fra uforstummede sludringer</string>
+    <string name="NekoXUpdatesChannel">NekoX-oppdateringskanal</string>
 </resources>

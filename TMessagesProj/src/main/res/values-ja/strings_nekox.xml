@@ -100,8 +100,8 @@
     <string name="UnblockAll">すべてのブロックを解除</string>
     <string name="UnblockAllWarn">**すべてのユーザーとボット**のブロックを解除してもよろしいですか？</string>
     <string name="BlockedListEmpty">あなたは誰もブロックしていません :)</string>
-    <string name="ProxyTypeVmess">Vmessプロキシ</string>
-    <string name="AddProxySocks5">Socks5プロキシを追加</string>
+    <string name="ProxyTypeVmess">VMessプロキシ</string>
+    <string name="AddProxySocks5">SOCKS5プロキシを追加</string>
     <string name="AddProxyTelegram">MTProtoプロキシを追加</string>
     <string name="AddProxyVmess">Vmessプロキシを追加</string>
     <string name="AddProxySS">Shadowsocksプロキシを追加</string>

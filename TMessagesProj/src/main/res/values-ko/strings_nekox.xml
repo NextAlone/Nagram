@@ -100,8 +100,8 @@
     <string name="UnblockAll">모두 차단 해제</string>
     <string name="UnblockAllWarn">**모든 사용자와 봇** 을 차단 해제 하시겠습니까?</string>
     <string name="BlockedListEmpty">아무도 차단하지 않았습니다.</string>
-    <string name="ProxyTypeVmess">Vmess 프록시</string>
-    <string name="AddProxySocks5">Socks5 프록시 추가</string>
+    <string name="ProxyTypeVmess">VMess 프록시</string>
+    <string name="AddProxySocks5">SOCKS5 프록시 추가</string>
     <string name="AddProxyTelegram">MTProto 프록시 추가</string>
     <string name="AddProxyVmess">Vmess 프록시 추가</string>
     <string name="AddProxySS">Shadowsocks 프록시 추가</string>

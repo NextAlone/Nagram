@@ -100,8 +100,8 @@
     <string name="UnblockAll">Bỏ chặn tất cả</string>
     <string name="UnblockAllWarn">Bạn có chắc chắn muốn bỏ chặn **tất cả người dùng và bot** không?</string>
     <string name="BlockedListEmpty">Bạn chưa chặn ai :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Thêm Proxy Socks5</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Thêm Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Thêm MTProto Proxy</string>
     <string name="AddProxyVmess">Thêm Vmess Proxy</string>
     <string name="AddProxySS">Thêm Shadowsocks Proxy</string>
@@ -227,4 +227,7 @@
     <string name="Win32ExecutableFiles">Tập tin thực thi Win32</string>
     <string name="AutoDownload">Tự động tải</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="DisplayPersianCalendarByLatin">Hiển thị lịch Ba Tư theo tiếng Latinh</string>
+    <string name="UsePersiancalendarInfo">Hiển thị ngày với lịch Hijri mặt trời</string>
+    <string name="UsePersiancalendar">Sử dụng lịch Ba Tư</string>
 </resources>

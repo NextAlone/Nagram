@@ -100,8 +100,8 @@
     <string name="UnblockAll">Очистить ЧС</string>
     <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**?</string>
     <string name="BlockedListEmpty">В вашем ЧС пусто, как у гоблина в голове :)</string>
-    <string name="ProxyTypeVmess">Vmess-прокси</string>
-    <string name="AddProxySocks5">Socks5-прокси</string>
+    <string name="ProxyTypeVmess">VMess-прокси</string>
+    <string name="AddProxySocks5">SOCKS5-прокси</string>
     <string name="AddProxyTelegram">MTProto-прокси</string>
     <string name="AddProxyVmess">Vmess-прокси</string>
     <string name="AddProxySS">Shadowsocks-прокси</string>
@@ -226,4 +226,7 @@
     <string name="UnpinSticker">Открепить</string>
     <string name="PinSticker">Закрепить</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="DisplayPersianCalendarByLatin">Показывать иранский календарь латиницей</string>
+    <string name="UsePersiancalendarInfo">Отключите для нормального отображения даты.</string>
+    <string name="UsePersiancalendar">Иранский календарь</string>
 </resources>

@@ -97,8 +97,8 @@
     <string name="UnblockAll">Alle entsperren</string>
     <string name="UnblockAllWarn">Bist du sicher, dass du **alle Benutzer und Bots** entsperren möchtest?</string>
     <string name="BlockedListEmpty">Du hast niemanden blockiert :)</string>
-    <string name="ProxyTypeVmess">Vmess-Proxy</string>
-    <string name="AddProxySocks5">Socks5-Proxy hinzufügen</string>
+    <string name="ProxyTypeVmess">VMess-Proxy</string>
+    <string name="AddProxySocks5">SOCKS5-Proxy hinzufügen</string>
     <string name="AddProxyTelegram">MTProto-Proxy hinzufügen</string>
     <string name="AddProxyVmess">Vmess-Proxy hinzufügen</string>
     <string name="AddProxySS">Shadowsocks-Proxy hinzufügen</string>
