@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.tcp2ws;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.FileLog;
 
 import java.io.IOException;
@@ -114,6 +115,8 @@ public class ProxyHandler implements Runnable {
         }
     }
 
+    public static Object okhttpClient;
+
     public void connectToServer(String server, Runnable succ, Runnable fail) throws IOException {
         if (server.equals("")) {
             close();
@@ -131,13 +134,21 @@ public class ProxyHandler implements Runnable {
             return;
         }
 
+        String ip = server;
+
         if (bean.getPayload().size() >= target) {
             server = bean.getPayload().get(target - 1);
         }
 
-        FileLog.d("Connect to DC" + target + ": " + (bean.getTls() ? "wss://" : "ws://") + server + "." + bean.getServer() + "/api");
+        if (BuildConfig.DEBUG) {
+            FileLog.d("Route " + ip + " to dc" + target + ": " + (bean.getTls() ? "wss://" : "ws://") + server + "." + bean.getServer() + "/api");
+        }
 
-        new OkHttpClient()
+        if (okhttpClient == null) {
+            okhttpClient = new OkHttpClient();
+        }
+
+        ((OkHttpClient) okhttpClient)
                 .newWebSocket(new Request.Builder()
                         .url((bean.getTls() ? "wss://" : "ws://") + server + "." + bean.getServer() + "/api")
                         .build(), new WebSocketListener() {
@@ -173,6 +184,8 @@ public class ProxyHandler implements Runnable {
                     @Override
                     public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                         FileLog.d("[" + webSocket.request().url() + "] Closing: " + code + " " + reason);
+                        close();
+
                     }
                 });
     }
