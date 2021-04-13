@@ -16891,12 +16891,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     chatActivityEnterView.setFieldFocused();
                     AndroidUtilities.runOnUIThread(() -> chatActivityEnterView.openKeyboard(), 100);
                 } else {
-                    bottomOverlayChat.setVisibility(View.VISIBLE);
-                    chatActivityEnterView.setFieldFocused(false);
-                    chatActivityEnterView.setVisibility(View.INVISIBLE);
-                    chatActivityEnterView.closeKeyboard();
-                    if (stickersAdapter != null) {
-                        stickersAdapter.hide();
+                    boolean showEnter = false;
+                    if (currentChat != null && currentChat.megagroup && chatInfo != null && chatInfo.linked_chat_id != 0) {
+                        TLRPC.Chat linked = getMessagesController().getChat(chatInfo.linked_chat_id);
+                        showEnter = !ChatObject.isKickedFromChat(linked);
+                    }
+                    if (!showEnter) {
+                        bottomOverlayChat.setVisibility(View.VISIBLE);
+                        chatActivityEnterView.setFieldFocused(false);
+                        chatActivityEnterView.setVisibility(View.INVISIBLE);
+                        chatActivityEnterView.closeKeyboard();
+                        if (stickersAdapter != null) {
+                            stickersAdapter.hide();
+                        }
                     }
                 }
                 if (attachItem != null) {
