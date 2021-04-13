@@ -348,7 +348,7 @@ object ProxyUtil {
 
             } else if (link.startsWith(SSR_PROTOCOL)) {
 
-                AndroidUtilities.showWsAlert(ctx, SharedConfig.WsProxy(link))
+                AndroidUtilities.showShadowsocksRAlert(ctx, SharedConfig.ShadowsocksRProxy(link))
 
             } else if (link.startsWith(WS_PROTOCOL) || link.startsWith(WSS_PROTOCOL)) {
 
