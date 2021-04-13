@@ -354,6 +354,16 @@ android {
     }
 
     applicationVariants.all { variant ->
+        def flavor = variant.mergedFlavor
+        if (variant.buildType.name == "fdroidArmRelease") {
+            variant.outputs.each { output ->
+                output.versionNameOverride = flavor.versionName + "-armeabi-v7a"
+            }
+        } else if (variant.buildType.name == "fdroidArm64Release") {
+            variant.outputs.each { output ->
+                output.versionNameOverride = flavor.versionName + "-arm64-v8a"
+            }
+        }
         variant.outputs.all { output ->
             outputFileName = outputFileName.replace("TMessagesProj", "NekoX")
         }
