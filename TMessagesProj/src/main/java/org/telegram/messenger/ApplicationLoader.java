@@ -25,7 +25,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.os.Process;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -39,19 +38,14 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import cn.hutool.core.codec.Base64;
-import cn.hutool.core.io.IoUtil;
-import kotlin.jvm.functions.Function0;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -361,40 +355,12 @@ public class ApplicationLoader extends Application {
         Utilities.stageQueue.postRunnable(() -> {
             NekoConfig.preferences.contains("qwq");
             NekoXConfig.preferences.contains("qwq");
-
-            Runnable fuckMT = () -> {
-                Thread.setDefaultUncaughtExceptionHandler(null);
-                Thread.currentThread().setUncaughtExceptionHandler(null);
-
-                if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    try {
-                        Process.killProcess(Process.myPid());
-                    } catch (Exception e) {
-                    }
-                }
-                Runtime.getRuntime().exit(0);
-            };
-
-            try {
-                Class.forName(Base64.decodeStr("YmluLm10LmFwa3NpZ25hdHVyZWtpbGxlcnBsdXMuSG9va0FwcGxpY2F0aW9u"));
-                AndroidUtilities.runOnUIThread(fuckMT);
-            } catch (ClassNotFoundException ignored) {
-            }
-
-            if (!SignturesKt.isVerified(this)) {
-                InputStream certPointSF = getClass().getResourceAsStream(Base64.decodeStr("TUVUQS1JTkYvQ0VSVC5TRg=="));
-                if (certPointSF == null) {
-                    AndroidUtilities.runOnUIThread(fuckMT);
-                }
-                IoUtil.close(certPointSF);
-            }
-
         });
 
         try {
             Class.forName("org.robolectric.android.internal.AndroidTestEnvironment");
             return;
-        } catch (ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException e) {
         }
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
