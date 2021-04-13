@@ -414,9 +414,9 @@ dependencies {
     implementation "dnsjava:dnsjava:3.3.1"
     implementation "org.dizitart:nitrite:3.4.3"
 
-    implementation "cn.hutool:hutool-core:5.6.2"
-    implementation "cn.hutool:hutool-crypto:5.6.2"
-    implementation "cn.hutool:hutool-http:5.6.2"
+    implementation "cn.hutool:hutool-core:5.6.3"
+    implementation "cn.hutool:hutool-crypto:5.6.3"
+    implementation "cn.hutool:hutool-http:5.6.3"
     implementation "com.jakewharton:process-phoenix:2.0.0"
 
     compileOnly "org.yaml:snakeyaml:1.28"
