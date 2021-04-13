@@ -231,4 +231,5 @@
     <string name="AddProxyWs">Add WebSocket Relay</string>
     <string name="ProxyInfoWS">WebSocket Relay Settings</string>
     <string name="WsPayload">Payload</string>
+    <string name="AutoLockImmediately">Immediately</string>
 </resources>
