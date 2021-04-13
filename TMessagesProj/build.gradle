@@ -61,9 +61,10 @@ alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
 
 def targetAbi = ""
+def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
     if (gradle.startParameter.taskNames.size == 1) {
-        def targetTask = gradle.startParameter.taskNames[0].toLowerCase()
+        targetTask = gradle.startParameter.taskNames[0].toLowerCase()
         if (targetTask.contains("arm64")) {
             targetAbi = "arm64"
         } else if (targetTask.contains("arm")) {
@@ -444,14 +445,15 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
 
     def ll = new File("TMessagesProj/libs").list()
-    if (ll == null || ll.length == 0) {
+    if ((ll == null || ll.length == 0) && !targetTask.contains("foss")) {
         System.err.println("Missing libs")
         System.exit(1)
     }
-
-    if (!targetAbi.isBlank() && ll.length == 1) {
-        implementation project(":ss-rust")
-        implementation project(":ssr-libev")
+    if (!targetAbi.isBlank()) {
+        if (ll.length) {
+            implementation project(":ss-rust")
+            implementation project(":ssr-libev")
+        }
     }
 
 }
