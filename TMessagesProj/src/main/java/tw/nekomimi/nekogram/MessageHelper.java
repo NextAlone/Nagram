@@ -46,6 +46,15 @@ public class MessageHelper extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, dialog_id, arrayList, false);
     }
 
+    public void resetMessageContent(long dialog_id, ArrayList<MessageObject> messageObjects) {
+        ArrayList<MessageObject> arrayList = new ArrayList<>();
+        for (MessageObject messageObject : messageObjects) {
+            MessageObject obj = new MessageObject(currentAccount, messageObject.messageOwner, true, true);
+            arrayList.add(obj);
+        }
+        getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, dialog_id, arrayList, false);
+    }
+
     public static MessageHelper getInstance(int num) {
         MessageHelper localInstance = Instance.get(num);
         if (localInstance == null) {

@@ -1091,6 +1091,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int unpin = 106;
     private final static int save = 107;
     private final static int delete_history = 108;
+    private final static int hide = 109;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -1904,6 +1905,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     ArrayList<MessageObject> messages = getSelectedMessages();
                     forwardMessages(messages, false, true, 0, UserConfig.getInstance(currentAccount).getClientUserId());
                     undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
+                } else if (id == hide) {
+                    ArrayList<MessageObject> messages = getSelectedMessages();
+                    for (MessageObject message : messages) {
+                        message.messageOwner.hide = true;
+                    }
+                    getMessageHelper().resetMessageContent(dialog_id, messages);
                 } else if (id == delete) {
                     if (getParentActivity() == null) {
                         return;
@@ -2557,6 +2564,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeOtherItem.addSubItem(translate, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
         actionModeOtherItem.addSubItem(unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
         actionModeOtherItem.addSubItem(save, R.drawable.baseline_bookmark_24, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
+
+        if (NekoConfig.showMessageHide) {
+            actionModeOtherItem.addSubItem(hide, R.drawable.baseline_remove_circle_24, LocaleController.getString("Hide", R.string.Hide));
+        }
 
         actionMode.getItem(reply).setVisibility(ChatObject.canSendMessages(currentChat) && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
@@ -19193,6 +19204,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(89);
                             icons.add(R.drawable.menu_info);
                         }
+                        if (NekoConfig.showMessageHide) {
+                            items.add(LocaleController.getString("Hide", R.string.Hide));
+                            options.add(204);
+                            icons.add(R.drawable.baseline_remove_circle_24);
+                        }
                         boolean canViewStats = false;
                         if (message.messageOwner.views > 0 || message.messageOwner.forwards > 0) {
                             if (message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.channel_post != 0) {
@@ -19363,6 +19379,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(203);
                                 icons.add(R.drawable.baseline_vpn_key_24);
                             }
+                        }
+                        if (NekoConfig.showMessageHide) {
+                            items.add(LocaleController.getString("Hide", R.string.Hide));
+                            options.add(204);
+                            icons.add(R.drawable.baseline_remove_circle_24);
                         }
                         items.add(LocaleController.getString("Delete", R.string.Delete));
                         options.add(1);
@@ -20734,6 +20755,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                     AlertUtil.showToast(e);
 
+                }
+
+            }
+            case 204: {
+                if (selectedObjectGroup != null) {
+                    for (MessageObject object : selectedObjectGroup.messages) {
+                        object.messageOwner.hide = true;
+                    }
+                    getMessageHelper().resetMessageContent(dialog_id, selectedObjectGroup.messages);
+                } else {
+                    selectedObject.messageOwner.hide = true;
+                    getMessageHelper().resetMessageContent(dialog_id, selectedObject);
                 }
 
             }

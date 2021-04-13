@@ -59,6 +59,7 @@ public class NekoConfig {
     public static boolean showMessageDetails;
     public static boolean showTranslate;
     public static boolean showRepeat;
+    public static boolean showMessageHide;
 
     public static boolean hidePhone;
     public static int typeface;
@@ -218,6 +219,8 @@ public class NekoConfig {
         showMessageDetails = preferences.getBoolean("showMessageDetails", false);
         showTranslate = preferences.getBoolean("showTranslate", true);
         showRepeat = preferences.getBoolean("showRepeat", false);
+        showMessageHide = preferences.getBoolean("showMessageHide", false);
+
         eventType = preferences.getInt("eventType", 0);
         actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
         newYear = preferences.getBoolean("newYear", false);
@@ -368,6 +371,14 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showRepeat", showRepeat);
+        editor.apply();
+    }
+
+    public static void toggleShowHide() {
+        showMessageHide = !showMessageHide;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("showMessageHide", showMessageHide);
         editor.apply();
     }
 

@@ -46551,6 +46551,7 @@ public class TLRPC {
         public boolean isThreadMessage; //custom
         public String translatedMessage; //custom
         public boolean translated; // custom
+        public boolean hide; // custom
 
         public static Message TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             Message result = null;
