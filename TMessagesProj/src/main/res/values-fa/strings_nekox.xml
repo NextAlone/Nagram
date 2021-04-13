@@ -66,7 +66,7 @@
     <string name="ImportPxy">وارد كردن</string>
     <string name="FilterNameUsers">کاربران</string>
     <string name="FilterNameUsersDescription">فقط پیام های چت های خصوصی</string>
-    <string name="FilterNameContacts">مخاطبین</string>
+    <string name="FilterNameContacts">آشِنایان</string>
     <string name="FilterNameContactsDescription">فقط پیام های کاربران ذخیره شده</string>
     <string name="FilterNameGroups">گروه‌ها</string>
     <string name="FilterNameGroupsDescription">فقط پیام های گفتگو های گروهی</string>
@@ -232,4 +232,7 @@
     <string name="UsePersiancalendarInfo">نمایش تاریخ با تقویم هجری خورشیدی</string>
     <string name="DisplayPersianCalendarByLatin">نمایش تقویم فارسی بصورت لاتین</string>
     <string name="UsePersiancalendar">استفاده از تقویم فارسی</string>
+    <string name="WsPayload">ظرفیت ترابری</string>
+    <string name="ProxyInfoWS">تنظیمات رله WebSocket</string>
+    <string name="AddProxyWs">افزودن رله WebSocket</string>
 </resources>

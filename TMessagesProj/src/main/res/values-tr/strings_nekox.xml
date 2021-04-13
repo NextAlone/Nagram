@@ -29,7 +29,7 @@
     <string name="ProxyAutoSwitch">Otomatik proxy geçişi</string>
     <string name="LinkedGroupChat">Bağlı grup</string>
     <string name="LinkedChannelChat">Bağlı kanal</string>
-    <string name="DevModeTitle">**Telegram hesabınız yasaklanmış olabilir**</string>
+    <string name="DevModeTitle">**Telegram hesabınız yasaklanabilir**</string>
     <string name="DevModeNotice">Geliştirici özelliklerinin uygunsuz kullanımından sorumlu değiliz.</string>
     <string name="TapToDisable">Devre dışı bırakmak için dokunun. Bunlara ihtiyacınız yok.</string>
     <string name="PlaceHolder">Yer Tutucu - Lütfen Devre Dışı Bırakın</string>
@@ -220,4 +220,9 @@
     <string name="ArchiveFiles">Arşiv dosyaları</string>
     <string name="Win32ExecutableFiles">Win32 çalıştırılabilir dosyalar</string>
     <string name="AutoDownload">Otomatik İndirme</string>
+    <string name="ProxyInfoWS">WebSocket Relay Ayarları</string>
+    <string name="AddProxyWs">WebSocket Relay Ekle</string>
+    <string name="UsePersiancalendarInfo">Güneş Hicri takvimi ile tarihi görüntüle</string>
+    <string name="DisplayPersianCalendarByLatin">Farsça takvimini Latince olarak görüntüle</string>
+    <string name="UsePersiancalendar">Farsça takvimi kullan</string>
 </resources>

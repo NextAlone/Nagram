@@ -232,4 +232,7 @@
     <string name="DisplayPersianCalendarByLatin">عرض التقويم الفارسي حسب اللغة اللاتينية</string>
     <string name="UsePersiancalendarInfo">عرض التاريخ مع التقويم الهجري الشمسي</string>
     <string name="UsePersiancalendar">استخدام التقويم الفارسي</string>
+    <string name="WsPayload">الحمولة</string>
+    <string name="ProxyInfoWS">إعدادات ترحيل WebSocket</string>
+    <string name="AddProxyWs">إضافة WebSocket Relay</string>
 </resources>

@@ -230,4 +230,7 @@
     <string name="DisplayPersianCalendarByLatin">Hiển thị lịch Ba Tư theo tiếng Latinh</string>
     <string name="UsePersiancalendarInfo">Hiển thị ngày với lịch Hijri mặt trời</string>
     <string name="UsePersiancalendar">Sử dụng lịch Ba Tư</string>
+    <string name="WsPayload">Payload</string>
+    <string name="ProxyInfoWS">Cài đặt WebSocket Relay</string>
+    <string name="AddProxyWs">Thêm WebSocket Replay</string>
 </resources>

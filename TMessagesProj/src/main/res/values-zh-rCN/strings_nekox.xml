@@ -228,4 +228,11 @@
     <string name="EnableStickerPin">启用贴纸集置顶</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="UsePersiancalendar">使用伊朗历</string>
+    <string name="UsePersiancalendarInfo">用太阳回历显示日期</string>
+    <string name="DisplayPersianCalendarByLatin">以拉丁字母显示波斯日历</string>
+    <string name="AddProxyWs">添加 WebSocket 中继</string>
+    <string name="ProxyInfoWS">WebSocket 中继设置</string>
+    <string name="WsPayload">Payload</string>
+    <string name="WsNeedLogin">由于技术限制, Ws 中继暂时不能在登录前使用.</string>
+    <string name="AutoLockImmediately">立即</string>
 </resources>
