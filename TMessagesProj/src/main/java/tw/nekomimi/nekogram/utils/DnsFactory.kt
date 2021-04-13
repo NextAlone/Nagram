@@ -13,10 +13,11 @@ import kotlin.collections.ArrayList
 
 object DnsFactory {
 
-    val providers = arrayOf(
+    val providers = if (Locale.getDefault().country == "CN") arrayOf(
+            "https://doh.dns.sb/dns-query"
+    ) else arrayOf(
             "https://mozilla.cloudflare-dns.com/dns-query",
-            "https://dns.adguard.com/dns-query",
-            if (Locale.getDefault().country == "CN") "https://dns.alidns.com/dns-query" else "https://dns.google/dns-query",
+            "https://dns.google/dns-query",
     )
 
     val cache = Cache()

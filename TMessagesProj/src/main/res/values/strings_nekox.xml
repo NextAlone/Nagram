@@ -232,4 +232,5 @@
     <string name="ProxyInfoWS">WebSocket Relay Settings</string>
     <string name="WsPayload">Payload</string>
     <string name="AutoLockImmediately">Immediately</string>
+    <string name="WsNeedLogin">Due to technical limitations, Ws Relay cannot be used before logging in.</string>
 </resources>
