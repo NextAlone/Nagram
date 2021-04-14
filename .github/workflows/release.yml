@@ -24,7 +24,7 @@ jobs:
         with:
           permission: "write"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
   ffmpeg:
     name: Native Build (FFmpeg)
     runs-on: ubuntu-latest
@@ -330,10 +330,18 @@ jobs:
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
           APK=$(dirname $APK)
           echo "APK=$APK" >> $GITHUB_ENV
+          
+      - uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          expire-in: 0
+          
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.flavor }}
           path: ${{ env.APK }}
+      
+          
   publish:
     name: Publish Release
     if: github.event.inputs.publish != 'y'
@@ -385,11 +393,7 @@ jobs:
           upload apks/NekoX-full-*-releaseNoGcm.apk
           upload apks/NekoX-mini-*-release.apk
           upload apks/NekoX-mini-*-releaseNoGcm.apk
-
-        uses: kolpav/purge-artifacts-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          expire-in: 0
+          
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
