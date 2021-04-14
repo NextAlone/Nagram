@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "124118418489",
-    "firebase_url": "https://nekox-114.firebaseio.com",
-    "project_id": "nekox-114",
-    "storage_bucket": "nekox-114.appspot.com"
+    "project_number": "486018081595",
+    "project_id": "freegrm-6b2de",
+    "storage_bucket": "freegrm-6b2de.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:124118418489:android:3dc02bf5a16e92600d39e8",
+        "mobilesdk_app_id": "1:486018081595:android:f15f15e2321f3074524d1e",
         "android_client_info": {
-          "package_name": "nekox.messenger"
+          "package_name": "Freegram.messenger"
         }
       },
       "oauth_client": [
         {
-          "client_id": "124118418489-lm9tuk7lbedjal3tgr8g68id1ue8gv2m.apps.googleusercontent.com",
+          "client_id": "486018081595-02vh8k95n5h3oub8fbjffhebtchmkiso.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAGMJyrCKui9kUWANoRYbEa3Gt4fsqm1sE"
+          "current_key": "AIzaSyB7cTkjs2LE-OGOSP6GCy2KXF-rRwXC7BI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "124118418489-lm9tuk7lbedjal3tgr8g68id1ue8gv2m.apps.googleusercontent.com",
+              "client_id": "486018081595-02vh8k95n5h3oub8fbjffhebtchmkiso.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
