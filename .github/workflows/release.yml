@@ -385,6 +385,11 @@ jobs:
           upload apks/NekoX-full-*-releaseNoGcm.apk
           upload apks/NekoX-mini-*-release.apk
           upload apks/NekoX-mini-*-releaseNoGcm.apk
+
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 0
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
