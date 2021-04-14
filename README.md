@@ -26,6 +26,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc
 - Scan the QR code (any link, can add a proxy)
 - The ( vmess / vmess1 / ss / ssr / trojan ) proxy link in the message can be clicked
+- Built-in WebSocket relay support (Connect via Cloudflare CDN)
 - Allow auto-disabling proxy when VPN is enabled
 - Proxy automatic switcher
 - Add stickers without sticker pack
@@ -102,6 +103,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-t
 echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
 
 rustup install $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
+rustup default $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 
@@ -176,7 +178,7 @@ You can [open an issue to](https://github.com/NekoX-Dev/NekoX/issues/new?&templa
     <li>OpenCC: <a href="https://github.com/BYVoid/OpenCC/blob/master/LICENSE">Apache License 2.0</a></li>
     <li>opencc-data: <a href="https://github.com/nk2028/opencc-data">Apache License 2.0</a></li>
     <li>android-device-list: <a href="https://github.com/pbakondy/android-device-list/blob/master/LICENSE">MIT</a> </li>
+    <li>JetBrains: for allocating free open-source licences for IDEs</li>
 </ul>
 
-Thanks to JetBrains for allocating free open-source licences for IDEs.  
 [<img src=".github/jetbrains-variant-3.png" width="200"/>](https://jb.gg/OpenSource)

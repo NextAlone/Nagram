@@ -31,7 +31,7 @@
     <string name="ProxyAutoSwitch">سوئیچ خودکار پروکسی</string>
     <string name="LinkedGroupChat">گروه متصل</string>
     <string name="LinkedChannelChat">کانال متصل</string>
-    <string name="DevModeTitle">** ممکن است حساب تلگرام شما بن شده باشد **</string>
+    <string name="DevModeTitle">**ممکن است حساب تلگرام شما مسدود شده باشد**</string>
     <string name="DevModeNotice">ما مسئولیتی در قبال استفاده نادرست از ویژگی های توسعه دهنده نداریم.</string>
     <string name="TapToDisable">برای غیرفعال کردن ضربه بزنید. شما به این موارد نیاز ندارید.</string>
     <string name="PlaceHolder">حفره مکان - لطفا غیرفعال کنید</string>
@@ -49,7 +49,7 @@
     <string name="More">بیشتر</string>
     <string name="NekoXUpdatesChannel">کانال بروزرسانی NekoX</string>
     <string name="ShowIdAndDc">نمایش شناسه / DC کاربر در پروفایل</string>
-    <string name="UseDefaultTheme">بکارگیری پوستۀ پیشـگزیده *</string>
+    <string name="UseDefaultTheme">بکارگیری پوسته پیش‌گزیده *</string>
     <string name="NightMode">حالت شب</string>
     <string name="PrivacyNotice">هشدار حریم خصوصی</string>
     <string name="PrivacyNoticePhoneVisible">بنظر می رسد شماره تلفن شما برای همه قابل مشاهده است، و این ممکن باعث شود که هکرهای دولتی هویت واقعی شما را پیدا کنند. لطفا آن را خاموش کنید!</string>
@@ -66,7 +66,7 @@
     <string name="ImportPxy">وارد كردن</string>
     <string name="FilterNameUsers">کاربران</string>
     <string name="FilterNameUsersDescription">فقط پیام های چت های خصوصی</string>
-    <string name="FilterNameContacts">مخاطبین</string>
+    <string name="FilterNameContacts">آشِنایان</string>
     <string name="FilterNameContactsDescription">فقط پیام های کاربران ذخیره شده</string>
     <string name="FilterNameGroups">گروه‌ها</string>
     <string name="FilterNameGroupsDescription">فقط پیام های گفتگو های گروهی</string>
@@ -102,8 +102,8 @@
     <string name="UnblockAll">رفع مسدودی همه</string>
     <string name="UnblockAllWarn">آیا از رفع مسدودیت **همه ی کاربران و ربات ها** اطمینان دارید؟</string>
     <string name="BlockedListEmpty">شما هیچ فردی را مسدود نکرده اید :)</string>
-    <string name="ProxyTypeVmess">پروکسی Vmess</string>
-    <string name="AddProxySocks5">افزودن پروکسی Socks5</string>
+    <string name="ProxyTypeVmess">پروکسی VMess</string>
+    <string name="AddProxySocks5">افزودن پروکسی SOCKS5</string>
     <string name="AddProxyTelegram">افزودن پروکسی MTProto</string>
     <string name="AddProxyVmess">افزودن پروکسی Vmess</string>
     <string name="AddProxySS">افزودن پروکسی Shadowsocks</string>
@@ -114,8 +114,8 @@
     <string name="ShareProxy">اشتراک گذاری پروکسی</string>
     <string name="ProxyDelete">حذف پروکسی</string>
     <string name="ProxyInfoVmess">تنظیمات پروکسی Vmess</string>
-    <string name="VmessUserId">آیدی کاربر</string>
-    <string name="VmessAlterId">آیدی عددی</string>
+    <string name="VmessUserId">شناسه کاربر</string>
+    <string name="VmessAlterId">شناسه عددی</string>
     <string name="VmessSecurity">امنیت</string>
     <string name="VmessNetwork">شبکه</string>
     <string name="VmessHeadType">نوع Head</string>
@@ -142,7 +142,7 @@
     <string name="ImportProxyList">ایمپورت سرورهای پروکسی</string>
     <string name="ProxySubscription">اشتراک پروکسی</string>
     <string name="ProxySubDetails">جزئیات اشتراک</string>
-    <string name="SubscriptionUrls">آدرس ها</string>
+    <string name="SubscriptionUrls">آدرس‌ها</string>
     <string name="SubscriptionUpdating">درحال به روز رسانی اشتراک</string>
     <string name="SubscriptionDelete">حذف کردن اشتراک</string>
     <string name="ExportStickers">استخراج استیکر ها</string>
@@ -185,7 +185,7 @@
     <string name="DisableVibration">غیرفعال کردن لرزش</string>
     <string name="IgnoreContentRestrictions">دور زدن محدودیت های محتوا</string>
     <string name="IgnoreContentRestrictionsNotice">محدودیت های پیامها در اندروید را بصورت محلی دور می زند. این ممکن است در آینده توسط سرور از کار بیفتد، و شما خودتان نیازمند بررسی قانونی بودن این قابلیت هستید.</string>
-    <string name="SendCommentAfterForward">ارسال نظر پس از فروارد</string>
+    <string name="SendCommentAfterForward">ارسال نظر پس از هدایت</string>
     <string name="UnpinMessageX">لغو پین پیام</string>
     <string name="UnpinMessagesAll">لغو پین همه پیام ها</string>
     <string name="DismissForYourself">لغو کردن برای خودتان</string>
@@ -229,4 +229,10 @@
     <string name="ArchiveFiles">فایل‌های آرشیو</string>
     <string name="Win32ExecutableFiles">فایل‌های قابل اجرای Win32</string>
     <string name="AppLinkFDroid">اف دروید</string>
+    <string name="UsePersiancalendarInfo">نمایش تاریخ با تقویم هجری خورشیدی</string>
+    <string name="DisplayPersianCalendarByLatin">نمایش تقویم فارسی بصورت لاتین</string>
+    <string name="UsePersiancalendar">استفاده از تقویم فارسی</string>
+    <string name="WsPayload">ظرفیت ترابری</string>
+    <string name="ProxyInfoWS">تنظیمات رله WebSocket</string>
+    <string name="AddProxyWs">افزودن رله WebSocket</string>
 </resources>

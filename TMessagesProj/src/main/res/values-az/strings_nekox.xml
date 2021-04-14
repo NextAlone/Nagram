@@ -100,8 +100,8 @@
     <string name="UnblockAll">Hamısını blokdan çıxarın</string>
     <string name="UnblockAllWarn">** bütün istifadəçiləri və botları ** blokdan çıxarmaq istədiyinizə əminsiniz?</string>
     <string name="BlockedListEmpty">Heç kəsi blok etməmisiniz :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Socks5 Proxy əlavə edin</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">SOCKS5 Proxy əlavə edin</string>
     <string name="AddProxyTelegram">MTProto Proxy əlavə edin</string>
     <string name="AddProxyVmess">Vmess Proxy əlavə edin</string>
     <string name="AddProxySS">Shadowsocks Proxy əlavə edin</string>

@@ -377,8 +377,17 @@ public class ConnectionsManager extends BaseController {
         if (installer == null) {
             installer = "";
         }
+        String packageId = "";
+        try {
+            packageId = ApplicationLoader.applicationContext.getPackageName();
+        } catch (Throwable ignore) {
 
-        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+        }
+        if (packageId == null) {
+            packageId = "";
+        }
+
+        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, packageId, timezoneOffset, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
 
         Utilities.stageQueue.postRunnable(() -> {
 
@@ -390,7 +399,6 @@ public class ConnectionsManager extends BaseController {
                 }
                 native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
             }
-
             checkConnection();
 
         });
@@ -694,6 +702,17 @@ public class ConnectionsManager extends BaseController {
                 accountInstance.getMessagesController().checkPromoInfo(true);
             }
         }
+        if (SharedConfig.loginingAccount != -1) {
+            if (enabled && !TextUtils.isEmpty(address)) {
+                native_setProxySettings(SharedConfig.loginingAccount, address, port, username, password, secret);
+            } else {
+                native_setProxySettings(SharedConfig.loginingAccount, "", 1080, "", "", "");
+            }
+            AccountInstance accountInstance = AccountInstance.getInstance(SharedConfig.loginingAccount);
+            if (accountInstance.getUserConfig().isClientActivated()) {
+                accountInstance.getMessagesController().checkPromoInfo(true);
+            }
+        }
     }
 
     public static native void native_switchBackend(int currentAccount);
@@ -736,8 +755,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_setUserId(int currentAccount, int id);
 
-    public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, String installer, int timezoneOffset, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
-
+    public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, String installer, String packageId, int timezoneOffset, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
     public static native void native_setProxySettings(int currentAccount, String address, int port, String username, String password, String secret);
 
     public static native void native_setLangCode(int currentAccount, String langCode);
@@ -762,6 +780,8 @@ public class ConnectionsManager extends BaseController {
         return lastClassGuid++;
     }
 
+    public boolean alertShowed;
+
     public void setIsUpdating(final boolean value) {
         AndroidUtilities.runOnUIThread(() -> {
             if (isUpdating == value) {
@@ -770,7 +790,12 @@ public class ConnectionsManager extends BaseController {
             isUpdating = value;
             if (connectionState == ConnectionStateConnected) {
                 AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
-            }
+            } /*else if (connectionState == ConnectionStateConnectingToProxy && !alertShowed) {
+                if (getCurrentDatacenterId() == 4 && SharedConfig.currentProxy instanceof SharedConfig.WsProxy) {
+                    alertShowed = true;
+                    AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.needShowAlert, 3, Unit.INSTANCE);
+                }
+            }*/
         });
     }
 

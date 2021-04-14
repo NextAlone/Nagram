@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
@@ -100,6 +101,8 @@ import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -355,7 +358,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 ConnectionsManager.getInstance(currentAccount).setUserId(res.user.id);
                                 UserConfig.getInstance(currentAccount).clearConfig();
                                 MessagesController.getInstance(currentAccount).cleanup();
-                                UserConfig.getInstance(currentAccount).isBot = true;
                                 UserConfig.getInstance(currentAccount).syncContacts = syncContacts;
                                 UserConfig.getInstance(currentAccount).setCurrentUser(res.user);
                                 UserConfig.getInstance(currentAccount).saveConfig(true);
@@ -364,9 +366,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 users.add(res.user);
                                 MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
                                 MessagesController.getInstance(currentAccount).putUser(res.user, false);
-                                ContactsController.getInstance(currentAccount).checkAppAccount();
-                                MessagesController.getInstance(currentAccount).getBlockedPeers(true);
-                                MessagesController.getInstance(currentAccount).checkPromoInfo(true);
                                 ConnectionsManager.getInstance(currentAccount).updateDcSettings();
                                 needFinishActivity(false);
                             } else {
@@ -656,7 +655,20 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         doneItem.setContentDescription(LocaleController.getString("Done", R.string.Done));
         doneItem.setVisibility(doneButtonVisible[DONE_TYPE_ACTION] ? View.VISIBLE : View.GONE);
 
-        FrameLayout container = new FrameLayout(context);
+        FrameLayout container = new FrameLayout(context) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                MarginLayoutParams marginLayoutParams = (MarginLayoutParams) floatingButtonContainer.getLayoutParams();
+                if (Bulletin.getVisibleBulletin() != null && Bulletin.getVisibleBulletin().isShowing()) {
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                    marginLayoutParams.bottomMargin = AndroidUtilities.dp(14) + Bulletin.getVisibleBulletin().getLayout().getMeasuredHeight() - AndroidUtilities.dp(10);
+                } else {
+                    marginLayoutParams.bottomMargin = AndroidUtilities.dp(14);
+                }
+
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
+        };
         fragmentView = container;
 
         ScrollView scrollView = new ScrollView(context) {
@@ -1143,11 +1155,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         AndroidUtilities.shakeView(view, 2, 0);
     }
 
-    private void needShowInvalidAlert(final String phoneNumber, final boolean banned) {
-        if (getParentActivity() == null) {
+    public static void needShowInvalidAlert(BaseFragment fragment, final String phoneNumber, final boolean banned) {
+        if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
         builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
         if (banned) {
             builder.setMessage(LocaleController.getString("BannedPhoneNumber", R.string.BannedPhoneNumber));
@@ -1159,8 +1171,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                 String version = String.format(Locale.US, "%s (%d)", pInfo.versionName, pInfo.versionCode);
 
-                Intent mailer = new Intent(Intent.ACTION_SEND);
-                mailer.setType("message/rfc822");
+                Intent mailer = new Intent(Intent.ACTION_SENDTO);
+                mailer.setData(Uri.parse("mailto:"));
                 mailer.putExtra(Intent.EXTRA_EMAIL, new String[]{"login@stel.com"});
                 if (banned) {
                     mailer.putExtra(Intent.EXTRA_SUBJECT, "Banned phone number: " + phoneNumber);
@@ -1169,13 +1181,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     mailer.putExtra(Intent.EXTRA_SUBJECT, "Invalid phone number: " + phoneNumber);
                     mailer.putExtra(Intent.EXTRA_TEXT, "I'm trying to use my mobile phone number: " + phoneNumber + "\nBut Telegram says it's invalid. Please help.\n\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault());
                 }
-                getParentActivity().startActivity(Intent.createChooser(mailer, "Send email..."));
+                fragment.getParentActivity().startActivity(Intent.createChooser(mailer, "Send email..."));
             } catch (Exception e) {
-                needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(fragment.getParentActivity());
+                builder2.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+                builder2.setMessage(LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                fragment.showDialog(builder2.create());
             }
         });
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        showDialog(builder.create());
+        fragment.showDialog(builder.create());
     }
 
     private void showDoneButton(boolean show, boolean animated) {
@@ -1955,11 +1971,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         FileLog.e(e);
                     }
                     if (syncContacts) {
-                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn), Toast.LENGTH_SHORT);
-                        visibleToast.show();
+                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn)).show();
                     } else {
-                        visibleToast = Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff), Toast.LENGTH_SHORT);
-                        visibleToast.show();
+                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_off, LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff)).show();
                     }
                 }
             });
@@ -2245,13 +2259,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 } else {
                     if (error.text != null) {
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                            needShowInvalidAlert(req.phone_number, false);
+                            needShowInvalidAlert(LoginActivity.this, req.phone_number, false);
                         } else if (error.text.contains("PHONE_PASSWORD_FLOOD")) {
                             needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("FloodWait", R.string.FloodWait));
                         } else if (error.text.contains("PHONE_NUMBER_FLOOD")) {
                             needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
                         } else if (error.text.contains("PHONE_NUMBER_BANNED")) {
-                            needShowInvalidAlert(req.phone_number, true);
+                            needShowInvalidAlert(LoginActivity.this, req.phone_number, true);
                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
                             needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                         } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
@@ -2549,8 +2563,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                         String version = String.format(Locale.US, "%s (%d)", pInfo.versionName, pInfo.versionCode);
 
-                        Intent mailer = new Intent(Intent.ACTION_SEND);
-                        mailer.setType("message/rfc822");
+                        Intent mailer = new Intent(Intent.ACTION_SENDTO);
+                        mailer.setData(Uri.parse("mailto:"));
                         mailer.putExtra(Intent.EXTRA_EMAIL, new String[]{"sms@stel.com"});
                         mailer.putExtra(Intent.EXTRA_SUBJECT, "Android registration/login issue " + version + " " + emailPhone);
                         mailer.putExtra(Intent.EXTRA_TEXT, "Phone: " + requestPhone + "\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + lastError);

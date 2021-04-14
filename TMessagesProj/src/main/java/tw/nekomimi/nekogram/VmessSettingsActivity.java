@@ -80,7 +80,7 @@ public class VmessSettingsActivity extends BaseFragment {
 
     private static final int done_button = 1;
 
-    private static String[] securitySet = { "chacha20-poly1305","aes-128-gcm","auto","none" };
+    private static String[] securitySet = { "chacha20-poly1305","aes-128-gcm","auto","none","zero" };
     private static String[] networkSet = { "tcp","kcp","ws","h2","quic" };
     private static String[] headTypeSet = { "none","http","srtp","utp","wechat-video","dtls","wireguard" };
 

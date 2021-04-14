@@ -34,6 +34,8 @@ import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
 import com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL
 import com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL
+import com.v2ray.ang.V2RayConfig.WSS_PROTOCOL
+import com.v2ray.ang.V2RayConfig.WS_PROTOCOL
 import com.v2ray.ang.dto.AngConfig
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONArray
@@ -202,6 +204,8 @@ object ProxyUtil {
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
                         line.startsWith(SSR_PROTOCOL) ||
+                        line.startsWith(WS_PROTOCOL) ||
+                        line.startsWith(WSS_PROTOCOL) ||
                         line.startsWith(TROJAN_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
@@ -240,6 +244,8 @@ object ProxyUtil {
                         line.startsWith(VMESS1_PROTOCOL) ||
                         line.startsWith(SS_PROTOCOL) ||
                         line.startsWith(SSR_PROTOCOL) ||
+                        line.startsWith(WS_PROTOCOL) ||
+                        line.startsWith(WSS_PROTOCOL) ||
                         line.startsWith(TROJAN_PROTOCOL) /*||
                     line.startsWith(RB_PROTOCOL)*/) {
 
@@ -273,7 +279,10 @@ object ProxyUtil {
                                 line.startsWith(VMESS1_PROTOCOL) ||
                                 line.startsWith(SS_PROTOCOL) ||
                                 line.startsWith(SSR_PROTOCOL) ||
+                                line.startsWith(WS_PROTOCOL) ||
+                                line.startsWith(WSS_PROTOCOL) ||
                                 line.startsWith(TROJAN_PROTOCOL) /*||
+
                     line.startsWith(RB_PROTOCOL)*/) {
 
                             runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
@@ -341,6 +350,10 @@ object ProxyUtil {
 
                 AndroidUtilities.showShadowsocksRAlert(ctx, SharedConfig.ShadowsocksRProxy(link))
 
+            } else if (link.startsWith(WS_PROTOCOL) || link.startsWith(WSS_PROTOCOL)) {
+
+                AndroidUtilities.showWsAlert(ctx, SharedConfig.WsProxy(link))
+
             } else {
 
                 val url = link.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
@@ -406,6 +419,16 @@ object ProxyUtil {
                 }
 
                 SharedConfig.ShadowsocksRProxy(link)
+
+            } else if (link.startsWith(WS_PROTOCOL) || link.startsWith(WSS_PROTOCOL)) {
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                    error(LocaleController.getString("MinApi21Required", R.string.MinApi21Required))
+
+                }
+
+                SharedConfig.WsProxy(link)
 
             } else {
 

@@ -78,7 +78,7 @@ object AlertUtil {
     @JvmStatic
     fun showSimpleAlert(ctx: Context?, error: Throwable) {
 
-        showSimpleAlert(ctx, null, error.message ?: error.javaClass.simpleName) {}
+        showSimpleAlert(ctx, null, error.message ?: error.javaClass.simpleName)
 
     }
 
@@ -101,13 +101,10 @@ object AlertUtil {
         builder.setTitle(title ?: LocaleController.getString("NekoX", R.string.NekoX))
         builder.setMessage(text)
 
-        if (listener != null) {
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
 
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
-
-                builder.dismissRunnable.run()
-
-            }
+            builder.dismissRunnable?.run()
+            listener?.invoke(builder)
 
         }
 

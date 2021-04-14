@@ -264,11 +264,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (!UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             return;
         }
-        int eventType = Theme.getEventType();
         int contactsIcon = R.drawable.baseline_perm_contact_calendar_24;
         int savedIcon = R.drawable.baseline_bookmark_24;
         int settingsIcon = R.drawable.baseline_settings_24;
-        int inviteIcon = R.drawable.baseline_person_add_24;
         int callsIcon = R.drawable.baseline_call_24;
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
@@ -280,7 +278,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
                 return true;
             }));
         }
-        if (NekoXConfig.disableStatusUpdate && !UserConfig.getInstance(UserConfig.selectedAccount).isBot) {
+        if (NekoXConfig.disableStatusUpdate && !UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().bot) {
             boolean online = MessagesController.getInstance(UserConfig.selectedAccount).isOnline();
             String message = online ? StrUtil.upperFirst(LocaleController.getString("Online", R.string.Online)) : LocaleController.getString("VoipOfflineTitle", R.string.VoipOfflineTitle);
             if (NekoXConfig.keepOnlineStatus) {

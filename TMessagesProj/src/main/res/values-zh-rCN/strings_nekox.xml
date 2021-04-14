@@ -100,7 +100,7 @@
     <string name="UnblockAll">解除所有</string>
     <string name="UnblockAllWarn">您确定要解除屏蔽**所有用户和机器人**吗？</string>
     <string name="BlockedListEmpty">您还没有屏蔽任何人 :)</string>
-    <string name="ProxyTypeVmess">Vmess 代理</string>
+    <string name="ProxyTypeVmess">VMess 代理</string>
     <string name="AddProxySocks5">添加 SOCKS5 代理</string>
     <string name="AddProxyTelegram">添加 MTProto 代理</string>
     <string name="AddProxyVmess">添加 Vmess 代理</string>
@@ -227,4 +227,12 @@
 \n与 \"禁用收藏夹和最近\" 配对。</string>
     <string name="EnableStickerPin">启用贴纸集置顶</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="UsePersiancalendar">使用伊朗历</string>
+    <string name="UsePersiancalendarInfo">用太阳回历显示日期</string>
+    <string name="DisplayPersianCalendarByLatin">以拉丁字母显示波斯日历</string>
+    <string name="AddProxyWs">添加 WebSocket 中继</string>
+    <string name="ProxyInfoWS">WebSocket 中继设置</string>
+    <string name="WsPayload">Payload</string>
+    <string name="WsNeedLogin">由于技术限制, Ws 中继暂时不能在登录前使用.</string>
+    <string name="AutoLockImmediately">立即</string>
 </resources>

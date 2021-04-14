@@ -1182,6 +1182,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         popupMessages.clear();
         if (isReply) {
             int account = intent != null ? intent.getIntExtra("currentAccount", UserConfig.selectedAccount) : UserConfig.selectedAccount;
+            if (!UserConfig.isValidAccount(account)) {
+                return;
+            }
             popupMessages.addAll(NotificationsController.getInstance(account).popupReplyMessages);
         } else {
             for (int a : SharedConfig.activeAccounts) {
@@ -1371,7 +1374,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             currentChat = chat;
             if (avatarImageView != null) {
                 AvatarDrawable avatarDrawable = new AvatarDrawable(currentChat);
-                avatarImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", avatarDrawable, chat);
+                avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, chat);
             }
         } else if (currentUser != null) {
             TLRPC.User user = MessagesController.getInstance(currentMessageObject.currentAccount).getUser(currentUser.id);
@@ -1381,7 +1384,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             currentUser = user;
             if (avatarImageView != null) {
                 AvatarDrawable avatarDrawable = new AvatarDrawable(currentUser);
-                avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
+                avatarImageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
             }
         }
     }

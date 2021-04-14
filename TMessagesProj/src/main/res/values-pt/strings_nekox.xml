@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="UseChatAttachEnterMenu">Usar menu de entrada</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Activar pré-visualização de Link</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Desactivar pré-visualização de Link</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Gravar Áudio</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Gravar vídeo</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu de input do chat</string>
+    <string name="Locked">Bloqueado</string>
+</resources>

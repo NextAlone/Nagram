@@ -100,8 +100,8 @@
     <string name="UnblockAll">Odblokuj wszystkich</string>
     <string name="UnblockAllWarn">Czy na pewno chcesz odblokować **wszystkich użytkowników oraz wszystkie boty**?</string>
     <string name="BlockedListEmpty">Nikogo nie zablokowałeś :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Dodaj Proxy Socks5</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Dodaj Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Dodaj MTProto proxy</string>
     <string name="AddProxyVmess">Dodaj Vmess Proxy</string>
     <string name="AddProxySS">Dodaj Shadowsocks Proxy</string>

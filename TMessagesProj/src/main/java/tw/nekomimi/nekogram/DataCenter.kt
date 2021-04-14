@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram
 
+import android.graphics.Color
 import org.telegram.tgnet.ConnectionsManager
 
 object DataCenter {

@@ -100,8 +100,8 @@
     <string name="UnblockAll">Buka Semua Yang Diblokir</string>
     <string name="UnblockAllWarn">Anda yakin ingin membuka blokir untuk **semua pengguna dan robot**?</string>
     <string name="BlockedListEmpty">Anda belum memblokir siapa pun</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Tambahkan Proxy Socks5</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Tambahkan Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Tambahkan Proxy MTProto</string>
     <string name="AddProxyVmess">Tambahkan Proxy Vmess</string>
     <string name="AddProxySS">Tambahkan Proxy Shadowsocks</string>

@@ -16,7 +16,7 @@ data class AngConfig(
                          var address: String = "",
                          var port: Int = 443,
                          var id: String = "",
-                         var alterId: Int = 64,
+                         var alterId: Int = 0,
                          var security: String = "auto",
                          var network: String = "tcp",
                          var remarks: String = "",

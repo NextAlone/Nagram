@@ -100,8 +100,8 @@
     <string name="UnblockAll">Összes feloldása</string>
     <string name="UnblockAllWarn">Biztosan fel akarja oldani ** az összes felhasználó és bot ** feloldását?</string>
     <string name="BlockedListEmpty">Még senkit sem blokkoltál :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Adja hozzá a Socks5 Proxy-t</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Adja hozzá a SOCKS5 Proxy-t</string>
     <string name="AddProxyTelegram">Adja hozzá az MTProto Proxy-t</string>
     <string name="AddProxyVmess">Adja hozzá a Vmess proxyt</string>
     <string name="AddProxySS">Adjon hozzá Shadowsocks Proxy-t</string>

@@ -186,15 +186,17 @@ public class ActionBar extends FrameLayout {
             Drawable drawable = Theme.getCurrentHolidayDrawable();
             if (drawable != null && drawable.getBounds().contains((int) ev.getX(), (int) ev.getY())) {
                 manualStart = true;
-                if (snowflakesEffect != null) {
-                    snowflakesEffect = null;
-                    fireworksEffect = new FireworksEffect();
-                } else {
+                if (snowflakesEffect == null) {
                     fireworksEffect = null;
                     snowflakesEffect = new SnowflakesEffect();
+                    titleTextView[0].invalidate();
+                    invalidate();
+                } else {
+                    snowflakesEffect = null;
+                    fireworksEffect = new FireworksEffect();
+                    titleTextView[0].invalidate();
+                    invalidate();
                 }
-                titleTextView[0].invalidate();
-                invalidate();
             }
         }
         return super.onInterceptTouchEvent(ev);
@@ -217,15 +219,18 @@ public class ActionBar extends FrameLayout {
             if (drawable != null) {
 
                 SimpleTextView titleView = (SimpleTextView) child;
-                if (titleView.getVisibility() == View.VISIBLE && titleView.getText() instanceof String) {
+                if (titleView.getVisibility() == View.VISIBLE) {
                     TextPaint textPaint = titleView.getTextPaint();
                     textPaint.getFontMetricsInt(fontMetricsInt);
-                    textPaint.getTextBounds((String) titleView.getText(), 0, 1, rect);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        textPaint.getTextBounds(titleView.getText(), 0, 1, rect);
+                    } else {
+                        textPaint.getTextBounds(titleView.getText().toString(), 0, 1, rect);
+                    }
                     int x = titleView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + (rect.width() - (drawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2;
                     int y = titleView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + (int) Math.ceil((titleView.getTextHeight() - rect.height()) / 2.0f);
                     drawable.setBounds(x, y - drawable.getIntrinsicHeight(), x + drawable.getIntrinsicWidth(), y);
                     drawable.setAlpha((int) (255 * titleView.getAlpha()));
-                    drawable.setColorFilter(textPaint.getColor(), PorterDuff.Mode.MULTIPLY);
                     drawable.draw(canvas);
                     if (overlayTitleAnimationInProgress) {
                         child.invalidate();

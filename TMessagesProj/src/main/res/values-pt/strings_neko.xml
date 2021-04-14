@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="BotLogin">Login via Bot</string>
+    <string name="DeleteAllFromSelfAlert">Aviso! Isto irá **apagar todas as suas mensagens** neste chat, para **todos** os participantes.</string>
+    <string name="DeleteAllFromSelf">Apagar tudo o que é meu</string>
+    <string name="Hide">Esconder</string>
+    <string name="HidePhone">Ocultar o meu número de telefone</string>
+    <string name="MessageMenu">Menu de mensagens</string>
+    <string name="IPv6">A ligar através de IPv6</string>
+    <string name="NekoSettings">Definições do Neko</string>
+</resources>

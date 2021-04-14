@@ -85,8 +85,8 @@
     <string name="UnblockAll">Deblocați pe toți</string>
     <string name="UnblockAllWarn">Sigur doriți să deblocați ** toți utilizatorii și roboții **?</string>
     <string name="BlockedListEmpty">Nu ai blocat pe nimeni :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Adaugă Proxy-ul Socks5</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Adaugă Proxy-ul SOCKS5</string>
     <string name="AddProxyTelegram">Adaugă Proxy-ul MTProto</string>
     <string name="AddProxyVmess">Adaugă Proxy-ul Vmess</string>
     <string name="AddProxySS">Adaugă Proxy-ul Shadowsocks</string>

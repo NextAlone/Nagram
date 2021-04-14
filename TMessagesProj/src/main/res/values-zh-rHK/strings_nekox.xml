@@ -90,8 +90,8 @@
     <string name="UnblockAll">解除所有</string>
     <string name="UnblockAllWarn">您確定要解除屏蔽**所有用戶與機器人**嗎?</string>
     <string name="BlockedListEmpty">您还没有屏蔽任何人 :)</string>
-    <string name="ProxyTypeVmess">Vmess 代理</string>
-    <string name="AddProxySocks5">添加 Socks5 代理</string>
+    <string name="ProxyTypeVmess">VMess 代理</string>
+    <string name="AddProxySocks5">添加 SOCKS5 代理</string>
     <string name="AddProxyTelegram">添加 MTProto 代理</string>
     <string name="AddProxyVmess">添加 Vmess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>

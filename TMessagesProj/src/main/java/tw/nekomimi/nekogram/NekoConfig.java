@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsService;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.Theme;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -56,6 +59,7 @@ public class NekoConfig {
     public static boolean showMessageDetails;
     public static boolean showTranslate;
     public static boolean showRepeat;
+    public static boolean showMessageHide;
 
     public static boolean hidePhone;
     public static int typeface;
@@ -215,6 +219,8 @@ public class NekoConfig {
         showMessageDetails = preferences.getBoolean("showMessageDetails", false);
         showTranslate = preferences.getBoolean("showTranslate", true);
         showRepeat = preferences.getBoolean("showRepeat", false);
+        showMessageHide = preferences.getBoolean("showMessageHide", false);
+
         eventType = preferences.getInt("eventType", 0);
         actionBarDecoration = preferences.getInt("actionBarDecoration", 0);
         newYear = preferences.getBoolean("newYear", false);
@@ -365,6 +371,14 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showRepeat", showRepeat);
+        editor.apply();
+    }
+
+    public static void toggleShowHide() {
+        showMessageHide = !showMessageHide;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("showMessageHide", showMessageHide);
         editor.apply();
     }
 
@@ -801,6 +815,27 @@ public class NekoConfig {
             }
         }
         return systemEmojiTypeface;
+    }
+
+    public static int getNotificationColor() {
+        int color = 0;
+        Configuration configuration = ApplicationLoader.applicationContext.getResources().getConfiguration();
+        boolean isDark = (configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        if (isDark) {
+            color = 0xffffffff;
+        } else {
+            if (Theme.getActiveTheme().hasAccentColors()) {
+                color = Theme.getActiveTheme().getAccentColor(Theme.getActiveTheme().currentAccentId);
+            }
+            if (Theme.getActiveTheme().isDark() || color == 0) {
+                color = Theme.getColor(Theme.key_actionBarDefault);
+            }
+            // too bright
+            if (AndroidUtilities.computePerceivedBrightness(color) >= 0.721f) {
+                color = Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader) | 0xff000000;
+            }
+        }
+        return color;
     }
 
 }

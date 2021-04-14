@@ -400,6 +400,8 @@ public class Browser {
                 "vmesss1".equals(uri.getScheme()) ||
                 "ss".equals(uri.getScheme()) ||
                 "ssr".equals(uri.getScheme()) ||
+                "ws".equals(uri.getScheme()) ||
+                "wss".equals(uri.getScheme()) ||
                 "trojan".equals(uri.getScheme())) {
             return true;
         } else if ("telegram.dog".equals(host)) {

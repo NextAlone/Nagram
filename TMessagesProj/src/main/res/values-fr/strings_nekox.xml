@@ -88,8 +88,8 @@
     <string name="UnblockAll">Tout débloquer</string>
     <string name="UnblockAllWarn">Êtes-vous sûr de vouloir débloquer **tous les utilisateurs et tous les bots**?</string>
     <string name="BlockedListEmpty">Vous n\'avez bloqué personne :)</string>
-    <string name="ProxyTypeVmess">Proxy Vmess</string>
-    <string name="AddProxySocks5">Ajouter un proxy Socks5</string>
+    <string name="ProxyTypeVmess">Proxy VMess</string>
+    <string name="AddProxySocks5">Ajouter un proxy SOCKS5</string>
     <string name="AddProxyTelegram">Ajouter un proxy MTProto</string>
     <string name="AddProxyVmess">Ajouter un proxy Vmess</string>
     <string name="AddProxySS">Ajouter un proxy Shadowsocks</string>

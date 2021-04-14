@@ -101,7 +101,7 @@
     <string name="UnblockAllWarn">Վստա՞հ եք, որ ցանկանում եք ապաբլոկավորել ** բոլոր օգտվողներին և բոտերին **:</string>
     <string name="BlockedListEmpty">Դուք ոչ մեկին չեք արգելափակել :)</string>
     <string name="ProxyTypeVmess">Վմեսսի վստահված անձ</string>
-    <string name="AddProxySocks5">Ավելացնել Socks5 վստահված անձը</string>
+    <string name="AddProxySocks5">Ավելացնել SOCKS5 վստահված անձը</string>
     <string name="AddProxyTelegram">Ավելացնել MTProto վստահված անձ</string>
     <string name="AddProxyVmess">Ավելացնել Vmess վստահված անձը</string>
     <string name="AddProxySS">Ավելացնել Shadowsocks վստահված անձը</string>
