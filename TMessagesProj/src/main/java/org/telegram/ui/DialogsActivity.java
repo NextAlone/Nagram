@@ -7464,7 +7464,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             } else {
                 setFragmentIsSliding(false);
             }
-            fragmentView.requestLayout();
+            if (fragmentView != null) {
+                fragmentView.requestLayout();
+            }
         }
         setSlideTransitionProgress(1f - progress);
     }
