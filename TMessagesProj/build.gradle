@@ -443,14 +443,9 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.5.1"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
-
-    def ll = new File("TMessagesProj/libs").list()
-    if ((ll == null || ll.length == 0) && !targetTask.contains("foss")) {
-        System.err.println("Missing libs")
-        System.exit(1)
-    }
     if (!targetAbi.isBlank()) {
-        if (ll.length) {
+        def ll = new File("TMessagesProj/libs").list()
+        if (ll != null && ll.length == 1) {
             implementation project(":ss-rust")
             implementation project(":ssr-libev")
         }
