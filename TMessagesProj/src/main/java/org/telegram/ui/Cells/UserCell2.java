@@ -285,7 +285,7 @@ public class UserCell2 extends FrameLayout {
             }
         }
         if (currentUser != null) {
-            avatarImageView.setImage(ImageLocation.getForUser(currentUser, false), "50_50", avatarDrawable, currentUser);
+            avatarImageView.setImage(ImageLocation.getForUser(currentUser, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentUser);
         } else if (currentChat != null) {
             avatarImageView.setImage(ImageLocation.getForUserOrChat(currentChat, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(currentChat, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, currentObject);
         } else {

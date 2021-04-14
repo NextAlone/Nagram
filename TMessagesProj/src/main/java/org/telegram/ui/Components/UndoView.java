@@ -462,9 +462,9 @@ public class UndoView extends FrameLayout {
             currentCancelRunnable = () -> ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
 
         } else if (isTooltipAction()) {
-            CharSequence infoText;
-            String subInfoText;
-            int icon;
+            CharSequence infoText = "";
+            String subInfoText = "";
+            int icon = 0;
             int size = 36;
             boolean iconIsDrawable = false;
 

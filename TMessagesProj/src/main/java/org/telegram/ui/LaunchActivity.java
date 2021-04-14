@@ -4563,7 +4563,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (!mainFragmentsStack.isEmpty()) {
                 int type = (int) args[0];
 
-                FrameLayout container = null;
+                LinearLayout container = null;
                 BaseFragment fragment = null;
                 if (GroupCallActivity.groupCallUiVisible && GroupCallActivity.groupCallInstance != null) {
                     container = GroupCallActivity.groupCallInstance.getContainer();

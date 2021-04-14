@@ -356,16 +356,18 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
         return title;
     }
 
-    @Override
     public void onDown(boolean left) {
         pressedOverlayVisible[left ? 0 : 1] = true;
         postInvalidateOnAnimation();
     }
 
-    @Override
     public void onRelease() {
         Arrays.fill(pressedOverlayVisible, false);
         postInvalidateOnAnimation();
+    }
+
+    @Override
+    public void onClick() {
     }
 
     @Override

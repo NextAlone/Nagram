@@ -19,7 +19,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
-]import android.content.ClipData;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -2007,7 +2007,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     imageView.setRoundRadius(AndroidUtilities.dp(20));
                     frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
                     avatarDrawable.setInfo(currentChat);
-                    imageView.setImage(ImageLocation.getForChat(currentChat, false), "50_50", avatarDrawable, currentChat);
+                    imageView.setImage(ImageLocation.getForChat(currentChat,  ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentChat);
                     TextView textView = new TextView(context);
                     textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -18878,14 +18878,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return;
                 }
             } else if (message.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent && message.replyMessageObject != null && message.replyMessageObject.isInvoice()) {
-                TLRPC.TL_payments_getPaymentReceipt req = new TLRPC.TL_payments_getPaymentReceipt();
-                req.msg_id = message.getId();
-                req.peer = getMessagesController().getInputPeer(message.messageOwner.peer_id);
-                getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                    if (response instanceof TLRPC.TL_payments_paymentReceipt) {
-                        presentFragment(new PaymentFormActivity((TLRPC.TL_payments_paymentReceipt) response));
-                    }
-                }), ConnectionsManager.RequestFlagFailOnServerErrors);
+                // NekoX: payment deleted
                 return;
             } else if (message.messageOwner.action instanceof TLRPC.TL_messageActionGroupCall || message.messageOwner.action instanceof TLRPC.TL_messageActionInviteToGroupCall || message.messageOwner.action instanceof TLRPC.TL_messageActionGroupCallScheduled) {
                 if (getParentActivity() == null) {
@@ -24579,7 +24572,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             channelParticipant1.channelParticipant = new TLRPC.TL_channelParticipant();
                         }
                         channelParticipant1.channelParticipant.inviter_id = getUserConfig().getClientUserId();
-                        channelParticipant1.channelParticipant.user_id = participant.user_id;
+                        channelParticipant1.channelParticipant.peer = getMessagesController().getPeer(participant.user_id);
                         channelParticipant1.channelParticipant.date = participant.date;
                         channelParticipant1.channelParticipant.banned_rights = rightsBanned;
                         channelParticipant1.channelParticipant.admin_rights = rightsAdmin;
@@ -24607,7 +24600,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (currentChat.megagroup && chatInfo != null && chatInfo.participants != null) {
                             for (int a = 0; a < chatInfo.participants.participants.size(); a++) {
                                 TLRPC.ChannelParticipant p = ((TLRPC.TL_chatChannelParticipant) chatInfo.participants.participants.get(a)).channelParticipant;
-                                if (p.user_id == participant.user_id) {
+                                if (MessageObject.getPeerId(p.peer) == participant.user_id) {
                                     chatInfo.participants_count--;
                                     chatInfo.participants.participants.remove(a);
                                     break;

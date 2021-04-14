@@ -8925,7 +8925,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 processUpdates(updates, false);
                 AndroidUtilities.runOnUIThread(() -> {
                     if (finalNekoxBot instanceof TLRPC.User) {
-                        getMessagesController().deleteUserFromChat(updates.chats.get(0).id, (TLRPC.User) finalNekoxBot, null);
+                        getMessagesController().deleteParticipantFromChat(updates.chats.get(0).id, (TLRPC.User) finalNekoxBot, null);
                     }
 
                     putUsers(updates.users, false);

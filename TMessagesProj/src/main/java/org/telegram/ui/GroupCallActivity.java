@@ -1526,7 +1526,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         if (call.isScheduled()) {
                             TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(currentChat.id);
                             if (chatFull != null) {
-                                chatFull.flags &=~ 2097152;
+                                chatFull.flags &= ~2097152;
                                 chatFull.call = null;
                                 accountInstance.getNotificationCenter().postNotificationName(NotificationCenter.groupCallUpdated, currentChat.id, call.call.id, false);
                             }
@@ -3055,14 +3055,15 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     } else if (muteButtonState == MUTE_BUTTON_STATE_UNMUTE) {
                         updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
                         VoIPService.getSharedInstance().setMicMute(false, false, true);
-                if (!NekoConfig.disableVibration) {
-                        muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                }
+                        if (!NekoConfig.disableVibration) {
+                            muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        }
                     } else {
                         updateMuteButton(MUTE_BUTTON_STATE_UNMUTE, true);
                         VoIPService.getSharedInstance().setMicMute(true, false, true);
-                    if (!NekoConfig.disableVibration) {
-                        muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        if (!NekoConfig.disableVibration) {
+                            muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        }
                     }
                 }
             }
@@ -3324,7 +3325,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-                super.onMeasure( MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY),  MeasureSpec.makeMeasureSpec(size + getPaddingBottom(), MeasureSpec.EXACTLY));
+                super.onMeasure(MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(size + getPaddingBottom(), MeasureSpec.EXACTLY));
             }
 
             @Override
@@ -4815,7 +4816,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 options.add(8);
             } else {
                 items.add(LocaleController.getString("VoipGroupOpenProfile", R.string.VoipGroupOpenProfile));
-            icons.add(R.drawable.baseline_person_24);
+                icons.add(R.drawable.baseline_person_24);
                 options.add(6);
             }
             if (!isAdmin && ChatObject.canBlockUsers(currentChat)) {
@@ -4868,7 +4869,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 if (scrimPopupWindow != null) {
                     scrimPopupWindow.dismiss();
                 } else {
-                    if (options.get(i) != 9 && options.get(i) != 10 &&  options.get(i) != 11) {
+                    if (options.get(i) != 9 && options.get(i) != 10 && options.get(i) != 11) {
                         dismissAvatarPreview(true);
                     }
                 }
