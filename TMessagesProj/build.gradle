@@ -82,7 +82,7 @@ android {
     buildToolsVersion "30.0.3"
     ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "nekox.messenger"
+    defaultConfig.applicationId = "Freegram.messenger"
 
     splits {
 
