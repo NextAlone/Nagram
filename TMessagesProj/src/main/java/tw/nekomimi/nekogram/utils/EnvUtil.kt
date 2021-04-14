@@ -53,7 +53,7 @@ object EnvUtil {
                 // https://github.com/NekoX-Dev/NekoX/issues/284
                 NekoConfig.setCachePath(File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
             } else {
-                NekoConfig.setCachePath(ApplicationLoader.applicationContext.getExternalFilesDir(null)!!.path)
+                NekoConfig.setCachePath(ApplicationLoader.applicationContext.getExternalFilesDir("files")?.parent ?: File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
             }
 
         }

@@ -4520,7 +4520,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         shareButton = new ImageView(containerView.getContext());
         shareButton.setImageResource(R.drawable.baseline_share_24);
-        shareButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.SRC_IN));
+        shareButton.setColorFilter(new PorterDuffColorFilter(0xfffafafa, PorterDuff.Mode.SRC_IN));
         shareButton.setScaleType(ImageView.ScaleType.CENTER);
         shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         bottomButtonsLayout.addView(shareButton, LayoutHelper.createFrame(50, LayoutHelper.MATCH_PARENT));

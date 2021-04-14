@@ -405,18 +405,37 @@ jobs:
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
           git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
           git submodule status 'ssr-libev/*' > shadowsocksr_status
-      - name: Native Cache
+          git submodule status v2ray > v2ray_status
+      - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
+      - name: Native Cache (arm64-v8a)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
+      - name: Native Cache (x86)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
+      - name: Native Cache (x86_64)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
       - name: V2ray Cache
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray/*') }}
+          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
       - name: Shadowsocks Cache
         uses: actions/cache@v2
         with:
@@ -429,11 +448,10 @@ jobs:
           path: |
             TMessagesProj/libs/ssr-libev-release.aar
           key: ${{ hashFiles('shadowsocksr_status') }}
-      - name: Configure Gradle
+      - name: Fix Gradle Memoery
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
-          echo "sdk.dir=${ANDROID_HOME}" >> local.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
       - name: Gradle cache
         uses: actions/cache@v2
         with:
