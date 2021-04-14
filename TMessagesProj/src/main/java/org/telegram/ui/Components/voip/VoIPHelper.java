@@ -234,7 +234,7 @@ public class VoIPHelper {
                     if (!TextUtils.isEmpty(hash)) {
                         voIPService.setGroupCallHash(hash);
                     }
-                    GroupCallActivity.create((LaunchActivity) activity, AccountInstance.getInstance(UserConfig.selectedAccount));
+					GroupCallActivity.create((LaunchActivity) activity, AccountInstance.getInstance(UserConfig.selectedAccount), null, null, false, null);
                 }
             }
         } else if (VoIPService.callIShouldHavePutIntoIntent == null) {
@@ -273,8 +273,10 @@ public class VoIPHelper {
             }
         }
         if (checkJoiner && chat != null) {
-            JoinCallAlert.open(activity, -chat.id, accountInstance, fragment, createCall ? JoinCallAlert.TYPE_CREATE : JoinCallAlert.TYPE_JOIN, (selectedPeer, hasFew) -> {
-                if (!hasFew && hash != null) {
+			JoinCallAlert.open(activity, -chat.id, accountInstance, fragment, createCall ? JoinCallAlert.TYPE_CREATE : JoinCallAlert.TYPE_JOIN, null, (selectedPeer, hasFew, schedule) -> {
+				if (createCall && schedule) {
+					GroupCallActivity.create((LaunchActivity) activity, accountInstance, chat, selectedPeer, hasFew, hash);
+				} else if (!hasFew && hash != null) {
                     JoinCallByUrlAlert alert = new JoinCallByUrlAlert(activity, chat) {
                         @Override
                         protected void onJoin() {
@@ -319,6 +321,13 @@ public class VoIPHelper {
                 }
             }
         }
+		if (chat != null && !createCall) {
+			ChatObject.Call call = accountInstance.getMessagesController().getGroupCall(chat.id, false);
+			if (call != null && call.isScheduled()) {
+				GroupCallActivity.create((LaunchActivity) activity, accountInstance, chat, peer, hasFewPeers, hash);
+				return;
+			}
+		}
 
         lastCallTime = SystemClock.elapsedRealtime();
         Intent intent = new Intent(activity, VoIPService.class);
@@ -732,7 +741,7 @@ public class VoIPHelper {
             return;
         }
         JoinCallAlert.checkFewUsers(fragment.getParentActivity(), -currentChat.id, accountInstance, param -> {
-            if (param) {
+			/*if (param) {
                 if (fragment.getParentActivity() == null) {
                     return;
                 }
@@ -757,9 +766,9 @@ public class VoIPHelper {
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 fragment.showDialog(builder.create());
-            } else {
+			} else {*/
                 startCall(currentChat, peer, null, true, fragment.getParentActivity(), fragment, accountInstance);
-            }
+			//}
         });
     }
 }

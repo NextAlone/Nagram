@@ -69,7 +69,7 @@ public:
               std::string systemVersion, std::string appVersion, std::string langCode,
               std::string systemLangCode, std::string configPath, std::string logPath,
               std::string regId, std::string cFingerprint, std::string installerId,
-              int32_t timezoneOffset, int32_t userId, bool isPaused, bool enablePushConnection,
+             std::string packageId, int32_t timezoneOffset, int32_t userId, bool isPaused, bool enablePushConnection,
               bool hasNetwork, int32_t networkType);
     void setProxySettings(std::string address, uint16_t port, std::string username, std::string password, std::string secret);
     void setLangCode(std::string langCode);
@@ -218,6 +218,7 @@ private:
     requestsList runningRequests;
     std::vector<uint32_t> requestingSaltsForDc;
     int32_t lastPingId = 0;
+    int64_t lastInvokeAfterMessageId = 0;
 
     int32_t currentNetworkType = NETWORK_TYPE_WIFI;
     uint32_t currentVersion = 1;
@@ -230,6 +231,7 @@ private:
     std::string currentRegId;
     std::string certFingerprint;
     std::string installer;
+    std::string package;
     int32_t currentDeviceTimezone = 0;
     std::string currentSystemLangCode;
     std::string currentConfigPath;

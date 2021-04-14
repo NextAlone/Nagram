@@ -309,7 +309,7 @@ public class DrawerProfileCell extends FrameLayout {
         }
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
-        avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
+        avatarImageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
         if (NekoConfig.avatarAsDrawerBackground) {
             ImageLocation imageLocation = ImageLocation.getForUser(user, true);
             allowInvalidate = !useAdb() || !(NekoConfig.avatarBackgroundDarken || NekoConfig.avatarBackgroundBlur);
