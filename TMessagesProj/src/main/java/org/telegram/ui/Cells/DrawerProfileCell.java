@@ -23,7 +23,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +31,6 @@ import androidx.palette.graphics.Palette;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
@@ -47,6 +45,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmojiTextView;
+import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SnowflakesEffect;
 
@@ -68,6 +67,7 @@ public class DrawerProfileCell extends FrameLayout {
     private Integer currentColor;
     private Integer currentMoonColor;
     private SnowflakesEffect snowflakesEffect;
+    private FireworksEffect fireworksEffect;
     private boolean accountsShown;
     private int darkThemeBackgroundColor;
 
@@ -112,7 +112,7 @@ public class DrawerProfileCell extends FrameLayout {
                             paint.setColor((palette.getDarkMutedColor(0xFF547499) & 0x00FFFFFF) | 0x44000000);
                             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
                         }
-                        AndroidUtilities.runOnUIThread(() ->  {
+                        AndroidUtilities.runOnUIThread(() -> {
                             allowInvalidate = true;
                             imageReceiver.setCrossfadeWithOldImage(true);
                             imageReceiver.setImageBitmap(new BitmapDrawable(null, bitmap), false);
@@ -168,6 +168,8 @@ public class DrawerProfileCell extends FrameLayout {
         if (Theme.getEventType() == 0 || NekoConfig.actionBarDecoration == 1) {
             snowflakesEffect = new SnowflakesEffect();
             snowflakesEffect.setColorKey(Theme.key_chats_menuName);
+        } else if (NekoConfig.actionBarDecoration == 2) {
+            fireworksEffect = new FireworksEffect();
         }
     }
 
@@ -252,7 +254,7 @@ public class DrawerProfileCell extends FrameLayout {
                 }
             }
         } else {
-            int visibility = drawCatsShadow? VISIBLE : INVISIBLE;
+            int visibility = drawCatsShadow ? VISIBLE : INVISIBLE;
             if (shadowView.getVisibility() != visibility) {
                 shadowView.setVisibility(visibility);
             }
@@ -261,6 +263,8 @@ public class DrawerProfileCell extends FrameLayout {
 
         if (snowflakesEffect != null) {
             snowflakesEffect.onDraw(this, canvas);
+        } else if (fireworksEffect != null) {
+            fireworksEffect.onDraw(this, canvas);
         }
     }
 
@@ -301,7 +305,7 @@ public class DrawerProfileCell extends FrameLayout {
         } else if (!TextUtils.isEmpty(user.username)) {
             phoneTextView.setText("@" + user.username);
         } else {
-            phoneTextView.setText(LocaleController.getString("MobileHidden",R.string.MobileHidden));
+            phoneTextView.setText(LocaleController.getString("MobileHidden", R.string.MobileHidden));
         }
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));

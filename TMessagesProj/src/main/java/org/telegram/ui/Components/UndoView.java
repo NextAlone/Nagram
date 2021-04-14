@@ -386,10 +386,6 @@ public class UndoView extends FrameLayout {
         if (currentActionRunnable != null) {
             currentActionRunnable.run();
         }
-        if (NekoConfig.disableUndo && !isTooltipAction()) {
-            if (actionRunnable != null) actionRunnable.run();
-            return;
-        }
         isShown = true;
         currentActionRunnable = actionRunnable;
         currentCancelRunnable = cancelRunnable;
@@ -397,6 +393,12 @@ public class UndoView extends FrameLayout {
         currentAction = action;
         timeLeft = 5000;
         currentInfoObject = infoObject;
+
+        if (NekoConfig.disableUndo && !isTooltipAction()) {
+            if (actionRunnable != null) actionRunnable.run();
+            return;
+        }
+
         lastUpdateTime = SystemClock.elapsedRealtime();
         undoTextView.setText(LocaleController.getString("Undo", R.string.Undo).toUpperCase());
         undoImageView.setVisibility(VISIBLE);
