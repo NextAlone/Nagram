@@ -389,10 +389,10 @@ jobs:
               wait $job || exit 1
             done
           }
-          upload apks/NekoX-full-*-release.apk
-          upload apks/NekoX-full-*-releaseNoGcm.apk
-          upload apks/NekoX-mini-*-release.apk
-          upload apks/NekoX-mini-*-releaseNoGcm.apk
+          upload apks/Freegram-full-*-release.apk
+          upload apks/Freegram-full-*-releaseNoGcm.apk
+          upload apks/Freegram-mini-*-release.apk
+          upload apks/Freegram-mini-*-releaseNoGcm.apk
           
   play:
     name: Publish to Play Store
