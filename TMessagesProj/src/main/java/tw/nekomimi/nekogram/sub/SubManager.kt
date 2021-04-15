@@ -22,7 +22,7 @@ object SubManager {
 
             update(SubInfo().apply {
 
-                name = LocaleController.getString("NekoXProxy", R.string.NekoXProxy)
+                name = LocaleController.getString("FreegramProxy", R.string.FreegramProxy)
                 enable = public?.enable ?: true
 
                 urls = listOf(
