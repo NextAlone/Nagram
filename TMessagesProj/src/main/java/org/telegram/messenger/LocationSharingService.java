@@ -140,7 +140,7 @@ public class LocationSharingService extends Service implements NotificationCente
             builder.setContentIntent(contentIntent);
             NotificationsController.checkOtherNotificationsChannel();
             builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            builder.setContentTitle(LocaleController.getString("NekoX", R.string.NekoX));
+            builder.setContentTitle(LocaleController.getString("Freegram", R.string.Freegram));
             Intent stopIntent = new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class);
             builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         }
