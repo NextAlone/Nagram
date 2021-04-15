@@ -45,7 +45,7 @@
     <string name="TransToLang">Idioma de destino para tradução</string>
     <string name="TransInputToLang">Idioma de destino da tradução para envio de mensagens</string>
     <string name="More">Mais</string>
-    <string name="NekoXUpdatesChannel">Canal de atualizações do NekoX</string>
+    <string name="FreegramUpdatesChannel">Canal de atualizações do Freegram</string>
     <string name="ShowIdAndDc">Mostrar ID / DC no perfil</string>
     <string name="UseDefaultTheme">Usar o tema padrão *</string>
     <string name="NightMode">Modo Noturno</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">OK, Aplicar</string>
     <string name="DoNotRemindAgain">Não lembre novamente</string>
     <string name="RemoveTitleEmoji">Remover emoji no título</string>
-    <string name="NekoXProxy">Proxy Público do NekoX</string>
+    <string name="FreegramProxy">Proxy Público do Freegram</string>
     <string name="PublicPrefix">Público</string>
     <string name="DisableChatAction">Não enviar meu status de entrada</string>
     <string name="FakeScreenshot">Simular captura de tela</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Ordenar por Não-silenciadas</string>
     <string name="SortByUser">Ordenar por Usuário</string>
     <string name="SortByContacts">Ordenar por Contatos</string>
-    <string name="NekoXPushService">Serviço de Notificação NekoX</string>
-    <string name="EnablePushAlert">Por favor habilite o \"Serviço de Notificação NekoX\"</string>
-    <string name="DisablePushAlert">Por favor desabilite \"Serviço de Notificação NekoX\"</string>
+    <string name="FreegramPushService">Serviço de Notificação Freegram</string>
+    <string name="EnablePushAlert">Por favor habilite o \"Serviço de Notificação Freegram\"</string>
+    <string name="DisablePushAlert">Por favor desabilite \"Serviço de Notificação Freegram\"</string>
     <string name="DisableUndo">Desativar Desfazer</string>
     <string name="DisableSystemAccount">Desativar Conta do Sistema</string>
     <string name="FilterMenu">Menu de Filtro de Conversas</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Desativar modo desenvolvedor</string>
     <string name="DeveloperSettings">Configurações de desenvolvedor</string>
     <string name="LoginSettings">Configurações de login</string>
-    <string name="NekoXFaq">FAQ do NekoX</string>
+    <string name="FreegramFaq">FAQ do Freegram</string>
     <string name="TransSite">Traduzir plataforma</string>
     <string name="OpenKayChain">Cliente OpenPGP</string>
     <string name="OpenPGPApp">Provedor OpenPGP</string>

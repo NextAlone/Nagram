@@ -45,7 +45,7 @@
     <string name="TransToLang">번역할 언어</string>
     <string name="TransInputToLang">번역 입력할 언어</string>
     <string name="More">더 보기</string>
-    <string name="NekoXUpdatesChannel">NekoX 업데이트 채널</string>
+    <string name="FreegramUpdatesChannel">Freegram 업데이트 채널</string>
     <string name="ShowIdAndDc">프로필에 ID / DC 표시</string>
     <string name="UseDefaultTheme">기본 테마 사용 *</string>
     <string name="NightMode">야간 모드</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">예. 등록합니다.</string>
     <string name="DoNotRemindAgain">다시 표시하지 않기</string>
     <string name="RemoveTitleEmoji">제목에서 이모티콘 제거</string>
-    <string name="NekoXProxy">NekoX 공개 프록시</string>
+    <string name="FreegramProxy">Freegram 공개 프록시</string>
     <string name="PublicPrefix">공개</string>
     <string name="DisableChatAction">내 입력 상태 보여주지 않기</string>
     <string name="FakeScreenshot">스크린샷 요청</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">음소거 되지 않은 순서로 정렬</string>
     <string name="SortByUser">사용자 순서로 정렬</string>
     <string name="SortByContacts">연락처 순서로 정렬</string>
-    <string name="NekoXPushService">NekoX 푸시 서비스</string>
-    <string name="EnablePushAlert">\"NekoX Push Service\" 를 활성화 하십시오</string>
-    <string name="DisablePushAlert">\"NekoX Push Service\" 를 비활성화 하십시오</string>
+    <string name="FreegramPushService">Freegram 푸시 서비스</string>
+    <string name="EnablePushAlert">\"Freegram Push Service\" 를 활성화 하십시오</string>
+    <string name="DisablePushAlert">\"Freegram Push Service\" 를 비활성화 하십시오</string>
     <string name="DisableUndo">실행 취소</string>
     <string name="DisableSystemAccount">시스템 계정 비활성화</string>
     <string name="FilterMenu">대화 상자 필터 메뉴</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">개발자 모드 비활성화</string>
     <string name="DeveloperSettings">개발자 설정</string>
     <string name="LoginSettings">로그인 설정</string>
-    <string name="NekoXFaq">NekoX 자주하는 질문</string>
+    <string name="FreegramFaq">Freegram 자주하는 질문</string>
     <string name="TransSite">플랫폼 번역</string>
     <string name="OpenKayChain">OpenPGP 클라이언트</string>
     <string name="OpenPGPApp">OpenPGP 제공자</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">喵設置</string>
+    <string name="FreegramSettings">喵設置</string>
     <string name="MessageMenu">消息菜單</string>
     <string name="HidePhone">隱藏咱的手機號</string>
     <string name="Hide">隱藏</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">使用完全透明的狀態欄</string>
     <string name="EnableResidentNotification">請讓貓咪住在通知欄裏吧</string>
     <string name="DisableResidentNotification">果然通知欄還是太擠了</string>
-    <string name="NekogramRunning">貓貓奔跑中</string>
+    <string name="FreegramRunning">貓貓奔跑中</string>
     <string name="EventType">抽屜圖示集</string>
     <string name="ChristmasHat">每天顯示聖誕帽</string>
     <string name="ActionBarDecoration">標題欄裝飾</string>

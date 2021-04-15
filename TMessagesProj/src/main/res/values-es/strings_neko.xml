@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Configuraciones de Neko</string>
+    <string name="FreegramSettings">Configuraciones de Freegram</string>
     <string name="IPv6">Conexión a través de IPv6</string>
     <string name="MessageMenu">Menú contextual</string>
     <string name="HidePhone">Ocultar mi número de teléfono</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Barra de estado transparente</string>
     <string name="EnableResidentNotification">Mostrar una notificación permanente</string>
     <string name="DisableResidentNotification">Desactivar notificación permanente</string>
-    <string name="NekogramRunning">Nekogram está en funcionamiento</string>
+    <string name="FreegramRunning">Freegramgram está en funcionamiento</string>
     <string name="EventType">Conjunto de iconos de la barra lateral</string>
     <string name="ChristmasHat">Mostrar sombrero de navidad cada día</string>
     <string name="ActionBarDecoration">Decoración de la barra de título</string>

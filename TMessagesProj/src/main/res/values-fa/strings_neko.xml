@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">تنظیمات Neko</string>
+    <string name="FreegramSettings">تنظیمات Freegram</string>
     <string name="IPv6">اتصال از طریق IPv6</string>
     <string name="MessageMenu">منوی پیام</string>
     <string name="HidePhone">مخفی کردن شماره تلفن</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">نوار وضعیت شفاف</string>
     <string name="EnableResidentNotification">نشان دادن اعلان ساکن</string>
     <string name="DisableResidentNotification">غیرفعال کردن اعلان ساکن</string>
-    <string name="NekogramRunning">نكوگرام در حال اجرا است</string>
+    <string name="FreegramRunning">فریگرام در حال اجرا است</string>
     <string name="EventType">مجموعه آیکون‌های نوار کناری</string>
     <string name="ChristmasHat">نمایش همیشگی کلاه کریسمس</string>
     <string name="ActionBarDecoration">دکوراسیون نوار عنوان</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Setări Neko</string>
+    <string name="FreegramSettings">Setări Freegram</string>
     <string name="IPv6">Conectarea prin IPv6</string>
     <string name="MessageMenu">Meniu de mesaje</string>
     <string name="HidePhone">Ascunde numărul meu de telefon</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Bara de stare transparentă</string>
     <string name="EnableResidentNotification">Afișați o notificare rezidentă</string>
     <string name="DisableResidentNotification">Dezactivați notificare rezidentă</string>
-    <string name="NekogramRunning">Nekogram rulează</string>
+    <string name="FreegramRunning">Freegramgram rulează</string>
     <string name="EventType">Set de pictograme din bară laterală</string>
     <string name="ChristmasHat">Arată pălăria de Crăciun în fiecare zi</string>
     <string name="ActionBarDecoration">Decorarea barei de titlu</string>

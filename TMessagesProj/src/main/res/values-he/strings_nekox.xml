@@ -45,7 +45,7 @@
     <string name="TransToLang">שפת יעד לתרגום</string>
     <string name="TransInputToLang">שפת יעד קלט לתרגום</string>
     <string name="More">יותר</string>
-    <string name="NekoXUpdatesChannel">ערוץ עדכוני NekoX</string>
+    <string name="FreegramUpdatesChannel">ערוץ עדכוני Freegram</string>
     <string name="ShowIdAndDc">הצג ID / DC בפרופיל</string>
     <string name="UseDefaultTheme">השתמש בערכת ברירת המחדל *</string>
     <string name="NightMode">מצב לילה</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">אוקיי, החל אותו</string>
     <string name="DoNotRemindAgain">אל תזכיר שוב</string>
     <string name="RemoveTitleEmoji">הסר אמוג\'י בכותרת</string>
-    <string name="NekoXProxy">פרוקסי ציבור NekoX</string>
+    <string name="FreegramProxy">פרוקסי ציבור Freegram</string>
     <string name="PublicPrefix">ציבורי</string>
     <string name="DisableChatAction">אל תשלח את סטטוס הקלט שלי</string>
     <string name="FakeScreenshot">העמד פנים כמו צילום מסך</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">מיין לפי Unmute</string>
     <string name="SortByUser">מיין לפי משתמש</string>
     <string name="SortByContacts">מיין לפי אנשי קשר</string>
-    <string name="NekoXPushService">שירות דחיפה של NekoX</string>
-    <string name="EnablePushAlert">אנא אפשר את \"שירות הדחיפה של NekoX\"</string>
-    <string name="DisablePushAlert">אנא השבת את \"שירות הדחיפה של NekoX\"</string>
+    <string name="FreegramPushService">שירות דחיפה של Freegram</string>
+    <string name="EnablePushAlert">אנא אפשר את \"שירות הדחיפה של Freegram\"</string>
+    <string name="DisablePushAlert">אנא השבת את \"שירות הדחיפה של Freegram\"</string>
     <string name="DisableUndo">השבת בטל</string>
     <string name="DisableSystemAccount">השבת חשבון מערכת</string>
     <string name="FilterMenu">תפריט מסנן דיאלוגים</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">השבת את מצב המפתחים</string>
     <string name="DeveloperSettings">הגדרות מפתחים</string>
     <string name="LoginSettings">הגדרות כניסה</string>
-    <string name="NekoXFaq">שאלות נפוצות על NekoX</string>
+    <string name="FreegramFaq">שאלות נפוצות על Freegram</string>
     <string name="TransSite">תרגם פלטפורמה</string>
     <string name="OpenKayChain">לקוח OpenPGP</string>
     <string name="OpenPGPApp">ספק OpenPGP</string>

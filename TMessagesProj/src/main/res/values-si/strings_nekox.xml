@@ -9,10 +9,10 @@
     <string name="GoogleCloudTransKeyNotice">ඔබ ගූගල් ක්ලවුඩ් පරිවර්තන යතුරක් සකසන්නේ නම් පරිවර්තනය කිරීමේදී ව්‍යාජ ආකෘතිපත්‍රයක් වියමන අනුවාදයට ඉදිරිපත් කිරීම වෙනුවට වලාකුළු පරිවර්තන යෙ.ක්‍ර. අ.මු. (API) යොදාගනු ලැබේ (වේගවත්, ස්ථාවර සහ ගමනාගමන ඉතිරිය).</string>
     <string name="GoogleCloudTransKey">ගූගල් ක්ලවුඩ් පරිවර්තන යතුර</string>
     <string name="ProviderYandexTranslate">යාන්ඩෙක්ස්.ට්‍රාන්ස්ලේට්</string>
-    <string name="NekoXUpdatesChannel">නෙකෝඑක්ස් යාවත්කාලීන නාලිකාව</string>
+    <string name="FreegramUpdatesChannel">නෙකෝඑක්ස් යාවත්කාලීන නාලිකාව</string>
     <string name="AutoDownload">ස්වයං බාගතවීම</string>
     <string name="ArchiveFiles">ගොනු සංරක්ෂණය කරන්න</string>
-    <string name="NekoXFaq">නෙකෝඑක්ස් නිති අසන පැන</string>
+    <string name="FreegramFaq">නෙකෝඑක්ස් නිති අසන පැන</string>
     <string name="LoginSettings">පිවිසීමේ සැකසුම්</string>
     <string name="DeveloperSettings">සංවර්ධක සැකසුම්</string>
     <string name="SSRProtocol">කෙටුම්පත</string>

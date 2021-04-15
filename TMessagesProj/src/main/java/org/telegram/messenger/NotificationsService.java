@@ -48,7 +48,7 @@ public class NotificationsService extends Service {
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.notification)
                     .setColor(NekoConfig.getNotificationColor())
-                    .setContentTitle(LocaleController.getString("NekogramRunning", R.string.NekogramRunning))
+                    .setContentTitle(LocaleController.getString("FreegramRunning", R.string.FreegramRunning))
                     .setContentText(LocaleController.getString("TapToDisable",R.string.TapToDisable))
                     .setContentIntent(pendingIntent)
                     .setCategory(NotificationCompat.CATEGORY_STATUS)

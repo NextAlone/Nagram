@@ -2697,11 +2697,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == nekoRow) {
                     presentFragment(new NekoSettingsActivity());
                 } else if (position == questionRow) {
-                    Browser.openUrl(getParentActivity(), "https://t.me/NekogramX");
+                    Browser.openUrl(getParentActivity(), "https://t.me/Freegram_update");
                 } else if (position == faqRow) {
                     Browser.openUrl(getParentActivity(), NekoXConfig.FAQ_URL);
                 } else if (position == policyRow) {
-                    Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX/wiki/Privacy-Policy");
+                    Browser.openUrl(getParentActivity(), "https://github.com/herotux/Freegram/wiki/Privacy-Policy");
                 } else if (position == sendLogsRow) {
                     sendLogs();
                 } else if (position == clearLogsRow) {
@@ -2930,7 +2930,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
                     builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
-                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
+                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/herotux/Freegram/releases");
                         return Unit.INSTANCE;
                     });
 
@@ -7075,13 +7075,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == stickersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.deproko_baseline_stickers_24, true);
                     } else if (position == nekoRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NekoSettings", R.string.NekoSettings), R.drawable.baseline_extension_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("FreegramSettings", R.string.FreegramSettings), R.drawable.baseline_extension_24, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.baseline_folder_24, true);
                     } else if (position == questionRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NekoXUpdatesChannel", R.string.NekoXUpdatesChannel), R.drawable.baseline_bullhorn_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("FreegramUpdatesChannel", R.string.FreegramUpdatesChannel), R.drawable.baseline_bullhorn_24, true);
                     } else if (position == faqRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NekoXFaq", R.string.NekoXFaq), R.drawable.baseline_help_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("FreegramFaq", R.string.FreegramFaq), R.drawable.baseline_help_24, true);
                     } else if (position == policyRow) {
                         textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.baseline_security_24, true);
                     } else if (position == sendLogsRow) {
@@ -7120,7 +7120,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 if (custom) {
                                     val = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
                                 } else {
-                                    val = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                                    val = LocaleController.getStringSetting("NotificationsOn", R.string.NotificationsOn);
                                 }
                                 enabled = true;
                             } else if (delta < 60 * 60) {

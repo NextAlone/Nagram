@@ -452,7 +452,7 @@
         <service
             android:name="tw.mimi.nekogram.NekoXPushService"
             android:enabled="true"
-            android:label="@string/NekoXPushService"
+            android:label="@string/FreegramPushService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />

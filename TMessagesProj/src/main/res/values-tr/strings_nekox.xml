@@ -45,7 +45,7 @@
     <string name="TransToLang">Çeviri Hedef Dili</string>
     <string name="TransInputToLang">Çeviri Girişi Hedef Dili</string>
     <string name="More">Daha</string>
-    <string name="NekoXUpdatesChannel">NekoX Güncellemeleri Kanalı</string>
+    <string name="FreegramUpdatesChannel">Freegram Güncellemeleri Kanalı</string>
     <string name="ShowIdAndDc">Profilde ID / DC Değerlerini Göster</string>
     <string name="UseDefaultTheme">Varsayılan Temayı Kullan *</string>
     <string name="NightMode">Gece Modu</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Tamam, uygula</string>
     <string name="DoNotRemindAgain">Bir daha hatırlatma</string>
     <string name="RemoveTitleEmoji">Başlıktaki 😶 Emojisini Kaldır</string>
-    <string name="NekoXProxy">NekoX Genel Proxy</string>
+    <string name="FreegramProxy">Freegram Genel Proxy</string>
     <string name="PublicPrefix">Genel</string>
     <string name="DisableChatAction">Giriş Durumumu (yazıyor, vb.) Gönderme</string>
     <string name="FakeScreenshot">Ekran görüntüsü gibi davran</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Seslilere Göre Sırala</string>
     <string name="SortByUser">Kullanıcıya Göre Sırala</string>
     <string name="SortByContacts">Kişilere Göre Sırala</string>
-    <string name="NekoXPushService">NekoX Bildirim Hizmeti</string>
-    <string name="EnablePushAlert">Lütfen \"NekoX Bildirim Hizmeti\"ni etkinleştirin</string>
-    <string name="DisablePushAlert">Lütfen \"NekoX Bildirim Hizmeti\"ni devre dışı bırakın</string>
+    <string name="FreegramPushService">Freegram Bildirim Hizmeti</string>
+    <string name="EnablePushAlert">Lütfen \"Freegram Bildirim Hizmeti\"ni etkinleştirin</string>
+    <string name="DisablePushAlert">Lütfen \"Freegram Bildirim Hizmeti\"ni devre dışı bırakın</string>
     <string name="DisableUndo">Geri Almayı Devre Dışı Bırak</string>
     <string name="DisableSystemAccount">Sistem Hesabını Devre Dışı Bırak</string>
     <string name="FilterMenu">Mesajlar Filtresi Menüsü</string>
@@ -168,8 +168,8 @@
     <string name="DisableDeveloperMode">Geliştirici Modunu Devre Dışı Bırak</string>
     <string name="DeveloperSettings">Geliştirici Ayarları</string>
     <string name="LoginSettings">Giriş Ayarları</string>
-    <string name="NekoXFaq">NekoX SSS</string>
-    <string name="TransSite">NekoX\'in Çevrilmesine Katkıda Bulunun</string>
+    <string name="FreegramFaq">Freegram SSS</string>
+    <string name="TransSite">Freegram\'in Çevrilmesine Katkıda Bulunun</string>
     <string name="OpenKayChain">OpenPGP İstemcisi</string>
     <string name="OpenPGPApp">OpenPGP Sağlayıcısı</string>
     <string name="OpenPGPKey">OpenPGP Anahtarı</string>
