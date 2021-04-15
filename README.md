@@ -1,20 +1,14 @@
-# NekoX
+# Freegram
 
-NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
+Freegram is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
+Freegram is fork of NekoX with jalali calendar
 
-[![Get it on F-Droid](https://i.imgur.com/HDicnzz.png)](https://f-droid.org/packages/nekox.messenger)
-[![Get it on Google Play](https://imgur.com/YQzmZi9.png)](https://play.google.com/store/apps/details?id=nekox.messenger)
 
-- [Update News Telegram](https://t.me/NekogramX)
-- [GitHub Feedback](https://github.com/NekoX-Dev/NekoX/issues)
-- [Group Chat (English / Chinese)](https://t.me/NekoXChat) 
-- [Group Chat (Persian)](https://t.me/NekogramX_Persian)
-- [Group Chat (Indonesia)](https://t.me/NekoxID)
-- [Group Chat (Russian)](https://t.me/NekoXRussia)
-- [Group Chat (Hindi)](https://t.me/NekoXHindi)
-- [Group Chat (Turkish)](https://t.me/NekoXTurkish)
+- [Update News Telegram](https://t.me/Freegram_update)
+- [GitHub Feedback](https://github.com/herotux/Freegram/issues)
+- [Group Chat](https://t.me/Freegram-chat) 
 
-## NekoX Changes
+## Freegram Changes
 
 - Most of Nekogram's features
 - Unlimited login accounts
@@ -43,13 +37,13 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - Scan and confirm the login QR code directly
 - Allow clearing app data
 - Option to not send comment first when forwarding
-- Option to use nekox chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
+- Option to use Freegram chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
 - Option to disable link preview by default: to prevent the server from knowing that the link is shared through Telegram.
 - Option to ignore Android-only content restrictions (except for the Play Store version).
 - OpenKeychain client (sign / verify / decrypt / import)
 - Google Cloud Translate / Yandex.Translate support
 - Custom cache directory (supports external storage)
-- Custom app ID and Hash (optional NekoX / Android / Android X or Manual input)
+- Custom app ID and Hash (optional Freegram / Android / Android X or Manual input)
 - Custom server (official, test DC)
 - Keep the original file name when downloading files
 - View the data center you belong to when you don't have an avatar
@@ -117,9 +111,9 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 
 ## FAQ
 
-#### What is the differences between NekoX and Nekogram?
+#### What is the differences between NekoX and Freegram?
 
-Developed by different developers, read the feature list above to understand the differences.
+Developed by different developers, read the feature list above to understand the differences.Freegram have an option to show jalali date correct
 
 #### What is the difference between the Full and Mini version?
 
@@ -137,39 +131,21 @@ Google Cloud Messaging, also known as gcm / fcm, message push service by google 
 
 First, make sure you have the latest version installed (check the channel, Play store versions usually have a delay).
 
-Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show NekoX in the description and screenshots, the official developers doesn't like us!).
+Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show Freegram in the description and screenshots, the official developers doesn't like us!).
 
-Then, please *detail* your issue, create an issue or submit it to our [group](https://t.me/NekoXChat) with #bug.
+Then, please *detail* your issue, create an issue or submit it to our [group](https://t.me/Freegram_chat) with #bug.
 
-If you experience a *crash*, you also need to click on the version number at the bottom of the settings and select "Enable Log" and send it to us.
+If you experience a *crash*, you also need ## Localization
 
-## Localization
 
-Is NekoX not in your language, or the translation is incorrect or incomplete? Get involved in the translations on our [Weblate](https://hosted.weblate.org/engage/nekox/).
 
-[![Translation status](https://hosted.weblate.org/widgets/nekox/-/horizontal-auto.svg)](https://hosted.weblate.org/engage/nekox/)
-
-### Adding a new language
-
-First and foremost, Android must already support the specific language and locale you want to add. We cannot work with languages that Android and the SDK do not support, the tools simply break down. Next, if you are considering adding a country-specific variant of a language (e.g. de-AT), first make sure that the main language is well maintained (e.g. de). Your contribution might be useful to more people if you contribute to the existing version of your language rather than the country-specific variant.
-
-Anyone can create a new language via Weblate.
-
-### Adding unofficial translations for Telegram
-
-Current built-in language packs:
-
-* 简体中文: [moecn](https://translations.telegram.org/moecn)
-* 正體中文: [taiwan](https://translations.telegram.org/taiwan)
-* 日本語: [ja_raw](https://translations.telegram.org/ja_raw)
-
-You can [open an issue to](https://github.com/NekoX-Dev/NekoX/issues/new?&template=language_request.md) request to amend the built-in translation.
 
 ## Credits
 
 <ul>
     <li>Telegram-FOSS: <a href="https://github.com/Telegram-FOSS-Team/Telegram-FOSS/blob/master/LICENSE">GPLv2</a></li>
     <li>Nekogram: <a href="https://gitlab.com/Nekogram/Nekogram/-/blob/master/LICENSE">GPLv2</a></li>
+    <li>NekoX: <a href="https://github.com/Nekox-Dev/NekoX/blob/main/LICENSE">GPLv3</a></li>
     <li>v2rayNG: <a href="https://github.com/2dust/v2rayNG/blob/master/LICENSE">GPLv3</a></li>
     <li>AndroidLibV2rayLite: <a href="https://github.com/2dust/AndroidLibV2rayLite/blob/master/LICENSE">LGPLv3</a></li>
     <li>shadowsocks-android: <a href="https://github.com/shadowsocks/shadowsocks-android/blob/master/LICENSE">GPLv3</a></li>
