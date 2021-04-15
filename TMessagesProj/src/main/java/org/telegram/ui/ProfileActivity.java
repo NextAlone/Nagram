@@ -7120,7 +7120,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 if (custom) {
                                     val = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
                                 } else {
-                                    val = LocaleController.getStringSetting("NotificationsOn", R.string.NotificationsOn);
+                                    val = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
                                 }
                                 enabled = true;
                             } else if (delta < 60 * 60) {
