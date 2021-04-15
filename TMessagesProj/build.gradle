@@ -376,7 +376,7 @@ android {
             }
         }
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "NekoX")
+            outputFileName = outputFileName.replace("TMessagesProj", "Freegram")
         }
     }
 
