@@ -95,7 +95,7 @@ object AlertUtil {Neko
     fun showSimpleAlert(ctx: Context?, title: String?, text: String, listener: ((AlertDialog.Builder) -> Unit)? = null) = UIUtil.runOnUIThread(Runnable {
 
         if (ctx == null) return@Runnable
-
+Expecting member declaration
         val builder = AlertDialog.Builder(ctx)
 
         builder.setTitle(title ?: LocaleController.getString("Freegram", R.string.Freegram))
