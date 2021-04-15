@@ -58,7 +58,7 @@
     <string name="PrivacyNotice2fa">بنظر می رسد شما رمز عبوری برای حسابتان تعیین نکرده اید، که این ممکن است باعث شود هکرهای دولتی هویت واقعی شما را پیدا کنند. لطفا آن تعیین کنید!</string>
     <string name="ApplySuggestion">باشه، اعمال کن</string>
     <string name="DoNotRemindAgain">دیگر یادآوری نشود</string>
-    <string name="RemoveTitleEmoji">حذف ایموجی کنار اسم Nekogram X</string>
+    <string name="RemoveTitleEmoji">حذف ایموجی کنار اسم Freegram</string>
     <string name="NekoXProxy">پروکسی عمومی NekoX</string>
     <string name="PublicPrefix">همگانی</string>
     <string name="DisableChatAction">عدم ارسال وضعیت ورودی</string>
