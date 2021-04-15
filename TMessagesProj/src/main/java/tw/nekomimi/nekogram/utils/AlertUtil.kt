@@ -19,7 +19,7 @@ import tw.nekomimi.nekogram.PopupBuilder
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
-object AlertUtil {
+object AlertUtil {Neko
 
     @JvmStatic
     fun copyAndAlert(text: String) {
