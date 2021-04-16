@@ -97,6 +97,7 @@ import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
 import tw.nekomimi.nekogram.SubSettingsActivity;
 import tw.nekomimi.nekogram.TrojanSettingsActivity;
 import tw.nekomimi.nekogram.VmessSettingsActivity;
+import tw.nekomimi.nekogram.WsSettingsActivity;
 import tw.nekomimi.nekogram.parts.ProxyChecksKt;
 import tw.nekomimi.nekogram.sub.SubInfo;
 import tw.nekomimi.nekogram.sub.SubManager;
@@ -331,6 +332,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int menu_add_input_vmess = 4;
     private int menu_add_input_ss = 7;
     private int menu_add_input_ssr = 8;
+    private int menu_add_input_ws = 9;
     private int menu_add_input_rb = 17;
 
     private int menu_add_import_from_clipboard = 5;
@@ -622,6 +624,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         addItem.addSubItem(menu_add_input_socks, LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity(0)));
         addItem.addSubItem(menu_add_input_telegram, LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity(1)));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            addItem.addSubItem(menu_add_input_ws, LocaleController.getString("AddProxyWs", R.string.AddProxyWs)).setOnClickListener((v) -> presentFragment(new WsSettingsActivity()));
+        }
+
         if (!BuildVars.isMini) {
 
             addItem.addSubItem(menu_add_input_vmess, LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess)).setOnClickListener((v) -> presentFragment(new VmessSettingsActivity()));
@@ -659,6 +665,18 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             if (position == useProxyRow) {
                 if (SharedConfig.currentProxy == null) {
                     if (!SharedConfig.proxyList.isEmpty()) {
+                        SharedConfig.ProxyInfo toSet = null;
+                        for (SharedConfig.ProxyInfo proxyInfo : SharedConfig.proxyList) {
+                            if (!SharedConfig.activeAccounts.isEmpty() || !(proxyInfo instanceof SharedConfig.WsProxy)) {
+                                toSet = proxyInfo;
+                                break;
+                            }
+                        }
+                        if (toSet == null) {
+                            AlertUtil.showToast(LocaleController.getString("WsNeedLogin", R.string.WsNeedLogin));
+                            addProxy();
+                            return;
+                        }
                         SharedConfig.setCurrentProxy(SharedConfig.proxyList.get(0));
                     } else {
                         addProxy();
@@ -686,6 +704,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 editor.apply();
             } else if (position >= proxyStartRow && position < proxyEndRow) {
                 SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
+
+                if (SharedConfig.activeAccounts.isEmpty() && info instanceof SharedConfig.WsProxy) {
+                    AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("WsNeedLogin", R.string.WsNeedLogin));
+                    return;
+                }
+
                 useProxySettings = true;
                 SharedConfig.setCurrentProxy(info);
                 updateRows(true);
@@ -705,9 +729,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 builder.addItems(new String[]{
 
                         info.subId == 1 ? null : LocaleController.getString("EditProxy", R.string.EditProxy),
-                        LocaleController.getString("ShareProxy", R.string.ShareProxy),
-                        LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                        LocaleController.getString("CopyLink", R.string.CopyLink),
+                        info.subId == 1 && info instanceof SharedConfig.WsProxy ? null : LocaleController.getString("ShareProxy", R.string.ShareProxy),
+                        info.subId == 1 && info instanceof SharedConfig.WsProxy ? null : LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
+                        info.subId == 1 && info instanceof SharedConfig.WsProxy ? null : LocaleController.getString("CopyLink", R.string.CopyLink),
                         info.subId == 1 ? null : LocaleController.getString("ProxyDelete", R.string.ProxyDelete),
                         LocaleController.getString("Cancel", R.string.Cancel)
 
@@ -738,6 +762,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 presentFragment(new ShadowsocksRSettingsActivity((SharedConfig.ShadowsocksRProxy) info));
                             }
+                        } else if (info instanceof SharedConfig.WsProxy) {
+                            presentFragment(new WsSettingsActivity((SharedConfig.WsProxy) info));
                         } else {
                             presentFragment(new ProxySettingsActivity(info));
                         }
@@ -802,6 +828,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 LocaleController.getString("AddProxySocks5", R.string.AddProxySocks5),
                 LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram),
+                LocaleController.getString("AddProxyWs", R.string.AddProxyWs),
                 BuildVars.isMini ? null : LocaleController.getString("AddProxyVmess", R.string.AddProxyVmess),
                 BuildVars.isMini ? null : LocaleController.getString("AddProxyTrojan", R.string.AddProxyTrojan),
                 BuildVars.isMini || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? null : LocaleController.getString("AddProxySS", R.string.AddProxySS),
@@ -821,21 +848,25 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
             } else if (i == 2) {
 
-                presentFragment(new VmessSettingsActivity());
+                presentFragment(new WsSettingsActivity());
 
             } else if (i == 3) {
 
-                presentFragment(new TrojanSettingsActivity());
+                presentFragment(new VmessSettingsActivity());
 
             } else if (i == 4) {
 
-                presentFragment(new ShadowsocksSettingsActivity());
+                presentFragment(new TrojanSettingsActivity());
 
             } else if (i == 5) {
 
-                presentFragment(new ShadowsocksRSettingsActivity());
+                presentFragment(new ShadowsocksSettingsActivity());
 
             } else if (i == 6) {
+
+                presentFragment(new ShadowsocksRSettingsActivity());
+
+            } else if (i == 7) {
 
                 ProxyUtil.importFromClipboard(getParentActivity());
 
@@ -969,6 +1000,15 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     public void checkSingleProxy(SharedConfig.ProxyInfo proxyInfo, int repeat, Runnable callback) {
+
+        if (SharedConfig.activeAccounts.isEmpty() && proxyInfo instanceof SharedConfig.WsProxy) {
+            proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
+            proxyInfo.checking = false;
+            proxyInfo.available = false;
+            proxyInfo.ping = 0;
+            callback.run();
+            return;
+        }
 
         UIUtil.runOnIoDispatcher(() -> {
 

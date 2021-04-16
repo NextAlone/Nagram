@@ -277,9 +277,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            showAlertWithText(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            showAlertWithText(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                         } else {
-                            showAlertWithText(LocaleController.getString("NekoX", R.string.NekoX), error.text);
+                            showAlertWithText(LocaleController.getString("Freegram", R.string.Freegram), error.text);
                         }
                     }
                 }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -646,9 +646,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         } else {
                             timeString = LocaleController.formatPluralString("Minutes", time / 60);
                         }
-                        showAlertWithText(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                        showAlertWithText(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                     } else {
-                        showAlertWithText(LocaleController.getString("NekoX", R.string.NekoX), error.text);
+                        showAlertWithText(LocaleController.getString("Freegram", R.string.Freegram), error.text);
                     }
                 }
             });
@@ -786,9 +786,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                showAlertWithText(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                showAlertWithText(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                             } else {
-                                showAlertWithText(LocaleController.getString("NekoX", R.string.NekoX), error.text);
+                                showAlertWithText(LocaleController.getString("Freegram", R.string.Freegram), error.text);
                             }
                         });
                     }

@@ -37,7 +37,7 @@
     <string name="GoogleCloudTransKey">Cheia de traducere ale Google Cloud</string>
     <string name="TransToLang">Limba țintă de traducere</string>
     <string name="More">Mai Mult</string>
-    <string name="NekoXUpdatesChannel">Canalul de actualizări NekoX</string>
+    <string name="FreegramUpdatesChannel">Canalul de actualizări Freegram</string>
     <string name="ShowIdAndDc">Afișează ID-ul / DC în profil</string>
     <string name="UseDefaultTheme">Utilizați tema implicită *</string>
     <string name="NightMode">Modul Noapte</string>
@@ -46,7 +46,7 @@
     <string name="ApplySuggestion">OK, aplică</string>
     <string name="DoNotRemindAgain">Nu mai amintiți</string>
     <string name="RemoveTitleEmoji">Eliminați emoji din titlu</string>
-    <string name="NekoXProxy">Public Proxy al NekoX</string>
+    <string name="FreegramProxy">Public Proxy al Freegram</string>
     <string name="PublicPrefix">Public</string>
     <string name="DisableChatAction">Nu trimiteți starea de intrare</string>
     <string name="ImportPxy">Import</string>
@@ -72,9 +72,9 @@
     <string name="SortByUnmuted">Sortare după mutare</string>
     <string name="SortByUser">Sortare după utilizator</string>
     <string name="SortByContacts">Sortare după contacte</string>
-    <string name="NekoXPushService">Serviciu de push NekoX</string>
-    <string name="EnablePushAlert">Vă rugăm să activați „NekoX Push Service”</string>
-    <string name="DisablePushAlert">Vă rugăm să dezactivați „NekoX Push Service”</string>
+    <string name="FreegramPushService">Serviciu de push Freegram</string>
+    <string name="EnablePushAlert">Vă rugăm să activați „Freegram Push Service”</string>
+    <string name="DisablePushAlert">Vă rugăm să dezactivați „Freegram Push Service”</string>
     <string name="DisableUndo">Dezactiveați anulare</string>
     <string name="DisableSystemAccount">Dezactivați contul de sistem</string>
     <string name="FilterMenu">Meniu filtre dialoguri</string>
@@ -85,8 +85,8 @@
     <string name="UnblockAll">Deblocați pe toți</string>
     <string name="UnblockAllWarn">Sigur doriți să deblocați ** toți utilizatorii și roboții **?</string>
     <string name="BlockedListEmpty">Nu ai blocat pe nimeni :)</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Adaugă Proxy-ul Socks5</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Adaugă Proxy-ul SOCKS5</string>
     <string name="AddProxyTelegram">Adaugă Proxy-ul MTProto</string>
     <string name="AddProxyVmess">Adaugă Proxy-ul Vmess</string>
     <string name="AddProxySS">Adaugă Proxy-ul Shadowsocks</string>
@@ -120,7 +120,7 @@
     <string name="DisableDeveloperMode">Dezactiveați modul dezvoltator</string>
     <string name="DeveloperSettings">Setări dezvoltator</string>
     <string name="LoginSettings">Setări de autentificare</string>
-    <string name="NekoXFaq">Întrebări frecvente despre NekoX</string>
+    <string name="FreegramFaq">Întrebări frecvente despre Freegram</string>
     <string name="TransSite">Platformă de traducere</string>
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Furnizor OpenPGP</string>

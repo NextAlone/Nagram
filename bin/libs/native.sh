@@ -2,19 +2,24 @@
 
 source "bin/init/env.sh"
 
-./gradlew TMessagesProj:stripFullFossDebugSymbols || exit 1
-
-OUT=TMessagesProj/build/intermediates/stripped_native_libs/fullFoss/out/lib
+OUT=TMessagesProj/build/intermediates/stripped_native_libs/miniFoss/out/lib
 DIR=TMessagesProj/src/main/libs
-rm -rf $DIR/armeabi-v7a
-mkdir -p $DIR/armeabi-v7a
-cp $OUT/armeabi-v7a/libtmessages*.so $DIR/armeabi-v7a
-rm -rf $DIR/arm64-v8a
-mkdir -p $DIR/arm64-v8a
-cp $OUT/arm64-v8a/libtmessages*.so $DIR/arm64-v8a
-rm -rf $DIR/x86
-mkdir -p $DIR/x86
-cp $OUT/x86/libtmessages*.so $DIR/x86
-rm -rf $DIR/x86_64
-mkdir -p $DIR/x86_64
-cp $OUT/x86_64/libtmessages*.so $DIR/x86_64
+
+./gradlew TMessagesProj:stripMiniFossDebugSymbols || exit 1
+
+function install() {
+  local ABI="$1"
+  if [ ! -f $OUT/$ABI/libtmessages*.so ]; then
+    echo ">> Skip $ABI"
+    return 0
+  fi
+  rm -rf $DIR/$ABI
+  mkdir -p $DIR/$ABI
+  cp $OUT/$ABI/libtmessages*.so $DIR/$ABI
+  echo ">> Install $DIR/$ABI/$(ls $DIR/$ABI)"
+}
+
+install armeabi-v7a
+install arm64-v8a
+install x86
+install x86_64

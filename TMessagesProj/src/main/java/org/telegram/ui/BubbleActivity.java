@@ -146,8 +146,12 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             return false;
         }
         currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+        if (!UserConfig.isValidAccount(currentAccount)) {
+            finish();
+            return false;
+        }
         BaseFragment chatActivity = null;
-        if (intent.getAction().startsWith("com.tmessages.openchat")) {
+        if (intent.getAction() != null && intent.getAction().startsWith("com.tmessages.openchat")) {
             int chatId = intent.getIntExtra("chatId", 0);
             int userId = intent.getIntExtra("userId", 0);
             Bundle args = new Bundle();
@@ -269,7 +273,11 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {
-                AndroidUtilities.runOnUIThread(lockRunnable, (long) SharedConfig.autoLockIn * 1000 + 1000);
+                if (SharedConfig.autoLockIn == 1) {
+                    AndroidUtilities.runOnUIThread(lockRunnable, 1000);
+                } else {
+                    AndroidUtilities.runOnUIThread(lockRunnable, (long) SharedConfig.autoLockIn * 1000 + 1000);
+                }
             }
         } else {
             SharedConfig.lastPauseTime = 0;

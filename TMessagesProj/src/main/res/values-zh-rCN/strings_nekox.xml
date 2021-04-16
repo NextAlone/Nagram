@@ -45,7 +45,7 @@
     <string name="TransToLang">翻译目标语言</string>
     <string name="TransInputToLang">输入翻译目标语言</string>
     <string name="More">更多</string>
-    <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
+    <string name="FreegramUpdatesChannel">Freegram 更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="UseDefaultTheme">使用默认主题 *</string>
     <string name="NightMode">夜间模式</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">应用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除标题中的表情</string>
-    <string name="NekoXProxy">NekoX 公共代理</string>
+    <string name="FreegramProxy">Freegram 公共代理</string>
     <string name="PublicPrefix">公共</string>
     <string name="DisableChatAction">不要发送我的输入状态</string>
     <string name="FakeScreenshot">假装截屏</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">可通知优先排序</string>
     <string name="SortByUser">用户优先排序</string>
     <string name="SortByContacts">联系人优先排序</string>
-    <string name="NekoXPushService">NekoX 通知服务</string>
-    <string name="EnablePushAlert">请启用 \"NekoX 通知服务\"</string>
-    <string name="DisablePushAlert">请禁用 \"NekoX 通知服务\"</string>
+    <string name="FreegramPushService">Freegram 通知服务</string>
+    <string name="EnablePushAlert">请启用 \"Freegram 通知服务\"</string>
+    <string name="DisablePushAlert">请禁用 \"Freegram 通知服务\"</string>
     <string name="DisableUndo">禁用五秒内后悔</string>
     <string name="DisableSystemAccount">禁用系统帐户</string>
     <string name="FilterMenu">分类菜单</string>
@@ -100,7 +100,7 @@
     <string name="UnblockAll">解除所有</string>
     <string name="UnblockAllWarn">您确定要解除屏蔽**所有用户和机器人**吗？</string>
     <string name="BlockedListEmpty">您还没有屏蔽任何人 :)</string>
-    <string name="ProxyTypeVmess">Vmess 代理</string>
+    <string name="ProxyTypeVmess">VMess 代理</string>
     <string name="AddProxySocks5">添加 SOCKS5 代理</string>
     <string name="AddProxyTelegram">添加 MTProto 代理</string>
     <string name="AddProxyVmess">添加 Vmess 代理</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">禁用开发者模式</string>
     <string name="DeveloperSettings">开发者设置</string>
     <string name="LoginSettings">登录设置</string>
-    <string name="NekoXFaq">NekoX 常见问题</string>
+    <string name="FreegramFaq">Freegram 常见问题</string>
     <string name="TransSite">翻译平台</string>
     <string name="OpenKayChain">OpenPGP 客户端</string>
     <string name="OpenPGPApp">OpenPGP 提供应用</string>
@@ -227,4 +227,12 @@
 \n与 \"禁用收藏夹和最近\" 配对。</string>
     <string name="EnableStickerPin">启用贴纸集置顶</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="UsePersiancalendar">使用伊朗历</string>
+    <string name="UsePersiancalendarInfo">用太阳回历显示日期</string>
+    <string name="DisplayPersianCalendarByLatin">以拉丁字母显示波斯日历</string>
+    <string name="AddProxyWs">添加 WebSocket 中继</string>
+    <string name="ProxyInfoWS">WebSocket 中继设置</string>
+    <string name="WsPayload">Payload</string>
+    <string name="WsNeedLogin">由于技术限制, Ws 中继暂时不能在登录前使用.</string>
+    <string name="AutoLockImmediately">立即</string>
 </resources>

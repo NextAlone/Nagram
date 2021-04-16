@@ -127,7 +127,7 @@ void Connection::onReceivedData(NativeByteBuffer *buffer) {
             currentDatacenter->storeCurrentAddressAndPortNum();
             isTryingNextPort = false;
             if (connectionType == ConnectionTypeProxy) {
-                setTimeout(5);
+                setTimeout(25);
             } else if (connectionType == ConnectionTypePush) {
                 setTimeout(60 * 15);
             } else if (connectionType == ConnectionTypeUpload) {
@@ -373,7 +373,7 @@ void Connection::connect() {
     hasSomeDataSinceLastConnect = false;
     openConnection(hostAddress, hostPort, secret, ipv6 != 0, ConnectionsManager::getInstance(currentDatacenter->instanceNum).currentNetworkType);
     if (connectionType == ConnectionTypeProxy) {
-        setTimeout(50);
+        setTimeout(25);
     } else if (connectionType == ConnectionTypePush) {
         if (isTryingNextPort) {
             setTimeout(40);

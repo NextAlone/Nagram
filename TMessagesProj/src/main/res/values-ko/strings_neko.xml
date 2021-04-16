@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">네코그램 설정</string>
+    <string name="FreegramSettings">네코그램 설정</string>
     <string name="IPv6">IPv6를 통해 연결</string>
     <string name="MessageMenu">메세지 메뉴</string>
     <string name="HidePhone">내 번호 숨기기</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">투명 상태 표시줄</string>
     <string name="EnableResidentNotification">참가자 알람 표시</string>
     <string name="DisableResidentNotification">참가자 알람 중지</string>
-    <string name="NekogramRunning">네코그램이 실행 중 입니다</string>
+    <string name="FreegramRunning">네코그램이 실행 중 입니다</string>
     <string name="EventType">사이드바 아이콘 세트</string>
     <string name="ChristmasHat">크리스마스 모자 매일 보여주기</string>
     <string name="ActionBarDecoration">제목 표시줄 꾸미기</string>

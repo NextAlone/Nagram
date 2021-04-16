@@ -42,7 +42,7 @@
     <string name="TransToLang">Zielsprache der Übersetzung</string>
     <string name="TransInputToLang">Quellsprache der Übersetzung</string>
     <string name="More">Mehr</string>
-    <string name="NekoXUpdatesChannel">NekoX Update-Kanal</string>
+    <string name="FreegramUpdatesChannel">Freegram Update-Kanal</string>
     <string name="ShowIdAndDc">ID/DC im Profil anzeigen</string>
     <string name="UseDefaultTheme">Standardthema verwenden*</string>
     <string name="NightMode">Nachtmodus</string>
@@ -54,7 +54,7 @@
     <string name="ApplySuggestion">OK, anwenden</string>
     <string name="DoNotRemindAgain">Nicht mehr erinnern</string>
     <string name="RemoveTitleEmoji">Emoji im Titel entfernen</string>
-    <string name="NekoXProxy">Öffentlicher NekoX-Proxy</string>
+    <string name="FreegramProxy">Öffentlicher Freegram-Proxy</string>
     <string name="PublicPrefix">Öffentlich</string>
     <string name="DisableChatAction">Meinen Eingabestatus nicht senden</string>
     <string name="FakeScreenshot">Screenshot verhindern</string>
@@ -82,9 +82,9 @@
     <string name="SortByUnmuted">Nach nicht Stummgeschalteten sortieren</string>
     <string name="SortByUser">Nach Nutzern sortieren</string>
     <string name="SortByContacts">Nach Kontakten sortieren</string>
-    <string name="NekoXPushService">NekoX Push-Service</string>
-    <string name="EnablePushAlert">Bitte aktiviere den \"NekoX Push-Service\"</string>
-    <string name="DisablePushAlert">Bitte deaktiviere den \"NekoX Push-Service\"</string>
+    <string name="FreegramPushService">Freegram Push-Service</string>
+    <string name="EnablePushAlert">Bitte aktiviere den \"Freegram Push-Service\"</string>
+    <string name="DisablePushAlert">Bitte deaktiviere den \"Freegram Push-Service\"</string>
     <string name="DisableUndo">Rückgängig machen deaktivieren</string>
     <string name="DisableSystemAccount">Systemkonto deaktivieren</string>
     <string name="FilterMenu">Dialog-Filtermenü</string>
@@ -97,8 +97,8 @@
     <string name="UnblockAll">Alle entsperren</string>
     <string name="UnblockAllWarn">Bist du sicher, dass du **alle Benutzer und Bots** entsperren möchtest?</string>
     <string name="BlockedListEmpty">Du hast niemanden blockiert :)</string>
-    <string name="ProxyTypeVmess">Vmess-Proxy</string>
-    <string name="AddProxySocks5">Socks5-Proxy hinzufügen</string>
+    <string name="ProxyTypeVmess">VMess-Proxy</string>
+    <string name="AddProxySocks5">SOCKS5-Proxy hinzufügen</string>
     <string name="AddProxyTelegram">MTProto-Proxy hinzufügen</string>
     <string name="AddProxyVmess">Vmess-Proxy hinzufügen</string>
     <string name="AddProxySS">Shadowsocks-Proxy hinzufügen</string>
@@ -162,7 +162,7 @@
     <string name="DisableDeveloperMode">Entwicklermodus deaktivieren</string>
     <string name="DeveloperSettings">Entwickleroptionen</string>
     <string name="LoginSettings">Anmeldeeinstellungen</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="FreegramFaq">Freegram FAQ</string>
     <string name="TransSite">Plattform übersetzen</string>
     <string name="OpenKayChain">OpenPGP-Client</string>
     <string name="OpenPGPApp">OpenPGP-Anbieter</string>

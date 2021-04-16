@@ -6,7 +6,7 @@ import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
 @JvmOverloads
-fun mkDatabase(name: String, delete: Boolean = true): Nitrite {
+fun mkDatabase(name: String, delete: Boolean = false): Nitrite {
 
     val file = File("${ApplicationLoader.getDataDirFixed()}/databases/$name.db")
     FileUtil.initDir(file.parentFile!!)

@@ -45,7 +45,7 @@
     <string name="TransToLang">Tujuan bahasa yang ingin di terjemahkan</string>
     <string name="TransInputToLang">Asal bahasa yang ingin di terjemahkan</string>
     <string name="More">Lainnya</string>
-    <string name="NekoXUpdatesChannel">Kanal Pembaruan NekoX</string>
+    <string name="FreegramUpdatesChannel">Kanal Pembaruan Freegram</string>
     <string name="ShowIdAndDc">Tampilkan ID / DC pada profil</string>
     <string name="UseDefaultTheme">Gunakan tema standar *</string>
     <string name="NightMode">Mode Malam</string>
@@ -56,8 +56,8 @@
     <string name="PrivacyNotice2fa">Terdeteksi bahwa anda belum mengatur kata sandi, yang bisa di retas oleh Hacker suruhan pemerintah sehingga dengan mudah menemukan identitas asli anda, harap atur sekarang!</string>
     <string name="ApplySuggestion">Oke, Terapkan</string>
     <string name="DoNotRemindAgain">Jangan ingatkan lagi</string>
-    <string name="RemoveTitleEmoji">Hapus emoji pada judul NekogramX</string>
-    <string name="NekoXProxy">Proxy Publik NekoX</string>
+    <string name="RemoveTitleEmoji">Hapus emoji pada judul FreegramgramX</string>
+    <string name="FreegramProxy">Proxy Publik Freegram</string>
     <string name="PublicPrefix">Publik</string>
     <string name="DisableChatAction">Jangan kirim status masukan saya</string>
     <string name="FakeScreenshot">Palsukan tangkapan layar</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Urutkan sesuai pesan yang bersuara</string>
     <string name="SortByUser">Urutkan sesuai nama pengguna</string>
     <string name="SortByContacts">Urutkan sesuai nama pada kontak</string>
-    <string name="NekoXPushService">Layanan Push NekoX</string>
-    <string name="EnablePushAlert">Mohon hidupkan \"Layanan Push NekoX\"</string>
-    <string name="DisablePushAlert">Mohon matikan \"Layanan Push NekoX\"</string>
+    <string name="FreegramPushService">Layanan Push Freegram</string>
+    <string name="EnablePushAlert">Mohon hidupkan \"Layanan Push Freegram\"</string>
+    <string name="DisablePushAlert">Mohon matikan \"Layanan Push Freegram\"</string>
     <string name="DisableUndo">Matikan konfirmasi pembatalan ketika menghapus sebuah pesan</string>
     <string name="DisableSystemAccount">Matikan Akun Sistem</string>
     <string name="FilterMenu">Menu Penyaring Obrolan</string>
@@ -100,8 +100,8 @@
     <string name="UnblockAll">Buka Semua Yang Diblokir</string>
     <string name="UnblockAllWarn">Anda yakin ingin membuka blokir untuk **semua pengguna dan robot**?</string>
     <string name="BlockedListEmpty">Anda belum memblokir siapa pun</string>
-    <string name="ProxyTypeVmess">Vmess Proxy</string>
-    <string name="AddProxySocks5">Tambahkan Proxy Socks5</string>
+    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="AddProxySocks5">Tambahkan Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Tambahkan Proxy MTProto</string>
     <string name="AddProxyVmess">Tambahkan Proxy Vmess</string>
     <string name="AddProxySS">Tambahkan Proxy Shadowsocks</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Matikan Mode Pengembang</string>
     <string name="DeveloperSettings">Pengaturan Pengembang</string>
     <string name="LoginSettings">Pengaturan Login</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="FreegramFaq">Freegram FAQ</string>
     <string name="TransSite">Platform Penterjemah</string>
     <string name="OpenKayChain">Klien OpenPGP</string>
     <string name="OpenPGPApp">Penyedia OpenPGP</string>

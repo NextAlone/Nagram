@@ -45,7 +45,7 @@
     <string name="TransToLang">Թարգմանության թիրախային լեզուն</string>
     <string name="TransInputToLang">Թարգմանության մուտքագրման թիրախային լեզուն</string>
     <string name="More">Ավելին</string>
-    <string name="NekoXUpdatesChannel">NekoX- ի թարմացումների ալիք</string>
+    <string name="FreegramUpdatesChannel">Freegram- ի թարմացումների ալիք</string>
     <string name="ShowIdAndDc">IDույց տալ ID / DC պրոֆիլում</string>
     <string name="UseDefaultTheme">Օգտագործեք լռելյայն թեման *</string>
     <string name="NightMode">Գիշերային ռեժիմ</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Լավ, կիրառիր</string>
     <string name="DoNotRemindAgain">Նորից մի հիշեցրու</string>
     <string name="RemoveTitleEmoji">Հեռացնել զմայլիկը վերնագրում</string>
-    <string name="NekoXProxy">NekoX հանրային վստահված անձ</string>
+    <string name="FreegramProxy">Freegram հանրային վստահված անձ</string>
     <string name="PublicPrefix">Հանրային</string>
     <string name="DisableChatAction">Մի ուղարկեք իմ մուտքագրման կարգավիճակը</string>
     <string name="FakeScreenshot">Պատկերացրեք սքրինշոթը</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Դասավորել ըստ անջատվածի</string>
     <string name="SortByUser">Դասավորել ըստ Օգտագործողի</string>
     <string name="SortByContacts">Դասավորել ըստ կոնտակտների</string>
-    <string name="NekoXPushService">NekoX հրում ծառայություն</string>
-    <string name="EnablePushAlert">Խնդրում ենք միացնել «NekoX Push Service» - ը</string>
-    <string name="DisablePushAlert">Խնդրում ենք անջատել «NekoX Push Service» - ը</string>
+    <string name="FreegramPushService">Freegram հրում ծառայություն</string>
+    <string name="EnablePushAlert">Խնդրում ենք միացնել «Freegram Push Service» - ը</string>
+    <string name="DisablePushAlert">Խնդրում ենք անջատել «Freegram Push Service» - ը</string>
     <string name="DisableUndo">Անջատել հետարկումը</string>
     <string name="DisableSystemAccount">Անջատել համակարգի հաշիվը</string>
     <string name="FilterMenu">Երկխոսությունների ֆիլտրի ընտրացանկ</string>
@@ -101,7 +101,7 @@
     <string name="UnblockAllWarn">Վստա՞հ եք, որ ցանկանում եք ապաբլոկավորել ** բոլոր օգտվողներին և բոտերին **:</string>
     <string name="BlockedListEmpty">Դուք ոչ մեկին չեք արգելափակել :)</string>
     <string name="ProxyTypeVmess">Վմեսսի վստահված անձ</string>
-    <string name="AddProxySocks5">Ավելացնել Socks5 վստահված անձը</string>
+    <string name="AddProxySocks5">Ավելացնել SOCKS5 վստահված անձը</string>
     <string name="AddProxyTelegram">Ավելացնել MTProto վստահված անձ</string>
     <string name="AddProxyVmess">Ավելացնել Vmess վստահված անձը</string>
     <string name="AddProxySS">Ավելացնել Shadowsocks վստահված անձը</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Անջատել մշակողի ռեժիմը</string>
     <string name="DeveloperSettings">Մշակողի կարգավորումներ</string>
     <string name="LoginSettings">Մուտքի կարգավորումներ</string>
-    <string name="NekoXFaq">NekoX ՀՏՀ</string>
+    <string name="FreegramFaq">Freegram ՀՏՀ</string>
     <string name="TransSite">Թարգմանել պլատֆորմը</string>
     <string name="OpenKayChain">OpenPGP հաճախորդ</string>
     <string name="OpenPGPApp">OpenPGP մատակարար</string>

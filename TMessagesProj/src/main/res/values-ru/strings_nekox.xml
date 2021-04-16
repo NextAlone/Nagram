@@ -45,7 +45,7 @@
     <string name="TransToLang">Переводить на:</string>
     <string name="TransInputToLang">Переводить с:</string>
     <string name="More">Ещё</string>
-    <string name="NekoXUpdatesChannel">Канал обновлений NekoX</string>
+    <string name="FreegramUpdatesChannel">Канал обновлений Freegram</string>
     <string name="ShowIdAndDc">Отображать ID и DC в профиле</string>
     <string name="UseDefaultTheme">Классическая тема Telegram</string>
     <string name="NightMode">Ночной режим</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Ок</string>
     <string name="DoNotRemindAgain">Не напоминать</string>
     <string name="RemoveTitleEmoji">Убрать эмодзи из шапки</string>
-    <string name="NekoXProxy">Список прокси от NekoX</string>
+    <string name="FreegramProxy">Список прокси от Freegram</string>
     <string name="PublicPrefix">Из списка</string>
     <string name="DisableChatAction">Не отправлять статус написания</string>
     <string name="FakeScreenshot">Симулировать скриншот</string>
@@ -85,7 +85,7 @@
     <string name="SortByUnmuted">Сначала со звуком</string>
     <string name="SortByUser">Сначала личные</string>
     <string name="SortByContacts">Сначала контакты</string>
-    <string name="NekoXPushService">Сервис уведомлений NekoX</string>
+    <string name="FreegramPushService">Сервис уведомлений Freegram</string>
     <string name="EnablePushAlert">Включите сервис уведомлений</string>
     <string name="DisablePushAlert">Отключите сервис уведомлений</string>
     <string name="DisableUndo">Скрыть отмену действий</string>
@@ -100,8 +100,8 @@
     <string name="UnblockAll">Очистить ЧС</string>
     <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**?</string>
     <string name="BlockedListEmpty">В вашем ЧС пусто, как у гоблина в голове :)</string>
-    <string name="ProxyTypeVmess">Vmess-прокси</string>
-    <string name="AddProxySocks5">Socks5-прокси</string>
+    <string name="ProxyTypeVmess">VMess-прокси</string>
+    <string name="AddProxySocks5">SOCKS5-прокси</string>
     <string name="AddProxyTelegram">MTProto-прокси</string>
     <string name="AddProxyVmess">Vmess-прокси</string>
     <string name="AddProxySS">Shadowsocks-прокси</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Отключить режим разработчика</string>
     <string name="DeveloperSettings">Настройки разработчика</string>
     <string name="LoginSettings">Настройки входа</string>
-    <string name="NekoXFaq">NekoX FAQ (EN/CH)</string>
+    <string name="FreegramFaq">Freegram FAQ (EN/CH)</string>
     <string name="TransSite">Платформа переводов</string>
     <string name="OpenKayChain">OpenPGP</string>
     <string name="OpenPGPApp">Провайдер OpenPGP</string>
@@ -193,7 +193,7 @@
     <string name="StorageReset">Стереть все данные</string>
     <string name="StorageResetInfo">Все данные будут удалены (также вы выйдете из всех аккаунтов).</string>
     <string name="FCTitle">Хотите подписаться?</string>
-    <string name="FCInfo">Информация о новых версиях и ссылки доступны на канале @NekogramX.</string>
+    <string name="FCInfo">Информация о новых версиях и ссылки доступны на канале @FreegramgramX.</string>
     <string name="CCTitle">OpenCC (китайский язык)</string>
     <string name="CCTarget">Цель</string>
     <string name="CCNo">Отсутствует</string>
@@ -226,4 +226,7 @@
     <string name="UnpinSticker">Открепить</string>
     <string name="PinSticker">Закрепить</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="DisplayPersianCalendarByLatin">Показывать иранский календарь латиницей</string>
+    <string name="UsePersiancalendarInfo">Отключите для нормального отображения даты.</string>
+    <string name="UsePersiancalendar">Иранский календарь</string>
 </resources>

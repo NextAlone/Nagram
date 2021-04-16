@@ -45,7 +45,7 @@
     <string name="TransToLang">Переклад цільової мови</string>
     <string name="TransInputToLang">Цільова мова для введення перекладу</string>
     <string name="More">Більше</string>
-    <string name="NekoXUpdatesChannel">Канал оновлень NekoX</string>
+    <string name="FreegramUpdatesChannel">Канал оновлень Freegram</string>
     <string name="ShowIdAndDc">Показати ID / DC в профілі</string>
     <string name="UseDefaultTheme">Використовувати стандартну тему *</string>
     <string name="NightMode">Нічний режим</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Добре, застосувати</string>
     <string name="DoNotRemindAgain">Не нагадувати більше</string>
     <string name="RemoveTitleEmoji">Видаляти смайли в назві</string>
-    <string name="NekoXProxy">Публічний проксі NekoX</string>
+    <string name="FreegramProxy">Публічний проксі Freegram</string>
     <string name="PublicPrefix">Загальнодоступна</string>
     <string name="DisableChatAction">Не надсилати мій статус вводу</string>
     <string name="FakeScreenshot">Зробіть знімок екрану</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Сортувати за відключеними</string>
     <string name="SortByUser">Сортувати за користувачем</string>
     <string name="SortByContacts">Сортувати за контактами</string>
-    <string name="NekoXPushService">Push-сервіс NekoX</string>
-    <string name="EnablePushAlert">Будь ласка, увімкніть \"NekoX Push сервіс\"</string>
-    <string name="DisablePushAlert">Відключіть \"Push Service NekoX\"</string>
+    <string name="FreegramPushService">Push-сервіс Freegram</string>
+    <string name="EnablePushAlert">Будь ласка, увімкніть \"Freegram Push сервіс\"</string>
+    <string name="DisablePushAlert">Відключіть \"Push Service Freegram\"</string>
     <string name="DisableUndo">Вимкнути відміну</string>
     <string name="DisableSystemAccount">Вимкнути системний обліковий запис</string>
     <string name="FilterMenu">Меню фільтру діалогів</string>
@@ -100,8 +100,8 @@
     <string name="UnblockAll">Розблокувати всі</string>
     <string name="UnblockAllWarn">Ви дійсно хочете розблокувати **всіх користувачів і ботів**?</string>
     <string name="BlockedListEmpty">Ви не заблокували нікого :)</string>
-    <string name="ProxyTypeVmess">Vmess проксі</string>
-    <string name="AddProxySocks5">Додати Socks5 проксі</string>
+    <string name="ProxyTypeVmess">VMess проксі</string>
+    <string name="AddProxySocks5">Додати SOCKS5 проксі</string>
     <string name="AddProxyTelegram">Додати MTProto Proxy</string>
     <string name="AddProxyVmess">Додати проксі Vmess</string>
     <string name="AddProxySS">Додати Shadowsocks проксі</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Вимкнути режим розробника</string>
     <string name="DeveloperSettings">Налаштування для розробників</string>
     <string name="LoginSettings">Параметри входу</string>
-    <string name="NekoXFaq">Питання NekoX</string>
+    <string name="FreegramFaq">Питання Freegram</string>
     <string name="TransSite">Перекласти платформу</string>
     <string name="OpenKayChain">Клієнт OpenPGP</string>
     <string name="OpenPGPApp">OpenPGP постачальник</string>

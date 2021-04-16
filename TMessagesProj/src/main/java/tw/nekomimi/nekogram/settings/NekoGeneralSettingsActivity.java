@@ -132,7 +132,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int disableNumberRoundingRow;
     private int openArchiveOnPullRow;
     private int nameOrderRow;
-    private int usePersianCalenderRow;
+    private int usePersianCalendarRow;
+    private int displayPersianCalendarByLatinRow;
     private int general2Row;
 
     private UndoView restartTooltip;
@@ -480,11 +481,17 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }
                 ActionBarLayout.headerShadowDrawable = NekoConfig.disableAppBarShadow ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
-            } else if (position == usePersianCalenderRow) {
-               /* NekoConfig.toggleUsePersianCalender();
+            } else if (position == usePersianCalendarRow) {
+                NekoConfig.toggleUsePersiancalendar();
+                LocaleController.reloadPersianCalendarConfig();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.usePersianCalender);
-                }*/
+                    ((TextCheckCell) view).setChecked(LocaleController.usePersianCalendar);
+                }
+            } else if (position == displayPersianCalendarByLatinRow) {
+                NekoConfig.toggleDisplayPersianCalendarByLatin();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.displayPersianCalendarByLatin);
+                }
             } else if (position == pgpAppRow) {
 
                 PopupBuilder builder = new PopupBuilder(view);
@@ -774,7 +781,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         disableNumberRoundingRow = rowCount++;
         openArchiveOnPullRow = rowCount++;
         nameOrderRow = rowCount++;
-        usePersianCalenderRow = -1;
+        usePersianCalendarRow = rowCount++;
+        displayPersianCalendarByLatinRow = rowCount++;
         general2Row = rowCount++;
 
         if (notify && listAdapter != null) {
@@ -977,7 +985,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("DisableNumberRounding", R.string.DisableNumberRounding), "4.8K -> 4777", NekoConfig.disableNumberRounding, true, true);
                     } else if (position == appBarShadowRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, true);
-                    } else if (position == usePersianCalenderRow) {
+                    } else if (position == usePersianCalendarRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("UsePersiancalendar", R.string.UsePersiancalendar), LocaleController.getString("UsePersiancalendarInfo", R.string.UsePersiancalendarInfo), LocaleController.usePersianCalendar, true, true);
+                    } else if (position == displayPersianCalendarByLatinRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisplayPersianCalendarByLatin", R.string.DisplayPersianCalendarByLatin), NekoConfig.displayPersianCalendarByLatin, false);
                     } else if (position == autoPauseVideoRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
                     } else if (position == acceptSecretChatRow) {

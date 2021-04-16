@@ -114,14 +114,14 @@
         android:extractNativeLibs="true"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/NekoX"
+        android:label="@string/Freegram"
         android:largeHeap="true"
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="false"
         android:theme="@style/Theme.TMessages.Start"
-        android:requestLegacyExternalStorage="true"
         tools:replace="android:supportsRtl">
 
         <activity
@@ -210,6 +210,8 @@
                 <data android:scheme="vmess1" />
                 <data android:scheme="ss" />
                 <data android:scheme="ssr" />
+                <data android:scheme="ws" />
+                <data android:scheme="wss" />
                 <data android:scheme="trojan" />
 
             </intent-filter>
@@ -332,8 +334,10 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:hardwareAccelerated="@bool/useHardwareAcceleration"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher">
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            <intent-filter
+                android:icon="@mipmap/ic_launcher"
+                android:roundIcon="@mipmap/ic_launcher">
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
         <activity
@@ -378,7 +382,7 @@
             android:name=".NotificationsDisabledReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.app.action.NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED"/>
+                <action android:name="android.app.action.NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED" />
             </intent-filter>
         </receiver>
 
@@ -426,18 +430,29 @@
             android:name=".KeepAliveJob"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service android:name=".BringAppForegroundService" android:enabled="true"/>
-        <service android:name=".NotificationsService" android:enabled="true"/>
-        <service android:name=".NotificationRepeat" android:exported="false"/>
-        <service android:name=".VideoEncodingService" android:enabled="true"/>
-        <service android:name=".ImportingService" android:enabled="true"/>
-        <service android:name=".LocationSharingService"
-            android:foregroundServiceType="location"
+        <service
+            android:name=".BringAppForegroundService"
             android:enabled="true" />
         <service
-            android:name="tw.nekomimi.nekogram.NekoXPushService"
+            android:name=".NotificationsService"
+            android:enabled="true" />
+        <service
+            android:name=".NotificationRepeat"
+            android:exported="false" />
+        <service
+            android:name=".VideoEncodingService"
+            android:enabled="true" />
+        <service
+            android:name=".ImportingService"
+            android:enabled="true" />
+        <service
+            android:name=".LocationSharingService"
             android:enabled="true"
-            android:label="@string/NekoXPushService"
+            android:foregroundServiceType="location" />
+        <service
+            android:name="tw.mimi.nekogram.NekoXPushService"
+            android:enabled="true"
+            android:label="@string/FreegramPushService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
@@ -567,8 +582,8 @@
 
         <service
             android:name=".ChatsWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".ContactsWidgetProvider">
             <meta-data
@@ -581,29 +596,44 @@
 
         <service
             android:name=".ContactsWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".FeedWidgetProvider">
-            <meta-data android:name="android.appwidget.provider"
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/feed_widget_info" />
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
         </receiver>
 
-    <service android:name=".FeedWidgetService"
-        android:permission="android.permission.BIND_REMOTEVIEWS"
-        android:exported="false" />
+        <service
+            android:name=".FeedWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <uses-library android:name="com.sec.android.app.multiwindow" android:required="false" />
-        <meta-data android:name="com.sec.android.support.multiwindow" android:value="true" />
-        <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:value="632dp" />
-        <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:value="598dp" />
-        <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:value="632dp" />
-        <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:value="598dp" />
+        <uses-library
+            android:name="com.sec.android.app.multiwindow"
+            android:required="false" />
 
-<!--        <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />-->
+        <meta-data
+            android:name="com.sec.android.support.multiwindow"
+            android:value="true" />
+        <meta-data
+            android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W"
+            android:value="632dp" />
+        <meta-data
+            android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H"
+            android:value="598dp" />
+        <meta-data
+            android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W"
+            android:value="632dp" />
+        <meta-data
+            android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
+            android:value="598dp" />
+
+        <!--        <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />-->
 
         <meta-data
             android:name="com.sec.android.support.multiwindow"

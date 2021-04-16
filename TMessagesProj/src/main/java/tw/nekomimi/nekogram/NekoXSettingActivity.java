@@ -64,7 +64,7 @@ public class NekoXSettingActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NekoSettings", R.string.NekoSettings));
+        actionBar.setTitle(LocaleController.getString("FreegramSettings", R.string.FreegramSettings));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);

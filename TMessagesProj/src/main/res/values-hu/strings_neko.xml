@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Beállítás</string>
+    <string name="FreegramSettings">Freegram Beállítás</string>
     <string name="MessageMenu">Üzenet menü</string>
     <string name="HidePhone">Telefonszámom elrejtése</string>
     <string name="Hide">Elrejt</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Átlátszó állapotsor</string>
     <string name="EnableResidentNotification">Lakossági értesítés megjelenítése</string>
     <string name="DisableResidentNotification">Tiltsa le a lakossági értesítést</string>
-    <string name="NekogramRunning">Nekogram fut</string>
+    <string name="FreegramRunning">Freegramgram fut</string>
     <string name="EventType">Oldalsáv ikon készlet</string>
     <string name="ChristmasHat">Mutasd a karácsonyi kalapot mindennap</string>
     <string name="ActionBarDecoration">Címsor díszítése</string>

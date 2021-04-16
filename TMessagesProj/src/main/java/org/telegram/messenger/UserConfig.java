@@ -66,7 +66,6 @@ public class UserConfig extends BaseController {
     public long pendingAppUpdateInstallTime;
     public long lastUpdateCheckTime;
     public long autoDownloadConfigLoadTime;
-    public boolean isBot;
     public boolean official;
     public boolean deviceInfo;
 
@@ -154,7 +153,6 @@ public class UserConfig extends BaseController {
                 editor.putBoolean("hasValidDialogLoadIds", hasValidDialogLoadIds);
                 editor.putInt("sharingMyLocationUntil", sharingMyLocationUntil);
                 editor.putInt("lastMyLocationShareTime", lastMyLocationShareTime);
-                editor.putBoolean("isBot", isBot);
                 editor.putBoolean("official", official);
                 editor.putBoolean("deviceInfo", deviceInfo);
 
@@ -250,6 +248,10 @@ public class UserConfig extends BaseController {
         }
     }
 
+    public static boolean isValidAccount(int num) {
+         return num >= 0 && num < UserConfig.MAX_ACCOUNT_COUNT && getInstance(num).isClientActivated();
+    }
+
     public boolean isClientActivated() {
         synchronized (sync) {
             return currentUser != null;
@@ -309,7 +311,6 @@ public class UserConfig extends BaseController {
             notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
             autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
             hasValidDialogLoadIds = preferences.contains("2dialogsLoadOffsetId") || preferences.getBoolean("hasValidDialogLoadIds", false);
-            isBot = preferences.getBoolean("isBot", false);
             official = preferences.getBoolean("official", false);
             deviceInfo = preferences.getBoolean("deviceInfo", true);
 
@@ -498,7 +499,6 @@ public class UserConfig extends BaseController {
         loginTime = (int) (System.currentTimeMillis() / 1000);
         lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000) - 23 * 60 * 60;
         lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000) - 25 * 60 * 60;
-        isBot = false;
         resetSavedPassword();
         boolean hasActivated = false;
         for (int a : SharedConfig.activeAccounts) {

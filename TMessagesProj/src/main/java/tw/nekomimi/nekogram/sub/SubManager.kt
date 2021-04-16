@@ -22,13 +22,13 @@ object SubManager {
 
             update(SubInfo().apply {
 
-                name = LocaleController.getString("NekoXProxy", R.string.NekoXProxy)
+                name = LocaleController.getString("FreegramProxy", R.string.FreegramProxy)
                 enable = public?.enable ?: true
 
                 urls = listOf(
-                        "https://nekox.pages.dev/proxy_list",
-                        "https://github.com/NekoX-Dev/ProxyList/blob/master/proxy_list@js-file-line\">@<",
-                        "https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list"
+                        "https://nekox.pages.dev/proxy_list_pro",
+                        "https://github.com/NekoX-Dev/ProxyList/blob/master/proxy_list_pro@js-file-line\">@<",
+                        "https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list_pro"
                 )
 
                 id = 1L

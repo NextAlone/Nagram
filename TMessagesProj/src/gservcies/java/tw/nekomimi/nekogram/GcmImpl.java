@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import androidx.annotation.Keep;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.InstallStateUpdatedListener;
@@ -42,7 +42,7 @@ public class GcmImpl implements ExternalGcm.Interface {
     public boolean checkPlayServices() {
         if (hasPlayServices != null) return hasPlayServices;
         try {
-            int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(ApplicationLoader.applicationContext);
+            int resultCode = GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(ApplicationLoader.applicationContext);
             hasPlayServices = resultCode == ConnectionResult.SUCCESS;
         } catch (Exception e) {
             hasPlayServices = false;

@@ -70,7 +70,7 @@ public class NekoSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NekoSettings", R.string.NekoSettings));
+        actionBar.setTitle(LocaleController.getString("FreegramSettings", R.string.FreegramSettings));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -105,15 +105,15 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
+                MessagesController.getInstance(currentAccount).openByUserName("Freegram_update", this, 1);
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox/");
             } else if (position == fdroidRow) {
-                Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/nekox.messenger");
+                Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/Freegram.messenger");
             } else if (position == googlePlayRow) {
-                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
+                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=Freegram.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX");
+                Browser.openUrl(getParentActivity(), "https://github.com/herotux/Freegram");
             }
         });
 
