@@ -13103,7 +13103,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             obj.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser &&
                             obj.messageOwner.from_id instanceof TLRPC.TL_peerUser &&
                             obj.messageOwner.from_id.user_id == getUserConfig().getClientUserId()) {
-                        TLObject nekoxBot = getMessagesController().getUserOrChat("NekoXBot");
+                        TLObject nekoxBot = getMessagesController().getUserOrChat("Freegrambot");
                         if (nekoxBot instanceof TLRPC.User &&
                                 action.user_id == ((TLRPC.User) nekoxBot).id) {
                             ArrayList<Integer> mids = new ArrayList<>();
@@ -13705,7 +13705,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (action instanceof TLRPC.TL_messageActionChatDeleteUser &&
                         fst.messageOwner.from_id instanceof TLRPC.TL_peerUser &&
                         fst.messageOwner.from_id.user_id == getUserConfig().getClientUserId()) {
-                    TLObject nekoxBot = getMessagesController().getUserOrChat("NekoXBot");
+                    TLObject nekoxBot = getMessagesController().getUserOrChat("Freegrambot");
                     if (nekoxBot instanceof TLRPC.User &&
                             action.user_id == ((TLRPC.User) nekoxBot).id) {
                         ArrayList<Integer> mids = new ArrayList<>();
