@@ -1729,7 +1729,7 @@ public class LocaleController {
             int dateYear = rightNow.get(Calendar.YEAR);
             PersianDate pdate = new PersianDate(date);
             if (dateDay == day && year == dateYear) {
-                return getInstance().formatterDay.format(new Date(date));
+                return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
                 
             
                 /*int diff = (int) (ConnectionsManager.getInstance().getCurrentTime() - date) / 60;
