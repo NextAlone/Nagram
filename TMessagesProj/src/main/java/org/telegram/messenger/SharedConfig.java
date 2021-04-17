@@ -920,21 +920,31 @@ public class SharedConfig {
         @Override
         public void start() {
             if (loader != null) return;
-            loader = new WsLoader();
-            port = ProxyManager.mkPort();
-            loader.init(bean, port);
-            loader.start();
-
-            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
-                ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
+            synchronized (this)
+            {
+                loader = new WsLoader();
+                port = ProxyManager.mkPort();
+                loader.init(bean, port);
+                loader.start();
+                if (SharedConfig.proxyEnabled && SharedConfig.currentProxy == this) {
+                    ConnectionsManager.setProxySettings(true, address, port, username, password, secret);
+                }
             }
         }
 
         @Override
         public void stop() {
             if (loader == null) return;
-            loader.stop();
-            loader = null;
+            ConnectionsManager.setProxySettings(false, address, port, username, password, secret);
+            UIUtil.runOnIoDispatcher(() -> {
+                synchronized (this)
+                {
+                    if (loader == null)
+                        return;
+                    loader.stop();
+                    loader = null;
+                }
+            });
         }
 
         @Override

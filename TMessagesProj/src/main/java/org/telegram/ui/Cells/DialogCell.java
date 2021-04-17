@@ -3165,7 +3165,7 @@ public class DialogCell extends BaseCell {
         }
         sb.append(". ");
         if (chat != null && !message.isOut() && message.isFromUser() && message.messageOwner.action == null) {
-            TLRPC.User fromUser = MessagesController.getInstance(currentAccount).getUser(message.messageOwner.from_id.user_id);
+            TLRPC.User fromUser = MessagesController.getInstance(currentAccount).getUser(message.getSenderId());
             if (fromUser != null) {
                 sb.append(ContactsController.formatName(fromUser.first_name, fromUser.last_name));
                 sb.append(". ");
