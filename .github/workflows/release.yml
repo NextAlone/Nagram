@@ -474,3 +474,4 @@ jobs:
           EOF
           sed -i -e 's@<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />@@g' TMessagesProj/src/main/AndroidManifest.xml
           ./gradlew TMessagesProj:publishFullPlayRelease
+
