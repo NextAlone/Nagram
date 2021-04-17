@@ -56,6 +56,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int sourceCodeRow;
     private int translationRow;
     private int about2Row;
+    private int donationRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -108,6 +109,8 @@ public class NekoSettingsActivity extends BaseFragment {
                 MessagesController.getInstance(currentAccount).openByUserName("TeleTux_update", this, 1);
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/teletux/");
+            } else if (position == donationRow) {
+                Browser.openUrl(getParentActivity(), "https://idpay.ir/arimasmod/camp/20803");
             } else if (position == fdroidRow) {
                 Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/teletux.messenger");
             } else if (position == googlePlayRow) {
@@ -140,6 +143,7 @@ public class NekoSettingsActivity extends BaseFragment {
         aboutRow = rowCount++;
         channelRow = rowCount++;
         fdroidRow = rowCount ++;
+        docationRow = rowCount ++; 
         if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {
@@ -238,6 +242,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@TeleTux_chat", true);
                     } else if (position == fdroidRow) {
                         textCell.setText(LocaleController.getString("AppLinkFDroid", R.string.AppLinkFDroid), true);
+                    } else if (position == donationRow) {
+                        textCell.setText(LocaleController.getString("donation", R.string.Donation), true);
                     } else if (position == googlePlayRow) {
                         textCell.setText(LocaleController.getString("GooglePlay", R.string.GooglePlay), true);
                     } else if (position == sourceCodeRow) {
