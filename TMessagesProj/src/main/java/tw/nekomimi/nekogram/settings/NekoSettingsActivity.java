@@ -143,7 +143,7 @@ public class NekoSettingsActivity extends BaseFragment {
         aboutRow = rowCount++;
         channelRow = rowCount++;
         fdroidRow = rowCount ++;
-        docationRow = rowCount ++; 
+        donationRow = rowCount ++; 
         if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {
