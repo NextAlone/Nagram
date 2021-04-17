@@ -13816,8 +13816,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         textureImageView.setImageDrawable(null);
                     }
                 }
-                pipVideoView.close();
-                pipVideoView = null;
+                if (pipVideoView != null) {
+                    pipVideoView.close();
+                    pipVideoView = null;
+                }
             } else {
                 containerView.invalidate();
             }
