@@ -376,21 +376,21 @@ void Connection::connect() {
         setTimeout(25);
     } else if (connectionType == ConnectionTypePush) {
         if (isTryingNextPort) {
-            setTimeout(40);
+            setTimeout(20);
         } else {
-            setTimeout(60);
+            setTimeout(30);
         }
     } else if (connectionType == ConnectionTypeUpload) {
         if (ConnectionsManager::getInstance(currentDatacenter->instanceNum).networkSlow) {
-            setTimeout(80);
+            setTimeout(40);
         } else {
-            setTimeout(50);
+            setTimeout(25);
         }
     } else {
         if (isTryingNextPort) {
-            setTimeout(100);
+            setTimeout(8);
         } else {
-            setTimeout(200);
+            setTimeout(12);
         }
     }
     connectionInProcess = false;
