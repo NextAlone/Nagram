@@ -235,7 +235,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@NekogramX", true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@TeleTux_chat", true);
                     } else if (position == fdroidRow) {
                         textCell.setText(LocaleController.getString("AppLinkFDroid", R.string.AppLinkFDroid), true);
                     } else if (position == googlePlayRow) {
