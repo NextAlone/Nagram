@@ -107,7 +107,7 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName("TeleTux_update", this, 1);
             } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox/");
+                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/teletux/");
             } else if (position == fdroidRow) {
                 Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/teletux.messenger");
             } else if (position == googlePlayRow) {
