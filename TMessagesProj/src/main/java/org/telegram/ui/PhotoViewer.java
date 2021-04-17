@@ -292,6 +292,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private ActionBarMenuItem pipItem;
     private ActionBarMenuItem masksItem;
     private ActionBarMenuItem shareItem;
+    private ActionBarMenuItem fastForwardItem;
+    private Runnable fastForwardCallback;
     private LinearLayout itemsLayout;
     private Map<View, Boolean> actionBarItemsVisibility = new HashMap<>(3);
     private LinearLayout bottomButtonsLayout;
@@ -1108,6 +1110,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private final static int gallery_menu_set_as_main = 16;
     private final static int gallery_menu_edit_avatar = 17;
     private final static int gallery_menu_share2 = 18;
+    private final static int gallery_menu_fast_fwd = 19;
 
     private static DecelerateInterpolator decelerateInterpolator;
     private static Paint progressPaint;
@@ -4002,6 +4005,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 } else if (id == gallery_menu_share || id == gallery_menu_share2) {
                     onSharePressed();
+                } else if (id == gallery_menu_fast_fwd) {
+                    if (fastForwardCallback != null) {
+                        fastForwardCallback.run();
+                    }
                 } else if (id == gallery_menu_openin) {
                     try {
                         if (currentMessageObject != null) {
@@ -4200,6 +4207,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         sendItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
         shareItem = menu.addItem(gallery_menu_share2, R.drawable.share);
         shareItem.setContentDescription(LocaleController.getString("ShareFile", R.string.ShareFile));
+        fastForwardItem = menu.addItem(gallery_menu_fast_fwd, R.drawable.ic_ab_forward_anonym);
+        fastForwardItem.setContentDescription(LocaleController.getString("FastForward", R.string.FastForward));
 
         menuItem = menu.addItem(0, R.drawable.ic_ab_other);
         menuItem.addSubItem(gallery_menu_openin, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp)).setColors(0xfffafafa, 0xfffafafa);
@@ -9294,6 +9303,104 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
+    private void updateFastForwardCallback(final MessageObject messageObject) {
+        fastForwardCallback = () -> {
+            final int channelId = messageObject.getChannelId();
+            TLObject req;
+            if (channelId != 0) {
+                TLRPC.TL_channels_getMessages r = new TLRPC.TL_channels_getMessages();
+                r.id.add(messageObject.getRealId());
+                r.channel = MessagesController.getInstance(currentAccount).getInputChannel(channelId);
+                req = r;
+            } else {
+                TLRPC.TL_messages_getMessages r = new TLRPC.TL_messages_getMessages();
+                r.id.add(messageObject.getRealId());
+                req = r;
+            }
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                if (parentChatActivity == null) {
+                    return;
+                }
+                if (error != null) {
+                    Toast toast = Toast.makeText(parentActivity, error.text, Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
+                }
+                if (!(response instanceof TLRPC.messages_Messages)) {
+                    return;
+                }
+                TLRPC.Message msg = ((TLRPC.messages_Messages) response).messages.get(0);
+                if (msg.media == null || msg.media.webpage == null) {
+                    return;
+                }
+
+                // Apply new file_reference.
+                TLRPC.WebPage cloudWebPage = msg.media.webpage;
+                TLRPC.WebPage localWebPage = messageObject.messageOwner.media.webpage;
+
+                if (cloudWebPage.photo != null && localWebPage.photo != null) {
+                    localWebPage.photo.file_reference = cloudWebPage.photo.file_reference;
+                }
+                if (cloudWebPage.document != null && localWebPage.document != null) {
+                    localWebPage.document.file_reference = cloudWebPage.document.file_reference;
+                }
+
+                if (cloudWebPage.cached_page != null && localWebPage.cached_page != null) {
+                    for (int b = 0, size2 = cloudWebPage.cached_page.documents.size(); b < size2; b++) {
+                        localWebPage.cached_page.documents.get(b).file_reference =
+                            cloudWebPage.cached_page.documents.get(b).file_reference;
+                    }
+                    for (int b = 0, size2 = cloudWebPage.cached_page.photos.size(); b < size2; b++) {
+                        localWebPage.cached_page.photos.get(b).file_reference =
+                            cloudWebPage.cached_page.photos.get(b).file_reference;
+                    }
+                }
+
+                // Prepare WebPage for ShareAlert.
+                ArrayList<MessageObject> pageMedias = new ArrayList<MessageObject>();
+                TLRPC.WebPage webPage = messageObject.messageOwner.media.webpage;
+                TLRPC.TL_message message = null;
+                if (webPage.document != null) {
+                    message = new TLRPC.TL_message();
+                    message.media = new TLRPC.TL_messageMediaDocument();
+                    message.media.document = webPage.document;
+                } else if (webPage.photo != null) {
+                    message = new TLRPC.TL_message();
+                    message.media = new TLRPC.TL_messageMediaPhoto();
+                    message.media.photo = webPage.photo;
+                }
+                message.message = "";
+                message.realId = messageObject.getId();
+                message.id = Utilities.random.nextInt();
+                message.date = messageObject.messageOwner.date;
+                message.peer_id = messageObject.messageOwner.peer_id;
+                message.out = messageObject.messageOwner.out;
+                message.from_id = messageObject.messageOwner.from_id;
+                pageMedias.add(new MessageObject(currentAccount, message, false, true));
+
+                pageMedias.addAll(messageObject.getWebPagePhotos(null, null));
+
+                if (pageMedias.isEmpty()) {
+                    return;
+                }
+
+                // Show ShareAlert.
+                parentChatActivity.showDialog(new org.telegram.ui.Components.ShareAlert(
+                    parentActivity,
+                    null,
+                     pageMedias,
+                    "",
+                    null,
+                    (channelId != 0),
+                    null,
+                    null,
+                    true,
+                    false,
+                    true));
+            }));
+        };
+    }
+
     private void onPhotoShow(final MessageObject messageObject, final TLRPC.FileLocation fileLocation, ImageLocation imageLocation, ImageLocation videoLocation, final ArrayList<MessageObject> messages, final ArrayList<SecureDocument> documents, final List<Object> photos, int index, final PlaceProviderObject object) {
         classGuid = ConnectionsManager.generateClassGuid();
         currentMessageObject = null;
@@ -9356,6 +9463,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         allMediaItem.setText(LocaleController.getString("ShowAllMedia", R.string.ShowAllMedia));
         menuItem.setVisibility(View.VISIBLE);
         setItemVisible(sendItem, false, false);
+        setItemVisible(fastForwardItem, false, false);
         setItemVisible(pipItem, false, true);
         cameraItem.setVisibility(View.GONE);
         cameraItem.setTag(null);
@@ -9485,6 +9593,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                     }
                 }
+                updateFastForwardCallback(messageObject);
+                setItemVisible(fastForwardItem, true, false);
             }
             if (messageObject.canPreviewDocument()) {
                 sharedMediaType = MediaDataController.MEDIA_FILE;
