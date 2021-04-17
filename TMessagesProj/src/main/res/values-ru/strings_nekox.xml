@@ -45,7 +45,7 @@
     <string name="TransToLang">Переводить на:</string>
     <string name="TransInputToLang">Переводить с:</string>
     <string name="More">Ещё</string>
-    <string name="FreegramUpdatesChannel">Канал обновлений Freegram</string>
+    <string name="TeleTuxUpdatesChannel">Канал обновлений TeleTux</string>
     <string name="ShowIdAndDc">Отображать ID и DC в профиле</string>
     <string name="UseDefaultTheme">Классическая тема Telegram</string>
     <string name="NightMode">Ночной режим</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Ок</string>
     <string name="DoNotRemindAgain">Не напоминать</string>
     <string name="RemoveTitleEmoji">Убрать эмодзи из шапки</string>
-    <string name="FreegramProxy">Список прокси от Freegram</string>
+    <string name="TeleTuxProxy">Список прокси от TeleTux</string>
     <string name="PublicPrefix">Из списка</string>
     <string name="DisableChatAction">Не отправлять статус написания</string>
     <string name="FakeScreenshot">Симулировать скриншот</string>
@@ -85,7 +85,7 @@
     <string name="SortByUnmuted">Сначала со звуком</string>
     <string name="SortByUser">Сначала личные</string>
     <string name="SortByContacts">Сначала контакты</string>
-    <string name="FreegramPushService">Сервис уведомлений Freegram</string>
+    <string name="TeleTuxPushService">Сервис уведомлений TeleTux</string>
     <string name="EnablePushAlert">Включите сервис уведомлений</string>
     <string name="DisablePushAlert">Отключите сервис уведомлений</string>
     <string name="DisableUndo">Скрыть отмену действий</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Отключить режим разработчика</string>
     <string name="DeveloperSettings">Настройки разработчика</string>
     <string name="LoginSettings">Настройки входа</string>
-    <string name="FreegramFaq">Freegram FAQ (EN/CH)</string>
+    <string name="TeleTuxFaq">TeleTux FAQ (EN/CH)</string>
     <string name="TransSite">Платформа переводов</string>
     <string name="OpenKayChain">OpenPGP</string>
     <string name="OpenPGPApp">Провайдер OpenPGP</string>
@@ -193,7 +193,7 @@
     <string name="StorageReset">Стереть все данные</string>
     <string name="StorageResetInfo">Все данные будут удалены (также вы выйдете из всех аккаунтов).</string>
     <string name="FCTitle">Хотите подписаться?</string>
-    <string name="FCInfo">Информация о новых версиях и ссылки доступны на канале @FreegramgramX.</string>
+    <string name="FCInfo">Информация о новых версиях и ссылки доступны на канале @TeleTuxgramX.</string>
     <string name="CCTitle">OpenCC (китайский язык)</string>
     <string name="CCTarget">Цель</string>
     <string name="CCNo">Отсутствует</string>

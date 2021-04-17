@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="FreegramSettings">Freegram կայանքներ</string>
+    <string name="TeleTuxSettings">TeleTux կայանքներ</string>
     <string name="IPv6">Միացում IPv6- ի միջոցով</string>
     <string name="MessageMenu">Հաղորդագրության ընտրացանկ</string>
     <string name="HidePhone">Թաքցրեք իմ հեռախոսահամարը</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Թափանցիկ կարգավիճակի տող</string>
     <string name="EnableResidentNotification">Showույց տալ բնակչի ծանուցումը</string>
     <string name="DisableResidentNotification">Անջատել բնակչի ծանուցումը</string>
-    <string name="FreegramRunning">Freegramgram- ը վազում է</string>
+    <string name="TeleTuxRunning">TeleTuxgram- ը վազում է</string>
     <string name="EventType">Կողային գծի պատկերակների հավաքածու</string>
     <string name="ChristmasHat">.Ուցադրեք ամանորյա գլխարկը ամեն օր</string>
     <string name="ActionBarDecoration">Վերնագրի ձևի ձևավորում</string>

@@ -82,7 +82,7 @@ android {
     buildToolsVersion "30.0.3"
     ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "Freegram.messenger"
+    defaultConfig.applicationId = "teletux.messenger"
 
     splits {
 
@@ -376,7 +376,7 @@ android {
             }
         }
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Freegram")
+            outputFileName = outputFileName.replace("TMessagesProj", "TeleTux")
         }
     }
 

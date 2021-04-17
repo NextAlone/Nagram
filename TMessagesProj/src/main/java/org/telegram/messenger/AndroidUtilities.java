@@ -2263,7 +2263,7 @@ public class AndroidUtilities {
         }
         File storageDir = null;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Freegram");
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TeleTux");
             if (!storageDir.mkdirs()) {
                 if (!storageDir.exists()) {
                     if (BuildVars.LOGS_ENABLED) {
@@ -2730,7 +2730,7 @@ public class AndroidUtilities {
                     parentFragment.presentFragment(new ThemePreviewActivity(themeInfo));
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                    builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                     builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                     parentFragment.showDialog(builder.create());
@@ -2776,7 +2776,7 @@ public class AndroidUtilities {
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                    builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                     builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
                     if (parentFragment != null) {

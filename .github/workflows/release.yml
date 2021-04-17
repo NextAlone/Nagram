@@ -389,10 +389,10 @@ jobs:
               wait $job || exit 1
             done
           }
-          upload apks/Freegram-full-*-release.apk
-          upload apks/Freegram-full-*-releaseNoGcm.apk
-          upload apks/Freegram-mini-*-release.apk
-          upload apks/Freegram-mini-*-releaseNoGcm.apk
+          upload apks/TeleTux-full-*-release.apk
+          upload apks/TeleTux-full-*-releaseNoGcm.apk
+          upload apks/TeleTux-mini-*-release.apk
+          upload apks/TeleTux-mini-*-releaseNoGcm.apk
           
   play:
     name: Publish to Play Store

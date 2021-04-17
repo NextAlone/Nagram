@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "486018081595",
-    "project_id": "freegrm-6b2de",
-    "storage_bucket": "freegrm-6b2de.appspot.com"
+    "project_number": "908066057719",
+    "project_id": "teletux-36d93",
+    "storage_bucket": "teletux-36d93.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:486018081595:android:f15f15e2321f3074524d1e",
+        "mobilesdk_app_id": "1:908066057719:android:cc24cc1ecb5defe06b12f2",
         "android_client_info": {
-          "package_name": "Freegram.messenger"
+          "package_name": "teletux.messenger"
         }
       },
       "oauth_client": [
         {
-          "client_id": "486018081595-02vh8k95n5h3oub8fbjffhebtchmkiso.apps.googleusercontent.com",
+          "client_id": "908066057719-bmcbrp5t6poqgfaqc49a84t5e31nvntl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB7cTkjs2LE-OGOSP6GCy2KXF-rRwXC7BI"
+          "current_key": "AIzaSyBZRifMBTHei3Cd-TLAT8Ud6NASxptTZg0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "486018081595-02vh8k95n5h3oub8fbjffhebtchmkiso.apps.googleusercontent.com",
+              "client_id": "908066057719-bmcbrp5t6poqgfaqc49a84t5e31nvntl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

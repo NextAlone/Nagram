@@ -8881,7 +8881,7 @@ public class MessagesController extends BaseController implements NotificationCe
             req.title = title;
             TLObject nekoxBot = null;
             if (selectedContacts.isEmpty()) {
-                String username = "Freegrambot";
+                String username = "TeleTuxbot";
                 nekoxBot = getUserOrChat(username);
                 if (nekoxBot instanceof TLRPC.User) {
                     req.users.add(getInputUser((TLRPC.User) nekoxBot));

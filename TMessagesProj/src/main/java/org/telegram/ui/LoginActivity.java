@@ -296,7 +296,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
     @Override
     public View createView(Context context) {
-        actionBar.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.Freegram));
+        actionBar.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -341,7 +341,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         String token = editText.getText().toString();
 
                         if (token.length() == 0) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
                             return;
                         }
 
@@ -374,11 +374,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 }
                                 if (error.text != null) {
                                     if (error.text.contains("ACCESS_TOKEN_INVALID")) {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
                                     } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("FloodWait", R.string.FloodWait));
                                     } else if (error.code != -1000) {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.code + ": " + error.text);
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.code + ": " + error.text);
                                     }
                                 }
                             }
@@ -914,7 +914,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
                     setPage(6, true, bundle, false);
                 } else {
-                    needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error1.text);
+                    needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error1.text);
                 }
             }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
         } else {
@@ -1160,7 +1160,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+        builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
         if (banned) {
             builder.setMessage(LocaleController.getString("BannedPhoneNumber", R.string.BannedPhoneNumber));
         } else {
@@ -1184,7 +1184,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 fragment.getParentActivity().startActivity(Intent.createChooser(mailer, "Send email..."));
             } catch (Exception e) {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(fragment.getParentActivity());
-                builder2.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                builder2.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                 builder2.setMessage(LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                 builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                 fragment.showDialog(builder2.create());
@@ -1298,7 +1298,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.Freegram));
+            builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux));
             builder.setMessage(LocaleController.getString("StopLoading", R.string.StopLoading));
             builder.setPositiveButton(LocaleController.getString("WaitMore", R.string.WaitMore), null);
             builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
@@ -2108,14 +2108,14 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             if (countryState == 1) {
-                needShowAlert(LocaleController.getString("NekogramWithEmoji", R.string.Freegram), LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                needShowAlert(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux), LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 return;
             } else if (countryState == 2 && !BuildVars.DEBUG_VERSION) {
-                needShowAlert(LocaleController.getString("NekogramWithEmoji", R.string.Freegram), LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                needShowAlert(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux), LocaleController.getString("WrongCountry", R.string.WrongCountry));
                 return;
             }
             if (codeField.length() == 0) {
-                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 return;
             }
             if (phoneField.length() == 0) {
@@ -2133,7 +2133,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     if (PhoneNumberUtils.compare(phone, userPhone) && ConnectionsManager.native_isTestBackend(currentAccount) == ConnectionsManager.native_isTestBackend(a)) {
                         final int num = a;
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.Freegram));
+                        builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux));
                         builder.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", R.string.AccountAlreadyLoggedIn));
                         builder.setPositiveButton(LocaleController.getString("AccountSwitch", R.string.AccountSwitch), (dialog, which) -> {
                             if (UserConfig.selectedAccount != num) {
@@ -2228,7 +2228,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                             bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
                                             setPage(6, true, bundle, false);
                                         } else {
-                                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error1.text);
+                                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error1.text);
                                         }
                                     }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
                                 } else {
@@ -2236,17 +2236,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                     showDoneButton(false, true);
 
                                     if (errorI.text.contains("PHONE_NUMBER_INVALID")) {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                                     } else if (errorI.text.contains("PHONE_CODE_EMPTY") || errorI.text.contains("PHONE_CODE_INVALID")) {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                                     } else if (errorI.text.contains("PHONE_CODE_EXPIRED")) {
                                         onBackPressed(true);
                                         setPage(0, true, null, true);
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                     } else if (errorI.text.startsWith("FLOOD_WAIT")) {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("FloodWait", R.string.FloodWait));
                                     } else {
-                                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + errorI.text);
+                                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + errorI.text);
                                     }
                                 }
                             }
@@ -2261,19 +2261,19 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
                             needShowInvalidAlert(LoginActivity.this, req.phone_number, false);
                         } else if (error.text.contains("PHONE_PASSWORD_FLOOD")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("FloodWait", R.string.FloodWait));
                         } else if (error.text.contains("PHONE_NUMBER_FLOOD")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
                         } else if (error.text.contains("PHONE_NUMBER_BANNED")) {
                             needShowInvalidAlert(LoginActivity.this, req.phone_number, true);
                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                         } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("FloodWait", R.string.FloodWait));
                         } else if (error.code != -1000) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                         }
                     }
                 }
@@ -2299,7 +2299,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 if (preferences.getBoolean("firstloginshow", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
                                     preferences.edit().putBoolean("firstloginshow", false).commit();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                                    builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                     builder.setMessage(LocaleController.getString("AllowFillNumber", R.string.AllowFillNumber));
                                     permissionsShowDialog = showDialog(builder.create());
@@ -2570,7 +2570,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         mailer.putExtra(Intent.EXTRA_TEXT, "Phone: " + requestPhone + "\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + lastError);
                         getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                     } catch (Exception e) {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                     }
                 }
             });
@@ -2641,17 +2641,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 } else {
                     if (error.text != null) {
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                         } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
                             onBackPressed(true);
                             setPage(0, true, null, true);
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("FloodWait", R.string.FloodWait));
                         } else if (error.code != -1000) {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                         }
                     }
                 }
@@ -3079,7 +3079,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
                                 setPage(6, true, bundle, false);
                             } else {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error1.text);
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error1.text);
                             }
                         }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
                         destroyTimer();
@@ -3100,9 +3100,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         waitingForEvent = true;
                         if (currentType != 3) {
                             if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                             } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                                 for (int a = 0; a < codeField.length; a++) {
                                     codeField[a].setText("");
                                 }
@@ -3110,11 +3110,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
                                 onBackPressed(true);
                                 setPage(0, true, null, true);
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                             } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("FloodWait", R.string.FloodWait));
                             } else {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                             }
                         }
                     }
@@ -3133,7 +3133,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         public boolean onBackPressed(boolean force) {
             if (!force) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.Freegram));
+                builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux));
                 builder.setMessage(LocaleController.getString("StopVerification", R.string.StopVerification));
                 builder.setPositiveButton(LocaleController.getString("Continue", R.string.Continue), null);
                 builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
@@ -3377,9 +3377,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                             } else {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -3422,7 +3422,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             setPage(5, true, params, false);
                         } else {
                             if (error.text.equals("2FA_RECENT_CONFIRM")) {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("ResetAccountCancelledAlert", R.string.ResetAccountCancelledAlert));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("ResetAccountCancelledAlert", R.string.ResetAccountCancelledAlert));
                             } else if (error.text.startsWith("2FA_CONFIRM_WAIT_")) {
                                 Bundle params = new Bundle();
                                 params.putString("phoneFormated", requestPhone);
@@ -3432,7 +3432,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 params.putInt("waitTime", Utilities.parseInt(error.text.replace("2FA_CONFIRM_WAIT_", "")));
                                 setPage(8, true, params, false);
                             } else {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
@@ -3580,9 +3580,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                         } else {
-                            needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                            needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                         }
                     }
                 });
@@ -3729,9 +3729,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             setPage(5, true, params, false);
                         } else {
                             if (error.text.equals("2FA_RECENT_CONFIRM")) {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("ResetAccountCancelledAlert", R.string.ResetAccountCancelledAlert));
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("ResetAccountCancelledAlert", R.string.ResetAccountCancelledAlert));
                             } else {
-                                needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                                needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
@@ -3957,7 +3957,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> onAuthSuccess((TLRPC.TL_auth_authorization) response));
                     builder.setMessage(LocaleController.getString("PasswordReset", R.string.PasswordReset));
-                    builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                    builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                     Dialog dialog = showDialog(builder.create());
                     if (dialog != null) {
                         dialog.setCanceledOnTouchOutside(false);
@@ -3974,9 +3974,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         } else {
                             timeString = LocaleController.formatPluralString("Minutes", time / 60);
                         }
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                     } else {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                     }
                 }
             }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -4368,7 +4368,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         public boolean onBackPressed(boolean force) {
             if (!force) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.Freegram));
+                builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux));
                 builder.setMessage(LocaleController.getString("AreYouSureRegistration", R.string.AreYouSureRegistration));
                 builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
                     onBackPressed(true);
@@ -4471,17 +4471,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 } else {
                     needHideProgress(false);
                     if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                     } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                     } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                     } else if (error.text.contains("FIRSTNAME_INVALID")) {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidFirstName", R.string.InvalidFirstName));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidFirstName", R.string.InvalidFirstName));
                     } else if (error.text.contains("LASTNAME_INVALID")) {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), LocaleController.getString("InvalidLastName", R.string.InvalidLastName));
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.getString("InvalidLastName", R.string.InvalidLastName));
                     } else {
-                        needShowAlert(LocaleController.getString("Freegram", R.string.Freegram), error.text);
+                        needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
                     }
                 }
             }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);

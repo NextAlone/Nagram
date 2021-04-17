@@ -47,7 +47,7 @@
     <string name="TransToLang">زبان ترجمه مقصد</string>
     <string name="TransInputToLang">زبان ترجمه پیام ورودی</string>
     <string name="More">بیشتر</string>
-    <string name="FreegramUpdatesChannel">کانال بروزرسانی Freegram</string>
+    <string name="TeleTuxUpdatesChannel">کانال بروزرسانی TeleTux</string>
     <string name="ShowIdAndDc">نمایش شناسه / DC کاربر در پروفایل</string>
     <string name="UseDefaultTheme">بکارگیری پوسته پیش‌گزیده *</string>
     <string name="NightMode">حالت شب</string>
@@ -58,8 +58,8 @@
     <string name="PrivacyNotice2fa">بنظر می رسد شما رمز عبوری برای حسابتان تعیین نکرده اید، که این ممکن است باعث شود هکرهای دولتی هویت واقعی شما را پیدا کنند. لطفا آن تعیین کنید!</string>
     <string name="ApplySuggestion">باشه، اعمال کن</string>
     <string name="DoNotRemindAgain">دیگر یادآوری نشود</string>
-    <string name="RemoveTitleEmoji">حذف ایموجی کنار اسم Freegram</string>
-    <string name="FreegramProxy">پروکسی عمومی Freegram</string>
+    <string name="RemoveTitleEmoji">حذف ایموجی کنار اسم TeleTux</string>
+    <string name="TeleTuxProxy">پروکسی عمومی TeleTux</string>
     <string name="PublicPrefix">همگانی</string>
     <string name="DisableChatAction">عدم ارسال وضعیت ورودی</string>
     <string name="FakeScreenshot">تظاهر کردن عکس از صفحه</string>
@@ -87,9 +87,9 @@
     <string name="SortByUnmuted">ترتیب بر اساس صدادار</string>
     <string name="SortByUser">ترتیب بر اساس کاربر</string>
     <string name="SortByContacts">ترتیب بر اساس مخاطبین</string>
-    <string name="FreegramPushService">پوش سرویس Freegram</string>
-    <string name="EnablePushAlert">لطفا پوش سرویس Freegram را فعال کنید</string>
-    <string name="DisablePushAlert">لطفا پوش سرویس Freegram را غیرفعال کنید</string>
+    <string name="TeleTuxPushService">پوش سرویس TeleTux</string>
+    <string name="EnablePushAlert">لطفا پوش سرویس TeleTux را فعال کنید</string>
+    <string name="DisablePushAlert">لطفا پوش سرویس TeleTux را غیرفعال کنید</string>
     <string name="DisableUndo">غیرفعال کردن واگرد</string>
     <string name="DisableSystemAccount">غیرفعال کردن حساب کاربری سیستم</string>
     <string name="FilterMenu">منوی فیلتر گفتگو ها</string>
@@ -170,7 +170,7 @@
     <string name="DisableDeveloperMode">غیرفعال‌سازی حالت توسعه دهنده</string>
     <string name="DeveloperSettings">تنظیمات برنامه نویس</string>
     <string name="LoginSettings">تنظیمات ورود به سیستم</string>
-    <string name="FreegramFaq">پرسش های متداول Freegram</string>
+    <string name="TeleTuxFaq">پرسش های متداول TeleTux</string>
     <string name="TransSite">پلتفرم ترجمه</string>
     <string name="OpenKayChain">کلاینت OpenPGP</string>
     <string name="OpenPGPApp">ارائه دهنده OpenPGP</string>

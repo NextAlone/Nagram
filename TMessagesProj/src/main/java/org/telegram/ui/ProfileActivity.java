@@ -2697,11 +2697,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == nekoRow) {
                     presentFragment(new NekoSettingsActivity());
                 } else if (position == questionRow) {
-                    Browser.openUrl(getParentActivity(), "https://t.me/Freegram_update");
+                    Browser.openUrl(getParentActivity(), "https://t.me/TeleTux_update");
                 } else if (position == faqRow) {
                     Browser.openUrl(getParentActivity(), NekoXConfig.FAQ_URL);
                 } else if (position == policyRow) {
-                    Browser.openUrl(getParentActivity(), "https://github.com/herotux/Freegram/wiki/Privacy-Policy");
+                    Browser.openUrl(getParentActivity(), "https://github.com/herotux/TeleTux/wiki/Privacy-Policy");
                 } else if (position == sendLogsRow) {
                     sendLogs();
                 } else if (position == clearLogsRow) {
@@ -2930,7 +2930,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
                     builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
-                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/herotux/Freegram/releases");
+                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/herotux/TeleTux/releases");
                         return Unit.INSTANCE;
                     });
 
@@ -3827,7 +3827,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     int action = actions.get(i);
                     if (action == 1 && (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_chatParticipantAdmin)) {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
-                        builder2.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                        builder2.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                         builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
                         builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
                             if (channelParticipant != null) {
@@ -6866,7 +6866,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     cell.getTextView().setMovementMethod(null);
                     cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
 
-                    cell.setText("Freegram v" + BuildConfig.VERSION_NAME + " " + FileUtil.getAbi() + " " + BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE);
+                    cell.setText("TeleTux v" + BuildConfig.VERSION_NAME + " " + FileUtil.getAbi() + " " + BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE);
 
                     cell.getTextView().setPadding(0, AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14));
                     view = cell;
@@ -7075,13 +7075,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == stickersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.deproko_baseline_stickers_24, true);
                     } else if (position == nekoRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("FreegramSettings", R.string.FreegramSettings), R.drawable.baseline_extension_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("TeleTuxSettings", R.string.TeleTuxSettings), R.drawable.baseline_extension_24, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.baseline_folder_24, true);
                     } else if (position == questionRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("FreegramUpdatesChannel", R.string.FreegramUpdatesChannel), R.drawable.baseline_bullhorn_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("TeleTuxUpdatesChannel", R.string.TeleTuxUpdatesChannel), R.drawable.baseline_bullhorn_24, true);
                     } else if (position == faqRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("FreegramFaq", R.string.FreegramFaq), R.drawable.baseline_help_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("TeleTuxFaq", R.string.TeleTuxFaq), R.drawable.baseline_help_24, true);
                     } else if (position == policyRow) {
                         textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.baseline_security_24, true);
                     } else if (position == sendLogsRow) {

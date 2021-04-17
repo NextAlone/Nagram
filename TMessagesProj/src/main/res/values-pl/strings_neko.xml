@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="FreegramSettings">Ustawienia Freegram</string>
+    <string name="TeleTuxSettings">Ustawienia TeleTux</string>
     <string name="IPv6">Łączenie przez IPv6</string>
     <string name="MessageMenu">Menu wiadomości</string>
     <string name="HidePhone">Ukryj mój numer telefonu</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Przezroczysty pasek stanu</string>
     <string name="EnableResidentNotification">Wyświetlaj powiadomienie mieszkańców</string>
     <string name="DisableResidentNotification">Wyłącz powiadomienia o lokalizacji</string>
-    <string name="FreegramRunning">Freegramgram działa</string>
+    <string name="TeleTuxRunning">TeleTuxgram działa</string>
     <string name="EventType">Ustawienia ikon paska bocznego</string>
     <string name="ChristmasHat">Pokazuj kapelusz świąteczny codziennie</string>
     <string name="ActionBarDecoration">Dekoracja paska tytułów</string>

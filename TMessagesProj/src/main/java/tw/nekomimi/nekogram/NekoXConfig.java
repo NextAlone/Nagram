@@ -11,12 +11,12 @@ import tw.nekomimi.nekogram.database.NitritesKt;
 public class NekoXConfig {
 
     //  public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
-    public static String FAQ_URL = "https://github.com/herotux/Freegram#faq";
+    public static String FAQ_URL = "https://github.com/herotux/TeleTux#faq";
     public static int[] officialChats = {
-            1223771542, // Freegram Updates
-            1199446479, // Freegram Chat
-            1199446479, // Freegram Chat Channel
-            1336955033, // Freegram APKs
+            1223771542, // TeleTux Updates
+            1199446479, // TeleTux Chat
+            1199446479, // TeleTux Chat Channel
+            1336955033, // TeleTux APKs
     };
 
     public static int[] developers = {
