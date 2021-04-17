@@ -20949,6 +20949,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 }
 
+                break;
+
             }
             case 204: {
                 if (selectedObjectGroup != null) {
