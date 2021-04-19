@@ -993,8 +993,9 @@ public class DialogCell extends BaseCell {
                             if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                                 if (message.isOutOwner()) {
                                     messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
-                                } else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null) {
-                                    messageNameString = message.messageOwner.fwd_from.from_name;
+                                // NekoX: fix show forwarded name as sender
+                                /*} else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null) {
+                                    messageNameString = message.messageOwner.fwd_from.from_name;*/
                                 } else if (fromUser != null) {
                                     if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
                                         if (UserObject.isDeleted(fromUser)) {
