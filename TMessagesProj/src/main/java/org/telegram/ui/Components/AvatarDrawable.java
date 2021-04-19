@@ -22,6 +22,7 @@ import android.text.TextPaint;
 import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
@@ -239,17 +240,10 @@ public class AvatarDrawable extends Drawable {
                 stringBuilder.appendCodePoint(firstName.codePointAt(0));
             }
             if (lastName != null && lastName.length() > 0) {
-                Integer lastch = null;
-                for (int a = lastName.length() - 1; a >= 0; a--) {
-                    if (lastch != null && lastName.charAt(a) == ' ') {
-                        break;
-                    }
-                    lastch = lastName.codePointAt(a);
-                }
                 if (Build.VERSION.SDK_INT > 17) {
                     stringBuilder.append("\u200C");
                 }
-                stringBuilder.appendCodePoint(lastch);
+                stringBuilder.append(Emoji.getFirstCharSafely(lastName));
             } else if (firstName != null && firstName.length() > 0) {
                 for (int a = firstName.length() - 1; a >= 0; a--) {
                     if (firstName.charAt(a) == ' ') {
@@ -257,7 +251,7 @@ public class AvatarDrawable extends Drawable {
                             if (Build.VERSION.SDK_INT > 17) {
                                 stringBuilder.append("\u200C");
                             }
-                            stringBuilder.appendCodePoint(firstName.codePointAt(a + 1));
+                            stringBuilder.append(Emoji.getFirstCharSafely(firstName.substring(a+1)));
                             break;
                         }
                     }
@@ -266,7 +260,8 @@ public class AvatarDrawable extends Drawable {
         }
 
         if (stringBuilder.length() > 0) {
-            String text = stringBuilder.toString().toUpperCase();
+            CharSequence text = Emoji.replaceEmoji(stringBuilder.toString().toUpperCase(), namePaint.getFontMetricsInt(), (int) namePaint.getTextSize(), false);
+
             try {
                 textLayout = new StaticLayout(text, namePaint, AndroidUtilities.dp(100), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (textLayout.getLineCount() > 0) {

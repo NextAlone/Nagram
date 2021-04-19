@@ -183,7 +183,7 @@
     <string name="ShareMyKey">Share My Public Key</string>
     <string name="DisableVibration">Disable Vibration</string>
     <string name="IgnoreContentRestrictions">Ignore content restrictions</string>
-    <string name="IgnoreContentRestrictionsNotice">Ignores android restrictions on messages locally. This may be banned by the server in the future, and you will need to evaluate the local legality of this option yourself.</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignores play restrictions on messages.</string>
     <string name="SendCommentAfterForward">Send comment after forwarding</string>
     <string name="UnpinMessageX">Unpin message</string>
     <string name="UnpinMessagesAll">Unpin all messages</string>
@@ -233,4 +233,7 @@
     <string name="WsPayload">Payload</string>
     <string name="AutoLockImmediately">Immediately</string>
     <string name="WsNeedLogin">Due to technical limitations, Ws Relay cannot be used before logging in.</string>
+    <string name="BackupSettings">Backup settings</string>
+    <string name="ImportSettings">Import settings</string>
+    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
 </resources>
