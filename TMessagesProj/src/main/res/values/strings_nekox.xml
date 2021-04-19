@@ -233,4 +233,7 @@
     <string name="WsPayload">Payload</string>
     <string name="AutoLockImmediately">Immediately</string>
     <string name="WsNeedLogin">Due to technical limitations, Ws Relay cannot be used before logging in.</string>
+    <string name="BackupSettings">Backup settings</string>
+    <string name="ImportSettings">Import settings</string>
+    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
 </resources>
