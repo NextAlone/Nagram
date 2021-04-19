@@ -254,9 +254,25 @@ public class NekoSettingsActivity extends BaseFragment {
         mainconfig.add("lockRecordAudioVideoHint");
         mainconfig.add("disableVoiceAudioEffects");
         mainconfig.add("chatSwipeAction");
+
         mainconfig.add("theme");
+        mainconfig.add("selectedAutoNightType");
+        mainconfig.add("autoNightScheduleByLocation");
+        mainconfig.add("autoNightBrighnessThreshold");
+        mainconfig.add("autoNightDayStartTime");
+        mainconfig.add("autoNightDayEndTime");
+        mainconfig.add("autoNightSunriseTime");
+        mainconfig.add("autoNightCityName");
+        mainconfig.add("autoNightSunsetTime");
+        mainconfig.add("autoNightLocationLatitude3");
+        mainconfig.add("autoNightLocationLongitude3");
+        mainconfig.add("autoNightLastSunCheckDay");
+
+        mainconfig.add("lang_code");
+
         spToJSON("mainconfig", configJson, mainconfig::contains);
         spToJSON("themeconfig", configJson, null);
+
         spToJSON("nekoconfig", configJson, null);
 
         return configJson.toString(4);
