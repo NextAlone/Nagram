@@ -727,4 +727,43 @@ public class Emoji {
         }
         preferences.edit().putString("color", stringBuilder.toString()).commit();
     }
+
+    /**
+     * NekoX: This function tries to fix incomplete emoji display shown in AvatarDrawable
+     * In AvatarDrawable, only the first char is used to draw "avatar".
+     * @return The first char or the first emoji
+     */
+    public static String getFirstCharSafely(String source) {
+        source = source.trim();
+        if (source.length() <= 1)
+            return source;
+        StringBuilder sb = new StringBuilder();
+        boolean nextEmoji = false;
+        int code = source.codePointAt(0);
+        sb.appendCodePoint(code); // append the first "char"
+        for (int offset = code > 0xFFFF ? 2 : 1; offset < source.length(); offset++) {
+            code = source.codePointAt(offset);
+            if (code > 0xFFFF) offset++;
+            if (nextEmoji || code == 0xFE0F || code == 0x20E3 || (code >= 0x1F3FB && code <= 0x1F3FF)) {
+                // 0xFE0F: VARIATION SELECTOR-16, 20E3: Keycap,  0x1F3FB ~ 0x1F3FF: skin tone
+                sb.appendCodePoint(code);
+                nextEmoji = false;
+                continue;
+            } else if ((code >= 0x1F1E6 && code <= 0x1F1FF)) {
+                sb.appendCodePoint(code);
+                break;
+                // 0x1F1E6 ~ 0x1F1FF: regional indicator symbol letter a to z
+                // These unicode are also used in the first "char" of country flag emoji, so break immediately to prevent appending two emoji
+            } else if (code == 0x200D) {
+                // 0x200D: ZWJ
+                sb.appendCodePoint(code);
+                nextEmoji = true;
+                continue;
+            }
+            if (!nextEmoji)
+                break;
+        }
+        return sb.toString();
+    }
+
 }
