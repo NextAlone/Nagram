@@ -421,8 +421,6 @@ jobs:
           update apks/miniAppleEmoji-x86-releaseNoGcm.apk
           update apks/miniAppleEmoji-x86_64-release.apk
           update apks/miniAppleEmoji-x86_64-releaseNoGcm.apk
-
-          
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
