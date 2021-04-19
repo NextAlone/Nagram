@@ -2007,7 +2007,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     imageView.setRoundRadius(AndroidUtilities.dp(20));
                     frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
                     avatarDrawable.setInfo(currentChat);
-                    imageView.setImage(ImageLocation.getForChat(currentChat,  ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentChat);
+                    imageView.setImage(ImageLocation.getForChat(currentChat, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentChat);
                     TextView textView = new TextView(context);
                     textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -3644,9 +3644,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 bottomOverlayChat != null && bottomOverlayChat.getVisibility() == View.VISIBLE ||
                                 currentChat != null && (ChatObject.isNotInChat(currentChat) && !isThreadChat() || ChatObject.isChannel(currentChat) && !ChatObject.canPost(currentChat) && !currentChat.megagroup || !ChatObject.canSendMessages(currentChat)) ||
                                 textSelectionHelper.isSelectionMode()) {
-                            slidingView.setSlidingOffset(0);
-                            slidingView = null;
-                            return;
+                            if (!canSendInCommentGroup()) {
+                                slidingView.setSlidingOffset(0);
+                                slidingView = null;
+                                return;
+                            }
                         }
                         startedTrackingPointerId = e.getPointerId(0);
                         maybeStartTrackingSlidingView = true;
@@ -17069,20 +17071,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     bottomOverlayChat.setVisibility(View.INVISIBLE);
                     chatActivityEnterView.setFieldFocused();
                     AndroidUtilities.runOnUIThread(() -> chatActivityEnterView.openKeyboard(), 100);
-                } else {
-                    boolean showEnter = false;
-                    if (currentChat != null && currentChat.megagroup && chatInfo != null && chatInfo.linked_chat_id != 0) {
-                        TLRPC.Chat linked = getMessagesController().getChat(chatInfo.linked_chat_id);
-                        showEnter = !ChatObject.isKickedFromChat(linked);
-                    }
-                    if (!showEnter) {
-                        bottomOverlayChat.setVisibility(View.VISIBLE);
-                        chatActivityEnterView.setFieldFocused(false);
-                        chatActivityEnterView.setVisibility(View.INVISIBLE);
-                        chatActivityEnterView.closeKeyboard();
-                        if (stickersAdapter != null) {
-                            stickersAdapter.hide();
-                        }
+                } else if (!canSendInCommentGroup()) {
+                    bottomOverlayChat.setVisibility(View.VISIBLE);
+                    chatActivityEnterView.setFieldFocused(false);
+                    chatActivityEnterView.setVisibility(View.INVISIBLE);
+                    chatActivityEnterView.closeKeyboard();
+                    if (stickersAdapter != null) {
+                        stickersAdapter.hide();
                     }
                 }
                 if (attachItem != null) {
@@ -18985,6 +18980,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 currentChat != null && (ChatObject.isNotInChat(currentChat) && !isThreadChat() || ChatObject.isChannel(currentChat) && !ChatObject.canPost(currentChat) && !currentChat.megagroup || !ChatObject.canSendMessages(currentChat))) {
             allowChatActions = false;
         }
+        allowChatActions |= canSendInCommentGroup();
 
         if (single || type < 2 || type == 20) {
             if (getParentActivity() == null) {
@@ -22136,7 +22132,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
                         new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
                             if (which == 0) {
-                        processExternalUrl(1, urlFinal, false);
+                                processExternalUrl(1, urlFinal, false);
                             } else if (which == 1) {
                                 String url1 = urlFinal;
                                 boolean tel = false;
@@ -24670,5 +24666,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 openRightsEdit(action, user, participant, null, null, "", editingAdmin);
             }
         }
+    }
+
+    private boolean canSendInCommentGroup() {
+        //currentChat是群组
+        return currentChat != null && currentChat.megagroup && chatInfo != null && chatInfo.linked_chat_id != 0;
     }
 }
