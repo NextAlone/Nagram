@@ -389,38 +389,38 @@ jobs:
               wait $job || exit 1
             done
           }
-          update apks/TeleTux-full-arm64-v8a-release.apk
-          update apks/TeleTux-full-arm64-v8a-releaseNoGcm.apk
-          update apks/TeleTux-full-armeabi-v7a-release.apk
-          update apks/full-armeabi-v7a-releaseNoGcm.apk
-          update apks/full-x86-release.apk
-          update apks/full-x86-releaseNoGcm.apk
-          update apks/full-x86_64-release.apk
-          update apks/full-x86_64-releaseNoGcm.apk
-          update apks/fullAppleEmoji-arm64-v8a-release.apk
-          update apks/fullAppleEmoji-arm64-v8a-releaseNoGcm.apk
-          update apks/fullAppleEmoji-armeabi-v7a-release.apk
-          update apks/fullAppleEmoji-armeabi-v7a-releaseNoGcm.apk
-          update apks/fullAppleEmoji-x86-release.apk
-          update apks/fullAppleEmoji-x86-releaseNoGcm.apk
-          update apks/fullAppleEmoji-x86_64-release.apk
-          update apks/fullAppleEmoji-x86_64-releaseNoGcm.apk
-          update apks/mini-arm64-v8a-release.apk
-          update apks/mini-arm64-v8a-releaseNoGcm.apk
-          update apks/mini-armeabi-v7a-release.apk
-          update apks/mini-armeabi-v7a-releaseNoGcm.apk
-          update apks/mini-x86-release.apk
-          update apks/mini-x86-releaseNoGcm.apk
-          update apks/mini-x86_64-release.apk
-          update apks/mini-x86_64-releaseNoGcm.apk
-          update apks/miniAppleEmoji-arm64-v8a-release.apk
-          update apks/miniAppleEmoji-arm64-v8a-releaseNoGcm.apk
-          update apks/miniAppleEmoji-armeabi-v7a-release.apk
-          update apks/miniAppleEmoji-armeabi-v7a-releaseNoGcm.apk
-          update apks/miniAppleEmoji-x86-release.apk
-          update apks/miniAppleEmoji-x86-releaseNoGcm.apk
-          update apks/miniAppleEmoji-x86_64-release.apk
-          update apks/miniAppleEmoji-x86_64-releaseNoGcm.apk
+          upload apks/TeleTux-full-arm64-v8a-release.apk
+          upload apks/TeleTux-full-arm64-v8a-releaseNoGcm.apk
+          upload apks/TeleTux-full-armeabi-v7a-release.apk
+          upload apks/full-armeabi-v7a-releaseNoGcm.apk
+          upload apks/full-x86-release.apk
+          upload apks/full-x86-releaseNoGcm.apk
+          upload apks/full-x86_64-release.apk
+          upload apks/full-x86_64-releaseNoGcm.apk
+          upload apks/fullAppleEmoji-arm64-v8a-release.apk
+          upload apks/fullAppleEmoji-arm64-v8a-releaseNoGcm.apk
+          upload apks/fullAppleEmoji-armeabi-v7a-release.apk
+          upload apks/fullAppleEmoji-armeabi-v7a-releaseNoGcm.apk
+          upload apks/fullAppleEmoji-x86-release.apk
+          upload apks/fullAppleEmoji-x86-releaseNoGcm.apk
+          upload apks/fullAppleEmoji-x86_64-release.apk
+          upload apks/fullAppleEmoji-x86_64-releaseNoGcm.apk
+          upload apks/mini-arm64-v8a-release.apk
+          upload apks/mini-arm64-v8a-releaseNoGcm.apk
+          upload apks/mini-armeabi-v7a-release.apk
+          upload apks/mini-armeabi-v7a-releaseNoGcm.apk
+          upload apks/mini-x86-release.apk
+          upload apks/mini-x86-releaseNoGcm.apk
+          upload apks/mini-x86_64-release.apk
+          upload apks/mini-x86_64-releaseNoGcm.apk
+          upload apks/miniAppleEmoji-arm64-v8a-release.apk
+          upload apks/miniAppleEmoji-arm64-v8a-releaseNoGcm.apk
+          upload apks/miniAppleEmoji-armeabi-v7a-release.apk
+          upload apks/miniAppleEmoji-armeabi-v7a-releaseNoGcm.apk
+          upload apks/miniAppleEmoji-x86-release.apk
+          upload apks/miniAppleEmoji-x86-releaseNoGcm.apk
+          upload apks/miniAppleEmoji-x86_64-release.apk
+          upload apks/miniAppleEmoji-x86_64-releaseNoGcm.apk
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
