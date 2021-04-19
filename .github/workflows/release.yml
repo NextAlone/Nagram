@@ -389,10 +389,39 @@ jobs:
               wait $job || exit 1
             done
           }
-          upload apks/TeleTux-full-*-release.apk
-          upload apks/TeleTux-full-*-releaseNoGcm.apk
-          upload apks/TeleTux-mini-*-release.apk
-          upload apks/TeleTux-mini-*-releaseNoGcm.apk
+          update apks/TeleTux-full-arm64-v8a-release.apk
+          update apks/TeleTux-full-arm64-v8a-releaseNoGcm.apk
+          update apks/TeleTux-full-armeabi-v7a-release.apk
+          update apks/full-armeabi-v7a-releaseNoGcm.apk
+          update apks/full-x86-release.apk
+          update apks/full-x86-releaseNoGcm.apk
+          update apks/full-x86_64-release.apk
+          update apks/full-x86_64-releaseNoGcm.apk
+          update apks/fullAppleEmoji-arm64-v8a-release.apk
+          update apks/fullAppleEmoji-arm64-v8a-releaseNoGcm.apk
+          update apks/fullAppleEmoji-armeabi-v7a-release.apk
+          update apks/fullAppleEmoji-armeabi-v7a-releaseNoGcm.apk
+          update apks/fullAppleEmoji-x86-release.apk
+          update apks/fullAppleEmoji-x86-releaseNoGcm.apk
+          update apks/fullAppleEmoji-x86_64-release.apk
+          update apks/fullAppleEmoji-x86_64-releaseNoGcm.apk
+          update apks/mini-arm64-v8a-release.apk
+          update apks/mini-arm64-v8a-releaseNoGcm.apk
+          update apks/mini-armeabi-v7a-release.apk
+          update apks/mini-armeabi-v7a-releaseNoGcm.apk
+          update apks/mini-x86-release.apk
+          update apks/mini-x86-releaseNoGcm.apk
+          update apks/mini-x86_64-release.apk
+          update apks/mini-x86_64-releaseNoGcm.apk
+          update apks/miniAppleEmoji-arm64-v8a-release.apk
+          update apks/miniAppleEmoji-arm64-v8a-releaseNoGcm.apk
+          update apks/miniAppleEmoji-armeabi-v7a-release.apk
+          update apks/miniAppleEmoji-armeabi-v7a-releaseNoGcm.apk
+          update apks/miniAppleEmoji-x86-release.apk
+          update apks/miniAppleEmoji-x86-releaseNoGcm.apk
+          update apks/miniAppleEmoji-x86_64-release.apk
+          update apks/miniAppleEmoji-x86_64-releaseNoGcm.apk
+
           
   play:
     name: Publish to Play Store
