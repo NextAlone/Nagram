@@ -183,7 +183,7 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == googlePlayRow) {
                 Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=teletux.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/herotux/TeleTux");
+                Browser.openUrl(getParentActivity(), "https://github.com/TeleTux/TeleTux");
             }
         });
 
@@ -384,6 +384,7 @@ public class NekoSettingsActivity extends BaseFragment {
         aboutRow = rowCount++;
         channelRow = rowCount++;
         fdroidRow = rowCount++;
+        donationRow = rowCount++;
         if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {
