@@ -379,7 +379,6 @@ jobs:
           function zip() {
             for apk in $@; do
               echo ">> zip $apk"
-              echo zip $(basename "$apk").zip  "$apk"
               zip $(basename "$apk").zip  "$apk"
             done
             for job in $(jobs -p); do
