@@ -376,7 +376,7 @@ jobs:
         run: |
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
-          
+
           function zip() {
             for apk in $@; do
               echo ">> zip $apk"
@@ -396,14 +396,14 @@ jobs:
               wait $job || exit 1
             done
           }
-          zip apks/TeleTux-full-*-release.apk
-          zip apks/TeleTux-full-*-releaseNoGcm.apk
-          zip apks/fullAppleEmoji-*-release.apk
-          zip apks/fullAppleEmoji-*-releaseNoGcm.apk
-          zip apks/mini-*-release.apk
-          zip apks/mini-*-releaseNoGcm.apk
-          zip apks/miniAppleEmoji-*-release.apk
-          zip apks/miniAppleEmoji-*-releaseNoGcm.apk
+          zip "apks/TeleTux-full-*-release.apk"
+          zip "apks/TeleTux-full-*-releaseNoGcm.apk"
+          zip "apks/fullAppleEmoji-*-release.apk"
+          zip "apks/fullAppleEmoji-*-releaseNoGcm.apk"
+          zip "apks/mini-*-release.apk"
+          zip "apks/mini-*-releaseNoGcm.apk"
+          zip "apks/miniAppleEmoji-*-release.apk"
+          zip "apks/miniAppleEmoji-*-releaseNoGcm.apk"
 
 
 
