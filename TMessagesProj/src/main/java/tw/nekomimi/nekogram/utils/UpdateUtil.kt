@@ -10,7 +10,7 @@ import org.telegram.ui.ActionBar.AlertDialog
 
 object UpdateUtil {
 
-    const val channelUsername = "NekogramX"
+    const val channelUsername = "TeleTux_update"
 
     @JvmStatic
     fun postCheckFollowChannel(ctx: Context, currentAccount: Int) = UIUtil.runOnIoDispatcher {
