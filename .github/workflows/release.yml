@@ -378,7 +378,8 @@ jobs:
           find artifacts -name "*.apk" -exec cp {} apks \;
 
           function zip() {
-            for apk in $@; do
+            apks = $@
+            for apk in $apks; do
               echo ">> zip $apk"
               zip $(basename "$apk").zip  "$apk"
             done
