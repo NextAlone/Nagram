@@ -1971,9 +1971,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         FileLog.e(e);
                     }
                     if (syncContacts) {
-                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn)).show();
+                        BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn)).show();
                     } else {
-                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_off, LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff)).show();
+                        BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_off, LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff)).show();
                     }
                 }
             });
@@ -2175,7 +2175,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         String dcId = phone.substring(5, 6);
                         final TLRPC.TL_auth_signIn reqI = new TLRPC.TL_auth_signIn();
                         reqI.phone_number = phone;
-                        reqI.phone_code = dcId + dcId + dcId + dcId + dcId;
+                        reqI.phone_code = dcId + dcId + dcId + dcId + dcId + dcId;
                         reqI.phone_code_hash = phoneHash;
                         int reqIdI = ConnectionsManager.getInstance(currentAccount).sendRequest(reqI, (responseI, errorI) -> AndroidUtilities.runOnUIThread(() -> {
                             boolean ok = false;
