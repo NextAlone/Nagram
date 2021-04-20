@@ -376,13 +376,11 @@ jobs:
         run: |
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
+          
           function zip() {
             for apk in $@; do
               echo ">> zip $apk"
               zip $(basename "$apk").zip  "$apk"
-            done
-            for job in $(jobs -p); do
-              wait $job || exit 1
             done
           }
           function upload() {
