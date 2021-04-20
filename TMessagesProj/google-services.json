@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "908066057719",
     "project_id": "teletux-36d93",
+    "firebase_url": "https://teletux-36d93.firebaseio.com",
     "storage_bucket": "teletux-36d93.appspot.com"
   },
   "client": [
