@@ -392,12 +392,12 @@ jobs:
 
           upload apks/TeleTux-full-*-release.apk
           upload apks/TeleTux-full-*-releaseNoGcm.apk
-          upload apks/fullAppleEmoji-*-release.apk
-          upload apks/fullAppleEmoji-*-releaseNoGcm.apk
-          upload apks/mini-*-release.apk
-          upload apks/mini-*-releaseNoGcm.apk
-          upload apks/miniAppleEmoji-*-release.apk
-          upload apks/miniAppleEmoji-*-releaseNoGcm.apk
+          upload apks/TeleTux-fullAppleEmoji-*-release.apk
+          upload apks/TeleTux-fullAppleEmoji-*-releaseNoGcm.apk
+          upload apks/TeleTux-mini-*-release.apk
+          upload apks/TeleTux-mini-*-releaseNoGcm.apk
+          upload apks/TeleTux-miniAppleEmoji-*-release.apk
+          upload apks/TeleTux-miniAppleEmoji-*-releaseNoGcm.apk
 
   play:
     name: Publish to Play Store
