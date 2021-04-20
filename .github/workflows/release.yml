@@ -399,73 +399,26 @@ jobs:
               wait $job || exit 1
             done
           }
-          zip apks/TeleTux-full-arm64-v8a-release.apk
-          zip apks/TeleTux-full-arm64-v8a-releaseNoGcm.apk
-          zip apks/TeleTux-full-armeabi-v7a-release.apk
-          zip apks/full-armeabi-v7a-releaseNoGcm.apk
-          zip apks/full-x86-release.apk
-          zip apks/full-x86-releaseNoGcm.apk
-          zip apks/full-x86_64-release.apk
-          zip apks/full-x86_64-releaseNoGcm.apk
-          zip apks/fullAppleEmoji-arm64-v8a-release.apk
-          zip apks/fullAppleEmoji-arm64-v8a-releaseNoGcm.apk
-          zip apks/fullAppleEmoji-armeabi-v7a-release.apk
-          zip apks/fullAppleEmoji-armeabi-v7a-releaseNoGcm.apk
-          zip apks/fullAppleEmoji-x86-release.apk
-          zip apks/fullAppleEmoji-x86-releaseNoGcm.apk
-          zip apks/fullAppleEmoji-x86_64-release.apk
-          zip apks/fullAppleEmoji-x86_64-releaseNoGcm.apk
-          zip apks/mini-arm64-v8a-release.apk
-          zip apks/mini-arm64-v8a-releaseNoGcm.apk
-          zip apks/mini-armeabi-v7a-release.apk
-          zip apks/mini-armeabi-v7a-releaseNoGcm.apk
-          zip apks/mini-x86-release.apk
-          zip apks/mini-x86-releaseNoGcm.apk
-          zip apks/mini-x86_64-release.apk
-          zip apks/mini-x86_64-releaseNoGcm.apk
-          zip apks/miniAppleEmoji-arm64-v8a-release.apk
-          zip apks/miniAppleEmoji-arm64-v8a-releaseNoGcm.apk
-          zip apks/miniAppleEmoji-armeabi-v7a-release.apk
-          zip apks/miniAppleEmoji-armeabi-v7a-releaseNoGcm.apk
-          zip apks/miniAppleEmoji-x86-release.apk
-          zip apks/miniAppleEmoji-x86-releaseNoGcm.apk
-          zip apks/miniAppleEmoji-x86_64-release.apk
-          zip apks/miniAppleEmoji-x86_64-releaseNoGcm.apk
+          zip apks/TeleTux-full-*-release.apk
+          zip apks/TeleTux-full-*-releaseNoGcm.apk
+          zip apks/fullAppleEmoji-*-release.apk
+          zip apks/fullAppleEmoji-*-releaseNoGcm.apk
+          zip apks/mini-*-release.apk
+          zip apks/mini-*-releaseNoGcm.apk
+          zip apks/miniAppleEmoji-*-release.apk
+          zip apks/miniAppleEmoji-*-releaseNoGcm.apk
 
 
 
-          upload apks/TeleTux-full-arm64-v8a-release.apk.zip
-          upload apks/TeleTux-full-arm64-v8a-releaseNoGcm.apk.zip
-          upload apks/TeleTux-full-armeabi-v7a-release.apk.zip
-          upload apks/full-armeabi-v7a-releaseNoGcm.apk.zip
-          upload apks/full-x86-release.apk.zip
-          upload apks/full-x86-releaseNoGcm.apk.zip
-          upload apks/full-x86_64-release.apk.zip
-          upload apks/full-x86_64-releaseNoGcm.apk.zip
-          upload apks/fullAppleEmoji-arm64-v8a-release.apk.zip
-          upload apks/fullAppleEmoji-arm64-v8a-releaseNoGcm.apk.zip
-          upload apks/fullAppleEmoji-armeabi-v7a-release.apk.zip
-          upload apks/fullAppleEmoji-armeabi-v7a-releaseNoGcm.apk.zip
-          upload apks/fullAppleEmoji-x86-release.apk.zip
-          upload apks/fullAppleEmoji-x86-releaseNoGcm.apk.zip
-          upload apks/fullAppleEmoji-x86_64-release.apk.zip
-          upload apks/fullAppleEmoji-x86_64-releaseNoGcm.apk.zip
-          upload apks/mini-arm64-v8a-release.apk.zip
-          upload apks/mini-arm64-v8a-releaseNoGcm.apk.zip
-          upload apks/mini-armeabi-v7a-release.apk.zip
-          upload apks/mini-armeabi-v7a-releaseNoGcm.apk.zip
-          upload apks/mini-x86-release.apk.zip
-          upload apks/mini-x86-releaseNoGcm.apk.zip
-          upload apks/mini-x86_64-release.apk.zip
-          upload apks/mini-x86_64-releaseNoGcm.apk.zip
-          upload apks/miniAppleEmoji-arm64-v8a-release.apk.zip
-          upload apks/miniAppleEmoji-arm64-v8a-releaseNoGcm.apk.zip
-          upload apks/miniAppleEmoji-armeabi-v7a-release.apk.zip
-          upload apks/miniAppleEmoji-armeabi-v7a-releaseNoGcm.apk.zip
-          upload apks/miniAppleEmoji-x86-release.apk.zip
-          upload apks/miniAppleEmoji-x86-releaseNoGcm.apk.zip
-          upload apks/miniAppleEmoji-x86_64-release.apk.zip
-          upload apks/miniAppleEmoji-x86_64-releaseNoGcm.apk.apk.zip
+          upload apks/TeleTux-full-*-release.apk.zip
+          upload apks/TeleTux-full-*-releaseNoGcm.apk.zip
+          upload apks/fullAppleEmoji-*-release.apk.zip
+          upload apks/fullAppleEmoji-*-releaseNoGcm.apk.zip
+          upload apks/mini-*-release.apk.zip
+          upload apks/mini-*-releaseNoGcm.apk.zip
+          upload apks/miniAppleEmoji-*-release.apk.zip
+          upload apks/miniAppleEmoji-*-releaseNoGcm.apk.zip
+
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
