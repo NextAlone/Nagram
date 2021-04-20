@@ -33,7 +33,7 @@ public class NotificationsService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String CHANNEL_ID = "push_service_channel";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, LocaleController.getString("PlaceHolder", R.string.PlaceHolder), NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("NekoX - System");
+            channel.setDescription("TeleTux - System");
             channel.enableLights(false);
             channel.enableVibration(false);
             channel.setSound(null, null);
