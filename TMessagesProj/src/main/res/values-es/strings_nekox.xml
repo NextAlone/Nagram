@@ -45,7 +45,7 @@
     <string name="TransToLang">Idioma destino de la traducción</string>
     <string name="TransInputToLang">Idioma destino de la traducción</string>
     <string name="More">Más</string>
-    <string name="FreegramUpdatesChannel">Canal de actualizaciones Freegram</string>
+    <string name="TeleTuxUpdatesChannel">Canal de actualizaciones TeleTux</string>
     <string name="ShowIdAndDc">Mostrar ID / DC en el perfil</string>
     <string name="UseDefaultTheme">Usar tema predeterminado *</string>
     <string name="NightMode">Modo Nocturno</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">OK, aplícalo</string>
     <string name="DoNotRemindAgain">No volver a recordar</string>
     <string name="RemoveTitleEmoji">Eliminar emoji en el título</string>
-    <string name="FreegramProxy">Proxy público de Freegram</string>
+    <string name="TeleTuxProxy">Proxy público de TeleTux</string>
     <string name="PublicPrefix">Público</string>
     <string name="DisableChatAction">No enviar el estado de mi entrada</string>
     <string name="FakeScreenshot">Pretender captura de pantalla</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Ordenar por no silenciado</string>
     <string name="SortByUser">Ordenar por usuario</string>
     <string name="SortByContacts">Ordenar por contactos</string>
-    <string name="FreegramPushService">Servicio Freegram Push</string>
-    <string name="EnablePushAlert">Por favor, activa \"Freegram Push Service\"</string>
-    <string name="DisablePushAlert">Por favor deshabilite \"Freegram Push Service\"</string>
+    <string name="TeleTuxPushService">Servicio TeleTux Push</string>
+    <string name="EnablePushAlert">Por favor, activa \"TeleTux Push Service\"</string>
+    <string name="DisablePushAlert">Por favor deshabilite \"TeleTux Push Service\"</string>
     <string name="DisableUndo">Desactivar Deshacer</string>
     <string name="DisableSystemAccount">Desactivar cuenta del sistema</string>
     <string name="FilterMenu">Menú de filtros de diálogos</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Desactivar Modo Desarrollador</string>
     <string name="DeveloperSettings">Configuraciones de desarrollador</string>
     <string name="LoginSettings">Configuración de inicio de sesión</string>
-    <string name="FreegramFaq">Preguntas frecuentes sobre Freegram</string>
+    <string name="TeleTuxFaq">Preguntas frecuentes sobre TeleTux</string>
     <string name="TransSite">Traducir plataforma</string>
     <string name="OpenKayChain">Cliente OpenPGP</string>
     <string name="OpenPGPApp">Proveedor OpenPGP</string>

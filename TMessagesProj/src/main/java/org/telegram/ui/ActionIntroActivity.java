@@ -673,7 +673,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+        builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
         builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
         builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
@@ -727,7 +727,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             if (grantResults != null && grantResults.length != 0) {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                    builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                     builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
                     builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                         if (getParentActivity() == null) {
@@ -752,7 +752,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 processOpenQrReader();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                 builder.setMessage(LocaleController.getString("QRCodePermissionNoCamera", R.string.QRCodePermissionNoCamera));
                 builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                     try {

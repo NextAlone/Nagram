@@ -2112,7 +2112,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (folderId != 0) {
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
             } else {
-                actionBar.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                actionBar.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
             }
             if (folderId == 0) {
                 actionBar.setSupportsHolidayImage(true);
@@ -2504,7 +2504,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             TLRPC.User user = getUserConfig().getCurrentUser();
             avatarDrawable.setInfo(user);
             imageView.getImageReceiver().setCurrentAccount(currentAccount);
-            imageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
+            imageView.setForUserOrChat(user, avatarDrawable);
 
             int accounts = 0;
             for (int a : SharedConfig.activeAccounts) {

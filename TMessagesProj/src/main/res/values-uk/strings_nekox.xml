@@ -45,7 +45,7 @@
     <string name="TransToLang">Переклад цільової мови</string>
     <string name="TransInputToLang">Цільова мова для введення перекладу</string>
     <string name="More">Більше</string>
-    <string name="FreegramUpdatesChannel">Канал оновлень Freegram</string>
+    <string name="TeleTuxUpdatesChannel">Канал оновлень TeleTux</string>
     <string name="ShowIdAndDc">Показати ID / DC в профілі</string>
     <string name="UseDefaultTheme">Використовувати стандартну тему *</string>
     <string name="NightMode">Нічний режим</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Добре, застосувати</string>
     <string name="DoNotRemindAgain">Не нагадувати більше</string>
     <string name="RemoveTitleEmoji">Видаляти смайли в назві</string>
-    <string name="FreegramProxy">Публічний проксі Freegram</string>
+    <string name="TeleTuxProxy">Публічний проксі TeleTux</string>
     <string name="PublicPrefix">Загальнодоступна</string>
     <string name="DisableChatAction">Не надсилати мій статус вводу</string>
     <string name="FakeScreenshot">Зробіть знімок екрану</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Сортувати за відключеними</string>
     <string name="SortByUser">Сортувати за користувачем</string>
     <string name="SortByContacts">Сортувати за контактами</string>
-    <string name="FreegramPushService">Push-сервіс Freegram</string>
-    <string name="EnablePushAlert">Будь ласка, увімкніть \"Freegram Push сервіс\"</string>
-    <string name="DisablePushAlert">Відключіть \"Push Service Freegram\"</string>
+    <string name="TeleTuxPushService">Push-сервіс TeleTux</string>
+    <string name="EnablePushAlert">Будь ласка, увімкніть \"TeleTux Push сервіс\"</string>
+    <string name="DisablePushAlert">Відключіть \"Push Service TeleTux\"</string>
     <string name="DisableUndo">Вимкнути відміну</string>
     <string name="DisableSystemAccount">Вимкнути системний обліковий запис</string>
     <string name="FilterMenu">Меню фільтру діалогів</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Вимкнути режим розробника</string>
     <string name="DeveloperSettings">Налаштування для розробників</string>
     <string name="LoginSettings">Параметри входу</string>
-    <string name="FreegramFaq">Питання Freegram</string>
+    <string name="TeleTuxFaq">Питання TeleTux</string>
     <string name="TransSite">Перекласти платформу</string>
     <string name="OpenKayChain">Клієнт OpenPGP</string>
     <string name="OpenPGPApp">OpenPGP постачальник</string>

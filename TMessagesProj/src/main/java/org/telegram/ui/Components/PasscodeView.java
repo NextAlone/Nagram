@@ -957,7 +957,7 @@ public class PasscodeView extends FrameLayout {
                     if (useBiometric) {
                         Executor executor = ContextCompat.getMainExecutor(parentActivity);
                         BiometricPrompt.Builder builder = new BiometricPrompt.Builder(parentActivity)
-                                .setTitle(LocaleController.getString("Freegram", R.string.Freegram))
+                                .setTitle(LocaleController.getString("TeleTux", R.string.TeleTux))
                                 .setNegativeButton(LocaleController.getString("Canel", R.string.Cancel), executor, (dialog, which) -> { });
                         if (Build.VERSION.SDK_INT >= 29) {
                             builder.setConfirmationRequired(false);
@@ -1017,7 +1017,7 @@ public class PasscodeView extends FrameLayout {
                     fingerprintStatusTextView.setLayoutParams(layoutParams);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(LocaleController.getString("Freegram", R.string.Freegram));
+                    builder.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                     builder.setView(relativeLayout);
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     builder.setOnDismissListener(dialog -> {

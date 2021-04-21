@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "7.7.0-preview05"
-def verCode = 295
+def verName = "7.7.2-rc03"
+def verCode = 290 + 3 * 3
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1)")
 }
 
-def officialVer = "7.7.0"
-def officialCode = 2284
+def officialVer = "7.7.2"
+def officialCode = 2293
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -82,7 +82,7 @@ android {
     buildToolsVersion "30.0.3"
     ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "Freegram.messenger"
+    defaultConfig.applicationId = "teletux.messenger"
 
     splits {
 
@@ -114,8 +114,8 @@ android {
         versionName verName
         versionCode verCode
 
-        def appId = "1391584"
-        def appHash = "355c91550b0d658cfb7ff89dcf91a08c"
+        def appId = "147667"
+        def appHash = "32c9ee834b3766f931f3cbea6383fb8f"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
@@ -376,7 +376,7 @@ android {
             }
         }
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Freegram")
+            outputFileName = outputFileName.replace("TMessagesProj", "TeleTux")
         }
     }
 
@@ -390,7 +390,7 @@ def playCoreVersion = "1.10.0"
 dependencies {
 
     implementation "androidx.browser:browser:1.3.0"
-    implementation "androidx.core:core-ktx:1.6.0-alpha01"
+    implementation "androidx.core:core-ktx:1.6.0-alpha02"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.exifinterface:exifinterface:1.3.2"

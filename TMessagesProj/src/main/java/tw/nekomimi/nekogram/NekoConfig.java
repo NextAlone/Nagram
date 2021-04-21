@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -297,7 +298,7 @@ public class NekoConfig {
         autoPauseVideo = preferences.getBoolean("autoPauseVideo", false);
         disableProximityEvents = preferences.getBoolean("disableProximityEvents", false);
 
-        ignoreContentRestrictions = preferences.getBoolean("ignoreContentRestrictions", false);
+        ignoreContentRestrictions = preferences.getBoolean("ignoreContentRestrictions", !BuildVars.isPlay);
         useChatAttachMediaMenu = preferences.getBoolean("useChatAttachMediaMenu", true);
         disableLinkPreviewByDefault = preferences.getBoolean("disableLinkPreviewByDefault", false);
         sendCommentAfterForward = preferences.getBoolean("sendCommentAfterForward", true);

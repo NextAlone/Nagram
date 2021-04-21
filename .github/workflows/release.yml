@@ -389,11 +389,16 @@ jobs:
               wait $job || exit 1
             done
           }
-          upload apks/Freegram-full-*-release.apk
-          upload apks/Freegram-full-*-releaseNoGcm.apk
-          upload apks/Freegram-mini-*-release.apk
-          upload apks/Freegram-mini-*-releaseNoGcm.apk
-          
+
+          upload apks/TeleTux-full-*-release.apk
+          upload apks/TeleTux-full-*-releaseNoGcm.apk
+          upload apks/TeleTux-fullAppleEmoji-*-release.apk
+          upload apks/TeleTux-fullAppleEmoji-*-releaseNoGcm.apk
+          upload apks/TeleTux-mini-*-release.apk
+          upload apks/TeleTux-mini-*-releaseNoGcm.apk
+          upload apks/TeleTux-miniAppleEmoji-*-release.apk
+          upload apks/TeleTux-miniAppleEmoji-*-releaseNoGcm.apk
+
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
@@ -474,4 +479,3 @@ jobs:
           EOF
           sed -i -e 's@<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />@@g' TMessagesProj/src/main/AndroidManifest.xml
           ./gradlew TMessagesProj:publishFullPlayRelease
-

@@ -98,7 +98,7 @@ object AlertUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(title ?: LocaleController.getString("Freegram", R.string.Freegram))
+        builder.setTitle(title ?: LocaleController.getString("TeleTux", R.string.TeleTux))
         builder.setMessage(text)
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->

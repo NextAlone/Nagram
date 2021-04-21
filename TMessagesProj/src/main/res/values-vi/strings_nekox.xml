@@ -45,7 +45,7 @@
     <string name="TransToLang">Dịch ngôn ngữ đích</string>
     <string name="TransInputToLang">Dịch ngôn ngữ đích đầu vào</string>
     <string name="More">Thêm</string>
-    <string name="FreegramUpdatesChannel">Kênh cập nhật Freegram</string>
+    <string name="TeleTuxUpdatesChannel">Kênh cập nhật TeleTux</string>
     <string name="ShowIdAndDc">Hiển thị ID / DC trong hồ sơ</string>
     <string name="UseDefaultTheme">Sử dụng chủ đề mặc định *</string>
     <string name="NightMode">Chế độ ban đêm</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">OK, Áp dụng nó</string>
     <string name="DoNotRemindAgain">Không nhắc lại</string>
     <string name="RemoveTitleEmoji">Xóa biểu tượng cảm xúc trong tiêu đề</string>
-    <string name="FreegramProxy">Freegram Proxy Mở</string>
+    <string name="TeleTuxProxy">TeleTux Proxy Mở</string>
     <string name="PublicPrefix">Mở</string>
     <string name="DisableChatAction">Không gửi trạng thái đầu vào của tôi</string>
     <string name="FakeScreenshot">Ảnh chụp màn hình giả vờ</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Sắp xếp theo Không tắt tiếng</string>
     <string name="SortByUser">Sắp xếp theo người dùng</string>
     <string name="SortByContacts">Sắp xếp theo Danh bạ</string>
-    <string name="FreegramPushService">Dịch vụ đẩy Freegram</string>
-    <string name="EnablePushAlert">Vui lòng kích hoạt \"Dịch vụ đẩy Freegram\"</string>
-    <string name="DisablePushAlert">Vui lòng tắt \"Dịch vụ đẩy Freegram\"</string>
+    <string name="TeleTuxPushService">Dịch vụ đẩy TeleTux</string>
+    <string name="EnablePushAlert">Vui lòng kích hoạt \"Dịch vụ đẩy TeleTux\"</string>
+    <string name="DisablePushAlert">Vui lòng tắt \"Dịch vụ đẩy TeleTux\"</string>
     <string name="DisableUndo">Tắt hoàn tác</string>
     <string name="DisableSystemAccount">Tắt tài khoản hệ thống</string>
     <string name="FilterMenu">Menu Bộ lọc Hộp thoại</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Tắt Chế độ nhà phát triển</string>
     <string name="DeveloperSettings">Cài đặt nhà phát triển</string>
     <string name="LoginSettings">Cài đặt đăng nhập</string>
-    <string name="FreegramFaq">Freegram FAQ</string>
+    <string name="TeleTuxFaq">TeleTux FAQ</string>
     <string name="TransSite">Nền tảng Dịch</string>
     <string name="OpenKayChain">Ứng dụng khách OpenPGP</string>
     <string name="OpenPGPApp">Nhà cung cấp OpenPGP</string>

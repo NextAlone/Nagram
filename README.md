@@ -1,14 +1,14 @@
-# Freegram
+# TeleTux
 
-Freegram is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
-Freegram is fork of NekoX with jalali calendar
+TeleTux is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
+TeleTux is fork of NekoX with jalali calendar
 
 
-- [Update News Telegram](https://t.me/Freegram_update)
-- [GitHub Feedback](https://github.com/herotux/Freegram/issues)
-- [Group Chat](https://t.me/Freegram-chat) 
+- [Update News Telegram](https://t.me/TeleTux_update)
+- [GitHub Feedback](https://github.com/herotux/TeleTux/issues)
+- [Group Chat](https://t.me/TeleTux-chat) 
 
-## Freegram Changes
+## TeleTux Changes
 
 - Most of Nekogram's features
 - Unlimited login accounts
@@ -37,13 +37,13 @@ Freegram is fork of NekoX with jalali calendar
 - Scan and confirm the login QR code directly
 - Allow clearing app data
 - Option to not send comment first when forwarding
-- Option to use Freegram chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
+- Option to use TeleTux chat input menu: replace record button with a menu which contains an switch to control link preview (enabled by default)
 - Option to disable link preview by default: to prevent the server from knowing that the link is shared through Telegram.
 - Option to ignore Android-only content restrictions (except for the Play Store version).
 - OpenKeychain client (sign / verify / decrypt / import)
 - Google Cloud Translate / Yandex.Translate support
 - Custom cache directory (supports external storage)
-- Custom app ID and Hash (optional Freegram / Android / Android X or Manual input)
+- Custom app ID and Hash (optional TeleTux / Android / Android X or Manual input)
 - Custom server (official, test DC)
 - Keep the original file name when downloading files
 - View the data center you belong to when you don't have an avatar
@@ -111,9 +111,9 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 
 ## FAQ
 
-#### What is the differences between NekoX and Freegram?
+#### What is the differences between NekoX and TeleTux?
 
-Developed by different developers, read the feature list above to understand the differences.Freegram have an option to show jalali date correct
+Developed by different developers, read the feature list above to understand the differences.TeleTux have an option to show jalali date correct
 
 #### What is the difference between the Full and Mini version?
 
@@ -131,9 +131,9 @@ Google Cloud Messaging, also known as gcm / fcm, message push service by google 
 
 First, make sure you have the latest version installed (check the channel, Play store versions usually have a delay).
 
-Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show Freegram in the description and screenshots, the official developers doesn't like us!).
+Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show TeleTux in the description and screenshots, the official developers doesn't like us!).
 
-Then, please *detail* your issue, create an issue or submit it to our [group](https://t.me/Freegram_chat) with #bug.
+Then, please *detail* your issue, create an issue or submit it to our [group](https://t.me/TeleTux_chat) with #bug.
 
 If you experience a *crash*, you also need ## Localization
 

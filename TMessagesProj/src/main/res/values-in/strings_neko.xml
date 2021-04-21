@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="FreegramSettings">Pengaturan Freegram</string>
+    <string name="TeleTuxSettings">Pengaturan TeleTux</string>
     <string name="IPv6">Menghubungkan melalui IPv6</string>
     <string name="MessageMenu">Menu Perpesanan</string>
     <string name="HidePhone">Sembunyikan nomor telepon saya</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Bilah status transparan</string>
     <string name="EnableResidentNotification">Menampilkan pemberitahuan lainnya</string>
     <string name="DisableResidentNotification">Sembunyikan pemberitahuan lainnya</string>
-    <string name="FreegramRunning">Freegramgram sedang berjalan</string>
+    <string name="TeleTuxRunning">TeleTuxgram sedang berjalan</string>
     <string name="EventType">Atur ikon pada bilah samping</string>
     <string name="ChristmasHat">Tampilkan topi natal setiap hari</string>
     <string name="ActionBarDecoration">Dekorasi Title Bar</string>

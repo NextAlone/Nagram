@@ -41,7 +41,6 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -482,7 +481,7 @@ public class UndoView extends FrameLayout {
                 AvatarDrawable avatarDrawable = new AvatarDrawable();
                 avatarDrawable.setTextSize(AndroidUtilities.dp(12));
                 avatarDrawable.setInfo(user);
-                avatarImageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
+                avatarImageView.setForUserOrChat(user, avatarDrawable);
                 avatarImageView.setVisibility(VISIBLE);
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_USER_CHANGED) {
@@ -492,12 +491,12 @@ public class UndoView extends FrameLayout {
                 if (infoObject instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) infoObject;
                     avatarDrawable.setInfo(user);
-                    avatarImageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
+                    avatarImageView.setForUserOrChat(user, avatarDrawable);
                     name = ContactsController.formatName(user.first_name, user.last_name);
                 } else {
                     TLRPC.Chat chat = (TLRPC.Chat) infoObject;
                     avatarDrawable.setInfo(chat);
-                    avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, chat);
+                    avatarImageView.setForUserOrChat(chat, avatarDrawable);
                     name = chat.title;
                 }
                 infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserChanged", R.string.VoipGroupUserChanged, name));
@@ -733,9 +732,9 @@ public class UndoView extends FrameLayout {
                     }
                 } else {
                     if (action == ACTION_ADDED_TO_FOLDER) {
-                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsAddedToExisting", R.string.FilterChatsAddedToExisting, LocaleController.formatPluralString("Chats", (Integer) infoObject), filter.name));
+                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsAddedToExisting", R.string.FilterChatsAddedToExisting, LocaleController.formatPluralString("ChatsSelected", (Integer) infoObject), filter.name));
                     } else {
-                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsRemovedFrom", R.string.FilterChatsRemovedFrom, LocaleController.formatPluralString("Chats", (Integer) infoObject), filter.name));
+                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsRemovedFrom", R.string.FilterChatsRemovedFrom, LocaleController.formatPluralString("ChatsSelected", (Integer) infoObject), filter.name));
                     }
                 }
                 subInfoText = null;

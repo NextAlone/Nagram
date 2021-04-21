@@ -993,8 +993,9 @@ public class DialogCell extends BaseCell {
                             if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                                 if (message.isOutOwner()) {
                                     messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
-                                } else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null) {
-                                    messageNameString = message.messageOwner.fwd_from.from_name;
+                                // NekoX: fix show forwarded name as sender
+                                /*} else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null) {
+                                    messageNameString = message.messageOwner.fwd_from.from_name;*/
                                 } else if (fromUser != null) {
                                     if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
                                         if (UserObject.isDeleted(fromUser)) {
@@ -2126,11 +2127,11 @@ public class DialogCell extends BaseCell {
                         avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                         avatarImage.setImage(null, null, avatarDrawable, null, user, 0);
                     } else {
-                        avatarImage.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user, 0);
+                        avatarImage.setForUserOrChat(user, avatarDrawable);
                     }
                 } else if (chat != null) {
                     avatarDrawable.setInfo(chat);
-                    avatarImage.setImage(ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, chat, 0);
+                    avatarImage.setForUserOrChat(chat, avatarDrawable);
                 }
             }
 
@@ -3165,7 +3166,7 @@ public class DialogCell extends BaseCell {
         }
         sb.append(". ");
         if (chat != null && !message.isOut() && message.isFromUser() && message.messageOwner.action == null) {
-            TLRPC.User fromUser = MessagesController.getInstance(currentAccount).getUser(message.messageOwner.from_id.user_id);
+            TLRPC.User fromUser = MessagesController.getInstance(currentAccount).getUser(message.getSenderId());
             if (fromUser != null) {
                 sb.append(ContactsController.formatName(fromUser.first_name, fromUser.last_name));
                 sb.append(". ");

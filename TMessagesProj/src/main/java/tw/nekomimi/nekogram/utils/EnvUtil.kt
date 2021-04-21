@@ -40,7 +40,7 @@ object EnvUtil {
 
             }
 
-            add(Environment.getExternalStoragePublicDirectory("NekoX"))
+            add(Environment.getExternalStoragePublicDirectory("TeleTux"))
 
         }.map { it.path }.toTypedArray()
 

@@ -22,7 +22,7 @@ object SubManager {
 
             update(SubInfo().apply {
 
-                name = LocaleController.getString("FreegramProxy", R.string.FreegramProxy)
+                name = LocaleController.getString("TeleTuxProxy", R.string.TeleTuxProxy)
                 enable = public?.enable ?: true
 
                 urls = listOf(

@@ -45,7 +45,7 @@
     <string name="TransToLang">Tərcümə hədəf dili</string>
     <string name="TransInputToLang">Tərcümə giriş hədəf dili</string>
     <string name="More">Daha çox</string>
-    <string name="FreegramUpdatesChannel">Freegram Kanalını Yeniləyir</string>
+    <string name="TeleTuxUpdatesChannel">TeleTux Kanalını Yeniləyir</string>
     <string name="ShowIdAndDc">Profildə ID / DC göstərin</string>
     <string name="UseDefaultTheme">Varsayılan temadan istifadə edin *</string>
     <string name="NightMode">Gecə rejimi</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">Tamam, tətbiq et</string>
     <string name="DoNotRemindAgain">Bir daha xatırlatmayın</string>
     <string name="RemoveTitleEmoji">Başlıqdakı emojiləri silin</string>
-    <string name="FreegramProxy">Freegram Public Proxy</string>
+    <string name="TeleTuxProxy">TeleTux Public Proxy</string>
     <string name="PublicPrefix">İctimai</string>
     <string name="DisableChatAction">Giriş statusumu göndərməyin</string>
     <string name="FakeScreenshot">Ekran görüntüsü kimi göstərin</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">Səslə səssizdir</string>
     <string name="SortByUser">İstifadəçiyə görə sırala</string>
     <string name="SortByContacts">Kontaktlara görə sırala</string>
-    <string name="FreegramPushService">Freegram Push Service</string>
-    <string name="EnablePushAlert">Zəhmət olmasa \"Freegram Push Service\" i aktiv edin</string>
-    <string name="DisablePushAlert">Zəhmət olmasa \"Freegram Push Service\" i deaktiv edin</string>
+    <string name="TeleTuxPushService">TeleTux Push Service</string>
+    <string name="EnablePushAlert">Zəhmət olmasa \"TeleTux Push Service\" i aktiv edin</string>
+    <string name="DisablePushAlert">Zəhmət olmasa \"TeleTux Push Service\" i deaktiv edin</string>
     <string name="DisableUndo">Geri Almağı deaktiv edin</string>
     <string name="DisableSystemAccount">Sistem Hesabını deaktiv edin</string>
     <string name="FilterMenu">Dialoqlar Filtri Menyusu</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">Geliştirici rejimini deaktiv edin</string>
     <string name="DeveloperSettings">Developer Ayarları</string>
     <string name="LoginSettings">Giriş Ayarları</string>
-    <string name="FreegramFaq">Freegram ilə bağlı suallar</string>
+    <string name="TeleTuxFaq">TeleTux ilə bağlı suallar</string>
     <string name="TransSite">Tərcümə Platforması</string>
     <string name="OpenKayChain">OpenPGP Müştəri</string>
     <string name="OpenPGPApp">OpenPGP Təminatçısı</string>

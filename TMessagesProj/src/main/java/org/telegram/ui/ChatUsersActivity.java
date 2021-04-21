@@ -1799,7 +1799,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return true;
                 }
                 if (!isChannel) {
-                    if (ChatObject.isChannel(currentChat)) {
+                    if (ChatObject.isChannel(currentChat) && !currentChat.gigagroup) {
                         items.add(LocaleController.getString("ChangePermissions", R.string.ChangePermissions));
                         icons.add(R.drawable.baseline_block_24);
                         actions.add(1);

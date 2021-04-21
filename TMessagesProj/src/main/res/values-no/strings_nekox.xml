@@ -32,7 +32,7 @@
     <string name="OpenPGPApp">OpenPGP-tilbyder</string>
     <string name="OpenKayChain">OpenPGP-klient</string>
     <string name="TransSite">Oversettelsesplattform</string>
-    <string name="FreegramFaq">Freegram-O-S-S</string>
+    <string name="TeleTuxFaq">TeleTux-O-S-S</string>
     <string name="LoginSettings">Innloggingsinnstillinger</string>
     <string name="DeveloperSettings">Utviklerinnstillinger</string>
     <string name="NoQrFound">Fant ingen QR-kode</string>
@@ -57,9 +57,9 @@
     <string name="AddProxySocks5">Legg til SOCKS5-mellomtjener</string>
     <string name="DisableSystemAccount">Skru av systemkonto</string>
     <string name="DisableUndo">Skru av angring</string>
-    <string name="DisablePushAlert">Skru av Freegram-dyttingstjenesten</string>
-    <string name="EnablePushAlert">Skru på Freegram-dyttingstjenesten</string>
-    <string name="FreegramPushService">Freegram-dyttingstjeneste</string>
+    <string name="DisablePushAlert">Skru av TeleTux-dyttingstjenesten</string>
+    <string name="EnablePushAlert">Skru på TeleTux-dyttingstjenesten</string>
+    <string name="TeleTuxPushService">TeleTux-dyttingstjeneste</string>
     <string name="SortByContacts">Sorter etter kontakter</string>
     <string name="SortByUser">Sorter etter bruker</string>
     <string name="SortByUnread">Sorter etter ulest</string>
@@ -102,5 +102,5 @@
     <string name="ProxyTypeVmess">VMess-mellomtjener</string>
     <string name="BlockedListEmpty">Du har ikke blokkert noen :)</string>
     <string name="FilterNameUnmutedDescription">Kun meldinger fra uforstummede sludringer</string>
-    <string name="FreegramUpdatesChannel">Freegram-oppdateringskanal</string>
+    <string name="TeleTuxUpdatesChannel">TeleTux-oppdateringskanal</string>
 </resources>

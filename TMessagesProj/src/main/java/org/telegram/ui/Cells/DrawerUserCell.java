@@ -94,7 +94,7 @@ public class DrawerUserCell extends FrameLayout {
         avatarDrawable.setInfo(user);
         textView.setText(UserObject.getUserName(user));
         imageView.getImageReceiver().setCurrentAccount(account);
-        imageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
+        imageView.setForUserOrChat(user, avatarDrawable);
         checkBox.setVisibility(account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
     }
 

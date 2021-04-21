@@ -38,7 +38,7 @@
     <string name="TransToLang">Langue cible de la traduction</string>
     <string name="TransInputToLang">Langue source de la traduction</string>
     <string name="More">Plus</string>
-    <string name="FreegramUpdatesChannel">Canal de mise à jour Freegram</string>
+    <string name="TeleTuxUpdatesChannel">Canal de mise à jour TeleTux</string>
     <string name="ShowIdAndDc">Afficher ID / DC dans le profil</string>
     <string name="UseDefaultTheme">Utiliser le thème par défaut *</string>
     <string name="NightMode">Mode Nuit</string>
@@ -47,7 +47,7 @@
     <string name="ApplySuggestion">OK, appliquez-le</string>
     <string name="DoNotRemindAgain">Ne plus rappeler</string>
     <string name="RemoveTitleEmoji">Supprimer l\'émoji dans le titre</string>
-    <string name="FreegramProxy">Proxy public Freegram</string>
+    <string name="TeleTuxProxy">Proxy public TeleTux</string>
     <string name="PublicPrefix">Publique</string>
     <string name="DisableChatAction">Ne pas envoyer mon statut de saisie</string>
     <string name="FakeScreenshot">Faire une fausse capture d\'écran</string>
@@ -74,9 +74,9 @@
     <string name="SortByUnmuted">Trier par Démuté</string>
     <string name="SortByUser">Trier par Utilisateur</string>
     <string name="SortByContacts">Trier par Contacts</string>
-    <string name="FreegramPushService">Service Push Freegram</string>
-    <string name="EnablePushAlert">Veuillez activer le service \"Freegram Push\"</string>
-    <string name="DisablePushAlert">Veuillez désactiver le service \"Freegram Push\"</string>
+    <string name="TeleTuxPushService">Service Push TeleTux</string>
+    <string name="EnablePushAlert">Veuillez activer le service \"TeleTux Push\"</string>
+    <string name="DisablePushAlert">Veuillez désactiver le service \"TeleTux Push\"</string>
     <string name="DisableUndo">Désactiver l\'annulation</string>
     <string name="DisableSystemAccount">Désactiver le Compte Système</string>
     <string name="DisableProxyWhenVpnEnabled">Désactiver le proxy lorsque le VPN est activé</string>
@@ -155,7 +155,7 @@
     <string name="DisableDeveloperMode">Désactiver le Mode Développeur</string>
     <string name="DeveloperSettings">Paramètres de développeur</string>
     <string name="LoginSettings">Paramètres de connexion</string>
-    <string name="FreegramFaq">FAQ Freegram</string>
+    <string name="TeleTuxFaq">FAQ TeleTux</string>
     <string name="TransSite">Platforme de Traduction</string>
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Fournisseur OpenPGP</string>

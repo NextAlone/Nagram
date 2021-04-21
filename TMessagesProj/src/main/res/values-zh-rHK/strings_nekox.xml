@@ -36,7 +36,7 @@
     <string name="TransToLang">翻譯目標語言</string>
     <string name="TransInputToLang">翻譯輸入目標語言</string>
     <string name="More">更多</string>
-    <string name="FreegramUpdatesChannel">Freegram 更新頻道</string>
+    <string name="TeleTuxUpdatesChannel">TeleTux 更新頻道</string>
     <string name="ShowIdAndDc">在個人資料中顯示ID / DC</string>
     <string name="UseDefaultTheme">使用默認主題 *</string>
     <string name="NightMode">夜間模式</string>
@@ -48,7 +48,7 @@
     <string name="ApplySuggestion">應用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除標題中的表情</string>
-    <string name="FreegramProxy">Freegram 公共代理</string>
+    <string name="TeleTuxProxy">TeleTux 公共代理</string>
     <string name="PublicPrefix">公共</string>
     <string name="DisableChatAction">不要發送我的輸入狀態</string>
     <string name="FakeScreenshot">假裝截屏</string>
@@ -75,9 +75,9 @@
     <string name="SortByUnmuted">可通知優先排序</string>
     <string name="SortByUser">用戶優先排序</string>
     <string name="SortByContacts">聯絡人優先排序</string>
-    <string name="FreegramPushService">Freegram 通知服務</string>
-    <string name="EnablePushAlert">請啓用 \"Freegram 通知服務\"</string>
-    <string name="DisablePushAlert">請禁用 \"Freegram 通知服務\"</string>
+    <string name="TeleTuxPushService">TeleTux 通知服務</string>
+    <string name="EnablePushAlert">請啓用 \"TeleTux 通知服務\"</string>
+    <string name="DisablePushAlert">請禁用 \"TeleTux 通知服務\"</string>
     <string name="DisableUndo">禁用五秒內後悔</string>
     <string name="DisableSystemAccount">禁用系統賬戶</string>
     <string name="FilterMenu">分類菜單</string>
@@ -154,7 +154,7 @@
     <string name="DisableDeveloperMode">禁用開發人員模式</string>
     <string name="DeveloperSettings">開發人員設定</string>
     <string name="LoginSettings">登錄設定</string>
-    <string name="FreegramFaq">Freegram 常見問題</string>
+    <string name="TeleTuxFaq">TeleTux 常見問題</string>
     <string name="TransSite">翻譯平台</string>
     <string name="OpenKayChain">OpenPGP 客戶端</string>
     <string name="OpenPGPApp">OpenPGP 提供应用</string>
