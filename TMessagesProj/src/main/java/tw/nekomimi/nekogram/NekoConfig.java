@@ -264,7 +264,7 @@ public class NekoConfig {
         skipOpenLinkConfirm = preferences.getBoolean("skip_open_link_confirm", false);
 
         ignoreMutedCount = preferences.getBoolean("ignore_muted_count", true);
-        useDefaultTheme = preferences.getBoolean("use_default_theme", false);
+        useDefaultTheme = preferences.getBoolean("use_default_theme", true);
         showIdAndDc = preferences.getBoolean("show_id_and_dc", false);
 
         googleCloudTranslateKey = preferences.getString("google_cloud_translate_key", null);
