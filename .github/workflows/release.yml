@@ -382,7 +382,7 @@ jobs:
               curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
                 -X POST \
                 -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
-                -F document=@\"$apk\" \
+                -F document="@$apk" \
                 --silent --show-error --fail >/dev/null &
             done
             for job in $(jobs -p); do
@@ -479,5 +479,3 @@ jobs:
           EOF
           sed -i -e 's@<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />@@g' TMessagesProj/src/main/AndroidManifest.xml
           ./gradlew TMessagesProj:publishFullPlayRelease
-
-
