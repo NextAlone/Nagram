@@ -1007,7 +1007,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             pickerBottomLayout.setTextColor(Theme.getColor(darkTheme ? Theme.key_voipgroup_listeningText : Theme.key_dialogTextBlue2));
             pickerBottomLayout.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             pickerBottomLayout.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            pickerBottomLayout.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            pickerBottomLayout.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             pickerBottomLayout.setGravity(Gravity.CENTER);
             if (darkTheme && linkToCopy[1] != null) {
                 pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopySpeakerLink", R.string.VoipGroupCopySpeakerLink).toUpperCase());
@@ -1047,7 +1047,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     textView.setTextColor(Theme.getColor(darkTheme ? Theme.key_voipgroup_listeningText : Theme.key_dialogTextBlue2));
                     textView.setGravity(Gravity.CENTER_VERTICAL);
-                    textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
                     sharesCountLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL, 8, 0, 20, 0));
                 }
             }
@@ -1263,7 +1263,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         });
 
         textPaint.setTextSize(AndroidUtilities.dp(12));
-        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
 
         selectedCountView = new View(context) {
             @Override

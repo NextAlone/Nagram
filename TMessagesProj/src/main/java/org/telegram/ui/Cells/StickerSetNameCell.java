@@ -62,7 +62,7 @@ public class StickerSetNameCell extends FrameLayout {
         textView = new EmojiTextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelStickerSetName));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setSingleLine(true);
         if (supportRtl) {

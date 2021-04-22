@@ -96,7 +96,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
 
         title = new TextView(context);
 
-        title.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        title.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         title.setTag(Theme.key_windowBackgroundWhiteBlackText);
         title.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);

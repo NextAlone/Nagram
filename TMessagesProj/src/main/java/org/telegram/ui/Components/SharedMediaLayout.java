@@ -886,7 +886,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         selectedMessagesCountTextView = new NumberTextView(context);
         selectedMessagesCountTextView.setTextSize(18);
-        selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         actionModeLayout.addView(selectedMessagesCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 18, 0, 0, 0));
         actionModeViews.add(selectedMessagesCountTextView);

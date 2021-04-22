@@ -137,7 +137,7 @@ public class DrawerProfileCell extends FrameLayout {
 
         nameTextView = new EmojiTextView(context);
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         nameTextView.setLines(1);
         nameTextView.setMaxLines(1);
         nameTextView.setSingleLine(true);

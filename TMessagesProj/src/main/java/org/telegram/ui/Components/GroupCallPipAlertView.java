@@ -102,7 +102,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         titleView.setTextSize(15);
         titleView.setMaxLines(2);
         titleView.setEllipsize(TextUtils.TruncateAt.END);
-        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         linearLayout.addView(titleView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         subtitleView = new TextView(context);

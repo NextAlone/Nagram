@@ -473,7 +473,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         deleteView.setGravity(Gravity.CENTER_VERTICAL);
                         deleteView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
                         deleteView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                        deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
                         deleteView.setText(textSelectionOverlay.getContext().getString(android.R.string.copy));
                         deleteView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
                         deleteView.setOnClickListener(v -> {

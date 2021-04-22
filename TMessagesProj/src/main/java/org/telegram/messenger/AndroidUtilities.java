@@ -2101,7 +2101,7 @@ public class AndroidUtilities {
             }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
             for (int a = 0; a < bolds.size() / 2; a++) {
-                spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf")), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableStringBuilder;
         } catch (Exception e) {

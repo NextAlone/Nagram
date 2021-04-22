@@ -57,7 +57,7 @@ public class SearchCounterView extends View {
 
     public SearchCounterView(Context context) {
         super(context);
-        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         textPaint.setTextSize(AndroidUtilities.dp(15));
     }
 

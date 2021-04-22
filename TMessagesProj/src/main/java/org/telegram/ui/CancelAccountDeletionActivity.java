@@ -439,7 +439,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             titleTextView = new TextView(context);
             titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             titleTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             titleTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             titleTextView.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
@@ -690,7 +690,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     codeField[a].setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                     codeField[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     codeField[a].setMaxLines(1);
-                    codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
                     codeField[a].setPadding(0, 0, 0, 0);
                     codeField[a].setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
                     if (currentType == 3) {

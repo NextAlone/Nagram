@@ -114,7 +114,7 @@ public class QRCodeBottomSheet extends BottomSheet {
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         buttonTextView.setText(LocaleController.getString("ShareQrCode", R.string.ShareQrCode));
         buttonTextView.setOnClickListener(view -> {
 

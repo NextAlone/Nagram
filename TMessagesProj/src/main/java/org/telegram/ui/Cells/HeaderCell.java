@@ -58,7 +58,7 @@ public class HeaderCell extends LinearLayout {
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         if (bigTitle) {
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
         }
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);

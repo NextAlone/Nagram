@@ -386,7 +386,7 @@ public class CheckBoxBase {
                 if (checkedText != null) {
                     if (textPaint == null) {
                         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-                        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
                     }
                     final float textSize, y;
                     switch (checkedText.length()) {

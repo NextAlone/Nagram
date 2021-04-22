@@ -277,7 +277,7 @@ public class GroupCallUserCell extends FrameLayout {
 
         nameTextView = new SimpleTextView(context);
         nameTextView.setTextColor(Theme.getColor(Theme.key_voipgroup_nameText));
-        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         nameTextView.setTextSize(16);
         nameTextView.setDrawablePadding(AndroidUtilities.dp(6));
         nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);

@@ -221,7 +221,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         startMessagingButton.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging));
         startMessagingButton.setGravity(Gravity.CENTER);
         startMessagingButton.setTextColor(0xffffffff);
-        startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
         startMessagingButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);

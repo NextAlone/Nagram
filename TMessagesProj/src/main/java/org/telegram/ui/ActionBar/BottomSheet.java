@@ -668,14 +668,14 @@ public class BottomSheet extends Dialog {
             } else if (type == 1) {
                 textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
                 textView.setGravity(Gravity.CENTER);
                 addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             } else if (type == 2) {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
                 textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
                 addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
@@ -854,7 +854,7 @@ public class BottomSheet extends Dialog {
                 titleView.setSingleLine(true);
                 titleView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
                 titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-                titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             } else {
                 titleView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
             }

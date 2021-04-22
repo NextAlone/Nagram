@@ -75,7 +75,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         nameTextView = new SimpleTextView(context);
         nameTextView.setTextSize(16);
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         nameTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
 
         if (distance) {

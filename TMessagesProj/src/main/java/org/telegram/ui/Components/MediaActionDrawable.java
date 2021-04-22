@@ -94,7 +94,7 @@ public class MediaActionDrawable extends Drawable {
 
         paint3.setColor(0xffffffff);
 
-        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         textPaint.setTextSize(AndroidUtilities.dp(13));
         textPaint.setColor(0xffffffff);
 

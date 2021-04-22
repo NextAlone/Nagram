@@ -255,7 +255,7 @@ class BottomBuilder(val ctx: Context) {
             setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0))
             setPadding(AndroidUtilities.dp(18f), 0, AndroidUtilities.dp(18f), 0)
             setText(text)
-            typeface = AndroidUtilities.getTypeface("fonts/rmedium.ttf")
+            typeface = AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf")
             (if (left) buttonsView else rightButtonsView).addView(this, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, rtl))
             setOnClickListener { if (!noAutoDismiss) dismiss();listener(this) }
 
