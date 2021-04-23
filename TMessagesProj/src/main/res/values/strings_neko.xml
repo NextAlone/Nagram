@@ -109,5 +109,6 @@
     <string name="ProviderDeepLTranslate">DeepL Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Translate</string>
+    <string name="pressTitleToOpenAllChats">Press title to open \"All Chats\" tab</string>
 
 </resources>

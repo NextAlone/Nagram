@@ -43,6 +43,7 @@ public class NekoConfig {
     public static boolean hideKeyboardOnChatScroll;
     public static boolean rearVideoMessages;
     public static boolean hideAllTab;
+    public static boolean pressTitleToOpenAllChats;
     public static boolean confirmAVMessage;
     public static boolean askBeforeCall;
     public static boolean disableNumberRounding;
@@ -240,6 +241,7 @@ public class NekoConfig {
         showTabsOnForward = preferences.getBoolean("showTabsOnForward", false);
         rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
         hideAllTab = preferences.getBoolean("hideAllTab", false);
+        pressTitleToOpenAllChats = preferences.getBoolean("pressTitleToOpenAllChats", false);
 
         disableChatAction = preferences.getBoolean("disable_chat_action", false);
         sortByUnread = preferences.getBoolean("sort_by_unread", false);
@@ -577,6 +579,10 @@ public class NekoConfig {
 
     public static void toggleHideAllTab() {
         preferences.edit().putBoolean("hideAllTab", hideAllTab = !hideAllTab).apply();
+    }
+
+    public static void togglePressTitleToOpenAllChats() {
+        preferences.edit().putBoolean("pressTitleToOpenAllChats", pressTitleToOpenAllChats = !pressTitleToOpenAllChats).apply();
     }
 
     public static void toggleSortByUnmuted() {
