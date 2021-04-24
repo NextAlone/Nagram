@@ -2099,6 +2099,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
             }
             actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+            if (NekoConfig.hideAllTab) {
+                actionBar.setOnLongClickListener(v -> {
+                    if (NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                        filterTabsView.toggleAllTabs(true);
+                        filterTabsView.selectFirstTab();
+                    }
+                    return false;
+                });
+            }
         } else {
             if (searchString != null || folderId != 0) {
                 actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
@@ -4135,7 +4144,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 filterTabsView.selectFirstTab();
                 return false;
             }
-            if(!NekoConfig.pressTitleToOpenAllChats){
+            if (!NekoConfig.pressTitleToOpenAllChats && filterTabsView != null) {
                 // not hideAllTab OR hideAllTab but not pressTitleToOpenAllChats
                 filterTabsView.toggleAllTabs(true);
                 filterTabsView.selectFirstTab();
