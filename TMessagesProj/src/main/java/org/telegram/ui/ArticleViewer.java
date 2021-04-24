@@ -2440,7 +2440,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         int additionalSize = AndroidUtilities.dp(SharedConfig.ivFontSize - 16);
 
         TextPaint paint;
-        paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         if (parentBlock instanceof TLRPC.TL_pageBlockEmbedPost && richText == null) {
             TLRPC.TL_pageBlockEmbedPost pageBlockEmbedPost = (TLRPC.TL_pageBlockEmbedPost) parentBlock;
             if (pageBlockEmbedPost.author == plainText) {
