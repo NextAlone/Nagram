@@ -506,6 +506,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             textPaint.setTextSize(AndroidUtilities.dp(16));
+            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
 
             sizeBar = new SeekBarView(context);
             sizeBar.setReportChanges(true);
@@ -2439,6 +2440,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         int additionalSize = AndroidUtilities.dp(SharedConfig.ivFontSize - 16);
 
         TextPaint paint;
+        paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         if (parentBlock instanceof TLRPC.TL_pageBlockEmbedPost && richText == null) {
             TLRPC.TL_pageBlockEmbedPost pageBlockEmbedPost = (TLRPC.TL_pageBlockEmbedPost) parentBlock;
             if (pageBlockEmbedPost.author == plainText) {
@@ -2481,6 +2483,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 relatedArticleHeaderPaint.setColor(getTextColor());
                 relatedArticleHeaderPaint.setTextSize(AndroidUtilities.dp(15) + additionalSize);
                 paint = relatedArticleHeaderPaint;
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             } else {
                 if (relatedArticleTextPaint == null) {
                     relatedArticleTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -2488,6 +2491,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 relatedArticleTextPaint.setColor(getGrayTextColor());
                 relatedArticleTextPaint.setTextSize(AndroidUtilities.dp(14) + additionalSize);
                 paint = relatedArticleTextPaint;
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             }
         } else if (isListItemBlock(parentBlock) && plainText != null) {
             if (listTextPointerPaint == null) {

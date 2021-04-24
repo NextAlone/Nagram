@@ -1350,7 +1350,7 @@ public class AndroidUtilities {
                     if (Build.VERSION.SDK_INT >= 26) {
                         Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
                         if (assetPath.contains("Medium")) {
-                            builder.setWeight(700);
+                            builder.setWeight(500);
                         }
                         if (assetPath.contains("IU")) {
                             builder.setItalic(true);

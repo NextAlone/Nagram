@@ -50,6 +50,7 @@ public class TextCell extends FrameLayout {
         textView.setTextSize(16);
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         addView(textView);
 
         valueTextView = new SimpleTextView(context);
@@ -57,6 +58,7 @@ public class TextCell extends FrameLayout {
         valueTextView.setTextSize(16);
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT);
         valueTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         addView(valueTextView);
 
         imageView = new ImageView(context);
