@@ -1327,19 +1327,19 @@ public class AndroidUtilities {
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
             if (NekoConfig.typeface == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (assetPath.contains("medium") && assetPath.contains("italic")) {
+                if (assetPath.contains("Medium") && assetPath.contains("IU")) {
                     return Typeface.create("sans-serif-medium", Typeface.ITALIC);
                 }
-                if (assetPath.contains("medium")) {
+                if (assetPath.contains("Medium")) {
                     return Typeface.create("sans-serif-medium", Typeface.NORMAL);
                 }
-                if (assetPath.contains("italic")) {
+                if (assetPath.contains("IU")) {
                     return Typeface.create((Typeface) null, Typeface.ITALIC);
                 }
                 if (assetPath.contains("mono")) {
                     return Typeface.MONOSPACE;
                 }
-                if (assetPath.contains("mw_bold")) {
+                if (assetPath.contains("Bold")) {
                     return Typeface.create("serif", Typeface.BOLD);
                 }
                 //return Typeface.create((Typeface) null, Typeface.NORMAL);
@@ -1349,10 +1349,10 @@ public class AndroidUtilities {
                     Typeface t;
                     if (Build.VERSION.SDK_INT >= 26) {
                         Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
-                        if (assetPath.contains("medium")) {
+                        if (assetPath.contains("Medium")) {
                             builder.setWeight(700);
                         }
-                        if (assetPath.contains("italic")) {
+                        if (assetPath.contains("IU")) {
                             builder.setItalic(true);
                         }
                         t = builder.build();

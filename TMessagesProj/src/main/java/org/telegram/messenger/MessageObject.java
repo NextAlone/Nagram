@@ -919,8 +919,10 @@ public class MessageObject {
             TextPaint paint;
             if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                 paint = Theme.chat_msgGameTextPaint;
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             } else {
                 paint = Theme.chat_msgTextPaint;
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             }
             int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
             messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
@@ -1833,8 +1835,10 @@ public class MessageObject {
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         } else {
             paint = Theme.chat_msgTextPaint;
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         }
         int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
         messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
@@ -1904,8 +1908,10 @@ public class MessageObject {
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         } else {
             paint = Theme.chat_msgTextPaint;
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         }
         int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
         messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
@@ -3063,8 +3069,10 @@ public class MessageObject {
             TextPaint paint;
             if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                 paint = Theme.chat_msgGameTextPaint;
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             } else {
                 paint = Theme.chat_msgTextPaint;
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
             }
             int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
             messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
@@ -4206,8 +4214,10 @@ public class MessageObject {
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         } else {
             paint = Theme.chat_msgTextPaint;
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
         }
 
         try {
