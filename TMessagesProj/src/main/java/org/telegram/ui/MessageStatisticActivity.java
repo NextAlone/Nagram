@@ -255,7 +255,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
         TextView loadingTitle = new TextView(context);
         loadingTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        loadingTitle.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        loadingTitle.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         loadingTitle.setTextColor(Theme.getColor(Theme.key_player_actionBarTitle));
         loadingTitle.setTag(Theme.key_player_actionBarTitle);
         loadingTitle.setText(LocaleController.getString("LoadingStats", R.string.LoadingStats));
@@ -851,7 +851,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 primary[j] = new TextView(context);
                 title[j] = new TextView(context);
 
-                primary[j].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+                primary[j].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 primary[j].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
                 title[j].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
 

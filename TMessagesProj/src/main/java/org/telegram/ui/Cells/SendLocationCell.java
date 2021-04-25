@@ -79,7 +79,7 @@ public class SendLocationCell extends FrameLayout {
         titleTextView.setTag(live ? Theme.key_location_sendLiveLocationText : Theme.key_location_sendLocationText);
         titleTextView.setTextColor(Theme.getColor(live ? Theme.key_location_sendLiveLocationText : Theme.key_location_sendLocationText));
         titleTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 16 : 73, 12, LocaleController.isRTL ? 73 : 16, 0));
 
         accurateTextView = new SimpleTextView(context);

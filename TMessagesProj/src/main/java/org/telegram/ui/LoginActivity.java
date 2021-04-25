@@ -2452,7 +2452,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             titleTextView = new TextView(context);
             titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+            titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             titleTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             titleTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             titleTextView.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
@@ -2719,7 +2719,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     codeField[a].setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                     codeField[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     codeField[a].setMaxLines(1);
-                    codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+                    codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                     codeField[a].setPadding(0, 0, 0, 0);
                     codeField[a].setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
                     if (currentType == 3) {
@@ -3396,7 +3396,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             resetAccountButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText6));
             resetAccountButton.setVisibility(GONE);
             resetAccountButton.setText(LocaleController.getString("ResetMyAccount", R.string.ResetMyAccount));
-            resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+            resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             resetAccountButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             resetAccountButton.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             resetAccountButton.setPadding(0, AndroidUtilities.dp(14), 0, 0);
@@ -3700,7 +3700,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             resetAccountButton = new TextView(context);
             resetAccountButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             resetAccountButton.setText(LocaleController.getString("ResetAccountButton", R.string.ResetAccountButton));
-            resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+            resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             resetAccountButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             resetAccountButton.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             resetAccountButton.setPadding(0, AndroidUtilities.dp(14), 0, 0);

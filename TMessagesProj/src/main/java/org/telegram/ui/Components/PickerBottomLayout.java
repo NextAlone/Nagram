@@ -47,7 +47,7 @@ public class PickerBottomLayout extends FrameLayout {
         cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(0x0f000000, 0));
         cancelButton.setPadding(AndroidUtilities.dp(33), 0, AndroidUtilities.dp(33), 0);
         cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(cancelButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
         LinearLayout rightLayout = new LinearLayout(context);
@@ -67,7 +67,7 @@ public class PickerBottomLayout extends FrameLayout {
         middleButtonTextView.setTextColor(Theme.getColor(Theme.key_picker_enabledButton));
         middleButtonTextView.setGravity(Gravity.CENTER);
         middleButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8));
-        middleButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        middleButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         middleButton.addView(middleButtonTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 
         doneButton = new LinearLayout(context);
@@ -77,7 +77,7 @@ public class PickerBottomLayout extends FrameLayout {
         rightLayout.addView(doneButton);
 
         doneButtonBadgeTextView = new TextView(context);
-        doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         doneButtonBadgeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         doneButtonBadgeTextView.setTextColor(Theme.getColor(Theme.key_picker_badgeText));
         doneButtonBadgeTextView.setGravity(Gravity.CENTER);
@@ -93,7 +93,7 @@ public class PickerBottomLayout extends FrameLayout {
         doneButtonTextView.setGravity(Gravity.CENTER);
         doneButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8));
         doneButtonTextView.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
-        doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         doneButton.addView(doneButtonTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
     }
 

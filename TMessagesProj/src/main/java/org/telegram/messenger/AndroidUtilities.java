@@ -1327,13 +1327,13 @@ public class AndroidUtilities {
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
             if (NekoConfig.typeface == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (assetPath.contains("Medium") && assetPath.contains("IU")) {
+                if (assetPath.contains("medium") && assetPath.contains("italic")) {
                     return Typeface.create("sans-serif-medium", Typeface.ITALIC);
                 }
-                if (assetPath.contains("Medium")) {
+                if (assetPath.contains("Regular")) {
                     return Typeface.create("sans-serif-medium", Typeface.NORMAL);
                 }
-                if (assetPath.contains("IU")) {
+                if (assetPath.contains("italic")) {
                     return Typeface.create((Typeface) null, Typeface.ITALIC);
                 }
                 if (assetPath.contains("mono")) {
@@ -1349,10 +1349,10 @@ public class AndroidUtilities {
                     Typeface t;
                     if (Build.VERSION.SDK_INT >= 26) {
                         Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
-                        if (assetPath.contains("Medium")) {
+                        if (assetPath.contains("Regular")) {
                             builder.setWeight(500);
                         }
-                        if (assetPath.contains("IU")) {
+                        if (assetPath.contains("italic")) {
                             builder.setItalic(true);
                         }
                         t = builder.build();
@@ -2101,7 +2101,7 @@ public class AndroidUtilities {
             }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
             for (int a = 0; a < bolds.size() / 2; a++) {
-                spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf")), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf")), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableStringBuilder;
         } catch (Exception e) {

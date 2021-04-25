@@ -76,11 +76,11 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         percentPaint.setColor(0xffffffff);
         openPaint.setColor(0xffffffff);
 
-        docPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
-        namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
-        buttonPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
-        percentPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
-        openPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        docPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        buttonPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        percentPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        openPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
     }
 
     public OtherDocumentPlaceholderDrawable(Context context, View view, MessageObject messageObject) {
@@ -161,6 +161,8 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
 
         String button;
         TextPaint paint;
+        paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        
         int offsetY;
         if (loaded) {
             button = LocaleController.getString("OpenFile", R.string.OpenFile);

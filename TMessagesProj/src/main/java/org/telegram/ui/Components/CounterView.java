@@ -64,7 +64,7 @@ public class CounterView extends View {
         setVisibility(View.GONE);
         circlePaint.setColor(Color.BLACK);
 
-        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         textPaint.setTextSize(AndroidUtilities.dp(13));
     }
 

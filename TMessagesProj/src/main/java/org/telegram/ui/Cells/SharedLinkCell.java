@@ -166,7 +166,7 @@ public class SharedLinkCell extends FrameLayout {
         urlPath.setUseRoundRect(true);
 
         titleTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        titleTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        titleTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         titleTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
 
         descriptionTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);

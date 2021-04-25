@@ -21,7 +21,7 @@ public class URLSpanNoUnderlineBold extends URLSpanNoUnderline {
     @Override
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
-        ds.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf"));
+        ds.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         ds.setUnderlineText(false);
     }
 }

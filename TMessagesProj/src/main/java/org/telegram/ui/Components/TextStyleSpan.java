@@ -73,11 +73,11 @@ public class TextStyleSpan extends MetricAffectingSpan {
             if ((flags & FLAG_STYLE_MONO) != 0 || (flags & FLAG_STYLE_QUOTE) != 0) {
                 return Typeface.MONOSPACE;
             } else if ((flags & FLAG_STYLE_BOLD) != 0 && (flags & FLAG_STYLE_ITALIC) != 0) {
-                return AndroidUtilities.getTypeface("fonts/Vazir-Regular-UI.ttf");
+                return AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf");
             } else if ((flags & FLAG_STYLE_BOLD) != 0) {
-                return AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf");
+                return AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf");
             } else if ((flags & FLAG_STYLE_ITALIC) != 0) {
-                return AndroidUtilities.getTypeface("fonts/Vazir-Regular-UI.ttf");
+                return AndroidUtilities.getTypeface("fonts/ritalic.ttf");
             } else {
                 return null;
             }
@@ -130,15 +130,15 @@ public class TextStyleSpan extends MetricAffectingSpan {
     }
 
     public boolean isBold() {
-        return style.getTypeface() == AndroidUtilities.getTypeface("fonts/Vazir-Medium.ttf");
+        return style.getTypeface() == AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf");
     }
 
     public boolean isItalic() {
-        return style.getTypeface() == AndroidUtilities.getTypeface("fonts/Vazir-Regular-UI.ttf");
+        return style.getTypeface() == AndroidUtilities.getTypeface("fonts/ritalic.ttf");
     }
 
     public boolean isBoldItalic() {
-        return style.getTypeface() == AndroidUtilities.getTypeface("fonts/Vazir-Regular-UI.ttf");
+        return style.getTypeface() == AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf");
     }
 
     @Override
