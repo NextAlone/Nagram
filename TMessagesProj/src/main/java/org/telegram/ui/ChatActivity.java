@@ -20992,6 +20992,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectedObject.messageOwner.hide = true;
                     getMessageHelper().resetMessageContent(dialog_id, selectedObject);
                 }
+                break;
+
             }
             case 205: {
                 if (selectedObject == null)
@@ -21002,7 +21004,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
                     return;
                 presentFragment(new ChatActivity(args), true);
+                break;
+
             }
+
         }
         selectedObject = null;
         selectedObjectGroup = null;
