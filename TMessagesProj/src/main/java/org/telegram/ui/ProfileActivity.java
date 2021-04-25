@@ -7859,8 +7859,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     final Object onlineTextViewTag = onlineTextView[1].getTag();
                     if (onlineTextViewTag instanceof String) {
                         onlineTextView[1].setTextColor(Theme.getColor((String) onlineTextViewTag));
+                        onlineTextView[1].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
                     } else {
                         onlineTextView[1].setTextColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));
+                        onlineTextView[1].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                     }
                 }
                 if (lockIconDrawable != null) {
@@ -7870,6 +7873,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     scamDrawable.setColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));
                 }
                 nameTextView[1].setTextColor(Theme.getColor(Theme.key_profile_title));
+                nameTextView[1].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 idTextView.setTextColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));
                 actionBar.setItemsColor(Theme.getColor(Theme.key_actionBarDefaultIcon), false);
                 actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_avatar_actionBarSelectorBlue), false);
