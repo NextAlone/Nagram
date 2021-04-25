@@ -161,7 +161,6 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
 
         String button;
         TextPaint paint;
-        paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         
         int offsetY;
         if (loaded) {
