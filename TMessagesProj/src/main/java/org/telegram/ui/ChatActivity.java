@@ -1087,6 +1087,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int save_to = 25;
     private final static int auto_delete_timer = 26;
 
+    private final static int jump_to_chat = 114514;
+
     private final static int translate = 101;
     private final static int show_pinned = 102;
     private final static int share_key = 103;
@@ -2222,6 +2224,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     presentFragment(new ChatActivity(args));
+                } else if (id == jump_to_chat) { // NekoX: jump button to linked chat
+                    if (chatInfo == null || threadMessageId == 0)
+                        return;
+                    Bundle args = new Bundle();
+                    args.putInt("chat_id", chatInfo.id);
+                    args.putInt("message_id", threadMessageId);
+                    if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
+                        return;
+                    presentFragment(new ChatActivity(args));
                 }
             }
         });
@@ -2250,6 +2261,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         ActionBarMenu menu = actionBar.createMenu();
+
+        if (isThreadChat() && threadMessageId != 0 && isComments) {
+            // NekoX: jump button to linked chat
+            menu.addItem(jump_to_chat, R.drawable.menu_chats);
+        }
 
         if (currentEncryptedChat == null && chatMode == 0 && reportType < 0) {
             searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
