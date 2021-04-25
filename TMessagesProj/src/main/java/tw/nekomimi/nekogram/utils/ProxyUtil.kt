@@ -91,7 +91,7 @@ object ProxyUtil {
             try {
                 // sip008
                 val ssArray = JSONArray(text)
-                for (index in 0..ssArray.length()) {
+                for (index in 0 until ssArray.length()) {
                     proxies.add(ShadowsocksLoader.Bean.parseJson(ssArray.getJSONObject(index)).toString())
                 }
                 return proxies
@@ -132,9 +132,9 @@ object ProxyUtil {
                                 when (opt.key) {
                                     "name" -> opts.remarks = opt.value as String
                                     "server" -> opts.address = opt.value as String
-                                    "port" -> opts.port = opt.value as Int
+                                    "port" -> opts.port = opt.value.toString().toInt()
                                     "uuid" -> opts.id = opt.value as String
-                                    "alterId" -> opts.alterId = opt.value as Int
+                                    "alterId" -> opts.alterId = opt.value.toString().toInt()
                                     "cipher" -> opts.security = opt.value as String
                                     "network" -> opts.network = opt.value as String
                                     "tls" -> opts.streamSecurity = if (opt.value?.toString() == "true") "tls" else opts.streamSecurity
@@ -162,7 +162,7 @@ object ProxyUtil {
                                 when (opt.key) {
                                     "name" -> opts.remarks = opt.value as String
                                     "server" -> opts.address = opt.value as String
-                                    "port" -> opts.port = opt.value as Int
+                                    "port" -> opts.port = opt.value.toString().toInt()
                                     "password" -> opts.id = opt.value as String
                                     "sni" -> opts.requestHost = opt.value as String
                                 }
@@ -175,7 +175,7 @@ object ProxyUtil {
                                 when (opt.key) {
                                     "name" -> opts.remarks = opt.value as String
                                     "server" -> opts.host = opt.value as String
-                                    "port" -> opts.remotePort = opt.value as Int
+                                    "port" -> opts.remotePort = opt.value.toString().toInt()
                                     "cipher" -> opts.method = opt.value as String
                                     "password" -> opts.password = opt.value as String
                                     "obfs" -> opts.obfs = opt.value as String
