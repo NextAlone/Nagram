@@ -1555,7 +1555,7 @@ public class FilterTabsView extends FrameLayout {
         return listView;
     }
 
-    public boolean showAllChatsTab = false;
+    public boolean showAllChatsTab = !NekoConfig.hideAllTab;
 
     public void toggleAllTabs(boolean show) {
         if (show == showAllChatsTab)

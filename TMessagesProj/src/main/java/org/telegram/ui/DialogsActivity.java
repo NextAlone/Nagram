@@ -2099,15 +2099,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
             }
             actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
-            if (NekoConfig.hideAllTab) {
-                actionBar.setOnLongClickListener(v -> {
-                    if (NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
-                        filterTabsView.toggleAllTabs(true);
-                        filterTabsView.selectFirstTab();
-                    }
-                    return false;
-                });
-            }
+            actionBar.setOnLongClickListener(v -> {
+                if (NekoConfig.hideAllTab && NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                    filterTabsView.toggleAllTabs(true);
+                    filterTabsView.selectFirstTab();
+                }
+                return false;
+            });
         } else {
             if (searchString != null || folderId != 0) {
                 actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
@@ -2119,15 +2117,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
             } else {
                 actionBar.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
-                if (NekoConfig.hideAllTab) {
-                    actionBar.setOnLongClickListener(v -> {
-                        if (NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
-                            filterTabsView.toggleAllTabs(true);
-                            filterTabsView.selectFirstTab();
-                        }
-                        return false;
-                    });
-                }
+                actionBar.setOnLongClickListener(v -> {
+                    if (NekoConfig.hideAllTab && NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                        filterTabsView.toggleAllTabs(true);
+                        filterTabsView.selectFirstTab();
+                    }
+                    return false;
+                });
             }
             if (folderId == 0) {
                 actionBar.setSupportsHolidayImage(true);

@@ -211,6 +211,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.pressTitleToOpenAllChats);
                 }
+                getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (position == tabsTitleTypeRow) {
                 PopupBuilder builder = new PopupBuilder(view);
 
