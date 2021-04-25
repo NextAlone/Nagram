@@ -47,7 +47,6 @@ import java.util.Set;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.IoUtil;
-import kotlin.jvm.functions.Function0;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -83,16 +82,14 @@ public class ApplicationLoader extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {
-        if (SDK_INT >= Build.VERSION_CODES.P) {
-            Reflection.unseal(base);
-        }
         super.attachBaseContext(base);
+        MultiDex.install(this);
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
         }
-        if (SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            MultiDex.install(this);
+        if (SDK_INT >= Build.VERSION_CODES.P) {
+            Reflection.unseal(base);
         }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
             Log.e("nekox", "from " + thread.toString(), error);
