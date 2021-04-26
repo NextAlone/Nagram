@@ -64,6 +64,7 @@ public class NotificationsCheckCell extends FrameLayout {
         textView.setSingleLine(true);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setEllipsize(TextUtils.TruncateAt.END);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 80 : (reorder ? 64 : padding), 13 + (currentHeight - 70) / 2, LocaleController.isRTL ? (reorder ? 64 : padding) : 80, 0));
 
         valueTextView = new TextView(context);
@@ -75,6 +76,7 @@ public class NotificationsCheckCell extends FrameLayout {
         valueTextView.setSingleLine(true);
         valueTextView.setPadding(0, 0, 0, 0);
         valueTextView.setEllipsize(TextUtils.TruncateAt.END);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 80 : (reorder ? 64 : padding), 38 + (currentHeight - 70) / 2, LocaleController.isRTL ? (reorder ? 64 : padding) : 80, 0));
 
         checkBox = new Switch(context);
@@ -102,9 +104,12 @@ public class NotificationsCheckCell extends FrameLayout {
 
     public void setTextAndValueAndCheck(String text, CharSequence value, boolean checked, int iconType, boolean multiline, boolean divider) {
         textView.setText(text);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         valueTextView.setText(value);
         checkBox.setChecked(checked, iconType, false);
         valueTextView.setVisibility(VISIBLE);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         needDivider = divider;
         isMultiline = multiline;
 
