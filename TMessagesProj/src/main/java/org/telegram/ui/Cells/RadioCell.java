@@ -42,7 +42,6 @@ public class RadioCell extends FrameLayout {
         super(context);
 
         textView = new TextView(context);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         if (dialog) {
             textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         } else {
