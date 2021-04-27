@@ -6722,7 +6722,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         path.mkdirs();
 
-        File logcatFile = new File(path, "NekoX-" + System.currentTimeMillis() + ".log");
+        File logcatFile = new File(path, "TeleTux-" + System.currentTimeMillis() + ".log");
 
         FileUtil.delete(logcatFile);
 
