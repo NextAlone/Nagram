@@ -20,7 +20,8 @@ public class NekoXConfig {
     };
 
     public static int[] developers = {
-            1160156558 // freetux
+            1160156558, // freetux
+            247133452
     };
 
     public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
