@@ -84,8 +84,8 @@ public class TextPriceCell extends FrameLayout {
             setTag(Theme.key_windowBackgroundWhiteBlackText);
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-            valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
+            valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Bold-Regular.ttf"));
         } else {
             setTag(Theme.key_windowBackgroundWhiteGrayText2);
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));

@@ -7753,6 +7753,7 @@ public class Theme {
 
         profile_aboutTextPaint.setColor(getColor(key_windowBackgroundWhiteBlackText));
         profile_aboutTextPaint.linkColor = getColor(key_windowBackgroundWhiteLinkText);
+        profile_aboutTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
         setDrawableColorByKey(profile_verifiedDrawable, key_profile_verifiedBackground);
         setDrawableColorByKey(profile_verifiedCheckDrawable, key_profile_verifiedCheck);
