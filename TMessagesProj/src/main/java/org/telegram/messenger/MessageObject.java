@@ -334,7 +334,6 @@ public class MessageObject {
             return (directionFlags & 1) != 0 && (directionFlags & 2) == 0;
         }
     }
-
     public static final int POSITION_FLAG_LEFT = 1;
     public static final int POSITION_FLAG_RIGHT = 2;
     public static final int POSITION_FLAG_TOP = 4;

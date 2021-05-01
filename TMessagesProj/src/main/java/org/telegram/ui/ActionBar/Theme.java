@@ -7066,7 +7066,9 @@ public class Theme {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
                 chat_msgTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+                chat_msgTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 chat_msgGameTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+                chat_msgGameTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 chat_msgTextPaintOneEmoji = new TextPaint(Paint.ANTI_ALIAS_FLAG);
                 chat_msgTextPaintTwoEmoji = new TextPaint(Paint.ANTI_ALIAS_FLAG);
                 chat_msgTextPaintThreeEmoji = new TextPaint(Paint.ANTI_ALIAS_FLAG);
