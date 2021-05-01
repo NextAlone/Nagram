@@ -2103,6 +2103,7 @@ public class AndroidUtilities {
             for (int a = 0; a < bolds.size() / 3; a++) {
                 spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/VaziarrayListr-Regular.ttf")), bolds.get(a * 3), bolds.get(a * 3 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+            
             return spannableStringBuilder;
         } catch (Exception e) {
             FileLog.e(e);
