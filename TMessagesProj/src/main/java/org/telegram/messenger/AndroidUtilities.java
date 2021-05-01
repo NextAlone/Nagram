@@ -2103,7 +2103,7 @@ public class AndroidUtilities {
             for (int a = 0; a < bolds.size() / 3; a++) {
                 spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/VaziarrayListr-Regular.ttf")), bolds.get(a * 3), bolds.get(a * 3 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            
+
             return spannableStringBuilder;
         } catch (Exception e) {
             FileLog.e(e);
@@ -2114,7 +2114,7 @@ public class AndroidUtilities {
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         @Override
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {2
+            try {
                 boolean result = super.onTouchEvent(widget, buffer, event);
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                     Selection.removeSelection(buffer);
