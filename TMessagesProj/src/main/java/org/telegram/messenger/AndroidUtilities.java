@@ -2110,7 +2110,6 @@ public class AndroidUtilities {
         }
         return new SpannableStringBuilder(str);
     }
-    bold
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         @Override
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
