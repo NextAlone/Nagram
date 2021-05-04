@@ -123,7 +123,6 @@ public class NekoXSettingActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoXConfig.disableStatusUpdate);
                 }
-            }
             } else if (position == hide_MeRow) {
                 NekoXConfig.togglehide_Me();
                 if (view instanceof TextCheckCell) {
