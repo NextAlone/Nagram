@@ -5204,22 +5204,18 @@ public class MessagesController extends BaseController implements NotificationCe
 
         offlineSent = !online;
         AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null));
-        if (NekoXConfig.disableStatusUpdate) {
-            lastStatusUpdateTime = System.currentTimeMillis();
-            statusSettingState = 0;
-        } else {
-            TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
-            req.offline = !online;
-            statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
-                if (error == null) {
-                    lastStatusUpdateTime = System.currentTimeMillis();
-                    statusSettingState = 0;
-                } else {
-                    AlertUtil.showToast(error);
-                }
-                statusRequest = 0;
-            });
-        }
+
+        TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
+        req.offline = !online;
+        statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                lastStatusUpdateTime = System.currentTimeMillis();
+                statusSettingState = 0;
+            } else {
+                AlertUtil.showToast(error);
+            }
+            statusRequest = 0;
+        });
     }
 
     public void updateTimerProc() {
@@ -5242,6 +5238,22 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (NekoXConfig.disableStatusUpdate) {
                             lastStatusUpdateTime = System.currentTimeMillis();
                             statusSettingState = 0;
+                        }else if (NekoXConfig.hide_Me) {
+                            TLRPC.tL_account_updateStatus req= new TLRPC.TL_account_updateStatus();
+                            req.offline = false;
+                            statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
+                                if (error == null) {
+                                    lastStatusUpdateTime = System.currentTimeMillis();
+                                    offlineSent = true;
+                                    statusSettingState = 0;
+                                } else {
+                                    if (lastStatusUpdateTime != 0) {
+                                        lastStatusUpdateTime += 5000;
+                                    }
+                                }
+                                statusRequest = 0;
+                            });
+                        }
                         } else {
                             TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
                             req.offline = false;

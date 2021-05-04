@@ -33,6 +33,7 @@ public class NekoXConfig {
     public static boolean disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
 
     public static boolean disableStatusUpdate = preferences.getBoolean("disable_status_update", false);
+    public static boolean hide_Me = preferences.getBoolean("hide_me", false);
     public static boolean keepOnlineStatus = preferences.getBoolean("keepOnlineStatus", false);
 
     public static boolean enableStickerPin = preferences.getBoolean("enableStickerPin", false);
@@ -48,6 +49,7 @@ public class NekoXConfig {
                     .putBoolean("disable_flag_secure", disableFlagSecure = false)
                     .putBoolean("disable_screenshot_detection", disableScreenshotDetection = false)
                     .putBoolean("disable_status_update", disableStatusUpdate = false)
+                    .putBoolean("hide_me", hide_Me = false)
                     .apply();
 
 
@@ -155,6 +157,11 @@ public class NekoXConfig {
     public static void toggleEnableStickerPin() {
 
         preferences.edit().putBoolean("enableStickerPin", enableStickerPin = !enableStickerPin).apply();
+
+    }
+    public static void togglehide_Me() {
+
+        preferences.edit().putBoolean("hide_Me", hide_Me = !hide_Me).apply();
 
     }
 
