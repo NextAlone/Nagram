@@ -5253,7 +5253,6 @@ public class MessagesController extends BaseController implements NotificationCe
                                 }
                                 statusRequest = 0;
                             });
-                        }
                         } else {
                             TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
                             req.offline = false;
