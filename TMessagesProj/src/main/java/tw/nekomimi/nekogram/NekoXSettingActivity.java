@@ -295,7 +295,6 @@ public class NekoXSettingActivity extends BaseFragment {
                         } else if (position == disableStatusUpdateRow) {
                             textCell.setTextAndCheck("Disable Status Update", NekoXConfig.disableStatusUpdate, false);
 
-                        }
                         } else if (position == hide_MeRow) {
                             textCell.setTextAndCheck("Hide Me", NekoXConfig.hide_Me, false);
 

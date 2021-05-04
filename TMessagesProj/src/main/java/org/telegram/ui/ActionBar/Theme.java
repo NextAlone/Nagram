@@ -6934,7 +6934,9 @@ public class Theme {
                 dialogs_nameEncryptedPaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
                 dialogs_nameEncryptedPaint[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 dialogs_messagePaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+                dialogs_messagePaint[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 dialogs_messagePrintingPaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+                dialogs_messagePrintingPaint[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             }
             dialogs_searchNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_searchNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
@@ -6943,6 +6945,7 @@ public class Theme {
             dialogs_messageNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_messageNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             dialogs_timePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            dialogs_timePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             dialogs_countTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_countTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             dialogs_archiveTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
@@ -6950,7 +6953,9 @@ public class Theme {
             dialogs_archiveTextPaintSmall = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_archiveTextPaintSmall.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             dialogs_onlinePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            dialogs_onlinePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             dialogs_offlinePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            dialogs_offlinePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
             dialogs_tabletSeletedPaint = new Paint();
             dialogs_pinnedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
