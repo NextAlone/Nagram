@@ -5239,7 +5239,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             lastStatusUpdateTime = System.currentTimeMillis();
                             statusSettingState = 0;
                         }else if (NekoXConfig.hide_Me) {
-                            TLRPC.tL_account_updateStatus req= new TLRPC.TL_account_updateStatus();
+                            TLRPC.TL_account_updateStatus req= new TLRPC.TL_account_updateStatus();
                             req.offline = false;
                             statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
                                 if (error == null) {
