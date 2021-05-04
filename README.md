@@ -5,7 +5,7 @@ TeleTux is fork of NekoX with jalali calendar
 
 
 - [Update News Telegram](https://t.me/TeleTux_update)
-- [GitHub Feedback](https://github.com/herotux/TeleTux/issues)
+- [GitHub Feedback](https://github.com/TeleTux/TeleTux/issues)
 - [Group Chat](https://t.me/TeleTux-chat) 
 
 ## TeleTux Changes

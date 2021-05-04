@@ -2701,7 +2701,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == faqRow) {
                     Browser.openUrl(getParentActivity(), NekoXConfig.FAQ_URL);
                 } else if (position == policyRow) {
-                    Browser.openUrl(getParentActivity(), "https://github.com/herotux/TeleTux/wiki/Privacy-Policy");
+                    Browser.openUrl(getParentActivity(), "https://github.com/TeleTux/TeleTux/wiki/Privacy-Policy");
                 } else if (position == sendLogsRow) {
                     sendLogs();
                 } else if (position == clearLogsRow) {

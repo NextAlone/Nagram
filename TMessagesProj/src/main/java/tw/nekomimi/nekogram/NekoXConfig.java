@@ -11,7 +11,7 @@ import tw.nekomimi.nekogram.database.NitritesKt;
 public class NekoXConfig {
 
     //  public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
-    public static String FAQ_URL = "https://github.com/herotux/TeleTux#faq";
+    public static String FAQ_URL = "https://github.com/TeleTux/TeleTux#faq";
     public static int[] officialChats = {
             1223771542, // TeleTux Updates
             1199446479, // TeleTux Chat

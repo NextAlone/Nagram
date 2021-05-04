@@ -5204,18 +5204,22 @@ public class MessagesController extends BaseController implements NotificationCe
 
         offlineSent = !online;
         AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null));
-
-        TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
-        req.offline = !online;
-        statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
-            if (error == null) {
-                lastStatusUpdateTime = System.currentTimeMillis();
-                statusSettingState = 0;
-            } else {
-                AlertUtil.showToast(error);
-            }
-            statusRequest = 0;
-        });
+        if (NekoXConfig.disableStatusUpdate) {
+            lastStatusUpdateTime = System.currentTimeMillis();
+            statusSettingState = 0;
+        } else {
+            TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
+            req.offline = !online;
+            statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    lastStatusUpdateTime = System.currentTimeMillis();
+                    statusSettingState = 0;
+                } else {
+                    AlertUtil.showToast(error);
+                }
+                statusRequest = 0;
+            });
+        }
     }
 
     public void updateTimerProc() {
