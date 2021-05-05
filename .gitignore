@@ -9,4 +9,6 @@ local.properties
 service_account_credentials.json
 *.aar
 *.so
-.project/
+.project
+.settings/
+
