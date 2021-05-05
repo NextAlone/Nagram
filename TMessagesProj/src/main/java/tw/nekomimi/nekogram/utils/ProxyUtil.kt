@@ -78,7 +78,7 @@ object ProxyUtil {
     @JvmOverloads
     fun parseProxies(text: String, tryDecode: Boolean = true): MutableList<String> {
 
-        if (tryDecode) {
+        if (tryDecode && !text.contains("proxies:")) {
             try {
                 return parseProxies(String(Base64.decode(text, Base64.NO_PADDING)), false)
             } catch (ignored: Exception) {
@@ -98,7 +98,7 @@ object ProxyUtil {
             } catch (ignored: JSONException) {
             }
 
-            if (text.contains("proxies:\n")) {
+            if (text.contains("proxies:")) {
 
                 if (BuildVars.isMini) {
                     error(LocaleController.getString("MiniVersionAlert", R.string.MiniVersionAlert))
