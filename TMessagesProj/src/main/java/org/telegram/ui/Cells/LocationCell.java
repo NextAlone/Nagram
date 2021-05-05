@@ -60,6 +60,7 @@ public class LocationCell extends FrameLayout {
         addressTextView.setSingleLine(true);
         addressTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         addressTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+        addressTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(addressTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), (LocaleController.isRTL ? 16 : 73), 35, (LocaleController.isRTL ? 73 : 16), 0));
     }
 

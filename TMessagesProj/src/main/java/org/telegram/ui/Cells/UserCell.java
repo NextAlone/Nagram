@@ -106,7 +106,6 @@ public class UserCell extends FrameLayout {
 
         nameTextView = new SimpleTextView(context);
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         nameTextView.setTextSize(16);
         nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 + (checkbox == 2 ? 18 : 0) + additionalPadding : (64 + padding), 10, LocaleController.isRTL ? (64 + padding) : 28 + (checkbox == 2 ? 18 : 0) + additionalPadding, 0));
@@ -136,6 +135,7 @@ public class UserCell extends FrameLayout {
             adminTextView = new TextView(context);
             adminTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon));
+            adminTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             addView(adminTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 23 : 0, 10, LocaleController.isRTL ? 0 : 23, 0));
         }
 

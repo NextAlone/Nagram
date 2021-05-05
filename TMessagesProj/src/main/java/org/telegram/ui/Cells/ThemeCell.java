@@ -65,6 +65,7 @@ public class ThemeCell extends FrameLayout {
         textView.setPadding(0, 0, 0, AndroidUtilities.dp(1));
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 53 + 48 + 4 : 60, 0, LocaleController.isRTL ? 60 : 53 + 48 + 4, 0));
 
         checkImage = new ImageView(context);

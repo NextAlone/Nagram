@@ -44,6 +44,7 @@ public class TextCheckBoxCell extends FrameLayout {
         textView.setSingleLine(true);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 66 : 21, 0, LocaleController.isRTL ? 21 : 66, 0));
 
         checkBox = new CheckBoxSquare(context, dialog);

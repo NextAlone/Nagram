@@ -82,6 +82,7 @@ public class SettingsSearchCell extends FrameLayout {
         textView.setMaxLines(1);
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, LocaleController.isRTL ? 16 : 71, 10, LocaleController.isRTL ? 71 : 16, 0));
 
         valueTextView = new TextView(context);
@@ -91,6 +92,8 @@ public class SettingsSearchCell extends FrameLayout {
         valueTextView.setMaxLines(1);
         valueTextView.setSingleLine(true);
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, LocaleController.isRTL ? 16 : 71, 33, LocaleController.isRTL ? 71 : 16, 0));
 
         imageView = new ImageView(context);

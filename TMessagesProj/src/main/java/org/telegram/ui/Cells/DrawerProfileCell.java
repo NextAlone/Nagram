@@ -154,6 +154,7 @@ public class DrawerProfileCell extends FrameLayout {
                 textView.setMaxLines(1);
                 textView.setSingleLine(true);
                 textView.setGravity(Gravity.LEFT);
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 return textView;
             }
         };

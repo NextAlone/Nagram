@@ -126,6 +126,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         extTextView.setGravity(Gravity.CENTER);
         extTextView.setEllipsize(TextUtils.TruncateAt.END);
         extTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        extTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         if (viewType == VIEW_TYPE_PICKER) {
             addView(extTextView, LayoutHelper.createFrame(32, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 20, 28, LocaleController.isRTL ? 20 : 0, 0));
         } else {
@@ -191,6 +192,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             captionTextView.setEllipsize(TextUtils.TruncateAt.END);
             captionTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
             captionTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            captionTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
             addView(captionTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 8 : 72, 30, LocaleController.isRTL ? 72 : 8, 0));
             captionTextView.setVisibility(View.GONE);
         } else {
@@ -216,6 +219,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         dateTextView.setSingleLine(true);
         dateTextView.setEllipsize(TextUtils.TruncateAt.END);
         dateTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        dateTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         if (viewType == VIEW_TYPE_PICKER) {
             dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
             addView(dateTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 8 : 72, 34, LocaleController.isRTL ? 72 : 8, 0));

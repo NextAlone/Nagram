@@ -105,6 +105,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity(LayoutHelper.getAbsoluteGravityStart());
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(textView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START, 71, 10, 21, 0));
 
         valueTextView = new TextView(context);
@@ -114,6 +115,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
         valueTextView.setMaxLines(1);
         valueTextView.setSingleLine(true);
         valueTextView.setGravity(LayoutHelper.getAbsoluteGravityStart());
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(valueTextView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START, 71, 35, 21, 0));
 
         imageView = new BackupImageView(context);

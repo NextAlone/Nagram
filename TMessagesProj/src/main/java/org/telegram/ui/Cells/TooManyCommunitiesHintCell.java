@@ -44,6 +44,7 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
         messageTextView.setTextColor(Theme.getColor(Theme.key_chats_message));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         messageTextView.setGravity(Gravity.CENTER);
+        messageTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 36, 110, 36, 0));
 
         TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);

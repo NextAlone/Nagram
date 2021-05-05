@@ -78,6 +78,8 @@ public class StickerSetNameCell extends FrameLayout {
         urlTextView.setEllipsize(TextUtils.TruncateAt.END);
         urlTextView.setSingleLine(true);
         urlTextView.setVisibility(INVISIBLE);
+        urlTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         if (supportRtl) {
             lp = LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.END, 17, 6, 17, 0);
         } else {

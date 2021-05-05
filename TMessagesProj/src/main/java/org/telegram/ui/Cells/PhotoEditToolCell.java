@@ -63,6 +63,7 @@ public class PhotoEditToolCell extends FrameLayout {
         nameTextView.setMaxLines(1);
         nameTextView.setSingleLine(true);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(nameTextView, LayoutHelper.createFrame(80, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0, 0, 0));
 
         valueTextView = new TextView(context);
@@ -70,6 +71,7 @@ public class PhotoEditToolCell extends FrameLayout {
         valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         valueTextView.setGravity(Gravity.RIGHT);
         valueTextView.setSingleLine(true);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(valueTextView, LayoutHelper.createFrame(80, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0, 0, 0));
 
         seekBar = new PhotoEditorSeekBar(context);

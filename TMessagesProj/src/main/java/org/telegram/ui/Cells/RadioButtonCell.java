@@ -57,6 +57,8 @@ public class RadioButtonCell extends LinearLayout {
         }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         textLayout.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 0, 0, 0, 5));
 
         valueTextView = new TextView(context);
@@ -70,6 +72,7 @@ public class RadioButtonCell extends LinearLayout {
         valueTextView.setLines(0);
         valueTextView.setMaxLines(0);
         valueTextView.setSingleLine(false);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         textLayout.addView(valueTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP));
 
         radioButton = new RadioButton(context);

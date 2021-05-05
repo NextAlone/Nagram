@@ -52,6 +52,7 @@ public class GraySectionCell extends FrameLayout {
         rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         rightTextView.setTextColor(Theme.getColor(Theme.key_graySectionText));
         rightTextView.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL);
+        rightTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(rightTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 16, 0, 16, 0));
 
         ViewCompat.setAccessibilityHeading(this, true);

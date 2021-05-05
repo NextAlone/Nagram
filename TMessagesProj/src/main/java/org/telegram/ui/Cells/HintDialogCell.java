@@ -62,6 +62,8 @@ public class HintDialogCell extends FrameLayout {
         nameTextView.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         nameTextView.setLines(1);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
+
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 6, 64, 6, 0));
 
         counterView = new CounterView(context);

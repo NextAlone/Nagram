@@ -20,7 +20,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
-import android.view.Gravity;
+import android.view.Gravity;    
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
@@ -101,6 +101,8 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         infoTextView.setEllipsize(TextUtils.TruncateAt.END);
         infoTextView.setSingleLine(true);
+        infoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         if (supportRtl) {
             lp = LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.START, left, 30, 100, 0);
         } else {

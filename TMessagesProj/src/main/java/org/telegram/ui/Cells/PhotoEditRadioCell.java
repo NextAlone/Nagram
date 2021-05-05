@@ -61,6 +61,7 @@ public class PhotoEditRadioCell extends FrameLayout {
         nameTextView.setMaxLines(1);
         nameTextView.setSingleLine(true);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
         addView(nameTextView, LayoutHelper.createFrame(80, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0, 0, 0));
 
         tintButtonsContainer = new LinearLayout(context);

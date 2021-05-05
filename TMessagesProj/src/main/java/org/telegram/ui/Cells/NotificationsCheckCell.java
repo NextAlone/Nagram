@@ -64,6 +64,8 @@ public class NotificationsCheckCell extends FrameLayout {
         textView.setSingleLine(true);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
+
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 80 : (reorder ? 64 : padding), 13 + (currentHeight - 70) / 2, LocaleController.isRTL ? (reorder ? 64 : padding) : 80, 0));
 
         valueTextView = new TextView(context);
@@ -75,6 +77,7 @@ public class NotificationsCheckCell extends FrameLayout {
         valueTextView.setSingleLine(true);
         valueTextView.setPadding(0, 0, 0, 0);
         valueTextView.setEllipsize(TextUtils.TruncateAt.END);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
         addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 80 : (reorder ? 64 : padding), 38 + (currentHeight - 70) / 2, LocaleController.isRTL ? (reorder ? 64 : padding) : 80, 0));
 
         checkBox = new Switch(context);

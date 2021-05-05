@@ -65,6 +65,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             nameTextView.setEllipsize(TextUtils.TruncateAt.END);
             nameTextView.setMaxLines(1);
             nameTextView.setGravity(Gravity.BOTTOM);
+            nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             linearLayout.addView(nameTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 8, 0, 0, 5));
 
             countTextView = new TextView(context);
@@ -74,6 +75,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             countTextView.setEllipsize(TextUtils.TruncateAt.END);
             countTextView.setMaxLines(1);
             countTextView.setGravity(Gravity.BOTTOM);
+            countTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             linearLayout.addView(countTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 4, 0, 7, 5));
 
             selector = new View(context);

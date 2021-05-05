@@ -74,6 +74,7 @@ public class ShareDialogCell extends FrameLayout {
         nameTextView.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         nameTextView.setLines(2);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 6, currentType == TYPE_CREATE ? 58 : 66, 6, 0));
 
         checkBox = new CheckBox2(context, 21);

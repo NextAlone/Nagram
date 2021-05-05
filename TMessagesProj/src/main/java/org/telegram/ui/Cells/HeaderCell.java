@@ -70,6 +70,7 @@ public class HeaderCell extends LinearLayout {
         textView2.setTextSize(13);
         textView2.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        textView2.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
         addView(textView2, LayoutHelper.createLinear(-2, -2, 0, 4, 0, 0));
 
         if (!text2) textView2.setVisibility(View.GONE);

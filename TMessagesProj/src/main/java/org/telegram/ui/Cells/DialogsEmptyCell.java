@@ -75,6 +75,7 @@ public class DialogsEmptyCell extends LinearLayout {
         emptyTextView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         emptyTextView2.setGravity(Gravity.CENTER);
         emptyTextView2.setLineSpacing(AndroidUtilities.dp(2), 1);
+        emptyTextView2.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(emptyTextView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 52, 7, 52, 0));
     }
 
