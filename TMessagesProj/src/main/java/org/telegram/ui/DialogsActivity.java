@@ -2523,8 +2523,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (u != null) {
                     AccountSelectCell cell = new AccountSelectCell(context, false);
                     cell.setAccount(a, true);
-                    switchItem.addSubItem(10 + accounts, cell, AndroidUtilities.dp(230), AndroidUtilities.dp(48));
-                    accounts++;
+                    switchItem.addSubItem(10 + a, cell, AndroidUtilities.dp(230), AndroidUtilities.dp(48));
+                    accounts = a > accounts + 1 ? a + 1 : accounts + 1;
                 }
             }
             this.accounts = accounts;
