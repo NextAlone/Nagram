@@ -5243,10 +5243,9 @@ public class MessagesController extends BaseController implements NotificationCe
                             req.offline = true;
                             statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
                                 if (error == null) {
-                                    lastStatusUpdateTime = System.currentTimeMillis();
                                     offlineSent = true;
                                     statusSettingState = 0;
-                                } else {
+                                } else {    
                                     if (lastStatusUpdateTime != 0) {
                                         lastStatusUpdateTime += 5000;
                                     }
