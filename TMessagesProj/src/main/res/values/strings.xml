@@ -4409,4 +4409,5 @@
     <string name="YourNameChanged">Name updated.</string>
     <string name="ChannelTitleChanged">Channel title updated.</string>
     <string name="ChannelDescriptionChanged">Channel description updated.</string>
+    <string name="GoToBeginning">Go to Beginning</string>
 </resources>
