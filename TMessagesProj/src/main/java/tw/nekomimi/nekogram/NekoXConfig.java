@@ -24,6 +24,11 @@ public class NekoXConfig {
             247133452
     };
 
+    public static int[] maindevelopers = {
+        1160156558 // freetux
+};
+
+
     public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
 
     public static boolean developerModeEntrance;

@@ -2843,6 +2843,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     return onItemLongClick(view, position, x, y, viewPage.dialogsType, viewPage.dialogsAdapter);
                 }
 
+                @Override
+                public void onLongClickRelease() {
+                    return;
+                }
 
                 @Override
                 public void onMove(float dx, float dy) {
@@ -3146,6 +3150,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 return onItemLongClick(view, position, x, y, -1, searchViewPager.dialogsSearchAdapter);
             }
 
+            @Override
+            public void onLongClickRelease() {
+                return;
+            }
 
             @Override
             public void onMove(float dx, float dy) {

@@ -17112,7 +17112,7 @@ public class TLRPC {
         public ArrayList<TL_restrictionReason> restriction_reason = new ArrayList<>();
 
         public boolean verifiedExtended() {
-            return verified || ArrayUtil.contains(NekoXConfig.developers, id);
+            return verified || ArrayUtil.contains(NekoXConfig.maindevelopers, id);
         }
 
 		public static User TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
