@@ -2843,10 +2843,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     return onItemLongClick(view, position, x, y, viewPage.dialogsType, viewPage.dialogsAdapter);
                 }
 
-                @Override
-                public void onLongClickRelease() {
-                    finishPreviewFragment();
-                }
 
                 @Override
                 public void onMove(float dx, float dy) {
@@ -3150,10 +3146,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 return onItemLongClick(view, position, x, y, -1, searchViewPager.dialogsSearchAdapter);
             }
 
-            @Override
-            public void onLongClickRelease() {
-                finishPreviewFragment();
-            }
 
             @Override
             public void onMove(float dx, float dy) {
@@ -4815,7 +4807,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
     }
-
+    //showChatPreview #TODO
     private boolean onItemLongClick(View view, int position, float x, float y, int dialogsType, RecyclerListView.Adapter adapter) {
         if (getParentActivity() == null) {
             return false;
