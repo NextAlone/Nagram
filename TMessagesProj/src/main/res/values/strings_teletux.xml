@@ -2,4 +2,5 @@
 <resources>
     <string name="contributors">contributors</string>
     <string name="Donation">Donation</string>
+    <string name="UseVazirFont">Use Vazir font</string>
 </resources>
