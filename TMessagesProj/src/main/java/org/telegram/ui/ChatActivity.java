@@ -5177,11 +5177,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 };
                 pinnedMessageTextView[a].setTextSize(14);
                 pinnedMessageTextView[a].setTextColor(Theme.getColor(Theme.key_chat_topPanelMessage));
+                pinnedMessageTextView[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 pinnedMessageView.addView(pinnedMessageTextView[a], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 18, Gravity.TOP | Gravity.LEFT, 18, 25.3f, 44, 0));
 
                 pinnedMessageImageView[a] = new BackupImageView(context);
                 pinnedMessageImageView[a].setRoundRadius(AndroidUtilities.dp(2));
-                pinnedMessageImageView[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 pinnedMessageView.addView(pinnedMessageImageView[a], LayoutHelper.createFrame(32, 32, Gravity.TOP | Gravity.LEFT, 17, 8, 0, 0));
                 if (a == 1) {
                     pinnedMessageTextView[a].setVisibility(View.INVISIBLE);
