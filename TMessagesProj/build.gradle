@@ -444,11 +444,8 @@ dependencies {
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
     if (!targetAbi.isBlank()) {
-        def ll = new File("TMessagesProj/libs").list()
-        if (ll != null && ll.length == 1) {
-            implementation project(":ss-rust")
-            implementation project(":ssr-libev")
-        }
+        implementation project(":ss-rust")
+        implementation project(":ssr-libev")
     }
 
 }
