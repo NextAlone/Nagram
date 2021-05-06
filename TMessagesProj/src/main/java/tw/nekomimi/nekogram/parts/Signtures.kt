@@ -29,7 +29,7 @@ fun Context.getSha256Signature(packageName: String): String {
         } else {
             appInfo.signatures[0].toByteArray()
         }
-    ).toUpperCase()
+    ).uppercase()
 }
 
 fun Context.isVerified(): Boolean {
