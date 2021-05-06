@@ -7225,10 +7225,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         searchGoToBeginningButton.setContentDescription(LocaleController.getString("GoToBeginning", R.string.GoToBeginning));
 
         searchCountText = new SearchCounterView(context);
-//        searchCountText.setTextColor(Theme.getColor(Theme.key_chat_searchPanelText));
-//        searchCountText.setTextSize(15);
-//        searchCountText.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-        searchCountText.setGravity(Gravity.LEFT);
+        searchCountText.setTextColor(Theme.getColor(Theme.key_chat_searchPanelText));
+        searchCountText.setTextSize(15);
+        searchCountText.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        searchCountText.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         searchContainer.addView(searchCountText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 0, 0, 108, 0));
 
         bottomOverlay = new FrameLayout(context) {
