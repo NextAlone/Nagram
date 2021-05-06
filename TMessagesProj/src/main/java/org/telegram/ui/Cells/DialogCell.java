@@ -1588,6 +1588,7 @@ public class DialogCell extends BaseCell {
                         messageNameString = s;
                     }
                 }
+                messageNameString = Emoji.replaceEmoji(messageNameString, Theme.dialogs_messageNamePaint.getFontMetricsInt(), AndroidUtilities.dp(12), false);
                 messageNameLayout = StaticLayoutEx.createStaticLayout(messageNameString, Theme.dialogs_messageNamePaint, messageWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false, TextUtils.TruncateAt.END, messageWidth, 1);
             } catch (Exception e) {
                 FileLog.e(e);
@@ -1619,6 +1620,7 @@ public class DialogCell extends BaseCell {
                 if (hasMessageThumb && messageNameString != null) {
                     messageWidth += AndroidUtilities.dp(6);
                 }
+                messageStringFinal = Emoji.replaceEmoji(messageStringFinal, currentMessagePaint.getFontMetricsInt(), AndroidUtilities.dp(12), false);
                 messageLayout = StaticLayoutEx.createStaticLayout(messageStringFinal, currentMessagePaint, messageWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, AndroidUtilities.dp(1), false, TextUtils.TruncateAt.END, messageWidth, messageNameString != null ? 1 : 2);
             } else {
                 if (hasMessageThumb) {
@@ -1627,6 +1629,7 @@ public class DialogCell extends BaseCell {
                         messageLeft -= thumbSize + AndroidUtilities.dp(6);
                     }
                 }
+                messageStringFinal = Emoji.replaceEmoji(messageStringFinal,currentMessagePaint.getFontMetricsInt(), AndroidUtilities.dp(12), false);
                 messageLayout = new StaticLayout(messageStringFinal, currentMessagePaint, messageWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
         } catch (Exception e) {

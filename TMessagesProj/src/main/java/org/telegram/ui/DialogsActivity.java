@@ -73,8 +73,6 @@ import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -84,7 +82,6 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
@@ -2102,6 +2099,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
             }
             actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+            actionBar.setOnLongClickListener(v -> {
+                if (NekoConfig.hideAllTab && NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                    filterTabsView.toggleAllTabs(true);
+                    filterTabsView.selectFirstTab();
+                }
+                return false;
+            });
         } else {
             if (searchString != null || folderId != 0) {
                 actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
@@ -2113,6 +2117,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
             } else {
                 actionBar.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
+                actionBar.setOnLongClickListener(v -> {
+                    if (NekoConfig.hideAllTab && NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                        filterTabsView.toggleAllTabs(true);
+                        filterTabsView.selectFirstTab();
+                    }
+                    return false;
+                });
             }
             if (folderId == 0) {
                 actionBar.setSupportsHolidayImage(true);
@@ -2512,8 +2523,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (u != null) {
                     AccountSelectCell cell = new AccountSelectCell(context, false);
                     cell.setAccount(a, true);
-                    switchItem.addSubItem(10 + accounts, cell, AndroidUtilities.dp(230), AndroidUtilities.dp(48));
-                    accounts++;
+                    switchItem.addSubItem(10 + a, cell, AndroidUtilities.dp(230), AndroidUtilities.dp(48));
+                    accounts = a > accounts + 1 ? a + 1 : accounts + 1;
                 }
             }
             this.accounts = accounts;
@@ -3832,7 +3843,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     filterTabsView.resetTabId();
                 }
                 filterTabsView.removeTabs();
-                if (!NekoConfig.hideAllTab)
+                if (filterTabsView.showAllChatsTab)
                     filterTabsView.addTab(Integer.MAX_VALUE, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
@@ -4123,9 +4134,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 hideActionMode(true);
             }
             return false;
-        } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !tabsAnimationInProgress && !filterTabsView.isAnimatingIndicator() && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE && !startedTracking) {
-            filterTabsView.selectFirstTab();
-            return false;
+        } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !tabsAnimationInProgress && !filterTabsView.isAnimatingIndicator()
+                && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE && !startedTracking) {
+            if(!NekoConfig.hideAllTab){
+                filterTabsView.selectFirstTab();
+                return false;
+            }
+            if (!NekoConfig.pressTitleToOpenAllChats && filterTabsView != null) {
+                // not hideAllTab OR hideAllTab but not pressTitleToOpenAllChats
+                filterTabsView.toggleAllTabs(true);
+                filterTabsView.selectFirstTab();
+                return false;
+            }
         } else if (commentView != null && commentView.isPopupShowing()) {
             commentView.hidePopup(true);
             return false;

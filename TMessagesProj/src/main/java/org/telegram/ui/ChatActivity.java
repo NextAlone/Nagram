@@ -391,6 +391,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private ImageView searchUserButton;
     private ImageView searchUpButton;
     private ImageView searchDownButton;
+    private ImageView searchGoToBeginningButton;
     private SearchCounterView searchCountText;
     private ChatActionCell floatingDateView;
     private ChatActionCell infoTopView;
@@ -1096,6 +1097,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int save = 107;
     private final static int delete_history = 108;
     private final static int hide = 109;
+    private final static int view_in_chat = 110;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -2222,6 +2224,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     presentFragment(new ChatActivity(args));
+                } else if (id == view_in_chat) {
+                    if (chatInfo == null || threadMessageId == 0)
+                        return;
+                    Bundle args = new Bundle();
+                    args.putInt("chat_id", chatInfo.id);
+                    args.putInt("message_id", threadMessageId);
+                    if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
+                        return;
+                    presentFragment(new ChatActivity(args), true);
                 }
             }
         });
@@ -2250,6 +2261,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         ActionBarMenu menu = actionBar.createMenu();
+
+        if (isThreadChat() && threadMessageId != 0 && isComments) {
+            menu.addItem(view_in_chat, R.drawable.baseline_forum_24);
+        }
 
         if (currentEncryptedChat == null && chatMode == 0 && reportType < 0) {
             searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
@@ -7194,6 +7209,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             showDialog(AlertsCreator.createCalendarPickerDialog(getParentActivity(), 1375315200000L, this::jumpToDate).create());
         });
         searchCalendarButton.setContentDescription(LocaleController.getString("JumpToDate", R.string.JumpToDate));
+
+        searchGoToBeginningButton = new ImageView(context);
+        searchGoToBeginningButton.setScaleType(ImageView.ScaleType.CENTER);
+        searchGoToBeginningButton.setImageResource(R.drawable.baseline_arrow_upward_24);
+        searchGoToBeginningButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.SRC_IN));
+        searchGoToBeginningButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
+        boolean showSearchUserButton = currentChat != null && (!ChatObject.isChannel(currentChat) || currentChat.megagroup);
+        searchContainer.addView(searchGoToBeginningButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP, showSearchUserButton ? 48 * 2 : 48, 0, 0, 0));
+        searchGoToBeginningButton.setOnClickListener(view -> {
+            scrollToMessageId(1, 0, false, 0, true, 0);
+        });
+        searchGoToBeginningButton.setContentDescription(LocaleController.getString("GoToBeginning", R.string.GoToBeginning));
 
         searchCountText = new SearchCounterView(context);
 //        searchCountText.setTextColor(Theme.getColor(Theme.key_chat_searchPanelText));
@@ -19109,6 +19136,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             options.add(27);
                             icons.add(R.drawable.baseline_forum_24);
+                        } else if (isThreadChat() && chatMode != MODE_SCHEDULED && currentChat != null) {
+                            options.add(205);
+                            icons.add(R.drawable.baseline_forum_24);
+                            items.add(LocaleController.getString("ViewInChat", R.string.ViewInChat));
                         }
                         if (chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
                             items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
@@ -19474,6 +19505,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             options.add(27);
                             icons.add(R.drawable.baseline_forum_24);
+                        } else if (isThreadChat() && chatMode != MODE_SCHEDULED && currentChat != null) {
+                            options.add(205);
+                            icons.add(R.drawable.baseline_forum_24);
+                            items.add(LocaleController.getString("ViewInChat", R.string.ViewInChat));
                         }
                         if (type == 4) {
                             if (selectedObject.isVideo()) {
@@ -20972,8 +21007,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectedObject.messageOwner.hide = true;
                     getMessageHelper().resetMessageContent(dialog_id, selectedObject);
                 }
+                break;
 
             }
+            case 205: {
+                if (selectedObject == null)
+                    return;
+                Bundle args = new Bundle();
+                args.putInt("chat_id", chatInfo.id);
+                args.putInt("message_id", selectedObject.messageOwner.id);
+                if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
+                    return;
+                presentFragment(new ChatActivity(args), true);
+                break;
+
+            }
+
         }
         selectedObject = null;
         selectedObjectGroup = null;
