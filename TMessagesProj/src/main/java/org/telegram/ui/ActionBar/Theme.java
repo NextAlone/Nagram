@@ -4070,7 +4070,7 @@ public class Theme {
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
-        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "indigo.attheme";
+        themeInfo.assetName = NekoConfig.useDefaultTheme ? "bluebubbles.attheme" : "TuxBlue.attheme";
         themeInfo.previewBackgroundColor = -657931;
         themeInfo.previewInColor = NekoConfig.useDefaultTheme ? 0xffffffff : Color.parseColor("#c0ffffff");
         themeInfo.previewOutColor = NekoConfig.useDefaultTheme ? 0xffd0e6ff: Color.parseColor("#3f51b5");
