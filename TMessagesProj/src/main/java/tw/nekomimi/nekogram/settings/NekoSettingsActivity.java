@@ -381,11 +381,11 @@ public class NekoSettingsActivity extends BaseFragment {
         aboutRow = rowCount++;
         channelRow = rowCount++;
         fdroidRow = rowCount++;
-        if (ExternalGcm.checkPlayServices()) {
+        /*if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
-        } else {
+        } else {*/
             googlePlayRow = -1;
-        }
+//        }
         sourceCodeRow = rowCount++;
         translationRow = rowCount++;
         about2Row = rowCount++;
