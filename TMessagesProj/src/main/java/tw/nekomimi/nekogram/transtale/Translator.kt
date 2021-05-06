@@ -73,7 +73,7 @@ interface Translator {
             var country = to.country
 
             if (language == "in") language = "id"
-            if (country.toLowerCase() == "duang") country = "CN"
+            if (country.lowercase() == "duang") country = "CN"
 
             val provider = NekoConfig.translationProvider
             when (provider) {
@@ -135,7 +135,7 @@ interface Translator {
                     .languages
                     .map { it.pluralLangCode }
                     .toSet()
-                    .filter { !it.toLowerCase().contains("duang") }
+                    .filter { !it.lowercase().contains("duang") }
                     .map { it.code2Locale })
                     .toTypedArray()
 
