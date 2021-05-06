@@ -237,4 +237,14 @@
     <string name="ImportSettings">Import settings</string>
     <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
     <string name="nekoXPaymentRemovedToast">The payment function has been removed.</string>
+    <string name="VersionUpdateTitle">New Version Available</string>
+    <string name="VersionUpdateVariantNotMatch">Version variants fail to match automatically.\nPlease download manually from GitHub.</string>
+    <string name="VersionUpdateConfirm">UPDATE</string>
+    <string name="VersionUpdateIgnore">Ignore</string>
+    <string name="VersionUpdateNotNow">Not now</string>
+    <string name="VersionUpdateNoUpdate">No Update.</string>
+    <string name="AutoCheckUpdateOFF">OFF</string>
+    <string name="AutoCheckUpdateSwitch">Automatic Update</string>
+    <string name="AutoCheckUpdateStable">Stable</string>
+    <string name="AutoCheckUpdateRc">Release Candidate</string>
 </resources>

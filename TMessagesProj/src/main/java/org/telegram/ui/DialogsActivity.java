@@ -166,11 +166,15 @@ import org.telegram.ui.Components.ViewPagerFixed;
 
 import java.util.ArrayList;
 
+import cn.hutool.core.date.DateTime;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
@@ -3510,6 +3514,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
         UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
+        if (!BuildVars.isFdroid && NekoXConfig.autoUpdateReleaseChannel != 0 && DateTime.now().compareTo(NekoXConfig.nextUpdateCheck) > 0)
+            UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), true), 6000);
 
         return fragmentView;
     }
