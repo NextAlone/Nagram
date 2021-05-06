@@ -56,6 +56,7 @@ public class GroupCallInvitedCell extends FrameLayout {
         nameTextView.setTextColor(Theme.getColor(Theme.key_voipgroup_nameText));
         nameTextView.setTextSize(16);
         nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
+        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 54 : 67, 10, LocaleController.isRTL ? 67 : 54, 0));
 
         statusTextView = new SimpleTextView(context);
@@ -63,6 +64,7 @@ public class GroupCallInvitedCell extends FrameLayout {
         statusTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         statusTextView.setTextColor(Theme.getColor(grayIconColor));
         statusTextView.setText(LocaleController.getString("Invited", R.string.Invited));
+        statusTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 54 : 67, 32, LocaleController.isRTL ? 67 : 54, 0));
 
         muteButton = new ImageView(context);

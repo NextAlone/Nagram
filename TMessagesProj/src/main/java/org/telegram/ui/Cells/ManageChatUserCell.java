@@ -93,6 +93,7 @@ public class ManageChatUserCell extends FrameLayout {
         statusTextView = new SimpleTextView(context);
         statusTextView.setTextSize(14);
         statusTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
+        statusTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 : (68 + namePadding), 34.5f, LocaleController.isRTL ? (68 + namePadding) : 28, 0));
 
         if (needOption) {

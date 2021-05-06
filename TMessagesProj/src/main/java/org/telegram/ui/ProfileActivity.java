@@ -3362,6 +3362,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             onlineTextView[a].setTextColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));
             onlineTextView[a].setTextSize(14);
             onlineTextView[a].setGravity(Gravity.LEFT);
+            onlineTextView[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
             onlineTextView[a].setAlpha(a == 0 || a == 2 ? 0.0f : 1.0f);
             if (a > 0) {
                 onlineTextView[a].setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -3373,6 +3375,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         idTextView.setTextColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));
         idTextView.setTextSize(14);
         idTextView.setGravity(Gravity.LEFT);
+        idTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         idTextView.setAlpha(1.0f);
 
         frameLayout.addView(idTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 48, 0));

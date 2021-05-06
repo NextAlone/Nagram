@@ -119,6 +119,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         subtitleTextView.setTag(Theme.key_actionBarDefaultSubtitle);
         subtitleTextView.setTextSize(14);
         subtitleTextView.setGravity(Gravity.LEFT);
+        subtitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         addView(subtitleTextView);
 
         if (parentFragment != null) {

@@ -653,6 +653,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         timeTextView.setText("0:00");
         timeTextView.setTextColor(Theme.getColor(Theme.key_player_time));
         timeTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        timeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+
         playerLayout.addView(timeTextView, LayoutHelper.createFrame(100, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 20, 98, 0, 0));
 
         durationTextView = new TextView(context);

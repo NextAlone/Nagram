@@ -218,6 +218,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             leftTab.setLeftDrawable(R.drawable.msg_tabs_mic1);
             leftTab.setText(LocaleController.getString("VoipGroupInviteCanSpeak", R.string.VoipGroupInviteCanSpeak));
             leftTab.setGravity(Gravity.CENTER);
+            leftTab.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             addView(leftTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 14, 0, 0, 0));
             leftTab.setOnClickListener(v -> switchToTab(0));
 
@@ -227,6 +228,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             rightTab.setLeftDrawable(R.drawable.msg_tabs_mic2);
             rightTab.setText(LocaleController.getString("VoipGroupInviteListenOnly", R.string.VoipGroupInviteListenOnly));
             rightTab.setGravity(Gravity.CENTER);
+            rightTab.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             addView(rightTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 14, 0));
             rightTab.setOnClickListener(v -> switchToTab(1));
         }

@@ -5181,6 +5181,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 pinnedMessageImageView[a] = new BackupImageView(context);
                 pinnedMessageImageView[a].setRoundRadius(AndroidUtilities.dp(2));
+                pinnedMessageImageView[a].setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 pinnedMessageView.addView(pinnedMessageImageView[a], LayoutHelper.createFrame(32, 32, Gravity.TOP | Gravity.LEFT, 17, 8, 0, 0));
                 if (a == 1) {
                     pinnedMessageTextView[a].setVisibility(View.INVISIBLE);
@@ -6956,6 +6957,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         replyObjectTextView = new SimpleTextView(context);
         replyObjectTextView.setTextSize(14);
         replyObjectTextView.setTextColor(Theme.getColor(Theme.key_chat_replyPanelMessage));
+        replyObjectTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         replyLayout.addView(replyObjectTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 18, Gravity.TOP | Gravity.LEFT, 52, 24, 0, 0));
 
         replyImageView = new BackupImageView(context);
