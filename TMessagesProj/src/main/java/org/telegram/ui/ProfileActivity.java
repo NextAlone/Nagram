@@ -175,6 +175,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
@@ -2934,6 +2935,48 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
 
+                    if (!BuildVars.isFdroid) {
+                        builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
+                            UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), false));
+                            return Unit.INSTANCE;
+                        });
+
+                        String currentChannel = " - ";
+                        switch (NekoXConfig.autoUpdateReleaseChannel) {
+                            case 0:
+                                currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
+                                break;
+                            case 1:
+                                currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
+                                break;
+                            case 2:
+                                currentChannel += LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc);
+                                break;
+                        }
+
+                        builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.update_black_24, (it) -> {
+                            BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
+                            switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), NekoXConfig.autoUpdateReleaseChannel == 0, (radioButtonCell) -> {
+                                NekoXConfig.setAutoUpdateReleaseChannel(0);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), NekoXConfig.autoUpdateReleaseChannel == 1, (radioButtonCell) -> {
+                                NekoXConfig.setAutoUpdateReleaseChannel(1);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc), NekoXConfig.autoUpdateReleaseChannel == 2, (radioButtonCell) -> {
+                                NekoXConfig.setAutoUpdateReleaseChannel(2);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            showDialog(switchBuilder.create());
+                            return Unit.INSTANCE;
+                        });
+                    }
+
                     if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode || ArrayUtil.contains(NekoXConfig.developers, getUserConfig().clientUserId)) {
                         builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                             BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
@@ -3235,7 +3278,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer = new FrameLayout(context);
         avatarContainer2 = new FrameLayout(context);
         AndroidUtilities.updateViewVisibilityAnimated(avatarContainer2, true, 1f, false);
-        frameLayout.addView(avatarContainer2,  LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        frameLayout.addView(avatarContainer2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         avatarContainer.setPivotX(0);
         avatarContainer.setPivotY(0);
         avatarContainer2.addView(avatarContainer, LayoutHelper.createFrame(42, 42, Gravity.TOP | Gravity.LEFT, 64, 0, 0, 0));
@@ -3584,6 +3627,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         pinchToZoomHelper = new PinchToZoomHelper(decorView) {
 
             Paint statusBarPaint;
+
             @Override
             protected void invalidateViews() {
                 super.invalidateViews();

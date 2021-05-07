@@ -33,13 +33,14 @@ public class BuildVars {
     public static boolean isUnknown = !BuildConfig.BUILD_TYPE.startsWith("release");
     public static boolean isMini = BuildConfig.FLAVOR.startsWith("mini");
     public static boolean isPlay = BuildConfig.FLAVOR.endsWith("Play");
+    public static boolean isFdroid = BuildConfig.BUILD_TYPE.toLowerCase().contains("fdroid");
 
     static {
 
         try {
             PackageInfo info = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             BUILD_VERSION = info.versionCode;
-            BUILD_VERSION_STRING = info.packageName;
+            BUILD_VERSION_STRING = info.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             BUILD_VERSION = BuildConfig.VERSION_CODE;
             BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;

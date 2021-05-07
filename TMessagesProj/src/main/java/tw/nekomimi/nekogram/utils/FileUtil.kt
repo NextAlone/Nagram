@@ -144,7 +144,7 @@ object FileUtil {
                 Build.SUPPORTED_ABIS[0]
             } else {
                 Build.CPU_ABI
-            }.toLowerCase()
+            }.lowercase()
 
         }.also {
 

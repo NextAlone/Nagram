@@ -63,6 +63,8 @@
     java.lang.Object readResolve();
 }
 
+-keep class tw.nekomimi.nekogram.InternalUpdater$ReleaseMetadata { *; }
+-keep class tw.nekomimi.nekogram.InternalUpdater$ApkMetadata { *; }
 
 # Constant folding for resource integers may mean that a resource passed to this method appears to be unused. Keep the method to prevent this from happening.
 -keep class com.google.android.exoplayer2.upstream.RawResourceDataSource {

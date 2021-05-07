@@ -6,6 +6,8 @@ import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.NotificationCenter;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
 import tw.nekomimi.nekogram.database.NitritesKt;
 
 public class NekoXConfig {
@@ -42,6 +44,10 @@ public class NekoXConfig {
     public static boolean keepOnlineStatus = preferences.getBoolean("keepOnlineStatus", false);
 
     public static boolean enableStickerPin = preferences.getBoolean("enableStickerPin", false);
+
+    public static int autoUpdateReleaseChannel = preferences.getInt("autoUpdateReleaseChannel", 2);
+    public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
+    public static DateTime nextUpdateCheck = DateTime.of(preferences.getString("nextUpdateCheck", "2021-01-01T00:00:00Z"), DatePattern.UTC_PATTERN);
 
 
     public static void toggleDeveloperMode() {
@@ -170,5 +176,17 @@ public class NekoXConfig {
 
     }
 
+    public static void setAutoUpdateReleaseChannel(int channel) {
+        preferences.edit().putInt("autoUpdateReleaseChannel", autoUpdateReleaseChannel = channel).apply();
+    }
+
+    public static void setIgnoredUpdateTag(String ignored) {
+        preferences.edit().putString("ignoredUpdateTag", ignoredUpdateTag = ignored).apply();
+    }
+
+    public static void setNextUpdateCheck(DateTime dateTime) {
+        nextUpdateCheck = dateTime;
+        preferences.edit().putString("nextUpdateCheck", dateTime.toString(DatePattern.UTC_PATTERN)).apply();
+    }
 
 }
