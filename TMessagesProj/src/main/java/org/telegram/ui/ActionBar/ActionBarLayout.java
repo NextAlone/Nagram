@@ -882,7 +882,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public boolean presentFragmentAsPreview(BaseFragment fragment) {
-        return presentFragment(fragment, false, false, true, false);
+        return presentFragment(fragment, false, false, true, true);
     }
 
     public boolean presentFragment(BaseFragment fragment) {
