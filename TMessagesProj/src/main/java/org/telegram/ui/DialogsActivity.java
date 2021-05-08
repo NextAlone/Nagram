@@ -4964,12 +4964,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (getMessagesController().checkCanOpenChat(args, DialogsActivity.this)) {
                 getNotificationCenter().postNotificationName(NotificationCenter.closeChats);
                 prepareBlurBitmap();
-                presentFragment(new ChatActivity(args));
+                presentFragmentAsPreview(new ChatActivity(args));
             }
         } else {
             if (getMessagesController().checkCanOpenChat(args, DialogsActivity.this)) {
                 prepareBlurBitmap();
-                presentFragment(new ChatActivity(args));
+                presentFragmentAsPreview(new ChatActivity(args));
             }
         }
         return true;
