@@ -2543,11 +2543,13 @@ public class AlertsCreator {
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
             minMonth = pdate.getShMonth();
+            minMonth-=1;
             minDay = pdate.getShDay();
             calendar.setTimeInMillis(System.currentTimeMillis());
             PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
             maxYear = pdate2.getShYear();
             maxMonth = pdate2.getShMonth();
+            maxMonth-=1;
             maxDay = pdate2.getShDay();
         } else {
             calendar.setTimeInMillis(minDate);
@@ -2707,7 +2709,7 @@ public class AlertsCreator {
                         return LocaleController.getString("Ordibehesht", R.string.Ordibehesht);
                     }
                     case 2: {
-                        return LocaleController.getString("Khordad", R.string.March);
+                        return LocaleController.getString("Khordad", R.string.Khordad);
                     }
                     case 3: {
                         return LocaleController.getString("Tir", R.string.Tir);
@@ -2824,9 +2826,19 @@ public class AlertsCreator {
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
             checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
-            calendar.set(Calendar.YEAR, yearPicker.getValue());
-            calendar.set(Calendar.MONTH, monthPicker.getValue());
-            calendar.set(Calendar.DAY_OF_MONTH, dayPicker.getValue());
+            if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
+                PersianDate pdate3 = new PersianDate();
+                pdate3.setShYear(yearPicker.getValue());
+                pdate3.setShMonth((monthPicker.getValue()+=1));
+                pdate3.setShDay(dayPicker.getValue());
+                calendar.set(Calendar.YEAR, pdate3.getGrgYear());
+                calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
+                calendar.set(Calendar.DAY_OF_MONTH, pdate3.getGrgDay());
+            } else {
+                calendar.set(Calendar.YEAR, yearPicker.getValue());
+                calendar.set(Calendar.MONTH, monthPicker.getValue());
+                calendar.set(Calendar.DAY_OF_MONTH, dayPicker.getValue());
+            }
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.SECOND, 0);
