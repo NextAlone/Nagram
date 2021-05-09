@@ -938,7 +938,7 @@ public class AlertsCreator {
         dayPicker.setMinValue(1);
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
-            dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue, monthPicker.getValue));
+            dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue()));
         } else {
             dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
