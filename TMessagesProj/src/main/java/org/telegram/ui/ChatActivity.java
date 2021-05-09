@@ -7222,7 +7222,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (LocaleController.isRTL) {
             searchContainer.addView(searchGoToBeginningButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP, showSearchUserButton ? 48 * 2 : 48, 0, 0, 0));
         } else {
-            searchContainer.addView(searchGoToBeginningButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, searchUpButton ? 48 * 2 : 48, 0, 0, 0));
+            searchContainer.addView(searchGoToBeginningButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, searchUpButton ? 48 * 2, 0, 0, 0));
 
         }
             searchGoToBeginningButton.setOnClickListener(view -> {

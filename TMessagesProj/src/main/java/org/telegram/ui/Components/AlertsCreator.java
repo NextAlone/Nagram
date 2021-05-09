@@ -936,7 +936,7 @@ public class AlertsCreator {
         calendar.set(Calendar.MONTH, monthPicker.getValue());
         calendar.set(Calendar.YEAR, yearPicker.getValue());
         dayPicker.setMinValue(1);
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) {
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
             dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue, monthPicker.getValue));
         } else {
@@ -947,7 +947,7 @@ public class AlertsCreator {
     private static void checkPickerDate(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) {
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
             int currentYear = pdate.getShYear();
             int currentMonth = pdate.getShMonth();
@@ -2677,7 +2677,7 @@ public class AlertsCreator {
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         monthPicker.setFormatter(value -> {
             
-            if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) { 
+            if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
                 switch (value) {
                     case 0: {
                         return LocaleController.getString("Farvardin", R.string.January);
@@ -2762,7 +2762,7 @@ public class AlertsCreator {
         });
         monthPicker.setOnValueChangedListener(onValueChangeListener);
 
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) {
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(minDate); 
             PersianDate pdate = new PersianDate(minDate);
