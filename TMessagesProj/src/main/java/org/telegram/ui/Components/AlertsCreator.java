@@ -947,9 +947,9 @@ public class AlertsCreator {
     private static void checkPickerDate(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        int currentYear == 0;
-        int currentMonth == 0;
-        int currentDay == 0;
+        int currentYear = 0;
+        int currentMonth = 0;
+        int currentDay = 0;
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
             currentYear = pdate.getShYear();
@@ -2765,8 +2765,8 @@ public class AlertsCreator {
         });
         monthPicker.setOnValueChangedListener(onValueChangeListener);
         Calendar calendar = Calendar.getInstance();
-        int minYear == 0;
-        int maxYear == 0;
+        int minYear = 0;
+        int maxYear = 0;
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
