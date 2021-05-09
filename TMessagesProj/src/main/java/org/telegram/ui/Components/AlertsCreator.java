@@ -2637,7 +2637,7 @@ public class AlertsCreator {
         titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
+        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP);, 0, 12, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         LinearLayout linearLayout = new LinearLayout(context);
@@ -2701,7 +2701,7 @@ public class AlertsCreator {
                         return LocaleController.getString("Mehr", R.string.July);
                     }
                     case 7: {
-                        return LocaleController.getString("Abaan", R.string.August);
+                        return LocaleController.getString("Aabaan", R.string.August);
                     }
                     case 8: {
                         return LocaleController.getString("Aazar", R.string.September);
