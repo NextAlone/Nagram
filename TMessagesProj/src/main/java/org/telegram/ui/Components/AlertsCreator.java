@@ -952,9 +952,9 @@ public class AlertsCreator {
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
-            int currentYear = pdate.getShYear();
-            int currentMonth = pdate.getShMonth();
-            int currentDay = pdate.getShDay();
+            currentYear = pdate.getShYear();
+            currentMonth = pdate.getShMonth();
+            currentDay = pdate.getShDay();
         }
         
 
@@ -2761,18 +2761,16 @@ public class AlertsCreator {
         });
         monthPicker.setOnValueChangedListener(onValueChangeListener);
         Calendar calendar = Calendar.getInstance();
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {      
-            calendar.setTimeInMillis(minDate); 
+        calendar.setTimeInMillis(minDate);
+        int minYear = calendar.get(Calendar.YEAR);
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int maxYear = calendar.get(Calendar.YEAR);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
             PersianDate pdate = new PersianDate(minDate);
-            int minYear = pdate.getShYear();
+            minYear = pdate.getShYear();
             calendar.setTimeInMillis(System.currentTimeMillis());
-            PersianDate pdate = new PersianDate(System.currentTimeMillis());
-            int maxYear = pdate.getShYear();
-        } else {
-            calendar.setTimeInMillis(minDate);
-            int minYear = calendar.get(Calendar.YEAR);
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            int maxYear = calendar.get(Calendar.YEAR);
+            PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
+            maxYear = pdate2.getShYear();
         }
 
         
