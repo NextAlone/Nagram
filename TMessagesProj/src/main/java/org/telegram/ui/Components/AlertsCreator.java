@@ -2531,16 +2531,34 @@ public class AlertsCreator {
         int day = dayPicker.getValue();
         int month = monthPicker.getValue();
         int year = yearPicker.getValue();
-
+        int minYear = 0;
+        int minMonth = 0;
+        int minDay = 0;
+        int maxYear = 0;
+        int maxMonth = 0;
+        int maxDay = 0;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(minDate);
-        int minYear = calendar.get(Calendar.YEAR);
-        int minMonth = calendar.get(Calendar.MONTH);
-        int minDay = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int maxYear = calendar.get(Calendar.YEAR);
-        int maxMonth = calendar.get(Calendar.MONTH);
-        int maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+            calendar.setTimeInMillis(minDate);
+            PersianDate pdate = new PersianDate(minDate);
+            minYear = pdate.getShYear();
+            minMonth = pdate.getShMonth();
+            minDay = pdate.getShDay();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
+            maxYear = pdate2.getShYear();
+            maxMonth = pdate2.getShMonth();
+            maxDay = pdate2.getShDay();
+        } else {
+            calendar.setTimeInMillis(minDate);
+            minYear = calendar.get(Calendar.YEAR);
+            minMonth = calendar.get(Calendar.MONTH);
+            minDay = calendar.get(Calendar.DAY_OF_MONTH);
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            maxYear = calendar.get(Calendar.YEAR);
+            maxMonth = calendar.get(Calendar.MONTH);
+            maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+        }
 
         if (year > maxYear) {
             yearPicker.setValue(year = maxYear);
@@ -2640,7 +2658,7 @@ public class AlertsCreator {
         titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
+        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP, 0, 48, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         LinearLayout linearLayout = new LinearLayout(context);
@@ -2683,7 +2701,9 @@ public class AlertsCreator {
             if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
                 switch (value) {
                     case 0: {
+                        default: {
                         return LocaleController.getString("Farvardin", R.string.Farvardin);
+                        }
                     }
                     case 1: {
                         return LocaleController.getString("Ordibehesht", R.string.Ordibehesht);
@@ -2716,9 +2736,7 @@ public class AlertsCreator {
                         return LocaleController.getString("Bahman", R.string.Bahman);
                     }
                     case 11:
-                    default: {
                         return LocaleController.getString("Esfand", R.string.Esfand);
-                    }
                 }
             } else {
                 switch (value) {
