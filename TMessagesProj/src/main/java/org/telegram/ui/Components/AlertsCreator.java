@@ -2829,7 +2829,8 @@ public class AlertsCreator {
             if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
                 PersianDate pdate3 = new PersianDate();
                 pdate3.setShYear(yearPicker.getValue());
-                pdate3.setShMonth((monthPicker.getValue()+=1));
+                int monthPickerval = monthPicker.getValue();
+                pdate3.setShMonth((monthPickerval +=1);
                 pdate3.setShDay(dayPicker.getValue());
                 calendar.set(Calendar.YEAR, pdate3.getGrgYear());
                 calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
