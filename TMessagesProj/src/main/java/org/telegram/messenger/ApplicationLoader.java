@@ -353,11 +353,8 @@ public class ApplicationLoader extends Application {
         Utilities.stageQueue.postRunnable(() -> {
             NekoConfig.preferences.contains("qwq");
             NekoXConfig.preferences.contains("qwq");
-<<<<<<< HEAD
-=======
 
             SignturesKt.checkMT(this);
->>>>>>> upstream/dev
         });
 
         try {
