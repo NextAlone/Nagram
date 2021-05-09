@@ -184,7 +184,7 @@
     <string name="ShareMyKey">اشتراک گذاری کلید عمومی من</string>
     <string name="DisableVibration">غیرفعال کردن لرزش</string>
     <string name="IgnoreContentRestrictions">دور زدن محدودیت های محتوا</string>
-    <string name="IgnoreContentRestrictionsNotice">محدودیت های پیامها در اندروید را بصورت محلی دور می زند. این ممکن است در آینده توسط سرور از کار بیفتد، و شما خودتان نیازمند بررسی قانونی بودن این قابلیت هستید.</string>
+    <string name="IgnoreContentRestrictionsNotice">محدودیت‌های گوگل پلی روی پیام‌ها را نادیده می‌گیرد.</string>
     <string name="SendCommentAfterForward">ارسال نظر پس از هدایت</string>
     <string name="UnpinMessageX">لغو پین پیام</string>
     <string name="UnpinMessagesAll">لغو پین همه پیام ها</string>
@@ -235,4 +235,10 @@
     <string name="WsPayload">ظرفیت ترابری</string>
     <string name="ProxyInfoWS">تنظیمات رله WebSocket</string>
     <string name="AddProxyWs">افزودن رله WebSocket</string>
+    <string name="BackupSettings">پشتیبان‌گیری از تنظیمات</string>
+    <string name="WsNeedLogin">به دلیل محدودیت‌های فنی، رله Ws نمی‌تواند پیش از ورود به حساب استفاده شود.</string>
+    <string name="AutoLockImmediately">بلافاصله</string>
+    <string name="nekoXPaymentRemovedToast">عملکرد پرداخت حذف شده است.</string>
+    <string name="ImportSettingsAlert">آیا از دوباره ‌نویسی تنظیمات اطمینان دارید؟ وارد کردن تنظیمات از منابع ناشناس ممکن است باعث دوباره نویسی سنجاق‌شده‌ها و قفل‌شدن برنامه شود.</string>
+    <string name="ImportSettings">وارد کردن تنظیمات</string>
 </resources>

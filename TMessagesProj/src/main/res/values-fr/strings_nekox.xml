@@ -25,7 +25,7 @@
     <string name="ProxyAutoSwitch">Activation automatique du Proxy</string>
     <string name="LinkedGroupChat">Groupe lié</string>
     <string name="LinkedChannelChat">Canal lié</string>
-    <string name="DevModeTitle">**Votre compte telegram peut être banni**</string>
+    <string name="DevModeTitle">**Votre compte Telegram pourrait être banni**</string>
     <string name="DevModeNotice">Nous ne sommes pas responsables d\'une mauvaise utilisation des fonctionnalités de développeur.</string>
     <string name="TapToDisable">Appuyez pour désactiver. Vous n\'en avez pas besoin.</string>
     <string name="PlaceHolder">Espace réservé - Veuillez désactiver</string>
@@ -203,4 +203,9 @@
     <string name="PinSticker">Épingler</string>
     <string name="UseChatAttachEnterMenuNotice">Remplacez le bouton d\'enregistrement par un menu de saisie et ajoutez un commutateur d\'aperçu de lien.</string>
     <string name="AccDescrChatAttachEnterMenu">Menu de saisie de la discussion</string>
+    <string name="CustomBackendNotice">Cette fonction n\'est fournie que pour les utilisateurs experts, si vous ne savez pas ce que les options suivantes représentent, ignorez-les.</string>
+    <string name="UseCustomApiNotice">Connectez-vous à l\'aide de l\'API personnalisée. Si vous ne parvenez pas à vous enregistrer ou à vous connecter, ceci peut vous aider.
+\n
+\nNote : fcm ne fonctionnera pas si vous utilisez la version release.</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Désactiver l\'aperçu de lien par défaut afin d\'empêcher le serveur Telegram de lire vos liens échangés.</string>
 </resources>

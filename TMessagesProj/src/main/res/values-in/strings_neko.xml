@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">Terjemahan DeepL</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">Terjemahan YouDao</string>
+    <string name="pressTitleToOpenAllChats">Tekan judul untuk membuka tab \"Semua Obrolan\"</string>
 </resources>

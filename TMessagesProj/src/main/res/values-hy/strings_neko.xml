@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">DeepL Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft- ի թարգմանիչ</string>
     <string name="ProviderYouDao">YouDao Translate</string>
+    <string name="pressTitleToOpenAllChats">Սեղմեք վերնագիրը ՝ «Բոլոր զրույցները» ներդիրը բացելու համար</string>
 </resources>

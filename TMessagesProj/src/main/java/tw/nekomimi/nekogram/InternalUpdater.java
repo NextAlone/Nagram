@@ -14,9 +14,9 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
 
-import cn.hutool.core.date.DateField;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateTime;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import cn.hutool.http.HttpRequest;
 import tw.nekomimi.nekogram.utils.FileUtil;
 
@@ -51,7 +51,7 @@ public class InternalUpdater {
         if (BuildVars.isFdroid)
             return;
         try {
-            NekoXConfig.setNextUpdateCheck(DateTime.now().offsetNew(DateField.HOUR, 24));
+            NekoXConfig.setNextUpdateCheck(System.currentTimeMillis() / 1000 + 24 * 3600);
 
             String ret = HttpRequest.get(API_URL_RELEASE).header("accept", "application/vnd.github.v3+json").execute().body();
             ReleaseMetadata[] releases = new Gson().fromJson(ret, ReleaseMetadata[].class);
@@ -81,7 +81,12 @@ public class InternalUpdater {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 builder.setTitle(LocaleController.getString("VersionUpdateTitle", R.string.VersionUpdateTitle));
 
-                String message = finalRelease.name + "   " + LocaleController.formatDateChat(DateTime.of(finalRelease.published_at, DatePattern.UTC_PATTERN).toTimestamp().getTime() / 1000) + "\n\n";
+                String message = null;
+                try {
+                    message = finalRelease.name + "   " + LocaleController.formatDateChat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(finalRelease.published_at).getTime() / 1000) + "\n\n";
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
                 if (apk == null)
                     message += LocaleController.getString("VersionUpdateVariantNotMatch", R.string.VersionUpdateVariantNotMatch);
                 else
@@ -95,7 +100,7 @@ public class InternalUpdater {
                         Browser.openUrl(ctx, finalRelease.html_url);
                 });
                 builder.setNeutralButton(LocaleController.getString("VersionUpdateIgnore", R.string.VersionUpdateIgnore), (dialog, which) -> NekoXConfig.setIgnoredUpdateTag(finalRelease.name));
-                builder.setNegativeButton(LocaleController.getString("VersionUpdateNotNow", R.string.VersionUpdateNotNow), (dialog, which) -> NekoXConfig.setNextUpdateCheck(DateTime.now().offsetNew(DateField.HOUR, 24 * 3)));
+                builder.setNegativeButton(LocaleController.getString("VersionUpdateNotNow", R.string.VersionUpdateNotNow), (dialog, which) -> NekoXConfig.setNextUpdateCheck(System.currentTimeMillis() / 1000 + 3 * 24 * 3600));
                 builder.show();
             });
         } catch (Exception e) {

@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">Traduzir DeepL</string>
     <string name="ProviderMicrosoftTranslator">Tradutor Microsoft</string>
     <string name="ProviderYouDao">Traduzir YouDao</string>
+    <string name="pressTitleToOpenAllChats">Pressione o título para abrir a guia \"Todos os bate-papos\"</string>
 </resources>

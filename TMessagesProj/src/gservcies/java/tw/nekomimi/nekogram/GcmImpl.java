@@ -107,7 +107,7 @@ public class GcmImpl implements ExternalGcm.Interface {
 
     @Override
     public void checkUpdate(Activity ctx) {
-        if (!checkPlayServices()) return;
+       /* if (!checkPlayServices()) return;
         AppUpdateManager manager = AppUpdateManagerFactory.create(ctx);
         InstallStateUpdatedListener listener = (installState) -> {
             if (installState.installStatus() == InstallStatus.DOWNLOADED) {
@@ -136,7 +136,7 @@ public class GcmImpl implements ExternalGcm.Interface {
             } else {
                 FileLog.d("no updates");
             }
-        });
+        });*/
 
     }
 

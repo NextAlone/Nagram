@@ -43,8 +43,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import cn.hutool.core.codec.Base64;
-import cn.hutool.core.io.IoUtil;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -355,6 +353,11 @@ public class ApplicationLoader extends Application {
         Utilities.stageQueue.postRunnable(() -> {
             NekoConfig.preferences.contains("qwq");
             NekoXConfig.preferences.contains("qwq");
+<<<<<<< HEAD
+=======
+
+            SignturesKt.checkMT(this);
+>>>>>>> upstream/dev
         });
 
         try {

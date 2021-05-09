@@ -44,7 +44,7 @@
     <string name="SaveCacheToExternalFilesDir">Depolama yalıtımı</string>
     <string name="SaveCacheToExternalFilesDirAbout">Paylaşılan depolama alanını düzenli tutmak için \"Telegram\" klasörünü uygulamaya özgü dizine kaydedin.</string>
     <string name="SensitiveDisableFiltering">Hassas İçerik Filtrelemesini Devre Dışı Bırak</string>
-    <string name="SensitiveAbout">Hassas medyayı tüm cihazlarınızdaki herkese açık kanallarda görüntüleyin</string>
+    <string name="SensitiveAbout">Hassas medyayı tüm aygıtlarınızdaki herkese açık kanallarda görüntüleyin.</string>
     <string name="StickerSize">Çıkartma Boyutu</string>
     <string name="StickerSizeDialogMessageBigOne">Büyük bir tane</string>
     <string name="StickerSizeDialogMessageSmallOne">Küçük bir tane</string>
@@ -52,7 +52,7 @@
     <string name="StickerSizeDialogName">Duang</string>
     <string name="Experiment">Deneysel</string>
     <string name="UnlimitedFavoredStickers">Sınırsız Favori Çıkartmaları</string>
-    <string name="UnlimitedFavoredStickersAbout">Favorilere sınırsız çıkartma ekleyin. Çıkartmalar diğer cihazlarla senkronize edilemeyebilir.</string>
+    <string name="UnlimitedFavoredStickersAbout">Sık kullanılanlara sınırsız çıkartma ekleyin. Çıkartmalar diğer aygıtlarla eşzamanlanamayabilir.</string>
     <string name="MessageDetails">Detaylar</string>
     <string name="ExportAsJson">JSON olarak dışa aktar</string>
     <string name="Translate">Çevir</string>
@@ -67,7 +67,7 @@
     <string name="DisablePhotoViewerSideAction">Kenarlara Dokunarak Fotoğraf Geçmeyi Devre Dışı Bırak</string>
     <string name="BotToken">Anahtar</string>
     <string name="UnlimitedPinnedDialogs">Sınırsız Sabitlenmiş Sohbetler</string>
-    <string name="UnlimitedPinnedDialogsAbout">Sabitlenmiş sohbetler senkronizasyonlarını kapatarak mesajları sınırsız sabitleyin.</string>
+    <string name="UnlimitedPinnedDialogsAbout">Eşzamanlamalarını kapatarak mesajları sınırsız sabitleyin.</string>
     <string name="OpenArchiveOnPull">Arşivlenmiş Sohbetleri Aşağıya Kaydırdıktan Sonra Aç</string>
     <string name="HideKeyboardOnChatScroll">Sohbeti Kaydırırken Klavyeyi Gizle</string>
     <string name="UserRestrictionsSendStickers2">Çıkartma Gönder</string>
@@ -78,7 +78,7 @@
     <string name="HideAllTab">\"Tüm Sohbetler\" Sekmesini Gizle</string>
     <string name="HideAllTabAbout">Açmak için ana sayfada \"Geri\" tuşuna basın.</string>
     <string name="TabTitleType">Sekmelerde Göster</string>
-    <string name="TabTitleTypeTip">İfadeler Telegram tarafından bulutta senkronize edilir.</string>
+    <string name="TabTitleTypeTip">İfadeler Telegram tarafından bulutta eşzamanlanır.</string>
     <string name="TabTitleTypeText">Başlıklar</string>
     <string name="TabTitleTypeIcon">İfadeler</string>
     <string name="TabTitleTypeMix">Başlıklı İfadeler</string>
@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">DeepL Çeviri</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Tercüman</string>
     <string name="ProviderYouDao">YouDao Çeviri</string>
+    <string name="pressTitleToOpenAllChats">\"Tüm Sohbetler\" sekmesini açmak için başlığa basın</string>
 </resources>

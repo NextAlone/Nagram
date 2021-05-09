@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">Dịch DeepL</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Dịch</string>
     <string name="ProviderYouDao">YouDao Dịch</string>
+    <string name="pressTitleToOpenAllChats">Nhấn vào tiêu đề để mở tab \"Tất cả các cuộc trò chuyện\"</string>
 </resources>

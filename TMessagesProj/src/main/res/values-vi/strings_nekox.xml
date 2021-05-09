@@ -182,7 +182,7 @@
     <string name="ShareMyKey">Chia sẻ khóa công khai của tôi</string>
     <string name="DisableVibration">Tắt rung</string>
     <string name="IgnoreContentRestrictions">Bỏ qua các hạn chế nội dung</string>
-    <string name="IgnoreContentRestrictionsNotice">Bỏ qua các hạn chế của Android đối với tin nhắn cục bộ. Điều này có thể bị máy chủ cấm trong tương lai và bạn sẽ cần phải tự mình đánh giá tính hợp pháp tại địa phương của tùy chọn này.</string>
+    <string name="IgnoreContentRestrictionsNotice">Bỏ qua thông báo không phải bản tải ở CH Play trong tin nhắn.</string>
     <string name="SendCommentAfterForward">Gửi bình luận sau khi chuyển tiếp</string>
     <string name="UnpinMessageX">Bỏ ghim tin nhắn</string>
     <string name="UnpinMessagesAll">Bỏ ghim tất cả tin nhắn</string>
@@ -233,4 +233,10 @@
     <string name="WsPayload">Payload</string>
     <string name="ProxyInfoWS">Cài đặt WebSocket Relay</string>
     <string name="AddProxyWs">Thêm WebSocket Replay</string>
+    <string name="nekoXPaymentRemovedToast">Chức năng thanh toán đã bị loại bỏ.</string>
+    <string name="ImportSettingsAlert">Bạn có chắc chắn muốn ghi đè cài đặt không\? Việc nhập cài đặt từ các nguồn không xác định có thể khiến mã pin bị ghi đè và khiến ứng dụng bị khóa.</string>
+    <string name="ImportSettings">Nhập cài đặt</string>
+    <string name="BackupSettings">Sao lưu cài đặt</string>
+    <string name="WsNeedLogin">Do hạn chế về mặt kỹ thuật, không thể sử dụng Ws Relay trước khi đăng nhập.</string>
+    <string name="AutoLockImmediately">Liền</string>
 </resources>

@@ -182,7 +182,7 @@
     <string name="ShareMyKey">Ortak Anahtarımı Paylaş</string>
     <string name="DisableVibration">Titreşimi Devre Dışı Bırak</string>
     <string name="IgnoreContentRestrictions">İçerik Kısıtlamalarını Yok Say</string>
-    <string name="IgnoreContentRestrictionsNotice">Yerel olarak mesajlardaki Android kısıtlamalarını yok sayar. Bu, gelecekte sunucu tarafından yasaklanabilir ve bu seçeneğin yerel yasallığını kendiniz değerlendirmeniz gerekecektir.</string>
+    <string name="IgnoreContentRestrictionsNotice">Mesajlardaki oynatma kısıtlamalarını yok sayar.</string>
     <string name="SendCommentAfterForward">Yorumu, İlettikten Sonra Gönder</string>
     <string name="UnpinMessageX">Mesaj sabitlemesini kaldır</string>
     <string name="UnpinMessagesAll">Tüm mesajların sabitlemesini kaldır</string>
@@ -207,7 +207,7 @@
     <string name="UserRestrictionsSendInline">Satır İçi Botlar aracılığıyla gönder</string>
     <string name="AcceptSecretChat">Yeni gizli sohbeti kabul et</string>
     <string name="TabletMode">Tablet modu</string>
-    <string name="TabletModeDefault">Cihaza bağlı</string>
+    <string name="TabletModeDefault">Aygıta bağlı</string>
     <string name="ReplaceText">Metni Değiştir</string>
     <string name="TextOrigin">Menşei</string>
     <string name="TextReplace">Değiştir</string>
@@ -225,4 +225,18 @@
     <string name="UsePersiancalendarInfo">Güneş Hicri takvimi ile tarihi görüntüle</string>
     <string name="DisplayPersianCalendarByLatin">Farsça takvimini Latince olarak görüntüle</string>
     <string name="UsePersiancalendar">Farsça takvimi kullan</string>
+    <string name="nekoXPaymentRemovedToast">Ödeme işlevi kaldırıldı.</string>
+    <string name="ImportSettingsAlert">Ayarların üzerine yazmak istediğinizden emin misiniz\? Bilinmeyen kaynaklardan ayarları içe aktarmak, PIN kodunun üzerine yazılmasına ve uygulamanın kilitlenmesine neden olabilir.</string>
+    <string name="ImportSettings">Ayarları içe aktar</string>
+    <string name="BackupSettings">Yedekleme ayarları</string>
+    <string name="WsNeedLogin">Teknik sınırlamalar nedeniyle, Ws Relay oturum açmadan önce kullanılamaz.</string>
+    <string name="AutoLockImmediately">Hemen</string>
+    <string name="WsPayload">Yük</string>
+    <string name="SetPinnedSuffix">(Sabitlendi)</string>
+    <string name="UnpinSticker">Sabitlemeyi kaldır</string>
+    <string name="PinSticker">Sabitle</string>
+    <string name="EnableStickerPinTip">Bu işlev hala geliştirilme aşamasındadır, bulut ile eşzamanlama düşünüldüğü gibi çalışmayabilir.</string>
+    <string name="EnableStickerPinAbout">Çıkartmaları sabitleyin ve yeni çıkartmalar eklerken bile bulut ile eşzamanlayın.
+\nSık Kullanılanları ve Son Kullanılanları Devre Dışı Bırak ile eşleştirilir.</string>
+    <string name="EnableStickerPin">Çıkartmaları Sabitlemeyi Etkinleştir</string>
 </resources>
