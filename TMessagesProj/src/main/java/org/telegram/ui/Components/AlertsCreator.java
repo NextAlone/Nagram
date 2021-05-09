@@ -2683,41 +2683,41 @@ public class AlertsCreator {
             if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
                 switch (value) {
                     case 0: {
-                        return LocaleController.getString("Farvardin", R.string.January);
+                        return LocaleController.getString("Farvardin", R.string.Farvardin);
                     }
                     case 1: {
-                        return LocaleController.getString("Ordibehesht", R.string.February);
+                        return LocaleController.getString("Ordibehesht", R.string.Ordibehesht);
                     }
                     case 2: {
                         return LocaleController.getString("Khordad", R.string.March);
                     }
                     case 3: {
-                        return LocaleController.getString("Tir", R.string.April);
+                        return LocaleController.getString("Tir", R.string.Tir);
                     }
                     case 4: {
-                        return LocaleController.getString("Mordad", R.string.May);
+                        return LocaleController.getString("Mordad", R.string.Mordad);
                     }
                     case 5: {
-                        return LocaleController.getString("Shahrivar", R.string.June);
+                        return LocaleController.getString("Shahrivar", R.string.Shahrivar);
                     }
                     case 6: {
-                        return LocaleController.getString("Mehr", R.string.July);
+                        return LocaleController.getString("Mehr", R.string.Mehr);
                     }
                     case 7: {
-                        return LocaleController.getString("Aabaan", R.string.August);
+                        return LocaleController.getString("Aabaan", R.string.Aabaan);
                     }
                     case 8: {
-                        return LocaleController.getString("Aazar", R.string.September);
+                        return LocaleController.getString("Aazar", R.string.Aazar);
                     }
                     case 9: {
-                        return LocaleController.getString("Dey", R.string.October);
+                        return LocaleController.getString("Dey", R.string.Dey);
                     }
                     case 10: {
-                        return LocaleController.getString("Bahman", R.string.November);
+                        return LocaleController.getString("Bahman", R.string.Bahman);
                     }
                     case 11:
                     default: {
-                        return LocaleController.getString("Esfand", R.string.December);
+                        return LocaleController.getString("Esfand", R.string.Esfand);
                     }
                 }
             } else {
