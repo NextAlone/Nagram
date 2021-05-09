@@ -41,7 +41,7 @@ public class NekoXConfig {
 
     public static int autoUpdateReleaseChannel = preferences.getInt("autoUpdateReleaseChannel", 2);
     public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
-    public static DateTime nextUpdateCheck = DateTime.of(preferences.getString("nextUpdateCheck", "2021-01-01T00:00:00Z"), DatePattern.UTC_PATTERN);
+    public static long nextUpdateCheck = preferences.getLong("nextUpdateCheckTimestamp", 0);
 
 
     public static void toggleDeveloperMode() {
@@ -172,9 +172,8 @@ public class NekoXConfig {
         preferences.edit().putString("ignoredUpdateTag", ignoredUpdateTag = ignored).apply();
     }
 
-    public static void setNextUpdateCheck(DateTime dateTime) {
-        nextUpdateCheck = dateTime;
-        preferences.edit().putString("nextUpdateCheck", dateTime.toString(DatePattern.UTC_PATTERN)).apply();
+    public static void setNextUpdateCheck(long timestamp) {
+        preferences.edit().putLong("nextUpdateCheckTimestamp",  nextUpdateCheck = timestamp).apply();
     }
 
 }

@@ -166,7 +166,6 @@ import org.telegram.ui.Components.ViewPagerFixed;
 
 import java.util.ArrayList;
 
-import cn.hutool.core.date.DateTime;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.InternalUpdater;
@@ -3514,7 +3513,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
         UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
-        if (!BuildVars.isFdroid && NekoXConfig.autoUpdateReleaseChannel != 0 && DateTime.now().compareTo(NekoXConfig.nextUpdateCheck) > 0)
+        if (!BuildVars.isFdroid && NekoXConfig.autoUpdateReleaseChannel != 0 && System.currentTimeMillis() / 1000 > NekoXConfig.nextUpdateCheck)
             UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), true), 6000);
 
         return fragmentView;
