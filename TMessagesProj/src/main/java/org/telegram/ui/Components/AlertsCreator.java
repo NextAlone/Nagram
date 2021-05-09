@@ -2701,9 +2701,7 @@ public class AlertsCreator {
             if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
                 switch (value) {
                     case 0: {
-                        default: {
                         return LocaleController.getString("Farvardin", R.string.Farvardin);
-                        }
                     }
                     case 1: {
                         return LocaleController.getString("Ordibehesht", R.string.Ordibehesht);
@@ -2736,7 +2734,9 @@ public class AlertsCreator {
                         return LocaleController.getString("Bahman", R.string.Bahman);
                     }
                     case 11:
-                        return LocaleController.getString("Esfand", R.string.Esfand);
+                        default: {
+                            return LocaleController.getString("Esfand", R.string.Esfand);
+                        }
                 }
             } else {
                 switch (value) {
