@@ -29,7 +29,7 @@
     <string name="ProxyAutoSwitch">Պրոքսիի ավտոմատ անջատիչ</string>
     <string name="LinkedGroupChat">Կապված խումբ</string>
     <string name="LinkedChannelChat">Կապված ալիք</string>
-    <string name="DevModeTitle">** Ձեր հեռագրի հաշիվը կարող է արգելվել **</string>
+    <string name="DevModeTitle">** Ձեր Telegram հաշիվը կարող է արգելվել **</string>
     <string name="DevModeNotice">Մենք պատասխանատվություն չենք կրում մշակողի առանձնահատկությունների ոչ պատշաճ օգտագործման համար.</string>
     <string name="TapToDisable">Հպեք ՝ անջատելու համար: Սրանք ձեզ պետք չեն.</string>
     <string name="PlaceHolder">Տեղապահ - Խնդրում ենք անջատել</string>
@@ -100,7 +100,7 @@
     <string name="UnblockAll">Արգելափակել բոլորը</string>
     <string name="UnblockAllWarn">Վստա՞հ եք, որ ցանկանում եք ապաբլոկավորել ** բոլոր օգտվողներին և բոտերին **:</string>
     <string name="BlockedListEmpty">Դուք ոչ մեկին չեք արգելափակել :)</string>
-    <string name="ProxyTypeVmess">Վմեսսի վստահված անձ</string>
+    <string name="ProxyTypeVmess">VMess վստահված անձ</string>
     <string name="AddProxySocks5">Ավելացնել SOCKS5 վստահված անձը</string>
     <string name="AddProxyTelegram">Ավելացնել MTProto վստահված անձ</string>
     <string name="AddProxyVmess">Ավելացնել Vmess վստահված անձը</string>
@@ -112,8 +112,8 @@
     <string name="ShareProxy">Համօգտագործել վստահված անձը</string>
     <string name="ProxyDelete">Deleteնջել վստահված անձը</string>
     <string name="ProxyInfoVmess">Vmess վստահված անձի կարգավորումներ</string>
-    <string name="VmessUserId">Օգտագործողի այ - Դի</string>
-    <string name="VmessAlterId">Alter Id</string>
+    <string name="VmessUserId">օգտագործողի այ - Դի</string>
+    <string name="VmessAlterId">Փոխել ID- ն</string>
     <string name="VmessSecurity">Անվտանգություն</string>
     <string name="VmessNetwork">Անց</string>
     <string name="VmessHeadType">Գլխի տեսակը</string>
@@ -140,7 +140,7 @@
     <string name="ImportProxyList">Ներմուծեք վստահված սերվերներ</string>
     <string name="ProxySubscription">Վստահված անձի բաժանորդագրություն</string>
     <string name="ProxySubDetails">Բաժանորդագրության մանրամասները</string>
-    <string name="SubscriptionUrls">Ուրլներ</string>
+    <string name="SubscriptionUrls">URL- ներ</string>
     <string name="SubscriptionUpdating">Բաժանորդագրության թարմացում</string>
     <string name="SubscriptionDelete">Deleteնջել բաժանորդագրությունը</string>
     <string name="ExportStickers">Արտահանեք պիտակները</string>
@@ -182,7 +182,7 @@
     <string name="ShareMyKey">Share իմ հանրային բանալին</string>
     <string name="DisableVibration">Անջատեք թրթռումը</string>
     <string name="IgnoreContentRestrictions">Անտեսեք բովանդակության սահմանափակումները</string>
-    <string name="IgnoreContentRestrictionsNotice">Անտեսում է հաղորդագրությունների տեղական android սահմանափակումները: Հետագայում դա կարող է արգելվել սերվերի կողմից, և դուք պետք է ինքներդ գնահատեք այս տարբերակի տեղական օրինականությունը:</string>
+    <string name="IgnoreContentRestrictionsNotice">Անտեսում է հաղորդագրությունների նվագարկման սահմանափակումները:</string>
     <string name="SendCommentAfterForward">Ուղարկեք մեկնաբանություն փոխանցելուց հետո</string>
     <string name="UnpinMessageX">Ապամոնտաժել հաղորդագրությունը</string>
     <string name="UnpinMessagesAll">Ապամոնտաժել բոլոր հաղորդագրությունները</string>
@@ -216,4 +216,27 @@
     <string name="HideDeviceInfo">Թաքցնել սարքի մոդելը</string>
     <string name="HideDeviceInfoOff">Մուտք գործելուց հետո հավելվածը երկրորդ անգամ կբեռնվի սարքի մոդելը:</string>
     <string name="HideDeviceInfoOn">Դա կարող եք ավելի ուշ փոխել կարգավորումներում:</string>
+    <string name="nekoXPaymentRemovedToast">Վճարման գործառույթը հանվել է:</string>
+    <string name="ImportSettingsAlert">Վստա՞հ եք, որ ցանկանում եք վերագրել կարգավորումները: Պարամետրերը անհայտ աղբյուրներից ներմուծելը կարող է հանգեցնել քորոցի վերագրման և հավելվածի կողպմանը:</string>
+    <string name="ImportSettings">Ներմուծման կարգավորումներ</string>
+    <string name="BackupSettings">Պահուստավորման կարգավորումներ</string>
+    <string name="WsNeedLogin">Տեխնիկական սահմանափակումների պատճառով Ws Relay- ը հնարավոր չէ օգտագործել մինչև մուտք գործելը:</string>
+    <string name="AutoLockImmediately">Անմիջապես</string>
+    <string name="WsPayload">Payանրաբեռնվածություն</string>
+    <string name="ProxyInfoWS">WebSocket ռելեի կարգավորումներ</string>
+    <string name="AddProxyWs">Ավելացնել WebSocket ռելե</string>
+    <string name="DisplayPersianCalendarByLatin">Persianուցադրել պարսկական օրացույցը լատիներենով</string>
+    <string name="UsePersiancalendarInfo">ցուցադրել ամսաթիվը Solar Hijri օրացույցով</string>
+    <string name="UsePersiancalendar">Օգտագործեք պարսկական օրացույց</string>
+    <string name="AppLinkFDroid">F-Droid խանութ</string>
+    <string name="SetPinnedSuffix">(Ամրացված)</string>
+    <string name="UnpinSticker">անջատել</string>
+    <string name="PinSticker">քորոց</string>
+    <string name="EnableStickerPinTip">Այս գործառույթը դեռ մշակման փուլում է, ամպի հետ համաժամացումը կարող է չաշխատել ինչպես կարծում էին:</string>
+    <string name="EnableStickerPinAbout">Կպցրեք պիտակները և համաժամացրեք ամպի հետ նույնիսկ նոր պիտակներ ավելացնելիս:
+\nPaուգակցված է «Անջատել սիրվածի» հետ</string>
+    <string name="EnableStickerPin">Միացնել կապում կպչուկը</string>
+    <string name="ArchiveFiles">Արխիվացնել ֆայլերը</string>
+    <string name="Win32ExecutableFiles">Win32 գործադիր ֆայլեր</string>
+    <string name="AutoDownload">Ավտոմատ ներբեռնում</string>
 </resources>

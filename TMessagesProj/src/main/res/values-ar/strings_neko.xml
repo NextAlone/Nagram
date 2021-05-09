@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">ترجمة DeepL</string>
     <string name="ProviderMicrosoftTranslator">مترجم مايكروسوفت</string>
     <string name="ProviderYouDao">ترجمة YouDao</string>
+    <string name="pressTitleToOpenAllChats">اضغط على العنوان لفتح علامة التبويب \"كافة الدردشات\"</string>
 </resources>

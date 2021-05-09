@@ -6,7 +6,7 @@
     <string name="HidePhone">Nascondi il mio numero</string>
     <string name="Hide">Nascondi</string>
     <string name="DeleteAllFromSelf">Elimina tutti i miei messaggi</string>
-    <string name="DeleteAllFromSelfAlert">Attenzione! Questo eliminerà **tutti i tuoi messaggi** da questa chat per **tutti i partecipanti.**</string>
+    <string name="DeleteAllFromSelfAlert">Attenzione! Questo eliminerà **tutti i tuoi messaggi** da questa chat per **tutti i partecipanti**.</string>
     <string name="BotLogin">Login con bot token</string>
     <string name="InvalidAccessToken">Accesso col token non valido</string>
     <string name="IgnoreBlocked">Ignora gli utenti bloccati nel gruppo</string>
@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">Traduzione DeepL</string>
     <string name="ProviderMicrosoftTranslator">Traduttore Microsoft</string>
     <string name="ProviderYouDao">Traduzione YouDao</string>
+    <string name="pressTitleToOpenAllChats">Premi il titolo per aprire la scheda \"Tutte le chat\"</string>
 </resources>

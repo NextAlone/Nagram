@@ -49,7 +49,7 @@
     <string name="StickerSizeDialogMessageBigOne">Великий</string>
     <string name="StickerSizeDialogMessageSmallOne">Малий</string>
     <string name="StickerSizeDialogMessageReplyTo">Мяу</string>
-    <string name="StickerSizeDialogName">Duang</string>
+    <string name="StickerSizeDialogName">Орфей</string>
     <string name="Experiment">Експериментальна</string>
     <string name="UnlimitedFavoredStickers">Необмежені улюблені Наклейки</string>
     <string name="UnlimitedFavoredStickersAbout">Додати необмежену кількість стікерів до обраних. Наклейки не можуть бути синхронізовані з іншими пристроями.</string>
@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">DeepL переклад</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Перекладач</string>
     <string name="ProviderYouDao">YouDao Переклад</string>
+    <string name="pressTitleToOpenAllChats">Натисніть на заголовок, щоб відкрити папку \"Всі чати\"</string>
 </resources>

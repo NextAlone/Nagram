@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">مترجم DeepL</string>
     <string name="ProviderMicrosoftTranslator">مترجم مایکروسافت</string>
     <string name="ProviderYouDao">مترجم YouDao</string>
+    <string name="pressTitleToOpenAllChats">لمس عنوان برای بازکردن تب \"همه گفتگو‌ها\"</string>
 </resources>

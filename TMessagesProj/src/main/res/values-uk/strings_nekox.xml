@@ -29,7 +29,7 @@
     <string name="ProxyAutoSwitch">Авто-перемикання проксі</string>
     <string name="LinkedGroupChat">Зв\'язана група</string>
     <string name="LinkedChannelChat">Пов\'язаний канал</string>
-    <string name="DevModeTitle">**Ваш аккаунт в Telegram може бути забанений**</string>
+    <string name="DevModeTitle">**Ваш аккаунт в Telegram може бути заблоковано**</string>
     <string name="DevModeNotice">Ми не несемо відповідальність за будь-яке некоректне використання функцій розробника.</string>
     <string name="TapToDisable">Торкніться, щоб вимкнути. Вони вам не потрібні.</string>
     <string name="PlaceHolder">Заповнювач - Вимкнути</string>
@@ -127,9 +127,9 @@
     <string name="SSPluginOpts">Конфігурація плагінів</string>
     <string name="ProxyInfoSSR">Налаштування проксі ShadowsocksR</string>
     <string name="SSRProtocol">Protocol</string>
-    <string name="SSRProtocolParams">Protocol Params</string>
-    <string name="SSRObfs">Obfs</string>
-    <string name="SSRObfsParam">Obfs Param</string>
+    <string name="SSRProtocolParams">Параметри протоколу</string>
+    <string name="SSRObfs">Obfs (обфускація трафіку)</string>
+    <string name="SSRObfsParam">Парметри Obfs</string>
     <string name="ProxyInfoTrojan">Налаштування Trojan Proxy</string>
     <string name="TrojanSNI">SNI (необов\'язково)</string>
     <string name="ProxyRemarks">Зауваження</string>
@@ -182,7 +182,7 @@
     <string name="ShareMyKey">Поділіться моїм публічним ключем</string>
     <string name="DisableVibration">Вібрація вимкнено</string>
     <string name="IgnoreContentRestrictions">Ігнорувати обмеження на контент</string>
-    <string name="IgnoreContentRestrictionsNotice">Локально ігнорує обмеження Android щодо повідомлень. Це може бути заборонено сервером у майбутньому, і вам потрібно буде оцінити локальну законність цієї опції самостійно.</string>
+    <string name="IgnoreContentRestrictionsNotice">Локально ігнорує обмеження Android щодо повідомлень.</string>
     <string name="SendCommentAfterForward">Відправити коментар після перенаправлення</string>
     <string name="UnpinMessageX">Відкріпити повідомлення</string>
     <string name="UnpinMessagesAll">Відкріпити всі повідомлення</string>
@@ -216,4 +216,27 @@
     <string name="HideDeviceInfo">Сховати модель пристрою</string>
     <string name="HideDeviceInfoOff">Модель пристрою буде завантажена вдруге, коли програма запуститься після входу в систему.</string>
     <string name="HideDeviceInfoOn">Ви можете змінити це в налаштуваннях пізніше.</string>
+    <string name="nekoXPaymentRemovedToast">Функція оплати була видалена.</string>
+    <string name="ImportSettingsAlert">Чи дійсно ви впевнені, що хочете перезаписати налаштування\? Імпортування налаштувань з невідомих джерел може спричинити перезапис пін-коду і спричити блокування додатку.</string>
+    <string name="WsNeedLogin">З технічних причин WebSocket проксі не може бути використаний перед тим, як ви увійдете в аккаунт.</string>
+    <string name="EnableStickerPinTip">Ця функція ще на стадії розробки, синхронізація з хмарним сховищем може не працювати належним чином.</string>
+    <string name="EnableStickerPinAbout">Закріпити стікери і синхронізувати з хмарним сховищем, навіть коли додаєте нові стікери. 
+\nПов\'язано з вимкненням улюблених та недавніх стікерів.</string>
+    <string name="EnableStickerPin">Ввімкнути закріплення стікеру</string>
+    <string name="ImportSettings">Імпортувати налаштування</string>
+    <string name="BackupSettings">Налаштування резервного копіювання</string>
+    <string name="AutoLockImmediately">Негайно</string>
+    <string name="WsPayload">Навантаження</string>
+    <string name="ProxyInfoWS">Налаштування WebSocket проксі</string>
+    <string name="AddProxyWs">Додати WebSocket проксі</string>
+    <string name="DisplayPersianCalendarByLatin">Показувати перський календар латиницею</string>
+    <string name="UsePersiancalendarInfo">Показувати дату у форматі Solar Hijri (перський календар)</string>
+    <string name="UsePersiancalendar">Використовувати персидський календар</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(Закріплено)</string>
+    <string name="UnpinSticker">Прибрати закріплення</string>
+    <string name="PinSticker">Закріпити</string>
+    <string name="ArchiveFiles">Архіви</string>
+    <string name="Win32ExecutableFiles">Файли запуску Windows</string>
+    <string name="AutoDownload">Автозавантаження</string>
 </resources>

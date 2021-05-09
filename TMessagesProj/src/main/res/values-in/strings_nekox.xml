@@ -29,7 +29,7 @@
     <string name="ProxyAutoSwitch">Alihkan Proxy Secara Otomatis</string>
     <string name="LinkedGroupChat">Grup Tertaut</string>
     <string name="LinkedChannelChat">Kanal Tertaut</string>
-    <string name="DevModeTitle">**Akun telegram Anda mungkin diblokir **</string>
+    <string name="DevModeTitle">**Akun Telegram Anda mungkin diblokir **</string>
     <string name="DevModeNotice">Kami tidak bertanggung jawab atas penyalahgunaan fitur pengembang.</string>
     <string name="TapToDisable">Sentuh untuk mematikan. Jika anda tidak membutuhkan ini.</string>
     <string name="PlaceHolder">Placeholder - Harap Matikan</string>
@@ -100,7 +100,7 @@
     <string name="UnblockAll">Buka Semua Yang Diblokir</string>
     <string name="UnblockAllWarn">Anda yakin ingin membuka blokir untuk **semua pengguna dan robot**?</string>
     <string name="BlockedListEmpty">Anda belum memblokir siapa pun</string>
-    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="ProxyTypeVmess">Proksi VMess</string>
     <string name="AddProxySocks5">Tambahkan Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Tambahkan Proxy MTProto</string>
     <string name="AddProxyVmess">Tambahkan Proxy Vmess</string>
@@ -182,7 +182,7 @@
     <string name="ShareMyKey">Bagikan Kunci Publik Saya</string>
     <string name="DisableVibration">Matikan Fitur Getar</string>
     <string name="IgnoreContentRestrictions">Abaikan batasan konten</string>
-    <string name="IgnoreContentRestrictionsNotice">Mengabaikan batasan android pada pesan secara lokal. Ini mungkin dilarang oleh server di masa mendatang, dan Anda perlu mengevaluasi sendiri legalitas lokal dari opsi ini.</string>
+    <string name="IgnoreContentRestrictionsNotice">Abaikan pembatasan play pada pesan.</string>
     <string name="SendCommentAfterForward">Kirim komentar setelah meneruskan</string>
     <string name="UnpinMessageX">Lepas pesan tersemat</string>
     <string name="UnpinMessagesAll">Lepas semua pesan tersemat</string>
@@ -216,4 +216,27 @@
     <string name="HideDeviceInfo">Sembunyikan model perangkat</string>
     <string name="HideDeviceInfoOff">Model perangkat akan diunggah untuk kedua kalinya aplikasi dimulai setelah masuk.</string>
     <string name="HideDeviceInfoOn">Anda dapat mengubahnya di pengaturan nanti.</string>
+    <string name="nekoXPaymentRemovedToast">Fungsi pembayaran telah dihapus.</string>
+    <string name="ImportSettingsAlert">Yakin ingin menimpa pengaturan\? Mengimpor pengaturan dari sumber yang tidak dikenal dapat menyebabkan pin ditimpa dan menyebabkan aplikasi terkunci.</string>
+    <string name="ImportSettings">Pengaturan impor</string>
+    <string name="BackupSettings">Pengaturan cadangan</string>
+    <string name="WsNeedLogin">Karena keterbatasan teknis, Ws Relay tidak dapat digunakan sebelum masuk.</string>
+    <string name="AutoLockImmediately">Segera</string>
+    <string name="WsPayload">Muatan</string>
+    <string name="ProxyInfoWS">Pengaturan WebSocket Relay</string>
+    <string name="AddProxyWs">Tambah WebSocket Relay</string>
+    <string name="DisplayPersianCalendarByLatin">Tampilkan kalender Persia dengan Latin</string>
+    <string name="UsePersiancalendarInfo">Tampilkan tanggal dengan kalender Matahari Hijriah</string>
+    <string name="UsePersiancalendar">Gunakan kalender Persia</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(Disematkan)</string>
+    <string name="UnpinSticker">Lepas sematan</string>
+    <string name="PinSticker">Semat</string>
+    <string name="EnableStickerPinTip">Fungsi ini masih dalam pengembangan, sinkronisasi dengan cloud mungkin tidak berfungsi seperti yang diperkirakan.</string>
+    <string name="EnableStickerPinAbout">Sematkan Stiker dan sinkronkan dengan cloud saat menambahkan stiker baru.
+\nDisandingkan dengan Nonaktifkan Favorit dan Terbaru.</string>
+    <string name="EnableStickerPin">Aktifkan Penyematan Stiker</string>
+    <string name="ArchiveFiles">Arsipkan file</string>
+    <string name="Win32ExecutableFiles">Win32 file yang dapat dieksekusi</string>
+    <string name="AutoDownload">UnduhOtomatis</string>
 </resources>

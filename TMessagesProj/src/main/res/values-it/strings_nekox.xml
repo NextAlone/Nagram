@@ -45,7 +45,7 @@
     <string name="TransToLang">Lingua di destinazione della traduzione</string>
     <string name="TransInputToLang">Lingua di destinazione dell\'inserimento della traduzione</string>
     <string name="More">Altro</string>
-    <string name="NekoXUpdatesChannel">Canale Aggiornamenti NekoX</string>
+    <string name="NekoXUpdatesChannel">Canale aggiornamenti NekoX</string>
     <string name="ShowIdAndDc">Mostra ID / DC nel profilo</string>
     <string name="UseDefaultTheme">Usa tema predefinito *</string>
     <string name="NightMode">Modalità Notturna</string>
@@ -162,7 +162,7 @@
     <string name="ImportProxyFromClipboard">Importa Dagli Appunti</string>
     <string name="BrokenLink">Collegamento Sconosciuto / Rotto</string>
     <string name="ShareQRCode">QR Code</string>
-    <string name="ScanQRCode">Scan QR Code</string>
+    <string name="ScanQRCode">Scansiona QR Code</string>
     <string name="NoQrFound">Nessun codice QR trovato</string>
     <string name="EnableDeveloperMode">Abilita Modalità Sviluppatore</string>
     <string name="DisableDeveloperMode">Disabilita Modalità Sviluppatore</string>
@@ -182,7 +182,7 @@
     <string name="ShareMyKey">Condividi La Mia Chiave Pubblica</string>
     <string name="DisableVibration">Disabilita Vibrazione</string>
     <string name="IgnoreContentRestrictions">Ignora le restrizioni di contenuto</string>
-    <string name="IgnoreContentRestrictionsNotice">Ignora le restrizioni degli android sui messaggi localmente. Questo potrebbe essere bandito dal server in futuro, e sarà necessario valutare la legalità locale di questa opzione da solo.</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignora le restrizioni di riproduzione dei messaggi.</string>
     <string name="SendCommentAfterForward">Invia commenti dopo l\'inoltro</string>
     <string name="UnpinMessageX">Togli Messaggio Fissato</string>
     <string name="UnpinMessagesAll">Togli tutti i messaggi fissati</string>
@@ -213,4 +213,27 @@
     <string name="TextReplace">Sostituisci</string>
     <string name="TextOrigin">Origine</string>
     <string name="ReplaceText">Sostituisci Testo</string>
+    <string name="nekoXPaymentRemovedToast">La funzione di pagamento è stata rimossa.</string>
+    <string name="ImportSettingsAlert">Sei sicuro di voler sovrascrivere le impostazioni\? L\'importazione delle impostazioni da fonti sconosciute può causare la sovrascrittura del pin e causare il blocco dell\'applicazione.</string>
+    <string name="ImportSettings">Importa impostazioni</string>
+    <string name="BackupSettings">Backup impostazioni</string>
+    <string name="WsNeedLogin">A causa di limitazioni tecniche, i Relay WebSocket non possono essere usati prima di aver fatto login.</string>
+    <string name="AutoLockImmediately">Immediatamente</string>
+    <string name="WsPayload">Payload</string>
+    <string name="ProxyInfoWS">Impostazioni Relay WebSocket</string>
+    <string name="AddProxyWs">Aggiungi un Relay WebSocket</string>
+    <string name="DisplayPersianCalendarByLatin">Mostra il calendario persiano (Latin)</string>
+    <string name="UsePersiancalendarInfo">Mostra data con il calendario solare Hijri</string>
+    <string name="UsePersiancalendar">Usa il calendario persiano</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(Fissato)</string>
+    <string name="UnpinSticker">Togli Fissato</string>
+    <string name="PinSticker">Fissa</string>
+    <string name="EnableStickerPinTip">Questa funzione è ancora in fase di sviluppo, la sincronizzazione con il cloud potrebbe non funzionare come pensato.</string>
+    <string name="EnableStickerPinAbout">Fissa Stickers e sincronizzali con il cloud anche quando si aggiungono nuovi stickers.
+\nAccoppiato con Disabilita Preferito e Recente.</string>
+    <string name="EnableStickerPin">Abilita sticker fissati</string>
+    <string name="ArchiveFiles">Archivia file</string>
+    <string name="Win32ExecutableFiles">File eseguibili Win32</string>
+    <string name="AutoDownload">AutoDownload</string>
 </resources>

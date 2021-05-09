@@ -23,4 +23,27 @@
     <string name="UpdateUpdate">Aktualizovat</string>
     <string name="UpdateLater">Později</string>
     <string name="DownloadFailed">Stahování se nezdařilo</string>
+    <string name="UpdateDownloaded">Aktualizace byla stažena.</string>
+    <string name="Ignore">Ignorovat</string>
+    <string name="Install">Instalace</string>
+    <string name="PrivacyNoticeAddByPhone">Zjistilo se, že nemáte vypnuto v nastavení „Povolit vyhledání přes telefonní číslo“, které by mohlo způsobit, že hacker kontrolovaný vládou najde vaši skutečnou identitu, prosim vypněte to!</string>
+    <string name="PrivacyNoticePhoneVisible">Zjistili jsme, že vaše číslo mobilního telefonu je viditelné pro kohokoli, což může způsobit, že hackeři ovládaní vládou najdou vaši skutečnou identitu. Prosím vypněte jej!</string>
+    <string name="PrivacyNotice">Varování o ochraně osobních údajů</string>
+    <string name="NightMode">Noční režim</string>
+    <string name="UseDefaultTheme">Použít výchozí motiv *</string>
+    <string name="ShowIdAndDc">Ukázat ID / DC v profilu</string>
+    <string name="NekoXUpdatesChannel">Kanál aktualizací NekoX</string>
+    <string name="More">Více</string>
+    <string name="ChangeTranslateProvider">Změnit poskytovatele</string>
+    <string name="AllowFlashCall">Povolit bleskové volání</string>
+    <string name="CustomBackendTestDC">Oficiální testovací datové centrum</string>
+    <string name="CustomBackendProduction">Oficiální výrobní datové centrum</string>
+    <string name="CustomBackendNotice">Tato funkce je k dispozici pouze pro zkušené uživatele, pokud nevíte, co představují následující možnosti, jednoduše je ignorujte.</string>
+    <string name="CustomBackend">Vlastní Backend</string>
+    <string name="TapToDisable">Klepnutím deaktivujete. Není to potřeba.</string>
+    <string name="DevModeNotice">Nejsme zodpovědní za jakékoli nesprávné použití funkcí pro vývojáře.</string>
+    <string name="DevModeTitle">**Váš Telegram účet může být zablokován**</string>
+    <string name="LinkedChannelChat">Propojený kanál</string>
+    <string name="LinkedGroupChat">Propojená skupina</string>
+    <string name="ProxyAutoSwitch">Automatické přepínání serveru proxy</string>
 </resources>
