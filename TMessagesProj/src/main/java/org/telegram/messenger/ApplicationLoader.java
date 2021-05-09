@@ -354,7 +354,7 @@ public class ApplicationLoader extends Application {
             NekoConfig.preferences.contains("qwq");
             NekoXConfig.preferences.contains("qwq");
 
-            SignturesKt.checkMT(this);
+            //SignturesKt.checkMT(this);
         });
 
         try {
