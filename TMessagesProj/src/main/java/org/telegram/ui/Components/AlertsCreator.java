@@ -2768,6 +2768,7 @@ public class AlertsCreator {
         int minYear = 0;
         int maxYear = 0;
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
+            calendar.setTimeInMillis(minDate);
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
             calendar.setTimeInMillis(System.currentTimeMillis());
