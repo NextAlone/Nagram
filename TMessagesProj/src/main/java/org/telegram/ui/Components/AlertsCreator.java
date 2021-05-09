@@ -2830,7 +2830,7 @@ public class AlertsCreator {
                 PersianDate pdate3 = new PersianDate();
                 pdate3.setShYear(yearPicker.getValue());
                 int monthPickerval = monthPicker.getValue();
-                pdate3.setShMonth((monthPickerval +=1);
+                pdate3.setShMonth((monthPickerval +=1));
                 pdate3.setShDay(dayPicker.getValue());
                 calendar.set(Calendar.YEAR, pdate3.getGrgYear());
                 calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
