@@ -1016,6 +1016,20 @@ public class PersianDate {
     }
   }
 
+  public Integer getMonthLengthPicker(Integer year, Integer month) {
+    if (month <= 5) {
+      return 31;
+    } else if (month <= 10) {
+      return 30;
+    } else {
+      if (this.isLeap(year)) {
+        return 30;
+      } else {
+        return 29;
+      }
+    }
+  }
+
   /**
    * Get number of days in month
    *

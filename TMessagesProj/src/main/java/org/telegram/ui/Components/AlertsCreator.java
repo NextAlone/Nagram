@@ -117,9 +117,11 @@ import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
+import tw.nekomimi.nekogram.shamsicalendar.LanguageUtils;
 
 public class AlertsCreator {
-
     public static Dialog processError(int currentAccount, TLRPC.TL_error error, BaseFragment fragment, TLObject request, Object... args) {
         if (error.code == 406 || error.text == null) {
             return null;
@@ -934,16 +936,28 @@ public class AlertsCreator {
         calendar.set(Calendar.MONTH, monthPicker.getValue());
         calendar.set(Calendar.YEAR, yearPicker.getValue());
         dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) {
+            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue, monthPicker.getValue));
+        } else {
+            dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        }
     }
 
     private static void checkPickerDate(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) {
+            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            int currentYear = pdate.getShYear();
+            int currentMonth = pdate.getShMonth();
+            int currentDay = pdate.getShDay();
+        } else {
+            int currentYear = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+        
 
         if (currentYear > yearPicker.getValue()) {
             yearPicker.setValue(currentYear);
@@ -2662,53 +2676,109 @@ public class AlertsCreator {
         monthPicker.setWrapSelectorWheel(false);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         monthPicker.setFormatter(value -> {
-            switch (value) {
-                case 0: {
-                    return LocaleController.getString("January", R.string.January);
+            
+            if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) { 
+                switch (value) {
+                    case 0: {
+                        return LocaleController.getString("Farvardin", R.string.January);
+                    }
+                    case 1: {
+                        return LocaleController.getString("Ordibehesht", R.string.February);
+                    }
+                    case 2: {
+                        return LocaleController.getString("Khordad", R.string.March);
+                    }
+                    case 3: {
+                        return LocaleController.getString("Tir", R.string.April);
+                    }
+                    case 4: {
+                        return LocaleController.getString("Mordad", R.string.May);
+                    }
+                    case 5: {
+                        return LocaleController.getString("Shahrivar", R.string.June);
+                    }
+                    case 6: {
+                        return LocaleController.getString("Mehr", R.string.July);
+                    }
+                    case 7: {
+                        return LocaleController.getString("Abaan", R.string.August);
+                    }
+                    case 8: {
+                        return LocaleController.getString("Aazar", R.string.September);
+                    }
+                    case 9: {
+                        return LocaleController.getString("Dey", R.string.October);
+                    }
+                    case 10: {
+                        return LocaleController.getString("Bahman", R.string.November);
+                    }
+                    case 11:
+                    default: {
+                        return LocaleController.getString("Esfand", R.string.December);
+                    }
                 }
-                case 1: {
-                    return LocaleController.getString("February", R.string.February);
+            } else {
+                switch (value) {
+                    case 0: {
+                        return LocaleController.getString("January", R.string.January);
+                    }
+                    case 1: {
+                        return LocaleController.getString("February", R.string.February);
+                    }
+                    case 2: {
+                        return LocaleController.getString("March", R.string.March);
+                    }
+                    case 3: {
+                        return LocaleController.getString("April", R.string.April);
+                    }
+                    case 4: {
+                        return LocaleController.getString("May", R.string.May);
+                    }
+                    case 5: {
+                        return LocaleController.getString("June", R.string.June);
+                    }
+                    case 6: {
+                        return LocaleController.getString("July", R.string.July);
+                    }
+                    case 7: {
+                        return LocaleController.getString("August", R.string.August);
+                    }
+                    case 8: {
+                        return LocaleController.getString("September", R.string.September);
+                    }
+                    case 9: {
+                        return LocaleController.getString("October", R.string.October);
+                    }
+                    case 10: {
+                        return LocaleController.getString("November", R.string.November);
+                    }
+                    case 11:
+                    default: {
+                        return LocaleController.getString("December", R.string.December);
+                    }
                 }
-                case 2: {
-                    return LocaleController.getString("March", R.string.March);
-                }
-                case 3: {
-                    return LocaleController.getString("April", R.string.April);
-                }
-                case 4: {
-                    return LocaleController.getString("May", R.string.May);
-                }
-                case 5: {
-                    return LocaleController.getString("June", R.string.June);
-                }
-                case 6: {
-                    return LocaleController.getString("July", R.string.July);
-                }
-                case 7: {
-                    return LocaleController.getString("August", R.string.August);
-                }
-                case 8: {
-                    return LocaleController.getString("September", R.string.September);
-                }
-                case 9: {
-                    return LocaleController.getString("October", R.string.October);
-                }
-                case 10: {
-                    return LocaleController.getString("November", R.string.November);
-                }
-                case 11:
-                default: {
-                    return LocaleController.getString("December", R.string.December);
-                }
-            }
+                
+            }    
         });
         monthPicker.setOnValueChangedListener(onValueChangeListener);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(minDate);
-        int minYear = calendar.get(Calendar.YEAR);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int maxYear = calendar.get(Calendar.YEAR);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().currentLocaleInfo.pluralLangCode)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(minDate); 
+            PersianDate pdate = new PersianDate(minDate);
+            int minYear = pdate.getShYear();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            int maxYear = pdate.getShYear();
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(minDate);
+            int minYear = calendar.get(Calendar.YEAR);
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int maxYear = calendar.get(Calendar.YEAR);
+        }
+
+        
 
         yearPicker.setMinValue(minYear);
         yearPicker.setMaxValue(maxYear);
