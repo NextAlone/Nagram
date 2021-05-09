@@ -2,4 +2,17 @@
 <resources>
     <string name="contributors">مشارکت کننده ها</string>
     <string name="Donation">حمایت مالی</string>
+    <string name="UseVazirFont">از فونت وزیر استفاده کن</string>
+    <string name="Farvardin">فروردین</string>
+    <string name="Ordibehesht">اردیبهشت</string>
+    <string name="Khordad">خرداد</string>
+    <string name="Tir">تیر</string>
+    <string name="Mordad">مرداد</string>
+    <string name="Shahrivar">شهریور</string>
+    <string name="Mehr">مهر</string>
+    <string name="Aabaan">آبان</string>
+    <string name="Aazar">آذر</string>
+    <string name="Dey">دی</string>
+    <string name="Bahman">بهمن</string>
+    <string name="Esfand">اسفند</string>
 </resources>
