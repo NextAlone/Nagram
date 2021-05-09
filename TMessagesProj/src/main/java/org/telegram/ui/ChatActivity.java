@@ -7213,8 +7213,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         searchGoToBeginningButton.setImageResource(R.drawable.baseline_arrow_upward_24);
         searchGoToBeginningButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.SRC_IN));
         searchGoToBeginningButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
-        boolean showSearchUserButton = currentChat != null && (!ChatObject.isChannel(currentChat) || currentChat.megagroup);
-        searchContainer.addView(searchGoToBeginningButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP, showSearchUserButton ? 48 * 2 : 48, 0, 0, 0));
+        searchContainer.addView(searchGoToBeginningButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 48 * 2, 0));
         searchGoToBeginningButton.setOnClickListener(view -> {
             scrollToMessageId(1, 0, false, 0, true, 0);
         });
