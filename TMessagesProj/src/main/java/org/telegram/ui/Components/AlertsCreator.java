@@ -937,7 +937,7 @@ public class AlertsCreator {
         calendar.set(Calendar.YEAR, yearPicker.getValue());
         dayPicker.setMinValue(1);
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
-            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            PersianDate pdate = new PersianDate();
             dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue()));
         } else {
             dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -2829,8 +2829,8 @@ public class AlertsCreator {
             if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
                 PersianDate pdate3 = new PersianDate();
                 pdate3.setShYear(yearPicker.getValue());
-                int monthPickerval = monthPicker.getValue();
-                pdate3.setShMonth((monthPickerval +=1));
+                //int monthPickerval = monthPicker.getValue();
+                pdate3.setShMonth(monthPicker.getValue();
                 pdate3.setShDay(dayPicker.getValue());
                 calendar.set(Calendar.YEAR, pdate3.getGrgYear());
                 calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
