@@ -2874,7 +2874,7 @@ public class AlertsCreator {
                 pdate3.setShYear(yearPicker.getValue());
                 int monthPickerval = monthPicker.getValue();
                 if (monthPickerval == 0){
-                    monthPickerval+=1
+                    monthPickerval+=1;
                 }
                 pdate3.setShMonth(monthPickerval);
                 pdate3.setShDay(dayPicker.getValue());
