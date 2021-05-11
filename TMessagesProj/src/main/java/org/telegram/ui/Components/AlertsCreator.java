@@ -2300,9 +2300,9 @@ public class AlertsCreator {
                 }else {
                     if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                         PersianDate pdate = new PersianDate(date);
-                        return week + pdate.getPersianNormalDate();
+                        return pdate.getPersianNormalDate();
                     } else {
-                        return week + loc.formatterScheduleYear.format(date);
+                        return loc.formatterScheduleYear.format(date);
                     }
                 }
             }
