@@ -938,7 +938,7 @@ public class AlertsCreator {
         dayPicker.setMinValue(1);
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate();
-            dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue()));
+            dayPicker.setMaxValue(pdate.getMonthLength(yearPicker.getValue(), monthPicker.getValue()));
         } else {
             dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
@@ -2136,6 +2136,7 @@ public class AlertsCreator {
         final NumberPicker dayPicker = new NumberPicker(context);
         dayPicker.setTextColor(datePickerColors.textColor);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
+        dayPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         dayPicker.setItemCount(5);
         final NumberPicker hourPicker = new NumberPicker(context) {
             @Override
@@ -2243,7 +2244,14 @@ public class AlertsCreator {
         long currentTime = System.currentTimeMillis();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(currentTime);
-        int currentYear = calendar.get(Calendar.YEAR);
+        int currentYear = 0;
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            currentYear = pdate.getShYear();
+        } else {
+            currentYear = calendar.get(Calendar.YEAR);
+            
+        }
 
         TextView buttonTextView = new TextView(context) {
             @Override
@@ -2263,10 +2271,25 @@ public class AlertsCreator {
                 long date = currentTime + (long) value * 86400000L;
                 calendar.setTimeInMillis(date);
                 int year = calendar.get(Calendar.YEAR);
-                if (year == currentYear) {
-                    return LocaleController.getInstance().formatterScheduleDay.format(date);
+                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    PersianDate pdate = new PersianDate(date);
+                    year = pdate.getShYear();
                 } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    year = calendar.get(Calendar.YEAR);
+                }
+                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    PersianDate pdate = new PersianDate(date);
+                    if (year == currentYear) {
+                        return pdate.getPersianMonthDay();
+                    } else {
+                        return pdate.getPersianNormalDate();
+                    }
+                }else {
+                    if (year == currentYear) {
+                        return LocaleController.getInstance().formatterScheduleDay.format(date);
+                    } else {
+                        return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    }
                 }
             }
         });
@@ -2358,6 +2381,7 @@ public class AlertsCreator {
         final NumberPicker dayPicker = new NumberPicker(context);
         dayPicker.setTextColor(datePickerColors.textColor);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
+        dayPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         dayPicker.setItemCount(5);
         final NumberPicker hourPicker = new NumberPicker(context) {
             @Override
@@ -2432,6 +2456,12 @@ public class AlertsCreator {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(currentTime);
         int currentYear = calendar.get(Calendar.YEAR);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            currentYear = pdate.getShYear();
+        } else {
+            currentYear = calendar.get(Calendar.YEAR);
+        }
 
         TextView buttonTextView = new TextView(context) {
             @Override
@@ -2451,10 +2481,25 @@ public class AlertsCreator {
                 long date = currentTime + (long) value * 86400000L;
                 calendar.setTimeInMillis(date);
                 int year = calendar.get(Calendar.YEAR);
-                if (year == currentYear) {
-                    return LocaleController.getInstance().formatterScheduleDay.format(date);
+                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    PersianDate pdate = new PersianDate(date);
+                    year = pdate.getShYear();
                 } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    year = calendar.get(Calendar.YEAR);
+                }
+                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    PersianDate pdate = new PersianDate(date);
+                    if (year == currentYear) {
+                        return pdate.getPersianMonthDay();
+                    } else {
+                        return pdate.getPersianNormalDate();
+                    }
+                }else {
+                    if (year == currentYear) {
+                        return LocaleController.getInstance().formatterScheduleDay.format(date);
+                    } else {
+                        return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    }
                 }
             }
         });
@@ -2543,13 +2588,11 @@ public class AlertsCreator {
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
             minMonth = pdate.getShMonth();
-            minMonth-=1;
             minDay = pdate.getShDay();
             calendar.setTimeInMillis(System.currentTimeMillis());
             PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
             maxYear = pdate2.getShYear();
             maxMonth = pdate2.getShMonth();
-            maxMonth-=1;
             maxDay = pdate2.getShDay();
         } else {
             calendar.setTimeInMillis(minDate);
@@ -2595,7 +2638,7 @@ public class AlertsCreator {
         int daysInMonth = 0;
         if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
             PersianDate pdate = new PersianDate();
-            daysInMonth = pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue());
+            daysInMonth = pdate.getMonthLength(yearPicker.getValue(), monthPicker.getValue());
         } else {
             daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
@@ -2616,13 +2659,16 @@ public class AlertsCreator {
 
         final NumberPicker dayPicker = new NumberPicker(context);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
+        dayPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         dayPicker.setItemCount(5);
         final NumberPicker monthPicker = new NumberPicker(context);
         monthPicker.setItemCount(5);
         monthPicker.setTextOffset(-AndroidUtilities.dp(10));
+        monthPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         final NumberPicker yearPicker = new NumberPicker(context);
         yearPicker.setItemCount(5);
         yearPicker.setTextOffset(-AndroidUtilities.dp(24));
+        yearPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
         LinearLayout container = new LinearLayout(context) {
 
@@ -2698,49 +2744,53 @@ public class AlertsCreator {
             checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
         };
         dayPicker.setOnValueChangedListener(onValueChangeListener);
-
-        monthPicker.setMinValue(0);
-        monthPicker.setMaxValue(11);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+            monthPicker.setMinValue(1);
+            monthPicker.setMaxValue(12);
+        }else {
+            monthPicker.setMinValue(0);
+            monthPicker.setMaxValue(11);
+        }
         monthPicker.setWrapSelectorWheel(false);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         monthPicker.setFormatter(value -> {
             
             if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
                 switch (value) {
-                    case 0: {
+                    case 1: {
                         return LocaleController.getString("Farvardin", R.string.Farvardin);
                     }
-                    case 1: {
+                    case 2: {
                         return LocaleController.getString("Ordibehesht", R.string.Ordibehesht);
                     }
-                    case 2: {
+                    case 3: {
                         return LocaleController.getString("Khordad", R.string.Khordad);
                     }
-                    case 3: {
+                    case 4: {
                         return LocaleController.getString("Tir", R.string.Tir);
                     }
-                    case 4: {
+                    case 5: {
                         return LocaleController.getString("Mordad", R.string.Mordad);
                     }
-                    case 5: {
+                    case 6: {
                         return LocaleController.getString("Shahrivar", R.string.Shahrivar);
                     }
-                    case 6: {
+                    case 7: {
                         return LocaleController.getString("Mehr", R.string.Mehr);
                     }
-                    case 7: {
+                    case 8: {
                         return LocaleController.getString("Aabaan", R.string.Aabaan);
                     }
-                    case 8: {
+                    case 9: {
                         return LocaleController.getString("Aazar", R.string.Aazar);
                     }
-                    case 9: {
+                    case 10: {
                         return LocaleController.getString("Dey", R.string.Dey);
                     }
-                    case 10: {
+                    case 11: {
                         return LocaleController.getString("Bahman", R.string.Bahman);
                     }
-                    case 11:
+                    case 12:
                         default: {
                             return LocaleController.getString("Esfand", R.string.Esfand);
                         }
@@ -2835,7 +2885,6 @@ public class AlertsCreator {
                 PersianDate pdate3 = new PersianDate();
                 pdate3.setShYear(yearPicker.getValue());
                 int monthPickerval = monthPicker.getValue();
-                monthPickerval+=1;
                 pdate3.setShMonth(monthPickerval);
                 pdate3.setShDay(dayPicker.getValue());
                 calendar.set(Calendar.YEAR, pdate3.getGrgYear());
