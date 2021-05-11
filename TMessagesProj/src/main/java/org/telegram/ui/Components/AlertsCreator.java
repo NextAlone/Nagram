@@ -2048,8 +2048,8 @@ public class AlertsCreator {
                 num = 1;
                 if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                     PersianDate pdate = new PersianDate(time);
-                    String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), LocaleController.getInstance().formatterDay.format(new Date(time)));
-                    button.setText(LocaleController.formatString("SendDayAt", R.string.SendDayAt, format));
+                    PersianDateFormat pdateformater1 = new PersianDateFormat('F j در H:i');
+                    button.setText(pdateformater1.format(pdate));
                 } else {
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
                     
@@ -2058,8 +2058,8 @@ public class AlertsCreator {
                 num = 2;
                 if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                     PersianDate pdate = new PersianDate(time);
-                    String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianNormalDate(), LocaleController.getInstance().formatterDay.format(new Date(time)));
-                    button.setText(LocaleController.formatString("SendDayYearAt", R.string.SendDayYearAt, format));
+                    PersianDateFormat pdateformater1 = new PersianDateFormat('Y F j در H:i');
+                    button.setText(pdateformater1.format(pdate));
                 } else {
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
                     
