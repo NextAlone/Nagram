@@ -119,7 +119,6 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
 import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
-import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
 import tw.nekomimi.nekogram.shamsicalendar.LanguageUtils;
 import java.util.Date;
 
@@ -2049,7 +2048,7 @@ public class AlertsCreator {
                 num = 1;
                 if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                     PersianDate pdate = new PersianDate(time);
-                    PersianDateFormat pdateformater1 = new PersianDateFormat('F j در H:i');
+                    PersianDateFormat pdateformater1 = new PersianDateFormat("F j در H:i");
                     button.setText(pdateformater1.format(pdate));
                 } else {
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
@@ -2059,7 +2058,7 @@ public class AlertsCreator {
                 num = 2;
                 if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                     PersianDate pdate = new PersianDate(time);
-                    PersianDateFormat pdateformater1 = new PersianDateFormat('Y F j در H:i');
+                    PersianDateFormat pdateformater1 = new PersianDateFormat("Y F j در H:i");
                     button.setText(pdateformater1.format(pdate));
                 } else {
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
