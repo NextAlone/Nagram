@@ -2221,7 +2221,7 @@ public class AlertsCreator {
         titleView.setTextColor(datePickerColors.textColor);
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-        titleLayout.addView(titleView, LayoutHelper.createFrame(48, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP,0, 0, 0, 0));
+        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP,0, 0, 48, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         if ((int) dialogId > 0 && dialogId != selfUserId) {
@@ -2704,7 +2704,7 @@ public class AlertsCreator {
         titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-        titleLayout.addView(titleView, LayoutHelper.createFrame(48, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP,0, 0, 0, 0));
+        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP,0, 0, 48, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         LinearLayout linearLayout = new LinearLayout(context);
