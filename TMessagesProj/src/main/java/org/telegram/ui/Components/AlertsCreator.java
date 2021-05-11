@@ -120,6 +120,7 @@ import tw.nekomimi.nekogram.utils.VibrateUtil;
 import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
 import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
 import tw.nekomimi.nekogram.shamsicalendar.LanguageUtils;
+import java.util.Date;
 
 public class AlertsCreator {
     public static Dialog processError(int currentAccount, TLRPC.TL_error error, BaseFragment fragment, TLObject request, Object... args) {
@@ -1929,8 +1930,13 @@ public class AlertsCreator {
             }
         });
 
-        monthPicker.setMinValue(0);
-        monthPicker.setMaxValue(11);
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+            monthPicker.setMinValue(1);
+            monthPicker.setMaxValue(12);
+        }else {
+            monthPicker.setMinValue(0);
+            monthPicker.setMaxValue(11);
+        }
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 0.3f));
         monthPicker.setFormatter(value -> {
             Calendar calendar = Calendar.getInstance();
@@ -2037,19 +2043,40 @@ public class AlertsCreator {
             int num;
             if (day == 0) {
                 num = 0;
+                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (currentYear == selectedYear) {
                 num = 1;
+                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    PersianDate pdate = new PersianDate(time);
+                    String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), LocaleController.getInstance().formatterDay.format(new Date(time)));
+                    button.setText(LocaleController.formatString("SendDayAt", R.string.SendDayAt, format));
+                } else {
+                    button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+                    
+                }
             } else {
                 num = 2;
+                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    PersianDate pdate = new PersianDate(time);
+                    String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianNormalDate(), LocaleController.getInstance().formatterDay.format(new Date(time)));
+                    button.setText(LocaleController.formatString("SendDayYearAt", R.string.SendDayYearAt, format));
+                } else {
+                    button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+                    
+                }
             }
             if (type == 1) {
                 num += 3;
+                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (type == 2) {
                 num += 6;
+                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (type == 3) {
                 num += 9;
+                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             }
-            button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+            
+            //button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
         }
         if (infoText != null) {
             int diff = (int) ((time - systemTime) / 1000);
@@ -2266,14 +2293,14 @@ public class AlertsCreator {
                 if (year == currentYear) {
                     if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                         PersianDate pdate = new PersianDate(date);
-                        return LocaleController.formatString("formatDateSchedule", R.string.formatDateSchedule, pdate.dayName(), ", ", pdate.getPersianMonthDay());
+                        return week + pdate.getPersianMonthDay();
                     } else {
                         return week + loc.formatterScheduleDay.format(date);
                     }
                 }else {
                     if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
                         PersianDate pdate = new PersianDate(date);
-                        return LocaleController.formatString("formatDateScheduleYear", R.string.formatDateScheduleYear, pdate.dayName(), ", ", pdate.getPersianNormalDate());
+                        return week + pdate.getPersianNormalDate();
                     } else {
                         return week + loc.formatterScheduleYear.format(date);
                     }
