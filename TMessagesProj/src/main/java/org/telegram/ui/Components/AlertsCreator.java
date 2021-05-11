@@ -2136,7 +2136,6 @@ public class AlertsCreator {
         final NumberPicker dayPicker = new NumberPicker(context);
         dayPicker.setTextColor(datePickerColors.textColor);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
-        dayPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         dayPicker.setItemCount(5);
         final NumberPicker hourPicker = new NumberPicker(context) {
             @Override
@@ -2381,7 +2380,6 @@ public class AlertsCreator {
         final NumberPicker dayPicker = new NumberPicker(context);
         dayPicker.setTextColor(datePickerColors.textColor);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
-        dayPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         dayPicker.setItemCount(5);
         final NumberPicker hourPicker = new NumberPicker(context) {
             @Override
@@ -2659,16 +2657,13 @@ public class AlertsCreator {
 
         final NumberPicker dayPicker = new NumberPicker(context);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
-        dayPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         dayPicker.setItemCount(5);
         final NumberPicker monthPicker = new NumberPicker(context);
         monthPicker.setItemCount(5);
         monthPicker.setTextOffset(-AndroidUtilities.dp(10));
-        monthPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         final NumberPicker yearPicker = new NumberPicker(context);
         yearPicker.setItemCount(5);
         yearPicker.setTextOffset(-AndroidUtilities.dp(24));
-        yearPicker.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
         LinearLayout container = new LinearLayout(context) {
 
