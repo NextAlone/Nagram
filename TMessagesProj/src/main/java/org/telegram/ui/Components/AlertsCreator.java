@@ -937,7 +937,7 @@ public class AlertsCreator {
         calendar.set(Calendar.MONTH, monthPicker.getValue());
         calendar.set(Calendar.YEAR, yearPicker.getValue());
         dayPicker.setMinValue(1);
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+        if (LocaleController.usePersianCalendar) {
             PersianDate pdate = new PersianDate();
             dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue()));
         } else {
@@ -951,7 +951,7 @@ public class AlertsCreator {
         int currentYear = 0;
         int currentMonth = 0;
         int currentDay = 0;
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+        if (LocaleController.usePersianCalendar) {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
             currentYear = pdate.getShYear();
             currentMonth = pdate.getShMonth();
@@ -2040,7 +2040,7 @@ public class AlertsCreator {
                 button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (currentYear == selectedYear) {
                 num = 1;
-                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                if (LocaleController.usePersianCalendar) {
                     PersianDate pdate = new PersianDate(time);
                     PersianDateFormat pdateformater1 = new PersianDateFormat("F j در H:i");
                     button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
@@ -2050,7 +2050,7 @@ public class AlertsCreator {
                 }
             } else {
                 num = 2;
-                if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                if (LocaleController.usePersianCalendar) {
                     PersianDate pdate = new PersianDate(time);
                     PersianDateFormat pdateformater1 = new PersianDateFormat("Y F j در H:i");
                     button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
@@ -2285,14 +2285,14 @@ public class AlertsCreator {
                 LocaleController loc = LocaleController.getInstance();
                 final String week = loc.formatterWeek.format(date) + "; ";
                 if (year == currentYear) {
-                    if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    if (LocaleController.usePersianCalendar) {
                         PersianDate pdate = new PersianDate(date);
                         return week + pdate.getPersianMonthDay();
                     } else {
                         return week + loc.formatterScheduleDay.format(date);
                     }
                 }else {
-                    if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    if (LocaleController.usePersianCalendar) {
                         PersianDate pdate = new PersianDate(date);
                         return pdate.getPersianNormalDate();
                     } else {
@@ -2482,7 +2482,7 @@ public class AlertsCreator {
                 calendar.setTimeInMillis(date);
                 int year = calendar.get(Calendar.YEAR);
                 if (year == currentYear) {
-                    if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    if (LocaleController.usePersianCalendar) {
                         PersianDate pdate = new PersianDate(date);
                         return pdate.getPersianMonthDay();
                     } else {
@@ -2490,7 +2490,7 @@ public class AlertsCreator {
                         
                     }
                 }else {
-                    if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+                    if (LocaleController.usePersianCalendar) {
                         PersianDate pdate = new PersianDate(date);
                         return pdate.getPersianNormalDate();
                     } else {
@@ -2579,7 +2579,7 @@ public class AlertsCreator {
         int maxMonth = 0;
         int maxDay = 0;
         Calendar calendar = Calendar.getInstance();
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+        if (LocaleController.usePersianCalendar) {
             calendar.setTimeInMillis(minDate);
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
@@ -2632,7 +2632,7 @@ public class AlertsCreator {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         int daysInMonth = 0;
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {
+        if (LocaleController.usePersianCalendar) {
             PersianDate pdate = new PersianDate();
             daysInMonth = pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue());
         } else {
@@ -2743,7 +2743,7 @@ public class AlertsCreator {
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         monthPicker.setFormatter(value -> {
             
-            if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
+            if (LocaleController.usePersianCalendar) { 
                 switch (value) {
                     case 0: {
                         return LocaleController.getString("Farvardin", R.string.Farvardin);
@@ -2830,7 +2830,7 @@ public class AlertsCreator {
         Calendar calendar = Calendar.getInstance();
         int minYear = 0;
         int maxYear = 0;
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
+        if (LocaleController.usePersianCalendar) {  
             calendar.setTimeInMillis(minDate);
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
@@ -2869,28 +2869,36 @@ public class AlertsCreator {
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
             checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
-            if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) {  
+            if (LocaleController.usePersianCalendar) {  
                 PersianDate pdate3 = new PersianDate();
                 pdate3.setShYear(yearPicker.getValue());
-                int monthPickerval = monthPicker.getValue();
-                if (monthPickerval == 0){
-                    monthPickerval+=1;
-                }
+                int monthPickerval = monthPicker.getValue()+=1;
                 pdate3.setShMonth(monthPickerval);
                 pdate3.setShDay(dayPicker.getValue());
-                calendar.set(Calendar.YEAR, pdate3.getGrgYear());
-                calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
-                calendar.set(Calendar.DAY_OF_MONTH, pdate3.getGrgDay());
+                pdate3.setHour(0);
+                pdate3.setMinute(0);
+                pdate3.setSecond(0);
+                callback.run((int) (pdate3.getTime() / 1000));
+                builder.getDismissRunnable().run();
+
+                //calendar.set(Calendar.YEAR, pdate3.getGrgYear());
+                //calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
+                //calendar.set(Calendar.DAY_OF_MONTH, pdate3.getGrgDay());
+                //calendar.set(Calendar.MINUTE, 0);
+                //calendar.set(Calendar.HOUR_OF_DAY, 0);
+                //calendar.set(Calendar.SECOND, 0);
+                //callback.run((int) (calendar.getTimeInMillis() / 1000));
+                //builder.getDismissRunnable().run();
             } else {
                 calendar.set(Calendar.YEAR, yearPicker.getValue());
                 calendar.set(Calendar.MONTH, monthPicker.getValue());
                 calendar.set(Calendar.DAY_OF_MONTH, dayPicker.getValue());
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.SECOND, 0);
+                callback.run((int) (calendar.getTimeInMillis() / 1000));
+                builder.getDismissRunnable().run();
             }
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.SECOND, 0);
-            callback.run((int) (calendar.getTimeInMillis() / 1000));
-            builder.getDismissRunnable().run();
         });
 
         builder.setCustomView(container);
