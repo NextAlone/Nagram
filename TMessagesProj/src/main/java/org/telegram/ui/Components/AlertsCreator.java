@@ -2624,7 +2624,7 @@ public class AlertsCreator {
         }
         if (year == minYear) {
             if (month < minMonth) {
-                monthPicker.setValu(month = minMonth);
+                monthPicker.setValue(month = minMonth);
             }
             if (month == minMonth) {
                 if (day < minDay) {
