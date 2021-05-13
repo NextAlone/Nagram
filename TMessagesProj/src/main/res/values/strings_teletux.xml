@@ -19,7 +19,7 @@
     <string name="Boticon" translatable="false">f544</string>
     <string name="Channelicon" translatable="false">f0a1</string>
     <string name="Groupicon" translatable="false">f0c0</string>
-    <string name="HideBottomButton">Hide Bottom Button</string>
+    <string name="hideBottomButton">Hide Bottom Button</string>
 
 
 
