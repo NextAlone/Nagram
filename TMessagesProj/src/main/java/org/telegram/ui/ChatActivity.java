@@ -7285,7 +7285,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (getParentActivity() == null) {
                 return;
             }
-            if (!NekoConfig.hideBottomButton) {
+            if (NekoConfig.hideBottomButton == 0) {
                 return;
             }
             if (MessagesController.getGlobalMainSettings().getBoolean("hideBottomButton", false)) {
@@ -17046,7 +17046,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", R.string.DeleteThisChat));
             }
         }
-        if (!NekoConfig.hideBottomButton) {
+        if (NekoConfig.hideBottomButton == 0) {
             bottomOverlayChatText.setText("");
         }
 
