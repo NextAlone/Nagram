@@ -15,4 +15,12 @@
     <string name="Dey">Dey</string>
     <string name="Bahman">Bahman</string>
     <string name="Esfand">Esfand</string>
+    <string name="Usericon" translatable="false">f007</string>
+    <string name="Boticon" translatable="false">f544</string>
+    <string name="Channelicon" translatable="false">f0a1</string>
+    <string name="Groupicon" translatable="false">f0c0</string>
+    <string name="HideBottomButton">Hide Bottom Button</string>
+
+
+
 </resources>
