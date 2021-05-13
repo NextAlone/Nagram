@@ -2038,6 +2038,9 @@ public class AlertsCreator {
             int num;
             if (day == 0) {
                 num = 0;
+                if (type == 1) {
+                    num += 3;
+                }
                 button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (currentYear == selectedYear) {
                 num = 1;
@@ -2045,7 +2048,15 @@ public class AlertsCreator {
                     PersianDate pdate = new PersianDate(time);
                     PersianDateFormat pdateformater1 = new PersianDateFormat("F j در H:i");
                     button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                    if (type == 1) {
+                        PersianDate pdate = new PersianDate(time);
+                        PersianDateFormat pdateformater1 = new PersianDateFormat("یادآوری در تاریخ F j در H:i");
+                        button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                    }
                 } else {
+                    if (type == 1) {
+                        num += 3;
+                    }
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
                     
                 }
@@ -2055,15 +2066,21 @@ public class AlertsCreator {
                     PersianDate pdate = new PersianDate(time);
                     PersianDateFormat pdateformater1 = new PersianDateFormat("Y F j در H:i");
                     button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                    if (type == 1) {
+                        PersianDate pdate = new PersianDate(time);
+                        PersianDateFormat pdateformater1 = new PersianDateFormat("یادآوری در تاریخ Y F j در H:i");
+                        button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                    }
                 } else {
+                    if (type == 1) {
+                        num += 3;
+                    }
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
                     
                 }
             }
-            if (type == 1) {
-                num += 3;
-                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
-            } else if (type == 2) {
+            
+            if (type == 2) {
                 num += 6;
                 button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (type == 3) {
