@@ -955,6 +955,7 @@ public class AlertsCreator {
             PersianDate pdate = new PersianDate(System.currentTimeMillis());
             currentYear = pdate.getShYear();
             currentMonth = pdate.getShMonth();
+            currentMonth-=1;
             currentDay = pdate.getShDay();
         } else {
             currentYear = calendar.get(Calendar.YEAR);
@@ -2584,11 +2585,14 @@ public class AlertsCreator {
             PersianDate pdate = new PersianDate(minDate);
             minYear = pdate.getShYear();
             minMonth = pdate.getShMonth();
+            minMonth -=1;
             minDay = pdate.getShDay();
             calendar.setTimeInMillis(System.currentTimeMillis());
             PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
             maxYear = pdate2.getShYear();
             maxMonth = pdate2.getShMonth();
+            maxMonth-=1;
+
             maxDay = pdate2.getShDay();
         } else {
             calendar.setTimeInMillis(minDate);
@@ -2620,7 +2624,7 @@ public class AlertsCreator {
         }
         if (year == minYear) {
             if (month < minMonth) {
-                monthPicker.setValue(month = minMonth);
+                monthPicker.setValu(month = minMonth);
             }
             if (month == minMonth) {
                 if (day < minDay) {
@@ -2854,7 +2858,7 @@ public class AlertsCreator {
         yearPicker.setOnValueChangedListener(onValueChangeListener);
 
         dayPicker.setValue(31);
-        monthPicker.setValue(12);
+        monthPicker.setValue(11);
         yearPicker.setValue(maxYear);
 
         checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
