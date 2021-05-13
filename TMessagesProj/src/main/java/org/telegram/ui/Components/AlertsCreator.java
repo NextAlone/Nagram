@@ -2872,8 +2872,8 @@ public class AlertsCreator {
             if (LocaleController.usePersianCalendar) {  
                 PersianDate pdate3 = new PersianDate();
                 pdate3.setShYear(yearPicker.getValue());
-                int monthPickerval = monthPicker.getValue()+=1;
-                pdate3.setShMonth(monthPickerval);
+                int monthPickerval = monthPicker.getValue();
+                pdate3.setShMonth(monthPickerval+=1);
                 pdate3.setShDay(dayPicker.getValue());
                 pdate3.setHour(0);
                 pdate3.setMinute(0);
