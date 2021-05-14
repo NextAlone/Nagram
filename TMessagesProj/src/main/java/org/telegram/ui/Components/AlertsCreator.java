@@ -2049,9 +2049,9 @@ public class AlertsCreator {
                     PersianDateFormat pdateformater1 = new PersianDateFormat("F j در H:i");
                     button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
                     if (type == 1) {
-                        PersianDate pdate = new PersianDate(time);
-                        PersianDateFormat pdateformater1 = new PersianDateFormat("یادآوری در تاریخ F j در H:i");
-                        button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                        PersianDate pdate1 = new PersianDate(time);
+                        PersianDateFormat pdateformater2 = new PersianDateFormat("یادآوری در تاریخ F j در H:i");
+                        button.setText(LanguageUtils.getPersianNumbers(pdateformater2.format(pdate1)));
                     }
                 } else {
                     if (type == 1) {
@@ -2067,9 +2067,9 @@ public class AlertsCreator {
                     PersianDateFormat pdateformater1 = new PersianDateFormat("Y F j در H:i");
                     button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
                     if (type == 1) {
-                        PersianDate pdate = new PersianDate(time);
-                        PersianDateFormat pdateformater1 = new PersianDateFormat("یادآوری در تاریخ Y F j در H:i");
-                        button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                        PersianDate pdate1 = new PersianDate(time);
+                        PersianDateFormat pdateformater2 = new PersianDateFormat("یادآوری در تاریخ Y F j در H:i");
+                        button.setText(LanguageUtils.getPersianNumbers(pdateformater2.format(pdate1)));
                     }
                 } else {
                     if (type == 1) {
