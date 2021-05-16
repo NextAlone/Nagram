@@ -140,6 +140,7 @@ public class ProxySettingsActivity extends BaseFragment {
 
         public void setValue(String name, boolean checked, boolean divider) {
             textView.setText(name);
+            textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
             checkImage.setVisibility(checked ? VISIBLE : INVISIBLE);
             needDivider = divider;
         }
@@ -158,7 +159,7 @@ public class ProxySettingsActivity extends BaseFragment {
 
     public ProxySettingsActivity(int type) {
         super();
-        currentProxyInfo = new SharedConfig.ProxyInfo("", 1080, "", "", "");
+        currentProxyInfo = new SharedConfig.ProxyInfo("127.0.0.1", 9050, "", "", "");
         addingNewProxy = true;
         currentType = type;
     }
