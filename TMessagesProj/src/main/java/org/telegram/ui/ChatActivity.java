@@ -17046,9 +17046,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", R.string.DeleteThisChat));
             }
         }
-        if (NekoConfig.hideBottomButton == 0) {
-            bottomOverlayChatText.setText("");
-        }
 
         if (currentChat != null && currentChat.gigagroup && reportType < 0 && chatMode == 0) {
             bottomOverlayImage.setVisibility(View.VISIBLE);
