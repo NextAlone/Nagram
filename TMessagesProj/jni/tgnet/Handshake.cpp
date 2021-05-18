@@ -911,9 +911,9 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
 }
 
 void Handshake::sendAckRequest(int64_t messageId) {
-    TL_msgs_ack *msgsAck = new TL_msgs_ack();
+    /*TL_msgs_ack *msgsAck = new TL_msgs_ack();
     msgsAck->msg_ids.push_back(messageId);
-    sendRequestData(msgsAck, false);
+    sendRequestData(msgsAck, false);*/
 }
 
 TLObject *Handshake::getCurrentHandshakeRequest() {
