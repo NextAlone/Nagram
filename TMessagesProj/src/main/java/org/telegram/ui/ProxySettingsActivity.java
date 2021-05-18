@@ -140,7 +140,6 @@ public class ProxySettingsActivity extends BaseFragment {
 
         public void setValue(String name, boolean checked, boolean divider) {
             textView.setText(name);
-            textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
             checkImage.setVisibility(checked ? VISIBLE : INVISIBLE);
             needDivider = divider;
         }
