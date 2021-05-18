@@ -7285,12 +7285,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (getParentActivity() == null) {
                 return;
             }
-            if (NekoConfig.hideBottomButton == 0) {
-                return;
-            }
-            if (MessagesController.getGlobalMainSettings().getBoolean("hideBottomButton", false)) {
-                return;
-            }
             if (reportType >= 0) {
                 showDialog(new ReportAlert(getParentActivity(), reportType) {
                     @Override
@@ -17051,6 +17045,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             bottomOverlayImage.setVisibility(View.VISIBLE);
         } else {
             bottomOverlayImage.setVisibility(View.INVISIBLE);
+        }
+
+        if (NekoConfig.hideBottomButton == 1) {
+            bottomOverlayChat.setVisibility(View.INVISIBLE);
         }
         if (inPreviewMode) {
             searchContainer.setVisibility(View.INVISIBLE);
