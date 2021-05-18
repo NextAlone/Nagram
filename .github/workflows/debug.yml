@@ -234,14 +234,14 @@ jobs:
     strategy:
       matrix:
         flavor:
-          - FullRelease
-          - FullReleaseNoGcm
-          - FullAppleEmojiRelease
-          - FullAppleEmojiReleaseNoGcm
           - MiniRelease
           - MiniReleaseNoGcm
           - MiniAppleEmojiRelease
           - MiniAppleEmojiReleaseNoGcm
+          - FullRelease
+          - FullReleaseNoGcm
+          - FullAppleEmojiRelease
+          - FullAppleEmojiReleaseNoGcm
     steps:
       - name: Checkout
         uses: actions/checkout@v2
