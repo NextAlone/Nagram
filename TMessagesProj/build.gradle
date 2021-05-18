@@ -324,15 +324,15 @@ android {
 
     productFlavors {
         mini {
+            isDefault true
         }
         miniAppleEmoji {
         }
         full {
-            isDefault true
         }
         fullAppleEmoji {
         }
-        fullPlay {
+        miniPlay {
             versionNameSuffix "-play"
             versionCode verCode - 2
         }
@@ -443,10 +443,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.5.1"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
-    if (!targetAbi.isBlank()) {
-        implementation project(":ss-rust")
-        implementation project(":ssr-libev")
-    }
 
 }
 
