@@ -260,7 +260,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (position == hideBottomButtonRow){
                 NekoConfig.togglehideBottomButton();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.hideBottomButton == 0);
+                    ((TextCheckCell) view).setChecked(NekoConfig.hideBottomButton == 1);
                 }
             } else if (position == useVazirFontRow){
                 NekoConfig.toggleUseVazirFont();
