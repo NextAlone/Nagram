@@ -2586,7 +2586,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         if (currentEncryptedChat == null) {
             actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("Forward", R.string.Forward));
-            actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("DirectShare", R.string.DirectShare));
         }
 
         if (currentEncryptedChat == null || NekoXConfig.disableFlagSecure) {
@@ -19913,7 +19912,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             item.setVisibility(View.VISIBLE);
         }
         actionModeOtherItem.showSubItem(forward_noquote);
-        actionModeOtherItem.showSubItem(forward_direct);
         item = actionMode.getItem(delete);
         if (item != null) {
             item.setVisibility(View.VISIBLE);
