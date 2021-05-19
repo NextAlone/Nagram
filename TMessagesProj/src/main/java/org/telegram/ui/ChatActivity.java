@@ -19913,11 +19913,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             item.setVisibility(View.VISIBLE);
         }
         actionModeOtherItem.showSubItem(forward_noquote);
+        actionModeOtherItem.showSubItem(forward_direct);
         item = actionMode.getItem(delete);
         if (item != null) {
             item.setVisibility(View.VISIBLE);
         }
         bottomMessagesActionContainer.setVisibility(View.VISIBLE);
+
 
         int translationY = chatActivityEnterView.getMeasuredHeight() - AndroidUtilities.dp(51);
         if (chatActivityEnterView.getVisibility() == View.VISIBLE) {
