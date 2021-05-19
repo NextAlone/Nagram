@@ -982,11 +982,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == useSystemEmojiRow) {
                         textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), NekoConfig.useSystemEmoji, true);
                     } else if (position == hideBottomButtonRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("hideBottomButton", R.string.hideBottomButton), NekoConfig.hideBottomButton == 1, true);
+                        textCell.setTextAndCheck(LocaleController.getString("hideBottomButton", R.string.hideBottomButton), NekoConfig.hideBottomButton == 0, false);
                     } else if (position == typefaceRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TypefaceUseDefault", R.string.TypefaceUseDefault), NekoConfig.typeface == 1, true);
                     } else if (position == useVazirFontRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UseVazirFont", R.string.UseVazirFont), NekoConfig.hideBottomButton == 1, true);
+                        textCell.setTextAndCheck(LocaleController.getString("UseVazirFont", R.string.UseVazirFont), NekoConfig.UseVazirFont == 1, true);
                     } else if (position == newYearRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ChristmasHat", R.string.ChristmasHat), NekoConfig.newYear, true);
                     } else if (position == openArchiveOnPullRow) {
