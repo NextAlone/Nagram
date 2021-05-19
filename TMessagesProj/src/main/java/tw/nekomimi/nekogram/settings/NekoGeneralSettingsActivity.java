@@ -986,7 +986,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     } else if (position == typefaceRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TypefaceUseDefault", R.string.TypefaceUseDefault), NekoConfig.typeface == 1, true);
                     } else if (position == useVazirFontRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UseVazirFont", R.string.UseVazirFont), NekoConfig.UseVazirFont == 1, true);
+                        textCell.setTextAndCheck(LocaleController.getString("UseVazirFont", R.string.UseVazirFont), NekoConfig.useVazirFont == 1, true);
                     } else if (position == newYearRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ChristmasHat", R.string.ChristmasHat), NekoConfig.newYear, true);
                     } else if (position == openArchiveOnPullRow) {
