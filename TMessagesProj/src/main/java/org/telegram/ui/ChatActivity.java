@@ -2586,6 +2586,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         if (currentEncryptedChat == null) {
             actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("Forward", R.string.Forward));
+            actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("DirectShare", R.string.DirectShare));
         }
 
         if (currentEncryptedChat == null || NekoXConfig.disableFlagSecure) {
@@ -19365,6 +19366,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(95);
                             icons.add(R.drawable.baseline_fast_forward_24);
                         }
+                        if (chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
+                            items.add(LocaleController.getString("DirectShare", R.string.DirectShare));
+                            options.add(30);
+                            icons.add(R.drawable.baseline_forward_24);
+                        }
                         if (chatMode != MODE_SCHEDULED) {
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages) {
                                 items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
@@ -20774,6 +20780,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 saveStickerToGallery(selectedObject);
                 break;
             }
+            //Direct share->
+            case 30: {
+                if (getParentActivity() == null) {
+                    selectedObject = null;
+                    return;
+                }
+                if (chatActivityEnterView != null) {
+                    chatActivityEnterView.closeKeyboard();
+                }
+                showDialog(ShareAlert.createShareAlert(getParentActivity(), selectedObject, null, ChatObject.isChannel(currentChat) && !currentChat.megagroup && currentChat.username != null && currentChat.username.length() > 0, null, true));
+
+                break;
+            }
+
             case 88: {
 
                 MessageTransKt.translateMessages(this);
