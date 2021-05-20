@@ -9228,6 +9228,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return messageObject.needDrawShareButton();
     }
 
+    private boolean checkNeedDrawEditButton(MessageObject messageObject) {
+        if (messageObject.isOut() && messageObject.isOutOwner()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public boolean isInsideBackground(float x, float y) {
         return currentBackgroundDrawable != null && x >= backgroundDrawableLeft && x <= backgroundDrawableLeft + backgroundDrawableRight;
     }
