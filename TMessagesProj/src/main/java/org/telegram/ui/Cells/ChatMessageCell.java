@@ -13290,7 +13290,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (drawSideButton == 1) {
                     info.addChild(ChatMessageCell.this, SHARE);
                 }
-                if (drawEditButton == 1) {
+                if (drawEditButton) {
                     info.addChild(ChatMessageCell.this, EDIT);
                 }
                 if (replyNameLayout != null) {
