@@ -13442,7 +13442,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     info.setClickable(true);
 
                 //Devgram->
-                } else if (drawEditButton && x >= editStartX && x <= editStartX + AndroidUtilities.dp(40) && y >= editStartY && y <= editStartY + AndroidUtilities.dp(32)) {
+                } else if (drawEditButton) {
                     editPressed = true;
                     result = true;
                     if (delegate != null) {
