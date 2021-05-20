@@ -13110,6 +13110,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         private final int REPLY = 497;
         private final int COMMENT = 496;
         private final int POLL_HINT = 495;
+        private final int EDIT = 494;
         private Path linkPath = new Path();
         private RectF rectF = new RectF();
         private Rect rect = new Rect();
@@ -13289,6 +13290,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (drawSideButton == 1) {
                     info.addChild(ChatMessageCell.this, SHARE);
                 }
+                if (drawEditButton == 1) {
+                    info.addChild(ChatMessageCell.this, EDIT);
+                }
                 if (replyNameLayout != null) {
                     info.addChild(ChatMessageCell.this, REPLY);
                 }
@@ -13442,12 +13446,23 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     info.setClickable(true);
 
                 //Devgram->
-                } else if (drawEditButton) {
-                    editPressed = true;
-                    result = true;
-                    if (delegate != null) {
-                        delegate.didPressEdit(this);
+                } else if (virtualViewId == EDIT) {
+                    info.setClassName("android.widget.ImageButton");
+                    info.setEnabled(true);
+                    info.addAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    rect.set((int) editStartX, (int) editStartY, (int) editStartX + AndroidUtilities.dp(40), (int) editStartY + AndroidUtilities.dp(32));
+                    info.setBoundsInParent(rect);
+                    if (accessibilityVirtualViewBounds.get(virtualViewId) == null || !accessibilityVirtualViewBounds.get(virtualViewId).equals(rect)) {
+                        accessibilityVirtualViewBounds.put(virtualViewId, new Rect(rect));
                     }
+                    rect.offset(pos[0], pos[1]);
+                    info.setBoundsInScreen(rect);
+                    info.setClickable(true);
+                    //editPressed = true;
+                    //result = true;
+                    //if (delegate != null) {
+                    //    delegate.didPressEdit(this);
+                    //}
 
 
                     invalidate();
@@ -13551,6 +13566,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         if (delegate != null) {
                             delegate.didPressSideButton(ChatMessageCell.this);
                         }
+                    } else if (virtualViewId == EDIT) {
+                        if (delegate != null) {
+                            delegate.didPressEdit(ChatMessageCell.this);
+                        }
+
                     } else if (virtualViewId == REPLY) {
                         if (delegate != null && (!isThreadChat || currentMessageObject.getReplyTopMsgId() != 0) && currentMessageObject.hasValidReplyMessageObject()) {
                             delegate.didPressReplyMessage(ChatMessageCell.this, currentMessageObject.getReplyMsgId());

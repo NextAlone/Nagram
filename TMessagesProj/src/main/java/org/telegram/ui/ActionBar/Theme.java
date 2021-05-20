@@ -7347,9 +7347,9 @@ public class Theme {
             chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow).mutate();
             chat_replyIconDrawable = resources.getDrawable(R.drawable.fast_reply);
             chat_goIconDrawable = resources.getDrawable(R.drawable.message_arrow);
-            
+
             //Devgram->
-            chat_editDrawable = resources.getDrawable(R.drawable.share_round);
+            chat_editDrawable = createRoundRectDrawable(AndroidUtilities.dp(16), 0xffffffff);
             chat_editIconDrawable = resources.getDrawable(R.drawable.ic_pencil_edit_button);
             //Devgram/
 
