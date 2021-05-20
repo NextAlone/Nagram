@@ -13442,7 +13442,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
 
                     invalidate();
-                }
+            
                 //Devgram/
 
                 } else if (virtualViewId == REPLY) {
