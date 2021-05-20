@@ -2173,6 +2173,13 @@ public class Theme {
     public static Drawable chat_contextResult_shadowUnderSwitchDrawable;
     public static Drawable chat_shareDrawable;
     public static Drawable chat_shareIconDrawable;
+
+    //Devgram->
+    public static Drawable chat_editDrawable;
+    public static Drawable chat_editIconDrawable;
+    //Devgram->
+
+
     public static Drawable chat_replyIconDrawable;
     public static Drawable chat_goIconDrawable;
     public static Drawable chat_botLinkDrawalbe;
@@ -7340,6 +7347,11 @@ public class Theme {
             chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow).mutate();
             chat_replyIconDrawable = resources.getDrawable(R.drawable.fast_reply);
             chat_goIconDrawable = resources.getDrawable(R.drawable.message_arrow);
+            
+            //Devgram->
+            chat_editDrawable = resources.getDrawable(R.drawable.share_round);
+            chat_editIconDrawable = resources.getDrawable(R.drawable.ic_pencil_edit_button);
+            //Devgram/
 
             chat_fileMiniStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);
             chat_fileMiniStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);

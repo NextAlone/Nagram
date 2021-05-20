@@ -266,6 +266,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return null;
         }
 
+        //Devgram->
+        default void didPressEdit(ChatMessageCell cell) {
+        }
+        //Devgram/
+
     }
 
     private final static int DOCUMENT_ATTACH_TYPE_NONE = 0;
@@ -627,6 +632,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private int backgroundWidth = 100;
     private boolean hasNewLineForTime;
 
+    //Devgram->
+    private boolean drawEditButton;
+    private boolean editPressed;
+    private int editStartX;
+    private int editStartY;
+    //Devgram/
     private int layoutWidth;
     private int layoutHeight;
 
@@ -3002,6 +3013,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (isPinnedChat || drawSideButton == 1 && messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
                 drawSideButton = 2;
             }
+            //Devgram->
+            drawEditButton = checkNeedDrawEditButton(messageObject);
+            //Devgram/
             replyNameLayout = null;
             adminLayout = null;
             checkOnlyButtonPressed = false;
@@ -10211,6 +10225,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
 
+         //Devgram->
+         if (drawEditButton) {
+             editStartX = currentBackgroundDrawable.getBounds().left - AndroidUtilities.dp(8) - Theme.chat_shareDrawable.getIntrinsicWidth();
+             setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY = layoutHeight - AndroidUtilities.dp(41));
+             Theme.chat_editDrawable.draw(canvas);
+ 
+             setDrawableBounds(Theme.chat_editIconDrawable, editStartX + AndroidUtilities.dp(8), editStartY + AndroidUtilities.dp(9));
+             Theme.chat_editIconDrawable.draw(canvas);
+ 
+         }
+         //Devgram/
+
         if (drawSideButton != 0) {
             if (sideButtonPressed) {
                 if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackgroundSelected)) {
@@ -13405,6 +13431,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     rect.offset(pos[0], pos[1]);
                     info.setBoundsInScreen(rect);
                     info.setClickable(true);
+
+                //Devgram->
+                } else if (drawEditButton && x >= editStartX && x <= editStartX + AndroidUtilities.dp(40) && y >= editStartY && y <= editStartY + AndroidUtilities.dp(32)) {
+                    editPressed = true;
+                    result = true;
+                    if (delegate != null) {
+                        delegate.didPressEdit(this);
+                    }
+
+
+                    invalidate();
+                }
+                //Devgram/
+
                 } else if (virtualViewId == REPLY) {
                     info.setEnabled(true);
                     StringBuilder sb = new StringBuilder();

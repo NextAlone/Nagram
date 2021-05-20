@@ -22489,6 +22489,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         cell.showHintButton(false, true, type);
                     }
 
+                    //Devgram->
+                    @Override
+                    public void didPressEdit(ChatMessageCell cell) {
+                        startEditingMessageObject(cell.getMessageObject());
+                        selectedObject = null;
+                        selectedObjectGroup = null;
+                    }
+                    //Devgram/
+
+
                     @Override
                     public boolean shouldDrawThreadProgress(ChatMessageCell cell) {
                         MessageObject.GroupedMessages group = cell.getCurrentMessagesGroup();
