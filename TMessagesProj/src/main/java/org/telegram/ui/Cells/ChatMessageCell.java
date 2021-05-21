@@ -10218,7 +10218,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 right = currentBackgroundDrawable.getBounds().right;
             }
 
-            if (drawSideButton != 0) {
+            if (drawSideButton != 0 || drawEditButton) {
                 if (currentMessageObject.isOutOwner()) {
                     left -= AndroidUtilities.dp(8 + 32);
                 } else {
