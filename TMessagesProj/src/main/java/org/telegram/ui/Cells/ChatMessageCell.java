@@ -2007,6 +2007,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             linkPreviewPressed = false;
             otherPressed = false;
             sideButtonPressed = false;
+            editPressed = false;
             imagePressed = false;
             timePressed = false;
             gamePreviewPressed = false;
@@ -2059,6 +2060,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     } else if (drawNameLayout && nameLayout != null && viaWidth != 0 && x >= nameX + viaNameWidth && x <= nameX + viaNameWidth + viaWidth && y >= nameY - AndroidUtilities.dp(4) && y <= nameY + AndroidUtilities.dp(20)) {
                         forwardBotPressed = true;
                         result = true;
+                    //Devgram->
+                    } else if (drawEditButton && x >= editStartX && x <= editStartX + AndroidUtilities.dp(40) && y >= editStartY && y <= editStartY + AndroidUtilities.dp(32)) {
+                        editPressed = true;
+                        result = true;
+                        if (delegate != null) {
+                            delegate.didPressEdit(this);
+                        }
+
+
+                        invalidate();
+                    
+                    //Devgram/
+
+
                     } else if (drawSideButton != 0 && x >= sideStartX && x <= sideStartX + AndroidUtilities.dp(40) && y >= sideStartY && y <= sideStartY + AndroidUtilities.dp(32 + (drawSideButton == 3 && commentLayout != null ? 18 : 0))) {
                         if (currentMessageObject.isSent()) {
                             sideButtonPressed = true;
@@ -2998,6 +3013,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             isPressed = false;
             gamePreviewPressed = false;
             sideButtonPressed = false;
+            editPressed = false;
             isCheckPressed = true;
             hasNewLineForTime = false;
             isThreadPost = isThreadChat && messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.channel_post != 0;
@@ -6020,6 +6036,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         linkPreviewPressed = false;
         sideButtonPressed = false;
+        editPressed = false;
         imagePressed = false;
         timePressed = false;
         gamePreviewPressed = false;
@@ -13458,15 +13475,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     rect.offset(pos[0], pos[1]);
                     info.setBoundsInScreen(rect);
                     info.setClickable(true);
-                    //editPressed = true;
-                    //result = true;
-                    //if (delegate != null) {
-                    //    delegate.didPressEdit(this);
-                    //}
 
-
-                    invalidate();
-            
                 //Devgram/
 
                 } else if (virtualViewId == REPLY) {
