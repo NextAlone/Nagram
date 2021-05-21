@@ -17052,7 +17052,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             chatActivityEnterView.setFieldFocused(false);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
         } else if (searchItem != null && searchItemVisible) {
-            searchContainer.animate().setListener(null).cancel;
+            searchContainer.animate().setListener(null).cancel();
             if (NekoConfig.hideBottomButton == 1) {
                 bottomOverlayChat.setVisibility(View.INVISIBLE);
             }
