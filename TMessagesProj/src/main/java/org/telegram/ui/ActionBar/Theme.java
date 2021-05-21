@@ -7350,7 +7350,7 @@ public class Theme {
 
             //Devgram->
             chat_editDrawable = createRoundRectDrawable(AndroidUtilities.dp(16), 0xffffffff);
-            chat_editIconDrawable = resources.getDrawable(R.drawable.ic_pencil_edit_button);
+            chat_editIconDrawable = resources.getDrawable(R.drawable.ic_pencil_edit_button).mutate();
             //Devgram/
 
             chat_fileMiniStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);

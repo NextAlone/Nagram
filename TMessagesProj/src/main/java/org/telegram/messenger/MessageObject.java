@@ -4107,7 +4107,11 @@ public class MessageObject {
                 return true;
             }
         }
-        return true;
+        if (isOut() && isOutOwner()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public boolean isYouTubeVideo() {
