@@ -9241,17 +9241,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 return false;
             }
         }
-        return messageObject.needDrawShareButton();
-    }
-
-    private boolean checkNeedDrawEditButton(MessageObject messageObject) {
         if (messageObject.isOut() && messageObject.isOutOwner()) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
-
     }
+
 
     public boolean isInsideBackground(float x, float y) {
         return currentBackgroundDrawable != null && x >= backgroundDrawableLeft && x <= backgroundDrawableLeft + backgroundDrawableRight;
