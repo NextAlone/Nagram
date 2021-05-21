@@ -4794,7 +4794,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             backgroundWidth = Math.min(AndroidUtilities.displaySize.x - AndroidUtilities.dp(drawAvatar ? 102 : 50), AndroidUtilities.dp(252 + 37));
                         }
                         backgroundWidth -= AndroidUtilities.dp(4);
-                        if (checkNeedDrawShareButton(messageObject)) {
+                        if (checkNeedDrawShareButton(messageObject) || checkNeedDrawEditButton(messageObject)) {
                             backgroundWidth -= AndroidUtilities.dp(20);
                         }
                         int maxWidth = backgroundWidth - AndroidUtilities.dp(37);
@@ -4844,7 +4844,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             backgroundWidth = Math.min(AndroidUtilities.displaySize.x - AndroidUtilities.dp(drawAvatar ? 102 : 50), AndroidUtilities.dp(252 + 37));
                         }
                         backgroundWidth -= AndroidUtilities.dp(4);
-                        if (checkNeedDrawShareButton(messageObject)) {
+                        if (checkNeedDrawShareButton(messageObject) || checkNeedDrawEditButton(messageObject)) {
                             backgroundWidth -= AndroidUtilities.dp(20);
                         }
                         int maxWidth = backgroundWidth - AndroidUtilities.dp(34);
@@ -4878,7 +4878,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             backgroundWidth = Math.min(AndroidUtilities.displaySize.x - AndroidUtilities.dp(drawAvatar ? 102 : 50), AndroidUtilities.dp(252 + 37));
                         }
                         backgroundWidth -= AndroidUtilities.dp(4);
-                        if (checkNeedDrawShareButton(messageObject)) {
+                        if (checkNeedDrawShareButton(messageObject) || checkNeedDrawEditButton(messageObject)) {
                             backgroundWidth -= AndroidUtilities.dp(20);
                         }
                         availableTimeWidth = backgroundWidth - AndroidUtilities.dp(34);
@@ -5036,7 +5036,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             maxPhotoWidth = photoWidth = (int) (AndroidUtilities.getMinTabletSide() * 0.7f);
                         } else {
                             if (currentPhotoObject != null && (messageObject.type == MessageObject.TYPE_PHOTO || messageObject.type == MessageObject.TYPE_VIDEO || messageObject.type == 8) && currentPhotoObject.w >= currentPhotoObject.h) {
-                                maxPhotoWidth = photoWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(64 + (checkNeedDrawShareButton(messageObject) ? 10 : 0));
+                                maxPhotoWidth = photoWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(64 + ((checkNeedDrawShareButton(messageObject) || checkNeedDrawEditButton(messageObject)) ? 10 : 0));
                                 useFullWidth = true;
                             } else {
                                 maxPhotoWidth = photoWidth = (int) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * 0.7f);
