@@ -10258,7 +10258,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
          //Devgram->
          if (drawEditButton) {
-             editStartX = currentBackgroundDrawable.getBounds().left - AndroidUtilities.dp(8) - Theme.chat_shareDrawable.getIntrinsicWidth();
+             editStartX = getCurrentBackgroundLeft() - AndroidUtilities.dp(8 + 32);
              setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY = layoutHeight - AndroidUtilities.dp(41));
              Theme.chat_editDrawable.draw(canvas);
  
