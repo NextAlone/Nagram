@@ -11603,7 +11603,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             checkRaiseSensors();
             checkActionBarMenu(false);
         }
-        if (inPreviewMode) {
+        if (inPreviewMode && NekoConfig.hideBottomButton == 1) {
             bottomOverlay.setVisibility(View.INVISIBLE);
         }
         if (hideKeyboard) {
@@ -17041,14 +17041,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
 
-        if (currentChat != null && currentChat.gigagroup && reportType < 0 && chatMode == 0) {
+        if (currentChat != null && currentChat.gigagroup && reportType < 0 && chatMode == 0 && NekoConfig.hideBottomButton == 0) {
             bottomOverlayImage.setVisibility(View.VISIBLE);
         } else {
             bottomOverlayImage.setVisibility(View.INVISIBLE);
-        }
-
-        if (NekoConfig.hideBottomButton == 1) {
-            bottomOverlayChat.setVisibility(View.INVISIBLE);
         }
         if (inPreviewMode) {
             searchContainer.setVisibility(View.INVISIBLE);
@@ -17056,7 +17052,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             chatActivityEnterView.setFieldFocused(false);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
         } else if (searchItem != null && searchItemVisible) {
-            searchContainer.animate().setListener(null).cancel();
+            searchContainer.animate().setListener(null).cif (NekoConfig.hideBottomButton == 1) {
+                bottomOverlayChat.setVisibility(View.INVISIBLE);
+            }ancel();
             if (searchContainer.getVisibility() != View.VISIBLE) {
                 searchContainer.setVisibility(View.VISIBLE);
                 searchContainer.setAlpha(0f);

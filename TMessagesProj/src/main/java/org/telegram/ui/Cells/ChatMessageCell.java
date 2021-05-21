@@ -691,7 +691,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean sideButtonPressed;
     private float sideStartX;
     private float sideStartY;
-
     private StaticLayout nameLayout;
     private StaticLayout adminLayout;
     private int nameWidth;
@@ -2074,7 +2073,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     //Devgram/
 
 
-                    } else if (drawSideButton != 0 && x >= sideStartX && x <= sideStartX + AndroidUtilities.dp(40) && y >= sideStartY && y <= sideStartY + AndroidUtilities.dp(32 + (drawSideButton == 3 && commentLayout != null ? 18 : 0))) {
+                    } else if (drawSideButton != 0 && x >= sideStartX && x <= sideStartX + AndroidUtilities.dp(40) && y >= sideStartY && y <= sideStartY + AndroidUtilities.dp(32)) {
                         if (currentMessageObject.isSent()) {
                             sideButtonPressed = true;
                         }

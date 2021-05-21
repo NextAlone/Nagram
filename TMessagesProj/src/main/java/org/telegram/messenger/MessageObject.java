@@ -4084,7 +4084,7 @@ public class MessageObject {
             return true;
         } else if (isFromUser()) {
             if (messageOwner.media instanceof TLRPC.TL_messageMediaEmpty || messageOwner.media == null || messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && !(messageOwner.media.webpage instanceof TLRPC.TL_webPage)) {
-                return false;
+                return true;
             }
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id.user_id);
             if (user != null && user.bot) {
@@ -4108,6 +4108,7 @@ public class MessageObject {
 
         return false;
     }
+    
 
     public boolean isYouTubeVideo() {
         return messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && messageOwner.media.webpage != null && !TextUtils.isEmpty(messageOwner.media.webpage.embed_url) && "YouTube".equals(messageOwner.media.webpage.site_name);
