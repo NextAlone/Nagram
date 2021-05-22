@@ -1982,7 +1982,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         editorTextView = new TextView(context);
         editorTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
-        messageEditText.setOnEditorActionListener(editorTextView.OnEditorActionListener() {
+        messageEditText.setOnEditorActionListener(editorTextView.OnEditorActionListener()) {
 
             boolean ctrlPressed = false;
 
