@@ -13,3 +13,4 @@ service_account_credentials.json
 .settings/
 ss-rust/
 .classpath
+TMessagesProj/bin/

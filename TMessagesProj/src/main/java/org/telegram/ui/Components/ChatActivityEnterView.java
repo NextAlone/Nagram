@@ -359,6 +359,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private View recordedAudioBackground;
     private ImageView recordedAudioPlayButton;
     private TextView recordedAudioTimeTextView;
+    private TextView editorTextView;
     private SlideTextView slideText;
     @SuppressWarnings("FieldCanBeLocal")
     private LinearLayout recordTimeContainer;
@@ -1978,7 +1979,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return false;
             }
         });
-        messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        editorTextView = new TextView(context);
+        editorTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        messageEditText.setOnEditorActionListener(editorTextView.OnEditorActionListener() {
 
             boolean ctrlPressed = false;
 
