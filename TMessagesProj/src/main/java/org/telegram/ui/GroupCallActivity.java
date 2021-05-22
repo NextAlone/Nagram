@@ -129,6 +129,9 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.WaveDrawable;
 import org.telegram.ui.Components.voip.VoIPToggleButton;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
+import tw.nekomimi.nekogram.shamsicalendar.LanguageUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -2819,10 +2822,22 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     long date = currentTime + (long) value * 86400000L;
                     calendar.setTimeInMillis(date);
                     int year = calendar.get(Calendar.YEAR);
+                    LocaleController loc = LocaleController.getInstance();
+                    final String week = loc.formatterWeek.format(date) + "; ";
                     if (year == currentYear) {
-                        return LocaleController.getInstance().formatterScheduleDay.format(date);
-                    } else {
-                        return LocaleController.getInstance().formatterScheduleYear.format(date);
+                        if (LocaleController.usePersianCalendar) {
+                            PersianDate pdate = new PersianDate(date);
+                            return week + pdate.getPersianMonthDay();
+                        } else {
+                            return week + loc.formatterScheduleDay.format(date);
+                        }
+                    }else {
+                        if (LocaleController.usePersianCalendar) {
+                            PersianDate pdate = new PersianDate(date);
+                            return pdate.getPersianNormalDate();
+                        } else {
+                            return loc.formatterScheduleYear.format(date);
+                        }
                     }
                 }
             });
