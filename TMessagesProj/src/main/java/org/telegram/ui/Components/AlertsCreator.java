@@ -2040,6 +2040,10 @@ public class AlertsCreator {
                 num = 0;
                 if (type == 1) {
                     num += 3;
+                } else if (type == 2) {
+                    num += 6;
+                } else if (type == 3) {
+                    num += 9;
                 }
                 button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (currentYear == selectedYear) {
@@ -2056,6 +2060,10 @@ public class AlertsCreator {
                 } else {
                     if (type == 1) {
                         num += 3;
+                    } else if (type == 2) {
+                        num += 6;
+                    } else if (type == 3) {
+                        num += 9;
                     }
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
                     
@@ -2074,18 +2082,14 @@ public class AlertsCreator {
                 } else {
                     if (type == 1) {
                         num += 3;
+                    } else if (type == 2) {
+                        num += 6;
+                    } else if (type == 3) {
+                        num += 9;
                     }
                     button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
                     
                 }
-            }
-            
-            if (type == 2) {
-                num += 6;
-                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
-            } else if (type == 3) {
-                num += 9;
-                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             }
             
             //button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
