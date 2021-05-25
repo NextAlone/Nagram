@@ -10258,14 +10258,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
          //Devgram->
          if (drawEditButton) {
-             editStartX = getCurrentBackgroundLeft() - AndroidUtilities.dp(8 + 32);
-             setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY = layoutHeight - AndroidUtilities.dp(41));
-             Theme.chat_editDrawable.draw(canvas);
+            editStartX = getCurrentBackgroundLeft() - AndroidUtilities.dp(8 + 32);
+            setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY = layoutHeight - AndroidUtilities.dp(41));
+            if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
+                Theme.chat_editDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackground), false));
+            } else {
+                Theme.chat_editDrawable.setColorFilter(Theme.colorFilter2);
+            }
+            Theme.chat_editDrawable.draw(canvas);
  
-             setDrawableBounds(Theme.chat_editIconDrawable, editStartX + AndroidUtilities.dp(8), editStartY + AndroidUtilities.dp(9));
-             Theme.chat_editIconDrawable.draw(canvas);
+            setDrawableBounds(Theme.chat_editIconDrawable, editStartX + AndroidUtilities.dp(8), editStartY + AndroidUtilities.dp(9));
+            Theme.chat_editIconDrawable.draw(canvas);
  
-         }
+        }
          //Devgram/
 
         if (drawSideButton != 0) {
