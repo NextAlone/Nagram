@@ -10269,7 +10269,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     editStartY -= getTranslationY();
                 }
             }
-            setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY = layoutHeight - AndroidUtilities.dp(41), AndroidUtilities.dp(32), AndroidUtilities.dp(32));
+            setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY, AndroidUtilities.dp(32), AndroidUtilities.dp(32));
             if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
                 Theme.chat_editDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackground), false));
             } else {
