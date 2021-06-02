@@ -74,6 +74,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int sendCommentAfterForwardRow;
     private int disableProximityEventsRow;
     private int disableTrendingRow;
+    private int dontSendGreetingStickerRow;
 
     private int mapPreviewRow;
     private int messageMenuRow;
@@ -269,6 +270,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableTrending);
                 }
+            } else if (position == dontSendGreetingStickerRow) {
+                NekoConfig.toggleDontSendGreetingSticker();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.dontSendGreetingSticker);
+                }
             } else if (position == win32Row) {
                 NekoConfig.toggleDisableAutoDownloadingWin32Executable();
                 if (view instanceof TextCheckCell) {
@@ -316,6 +322,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         sendCommentAfterForwardRow = rowCount++;
         disableProximityEventsRow = rowCount++;
         disableTrendingRow = rowCount++;
+        dontSendGreetingStickerRow = rowCount++;
 
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -675,6 +682,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("DisableProximityEvents", R.string.DisableProximityEvents), NekoConfig.disableProximityEvents, true);
                     } else if (position == disableTrendingRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableTrending", R.string.DisableTrending), NekoConfig.disableTrending, true);
+                    } else if (position == dontSendGreetingStickerRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DontSendGreetingSticker", R.string.DontSendGreetingSticker), NekoConfig.dontSendGreetingSticker, true);
                     } else if (position == win32Row) {
                         textCell.setTextAndCheck(LocaleController.getString("Win32ExecutableFiles", R.string.Win32ExecutableFiles), !NekoConfig.disableAutoDownloadingWin32Executable, true);
                     } else if (position == archiveRow) {

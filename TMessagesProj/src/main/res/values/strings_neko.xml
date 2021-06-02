@@ -110,5 +110,6 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="pressTitleToOpenAllChats">Press title to open \"All Chats\" tab</string>
+    <string name="DontSendGreetingSticker">Don\'t send greeting sticker</string>
 
 </resources>

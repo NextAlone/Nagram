@@ -22,6 +22,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ChatGreetingsView extends LinearLayout {
 
     private TLRPC.Document preloadedGreetingsSticker;
@@ -84,6 +86,8 @@ public class ChatGreetingsView extends LinearLayout {
             stickerToSendView.setImage(ImageLocation.getForDocument(sticker), createFilter(sticker), ImageLocation.getForDocument(thumb, sticker), null, 0, sticker);
         }
         stickerToSendView.setOnClickListener(v -> {
+            if (NekoConfig.dontSendGreetingSticker)
+                return;
             if (listener != null) {
                 listener.onGreetings(sticker);
             }

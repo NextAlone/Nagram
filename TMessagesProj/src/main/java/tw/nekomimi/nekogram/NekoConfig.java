@@ -149,6 +149,8 @@ public class NekoConfig {
     public static boolean disableAutoDownloadingWin32Executable;
     public static boolean disableAutoDownloadingArchive;
 
+    public static boolean dontSendGreetingSticker;
+
     public static String getOpenPGPAppName() {
 
         if (StrUtil.isNotBlank(openPGPApp)) {
@@ -310,6 +312,8 @@ public class NekoConfig {
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
         disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
+
+        dontSendGreetingSticker = preferences.getBoolean("dontSendGreetingSticker", false);
 
     }
 
@@ -789,6 +793,10 @@ public class NekoConfig {
 
     public static void toggleDisableAutoDownloadingArchive() {
         preferences.edit().putBoolean("disableAutoDownloadingArchive", disableAutoDownloadingArchive = !disableAutoDownloadingArchive).apply();
+    }
+
+    public static void toggleDontSendGreetingSticker() {
+        preferences.edit().putBoolean("dontSendGreetingSticker", dontSendGreetingSticker = !dontSendGreetingSticker).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";
