@@ -237,6 +237,5 @@
     <string name="ImportSettingsAlert">Bạn có chắc chắn muốn ghi đè cài đặt không\? Việc nhập cài đặt từ các nguồn không xác định có thể khiến mã pin bị ghi đè và khiến ứng dụng bị khóa.</string>
     <string name="ImportSettings">Nhập cài đặt</string>
     <string name="BackupSettings">Sao lưu cài đặt</string>
-    <string name="WsNeedLogin">Do hạn chế về mặt kỹ thuật, không thể sử dụng Ws Relay trước khi đăng nhập.</string>
     <string name="AutoLockImmediately">Liền</string>
 </resources>

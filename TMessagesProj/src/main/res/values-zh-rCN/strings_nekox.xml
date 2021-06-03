@@ -233,6 +233,5 @@
     <string name="AddProxyWs">添加 WebSocket 中继</string>
     <string name="ProxyInfoWS">WebSocket 中继设置</string>
     <string name="WsPayload">Payload</string>
-    <string name="WsNeedLogin">由于技术限制, Ws 中继暂时不能在登录前使用.</string>
     <string name="AutoLockImmediately">立即</string>
 </resources>

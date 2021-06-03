@@ -220,7 +220,6 @@
     <string name="ImportSettingsAlert">Վստա՞հ եք, որ ցանկանում եք վերագրել կարգավորումները: Պարամետրերը անհայտ աղբյուրներից ներմուծելը կարող է հանգեցնել քորոցի վերագրման և հավելվածի կողպմանը:</string>
     <string name="ImportSettings">Ներմուծման կարգավորումներ</string>
     <string name="BackupSettings">Պահուստավորման կարգավորումներ</string>
-    <string name="WsNeedLogin">Տեխնիկական սահմանափակումների պատճառով Ws Relay- ը հնարավոր չէ օգտագործել մինչև մուտք գործելը:</string>
     <string name="AutoLockImmediately">Անմիջապես</string>
     <string name="WsPayload">Payանրաբեռնվածություն</string>
     <string name="ProxyInfoWS">WebSocket ռելեի կարգավորումներ</string>

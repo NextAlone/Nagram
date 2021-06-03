@@ -220,7 +220,6 @@
     <string name="ImportSettingsAlert">Yakin ingin menimpa pengaturan\? Mengimpor pengaturan dari sumber yang tidak dikenal dapat menyebabkan pin ditimpa dan menyebabkan aplikasi terkunci.</string>
     <string name="ImportSettings">Pengaturan impor</string>
     <string name="BackupSettings">Pengaturan cadangan</string>
-    <string name="WsNeedLogin">Karena keterbatasan teknis, Ws Relay tidak dapat digunakan sebelum masuk.</string>
     <string name="AutoLockImmediately">Segera</string>
     <string name="WsPayload">Muatan</string>
     <string name="ProxyInfoWS">Pengaturan WebSocket Relay</string>

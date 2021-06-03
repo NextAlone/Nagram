@@ -239,6 +239,5 @@
     <string name="ImportSettingsAlert">هل تريد بالتأكيد الكتابة فوق الإعدادات؟ استيراد الإعدادات من مصادر غير معروفة قد يؤدي إلى الكتابة فوق الدبوس ويتسبب في تأمين التطبيق.</string>
     <string name="ImportSettings">استيراد الإعدادات</string>
     <string name="BackupSettings">إعدادات النسخ الاحتياطي</string>
-    <string name="WsNeedLogin">بسبب القيود الفنية ، لا يمكن استخدام Ws Relay قبل تسجيل الدخول.</string>
     <string name="AutoLockImmediately">فورا</string>
 </resources>
