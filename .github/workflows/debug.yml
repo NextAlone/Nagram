@@ -27,7 +27,7 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status') }}
+          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -107,7 +107,7 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status') }}
+          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
       - name: BoringSSL Cache
         uses: actions/cache@v2
         if: steps.cache.outputs.cache-hit != 'true'
