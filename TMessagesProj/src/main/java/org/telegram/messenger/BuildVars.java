@@ -20,6 +20,7 @@ public class BuildVars {
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean LOGS_ENABLED = DEBUG_PRIVATE_VERSION;
     public static boolean USE_CLOUD_STRINGS = true;
+    public static boolean NO_SCOPED_STORAGE = true;
 
     public static int BUILD_VERSION;
     public static String BUILD_VERSION_STRING;

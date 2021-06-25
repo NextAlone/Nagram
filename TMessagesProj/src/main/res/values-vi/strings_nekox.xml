@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Đang cập nhật đăng ký</string>
     <string name="SubscriptionDelete">Xóa đăng ký</string>
     <string name="ExportStickers">Xuất nhãn dán</string>
-    <string name="ImportStickers">Nhập nhãn dán từ tệp</string>
+    <string name="ImportStickersX">Nhập nhãn dán từ tệp</string>
     <string name="ImportStickersList">Nhập nhãn dán</string>
     <string name="StickerSets">Bộ nhãn dán</string>
     <string name="InvalidStickersFile">Tệp nhãn dán không hợp lệ: </string>

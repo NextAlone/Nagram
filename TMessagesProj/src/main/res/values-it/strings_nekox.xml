@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Aggiornamento Abbonamento</string>
     <string name="SubscriptionDelete">Elimina Abbonamento</string>
     <string name="ExportStickers">Esporta Adesivi</string>
-    <string name="ImportStickers">Importa adesivi da file</string>
+    <string name="ImportStickersX">Importa adesivi da file</string>
     <string name="ImportStickersList">Importa adesivi</string>
     <string name="StickerSets">Set Di Adesivi</string>
     <string name="InvalidStickersFile">File adesivi non valido: </string>

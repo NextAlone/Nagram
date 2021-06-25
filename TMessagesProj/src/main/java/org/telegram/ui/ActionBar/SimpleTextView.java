@@ -27,8 +27,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.UserObject;
@@ -84,6 +82,9 @@ public class SimpleTextView extends View implements Drawable.Callback {
     private int fullLayoutAdditionalWidth;
     private int fullLayoutLeftOffset;
     private float fullLayoutLeftCharactersOffset;
+
+    private int minusWidth;
+    private int fullTextMaxLines = 3;
 
     public SimpleTextView(Context context) {
         super(context);
@@ -231,9 +232,8 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 if (buildFullLayout) {
                     CharSequence string = TextUtils.ellipsize(text, textPaint, width, TextUtils.TruncateAt.END);
                     if (!string.equals(text)) {
-                        fullLayout = StaticLayoutEx.createStaticLayout(text, 0, text.length(), textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, width, 3, false);
+                        fullLayout = StaticLayoutEx.createStaticLayout(text, 0, text.length(), textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, width, fullTextMaxLines, false);
                         if (fullLayout != null) {
-
                             int end = fullLayout.getLineEnd(0);
                             int start = fullLayout.getLineStart(1);
                             CharSequence substr = text.subSequence(0, end);
@@ -251,7 +251,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                                 part = "\u200F" + part;
                             }
                             partLayout = new StaticLayout(part, 0, part.length(), textPaint, scrollNonFitText ? AndroidUtilities.dp(2000) : width + AndroidUtilities.dp(8), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                            fullLayout = StaticLayoutEx.createStaticLayout(full, 0, full.length(), textPaint, width + AndroidUtilities.dp(8) + fullLayoutAdditionalWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, width + fullLayoutAdditionalWidth, 3, false);
+                            fullLayout = StaticLayoutEx.createStaticLayout(full, 0, full.length(), textPaint, width + AndroidUtilities.dp(8) + fullLayoutAdditionalWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, width + fullLayoutAdditionalWidth, fullTextMaxLines, false);
                         }
                     } else {
                         layout = new StaticLayout(string, 0, string.length(), textPaint, scrollNonFitText ? AndroidUtilities.dp(2000) : width + AndroidUtilities.dp(8), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -296,7 +296,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
             scrollingOffset = 0;
             currentScrollDelay = SCROLL_DELAY_MS;
         }
-        createLayout(width - getPaddingLeft() - getPaddingRight());
+        createLayout(width - getPaddingLeft() - getPaddingRight() - minusWidth);
 
         int finalHeight;
         if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
@@ -379,6 +379,16 @@ public class SimpleTextView extends View implements Drawable.Callback {
         }
     }
 
+    public void setMinusWidth(int value) {
+        if (value == minusWidth) {
+            return;
+        }
+        minusWidth = value;
+        if (!recreateLayoutMaybe()) {
+            invalidate();
+        }
+    }
+
     public Drawable getRightDrawable() {
         return rightDrawable;
     }
@@ -435,7 +445,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
 
     private boolean recreateLayoutMaybe() {
         if (wasLayout && getMeasuredHeight() != 0 && !buildFullLayout) {
-            boolean result = createLayout(getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
+            boolean result = createLayout(getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - minusWidth);
             if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.CENTER_VERTICAL) {
                 offsetY = (getMeasuredHeight() - textHeight) / 2 + getPaddingTop();
             } else {
@@ -571,10 +581,14 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 int prevAlpha = textPaint.getAlpha();
                 textPaint.setAlpha((int) (255 * (1.0f - fullAlpha)));
                 canvas.save();
+                float partOffset = 0;
+                if (partLayout.getText().length() == 1) {
+                     partOffset = fullTextMaxLines == 1 ? AndroidUtilities.dp(0.5f) : AndroidUtilities.dp(4);
+                }
                 if (layout.getLineLeft(0) != 0) {
-                    canvas.translate(-layout.getLineWidth(0) + (partLayout.getText().length() == 1 ? AndroidUtilities.dp(4) : 0), 0);
+                    canvas.translate(-layout.getLineWidth(0) + partOffset, 0);
                 } else {
-                    canvas.translate(layout.getLineWidth(0) - (partLayout.getText().length() == 1 ? AndroidUtilities.dp(4) : 0), 0);
+                    canvas.translate(layout.getLineWidth(0) - partOffset, 0);
                 }
                 canvas.translate(-fullLayoutLeftOffset * fullAlpha + fullLayoutLeftCharactersOffset * fullAlpha, 0);
                 partLayout.draw(canvas);
@@ -687,8 +701,12 @@ public class SimpleTextView extends View implements Drawable.Callback {
         if (this.fullLayoutAdditionalWidth != fullLayoutAdditionalWidth || this.fullLayoutLeftOffset != fullLayoutLeftOffset) {
             this.fullLayoutAdditionalWidth = fullLayoutAdditionalWidth;
             this.fullLayoutLeftOffset = fullLayoutLeftOffset;
-            createLayout(getMeasuredWidth());
+            createLayout(getMeasuredWidth() - minusWidth);
         }
+    }
+
+    public void setFullTextMaxLines(int fullTextMaxLines) {
+        this.fullTextMaxLines = fullTextMaxLines;
     }
 
     public int getTextColor() {

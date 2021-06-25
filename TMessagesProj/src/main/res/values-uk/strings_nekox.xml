@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Оновлення підписки</string>
     <string name="SubscriptionDelete">Знищення підписки</string>
     <string name="ExportStickers">Експортувати наліпки</string>
-    <string name="ImportStickers">Імпортувати стікери з файлу</string>
+    <string name="ImportStickersX">Імпортувати стікери з файлу</string>
     <string name="ImportStickersList">Імпортуйте наклейки</string>
     <string name="StickerSets">Набори стікерів</string>
     <string name="InvalidStickersFile">Некоректний файл стікерів: </string>

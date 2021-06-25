@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Обновление подписки</string>
     <string name="SubscriptionDelete">Удалить подписку</string>
     <string name="ExportStickers">Экспорт стикеров</string>
-    <string name="ImportStickers">Импорт стикеров</string>
+    <string name="ImportStickersX">Импорт стикеров</string>
     <string name="ImportStickersList">Импорт стикеров</string>
     <string name="StickerSets">Наборы стикеров</string>
     <string name="InvalidStickersFile">Неверный список стикеров: </string>

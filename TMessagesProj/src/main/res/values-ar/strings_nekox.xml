@@ -146,7 +146,7 @@
     <string name="SubscriptionUpdating">تحديث الاشتراك</string>
     <string name="SubscriptionDelete">حذف الإشتراك</string>
     <string name="ExportStickers">تصدير الملصقات</string>
-    <string name="ImportStickers">استيراد ملصقات من الملف</string>
+    <string name="ImportStickersX">استيراد ملصقات من الملف</string>
     <string name="ImportStickersList">تصدير الملصقات</string>
     <string name="StickerSets">مجموعات الملصقات</string>
     <string name="InvalidStickersFile">ملف الملصقات غير صالح: </string>

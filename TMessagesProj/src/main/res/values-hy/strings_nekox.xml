@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Բաժանորդագրության թարմացում</string>
     <string name="SubscriptionDelete">Deleteնջել բաժանորդագրությունը</string>
     <string name="ExportStickers">Արտահանեք պիտակները</string>
-    <string name="ImportStickers">Ներմուծեք պիտակները ֆայլից</string>
+    <string name="ImportStickersX">Ներմուծեք պիտակները ֆայլից</string>
     <string name="ImportStickersList">Ներմուծեք պիտակները</string>
     <string name="StickerSets">Կպչուն պիտակներ</string>
     <string name="InvalidStickersFile">Կպչուկների անվավեր ֆայլ ՝ </string>

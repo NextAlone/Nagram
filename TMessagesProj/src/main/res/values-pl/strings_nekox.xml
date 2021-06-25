@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Aktualizowanie subskrypcji</string>
     <string name="SubscriptionDelete">Usuń subskrypcję</string>
     <string name="ExportStickers">Eksportuj naklejki</string>
-    <string name="ImportStickers">Importuj naklejki z pliku</string>
+    <string name="ImportStickersX">Importuj naklejki z pliku</string>
     <string name="ImportStickersList">Importuj naklejki</string>
     <string name="StickerSets">Zestawy naklejek</string>
     <string name="InvalidStickersFile">Nieprawidłowy plik z naklejkami: </string>

@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Atualização da assinatura</string>
     <string name="SubscriptionDelete">Excluir assinatura</string>
     <string name="ExportStickers">Exportar Stickers</string>
-    <string name="ImportStickers">Importar stickers de arquivo</string>
+    <string name="ImportStickersX">Importar stickers de arquivo</string>
     <string name="ImportStickersList">Importar Stickers</string>
     <string name="StickerSets">Pacote de Sticker</string>
     <string name="InvalidStickersFile">Arquivo de stickers inválido: </string>

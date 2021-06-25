@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Aboneliği Güncelleme</string>
     <string name="SubscriptionDelete">Aboneliği Sil</string>
     <string name="ExportStickers">Çıkartmaları Dışa Aktar</string>
-    <string name="ImportStickers">Çıkartmaları dosyadan içe aktar</string>
+    <string name="ImportStickersX">Çıkartmaları dosyadan içe aktar</string>
     <string name="ImportStickersList">Çıkartmaları içe aktar</string>
     <string name="StickerSets">Çıkartma Paketleri</string>
     <string name="InvalidStickersFile">Geçersiz çıkartmalar dosyası: </string>

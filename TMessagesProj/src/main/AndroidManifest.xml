@@ -224,7 +224,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="ton" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="org.telegram.messenger.CREATE_STICKER_PACK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*/*"/>
             </intent-filter>
 
             <meta-data
@@ -435,7 +441,8 @@
             android:enabled="true" />
         <service
             android:name=".NotificationsService"
-            android:enabled="true" />
+            android:enabled="true"
+            android:foregroundServiceType="mediaProjection|camera|microphone" />
         <service
             android:name=".NotificationRepeat"
             android:exported="false" />

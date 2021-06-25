@@ -145,7 +145,7 @@
     <string name="SubscriptionUpdating">Updating Subscription</string>
     <string name="SubscriptionDelete">Delete Subscription</string>
     <string name="ExportStickers">Export Stickers</string>
-    <string name="ImportStickers">Import stickers from file</string>
+    <string name="ImportStickersX">Import stickers from file</string>
     <string name="ImportStickersList">Import stickers</string>
     <string name="StickerSets">Sticker Sets</string>
     <string name="InvalidStickersFile">Invalid stickers file: </string>

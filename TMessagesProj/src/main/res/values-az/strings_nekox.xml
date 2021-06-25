@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Abunəlik yenilənir</string>
     <string name="SubscriptionDelete">Abunəliyi silin</string>
     <string name="ExportStickers">İxrac Etiketləri</string>
-    <string name="ImportStickers">Etiketləri fayldan idxal edin</string>
+    <string name="ImportStickersX">Etiketləri fayldan idxal edin</string>
     <string name="ImportStickersList">Etiketləri idxal edin</string>
     <string name="StickerSets">Etiket dəstləri</string>
     <string name="InvalidStickersFile">Yanlış stikerlər faylı: </string>

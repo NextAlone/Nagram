@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">サブスクリプションを更新中</string>
     <string name="SubscriptionDelete">サブスクリプションを削除</string>
     <string name="ExportStickers">ステッカーをエクスポート</string>
-    <string name="ImportStickers">ファイルからステッカーをインポート</string>
+    <string name="ImportStickersX">ファイルからステッカーをインポート</string>
     <string name="ImportStickersList">ステッカーをインポート</string>
     <string name="StickerSets">ステッカーセット</string>
     <string name="InvalidStickersFile">ステッカーファイルが無効です: </string>

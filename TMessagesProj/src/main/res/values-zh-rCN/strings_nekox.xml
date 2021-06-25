@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">正更新订阅</string>
     <string name="SubscriptionDelete">删除订阅</string>
     <string name="ExportStickers">导出贴纸集</string>
-    <string name="ImportStickers">从文件导入贴纸集</string>
+    <string name="ImportStickersX">从文件导入贴纸集</string>
     <string name="ImportStickersList">导入贴纸集</string>
     <string name="StickerSets">贴纸集</string>
     <string name="InvalidStickersFile">无效的贴纸集文件： </string>

@@ -146,7 +146,7 @@
     <string name="SubscriptionUpdating">درحال به روز رسانی اشتراک</string>
     <string name="SubscriptionDelete">حذف کردن اشتراک</string>
     <string name="ExportStickers">استخراج استیکر ها</string>
-    <string name="ImportStickers">وارد کردن استیکر ها از فایل</string>
+    <string name="ImportStickersX">وارد کردن استیکر ها از فایل</string>
     <string name="ImportStickersList">وارد کردن استیکر ها</string>
     <string name="StickerSets">دسته های استیکر</string>
     <string name="InvalidStickersFile">فایل استیکر نامعتبر: </string>

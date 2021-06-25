@@ -32,6 +32,7 @@ import android.util.Log;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.multidex.MultiDex;
 
+import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -314,9 +315,6 @@ public class ApplicationLoader extends Application {
         if (user != null) {
             MessagesController.getInstance(account).putUser(user, true);
         }
-
-        MediaController.getInstance().init(account);
-
         Utilities.stageQueue.postRunnable(() -> {
             Theme.init(account);
             SendMessagesHelper.getInstance(account).checkUnsentMessages();
@@ -452,6 +450,7 @@ public class ApplicationLoader extends Application {
         try {
             LocaleController.getInstance().onDeviceConfigurationChange(newConfig);
             AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
+            VideoCapturerDevice.checkScreenCapturerSize();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1856,7 +1856,7 @@ public class MediaDataController extends BaseController {
         if (thumb != null) {
             final ArrayList<TLRPC.Document> documents = stickerSet.documents;
             if (documents != null && !documents.isEmpty()) {
-                loadStickerSetThumbInternal(thumb, stickerSet, documents.get(0));
+                loadStickerSetThumbInternal(thumb, stickerSet, documents.get(0), stickerSet.set.thumb_version);
             }
         }
     }
@@ -1872,12 +1872,12 @@ public class MediaDataController extends BaseController {
             } else {
                 return;
             }
-            loadStickerSetThumbInternal(thumb, stickerSet, sticker);
+            loadStickerSetThumbInternal(thumb, stickerSet, sticker, stickerSet.set.thumb_version);
         }
     }
 
-    private void loadStickerSetThumbInternal(TLRPC.PhotoSize thumb, Object parentObject, TLRPC.Document sticker) {
-        final ImageLocation imageLocation = ImageLocation.getForSticker(thumb, sticker);
+    private void loadStickerSetThumbInternal(TLRPC.PhotoSize thumb, Object parentObject, TLRPC.Document sticker, int thumbVersion) {
+        final ImageLocation imageLocation = ImageLocation.getForSticker(thumb, sticker, thumbVersion);
         if (imageLocation != null) {
             final String ext = imageLocation.imageType == FileLoader.IMAGE_TYPE_LOTTIE ? "tgs" : "webp";
             getFileLoader().loadFile(imageLocation, parentObject, ext, 2, 1);
@@ -2640,7 +2640,9 @@ public class MediaDataController extends BaseController {
                         continue;
                     }
 
-                    objects.add(new MessageObject(currentAccount, message, usersDict, true, true));
+                    MessageObject messageObject = new MessageObject(currentAccount, message, usersDict, true, true);
+                    messageObject.createStrippedThumb();
+                    objects.add(messageObject);
                 }
 
                 AndroidUtilities.runOnUIThread(() -> {
@@ -5214,7 +5216,7 @@ public class MediaDataController extends BaseController {
         });
     }
 
-    public void loadBotInfo(final int uid, boolean cache, final int classGuid) {
+    public void loadBotInfo(final int uid, final long dialogId, boolean cache, final int classGuid) {
         if (cache) {
             TLRPC.BotInfo botInfo = botInfos.get(uid);
             if (botInfo != null) {
@@ -5225,7 +5227,7 @@ public class MediaDataController extends BaseController {
         getMessagesStorage().getStorageQueue().postRunnable(() -> {
             try {
                 TLRPC.BotInfo botInfo = null;
-                SQLiteCursor cursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info WHERE uid = %d", uid));
+                SQLiteCursor cursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info_v2 WHERE uid = %d AND dialogId = %d", uid, dialogId));
                 if (cursor.next()) {
                     NativeByteBuffer data;
 
@@ -5289,19 +5291,20 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    public void putBotInfo(final TLRPC.BotInfo botInfo) {
+    public void putBotInfo(long dialogId, TLRPC.BotInfo botInfo) {
         if (botInfo == null) {
             return;
         }
         botInfos.put(botInfo.user_id, botInfo);
         getMessagesStorage().getStorageQueue().postRunnable(() -> {
             try {
-                SQLitePreparedStatement state = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info(uid, info) VALUES(?, ?)");
+                SQLitePreparedStatement state = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info_v2 VALUES(?, ?, ?)");
                 state.requery();
                 NativeByteBuffer data = new NativeByteBuffer(botInfo.getObjectSize());
                 botInfo.serializeToStream(data);
                 state.bindInteger(1, botInfo.user_id);
-                state.bindByteBuffer(2, data);
+                state.bindLong(2, dialogId);
+                state.bindByteBuffer(3, data);
                 state.step();
                 data.reuse();
                 state.dispose();

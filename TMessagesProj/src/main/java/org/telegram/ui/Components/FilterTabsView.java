@@ -1220,7 +1220,10 @@ public class FilterTabsView extends FrameLayout {
             additionalTabWidth = trueTabsWidth < width ? (width - trueTabsWidth) / tabs.size() : 0;
             if (prevWidth != additionalTabWidth) {
                 ignoreLayout = true;
+                RecyclerView.ItemAnimator animator = listView.getItemAnimator();
+                listView.setItemAnimator(null);
                 adapter.notifyDataSetChanged();
+                listView.setItemAnimator(animator);
                 ignoreLayout = false;
             }
             updateTabsWidths();

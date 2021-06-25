@@ -583,7 +583,7 @@ public class ManageLinksActivity extends BaseFragment {
                 }
             }
         });
-        recyclerItemsEnterAnimator = new RecyclerItemsEnterAnimator(listView);
+        recyclerItemsEnterAnimator = new RecyclerItemsEnterAnimator(listView, false);
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         defaultItemAnimator.setDelayAnimations(false);
         defaultItemAnimator.setSupportsChangeAnimations(false);
