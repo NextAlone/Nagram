@@ -10349,10 +10349,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             rect.set(editStartX, editStartY, editStartX + AndroidUtilities.dp(32), editStartY + AndroidUtilities.dp(32));
             Theme.applyServiceShaderMatrix(getMeasuredWidth(), backgroundHeight, getX(), viewTop);
             canvas.drawRoundRect(rect, AndroidUtilities.dp(16), AndroidUtilities.dp(16), Theme.chat_actionBackgroundPaint);
-            if (Theme.hasGradientService()) {
-                canvas.drawRoundRect(rect, AndroidUtilities.dp(16), AndroidUtilities.dp(16), Theme.chat_actionBackgroundGradientDarkenPaint);
-            }
-            Theme.chat_editDrawable.draw(canvas);
+            //if (Theme.hasGradientService()) {
+            //    canvas.drawRoundRect(rect, AndroidUtilities.dp(16), AndroidUtilities.dp(16), Theme.chat_actionBackgroundGradientDarkenPaint);
+            //}
+            //Theme.chat_editDrawable.draw(canvas);
  
             setDrawableBounds(Theme.chat_editIconDrawable, editStartX + AndroidUtilities.dp(8), editStartY + AndroidUtilities.dp(9));
             Theme.chat_editIconDrawable.draw(canvas);

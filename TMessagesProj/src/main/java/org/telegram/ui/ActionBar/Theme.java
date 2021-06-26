@@ -7652,7 +7652,7 @@ public class Theme {
             chat_goIconDrawable = resources.getDrawable(R.drawable.message_arrow);
 
             //Devgram->
-            chat_editDrawable = createRoundRectDrawable(AndroidUtilities.dp(16), 0xffffffff);
+            // chat_editDrawable = createRoundRectDrawable(AndroidUtilities.dp(16), 0xffffffff);
             chat_editIconDrawable = resources.getDrawable(R.drawable.ic_penedit).mutate();
             //Devgram/
 
@@ -8134,6 +8134,7 @@ public class Theme {
             chat_botButtonPaint.setColor(0xffffffff);
             setDrawableColor(chat_commentStickerDrawable, 0xffffffff);
             setDrawableColor(chat_shareIconDrawable, 0xffffffff);
+            setDrawableColor(chat_editIconDrawable, 0xffffffff);
             setDrawableColor(chat_replyIconDrawable, 0xffffffff);
             setDrawableColor(chat_goIconDrawable, 0xffffffff);
             setDrawableColor(chat_botInlineDrawable, 0xffffffff);
@@ -8153,6 +8154,7 @@ public class Theme {
             chat_actionTextPaint.linkColor = getColor(key_chat_serviceLink);
             setDrawableColorByKey(chat_commentStickerDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_shareIconDrawable, key_chat_serviceIcon);
+            setDrawableColorByKey(chat_editIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_replyIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_goIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botInlineDrawable, key_chat_serviceIcon);
