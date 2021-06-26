@@ -5067,7 +5067,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             photoWidth = (int) (AndroidUtilities.getMinTabletSide() * 0.7f);
                         } else {
                             if (currentPhotoObject != null && (messageObject.type == MessageObject.TYPE_PHOTO || messageObject.type == MessageObject.TYPE_VIDEO || messageObject.type == 8) && currentPhotoObject.w >= currentPhotoObject.h) {
+<<<<<<< HEAD
+                                maxPhotoWidth = photoWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(64 + ((checkNeedDrawShareButton(messageObject) || checkNeedDrawEditButton(messageObject)) ? 10 : 0));
+=======
                                 photoWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(64 + (checkNeedDrawShareButton(messageObject) ? 10 : 0));
+>>>>>>> upstream/dev
                                 useFullWidth = true;
                             } else {
                                 photoWidth = (int) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * 0.7f);
@@ -10339,11 +10343,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
             setDrawableBounds(Theme.chat_editDrawable, editStartX, editStartY, AndroidUtilities.dp(32), AndroidUtilities.dp(32));
-            if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
-                Theme.chat_editDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackground), false));
-            } else {
-                Theme.chat_editDrawable.setColorFilter(Theme.colorFilter2);
-            }
+            // if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
+            //    Theme.chat_editDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackground), false));
+            //} else {
+            //    Theme.chat_editDrawable.setColorFilter(Theme.colorFilter2);
+            //}
             Theme.chat_editDrawable.draw(canvas);
  
             setDrawableBounds(Theme.chat_editIconDrawable, editStartX + AndroidUtilities.dp(8), editStartY + AndroidUtilities.dp(9));
