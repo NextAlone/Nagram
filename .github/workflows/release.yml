@@ -40,7 +40,7 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status') }}
+          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -121,7 +121,7 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status') }}
+          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
       - name: BoringSSL Cache
         uses: actions/cache@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -478,4 +478,4 @@ jobs:
           ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
           EOF
           sed -i -e 's@<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />@@g' TMessagesProj/src/main/AndroidManifest.xml
-          ./gradlew TMessagesProj:publishFullPlayRelease
+          ./gradlew TMessagesProj:publishMiniPlayRelease

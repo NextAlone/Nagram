@@ -199,6 +199,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             final RecyclerListView listView = mediaPages[0].listView;
             for (int a = 0, count = listView.getChildCount(); a < count; a++) {
                 View view = listView.getChildAt(a);
+                if (view.getTop() >= mediaPages[0].listView.getMeasuredHeight()) {
+                    continue;
+                }
                 BackupImageView imageView = null;
                 if (view instanceof SharedPhotoVideoCell) {
                     SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
@@ -259,8 +262,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                             }
                         }
                     }
-
                     return object;
+                }
+                if (mediaPages[0].selectedType == 0) {
+                    int position = photoVideoAdapter.getPositionForIndex(index);
+                    int firstVisiblePosition = mediaPages[0].layoutManager.findFirstVisibleItemPosition();
+                    int lastVisiblePosition = mediaPages[0].layoutManager.findLastVisibleItemPosition();
+
+                    if (position <= firstVisiblePosition) {
+                        mediaPages[0].layoutManager.scrollToPositionWithOffset(position, 0);
+                    } else if (position >= lastVisiblePosition && lastVisiblePosition >= 0) {
+                        mediaPages[0].layoutManager.scrollToPositionWithOffset(position, 0, true);
+                    }
                 }
             }
             return null;
@@ -450,7 +463,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                             for (int a = 0; a < dids.size(); a++) {
                                 long did = dids.get(a);
                                 if (message != null) {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0);
+                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
                                 }
                                 if (id == forward_noquote) {
                                     getMessageHelper().processForwardFromMyName(fmessages, did, true, 0);
@@ -1087,6 +1100,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 protected void onLayout(boolean changed, int l, int t, int r, int b) {
                     super.onLayout(changed, l, t, r, b);
                     updateSections(this, true);
+                    if (mediaPage.selectedType == 0) {
+                        PhotoViewer.getInstance().checkCurrentImageVisibility();
+                    }
                 }
             };
             mediaPages[a].listView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING);
@@ -1657,11 +1673,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 changed = true;
             }
         } else {
-            TLRPC.EncryptedChat currentEncryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat((int) (dialog_id >> 32));
-            if (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 46) {
-                if (hasMedia[4] != 0 && !scrollSlidingTextTabStrip.hasTab(4)) {
-                    changed = true;
-                }
+            if (hasMedia[4] != 0 && !scrollSlidingTextTabStrip.hasTab(4)) {
+                changed = true;
             }
         }
         if (hasMedia[2] != 0 && !scrollSlidingTextTabStrip.hasTab(2)) {
@@ -1691,12 +1704,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                     }
                 }
             } else {
-                TLRPC.EncryptedChat currentEncryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat((int) (dialog_id >> 32));
-                if (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 46) {
-                    if (hasMedia[4] != 0) {
-                        if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2));
-                        }
+                if (hasMedia[4] != 0) {
+                    if (!scrollSlidingTextTabStrip.hasTab(4)) {
+                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2));
                     }
                 }
             }
@@ -2122,7 +2132,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         }
 
         @Override
-        public boolean isEnabled(int section, int row) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder, int section, int row) {
             return row != 0;
         }
 
@@ -2249,7 +2259,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         }
 
         @Override
-        public boolean isEnabled(int section, int row) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder, int section, int row) {
             return row != 0;
         }
 
@@ -2425,7 +2435,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         }
 
         @Override
-        public boolean isEnabled(int section, int row) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder, int section, int row) {
             return false;
         }
 
@@ -2573,6 +2583,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         @Override
         public int getPositionForScrollProgress(float progress) {
             return 0;
+        }
+
+        public int getPositionForIndex(int i) {
+            return i / columnsCount;
         }
     }
 

@@ -20,6 +20,7 @@ public class BuildVars {
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean LOGS_ENABLED = DEBUG_PRIVATE_VERSION;
     public static boolean USE_CLOUD_STRINGS = true;
+    public static boolean NO_SCOPED_STORAGE = true;
 
     public static int BUILD_VERSION;
     public static String BUILD_VERSION_STRING;
@@ -31,9 +32,9 @@ public class BuildVars {
     public static String TGX_APP_HASH = "3e0cb5efcd52300aec5994fdfc5bdc16";
 
     public static boolean isUnknown = !BuildConfig.BUILD_TYPE.startsWith("release");
-    public static boolean isMini = BuildConfig.FLAVOR.startsWith("mini");
     public static boolean isPlay = BuildConfig.FLAVOR.endsWith("Play");
     public static boolean isFdroid = BuildConfig.BUILD_TYPE.toLowerCase().contains("fdroid");
+    public static boolean isMini = !BuildConfig.FLAVOR.startsWith("full");
 
     static {
 

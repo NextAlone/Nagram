@@ -524,7 +524,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     HashMap<Object, Object> selectedPhotos = new HashMap<>();
                     ArrayList<Object> selectedPhotosOrder = new ArrayList<>();
 
-                    PhotoPickerActivity fragment = new PhotoPickerActivity(0, MediaController.allMediaAlbumEntry, selectedPhotos, selectedPhotosOrder, 0, chatActivity != null, chatActivity);
+                    PhotoPickerActivity fragment = new PhotoPickerActivity(0, MediaController.allMediaAlbumEntry, selectedPhotos, selectedPhotosOrder, 0, chatActivity != null, chatActivity, false);
                     fragment.setDocumentsPicker(true);
                     fragment.setDelegate(new PhotoPickerActivity.PhotoPickerActivityDelegate() {
                         @Override

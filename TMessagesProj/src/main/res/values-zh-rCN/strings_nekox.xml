@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">正更新订阅</string>
     <string name="SubscriptionDelete">删除订阅</string>
     <string name="ExportStickers">导出贴纸集</string>
-    <string name="ImportStickers">从文件导入贴纸集</string>
+    <string name="ImportStickersX">从文件导入贴纸集</string>
     <string name="ImportStickersList">导入贴纸集</string>
     <string name="StickerSets">贴纸集</string>
     <string name="InvalidStickersFile">无效的贴纸集文件： </string>
@@ -233,6 +233,5 @@
     <string name="AddProxyWs">添加 WebSocket 中继</string>
     <string name="ProxyInfoWS">WebSocket 中继设置</string>
     <string name="WsPayload">Payload</string>
-    <string name="WsNeedLogin">由于技术限制, Ws 中继暂时不能在登录前使用.</string>
     <string name="AutoLockImmediately">立即</string>
 </resources>

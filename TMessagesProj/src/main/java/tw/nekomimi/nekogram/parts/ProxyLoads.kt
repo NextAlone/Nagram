@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
+import cn.hutool.http.HttpResponse
 import cn.hutool.http.HttpUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +35,17 @@ fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): 
                             subY = url.substringAfterLast("@")
                             urlFinal = url.substringBefore("@")
                         }
-                        var content = HttpUtil.get(urlFinal)
+                        var nextUrl = url
+                        var resp: HttpResponse
+                        while (true) {
+                            resp = HttpUtil.createGet(nextUrl).execute();
+                            if (resp.status == 301 || resp.status == 302 || resp.status == 307) {
+                                nextUrl = resp.header("Location");
+                                continue;
+                            }
+                            break;
+                        }
+                        var content = resp.body()
                         if (subX.isNotBlank()) {
                             content = content.substringAfter(subX)
                                     .substringBefore(subY)

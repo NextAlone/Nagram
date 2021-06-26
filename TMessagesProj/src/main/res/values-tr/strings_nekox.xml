@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Aboneliği Güncelleme</string>
     <string name="SubscriptionDelete">Aboneliği Sil</string>
     <string name="ExportStickers">Çıkartmaları Dışa Aktar</string>
-    <string name="ImportStickers">Çıkartmaları dosyadan içe aktar</string>
+    <string name="ImportStickersX">Çıkartmaları dosyadan içe aktar</string>
     <string name="ImportStickersList">Çıkartmaları içe aktar</string>
     <string name="StickerSets">Çıkartma Paketleri</string>
     <string name="InvalidStickersFile">Geçersiz çıkartmalar dosyası: </string>
@@ -229,7 +229,6 @@
     <string name="ImportSettingsAlert">Ayarların üzerine yazmak istediğinizden emin misiniz\? Bilinmeyen kaynaklardan ayarları içe aktarmak, PIN kodunun üzerine yazılmasına ve uygulamanın kilitlenmesine neden olabilir.</string>
     <string name="ImportSettings">Ayarları içe aktar</string>
     <string name="BackupSettings">Yedekleme ayarları</string>
-    <string name="WsNeedLogin">Teknik sınırlamalar nedeniyle, Ws Relay oturum açmadan önce kullanılamaz.</string>
     <string name="AutoLockImmediately">Hemen</string>
     <string name="WsPayload">Yük</string>
     <string name="SetPinnedSuffix">(Sabitlendi)</string>

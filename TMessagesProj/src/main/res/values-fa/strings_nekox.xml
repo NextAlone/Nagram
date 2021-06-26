@@ -146,7 +146,7 @@
     <string name="SubscriptionUpdating">درحال به روز رسانی اشتراک</string>
     <string name="SubscriptionDelete">حذف کردن اشتراک</string>
     <string name="ExportStickers">استخراج استیکر ها</string>
-    <string name="ImportStickers">وارد کردن استیکر ها از فایل</string>
+    <string name="ImportStickersX">وارد کردن استیکر ها از فایل</string>
     <string name="ImportStickersList">وارد کردن استیکر ها</string>
     <string name="StickerSets">دسته های استیکر</string>
     <string name="InvalidStickersFile">فایل استیکر نامعتبر: </string>
@@ -236,7 +236,6 @@
     <string name="ProxyInfoWS">تنظیمات رله WebSocket</string>
     <string name="AddProxyWs">افزودن رله WebSocket</string>
     <string name="BackupSettings">پشتیبان‌گیری از تنظیمات</string>
-    <string name="WsNeedLogin">به دلیل محدودیت‌های فنی، رله Ws نمی‌تواند پیش از ورود به حساب استفاده شود.</string>
     <string name="AutoLockImmediately">بلافاصله</string>
     <string name="nekoXPaymentRemovedToast">عملکرد پرداخت حذف شده است.</string>
     <string name="ImportSettingsAlert">آیا از دوباره ‌نویسی تنظیمات اطمینان دارید؟ وارد کردن تنظیمات از منابع ناشناس ممکن است باعث دوباره نویسی سنجاق‌شده‌ها و قفل‌شدن برنامه شود.</string>

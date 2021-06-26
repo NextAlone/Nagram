@@ -849,7 +849,7 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
                         inner->temp_session_id = connection->getSessionId();
 
                         NetworkMessage *networkMessage = new NetworkMessage();
-                        networkMessage->message = std::unique_ptr<TL_message>(new TL_message());
+                        networkMessage->message = std::make_unique<TL_message>();
                         networkMessage->message->msg_id = authKeyPendingMessageId = messageId;
                         networkMessage->message->bytes = inner->getObjectSize();
                         networkMessage->message->body = std::unique_ptr<TLObject>(inner);
@@ -911,9 +911,9 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
 }
 
 void Handshake::sendAckRequest(int64_t messageId) {
-    TL_msgs_ack *msgsAck = new TL_msgs_ack();
+    /*TL_msgs_ack *msgsAck = new TL_msgs_ack();
     msgsAck->msg_ids.push_back(messageId);
-    sendRequestData(msgsAck, false);
+    sendRequestData(msgsAck, false);*/
 }
 
 TLObject *Handshake::getCurrentHandshakeRequest() {

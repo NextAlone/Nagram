@@ -143,7 +143,7 @@
     <string name="SubscriptionUpdating">Az előfizetés frissítése</string>
     <string name="SubscriptionDelete">Előfizetés törlése</string>
     <string name="ExportStickers">Matricák exportálása</string>
-    <string name="ImportStickers">Matricák importálása fájlból</string>
+    <string name="ImportStickersX">Matricák importálása fájlból</string>
     <string name="ImportStickersList">Matricák importálása</string>
     <string name="StickerSets">Matrica készletek</string>
     <string name="InvalidStickersFile">Érvénytelen matricafájl: </string>

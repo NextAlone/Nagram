@@ -168,7 +168,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+//        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         updateRows();
 
         return true;
@@ -350,17 +350,17 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiDidLoad) {
+       /* if (id == NotificationCenter.emojiDidLoad) {
             if (listView != null) {
                 listView.invalidateViews();
             }
-        }
+        }*/
     }
 
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+//        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {

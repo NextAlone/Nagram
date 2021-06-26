@@ -63,7 +63,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -2098,11 +2097,11 @@ public class AlertsCreator {
             int diff = (int) ((time - systemTime) / 1000);
             String t;
             if (diff > 24 * 60 * 60) {
-                t = LocaleController.formatPluralString("DaysSchedule", diff / (24 * 60 * 60));
+                t = LocaleController.formatPluralString("DaysSchedule", Math.round(diff / (24 * 60 * 60.0f)));
             } else if (diff >= 60 * 60) {
-                t = LocaleController.formatPluralString("HoursSchedule", diff / (60 * 60));
+                t = LocaleController.formatPluralString("HoursSchedule", Math.round(diff / (60 * 60.0f)));
             } else if (diff >= 60) {
-                t = LocaleController.formatPluralString("MinutesSchedule", diff / 60);
+                t = LocaleController.formatPluralString("MinutesSchedule", Math.round(diff / 60.0f));
             } else {
                 t = LocaleController.formatPluralString("SecondsSchedule", diff);
             }
@@ -3641,7 +3640,11 @@ public class AlertsCreator {
         builder.setPositiveButton(LocaleController.getString("Enable", R.string.Enable), (dialogInterface, i) -> {
             if (activity != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    activity.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())));
+                    try {
+                        activity.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
                 }
             }
         });

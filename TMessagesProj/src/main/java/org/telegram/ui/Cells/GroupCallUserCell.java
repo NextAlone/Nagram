@@ -176,7 +176,6 @@ public class GroupCallUserCell extends FrameLayout {
         muteButton.setScaleX(0.6f + 0.4f * (1f - progressToAvatarPreview));
         muteButton.setScaleY(0.6f + 0.4f * (1f - progressToAvatarPreview));
 
-
         invalidate();
     }
 
@@ -190,6 +189,12 @@ public class GroupCallUserCell extends FrameLayout {
             AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, true, 1f, animated);
         } else {
             AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, false, 1f, animated);
+        }
+    }
+
+    public void setDrawAvatar(boolean draw) {
+        if (avatarImageView.getImageReceiver().getVisible() != draw) {
+            avatarImageView.getImageReceiver().setVisible(draw, true);
         }
     }
 
@@ -443,7 +448,7 @@ public class GroupCallUserCell extends FrameLayout {
         return avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    public void setData(AccountInstance account, TLRPC.TL_groupCallParticipant groupCallParticipant, ChatObject.Call call, int self, TLRPC.FileLocation uploadingAvatar) {
+    public void setData(AccountInstance account, TLRPC.TL_groupCallParticipant groupCallParticipant, ChatObject.Call call, int self, TLRPC.FileLocation uploadingAvatar, boolean animated) {
         currentCall = call;
         accountInstance = account;
         selfId = self;
@@ -486,7 +491,7 @@ public class GroupCallUserCell extends FrameLayout {
                 }
             }
         }
-        applyParticipantChanges(false);
+        applyParticipantChanges(animated);
     }
 
     public void setDrawDivider(boolean draw) {
@@ -874,9 +879,15 @@ public class GroupCallUserCell extends FrameLayout {
 
         avatarImageView.setScaleX(avatarWavesDrawable.getAvatarScale());
         avatarImageView.setScaleY(avatarWavesDrawable.getAvatarScale());
+
         avatarProgressView.setScaleX(avatarWavesDrawable.getAvatarScale());
         avatarProgressView.setScaleY(avatarWavesDrawable.getAvatarScale());
+
         super.dispatchDraw(canvas);
+    }
+
+    public void getAvatarPosition(int[] pos) {
+        avatarImageView.getLocationInWindow(pos);
     }
 
     public static class AvatarWavesDrawable {
@@ -1030,5 +1041,12 @@ public class GroupCallUserCell extends FrameLayout {
         if (info.isEnabled() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, participant.muted && !participant.can_self_unmute ? LocaleController.getString("VoipUnmute", R.string.VoipUnmute) : LocaleController.getString("VoipMute", R.string.VoipMute)));
         }
+    }
+
+    public int getPeerId() {
+        if (participant == null) {
+            return 0;
+        }
+        return MessageObject.getPeerId(participant.peer);
     }
 }

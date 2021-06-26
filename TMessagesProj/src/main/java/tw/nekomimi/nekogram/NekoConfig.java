@@ -147,9 +147,12 @@ public class NekoConfig {
     public static boolean avatarBackgroundBlur;
     public static boolean avatarBackgroundDarken;
     public static boolean disableTrending;
+    public static boolean dontSendGreetingSticker;
+    public static boolean takeGIFasVideo;
 
     public static boolean disableAutoDownloadingWin32Executable;
     public static boolean disableAutoDownloadingArchive;
+
 
     public static String getOpenPGPAppName() {
 
@@ -311,6 +314,8 @@ public class NekoConfig {
         increaseVoiceMessageQuality = preferences.getBoolean("increaseVoiceMessageQuality", true);
         acceptSecretChat = preferences.getBoolean("acceptSecretChat", true);
         disableTrending = preferences.getBoolean("disableTrending", true);
+        dontSendGreetingSticker = preferences.getBoolean("dontSendGreetingSticker", false);
+        takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
         disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
@@ -807,6 +812,14 @@ public class NekoConfig {
 
     public static void toggleDisableAutoDownloadingArchive() {
         preferences.edit().putBoolean("disableAutoDownloadingArchive", disableAutoDownloadingArchive = !disableAutoDownloadingArchive).apply();
+    }
+
+    public static void toggleDontSendGreetingSticker() {
+        preferences.edit().putBoolean("dontSendGreetingSticker", dontSendGreetingSticker = !dontSendGreetingSticker).apply();
+    }
+
+    public static void toggleTakeGIFasVideo() {
+        preferences.edit().putBoolean("takeGIFasVideo", takeGIFasVideo = !takeGIFasVideo).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

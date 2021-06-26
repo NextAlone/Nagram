@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">구독 업데이트</string>
     <string name="SubscriptionDelete">구독 삭제</string>
     <string name="ExportStickers">스티커 내보내기</string>
-    <string name="ImportStickers">스티커를 파일에서 가져 오기</string>
+    <string name="ImportStickersX">스티커를 파일에서 가져 오기</string>
     <string name="ImportStickersList">스티커 가져 오기</string>
     <string name="StickerSets">스티커 세트</string>
     <string name="InvalidStickersFile">잘못된 스티커 파일:</string>

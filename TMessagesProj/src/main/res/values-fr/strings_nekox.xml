@@ -132,7 +132,7 @@
     <string name="SubscriptionUpdating">Mise à jour de l\'abonnement</string>
     <string name="SubscriptionDelete">Supprimer l\'abonnement</string>
     <string name="ExportStickers">Exporter des autocollants</string>
-    <string name="ImportStickers">Importer des autocollants depuis un fichier</string>
+    <string name="ImportStickersX">Importer des autocollants depuis un fichier</string>
     <string name="ImportStickersList">Importer des autocollants</string>
     <string name="StickerSets">Ensembles d\'autocollants</string>
     <string name="InvalidStickersFile">Fichier d\'autocollants invalide: </string>

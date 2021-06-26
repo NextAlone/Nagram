@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">מעדכן מנוי</string>
     <string name="SubscriptionDelete">מחק את המנוי</string>
     <string name="ExportStickers">ייצוא מדבקות</string>
-    <string name="ImportStickers">ייבא שרתים מקובץ</string>
+    <string name="ImportStickersX">ייבא שרתים מקובץ</string>
     <string name="ImportStickersList">יבוא מדבקות</string>
     <string name="StickerSets">סטים של מדבקה</string>
     <string name="InvalidStickersFile">קובץ מדבקות לא חוקי: </string>

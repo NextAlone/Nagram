@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Perbarui Langganan</string>
     <string name="SubscriptionDelete">Hapus Langganan</string>
     <string name="ExportStickers">Ekspor Stiker</string>
-    <string name="ImportStickers">Impor stiker dari berkas</string>
+    <string name="ImportStickersX">Impor stiker dari berkas</string>
     <string name="ImportStickersList">Impor stiker</string>
     <string name="StickerSets">Atur Stiker</string>
     <string name="InvalidStickersFile">File stiker tidak valid: </string>
@@ -220,7 +220,6 @@
     <string name="ImportSettingsAlert">Yakin ingin menimpa pengaturan\? Mengimpor pengaturan dari sumber yang tidak dikenal dapat menyebabkan pin ditimpa dan menyebabkan aplikasi terkunci.</string>
     <string name="ImportSettings">Pengaturan impor</string>
     <string name="BackupSettings">Pengaturan cadangan</string>
-    <string name="WsNeedLogin">Karena keterbatasan teknis, Ws Relay tidak dapat digunakan sebelum masuk.</string>
     <string name="AutoLockImmediately">Segera</string>
     <string name="WsPayload">Muatan</string>
     <string name="ProxyInfoWS">Pengaturan WebSocket Relay</string>

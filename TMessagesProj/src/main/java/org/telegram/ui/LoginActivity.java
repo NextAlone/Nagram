@@ -2282,7 +2282,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             needShowProgress(reqId);
         }
 
+        private boolean numberFilled;
         public void fillNumber() {
+            if (numberFilled) {
+                return;
+            }
             try {
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
                 if (tm.getSimState() != TelephonyManager.SIM_STATE_ABSENT && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE) {
@@ -2311,6 +2315,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             return;
                         }*/
                     }
+                    numberFilled = true;
                     if (!newAccount && allowCall) {
                         String number = PhoneFormat.stripExceptNumbers(tm.getLine1Number());
                         String textToSet = null;

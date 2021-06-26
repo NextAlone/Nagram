@@ -14,5 +14,5 @@ rm -rf build/release &&
 mkdir -p build/release &&
 find TMessagesProj/build/outputs/apk -name "*.apk" -exec cp {} build/release \; &&
 rm -f build/release/*-debug.apk &&
-rm -f build/release/*fullPlay*.apk &&
+rm -f build/release/*miniPlay*.apk &&
 ghr -delete -n "$1" "$1" build/release

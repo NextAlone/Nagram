@@ -665,18 +665,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             if (position == useProxyRow) {
                 if (SharedConfig.currentProxy == null) {
                     if (!SharedConfig.proxyList.isEmpty()) {
-                        SharedConfig.ProxyInfo toSet = null;
-                        for (SharedConfig.ProxyInfo proxyInfo : SharedConfig.proxyList) {
-                            if (!SharedConfig.activeAccounts.isEmpty() || !(proxyInfo instanceof SharedConfig.WsProxy)) {
-                                toSet = proxyInfo;
-                                break;
-                            }
-                        }
-                        if (toSet == null) {
-                            AlertUtil.showToast(LocaleController.getString("WsNeedLogin", R.string.WsNeedLogin));
-                            addProxy();
-                            return;
-                        }
                         SharedConfig.setCurrentProxy(SharedConfig.proxyList.get(0));
                     } else {
                         addProxy();
@@ -704,11 +692,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 editor.apply();
             } else if (position >= proxyStartRow && position < proxyEndRow) {
                 SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
-
-                if (SharedConfig.activeAccounts.isEmpty() && info instanceof SharedConfig.WsProxy) {
-                    AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("WsNeedLogin", R.string.WsNeedLogin));
-                    return;
-                }
 
                 useProxySettings = true;
                 SharedConfig.setCurrentProxy(info);

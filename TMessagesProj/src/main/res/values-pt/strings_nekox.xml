@@ -74,7 +74,7 @@
     <string name="InvalidStickersFile">Ficheiro de stickers inválido:</string>
     <string name="StickerSets">Pacote de Sticker</string>
     <string name="ImportStickersList">Importar Stickers</string>
-    <string name="ImportStickers">Importar stickers de ficheiro</string>
+    <string name="ImportStickersX">Importar stickers de ficheiro</string>
     <string name="ExportStickers">Exportar Stickers</string>
     <string name="SubscriptionDelete">Apagar assinatura</string>
     <string name="SubscriptionUpdating">Atualização da assinatura</string>

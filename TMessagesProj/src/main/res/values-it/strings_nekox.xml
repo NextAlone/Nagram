@@ -144,7 +144,7 @@
     <string name="SubscriptionUpdating">Aggiornamento Abbonamento</string>
     <string name="SubscriptionDelete">Elimina Abbonamento</string>
     <string name="ExportStickers">Esporta Adesivi</string>
-    <string name="ImportStickers">Importa adesivi da file</string>
+    <string name="ImportStickersX">Importa adesivi da file</string>
     <string name="ImportStickersList">Importa adesivi</string>
     <string name="StickerSets">Set Di Adesivi</string>
     <string name="InvalidStickersFile">File adesivi non valido: </string>
@@ -217,7 +217,6 @@
     <string name="ImportSettingsAlert">Sei sicuro di voler sovrascrivere le impostazioni\? L\'importazione delle impostazioni da fonti sconosciute può causare la sovrascrittura del pin e causare il blocco dell\'applicazione.</string>
     <string name="ImportSettings">Importa impostazioni</string>
     <string name="BackupSettings">Backup impostazioni</string>
-    <string name="WsNeedLogin">A causa di limitazioni tecniche, i Relay WebSocket non possono essere usati prima di aver fatto login.</string>
     <string name="AutoLockImmediately">Immediatamente</string>
     <string name="WsPayload">Payload</string>
     <string name="ProxyInfoWS">Impostazioni Relay WebSocket</string>
