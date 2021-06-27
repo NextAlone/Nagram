@@ -67,7 +67,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     }
 
     private boolean hasImportingStickers() {
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for(int a : SharedConfig.activeAccounts){
             if (SendMessagesHelper.getInstance(a).isImportingStickers()) {
                 return true;
             }
