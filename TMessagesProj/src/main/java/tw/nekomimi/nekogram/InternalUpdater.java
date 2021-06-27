@@ -58,10 +58,10 @@ public class InternalUpdater {
 
             ReleaseMetadata release = null;
             for (ReleaseMetadata rel : releases) {
+                if (rel.name.equals("v" + BuildVars.BUILD_VERSION_STRING))
+                    break;
                 if (rel.name.contains("rc") && NekoXConfig.autoUpdateReleaseChannel < 2 || rel.name.contains("preview") && NekoXConfig.autoUpdateReleaseChannel < 3)
                     continue;
-                if (rel.name.equals("v" + BuildConfig.VERSION_NAME))
-                    break;
                 release = rel;
                 break;
             }
