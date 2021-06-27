@@ -1391,7 +1391,7 @@ public class MediaDataController extends BaseController {
         } else {
             final LongSparseArray<TLRPC.TL_messages_stickerSet> newStickerSets = new LongSparseArray<>();
             // NekoX: Pin Sticker
-            if (NekoXConfig.enableStickerPin && type == MediaDataController.TYPE_IMAGE) {
+            if (NekoConfig.enableStickerPin && type == MediaDataController.TYPE_IMAGE) {
                 PinnedStickerHelper ins = PinnedStickerHelper.getInstance(UserConfig.selectedAccount);
                 if (ins.reorderPinnedStickersForSS(res.sets, true))
                     AndroidUtilities.runOnUIThread(() -> {
@@ -1910,7 +1910,7 @@ public class MediaDataController extends BaseController {
 
         final int type = stickerSet.masks ? TYPE_MASK : TYPE_IMAGE;
 
-        if (NekoXConfig.enableStickerPin && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
+        if (NekoConfig.enableStickerPin && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
             PinnedStickerHelper.getInstance(currentAccount).removePinnedStickerLocal(stickerSet.id);
         }
 
@@ -1947,7 +1947,7 @@ public class MediaDataController extends BaseController {
             toggleStickerSetInternal(context, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, false);
         } else {
             final StickerSetBulletinLayout bulletinLayout = new StickerSetBulletinLayout(context, stickerSetObject, toggle);
-            final int finalCurrentIndex = NekoXConfig.enableStickerPin && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
+            final int finalCurrentIndex = NekoConfig.enableStickerPin && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
                     ? PinnedStickerHelper.getInstance(UserConfig.selectedAccount).pinnedList.size()
                     : currentIndex;
             // NekoX: Pin Sticker, Fix undo for Archiving and Deleting
