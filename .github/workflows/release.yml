@@ -381,10 +381,10 @@ jobs:
               wait $job || exit 1
             done
           }
-          upload apks/NekoX-full-*-release.apk
-          upload apks/NekoX-full-*-releaseNoGcm.apk
           upload apks/NekoX-mini-*-release.apk
           upload apks/NekoX-mini-*-releaseNoGcm.apk
+          upload apks/NekoX-full-*-release.apk
+          upload apks/NekoX-full-*-releaseNoGcm.apk
   play:
     name: Publish to Play Store
     if: github.event.inputs.play != 'y'
