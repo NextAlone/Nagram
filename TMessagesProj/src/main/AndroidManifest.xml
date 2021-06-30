@@ -220,11 +220,9 @@
                 android:priority="1"
                 android:roundIcon="@mipmap/ic_launcher">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="*/*" />
+                <data android:scheme="tg" />
             </intent-filter>
 
             <intent-filter>
