@@ -113,5 +113,6 @@
     <string name="DontSendGreetingSticker">Don\'t send greeting sticker</string>
     <string name="TakeGIFasVideo">Take GIF as Video</string>
     <string name="UseMediaStreamInVoip">Use media stream in Voip</string>
+    <string name="HideTimeForSticker">Hide time for stickers</string>
 
 </resources>
