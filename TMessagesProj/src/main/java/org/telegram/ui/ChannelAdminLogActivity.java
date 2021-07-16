@@ -745,9 +745,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     ImageReceiver imageReceiver = chatMessageCell.getAvatarImage();
                     if (imageReceiver != null) {
                         if (chatMessageCell.getMessageObject().deleted) {
-//                            if (child.getTranslationY() != 0) {
-//                                canvas.restore();
-//                            }
                             imageReceiver.setVisible(false, false);
                             return result;
                         }
@@ -763,17 +760,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             if (p >= 0) {
                                 int nextPosition;
 
-                                nextPosition = p - 1;
+                                nextPosition = p + 1;
 
                                 holder = chatListView.findViewHolderForAdapterPosition(nextPosition);
                                 if (holder != null) {
-//                                    if (child.getTranslationY() != 0) {
-//                                        canvas.restore();
-//                                    }
                                     imageReceiver.setVisible(false, false);
                                     return result;
                                 }
-
                             }
                         }
                         float tx = chatMessageCell.getSlidingOffsetX() + chatMessageCell.getCheckBoxTranslation();
@@ -785,9 +778,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             y = maxY;
                         }
 
-//                        if (child.getTranslationY() != 0) {
-//                            canvas.restore();
-//                        }
                         if (chatMessageCell.drawPinnedTop()) {
                             int p;
 
@@ -804,7 +794,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
                                     int prevPosition;
 
-                                    prevPosition = p + 1;
+                                    prevPosition = p - 1;
 
 
                                     holder = chatListView.findViewHolderForAdapterPosition(prevPosition);

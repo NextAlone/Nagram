@@ -928,8 +928,7 @@ public class SharedConfig {
         @Override
         public void start() {
             if (loader != null) return;
-            synchronized (this)
-            {
+            synchronized (this) {
                 loader = new WsLoader();
                 port = ProxyManager.mkPort();
                 loader.init(bean, port);
@@ -945,8 +944,7 @@ public class SharedConfig {
             if (loader == null) return;
             ConnectionsManager.setProxySettings(false, address, port, username, password, secret);
             UIUtil.runOnIoDispatcher(() -> {
-                synchronized (this)
-                {
+                synchronized (this) {
                     if (loader == null)
                         return;
                     loader.stop();
@@ -2214,31 +2212,33 @@ public class SharedConfig {
     }
 
     public static void checkSaveToGalleryFiles() {
-        try {
-            File telegramPath = EnvUtil.getTelegramPath();
-            File imagePath = new File(telegramPath, "images");
-            imagePath.mkdirs();
-            File videoPath = new File(telegramPath, "videos");
-            videoPath.mkdirs();
+        Utilities.globalQueue.postRunnable(() -> {
+            try {
+                File telegramPath = EnvUtil.getTelegramPath();
+                File imagePath = new File(telegramPath, "images");
+                imagePath.mkdirs();
+                File videoPath = new File(telegramPath, "videos");
+                videoPath.mkdirs();
 
-            if (saveToGallery) {
-                if (imagePath.isDirectory()) {
-                    new File(imagePath, ".nomedia").delete();
+                if (saveToGallery) {
+                    if (imagePath.isDirectory()) {
+                        new File(imagePath, ".nomedia").delete();
+                    }
+                    if (videoPath.isDirectory()) {
+                        new File(videoPath, ".nomedia").delete();
+                    }
+                } else {
+                    if (imagePath.isDirectory()) {
+                        AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
+                    }
+                    if (videoPath.isDirectory()) {
+                        AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
+                    }
                 }
-                if (videoPath.isDirectory()) {
-                    new File(videoPath, ".nomedia").delete();
-                }
-            } else {
-                if (imagePath.isDirectory()) {
-                    AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
-                }
-                if (videoPath.isDirectory()) {
-                    AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
-                }
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
+        });
     }
 
     public static int getChatSwipeAction(int currentAccount) {

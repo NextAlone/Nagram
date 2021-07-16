@@ -34,6 +34,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
@@ -70,7 +71,7 @@ public class DrawerProfileCell extends FrameLayout {
     private FireworksEffect fireworksEffect;
     private boolean accountsShown;
     private int darkThemeBackgroundColor;
-
+    public static boolean switchingTheme;
 
     private Bitmap lastBitmap;
     private TLRPC.User user;

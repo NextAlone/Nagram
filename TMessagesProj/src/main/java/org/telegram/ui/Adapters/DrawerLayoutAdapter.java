@@ -57,8 +57,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator) {
         mContext = context;
         itemAnimator = animator;
-        accountsShown = MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
-        Theme.createDialogsResources(context);
+        accountsShown = UserConfig.getActivatedAccountsCount() > 1 && MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
+        Theme.createCommonDialogResources(context);
         resetItems();
         try {
             hasGps = ApplicationLoader.applicationContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
@@ -344,7 +344,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         }
 
         public void bind(DrawerActionCell actionCell) {
-            actionCell.setTextAndIcon(text, icon);
+            actionCell.setTextAndIcon(id, text, icon);
         }
     }
 

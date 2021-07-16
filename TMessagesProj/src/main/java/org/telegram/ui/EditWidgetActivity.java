@@ -75,6 +75,7 @@ import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.InviteMembersBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.io.File;
@@ -653,7 +654,7 @@ public class EditWidgetActivity extends BaseFragment {
                 } else {
                     drawable.setAlpha(255);
                 }
-                if (drawable instanceof ColorDrawable || drawable instanceof GradientDrawable) {
+                if (drawable instanceof ColorDrawable || drawable instanceof GradientDrawable || drawable instanceof MotionBackgroundDrawable) {
                     drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                     if (drawable instanceof BackgroundGradientDrawable) {
                         final BackgroundGradientDrawable backgroundGradientDrawable = (BackgroundGradientDrawable) drawable;

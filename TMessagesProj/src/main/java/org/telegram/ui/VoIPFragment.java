@@ -226,7 +226,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             return;
         }
         boolean transitionFromPip = VoIPPiPView.getInstance() != null;
-        if (VoIPService.getSharedInstance() == null) {
+        if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getUser() == null) {
             return;
         }
         VoIPFragment fragment = new VoIPFragment(account);

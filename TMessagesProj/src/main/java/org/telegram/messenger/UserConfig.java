@@ -225,7 +225,7 @@ public class UserConfig extends BaseController {
     }
 
     public static boolean isValidAccount(int num) {
-         return num >= 0 && SharedConfig.activeAccounts.contains(num) && getInstance(num).isClientActivated();
+        return num >= 0 && SharedConfig.activeAccounts.contains(num) && getInstance(num).isClientActivated();
     }
 
     public boolean isClientActivated() {

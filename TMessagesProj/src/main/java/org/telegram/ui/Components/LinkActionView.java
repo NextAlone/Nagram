@@ -496,8 +496,8 @@ public class LinkActionView extends LinearLayout {
                 } else {
                     avatarsContainer.avatarsImageView.setObject(i, UserConfig.selectedAccount, null);
                 }
-                avatarsContainer.avatarsImageView.commitTransition(false);
             }
+            avatarsContainer.avatarsImageView.commitTransition(false);
         }
     }
 

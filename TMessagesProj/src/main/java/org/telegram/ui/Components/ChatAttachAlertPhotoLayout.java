@@ -1629,6 +1629,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         animateCameraValues[2] = itemSize;
         additionCloseCameraY = 0;
         cameraExpanded = true;
+        cameraView.setFpsLimit(-1);
         if (animated) {
             setCameraOpenProgress(0);
             cameraAnimationInProgress = true;
@@ -1720,15 +1721,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         } else {
                             AndroidUtilities.rectTmp.set(0 , 0, getMeasuredWidth(), getMeasuredHeight());
                         }
+                        canvas.save();
                         canvas.clipRect(AndroidUtilities.rectTmp);
                         super.dispatchDraw(canvas);
                         canvas.restore();
                     }
-
                 }
             };
             cameraView.setRecordFile(AndroidUtilities.generateVideoPath(parentAlert.baseFragment instanceof ChatActivity && ((ChatActivity) parentAlert.baseFragment).isSecretChat()));
             cameraView.setFocusable(true);
+            cameraView.setFpsLimit(30);
             if (Build.VERSION.SDK_INT >= 21) {
                 Path path = new Path();
                 float[] radii = new float[8];
@@ -2062,6 +2064,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         cameraView.invalidate();
                     }
                     cameraOpened = false;
+
                     if (cameraPanel != null) {
                         cameraPanel.setVisibility(View.GONE);
                     }
@@ -2072,8 +2075,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     if (cameraPhotoRecyclerView != null) {
                         cameraPhotoRecyclerView.setVisibility(View.GONE);
                     }
-                    if (Build.VERSION.SDK_INT >= 21 && cameraView != null) {
-                        cameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                    if (cameraView != null) {
+                        cameraView.setFpsLimit(30);
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            cameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                        }
                     }
                 }
             });
@@ -2098,6 +2104,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 }
             }
             cameraOpened = false;
+            cameraView.setFpsLimit(30);
             if (Build.VERSION.SDK_INT >= 21) {
                 cameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             }

@@ -1157,8 +1157,11 @@ public boolean retriedToSend;
                                 message.httpLocation = null;
                                 message.obj.messageOwner.attachPath = cacheFile.toString();
                                 if (!document.thumbs.isEmpty()) {
-                                    message.photoSize = document.thumbs.get(0);
-                                    message.locationParent = document;
+                                    TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                                    if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                        message.photoSize = photoSize;
+                                        message.locationParent = document;
+                                    }
                                 }
                                 ArrayList<TLRPC.Message> messages = new ArrayList<>();
                                 messages.add(messageObject.messageOwner);
@@ -2376,8 +2379,11 @@ public boolean retriedToSend;
                     delayedMessage.inputUploadMedia = uploadedDocument;
                     delayedMessage.performMediaUpload = performMediaUpload;
                     if (!document.thumbs.isEmpty()) {
-                        delayedMessage.photoSize = document.thumbs.get(0);
-                        delayedMessage.locationParent = document;
+                        TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                        if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                            delayedMessage.photoSize = photoSize;
+                            delayedMessage.locationParent = document;
+                        }
                     }
                     delayedMessage.videoEditedInfo = videoEditedInfo;
                 } else if (type == 7) {
@@ -2406,8 +2412,11 @@ public boolean retriedToSend;
                         delayedMessage.type = 2;
                         delayedMessage.obj = messageObject;
                         if (!document.thumbs.isEmpty()) {
-                            delayedMessage.photoSize = document.thumbs.get(0);
-                            delayedMessage.locationParent = document;
+                            TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                            if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                delayedMessage.photoSize = photoSize;
+                                delayedMessage.locationParent = document;
+                            }
                         }
                         delayedMessage.parentObject = parentObject;
                         delayedMessage.inputUploadMedia = uploadedDocument;
@@ -3795,8 +3804,11 @@ public boolean retriedToSend;
                         delayedMessage.inputUploadMedia = uploadedDocument;
                         delayedMessage.performMediaUpload = performMediaUpload;
                         if (!document.thumbs.isEmpty()) {
-                            delayedMessage.photoSize = document.thumbs.get(0);
-                            delayedMessage.locationParent = document;
+                            TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                            if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                delayedMessage.photoSize = photoSize;
+                                delayedMessage.locationParent = document;
+                            }
                         }
                         delayedMessage.videoEditedInfo = videoEditedInfo;
                     } else if (type == 6) {
@@ -3858,8 +3870,11 @@ public boolean retriedToSend;
                             delayedMessage.inputUploadMedia = uploadedMedia;
                             delayedMessage.performMediaUpload = performMediaUpload;
                             if (!document.thumbs.isEmpty()) {
-                                delayedMessage.photoSize = document.thumbs.get(0);
-                                delayedMessage.locationParent = document;
+                                TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                                if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                    delayedMessage.photoSize = photoSize;
+                                    delayedMessage.locationParent = document;
+                                }
                             }
                         }
                     } else if (type == 8) {
@@ -4520,7 +4535,7 @@ public boolean retriedToSend;
                         putToDelayedMessages(location, message);
                         getFileLoader().uploadFile(location, message.sendRequest == null, false, ConnectionsManager.FileTypeFile);
                         putToUploadingMessages(message.obj);
-                    } else if (media.thumb == null && message.photoSize != null) {
+                    } else if (media.thumb == null && message.photoSize != null && !(message.photoSize instanceof TLRPC.TL_photoStrippedSize)) {
                         String location = FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE) + "/" + message.photoSize.location.volume_id + "_" + message.photoSize.location.local_id + ".jpg";
                         putToDelayedMessages(location, message);
                         getFileLoader().uploadFile(location, false, true, ConnectionsManager.FileTypePhoto);
@@ -5437,9 +5452,9 @@ public boolean retriedToSend;
     private void updateMediaPaths(MessageObject newMsgObj, TLRPC.Message sentMessage, int newMsgId, String originalPath, boolean post) {
         TLRPC.Message newMsg = newMsgObj.messageOwner;
 
+        TLRPC.PhotoSize strippedNew = null;
         if (newMsg.media != null) {
             TLRPC.PhotoSize strippedOld = null;
-            TLRPC.PhotoSize strippedNew = null;
             TLObject photoObject = null;
             if (newMsgObj.isLiveLocation() && sentMessage.media instanceof TLRPC.TL_messageMediaGeoLive) {
                 newMsg.media.period = sentMessage.media.period;
@@ -5540,6 +5555,11 @@ public boolean retriedToSend;
                         String fileName = size2.location.volume_id + "_" + size2.location.local_id;
                         File cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), fileName + ".jpg");
                         cacheFile.delete();
+                        if ("s".equals(size2.type) && strippedNew != null) {
+                            newMsg.media.photo.sizes.set(b, strippedNew);
+                            ImageLocation location = ImageLocation.getForPhoto(strippedNew, sentMessage.media.photo);
+                            ImageLoader.getInstance().replaceImageInCache(fileName, location.getKey(sentMessage, null, false), location, post);
+                        }
                     }
                 }
             }
@@ -6904,7 +6924,7 @@ public boolean retriedToSend;
                             originalPath = info.uri.toString();
                         }
 
-                        if (tempPath != null && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp"))) {
+                        if (tempPath != null && info.ttl <= 0 && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp"))) {
                             continue;
                         } else if (ImageLoader.shouldSendImageAsDocument(info.path, info.uri)) {
                             continue;
@@ -7383,7 +7403,7 @@ public boolean retriedToSend;
                         if (forceDocument || ImageLoader.shouldSendImageAsDocument(info.path, info.uri)) {
                             isDocument = true;
                             extension = tempPath != null ? FileLoader.getFileExtension(new File(tempPath)) : "";
-                        } else if (tempPath != null && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp"))) {
+                        } else if (tempPath != null && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp")) && info.ttl <= 0) {
                             if (tempPath.endsWith(".gif")) {
                                 extension = "gif";
                             } else {
