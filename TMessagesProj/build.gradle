@@ -74,6 +74,8 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
+    def flavorsConfig = "config/debug"
+
     signingConfigs {
         def github = System.getenv("GITHUB_REPOSITORY")
         if (github != null && github != "") {
@@ -117,7 +119,6 @@ android {
             shrinkResources false
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
         }
 
         /*debugAsan {
@@ -157,7 +158,6 @@ android {
             minifyEnabled true
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
         }
 
         standalone {
@@ -168,18 +168,17 @@ android {
             minifyEnabled true
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
         }
 
         release {
             debuggable false
             jniDebuggable false
             signingConfig signingConfigs.release
+            applicationIdSuffix ".beta"
             minifyEnabled true
             shrinkResources false
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
         }
     }
 
@@ -196,11 +195,11 @@ android {
     }
 
     sourceSets.standalone {
-        manifest.srcFile 'config/release/AndroidManifest.xml'
+        manifest.srcFile flavorsConfig + '/AndroidManifest.xml'
     }
 
     sourceSets.release {
-        manifest.srcFile 'config/release/AndroidManifest.xml'
+        manifest.srcFile flavorsConfig + '/AndroidManifest.xml'
     }
 
     flavorDimensions "minApi"
@@ -212,6 +211,82 @@ android {
             }
             ext {
                 abiVersionCode = 1
+            }
+        }
+        x86 {
+            ndk {
+                abiFilters "x86"
+            }
+            ext {
+                abiVersionCode = 2
+            }
+        }
+        armv7_SDK23 {
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+            sourceSets.debug {
+                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
+            }
+            sourceSets.release {
+                manifest.srcFile flavorsConfig + '/AndroidManifest_SDK23.xml'
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 3
+            }
+        }
+        x86_SDK23 {
+            ndk {
+                abiFilters "x86"
+            }
+            sourceSets.debug {
+                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
+            }
+            sourceSets.release {
+                manifest.srcFile flavorsConfig + '/AndroidManifest_SDK23.xml'
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 4
+            }
+        }
+        arm64 {
+            ndk {
+                abiFilters "arm64-v8a"
+            }
+            ext {
+                abiVersionCode = 5
+            }
+        }
+        x64 {
+            ndk {
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+            sourceSets.debug {
+                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
+            }
+            sourceSets.release {
+                manifest.srcFile flavorsConfig + '/AndroidManifest_SDK23.xml'
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 7
+            }
+        }
+        x64_SDK23 {
+            ndk {
+                abiFilters "x86_64"
+            }
+            sourceSets.debug {
+                manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
+            }
+            sourceSets.release {
+                manifest.srcFile flavorsConfig + '/AndroidManifest_SDK23.xml'
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 2
             }
         }
         bundleAfat_SDK23 {
@@ -240,10 +315,10 @@ android {
                 manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
             }
             sourceSets.release {
-                manifest.srcFile 'config/release/AndroidManifest_SDK23.xml'
+                manifest.srcFile flavorsConfig + '/AndroidManifest_SDK23.xml'
             }
             sourceSets.standalone {
-                manifest.srcFile 'config/release/AndroidManifest_standalone.xml'
+                manifest.srcFile flavorsConfig + '/AndroidManifest_standalone.xml'
             }
             ext {
                 abiVersionCode = 9
