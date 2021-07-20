@@ -6,6 +6,18 @@ jobs:
   linux:
     name: Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: [debug, release]
+        include:
+          - type: debug
+            afat: assembleAfatDebug
+            name: ""
+            updates: 1
+          - type: release
+            afat: assembleAfatRelease
+            name: " compressed"
+            updates: 0
     steps:
       - uses: actions/checkout@v2
         with:
@@ -18,6 +30,7 @@ jobs:
           echo "ADDITIONAL_BUILD_NUMBER = $result should be betweetn 0 and 10!"
           echo "ADDITIONAL_BUILD_NUMBER=$result" >> $GITHUB_ENV
           echo "USER_REPO=$GITHUB_REPOSITORY" >> $GITHUB_ENV
+          echo "CHECK_UPDATES=${{ matrix.updates }}" >> $GITHUB_ENV
       - name: Add language.
         env:
           URL_LANG: ${{ secrets.URL_LANG }}
@@ -43,15 +56,15 @@ jobs:
           echo $ADDITIONAL_BUILD_NUMBER
           sudo apt update
           sudo apt install openjdk-17-jdk openjdk-17-jre ninja-build
-          ./gradlew assembleAfatDebug
-          
+          ./gradlew ${{ matrix.afat }}
+
           #grep BUILD_VERSION_STRING TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java | cut -d'"' -f 2 > ver.txt
-          grep VERSION_NAME TMessagesProj/build/generated/source/buildConfig/afat/debug/org/telegram/messenger/BuildConfig.java | cut -d'"' -f 2 > ver.txt
-          
+          grep VERSION_NAME TMessagesProj/build/generated/source/buildConfig/afat/${{ matrix.type }}/org/telegram/messenger/BuildConfig.java | cut -d'"' -f 2 > ver.txt
+
           mkdir artifact
-          mv TMessagesProj/build/outputs/apk/afat/debug/app.apk artifact/ForkClient_$(cat ver.txt).apk
+          mv TMessagesProj/build/outputs/apk/afat/${{ matrix.type }}/app.apk "artifact/ForkClient $(cat ver.txt)${{ matrix.name }}.apk"
       - uses: actions/upload-artifact@master
         name: Upload artifact.
         with:
-          name: ForkClient
+          name: ForkClient-${{ matrix.type }}
           path: artifact/
