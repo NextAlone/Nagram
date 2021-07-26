@@ -1526,6 +1526,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public View createView(Context context) {
         Theme.createProfileResources(context);
+        Theme.createChatResources(context, false);
 
         searchTransitionOffset = 0;
         searchTransitionProgress = 1f;

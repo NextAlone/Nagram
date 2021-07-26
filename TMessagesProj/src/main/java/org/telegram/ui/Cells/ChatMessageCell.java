@@ -8107,10 +8107,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (firstVisibleBlockNum >= 0) {
             int restore = Integer.MIN_VALUE;
             int oldAlpha = -1;
+            int oldLinkAlpha = -1;
             if (alpha != 1.0f) {
                 if (drawOnlyText) {
                     oldAlpha = Theme.chat_msgTextPaint.getAlpha();
+                    oldLinkAlpha = Color.alpha(Theme.chat_msgTextPaint.linkColor);
                     Theme.chat_msgTextPaint.setAlpha((int) (oldAlpha * alpha));
+                    Theme.chat_msgTextPaint.linkColor = ColorUtils.setAlphaComponent(Theme.chat_msgTextPaint.linkColor, (int) (oldLinkAlpha * alpha));
                 } else {
                     if (currentBackgroundDrawable != null) {
                         int top = currentBackgroundDrawable.getBounds().top;
@@ -8162,6 +8165,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             if (oldAlpha >= 0) {
                 Theme.chat_msgTextPaint.setAlpha(oldAlpha);
+                Theme.chat_msgTextPaint.linkColor = ColorUtils.setAlphaComponent(Theme.chat_msgTextPaint.linkColor, oldLinkAlpha);
             }
 
             if (restore != Integer.MIN_VALUE) {
@@ -9902,6 +9906,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 return;
             }
             Theme.MessageDrawable drawable = a == 0 ? currentBackgroundDrawable : currentBackgroundSelectedDrawable;
+            if (drawable == null) {
+                continue;
+            }
             int h = parentHeight;
             if (h == 0) {
                 h = AndroidUtilities.displaySize.y;

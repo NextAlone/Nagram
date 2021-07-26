@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    style="@style/TMessages.AppWidget.Background"
     android:layout_width="match_parent"
     android:layout_height="262dp"
-    android:background="@drawable/widget_bg"
-    android:padding="2dp">
+    android:orientation="vertical"
+    android:theme="@style/Theme.TMessages.AppWidget">
 
-    <ListView
-        android:id="@+id/list_view"
+    <ListView android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="0px"
         android:scrollbars="none"
-        android:divider="#00000000" />
+        android:divider="#00000000"/>
 
     <TextView
         android:id="@+id/empty_view"

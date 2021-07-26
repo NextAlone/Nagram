@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "7.8.1-preview01"
-def verCode = 345
+def verName = "7.8.2-preview01"
+def verCode = 350
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1")
 }
 
-def officialVer = "7.8.1"
-def officialCode = 2372
+def officialVer = "7.8.2"
+def officialCode = 2376
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -78,8 +78,8 @@ def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "nekox.messenger"

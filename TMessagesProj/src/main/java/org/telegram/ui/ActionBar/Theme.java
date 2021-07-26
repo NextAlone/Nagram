@@ -7408,7 +7408,7 @@ public class Theme {
         }
     }
 
-    public static void createCommonChatResources(Context context) {
+    public static void createCommonChatResources() {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
                 chat_msgTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -7505,7 +7505,7 @@ public class Theme {
     }
 
     public static void createChatResources(Context context, boolean fontsOnly) {
-        createCommonChatResources(context);
+        createCommonChatResources();
 
         if (!fontsOnly && chat_msgInDrawable == null) {
 
@@ -8726,6 +8726,7 @@ public class Theme {
             Drawable drawable = wallpaper;
             AndroidUtilities.runOnUIThread(() -> {
                 wallpaperLoadTask = null;
+                createCommonChatResources();
                 applyChatServiceMessageColor(null, null, drawable);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper);
             });

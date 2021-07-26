@@ -903,7 +903,7 @@ public class MessageObject {
     }
 
     public MessageObject(int accountNum, TLRPC.Message message, MessageObject replyToMessage, AbstractMap<Integer, TLRPC.User> users, AbstractMap<Integer, TLRPC.Chat> chats, SparseArray<TLRPC.User> sUsers, SparseArray<TLRPC.Chat> sChats, boolean generateLayout, boolean checkMediaExists, long eid) {
-        Theme.createCommonChatResources(null);
+        Theme.createCommonChatResources();
 
         currentAccount = accountNum;
         messageOwner = message;
@@ -2370,7 +2370,7 @@ public class MessageObject {
         }
         wantedBotKeyboardWidth = 0;
         if (messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup || messageOwner.reactions != null && !messageOwner.reactions.results.isEmpty()) {
-            Theme.createCommonChatResources(null);
+            Theme.createCommonChatResources();
             if (botButtonsLayout == null) {
                 botButtonsLayout = new StringBuilder();
             } else {

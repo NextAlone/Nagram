@@ -211,6 +211,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     float pinchScale;
 
     boolean isInPinchToZoomTouchMode;
+    boolean maybePinchToZoomTouchMode;
 
     private int pointerId1, pointerId2;
 
@@ -2501,7 +2502,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         if (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-            if (!isInPinchToZoomTouchMode && ev.getPointerCount() == 2 && finishZoomTransition == null && recording) {
+            if (maybePinchToZoomTouchMode && !isInPinchToZoomTouchMode && ev.getPointerCount() == 2 && finishZoomTransition == null && recording) {
                 pinchStartDistance = (float) Math.hypot(ev.getX(1) - ev.getX(0), ev.getY(1) - ev.getY(0));
 
                 pinchScale = 1f;
@@ -2512,7 +2513,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
             if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
                 AndroidUtilities.rectTmp.set(cameraContainer.getX(), cameraContainer.getY(), cameraContainer.getX() + cameraContainer.getMeasuredWidth(), cameraContainer.getY() + cameraContainer.getMeasuredHeight());
-                return AndroidUtilities.rectTmp.contains(ev.getX(), ev.getY());
+                maybePinchToZoomTouchMode = AndroidUtilities.rectTmp.contains(ev.getX(), ev.getY());
             }
             return true;
         } else if (ev.getActionMasked() == MotionEvent.ACTION_MOVE && isInPinchToZoomTouchMode) {
@@ -2540,7 +2541,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             isInPinchToZoomTouchMode = false;
             finishZoom();
         }
-        return isInPinchToZoomTouchMode;
+        return true;
     }
 
     ValueAnimator finishZoomTransition;
