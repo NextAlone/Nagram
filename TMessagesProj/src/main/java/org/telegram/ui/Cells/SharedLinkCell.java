@@ -48,7 +48,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 public class SharedLinkCell extends FrameLayout {
 
     public interface SharedLinkCellDelegate {
-        void needOpenWebView(TLRPC.WebPage webPage);
+        void needOpenWebView(TLRPC.WebPage webPage, MessageObject messageObject);
         boolean canPerformActions();
         void onLinkPress(final String urlFinal, boolean longPress);
     }
@@ -452,6 +452,10 @@ public class SharedLinkCell extends FrameLayout {
         requestLayout();
     }
 
+    public ImageReceiver getLinkImageView() {
+        return linkImageView;
+    }
+
     public void setDelegate(SharedLinkCellDelegate sharedLinkCellDelegate) {
         delegate = sharedLinkCellDelegate;
     }
@@ -508,7 +512,7 @@ public class SharedLinkCell extends FrameLayout {
                                 try {
                                     TLRPC.WebPage webPage = pressedLink == 0 && message.messageOwner.media != null ? message.messageOwner.media.webpage : null;
                                     if (webPage != null && webPage.embed_url != null && webPage.embed_url.length() != 0) {
-                                        delegate.needOpenWebView(webPage);
+                                        delegate.needOpenWebView(webPage, message);
                                     } else {
                                         delegate.onLinkPress(links.get(pressedLink), false);
                                     }

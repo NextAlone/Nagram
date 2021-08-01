@@ -157,6 +157,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private boolean checkShowPermissions = true;
     private boolean newAccount;
     private boolean syncContacts;
+    private boolean testBackend = false;
 
     private int scrollHeight;
 
@@ -1686,6 +1687,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         private CheckBoxCell syncCell;
         private CheckBoxCell infoCell;
+        private CheckBoxCell testBackendCheckBox;
 
         private int countryState = 0;
 
@@ -2010,6 +2012,20 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             allowFlashCall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
 
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                testBackendCheckBox = new CheckBoxCell(context, 2);
+                testBackendCheckBox.setText("Test Backend", "", testBackend, false);
+                addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+                testBackendCheckBox.setOnClickListener(v -> {
+                    if (getParentActivity() == null) {
+                        return;
+                    }
+                    CheckBoxCell cell = (CheckBoxCell) v;
+                    testBackend = !testBackend;
+                    cell.setChecked(testBackend, true);
+                });
+            }
+
             HashMap<String, String> languageMap = new HashMap<>();
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().getAssets().open("countries.txt")));
@@ -2138,6 +2154,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
+            boolean isTestBakcend = BuildVars.DEBUG_PRIVATE_VERSION && getConnectionsManager().isTestBackend();
+            if (isTestBakcend != testBackend) {
+                getConnectionsManager().switchBackend(false);
+                isTestBakcend = testBackend;
+            }
             if (getParentActivity() instanceof LaunchActivity) {
                 for (int a : SharedConfig.activeAccounts) {
                     UserConfig userConfig = UserConfig.getInstance(a);
@@ -2145,7 +2166,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         continue;
                     }
                     String userPhone = userConfig.getCurrentUser().phone;
-                    if (PhoneNumberUtils.compare(phone, userPhone) && ConnectionsManager.native_isTestBackend(currentAccount) == ConnectionsManager.native_isTestBackend(a)) {
+                    if (PhoneNumberUtils.compare(phone, userPhone) && ConnectionsManager.getInstance(a).isTestBackend() == isTestBakcend) {
                         final int num = a;
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.NekoX));

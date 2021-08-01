@@ -300,6 +300,9 @@ public class MessagesController extends BaseController implements NotificationCe
     public String mapKey;
     public int maxMessageLength;
     public int maxCaptionLength;
+    public int roundVideoSize;
+    public int roundVideoBitrate;
+    public int roundAudioBitrate;
     public boolean blockedCountry;
     public boolean preloadFeaturedStickers;
     public String youtubePipType;
@@ -859,7 +862,9 @@ public class MessagesController extends BaseController implements NotificationCe
         autoarchiveAvailable = mainPreferences.getBoolean("autoarchiveAvailable", false);
         groipCallVideoMaxParticipants = mainPreferences.getInt("groipCallVideoMaxParticipants", 30);
         suggestStickersApiOnly = mainPreferences.getBoolean("suggestStickersApiOnly", false);
-
+        roundVideoSize = mainPreferences.getInt("roundVideoSize", 384);
+        roundVideoBitrate = mainPreferences.getInt("roundVideoBitrate", 1000);
+        roundAudioBitrate = mainPreferences.getInt("roundAudioBitrate", 64);
         pendingSuggestions = mainPreferences.getStringSet("pendingSuggestions", null);
         if (pendingSuggestions != null) {
             pendingSuggestions = new HashSet<>(pendingSuggestions);
@@ -1740,6 +1745,50 @@ public class MessagesController extends BaseController implements NotificationCe
                                     updateCheckDelay = delay;
                                     editor.putInt("updateCheckDelay", updateCheckDelay);
                                     changed = true;
+                                }
+                            }
+                            break;
+                        }
+                        case "round_video_encoding": {
+                            if (value.value instanceof TLRPC.TL_jsonObject) {
+                                TLRPC.TL_jsonObject jsonObject = (TLRPC.TL_jsonObject) value.value;
+                                for (int b = 0, N2 = jsonObject.value.size(); b < N2; b++) {
+                                    TLRPC.TL_jsonObjectValue value2 = jsonObject.value.get(b);
+                                    switch (value2.key) {
+                                        case "diameter": {
+                                            if (value2.value instanceof TLRPC.TL_jsonNumber) {
+                                                TLRPC.TL_jsonNumber number = (TLRPC.TL_jsonNumber) value2.value;
+                                                if (number.value != roundVideoSize) {
+                                                    roundVideoSize = (int) number.value;
+                                                    editor.putInt("roundVideoSize", roundVideoSize);
+                                                    changed = true;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                        case "video_bitrate": {
+                                            if (value2.value instanceof TLRPC.TL_jsonNumber) {
+                                                TLRPC.TL_jsonNumber number = (TLRPC.TL_jsonNumber) value2.value;
+                                                if (number.value != roundVideoBitrate) {
+                                                    roundVideoBitrate = (int) number.value;
+                                                    editor.putInt("roundVideoBitrate", roundVideoBitrate);
+                                                    changed = true;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                        case "audio_bitrate": {
+                                            if (value2.value instanceof TLRPC.TL_jsonNumber) {
+                                                TLRPC.TL_jsonNumber number = (TLRPC.TL_jsonNumber) value2.value;
+                                                if (number.value != roundAudioBitrate) {
+                                                    roundAudioBitrate = (int) number.value;
+                                                    editor.putInt("roundAudioBitrate", roundAudioBitrate);
+                                                    changed = true;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                             break;
@@ -9679,7 +9728,7 @@ public class MessagesController extends BaseController implements NotificationCe
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
         if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
-            ConnectionsManager.native_switchBackend(currentAccount);
+            ConnectionsManager.native_switchBackend(currentAccount, false);
         }
         SharedConfig.activeAccounts.remove(currentAccount);
         SharedConfig.saveAccounts();

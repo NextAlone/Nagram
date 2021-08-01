@@ -38,10 +38,11 @@ public abstract class BaseCell extends ViewGroup {
                 if (!NekoConfig.disableVibration) {
                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
-                onLongPress();
-                MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                onTouchEvent(event);
-                event.recycle();
+                if (onLongPress()) {
+                    MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
+                    onTouchEvent(event);
+                    event.recycle();
+                }
             }
         }
     }
@@ -103,7 +104,7 @@ public abstract class BaseCell extends ViewGroup {
         return false;
     }
 
-    protected void onLongPress() {
-
+    protected boolean onLongPress() {
+        return true;
     }
 }

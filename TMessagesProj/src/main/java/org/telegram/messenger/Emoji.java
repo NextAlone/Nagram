@@ -308,7 +308,6 @@ public class Emoji {
 
         @Override
         public void setAlpha(int alpha) {
-            placeholderPaint.setAlpha(alpha);
             paint.setAlpha(alpha);
         }
 
