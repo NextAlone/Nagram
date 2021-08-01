@@ -2949,7 +2949,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
 
-                    if (!BuildVars.isFdroid) {
+                    if (!BuildVars.isFdroid && !BuildVars.isPlay) {
                         builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
                             UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), false));
                             return Unit.INSTANCE;
