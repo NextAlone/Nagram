@@ -4802,7 +4802,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             TLRPC.Chat chat = parentFragment.getCurrentChat();
             TLRPC.User user = parentFragment.getCurrentUser();
             if (user != null || ChatObject.isChannel(chat) && chat.megagroup || !ChatObject.isChannel(chat)) {
-                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, !notify).commit();
+                MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("silent_" + dialog_id, !notify).apply();
             }
         }
         if (stickersExpanded) {
@@ -4846,27 +4846,29 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
         }
-        if (processSendingText(message, notify, scheduleDate)) {
-            if (delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
-                messageEditText.setText("");
-                if (delegate != null) {
-                    delegate.onMessageSend(message, notify, scheduleDate);
-                }
-            } else {
-                if (delegate != null) {
-                    delegate.beforeMessageSend(message, notify, scheduleDate);
-                }
-                messageTransitionIsRunning = false;
-                AndroidUtilities.runOnUIThread(moveToSendStateRunnable = () -> {
-                    moveToSendStateRunnable = null;
-                    hideTopView(true);
+        if (StrUtil.isNotBlank(message)) {
+            if (delegate != null) {
+                delegate.beforeMessageSend(message, notify, scheduleDate);
+            }
+            if (processSendingText(message, notify, scheduleDate)) {
+                if (delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
                     messageEditText.setText("");
                     if (delegate != null) {
                         delegate.onMessageSend(message, notify, scheduleDate);
                     }
-                }, 200);
+                } else {
+                    messageTransitionIsRunning = false;
+                    AndroidUtilities.runOnUIThread(moveToSendStateRunnable = () -> {
+                        moveToSendStateRunnable = null;
+                        hideTopView(true);
+                        messageEditText.setText("");
+                        if (delegate != null) {
+                            delegate.onMessageSend(message, notify, scheduleDate);
+                        }
+                    }, 200);
+                }
+                lastTypingTimeSend = 0;
             }
-            lastTypingTimeSend = 0;
         } else if (forceShowSendButton) {
             if (delegate != null) {
                 delegate.beforeMessageSend(null, notify, scheduleDate);
