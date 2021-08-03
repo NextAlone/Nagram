@@ -68,6 +68,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.SettingsSuggestionCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
@@ -99,7 +100,7 @@ public class ChangePhoneActivity extends BaseFragment {
 
     private final static int done_button = 1;
 
-    private class ProgressView extends View {
+    private static class ProgressView extends View {
 
         private Paint paint = new Paint();
         private Paint paint2 = new Paint();
@@ -584,7 +585,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                     phoneField.setText(builder);
                     if (start >= 0) {
-                        phoneField.setSelection(start <= phoneField.length() ? start : phoneField.length());
+                        phoneField.setSelection(Math.min(start, phoneField.length()));
                     }
                     phoneField.onTextChange();
                     ignoreOnPhoneChange = false;
@@ -998,10 +999,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 int maxHeight = AndroidUtilities.dp(291);
                 if (scrollHeight - innerHeight < requiredHeight) {
                     setMeasuredDimension(getMeasuredWidth(), innerHeight + requiredHeight);
-                } else if (scrollHeight > maxHeight) {
-                    setMeasuredDimension(getMeasuredWidth(), maxHeight);
                 } else {
-                    setMeasuredDimension(getMeasuredWidth(), scrollHeight);
+                    setMeasuredDimension(getMeasuredWidth(), Math.min(scrollHeight, maxHeight));
                 }
             }
         }
@@ -1432,6 +1431,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     MessagesController.getInstance(currentAccount).putUser(user, false);
                     finishFragment();
                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                    getMessagesController().removeSuggestion(0, "VALIDATE_PHONE_NUMBER");
                 } else {
                     lastError = error.text;
                     if (currentType == 3 && (nextType == 4 || nextType == 2) || currentType == 2 && (nextType == 4 || nextType == 3) || currentType == 4 && nextType == 2) {

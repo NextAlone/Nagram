@@ -32,6 +32,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -105,6 +106,7 @@ import org.telegram.ui.Components.SendingFileDrawable;
 import org.telegram.ui.Components.StatusDrawable;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.TypingDotsDrawable;
+import org.telegram.ui.RoundVideoProgressShadow;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -125,6 +127,9 @@ import java.util.concurrent.CountDownLatch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class Theme {
@@ -172,6 +177,8 @@ public class Theme {
         public static final int TYPE_MEDIA = 1;
         public static final int TYPE_PREVIEW = 2;
 
+        Drawable transitionDrawable;
+        int transitionDrawableColor;
         private int alpha;
 
         public MessageDrawable(int type, boolean out, boolean selected) {
@@ -334,6 +341,29 @@ public class Theme {
                 backgroundDrawableColor[idx2][idx] = color;
             }
             return backgroundDrawable[idx2][idx];
+        }
+
+        public Drawable getTransitionDrawable(int color) {
+            if (transitionDrawable == null) {
+                Bitmap bitmap = Bitmap.createBitmap(dp(50), dp(40), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+
+                backupRect.set(getBounds());
+
+                Paint shadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                shadowPaint.setColor(0xffffffff);
+                setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                draw(canvas, shadowPaint);
+
+                transitionDrawable = new NinePatchDrawable(bitmap, getByteBuffer(bitmap.getWidth() / 2 - 1, bitmap.getWidth() / 2 + 1, bitmap.getHeight() / 2 - 1, bitmap.getHeight() / 2 + 1).array(), new Rect(), null);
+                setBounds(backupRect);
+            }
+            if (transitionDrawableColor != color) {
+                transitionDrawableColor = color;
+                transitionDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            }
+
+            return transitionDrawable;
         }
 
         public Drawable getShadowDrawable() {
@@ -2197,6 +2227,9 @@ public class Theme {
     public static Paint chat_composeBackgroundPaint;
     public static Paint chat_radialProgressPaint;
     public static Paint chat_radialProgress2Paint;
+    public static Paint chat_radialProgressPausedPaint;
+    public static Paint chat_radialProgressPausedSeekbarPaint;
+
     public static TextPaint chat_msgTextPaint;
     public static TextPaint chat_actionTextPaint;
     public static TextPaint chat_msgBotButtonPaint;
@@ -3148,6 +3181,9 @@ public class Theme {
     private static ThreadLocal<float[]> hsvTemp3Local = new ThreadLocal<>();
     private static ThreadLocal<float[]> hsvTemp4Local = new ThreadLocal<>();
     private static ThreadLocal<float[]> hsvTemp5Local = new ThreadLocal<>();
+
+    private static FragmentContextViewWavesDrawable fragmentContextViewWavesDrawable;
+    private static RoundVideoProgressShadow roundPlayDrawable;
 
     static {
         defaultColors.put(key_dialogBackground, 0xffffffff);
@@ -6434,6 +6470,7 @@ public class Theme {
                             ThemeInfo.fillAccentValues(accent, theme.settings);
                             if (currentTheme == themeInfo && currentTheme.currentAccentId == accent.id) {
                                 refreshThemeColors();
+                                createChatResources(ApplicationLoader.applicationContext, false);
                                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme, currentNightTheme == currentTheme, null, -1);
                             }
                             PatternsLoader.createLoader(true);
@@ -6757,34 +6794,34 @@ public class Theme {
             Integer gradientToColor3 = colors.get(key_chat_wallpaper_gradient_to3);
 
             int defaultBackgroundColor = backgroundColor != null ? backgroundColor : 0;
-            int backgroundOverrideColor = (int) accent.backgroundOverrideColor;
+            int backgroundOverrideColor = accent != null ? (int) accent.backgroundOverrideColor : 0;
             int backColor;
-            if (backgroundOverrideColor == 0 && accent.backgroundOverrideColor != 0) {
+            if (backgroundOverrideColor == 0 && accent != null && accent.backgroundOverrideColor != 0) {
                 backColor = 0;
             } else {
                 backColor = backgroundOverrideColor != 0 ? backgroundOverrideColor : defaultBackgroundColor;
             }
 
             int defaultBackgroundGradient1 = gradientToColor1 != null ? gradientToColor1 : 0;
-            int backgroundGradientOverrideColor1 = (int) accent.backgroundGradientOverrideColor1;
+            int backgroundGradientOverrideColor1 = accent != null ? (int) accent.backgroundGradientOverrideColor1 : 0;
             int color1;
-            if (backgroundGradientOverrideColor1 == 0 && accent.backgroundGradientOverrideColor1 != 0) {
+            if (backgroundGradientOverrideColor1 == 0 && accent != null && accent.backgroundGradientOverrideColor1 != 0) {
                 color1 = 0;
             } else {
                 color1 = backgroundGradientOverrideColor1 != 0 ? backgroundGradientOverrideColor1 : defaultBackgroundGradient1;
             }
             int defaultBackgroundGradient2 = gradientToColor2 != null ? gradientToColor2 : 0;
-            int backgroundGradientOverrideColor2 = (int) accent.backgroundGradientOverrideColor2;
+            int backgroundGradientOverrideColor2 = accent != null ? (int) accent.backgroundGradientOverrideColor2 : 0;
             int color2;
-            if (backgroundGradientOverrideColor2 == 0 && accent.backgroundGradientOverrideColor2 != 0) {
+            if (backgroundGradientOverrideColor2 == 0 && accent != null && accent.backgroundGradientOverrideColor2 != 0) {
                 color2 = 0;
             } else {
                 color2 = backgroundGradientOverrideColor2 != 0 ? backgroundGradientOverrideColor2 : defaultBackgroundGradient2;
             }
             int defaultBackgroundGradient3 = gradientToColor3 != null ? gradientToColor3 : 0;
-            int backgroundGradientOverrideColor3 = (int) accent.backgroundGradientOverrideColor3;
+            int backgroundGradientOverrideColor3 = accent != null ? (int) accent.backgroundGradientOverrideColor3 : 0;
             int color3;
-            if (backgroundGradientOverrideColor3 == 0 && accent.backgroundGradientOverrideColor3 != 0) {
+            if (backgroundGradientOverrideColor3 == 0 && accent != null && accent.backgroundGradientOverrideColor3 != 0) {
                 color3 = 0;
             } else {
                 color3 = backgroundGradientOverrideColor3 != 0 ? backgroundGradientOverrideColor3 : defaultBackgroundGradient3;
@@ -6794,7 +6831,7 @@ public class Theme {
                 try {
                     Uri data = Uri.parse(wallpaperLink[0]);
                     String bgColor = data.getQueryParameter("bg_color");
-                    if (!TextUtils.isEmpty(bgColor)) {
+                    if (accent != null && !TextUtils.isEmpty(bgColor)) {
                         accent.backgroundOverrideColor = backColor = Integer.parseInt(bgColor.substring(0, 6), 16) | 0xff000000;
                         if (bgColor.length() >= 13 && AndroidUtilities.isValidWallChar(bgColor.charAt(6))) {
                             accent.backgroundGradientOverrideColor1 = color1 = Integer.parseInt(bgColor.substring(7, 13), 16) | 0xff000000;
@@ -6860,7 +6897,7 @@ public class Theme {
                         options.inJustDecodeBounds = false;
                         Bitmap wallpaper = BitmapFactory.decodeFile(wallpaperPath, options);
                         if (wallpaper != null) {
-                            if (color2 != 0) {
+                            if (color2 != 0 && accent != null) {
                                 MotionBackgroundDrawable wallpaperDrawable = new MotionBackgroundDrawable(backColor, color1, color2, color3, true);
                                 wallpaperDrawable.setPatternBitmap((int) (accent.patternIntensity * 100), wallpaper);
                                 wallpaperDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
@@ -7219,8 +7256,22 @@ public class Theme {
         dialogs_unarchiveDrawable.commitApplyLayerColors();
     }
 
+    public static void createCommonDialogResources(Context context) {
+        if (dialogs_countTextPaint == null) {
+            dialogs_countTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            dialogs_countTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+
+            dialogs_countPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+            dialogs_onlineCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+
+        dialogs_countTextPaint.setTextSize(AndroidUtilities.dp(13));
+    }
+
     public static void createDialogsResources(Context context) {
         createCommonResources(context);
+        createCommonDialogResources(context);
         if (dialogs_namePaint == null) {
             Resources resources = context.getResources();
 
@@ -7285,8 +7336,6 @@ public class Theme {
 
             dialogs_tabletSeletedPaint = new Paint();
             dialogs_pinnedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            dialogs_onlineCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            dialogs_countPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_countGrayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_errorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_actionMessagePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -7335,7 +7384,6 @@ public class Theme {
 
         dialogs_messageNamePaint.setTextSize(AndroidUtilities.dp(14));
         dialogs_timePaint.setTextSize(AndroidUtilities.dp(13));
-        dialogs_countTextPaint.setTextSize(AndroidUtilities.dp(13));
         dialogs_archiveTextPaint.setTextSize(AndroidUtilities.dp(13));
         dialogs_archiveTextPaintSmall.setTextSize(AndroidUtilities.dp(11));
         dialogs_onlinePaint.setTextSize(AndroidUtilities.dp(15));
@@ -7411,7 +7459,7 @@ public class Theme {
         }
     }
 
-    public static void createChatResources(Context context, boolean fontsOnly) {
+    public static void createCommonChatResources() {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
                 chat_msgTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -7430,9 +7478,16 @@ public class Theme {
                     chat_msgBotButtonPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 }
             }
+
+            chat_msgTextPaintOneEmoji.setTextSize(AndroidUtilities.dp(28));
+            chat_msgTextPaintTwoEmoji.setTextSize(AndroidUtilities.dp(24));
+            chat_msgTextPaintThreeEmoji.setTextSize(AndroidUtilities.dp(20));
+            chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
+            chat_msgGameTextPaint.setTextSize(AndroidUtilities.dp(14));
+            chat_msgBotButtonPaint.setTextSize(AndroidUtilities.dp(15));
         }
 
-        if (!fontsOnly && chat_msgInDrawable == null) {
+        if (chat_infoPaint == null) {
             chat_infoPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             chat_stickerCommentCountPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             if (NekoConfig.useVazirFont == 1) {
@@ -7531,6 +7586,27 @@ public class Theme {
             }
             chat_contextResult_descriptionTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             chat_composeBackgroundPaint = new Paint();
+            chat_radialProgressPausedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            chat_radialProgressPausedSeekbarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+        if (chat_actionBackgroundPaint == null) {
+            chat_actionBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+        if (chat_actionBackgroundSelectedPaint == null) {
+            chat_actionBackgroundSelectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+        if (chat_actionBackgroundPaint2 == null) {
+            chat_actionBackgroundPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+        if (chat_actionBackgroundSelectedPaint2 == null) {
+            chat_actionBackgroundSelectedPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+    }
+
+    public static void createChatResources(Context context, boolean fontsOnly) {
+        createCommonChatResources();
+
+        if (!fontsOnly && chat_msgInDrawable == null) {
 
             Resources resources = context.getResources();
 
@@ -7776,13 +7852,6 @@ public class Theme {
 
             applyChatTheme(fontsOnly, false);
         }
-
-        chat_msgTextPaintOneEmoji.setTextSize(AndroidUtilities.dp(28));
-        chat_msgTextPaintTwoEmoji.setTextSize(AndroidUtilities.dp(24));
-        chat_msgTextPaintThreeEmoji.setTextSize(AndroidUtilities.dp(20));
-        chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
-        chat_msgGameTextPaint.setTextSize(AndroidUtilities.dp(14));
-        chat_msgBotButtonPaint.setTextSize(AndroidUtilities.dp(15));
 
         if (!fontsOnly && chat_botProgressPaint != null) {
             chat_botProgressPaint.setStrokeWidth(AndroidUtilities.dp(2));
@@ -8109,6 +8178,8 @@ public class Theme {
         }
         if (servicePressedColor == null) {
             servicePressedColor = serviceSelectedMessageColor;
+        }
+        if (servicePressedColor2 == null) {
             servicePressedColor2 = serviceSelectedMessage2Color;
         }
 
@@ -8766,6 +8837,7 @@ public class Theme {
             Drawable drawable = wallpaper;
             AndroidUtilities.runOnUIThread(() -> {
                 wallpaperLoadTask = null;
+                createCommonChatResources();
                 applyChatServiceMessageColor(null, null, drawable);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper);
             });
@@ -9009,6 +9081,15 @@ public class Theme {
         return isPatternWallpaper || "CJz3BZ6YGEYBAAAABboWp6SAv04".equals(selectedBgSlug) || "qeZWES8rGVIEAAAARfWlK1lnfiI".equals(selectedBgSlug);
     }
 
+    public static BackgroundGradientDrawable getCurrentGradientWallpaper() {
+        if (currentTheme.overrideWallpaper != null && currentTheme.overrideWallpaper.color != 0 && currentTheme.overrideWallpaper.gradientColor1 != 0) {
+            final int[] colors = {currentTheme.overrideWallpaper.color, currentTheme.overrideWallpaper.gradientColor1};
+            final GradientDrawable.Orientation orientation = BackgroundGradientDrawable.getGradientOrientation(currentTheme.overrideWallpaper.rotation);
+            return new BackgroundGradientDrawable(orientation, colors);
+        }
+        return null;
+    }
+
     public static AudioVisualizerDrawable getCurrentAudiVisualizerDrawable() {
         if (chat_msgAudioVisualizeDrawable == null) {
             chat_msgAudioVisualizeDrawable = new AudioVisualizerDrawable();
@@ -9076,12 +9157,17 @@ public class Theme {
         return statusDrawable;
     }
 
-    private static FragmentContextViewWavesDrawable fragmentContextViewWavesDrawable;
-
     public static FragmentContextViewWavesDrawable getFragmentContextViewWavesDrawable() {
         if (fragmentContextViewWavesDrawable == null) {
             fragmentContextViewWavesDrawable = new FragmentContextViewWavesDrawable();
         }
         return fragmentContextViewWavesDrawable;
+    }
+
+    public static RoundVideoProgressShadow getRadialSeekbarShadowDrawable() {
+        if (roundPlayDrawable == null) {
+            roundPlayDrawable = new RoundVideoProgressShadow();
+        }
+        return roundPlayDrawable;
     }
 }

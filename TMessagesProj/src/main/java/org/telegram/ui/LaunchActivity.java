@@ -143,7 +143,6 @@ import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UndoView;
-import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 
@@ -152,7 +151,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -226,6 +229,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     private RadialProgress2 updateLayoutIcon;
     private SimpleTextView updateTextView;
     private TextView updateSizeTextView;
+    private FrameLayout sideMenuContainer;
 
     private AlertDialog localeDialog;
     private boolean loadingLocaleDialog;
@@ -325,11 +329,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (Build.VERSION.SDK_INT >= 24) {
             AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
         }
-        Theme.createChatResources(this, false); //TODO optimize
+        Theme.createCommonChatResources();
+        Theme.createDialogsResources(this);
         if (SharedConfig.passcodeHash.length() != 0 && SharedConfig.appLocked) {
             SharedConfig.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
         }
-        //FileLog.d("UI create5 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         AndroidUtilities.fillStatusBarHeight(this);
         actionBarLayout = new ActionBarLayout(this) {
             @Override
@@ -509,8 +513,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else {
             drawerLayoutContainer.addView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
-        //FileLog.d("UI create7 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
-        FrameLayout sideMenuContainer = new FrameLayout(this);
+        sideMenuContainer = new FrameLayout(this);
         sideMenu = new RecyclerListView(this) {
             @Override
             public boolean drawChild(Canvas canvas, View child, long drawingTime) {
@@ -528,7 +531,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 return result;
             }
         };
-        //FileLog.d("UI create34 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         itemAnimator = new SideMenultItemAnimator(sideMenu);
         sideMenu.setItemAnimator(itemAnimator);
         sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
@@ -692,7 +694,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         });
-        //FileLog.d("UI create33 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         final ItemTouchHelper sideMenuTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
 
             private RecyclerView.ViewHolder selectedViewHolder;
@@ -769,7 +770,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 view.setTranslationY(dY);
             }
         });
-        //FileLog.d("UI create32 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         sideMenuTouchHelper.attachToRecyclerView(sideMenu);
         sideMenu.setOnItemLongClickListener((view, position) -> {
             if (view instanceof DrawerUserCell) {
@@ -802,96 +802,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             return false;
         });
-        //FileLog.d("UI create31 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         drawerLayoutContainer.setParentActionBarLayout(actionBarLayout);
         actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
         actionBarLayout.init(mainFragmentsStack);
         actionBarLayout.setDelegate(this);
-        //FileLog.d("UI create30 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         Theme.loadWallpaper();
-        //FileLog.d("UI create8 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
-
-        updateLayout = new FrameLayout(this) {
-
-            private Paint paint = new Paint();
-            private Matrix matrix = new Matrix();
-            private LinearGradient updateGradient;
-            private int lastGradientWidth;
-
-            @Override
-            protected void onDraw(Canvas canvas) {
-                if (updateGradient == null) {
-                    return;
-                }
-                paint.setColor(0xffffffff);
-                paint.setShader(updateGradient);
-                updateGradient.setLocalMatrix(matrix);
-                canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
-                updateLayoutIcon.setBackgroundGradientDrawable(updateGradient);
-                updateLayoutIcon.draw(canvas);
-            }
-
-            @Override
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                int width = MeasureSpec.getSize(widthMeasureSpec);
-                if (lastGradientWidth != width) {
-                    updateGradient = new LinearGradient(0, 0, width, 0, new int[]{0xff69BF72, 0xff53B3AD}, new float[]{0.0f, 1.0f}, Shader.TileMode.CLAMP);
-                    lastGradientWidth = width;
-                }
-            }
-        };
-        updateLayout.setWillNotDraw(false);
-        updateLayout.setVisibility(View.INVISIBLE);
-        updateLayout.setTranslationY(AndroidUtilities.dp(44));
-        if (Build.VERSION.SDK_INT >= 21) {
-            updateLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor(Theme.key_listSelector), null));
-        }
-        sideMenuContainer.addView(updateLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44, Gravity.LEFT | Gravity.BOTTOM));
-        updateLayout.setOnClickListener(v -> {
-            if (!SharedConfig.isAppUpdateAvailable()) {
-                return;
-            }
-            if (updateLayoutIcon.getIcon() == MediaActionDrawable.ICON_DOWNLOAD) {
-                FileLoader.getInstance(currentAccount).loadFile(SharedConfig.pendingAppUpdate.document, "update", 1, 1);
-            } else if (updateLayoutIcon.getIcon() == MediaActionDrawable.ICON_CANCEL) {
-                FileLoader.getInstance(currentAccount).cancelLoadFile(SharedConfig.pendingAppUpdate.document);
-            } else {
-                AndroidUtilities.openForView(SharedConfig.pendingAppUpdate.document, true, this);
-            }
-        });
-
-        updateLayoutIcon = new RadialProgress2(updateLayout);
-        updateLayoutIcon.setColors(0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
-        updateLayoutIcon.setProgressRect(AndroidUtilities.dp(22), AndroidUtilities.dp(11), AndroidUtilities.dp(22 + 22), AndroidUtilities.dp(11 + 22));
-        updateLayoutIcon.setCircleRadius(AndroidUtilities.dp(11));
-        updateLayoutIcon.setAsMini();
-
-        updateTextView = new SimpleTextView(this);
-        updateTextView.setTextSize(15);
-        updateTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        updateTextView.setText(LocaleController.getString("AppUpdate", R.string.AppUpdate));
-        updateTextView.setTextColor(0xffffffff);
-        updateTextView.setGravity(Gravity.LEFT);
-        updateLayout.addView(updateTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 74, 0, 0, 0));
-
-        updateSizeTextView = new TextView(this);
-        updateSizeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        updateSizeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        updateSizeTextView.setGravity(Gravity.RIGHT);
-        updateSizeTextView.setTextColor(0xffffffff);
-        updateLayout.addView(updateSizeTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT, 0, 0, 17, 0));
-
-        passcodeView = new PasscodeView(this);
-        drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         checkCurrentAccount();
         updateCurrentConnectionState(currentAccount);
-
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
 
         currentConnectionState = ConnectionsManager.getInstance(currentAccount).getConnectionState();
-        //FileLog.d("UI create10 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needShowAlert);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.reloadInterface);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
@@ -994,12 +915,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
         }
-        //FileLog.d("UI create11 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         checkLayout();
         checkSystemBarColors();
-        //FileLog.d("UI create12 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         handleIntent(getIntent(), false, savedInstanceState != null, false);
-        //FileLog.d("UI create9 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         try {
             String os1 = Build.DISPLAY;
             String os2 = Build.USER;
@@ -1208,6 +1126,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.historyImportProgressChanged);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.groupCallUpdated);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.stickersImportComplete);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.newSuggestionsAvailable);
         }
         currentAccount = UserConfig.selectedAccount;
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.appDidLogout);
@@ -1224,6 +1143,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.historyImportProgressChanged);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.groupCallUpdated);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.stickersImportComplete);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.newSuggestionsAvailable);
     }
 
     private void checkLayout() {
@@ -1244,7 +1164,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     rightActionBarLayout.fragmentsStack.add(chatFragment);
                     a--;
                 }
-                if (passcodeView.getVisibility() != View.VISIBLE) {
+                if (passcodeView == null || passcodeView.getVisibility() != View.VISIBLE) {
                     actionBarLayout.showLastFragment();
                     rightActionBarLayout.showLastFragment();
                 }
@@ -1265,7 +1185,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     actionBarLayout.fragmentsStack.add(chatFragment);
                     a--;
                 }
-                if (passcodeView.getVisibility() != View.VISIBLE) {
+                if (passcodeView == null || passcodeView.getVisibility() != View.VISIBLE) {
                     actionBarLayout.showLastFragment();
                 }
             }
@@ -1331,9 +1251,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         termsOfServiceView.animate().alpha(1f).setDuration(150).setInterpolator(AndroidUtilities.decelerateInterpolator).setListener(null).start();
     }
 
-    private void showPasscodeActivity() {
-        if (passcodeView == null) {
+    public void showPasscodeActivity(boolean fingerprint, boolean animated, int x, int y, Runnable onShow, Runnable onStart) {
+        if (drawerLayoutContainer == null) {
             return;
+        }
+        if (passcodeView == null) {
+            passcodeView = new PasscodeView(this);
+            drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         }
         SharedConfig.appLocked = true;
         if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
@@ -1347,7 +1271,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (messageObject != null && messageObject.isRoundVideo()) {
             MediaController.getInstance().cleanupPlayer(true, true);
         }
-        passcodeView.onShow();
+        passcodeView.onShow(fingerprint, animated, x, y, () -> {
+            actionBarLayout.setVisibility(View.INVISIBLE);
+            if (AndroidUtilities.isTablet()) {
+                if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
+                    layersActionBarLayout.setVisibility(View.INVISIBLE);
+                }
+                rightActionBarLayout.setVisibility(View.INVISIBLE);
+            }
+            if (onShow != null) {
+                onShow.run();
+            }
+        }, onStart);
         SharedConfig.isWaitingForPasscodeEnter = true;
         drawerLayoutContainer.setAllowOpenDrawer(false, false);
         passcodeView.setDelegate(() -> {
@@ -1368,13 +1303,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 rightActionBarLayout.setVisibility(View.VISIBLE);
             }
         });
-        actionBarLayout.setVisibility(View.INVISIBLE);
-        if (AndroidUtilities.isTablet()) {
-            if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
-                layersActionBarLayout.setVisibility(View.INVISIBLE);
-            }
-            rightActionBarLayout.setVisibility(View.INVISIBLE);
-        }
     }
 
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
@@ -1386,7 +1314,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             return true;
         }
-        //FileLog.d("UI create13 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         if (isNew && PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             if (intent == null || !Intent.ACTION_MAIN.equals(intent.getAction())) {
                 PhotoViewer.getInstance().closePhoto(false, true);
@@ -1398,7 +1325,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         switchToAccount(intentAccount[0], true);
         boolean isVoipIntent = action != null && action.equals("voip");
         if (!fromPassword && (AndroidUtilities.needShowPasscode(true) || SharedConfig.isWaitingForPasscodeEnter)) {
-            showPasscodeActivity();
+            showPasscodeActivity(true, false, -1, -1, null, null);
             UserConfig.getInstance(currentAccount).saveConfig(false);
             if (!isVoipIntent) {
                 passcodeSaveIntent = intent;
@@ -1408,7 +1335,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
         }
         boolean pushOpened = false;
-        //FileLog.d("UI create14 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         int push_user_id = 0;
         int push_chat_id = 0;
         int push_enc_id = 0;
@@ -1756,6 +1682,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         Integer channelId = null;
                         Integer threadId = null;
                         Integer commentId = null;
+                        int videoTimestamp = -1;
                         boolean hasUrl = false;
                         final String scheme = data.getScheme();
                         boolean internal = intent.getExtras() != null && intent.getExtras().get("internal") != null && (boolean) intent.getExtras().get("internal");
@@ -1923,6 +1850,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                             messageId = null;
                                                         }
                                                     }
+                                                }
+                                                if (messageId != null) {
+                                                    videoTimestamp = getTimestampFromLink(data);
                                                 }
                                                 botUser = data.getQueryParameter("start");
                                                 botChat = data.getQueryParameter("startgroup");
@@ -2274,7 +2204,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 if (message != null && message.startsWith("@")) {
                                     message = " " + message;
                                 }
-                                runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, theme, voicechat, internal ? 3 : 0);
+                                runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, theme, voicechat, internal ? 3 : 0, videoTimestamp);
                             } else {
                                 try (Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null)) {
                                     if (cursor != null) {
@@ -2343,7 +2273,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         }
-        //FileLog.d("UI create15 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         if (UserConfig.getInstance(currentAccount).isClientActivated()) {
             if (searchQuery != null) {
                 final BaseFragment lastFragment = actionBarLayout.getLastFragment();
@@ -2480,7 +2409,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     fragment = new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER);
                     closePrevious = true;
                 } else if (open_settings == 6) {
-                    fragment = new EditWidgetActivity(open_widget_edit_type, open_widget_edit, true);
+                    fragment = new EditWidgetActivity(open_widget_edit_type, open_widget_edit);
                 } else if (open_settings == 100) {
                     fragment = new NekoSettingsActivity();
                 } else {
@@ -2619,7 +2548,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 pushOpened = true;
             }
         }
-        //FileLog.d("UI create16 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         if (!pushOpened && !isNew) {
             if (AndroidUtilities.isTablet()) {
                 if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
@@ -2660,17 +2588,45 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 rightActionBarLayout.showLastFragment();
             }
         }
-        //FileLog.d("UI create17 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         if (isVoipIntent) {
             VoIPFragment.show(this, intentAccount[0]);
         }
-        if (!showGroupVoip && GroupCallActivity.groupCallInstance != null && (intent == null || !Intent.ACTION_MAIN.equals(intent.getAction()))) {
+        if (!showGroupVoip && (intent == null || !Intent.ACTION_MAIN.equals(intent.getAction())) && GroupCallActivity.groupCallInstance != null) {
             GroupCallActivity.groupCallInstance.dismiss();
         }
 
         intent.setAction(null);
-        //FileLog.d("UI create18 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         return pushOpened;
+    }
+
+    public static int getTimestampFromLink(Uri data) {
+        List<String> segments = data.getPathSegments();
+        String timestampStr = null;
+        if (segments.contains("video")) {
+            timestampStr = data.getQuery();
+        } else if (data.getQueryParameter("t") != null) {
+            timestampStr = data.getQueryParameter("t");
+        }
+        int videoTimestamp = -1;
+        if (timestampStr != null) {
+            try {
+                videoTimestamp = Integer.parseInt(timestampStr);
+            } catch (Throwable ignore) {
+
+            }
+            if (videoTimestamp == - 1) {
+                DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+                Date reference = null;
+                try {
+                    reference = dateFormat.parse("00:00");
+                    Date date = dateFormat.parse(timestampStr);
+                    videoTimestamp = (int) ((date.getTime() - reference.getTime()) / 1000L);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return videoTimestamp;
     }
 
     private void openDialogsToSend(boolean animated) {
@@ -2922,13 +2878,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 final TLRPC.TL_wallPaper wallPaper,
                                 final String theme,
                                 final String voicechat,
-                                final int state) {
+                                final int state,
+                                final int videoTimestamp) {
         if (state == 0 && UserConfig.getActivatedAccountsCount() >= 2) {
             AlertsCreator.createAccountSelectDialog(this, account -> {
                 if (account != intentAccount) {
                     switchToAccount(account, true);
                 }
-                runLinkRequest(account, username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, theme, voicechat, 1);
+                runLinkRequest(account, username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, theme, voicechat, 1, videoTimestamp);
             }).show();
             return;
         } else if (code != null) {
@@ -3113,6 +3070,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             }
                             if (voicechat != null) {
                                 args.putString("voicechat", voicechat);
+                            }
+                            if (videoTimestamp >= 0) {
+                                args.putInt("video_timestamp", videoTimestamp);
                             }
                             BaseFragment lastFragment = !mainFragmentsStack.isEmpty() && voicechat == null ? mainFragmentsStack.get(mainFragmentsStack.size() - 1) : null;
                             if (lastFragment == null || MessagesController.getInstance(intentAccount).checkCanOpenChat(args, lastFragment)) {
@@ -3991,6 +3951,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.historyImportProgressChanged);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.groupCallUpdated);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.stickersImportComplete);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.newSuggestionsAvailable);
         }
 
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needShowAlert);
@@ -4067,7 +4028,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
        if (requestCode == SCREEN_CAPTURE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 VoIPService service = VoIPService.getSharedInstance();
-                if (service != null && service.groupCall != null) {
+                if (service != null) {
                     VideoCapturerDevice.mediaProjectionPermissionResultData = data;
                     service.createCaptureDevice(true);
                 }
@@ -4329,7 +4290,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         checkFreeDiscSpace();
         MediaController.checkGallery();
         onPasscodeResume();
-        if (passcodeView.getVisibility() != View.VISIBLE) {
+        if (passcodeView == null || passcodeView.getVisibility() != View.VISIBLE) {
             actionBarLayout.onResume();
             if (AndroidUtilities.isTablet()) {
                 rightActionBarLayout.onResume();
@@ -4641,6 +4602,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         FileLog.e(e2);
                     }
                 }
+            } else {
+                DrawerProfileCell.switchingTheme = false;
             }
             Theme.ThemeInfo theme = (Theme.ThemeInfo) args[0];
             boolean nigthTheme = (Boolean) args[1];
@@ -4758,6 +4721,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
         } else if (id == NotificationCenter.stickersImportComplete) {
             MediaDataController.getInstance(account).toggleStickerSet(this, (TLObject) args[0], 2, !mainFragmentsStack.isEmpty() ? mainFragmentsStack.get(mainFragmentsStack.size() - 1) : null, false, true);
+        } else if (id == NotificationCenter.newSuggestionsAvailable) {
+            sideMenu.invalidateViews();
         } else if (id == NotificationCenter.showBulletin) {
             if (!mainFragmentsStack.isEmpty()) {
                 int type = (int) args[0];
@@ -5132,7 +5097,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("lock app");
                             }
-                            showPasscodeActivity();
+                            showPasscodeActivity(true, false, -1, -1, null, null);
                         } else {
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("didn't pass lock check");
@@ -5168,7 +5133,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             lockRunnable = null;
         }
         if (AndroidUtilities.needShowPasscode(true)) {
-            showPasscodeActivity();
+            showPasscodeActivity(true, false, -1, -1, null, null);
         }
         if (SharedConfig.lastPauseTime != 0) {
             SharedConfig.lastPauseTime = 0;

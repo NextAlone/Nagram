@@ -147,6 +147,9 @@ public class ActionBarPopupWindow extends PopupWindow {
                             }
                             Object tag = view.getTag(R.id.width_tag);
                             Object tag2 = view.getTag(R.id.object_tag);
+                            if (tag != null) {
+                                view.getLayoutParams().width = LayoutHelper.WRAP_CONTENT;
+                            }
                             measureChildWithMargins(view, widthMeasureSpec, 0, heightMeasureSpec, 0);
                             if (!(tag instanceof Integer) && tag2 == null) {
                                 maxWidth = Math.max(maxWidth, view.getMeasuredWidth());
@@ -405,13 +408,20 @@ public class ActionBarPopupWindow extends PopupWindow {
                 lastVisible = child;
             }
 
+            boolean prevGap = false;
             for (int a = 0; a < count; a++) {
                 View child = linearLayout.getChildAt(a);
                 if (child.getVisibility() != View.VISIBLE) {
                     continue;
                 }
+                Object tag = child.getTag(R.id.object_tag);
                 if (child instanceof ActionBarMenuSubItem) {
-                    ((ActionBarMenuSubItem) child).updateSelectorBackground(child == firstVisible, child == lastVisible);
+                    ((ActionBarMenuSubItem) child).updateSelectorBackground(child == firstVisible || prevGap, child == lastVisible);
+                }
+                if (tag != null) {
+                    prevGap = true;
+                } else {
+                    prevGap = false;
                 }
             }
         }

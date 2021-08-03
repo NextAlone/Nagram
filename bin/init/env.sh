@@ -8,6 +8,16 @@ if [ -z "$ANDROID_HOME" ]; then
   fi
 fi
 
+# Fix DX is missing in compile SDK 31.0.0
+if [ ! -f $ANDROID_HOME/build-tools/31.0.0/dx ]; then
+    echo "Copy dx From compile SDK 30.0.3"
+    cp $ANDROID_HOME/build-tools/30.0.3/dx $ANDROID_HOME/build-tools/31.0.0/dx
+fi
+if [ ! -f $ANDROID_HOME/build-tools/31.0.0/lib/dx.jar ]; then
+    echo "Copy lib/dx.jar From compile SDK 30.0.3"
+    cp $ANDROID_HOME/build-tools/30.0.3/lib/dx.jar $ANDROID_HOME/build-tools/31.0.0/lib/dx.jar
+fi
+
 _NDK="$ANDROID_HOME/ndk/21.4.7075529"
 [ -f "$_NDK/source.properties" ] || _NDK="$ANDROID_NDK_HOME"
 [ -f "$_NDK/source.properties" ] || _NDK="$NDK"

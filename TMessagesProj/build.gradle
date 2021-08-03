@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "7.8.0-preview01"
-def verCode = 325
+def verName = "7.9.1-preview02"
+def verCode = 360
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1")
 }
 
-def officialVer = "7.8.0"
-def officialCode = 2360
+def officialVer = "7.9.1"
+def officialCode = 2387
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -78,8 +78,8 @@ def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "teletux.messenger"
@@ -384,13 +384,13 @@ android {
 
 def okHttpVersion = "5.0.0-alpha.2"
 def fcmVersion = "21.1.0"
-def crashlyticsVersion = "18.0.0"
+def crashlyticsVersion = "18.2.0"
 def playCoreVersion = "1.10.0"
 
 dependencies {
 
     implementation "androidx.browser:browser:1.3.0"
-    implementation "androidx.core:core-ktx:1.6.0-beta01"
+    implementation "androidx.core:core-ktx:1.6.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.exifinterface:exifinterface:1.3.2"
@@ -399,7 +399,7 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.sharetarget:sharetarget:1.1.0"
 
-    compileOnly "org.checkerframework:checker-qual:3.13.0"
+    compileOnly "org.checkerframework:checker-qual:3.16.0"
     compileOnly "org.checkerframework:checker-compat-qual:2.5.5"
 
     // don"t change this :)
@@ -408,20 +408,20 @@ dependencies {
 
     implementation "com.google.code.gson:gson:2.8.7"
     implementation "org.osmdroid:osmdroid-android:6.1.10"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1-native-mt"
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation "dnsjava:dnsjava:3.3.1"
+    implementation 'dnsjava:dnsjava:3.4.0'
     implementation "org.dizitart:nitrite:3.4.3"
 
-    implementation "cn.hutool:hutool-core:5.6.5"
-    implementation "cn.hutool:hutool-crypto:5.6.5"
-    implementation "cn.hutool:hutool-http:5.6.5"
+    implementation "cn.hutool:hutool-core:5.7.5"
+    implementation "cn.hutool:hutool-crypto:5.7.5"
+    implementation 'cn.hutool:hutool-http:5.7.5'
     implementation "com.jakewharton:process-phoenix:2.0.0"
 
-    compileOnly "org.yaml:snakeyaml:1.28"
-    fullImplementation "org.yaml:snakeyaml:1.28"
+    compileOnly 'org.yaml:snakeyaml:1.29'
+    fullImplementation 'org.yaml:snakeyaml:1.29'
 
     implementation project(":openpgp-api")
 
@@ -439,7 +439,7 @@ dependencies {
     releaseImplementation "com.google.android.play:core:$playCoreVersion"
 
     testImplementation "junit:junit:4.13.2"
-    testImplementation "androidx.test:core:1.3.0"
+    testImplementation "androidx.test:core:1.4.0"
     testImplementation "org.robolectric:robolectric:4.5.1"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"

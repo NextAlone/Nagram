@@ -51,6 +51,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
             protected void onDraw(Canvas canvas) {
                 onTextDraw();
                 super.onDraw(canvas);
+                afterTextDraw();
             }
         };
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -65,6 +66,10 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     protected void onTextDraw() {
+
+    }
+
+    protected void afterTextDraw() {
 
     }
 

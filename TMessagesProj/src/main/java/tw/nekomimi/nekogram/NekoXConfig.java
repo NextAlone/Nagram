@@ -43,8 +43,6 @@ public class NekoXConfig {
     public static boolean hide_Me = preferences.getBoolean("hide_me", false);
     public static boolean keepOnlineStatus = preferences.getBoolean("keepOnlineStatus", false);
 
-    public static boolean enableStickerPin = preferences.getBoolean("enableStickerPin", false);
-
     public static int autoUpdateReleaseChannel = preferences.getInt("autoUpdateReleaseChannel", 2);
     public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
     public static long nextUpdateCheck = preferences.getLong("nextUpdateCheckTimestamp", 0);

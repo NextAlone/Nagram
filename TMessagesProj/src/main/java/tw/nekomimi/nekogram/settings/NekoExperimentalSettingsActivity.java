@@ -65,6 +65,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int unlimitedFavedStickersRow;
     private int unlimitedPinnedDialogsRow;
     private int enableStickerPinRow;
+    private int useMediaStreamInVoipRow;
     private int experiment2Row;
 
     private UndoView tooltip;
@@ -172,13 +173,18 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 }
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (position == enableStickerPinRow) {
-                NekoXConfig.toggleEnableStickerPin();
+                NekoConfig.toggleEnableStickerPin();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoXConfig.enableStickerPin);
+                    ((TextCheckCell) view).setChecked(NekoConfig.enableStickerPin);
                 }
                 if (NekoConfig.mediaPreview) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                }
+            } else if (position == useMediaStreamInVoipRow){
+                NekoConfig.toggleUseMediaStreamInVoip();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.useMediaStreamInVoip);
                 }
             }
         });
@@ -211,6 +217,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         unlimitedFavedStickersRow = rowCount++;
         unlimitedPinnedDialogsRow = rowCount++;
         enableStickerPinRow = rowCount++;
+        useMediaStreamInVoipRow = rowCount++;
         experiment2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -348,7 +355,9 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     } else if (position == increaseVoiceMessageQualityRow) {
                         textCell.setTextAndCheck(LocaleController.getString("IncreaseVoiceMessageQuality", R.string.IncreaseVoiceMessageQuality), NekoConfig.increaseVoiceMessageQuality, true);
                     } else if (position == enableStickerPinRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("EnableStickerPin", R.string.EnableStickerPin), LocaleController.getString("EnableStickerPinAbout", R.string.EnableStickerPinAbout), NekoXConfig.enableStickerPin, true,true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("EnableStickerPin", R.string.EnableStickerPin), LocaleController.getString("EnableStickerPinAbout", R.string.EnableStickerPinAbout), NekoConfig.enableStickerPin, true,true);
+                    } else if (position == useMediaStreamInVoipRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UseMediaStreamInVoip", R.string.UseMediaStreamInVoip), NekoConfig.useMediaStreamInVoip, true);
                     }
                     break;
                 }

@@ -317,6 +317,8 @@ jobs:
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
+      - name: Fix Compile SDK 31.0.0
+        run: ./run init env
       - name: Gradle cache
         uses: actions/cache@v2
         with:
@@ -466,6 +468,8 @@ jobs:
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
+      - name: Fix Compile SDK 31.0.0
+        run: ./run init env
       - name: Gradle cache
         uses: actions/cache@v2
         with:

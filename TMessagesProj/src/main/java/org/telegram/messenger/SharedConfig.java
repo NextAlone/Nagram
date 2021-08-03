@@ -928,8 +928,7 @@ public class SharedConfig {
         @Override
         public void start() {
             if (loader != null) return;
-            synchronized (this)
-            {
+            synchronized (this) {
                 loader = new WsLoader();
                 port = ProxyManager.mkPort();
                 loader.init(bean, port);
@@ -945,8 +944,7 @@ public class SharedConfig {
             if (loader == null) return;
             ConnectionsManager.setProxySettings(false, address, port, username, password, secret);
             UIUtil.runOnIoDispatcher(() -> {
-                synchronized (this)
-                {
+                synchronized (this) {
                     if (loader == null)
                         return;
                     loader.stop();
@@ -1136,15 +1134,22 @@ public class SharedConfig {
                 }
                 if (pendingAppUpdate != null) {
                     long updateTime = 0;
-                    int updateVerstion;
+                    int updateVersion = 0;
+                    String updateVersionString = null;
                     try {
                         PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-                        updateVerstion = packageInfo.versionCode;
+                        updateVersion = packageInfo.versionCode;
+                        updateVersionString = packageInfo.versionName;
                     } catch (Exception e) {
                         FileLog.e(e);
-                        updateVerstion = BuildVars.BUILD_VERSION;
                     }
-                    if (pendingAppUpdateBuildVersion != updateVerstion) {
+                    if (updateVersion == 0) {
+                        updateVersion = BuildVars.BUILD_VERSION;
+                    }
+                    if (updateVersionString == null) {
+                        updateVersionString = BuildVars.BUILD_VERSION_STRING;
+                    }
+                    if (pendingAppUpdateBuildVersion != updateVersion || pendingAppUpdate.version == null || updateVersionString.compareTo(pendingAppUpdate.version) >= 0) {
                         pendingAppUpdate = null;
                         AndroidUtilities.runOnUIThread(SharedConfig::saveConfig);
                     }
@@ -1175,7 +1180,7 @@ public class SharedConfig {
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             smoothKeyboard = preferences.getBoolean("smoothKeyboard2", true);
-            pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", true);
+            pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
             suggestStickers = preferences.getInt("suggestStickers", 0);
@@ -1314,16 +1319,29 @@ public class SharedConfig {
         return pendingAppUpdateBuildVersion == currentVersion;
     }
 
-    public static void setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
-        pendingAppUpdate = update;
+    public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
+        String updateVersionString = null;
+        int versionCode = 0;
         try {
             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            pendingAppUpdateBuildVersion = packageInfo.versionCode;
+            versionCode = packageInfo.versionCode;
+            updateVersionString = packageInfo.versionName;
         } catch (Exception e) {
             FileLog.e(e);
-            pendingAppUpdateBuildVersion = BuildVars.BUILD_VERSION;
         }
+        if (versionCode == 0) {
+            versionCode = BuildVars.BUILD_VERSION;
+        }
+        if (updateVersionString == null) {
+            updateVersionString = BuildVars.BUILD_VERSION_STRING;
+        }
+        if (update.version == null || updateVersionString.compareTo(update.version) >= 0) {
+            return false;
+        }
+        pendingAppUpdate = update;
+        pendingAppUpdateBuildVersion = versionCode;
         saveConfig();
+        return true;
     }
 
     public static boolean checkPasscode(String passcode) {
@@ -2214,31 +2232,33 @@ public class SharedConfig {
     }
 
     public static void checkSaveToGalleryFiles() {
-        try {
-            File telegramPath = EnvUtil.getTelegramPath();
-            File imagePath = new File(telegramPath, "images");
-            imagePath.mkdirs();
-            File videoPath = new File(telegramPath, "videos");
-            videoPath.mkdirs();
+        Utilities.globalQueue.postRunnable(() -> {
+            try {
+                File telegramPath = EnvUtil.getTelegramPath();
+                File imagePath = new File(telegramPath, "images");
+                imagePath.mkdirs();
+                File videoPath = new File(telegramPath, "videos");
+                videoPath.mkdirs();
 
-            if (saveToGallery) {
-                if (imagePath.isDirectory()) {
-                    new File(imagePath, ".nomedia").delete();
+                if (saveToGallery) {
+                    if (imagePath.isDirectory()) {
+                        new File(imagePath, ".nomedia").delete();
+                    }
+                    if (videoPath.isDirectory()) {
+                        new File(videoPath, ".nomedia").delete();
+                    }
+                } else {
+                    if (imagePath.isDirectory()) {
+                        AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
+                    }
+                    if (videoPath.isDirectory()) {
+                        AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
+                    }
                 }
-                if (videoPath.isDirectory()) {
-                    new File(videoPath, ".nomedia").delete();
-                }
-            } else {
-                if (imagePath.isDirectory()) {
-                    AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
-                }
-                if (videoPath.isDirectory()) {
-                    AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
-                }
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
+        });
     }
 
     public static int getChatSwipeAction(int currentAccount) {

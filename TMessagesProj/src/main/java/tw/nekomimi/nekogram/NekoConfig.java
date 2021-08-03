@@ -148,11 +148,14 @@ public class NekoConfig {
     public static boolean avatarBackgroundDarken;
     public static boolean disableTrending;
     public static boolean dontSendGreetingSticker;
+    public static boolean hideTimeForSticker;
     public static boolean takeGIFasVideo;
 
     public static boolean disableAutoDownloadingWin32Executable;
     public static boolean disableAutoDownloadingArchive;
 
+    public static boolean enableStickerPin;
+    public static boolean useMediaStreamInVoip;
 
     public static String getOpenPGPAppName() {
 
@@ -315,10 +318,14 @@ public class NekoConfig {
         acceptSecretChat = preferences.getBoolean("acceptSecretChat", true);
         disableTrending = preferences.getBoolean("disableTrending", true);
         dontSendGreetingSticker = preferences.getBoolean("dontSendGreetingSticker", false);
+        hideTimeForSticker = preferences.getBoolean("hideTimeForSticker", false);
         takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
         disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
+
+        enableStickerPin = preferences.getBoolean("enableStickerPin", false);
+        useMediaStreamInVoip = preferences.getBoolean("useMediaStreamInVoip", false);
 
     }
 
@@ -818,8 +825,20 @@ public class NekoConfig {
         preferences.edit().putBoolean("dontSendGreetingSticker", dontSendGreetingSticker = !dontSendGreetingSticker).apply();
     }
 
+    public static void toggleHideTimeForSticker() {
+        preferences.edit().putBoolean("hideTimeForSticker", hideTimeForSticker = !hideTimeForSticker).apply();
+    }
+
     public static void toggleTakeGIFasVideo() {
         preferences.edit().putBoolean("takeGIFasVideo", takeGIFasVideo = !takeGIFasVideo).apply();
+    }
+
+    public static void toggleEnableStickerPin() {
+        preferences.edit().putBoolean("enableStickerPin", enableStickerPin = !enableStickerPin).apply();
+    }
+
+    public static void toggleUseMediaStreamInVoip() {
+        preferences.edit().putBoolean("useMediaStreamInVoip", useMediaStreamInVoip = !useMediaStreamInVoip).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

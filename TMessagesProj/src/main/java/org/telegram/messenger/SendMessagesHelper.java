@@ -492,6 +492,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         public HashMap<String, String> params;
         public boolean isVideo;
         public boolean canDeleteAfter;
+        public boolean forceImage;
     }
 
     public static class LocationProvider {
@@ -1157,8 +1158,11 @@ public boolean retriedToSend;
                                 message.httpLocation = null;
                                 message.obj.messageOwner.attachPath = cacheFile.toString();
                                 if (!document.thumbs.isEmpty()) {
-                                    message.photoSize = document.thumbs.get(0);
-                                    message.locationParent = document;
+                                    TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                                    if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                        message.photoSize = photoSize;
+                                        message.locationParent = document;
+                                    }
                                 }
                                 ArrayList<TLRPC.Message> messages = new ArrayList<>();
                                 messages.add(messageObject.messageOwner);
@@ -2376,8 +2380,11 @@ public boolean retriedToSend;
                     delayedMessage.inputUploadMedia = uploadedDocument;
                     delayedMessage.performMediaUpload = performMediaUpload;
                     if (!document.thumbs.isEmpty()) {
-                        delayedMessage.photoSize = document.thumbs.get(0);
-                        delayedMessage.locationParent = document;
+                        TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                        if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                            delayedMessage.photoSize = photoSize;
+                            delayedMessage.locationParent = document;
+                        }
                     }
                     delayedMessage.videoEditedInfo = videoEditedInfo;
                 } else if (type == 7) {
@@ -2406,8 +2413,11 @@ public boolean retriedToSend;
                         delayedMessage.type = 2;
                         delayedMessage.obj = messageObject;
                         if (!document.thumbs.isEmpty()) {
-                            delayedMessage.photoSize = document.thumbs.get(0);
-                            delayedMessage.locationParent = document;
+                            TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                            if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                delayedMessage.photoSize = photoSize;
+                                delayedMessage.locationParent = document;
+                            }
                         }
                         delayedMessage.parentObject = parentObject;
                         delayedMessage.inputUploadMedia = uploadedDocument;
@@ -3795,8 +3805,11 @@ public boolean retriedToSend;
                         delayedMessage.inputUploadMedia = uploadedDocument;
                         delayedMessage.performMediaUpload = performMediaUpload;
                         if (!document.thumbs.isEmpty()) {
-                            delayedMessage.photoSize = document.thumbs.get(0);
-                            delayedMessage.locationParent = document;
+                            TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                            if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                delayedMessage.photoSize = photoSize;
+                                delayedMessage.locationParent = document;
+                            }
                         }
                         delayedMessage.videoEditedInfo = videoEditedInfo;
                     } else if (type == 6) {
@@ -3858,8 +3871,11 @@ public boolean retriedToSend;
                             delayedMessage.inputUploadMedia = uploadedMedia;
                             delayedMessage.performMediaUpload = performMediaUpload;
                             if (!document.thumbs.isEmpty()) {
-                                delayedMessage.photoSize = document.thumbs.get(0);
-                                delayedMessage.locationParent = document;
+                                TLRPC.PhotoSize photoSize = document.thumbs.get(0);
+                                if (!(photoSize instanceof TLRPC.TL_photoStrippedSize)) {
+                                    delayedMessage.photoSize = photoSize;
+                                    delayedMessage.locationParent = document;
+                                }
                             }
                         }
                     } else if (type == 8) {
@@ -4520,7 +4536,7 @@ public boolean retriedToSend;
                         putToDelayedMessages(location, message);
                         getFileLoader().uploadFile(location, message.sendRequest == null, false, ConnectionsManager.FileTypeFile);
                         putToUploadingMessages(message.obj);
-                    } else if (media.thumb == null && message.photoSize != null) {
+                    } else if (media.thumb == null && message.photoSize != null && !(message.photoSize instanceof TLRPC.TL_photoStrippedSize)) {
                         String location = FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE) + "/" + message.photoSize.location.volume_id + "_" + message.photoSize.location.local_id + ".jpg";
                         putToDelayedMessages(location, message);
                         getFileLoader().uploadFile(location, false, true, ConnectionsManager.FileTypePhoto);
@@ -4704,6 +4720,9 @@ public boolean retriedToSend;
                         inputMediaPhoto.id.access_hash = messageMedia.photo.access_hash;
                         inputMediaPhoto.id.file_reference = messageMedia.photo.file_reference;
                         newInputMedia = inputMediaPhoto;
+                        if (BuildVars.DEBUG_VERSION) {
+                            FileLog.d("set uploaded photo");
+                        }
                     } else if (inputMedia instanceof TLRPC.TL_inputMediaUploadedDocument && messageMedia instanceof TLRPC.TL_messageMediaDocument) {
                         TLRPC.TL_inputMediaDocument inputMediaDocument = new TLRPC.TL_inputMediaDocument();
                         inputMediaDocument.id = new TLRPC.TL_inputDocument();
@@ -4711,6 +4730,9 @@ public boolean retriedToSend;
                         inputMediaDocument.id.access_hash = messageMedia.document.access_hash;
                         inputMediaDocument.id.file_reference = messageMedia.document.file_reference;
                         newInputMedia = inputMediaDocument;
+                        if (BuildVars.DEBUG_VERSION) {
+                            FileLog.d("set uploaded document");
+                        }
                     }
                 }
                 if (newInputMedia != null) {
@@ -4751,7 +4773,14 @@ public boolean retriedToSend;
         String key = "group_" + message.groupId;
         if (message.finalGroupMessage != message.messageObjects.get(message.messageObjects.size() - 1).getId()) {
             if (add) {
+                if (BuildVars.DEBUG_VERSION) {
+                    FileLog.d("final message not added, add");
+                }
                 putToDelayedMessages(key, message);
+            } else {
+                if (BuildVars.DEBUG_VERSION) {
+                    FileLog.d("final message not added");
+                }
             }
             return;
         } else if (add) {
@@ -4761,12 +4790,18 @@ public boolean retriedToSend;
             if (!message.scheduled) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
             }
+            if (BuildVars.DEBUG_VERSION) {
+                FileLog.d("add message");
+            }
         }
         if (message.sendRequest instanceof TLRPC.TL_messages_sendMultiMedia) {
             TLRPC.TL_messages_sendMultiMedia request = (TLRPC.TL_messages_sendMultiMedia) message.sendRequest;
             for (int a = 0; a < request.multi_media.size(); a++) {
                 TLRPC.InputMedia inputMedia = request.multi_media.get(a).media;
                 if (inputMedia instanceof TLRPC.TL_inputMediaUploadedPhoto || inputMedia instanceof TLRPC.TL_inputMediaUploadedDocument) {
+                    if (BuildVars.DEBUG_VERSION) {
+                        FileLog.d("multi media not ready");
+                    }
                     return;
                 }
             }
@@ -4777,6 +4812,9 @@ public boolean retriedToSend;
                     maxDelayedMessage.addDelayedRequest(message.sendRequest, message.messageObjects, message.originalPaths, message.parentObjects, message, message.scheduled);
                     if (message.requests != null) {
                         maxDelayedMessage.requests.addAll(message.requests);
+                    }
+                    if (BuildVars.DEBUG_VERSION) {
+                        FileLog.d("has maxDelayedMessage, delay");
                     }
                     return;
                 }
@@ -5437,9 +5475,9 @@ public boolean retriedToSend;
     private void updateMediaPaths(MessageObject newMsgObj, TLRPC.Message sentMessage, int newMsgId, String originalPath, boolean post) {
         TLRPC.Message newMsg = newMsgObj.messageOwner;
 
+        TLRPC.PhotoSize strippedNew = null;
         if (newMsg.media != null) {
             TLRPC.PhotoSize strippedOld = null;
-            TLRPC.PhotoSize strippedNew = null;
             TLObject photoObject = null;
             if (newMsgObj.isLiveLocation() && sentMessage.media instanceof TLRPC.TL_messageMediaGeoLive) {
                 newMsg.media.period = sentMessage.media.period;
@@ -5540,6 +5578,11 @@ public boolean retriedToSend;
                         String fileName = size2.location.volume_id + "_" + size2.location.local_id;
                         File cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), fileName + ".jpg");
                         cacheFile.delete();
+                        if ("s".equals(size2.type) && strippedNew != null) {
+                            newMsg.media.photo.sizes.set(b, strippedNew);
+                            ImageLocation location = ImageLocation.getForPhoto(strippedNew, sentMessage.media.photo);
+                            ImageLoader.getInstance().replaceImageInCache(fileName, location.getKey(sentMessage, null, false), location, post);
+                        }
                     }
                 }
             }
@@ -5701,8 +5744,14 @@ public boolean retriedToSend;
             getMessagesController().putUsers(users, true);
             getMessagesController().putChats(chats, true);
             getMessagesController().putEncryptedChats(encryptedChats, true);
-            for (int a = 0; a < messages.size(); a++) {
+            for (int a = 0, N = messages.size(); a < N; a++) {
                 MessageObject messageObject = new MessageObject(currentAccount, messages.get(a), false, true);
+                long groupId = messageObject.getGroupId();
+                if (groupId != 0 && messageObject.messageOwner.params != null && !messageObject.messageOwner.params.containsKey("final")) {
+                    if (a == N - 1 || messages.get(a + 1).grouped_id != groupId) {
+                        messageObject.messageOwner.params.put("final", "1");
+                    }
+                }
                 retrySendMessage(messageObject, true);
             }
             if (scheduledMessages != null) {
@@ -6875,6 +6924,28 @@ public boolean retriedToSend;
         return String.format(Locale.US, blur ? "%d_%d@%d_%d_b" : "%d_%d@%d_%d", photoSize.location.volume_id, photoSize.location.local_id, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density));
     }
 
+    private static boolean shouldSendWebPAsSticker(String path, Uri uri) {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        try {
+            if (path != null) {
+                RandomAccessFile file = new RandomAccessFile(path, "r");
+                ByteBuffer buffer = file.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, path.length());
+                Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
+                file.close();
+            } else {
+                try (InputStream inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri)) {
+                    BitmapFactory.decodeStream(inputStream, null, bmOptions);
+                } catch (Exception e) {
+
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return bmOptions.outWidth < 800 && bmOptions.outHeight < 800;
+    }
+
     @UiThread
     public static void prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, InputContentInfoCompat inputContent, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, boolean notify, int scheduleDate) {
         if (media.isEmpty()) {
@@ -6904,13 +6975,22 @@ public boolean retriedToSend;
                             originalPath = info.uri.toString();
                         }
 
-                        if (tempPath != null && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp"))) {
-                            continue;
+                        boolean isWebP = false;
+                        if (tempPath != null && info.ttl <= 0 && (tempPath.endsWith(".gif") || (isWebP = tempPath.endsWith(".webp")))) {
+                            if (!isWebP || shouldSendWebPAsSticker(tempPath, null)) {
+                                continue;
+                            } else {
+                                info.forceImage = true;
+                            }
                         } else if (ImageLoader.shouldSendImageAsDocument(info.path, info.uri)) {
                             continue;
                         } else if (tempPath == null && info.uri != null) {
-                            if (MediaController.isGif(info.uri) || MediaController.isWebp(info.uri)) {
-                                continue;
+                            if (MediaController.isGif(info.uri) || (isWebP = MediaController.isWebp(info.uri))) {
+                                if (!isWebP || shouldSendWebPAsSticker(null, info.uri)) {
+                                    continue;
+                                } else {
+                                    info.forceImage = true;
+                                }
                             }
                         }
 
@@ -7383,14 +7463,14 @@ public boolean retriedToSend;
                         if (forceDocument || ImageLoader.shouldSendImageAsDocument(info.path, info.uri)) {
                             isDocument = true;
                             extension = tempPath != null ? FileLoader.getFileExtension(new File(tempPath)) : "";
-                        } else if (tempPath != null && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp"))) {
+                        } else if (!info.forceImage && tempPath != null && (tempPath.endsWith(".gif") || tempPath.endsWith(".webp")) && info.ttl <= 0) {
                             if (tempPath.endsWith(".gif")) {
                                 extension = "gif";
                             } else {
                                 extension = "webp";
                             }
                             isDocument = true;
-                        } else if (tempPath == null && info.uri != null) {
+                        } else if (!info.forceImage && tempPath == null && info.uri != null) {
                             if (MediaController.isGif(info.uri)) {
                                 isDocument = true;
                                 originalPath = info.uri.toString();

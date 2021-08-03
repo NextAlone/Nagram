@@ -75,6 +75,7 @@ import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.InviteMembersBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.io.File;
@@ -102,7 +103,6 @@ public class EditWidgetActivity extends BaseFragment {
 
     private int widgetType;
     private int currentWidgetId;
-    private boolean isEdit;
 
     private EditWidgetActivityDelegate delegate;
 
@@ -653,7 +653,7 @@ public class EditWidgetActivity extends BaseFragment {
                 } else {
                     drawable.setAlpha(255);
                 }
-                if (drawable instanceof ColorDrawable || drawable instanceof GradientDrawable) {
+                if (drawable instanceof ColorDrawable || drawable instanceof GradientDrawable || drawable instanceof MotionBackgroundDrawable) {
                     drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                     if (drawable instanceof BackgroundGradientDrawable) {
                         final BackgroundGradientDrawable backgroundGradientDrawable = (BackgroundGradientDrawable) drawable;
@@ -731,18 +731,15 @@ public class EditWidgetActivity extends BaseFragment {
         }
     }
 
-    public EditWidgetActivity(int type, int widgetId, boolean edit) {
+    public EditWidgetActivity(int type, int widgetId) {
         super();
         widgetType = type;
         currentWidgetId = widgetId;
-        isEdit = edit;
-        if (edit) {
-            ArrayList<TLRPC.User> users = new ArrayList<>();
-            ArrayList<TLRPC.Chat> chats = new ArrayList<>();
-            getMessagesStorage().getWidgetDialogIds(currentWidgetId, widgetType, selectedDialogs, users, chats, true);
-            getMessagesController().putUsers(users, true);
-            getMessagesController().putChats(chats, true);
-        }
+        ArrayList<TLRPC.User> users = new ArrayList<>();
+        ArrayList<TLRPC.Chat> chats = new ArrayList<>();
+        getMessagesStorage().getWidgetDialogIds(currentWidgetId, widgetType, selectedDialogs, users, chats, true);
+        getMessagesController().putUsers(users, true);
+        getMessagesController().putChats(chats, true);
         updateRows();
     }
 
@@ -808,14 +805,16 @@ public class EditWidgetActivity extends BaseFragment {
                     getMessagesStorage().putWidgetDialogs(currentWidgetId, selectedDialogs);
 
                     SharedPreferences preferences = getParentActivity().getSharedPreferences("shortcut_widget", Activity.MODE_PRIVATE);
-                    preferences.edit().putInt("account" + currentWidgetId, currentAccount).commit();
-                    preferences.edit().putInt("type" + currentWidgetId, widgetType).commit();
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("account" + currentWidgetId, currentAccount);
+                    editor.putInt("type" + currentWidgetId, widgetType);
+                    editor.commit();
 
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getParentActivity());
                     if (widgetType == TYPE_CHATS) {
-                        ChatsWidgetProvider.updateWidget(getParentActivity(), appWidgetManager, currentWidgetId, isEdit);
+                        ChatsWidgetProvider.updateWidget(getParentActivity(), appWidgetManager, currentWidgetId);
                     } else {
-                        ContactsWidgetProvider.updateWidget(getParentActivity(), appWidgetManager, currentWidgetId, isEdit);
+                        ContactsWidgetProvider.updateWidget(getParentActivity(), appWidgetManager, currentWidgetId);
                     }
                     if (delegate != null) {
                         delegate.didSelectDialogs(selectedDialogs);
