@@ -13455,7 +13455,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             continue;
                         }
                     }
-                }
 
                 if (needAnimateToMessage != null && needAnimateToMessage.getId() == messageId && messageId < 0 && chatMode != MODE_SCHEDULED) {
                     obj = needAnimateToMessage;
