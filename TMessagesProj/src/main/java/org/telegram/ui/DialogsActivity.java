@@ -1847,8 +1847,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         getNotificationCenter().addObserver(this, NotificationCenter.messagesDeleted);
 
-
         getNotificationCenter().addObserver(this, NotificationCenter.didClearDatabase);
+
+        if (initialDialogsType == 3 && NekoConfig.showTabsOnForward) {
+            // Fix wrong tabs after forward
+            getMessagesController().selectedDialogFilterBackup[0] = getMessagesController().selectedDialogFilter[0];
+            getMessagesController().selectedDialogFilterBackup[1] = getMessagesController().selectedDialogFilter[1];
+        }
 
         loadDialogs(getAccountInstance());
         getMessagesController().loadPinnedDialogs(folderId, 0, null);
@@ -1878,6 +1883,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+
+        if (initialDialogsType == 3 && NekoConfig.showTabsOnForward) {
+            // Fix wrong tabs after forward
+            getMessagesController().selectedDialogFilter[0] = getMessagesController().selectedDialogFilterBackup[0];
+            getMessagesController().selectedDialogFilter[1] = getMessagesController().selectedDialogFilterBackup[1];
+        }
+
         if (searchString == null) {
             getNotificationCenter().removeObserver(this, NotificationCenter.dialogsNeedReload);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);

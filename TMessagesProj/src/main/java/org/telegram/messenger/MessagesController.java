@@ -98,6 +98,8 @@ public class MessagesController extends BaseController implements NotificationCe
     public ArrayList<TLRPC.Dialog> dialogsForBlock = new ArrayList<>();
     public ArrayList<TLRPC.Dialog> dialogsGroupsOnly = new ArrayList<>();
     public DialogFilter[] selectedDialogFilter = new DialogFilter[2];
+    public DialogFilter[] selectedDialogFilterBackup = new DialogFilter[2];
+    // Fix tabs after forward, when NekoConfig.showTabsOnForward is enabled
     private int dialogsLoadedTillDate = Integer.MAX_VALUE;
     public int unreadUnmutedDialogs;
     public ConcurrentHashMap<Long, Integer> dialogs_read_inbox_max = new ConcurrentHashMap<>(100, 1.0f, 2);
