@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Paramètres Neko</string>
+    <string name="TeleTuxSettings">Paramètres TeleTux</string>
     <string name="IPv6">Connexion via IPv6</string>
     <string name="MessageMenu">Menu des messages</string>
     <string name="HidePhone">Cacher mon numéro de téléphone</string>

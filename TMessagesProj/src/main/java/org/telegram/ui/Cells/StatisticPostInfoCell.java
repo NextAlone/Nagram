@@ -45,7 +45,7 @@ public class StatisticPostInfoCell extends FrameLayout {
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         message = new TextView(context);
-        message.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        message.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         message.setTextColor(Color.BLACK);
         message.setLines(1);
@@ -54,6 +54,7 @@ public class StatisticPostInfoCell extends FrameLayout {
         views = new TextView(context);
         views.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         views.setTextColor(Color.BLACK);
+        views.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
         linearLayout.addView(message, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1f, Gravity.NO_GRAVITY, 0, 0, 16, 0));
         linearLayout.addView(views, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
@@ -64,10 +65,12 @@ public class StatisticPostInfoCell extends FrameLayout {
         date.setTextColor(Color.BLACK);
         date.setLines(1);
         date.setEllipsize(TextUtils.TruncateAt.END);
+        date.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
         shares = new TextView(context);
         shares.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         shares.setTextColor(Color.BLACK);
+        shares.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);

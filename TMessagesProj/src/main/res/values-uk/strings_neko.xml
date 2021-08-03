@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Налаштування Neko</string>
+    <string name="TeleTuxSettings">Налаштування TeleTux</string>
     <string name="IPv6">Підключення через IPv6</string>
     <string name="MessageMenu">Меню повідомлення</string>
     <string name="HidePhone">Сховати мій номер телефону</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Прозорий рядок стану</string>
     <string name="EnableResidentNotification">Показувати сповіщення редактора</string>
     <string name="DisableResidentNotification">Вимкнути сповіщення резидента</string>
-    <string name="NekogramRunning">Некограм працює</string>
+    <string name="TeleTuxRunning">Некограм працює</string>
     <string name="EventType">Набір іконок бічної панелі</string>
     <string name="ChristmasHat">Показуйте різдвяну шапку щодня</string>
     <string name="ActionBarDecoration">Прикраса заголовка</string>

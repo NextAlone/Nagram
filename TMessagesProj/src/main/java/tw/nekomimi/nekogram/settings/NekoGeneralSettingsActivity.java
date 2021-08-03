@@ -108,6 +108,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private int appearanceRow;
     private int typefaceRow;
+    private int hideBottomButtonRow;
+    private int useVazirFontRow;
     private int useDefaultThemeRow;
     private int useSystemEmojiRow;
     private int transparentStatusBarRow;
@@ -254,6 +256,16 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 NekoConfig.toggleTypeface();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.typeface == 1);
+                }
+            } else if (position == hideBottomButtonRow){
+                NekoConfig.togglehideBottomButton();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.hideBottomButton == 1);
+                }
+            } else if (position == useVazirFontRow){
+                NekoConfig.toggleUseVazirFont();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.useVazirFont == 1);
                 }
             } else if (position == nameOrderRow) {
 
@@ -758,6 +770,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         appearanceRow = rowCount++;
         typefaceRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? rowCount++ : -1;
+        useVazirFontRow = rowCount++;
+        hideBottomButtonRow = rowCount++;
         useDefaultThemeRow = rowCount++;
         useSystemEmojiRow = !BuildConfig.FLAVOR.contains("No") ? rowCount++ : -1;
         transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
@@ -967,8 +981,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("HideProxySponsorChannel", R.string.HideProxySponsorChannel), NekoConfig.hideProxySponsorChannel, true);
                     } else if (position == useSystemEmojiRow) {
                         textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), NekoConfig.useSystemEmoji, true);
+                    } else if (position == hideBottomButtonRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("hideBottomButton", R.string.hideBottomButton), NekoConfig.hideBottomButton == 1, true);
                     } else if (position == typefaceRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TypefaceUseDefault", R.string.TypefaceUseDefault), NekoConfig.typeface == 1, true);
+                    } else if (position == useVazirFontRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UseVazirFont", R.string.UseVazirFont), NekoConfig.useVazirFont == 1, true);
                     } else if (position == newYearRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ChristmasHat", R.string.ChristmasHat), NekoConfig.newYear, true);
                     } else if (position == openArchiveOnPullRow) {

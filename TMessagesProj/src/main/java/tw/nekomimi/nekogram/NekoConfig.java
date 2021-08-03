@@ -63,8 +63,10 @@ public class NekoConfig {
     public static boolean showRepeat;
     public static boolean showMessageHide;
 
+    public static int hideBottomButton;
     public static boolean hidePhone;
     public static int typeface;
+    public static int useVazirFont;
     public static boolean transparentStatusBar;
     public static int tabletMode;
     public static boolean openArchiveOnPull;
@@ -209,6 +211,8 @@ public class NekoConfig {
             tabletMode = preferences.getInt("tabletMode", 0);
         }
 
+        hideBottomButton = preferences.getInt("hideBottomButton", 0);
+        useVazirFont = preferences.getInt("useVazirFont", 0);
         typeface = preferences.getInt("typeface", 0);
         nameOrder = preferences.getInt("nameOrder", 1);
         mapPreviewProvider = preferences.getInt("mapPreviewProvider", 0);
@@ -445,6 +449,20 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("transparentStatusBar", transparentStatusBar);
+        editor.apply();
+    }
+    public static void toggleUseVazirFont() {
+        useVazirFont = useVazirFont == 0 ? 1 : 0;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("useVazirFont", useVazirFont);
+        editor.apply();
+    }
+    public static void togglehideBottomButton() {
+        hideBottomButton = hideBottomButton == 0 ? 1 : 0;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("hideBottomButton", hideBottomButton);
         editor.apply();
     }
 

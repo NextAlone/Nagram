@@ -2128,7 +2128,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (folderId != 0) {
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
             } else {
-                actionBar.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+                actionBar.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
                 actionBar.setOnLongClickListener(v -> {
                     if (NekoConfig.hideAllTab && NekoConfig.pressTitleToOpenAllChats && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
                         filterTabsView.toggleAllTabs(true);
@@ -2857,7 +2857,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 @Override
                 public void onLongClickRelease() {
-                    finishPreviewFragment();
+                    return;
                 }
 
                 @Override
@@ -3169,7 +3169,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             public void onLongClickRelease() {
-                finishPreviewFragment();
+                return;
             }
 
             @Override
@@ -3769,7 +3769,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         selectedDialogsCountTextView = new NumberTextView(actionMode.getContext());
         selectedDialogsCountTextView.setTextSize(18);
-        selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         selectedDialogsCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         actionMode.addView(selectedDialogsCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
         selectedDialogsCountTextView.setOnTouchListener((v, event) -> true);
@@ -4994,7 +4994,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
     }
-
+    //showChatPreview #TODO
     private boolean onItemLongClick(View view, int position, float x, float y, int dialogsType, RecyclerListView.Adapter adapter) {
         if (getParentActivity() == null) {
             return false;

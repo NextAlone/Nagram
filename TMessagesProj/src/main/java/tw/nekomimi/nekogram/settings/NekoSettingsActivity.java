@@ -85,6 +85,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int sourceCodeRow;
     private int translationRow;
     private int about2Row;
+    private int donationRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -103,7 +104,7 @@ public class NekoSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NekoSettings", R.string.NekoSettings));
+        actionBar.setTitle(LocaleController.getString("TeleTuxSettings", R.string.TeleTuxSettings));
 
         ActionBarMenu menu = actionBar.createMenu();
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
@@ -172,15 +173,17 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
+                MessagesController.getInstance(currentAccount).openByUserName("TeleTux_update", this, 1);
             } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox/");
+                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/teletux/");
+            } else if (position == donationRow) {
+                Browser.openUrl(getParentActivity(), "https://idpay.ir/arimasmod/camp/20803");
             } else if (position == fdroidRow) {
-                Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/nekox.messenger");
+                Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/teletux.messenger");
             } else if (position == googlePlayRow) {
-                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
+                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=teletux.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX");
+                Browser.openUrl(getParentActivity(), "https://github.com/TeleTux/TeleTux");
             }
         });
 
@@ -190,7 +193,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private void backupSettings() {
 
         try {
-            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-settings.json");
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".TeleTux-settings.json");
             FileUtil.writeUtf8String(backupSettingsJson(), cacheFile);
             ShareUtil.shareFile(getParentActivity(), cacheFile);
         } catch (JSONException e) {
@@ -312,7 +315,7 @@ public class NekoSettingsActivity extends BaseFragment {
             importSettings(configJson);
 
             AlertDialog restart = new AlertDialog(context, 0);
-            restart.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+            restart.setTitle(LocaleController.getString("TeleTux", R.string.TeleTux));
             restart.setMessage(LocaleController.getString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
             restart.setPositiveButton(LocaleController.getString("OK", R.string.OK), (__, ___) -> {
                 ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
@@ -381,6 +384,7 @@ public class NekoSettingsActivity extends BaseFragment {
         aboutRow = rowCount++;
         channelRow = rowCount++;
         fdroidRow = rowCount++;
+        donationRow = rowCount++;
         /*if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {*/
@@ -476,9 +480,11 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@NekogramX", true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@TeleTux_update", true);
                     } else if (position == fdroidRow) {
                         textCell.setText(LocaleController.getString("AppLinkFDroid", R.string.AppLinkFDroid), true);
+                    } else if (position == donationRow) {
+                        textCell.setText(LocaleController.getString("donation", R.string.Donation), true);
                     } else if (position == googlePlayRow) {
                         textCell.setText(LocaleController.getString("GooglePlay", R.string.GooglePlay), true);
                     } else if (position == sourceCodeRow) {

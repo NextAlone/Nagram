@@ -1786,7 +1786,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         captionLimitView.setVisibility(View.GONE);
         captionLimitView.setTextSize(15);
         captionLimitView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         captionLimitView.setCenterAlign(true);
         addView(captionLimitView, LayoutHelper.createFrame(48, 20, Gravity.BOTTOM | Gravity.RIGHT, 3, 0, 0, 48));
 
@@ -8603,7 +8603,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             bluePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             bluePaint.setTextSize(AndroidUtilities.dp(15));
 
-            bluePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            bluePaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
 
             arrowPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelIcons));
             arrowPaint.setStyle(Paint.Style.STROKE);
@@ -8805,7 +8805,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         public TimerView(Context context) {
             super(context);
             textPaint.setTextSize(AndroidUtilities.dp(15));
-            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             updateColors();
         }
 

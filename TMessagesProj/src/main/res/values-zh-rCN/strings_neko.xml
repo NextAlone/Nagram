@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">喵设置</string>
+    <string name="TeleTuxSettings">喵设置</string>
     <string name="IPv6">通过 IPv6 连接</string>
     <string name="MessageMenu">消息菜单</string>
     <string name="HidePhone">隐藏您的手机号码</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">使用完全透明的状态栏</string>
     <string name="EnableResidentNotification">请让猫咪住在通知栏里吧</string>
     <string name="DisableResidentNotification">果然通知栏还是太挤了</string>
-    <string name="NekogramRunning">猫猫奔跑中</string>
+    <string name="TeleTuxRunning">猫猫奔跑中</string>
     <string name="EventType">抽屉图标集</string>
     <string name="ChristmasHat">每天显示圣诞帽</string>
     <string name="ActionBarDecoration">标题栏装饰</string>

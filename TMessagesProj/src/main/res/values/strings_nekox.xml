@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoX" translatable="false">Nekogram X</string>
+    <string name="TeleTux" translatable="false">TeleTux</string>
     <string name="Locked">Locked</string>
     <string name="AccDescrChatAttachEnterMenu">Chat input menu</string>
     <string name="ChatAttachEnterMenuRecordVideo">Record Video</string>
@@ -46,7 +46,7 @@
     <string name="TransToLang">Translation target language</string>
     <string name="TransInputToLang">Translation input target language</string>
     <string name="More">More</string>
-    <string name="NekoXUpdatesChannel">NekoX Updates Channel</string>
+    <string name="TeleTuxUpdatesChannel">TeleTux Updates Channel</string>
     <string name="ShowIdAndDc">Show ID / DC in profile</string>
     <string name="UseDefaultTheme">Use default theme *</string>
     <string name="NightMode">Night Mode</string>
@@ -58,7 +58,7 @@
     <string name="ApplySuggestion">OK, Apply it</string>
     <string name="DoNotRemindAgain">Don\'t remind again</string>
     <string name="RemoveTitleEmoji">Remove emoji in title</string>
-    <string name="NekoXProxy">NekoX Public Proxy</string>
+    <string name="TeleTuxProxy">TeleTux Public Proxy</string>
     <string name="PublicPrefix">Public</string>
     <string name="DisableChatAction">Don\'t send my input status</string>
     <string name="FakeScreenshot">Pretend screenshot</string>
@@ -86,9 +86,9 @@
     <string name="SortByUnmuted">Sort By Unmuted</string>
     <string name="SortByUser">Sort By User</string>
     <string name="SortByContacts">Sort By Contacts</string>
-    <string name="NekoXPushService">NekoX Push Service</string>
-    <string name="EnablePushAlert">Please enable "NekoX Push Service"</string>
-    <string name="DisablePushAlert">Please disable "NekoX Push Service"</string>
+    <string name="TeleTuxPushService">TeleTux Push Service</string>
+    <string name="EnablePushAlert">Please enable "TeleTux Push Service"</string>
+    <string name="DisablePushAlert">Please disable "TeleTux Push Service"</string>
     <string name="DisableUndo">Disable Undo</string>
     <string name="DisableSystemAccount">Disable System Account</string>
     <string name="FilterMenu">Dialogs Filter Menu</string>
@@ -169,7 +169,7 @@
     <string name="DisableDeveloperMode">Disable Developer Mode</string>
     <string name="DeveloperSettings">Developer Settings</string>
     <string name="LoginSettings">Login Settings</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="TeleTuxFaq">TeleTux FAQ</string>
     <string name="TransSite">Translate Platform</string>
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>

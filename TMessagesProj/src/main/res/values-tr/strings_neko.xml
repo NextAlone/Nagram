@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Ayarları</string>
+    <string name="TeleTuxSettings">TeleTux Ayarları</string>
     <string name="IPv6">IPv6 Aracılığıyla Bağlanmayı Dene</string>
     <string name="MessageMenu">Mesaj Menüsü Ögeleri</string>
     <string name="HidePhone">Telefon Numaramı Gizle</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Saydam Durum Çubuğu</string>
     <string name="EnableResidentNotification">Kalıcı bildirim göster</string>
     <string name="DisableResidentNotification">Kalıcı bildirimi devre dışı bırak</string>
-    <string name="NekogramRunning">Nekogram çalışıyor</string>
+    <string name="TeleTuxRunning">TeleTuxgram çalışıyor</string>
     <string name="EventType">Çekmece Dekorasyonu</string>
     <string name="ChristmasHat">Noel Şapkasını Her Zaman Göster</string>
     <string name="ActionBarDecoration">Başlık Çubuğu Dekorasyonu</string>

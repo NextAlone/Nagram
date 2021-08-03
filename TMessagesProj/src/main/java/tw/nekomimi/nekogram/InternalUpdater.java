@@ -22,7 +22,7 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 
 
 public class InternalUpdater {
-    private static final String API_URL_RELEASE = "https://api.github.com/repos/NekoX-Dev/NekoX/releases?per_page=10";
+    private static final String API_URL_RELEASE = "https://api.github.com/repos/TeleTux/TeleTux/releases?per_page=10";
 
     private static class ReleaseMetadata {
         String name;

@@ -186,7 +186,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 while (matcher.find()) {
                     if (stringBuilder == null) {
                         stringBuilder = new SpannableStringBuilder(title);
-                        textView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+                        //textView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
                     }
                     int start = matcher.start();
                     int end = matcher.end();

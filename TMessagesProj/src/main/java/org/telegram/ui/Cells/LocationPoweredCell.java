@@ -39,6 +39,7 @@ public class LocationPoweredCell extends FrameLayout {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         textView.setText("Powered by");
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
         imageView = new ImageView(context);
@@ -51,6 +52,7 @@ public class LocationPoweredCell extends FrameLayout {
         textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         textView2.setText("Foursquare");
+        textView2.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         linearLayout.addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
     }
 

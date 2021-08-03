@@ -147,6 +147,9 @@ import org.telegram.ui.Components.voip.GroupCallRenderersContainer;
 import org.telegram.ui.Components.voip.GroupCallStatusIcon;
 import org.telegram.ui.Components.voip.VideoPreviewDialog;
 import org.telegram.ui.Components.voip.VoIPToggleButton;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
+import tw.nekomimi.nekogram.shamsicalendar.LanguageUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -2931,7 +2934,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             scheduleStartInTextView = new SimpleTextView(context);
             scheduleStartInTextView.setGravity(Gravity.CENTER);
             scheduleStartInTextView.setTextColor(0xffffffff);
-            scheduleStartInTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            scheduleStartInTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             scheduleStartInTextView.setTextSize(18);
             scheduleStartInTextView.setText(LocaleController.getString("VoipChatStartsIn", R.string.VoipChatStartsIn));
             containerView.addView(scheduleStartInTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 21, 0, 21, 231 + 80)); //-80
@@ -3011,14 +3014,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             };
             scheduleTimeTextView.setGravity(Gravity.CENTER);
             scheduleTimeTextView.setTextColor(0xffffffff);
-            scheduleTimeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            scheduleTimeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             scheduleTimeTextView.setTextSize(60);
             containerView.addView(scheduleTimeTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 21, 0, 21, 231));
 
             scheduleStartAtTextView = new SimpleTextView(context);
             scheduleStartAtTextView.setGravity(Gravity.CENTER);
             scheduleStartAtTextView.setTextColor(0xffffffff);
-            scheduleStartAtTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            scheduleStartAtTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             scheduleStartAtTextView.setTextSize(18);
             containerView.addView(scheduleStartAtTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 21, 0, 21, 231 - 30)); //+ 30
         }
@@ -4267,7 +4270,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 TextView textView = new TextView(context);
                 textView.setTextColor(Theme.getColor(Theme.key_voipgroup_actionBarItems));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
                 textView.setGravity(Gravity.LEFT | Gravity.TOP);
                 textView.setSingleLine(true);
                 textView.setEllipsize(TextUtils.TruncateAt.END);
@@ -6587,7 +6590,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             TextView textView = new TextView(getContext());
             textView.setTextColor(Theme.getColor(Theme.key_voipgroup_actionBarItems));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             textView.setLines(1);
             textView.setMaxLines(1);
             textView.setSingleLine(true);

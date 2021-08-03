@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">إعدادات نيكو</string>
+    <string name="TeleTuxSettings">إعدادات نيكو</string>
     <string name="IPv6">الاتصال من خلال IPv6</string>
     <string name="MessageMenu">قائمة الرسائل</string>
     <string name="HidePhone">إخفاء رقم هاتفي</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">شريط الحالة الشفاف</string>
     <string name="EnableResidentNotification">إظهار إشعار المقيم</string>
     <string name="DisableResidentNotification">تعطيل سكان الإعلام</string>
-    <string name="NekogramRunning">تطبيق نيكوجرام يعمل</string>
+    <string name="TeleTuxRunning">تطبيق نيكوجرام يعمل</string>
     <string name="EventType">مجموعة أيقونات الشريط الجانبي</string>
     <string name="ChristmasHat">إظهار قبعة عيد الميلاد يومياً</string>
     <string name="ActionBarDecoration">زينة شريط العنوان</string>

@@ -61,7 +61,7 @@ public class DialogsEmptyCell extends LinearLayout {
         emptyTextView1.setTextColor(Theme.getColor(Theme.key_chats_nameMessage_threeLines));
         emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         emptyTextView1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        emptyTextView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        emptyTextView1.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         emptyTextView1.setGravity(Gravity.CENTER);
         addView(emptyTextView1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 52, 10, 52, 0));
 
@@ -75,6 +75,7 @@ public class DialogsEmptyCell extends LinearLayout {
         emptyTextView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         emptyTextView2.setGravity(Gravity.CENTER);
         emptyTextView2.setLineSpacing(AndroidUtilities.dp(2), 1);
+        emptyTextView2.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         addView(emptyTextView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 52, 7, 52, 0));
     }
 

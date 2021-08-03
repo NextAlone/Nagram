@@ -26,6 +26,7 @@ public class HashtagSearchCell extends TextView {
         setGravity(Gravity.CENTER_VERTICAL);
         setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+        setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 

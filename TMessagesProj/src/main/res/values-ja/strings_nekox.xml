@@ -45,7 +45,7 @@
     <string name="TransToLang">翻訳対象言語</string>
     <string name="TransInputToLang">翻訳入力対象言語</string>
     <string name="More">もっと見る</string>
-    <string name="NekoXUpdatesChannel">NekoX アップデートチャンネル</string>
+    <string name="TeleTuxUpdatesChannel">TeleTux アップデートチャンネル</string>
     <string name="ShowIdAndDc">プロファイルにID / DCを表示</string>
     <string name="UseDefaultTheme">デフォルトテーマを使用 *</string>
     <string name="NightMode">夜間モード</string>
@@ -57,7 +57,7 @@
     <string name="ApplySuggestion">わかりました。 適用します</string>
     <string name="DoNotRemindAgain">今後表示しない</string>
     <string name="RemoveTitleEmoji">タイトルの絵文字を削除</string>
-    <string name="NekoXProxy">NekoXパブリックプロキシ</string>
+    <string name="TeleTuxProxy">TeleTuxパブリックプロキシ</string>
     <string name="PublicPrefix">パブリック</string>
     <string name="DisableChatAction">入力ステータスを送信しない</string>
     <string name="FakeScreenshot">スクリーンショットのプレビュー</string>
@@ -85,9 +85,9 @@
     <string name="SortByUnmuted">ミュートなしで並べ替え</string>
     <string name="SortByUser">ユーザーで並べ替え</string>
     <string name="SortByContacts">連絡先で並べ替え</string>
-    <string name="NekoXPushService">NekoX プッシュサービス</string>
-    <string name="EnablePushAlert">\"NekoX プッシュサービス\"を有効にしてください</string>
-    <string name="DisablePushAlert">\"NekoX プッシュサービス\"を無効にしてください</string>
+    <string name="TeleTuxPushService">TeleTux プッシュサービス</string>
+    <string name="EnablePushAlert">\"TeleTux プッシュサービス\"を有効にしてください</string>
+    <string name="DisablePushAlert">\"TeleTux プッシュサービス\"を無効にしてください</string>
     <string name="DisableUndo">取り消しを無効にする</string>
     <string name="DisableSystemAccount">システムアカウントを無効にする</string>
     <string name="FilterMenu">ダイアログフィルターメニュー</string>
@@ -168,7 +168,7 @@
     <string name="DisableDeveloperMode">開発者モードを無効にする</string>
     <string name="DeveloperSettings">開発者設定</string>
     <string name="LoginSettings">ログイン設定</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="TeleTuxFaq">TeleTux FAQ</string>
     <string name="TransSite">プラットフォームを翻訳</string>
     <string name="OpenKayChain">OpenPGP クライアント</string>
     <string name="OpenPGPApp">OpenPGPプロバイダー</string>

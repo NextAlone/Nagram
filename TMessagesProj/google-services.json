@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "124118418489",
-    "firebase_url": "https://nekox-114.firebaseio.com",
-    "project_id": "nekox-114",
-    "storage_bucket": "nekox-114.appspot.com"
+    "project_number": "908066057719",
+    "project_id": "teletux-36d93",
+    "firebase_url": "https://teletux-36d93.firebaseio.com",
+    "storage_bucket": "teletux-36d93.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:124118418489:android:3dc02bf5a16e92600d39e8",
+        "mobilesdk_app_id": "1:908066057719:android:cc24cc1ecb5defe06b12f2",
         "android_client_info": {
-          "package_name": "nekox.messenger"
+          "package_name": "teletux.messenger"
         }
       },
       "oauth_client": [
         {
-          "client_id": "124118418489-lm9tuk7lbedjal3tgr8g68id1ue8gv2m.apps.googleusercontent.com",
+          "client_id": "908066057719-bmcbrp5t6poqgfaqc49a84t5e31nvntl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAGMJyrCKui9kUWANoRYbEa3Gt4fsqm1sE"
+          "current_key": "AIzaSyBZRifMBTHei3Cd-TLAT8Ud6NASxptTZg0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "124118418489-lm9tuk7lbedjal3tgr8g68id1ue8gv2m.apps.googleusercontent.com",
+              "client_id": "908066057719-bmcbrp5t6poqgfaqc49a84t5e31nvntl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -5364,6 +5364,21 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (NekoXConfig.disableStatusUpdate) {
                             lastStatusUpdateTime = System.currentTimeMillis();
                             statusSettingState = 0;
+                        }else if (NekoXConfig.hide_Me) {
+                            TLRPC.TL_account_updateStatus req= new TLRPC.TL_account_updateStatus();
+                            req.offline = true;
+                            statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
+                                if (error == null) {
+                                    lastStatusUpdateTime = System.currentTimeMillis();
+                                    offlineSent = true;
+                                    statusSettingState = 0;
+                                } else {
+                                    if (lastStatusUpdateTime != 0) {
+                                        lastStatusUpdateTime += 5000;
+                                    }
+                                }
+                                statusRequest = 0;
+                            });
                         } else {
                             TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
                             req.offline = false;
@@ -9028,7 +9043,7 @@ public class MessagesController extends BaseController implements NotificationCe
             req.title = title;
             TLObject nekoxBot = null;
             if (selectedContacts.isEmpty()) {
-                String username = "NekoXBot";
+                String username = "TeleTuxbot";
                 nekoxBot = getUserOrChat(username);
                 if (nekoxBot instanceof TLRPC.User) {
                     req.users.add(getInputUser((TLRPC.User) nekoxBot));

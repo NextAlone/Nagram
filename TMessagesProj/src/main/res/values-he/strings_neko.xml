@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">הגדרות Neko</string>
+    <string name="TeleTuxSettings">הגדרות TeleTux</string>
     <string name="IPv6">מתחבר דרך IPv6</string>
     <string name="MessageMenu">תפריט הודעה</string>
     <string name="HidePhone">הסתר את מספר הטלפון שלי</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">שורת מצב שקופה</string>
     <string name="EnableResidentNotification">הצג הודעת תושב</string>
     <string name="DisableResidentNotification">השבת את הודעת התושבים</string>
-    <string name="NekogramRunning">Nekogram פועל</string>
+    <string name="TeleTuxRunning">TeleTuxgram פועל</string>
     <string name="EventType">ערכת אייקונים של סרגל הצד</string>
     <string name="ChristmasHat">הצג כובע חג המולד כל יום</string>
     <string name="ActionBarDecoration">קישוט סרגל כותרת</string>

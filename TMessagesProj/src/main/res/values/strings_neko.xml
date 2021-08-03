@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Settings</string>
+    <string name="TeleTuxSettings">TeleTux Settings</string>
     <string name="IPv6">Connecting through IPv6</string>
     <string name="MessageMenu">Message menu</string>
     <string name="HidePhone">Hide my phone number</string>
@@ -25,7 +25,7 @@
     <string name="TransparentStatusBar">Transparent status bar</string>
     <string name="EnableResidentNotification">Show a resident notification</string>
     <string name="DisableResidentNotification">Disable resident notification</string>
-    <string name="NekogramRunning">Nekogram is running</string>
+    <string name="TeleTuxRunning">TeleTux is running</string>
     <string name="EventType">Sidebar icon set</string>
     <string name="ChristmasHat">Show christmas hat everyday</string>
     <string name="ActionBarDecoration">Title bar decoration</string>

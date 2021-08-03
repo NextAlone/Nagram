@@ -116,9 +116,12 @@ import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDateFormat;
+import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
+import tw.nekomimi.nekogram.shamsicalendar.LanguageUtils;
+import java.util.Date;
 
 public class AlertsCreator {
-
     public static Dialog processError(int currentAccount, TLRPC.TL_error error, BaseFragment fragment, TLObject request, Object... args) {
         if (error.code == 406 || error.text == null) {
             return null;
@@ -933,16 +936,32 @@ public class AlertsCreator {
         calendar.set(Calendar.MONTH, monthPicker.getValue());
         calendar.set(Calendar.YEAR, yearPicker.getValue());
         dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        if (LocaleController.usePersianCalendar) {
+            PersianDate pdate = new PersianDate();
+            dayPicker.setMaxValue(pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue()));
+        } else {
+            dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        }
     }
 
     private static void checkPickerDate(NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int currentYear = 0;
+        int currentMonth = 0;
+        int currentDay = 0;
+        if (LocaleController.usePersianCalendar) {
+            PersianDate pdate = new PersianDate(System.currentTimeMillis());
+            currentYear = pdate.getShYear();
+            currentMonth = pdate.getShMonth();
+            currentMonth-=1;
+            currentDay = pdate.getShDay();
+        } else {
+            currentYear = calendar.get(Calendar.YEAR);
+            currentMonth = calendar.get(Calendar.MONTH);
+            currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+        
 
         if (currentYear > yearPicker.getValue()) {
             yearPicker.setValue(currentYear);
@@ -1150,7 +1169,7 @@ public class AlertsCreator {
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         textView.setLines(1);
         textView.setMaxLines(1);
         textView.setSingleLine(true);
@@ -1253,7 +1272,7 @@ public class AlertsCreator {
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         textView.setLines(1);
         textView.setMaxLines(1);
         textView.setSingleLine(true);
@@ -1519,7 +1538,7 @@ public class AlertsCreator {
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         textView.setLines(1);
         textView.setMaxLines(1);
         textView.setSingleLine(true);
@@ -1910,7 +1929,6 @@ public class AlertsCreator {
                 checkPickerDate(dayPicker, monthPicker, yearPicker);
             }
         });
-
         monthPicker.setMinValue(0);
         monthPicker.setMaxValue(11);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 0.3f));
@@ -2019,19 +2037,61 @@ public class AlertsCreator {
             int num;
             if (day == 0) {
                 num = 0;
+                if (type == 1) {
+                    num += 3;
+                } else if (type == 2) {
+                    num += 6;
+                } else if (type == 3) {
+                    num += 9;
+                }
+                button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
             } else if (currentYear == selectedYear) {
                 num = 1;
+                if (LocaleController.usePersianCalendar) {
+                    PersianDate pdate = new PersianDate(time);
+                    PersianDateFormat pdateformater1 = new PersianDateFormat("F j در H:i");
+                    button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                    if (type == 1) {
+                        PersianDate pdate1 = new PersianDate(time);
+                        PersianDateFormat pdateformater2 = new PersianDateFormat("یادآوری در تاریخ F j در H:i");
+                        button.setText(LanguageUtils.getPersianNumbers(pdateformater2.format(pdate1)));
+                    }
+                } else {
+                    if (type == 1) {
+                        num += 3;
+                    } else if (type == 2) {
+                        num += 6;
+                    } else if (type == 3) {
+                        num += 9;
+                    }
+                    button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+                    
+                }
             } else {
                 num = 2;
+                if (LocaleController.usePersianCalendar) {
+                    PersianDate pdate = new PersianDate(time);
+                    PersianDateFormat pdateformater1 = new PersianDateFormat("Y F j در H:i");
+                    button.setText(LanguageUtils.getPersianNumbers(pdateformater1.format(pdate)));
+                    if (type == 1) {
+                        PersianDate pdate1 = new PersianDate(time);
+                        PersianDateFormat pdateformater2 = new PersianDateFormat("یادآوری در تاریخ Y F j در H:i");
+                        button.setText(LanguageUtils.getPersianNumbers(pdateformater2.format(pdate1)));
+                    }
+                } else {
+                    if (type == 1) {
+                        num += 3;
+                    } else if (type == 2) {
+                        num += 6;
+                    } else if (type == 3) {
+                        num += 9;
+                    }
+                    button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+                    
+                }
             }
-            if (type == 1) {
-                num += 3;
-            } else if (type == 2) {
-                num += 6;
-            } else if (type == 3) {
-                num += 9;
-            }
-            button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+            
+            //button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
         }
         if (infoText != null) {
             int diff = (int) ((time - systemTime) / 1000);
@@ -2109,7 +2169,6 @@ public class AlertsCreator {
         if (context == null) {
             return null;
         }
-
         int selfUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
 
         BottomSheet.Builder builder = new BottomSheet.Builder(context, false);
@@ -2182,8 +2241,8 @@ public class AlertsCreator {
         }
         titleView.setTextColor(datePickerColors.textColor);
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
+        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP,0, 0, 48, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         if ((int) dialogId > 0 && dialogId != selfUserId) {
@@ -2226,14 +2285,13 @@ public class AlertsCreator {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(currentTime);
         int currentYear = calendar.get(Calendar.YEAR);
-
         TextView buttonTextView = new TextView(context) {
             @Override
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
         };
-
+        //private static int year = 0;
         linearLayout.addView(dayPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         dayPicker.setMinValue(0);
         dayPicker.setMaxValue(365);
@@ -2245,10 +2303,22 @@ public class AlertsCreator {
                 long date = currentTime + (long) value * 86400000L;
                 calendar.setTimeInMillis(date);
                 int year = calendar.get(Calendar.YEAR);
+                LocaleController loc = LocaleController.getInstance();
+                final String week = loc.formatterWeek.format(date) + "; ";
                 if (year == currentYear) {
-                    return LocaleController.getInstance().formatterScheduleDay.format(date);
-                } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    if (LocaleController.usePersianCalendar) {
+                        PersianDate pdate = new PersianDate(date);
+                        return week + pdate.getPersianMonthDay();
+                    } else {
+                        return week + loc.formatterScheduleDay.format(date);
+                    }
+                }else {
+                    if (LocaleController.usePersianCalendar) {
+                        PersianDate pdate = new PersianDate(date);
+                        return pdate.getPersianNormalDate();
+                    } else {
+                        return loc.formatterScheduleYear.format(date);
+                    }
                 }
             }
         });
@@ -2300,7 +2370,7 @@ public class AlertsCreator {
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextColor(datePickerColors.buttonTextColor);
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), datePickerColors.buttonBackgroundColor, datePickerColors.buttonBackgroundPressedColor));
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
@@ -2401,7 +2471,7 @@ public class AlertsCreator {
 
         titleView.setTextColor(datePickerColors.textColor);
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
@@ -2414,7 +2484,6 @@ public class AlertsCreator {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(currentTime);
         int currentYear = calendar.get(Calendar.YEAR);
-
         TextView buttonTextView = new TextView(context) {
             @Override
             public CharSequence getAccessibilityClassName() {
@@ -2429,14 +2498,25 @@ public class AlertsCreator {
         dayPicker.setFormatter(value -> {
             if (value == 0) {
                 return LocaleController.getString("MessageScheduleToday", R.string.MessageScheduleToday);
-            } else {
+            } else {    
                 long date = currentTime + (long) value * 86400000L;
                 calendar.setTimeInMillis(date);
                 int year = calendar.get(Calendar.YEAR);
                 if (year == currentYear) {
-                    return LocaleController.getInstance().formatterScheduleDay.format(date);
-                } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    if (LocaleController.usePersianCalendar) {
+                        PersianDate pdate = new PersianDate(date);
+                        return pdate.getPersianMonthDay();
+                    } else {
+                        return LocaleController.getInstance().formatterScheduleDay.format(date);
+                        
+                    }
+                }else {
+                    if (LocaleController.usePersianCalendar) {
+                        PersianDate pdate = new PersianDate(date);
+                        return pdate.getPersianNormalDate();
+                    } else {
+                        return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    }
                 }
             }
         });
@@ -2487,7 +2567,7 @@ public class AlertsCreator {
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextColor(datePickerColors.buttonTextColor);
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), datePickerColors.buttonBackgroundColor, datePickerColors.buttonBackgroundPressedColor));
         buttonTextView.setText(LocaleController.getString("SetTimeLimit", R.string.SetTimeLimit));
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
@@ -2513,16 +2593,37 @@ public class AlertsCreator {
         int day = dayPicker.getValue();
         int month = monthPicker.getValue();
         int year = yearPicker.getValue();
-
+        int minYear = 0;
+        int minMonth = 0;
+        int minDay = 0;
+        int maxYear = 0;
+        int maxMonth = 0;
+        int maxDay = 0;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(minDate);
-        int minYear = calendar.get(Calendar.YEAR);
-        int minMonth = calendar.get(Calendar.MONTH);
-        int minDay = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int maxYear = calendar.get(Calendar.YEAR);
-        int maxMonth = calendar.get(Calendar.MONTH);
-        int maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (LocaleController.usePersianCalendar) {
+            calendar.setTimeInMillis(minDate);
+            PersianDate pdate = new PersianDate(minDate);
+            minYear = pdate.getShYear();
+            minMonth = pdate.getShMonth();
+            minMonth -=1;
+            minDay = pdate.getShDay();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
+            maxYear = pdate2.getShYear();
+            maxMonth = pdate2.getShMonth();
+            maxMonth-=1;
+
+            maxDay = pdate2.getShDay();
+        } else {
+            calendar.setTimeInMillis(minDate);
+            minYear = calendar.get(Calendar.YEAR);
+            minMonth = calendar.get(Calendar.MONTH);
+            minDay = calendar.get(Calendar.DAY_OF_MONTH);
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            maxYear = calendar.get(Calendar.YEAR);
+            maxMonth = calendar.get(Calendar.MONTH);
+            maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+        }
 
         if (year > maxYear) {
             yearPicker.setValue(year = maxYear);
@@ -2554,8 +2655,13 @@ public class AlertsCreator {
 
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
-
-        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int daysInMonth = 0;
+        if (LocaleController.usePersianCalendar) {
+            PersianDate pdate = new PersianDate();
+            daysInMonth = pdate.getMonthLengthPicker(yearPicker.getValue(), monthPicker.getValue());
+        } else {
+            daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        }
         dayPicker.setMaxValue(daysInMonth);
         if (day > daysInMonth) {
             day = daysInMonth;
@@ -2621,8 +2727,8 @@ public class AlertsCreator {
         titleView.setText(LocaleController.getString("ChooseDate", R.string.ChooseDate));
         titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
+        titleView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT | Gravity.TOP,0, 0, 48, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         LinearLayout linearLayout = new LinearLayout(context);
@@ -2655,59 +2761,114 @@ public class AlertsCreator {
             checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
         };
         dayPicker.setOnValueChangedListener(onValueChangeListener);
-
         monthPicker.setMinValue(0);
         monthPicker.setMaxValue(11);
         monthPicker.setWrapSelectorWheel(false);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         monthPicker.setFormatter(value -> {
-            switch (value) {
-                case 0: {
-                    return LocaleController.getString("January", R.string.January);
+            
+            if (LocaleController.usePersianCalendar) { 
+                switch (value) {
+                    case 0: {
+                        return LocaleController.getString("Farvardin", R.string.Farvardin);
+                    }
+                    case 1: {
+                        return LocaleController.getString("Ordibehesht", R.string.Ordibehesht);
+                    }
+                    case 2: {
+                        return LocaleController.getString("Khordad", R.string.Khordad);
+                    }
+                    case 3: {
+                        return LocaleController.getString("Tir", R.string.Tir);
+                    }
+                    case 4: {
+                        return LocaleController.getString("Mordad", R.string.Mordad);
+                    }
+                    case 5: {
+                        return LocaleController.getString("Shahrivar", R.string.Shahrivar);
+                    }
+                    case 6: {
+                        return LocaleController.getString("Mehr", R.string.Mehr);
+                    }
+                    case 7: {
+                        return LocaleController.getString("Aabaan", R.string.Aabaan);
+                    }
+                    case 8: {
+                        return LocaleController.getString("Aazar", R.string.Aazar);
+                    }
+                    case 9: {
+                        return LocaleController.getString("Dey", R.string.Dey);
+                    }
+                    case 10: {
+                        return LocaleController.getString("Bahman", R.string.Bahman);
+                    }
+                    case 11:
+                        default: {
+                            return LocaleController.getString("Esfand", R.string.Esfand);
+                        }
                 }
-                case 1: {
-                    return LocaleController.getString("February", R.string.February);
+            } else {
+                switch (value) {
+                    case 0: {
+                        return LocaleController.getString("January", R.string.January);
+                    }
+                    case 1: {
+                        return LocaleController.getString("February", R.string.February);
+                    }
+                    case 2: {
+                        return LocaleController.getString("March", R.string.March);
+                    }
+                    case 3: {
+                        return LocaleController.getString("April", R.string.April);
+                    }
+                    case 4: {
+                        return LocaleController.getString("May", R.string.May);
+                    }
+                    case 5: {
+                        return LocaleController.getString("June", R.string.June);
+                    }
+                    case 6: {
+                        return LocaleController.getString("July", R.string.July);
+                    }
+                    case 7: {
+                        return LocaleController.getString("August", R.string.August);
+                    }
+                    case 8: {
+                        return LocaleController.getString("September", R.string.September);
+                    }
+                    case 9: {
+                        return LocaleController.getString("October", R.string.October);
+                    }
+                    case 10: {
+                        return LocaleController.getString("November", R.string.November);
+                    }
+                    case 11:
+                    default: {
+                        return LocaleController.getString("December", R.string.December);
+                    }
                 }
-                case 2: {
-                    return LocaleController.getString("March", R.string.March);
-                }
-                case 3: {
-                    return LocaleController.getString("April", R.string.April);
-                }
-                case 4: {
-                    return LocaleController.getString("May", R.string.May);
-                }
-                case 5: {
-                    return LocaleController.getString("June", R.string.June);
-                }
-                case 6: {
-                    return LocaleController.getString("July", R.string.July);
-                }
-                case 7: {
-                    return LocaleController.getString("August", R.string.August);
-                }
-                case 8: {
-                    return LocaleController.getString("September", R.string.September);
-                }
-                case 9: {
-                    return LocaleController.getString("October", R.string.October);
-                }
-                case 10: {
-                    return LocaleController.getString("November", R.string.November);
-                }
-                case 11:
-                default: {
-                    return LocaleController.getString("December", R.string.December);
-                }
-            }
+                
+            }    
         });
         monthPicker.setOnValueChangedListener(onValueChangeListener);
-
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(minDate);
-        int minYear = calendar.get(Calendar.YEAR);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int maxYear = calendar.get(Calendar.YEAR);
+        int minYear = 0;
+        int maxYear = 0;
+        if (LocaleController.usePersianCalendar) {  
+            calendar.setTimeInMillis(minDate);
+            PersianDate pdate = new PersianDate(minDate);
+            minYear = pdate.getShYear();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            PersianDate pdate2 = new PersianDate(System.currentTimeMillis());
+            maxYear = pdate2.getShYear();
+        } else{
+            calendar.setTimeInMillis(minDate);
+            minYear = calendar.get(Calendar.YEAR);
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            maxYear = calendar.get(Calendar.YEAR);
+        }
+
+        
 
         yearPicker.setMinValue(minYear);
         yearPicker.setMaxValue(maxYear);
@@ -2717,7 +2878,7 @@ public class AlertsCreator {
         yearPicker.setOnValueChangedListener(onValueChangeListener);
 
         dayPicker.setValue(31);
-        monthPicker.setValue(12);
+        monthPicker.setValue(11);
         yearPicker.setValue(maxYear);
 
         checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
@@ -2726,20 +2887,42 @@ public class AlertsCreator {
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         buttonTextView.setText(LocaleController.getString("JumpToDate", R.string.JumpToDate));
         buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
             checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
-            calendar.set(Calendar.YEAR, yearPicker.getValue());
-            calendar.set(Calendar.MONTH, monthPicker.getValue());
-            calendar.set(Calendar.DAY_OF_MONTH, dayPicker.getValue());
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.SECOND, 0);
-            callback.run((int) (calendar.getTimeInMillis() / 1000));
-            builder.getDismissRunnable().run();
+            if (LocaleController.usePersianCalendar) {  
+                PersianDate pdate3 = new PersianDate();
+                pdate3.setShYear(yearPicker.getValue());
+                int monthPickerval = monthPicker.getValue();
+                pdate3.setShMonth(monthPickerval+=1);
+                pdate3.setShDay(dayPicker.getValue());
+                pdate3.setHour(0);
+                pdate3.setMinute(0);
+                pdate3.setSecond(0);
+                callback.run((int) (pdate3.getTime() / 1000));
+                builder.getDismissRunnable().run();
+
+                //calendar.set(Calendar.YEAR, pdate3.getGrgYear());
+                //calendar.set(Calendar.MONTH, pdate3.getGrgMonth());
+                //calendar.set(Calendar.DAY_OF_MONTH, pdate3.getGrgDay());
+                //calendar.set(Calendar.MINUTE, 0);
+                //calendar.set(Calendar.HOUR_OF_DAY, 0);
+                //calendar.set(Calendar.SECOND, 0);
+                //callback.run((int) (calendar.getTimeInMillis() / 1000));
+                //builder.getDismissRunnable().run();
+            } else {
+                calendar.set(Calendar.YEAR, yearPicker.getValue());
+                calendar.set(Calendar.MONTH, monthPicker.getValue());
+                calendar.set(Calendar.DAY_OF_MONTH, dayPicker.getValue());
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.SECOND, 0);
+                callback.run((int) (calendar.getTimeInMillis() / 1000));
+                builder.getDismissRunnable().run();
+            }
         });
 
         builder.setCustomView(container);
@@ -3565,7 +3748,7 @@ public class AlertsCreator {
         titleTextView.setText(LocaleController.getString("LowDiskSpaceTitle2", R.string.LowDiskSpaceTitle2));
         titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         titleTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         linearLayout.addView(titleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, 8));
 

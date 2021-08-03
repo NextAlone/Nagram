@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contributors">contributors</string>
+    <string name="Donation">Donation</string>
+    <string name="UseVazirFont">Use Vazir font</string>
+    <string name="Farvardin">Farvardin</string>
+    <string name="Ordibehesht">Ordibehesht</string>
+    <string name="Khordad">Khordad</string>
+    <string name="Tir">Tir</string>
+    <string name="Mordad">Mordad</string>
+    <string name="Shahrivar">Shahrivar</string>
+    <string name="Mehr">Mehr</string>
+    <string name="Aabaan">Aabaan</string>
+    <string name="Aazar">Aazar</string>
+    <string name="Dey">Dey</string>
+    <string name="Bahman">Bahman</string>
+    <string name="Esfand">Esfand</string>
+    <string name="Usericon" translatable="false">f007</string>
+    <string name="Boticon" translatable="false">f544</string>
+    <string name="Channelicon" translatable="false">f0a1</string>
+    <string name="Groupicon" translatable="false">f0c0</string>
+    <string name="hideBottomButton">Hide Bottom Button</string>
+
+
+
+</resources>

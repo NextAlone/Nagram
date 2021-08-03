@@ -42,7 +42,7 @@
     <string name="TransToLang">Zielsprache der Übersetzung</string>
     <string name="TransInputToLang">Quellsprache der Übersetzung</string>
     <string name="More">Mehr</string>
-    <string name="NekoXUpdatesChannel">NekoX-Aktualisierungskanal</string>
+    <string name="NekoXUpdatesChannel">TeleTux-Aktualisierungskanal</string>
     <string name="ShowIdAndDc">ID/DC im Profil anzeigen</string>
     <string name="UseDefaultTheme">Standardthema verwenden*</string>
     <string name="NightMode">Nachtmodus</string>
@@ -54,7 +54,7 @@
     <string name="ApplySuggestion">OK, anwenden</string>
     <string name="DoNotRemindAgain">Nicht mehr erinnern</string>
     <string name="RemoveTitleEmoji">Emoji im Titel entfernen</string>
-    <string name="NekoXProxy">Öffentlicher NekoX-Proxy</string>
+    <string name="TeleTuxProxy">Öffentlicher TeleTux-Proxy</string>
     <string name="PublicPrefix">Öffentlich</string>
     <string name="DisableChatAction">Meinen Eingabestatus nicht senden</string>
     <string name="FakeScreenshot">Screenshot verhindern</string>
@@ -82,9 +82,9 @@
     <string name="SortByUnmuted">Nach nicht Stummgeschalteten sortieren</string>
     <string name="SortByUser">Nach Nutzern sortieren</string>
     <string name="SortByContacts">Nach Kontakten sortieren</string>
-    <string name="NekoXPushService">NekoX Push-Service</string>
-    <string name="EnablePushAlert">Bitte aktiviere den \"NekoX Push-Service\"</string>
-    <string name="DisablePushAlert">Bitte deaktiviere den \"NekoX Push-Service\"</string>
+    <string name="TeleTuxPushService">TeleTux Push-Service</string>
+    <string name="EnablePushAlert">Bitte aktiviere den \"TeleTux Push-Service\"</string>
+    <string name="DisablePushAlert">Bitte deaktiviere den \"TeleTux Push-Service\"</string>
     <string name="DisableUndo">Rückgängig machen deaktivieren</string>
     <string name="DisableSystemAccount">Systemkonto deaktivieren</string>
     <string name="FilterMenu">Dialog-Filtermenü</string>
@@ -162,7 +162,7 @@
     <string name="DisableDeveloperMode">Entwicklermodus deaktivieren</string>
     <string name="DeveloperSettings">Entwickleroptionen</string>
     <string name="LoginSettings">Anmeldeeinstellungen</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="TeleTuxFaq">TeleTux FAQ</string>
     <string name="TransSite">Plattform übersetzen</string>
     <string name="OpenKayChain">OpenPGP-Client</string>
     <string name="OpenPGPApp">OpenPGP-Anbieter</string>

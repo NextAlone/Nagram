@@ -42,6 +42,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.util.Locale;
+import tw.nekomimi.nekogram.NekoConfig;
+import org.telegram.messenger.LocaleController;
 
 public class NumberPicker extends LinearLayout {
 
@@ -181,8 +183,12 @@ public class NumberPicker extends LinearLayout {
         paint.setAntiAlias(true);
         paint.setTextAlign(Align.CENTER);
         paint.setTextSize(mTextSize);
-        paint.setTypeface(mInputText.getTypeface());
-        ColorStateList colors = mInputText.getTextColors();
+        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
+            paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
+        } else {
+            paint.setTypeface(mInputText.getTypeface());
+        }
+            ColorStateList colors = mInputText.getTextColors();
         int color = colors.getColorForState(ENABLED_STATE_SET, Color.WHITE);
         paint.setColor(color);
         mSelectorWheelPaint = paint;

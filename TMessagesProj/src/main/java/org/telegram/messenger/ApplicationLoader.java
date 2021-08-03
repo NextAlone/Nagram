@@ -47,7 +47,6 @@ import java.util.Set;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
@@ -353,13 +352,13 @@ public class ApplicationLoader extends Application {
             NekoConfig.preferences.contains("qwq");
             NekoXConfig.preferences.contains("qwq");
 
-            SignturesKt.checkMT(this);
+            //SignturesKt.checkMT(this);
         });
 
         try {
             Class.forName("org.robolectric.android.internal.AndroidTestEnvironment");
             return;
-        } catch (ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException e) {
         }
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
@@ -380,7 +379,7 @@ public class ApplicationLoader extends Application {
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekoX ) " + BuildConfig.VERSION_NAME);
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( TeleTux ) " + BuildConfig.VERSION_NAME);
         org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
         startPushService();
