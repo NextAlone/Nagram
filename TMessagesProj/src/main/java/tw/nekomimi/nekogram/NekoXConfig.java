@@ -163,11 +163,6 @@ public class NekoXConfig {
 
     }
 
-    public static void toggleEnableStickerPin() {
-
-        preferences.edit().putBoolean("enableStickerPin", enableStickerPin = !enableStickerPin).apply();
-
-    }
     public static void togglehide_Me() {
 
         preferences.edit().putBoolean("hide_Me", hide_Me = !hide_Me).apply();

@@ -653,7 +653,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean drawEditButton;
     private boolean editPressed;
     private int editStartX;
-    private int editStartY;
+    private float editStartY;
     //Devgram/
     private int layoutWidth;
     private int layoutHeight;
