@@ -1587,8 +1587,7 @@ public class LocaleController {
                         return getInstance().formatterDay.format(new Date(date));
                     } else {
                         PersianDateFormat pdformater2 = new PersianDateFormat("HH:MM");
-                        pdformater1.format(pdate);
-                        return pdate;
+                        return pdformater1.format(pdate);
                     }
                 } else{
                     return getInstance().formatterDay.format(new Date(date));
@@ -1781,7 +1780,7 @@ public class LocaleController {
                     } else {
                         PersianDateFormat pdformater2 = new PersianDateFormat("F j در HH:MM");
                         pdformater1.format(pdate);
-                        return pdate;
+                        return pdformater1.format(pdate);
                     }                    
                 } else {
                     String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
@@ -1794,8 +1793,7 @@ public class LocaleController {
                         return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
                     } else {
                         PersianDateFormat pdformater2 = new PersianDateFormat("Y/m/d در HH:MM");
-                        pdformater1.format(pdate);
-                        return pdate;
+                        return pdformater1.format(pdate);
                     }                     
                 } else {
                     String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
