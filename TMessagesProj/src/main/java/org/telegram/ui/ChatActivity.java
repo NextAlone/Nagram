@@ -23347,7 +23347,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             cell.invalidate();
                             SecretMediaViewer.getInstance().setParentActivity(getParentActivity());
                             SecretMediaViewer.getInstance().openMedia(message, photoViewerProvider, action);
-<<<<<<< HEAD
                         } else if (message.type == MessageObject.TYPE_STICKER || message.type == MessageObject.TYPE_ANIMATED_STICKER) {
                             // In case we have a .webp file that is displayed as a sticker, but
                             // that doesn't fit in 512x512, we assume it may be a regular large
@@ -23370,9 +23369,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                                 return;
                             }
-=======
-                        } else if (message.getInputStickerSet() != null) {
->>>>>>> up/master
                             StickersAlert alert = new StickersAlert(getParentActivity(), ChatActivity.this, message.getInputStickerSet(), null, bottomOverlayChat.getVisibility() != View.VISIBLE && (currentChat == null || ChatObject.canSendStickers(currentChat)) ? chatActivityEnterView : null);
                             alert.setCalcMandatoryInsets(isKeyboardVisible());
                             showDialog(alert);
