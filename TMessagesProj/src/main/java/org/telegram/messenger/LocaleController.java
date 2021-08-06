@@ -1750,10 +1750,11 @@ public class LocaleController {
             if (dateDay == day && year == dateYear) {
                 if (usePersianCalendar) {
                     if (NekoConfig.displayPersianCalendarByLatin) {
-                    return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
-                    else {
+                        return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
+                    } else {
                         return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date)))));
                     }
+                    
                 } else {
                     return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
                 }
