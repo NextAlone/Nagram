@@ -9183,7 +9183,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         Activity act = (Activity) getParentActivity();
                         act.startIntentSenderFromChild(act, pi.getIntentSender(), 117, null, 0, 0, 0);
                     } catch (IntentSender.SendIntentException e) {
-                        FileLog.e(OpenPgpApi.TAG, "SendIntentException", e);
+                        Log.e(OpenPgpApi.TAG, "SendIntentException", e);
                     }
                     break;
                 }
