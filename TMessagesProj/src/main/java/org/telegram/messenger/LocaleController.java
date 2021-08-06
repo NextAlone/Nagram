@@ -1585,9 +1585,11 @@ public class LocaleController {
                 if (usePersianCalendar){
                     if (NekoConfig.displayPersianCalendarByLatin) {
                         return getInstance().formatterDay.format(new Date(date));
-                      }else {
-                        return LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date))));
-                      }
+                    } else {
+                        PersianDateFormat pdformater2 = new PersianDateFormat('HH:MM');
+                        pdformater1.format(pdate);
+                        return pdate;
+                    }
                 } else{
                     return getInstance().formatterDay.format(new Date(date));
                 }
@@ -1748,7 +1750,11 @@ public class LocaleController {
             PersianDate pdate = new PersianDate(date);
             if (dateDay == day && year == dateYear) {
                 if (usePersianCalendar) {
-                    return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date)))));
+                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
+                    else {
+                        return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date)))));
+                    }
                 } else {
                     return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
                 }
@@ -1769,16 +1775,28 @@ public class LocaleController {
                 }
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 if (usePersianCalendar) {
-                    String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date)))));
-                    return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);                    
+                    if (NekoConfig.displayPersianCalendarByLatin) {
+                        String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), getInstance().formatterDay.format(new Date(date)));
+                        return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);                    
+                    } else {
+                        PersianDateFormat pdformater2 = new PersianDateFormat('F j در HH:MM');
+                        pdformater1.format(pdate);
+                        return pdate;
+                    }                    
                 } else {
                     String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
                     return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
                 }
             } else {
                 if (usePersianCalendar) {
-                    String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianShortDate(), LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date)))));
-                    return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);                 
+                    if (NekoConfig.displayPersianCalendarByLatin) {
+                        String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianShortDate(), getInstance().formatterDay.format(new Date(date))); 
+                        return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
+                    } else {
+                        PersianDateFormat pdformater2 = new PersianDateFormat('Y/m/d در HH:MM');
+                        pdformater1.format(pdate);
+                        return pdate;
+                    }                     
                 } else {
                     String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
                     return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
