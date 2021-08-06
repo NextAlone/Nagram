@@ -80,7 +80,7 @@ public class PersianDateFormat {
         LanguageUtils.getPersianNumbers(String.valueOf( date.getShMonth()),
         LanguageUtils.getPersianNumbers(String.valueOf( textNumberFilterStatic("" + date.getHour())),
         LanguageUtils.getPersianNumbers(String.valueOf( textNumberFilterStatic("" + date.getMinute())),
-        )
+        
 
     };
     for (int i = 0; i < key.length; i++) {
