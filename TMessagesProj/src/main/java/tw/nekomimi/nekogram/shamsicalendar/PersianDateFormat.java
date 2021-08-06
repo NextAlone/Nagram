@@ -77,8 +77,8 @@ public class PersianDateFormat {
         date.monthNamesLatin(),
         LanguageUtils.getPersianNumbers(String.valueOf(date.getShDay())),
         LanguageUtils.getPersianNumbers(String.valueOf(date.getShYear())),
-        LanguageUtils.getPersianNumbers(String.valueOf( date.getShMonth()),
-        LanguageUtils.getPersianNumbers(String.valueOf( textNumberFilterStatic("" + date.getHour())),
+        LanguageUtils.getPersianNumbers(String.valueOf( date.getShMonth())),
+        LanguageUtils.getPersianNumbers(String.valueOf( textNumberFilterStatic("" + date.getHour()))),
         LanguageUtils.getPersianNumbers(String.valueOf( textNumberFilterStatic("" + date.getMinute())))
         
 
