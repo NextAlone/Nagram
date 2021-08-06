@@ -96,7 +96,7 @@ public class MessagesStorage extends BaseController {
 
     private CountDownLatch openSync = new CountDownLatch(1);
 
-    private static volatile MessagesStorage[] Instance = new MessagesStorage[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<MessagesStorage> Instance = new SparseArray();
     private final static int LAST_DB_VERSION = 80;
 
     public static MessagesStorage getInstance(int num) {

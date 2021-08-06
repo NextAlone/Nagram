@@ -60,6 +60,7 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.SparseArray;
@@ -9182,7 +9183,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         Activity act = (Activity) getParentActivity();
                         act.startIntentSenderFromChild(act, pi.getIntentSender(), 117, null, 0, 0, 0);
                     } catch (IntentSender.SendIntentException e) {
-                        Log.e(OpenPgpApi.TAG, "SendIntentException", e);
+                        FileLog.e(OpenPgpApi.TAG, "SendIntentException", e);
                     }
                     break;
                 }

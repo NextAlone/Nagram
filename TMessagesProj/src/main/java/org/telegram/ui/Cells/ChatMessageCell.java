@@ -13761,6 +13761,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         private final int COMMENT = 496;
         private final int POLL_HINT = 495;
         private final int EDIT = 494;
+        private final int FORWARD = 493;
         private Path linkPath = new Path();
         private RectF rectF = new RectF();
         private Rect rect = new Rect();
