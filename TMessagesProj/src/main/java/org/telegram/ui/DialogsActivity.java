@@ -1849,12 +1849,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         getNotificationCenter().addObserver(this, NotificationCenter.didClearDatabase);
 
-        if (initialDialogsType == 3 && NekoConfig.showTabsOnForward) {
-            // Fix wrong tabs after forward
-            getMessagesController().selectedDialogFilterBackup[0] = getMessagesController().selectedDialogFilter[0];
-            getMessagesController().selectedDialogFilterBackup[1] = getMessagesController().selectedDialogFilter[1];
-        }
-
         loadDialogs(getAccountInstance());
         getMessagesController().loadPinnedDialogs(folderId, 0, null);
         return true;
@@ -1883,13 +1877,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-
-        if (initialDialogsType == 3 && NekoConfig.showTabsOnForward) {
-            // Fix wrong tabs after forward
-            getMessagesController().selectedDialogFilter[0] = getMessagesController().selectedDialogFilterBackup[0];
-            getMessagesController().selectedDialogFilter[1] = getMessagesController().selectedDialogFilterBackup[1];
-        }
-
         if (searchString == null) {
             getNotificationCenter().removeObserver(this, NotificationCenter.dialogsNeedReload);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
@@ -6507,7 +6494,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     layoutManager.scrollToPositionWithOffset(1, 0);
                 }
 
-                if (viewPages[a].dialogsAdapter.isDataSetChanged() || args.length > 0) {
+                if (viewPages[a].selectedType >= 0 &&
+                        viewPages[a].selectedType < getMessagesController().dialogFilters.size() &&
+                        getMessagesController().dialogFilters.get(viewPages[a].selectedType) != null &&
+                        getMessagesController().selectedDialogFilter[viewPages[a].dialogsType == 8 ? 1 : 0] != null &&
+                        getMessagesController().dialogFilters.get(viewPages[a].selectedType).id !=
+                                getMessagesController().selectedDialogFilter[viewPages[a].dialogsType == 8 ? 1 : 0].id) {
+                    getMessagesController().selectDialogFilter(getMessagesController().dialogFilters.get(viewPages[a].selectedType), viewPages[a].dialogsType == 8 ? 1 : 0);
+                    viewPages[a].dialogsAdapter.notifyDataSetChanged();
+                } else if (viewPages[a].dialogsAdapter.isDataSetChanged() || args.length > 0) {
                     viewPages[a].dialogsAdapter.notifyDataSetChanged();
                     int newItemCount = viewPages[a].dialogsAdapter.getItemCount();
                     if (newItemCount > oldItemCount && initialDialogsType != 11 && initialDialogsType != 12 && initialDialogsType != 13) {

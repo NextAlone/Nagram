@@ -157,7 +157,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private boolean checkShowPermissions = true;
     private boolean newAccount;
     private boolean syncContacts;
-    private boolean testBackend = false;
+//    private boolean testBackend = false;
 
     private int scrollHeight;
 
@@ -909,19 +909,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         return;
                     }
                     Bundle bundle = new Bundle();
-                    if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-                        TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow algo = (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) password.current_algo;
-                        bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
-                        bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
-                        bundle.putString("current_p", Utilities.bytesToHex(algo.p));
-                        bundle.putInt("current_g", algo.g);
-                        bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
-                        bundle.putLong("current_srp_id", password.srp_id);
-                        bundle.putInt("passwordType", 1);
-                    }
-                    bundle.putString("hint", password.hint != null ? password.hint : "");
-                    bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern != null ? password.email_unconfirmed_pattern : "");
-                    bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
+                    SerializedData data = new SerializedData(password.getObjectSize());
+                    password.serializeToStream(data);
+                    bundle.putString("password", Utilities.bytesToHex(data.toByteArray()));
                     setPage(6, true, bundle, false);
                 } else {
                     needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error1.text);
@@ -1687,7 +1677,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         private CheckBoxCell syncCell;
         private CheckBoxCell infoCell;
-        private CheckBoxCell testBackendCheckBox;
+//        private CheckBoxCell testBackendCheckBox;
 
         private int countryState = 0;
 
@@ -2012,19 +2002,19 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             allowFlashCall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
 
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                testBackendCheckBox = new CheckBoxCell(context, 2);
-                testBackendCheckBox.setText("Test Backend", "", testBackend, false);
-                addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
-                testBackendCheckBox.setOnClickListener(v -> {
-                    if (getParentActivity() == null) {
-                        return;
-                    }
-                    CheckBoxCell cell = (CheckBoxCell) v;
-                    testBackend = !testBackend;
-                    cell.setChecked(testBackend, true);
-                });
-            }
+//            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+//                testBackendCheckBox = new CheckBoxCell(context, 2);
+//                testBackendCheckBox.setText("Test Backend", "", testBackend, false);
+//                addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+//                testBackendCheckBox.setOnClickListener(v -> {
+//                    if (getParentActivity() == null) {
+//                        return;
+//                    }
+//                    CheckBoxCell cell = (CheckBoxCell) v;
+//                    testBackend = !testBackend;
+//                    cell.setChecked(testBackend, true);
+//                });
+//            }
 
             HashMap<String, String> languageMap = new HashMap<>();
             try {
@@ -2154,11 +2144,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
-            boolean isTestBakcend = BuildVars.DEBUG_PRIVATE_VERSION && getConnectionsManager().isTestBackend();
-            if (isTestBakcend != testBackend) {
-                getConnectionsManager().switchBackend(false);
-                isTestBakcend = testBackend;
-            }
+//            boolean isTestBakcend = getConnectionsManager().isTestBackend();
+//            if (isTestBakcend != testBackend) {
+//                getConnectionsManager().switchBackend(false);
+//                isTestBakcend = testBackend;
+//            }
             if (getParentActivity() instanceof LaunchActivity) {
                 for (int a : SharedConfig.activeAccounts) {
                     UserConfig userConfig = UserConfig.getInstance(a);
@@ -2166,7 +2156,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         continue;
                     }
                     String userPhone = userConfig.getCurrentUser().phone;
-                    if (PhoneNumberUtils.compare(phone, userPhone) && ConnectionsManager.getInstance(a).isTestBackend() == isTestBakcend) {
+                    if (PhoneNumberUtils.compare(phone, userPhone) && ConnectionsManager.native_isTestBackend(currentAccount) == ConnectionsManager.native_isTestBackend(a)) {
                         final int num = a;
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString("NekogramWithEmoji", R.string.TeleTux));
@@ -2246,22 +2236,12 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                                 return;
                                             }
                                             Bundle bundle = new Bundle();
-                                            if (password.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-                                                TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow algo = (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) password.current_algo;
-                                                bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
-                                                bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
-                                                bundle.putString("current_p", Utilities.bytesToHex(algo.p));
-                                                bundle.putInt("current_g", algo.g);
-                                                bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
-                                                bundle.putLong("current_srp_id", password.srp_id);
-                                                bundle.putInt("passwordType", 1);
-                                            }
-                                            bundle.putString("hint", password.hint != null ? password.hint : "");
-                                            bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern != null ? password.email_unconfirmed_pattern : "");
+                                            SerializedData data = new SerializedData(password.getObjectSize());
+                                            password.serializeToStream(data);
+                                            bundle.putString("password", Utilities.bytesToHex(data.toByteArray()));
                                             bundle.putString("phoneFormated", phone);
                                             bundle.putString("phoneHash", phoneHash);
                                             bundle.putString("code", reqI.phone_code);
-                                            bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
                                             setPage(6, true, bundle, false);
                                         } else {
                                             needShowAlert(LocaleController.getString("TeleTux", R.string.TeleTux), error1.text);
@@ -4998,5 +4978,4 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         return arrayList;
     }
-
 }
