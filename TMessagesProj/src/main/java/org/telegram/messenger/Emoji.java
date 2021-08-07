@@ -45,7 +45,7 @@ public class Emoji {
     private static int bigImgSize;
     private static boolean inited = false;
     private static Paint placeholderPaint;
-    private static int[] emojiCounts = new int[]{1695, 199, 123, 332, 128, 222, 290, 259};
+    private static int[] emojiCounts = new int[]{1906, 199, 123, 332, 128, 222, 292, 259};
     private static Bitmap[][] emojiBmp = new Bitmap[8][];
     private static boolean[][] loadingEmoji = new boolean[8][];
 
@@ -506,7 +506,7 @@ public class Emoji {
                     emojiCode.setLength(0);
                     doneEmoji = false;
                 }
-                if ((Build.VERSION.SDK_INT < 23 || Build.VERSION.SDK_INT >= 29) && emojiCount >= 50) {
+                if ((Build.VERSION.SDK_INT < 23 || Build.VERSION.SDK_INT >= 29) && !BuildVars.DEBUG_PRIVATE_VERSION && emojiCount >= 50) {
                     break;
                 }
             }

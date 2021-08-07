@@ -58,6 +58,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
 import tw.nekomimi.nekogram.NekoConfig;
 
+import java.util.ArrayList;
+
 @SuppressWarnings("FieldCanBeLocal")
 public class UndoView extends FrameLayout {
 
@@ -86,7 +88,7 @@ public class UndoView extends FrameLayout {
     private int textWidth;
 
     private int currentAction;
-    private long currentDialogId;
+    private ArrayList<Long> currentDialogIds;
     private Runnable currentActionRunnable;
     private Runnable currentCancelRunnable;
 
@@ -124,6 +126,8 @@ public class UndoView extends FrameLayout {
     public final static int ACTION_CHAT_UNARCHIVED = 23;
     public final static int ACTION_PROXIMITY_SET = 24;
     public final static int ACTION_PROXIMITY_REMOVED = 25;
+    public final static int ACTION_CLEAR_FEW = 26;
+    public final static int ACTION_DELETE_FEW = 27;
 
     public final static int ACTION_VOIP_MUTED = 30;
     public final static int ACTION_VOIP_UNMUTED = 31;
@@ -359,9 +363,12 @@ public class UndoView extends FrameLayout {
             }
             currentCancelRunnable = null;
         }
-        if (currentAction == ACTION_CLEAR || currentAction == ACTION_DELETE) {
-            MessagesController.getInstance(currentAccount).removeDialogAction(currentDialogId, currentAction == ACTION_CLEAR, apply);
-            onRemoveDialogAction(currentDialogId, currentAction);
+        if (currentAction == ACTION_CLEAR || currentAction == ACTION_DELETE || currentAction == ACTION_CLEAR_FEW || currentAction == ACTION_DELETE_FEW) {
+            for (int a = 0; a < currentDialogIds.size(); a++) {
+                long did = currentDialogIds.get(a);
+                MessagesController.getInstance(currentAccount).removeDialogAction(did, currentAction == ACTION_CLEAR || currentAction == ACTION_CLEAR_FEW, apply);
+                onRemoveDialogAction(did, currentAction);
+            }
         }
         if (animated != 0) {
             AnimatorSet animatorSet = new AnimatorSet();
@@ -417,13 +424,20 @@ public class UndoView extends FrameLayout {
     }
 
     public void showWithAction(long did, int action, Object infoObject, Object infoObject2, Runnable actionRunnable, Runnable cancelRunnable) {
+        ArrayList<Long> ids = new ArrayList<>();
+        ids.add(did);
+        showWithAction(ids, action, infoObject, infoObject2, actionRunnable, cancelRunnable);
+    }
+
+    public void showWithAction(ArrayList<Long> dialogIds, int action, Object infoObject, Object infoObject2, Runnable actionRunnable, Runnable cancelRunnable) {
         if (currentActionRunnable != null) {
             currentActionRunnable.run();
         }
         isShown = true;
         currentActionRunnable = actionRunnable;
         currentCancelRunnable = cancelRunnable;
-        currentDialogId = did;
+        currentDialogIds = dialogIds;
+        long did = dialogIds.get(0);
         currentAction = action;
         timeLeft = 5000;
         currentInfoObject = infoObject;
@@ -1297,8 +1311,10 @@ public class UndoView extends FrameLayout {
             subinfoTextView.setVisibility(GONE);
             leftImageView.setVisibility(GONE);
 
-            if (currentAction == ACTION_CLEAR) {
+            if (currentAction == ACTION_CLEAR || currentAction == ACTION_CLEAR_FEW) {
                 infoTextView.setText(LocaleController.getString("HistoryClearedUndo", R.string.HistoryClearedUndo));
+            } else if (currentAction == ACTION_DELETE_FEW) {
+                infoTextView.setText(LocaleController.getString("ChatsDeletedUndo", R.string.ChatsDeletedUndo));
             } else {
                 int lowerId = (int) did;
                 if (lowerId < 0) {
@@ -1312,7 +1328,9 @@ public class UndoView extends FrameLayout {
                     infoTextView.setText(LocaleController.getString("ChatDeletedUndo", R.string.ChatDeletedUndo));
                 }
             }
-            MessagesController.getInstance(currentAccount).addDialogAction(did, currentAction == ACTION_CLEAR);
+            for (int a = 0; a < dialogIds.size(); a++) {
+                MessagesController.getInstance(currentAccount).addDialogAction(dialogIds.get(a), currentAction == ACTION_CLEAR || currentAction == ACTION_CLEAR_FEW);
+            }
         }
 
         AndroidUtilities.makeAccessibilityAnnouncement(infoTextView.getText() + (subinfoTextView.getVisibility() == VISIBLE ? ". " + subinfoTextView.getText() : ""));
@@ -1405,7 +1423,7 @@ public class UndoView extends FrameLayout {
             backgroundDrawable.draw(canvas);
         }
 
-        if (currentAction == ACTION_DELETE || currentAction == ACTION_CLEAR) {
+        if (currentAction == ACTION_DELETE || currentAction == ACTION_CLEAR || currentAction == ACTION_DELETE_FEW || currentAction == ACTION_CLEAR_FEW) {
             int newSeconds = timeLeft > 0 ? (int) Math.ceil(timeLeft / 1000.0f) : 0;
             if (prevSeconds != newSeconds) {
                 prevSeconds = newSeconds;
