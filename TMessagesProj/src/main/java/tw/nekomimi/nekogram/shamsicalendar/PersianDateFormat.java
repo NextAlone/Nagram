@@ -16,7 +16,7 @@ public class PersianDateFormat {
    */
   private String[] key = {"a", "l", "j", "F", "Y", "H", "i", "s", "d", "g", "n", "m", "t", "w", "y",
       "z", "A",
-      "L","X","C","E","T","b","D","e"};
+      "L","X","C","E","T","b","D","e","B","S"};
   private String pattern;
   /**
    * key_parse for convert String to PersianDate
