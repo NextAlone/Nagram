@@ -1779,7 +1779,7 @@ public class LocaleController {
                         String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), getInstance().formatterDay.format(new Date(date)));
                         return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);                    
                     } else {
-                        PersianDateFormat pdformater1 = new PersianDateFormat("F b در B:S");
+                        PersianDateFormat pdformater1 = new PersianDateFormat("b F در B:S");
                         return pdformater1.format(pdate);
                     }                    
                 } else {

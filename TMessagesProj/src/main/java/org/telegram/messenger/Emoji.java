@@ -97,16 +97,33 @@ public class Emoji {
 
     private static void loadEmojiInternal(final byte page, final short page2) {
         try {
-            int imageResize;
+            float scale;
+            int imageResize = 1;
             if (AndroidUtilities.density <= 1.0f) {
+                scale = 2.0f;
                 imageResize = 2;
+            } else if (AndroidUtilities.density <= 1.5f) {
+                scale = 2.0f;
+            } else if (AndroidUtilities.density <= 2.0f) {
+                scale = 2.0f;
             } else {
-                imageResize = 1;
+                scale = 2.0f;
             }
 
             String imageName;
             File imageFile;
 
+            try {
+                for (int a = 13; a < 16; a++) {
+                    imageName = String.format(Locale.US, "v%d_emoji%.01fx_%d.png", a, scale, page);
+                    imageFile = ApplicationLoader.applicationContext.getFileStreamPath(imageName);
+                    if (imageFile.exists()) {
+                        imageFile.delete();
+                    }
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
             Bitmap bitmap = null;
             try {
                 InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "%d_%d.png", page, page2));

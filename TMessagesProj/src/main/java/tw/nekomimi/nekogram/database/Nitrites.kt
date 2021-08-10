@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.database
 
 import org.dizitart.no2.Nitrite
 import org.telegram.messenger.ApplicationLoader
+import tw.nekomimi.nekogram.sub.SubInfo
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
@@ -21,6 +22,9 @@ fun mkDatabase(name: String, delete: Boolean = false): Nitrite {
 
         val test = nitrite.openSharedPreference("shared_preferences")
         test.connection.close()
+
+        val subs = nitrite.getRepository("proxy_sub", SubInfo::class.java)
+        subs.close()
 
         return nitrite
     }

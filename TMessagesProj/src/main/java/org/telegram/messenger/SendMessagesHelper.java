@@ -1668,6 +1668,9 @@ public boolean retriedToSend;
                         }
                     }
                 }
+                if (chat != null) {
+                    rank = getMessagesController().getAdminRank(chat.id, myId);
+                }
                 canSendStickers = ChatObject.canSendStickers(chat);
                 canSendMedia = ChatObject.canSendMedia(chat);
                 canSendPreview = ChatObject.canSendEmbed(chat);

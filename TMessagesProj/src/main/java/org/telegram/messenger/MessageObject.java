@@ -3522,8 +3522,12 @@ public class MessageObject {
     }
 
     public String getFileName() {
+        return getFileName(messageOwner);
+    }
+
+    public static String getFileName(TLRPC.Message messageOwner) {
         if (messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
-            return FileLoader.getAttachFileName(getDocument());
+            return FileLoader.getAttachFileName(getDocument(messageOwner));
         } else if (messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
             ArrayList<TLRPC.PhotoSize> sizes = messageOwner.media.photo.sizes;
             if (sizes.size() > 0) {
@@ -5593,7 +5597,16 @@ public class MessageObject {
     }
 
     public boolean needDrawForwarded() {
-        return (messageOwner.flags & TLRPC.MESSAGE_FLAG_FWD) != 0 && messageOwner.fwd_from != null && !messageOwner.fwd_from.imported && (messageOwner.fwd_from.saved_from_peer == null || messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChannel && messageOwner.fwd_from.saved_from_peer.channel_id != messageOwner.fwd_from.from_id.channel_id) && UserConfig.getInstance(currentAccount).getClientUserId() != getDialogId();
+        return (messageOwner.flags & TLRPC.MESSAGE_FLAG_FWD) != 0
+                && messageOwner.fwd_from != null
+                && !messageOwner.fwd_from.imported
+                && (
+                messageOwner.fwd_from.saved_from_peer == null
+                        || messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChannel && messageOwner.fwd_from.saved_from_peer.channel_id != messageOwner.fwd_from.from_id.channel_id
+                        || messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerUser
+                        || messageOwner.fwd_from.from_id == null && messageOwner.fwd_from.from_name != null
+        )
+                && UserConfig.getInstance(currentAccount).getClientUserId() != getDialogId();
     }
 
     public static boolean isForwardedMessage(TLRPC.Message message) {
