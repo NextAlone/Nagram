@@ -1586,7 +1586,7 @@ public class LocaleController {
                     if (NekoConfig.displayPersianCalendarByLatin) {
                         return getInstance().formatterDay.format(new Date(date));
                     } else {
-                        PersianDateFormat pdformater1 = new PersianDateFormat("H:i");
+                        PersianDateFormat pdformater1 = new PersianDateFormat("B:S");
                         return pdformater1.format(pdate);
                     }
                 } else{
@@ -1779,7 +1779,7 @@ public class LocaleController {
                         String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), getInstance().formatterDay.format(new Date(date)));
                         return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);                    
                     } else {
-                        PersianDateFormat pdformater1 = new PersianDateFormat("b F در H:i");
+                        PersianDateFormat pdformater1 = new PersianDateFormat("b F در B:S");
                         return pdformater1.format(pdate);
                     }
                 } else {
@@ -1792,7 +1792,7 @@ public class LocaleController {
                         String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianShortDate(), getInstance().formatterDay.format(new Date(date))); 
                         return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
                     } else {
-                        PersianDateFormat pdformater1 = new PersianDateFormat("Y/m/d در H:i");
+                        PersianDateFormat pdformater1 = new PersianDateFormat("Y/m/d در B:S");
                         return pdformater1.format(pdate);
                         
                     }
