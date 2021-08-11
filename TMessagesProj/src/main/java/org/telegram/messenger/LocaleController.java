@@ -1977,7 +1977,16 @@ public class LocaleController {
             } else {
                 int dayDiff = dateDay - day;
                 if (dayDiff == 0 || dayDiff == -1 && System.currentTimeMillis() - date < 60 * 60 * 8 * 1000) {
-                    return getInstance().formatterDay.format(new Date(date));
+                    if (usePersianCalendar){
+                        if (NekoConfig.displayPersianCalendarByLatin) {
+                            return getInstance().formatterDay.format(new Date(date));
+                        } else {
+                            PersianDateFormat pdformater1 = new PersianDateFormat("B:S");
+                            return pdformater1.format(pdate);
+                        }
+                    } else{
+                        return getInstance().formatterDay.format(new Date(date));
+                    }
                 } else if (dayDiff > -7 && dayDiff <= -1) {
                     return getInstance().formatterWeek.format(new Date(date));
                 } else if (usePersianCalendar) {
@@ -1989,7 +1998,7 @@ public class LocaleController {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return "LOC_ERR";
+        return "LOC_ERR: MessageListDate";
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
