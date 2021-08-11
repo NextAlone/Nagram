@@ -392,10 +392,10 @@ jobs:
             done
           }
 
-          upload apks/NekoX-mini-*-release.apk
-          upload apks/NekoX-mini-*-releaseNoGcm.apk
-          upload apks/NekoX-full-*-release.apk
-          upload apks/NekoX-full-*-releaseNoGcm.apk
+          upload apks/TeleTux-mini-*-release.apk
+          upload apks/TeleTux-mini-*-releaseNoGcm.apk
+          upload apks/TeleTux-full-*-release.apk
+          upload apks/TeleTux-full-*-releaseNoGcm.apk
 
   play:
     name: Publish to Play Store
