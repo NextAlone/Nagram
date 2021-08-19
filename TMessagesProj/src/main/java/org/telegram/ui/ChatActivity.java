@@ -20575,16 +20575,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (!TextUtils.isEmpty(path)) {
             try {
                 Bitmap image = BitmapFactory.decodeFile(path);
-                Bitmap outB = image.copy(Bitmap.Config.ARGB_8888, true);
-                Canvas canvas = new Canvas(outB);
-                canvas.drawColor(Color.WHITE);
-                canvas.drawBitmap(image, 0, 0, null);
-                if (image != null) {
-                    FileOutputStream stream = new FileOutputStream(path + ".png");
-                    outB.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    stream.close();
-                    MediaController.saveFile(path + ".png", getParentActivity(), 0, null, null);
-                }
+                FileOutputStream stream = new FileOutputStream(path + ".png");
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                stream.close();
+                MediaController.saveFile(path + ".png", getParentActivity(), 0, null, null);
             } catch (Exception e) {
                 FileLog.e(e);
             }
