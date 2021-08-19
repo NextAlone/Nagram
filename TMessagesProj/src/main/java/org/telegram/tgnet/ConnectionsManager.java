@@ -910,7 +910,7 @@ public class ConnectionsManager extends BaseController {
                 result = new InetAddress[0];
             }
 
-            return new ResolvedDomain(result, 10 * 60 * 1000L);
+            return new ResolvedDomain(result, SystemClock.elapsedRealtime());
 
         }
 

@@ -87,7 +87,7 @@ object DnsFactory {
             }
         }
 
-        FileLog.d("Try system dns")
+        FileLog.d("Try system dns to resolve $domain")
 
         try {
             return InetAddress.getAllByName(domain).toList()
