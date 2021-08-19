@@ -433,28 +433,34 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                         textCell.setTextAndValue("Edited", LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date))), divider);
                     } else if (position == forwardRow) {
                         StringBuilder builder = new StringBuilder();
-                        if (messageObject.messageOwner.fwd_from.from_id.channel_id != 0) {
-                            TLRPC.Chat chat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
-                            builder.append(chat.title);
-                            builder.append("\n");
-                            if (!TextUtils.isEmpty(chat.username)) {
-                                builder.append("@");
-                                builder.append(chat.username);
+                        if (messageObject.messageOwner.fwd_from.from_id == null) {
+                            builder.append(messageObject.messageOwner.fwd_from.from_name).append('\n');
+                        } else {
+                            if (messageObject.messageOwner.fwd_from.from_id.channel_id != 0) {
+                                TLRPC.Chat chat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
+                                builder.append(chat.title);
                                 builder.append("\n");
+                                if (!TextUtils.isEmpty(chat.username)) {
+                                    builder.append("@");
+                                    builder.append(chat.username);
+                                    builder.append("\n");
+                                }
+                                builder.append(chat.id);
+                            } else if (messageObject.messageOwner.fwd_from.from_id.user_id != 0) {
+                                TLRPC.User user = getMessagesController().getUser(messageObject.messageOwner.fwd_from.from_id.channel_id);
+                                if(user!=null){
+                                    builder.append(ContactsController.formatName(user.first_name, user.last_name));
+                                    builder.append("\n");
+                                    if (!TextUtils.isEmpty(user.username)) {
+                                        builder.append("@");
+                                        builder.append(user.username);
+                                        builder.append("\n");
+                                    }
+                                    builder.append(user.id);
+                                } else builder.append("null user");
+                            } else if (!TextUtils.isEmpty(messageObject.messageOwner.fwd_from.from_name)) {
+                                builder.append(messageObject.messageOwner.fwd_from.from_name);
                             }
-                            builder.append(chat.id);
-                        } else if (messageObject.messageOwner.fwd_from.from_id.user_id != 0) {
-                            TLRPC.User user = getMessagesController().getUser(messageObject.messageOwner.fwd_from.from_id.channel_id);
-                            builder.append(ContactsController.formatName(user.first_name, user.last_name));
-                            builder.append("\n");
-                            if (!TextUtils.isEmpty(user.username)) {
-                                builder.append("@");
-                                builder.append(user.username);
-                                builder.append("\n");
-                            }
-                            builder.append(user.id);
-                        } else if (!TextUtils.isEmpty(messageObject.messageOwner.fwd_from.from_name)) {
-                            builder.append(messageObject.messageOwner.fwd_from.from_name);
                         }
                         textCell.setTextAndValue("Forward from", builder.toString(), divider);
                     } else if (position == fileNameRow) {
