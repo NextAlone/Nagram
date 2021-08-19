@@ -13,11 +13,12 @@ import kotlin.collections.ArrayList
 
 object DnsFactory {
 
-    val providers = if (Locale.getDefault().country == "CN") arrayOf(
-            "https://doh.dns.sb/dns-query"
+    fun providers() = if (NekoConfig.customDoH.isNotBlank()) arrayOf(NekoConfig.customDoH)
+    else if (Locale.getDefault().country == "CN") arrayOf(
+        "https://doh.dns.sb/dns-query"
     ) else arrayOf(
-            "https://mozilla.cloudflare-dns.com/dns-query",
-            "https://dns.google/dns-query",
+        "https://mozilla.cloudflare-dns.com/dns-query",
+        "https://dns.google/dns-query",
     )
 
     val cache = Cache()
@@ -26,57 +27,64 @@ object DnsFactory {
     @JvmOverloads
     fun lookup(domain: String, fallback: Boolean = false): List<InetAddress> {
 
-        FileLog.d("Lookup $domain")
+        if (!NekoConfig.useSystemDNS) {
 
-        ConnectionsManager.getIpStrategy()
+            FileLog.d("Lookup $domain")
 
-        val noFallback = !ConnectionsManager.hasIpv4 || !ConnectionsManager.hasIpv6
+            ConnectionsManager.getIpStrategy()
 
-        val type = if (noFallback) {
-            if (ConnectionsManager.hasIpv4) Type.A else Type.AAAA
-        } else if (NekoConfig.useIPv6 xor !fallback) Type.A else Type.AAAA
+            val noFallback = !ConnectionsManager.hasIpv4 || !ConnectionsManager.hasIpv6
 
-        val dc = DClass.IN
-        val name = Name.fromConstantString("$domain.")
-        val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
-        var sr = cache.lookupRecords(name, type, dc)
+            val type = if (noFallback) {
+                if (ConnectionsManager.hasIpv4) Type.A else Type.AAAA
+            } else if (NekoConfig.useIPv6 xor !fallback) Type.A else Type.AAAA
 
-        if (!sr.isSuccessful) for (provider in providers) {
-            FileLog.d("Provider $provider")
+            val dc = DClass.IN
+            val name = Name.fromConstantString("$domain.")
+            val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
+            var sr = cache.lookupRecords(name, type, dc)
 
-            try {
-                val response = HttpUtil.createPost(provider)
-                        .contentType("application/dns-message")
-                        .header(Header.ACCEPT, "application/dns-message")
-                        .body(message)
-                        .setConnectionTimeout(5000)
-                        .execute()
-                if (!response.isOk) continue
-                val result = Message(response.bodyBytes())
-                val rcode = result.header.rcode
-                if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN && rcode != Rcode.NXRRSET) continue
-                cache.addMessage(result)
-                sr = cache.lookupRecords(name, type, dc)
-                if (sr == null) sr = cache.lookupRecords(name, type, dc)
-                break
-            } catch (e: Exception) {
+            if (!sr.isSuccessful) for (provider in providers()) {
+                    FileLog.d("Provider $provider")
+                    try {
+                        val response = HttpUtil.createPost(provider)
+                            .contentType("application/dns-message")
+                            .header(Header.ACCEPT, "application/dns-message")
+                            .body(message)
+                            .setConnectionTimeout(5000)
+                            .execute()
+                        if (!response.isOk) continue
+                        val result = Message(response.bodyBytes())
+                        val rcode = result.header.rcode
+                        if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN && rcode != Rcode.NXRRSET) continue
+                        cache.addMessage(result)
+                        sr = cache.lookupRecords(name, type, dc)
+                        if (sr == null) sr = cache.lookupRecords(name, type, dc)
+                        break
+                    } catch (e: Exception) {
+                    }
+                }
+
+            if (sr.isSuccessful) {
+                val records = ArrayList<Record>()
+                for (set in sr.answers()) {
+                    records.addAll(set.rrs(true))
+                }
+                val addresses = records.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
+                FileLog.d(addresses.toString())
+                return addresses
             }
-        }
 
-        if (sr.isSuccessful) {
-            val records = ArrayList<Record>()
-            for (set in sr.answers()) {
-                records.addAll(set.rrs(true))
+            FileLog.d("DNS Result $domain: $sr")
+
+            if (sr.isCNAME) {
+                FileLog.d("DNS CNAME: origin:$domain, CNAME ${sr.cname.target.toString(true)}")
+                return lookup(sr.cname.target.toString(true), false)
             }
-            val addresses = records.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
-            FileLog.d(addresses.toString())
-            return addresses
-        }
 
-        FileLog.d(sr.toString())
-
-        if (sr.isNXRRSET && !noFallback && !fallback) {
-            return lookup(domain, true)
+            if ((sr.isNXRRSET && !noFallback && !fallback)) {
+                return lookup(domain, true)
+            }
         }
 
         FileLog.d("Try system dns")
@@ -102,17 +110,17 @@ object DnsFactory {
         val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
         var sr = cache.lookupRecords(name, type, dc)
 
-        if (!sr.isSuccessful) for (provider in providers) {
+        if (!sr.isSuccessful) for (provider in providers()) {
             FileLog.d("Provider $provider")
 
             try {
 
                 val response = HttpUtil.createPost(provider)
-                        .contentType("application/dns-message")
-                        .header(Header.ACCEPT, "application/dns-message")
-                        .body(message)
-                        .setConnectionTimeout(5000)
-                        .execute()
+                    .contentType("application/dns-message")
+                    .header(Header.ACCEPT, "application/dns-message")
+                    .body(message)
+                    .setConnectionTimeout(5000)
+                    .execute()
                 if (!response.isOk) continue
                 val result = Message(response.bodyBytes())
                 val rcode = result.header.rcode

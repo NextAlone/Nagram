@@ -27,6 +27,7 @@ import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -40,6 +41,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.EditTextSettingsCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
@@ -48,6 +50,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -81,6 +84,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private int disableProxyWhenVpnEnabledRow;
     private int useProxyItemRow;
     private int hideProxyByDefaultRow;
+    private int useSystemDNSRow;
+    private int customDoHRow;
     private int connection2Row;
 
     private int drawerRow;
@@ -205,6 +210,33 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.hideProxyByDefault);
                 }
+            } else if (position == useSystemDNSRow) {
+                NekoConfig.toggleUseSystemDNS();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.useSystemDNS);
+                }
+            } else if (position == customDoHRow) {
+                Context ctx = getParentActivity();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setTitle(LocaleController.getString("customDoH", R.string.customDoH));
+
+                LinearLayout linearLayout = new LinearLayout(ctx);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                EditTextBoldCursor editText = new EditTextBoldCursor(ctx);
+                editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                editText.setHint("https://1.1.1.1/dns-query");
+                editText.setText(NekoConfig.customDoH);
+                linearLayout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT,AndroidUtilities.dp(8),0,AndroidUtilities.dp(10),0));
+
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (d, v) -> {
+                    NekoConfig.setCustomDoH(editText.getText().toString());
+                    FileLog.d("set customDoH to " + editText.getText().toString());
+                    listAdapter.notifyItemChanged(customDoHRow);
+                });
+                builder.setView(linearLayout);
+                showDialog(builder.create());
             } else if (position == hidePhoneRow) {
                 NekoConfig.toggleHidePhone();
                 if (view instanceof TextCheckCell) {
@@ -736,6 +768,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         disableProxyWhenVpnEnabledRow = rowCount++;
         useProxyItemRow = rowCount++;
         hideProxyByDefaultRow = rowCount++;
+        useSystemDNSRow = rowCount++;
+        customDoHRow = rowCount++;
         connection2Row = rowCount++;
 
         transRow = rowCount++;
@@ -854,7 +888,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                    if (position == nameOrderRow) {
+                    if (position == customDoHRow) {
+                        textCell.setTextAndValue(LocaleController.getString("customDoHRow", R.string.customDoH), NekoConfig.customDoH.isEmpty() ? "OFF" : NekoConfig.customDoH, true);
+                    } else if (position == nameOrderRow) {
                         String value;
                         switch (NekoConfig.nameOrder) {
                             case 2:
@@ -953,6 +989,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("UseProxyItem", R.string.UseProxyItem), NekoConfig.useProxyItem, true);
                     } else if (position == hideProxyByDefaultRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HideProxyByDefault", R.string.HideProxyByDefault), NekoConfig.hideProxyByDefault, false);
+                    } else if (position == useSystemDNSRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("useSystemDNS", R.string.useSystemDNS), NekoConfig.useSystemDNS, true);
                     } else if (position == hidePhoneRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, false);
                     } else if (position == disableUndoRow) {
@@ -1081,7 +1119,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == nameOrderRow || position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
                     position == translationProviderRow || position == actionBarDecorationRow ||
-                    position == pgpAppRow || position == keyRow || position == tabletModeRow) {
+                    position == pgpAppRow || position == keyRow || position == tabletModeRow || position == customDoHRow) {
                 return 2;
             } else if (position == connectionRow || position == transRow || position == dialogsRow ||
                     position == privacyRow || position == generalRow || position == appearanceRow || position == openKeyChainRow) {

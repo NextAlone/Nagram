@@ -118,6 +118,8 @@ public class NekoConfig {
     public static String ccInputLang;
     public static boolean increaseVoiceMessageQuality;
 
+    public static boolean useSystemDNS;
+    public static String customDoH;
     public static boolean hideProxyByDefault;
     public static boolean useProxyItem;
 
@@ -289,6 +291,8 @@ public class NekoConfig {
         askBeforeCall = preferences.getBoolean("askBeforeCall", false);
         disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
 
+        useSystemDNS = preferences.getBoolean("useSystemDNS", false);
+        customDoH = preferences.getString("customDoH", "");
         hideProxyByDefault = preferences.getBoolean("hide_proxy_by_default", false);
         useProxyItem = preferences.getBoolean("use_proxy_item", true);
 
@@ -699,6 +703,14 @@ public class NekoConfig {
 
     public static void toggleAskBeforeCall() {
         preferences.edit().putBoolean("askBeforeCall", askBeforeCall = !askBeforeCall).apply();
+    }
+
+    public static void toggleUseSystemDNS() {
+        preferences.edit().putBoolean("useSystemDNS", useSystemDNS = !useSystemDNS).apply();
+    }
+
+    public static void setCustomDoH(String doh) {
+        preferences.edit().putString("customDoH", customDoH = doh).apply();
     }
 
     public static void toggleHideProxyByDefault() {
