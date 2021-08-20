@@ -18,6 +18,7 @@ class Threads;
 
 class GroupInstanceCustomImpl final : public GroupInstanceInterface {
 public:
+    static int customAudioBitrate;
     explicit GroupInstanceCustomImpl(GroupInstanceDescriptor &&descriptor);
     ~GroupInstanceCustomImpl();
 

@@ -156,6 +156,8 @@ public class NekoConfig {
 
     public static boolean enableStickerPin;
     public static boolean useMediaStreamInVoip;
+    public static short customAudioBitrate = 320;
+    public static boolean disableGroupVoipAudioProcessing = false;
 
     public static String getOpenPGPAppName() {
 
@@ -326,6 +328,8 @@ public class NekoConfig {
 
         enableStickerPin = preferences.getBoolean("enableStickerPin", false);
         useMediaStreamInVoip = preferences.getBoolean("useMediaStreamInVoip", false);
+        customAudioBitrate = (short) preferences.getInt("customAudioBitrate", 32);
+        disableGroupVoipAudioProcessing = preferences.getBoolean("disableGroupVoipAudioProcessing", false);
 
     }
 
@@ -833,6 +837,14 @@ public class NekoConfig {
 
     public static void toggleUseMediaStreamInVoip() {
         preferences.edit().putBoolean("useMediaStreamInVoip", useMediaStreamInVoip = !useMediaStreamInVoip).apply();
+    }
+
+    public static void setCustomAudioBitrate(int bitrate) {
+        preferences.edit().putInt("customAudioBitrate", customAudioBitrate = (short) bitrate).apply();
+    }
+
+    public static void toggleDisableGroupVoipAudioProcessing() {
+        preferences.edit().putBoolean("disableGroupVoipAudioProcessing", disableGroupVoipAudioProcessing = !disableGroupVoipAudioProcessing).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

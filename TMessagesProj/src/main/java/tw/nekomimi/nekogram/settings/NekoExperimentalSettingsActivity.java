@@ -40,8 +40,10 @@ import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.PopupBuilder;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -66,6 +68,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int unlimitedPinnedDialogsRow;
     private int enableStickerPinRow;
     private int useMediaStreamInVoipRow;
+    private int customAudioBitrateRow;
     private int experiment2Row;
 
     private UndoView tooltip;
@@ -181,11 +184,33 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (position == useMediaStreamInVoipRow){
+            } else if (position == useMediaStreamInVoipRow) {
                 NekoConfig.toggleUseMediaStreamInVoip();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.useMediaStreamInVoip);
                 }
+            } else if (position == customAudioBitrateRow) {
+                PopupBuilder builder = new PopupBuilder(view);
+                builder.setItems(new String[]{
+                        "32 (" + LocaleController.getString("Default", R.string.Default) + ")",
+                        "64",
+                        "128",
+                        "192",
+                        "256",
+                        "320"
+                }, (i, __)->{
+                    switch (i) {
+                        case 0 : NekoConfig.setCustomAudioBitrate(32);  break;
+                        case 1 : NekoConfig.setCustomAudioBitrate(64);  break;
+                        case 2 : NekoConfig.setCustomAudioBitrate(128); break;
+                        case 3 : NekoConfig.setCustomAudioBitrate(192); break;
+                        case 4 : NekoConfig.setCustomAudioBitrate(256); break;
+                        case 5 : NekoConfig.setCustomAudioBitrate(320); break;
+                    }
+                    listAdapter.notifyItemChanged(customAudioBitrateRow);
+                    return Unit.INSTANCE;
+                });
+                builder.show();
             }
         });
 
@@ -218,6 +243,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         unlimitedPinnedDialogsRow = rowCount++;
         enableStickerPinRow = rowCount++;
         useMediaStreamInVoipRow = rowCount++;
+        customAudioBitrateRow = rowCount++;
         experiment2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -334,6 +360,16 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     }
                     break;
                 }
+                case 2: {
+                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    if (position == customAudioBitrateRow) {
+                        String value = String.valueOf(NekoConfig.customAudioBitrate) + "kbps";
+                        if(NekoConfig.customAudioBitrate==32) value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
+                        textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, true);
+                    }
+                    break;
+                }
                 case 3: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
@@ -355,7 +391,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     } else if (position == increaseVoiceMessageQualityRow) {
                         textCell.setTextAndCheck(LocaleController.getString("IncreaseVoiceMessageQuality", R.string.IncreaseVoiceMessageQuality), NekoConfig.increaseVoiceMessageQuality, true);
                     } else if (position == enableStickerPinRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("EnableStickerPin", R.string.EnableStickerPin), LocaleController.getString("EnableStickerPinAbout", R.string.EnableStickerPinAbout), NekoConfig.enableStickerPin, true,true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("EnableStickerPin", R.string.EnableStickerPin), LocaleController.getString("EnableStickerPinAbout", R.string.EnableStickerPinAbout), NekoConfig.enableStickerPin, true, true);
                     } else if (position == useMediaStreamInVoipRow) {
                         textCell.setTextAndCheck(LocaleController.getString("UseMediaStreamInVoip", R.string.UseMediaStreamInVoip), NekoConfig.useMediaStreamInVoip, true);
                     }
@@ -383,6 +419,10 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             switch (viewType) {
                 case 1:
                     view = new ShadowSectionCell(mContext);
+                    break;
+                case 2:
+                    view = new TextSettingsCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
                     view = new TextCheckCell(mContext);
@@ -416,6 +456,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 return 1;
             } else if (position == experimentRow) {
                 return 4;
+            } else if (position == customAudioBitrateRow) {
+                return 2;
             }
             return 3;
         }

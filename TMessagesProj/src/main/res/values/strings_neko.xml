@@ -116,5 +116,6 @@
     <string name="HideTimeForSticker">Hide time for stickers</string>
     <string name="useSystemDNS">Use system DNS</string>
     <string name="customDoH">Custom DoH</string>
+    <string name="customGroupVoipAudioBitrate">Group Voip Audio Bitrate</string>
 
 </resources>
