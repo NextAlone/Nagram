@@ -130,8 +130,8 @@
     <string name="ProxyInfoSSR">إعدادات وكيل ShadowsocksR</string>
     <string name="SSRProtocol">برتوكول</string>
     <string name="SSRProtocolParams">بروتوكول Params</string>
-    <string name="SSRObfs">Obfs</string>
-    <string name="SSRObfsParam">Obfs Param</string>
+    <string name="SSRObfs">Obfs(أو بی اِف اِس)</string>
+    <string name="SSRObfsParam">Obfs متغيرات</string>
     <string name="ProxyInfoTrojan">إعدادات البروكسي في تروجان</string>
     <string name="TrojanSNI">SNI (اختياري)</string>
     <string name="ProxyRemarks">ملاحظات</string>
@@ -240,4 +240,15 @@
     <string name="ImportSettings">استيراد الإعدادات</string>
     <string name="BackupSettings">إعدادات النسخ الاحتياطي</string>
     <string name="AutoLockImmediately">فورا</string>
+    <string name="AutoCheckUpdateRc">مرشح للاصدار</string>
+    <string name="AutoCheckUpdateStable">مستقر</string>
+    <string name="AutoCheckUpdateSwitch">التحديث التلقائي</string>
+    <string name="AutoCheckUpdateOFF">إيقاف</string>
+    <string name="VersionUpdateNoUpdate">لا يوجد تحديث.</string>
+    <string name="VersionUpdateNotNow">ليس الآن</string>
+    <string name="VersionUpdateIgnore">تجاهل</string>
+    <string name="VersionUpdateConfirm">تحديث</string>
+    <string name="VersionUpdateVariantNotMatch">فشل متغيرات الإصدار في المطابقة تلقائيا.
+\nيرجى تحميل التطبيق يدويا من GitHub.</string>
+    <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
 </resources>

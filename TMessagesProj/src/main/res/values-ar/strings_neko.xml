@@ -110,4 +110,8 @@
     <string name="ProviderMicrosoftTranslator">مترجم مايكروسوفت</string>
     <string name="ProviderYouDao">ترجمة YouDao</string>
     <string name="pressTitleToOpenAllChats">اضغط على العنوان لفتح علامة التبويب \"كافة الدردشات\"</string>
+    <string name="HideTimeForSticker">إخفاء الوقت للملصقات</string>
+    <string name="UseMediaStreamInVoip">استخدام دفق الوسائط في Voip</string>
+    <string name="TakeGIFasVideo">خذ GIF كفيديو</string>
+    <string name="DontSendGreetingSticker">لا ترسل ملصق ترحيب</string>
 </resources>
