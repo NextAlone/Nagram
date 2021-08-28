@@ -42,6 +42,8 @@ import org.telegram.ui.SwipeGestureSettingsView;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1012,6 +1014,21 @@ public class SharedConfig {
 
     private static boolean proxyListLoaded;
     public static ProxyInfo currentProxy;
+
+    public static Proxy getActiveSocks5Proxy() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return null;
+        // https://stackoverflow.com/questions/36205896/how-to-use-httpurlconnection-over-socks-proxy-on-android
+        // Android did not support socks proxy natively(using HURL) on devices previous than Marshmallow
+        // Hutool use HttpURLConnection too
+        if (!(currentProxy instanceof ExternalSocks5Proxy) || currentProxy instanceof WsProxy)
+            return null;
+        final ExternalSocks5Proxy proxy = (ExternalSocks5Proxy) currentProxy;
+        if (!proxy.isStarted())
+            return null;
+        FileLog.w("Return socks5 proxy: " + currentProxy.toString() + " port:" + currentProxy.port);
+        return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(currentProxy.address, currentProxy.port));
+    }
 
     public static void saveConfig() {
         synchronized (sync) {

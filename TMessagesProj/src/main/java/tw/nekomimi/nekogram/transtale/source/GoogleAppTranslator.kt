@@ -7,6 +7,8 @@ import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
+import tw.nekomimi.nekogram.transtale.applyProxy
+import tw.nekomimi.nekogram.utils.applyIf
 
 object GoogleAppTranslator : Translator {
 
@@ -28,6 +30,7 @@ object GoogleAppTranslator : Translator {
 
         val response = cn.hutool.http.HttpUtil
                 .createGet(url)
+                .applyIf(NekoConfig.translationProvider != 2) { applyProxy() }
                 .header("User-Agent", "GoogleTranslate/6.14.0.04.343003216 (Linux; U; Android 10; Redmi K20 Pro)")
                 .execute()
 

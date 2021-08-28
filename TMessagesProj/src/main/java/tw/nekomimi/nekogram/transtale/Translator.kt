@@ -3,9 +3,11 @@ package tw.nekomimi.nekogram.transtale
 import android.view.View
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
+import cn.hutool.http.HttpRequest
 import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
+import org.telegram.messenger.SharedConfig
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
 import tw.nekomimi.nekogram.cc.CCConverter
@@ -15,6 +17,11 @@ import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
 import java.util.*
+
+fun <T : HttpRequest> T.applyProxy(): T {
+    SharedConfig.getActiveSocks5Proxy()?.let { setProxy(it) }
+    return this
+}
 
 val String.code2Locale: Locale by receiveLazy<String, Locale> {
 

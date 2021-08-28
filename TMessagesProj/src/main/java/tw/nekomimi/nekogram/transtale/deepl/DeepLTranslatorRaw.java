@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.messenger.SharedConfig;
 
 public class DeepLTranslatorRaw {
     private int id = (new Random()).nextInt(10000) * 10000 + 1;
@@ -178,7 +180,12 @@ public class DeepLTranslatorRaw {
     private String request(String url, String body) throws IOException {
         InputStream httpConnectionStream = null;
         URL downloadUrl = new URL(url);
-        HttpURLConnection httpConnection = (HttpURLConnection)downloadUrl.openConnection();
+        HttpURLConnection httpConnection;
+        final Proxy proxy = SharedConfig.getActiveSocks5Proxy();
+        if (proxy != null)
+            httpConnection = (HttpURLConnection) downloadUrl.openConnection(proxy);
+        else
+            httpConnection = (HttpURLConnection) downloadUrl.openConnection();
         httpConnection.addRequestProperty("Connection", "keep-alive");
         httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4147.105 Safari/537.36");
         httpConnection.addRequestProperty("Content-Type", "application/json");
