@@ -150,6 +150,7 @@ public class NekoConfig {
     public static boolean dontSendGreetingSticker;
     public static boolean hideTimeForSticker;
     public static boolean takeGIFasVideo;
+    public static int maxRecentStickerCount;
 
     public static boolean disableAutoDownloadingWin32Executable;
     public static boolean disableAutoDownloadingArchive;
@@ -322,6 +323,7 @@ public class NekoConfig {
         dontSendGreetingSticker = preferences.getBoolean("dontSendGreetingSticker", false);
         hideTimeForSticker = preferences.getBoolean("hideTimeForSticker", false);
         takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
+        maxRecentStickerCount = preferences.getInt("maxRecentStickerCount", 20);
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
         disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
@@ -829,6 +831,10 @@ public class NekoConfig {
 
     public static void toggleTakeGIFasVideo() {
         preferences.edit().putBoolean("takeGIFasVideo", takeGIFasVideo = !takeGIFasVideo).apply();
+    }
+
+    public static void setMaxRecentStickerCount(int count) {
+        preferences.edit().putInt("maxRecentStickerCount", maxRecentStickerCount = count).apply();
     }
 
     public static void toggleEnableStickerPin() {

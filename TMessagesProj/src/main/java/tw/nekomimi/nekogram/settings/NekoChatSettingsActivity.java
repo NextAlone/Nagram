@@ -39,6 +39,9 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -77,6 +80,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int dontSendGreetingStickerRow;
     private int hideTimeForStickerRow;
     private int takeGIFasVideoRow;
+    private int maxRecentStickerCountRow;
 
     private int mapPreviewRow;
     private int messageMenuRow;
@@ -287,6 +291,19 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.takeGIFasVideo);
                 }
+            } else if (position == maxRecentStickerCountRow) {
+                final int[] counts = {20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
+                List<String> types = Arrays.stream(counts)
+                        .filter(i -> i <= getMessagesController().maxRecentStickersCount)
+                        .mapToObj(String::valueOf)
+                        .collect(Collectors.toList());
+                PopupBuilder builder = new PopupBuilder(view);
+                builder.setItems(types, (i, str) -> {
+                    NekoConfig.setMaxRecentStickerCount(Integer.parseInt(str.toString()));
+                    listAdapter.notifyItemChanged(maxRecentStickerCountRow);
+                    return Unit.INSTANCE;
+                });
+                builder.show();
             } else if (position == win32Row) {
                 NekoConfig.toggleDisableAutoDownloadingWin32Executable();
                 if (view instanceof TextCheckCell) {
@@ -337,6 +354,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         dontSendGreetingStickerRow = rowCount++;
         hideTimeForStickerRow = rowCount++;
         takeGIFasVideoRow = rowCount++;
+        maxRecentStickerCountRow = rowCount++;
 
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -656,6 +674,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                                 value = LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix);
                         }
                         textCell.setTextAndValue(LocaleController.getString("TabTitleType", R.string.TabTitleType), value, false);
+                    } else if (position == maxRecentStickerCountRow) {
+                        textCell.setTextAndValue(LocaleController.getString("maxRecentStickerCount", R.string.maxRecentStickerCount), String.valueOf(NekoConfig.maxRecentStickerCount), true);
                     }
                     break;
                 }
@@ -776,7 +796,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         public int getItemViewType(int position) {
             if (position == chat2Row || position == folders2Row || position == download2Row || position == stickerSize2Row) {
                 return 1;
-            } else if (position == mapPreviewRow || position == messageMenuRow || position == tabsTitleTypeRow) {
+            } else if (position == mapPreviewRow || position == messageMenuRow || position == tabsTitleTypeRow || position == maxRecentStickerCountRow) {
                 return 2;
             } else if (position == chatRow || position == foldersRow || position == downloadRow || position == stickerSizeHeaderRow) {
                 return 4;

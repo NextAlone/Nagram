@@ -117,5 +117,6 @@
     <string name="useSystemDNS">Use system DNS</string>
     <string name="customDoH">Custom DoH</string>
     <string name="customGroupVoipAudioBitrate">Group Voip Audio Bitrate</string>
+    <string name="maxRecentStickerCount">Max Recent Sticker</string>
 
 </resources>

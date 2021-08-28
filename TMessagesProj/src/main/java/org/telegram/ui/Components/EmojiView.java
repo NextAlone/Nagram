@@ -3471,8 +3471,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         } else {
             int previousCount = recentStickers.size();
             int previousCount2 = favouriteStickers.size();
-            recentStickers = MediaDataController.getInstance(currentAccount).getRecentStickers(MediaDataController.TYPE_IMAGE);
             favouriteStickers = MediaDataController.getInstance(currentAccount).getRecentStickers(MediaDataController.TYPE_FAVE);
+            recentStickers = MediaDataController.getInstance(currentAccount).getRecentStickers(MediaDataController.TYPE_IMAGE, favouriteStickers.size());
             for (int a = 0; a < favouriteStickers.size(); a++) {
                 TLRPC.Document favSticker = favouriteStickers.get(a);
                 for (int b = 0; b < recentStickers.size(); b++) {
@@ -3483,6 +3483,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     }
                 }
             }
+            recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), NekoConfig.maxRecentStickerCount)));
             if (previousCount != recentStickers.size() || previousCount2 != favouriteStickers.size()) {
                 updateStickerTabs();
             }

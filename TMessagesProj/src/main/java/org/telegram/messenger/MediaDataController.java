@@ -273,8 +273,12 @@ public class MediaDataController extends BaseController {
     }
 
     public ArrayList<TLRPC.Document> getRecentStickers(int type) {
+        return getRecentStickers(type, 0);
+    }
+
+    public ArrayList<TLRPC.Document> getRecentStickers(int type, int padding) {
         ArrayList<TLRPC.Document> arrayList = recentStickers[type];
-        return new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), 20)));
+        return new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), NekoConfig.maxRecentStickerCount + padding)));
     }
 
     public ArrayList<TLRPC.Document> getRecentStickersNoCopy(int type) {
