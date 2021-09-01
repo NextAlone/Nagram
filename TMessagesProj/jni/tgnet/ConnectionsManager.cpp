@@ -2503,7 +2503,7 @@ void ConnectionsManager::processRequestQueue(uint32_t connectionTypes, uint32_t 
                 } else {
                     currentCount = 0;
                 }
-                if (!networkAvailable || currentCount >= 12) {
+                if (!networkAvailable || currentCount >= 16) {
                     iter++;
                     continue;
                 }

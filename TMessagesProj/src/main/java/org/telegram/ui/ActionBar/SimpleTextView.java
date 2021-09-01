@@ -31,6 +31,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.StaticLayoutEx;
 
@@ -47,6 +48,10 @@ public class SimpleTextView extends View implements Drawable.Callback {
     private SpannableStringBuilder spannableStringBuilder;
     private Drawable leftDrawable;
     private Drawable rightDrawable;
+    private Drawable replacedDrawable;
+    private String replacedText;
+    private int replacingDrawableTextIndex;
+    private float replacingDrawableTextOffset;
     private float rightDrawableScale = 1.0f;
     private int drawablePadding = AndroidUtilities.dp(4);
     private int leftDrawableTopPadding;
@@ -214,9 +219,17 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 fullLayoutLeftCharactersOffset = fullLayout.getPrimaryHorizontal(0) - firstLineLayout.getPrimaryHorizontal(0);
             }
         }
+
+        if (replacingDrawableTextIndex >= 0) {
+            replacingDrawableTextOffset = layout.getPrimaryHorizontal(replacingDrawableTextIndex);
+        } else {
+            replacingDrawableTextOffset = 0;
+        }
     }
 
     protected boolean createLayout(int width) {
+        CharSequence text = this.text;
+        replacingDrawableTextIndex = -1;
         if (text != null) {
             text = Emoji.replaceEmoji(text, textPaint.getFontMetricsInt(), (int) textPaint.getTextSize(), false);
             try {
@@ -228,6 +241,17 @@ public class SimpleTextView extends View implements Drawable.Callback {
                     int dw = (int) (rightDrawable.getIntrinsicWidth() * rightDrawableScale);
                     width -= dw;
                     width -= drawablePadding;
+                }
+                if (replacedText != null && replacedDrawable != null) {
+                    replacingDrawableTextIndex = text.toString().indexOf(replacedText);
+                    if (replacingDrawableTextIndex >= 0) {
+                        SpannableStringBuilder builder = SpannableStringBuilder.valueOf(text);
+                        builder.setSpan(new DialogCell.FixedWidthSpan(replacedDrawable.getIntrinsicWidth()), replacingDrawableTextIndex, replacingDrawableTextIndex + replacedText.length(), 0);
+                        text = builder;
+                    } else {
+                        width -= replacedDrawable.getIntrinsicWidth();
+                        width -= drawablePadding;
+                    }
                 }
                 if (buildFullLayout) {
                     CharSequence string = TextUtils.ellipsize(text, textPaint, width, TextUtils.TruncateAt.END);
@@ -383,6 +407,23 @@ public class SimpleTextView extends View implements Drawable.Callback {
         }
     }
 
+    public void replaceTextWithDrawable(Drawable drawable, String replacedText) {
+        if (replacedDrawable == drawable) {
+            return;
+        }
+        if (replacedDrawable != null) {
+            replacedDrawable.setCallback(null);
+        }
+        replacedDrawable = drawable;
+        if (drawable != null) {
+            drawable.setCallback(this);
+        }
+        if (!recreateLayoutMaybe()) {
+            invalidate();
+        }
+        this.replacedText = replacedText;
+    }
+
     public void setMinusWidth(int value) {
         if (value == minusWidth) {
             return;
@@ -490,6 +531,11 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 textOffsetX += drawablePadding + leftDrawable.getIntrinsicWidth();
             }
         }
+        if (replacedDrawable != null && replacingDrawableTextIndex < 0) {
+            if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.LEFT) {
+                textOffsetX += drawablePadding + replacedDrawable.getIntrinsicWidth();
+            }
+        }
         return (int) getX() + offsetX + textOffsetX;
     }
 
@@ -533,6 +579,26 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 textOffsetX += drawablePadding + leftDrawable.getIntrinsicWidth();
             }
             totalWidth += drawablePadding + leftDrawable.getIntrinsicWidth();
+        }
+        if (replacedDrawable != null && replacedText != null) {
+            int x = (int) (-scrollingOffset + replacingDrawableTextOffset);
+            if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.CENTER_HORIZONTAL) {
+                x += offsetX;
+            }
+            int y;
+            if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.CENTER_VERTICAL) {
+                y = (getMeasuredHeight() - replacedDrawable.getIntrinsicHeight()) / 2 + leftDrawableTopPadding;
+            } else {
+                y = (textHeight - replacedDrawable.getIntrinsicHeight()) / 2 + leftDrawableTopPadding;
+            }
+            replacedDrawable.setBounds(x, y, x + replacedDrawable.getIntrinsicWidth(), y + replacedDrawable.getIntrinsicHeight());
+            replacedDrawable.draw(canvas);
+            if (replacingDrawableTextIndex < 0) {
+                if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.LEFT || (gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.CENTER_HORIZONTAL) {
+                    textOffsetX += drawablePadding + replacedDrawable.getIntrinsicWidth();
+                }
+                totalWidth += drawablePadding + replacedDrawable.getIntrinsicWidth();
+            }
         }
         if (rightDrawable != null) {
             int x = textOffsetX + textWidth + drawablePadding + (int) -scrollingOffset;
@@ -685,6 +751,8 @@ public class SimpleTextView extends View implements Drawable.Callback {
             invalidate(leftDrawable.getBounds());
         } else if (who == rightDrawable) {
             invalidate(rightDrawable.getBounds());
+        } else if (who == replacedDrawable) {
+            invalidate(replacedDrawable.getBounds());
         }
     }
 

@@ -639,6 +639,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     };
 
+    private boolean closeAnimationInProgress;
+
     private class WindowView extends FrameLayout {
 
         private final Paint blackPaint = new Paint();
@@ -653,7 +655,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int startedTrackingX;
         private int startedTrackingY;
         private VelocityTracker tracker;
-        private boolean closeAnimationInProgress;
         private float innerTranslationX;
         private float alpha;
 
@@ -4542,7 +4543,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void close(boolean byBackPress, boolean force) {
-        if (parentActivity == null || !isVisible || checkAnimation()) {
+        if (parentActivity == null || closeAnimationInProgress || !isVisible || checkAnimation()) {
             return;
         }
         if (fullscreenVideoContainer.getVisibility() == View.VISIBLE) {

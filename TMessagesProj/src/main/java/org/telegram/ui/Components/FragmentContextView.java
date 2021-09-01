@@ -124,7 +124,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private StaticLayout timeLayout;
     private RectF rect = new RectF();
     private boolean scheduleRunnableScheduled;
-    private Runnable updateScheduleTimeRunnable = new Runnable() {
+    private final Runnable updateScheduleTimeRunnable = new Runnable() {
         @Override
         public void run() {
             if (gradientTextPaint == null || !(fragment instanceof ChatActivity)) {
@@ -1388,6 +1388,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 return;
             }
             if (visible) {
+                if (playbackSpeedButton != null && playbackSpeedButton.isSubMenuShowing()) {
+                    playbackSpeedButton.toggleSubMenu();
+                }
                 visible = false;
                 if (create) {
                     if (getVisibility() != GONE) {
@@ -1808,6 +1811,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 updateStyle(4);
 
                 ChatObject.Call call = ((ChatActivity) fragment).getGroupCall();
+                TLRPC.Chat chat = ((ChatActivity) fragment).getCurrentChat();
                 if (call.isScheduled()) {
                     if (gradientPaint == null) {
                         gradientTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -1824,7 +1828,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (!TextUtils.isEmpty(call.call.title)) {
                         titleTextView.setText(call.call.title, false);
                     } else {
-                        titleTextView.setText(LocaleController.getString("VoipGroupScheduledVoiceChat", R.string.VoipGroupScheduledVoiceChat), false);
+                        if (ChatObject.isChannelOrGiga(chat)) {
+                            titleTextView.setText(LocaleController.getString("VoipChannelScheduledVoiceChat", R.string.VoipChannelScheduledVoiceChat), false);
+                        } else {
+                            titleTextView.setText(LocaleController.getString("VoipGroupScheduledVoiceChat", R.string.VoipGroupScheduledVoiceChat), false);
+                        }
                     }
                     subtitleTextView.setText(LocaleController.formatStartsTime(call.call.schedule_date, 4), false);
                     if (!scheduleRunnableScheduled) {
@@ -1834,7 +1842,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 } else {
                     timeLayout = null;
                     joinButton.setVisibility(VISIBLE);
-                    titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat), false);
+                    if (ChatObject.isChannelOrGiga(chat)) {
+                        titleTextView.setText(LocaleController.getString("VoipChannelVoiceChat", R.string.VoipChannelVoiceChat), false);
+                    } else {
+                        titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat), false);
+                    }
                     if (call.call.participants_count == 0) {
                         subtitleTextView.setText(LocaleController.getString("MembersTalkingNobody", R.string.MembersTalkingNobody), false);
                     } else {
@@ -2086,7 +2098,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     titleTextView.setText(service.groupCall.call.title, false);
                 } else {
                     if (fragment instanceof ChatActivity && ((ChatActivity) fragment).getCurrentChat() != null && ((ChatActivity) fragment).getCurrentChat().id == service.getChat().id) {
-                        titleTextView.setText(LocaleController.getString("VoipGroupViewVoiceChat", R.string.VoipGroupViewVoiceChat), false);
+                        TLRPC.Chat chat = ((ChatActivity) fragment).getCurrentChat();
+                        if (ChatObject.isChannelOrGiga(chat)) {
+                            titleTextView.setText(LocaleController.getString("VoipChannelViewVoiceChat", R.string.VoipChannelViewVoiceChat), false);
+                        } else {
+                            titleTextView.setText(LocaleController.getString("VoipGroupViewVoiceChat", R.string.VoipGroupViewVoiceChat), false);
+                        }
                     } else {
                         titleTextView.setText(service.getChat().title, false);
                     }

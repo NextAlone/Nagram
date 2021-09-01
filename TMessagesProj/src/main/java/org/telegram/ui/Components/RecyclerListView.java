@@ -2087,6 +2087,10 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    public boolean isMultiselect() {
+        return multiSelectionGesture;
+    }
+
     public interface onMultiSelectionChanged {
         void onSelectionChanged(int position, boolean selected, float x, float y);
         boolean canSelect(int position);

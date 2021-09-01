@@ -117,10 +117,6 @@ public class UserConfig extends BaseController {
     }
 
     public void saveConfig(boolean withFile) {
-        saveConfig(withFile, null);
-    }
-
-    public void saveConfig(boolean withFile, File oldFile) {
         NotificationCenter.getInstance(currentAccount).doOnIdle(() -> {
             synchronized (sync) {
                 try {
@@ -202,9 +198,6 @@ public class UserConfig extends BaseController {
                     }
 
                     editor.commit();
-                    if (oldFile != null) {
-                        oldFile.delete();
-                    }
                 } catch (Exception e) {
                     FileLog.e(e);
                 }

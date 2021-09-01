@@ -1704,9 +1704,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             profileActivity.getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
                         }
                         if (id == forward_noquote) {
-                            profileActivity.getMessageHelper().processForwardFromMyName(fmessages, did, true, 0);
+                            //profileActivity.getMessageHelper().processForwardFromMyName(fmessages, did, true, 0);
+                            profileActivity.getSendMessagesHelper().sendMessage(fmessages, did, true,false, true, 0);
                         } else {
-                            profileActivity.getSendMessagesHelper().sendMessage(fmessages, did, true, 0);
+                            profileActivity.getSendMessagesHelper().sendMessage(fmessages, did, false,false, true, 0);
                         }
                     }
                     fragment1.finishFragment();

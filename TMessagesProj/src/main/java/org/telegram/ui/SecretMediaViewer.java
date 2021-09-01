@@ -308,6 +308,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     private VelocityTracker velocityTracker;
     private Scroller scroller;
 
+    private boolean closeAfterAnimation;
+
     @SuppressLint("StaticFieldLeak")
     private static volatile SecretMediaViewer Instance = null;
     public static SecretMediaViewer getInstance() {
@@ -347,7 +349,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 if (isVideo && !videoWatchedOneTime) {
                     closeVideoAfterWatch = true;
                 } else {
-                    closePhoto(true, true);
+                    if (!closePhoto(true, true)) {
+                        closeAfterAnimation = true;
+                    }
                 }
             }
         } else if (id == NotificationCenter.didCreatedNewDeleteTask) {
@@ -382,7 +386,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 if (isVideo && !videoWatchedOneTime) {
                     closeVideoAfterWatch = true;
                 } else {
-                    closePhoto(true, true);
+                    if (!closePhoto(true, true)) {
+                        closeAfterAnimation = true;
+                    }
                 }
             }
         }
@@ -783,9 +789,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 isVideo = true;
                 centerImage.setImage(null, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 2);
                 long destroyTime = (long) messageObject.messageOwner.destroyTime * 1000;
-                long currentTime = System.currentTimeMillis() + ConnectionsManager.getInstance(currentAccount).getTimeDifference() * 1000;
+                long currentTime = System.currentTimeMillis() + ConnectionsManager.getInstance(currentAccount).getTimeDifference() * 1000L;
                 long timeToDestroy = destroyTime - currentTime;
-                long duration = messageObject.getDuration() * 1000;
+                long duration = messageObject.getDuration() * 1000L;
                 if (duration > timeToDestroy) {
                     secretDeleteTimer.setDestroyTime(-1, -1, true);
                 } else {
@@ -834,6 +840,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 containerView.setLayerType(View.LAYER_TYPE_NONE, null);
             }
             containerView.invalidate();
+            if (closeAfterAnimation) {
+                closePhoto(true, true);
+            }
         };
         imageMoveAnimation.setDuration(250);
         imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
@@ -1113,9 +1122,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         return currentMessageObject;
     }
 
-    public void closePhoto(boolean animated, boolean byDelete) {
+    public boolean closePhoto(boolean animated, boolean byDelete) {
         if (parentActivity == null || !isPhotoVisible || checkPhotoAnimation()) {
-            return;
+            return false;
         }
 
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagesDeleted);
@@ -1267,6 +1276,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             }
             animatorSet.start();
         }
+        return true;
     }
 
     private void onPhotoClosed(PhotoViewer.PlaceProviderObject object) {

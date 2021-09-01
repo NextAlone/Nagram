@@ -142,7 +142,7 @@ public class MessageHelper extends BaseController {
                 } else if ((int) did != 0) {
                     ArrayList<MessageObject> arrayList = new ArrayList<>();
                     arrayList.add(messageObject);
-                    getSendMessagesHelper().sendMessage(arrayList, did, notify, scheduleDate);
+                    getSendMessagesHelper().sendMessage(arrayList, did, false, false, notify, scheduleDate);
                 }
             } else if (messageObject.messageOwner.message != null) {
                 TLRPC.WebPage webPage = null;
@@ -153,7 +153,7 @@ public class MessageHelper extends BaseController {
             } else if ((int) did != 0) {
                 ArrayList<MessageObject> arrayList = new ArrayList<>();
                 arrayList.add(messageObject);
-                getSendMessagesHelper().sendMessage(arrayList, did, notify, scheduleDate);
+                getSendMessagesHelper().sendMessage(arrayList, did, true, false, notify, scheduleDate);
             }
         }
     }

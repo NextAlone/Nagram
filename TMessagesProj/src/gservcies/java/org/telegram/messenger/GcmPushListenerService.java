@@ -134,12 +134,21 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                         }
                     }
                     int account = UserConfig.selectedAccount;
+                    boolean foundAccount = false;
 
                     for (int a : SharedConfig.activeAccounts) {
                         if (UserConfig.getInstance(a).getClientUserId() == accountUserId) {
                             account = a;
+                            foundAccount = true;
                             break;
                         }
+                    }
+                    if (!foundAccount) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("GCM ACCOUNT NOT FOUND");
+                        }
+                        countDownLatch.countDown();
+                        return;
                     }
                     final int accountFinal = currentAccount = account;
                     if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
@@ -1110,6 +1119,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             if (token == null) {
                 return;
             }
+            boolean sendStat = false;
+            if (SharedConfig.pushStringGetTimeStart != 0 && SharedConfig.pushStringGetTimeEnd != 0 && (!SharedConfig.pushStatSent || !TextUtils.equals(SharedConfig.pushString, token))) {
+                sendStat = true;
+                SharedConfig.pushStatSent = false;
+            }
             SharedConfig.pushString = token;
             for (int a : SharedConfig.activeAccounts) {
                 UserConfig userConfig = UserConfig.getInstance(a);
@@ -1117,6 +1131,30 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                 userConfig.saveConfig(false);
                 if (userConfig.getClientUserId() != 0) {
                     final int currentAccount = a;
+                    if (sendStat) {
+                        TLRPC.TL_help_saveAppLog req = new TLRPC.TL_help_saveAppLog();
+                        TLRPC.TL_inputAppEvent event = new TLRPC.TL_inputAppEvent();
+                        event.time = SharedConfig.pushStringGetTimeStart;
+                        event.type = "fcm_token_request";
+                        event.peer = 0;
+                        event.data = new TLRPC.TL_jsonNull();
+                        req.events.add(event);
+
+                        event = new TLRPC.TL_inputAppEvent();
+                        event.time = SharedConfig.pushStringGetTimeEnd;
+                        event.type = "fcm_token_response";
+                        event.peer = SharedConfig.pushStringGetTimeEnd - SharedConfig.pushStringGetTimeStart;
+                        event.data = new TLRPC.TL_jsonNull();
+                        req.events.add(event);
+
+                        sendStat = false;
+                        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                            if (error != null) {
+                                SharedConfig.pushStatSent = true;
+                                SharedConfig.saveConfig();
+                            }
+                        }));
+                    }
                     AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(currentAccount).registerForPush(token));
                 }
             }

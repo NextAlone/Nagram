@@ -212,13 +212,22 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = "en";
         }
 
+        getUserConfig().loadConfig();
+        String pushString = getRegId();
+
+        int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
+        init(version, TLRPC.LAYER, appId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+    }
+
+    private String getRegId() {
         String pushString = SharedConfig.pushString;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             pushString = SharedConfig.pushStringStatus;
         }
-
-        int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
-        init(version, TLRPC.LAYER, appId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), enablePushConnection);
+        if (TextUtils.isEmpty(pushString)) {
+            pushString = SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + getCurrentTime() + "__";
+        }
+        return pushString;
     }
 
     public boolean isPushConnectionEnabled() {
@@ -417,6 +426,9 @@ public class ConnectionsManager extends BaseController {
         String pushString = regId;
         if (TextUtils.isEmpty(pushString) && !TextUtils.isEmpty(status)) {
             pushString = status;
+        }
+        if (TextUtils.isEmpty(pushString)) {
+            pushString = SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + getInstance(0).getCurrentTime() + "__";
         }
         for (int a : SharedConfig.activeAccounts) {
             native_setRegId(a, pushString);
