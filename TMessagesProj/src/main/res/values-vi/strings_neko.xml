@@ -110,4 +110,12 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Dịch</string>
     <string name="ProviderYouDao">YouDao Dịch</string>
     <string name="pressTitleToOpenAllChats">Nhấn vào tiêu đề để mở tab \"Tất cả các cuộc trò chuyện\"</string>
+    <string name="maxRecentStickerCount">Nhãn dán gần đây tối đa</string>
+    <string name="customGroupVoipAudioBitrate">Tốc độ bit trong Voip nhóm</string>
+    <string name="customDoH">DoH tùy chỉnh</string>
+    <string name="useSystemDNS">Sử dụng DNS hệ thống</string>
+    <string name="HideTimeForSticker">Ẩn thời gian đối với nhãn dán</string>
+    <string name="UseMediaStreamInVoip">Sử dụng luồng truyền phương tiện trong Voip</string>
+    <string name="TakeGIFasVideo">Lấy GIF dưới dạng Video</string>
+    <string name="DontSendGreetingSticker">Không gửi nhãn dán chào</string>
 </resources>

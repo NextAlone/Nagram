@@ -238,4 +238,15 @@
     <string name="EnableStickerPinAbout">Çıkartmaları sabitleyin ve yeni çıkartmalar eklerken bile bulut ile eşzamanlayın.
 \nSık Kullanılanları ve Son Kullanılanları Devre Dışı Bırak ile eşleştirilir.</string>
     <string name="EnableStickerPin">Çıkartmaları Sabitlemeyi Etkinleştir</string>
+    <string name="AutoCheckUpdateRc">Sürüm Adayı</string>
+    <string name="AutoCheckUpdateStable">Kararlı</string>
+    <string name="AutoCheckUpdateSwitch">Otomatik Güncelleme</string>
+    <string name="AutoCheckUpdateOFF">KAPALI</string>
+    <string name="VersionUpdateNoUpdate">Güncelleme Yok.</string>
+    <string name="VersionUpdateNotNow">Şimdi değil</string>
+    <string name="VersionUpdateIgnore">Yok say</string>
+    <string name="VersionUpdateConfirm">GÜNCELLE</string>
+    <string name="VersionUpdateVariantNotMatch">Sürüm çeşitleri otomatik olarak eşleşmiyor.
+\nLütfen GitHub\'dan elle indirin.</string>
+    <string name="VersionUpdateTitle">Yeni Sürüm Var</string>
 </resources>

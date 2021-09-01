@@ -216,4 +216,15 @@
     <string name="HideDeviceInfo">הסתר את דגם המכשיר</string>
     <string name="HideDeviceInfoOff">דגם המכשיר יעלה בפעם השנייה שהאפליקציה מתחילה לאחר הכניסה.</string>
     <string name="HideDeviceInfoOn">תוכל לשנות זאת בהגדרות מאוחר יותר.</string>
+    <string name="UsePersiancalendarInfo">להציג תאריך עם לוח שנה היג׳רי לפי השמש</string>
+    <string name="UsePersiancalendar">להשתמש בלוח השנה הפרסי</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(נעוץ)</string>
+    <string name="UnpinSticker">שחרור</string>
+    <string name="PinSticker">הצמדה</string>
+    <string name="EnableStickerPinAbout">ניתן להצמיד מדבקות ולסנכרן עם הענן אפילו בעת הוספת מדבקות חדשות.</string>
+    <string name="EnableStickerPin">הפעלת מדבקה נצמדת</string>
+    <string name="ArchiveFiles">קובצי ארכיון</string>
+    <string name="Win32ExecutableFiles">קובצי הפעלה מסוג Win32</string>
+    <string name="AutoDownload">הורדה אוטומטית</string>
 </resources>

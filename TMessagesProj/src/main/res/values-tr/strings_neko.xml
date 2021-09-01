@@ -110,4 +110,12 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Tercüman</string>
     <string name="ProviderYouDao">YouDao Çeviri</string>
     <string name="pressTitleToOpenAllChats">\"Tüm Sohbetler\" sekmesini açmak için başlığa basın</string>
+    <string name="maxRecentStickerCount">Maksimum son kullanılan çıkartma</string>
+    <string name="UseMediaStreamInVoip">VoIP\'te Medya Akışı kullan</string>
+    <string name="customGroupVoipAudioBitrate">Grup VoIP Ses Bit Hızı</string>
+    <string name="customDoH">Özel DoH</string>
+    <string name="useSystemDNS">Sistem DNS\'ini kullan</string>
+    <string name="HideTimeForSticker">Çıkartmalar için zamanı gizle</string>
+    <string name="TakeGIFasVideo">GIF\'i video olarak kaydet</string>
+    <string name="DontSendGreetingSticker">Selamlama çıkartması gönderme</string>
 </resources>

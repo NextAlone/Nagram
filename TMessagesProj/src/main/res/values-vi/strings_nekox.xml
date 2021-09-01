@@ -238,4 +238,15 @@
     <string name="ImportSettings">Nhập cài đặt</string>
     <string name="BackupSettings">Sao lưu cài đặt</string>
     <string name="AutoLockImmediately">Liền</string>
+    <string name="AutoCheckUpdateRc">Release Candidate</string>
+    <string name="AutoCheckUpdateStable">Ổn định</string>
+    <string name="AutoCheckUpdateSwitch">Tự động cập nhật</string>
+    <string name="AutoCheckUpdateOFF">TẮT</string>
+    <string name="VersionUpdateNoUpdate">Không có bản cập nhật.</string>
+    <string name="VersionUpdateNotNow">Không phải bây giờ</string>
+    <string name="VersionUpdateIgnore">Bỏ qua</string>
+    <string name="VersionUpdateConfirm">CẬP NHẬT</string>
+    <string name="VersionUpdateVariantNotMatch">Biến thể phiên bản không thể khớp tự động.
+\nVui lòng tải xuống thủ công từ GitHub.</string>
+    <string name="VersionUpdateTitle">Có phiên bản mới</string>
 </resources>

@@ -109,4 +109,13 @@
     <string name="ProviderDeepLTranslate">תרגום DeepL</string>
     <string name="ProviderMicrosoftTranslator">מתרגם מיקרוסופט</string>
     <string name="ProviderYouDao">YouDao Translate</string>
+    <string name="maxRecentStickerCount">כמות המדבקות האחרונות המרבית</string>
+    <string name="customGroupVoipAudioBitrate">קצב סיביות שמע של שיחות קבוצתיות</string>
+    <string name="customDoH">DoH מותאם אישית</string>
+    <string name="useSystemDNS">להשתמש ב־DNS של המערכת</string>
+    <string name="HideTimeForSticker">הסתרת שעת המדבקות</string>
+    <string name="UseMediaStreamInVoip">להשתמש בתזרים מדיה ב־VoIP</string>
+    <string name="TakeGIFasVideo">צילום GIF כסרטון</string>
+    <string name="DontSendGreetingSticker">לא לשלוח מדבקת איחולים</string>
+    <string name="pressTitleToOpenAllChats">יש ללחוץ על הכותרת כדי לפתוח את הלשונית „כל השיחות”</string>
 </resources>

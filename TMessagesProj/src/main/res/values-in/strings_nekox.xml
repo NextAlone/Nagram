@@ -238,4 +238,15 @@
     <string name="ArchiveFiles">Arsipkan file</string>
     <string name="Win32ExecutableFiles">Win32 file yang dapat dieksekusi</string>
     <string name="AutoDownload">UnduhOtomatis</string>
+    <string name="AutoCheckUpdateRc">Kandidat Rilis</string>
+    <string name="AutoCheckUpdateStable">Stabil</string>
+    <string name="AutoCheckUpdateSwitch">Perbarui Otomatis</string>
+    <string name="AutoCheckUpdateOFF">MATI</string>
+    <string name="VersionUpdateNoUpdate">Tidak ada pembaruan.</string>
+    <string name="VersionUpdateNotNow">Tidak</string>
+    <string name="VersionUpdateIgnore">Abaikan</string>
+    <string name="VersionUpdateConfirm">PERBARUI</string>
+    <string name="VersionUpdateVariantNotMatch">Gagal mencocokkan versi varian secara otomatis.
+\n Silakan unduh manual dari GitHub.</string>
+    <string name="VersionUpdateTitle">Tersedia Versi Baru</string>
 </resources>
