@@ -118,5 +118,6 @@
     <string name="customDoH">Custom DoH</string>
     <string name="customGroupVoipAudioBitrate">Group Voip Audio Bitrate</string>
     <string name="maxRecentStickerCount">Max Recent Sticker</string>
+    <string name="disableSwipeToNextChannel">Disable swipe to next channel</string>
 
 </resources>

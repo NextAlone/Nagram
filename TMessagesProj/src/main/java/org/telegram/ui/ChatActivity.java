@@ -4119,7 +4119,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (e.getAction() == MotionEvent.ACTION_DOWN) {
                     scrollByTouch = true;
                 }
-                if (pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
+                if (!NekoConfig.disableSwipeToNext && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
                     float progress = Math.min(1f, pullingDownOffset / AndroidUtilities.dp(110));
                     if (e.getAction() == MotionEvent.ACTION_UP && progress == 1 && pullingDownDrawable != null && !pullingDownDrawable.emptyStub) {
                         if (pullingDownDrawable.animationIsRunning()) {
@@ -4227,7 +4227,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     drawReplyButton(c);
                 }
 
-                if (pullingDownOffset != 0) {
+                if (!NekoConfig.disableSwipeToNext && pullingDownOffset != 0) {
                     c.save();
                     float transitionOffset = 0;
                     if (pullingDownAnimateProgress != 0) {
@@ -4262,7 +4262,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 drawLaterRoundProgressCell = null;
 
                 canvas.save();
-                if (fromPullingDownTransition && !toPullingDownTransition) {
+                if (!NekoConfig.disableSwipeToNext && fromPullingDownTransition && !toPullingDownTransition) {
                     canvas.clipRect(0, chatListViewPaddingTop - chatListViewPaddingVisibleOffset - AndroidUtilities.dp(4), getMeasuredWidth(), getMeasuredHeight());
                 }
 
@@ -5188,7 +5188,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             @Override
             public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-                if (dy < 0 && pullingDownOffset != 0) {
+                if (!NekoConfig.disableSwipeToNext && dy < 0 && pullingDownOffset != 0) {
                     pullingDownOffset += dy;
                     if (pullingDownOffset < 0) {
                         dy = (int) pullingDownOffset;
@@ -5221,7 +5221,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!foundTopView) {
                     scrolled = super.scrollVerticallyBy(dy, recycler, state);
                 }
-                if (dy > 0 && scrolled == 0 && ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect()) {
+                if (!NekoConfig.disableSwipeToNext && dy > 0 && scrolled == 0 && ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect()) {
                     if (pullingDownOffset == 0 && pullingDownDrawable != null) {
                         pullingDownDrawable.updateDialog();
                     }

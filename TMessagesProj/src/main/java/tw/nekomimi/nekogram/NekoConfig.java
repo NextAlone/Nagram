@@ -151,6 +151,7 @@ public class NekoConfig {
     public static boolean hideTimeForSticker;
     public static boolean takeGIFasVideo;
     public static int maxRecentStickerCount;
+    public static boolean disableSwipeToNext;
 
     public static boolean disableAutoDownloadingWin32Executable;
     public static boolean disableAutoDownloadingArchive;
@@ -324,6 +325,7 @@ public class NekoConfig {
         hideTimeForSticker = preferences.getBoolean("hideTimeForSticker", false);
         takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
         maxRecentStickerCount = preferences.getInt("maxRecentStickerCount", 20);
+        disableSwipeToNext = preferences.getBoolean("disableSwipeToNext", false);
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
         disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
@@ -835,6 +837,10 @@ public class NekoConfig {
 
     public static void setMaxRecentStickerCount(int count) {
         preferences.edit().putInt("maxRecentStickerCount", maxRecentStickerCount = count).apply();
+    }
+
+    public static void toggleDisableSwipeToNext() {
+        preferences.edit().putBoolean("disableSwipeToNext", disableSwipeToNext = !disableSwipeToNext).apply();
     }
 
     public static void toggleEnableStickerPin() {

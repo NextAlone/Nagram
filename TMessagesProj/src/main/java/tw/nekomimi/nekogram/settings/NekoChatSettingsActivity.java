@@ -81,6 +81,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int hideTimeForStickerRow;
     private int takeGIFasVideoRow;
     private int maxRecentStickerCountRow;
+    private int disableSwipeToNextRow;
 
     private int mapPreviewRow;
     private int messageMenuRow;
@@ -304,6 +305,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     return Unit.INSTANCE;
                 });
                 builder.show();
+            } else if (position == disableSwipeToNextRow) {
+                NekoConfig.toggleDisableSwipeToNext();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableSwipeToNext);
+                }
             } else if (position == win32Row) {
                 NekoConfig.toggleDisableAutoDownloadingWin32Executable();
                 if (view instanceof TextCheckCell) {
@@ -355,6 +361,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         hideTimeForStickerRow = rowCount++;
         takeGIFasVideoRow = rowCount++;
         maxRecentStickerCountRow = rowCount++;
+        disableSwipeToNextRow = rowCount++;
 
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -722,6 +729,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("HideTimeForSticker", R.string.HideTimeForSticker), NekoConfig.hideTimeForSticker, true);
                     } else if (position == takeGIFasVideoRow) {
                         textCell.setTextAndCheck(LocaleController.getString("TakeGIFasVideo", R.string.TakeGIFasVideo), NekoConfig.takeGIFasVideo, true);
+                    } else if (position == disableSwipeToNextRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("disableSwipeToNextChannel", R.string.disableSwipeToNextChannel), NekoConfig.disableSwipeToNext, true);
                     } else if (position == win32Row) {
                         textCell.setTextAndCheck(LocaleController.getString("Win32ExecutableFiles", R.string.Win32ExecutableFiles), !NekoConfig.disableAutoDownloadingWin32Executable, true);
                     } else if (position == archiveRow) {
