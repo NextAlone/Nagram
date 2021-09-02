@@ -149,10 +149,10 @@
     <string name="ImportStickersX">استيراد ملصقات من الملف</string>
     <string name="ImportStickersList">تصدير الملصقات</string>
     <string name="StickerSets">مجموعات الملصقات</string>
-    <string name="InvalidStickersFile">ملف الملصقات غير صالح: </string>
-    <string name="InvalidProxyFile">ملف قائمة البروكسي غير صالح: </string>
-    <string name="ImportedProxies">خوادم الوكيل المستوردة: </string>
-    <string name="ErrorsInImport">أخطاء الاستيراد: </string>
+    <string name="InvalidStickersFile">ملف الملصقات غير صالح:</string>
+    <string name="InvalidProxyFile">ملف قائمة البروكسي غير صالح:</string>
+    <string name="ImportedProxies">خوادم الوكيل المستوردة:</string>
+    <string name="ErrorsInImport">أخطاء الاستيراد:</string>
     <string name="NoProxy">لم تقم بإضافة أي سيرفرات بروكسي.</string>
     <string name="DeleteAllServer">حذف جميع الخوادم</string>
     <string name="DeleteUnavailableServer">حذف الخوادم غير المتاحة</string>
@@ -251,4 +251,6 @@
     <string name="VersionUpdateVariantNotMatch">فشل متغيرات الإصدار في المطابقة تلقائيا.
 \nيرجى تحميل التطبيق يدويا من GitHub.</string>
     <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

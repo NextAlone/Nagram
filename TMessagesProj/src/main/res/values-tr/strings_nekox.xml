@@ -100,7 +100,7 @@
     <string name="UnblockAll">Tümünün Engelini Kaldır</string>
     <string name="UnblockAllWarn">**Tüm kullanıcıların ve botların** engellemesini kaldırmak istediğinizden emin misiniz?</string>
     <string name="BlockedListEmpty">Kimseyi engellemedin :)</string>
-    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="ProxyTypeVmess">VMess Vekil Sunucu</string>
     <string name="AddProxySocks5">SOCKS5 Proxy Ekle</string>
     <string name="AddProxyTelegram">MTProto Proxy Ekle</string>
     <string name="AddProxyVmess">Vmess Proxy Ekle</string>
@@ -116,7 +116,7 @@
     <string name="VmessAlterId">Kimliği Değiştir</string>
     <string name="VmessSecurity">Güvenlik</string>
     <string name="VmessNetwork">Ağ</string>
-    <string name="VmessHeadType">Head Type</string>
+    <string name="VmessHeadType">Başlık Türü</string>
     <string name="VmessRequestHost">Ana Makine / QUIC Güvenliği İste</string>
     <string name="VmessPath">Path / QUIC Anahtarı</string>
     <string name="VmessTls">TLS Kullan</string>
