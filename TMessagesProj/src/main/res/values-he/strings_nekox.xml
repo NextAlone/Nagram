@@ -41,7 +41,7 @@
     <string name="ChangeTranslateProvider">החלף ספק</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">מפתח הענן של גוגל</string>
-    <string name="GoogleCloudTransKeyNotice">אם תגדיר מפתח Cloud Cloud של גוגל, API של תרגום ענן ייקרא במקום להגיש טופס מזויף לגרסת האינטרנט בעת התרגום (תנועה מהירה יותר, יציבה וחוסכת).</string>
+    <string name="GoogleCloudTransKeyNotice">הגדרת מפתח תרגום מול Google Cloud תוביל להפניית הקריאות ל־API של ענן התרגום במקום הגשת טופס מזויף בגרסת הדפדפן בעת בקשת תרגום (מהיר יותר, יציב וחוסך בתעבורה).</string>
     <string name="TransToLang">שפת יעד לתרגום</string>
     <string name="TransInputToLang">שפת יעד קלט לתרגום</string>
     <string name="More">יותר</string>
@@ -182,7 +182,7 @@
     <string name="ShareMyKey">שתף את המפתח הציבורי שלי</string>
     <string name="DisableVibration">השבת רטט</string>
     <string name="IgnoreContentRestrictions">התעלם ממגבלות תוכן</string>
-    <string name="IgnoreContentRestrictionsNotice">מתעלם ממגבלות אנדרואיד על הודעות באופן מקומי. ייתכן שהשרת יאסר בעתיד, ותצטרך להעריך בעצמך את החוקיות המקומית של אפשרות זו.</string>
+    <string name="IgnoreContentRestrictionsNotice">התעלמות מהגבלות השמעה על הודעות.</string>
     <string name="SendCommentAfterForward">שלח תגובה לאחר העברה</string>
     <string name="UnpinMessageX">בטל הצמדה של הודעה</string>
     <string name="UnpinMessagesAll">בטל את הצמדה של כל ההודעות</string>
@@ -227,4 +227,25 @@
     <string name="ArchiveFiles">קובצי ארכיון</string>
     <string name="Win32ExecutableFiles">קובצי הפעלה מסוג Win32</string>
     <string name="AutoDownload">הורדה אוטומטית</string>
+    <string name="VersionUpdateVariantNotMatch">תיאום הגווני הגרסאות אוטומטית כשל.
+\nנא להוריד ידנית מ־GitHub.</string>
+    <string name="VersionUpdateConfirm">עדכון</string>
+    <string name="VersionUpdateTitle">קיימת גרסה חדשה</string>
+    <string name="nekoXPaymentRemovedToast">יכולת התשלום הוסרה.</string>
+    <string name="ImportSettings">ייבוא הגדות</string>
+    <string name="ImportSettingsAlert">לשכתב את ההגדרות\? ייבוא הגדרות ממקורות לא ידועים עלול לשכתב את הקוד הסודי ולהוביל לנעילת היישום.</string>
+    <string name="BackupSettings">הגדרות גיבוי</string>
+    <string name="AutoLockImmediately">מיידית</string>
+    <string name="WsPayload">מטען</string>
+    <string name="ProxyInfoWS">הגדרות ממסר WebSocket</string>
+    <string name="AddProxyWs">הוספת ממסר WebSocket</string>
+    <string name="DisplayPersianCalendarByLatin">הצגת לוח שנה פרסי בכתב לטיני</string>
+    <string name="EnableStickerPinTip">יכולת זו עדיין בהליכי פיתוח, סנכרון מול הענן כנראה לא יעבוד כראוי.</string>
+    <string name="AutoCheckUpdateRc">מועמד להפצה</string>
+    <string name="AutoCheckUpdateStable">יציב</string>
+    <string name="AutoCheckUpdateSwitch">עדכון אוטומטי</string>
+    <string name="AutoCheckUpdateOFF">כבוי</string>
+    <string name="VersionUpdateNoUpdate">אין עדכון.</string>
+    <string name="VersionUpdateNotNow">לא עכשיו</string>
+    <string name="VersionUpdateIgnore">התעלמות</string>
 </resources>
