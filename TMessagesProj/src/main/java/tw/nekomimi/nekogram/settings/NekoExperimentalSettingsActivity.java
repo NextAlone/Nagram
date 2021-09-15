@@ -366,7 +366,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     if (position == customAudioBitrateRow) {
                         String value = String.valueOf(NekoConfig.customAudioBitrate) + "kbps";
                         if(NekoConfig.customAudioBitrate==32) value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
-                        textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, false);
                     }
                     break;
                 }
@@ -410,7 +410,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 3;
+            return type == 2 || type == 3;
         }
 
         @Override

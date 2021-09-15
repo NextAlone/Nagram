@@ -112,11 +112,11 @@
     <string name="pressTitleToOpenAllChats">Press title to open \"All Chats\" tab</string>
     <string name="DontSendGreetingSticker">Don\'t send greeting sticker</string>
     <string name="TakeGIFasVideo">Take GIF as Video</string>
-    <string name="UseMediaStreamInVoip">Use media stream in Voip</string>
+    <string name="UseMediaStreamInVoip">Use media stream in VoIP</string>
     <string name="HideTimeForSticker">Hide time for stickers</string>
     <string name="useSystemDNS">Use system DNS</string>
     <string name="customDoH">Custom DoH</string>
-    <string name="customGroupVoipAudioBitrate">Group Voip Audio Bitrate</string>
+    <string name="customGroupVoipAudioBitrate">Group VoIP Audio Bitrate</string>
     <string name="maxRecentStickerCount">Max Recent Sticker</string>
     <string name="disableSwipeToNextChannel">Disable swipe to next channel</string>
 
