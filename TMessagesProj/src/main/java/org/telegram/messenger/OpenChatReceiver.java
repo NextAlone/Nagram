@@ -29,8 +29,16 @@ public class OpenChatReceiver extends Activity {
             return;
         }
         try {
-            long chatId = intent.getLongExtra("chatId", 0);
-            long userId = intent.getLongExtra("userId", 0);
+            long chatId;
+            long userId;
+            try {
+                chatId = intent.getLongExtra("chatId", 0);
+                userId = intent.getLongExtra("userId", 0);
+            } catch (ClassCastException castException){
+                chatId = intent.getIntExtra("chatId", 0);
+                userId = intent.getIntExtra("userId", 0);
+                // A temporary fix for 8.0.1 update, should be reverted when official fix this
+            }
             int encId = intent.getIntExtra("encId", 0);
             if (chatId == 0 && userId == 0 && encId == 0) {
                 return;
