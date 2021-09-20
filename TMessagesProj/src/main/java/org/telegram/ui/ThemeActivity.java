@@ -731,7 +731,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         } else if (id == NotificationCenter.themeUploadError) {
             Theme.ThemeInfo themeInfo = (Theme.ThemeInfo) args[0];
             Theme.ThemeAccent accent = (Theme.ThemeAccent) args[1];
-            if (themeInfo == sharingTheme && accent == sharingAccent && sharingProgressDialog == null) {
+            if (themeInfo == sharingTheme && accent == sharingAccent && sharingProgressDialog != null) {
                 sharingProgressDialog.dismiss();
             }
         } else if (id == NotificationCenter.needShareTheme) {
