@@ -1402,7 +1402,7 @@ public:
     void start() {
         const auto weak = std::weak_ptr<GroupInstanceCustomInternal>(shared_from_this());
 
-        std::ostringstream stringStream;
+        std::stringstream stringStream;
         stringStream << "WebRTC-Audio-Allocation/min:" << _outgoingAudioBitrateKbit << "kbps,max:" << _outgoingAudioBitrateKbit << "kbps/"
                      << "WebRTC-Audio-OpusMinPacketLossRate/Enabled-1/"
                      << "WebRTC-TaskQueuePacer/Enabled/"
@@ -1411,7 +1411,8 @@ public:
         //           << "WebRTC-MutedStateKillSwitch/Enabled/"
         //           << "WebRTC-VP8IosMaxNumberOfThread/max_thread:1/"
 
-        webrtc::field_trial::InitFieldTrialsFromString(stringStream.str().c_str());
+        auto webrtcInitStr = stringStream.str();
+        webrtc::field_trial::InitFieldTrialsFromString(webrtcInitStr.c_str());
 
         _networkManager.reset(new ThreadLocalObject<GroupNetworkManager>(_threads->getNetworkThread(), [weak, threads = _threads] () mutable {
             return new GroupNetworkManager(
