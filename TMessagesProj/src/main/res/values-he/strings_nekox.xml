@@ -222,7 +222,8 @@
     <string name="SetPinnedSuffix">(נעוץ)</string>
     <string name="UnpinSticker">שחרור</string>
     <string name="PinSticker">הצמדה</string>
-    <string name="EnableStickerPinAbout">ניתן להצמיד מדבקות ולסנכרן עם הענן אפילו בעת הוספת מדבקות חדשות.</string>
+    <string name="EnableStickerPinAbout">ניתן להצמיד מדבקות ולסנכרן עם הענן אפילו בעת הוספת מדבקות חדשות.
+\nצמוד להשבתת מועדף והאחרונים.</string>
     <string name="EnableStickerPin">הפעלת מדבקה נצמדת</string>
     <string name="ArchiveFiles">קובצי ארכיון</string>
     <string name="Win32ExecutableFiles">קובצי הפעלה מסוג Win32</string>
