@@ -327,8 +327,8 @@ public class NekoConfig {
         hideTimeForSticker = preferences.getBoolean("hideTimeForSticker", false);
         takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
         maxRecentStickerCount = preferences.getInt("maxRecentStickerCount", 20);
-        disableSwipeToNext = preferences.getBoolean("disableSwipeToNext", false);
-        disableRemoteEmojiInteractions = preferences.getBoolean("disableRemoteEmojiInteractions", false);
+        disableSwipeToNext = preferences.getBoolean("disableSwipeToNext", true);
+        disableRemoteEmojiInteractions = preferences.getBoolean("disableRemoteEmojiInteractions", true);
         disableChoosingSticker = preferences.getBoolean("disableChoosingSticker", false);
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
