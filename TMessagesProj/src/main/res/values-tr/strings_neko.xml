@@ -118,4 +118,5 @@
     <string name="HideTimeForSticker">Çıkartmalar için zamanı gizle</string>
     <string name="TakeGIFasVideo">GIF\'i video olarak kaydet</string>
     <string name="DontSendGreetingSticker">Selamlama çıkartması gönderme</string>
+    <string name="disableSwipeToNextChannel">Sonraki kanala kaydırmayı devre dışı bırak</string>
 </resources>

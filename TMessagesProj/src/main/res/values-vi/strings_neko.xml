@@ -118,4 +118,5 @@
     <string name="UseMediaStreamInVoip">Sử dụng luồng truyền phương tiện trong Voip</string>
     <string name="TakeGIFasVideo">Lấy GIF dưới dạng Video</string>
     <string name="DontSendGreetingSticker">Không gửi nhãn dán chào</string>
+    <string name="disableSwipeToNextChannel">Tắt vuốt sang kênh tiếp theo</string>
 </resources>

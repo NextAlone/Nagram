@@ -110,4 +110,13 @@
     <string name="ProviderMicrosoftTranslator">Microsoft</string>
     <string name="ProviderYouDao">YouDao (кит.)</string>
     <string name="pressTitleToOpenAllChats">Открывать вкладку «Все» удержанием заголовка</string>
+    <string name="disableSwipeToNextChannel">Отключить проведение по экрану для перехода на следующий канал</string>
+    <string name="maxRecentStickerCount">Макс. недавний стикер</string>
+    <string name="customGroupVoipAudioBitrate">Битрейт группового Voip-аудио</string>
+    <string name="customDoH">Пользовательский DoH</string>
+    <string name="useSystemDNS">Использовать системный DNS</string>
+    <string name="HideTimeForSticker">Скрыть время публикации сообщения-стикера</string>
+    <string name="UseMediaStreamInVoip">Использование медиапотока в Voip</string>
+    <string name="TakeGIFasVideo">Воспринимать GIF как видео</string>
+    <string name="DontSendGreetingSticker">Не отправлять приветственный стикер</string>
 </resources>

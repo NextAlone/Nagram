@@ -118,4 +118,5 @@
     <string name="customGroupVoipAudioBitrate">مجموعة معدل نقل الصوت عبر بروتوكول الإنترنت</string>
     <string name="customDoH">مخصص DoH</string>
     <string name="useSystemDNS">استخدم DNS النظام</string>
+    <string name="disableSwipeToNextChannel">تعطيل السحب إلى القناة التالية</string>
 </resources>

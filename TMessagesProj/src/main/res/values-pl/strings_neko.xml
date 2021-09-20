@@ -109,4 +109,14 @@
     <string name="ProviderDeepLTranslate">Tłumacz DeepL</string>
     <string name="ProviderMicrosoftTranslator">Tłumacz Microsoft</string>
     <string name="ProviderYouDao">Tłumaczenie YouDao</string>
+    <string name="customDoH">Własne ustawienia DoH</string>
+    <string name="disableSwipeToNextChannel">Wyłącz przesuwanie palcem do następnego kanału</string>
+    <string name="maxRecentStickerCount">Maksymalna ilość ostatnio używanych naklejek</string>
+    <string name="customGroupVoipAudioBitrate">Bitrate dźwięku dla Voip grupowego</string>
+    <string name="useSystemDNS">Używaj systemowych DNS</string>
+    <string name="HideTimeForSticker">Nie wyświetlaj godziny dla naklejek</string>
+    <string name="UseMediaStreamInVoip">Używaj strumieniowania mediów w Voip</string>
+    <string name="TakeGIFasVideo">Traktuj GIF jako Video</string>
+    <string name="DontSendGreetingSticker">Nie wysyłaj naklejki na powitanie</string>
+    <string name="pressTitleToOpenAllChats">Dotknij tytuł aby otworzyć zakładkę \"Wszystkie czaty\"</string>
 </resources>

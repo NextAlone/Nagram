@@ -118,4 +118,5 @@
     <string name="customGroupVoipAudioBitrate">Taxa de Bits de Áudio do Grupo Voip</string>
     <string name="customDoH">DoH personalizado</string>
     <string name="useSystemDNS">Usar DNS do sistema</string>
+    <string name="disableSwipeToNextChannel">Desativar deslizar para o próximo canal</string>
 </resources>

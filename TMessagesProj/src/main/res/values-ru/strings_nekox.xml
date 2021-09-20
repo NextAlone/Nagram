@@ -237,4 +237,15 @@
     <string name="AddProxyWs">Добавить WebSocket реле</string>
     <string name="WsPayload">Полезная нагрузка</string>
     <string name="ImportSettingsAlert">Вы точно хотите перезаписать настройки\? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
+    <string name="AutoCheckUpdateRc">Кандидат на полноценный выпуск</string>
+    <string name="AutoCheckUpdateStable">Стабильный</string>
+    <string name="AutoCheckUpdateSwitch">Автообновление</string>
+    <string name="AutoCheckUpdateOFF">ВЫКЛ.</string>
+    <string name="VersionUpdateNoUpdate">Нет обновления.</string>
+    <string name="VersionUpdateNotNow">Не сейчас</string>
+    <string name="VersionUpdateIgnore">Игнорировать</string>
+    <string name="VersionUpdateConfirm">ОБНОВЛЕНИЕ</string>
+    <string name="VersionUpdateVariantNotMatch">Варианты версий не прошли автоматическую проверку.
+\nПожалуйста, скачайте вручную с GitHub.</string>
+    <string name="VersionUpdateTitle">Доступна новая версия</string>
 </resources>

@@ -208,4 +208,42 @@
     <string name="AcceptSecretChat">Zaakceptuj nowy tajny czat</string>
     <string name="TabletMode">Tryb tabletu</string>
     <string name="TabletModeDefault">Zależy od urządzenia</string>
+    <string name="AutoCheckUpdateRc">Wersja Release Candidate</string>
+    <string name="AutoCheckUpdateStable">Stabilna</string>
+    <string name="AutoCheckUpdateSwitch">Automatyczna aktualizacja</string>
+    <string name="AutoCheckUpdateOFF">WYŁĄCZONE</string>
+    <string name="VersionUpdateNoUpdate">Brak aktualizacji.</string>
+    <string name="VersionUpdateNotNow">Nie teraz</string>
+    <string name="VersionUpdateIgnore">Ignoruj</string>
+    <string name="VersionUpdateConfirm">AKTUALIZUJ</string>
+    <string name="VersionUpdateVariantNotMatch">Warianty wersji nie są zgodne.
+\nPobierz manualnie z GitHub.</string>
+    <string name="VersionUpdateTitle">Dostępna nowa wersja</string>
+    <string name="nekoXPaymentRemovedToast">Funkcja opłat została wyłączona.</string>
+    <string name="ImportSettingsAlert">Na pewno nadpisać ustawienia\? Import ustawień z nieznanych źródeł może spowodować nadpisanie PIN-u oraz zablokowanie aplikacji.</string>
+    <string name="ImportSettings">Importuj ustawienia</string>
+    <string name="BackupSettings">Eksportuj ustawienia</string>
+    <string name="AutoLockImmediately">Natychmiast</string>
+    <string name="WsPayload">Payload</string>
+    <string name="ProxyInfoWS">Ustawienia przekazywania WebSocket</string>
+    <string name="AddProxyWs">Dodaj przekazywanie WebSocket</string>
+    <string name="DisplayPersianCalendarByLatin">Wyświetlaj kalendarz perski obok łacińskiego</string>
+    <string name="UsePersiancalendarInfo">Wyświetlaj datę wraz z kalendarzem solarnym Hijri</string>
+    <string name="UsePersiancalendar">Używaj kalendarza perskiego</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(Przypięty)</string>
+    <string name="UnpinSticker">Odepnij</string>
+    <string name="PinSticker">Przypnij</string>
+    <string name="EnableStickerPinTip">Ta funkcja jest wciąż rozwijana, synchronizacja z chmurą może nie działać poprawnie.</string>
+    <string name="EnableStickerPinAbout">Przypinaj i synchronizuj naklejki z chmurą w przypadku dodawania nowych naklejek.
+\nOpcja powiązana z Wyłącz Ulubione oraz Ostatnio Używane.</string>
+    <string name="EnableStickerPin">Włącz przypinanie naklejek</string>
+    <string name="ArchiveFiles">Pliki archiwalne</string>
+    <string name="Win32ExecutableFiles">Pliki wykonywalne Win32</string>
+    <string name="AutoDownload">Zapisuj automatycznie</string>
+    <string name="DisableTrending">Wyłącz tematy zyskujące popularność</string>
+    <string name="ReplaceRegex">Używaj regex</string>
+    <string name="TextReplace">Zastąp</string>
+    <string name="TextOrigin">Źródło</string>
+    <string name="ReplaceText">Zastąp tekst</string>
 </resources>

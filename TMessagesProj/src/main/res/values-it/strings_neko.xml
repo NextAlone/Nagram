@@ -118,4 +118,5 @@
     <string name="UseMediaStreamInVoip">Usa stream media in Voip</string>
     <string name="TakeGIFasVideo">Mostra GIF come Video</string>
     <string name="DontSendGreetingSticker">Non inviare lo sticker di saluto</string>
+    <string name="disableSwipeToNextChannel">Disabilita scorri al prossimo canale</string>
 </resources>

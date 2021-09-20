@@ -118,4 +118,5 @@
     <string name="TakeGIFasVideo">צילום GIF כסרטון</string>
     <string name="DontSendGreetingSticker">לא לשלוח מדבקת איחולים</string>
     <string name="pressTitleToOpenAllChats">יש ללחוץ על הכותרת כדי לפתוח את הלשונית „כל השיחות”</string>
+    <string name="disableSwipeToNextChannel">השבתת החלקה לערוץ הבא</string>
 </resources>
