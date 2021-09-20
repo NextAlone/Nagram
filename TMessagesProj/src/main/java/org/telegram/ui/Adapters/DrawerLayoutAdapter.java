@@ -57,7 +57,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator) {
         mContext = context;
         itemAnimator = animator;
-        accountsShown = UserConfig.getActivatedAccountsCount() > 1 && MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
+        accountsShown = MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
         Theme.createCommonDialogResources(context);
         resetItems();
         try {
@@ -85,6 +85,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             return;
         }
         accountsShown = value;
+        MessagesController.getGlobalMainSettings().edit().putBoolean("accountsShown", accountsShown).apply();
         if (profileCell != null) {
             profileCell.setAccountsShown(accountsShown, animated);
         }
