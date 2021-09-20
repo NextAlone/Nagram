@@ -10,13 +10,13 @@ import org.dizitart.no2.objects.Index;
 public class ChatCCTarget implements Mappable {
 
     @Id
-    public int chatId;
+    public long chatId;
     public String ccTarget;
 
     public ChatCCTarget() {
     }
 
-    public ChatCCTarget(int chatId, String ccTarget) {
+    public ChatCCTarget(long chatId, String ccTarget) {
         this.chatId = chatId;
         this.ccTarget = ccTarget;
     }

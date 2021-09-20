@@ -34,23 +34,33 @@ public class HeaderCell extends LinearLayout {
 
     private TextView textView;
     private TextView textView2;
+    private int height = 40;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     public HeaderCell(Context context) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false, null);
+    }
+
+    public HeaderCell(Context context, Theme.ResourcesProvider resourcesProvider) {
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false, resourcesProvider);
     }
 
     public HeaderCell(Context context, int padding) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, false, null);
     }
 
     public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2) {
-
-        this(context, textColorKey, padding, topMargin, text2, false);
-
+        this(context, textColorKey, padding, topMargin, text2, false, null);
     }
 
     public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, boolean bigTitle) {
+        this(context, textColorKey, padding, topMargin, text2, bigTitle, null);
+    }
+
+
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, boolean bigTitle, Theme.ResourcesProvider resourcesProvider) {
         super(context);
+        this.resourcesProvider = resourcesProvider;
 
         setOrientation(LinearLayout.VERTICAL);
         setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(padding), 0);
@@ -62,7 +72,7 @@ public class HeaderCell extends LinearLayout {
         }
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        textView.setTextColor(Theme.getColor(textColorKey));
+        textView.setTextColor(getThemedColor(textColorKey));
         textView.setTag(textColorKey);
         addView(textView, LayoutHelper.createLinear(-1, -2));
 
@@ -123,5 +133,10 @@ public class HeaderCell extends LinearLayout {
                 info.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collection.getRowIndex(), collection.getRowSpan(), collection.getColumnIndex(), collection.getColumnSpan(), true));
             }
         }
+    }
+
+    private int getThemedColor(String key) {
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
+        return color != null ? color : Theme.getColor(key);
     }
 }

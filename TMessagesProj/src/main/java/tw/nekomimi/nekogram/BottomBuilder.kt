@@ -18,7 +18,6 @@ import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
 class BottomBuilder(val ctx: Context) {
-
     val builder = BottomSheet.Builder(ctx, true)
 
     private val rootView = LinearLayout(ctx).apply {

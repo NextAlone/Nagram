@@ -21,7 +21,7 @@ class TranslateDb(val code: String) {
         val chat = db.getRepository("chat", ChatLanguage::class.java)
         val ccTarget = db.getRepository("opencc", ChatCCTarget::class.java)
 
-        @JvmStatic fun getChatLanguage(chatId: Int, default: Locale): Locale {
+        @JvmStatic fun getChatLanguage(chatId: Long, default: Locale): Locale {
 
             return chat.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.language?.code2Locale
                     ?: default
@@ -29,14 +29,14 @@ class TranslateDb(val code: String) {
         }
 
         @JvmStatic
-        fun saveChatLanguage(chatId: Int, locale: Locale) = UIUtil.runOnIoDispatcher {
+        fun saveChatLanguage(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
 
             chat.update(ChatLanguage(chatId, locale.locale2code), true)
 
         }
 
         @JvmStatic
-        fun getChatCCTarget(chatId: Int, default: String?): String? {
+        fun getChatCCTarget(chatId: Long, default: String?): String? {
 
             return ccTarget.find(ObjectFilters.eq("chatId", chatId)).firstOrDefault()?.ccTarget
                     ?: default
@@ -44,7 +44,7 @@ class TranslateDb(val code: String) {
         }
 
         @JvmStatic
-        fun saveChatCCTarget(chatId: Int, target: String) = UIUtil.runOnIoDispatcher {
+        fun saveChatCCTarget(chatId: Long, target: String) = UIUtil.runOnIoDispatcher {
 
             ccTarget.update(ChatCCTarget(chatId, target), true)
 

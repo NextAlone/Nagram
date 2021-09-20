@@ -223,6 +223,8 @@ public class NotificationCenter {
     public static final int webRtcSpeakerAmplitudeEvent = totalEvents++;
     public static final int showBulletin = totalEvents++;
     public static final int appUpdateAvailable = totalEvents++;
+    public static final int onDatabaseMigration = totalEvents++;
+    public static final int onEmojiInteractionsReceived = totalEvents++;
 
     // custom
 

@@ -242,14 +242,14 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             } else if (position == channelRow || position == groupRow) {
                 if (fromChat != null) {
                     Bundle args = new Bundle();
-                    args.putInt("chat_id", fromChat.id);
+                    args.putLong("chat_id", fromChat.id);
                     ProfileActivity fragment = new ProfileActivity(args);
                     presentFragment(fragment);
                 }
             } else if (position == fromRow) {
                 if (fromUser != null) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", fromUser.id);
+                    args.putLong("user_id", fromUser.id);
                     ProfileActivity fragment = new ProfileActivity(args);
                     presentFragment(fragment);
                 }

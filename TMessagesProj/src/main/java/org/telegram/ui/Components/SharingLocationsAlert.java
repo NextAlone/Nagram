@@ -59,13 +59,13 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         void didSelectLocation(LocationController.SharingLocationInfo info);
     }
 
-    public SharingLocationsAlert(Context context, SharingLocationsAlertDelegate sharingLocationsAlertDelegate) {
-        super(context, false);
+    public SharingLocationsAlert(Context context, SharingLocationsAlertDelegate sharingLocationsAlertDelegate, Theme.ResourcesProvider resourcesProvider) {
+        super(context, false, resourcesProvider);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         delegate = sharingLocationsAlertDelegate;
 
         shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.SRC_IN));
+        shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogBackground), PorterDuff.Mode.SRC_IN));
 
         containerView = new FrameLayout(context) {
 
@@ -136,7 +136,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         listView = new RecyclerListView(context) {
             @Override
             public boolean onInterceptTouchEvent(MotionEvent event) {
-                boolean result = ContentPreviewViewer.getInstance().onInterceptTouchEvent(event, listView, 0, null);
+                boolean result = ContentPreviewViewer.getInstance().onInterceptTouchEvent(event, listView, 0, null, resourcesProvider);
                 return super.onInterceptTouchEvent(event) || result;
             }
 
@@ -153,7 +153,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         listView.setVerticalScrollBarEnabled(false);
         listView.setClipToPadding(false);
         listView.setEnabled(true);
-        listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+        listView.setGlowColor(getThemedColor(Theme.key_dialogScrollGlow));
         listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -175,10 +175,10 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         containerView.addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 3, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 48));
 
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
-        pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+        pickerBottomLayout.setBackgroundColor(getThemedColor(Theme.key_dialogBackground));
         containerView.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
+        pickerBottomLayout.cancelButton.setTextColor(getThemedColor(Theme.key_dialogTextRed));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", R.string.StopAllLocationSharings));
         pickerBottomLayout.cancelButton.setOnClickListener(view -> {
             for (int a : SharedConfig.activeAccounts) {
@@ -186,7 +186,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
             }
             dismiss();
         });
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+        pickerBottomLayout.doneButtonTextView.setTextColor(getThemedColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
         pickerBottomLayout.doneButton.setOnClickListener(view -> dismiss());
@@ -277,7 +277,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
             View view;
             switch (viewType) {
                 case 0:
-                    view = new SharingLiveLocationCell(context, false, 54);
+                    view = new SharingLiveLocationCell(context, false, 54, resourcesProvider);
                     //view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     break;
                 case 1:
@@ -295,7 +295,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     };
                     frameLayout.setWillNotDraw(false);
                     textView = new TextView(context);
-                    textView.setTextColor(Theme.getColor(Theme.key_dialogIcon));
+                    textView.setTextColor(getThemedColor(Theme.key_dialogIcon));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     textView.setGravity(Gravity.CENTER);
                     textView.setPadding(0, 0, 0, AndroidUtilities.dp(8));

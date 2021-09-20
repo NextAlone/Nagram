@@ -110,7 +110,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (id == NotificationCenter.updateUserStatus) {
             if (args[0] != null) {
                 TLRPC.TL_updateUserStatus update = (TLRPC.TL_updateUserStatus) args[0];
-                int selectedUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                long selectedUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
                 if (update.user_id != selectedUserId) {
                     return;
                 }

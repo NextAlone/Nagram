@@ -1317,7 +1317,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = null;
+            View view;
             switch (viewType) {
                 case 0:
                     view = new ShadowSectionCell(mContext);
@@ -1339,6 +1339,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 5:
+                default:
                     view = new TextDetailProxyCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;

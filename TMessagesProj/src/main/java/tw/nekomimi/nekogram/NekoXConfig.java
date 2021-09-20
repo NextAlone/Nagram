@@ -14,14 +14,14 @@ public class NekoXConfig {
 
     //  public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
     public static String FAQ_URL = "https://github.com/NekoX-Dev/NekoX#faq";
-    public static int[] officialChats = {
+    public static long[] officialChats = {
             1305127566, // NekoX Updates
             1151172683, // NekoX Chat
             1299578049, // NekoX Chat Channel
             1137038259, // NekoX APKs
     };
 
-    public static int[] developers = {
+    public static long[] developers = {
             896711046, // nekohasekai
             380570774, // Haruhi
     };

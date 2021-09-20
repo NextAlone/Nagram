@@ -733,7 +733,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
                     sendPopupLayout.addView(itemCells[a], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a, 0, 0));
 
-                    int chatId;
+                    long chatId;
                     if (chat != null) {
                         chatId = chat.id;
                     } else if (user != null) {

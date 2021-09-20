@@ -321,6 +321,8 @@ public class ApplicationLoader extends Application {
             ContactsController.getInstance(account).checkAppAccount();
             DownloadController.getInstance(account);
         });
+
+        ChatThemeController.init();
     }
 
     public ApplicationLoader() {

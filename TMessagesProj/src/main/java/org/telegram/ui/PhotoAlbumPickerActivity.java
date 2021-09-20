@@ -494,13 +494,13 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                             itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                         }
                     } else if (num == 2) {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
                     }
                     itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 
                     sendPopupLayout.addView(itemCells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
 
-                    int chatId;
+                    long chatId;
                     if (chat != null) {
                         chatId = chat.id;
                     } else if (user != null) {
@@ -596,7 +596,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             commentTextView.setVisibility(View.GONE);
         }
 
-        if (loading && (albumsSorted == null || albumsSorted != null && albumsSorted.isEmpty())) {
+        if (loading && (albumsSorted == null || albumsSorted.isEmpty())) {
             progressView.setVisibility(View.VISIBLE);
             listView.setEmptyView(null);
         } else {

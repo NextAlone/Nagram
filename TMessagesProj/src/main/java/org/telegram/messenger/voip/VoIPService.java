@@ -487,7 +487,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 	public boolean mutedByAdmin() {
 		ChatObject.Call call = groupCall;
 		if (call != null) {
-			int selfId = getSelfId();
+			long selfId = getSelfId();
 			TLRPC.TL_groupCallParticipant participant = call.participants.get(selfId);
 			if (participant != null && !participant.can_self_unmute && participant.muted && !ChatObject.canManageCalls(chat)) {
 				return true;
@@ -670,14 +670,14 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			throw new IllegalStateException("No account specified when starting VoIP service");
 		}
 		classGuid = ConnectionsManager.generateClassGuid();
-		int userID = intent.getIntExtra("user_id", 0);
-		int chatID = intent.getIntExtra("chat_id", 0);
+		long userID = intent.getLongExtra("user_id", 0);
+		long chatID = intent.getLongExtra("chat_id", 0);
 		createGroupCall = intent.getBooleanExtra("createGroupCall", false);
 		hasFewPeers = intent.getBooleanExtra("hasFewPeers", false);
 		joinHash = intent.getStringExtra("hash");
-		int peerChannelId = intent.getIntExtra("peerChannelId", 0);
-		int peerChatId = intent.getIntExtra("peerChatId", 0);
-		int peerUserId = intent.getIntExtra("peerUserId", 0);
+		long peerChannelId = intent.getLongExtra("peerChannelId", 0);
+		long peerChatId = intent.getLongExtra("peerChatId", 0);
+		long peerUserId = intent.getLongExtra("peerUserId", 0);
 		if (peerChatId != 0) {
 			groupCallPeer = new TLRPC.TL_inputPeerChat();
 			groupCallPeer.chat_id = peerChatId;
@@ -840,7 +840,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		createGroupInstance(CAPTURE_DEVICE_CAMERA, false);
 	}
 
-	public int getCallerId() {
+	public long getCallerId() {
 		if (user != null) {
 			return user.id;
 		} else {
@@ -1325,7 +1325,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		tgVoip[CAPTURE_DEVICE_CAMERA].onSignalingDataReceive(data.data);
 	}
 
-	public int getSelfId() {
+	public long getSelfId() {
 		if (groupCallPeer == null) {
 			return UserConfig.getInstance(currentAccount).clientUserId;
 		}
@@ -1342,7 +1342,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		if (chat == null || groupCall == null || groupCall.call.id != update.call.id) {
 			return;
 		}
-		int selfId = getSelfId();
+		long selfId = getSelfId();
 		for (int a = 0, N = update.participants.size(); a < N; a++) {
 			TLRPC.TL_groupCallParticipant participant = update.participants.get(a);
 			if (participant.left) {
@@ -1752,7 +1752,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 				if (response != null) {
 					AndroidUtilities.runOnUIThread(() -> mySource[CAPTURE_DEVICE_CAMERA] = ssrc);
 					TLRPC.Updates updates = (TLRPC.Updates) response;
-					int selfId = getSelfId();
+					long selfId = getSelfId();
 					for (int a = 0, N = updates.updates.size(); a < N; a++) {
 						TLRPC.Update update = updates.updates.get(a);
 						if (update instanceof TLRPC.TL_updateGroupCallParticipants) {
@@ -1821,7 +1821,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 				TLRPC.Updates updates = (TLRPC.Updates) response;
 				AndroidUtilities.runOnUIThread(() -> {
 					if (tgVoip[CAPTURE_DEVICE_SCREEN] != null) {
-						int selfId = getSelfId();
+						long selfId = getSelfId();
 						for (int a = 0, N = updates.updates.size(); a < N; a++) {
 							TLRPC.Update update = updates.updates.get(a);
 							if (update instanceof TLRPC.TL_updateGroupCallConnection) {
@@ -1968,7 +1968,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		if (groupCall == null || tgVoip[CAPTURE_DEVICE_CAMERA] == null) {
 			return;
 		}
-		int selfId = getSelfId();
+		long selfId = getSelfId();
 		ArrayList<RequestedParticipant> participants = null;
 		for (int a = 0, N = unknown.length; a < N; a++) {
 			TLRPC.TL_groupCallParticipant p = groupCall.participantsBySources.get(unknown[a]);
@@ -2853,7 +2853,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		startForeground(ID_ONGOING_CALL_NOTIFICATION, builder.getNotification());
 	}
 
-	private void startRingtoneAndVibration(int chatID) {
+	private void startRingtoneAndVibration(long chatID) {
 		SharedPreferences prefs = MessagesController.getNotificationsSettings(currentAccount);
 		AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
 		boolean needRing = am.getRingerMode() != AudioManager.RINGER_MODE_SILENT;

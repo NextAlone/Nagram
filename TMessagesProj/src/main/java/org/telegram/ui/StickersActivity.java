@@ -94,7 +94,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.PinnedStickerHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -392,7 +391,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), stickerSet, 0, StickersActivity.this, false, false);
                     }
                 };
-                trendingStickersAlert = new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, trendingDelegate));
+                trendingStickersAlert = new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, trendingDelegate), null);
                 trendingStickersAlert.show();
             } else if (position == archivedRow) {
                 presentFragment(new ArchivedStickersActivity(currentType));
@@ -1131,7 +1130,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         @Override
         @SuppressLint("ClickableViewAccessibility")
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = null;
+            View view;
             switch (viewType) {
                 case 0:
                     view = new StickerSetCell(mContext, 1);
@@ -1219,6 +1218,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     view = new ShadowSectionCell(mContext);
                     break;
                 case 4:
+                default:
                     view = new TextCheckCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
@@ -1335,7 +1335,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     if (!SharedConfig.stickersReorderingHintUsed) {
                         SharedConfig.setStickersReorderingHintUsed(true);
                         final String stickersReorderHint = LocaleController.getString("StickersReorderHint", R.string.StickersReorderHint);
-                        Bulletin.make(parentLayout, new ReorderingBulletinLayout(mContext, stickersReorderHint), ReorderingHintDrawable.DURATION * 2 + 250).show();
+                        Bulletin.make(parentLayout, new ReorderingBulletinLayout(mContext, stickersReorderHint, null), ReorderingHintDrawable.DURATION * 2 + 250).show();
                     }
                 }
             } else if (actionModeShowed) {
