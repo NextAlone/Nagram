@@ -82,6 +82,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int takeGIFasVideoRow;
     private int maxRecentStickerCountRow;
     private int disableSwipeToNextRow;
+    private int disableChoosingStickerRow;
+    private int disableRemoteEmojiInteractionsRow;
 
     private int mapPreviewRow;
     private int messageMenuRow;
@@ -310,6 +312,16 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableSwipeToNext);
                 }
+            } else if (position == disableChoosingStickerRow) {
+                NekoConfig.toggleDisableChoosingSticker();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableChoosingSticker);
+                }
+            } else if (position == disableRemoteEmojiInteractionsRow) {
+                NekoConfig.toggleDisableRemoteEmojiInteractions();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.disableRemoteEmojiInteractions);
+                }
             } else if (position == win32Row) {
                 NekoConfig.toggleDisableAutoDownloadingWin32Executable();
                 if (view instanceof TextCheckCell) {
@@ -362,6 +374,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         takeGIFasVideoRow = rowCount++;
         maxRecentStickerCountRow = rowCount++;
         disableSwipeToNextRow = rowCount++;
+        disableChoosingStickerRow = rowCount++;
+        disableRemoteEmojiInteractionsRow = rowCount++;
 
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -731,6 +745,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("TakeGIFasVideo", R.string.TakeGIFasVideo), NekoConfig.takeGIFasVideo, true);
                     } else if (position == disableSwipeToNextRow) {
                         textCell.setTextAndCheck(LocaleController.getString("disableSwipeToNextChannel", R.string.disableSwipeToNextChannel), NekoConfig.disableSwipeToNext, true);
+                    } else if (position == disableChoosingStickerRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("disableChoosingSticker", R.string.disableChoosingSticker), NekoConfig.disableChoosingSticker, true);
+                    } else if (position == disableRemoteEmojiInteractionsRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("disableRemoteEmojiInteractions", R.string.disableRemoteEmojiInteractions), NekoConfig.disableRemoteEmojiInteractions, true);
                     } else if (position == win32Row) {
                         textCell.setTextAndCheck(LocaleController.getString("Win32ExecutableFiles", R.string.Win32ExecutableFiles), !NekoConfig.disableAutoDownloadingWin32Executable, true);
                     } else if (position == archiveRow) {

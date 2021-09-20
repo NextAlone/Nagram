@@ -119,5 +119,7 @@
     <string name="customGroupVoipAudioBitrate">Group VoIP Audio Bitrate</string>
     <string name="maxRecentStickerCount">Max recent stickers</string>
     <string name="disableSwipeToNextChannel">Disable swipe to next channel</string>
+    <string name="disableChoosingSticker">Send typing instead of choosing sticker</string>
+    <string name="disableRemoteEmojiInteractions">Disable emoji interactions from remote</string>
 
 </resources>

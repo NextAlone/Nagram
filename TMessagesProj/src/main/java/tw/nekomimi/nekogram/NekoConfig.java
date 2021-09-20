@@ -152,6 +152,8 @@ public class NekoConfig {
     public static boolean takeGIFasVideo;
     public static int maxRecentStickerCount;
     public static boolean disableSwipeToNext;
+    public static boolean disableRemoteEmojiInteractions;
+    public static boolean disableChoosingSticker;
 
     public static boolean disableAutoDownloadingWin32Executable;
     public static boolean disableAutoDownloadingArchive;
@@ -326,6 +328,8 @@ public class NekoConfig {
         takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
         maxRecentStickerCount = preferences.getInt("maxRecentStickerCount", 20);
         disableSwipeToNext = preferences.getBoolean("disableSwipeToNext", false);
+        disableRemoteEmojiInteractions = preferences.getBoolean("disableRemoteEmojiInteractions", false);
+        disableChoosingSticker = preferences.getBoolean("disableChoosingSticker", false);
 
         disableAutoDownloadingWin32Executable = preferences.getBoolean("disableAutoDownloadingWin32Executable", true);
         disableAutoDownloadingArchive = preferences.getBoolean("disableAutoDownloadingArchive", true);
@@ -857,6 +861,14 @@ public class NekoConfig {
 
     public static void toggleDisableGroupVoipAudioProcessing() {
         preferences.edit().putBoolean("disableGroupVoipAudioProcessing", disableGroupVoipAudioProcessing = !disableGroupVoipAudioProcessing).apply();
+    }
+
+    public static void toggleDisableRemoteEmojiInteractions() {
+        preferences.edit().putBoolean("disableRemoteEmojiInteractions", disableRemoteEmojiInteractions = !disableRemoteEmojiInteractions).apply();
+    }
+
+    public static void toggleDisableChoosingSticker() {
+        preferences.edit().putBoolean("disableChoosingSticker", disableChoosingSticker = !disableChoosingSticker).apply();
     }
 
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";

@@ -6316,7 +6316,10 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (action == 9) {
                 req.action = new TLRPC.TL_sendMessageUploadAudioAction();
             } else if (action == 10) {
-                req.action = new TLRPC.TL_sendMessageChooseStickerAction();
+                if (NekoConfig.disableChoosingSticker)
+                    req.action = new TLRPC.TL_sendMessageTypingAction();
+                else
+                    req.action = new TLRPC.TL_sendMessageChooseStickerAction();
             } else if (action == 11) {
                 TLRPC.TL_sendMessageEmojiInteractionSeen interactionSeen = new TLRPC.TL_sendMessageEmojiInteractionSeen();
                 interactionSeen.emoticon = emojicon;
