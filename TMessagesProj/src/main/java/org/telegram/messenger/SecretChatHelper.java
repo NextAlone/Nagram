@@ -1799,7 +1799,6 @@ public class SecretChatHelper extends BaseController {
         }
     }
 
-    // NekoX: 8.0.1 - still int??
     public void declineSecretChat(int chat_id, boolean revoke) {
         declineSecretChat(chat_id, revoke, 0);
     }

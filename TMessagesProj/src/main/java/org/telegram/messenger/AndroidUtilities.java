@@ -2922,7 +2922,6 @@ public class AndroidUtilities {
 
     public static boolean openForView(MessageObject message, Activity activity) {
         return openForView(message, activity, null);
-        // NekoX: 8.0.1, resourcesProvider null??
     }
 
     public static boolean openForView(MessageObject message, Activity activity, Theme.ResourcesProvider resourcesProvider) {
