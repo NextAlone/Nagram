@@ -4771,6 +4771,10 @@ public class Theme {
                     new int[]{0, 180, 45, 0, 45, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new int[]    {          0,                             52,                            46,                            57,                            45,                            64,                            52,                            35,                            36,                            41,                            50,                            50,                            35,                            38,                            37,                            30 }
             );
+        } else {
+            // NekoX: Fix change color in pm
+            themeInfo.setAccentColorOptions(new int[]{0xFF5890C5}, null, null, null, null, null, null
+                    , new int[]{0}, null, null, null);
         }
         themes.add(currentDayTheme = currentTheme = defaultTheme = themeInfo);
         themesDict.put("Blue", themeInfo);
@@ -9375,6 +9379,8 @@ public class Theme {
                 }
             }
         }
+        if(!NekoConfig.useDefaultTheme && "indigo.attheme".equals(currentTheme.assetName))
+            settings.wallpaper = new ColorDrawable(-1);
         if (settings.wallpaper == null) {
             int selectedColor = overrideWallpaper != null ? overrideWallpaper.color : 0;
             try {
