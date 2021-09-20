@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -822,6 +823,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         if (themesHorizontalListCell != null) {
                             Theme.ThemeInfo themeInfo = Theme.getTheme("Blue");
                             Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
+                            if (themeInfo.themeAccentsMap == null)
+                                themeInfo.themeAccentsMap = new SparseArray<>();
                             Theme.ThemeAccent accent = themeInfo.themeAccentsMap.get(Theme.DEFALT_THEME_ACCENT_ID);
                             if (accent != null) {
                                 Theme.OverrideWallpaperInfo info = new Theme.OverrideWallpaperInfo();
