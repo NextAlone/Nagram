@@ -2649,15 +2649,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (chatMode == 0 && threadMessageId == 0 && !UserObject.isReplyUser(currentUser) && reportType < 0) {
             TLRPC.UserFull userFull = null;
             if (currentUser != null) {
-                audioCallIconItem = menu.addItem(call, R.drawable.ic_call, themeDelegate);
+//                audioCallIconItem = menu.addItem(call, R.drawable.ic_call, themeDelegate);
                 userFull = getMessagesController().getUserFull(currentUser.id);
-                if (userFull != null && userFull.phone_calls_available) {
-                    showAudioCallAsIcon = !inPreviewMode;
-                    audioCallIconItem.setVisibility(View.VISIBLE);
-                } else {
-                    showAudioCallAsIcon = false;
-                    audioCallIconItem.setVisibility(View.GONE);
-                }
+//                if (userFull != null && userFull.phone_calls_available) {
+//                    showAudioCallAsIcon = !inPreviewMode;
+//                    audioCallIconItem.setVisibility(View.VISIBLE);
+//                } else {
+//                    showAudioCallAsIcon = false;
+//                    audioCallIconItem.setVisibility(View.GONE);
+//                }
+                showAudioCallAsIcon = false;
             }
             headerItem = menu.addItem(0, R.drawable.ic_ab_other, themeDelegate);
             headerItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
@@ -3444,9 +3445,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     if (headerItem != null) {
                         TLRPC.UserFull userInfo = getCurrentUserInfo();
-                        if (showAudioCallAsIcon) {
-                            headerItem.hideSubItem(call);
-                        } else if (userInfo != null && userInfo.phone_calls_available) {
+//                        if (showAudioCallAsIcon) {
+//                            headerItem.hideSubItem(call);
+                        if (userInfo != null && userInfo.phone_calls_available) {
                             headerItem.showSubItem(call);
                         }
                     }
@@ -16176,7 +16177,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 userInfo = (TLRPC.UserFull) args[1];
                 checkThemeEmoticon();
                 if (headerItem != null) {
-                    showAudioCallAsIcon = userInfo.phone_calls_available && !inPreviewMode;
+//                    showAudioCallAsIcon = userInfo.phone_calls_available && !inPreviewMode;
+                    showAudioCallAsIcon = false;
                     if (userInfo.phone_calls_available) {
                         if (showAudioCallAsIcon) {
                             if (audioCallIconItem != null) {
