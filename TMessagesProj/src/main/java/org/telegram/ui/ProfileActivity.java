@@ -5054,14 +5054,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         } else if (id == NotificationCenter.reloadInterface) {
             int prevEmptyRow = emptyRow;
-            updateRowsIds();
-            if (listAdapter != null && prevEmptyRow != emptyRow) {
-                if (emptyRow == -1) {
-                    listAdapter.notifyItemRemoved(emptyRow);
-                } else {
-                    listAdapter.notifyItemInserted(emptyRow);
-                }
-            }
+            updateListAnimated(false);
         } else if (id == NotificationCenter.newSuggestionsAvailable) {
             int prevRow1 = passwordSuggestionRow;
             int prevRow2 = phoneSuggestionRow;
@@ -7095,9 +7088,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             getMessagesController().removeSuggestion(0, type == SettingsSuggestionCell.TYPE_PHONE ? "VALIDATE_PHONE_NUMBER" : "VALIDATE_PASSWORD");
                             getNotificationCenter().addObserver(ProfileActivity.this, NotificationCenter.newSuggestionsAvailable);
                             int oldRow = type == SettingsSuggestionCell.TYPE_PHONE ? phoneSuggestionRow : passwordSuggestionRow;
-                            updateRowsIds();
-                            saveScrollPosition();
-                            listAdapter.notifyItemRangeRemoved(oldRow, 2);
+                            updateListAnimated(false);
                         }
 
                         @Override
@@ -8343,7 +8334,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             int oldIndex = oldPositionToItem.get(oldItemPosition, -1);
             int newIndex = newPositionToItem.get(newItemPosition, -1);
-            return oldIndex == newIndex && oldIndex >= 0 && newIndex >= 0;
+            return oldIndex == newIndex && oldIndex >= 0;
         }
 
         @Override
