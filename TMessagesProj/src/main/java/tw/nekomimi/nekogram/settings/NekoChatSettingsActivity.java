@@ -356,7 +356,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         ignoreBlockedRow = rowCount++;
 
         ignoreMutedCountRow = rowCount++;
-        disableChatActionRow = rowCount++;
+
+        disableChatActionRow = NekoXConfig.developerMode || NekoXConfig.customApi > 0 ? rowCount++ : -1;
+        disableChoosingStickerRow = disableChatActionRow > 0 ? rowCount++ : -1;
+
+        disableRemoteEmojiInteractionsRow = rowCount++;
 
         disablePhotoSideActionRow = rowCount++;
         hideKeyboardOnChatScrollRow = rowCount++;
@@ -374,8 +378,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         takeGIFasVideoRow = rowCount++;
         maxRecentStickerCountRow = rowCount++;
         disableSwipeToNextRow = rowCount++;
-        disableChoosingStickerRow = rowCount++;
-        disableRemoteEmojiInteractionsRow = rowCount++;
 
         mapPreviewRow = rowCount++;
         messageMenuRow = rowCount++;
@@ -721,8 +723,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), NekoConfig.rearVideoMessages, true);
                     } else if (position == hideAllTabRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("HideAllTab", R.string.HideAllTab), LocaleController.getString("HideAllTabAbout", R.string.HideAllTabAbout), NekoConfig.hideAllTab, true, true);
-                    } else if(position == pressTitleToOpenAllChatsRow){
-                        textCell.setTextAndCheck(LocaleController.getString("pressTitleToOpenAllChats", R.string.pressTitleToOpenAllChats),NekoConfig.pressTitleToOpenAllChats, true);
+                    } else if (position == pressTitleToOpenAllChatsRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("pressTitleToOpenAllChats", R.string.pressTitleToOpenAllChats), NekoConfig.pressTitleToOpenAllChats, true);
                     } else if (position == confirmAVRow) {
                         textCell.setTextAndCheck(LocaleController.getString("ConfirmAVMessage", R.string.ConfirmAVMessage), NekoConfig.confirmAVMessage, true);
                     } else if (position == useChatAttachMediaMenuRow) {
