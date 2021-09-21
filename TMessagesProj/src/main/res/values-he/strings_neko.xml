@@ -119,4 +119,6 @@
     <string name="DontSendGreetingSticker">לא לשלוח מדבקת איחולים</string>
     <string name="pressTitleToOpenAllChats">יש ללחוץ על הכותרת כדי לפתוח את הלשונית „כל השיחות”</string>
     <string name="disableSwipeToNextChannel">השבתת החלקה לערוץ הבא</string>
+    <string name="disableRemoteEmojiInteractions">השבתת אינטראקציה עם אמוג׳י מהצד המרוחק</string>
+    <string name="disableChoosingSticker">לשלוח הקלדה במקום בחירת מדבקה</string>
 </resources>

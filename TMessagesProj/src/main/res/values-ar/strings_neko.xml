@@ -112,11 +112,13 @@
     <string name="pressTitleToOpenAllChats">اضغط على العنوان لفتح علامة التبويب \"كافة الدردشات\"</string>
     <string name="HideTimeForSticker">إخفاء الوقت للملصقات</string>
     <string name="UseMediaStreamInVoip">استخدام دفق الوسائط في Voip</string>
-    <string name="TakeGIFasVideo">خذ GIF كفيديو</string>
+    <string name="TakeGIFasVideo">التقاط GIF كفيديو</string>
     <string name="DontSendGreetingSticker">لا ترسل ملصق ترحيب</string>
     <string name="maxRecentStickerCount">الحد الاقصى للملصقات الأخيرة</string>
-    <string name="customGroupVoipAudioBitrate">مجموعة معدل نقل الصوت عبر بروتوكول الإنترنت</string>
+    <string name="customGroupVoipAudioBitrate">معدل البت الصوتي عبر بروتوكول الإنترنت الجماعي</string>
     <string name="customDoH">مخصص DoH</string>
     <string name="useSystemDNS">استخدم DNS النظام</string>
     <string name="disableSwipeToNextChannel">تعطيل السحب إلى القناة التالية</string>
+    <string name="disableRemoteEmojiInteractions">تعطيل تفاعلات الرموز التعبيرية من جهاز الطرف الاخر</string>
+    <string name="disableChoosingSticker">أرسل الكتابة بدلاً من اختيار الملصق</string>
 </resources>
