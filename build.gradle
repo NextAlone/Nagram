@@ -7,13 +7,13 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20'
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30'
+        classpath 'com.google.gms:google-services:4.3.10'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
         classpath 'gradle.plugin.org.mozilla.rust-android-gradle:plugin:0.8.3'
         //noinspection GradleDependency
         classpath "com.github.triplet.gradle:play-publisher:3.4.0-agp4.2"
-        classpath 'cn.hutool:hutool-core:5.7.5'
+        classpath 'cn.hutool:hutool-core:5.7.13'
     }
 }
 
@@ -26,7 +26,7 @@ static String detectNdkVersion() {
     if (androidHome == null) return version
     if (new File(androidHome, "ndk/$version").isDirectory()) return version
 
-    def versionFile = new File(androidHome,"ndk-bundle/source.properties")
+    def versionFile = new File(androidHome, "ndk-bundle/source.properties")
 
     if (!versionFile.isFile()) return version
 
@@ -34,7 +34,7 @@ static String detectNdkVersion() {
 
     versionProperties.load(versionFile.newDataInputStream())
 
-    return versionProperties.getProperty("Pkg.Revision",version)
+    return versionProperties.getProperty("Pkg.Revision", version)
 
 }
 

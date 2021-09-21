@@ -385,7 +385,7 @@ android {
 def okHttpVersion = "5.0.0-alpha.2"
 def fcmVersion = "21.1.0"
 def crashlyticsVersion = "18.2.0"
-def playCoreVersion = "1.10.0"
+def playCoreVersion = "1.10.1"
 
 dependencies {
 
@@ -406,19 +406,19 @@ dependencies {
     //noinspection GradleDependency
     implementation "com.googlecode.mp4parser:isoparser:1.0.6"
 
-    implementation "com.google.code.gson:gson:2.8.7"
+    implementation "com.google.code.gson:gson:2.8.8"
     implementation "org.osmdroid:osmdroid-android:6.1.10"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1-native-mt"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.4.0'
+    implementation 'dnsjava:dnsjava:3.4.1'
     implementation "org.dizitart:nitrite:3.4.3"
 
-    implementation "cn.hutool:hutool-core:5.7.5"
-    implementation "cn.hutool:hutool-crypto:5.7.5"
+    implementation "cn.hutool:hutool-core:5.7.13"
+    implementation "cn.hutool:hutool-crypto:5.7.13"
     implementation 'cn.hutool:hutool-http:5.7.5'
-    implementation "com.jakewharton:process-phoenix:2.0.0"
+    implementation "com.jakewharton:process-phoenix:2.1.2"
 
     compileOnly 'org.yaml:snakeyaml:1.29'
     fullImplementation 'org.yaml:snakeyaml:1.29'
