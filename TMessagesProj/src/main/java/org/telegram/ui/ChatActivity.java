@@ -12923,6 +12923,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     actionModeOtherItem.setSubItemVisibility(forward, canForwardMessagesCount == 1 && canEditMessagesCount == 1 && selectedCount == 1);
                 }
 
+                if (chatMode == MODE_SCHEDULED) {
+                    actionModeOtherItem.setSubItemVisibility(forward_noquote, false);
+                    actionModeOtherItem.setSubItemVisibility(save, false);
+                }
+
                 if (saveItem != null) {
                     actionModeOtherItem.setSubItemVisibility(save_to, ((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0);
                     saveItem.setText(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
@@ -20478,7 +20483,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(2);
                             icons.add(R.drawable.baseline_forward_24);
                         }
-                        if (!selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
+                        if (chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                             items.add(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
                             options.add(95);
                             icons.add(R.drawable.baseline_fast_forward_24);
@@ -21222,7 +21227,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (item != null) {
             item.setVisibility(View.VISIBLE);
         }
-        actionModeOtherItem.showSubItem(forward_noquote);
+        if (chatMode != MODE_SCHEDULED)
+            actionModeOtherItem.showSubItem(forward_noquote);
         item = actionMode.getItem(delete);
         if (item != null) {
             item.setVisibility(View.VISIBLE);
