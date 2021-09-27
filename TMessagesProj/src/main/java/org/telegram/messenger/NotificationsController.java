@@ -139,8 +139,6 @@ public class NotificationsController extends BaseController {
     private int notificationId;
     private String notificationGroup;
 
-    private int lastInternalNotificationId;
-
     static {
         if (Build.VERSION.SDK_INT >= 26 && ApplicationLoader.applicationContext != null) {
             notificationManager = NotificationManagerCompat.from(ApplicationLoader.applicationContext);
@@ -167,7 +165,7 @@ public class NotificationsController extends BaseController {
 
     public NotificationsController(int instance) {
         super(instance);
-lastInternalNotificationId = instance * 1000000 + 5000;
+
         notificationId = currentAccount + 1;
         notificationGroup = "messages" + (currentAccount == 0 ? "" : currentAccount);
         SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
@@ -3923,7 +3921,10 @@ lastInternalNotificationId = instance * 1000000 + 5000;
             arrayList.add(messageObject);
         }
 
-        LongSparseArray<Integer> oldIdsWear = wearNotificationsIds.clone();
+        LongSparseArray<Integer> oldIdsWear = new LongSparseArray<>();
+        for (int i = 0; i < wearNotificationsIds.size(); i++) {
+            oldIdsWear.put(wearNotificationsIds.keyAt(i), wearNotificationsIds.valueAt(i));
+        }
         wearNotificationsIds.clear();
 
         class NotificationHolder {
@@ -3945,7 +3946,7 @@ lastInternalNotificationId = instance * 1000000 + 5000;
 
             void call() {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.w("show dialog notification with id " + id);
+                    FileLog.w("show dialog notification with id " + id + " " + dialogId +  " user=" + user + " chat=" + chat);
                 }
                 try {
                     notificationManager.notify(id, notification.build());
@@ -3978,7 +3979,7 @@ lastInternalNotificationId = instance * 1000000 + 5000;
 
             Integer internalId = oldIdsWear.get(dialogId);
             if (internalId == null) {
-                internalId = lastInternalNotificationId++;
+                internalId = (int) dialogId + (int) (dialogId >> 32);
             } else {
                 oldIdsWear.remove(dialogId);
             }
