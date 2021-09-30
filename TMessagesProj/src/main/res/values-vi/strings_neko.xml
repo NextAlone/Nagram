@@ -111,12 +111,14 @@
     <string name="ProviderYouDao">YouDao Dịch</string>
     <string name="pressTitleToOpenAllChats">Nhấn vào tiêu đề để mở tab \"Tất cả các cuộc trò chuyện\"</string>
     <string name="maxRecentStickerCount">Nhãn dán gần đây tối đa</string>
-    <string name="customGroupVoipAudioBitrate">Tốc độ bit trong Voip nhóm</string>
+    <string name="customGroupVoipAudioBitrate">Tốc độ bit trong VoIP nhóm</string>
     <string name="customDoH">DoH tùy chỉnh</string>
     <string name="useSystemDNS">Sử dụng DNS hệ thống</string>
     <string name="HideTimeForSticker">Ẩn thời gian đối với nhãn dán</string>
-    <string name="UseMediaStreamInVoip">Sử dụng luồng truyền phương tiện trong Voip</string>
-    <string name="TakeGIFasVideo">Lấy GIF dưới dạng Video</string>
+    <string name="UseMediaStreamInVoip">Sử dụng luồng truyền phương tiện trong VoIP</string>
+    <string name="TakeGIFasVideo">Lấy GIF dưới dạng video</string>
     <string name="DontSendGreetingSticker">Không gửi nhãn dán chào</string>
     <string name="disableSwipeToNextChannel">Tắt vuốt sang kênh tiếp theo</string>
+    <string name="disableRemoteEmojiInteractions">Tắt tương tác emoji từ xa</string>
+    <string name="disableChoosingSticker">Gửi nhập thay vì chọn hình dán</string>
 </resources>

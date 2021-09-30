@@ -192,8 +192,8 @@
     <string name="QRLoginConfirm">确认登录</string>
     <string name="StorageReset">清除存储</string>
     <string name="StorageResetInfo">该应用程序的所有数据将被永久删除（并先尝试登出所有帐户）。</string>
-    <string name="FCTitle">关于本应用之更新</string>
-    <string name="FCInfo">要跟随我们的公告与更新频道吗 ？</string>
+    <string name="FCTitle">关于本应用的更新</string>
+    <string name="FCInfo">要关注我们的公告与更新频道吗 ？</string>
     <string name="CCTitle">OpenCC (简繁转换)</string>
     <string name="CCTarget">目标</string>
     <string name="CCNo">无</string>
@@ -236,4 +236,17 @@
     <string name="AutoLockImmediately">立即</string>
     <string name="ImportSettings">导入设置</string>
     <string name="BackupSettings">备份设置</string>
+    <string name="ImportSettingsAlert">确定要覆盖设置吗？从未知来源导入设置可能导致PIN被覆盖从而导致应用被锁定。</string>
+    <string name="AutoCheckUpdateRc">候选版</string>
+    <string name="AutoCheckUpdateStable">稳定版</string>
+    <string name="AutoCheckUpdateSwitch">自动更新</string>
+    <string name="AutoCheckUpdateOFF">关闭</string>
+    <string name="VersionUpdateNoUpdate">无更新。</string>
+    <string name="VersionUpdateNotNow">推迟</string>
+    <string name="VersionUpdateIgnore">忽略</string>
+    <string name="VersionUpdateConfirm">更新</string>
+    <string name="VersionUpdateVariantNotMatch">版本变体自动匹配失败。
+\n请从GitHub手动下载。</string>
+    <string name="VersionUpdateTitle">新版本可用</string>
+    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
 </resources>

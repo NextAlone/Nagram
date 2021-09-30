@@ -111,12 +111,14 @@
     <string name="ProviderYouDao">Traduzione YouDao</string>
     <string name="pressTitleToOpenAllChats">Premi il titolo per aprire la scheda \"Tutte le chat\"</string>
     <string name="customDoH">DoH Personale</string>
-    <string name="maxRecentStickerCount">Numero Sticker Recenti</string>
-    <string name="customGroupVoipAudioBitrate">Bitrate Audio Group Voip</string>
+    <string name="maxRecentStickerCount">Numero stickers recenti</string>
+    <string name="customGroupVoipAudioBitrate">Bitrate Audio Group VoIP</string>
     <string name="useSystemDNS">Usa DNS di sistema</string>
     <string name="HideTimeForSticker">Nascondi l\'orario per gli stickers</string>
-    <string name="UseMediaStreamInVoip">Usa stream media in Voip</string>
-    <string name="TakeGIFasVideo">Mostra GIF come Video</string>
+    <string name="UseMediaStreamInVoip">Usa stream media in VoIP</string>
+    <string name="TakeGIFasVideo">Mostra GIF come video</string>
     <string name="DontSendGreetingSticker">Non inviare lo sticker di saluto</string>
-    <string name="disableSwipeToNextChannel">Disabilita scorri al prossimo canale</string>
+    <string name="disableSwipeToNextChannel">Disabilita scorri al canale successivo</string>
+    <string name="disableRemoteEmojiInteractions">Disabilita interazione emoji remota</string>
+    <string name="disableChoosingSticker">Mostra sta scegliendo uno sticker</string>
 </resources>

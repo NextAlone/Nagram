@@ -109,4 +109,16 @@
     <string name="ProviderDeepLTranslate">DeepL 翻译</string>
     <string name="ProviderMicrosoftTranslator">微软翻译</string>
     <string name="ProviderYouDao">有道翻译</string>
+    <string name="pressTitleToOpenAllChats">长按标题打开“全部对话”</string>
+    <string name="disableRemoteEmojiInteractions">禁用远程表情符号交互</string>
+    <string name="disableChoosingSticker">选择贴纸时输入状态为输入中</string>
+    <string name="disableSwipeToNextChannel">禁用滑动到下个未读频道</string>
+    <string name="maxRecentStickerCount">最近贴纸数量上限</string>
+    <string name="UseMediaStreamInVoip">在通话中使用媒体流</string>
+    <string name="customGroupVoipAudioBitrate">群组通话音频比特率</string>
+    <string name="customDoH">自定义 DoH</string>
+    <string name="useSystemDNS">使用系统 DNS</string>
+    <string name="HideTimeForSticker">隐藏贴纸发送时间</string>
+    <string name="TakeGIFasVideo">GIF 显示为视频</string>
+    <string name="DontSendGreetingSticker">不要发送问候贴纸</string>
 </resources>

@@ -5,11 +5,11 @@
     <string name="ChatAttachEnterMenuRecordVideo">Registra video</string>
     <string name="ChatAttachEnterMenuRecordAudio">Registra audio</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Disabilita Anteprima Link</string>
-    <string name="ChatAttachEnterMenuEnableLinkPreview">Abilita Anteprima Collegamenti</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Abilita Anteprima Link</string>
     <string name="UseChatAttachEnterMenu">Usa il menu di input</string>
-    <string name="UseChatAttachEnterMenuNotice">Cambia il pulsante della registrazione in un menu di input e aggiungi un interruttore di anteprima collegamento.</string>
-    <string name="DisableLinkPreviewByDefault">Disabilita anteprima link come da default</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima dei link durante l\'input come da default per evitare che il server sappia che il link è condiviso tramite Telegram.</string>
+    <string name="UseChatAttachEnterMenuNotice">Cambia il pulsante della registrazione in un menu di input e aggiungi un pulsante di anteprima link.</string>
+    <string name="DisableLinkPreviewByDefault">Disabilita anteprima link da default</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima dei link durante l\'input da default per evitare che il server sappia che il link è condiviso tramite Telegram.</string>
     <string name="CustomApi">API personalizzata</string>
     <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto.\n\nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
     <string name="CustomApiNo">Non utilizzare l\'API personalizzata</string>
