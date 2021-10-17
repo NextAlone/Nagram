@@ -3330,14 +3330,8 @@ public class NotificationsController extends BaseController {
             } else {
                 notificationChannel.setSound(null, builder.build());
             }
-            TLRPC.User user = getUserConfig().getCurrentUser();
-            String keyGroup = currentAccount + "group";
-            NotificationChannelGroup notificationChannelGroup = new NotificationChannelGroup(keyGroup, UserObject.getUserName(user));
-            notificationChannel.setGroup(keyGroup);
-            systemNotificationManager.createNotificationChannelGroup(notificationChannelGroup);
             systemNotificationManager.createNotificationChannel(notificationChannel);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("create new channel group " + keyGroup);
                 FileLog.d("create new channel " + channelId);
             }
             lastNotificationChannelCreateTime = SystemClock.elapsedRealtime();
