@@ -3061,6 +3061,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 "Scan accounts",
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
+                                "Reset all notification channels",
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -3151,11 +3152,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 SharedConfig.pendingAppUpdate = null;
                                 SharedConfig.saveConfig();
                                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
-                            } else if (which == 16) {
+                            } else if (which == 17) {
                                 Set<String> suggestions = getMessagesController().pendingSuggestions;
                                 suggestions.add("VALIDATE_PHONE_NUMBER");
                                 suggestions.add("VALIDATE_PASSWORD");
                                 getNotificationCenter().postNotificationName(NotificationCenter.newSuggestionsAvailable);
+                            } else if (which == 18) {
+                                getNotificationsController().cleanupNotificationChannels();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

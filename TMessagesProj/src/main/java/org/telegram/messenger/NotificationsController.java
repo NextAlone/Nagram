@@ -324,6 +324,47 @@ public class NotificationsController extends BaseController {
         });
     }
 
+    public void cleanupNotificationChannels() {
+        notificationsQueue.postRunnable(() -> {
+            if (Build.VERSION.SDK_INT >= 26) {
+                try {
+                    String keyStart = currentAccount + "channel";
+                    List<NotificationChannel> list = systemNotificationManager.getNotificationChannels();
+                    int count = list.size();
+                    for (int a = 0; a < count; a++) {
+                        NotificationChannel channel = list.get(a);
+                        String id = channel.getId();
+                        if (id.startsWith(keyStart)) {
+                            try {
+                                systemNotificationManager.deleteNotificationChannel(id);
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("delete channel cleanup " + id);
+                            }
+                        }
+                    }
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                // Remove shits from 0552bcdc
+                try {
+                    String keyGroup = currentAccount + "group";
+                    List<NotificationChannelGroup> list = systemNotificationManager.getNotificationChannelGroups();
+                    for (NotificationChannelGroup group : list) {
+                        String id = group.getId();
+                        if (id.equals(keyGroup)) {
+                            systemNotificationManager.deleteNotificationChannelGroup(id);
+                        }
+                    }
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
     public void setInChatSoundEnabled(boolean value) {
         inChatSoundEnabled = value;
     }
