@@ -10,10 +10,10 @@
     <string name="UseChatAttachEnterMenuNotice">Кнопка отправки будет заменена на расширенное меню.</string>
     <string name="DisableLinkPreviewByDefault">Отправлять ссылки без превью</string>
     <string name="DisableLinkPreviewByDefaultNotice">Чтобы сервер не узнал о передаче ссылки через Telegram.</string>
-    <string name="CustomApi">Пользовательский API</string>
+    <string name="CustomApi">Выбрать API</string>
     <string name="UseCustomApiNotice">Используйте на свой страх и риск. Есть шанс, что ваш аккаунт будет удален, а номер заблокирован.
 \n
-\nПримечание: пуш-уведомления работать не будут.</string>
+\nПримечание: пуш-уведомления от Google работать не будут.</string>
     <string name="CustomApiNo">Не использовать (рекомендуется)</string>
     <string name="CustomApiOfficial">Telegram для Android</string>
     <string name="CustomApiTGX">Telegram X</string>
@@ -228,16 +228,16 @@
     <string name="UnpinSticker">Открепить</string>
     <string name="PinSticker">Закрепить</string>
     <string name="AppLinkFDroid">F-Droid</string>
-    <string name="DisplayPersianCalendarByLatin">Показывать иранский календарь латиницей</string>
+    <string name="DisplayPersianCalendarByLatin">Иранский календарь латиницей</string>
     <string name="UsePersiancalendarInfo">Отключите для нормального отображения даты.</string>
     <string name="UsePersiancalendar">Иранский календарь</string>
     <string name="nekoXPaymentRemovedToast">Функция оплаты была удалена.</string>
     <string name="ImportSettings">Импорт настроек</string>
     <string name="BackupSettings">Экспорт настроек</string>
     <string name="AutoLockImmediately">Немедленно</string>
-    <string name="ProxyInfoWS">Настройки реле WebSocket</string>
-    <string name="AddProxyWs">Добавить WebSocket реле</string>
-    <string name="WsPayload">Полезная нагрузка</string>
+    <string name="ProxyInfoWS">Настройки WebSocket</string>
+    <string name="AddProxyWs">Добавить WebSocket Relay</string>
+    <string name="WsPayload">Payload</string>
     <string name="ImportSettingsAlert">Вы точно хотите перезаписать настройки\? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
     <string name="AutoCheckUpdateRc">RC</string>
     <string name="AutoCheckUpdateStable">Stable</string>
@@ -249,4 +249,19 @@
     <string name="VersionUpdateConfirm">Обновить</string>
     <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения. Скачайте обновление вручную.</string>
     <string name="VersionUpdateTitle">Доступна новая версия</string>
+    <string name="repeatConfirmText">Вы хотите повторить сообщение\?</string>
+    <string name="DeleteDownloadedFileConfirm">Удалить загруженный файл\?</string>
+    <string name="repeatConfirm">Подтверждать повтор сообщения</string>
+    <string name="useCustomEmoji">Свой набор эмодзи</string>
+    <string name="customPublicProxyIP">Добавить IP открытого прокси</string>
+    <string name="update_download_soucre">Выбрать источник загрузки</string>
+    <string name="DeleteDownloadedFileExternal">Внешний файл пропущен.</string>
+    <string name="valuesLargeAvatarInDrawer">По умолчанию
+\nАватар
+\nУвеличенный аватар</string>
+    <string name="customPublicProxyIPNotice">Иногда установка открытого прокси (например, Cloudflare), может ускорить доступ.</string>
+    <string name="hideSponsoredMessage">Скрывать сообщения с меткой «спонсировано»</string>
+    <string name="unreadBadgeOnBackButton">Счетчик непрочтённых рядом с кнопкой «Назад»</string>
+    <string name="useCustomEmojiInvalid">С zip-архивом эмодзи что-то не так.</string>
+    <string name="DeleteDownloadedFileSucceed">Удалено</string>
 </resources>

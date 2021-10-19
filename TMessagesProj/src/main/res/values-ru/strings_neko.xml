@@ -10,7 +10,7 @@
     <string name="BotLogin">Вход по токену</string>
     <string name="InvalidAccessToken">Токен недействителен. Получите корректный у @BotFather.</string>
     <string name="IgnoreBlocked">Скрыть сообщения заблокированных</string>
-    <string name="Connection">Соединение</string>
+    <string name="Connection">Сеть</string>
     <string name="Chat">Чат</string>
     <string name="NameOrder">Сортировать контакты</string>
     <string name="FirstLast">По имени</string>
@@ -103,7 +103,7 @@
     <string name="DisableProximityEvents">Отключить датчик приближения</string>
     <string name="IncreaseVoiceMessageQuality">Повысить качество голосовых</string>
     <string name="SelectBetween">Выбрать между</string>
-    <string name="AvatarAsBackground">Аватар на фоне в боковом меню</string>
+    <string name="AvatarAsBackground">Фон бокового меню</string>
     <string name="BlurAvatarBackground">Размыть аватар</string>
     <string name="DarkenAvatarBackground">Затемнить аватар</string>
     <string name="ProviderDeepLTranslate">DeepL</string>

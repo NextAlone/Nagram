@@ -102,7 +102,7 @@
     <string name="UnblockAll">Sblocca Tutto</string>
     <string name="UnblockAllWarn">Sei sicuro di voler sbloccare **tutti gli utenti e bot**\?</string>
     <string name="BlockedListEmpty">Non hai bloccato nessuno :)</string>
-    <string name="ProxyTypeVmess">VMess Proxy</string>
+    <string name="ProxyTypeVmess">Proxy VMess</string>
     <string name="AddProxySocks5">Aggiungi Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Aggiungi Proxy MTProto</string>
     <string name="AddProxyVmess">Aggiungi Proxy Vmess</string>
@@ -142,7 +142,7 @@
     <string name="ImportProxyList">Importa server proxy</string>
     <string name="ProxySubscription">Abbonamento Proxy</string>
     <string name="ProxySubDetails">Dettagli Abbonamento</string>
-    <string name="SubscriptionUrls">URLs</string>
+    <string name="SubscriptionUrls">URL</string>
     <string name="SubscriptionUpdating">Aggiornamento Abbonamento</string>
     <string name="SubscriptionDelete">Elimina Abbonamento</string>
     <string name="ExportStickers">Esporta Stickers</string>
@@ -236,7 +236,7 @@
     <string name="EnableStickerPin">Abilita Sticker Fissati</string>
     <string name="ArchiveFiles">File Archivio</string>
     <string name="Win32ExecutableFiles">File eseguibili Win32</string>
-    <string name="AutoDownload">AutoDownload</string>
+    <string name="AutoDownload">Download Automatico</string>
     <string name="VersionUpdateConfirm">AGGIORNA</string>
     <string name="VersionUpdateVariantNotMatch">La versione selezionata ha fallito nel associarsi automaticamente.
 \nPer favore scaricala manualmente da GitHub.</string>
@@ -248,4 +248,19 @@
     <string name="VersionUpdateNotNow">Non ora</string>
     <string name="VersionUpdateIgnore">Ignora</string>
     <string name="VersionUpdateTitle">Nuova Versione Disponibile</string>
+    <string name="customPublicProxyIPNotice">In alcune aree, specificare l\'IP del proxy CDN pubblico (es. Cloudflare) può accelerare l\'accesso.</string>
+    <string name="DeleteDownloadedFileSucceed">Eliminato</string>
+    <string name="useCustomEmojiInvalid">Zip emoji non valido.</string>
+    <string name="DeleteDownloadedFileExternal">File esterno ignorato.</string>
+    <string name="unreadBadgeOnBackButton">Badge non letto sul pulsante indietro</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram Predefinito
+\nAvatar come sfondo
+\nAvatar come sfondo</string>
+    <string name="repeatConfirm">Chiedi prima di ripetere</string>
+    <string name="hideSponsoredMessage">Nascondi messaggi sponsorizzati</string>
+    <string name="useCustomEmoji">Usa Emoji Custom</string>
+    <string name="customPublicProxyIP">Imposta IP del proxy pubblico</string>
+    <string name="update_download_soucre">Seleziona la fonte del download</string>
+    <string name="DeleteDownloadedFileConfirm">Eliminare questo file dalla cache locale\?</string>
+    <string name="repeatConfirmText">Sei sicuro di ripetere\?</string>
 </resources>

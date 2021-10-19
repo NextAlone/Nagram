@@ -251,4 +251,12 @@
     <string name="VersionUpdateNoUpdate">אין עדכון.</string>
     <string name="VersionUpdateNotNow">לא עכשיו</string>
     <string name="VersionUpdateIgnore">התעלמות</string>
+    <string name="DeleteDownloadedFileConfirm">למחוק את הקובץ הזה מהמטמון המקומי\?</string>
+    <string name="customPublicProxyIP">הגדרת IP של מתווך ציבורי</string>
+    <string name="unreadBadgeOnBackButton">עיטור „לא נקראו” על כפתור החזרה</string>
+    <string name="DeleteDownloadedFileSucceed">נמחק</string>
+    <string name="useCustomEmoji">להשתמש באמוג׳י משלך</string>
+    <string name="DeleteDownloadedFileExternal">קובץ חיצוני לא עובד.</string>
+    <string name="customPublicProxyIPNotice">בחלק מהאזורים, ציון ה־IP של CDN במתווך ציבורי (למשל: Cloudflare) יכול להאיץ את הגישה.</string>
+    <string name="update_download_soucre">נא לבחור מקור הורדה</string>
 </resources>

@@ -251,4 +251,19 @@
     <string name="VersionUpdateVariantNotMatch">فشل متغيرات الإصدار في المطابقة تلقائيا.
 \nيرجى تحميل التطبيق يدويا من GitHub.</string>
     <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
+    <string name="unreadBadgeOnBackButton">شارة غير المقروءة على زر الرجوع</string>
+    <string name="customPublicProxyIP">تعيين عنوان IP للوكيل العام</string>
+    <string name="DeleteDownloadedFileConfirm">حذف هذا الملف من ذاكرة التخزين المؤقت المحلية؟</string>
+    <string name="hideSponsoredMessage">إخفاء الرسائل الدعائية</string>
+    <string name="valuesLargeAvatarInDrawer">تيليجرام الافتراضي
+\nالصورة الرمزية كخلفية
+\nصورة رمزية كبيرة كخلفية</string>
+    <string name="repeatConfirm">اسأل قبل التكرار</string>
+    <string name="DeleteDownloadedFileExternal">تم تخطي الملف الخارجي.</string>
+    <string name="repeatConfirmText">هل أنت متأكد من التكرار؟</string>
+    <string name="useCustomEmoji">استخدام الرموز التعبيرية المخصصة</string>
+    <string name="useCustomEmojiInvalid">ليس رمزًا تعبيريًا صالحًا.</string>
+    <string name="customPublicProxyIPNotice">في بعض المجالات، وتحديدا IP من CDN الوكيل العام(على سبيل المثال. Cloudflare) يمكن تسريع الوصول.</string>
+    <string name="update_download_soucre">حدد درجة التنزيل</string>
+    <string name="DeleteDownloadedFileSucceed">محذوف</string>
 </resources>
