@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Locked">Zablokowane</string>
-    <string name="AccDescrChatAttachEnterMenu">Menu wprowadzania czatu</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu w polu tekstowym</string>
     <string name="ChatAttachEnterMenuRecordVideo">Nagrywanie wideo</string>
     <string name="ChatAttachEnterMenuRecordAudio">Nagrywanie audio</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Wyłącz podgląd linku</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Włącz podgląd linku</string>
-    <string name="UseChatAttachEnterMenu">Menu wprowadzania czatu</string>
-    <string name="UseChatAttachEnterMenuNotice">Zmień przycisk rekordu na menu wejściowe i dodaj przełącznik podglądu linku.</string>
-    <string name="DisableLinkPreviewByDefault">Wyłącz podgląd linku domyślnie</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Wyłącz podgląd linku podczas wprowadzania domyślnie, aby uniemożliwić serwerowi wiedzieć, że link jest udostępniony przez Telegram.</string>
+    <string name="UseChatAttachEnterMenu">Menu w polu tekstowym</string>
+    <string name="UseChatAttachEnterMenuNotice">Zmień przycisk nagrywania na rozwijane menu i dodaj przełącznik podglądu linku.</string>
+    <string name="DisableLinkPreviewByDefault">Wyłącz podgląd linku</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Wyłącz żądanie podglądu linku podczas wprowadzania tekstu, aby serwer nie wiedział, że łącze jest udostępniane przez Telegram.</string>
     <string name="CustomApi">Własne API</string>
-    <string name="UseCustomApiNotice">Zaloguj się za pomocą niestandardowej api, jeśli nie możesz się zarejestrować lub zalogować, może to pomóc.\n\nUwaga: fcm nie będzie działać, jeśli używasz wersji wydania.</string>
+    <string name="UseCustomApiNotice">Zaloguj się za pomocą niestandardowego interfejsu API, jeśli nie możesz się zarejestrować lub zalogować. Może to pomóc.
+\n
+\nUwaga: fcm nie będzie działać, jeśli używasz wersji release.</string>
     <string name="CustomApiNo">Nie używaj niestandardowego API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -27,8 +29,8 @@
     <string name="Ignore">Ignoruj</string>
     <string name="UpdateDownloaded">Aktualizacja została właśnie pobrana.</string>
     <string name="ProxyAutoSwitch">Automatyczne przełączanie proxy</string>
-    <string name="LinkedGroupChat">Połączone grupy</string>
-    <string name="LinkedChannelChat">Podłączony kanał</string>
+    <string name="LinkedGroupChat">Połączona grupa</string>
+    <string name="LinkedChannelChat">Połączony kanał</string>
     <string name="DevModeTitle">**Twoje konto telegram może zostać zbanowane**</string>
     <string name="DevModeNotice">Nie jesteśmy odpowiedzialni za niewłaściwe korzystanie z funkcji programisty.</string>
     <string name="TapToDisable">Dotknij, aby wyłączyć. Nie potrzebujesz ich.</string>
@@ -39,11 +41,11 @@
     <string name="CustomBackendTestDC">Oficjalne centrum testowe</string>
     <string name="AllowFlashCall">Zezwalaj na połączenie flash</string>
     <string name="ChangeTranslateProvider">Zmień dostawcę</string>
-    <string name="ProviderYandexTranslate">Tłumaczenie Yandexa</string>
-    <string name="GoogleCloudTransKey">Klucz tłumaczenia Google Cloud</string>
-    <string name="GoogleCloudTransKeyNotice">Jeśli ustawisz Google Cloud Trans Key, API tłumaczenia w chmurze będzie wywoływane zamiast przesyłania fałszywego formularza do wersji internetowej podczas tłumaczenia (szybsza, stabilna i zapisująca ruch).</string>
-    <string name="TransToLang">Język docelowy tłumaczenia</string>
-    <string name="TransInputToLang">Język docelowy tłumaczenia</string>
+    <string name="ProviderYandexTranslate">Tłumacz Yandex</string>
+    <string name="GoogleCloudTransKey">Klucz Tłumacza z Google Cloud</string>
+    <string name="GoogleCloudTransKeyNotice">Konfiguracja klucza Google Cloud Translate pozwoli wywołać interfejs API, zamiast przesyłania fałszywego formularza do wersji internetowej podczas tłumaczenia (szybsze, stabilne i oszczędzające ruch).</string>
+    <string name="TransToLang">Tłumaczenie celu na język</string>
+    <string name="TransInputToLang">Język tłumaczenia w polu tekstowym</string>
     <string name="More">Więcej</string>
     <string name="NekoXUpdatesChannel">Kanał aktualizacji NekoX</string>
     <string name="ShowIdAndDc">Pokaż ID / DC w profilu</string>

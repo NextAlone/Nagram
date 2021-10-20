@@ -111,12 +111,14 @@
     <string name="ProviderYouDao">Traduzir YouDao</string>
     <string name="pressTitleToOpenAllChats">Pressione o título para abrir a guia \"Todos os bate-papos\"</string>
     <string name="HideTimeForSticker">Ocultar tempo para stickers</string>
-    <string name="UseMediaStreamInVoip">Usar stream de mídia em Voip</string>
-    <string name="TakeGIFasVideo">Detectar GIF como Vídeo</string>
+    <string name="UseMediaStreamInVoip">Usar stream de mídia em VoIP</string>
+    <string name="TakeGIFasVideo">Detectar GIF como vídeo</string>
     <string name="DontSendGreetingSticker">Não enviar sticker de saudação</string>
-    <string name="maxRecentStickerCount">Máximo de Stickers Recentes</string>
-    <string name="customGroupVoipAudioBitrate">Taxa de Bits de Áudio do Grupo Voip</string>
+    <string name="maxRecentStickerCount">Máximo de stickers recentes</string>
+    <string name="customGroupVoipAudioBitrate">Taxa de Bits de Áudio do Grupo VoIP</string>
     <string name="customDoH">DoH personalizado</string>
     <string name="useSystemDNS">Usar DNS do sistema</string>
     <string name="disableSwipeToNextChannel">Desativar deslizar para o próximo canal</string>
+    <string name="disableChoosingSticker">Envie digitando em vez de escolher sticker</string>
+    <string name="disableRemoteEmojiInteractions">Desativar interações de emoji remotamente</string>
 </resources>
