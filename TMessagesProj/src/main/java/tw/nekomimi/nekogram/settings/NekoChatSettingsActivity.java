@@ -79,6 +79,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int disableTrendingRow;
     private int dontSendGreetingStickerRow;
     private int hideTimeForStickerRow;
+    private int hideGroupStickerRow;
     private int takeGIFasVideoRow;
     private int maxRecentStickerCountRow;
     private int disableSwipeToNextRow;
@@ -289,6 +290,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.hideTimeForSticker);
                 }
+            } else if (position == hideGroupStickerRow) {
+                NekoConfig.toggleHideGroupSticker();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.hideGroupSticker);
+                }
             } else if (position == takeGIFasVideoRow) {
                 NekoConfig.toggleTakeGIFasVideo();
                 if (view instanceof TextCheckCell) {
@@ -375,6 +381,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         disableTrendingRow = rowCount++;
         dontSendGreetingStickerRow = rowCount++;
         hideTimeForStickerRow = rowCount++;
+        hideGroupStickerRow = rowCount++;
         takeGIFasVideoRow = rowCount++;
         maxRecentStickerCountRow = rowCount++;
         disableSwipeToNextRow = rowCount++;
@@ -741,6 +748,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("DisableTrending", R.string.DisableTrending), NekoConfig.disableTrending, true);
                     } else if (position == dontSendGreetingStickerRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DontSendGreetingSticker", R.string.DontSendGreetingSticker), NekoConfig.dontSendGreetingSticker, true);
+                    } else if (position == hideGroupStickerRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("HideGroupSticker", R.string.HideGroupSticker), NekoConfig.hideGroupSticker, true);
                     } else if (position == hideTimeForStickerRow) {
                         textCell.setTextAndCheck(LocaleController.getString("HideTimeForSticker", R.string.HideTimeForSticker), NekoConfig.hideTimeForSticker, true);
                     } else if (position == takeGIFasVideoRow) {

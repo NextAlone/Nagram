@@ -149,6 +149,7 @@ public class NekoConfig {
     public static boolean disableTrending;
     public static boolean dontSendGreetingSticker;
     public static boolean hideTimeForSticker;
+    public static boolean hideGroupSticker;
     public static boolean takeGIFasVideo;
     public static int maxRecentStickerCount;
     public static boolean disableSwipeToNext;
@@ -325,6 +326,7 @@ public class NekoConfig {
         disableTrending = preferences.getBoolean("disableTrending", true);
         dontSendGreetingSticker = preferences.getBoolean("dontSendGreetingSticker", false);
         hideTimeForSticker = preferences.getBoolean("hideTimeForSticker", false);
+        hideGroupSticker = preferences.getBoolean("hideGroupSticker", false);
         takeGIFasVideo = preferences.getBoolean("takeGIFasVideo", false);
         maxRecentStickerCount = preferences.getInt("maxRecentStickerCount", 20);
         disableSwipeToNext = preferences.getBoolean("disableSwipeToNext", true);
@@ -833,6 +835,10 @@ public class NekoConfig {
 
     public static void toggleHideTimeForSticker() {
         preferences.edit().putBoolean("hideTimeForSticker", hideTimeForSticker = !hideTimeForSticker).apply();
+    }
+
+    public static void toggleHideGroupSticker() {
+        preferences.edit().putBoolean("hideGroupSticker", hideGroupSticker = !hideGroupSticker).apply();
     }
 
     public static void toggleTakeGIFasVideo() {
