@@ -291,8 +291,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
                 return true;
             }));
         }
-        items.add(null); // divider
-        items.add(new CheckItem(12, LocaleController.getString("DarkMode", R.string.NightMode), R.drawable.baseline_brightness_2_24, () -> Theme.getActiveTheme().isDark(), null));
     }
 
     public int getId(int position) {

@@ -561,46 +561,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             } else if (view instanceof DrawerActionCheckCell) {
                 int id = drawerLayoutAdapter.getId(position);
                 //  DrawerLayoutAdapter.CheckItem item = drawerLayoutAdapter.getItem(position);
-                if (id == 12) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
-                    String dayThemeName = preferences.getString("lastDayTheme", "Blue");
-                    if (Theme.getTheme(dayThemeName) == null) {
-                        dayThemeName = "Blue";
-                    }
-                    String nightThemeName = preferences.getString("lastDarkTheme", "Night");
-                    if (Theme.getTheme(nightThemeName) == null) {
-                        nightThemeName = "Night";
-                    }
-                    Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
-
-                    ((DrawerActionCheckCell) view).setChecked(!themeInfo.isDark());
-
-                    if (dayThemeName.equals(nightThemeName)) {
-                        if (themeInfo.isDark()) {
-                            dayThemeName = "Blue";
-                        } else {
-                            nightThemeName = "Night";
-                        }
-                    }
-
-                    if (dayThemeName.equals(themeInfo.getKey())) {
-                        themeInfo = Theme.getTheme(nightThemeName);
-                    } else {
-                        themeInfo = Theme.getTheme(dayThemeName);
-                    }
-                    if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
-                        AlertUtil.showToast(LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff));
-                        Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
-                        Theme.saveAutoNightThemeConfig();
-                        Theme.cancelAutoNightThemeCallbacks();
-                    }
-                    int[] pos = new int[2];
-                    Switch s = ((DrawerActionCheckCell) view).checkBox;
-                    s.getLocationInWindow(pos);
-                    pos[0] += s.getMeasuredWidth() / 2;
-                    pos[1] += s.getMeasuredHeight() / 2;
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
-                } else if (id == 13) {
+                if (id == 13) {
                     presentFragment(new ProxyListActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 14) {
@@ -4576,7 +4537,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     themeSwitchSunDrawable = darkThemeView.getAnimatedDrawable();
                     float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
                     Animator anim = ViewAnimationUtils.createCircularReveal(toDark ? drawerLayoutContainer : themeSwitchImageView, pos[0], pos[1], toDark ? 0 : finalRadius, toDark ? finalRadius : 0);
-                    anim.setDuration(100);
+                    anim.setDuration(400);
                     anim.setInterpolator(Easings.easeInOutQuad);
                     anim.addListener(new AnimatorListenerAdapter() {
                         @Override
@@ -4588,7 +4549,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             if (!toDark) {
                                 darkThemeView.setVisibility(View.VISIBLE);
                             }
-                            drawerLayoutAdapter.notifyDataSetChanged();
+                            DrawerProfileCell.switchingTheme = false;
                         }
                     });
                     anim.start();
@@ -4598,6 +4559,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     try {
                         themeSwitchImageView.setImageDrawable(null);
                         frameLayout.removeView(themeSwitchImageView);
+                        DrawerProfileCell.switchingTheme = false;
                     } catch (Exception e2) {
                         FileLog.e(e2);
                     }
