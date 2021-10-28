@@ -26,6 +26,10 @@ public class NekomuraConfig {
     private static final int configTypeSetInt = 3;
     private static final int configTypeMapIntInt = 4;
 
+    // Configs
+    public static ConfigItem largeAvatarInDrawer = addConfig("largeAvatarInDrawer", configTypeInt, 0); // 0:TG Default 1:NekoX Default 2:Large Avatar
+    public static ConfigItem unreadBadgeOnBackButton = addConfig("unreadBadgeOnBackButton", configTypeBool, false);
+
     public static class ConfigItem {
         private String key;
         private int type;

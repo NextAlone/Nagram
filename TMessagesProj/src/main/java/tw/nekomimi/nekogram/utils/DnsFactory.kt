@@ -15,10 +15,13 @@ object DnsFactory {
 
     fun providers() = if (NekoConfig.customDoH.isNotBlank()) arrayOf(NekoConfig.customDoH)
     else if (Locale.getDefault().country == "CN") arrayOf(
-        "https://doh.dns.sb/dns-query"
+            // 1.1.1.1 / 8.8.8.8 seems blocked
+            "https://101.101.101.101/dns-query", //Taiwan
+            "https://9.9.9.9/dns-query", // Anycast Japan
+            "https://doh.dns.sb/dns-query", // Japan
     ) else arrayOf(
-        "https://mozilla.cloudflare-dns.com/dns-query",
-        "https://dns.google/dns-query",
+            "https://mozilla.cloudflare-dns.com/dns-query",
+            "https://dns.google/dns-query",
     )
 
     val cache = Cache()
@@ -45,32 +48,34 @@ object DnsFactory {
             var sr = cache.lookupRecords(name, type, dc)
 
             if (!sr.isSuccessful) for (provider in providers()) {
-                    FileLog.d("Provider $provider")
-                    try {
-                        val response = HttpUtil.createPost(provider)
+                FileLog.d("Provider $provider")
+                try {
+                    val response = HttpUtil.createPost(provider)
                             .contentType("application/dns-message")
                             .header(Header.ACCEPT, "application/dns-message")
                             .body(message)
                             .setConnectionTimeout(5000)
                             .execute()
-                        if (!response.isOk) continue
-                        val result = Message(response.bodyBytes())
-                        val rcode = result.header.rcode
-                        if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN && rcode != Rcode.NXRRSET) continue
-                        cache.addMessage(result)
-                        sr = cache.lookupRecords(name, type, dc)
-                        if (sr == null) sr = cache.lookupRecords(name, type, dc)
-                        break
-                    } catch (e: Exception) {
-                    }
+                    if (!response.isOk) continue
+                    val result = Message(response.bodyBytes())
+                    val rcode = result.header.rcode
+                    if (rcode != Rcode.NOERROR && rcode != Rcode.NXDOMAIN && rcode != Rcode.NXRRSET) continue
+                    cache.addMessage(result)
+                    sr = cache.lookupRecords(name, type, dc)
+                    if (sr == null) sr = cache.lookupRecords(name, type, dc)
+                    break
+                } catch (e: Exception) {
                 }
+            }
 
             if (sr.isSuccessful) {
                 val records = ArrayList<Record>()
                 for (set in sr.answers()) {
                     records.addAll(set.rrs(true))
                 }
-                val addresses = records.map { (it as? ARecord)?.address ?: (it as AAAARecord).address }
+                val addresses = records.map {
+                    (it as? ARecord)?.address ?: (it as AAAARecord).address
+                }
                 FileLog.d(addresses.toString())
                 return addresses
             }
@@ -116,11 +121,11 @@ object DnsFactory {
             try {
 
                 val response = HttpUtil.createPost(provider)
-                    .contentType("application/dns-message")
-                    .header(Header.ACCEPT, "application/dns-message")
-                    .body(message)
-                    .setConnectionTimeout(5000)
-                    .execute()
+                        .contentType("application/dns-message")
+                        .header(Header.ACCEPT, "application/dns-message")
+                        .body(message)
+                        .setConnectionTimeout(5000)
+                        .execute()
                 if (!response.isOk) continue
                 val result = Message(response.bodyBytes())
                 val rcode = result.header.rcode

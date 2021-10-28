@@ -47,7 +47,7 @@ public class SubInfo implements Mappable {
         HashMap<String, Exception> exceptions = new HashMap<>();
 
         try {
-            return ProxyLoadsKt.loadProxies(urls, exceptions);
+            return internal ? ProxyLoadsKt.loadProxiesPublic(urls, exceptions) : ProxyLoadsKt.loadProxies(urls, exceptions);
         } catch (Exception ignored) {
         }
 
