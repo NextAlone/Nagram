@@ -4298,8 +4298,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
-        if (NekoConfig.disableProxyWhenVpnEnabled && SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
-            SharedConfig.setProxyEnable(false);
+        if (NekoConfig.disableProxyWhenVpnEnabled) {
+            if (SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
+                SharedConfig.setProxyEnable(false);
+            } else if (!ProxyUtil.isVPNEnabled()) {
+                SharedConfig.setProxyEnable(true);
+            }
         }
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
