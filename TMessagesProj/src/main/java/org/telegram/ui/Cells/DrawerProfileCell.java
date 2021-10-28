@@ -8,7 +8,9 @@
 
 package org.telegram.ui.Cells;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -19,13 +21,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.palette.graphics.Palette;
 
@@ -36,6 +41,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -48,9 +54,12 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class DrawerProfileCell extends FrameLayout {
 
@@ -60,6 +69,8 @@ public class DrawerProfileCell extends FrameLayout {
     private ImageView shadowView;
     protected ImageView arrowView;
     private final ImageReceiver imageReceiver;
+    private RLottieImageView darkThemeView;
+    private RLottieDrawable sunDrawable;
 
     private Rect srcRect = new Rect();
     private Rect destRect = new Rect();
@@ -166,12 +177,112 @@ public class DrawerProfileCell extends FrameLayout {
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
         setArrowState(false);
 
+        sunDrawable = new RLottieDrawable(R.raw.sun, "" + R.raw.sun, AndroidUtilities.dp(28), AndroidUtilities.dp(28), true, null);
+        if (isCurrentThemeDay()) {
+            sunDrawable.setCustomEndFrame(36);
+        } else {
+            sunDrawable.setCustomEndFrame(0);
+            sunDrawable.setCurrentFrame(36);
+        }
+        sunDrawable.setPlayInDirectionOfCustomEndFrame(true);
+        darkThemeView = new RLottieImageView(context) {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+                super.onInitializeAccessibilityNodeInfo(info);
+                if (sunDrawable.getCustomEndFrame() != 0) {
+                    info.setText(LocaleController.getString("AccDescrSwitchToNightTheme", R.string.AccDescrSwitchToNightTheme));
+                } else {
+                    info.setText(LocaleController.getString("AccDescrSwitchToDayTheme", R.string.AccDescrSwitchToDayTheme));
+                }
+            }
+        };
+        sunDrawable.beginApplyLayerColors();
+        int color = Theme.getColor(Theme.key_chats_menuName);
+        sunDrawable.setLayerColor("Sunny.**", color);
+        sunDrawable.setLayerColor("Path 6.**", color);
+        sunDrawable.setLayerColor("Path.**", color);
+        sunDrawable.setLayerColor("Path 5.**", color);
+        sunDrawable.commitApplyLayerColors();
+        darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
+        darkThemeView.setAnimation(sunDrawable);
+        if (Build.VERSION.SDK_INT >= 21) {
+            darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(darkThemeBackgroundColor = Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(17)));
+            Theme.setRippleDrawableForceSoftware((RippleDrawable) darkThemeView.getBackground());
+        }
+        darkThemeView.setOnClickListener(v -> {
+            if (switchingTheme) {
+                return;
+            }
+            switchingTheme = true;
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+            String dayThemeName = preferences.getString("lastDayTheme", "Blue");
+            if (Theme.getTheme(dayThemeName) == null) {
+                dayThemeName = "Blue";
+            }
+            String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
+            if (Theme.getTheme(nightThemeName) == null) {
+                nightThemeName = "Dark Blue";
+            }
+            Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
+            if (dayThemeName.equals(nightThemeName)) {
+                if (themeInfo.isDark() || dayThemeName.equals("Dark Blue") || dayThemeName.equals("Night")) {
+                    dayThemeName = "Blue";
+                } else {
+                    nightThemeName = "Dark Blue";
+                }
+            }
+
+            boolean toDark;
+            if (toDark = dayThemeName.equals(themeInfo.getKey())) {
+                themeInfo = Theme.getTheme(nightThemeName);
+                sunDrawable.setCustomEndFrame(36);
+            } else {
+                themeInfo = Theme.getTheme(dayThemeName);
+                sunDrawable.setCustomEndFrame(0);
+            }
+            darkThemeView.playAnimation();
+            if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
+                Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
+                Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
+                Theme.saveAutoNightThemeConfig();
+                Theme.cancelAutoNightThemeCallbacks();
+            }
+            switchTheme(themeInfo, toDark);
+        });
+        addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
+
+
         if (Theme.getEventType() == 0 || NekoConfig.actionBarDecoration == 1) {
             snowflakesEffect = new SnowflakesEffect();
             snowflakesEffect.setColorKey(Theme.key_chats_menuName);
         } else if (NekoConfig.actionBarDecoration == 2) {
             fireworksEffect = new FireworksEffect();
         }
+    }
+
+    private void switchTheme(Theme.ThemeInfo themeInfo, boolean toDark) {
+        int[] pos = new int[2];
+        darkThemeView.getLocationInWindow(pos);
+        pos[0] += darkThemeView.getMeasuredWidth() / 2;
+        pos[1] += darkThemeView.getMeasuredHeight() / 2;
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1, toDark, darkThemeView);
+    }
+
+    private boolean isCurrentThemeDay() {
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        String dayThemeName = preferences.getString("lastDayTheme", "Blue");
+        if (Theme.getTheme(dayThemeName) == null) {
+            dayThemeName = "Blue";
+        }
+        String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
+        if (Theme.getTheme(nightThemeName) == null) {
+            nightThemeName = "Dark Blue";
+        }
+        Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
+        if (dayThemeName.equals(nightThemeName) && themeInfo.isDark()) {
+            dayThemeName = "Blue";
+        }
+        return dayThemeName.equals(themeInfo.getKey());
     }
 
     @Override
@@ -312,7 +423,7 @@ public class DrawerProfileCell extends FrameLayout {
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setForUserOrChat(user, avatarDrawable);
         if (NekoConfig.avatarAsDrawerBackground) {
-            ImageLocation imageLocation = ImageLocation.getForUser(user,  ImageLocation.TYPE_BIG);
+            ImageLocation imageLocation = ImageLocation.getForUser(user, ImageLocation.TYPE_BIG);
             allowInvalidate = !useAdb() || !(NekoConfig.avatarBackgroundDarken || NekoConfig.avatarBackgroundBlur);
             imageReceiver.setImage(imageLocation, "512_512", null, null, new ColorDrawable(0x00000000), 0, null, user, 1);
             avatarImageView.setVisibility(INVISIBLE);
