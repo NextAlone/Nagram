@@ -16359,6 +16359,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     themeDelegate.setCurrentTheme(themeDelegate.chatTheme, true, theme.isDark());
                 }
             }
+        } else if (id == NotificationCenter.dialogsUnreadCounterChanged) {
+            if (actionBar != null) {//Nekomura
+                actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
+            }
         }
     }
 
@@ -25163,6 +25167,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (highlightMessageId != Integer.MAX_VALUE) {
                         startMessageUnselect();
                     }
+                }
+                if (actionBar != null) {//Nekomura
+                    actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
                 }
             }
 
