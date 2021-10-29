@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -39,11 +38,13 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
-
 import kotlin.Unit;
+
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nkmr.Cells;
+import tw.nekomimi.nkmr.Cells.*;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -55,21 +56,22 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private boolean sensitiveCanChange = false;
     private boolean sensitiveEnabled = false;
 
-    private int rowCount;
+    private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
+    private Cells nkmrCells = new Cells(this, listView, listAdapter, rows);
 
-    private int experimentRow;
-    private int smoothKeyboardRow;
-    private int increaseVoiceMessageQualityRow;
-    private int mediaPreviewRow;
-    private int proxyAutoSwitchRow;
-    private int disableFilteringRow;
-    private int ignoreContentRestrictionsRow;
-    private int unlimitedFavedStickersRow;
-    private int unlimitedPinnedDialogsRow;
-    private int enableStickerPinRow;
-    private int useMediaStreamInVoipRow;
-    private int customAudioBitrateRow;
-    private int experiment2Row;
+    private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Experiment")));
+    private final NekomuraTGCell smoothKeyboardRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
+    private final NekomuraTGCell increaseVoiceMessageQualityRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
+    private final NekomuraTGCell mediaPreviewRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
+    private final NekomuraTGCell proxyAutoSwitchRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.proxyAutoSwitch));
+    private final NekomuraTGCell disableFilteringRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_CHECK, true));
+    //    private final NekomuraTGCell ignoreContentRestrictionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreContentRestrictions, LocaleController.getString("IgnoreContentRestrictionsNotice")));
+    private final NekomuraTGCell unlimitedFavedStickersRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
+    private final NekomuraTGCell unlimitedPinnedDialogsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
+    private final NekomuraTGCell enableStickerPinRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
+    private final NekomuraTGCell useMediaStreamInVoipRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
+    private final NekomuraTGCell customAudioBitrateRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private UndoView tooltip;
 
@@ -111,37 +113,84 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
+
+        // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == disableFilteringRow) {
-                sensitiveEnabled = !sensitiveEnabled;
-                TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
-                req.sensitive_enabled = sensitiveEnabled;
-                AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-                progressDialog.show();
-                getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                    progressDialog.dismiss();
-                    if (error == null) {
-                        if (response instanceof TLRPC.TL_boolTrue && view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(sensitiveEnabled);
-                        }
-                    } else {
-                        AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
+            NekomuraTGCell a = rows.get(position);
+            if (a instanceof NekomuraTGTextCheck) {
+                ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
+            } else if (a instanceof NekomuraTGSelectBox) {
+                ((NekomuraTGSelectBox) a).onClick();
+            } else if (a instanceof NekomuraTGTextInput) {
+                ((NekomuraTGTextInput) a).onClick();
+            } else if (a instanceof NekomuraTGTextDetail) {
+                RecyclerListView.OnItemClickListener o = ((NekomuraTGTextDetail) a).onItemClickListener;
+                if (o != null) {
+                    try {
+                        o.onItemClick(view, position);
+                    } catch (Exception e) {
                     }
-                }));
-            } else if (position == ignoreContentRestrictionsRow) {
-                NekoConfig.toggleIgnoreContentRestrictions();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.ignoreContentRestrictions);
                 }
-            } else if (position == unlimitedFavedStickersRow) {
-                NekoConfig.toggleUnlimitedFavedStickers();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.unlimitedFavedStickers);
+            } else if (a instanceof NekomuraTGCustom) { // Custom onclick
+                if (position == rows.indexOf(disableFilteringRow)) {
+                    sensitiveEnabled = !sensitiveEnabled;
+                    TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
+                    req.sensitive_enabled = sensitiveEnabled;
+                    AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+                    progressDialog.show();
+                    getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                        progressDialog.dismiss();
+                        if (error == null) {
+                            if (response instanceof TLRPC.TL_boolTrue && view instanceof TextCheckCell) {
+                                ((TextCheckCell) view).setChecked(sensitiveEnabled);
+                            }
+                        } else {
+                            AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
+                        }
+                    }));
+                } else if (position == rows.indexOf(customAudioBitrateRow)) {
+                    PopupBuilder builder = new PopupBuilder(view);
+                    builder.setItems(new String[]{
+                            "32 (" + LocaleController.getString("Default", R.string.Default) + ")",
+                            "64",
+                            "128",
+                            "192",
+                            "256",
+                            "320"
+                    }, (i, __) -> {
+                        switch (i) {
+                            case 0:
+                                NekomuraConfig.customAudioBitrate.setConfigInt(32);
+                                break;
+                            case 1:
+                                NekomuraConfig.customAudioBitrate.setConfigInt(64);
+                                break;
+                            case 2:
+                                NekomuraConfig.customAudioBitrate.setConfigInt(128);
+                                break;
+                            case 3:
+                                NekomuraConfig.customAudioBitrate.setConfigInt(192);
+                                break;
+                            case 4:
+                                NekomuraConfig.customAudioBitrate.setConfigInt(256);
+                                break;
+                            case 5:
+                                NekomuraConfig.customAudioBitrate.setConfigInt(320);
+                                break;
+                        }
+                        listAdapter.notifyItemChanged(position);
+                        return Unit.INSTANCE;
+                    });
+                    builder.show();
                 }
-            } else if (position == smoothKeyboardRow) {
-                SharedConfig.toggleSmoothKeyboard();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.smoothKeyboard);
+            }
+        });
+
+        // Cells: Set OnSettingChanged Callbacks
+        nkmrCells.callBackSettingsChanged = (key, newValue) -> {
+            if (key.equals(NekomuraConfig.smoothKeyboard.getKey())) {
+                if ((boolean) newValue != NekomuraConfig.smoothKeyboard.Bool()) {
+                    SharedConfig.toggleSmoothKeyboard();
                 }
                 if (SharedConfig.smoothKeyboard && getParentActivity() != null) {
                     getParentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -150,75 +199,31 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (position == unlimitedPinnedDialogsRow) {
-                NekoConfig.toggleUnlimitedPinnedDialogs();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.unlimitedPinnedDialogs);
-                }
-            } else if (position == mediaPreviewRow) {
-                NekoConfig.toggleMediaPreview();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.mediaPreview);
-                }
+            } else if (key.equals(NekomuraConfig.mediaPreview.getKey())) {
                 if (NekoConfig.mediaPreview) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (position == proxyAutoSwitchRow) {
-                NekoConfig.toggleProxyAutoSwitch();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.proxyAutoSwitch);
-                }
-            } else if (position == increaseVoiceMessageQualityRow) {
-                NekoConfig.toggleIncreaseVoiceMessageQuality();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.increaseVoiceMessageQuality);
-                }
-                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-            } else if (position == enableStickerPinRow) {
-                NekoConfig.toggleEnableStickerPin();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.enableStickerPin);
-                }
+            } else if (key.equals(NekomuraConfig.enableStickerPin.getKey())) {
                 if (NekoConfig.mediaPreview) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (position == useMediaStreamInVoipRow) {
-                NekoConfig.toggleUseMediaStreamInVoip();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.useMediaStreamInVoip);
-                }
-            } else if (position == customAudioBitrateRow) {
-                PopupBuilder builder = new PopupBuilder(view);
-                builder.setItems(new String[]{
-                        "32 (" + LocaleController.getString("Default", R.string.Default) + ")",
-                        "64",
-                        "128",
-                        "192",
-                        "256",
-                        "320"
-                }, (i, __)->{
-                    switch (i) {
-                        case 0 : NekoConfig.setCustomAudioBitrate(32);  break;
-                        case 1 : NekoConfig.setCustomAudioBitrate(64);  break;
-                        case 2 : NekoConfig.setCustomAudioBitrate(128); break;
-                        case 3 : NekoConfig.setCustomAudioBitrate(192); break;
-                        case 4 : NekoConfig.setCustomAudioBitrate(256); break;
-                        case 5 : NekoConfig.setCustomAudioBitrate(320); break;
-                    }
-                    listAdapter.notifyItemChanged(customAudioBitrateRow);
-                    return Unit.INSTANCE;
-                });
-                builder.show();
             }
-        });
+
+        };
 
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
     }
+
+    public NekomuraTGCell addNekomuraTGCell(NekomuraTGCell a) {
+        rows.add(a);
+        return a;
+    }
+
 
     @Override
     public void onResume() {
@@ -230,21 +235,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     }
 
     private void updateRows() {
-        rowCount = 0;
-
-        experimentRow = rowCount++;
-        smoothKeyboardRow = !AndroidUtilities.isTablet() ? rowCount++ : -1;
-        increaseVoiceMessageQualityRow = rowCount++;
-        mediaPreviewRow = rowCount++;
-        proxyAutoSwitchRow = rowCount++;
-        disableFilteringRow = rowCount++;
-        ignoreContentRestrictionsRow = !BuildConfig.VERSION_NAME.contains("play") || NekoXConfig.developerMode ? rowCount++ : -1;
-        unlimitedFavedStickersRow = rowCount++;
-        unlimitedPinnedDialogsRow = rowCount++;
-        enableStickerPinRow = rowCount++;
-        useMediaStreamInVoipRow = rowCount++;
-        customAudioBitrateRow = rowCount++;
-        experiment2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -304,7 +294,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     View child = listView.getChildAt(a);
                     RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.getChildViewHolder(child);
                     int position = holder.getAdapterPosition();
-                    if (position == disableFilteringRow) {
+                    if (position == rows.indexOf(disableFilteringRow)) {
                         TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                         checkCell.setChecked(sensitiveEnabled);
                         checkCell.setEnabled(sensitiveCanChange, animators);
@@ -327,7 +317,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                                 animatorSet.start();
                             }
                         }
-
                     }
                 }
             } else {
@@ -336,6 +325,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         }));
     }
 
+    //impl ListAdapter
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context mContext;
@@ -346,120 +336,93 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            return rowCount;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 1: {
-                    if (position == experiment2Row) {
-                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    } else {
-                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    }
-                    break;
-                }
-                case 2: {
-                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                    if (position == customAudioBitrateRow) {
-                        String value = String.valueOf(NekoConfig.customAudioBitrate) + "kbps";
-                        if(NekoConfig.customAudioBitrate==32) value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
-                        textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, false);
-                    }
-                    break;
-                }
-                case 3: {
-                    TextCheckCell textCell = (TextCheckCell) holder.itemView;
-                    textCell.setEnabled(true, null);
-                    if (position == disableFilteringRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("SensitiveDisableFiltering", R.string.SensitiveDisableFiltering), LocaleController.getString("SensitiveAbout", R.string.SensitiveAbout), sensitiveEnabled, true, true);
-                        textCell.setEnabled(sensitiveCanChange, null);
-                    } else if (position == ignoreContentRestrictionsRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("IgnoreContentRestrictions", R.string.IgnoreContentRestrictions), LocaleController.getString("IgnoreContentRestrictionsNotice", R.string.IgnoreContentRestrictionsNotice), NekoConfig.ignoreContentRestrictions, true, true);
-                    } else if (position == unlimitedFavedStickersRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedFavoredStickers", R.string.UnlimitedFavoredStickers), LocaleController.getString("UnlimitedFavoredStickersAbout", R.string.UnlimitedFavoredStickersAbout), NekoConfig.unlimitedFavedStickers, true, true);
-                    } else if (position == smoothKeyboardRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard), SharedConfig.smoothKeyboard, true);
-                    } else if (position == unlimitedPinnedDialogsRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("UnlimitedPinnedDialogs", R.string.UnlimitedPinnedDialogs), LocaleController.getString("UnlimitedPinnedDialogsAbout", R.string.UnlimitedPinnedDialogsAbout), NekoConfig.unlimitedPinnedDialogs, true, false);
-                    } else if (position == mediaPreviewRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("MediaPreview", R.string.MediaPreview), NekoConfig.mediaPreview, true);
-                    } else if (position == proxyAutoSwitchRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ProxyAutoSwitch", R.string.ProxyAutoSwitch), NekoConfig.proxyAutoSwitch, true);
-                    } else if (position == increaseVoiceMessageQualityRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("IncreaseVoiceMessageQuality", R.string.IncreaseVoiceMessageQuality), NekoConfig.increaseVoiceMessageQuality, true);
-                    } else if (position == enableStickerPinRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("EnableStickerPin", R.string.EnableStickerPin), LocaleController.getString("EnableStickerPinAbout", R.string.EnableStickerPinAbout), NekoConfig.enableStickerPin, true, true);
-                    } else if (position == useMediaStreamInVoipRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UseMediaStreamInVoip", R.string.UseMediaStreamInVoip), NekoConfig.useMediaStreamInVoip, true);
-                    }
-                    break;
-                }
-                case 4: {
-                    HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    if (position == experimentRow) {
-                        headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
-                    }
-                    break;
-                }
-            }
+            return rows.size();
         }
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 2 || type == 3;
+            int position = holder.getAdapterPosition();
+            NekomuraTGCell a = rows.get(position);
+            if (a != null) {
+                return a.isEnabled();
+            }
+            return true;
         }
+
+        @Override
+        public int getItemViewType(int position) {
+            NekomuraTGCell a = rows.get(position);
+            if (a != null) {
+                return a.getType();
+            }
+            return Cells.ITEM_TYPE_TEXT_DETAIL;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            NekomuraTGCell a = rows.get(position);
+            if (a != null) {
+                if (a instanceof NekomuraTGCustom) {
+                    // Custom binds
+                    if (holder.itemView instanceof TextCheckCell) {
+                        TextCheckCell textCell = (TextCheckCell) holder.itemView;
+                        textCell.setEnabled(true, null);
+                        if (position == rows.indexOf(disableFilteringRow)) {
+                            textCell.setTextAndValueAndCheck(LocaleController.getString("SensitiveDisableFiltering", R.string.SensitiveDisableFiltering), LocaleController.getString("SensitiveAbout", R.string.SensitiveAbout), sensitiveEnabled, true, true);
+                            textCell.setEnabled(sensitiveCanChange, null);
+                        }
+                    } else if (holder.itemView instanceof TextSettingsCell) {
+                        TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                        if (position == rows.indexOf(customAudioBitrateRow)) {
+                            String value = String.valueOf(NekoConfig.customAudioBitrate) + "kbps";
+                            if (NekoConfig.customAudioBitrate == 32)
+                                value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
+                            textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, false);
+                        }
+                    }
+                } else {
+                    // Default binds
+                    a.onBindViewHolder(holder);
+                    if (position == rows.indexOf(smoothKeyboardRow) && AndroidUtilities.isTablet()) {
+                        holder.itemView.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
+
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
-                case 1:
+                case Cells.ITEM_TYPE_DIVIDER:
                     view = new ShadowSectionCell(mContext);
                     break;
-                case 2:
+                case Cells.ITEM_TYPE_TEXT_SETTINGS_CELL:
                     view = new TextSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 3:
+                case Cells.ITEM_TYPE_TEXT_CHECK:
                     view = new TextCheckCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 4:
+                case Cells.ITEM_TYPE_HEADER:
                     view = new HeaderCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 5:
-                    view = new NotificationsCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 6:
+                case Cells.ITEM_TYPE_TEXT_DETAIL:
                     view = new TextDetailSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 7:
+                case Cells.ITEM_TYPE_TEXT:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    // view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (position == experiment2Row) {
-                return 1;
-            } else if (position == experimentRow) {
-                return 4;
-            } else if (position == customAudioBitrateRow) {
-                return 2;
-            }
-            return 3;
         }
     }
 }

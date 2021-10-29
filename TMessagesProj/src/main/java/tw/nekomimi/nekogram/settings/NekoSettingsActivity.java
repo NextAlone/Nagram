@@ -63,7 +63,6 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
-import tw.nekomimi.nkmr.NekomuraSettingsFragment;
 
 @SuppressLint("RtlHardcoded")
 public class NekoSettingsActivity extends BaseFragment {
@@ -77,7 +76,6 @@ public class NekoSettingsActivity extends BaseFragment {
     private int accountRow;
     private int chatRow;
     private int experimentRow;
-    private int nekomuraSettingsRow;
     private int categories2Row;
 
     private int aboutRow;
@@ -173,8 +171,6 @@ public class NekoSettingsActivity extends BaseFragment {
                 presentFragment(new NekoAccountSettingsActivity());
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
-            } else if (position == nekomuraSettingsRow) {
-                presentFragment(new NekomuraSettingsFragment());
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName("NekogramX", this, 1);
             } else if (position == translationRow) {
@@ -381,7 +377,6 @@ public class NekoSettingsActivity extends BaseFragment {
         accountRow = rowCount++;
         chatRow = rowCount++;
         experimentRow = rowCount++;
-        nekomuraSettingsRow = rowCount++;
         categories2Row = rowCount++;
 
         aboutRow = rowCount++;
@@ -390,7 +385,7 @@ public class NekoSettingsActivity extends BaseFragment {
         /*if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {*/
-            googlePlayRow = -1;
+        googlePlayRow = -1;
 //        }
         sourceCodeRow = rowCount++;
         translationRow = rowCount++;
@@ -476,8 +471,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.baseline_star_24, true);
                     } else if (position == accountRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.baseline_person_24, true);
-                    } else if (position == nekomuraSettingsRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NekomuraSettings", R.string.NekomuraSettings), R.drawable.notification, false);
                     }
                     break;
                 }
@@ -555,7 +548,7 @@ public class NekoSettingsActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == categories2Row || position == about2Row) {
                 return 1;
-            } else if (position == chatRow || position == accountRow || position == generalRow || position == experimentRow || position == nekomuraSettingsRow) {
+            } else if (position == chatRow || position == accountRow || position == generalRow || position == experimentRow) {
                 return 2;
             } else if (position == categoriesRow || position == aboutRow) {
                 return 4;

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekomuraSettings">New Settings</string>
     <string name="largeAvatarInDrawer">Large avatar in drawer</string>
     <string name="unreadBadgeOnBackButton">Unread badge on back button</string>
     <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>

@@ -165,6 +165,7 @@ import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
@@ -3604,7 +3605,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                     long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
 
-                    if (save) NekoConfig.setOpenPGPKeyId(keyId);
+                    if (save) NekomuraConfig.openPGPKeyId.setConfigLong(keyId);
 
                     signComment(result, save);
 
@@ -3646,7 +3647,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
                     if (error == null) return;
                     if (error.getMessage() != null && error.getMessage().contains("not found") && save) {
-                        NekoConfig.setOpenPGPKeyId(0L);
+                        NekomuraConfig.openPGPKeyId.setConfigLong(0L);
                         signComment(new Intent(), true);
                     } else {
                         AlertUtil.showToast(error.toString());

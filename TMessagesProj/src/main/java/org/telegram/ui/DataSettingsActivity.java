@@ -55,6 +55,7 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.EnvUtil;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class DataSettingsActivity extends BaseFragment {
 
@@ -355,7 +356,7 @@ public class DataSettingsActivity extends BaseFragment {
 
                     if (target.get() != null) {
 
-                        NekoConfig.setCachePath(target.get());
+                        NekomuraConfig.cachePath.setConfigString(target.get());
                         ImageLoader.getInstance().checkMediaPaths();
                         listAdapter.notifyItemChanged(position);
 

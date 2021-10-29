@@ -193,6 +193,7 @@ import tw.nekomimi.nekogram.utils.LangsKt;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -3098,7 +3099,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 7) {
                                 VoIPHelper.showCallDebugSettings(getParentActivity());
                             } else if (which == 8) {
-                                NekoConfig.toggleResidentNotification();
+                                NekomuraConfig.residentNotification.toggleConfigBool();
                             } else if (which == 9) {
                             } else if (which == 10) {
                                 getMessagesStorage().readAllDialogs(-1);

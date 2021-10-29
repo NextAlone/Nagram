@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nkmr.NekomuraConfig
 import java.io.File
 import java.util.*
 
@@ -51,9 +52,9 @@ object EnvUtil {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 // https://github.com/NekoX-Dev/NekoX/issues/284
-                NekoConfig.setCachePath(File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
+                NekomuraConfig.cachePath.setConfigString(File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
             } else {
-                NekoConfig.setCachePath(ApplicationLoader.applicationContext.getExternalFilesDir("files")?.parent ?: File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
+                NekomuraConfig.cachePath.setConfigString(ApplicationLoader.applicationContext.getExternalFilesDir("files")?.parent ?: File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
             }
 
         }

@@ -1,11 +1,14 @@
 package tw.nekomimi.nkmr;
 
+import static tw.nekomimi.nekogram.NekoConfig.TITLE_TYPE_TEXT;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 import java.io.ByteArrayInputStream;
@@ -25,10 +28,8 @@ public class NekomuraConfig {
     private static final int configTypeString = 2;
     private static final int configTypeSetInt = 3;
     private static final int configTypeMapIntInt = 4;
-
-    // Configs
-    public static ConfigItem largeAvatarInDrawer = addConfig("largeAvatarInDrawer", configTypeInt, 0); // 0:TG Default 1:NekoX Default 2:Large Avatar
-    public static ConfigItem unreadBadgeOnBackButton = addConfig("unreadBadgeOnBackButton", configTypeBool, false);
+    private static final int configTypeLong = 5;
+    private static final int configTypeFloat = 6;
 
     public static class ConfigItem {
         private String key;
@@ -56,6 +57,14 @@ public class NekomuraConfig {
 
         public int Int() {
             return (int) value;
+        }
+
+        public Long Long() {
+            return (Long) value;
+        }
+
+        public Float Float() {
+            return (Float) value;
         }
 
         public String String() {
@@ -87,7 +96,7 @@ public class NekomuraConfig {
             if (forceDefault) {
                 value = defaultValue;
             }
-            saveConfig();
+            saveConfig(this);
             return this.Bool();//返回toggle之后的
         }
 
@@ -96,7 +105,7 @@ public class NekomuraConfig {
             if (forceDefault) {
                 value = defaultValue;
             }
-            saveConfig();
+            saveConfig(this);
         }
 
         public void setConfigInt(int v) {
@@ -104,7 +113,23 @@ public class NekomuraConfig {
                 value = defaultValue;
             }
             value = v;
-            saveConfig();
+            saveConfig(this);
+        }
+
+        public void setConfigLong(Long v) {
+            if (forceDefault) {
+                value = defaultValue;
+            }
+            value = v;
+            saveConfig(this);
+        }
+
+        public void setConfigFloat(Float v) {
+            if (forceDefault) {
+                value = defaultValue;
+            }
+            value = v;
+            saveConfig(this);
         }
 
         public void setConfigString(String v) {
@@ -112,7 +137,7 @@ public class NekomuraConfig {
             if (forceDefault) {
                 value = defaultValue;
             }
-            saveConfig();
+            saveConfig(this);
         }
 
         public void setConfigSetInt(HashSet<Integer> v) {
@@ -120,23 +145,148 @@ public class NekomuraConfig {
             if (forceDefault) {
                 value = defaultValue;
             }
-            saveConfig();
+            saveConfig(this);
         }
 
         public void setConfigMapInt(HashMap<Integer, Integer> v) {
             value = v;
-            saveConfig();
+            saveConfig(this);
         }
     }
 
     private static boolean configLoaded;
     private static final Object sync = new Object();
-    private static ArrayList<ConfigItem> configs = new ArrayList<>();
+    private static final ArrayList<ConfigItem> configs = new ArrayList<>();
 
     // Configs
+    public static ConfigItem migrate = addConfig("NekoConfigMigrate", configTypeBool, false);
     public static ConfigItem largeAvatarInDrawer = addConfig("largeAvatarInDrawer", configTypeInt, 0); // 0:TG Default 1:NekoX Default 2:Large Avatar
-    //TODO NekoConfig 那个 useAvatar 还没有迁移过来，所以只实现了 largeAvatarInDrawer=2 的情况。。。
     public static ConfigItem unreadBadgeOnBackButton = addConfig("unreadBadgeOnBackButton", configTypeBool, false);
+
+    //From NekoConfig
+    public static ConfigItem useIPv6 = addConfig("useIPv6", configTypeBool, false);
+    public static ConfigItem hidePhone = addConfig("hidePhone", configTypeBool, true);
+    public static ConfigItem ignoreBlocked = addConfig("ignoreBlocked", configTypeBool, false);
+    public static ConfigItem forceTablet = addConfig("forceTablet", configTypeInt, 0);
+    public static ConfigItem inappCamera = addConfig("inappCamera", configTypeBool, false); // fake
+    public static ConfigItem smoothKeyboard = addConfig("smoothKeyboard", configTypeBool, false);// fake
+
+    public static ConfigItem typeface = addConfig("typeface_b", configTypeBool, false);
+    public static ConfigItem nameOrder = addConfig("nameOrder", configTypeInt, 1);
+    public static ConfigItem mapPreviewProvider = addConfig("mapPreviewProvider", configTypeInt, 0);
+    public static ConfigItem transparentStatusBar = addConfig("transparentStatusBar", configTypeBool, false);
+    public static ConfigItem residentNotification = addConfig("residentNotification", configTypeBool, false);
+    public static ConfigItem hideProxySponsorChannel = addConfig("hideProxySponsorChannel", configTypeBool, false);
+    public static ConfigItem showAddToSavedMessages = addConfig("showAddToSavedMessages", configTypeBool, true);
+    public static ConfigItem showReport = addConfig("showReport", configTypeBool, true);
+    public static ConfigItem showViewHistory = addConfig("showViewHistory", configTypeBool, true);
+    public static ConfigItem showAdminActions = addConfig("showAdminActions", configTypeBool, true);
+    public static ConfigItem showChangePermissions = addConfig("showChangePermissions", configTypeBool, true);
+    public static ConfigItem showDeleteDownloadedFile = addConfig("showDeleteDownloadedFile", configTypeBool, true);
+    public static ConfigItem showMessageDetails = addConfig("showMessageDetails", configTypeBool, false);
+    public static ConfigItem showTranslate = addConfig("showTranslate", configTypeBool, true);
+    public static ConfigItem showRepeat = addConfig("showRepeat", configTypeBool, false);
+    public static ConfigItem showMessageHide = addConfig("showMessageHide", configTypeBool, false);
+
+    public static ConfigItem eventType = addConfig("eventType", configTypeInt, 0);
+    public static ConfigItem actionBarDecoration = addConfig("actionBarDecoration", configTypeInt, 0);
+    public static ConfigItem newYear = addConfig("newYear", configTypeBool, false);
+    public static ConfigItem stickerSize = addConfig("stickerSize", configTypeFloat, 14.0f);
+    public static ConfigItem unlimitedFavedStickers = addConfig("unlimitedFavedStickers", configTypeBool, false);
+    public static ConfigItem unlimitedPinnedDialogs = addConfig("unlimitedPinnedDialogs", configTypeBool, false);
+    public static ConfigItem translationProvider = addConfig("translationProvider", configTypeInt, 1);
+    public static ConfigItem disablePhotoSideAction = addConfig("disablePhotoSideAction", configTypeBool, true);
+    public static ConfigItem openArchiveOnPull = addConfig("openArchiveOnPull", configTypeBool, false);
+    public static ConfigItem hideKeyboardOnChatScroll = addConfig("hideKeyboardOnChatScroll", configTypeBool, false);
+    public static ConfigItem avatarBackgroundBlur = addConfig("avatarBackgroundBlur", configTypeBool, false);
+    public static ConfigItem avatarBackgroundDarken = addConfig("avatarBackgroundDarken", configTypeBool, false);
+    public static ConfigItem useSystemEmoji = addConfig("useSystemEmoji", configTypeBool, false);
+    public static ConfigItem showTabsOnForward = addConfig("showTabsOnForward", configTypeBool, false);
+    public static ConfigItem rearVideoMessages = addConfig("rearVideoMessages", configTypeBool, false);
+    public static ConfigItem hideAllTab = addConfig("hideAllTab", configTypeBool, false);
+    public static ConfigItem pressTitleToOpenAllChats = addConfig("pressTitleToOpenAllChats", configTypeBool, false);
+
+    public static ConfigItem disableChatAction = addConfig("disable_chat_action", configTypeBool, false);
+    public static ConfigItem sortByUnread = addConfig("sort_by_unread", configTypeBool, false);
+    public static ConfigItem sortByUnmuted = addConfig("sort_by_unmuted", configTypeBool, true);
+    public static ConfigItem sortByUser = addConfig("sort_by_user", configTypeBool, true);
+    public static ConfigItem sortByContacts = addConfig("sort_by_contacts", configTypeBool, true);
+
+    public static ConfigItem disableUndo = addConfig("disable_undo", configTypeBool, false);
+
+    public static ConfigItem filterUsers = addConfig("filter_users", configTypeBool, true);
+    public static ConfigItem filterContacts = addConfig("filter_contacts", configTypeBool, true);
+    public static ConfigItem filterGroups = addConfig("filter_groups", configTypeBool, true);
+    public static ConfigItem filterChannels = addConfig("filter_channels", configTypeBool, true);
+    public static ConfigItem filterBots = addConfig("filter_bots", configTypeBool, true);
+    public static ConfigItem filterAdmins = addConfig("filter_admins", configTypeBool, true);
+    public static ConfigItem filterUnmuted = addConfig("filter_unmuted", configTypeBool, true);
+    public static ConfigItem filterUnread = addConfig("filter_unread", configTypeBool, true);
+    public static ConfigItem filterUnmutedAndUnread = addConfig("filter_unmuted_and_unread", configTypeBool, true);
+
+    public static ConfigItem disableSystemAccount = addConfig("disable_system_account", configTypeBool, false);
+    public static ConfigItem disableProxyWhenVpnEnabled = addConfig("disable_proxy_when_vpn_enabled", configTypeBool, false);
+    public static ConfigItem skipOpenLinkConfirm = addConfig("skip_open_link_confirm", configTypeBool, false);
+
+    public static ConfigItem ignoreMutedCount = addConfig("ignore_muted_count", configTypeBool, true);
+    public static ConfigItem useDefaultTheme = addConfig("use_default_theme", configTypeBool, false);
+    public static ConfigItem showIdAndDc = addConfig("show_id_and_dc", configTypeBool, false);
+
+    public static ConfigItem googleCloudTranslateKey = addConfig("google_cloud_translate_key", configTypeString, "");
+    public static ConfigItem cachePath = addConfig("cache_path", configTypeString, "");
+
+    public static ConfigItem translateToLang = addConfig("trans_to_lang", configTypeString, "");
+    public static ConfigItem translateInputLang = addConfig("trans_input_to_lang", configTypeString, "en");
+
+    public static ConfigItem ccToLang = addConfig("opencc_to_lang", configTypeString, "");
+    public static ConfigItem ccInputLang = addConfig("opencc_input_to_lang", configTypeString, "");
+
+    public static ConfigItem tabsTitleType = addConfig("tabsTitleType", configTypeInt, TITLE_TYPE_TEXT);
+    public static ConfigItem confirmAVMessage = addConfig("confirmAVMessage", configTypeBool, false);
+    public static ConfigItem askBeforeCall = addConfig("askBeforeCall", configTypeBool, false);
+    public static ConfigItem disableNumberRounding = addConfig("disableNumberRounding", configTypeBool, false);
+
+    public static ConfigItem useSystemDNS = addConfig("useSystemDNS", configTypeBool, false);
+    public static ConfigItem customDoH = addConfig("customDoH", configTypeString, "");
+    public static ConfigItem hideProxyByDefault = addConfig("hide_proxy_by_default", configTypeBool, false);
+    public static ConfigItem useProxyItem = addConfig("use_proxy_item", configTypeBool, true);
+
+    public static ConfigItem disableAppBarShadow = addConfig("disableAppBarShadow", configTypeBool, false);
+    public static ConfigItem mediaPreview = addConfig("mediaPreview", configTypeBool, true);
+
+    public static ConfigItem proxyAutoSwitch = addConfig("proxy_auto_switch", configTypeBool, false);
+
+    public static ConfigItem usePersianCalendar = addConfig("persian_calendar", configTypeBool, false);
+    public static ConfigItem displayPersianCalendarByLatin = addConfig("displayPersianCalendarByLatin", configTypeBool, false);
+    public static ConfigItem openPGPApp = addConfig("openPGPApp", configTypeString, "");
+    public static ConfigItem openPGPKeyId = addConfig("openPGPKeyId", configTypeLong, 0L);
+
+    public static ConfigItem disableVibration = addConfig("disableVibration", configTypeBool, false);
+    public static ConfigItem autoPauseVideo = addConfig("autoPauseVideo", configTypeBool, false);
+    public static ConfigItem disableProximityEvents = addConfig("disableProximityEvents", configTypeBool, false);
+
+    public static ConfigItem ignoreContentRestrictions = addConfig("ignoreContentRestrictions", configTypeBool, !BuildVars.isPlay);
+    public static ConfigItem useChatAttachMediaMenu = addConfig("useChatAttachMediaMenu", configTypeBool, true);
+    public static ConfigItem disableLinkPreviewByDefault = addConfig("disableLinkPreviewByDefault", configTypeBool, false);
+    public static ConfigItem sendCommentAfterForward = addConfig("sendCommentAfterForward", configTypeBool, true);
+    public static ConfigItem increaseVoiceMessageQuality = addConfig("increaseVoiceMessageQuality", configTypeBool, true);
+    public static ConfigItem acceptSecretChat = addConfig("acceptSecretChat", configTypeBool, true);
+    public static ConfigItem disableTrending = addConfig("disableTrending", configTypeBool, true);
+    public static ConfigItem dontSendGreetingSticker = addConfig("dontSendGreetingSticker", configTypeBool, false);
+    public static ConfigItem hideTimeForSticker = addConfig("hideTimeForSticker", configTypeBool, false);
+    public static ConfigItem takeGIFasVideo = addConfig("takeGIFasVideo", configTypeBool, false);
+    public static ConfigItem maxRecentStickerCount = addConfig("maxRecentStickerCount", configTypeInt, 20);
+    public static ConfigItem disableSwipeToNext = addConfig("disableSwipeToNext", configTypeBool, true);
+    public static ConfigItem disableRemoteEmojiInteractions = addConfig("disableRemoteEmojiInteractions", configTypeBool, true);
+    public static ConfigItem disableChoosingSticker = addConfig("disableChoosingSticker", configTypeBool, false);
+
+    public static ConfigItem disableAutoDownloadingWin32Executable = addConfig("disableAutoDownloadingWin32Executable", configTypeBool, true);
+    public static ConfigItem disableAutoDownloadingArchive = addConfig("disableAutoDownloadingArchive", configTypeBool, true);
+
+    public static ConfigItem enableStickerPin = addConfig("enableStickerPin", configTypeBool, false);
+    public static ConfigItem useMediaStreamInVoip = addConfig("useMediaStreamInVoip", configTypeBool, false);
+    public static ConfigItem customAudioBitrate = addConfig("customAudioBitrate", configTypeInt, 32);
+    public static ConfigItem disableGroupVoipAudioProcessing = addConfig("disableGroupVoipAudioProcessing", configTypeBool, false);
 
 
     static {
@@ -179,6 +329,12 @@ public class NekomuraConfig {
                 if (o.type == configTypeInt) {
                     o.value = preferences.getInt(o.key, (int) o.defaultValue);
                 }
+                if (o.type == configTypeLong) {
+                    o.value = preferences.getLong(o.key, (Long) o.defaultValue);
+                }
+                if (o.type == configTypeFloat) {
+                    o.value = preferences.getFloat(o.key, (Float) o.defaultValue);
+                }
                 if (o.type == configTypeString) {
                     o.value = preferences.getString(o.key, (String) o.defaultValue);
                 }
@@ -215,19 +371,26 @@ public class NekomuraConfig {
         }
     }
 
-    public static void saveConfig() {
+    public static void saveConfig(ConfigItem item) {
         synchronized (sync) {
             try {
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nkmrcfg", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 for (int i = 0; i < configs.size(); i++) {
                     ConfigItem o = configs.get(i);
+                    if (item != null && !item.getKey().equals(o.getKey())) continue;
 
                     if (o.type == configTypeBool) {
                         editor.putBoolean(o.key, (boolean) o.value);
                     }
                     if (o.type == configTypeInt) {
                         editor.putInt(o.key, (int) o.value);
+                    }
+                    if (o.type == configTypeLong) {
+                        editor.putLong(o.key, (Long) o.value);
+                    }
+                    if (o.type == configTypeFloat) {
+                        editor.putFloat(o.key, (Float) o.value);
                     }
                     if (o.type == configTypeString) {
                         editor.putString(o.key, o.value.toString());

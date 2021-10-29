@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,9 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -49,7 +46,6 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -68,6 +64,10 @@ import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 
+import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nkmr.Cells;
+import tw.nekomimi.nkmr.Cells.*;
+
 @SuppressLint("RtlHardcoded")
 public class NekoGeneralSettingsActivity extends BaseFragment {
 
@@ -76,69 +76,87 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private ValueAnimator statusBarColorAnimator;
     private DrawerProfilePreviewCell profilePreviewCell;
 
-    private int rowCount;
+    private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
+    private Cells nkmrCells = new Cells(this, listView, listAdapter, rows);
 
-    private int connectionRow;
-    private int ipv6Row;
-    private int disableProxyWhenVpnEnabledRow;
-    private int useProxyItemRow;
-    private int hideProxyByDefaultRow;
-    private int useSystemDNSRow;
-    private int customDoHRow;
-    private int connection2Row;
+    private final NekomuraTGCell profilePreviewRow = addNekomuraTGCell(new NkmrDrawerProfilePreviewCell());
+    private final NekomuraTGCell largeAvatarInDrawerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.largeAvatarInDrawer, LocaleController.getString("valuesLargeAvatarInDrawer"), null));
+    private final NekomuraTGCell avatarBackgroundBlurRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundBlur));
+    private final NekomuraTGCell avatarBackgroundDarkenRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundDarken));
+    private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int drawerRow;
-    private int avatarAsDrawerBackgroundRow;
-    private int avatarBackgroundBlurRow;
-    private int avatarBackgroundDarkenRow;
-    private int drawer2Row;
+    private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Connection")));
+    private final NekomuraTGCell useIPv6Row = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useIPv6));
+    private final NekomuraTGCell disableProxyWhenVpnEnabledRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableProxyWhenVpnEnabled));
+    private final NekomuraTGCell useProxyItemRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useProxyItem));
+    private final NekomuraTGCell hideProxyByDefaultRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
+    private final NekomuraTGCell useSystemDNSRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useSystemDNS));
+    private final NekomuraTGCell customDoHRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextInput(null, NekomuraConfig.customDoH, "https://1.0.0.1/dns-query", null));
+    private final NekomuraTGCell divider1 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int transRow;
-    private int translationProviderRow;
-    private int translateToLangRow;
-    private int translateInputToLangRow;
-    private int googleCloudTranslateKeyRow;
-    private int trans2Row;
+    private final NekomuraTGCell header2 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Translate")));
+    private final NekomuraTGCell translationProviderRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final NekomuraTGCell translateToLangRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final NekomuraTGCell translateInputToLangRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final NekomuraTGCell googleCloudTranslateKeyRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextDetail(NekomuraConfig.googleCloudTranslateKey, (view, position) -> {
+        customDialog_googleCloudTranslateKey(position);
+    }));
+    private final NekomuraTGCell divider2 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int openKeyChainRow;
-    private int pgpAppRow;
-    private int keyRow;
-    private int openKeyChain2Row;
+    private final NekomuraTGCell header3 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("OpenKayChain")));
+    private final NekomuraTGCell pgpAppRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final NekomuraTGCell keyRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextDetail(NekomuraConfig.openPGPKeyId, (view, position) -> {
+        requestKey(new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID));
+    }));
+    private final NekomuraTGCell divider3 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int dialogsRow;
-    private int sortMenuRow;
-    private int acceptSecretChatRow;
-    private int dialogs2Row;
+    private final NekomuraTGCell header4 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("DialogsSettings")));
+    private final NekomuraTGCell sortMenuRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.openPGPApp, null, () -> {
+        showSortMenuAlert();
+    }));
+    private final NekomuraTGCell acceptSecretChatRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.acceptSecretChat));
+    private final NekomuraTGCell divider4 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int appearanceRow;
-    private int typefaceRow;
-    private int useDefaultThemeRow;
-    private int useSystemEmojiRow;
-    private int transparentStatusBarRow;
-    private int newYearRow;
-    private int actionBarDecorationRow;
-    private int appBarShadowRow;
-    private int tabletModeRow;
-    private int appearance2Row;
+    private final NekomuraTGCell header5 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Appearance")));
+    private final NekomuraTGCell typefaceRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.typeface));
+    private final NekomuraTGCell useDefaultThemeRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useDefaultTheme));
+    private final NekomuraTGCell useSystemEmojiRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
+    private final NekomuraTGCell transparentStatusBarRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.transparentStatusBar));
+    private final NekomuraTGCell newYearRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.newYear));
+    private final NekomuraTGCell actionBarDecorationRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.actionBarDecoration, new String[]{
+            LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
+            LocaleController.getString("Snowflakes", R.string.Snowflakes),
+            LocaleController.getString("Fireworks", R.string.Fireworks)
+    }, null));
+    private final NekomuraTGCell tabletModeRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.forceTablet, new String[]{
+            LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
+            LocaleController.getString("Enable", R.string.Enable),
+            LocaleController.getString("Disable", R.string.Disable)
+    }, null));
+    private final NekomuraTGCell divider5 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int privacyRow;
-    private int disableSystemAccountRow;
-    private int privacy2Row;
+    private final NekomuraTGCell header6 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("PrivacyTitle")));
+    private final NekomuraTGCell disableSystemAccountRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableSystemAccount));
+    private final NekomuraTGCell divider6 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private int generalRow;
-    private int hidePhoneRow;
-    private int disableUndoRow;
-    private int showIdAndDcRow;
-    private int inappCameraRow;
-    private int hideProxySponsorChannelRow;
-    private int askBeforeCallRow;
-    private int autoPauseVideoRow;
-    private int disableNumberRoundingRow;
-    private int openArchiveOnPullRow;
-    private int nameOrderRow;
-    private int usePersianCalendarRow;
-    private int displayPersianCalendarByLatinRow;
-    private int general2Row;
+    private final NekomuraTGCell header7 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("General")));
+    private final NekomuraTGCell hidePhoneRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hidePhone));
+    private final NekomuraTGCell disableUndoRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableUndo));
+    private final NekomuraTGCell showIdAndDcRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.showIdAndDc));
+    private final NekomuraTGCell inappCameraRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.inappCamera));
+    private final NekomuraTGCell hideProxySponsorChannelRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideProxySponsorChannel));
+    private final NekomuraTGCell askBeforeCallRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.askBeforeCall));
+    private final NekomuraTGCell autoPauseVideoRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
+    private final NekomuraTGCell disableNumberRoundingRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableNumberRounding, "4.8K -> 4777"));
+    private final NekomuraTGCell openArchiveOnPullRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.openArchiveOnPull));
+    private final NekomuraTGCell nameOrderRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.nameOrder, new String[]{
+            LocaleController.getString("FirstLast", R.string.FirstLast),
+            LocaleController.getString("LastFirst", R.string.LastFirst)
+    }, null));
+    private final NekomuraTGCell usePersianCalendarRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.usePersianCalendar, LocaleController.getString("UsePersiancalendarInfo")));
+    private final NekomuraTGCell displayPersianCalendarByLatinRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.displayPersianCalendarByLatin));
+    private final NekomuraTGCell divider7 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
+
 
     private UndoView restartTooltip;
 
@@ -183,409 +201,201 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         }
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
+
+        // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == ipv6Row) {
-                NekoConfig.toggleIPv6();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.useIPv6);
+            NekomuraTGCell a = rows.get(position);
+            if (a instanceof NekomuraTGTextCheck) {
+                ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
+            } else if (a instanceof NekomuraTGSelectBox) {
+                ((NekomuraTGSelectBox) a).onClick();
+            } else if (a instanceof NekomuraTGTextInput) {
+                ((NekomuraTGTextInput) a).onClick();
+            } else if (a instanceof NekomuraTGTextDetail) {
+                RecyclerListView.OnItemClickListener o = ((NekomuraTGTextDetail) a).onItemClickListener;
+                if (o != null) {
+                    try {
+                        o.onItemClick(view, position);
+                    } catch (Exception e) {
+                    }
                 }
+            } else if (a instanceof NekomuraTGCustom) { // Custom OnClick
+                if (position == rows.indexOf(pgpAppRow)) {
+                    PopupBuilder builder = new PopupBuilder(view);
+
+                    builder.addSubItem(0, LocaleController.getString("None", R.string.None));
+
+                    LinkedList<String> appsMap = new LinkedList<>();
+                    appsMap.add("");
+
+                    Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
+                    List<ResolveInfo> resInfo = getParentActivity().getPackageManager().queryIntentServices(intent, 0);
+
+                    if (resInfo != null) {
+                        for (ResolveInfo resolveInfo : resInfo) {
+                            if (resolveInfo.serviceInfo == null) {
+                                continue;
+                            }
+
+                            String packageName = resolveInfo.serviceInfo.packageName;
+                            String simpleName = String.valueOf(resolveInfo.serviceInfo.loadLabel(getParentActivity().getPackageManager()));
+
+                            builder.addSubItem(appsMap.size(), simpleName);
+                            appsMap.add(packageName);
+
+                        }
+                    }
+
+                    builder.setDelegate((i) -> {
+                        NekomuraConfig.openPGPApp.setConfigString(appsMap.get(i));
+                        NekomuraConfig.openPGPKeyId.setConfigLong(0L);
+                        listAdapter.notifyItemChanged(rows.indexOf(pgpAppRow));
+                        listAdapter.notifyItemChanged(rows.indexOf(keyRow));
+
+                        if (i > 0) PGPUtil.recreateConnection();
+                    });
+
+                    builder.show();
+                } else if (position == rows.indexOf(translationProviderRow)) {
+                    PopupBuilder builder = new PopupBuilder(view);
+
+                    builder.setItems(new String[]{
+                            LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
+                            LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
+                            LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
+                            LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
+                            LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
+                            LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
+                            LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderDeepLTranslate)
+
+                    }, (i, __) -> {
+
+                        boolean needReset = NekomuraConfig.translationProvider.Int() - 1 != i && (NekomuraConfig.translationProvider.Int() == 1 || i == 0);
+
+                        NekomuraConfig.translationProvider.setConfigInt(i + 1);
+
+                        if (needReset) {
+
+                            updateRows(true);
+
+                        } else {
+
+                            listAdapter.notifyItemChanged(position);
+
+                        }
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.show();
+                } else if (position == rows.indexOf(translateToLangRow) || position == rows.indexOf(translateInputToLangRow)) {
+                    Translator.showTargetLangSelect(view, position == rows.indexOf(translateInputToLangRow), (locale) -> {
+
+                        if (position == rows.indexOf(translateToLangRow)) {
+
+                            NekomuraConfig.translateToLang.setConfigString(TranslatorKt.getLocale2code(locale));
+
+                        } else {
+
+                            NekomuraConfig.translateInputLang.setConfigString(TranslatorKt.getLocale2code(locale));
+
+                        }
+
+                        listAdapter.notifyItemChanged(position);
+
+                        return Unit.INSTANCE;
+                    });
+                }
+            }
+        });
+
+        // Cells: Set OnSettingChanged Callbacks
+        nkmrCells.callBackSettingsChanged = (key, newValue) -> {
+            if (key.equals(NekomuraConfig.useIPv6.getKey())) {
                 for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         ConnectionsManager.native_setIpStrategy(a, ConnectionsManager.getIpStrategy());
                     }
                 }
-            } else if (position == disableProxyWhenVpnEnabledRow) {
-                NekoConfig.toggleDisableProxyWhenVpnEnabled();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.disableProxyWhenVpnEnabled);
-                }
-            } else if (position == useProxyItemRow) {
-                NekoConfig.toggleUseProxyItem();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.useProxyItem);
-                }
-            } else if (position == hideProxyByDefaultRow) {
-                NekoConfig.toggleHideProxyByDefault();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.hideProxyByDefault);
-                }
-            } else if (position == useSystemDNSRow) {
-                NekoConfig.toggleUseSystemDNS();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.useSystemDNS);
-                }
-            } else if (position == customDoHRow) {
-                Context ctx = getParentActivity();
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setTitle(LocaleController.getString("customDoH", R.string.customDoH));
-
-                LinearLayout linearLayout = new LinearLayout(ctx);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-                EditTextBoldCursor editText = new EditTextBoldCursor(ctx);
-                editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-                editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                editText.setHint("https://1.1.1.1/dns-query");
-                editText.setText(NekoConfig.customDoH);
-                linearLayout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT,AndroidUtilities.dp(8),0,AndroidUtilities.dp(10),0));
-
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (d, v) -> {
-                    NekoConfig.setCustomDoH(editText.getText().toString());
-                    FileLog.d("set customDoH to " + editText.getText().toString());
-                    listAdapter.notifyItemChanged(customDoHRow);
-                });
-                builder.setView(linearLayout);
-                showDialog(builder.create());
-            } else if (position == hidePhoneRow) {
-                NekoConfig.toggleHidePhone();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.hidePhone);
-                }
+            } else if (key.equals(NekomuraConfig.inappCamera.getKey())) {
+                if (SharedConfig.inappCamera != (boolean) newValue)
+                    SharedConfig.toggleInappCamera();
+            } else if (key.equals(NekomuraConfig.hidePhone.getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(drawerRow);
-            } else if (position == disableUndoRow) {
-                NekoConfig.toggleDisableUndo();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.disableUndo);
-                }
-            } else if (position == useDefaultThemeRow) {
-                NekoConfig.toggleUseDefaultTheme();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.useDefaultTheme);
-                }
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-            } else if (position == inappCameraRow) {
-                SharedConfig.toggleInappCamera();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.inappCamera);
-                }
-            } else if (position == transparentStatusBarRow) {
-                NekoConfig.toggleTransparentStatusBar();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.transparentStatusBar);
-                }
+                listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
+            } else if (key.equals(NekomuraConfig.transparentStatusBar.getKey())) {
                 AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, false));
-            } else if (position == hideProxySponsorChannelRow) {
-                NekoConfig.toggleHideProxySponsorChannel();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.hideProxySponsorChannel);
-                }
+            } else if (key.equals(NekomuraConfig.hideProxySponsorChannel.getKey())) {
                 for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         MessagesController.getInstance(a).checkPromoInfo(true);
                     }
                 }
-            } else if (position == useSystemEmojiRow) {
-                NekoConfig.toggleUseSystemEmoji();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.useSystemEmoji);
-                }
-            } else if (position == typefaceRow) {
-                NekoConfig.toggleTypeface();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.typeface == 1);
-                }
-            } else if (position == nameOrderRow) {
-
-                PopupBuilder builder = new PopupBuilder(view);
-
-                builder.setItems(new String[]{
-                        LocaleController.getString("FirstLast", R.string.FirstLast),
-                        LocaleController.getString("LastFirst", R.string.LastFirst)
-                }, (i, __) -> {
-                    NekoConfig.setNameOrder(i + 1);
-                    listAdapter.notifyItemChanged(position);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-                    return Unit.INSTANCE;
-                });
-
-                builder.show();
-
-            } else if (position == actionBarDecorationRow) {
-
-                PopupBuilder builder = new PopupBuilder(view);
-
-                builder.setItems(new String[]{
-                        LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
-                        LocaleController.getString("Snowflakes", R.string.Snowflakes),
-                        LocaleController.getString("Fireworks", R.string.Fireworks)
-                }, (i, __) -> {
-
-                    NekoConfig.setActionBarDecoration(i);
-                    listAdapter.notifyItemChanged(position);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-
-                    return null;
-
-                });
-
-                builder.show();
-
-            } else if (position == tabletModeRow) {
-
-                PopupBuilder builder = new PopupBuilder(view);
-
-                builder.setItems(new String[]{
-                        LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
-                        LocaleController.getString("Enable", R.string.Enable),
-                        LocaleController.getString("Disable", R.string.Disable)
-                }, (i, __) -> {
-
-                    NekoConfig.setTabletMode(i);
-                    listAdapter.notifyItemChanged(position);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-
-                    return null;
-
-                });
-
-                builder.show();
-
-            } else if (position == newYearRow) {
-                NekoConfig.toggleNewYear();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.newYear);
-                    restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-                }
-            } else if (position == translationProviderRow) {
-
-                PopupBuilder builder = new PopupBuilder(view);
-
-                builder.setItems(new String[]{
-                        LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
-                        LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
-                        LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
-                        LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
-                        LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
-                        LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
-                        LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderDeepLTranslate)
-
-                }, (i, __) -> {
-
-                    boolean needReset = NekoConfig.translationProvider - 1 != i && (NekoConfig.translationProvider == 1 || i == 0);
-
-                    NekoConfig.setTranslationProvider(i + 1);
-
-                    if (needReset) {
-
-                        updateRows(true);
-
-                    } else {
-
-                        listAdapter.notifyItemChanged(translationProviderRow);
-
-                    }
-
-                    return Unit.INSTANCE;
-
-                });
-
-                builder.show();
-
-            } else if (position == translateToLangRow || position == translateInputToLangRow) {
-
-                Translator.showTargetLangSelect(view, position == translateInputToLangRow, (locale) -> {
-
-                    if (position == translateToLangRow) {
-
-                        NekoConfig.setTranslateToLang(TranslatorKt.getLocale2code(locale));
-
-                    } else {
-
-                        NekoConfig.setTranslateInputToLang(TranslatorKt.getLocale2code(locale));
-
-                    }
-
-                    listAdapter.notifyItemChanged(position);
-
-                    return Unit.INSTANCE;
-
-                });
-
-            } else if (position == googleCloudTranslateKeyRow) {
-
-                BottomBuilder builder = new BottomBuilder(getParentActivity());
-
-                builder.addTitle(
-                        LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey),
-                        LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice)
-                );
-
-                EditText keyField = builder.addEditText("Key");
-
-                if (StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)) {
-
-                    keyField.setText(NekoConfig.googleCloudTranslateKey);
-
-                }
-
-                builder.addCancelButton();
-
-                builder.addOkButton((it) -> {
-
-                    String key = keyField.getText().toString();
-
-                    if (StrUtil.isBlank(key)) key = null;
-
-                    NekoConfig.setGoogleTranslateKey(key);
-
-                    listAdapter.notifyItemChanged(position);
-
-                    return Unit.INSTANCE;
-
-                });
-
-                builder.show();
-
-                keyField.requestFocus();
-                AndroidUtilities.showKeyboard(keyField);
-
-            } else if (position == openArchiveOnPullRow) {
-                NekoConfig.toggleOpenArchiveOnPull();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.openArchiveOnPull);
-                }
-            } else if (position == sortMenuRow) {
-                showSortMenuAlert();
-            } else if (position == disableSystemAccountRow) {
-                NekoConfig.toggleDisableSystemAccount();
-                if (NekoConfig.disableSystemAccount) {
+            } else if (key.equals(NekomuraConfig.actionBarDecoration.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekomuraConfig.forceTablet.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekomuraConfig.newYear.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekomuraConfig.disableSystemAccount.getKey())) {
+                if (NekomuraConfig.disableSystemAccount.Bool()) {
                     getContactsController().deleteUnknownAppAccounts();
                 } else {
                     for (int a : SharedConfig.activeAccounts) {
                         ContactsController.getInstance(a).checkAppAccount();
                     }
                 }
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.disableSystemAccount);
-                }
-            } else if (position == avatarAsDrawerBackgroundRow) {
-                NekoConfig.toggleAvatarAsDrawerBackground();
-                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.avatarAsDrawerBackground);
-                }
+            } else if (key.equals(NekomuraConfig.largeAvatarInDrawer.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 TransitionManager.beginDelayedTransition(profilePreviewCell);
-                listAdapter.notifyItemChanged(drawerRow);
-                if (NekoConfig.avatarAsDrawerBackground) {
-                    updateRows(false);
-                    listAdapter.notifyItemRangeInserted(avatarBackgroundBlurRow, 2);
-                } else {
-                    listAdapter.notifyItemRangeRemoved(avatarBackgroundBlurRow, 2);
-                    updateRows(false);
-                }
-            } else if (position == avatarBackgroundBlurRow) {
-                NekoConfig.toggleAvatarBackgroundBlur();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.avatarBackgroundBlur);
-                }
+                listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
+                //TODO Support remove and insert rows.
+//                if (NekomuraConfig.largeAvatarInDrawer.Int() > 0) {
+//                    updateRows(false);
+//                    listAdapter.notifyItemRangeInserted(rows.indexOf(avatarBackgroundBlurRow), 2);
+//                } else {
+//                    listAdapter.notifyItemRangeRemoved(rows.indexOf(avatarBackgroundBlurRow), 2);
+//                    updateRows(false);
+//                }
+
+            } else if (key.equals(NekomuraConfig.avatarBackgroundBlur.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(drawerRow);
-            } else if (position == avatarBackgroundDarkenRow) {
-                NekoConfig.toggleAvatarBackgroundDarken();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.avatarBackgroundDarken);
-                }
+            } else if (key.equals(NekomuraConfig.avatarBackgroundDarken.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(drawerRow);
-            } else if (position == showIdAndDcRow) {
-                NekoConfig.toggleShowIdAndDc();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.showIdAndDc);
-                }
-            } else if (position == askBeforeCallRow) {
-                NekoConfig.toggleAskBeforeCall();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.askBeforeCall);
-                }
-            } else if (position == disableNumberRoundingRow) {
-                NekoConfig.toggleDisableNumberRounding();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.disableNumberRounding);
-                }
-            } else if (position == appBarShadowRow) {
-                NekoConfig.toggleDisableAppBarShadow();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.disableAppBarShadow);
-                }
-                ActionBarLayout.headerShadowDrawable = NekoConfig.disableAppBarShadow ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
+            } else if (key.equals(NekomuraConfig.disableAppBarShadow.getKey())) {
+                ActionBarLayout.headerShadowDrawable = (boolean) newValue ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
-            } else if (position == usePersianCalendarRow) {
-                NekoConfig.toggleUsePersiancalendar();
-                LocaleController.reloadPersianCalendarConfig();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(LocaleController.usePersianCalendar);
-                }
-            } else if (position == displayPersianCalendarByLatinRow) {
-                NekoConfig.toggleDisplayPersianCalendarByLatin();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.displayPersianCalendarByLatin);
-                }
-            } else if (position == pgpAppRow) {
-
-                PopupBuilder builder = new PopupBuilder(view);
-
-                builder.addSubItem(0, LocaleController.getString("None", R.string.None));
-
-                LinkedList<String> appsMap = new LinkedList<>();
-                appsMap.add("");
-
-                Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
-                List<ResolveInfo> resInfo = getParentActivity().getPackageManager().queryIntentServices(intent, 0);
-
-                if (resInfo != null) {
-                    for (ResolveInfo resolveInfo : resInfo) {
-                        if (resolveInfo.serviceInfo == null) {
-                            continue;
-                        }
-
-                        String packageName = resolveInfo.serviceInfo.packageName;
-                        String simpleName = String.valueOf(resolveInfo.serviceInfo.loadLabel(getParentActivity().getPackageManager()));
-
-                        builder.addSubItem(appsMap.size(), simpleName);
-                        appsMap.add(packageName);
-
-                    }
-                }
-
-                builder.setDelegate((i) -> {
-
-                    NekoConfig.setOpenPGPApp(appsMap.get(i));
-                    NekoConfig.setOpenPGPKeyId(0L);
-                    listAdapter.notifyItemChanged(pgpAppRow);
-                    listAdapter.notifyItemChanged(keyRow);
-
-                    if (i > 0) PGPUtil.recreateConnection();
-
-                });
-
-                builder.show();
-
-            } else if (position == keyRow) {
-
-                requestKey(new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID));
-
-            } else if (position == autoPauseVideoRow) {
-                NekoConfig.toggleAutoPauseVideo();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.autoPauseVideo);
-                }
-            } else if (position == acceptSecretChatRow) {
-                NekoConfig.toggleAcceptSecretChat();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.acceptSecretChat);
-                }
             }
-
-        });
+        };
 
         restartTooltip = new UndoView(context);
         frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
     }
+
+    public NekomuraTGCell addNekomuraTGCell(NekomuraTGCell a) {
+        rows.add(a);
+        return a;
+    }
+
+    private class NkmrDrawerProfilePreviewCell implements NekomuraTGCell {
+        public int getType() {
+            return 999;
+        }
+
+        public boolean isEnabled() {
+            return false;
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder holder) {
+            DrawerProfilePreviewCell cell = (DrawerProfilePreviewCell) holder.itemView;
+            cell.setUser(getUserConfig().getCurrentUser(), false);
+        }
+    }
+
 
     private void requestKey(Intent data) {
 
@@ -596,9 +406,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
 
                     long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
-                    NekoConfig.setOpenPGPKeyId(keyId);
+                    NekomuraConfig.openPGPKeyId.setConfigLong(keyId);
 
-                    listAdapter.notifyItemChanged(keyRow);
+                    listAdapter.notifyItemChanged(rows.indexOf(keyRow));
 
                     break;
                 }
@@ -680,19 +490,19 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
                 case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByUnread", R.string.SortByUnread), NekoConfig.sortByUnread, false);
+                    textCell.setTextAndCheck(LocaleController.getString("SortByUnread", R.string.SortByUnread), NekomuraConfig.sortByUnread.Bool(), false);
                     break;
                 }
                 case 1: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByUnmuted", R.string.SortByUnmuted), NekoConfig.sortByUnmuted, false);
+                    textCell.setTextAndCheck(LocaleController.getString("SortByUnmuted", R.string.SortByUnmuted), NekomuraConfig.sortByUnmuted.Bool(), false);
                     break;
                 }
                 case 2: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByUser", R.string.SortByUser), NekoConfig.sortByUser, false);
+                    textCell.setTextAndCheck(LocaleController.getString("SortByUser", R.string.SortByUser), NekomuraConfig.sortByUser.Bool(), false);
                     break;
                 }
                 case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByContacts", R.string.SortByContacts), NekoConfig.sortByContacts, false);
+                    textCell.setTextAndCheck(LocaleController.getString("SortByContacts", R.string.SortByContacts), NekomuraConfig.sortByContacts.Bool(), false);
                     break;
                 }
             }
@@ -703,30 +513,30 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 Integer tag = (Integer) view.getTag();
                 switch (tag) {
                     case 0: {
-                        NekoConfig.toggleSortByUnread();
+                        NekomuraConfig.sortByUnread.toggleConfigBool();
                         if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByUnread);
+                            ((TextCheckCell) view).setChecked(NekomuraConfig.sortByUnread.Bool());
                         }
                         break;
                     }
                     case 1: {
-                        NekoConfig.toggleSortByUnmuted();
+                        NekomuraConfig.sortByUnmuted.toggleConfigBool();
                         if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByUnmuted);
+                            ((TextCheckCell) view).setChecked(NekomuraConfig.sortByUnmuted.Bool());
                         }
                         break;
                     }
                     case 2: {
-                        NekoConfig.toggleSortByUser();
+                        NekomuraConfig.sortByUser.toggleConfigBool();
                         if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByUser);
+                            ((TextCheckCell) view).setChecked(NekomuraConfig.sortByUser.Bool());
                         }
                         break;
                     }
                     case 3: {
-                        NekoConfig.toggleSortByContacts();
+                        NekomuraConfig.sortByContacts.toggleConfigBool();
                         if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByContacts);
+                            ((TextCheckCell) view).setChecked(NekomuraConfig.sortByContacts.Bool());
                         }
                         break;
                     }
@@ -747,77 +557,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     }
 
     private void updateRows(boolean notify) {
-        rowCount = 0;
-
-        //drawerHeaderRow = rowCount++;
-        drawerRow = rowCount++;
-        avatarAsDrawerBackgroundRow = rowCount++;
-        if (NekoConfig.avatarAsDrawerBackground) {
-            avatarBackgroundBlurRow = rowCount++;
-            avatarBackgroundDarkenRow = rowCount++;
-        } else {
-            avatarBackgroundBlurRow = -1;
-            avatarBackgroundDarkenRow = -1;
-        }
-        hidePhoneRow = rowCount++;
-        drawer2Row = rowCount++;
-
-        connectionRow = rowCount++;
-        ipv6Row = rowCount++;
-        disableProxyWhenVpnEnabledRow = rowCount++;
-        useProxyItemRow = rowCount++;
-        hideProxyByDefaultRow = rowCount++;
-        useSystemDNSRow = rowCount++;
-        customDoHRow = rowCount++;
-        connection2Row = rowCount++;
-
-        transRow = rowCount++;
-        translationProviderRow = rowCount++;
-        translateToLangRow = rowCount++;
-        translateInputToLangRow = rowCount++;
-        googleCloudTranslateKeyRow = NekoConfig.translationProvider == 1 ? rowCount++ : -1;
-        trans2Row = rowCount++;
-
-        openKeyChainRow = rowCount++;
-        pgpAppRow = rowCount++;
-//        emailRow = rowCount++;
-        keyRow = rowCount++;
-        openKeyChain2Row = rowCount++;
-
-        dialogsRow = rowCount++;
-        sortMenuRow = rowCount++;
-        acceptSecretChatRow = rowCount++;
-        dialogs2Row = rowCount++;
-
-        appearanceRow = rowCount++;
-        typefaceRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? rowCount++ : -1;
-//        useDefaultThemeRow = rowCount++;
-        useSystemEmojiRow = !BuildConfig.FLAVOR.contains("No") ? rowCount++ : -1;
-        transparentStatusBarRow = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? rowCount++ : -1;
-        appBarShadowRow = rowCount++;
-        newYearRow = rowCount++;
-        actionBarDecorationRow = rowCount++;
-        tabletModeRow = rowCount++;
-        appearance2Row = rowCount++;
-
-        privacyRow = rowCount++;
-        disableSystemAccountRow = rowCount++;
-        privacy2Row = rowCount++;
-
-        generalRow = rowCount++;
-        disableUndoRow = rowCount++;
-        showIdAndDcRow = rowCount++;
-        inappCameraRow = rowCount++;
-        hideProxySponsorChannelRow = rowCount++;
-        askBeforeCallRow = rowCount++;
-        autoPauseVideoRow = rowCount++;
-        disableNumberRoundingRow = rowCount++;
-        openArchiveOnPullRow = rowCount++;
-        nameOrderRow = rowCount++;
-        usePersianCalendarRow = rowCount++;
-        displayPersianCalendarByLatinRow = rowCount++;
-        general2Row = rowCount++;
-
         if (notify && listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -864,6 +603,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         return themeDescriptions;
     }
 
+    //impl ListAdapter
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context mContext;
@@ -874,234 +614,103 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            return rowCount;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 1: {
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                }
-                case 2: {
-                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                    if (position == customDoHRow) {
-                        textCell.setTextAndValue(LocaleController.getString("customDoHRow", R.string.customDoH), NekoConfig.customDoH.isEmpty() ? "OFF" : NekoConfig.customDoH, true);
-                    } else if (position == nameOrderRow) {
-                        String value;
-                        switch (NekoConfig.nameOrder) {
-                            case 2:
-                                value = LocaleController.getString("LastFirst", R.string.LastFirst);
-                                break;
-                            case 1:
-                            default:
-                                value = LocaleController.getString("FirstLast", R.string.FirstLast);
-                                break;
-                        }
-                        textCell.setTextAndValue(LocaleController.getString("NameOrder", R.string.NameOrder), value, true);
-                    } else if (position == actionBarDecorationRow) {
-                        String value;
-                        switch (NekoConfig.actionBarDecoration) {
-                            case 1:
-                                value = LocaleController.getString("Snowflakes", R.string.Snowflakes);
-                                break;
-                            case 2:
-                                value = LocaleController.getString("Fireworks", R.string.Fireworks);
-                                break;
-                            case 0:
-                            default:
-                                value = LocaleController.getString("DependsOnDate", R.string.DependsOnDate);
-                        }
-                        textCell.setTextAndValue(LocaleController.getString("ActionBarDecoration", R.string.ActionBarDecoration), value, true);
-                    } else if (position == tabletModeRow) {
-                        String value;
-                        switch (NekoConfig.tabletMode) {
-                            case 0:
-                                value = LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault);
-                                break;
-                            case 1:
-                                value = LocaleController.getString("Enable", R.string.Enable);
-                                break;
-                            case 2:
-                            default:
-                                value = LocaleController.getString("Disable", R.string.Disable);
-                        }
-                        textCell.setTextAndValue(LocaleController.getString("TabletMode", R.string.TabletMode), value, false);
-                    } else if (position == sortMenuRow) {
-                        textCell.setText(LocaleController.getString("SortMenu", R.string.SortMenu), true);
-                    } else if (position == translateToLangRow) {
-                        textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
-                    } else if (position == translateInputToLangRow) {
-                        textCell.setTextAndValue(LocaleController.getString("TransInputToLang", R.string.TransInputToLang), NekoConfig.formatLang(NekoConfig.translateInputLang), true);
-                    } else if (position == translationProviderRow) {
-                        String value;
-                        switch (NekoConfig.translationProvider) {
-                            case 1:
-                                value = LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate);
-                                break;
-                            case 2:
-                                value = LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN);
-                                break;
-                            case 3:
-                                value = LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate);
-                                break;
-                            case 4:
-                                value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
-                                break;
-                            case 5:
-                                value = LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator);
-                                break;
-                            case 6:
-                                value = LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao);
-                                break;
-                            case 7:
-                                value = LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate);
-                                break;
-                            default:
-                                value = "Unknown";
-                        }
-                        textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
-                    } else if (position == pgpAppRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp), NekoConfig.getOpenPGPAppName(), true);
-                    } else if (position == keyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OpenPGPKey", R.string.OpenPGPKey), NekoConfig.openPGPKeyId + "", true);
-                    }
-                    break;
-                }
-                case 6: {
-                    TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
-                    if (position == googleCloudTranslateKeyRow) {
-                        textCell.setTextAndValue(LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey), StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey) ? NekoConfig.googleCloudTranslateKey : LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty), false);
-                    }
-                }
-                break;
-                case 3: {
-                    TextCheckCell textCell = (TextCheckCell) holder.itemView;
-                    textCell.setEnabled(true, null);
-                    if (position == ipv6Row) {
-                        textCell.setTextAndCheck(LocaleController.getString("IPv6", R.string.IPv6), NekoConfig.useIPv6, true);
-                    } else if (position == disableProxyWhenVpnEnabledRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableProxyWhenVpnEnabled", R.string.DisableProxyWhenVpnEnabled), NekoConfig.disableProxyWhenVpnEnabled, true);
-                    } else if (position == useProxyItemRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UseProxyItem", R.string.UseProxyItem), NekoConfig.useProxyItem, true);
-                    } else if (position == hideProxyByDefaultRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("HideProxyByDefault", R.string.HideProxyByDefault), NekoConfig.hideProxyByDefault, false);
-                    } else if (position == useSystemDNSRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("useSystemDNS", R.string.useSystemDNS), NekoConfig.useSystemDNS, true);
-                    } else if (position == hidePhoneRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("HidePhone", R.string.HidePhone), NekoConfig.hidePhone, false);
-                    } else if (position == disableUndoRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableUndo", R.string.DisableUndo), NekoConfig.disableUndo, true);
-                    } else if (position == useDefaultThemeRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UseDefaultTheme", R.string.UseDefaultTheme), NekoConfig.useDefaultTheme, true);
-                    } else if (position == inappCameraRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera), SharedConfig.inappCamera, true);
-                    } else if (position == transparentStatusBarRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), NekoConfig.transparentStatusBar, true);
-                    } else if (position == hideProxySponsorChannelRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("HideProxySponsorChannel", R.string.HideProxySponsorChannel), NekoConfig.hideProxySponsorChannel, true);
-                    } else if (position == useSystemEmojiRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), NekoConfig.useSystemEmoji, true);
-                    } else if (position == typefaceRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("TypefaceUseDefault", R.string.TypefaceUseDefault), NekoConfig.typeface == 1, true);
-                    } else if (position == newYearRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ChristmasHat", R.string.ChristmasHat), NekoConfig.newYear, true);
-                    } else if (position == openArchiveOnPullRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("OpenArchiveOnPull", R.string.OpenArchiveOnPull), NekoConfig.openArchiveOnPull, true);
-                    } else if (position == disableSystemAccountRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableSystemAccount", R.string.DisableSystemAccount), NekoConfig.disableSystemAccount, false);
-                    } else if (position == avatarAsDrawerBackgroundRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("AvatarAsBackground", R.string.AvatarAsBackground), NekoConfig.avatarAsDrawerBackground, true);
-                    } else if (position == showIdAndDcRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ShowIdAndDc", R.string.ShowIdAndDc), NekoConfig.showIdAndDc, true);
-                    } else if (position == askBeforeCallRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("AskBeforeCalling", R.string.AskBeforeCalling), NekoConfig.askBeforeCall, true);
-                    } else if (position == disableNumberRoundingRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("DisableNumberRounding", R.string.DisableNumberRounding), "4.8K -> 4777", NekoConfig.disableNumberRounding, true, true);
-                    } else if (position == appBarShadowRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisableAppBarShadow", R.string.DisableAppBarShadow), NekoConfig.disableAppBarShadow, true);
-                    } else if (position == usePersianCalendarRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("UsePersiancalendar", R.string.UsePersiancalendar), LocaleController.getString("UsePersiancalendarInfo", R.string.UsePersiancalendarInfo), LocaleController.usePersianCalendar, true, true);
-                    } else if (position == displayPersianCalendarByLatinRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DisplayPersianCalendarByLatin", R.string.DisplayPersianCalendarByLatin), NekoConfig.displayPersianCalendarByLatin, false);
-                    } else if (position == autoPauseVideoRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("AutoPauseVideo", R.string.AutoPauseVideo), LocaleController.getString("AutoPauseVideoAbout", R.string.AutoPauseVideoAbout), NekoConfig.autoPauseVideo, true, true);
-                    } else if (position == acceptSecretChatRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("AcceptSecretChat", R.string.AcceptSecretChat), NekoConfig.acceptSecretChat, false);
-                    } else if (position == avatarBackgroundBlurRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("BlurAvatarBackground", R.string.BlurAvatarBackground), NekoConfig.avatarBackgroundBlur, true);
-                    } else if (position == avatarBackgroundDarkenRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("DarkenAvatarBackground", R.string.DarkenAvatarBackground), NekoConfig.avatarBackgroundDarken, true);
-                    }
-                    break;
-                }
-                case 4: {
-                    HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    if (position == generalRow) {
-                        headerCell.setText(LocaleController.getString("General", R.string.General));
-                    } else if (position == connectionRow) {
-                        headerCell.setText(LocaleController.getString("Connection", R.string.Connection));
-                    } else if (position == appearanceRow) {
-                        headerCell.setText(LocaleController.getString("Appearance", R.string.Appearance));
-                    } else if (position == transRow) {
-                        headerCell.setText(LocaleController.getString("Translate", R.string.Translate));
-                    } else if (position == dialogsRow) {
-                        headerCell.setText(LocaleController.getString("DialogsSettings", R.string.DialogsSettings));
-                    } else if (position == privacyRow) {
-                        headerCell.setText(LocaleController.getString("PrivacyTitle", R.string.PrivacyTitle));
-                    } else if (position == openKeyChainRow) {
-                        headerCell.setText(LocaleController.getString("OpenKayChain", R.string.OpenKayChain));
-                    }
-                    break;
-                }
-                case 8: {
-                    DrawerProfilePreviewCell cell = (DrawerProfilePreviewCell) holder.itemView;
-                    cell.setUser(getUserConfig().getCurrentUser(), false);
-                    break;
-                }
-            }
+            return rows.size();
         }
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 6;
+            int position = holder.getAdapterPosition();
+            NekomuraTGCell a = rows.get(position);
+            if (a != null) {
+                return a.isEnabled();
+            }
+            return true;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            NekomuraTGCell a = rows.get(position);
+            if (a != null) {
+                return a.getType();
+            }
+            return Cells.ITEM_TYPE_TEXT_DETAIL;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            NekomuraTGCell a = rows.get(position);
+            if (a != null) {
+                if (a instanceof NekomuraTGCustom) {
+                    // Custom binds
+                    if (holder.itemView instanceof TextSettingsCell) {
+                        TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                        if (position == rows.indexOf(translationProviderRow)) {
+                            String value;
+                            switch (NekomuraConfig.translationProvider.Int()) {
+                                case 1:
+                                    value = LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate);
+                                    break;
+                                case 2:
+                                    value = LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN);
+                                    break;
+                                case 3:
+                                    value = LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate);
+                                    break;
+                                case 4:
+                                    value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
+                                    break;
+                                case 5:
+                                    value = LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator);
+                                    break;
+                                case 6:
+                                    value = LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao);
+                                    break;
+                                case 7:
+                                    value = LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate);
+                                    break;
+                                default:
+                                    value = "Unknown";
+                            }
+                            textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
+                        } else if (position == rows.indexOf(pgpAppRow)) {
+                            textCell.setTextAndValue(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp), NekoConfig.getOpenPGPAppName(), true);
+                        }
+                    }
+                } else {
+                    // Default binds
+                    a.onBindViewHolder(holder);
+                }
+            }
         }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
-                case 1:
+                case Cells.ITEM_TYPE_DIVIDER:
                     view = new ShadowSectionCell(mContext);
                     break;
-                case 2:
+                case Cells.ITEM_TYPE_TEXT_SETTINGS_CELL:
                     view = new TextSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 3:
+                case Cells.ITEM_TYPE_TEXT_CHECK:
                     view = new TextCheckCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 4:
+                case Cells.ITEM_TYPE_HEADER:
                     view = new HeaderCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 5:
-                    view = new NotificationsCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 6:
+                case Cells.ITEM_TYPE_TEXT_DETAIL:
                     view = new TextDetailSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 7:
+                case Cells.ITEM_TYPE_TEXT:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    // view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                case 8:
+                case 999:
                     view = profilePreviewCell = new DrawerProfilePreviewCell(mContext);
                     view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
@@ -1110,25 +719,45 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
+    }
 
-        @Override
-        public int getItemViewType(int position) {
-            if (position == connection2Row || position == dialogs2Row || position == trans2Row || position == privacy2Row ||
-                    position == general2Row || position == appearance2Row || position == openKeyChain2Row || position == drawer2Row) {
-                return 1;
-            } else if (position == nameOrderRow || position == sortMenuRow || position == translateToLangRow || position == translateInputToLangRow ||
-                    position == translationProviderRow || position == actionBarDecorationRow ||
-                    position == pgpAppRow || position == keyRow || position == tabletModeRow || position == customDoHRow) {
-                return 2;
-            } else if (position == connectionRow || position == transRow || position == dialogsRow ||
-                    position == privacyRow || position == generalRow || position == appearanceRow || position == openKeyChainRow) {
-                return 4;
-            } else if (position == googleCloudTranslateKeyRow) {
-                return 6;
-            } else if (position == drawerRow) {
-                return 8;
-            }
-            return 3;
+    //Custom dialogs
+
+    private void customDialog_googleCloudTranslateKey(int position) {
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+        builder.addTitle(
+                LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey),
+                LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice)
+        );
+
+        EditText keyField = builder.addEditText("Key");
+
+        if (StrUtil.isNotBlank(NekomuraConfig.googleCloudTranslateKey.String())) {
+
+            keyField.setText(NekomuraConfig.googleCloudTranslateKey.String());
+
         }
+
+        builder.addCancelButton();
+
+        builder.addOkButton((it) -> {
+
+            String key = keyField.getText().toString();
+
+            if (StrUtil.isBlank(key)) key = null;
+
+            NekomuraConfig.googleCloudTranslateKey.setConfigString(key);
+
+            listAdapter.notifyItemChanged(position);
+
+            return Unit.INSTANCE;
+
+        });
+
+        builder.show();
+
+        keyField.requestFocus();
+        AndroidUtilities.showKeyboard(keyField);
     }
 }

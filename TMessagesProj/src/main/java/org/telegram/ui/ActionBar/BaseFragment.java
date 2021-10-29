@@ -62,7 +62,7 @@ public abstract class BaseFragment {
     protected int currentAccount = UserConfig.selectedAccount;
 
     protected View fragmentView;
-    protected ActionBarLayout parentLayout;
+    public ActionBarLayout parentLayout;
     protected ActionBar actionBar;
     protected boolean inPreviewMode;
     protected boolean inBubbleMode;
