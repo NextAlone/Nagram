@@ -22,6 +22,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import cn.hutool.core.util.StrUtil;
+
 public class Cells {
     public static final int ITEM_TYPE_DIVIDER = 1;
     public static final int ITEM_TYPE_TEXT_SETTINGS_CELL = 2;
@@ -136,11 +138,13 @@ public class Cells {
     public class NekomuraTGTextDetail implements NekomuraTGCell {
         private final NekomuraConfig.ConfigItem bindConfig;
         private final String title;
+        private final String hint;
         public final RecyclerListView.OnItemClickListener onItemClickListener;
 
-        public NekomuraTGTextDetail(NekomuraConfig.ConfigItem bind, RecyclerListView.OnItemClickListener onItemClickListener) {
+        public NekomuraTGTextDetail(NekomuraConfig.ConfigItem bind, RecyclerListView.OnItemClickListener onItemClickListener, String hint) {
             this.bindConfig = bind;
             this.title = LocaleController.getString(bindConfig.getKey());
+            this.hint = hint == null ? "" : hint;
             this.onItemClickListener = onItemClickListener;
         }
 
@@ -154,7 +158,7 @@ public class Cells {
 
         public void onBindViewHolder(RecyclerView.ViewHolder holder) {
             TextDetailSettingsCell cell = (TextDetailSettingsCell) holder.itemView;
-            cell.setTextAndValue(title, bindConfig.String(), !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
+            cell.setTextAndValue(title, StrUtil.isNotBlank(bindConfig.String()) ? bindConfig.String() : hint , !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
         }
     }
     public class NekomuraTGTextCheck implements NekomuraTGCell {

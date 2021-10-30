@@ -100,18 +100,18 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell translateInputToLangRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell googleCloudTranslateKeyRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextDetail(NekomuraConfig.googleCloudTranslateKey, (view, position) -> {
         customDialog_googleCloudTranslateKey(position);
-    }));
+    }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
     private final NekomuraTGCell divider2 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header3 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("OpenKayChain")));
     private final NekomuraTGCell pgpAppRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell keyRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextDetail(NekomuraConfig.openPGPKeyId, (view, position) -> {
         requestKey(new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID));
-    }));
+    }, "0"));
     private final NekomuraTGCell divider3 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header4 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("DialogsSettings")));
-    private final NekomuraTGCell sortMenuRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.openPGPApp, null, () -> {
+    private final NekomuraTGCell sortMenuRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(LocaleController.getString("SortMenu"), null, null, () -> {
         showSortMenuAlert();
     }));
     private final NekomuraTGCell acceptSecretChatRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.acceptSecretChat));
@@ -128,7 +128,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             LocaleController.getString("Snowflakes", R.string.Snowflakes),
             LocaleController.getString("Fireworks", R.string.Fireworks)
     }, null));
-    private final NekomuraTGCell tabletModeRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.forceTablet, new String[]{
+    private final NekomuraTGCell tabletModeRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.tabletMode, new String[]{
             LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
             LocaleController.getString("Enable", R.string.Enable),
             LocaleController.getString("Disable", R.string.Disable)
@@ -335,7 +335,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }
             } else if (key.equals(NekomuraConfig.actionBarDecoration.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-            } else if (key.equals(NekomuraConfig.forceTablet.getKey())) {
+            } else if (key.equals(NekomuraConfig.tabletMode.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekomuraConfig.newYear.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
@@ -677,6 +677,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
                         } else if (position == rows.indexOf(pgpAppRow)) {
                             textCell.setTextAndValue(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp), NekoConfig.getOpenPGPAppName(), true);
+                        } else if (position == rows.indexOf(translateToLangRow)) {
+                            textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
+                        } else if (position == rows.indexOf(translateInputToLangRow)) {
+                            textCell.setTextAndValue(LocaleController.getString("TransInputToLang", R.string.TransInputToLang), NekoConfig.formatLang(NekoConfig.translateInputLang), true);
                         }
                     }
                 } else {

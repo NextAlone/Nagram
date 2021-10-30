@@ -40,7 +40,6 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import kotlin.Unit;
 
-import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.Cells;
@@ -69,7 +68,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final NekomuraTGCell unlimitedFavedStickersRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
     private final NekomuraTGCell unlimitedPinnedDialogsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
     private final NekomuraTGCell enableStickerPinRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
-    private final NekomuraTGCell useMediaStreamInVoipRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
+    private final NekomuraTGCell useMediaStreamInVoipRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useMediaStreamInVoip));
     private final NekomuraTGCell customAudioBitrateRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
@@ -200,12 +199,12 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
             } else if (key.equals(NekomuraConfig.mediaPreview.getKey())) {
-                if (NekoConfig.mediaPreview) {
+                if (NekomuraConfig.mediaPreview.Bool()) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
             } else if (key.equals(NekomuraConfig.enableStickerPin.getKey())) {
-                if (NekoConfig.mediaPreview) {
+                if (NekomuraConfig.mediaPreview.Bool()) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
@@ -378,8 +377,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                         if (position == rows.indexOf(customAudioBitrateRow)) {
-                            String value = String.valueOf(NekoConfig.customAudioBitrate) + "kbps";
-                            if (NekoConfig.customAudioBitrate == 32)
+                            String value = String.valueOf(NekomuraConfig.customAudioBitrate.Int()) + "kbps";
+                            if (NekomuraConfig.customAudioBitrate.Int() == 32)
                                 value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
                             textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, false);
                         }

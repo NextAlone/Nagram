@@ -61,7 +61,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
     private Cells nkmrCells = new Cells(this, rows);
 
-    private final NekomuraTGCell stickerSizeHeaderRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(998, true));
+    private final NekomuraTGCell header0 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("StickerSize")));
+    private final NekomuraTGCell stickerSizeRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(998, true));
     private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Chat")));
