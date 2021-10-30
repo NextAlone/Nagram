@@ -59,7 +59,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private StickerSizeCell stickerSizeCell;
 
     private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
-    private Cells nkmrCells = new Cells(this, listView, listAdapter, rows);
+    private Cells nkmrCells = new Cells(this, rows);
 
     private final NekomuraTGCell stickerSizeHeaderRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(998, true));
     private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
@@ -212,6 +212,9 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 MediaController.getInstance().recreateProximityWakeLock();
             }
         };
+
+        //Cells: Set ListAdapter
+        nkmrCells.setListAdapter(listView, listAdapter);
 
         return fragmentView;
     }

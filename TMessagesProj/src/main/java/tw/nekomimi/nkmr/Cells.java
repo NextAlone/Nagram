@@ -38,11 +38,14 @@ public class Cells {
 
     public CallBackSettingsChanged callBackSettingsChanged;
 
-    public Cells(BaseFragment thisFragment, RecyclerListView listView, RecyclerListView.SelectionAdapter listAdapter, ArrayList<NekomuraTGCell> rows) {
+    public Cells(BaseFragment thisFragment, ArrayList<NekomuraTGCell> rows) {
         this.thisFragment = thisFragment;
-        this.listView = listView;
-        this.listAdapter = listAdapter;
         this.rows = rows;
+    }
+
+    public void setListAdapter(RecyclerListView lv, RecyclerListView.SelectionAdapter la) {
+        this.listView = lv;
+        this.listAdapter = la;
     }
 
     public interface CallBackSettingsChanged {

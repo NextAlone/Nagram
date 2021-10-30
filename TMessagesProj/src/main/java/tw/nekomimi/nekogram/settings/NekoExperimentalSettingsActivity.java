@@ -57,7 +57,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private boolean sensitiveEnabled = false;
 
     private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
-    private Cells nkmrCells = new Cells(this, listView, listAdapter, rows);
+    private Cells nkmrCells = new Cells(this, rows);
 
     private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Experiment")));
     private final NekomuraTGCell smoothKeyboardRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
@@ -212,6 +212,9 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             }
 
         };
+
+        //Cells: Set ListAdapter
+        nkmrCells.setListAdapter(listView, listAdapter);
 
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));

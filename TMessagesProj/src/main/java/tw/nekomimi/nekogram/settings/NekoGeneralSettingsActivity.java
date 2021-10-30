@@ -77,7 +77,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private DrawerProfilePreviewCell profilePreviewCell;
 
     private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
-    private Cells nkmrCells = new Cells(this, listView, listAdapter, rows);
+    private Cells nkmrCells = new Cells(this, rows);
 
     private final NekomuraTGCell profilePreviewRow = addNekomuraTGCell(new NkmrDrawerProfilePreviewCell());
     private final NekomuraTGCell largeAvatarInDrawerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.largeAvatarInDrawer, LocaleController.getString("valuesLargeAvatarInDrawer"), null));
@@ -369,6 +369,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 parentLayout.rebuildAllFragmentViews(true, true);
             }
         };
+
+        //Cells: Set ListAdapter
+        nkmrCells.setListAdapter(listView, listAdapter);
 
         restartTooltip = new UndoView(context);
         frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
