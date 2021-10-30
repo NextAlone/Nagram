@@ -24,6 +24,7 @@ public class NekoXConfig {
     public static long[] developers = {
             896711046, // nekohasekai
             380570774, // Haruhi
+            601890953, // Nekomura Aoi
     };
 
     public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
