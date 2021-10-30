@@ -267,6 +267,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
@@ -276,6 +277,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nkmr.NekomuraUtil;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -20341,10 +20343,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
                                     options.add(11);
                                     icons.add(R.drawable.deproko_baseline_gif_24);
-                                } else if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
-                                    items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
-                                    options.add(91);
-                                    icons.add(R.drawable.baseline_delete_sweep_24);
                                 }
                                 items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                                 options.add(6);
@@ -20363,11 +20361,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
-                                items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
-                                options.add(91);
-                                icons.add(R.drawable.baseline_delete_sweep_24);
-                            }
                             items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                             options.add(6);
                             icons.add(R.drawable.baseline_share_24);
@@ -20378,11 +20371,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
-                                items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
-                                options.add(91);
-                                icons.add(R.drawable.baseline_delete_sweep_24);
-                            }
                             items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                             options.add(6);
                             icons.add(R.drawable.baseline_share_24);
@@ -20401,11 +20389,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
-                                items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
-                                options.add(91);
-                                icons.add(R.drawable.baseline_delete_sweep_24);
-                            }
                             items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                             options.add(6);
                             icons.add(R.drawable.baseline_share_24);
@@ -20416,11 +20399,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
-                                items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
-                                options.add(91);
-                                icons.add(R.drawable.baseline_delete_sweep_24);
-                            }
                             items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                             options.add(6);
                             icons.add(R.drawable.baseline_share_24);
@@ -20512,6 +20490,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (chatMode != MODE_SCHEDULED) {
                             boolean allowViewHistory = currentUser == null
                                     && (currentChat != null && !currentChat.broadcast && message.isFromUser());
+
+                            if (NekomuraConfig.showDeleteDownloadedFile.Bool() && NekomuraUtil.messageObjectIsFile(type, selectedObject)) {
+                                items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
+                                options.add(91); //TODO nkbtn here
+                                icons.add(R.drawable.menu_clearcache);
+                            }
 
                             if (allowViewHistory && NekomuraConfig.showViewHistory.Bool()) {
                                 items.add(LocaleController.getString("ViewUserHistory", R.string.ViewHistory));
@@ -22123,46 +22107,82 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case 91: {
-                if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    getParentActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
-                    selectedObject = null;
-                    selectedObjectGroup = null;
-                    selectedObjectToEditCaption = null;
-                    return;
-                }
-                ChatMessageCell messageCell = null;
-                int count = chatListView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = chatListView.getChildAt(a);
-                    if (child instanceof ChatMessageCell) {
-                        ChatMessageCell cell = (ChatMessageCell) child;
-                        if (cell.getMessageObject() == selectedObject) {
-                            messageCell = cell;
-                            break;
+                final MessageObject so = selectedObject;
+                final boolean isDownloading = NekomuraUtil.messageObjectIsDownloading(getMessageType(so));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("DeleteDownloadedFile"));
+                builder.setMessage(LocaleController.getString("DeleteDownloadedFileConfirm"));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                    if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        getParentActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
+                        return;
+                    }
+                    ChatMessageCell messageCell = null;
+                    int count = chatListView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = chatListView.getChildAt(a);
+                        if (child instanceof ChatMessageCell) {
+                            ChatMessageCell cell = (ChatMessageCell) child;
+                            if (cell.getMessageObject() == so) {
+                                messageCell = cell;
+                                break;
+                            }
                         }
                     }
-                }
-                String path = selectedObject.messageOwner.attachPath;
-                if (path != null && path.length() > 0) {
-                    File temp = new File(path);
-                    if (!temp.exists()) {
-                        path = null;
+                    String path = so.messageOwner.attachPath;
+                    if (path != null && path.length() > 0) {
+                        File temp = new File(path);
+                        if (!temp.exists()) {
+                            path = null;
+                        }
                     }
-                }
-                if (path == null || path.length() == 0) {
-                    path = FileLoader.getPathToMessage(selectedObject.messageOwner).toString();
-                }
-                File temp = new File(path);
-                try {
-                    temp.delete();
-                    selectedObject.mediaExists = false;
-                } catch (Exception ignore) {
-                    temp.deleteOnExit();
-                }
-                if (messageCell != null) {
-                    checkAutoDownloadMessage(selectedObject);
-                    messageCell.updateButtonState(false, true, false);
-                }
+                    if (path == null || path.length() == 0) {
+                        path = FileLoader.getPathToMessage(so.messageOwner).toString();
+                    }
+
+                    File file = new File(path);
+                    FileLoader.getInstance(currentAccount).cancelLoadFile(so.getDocument());
+                    so.loadedFileSize = 0;
+
+                    if (isDownloading) {
+                        // Download unfinished catalog is not the same
+                        String cacheFilePath = AndroidUtilities.getCacheDir().getAbsolutePath();
+                        cacheFilePath += "/" + NekomuraUtil.getFileNameNoEx(file.getName());
+                        List<String> suffix = Arrays.asList(".pt", ".temp");
+                        for (int ii = 0; ii < suffix.size(); ii++) {
+                            file = new File(cacheFilePath + suffix.get(ii));
+                            try {
+                                file.delete();
+                                so.mediaExists = false;
+                            } catch (Exception ignore) {
+                                file.deleteOnExit();
+                            }
+                        }
+                    } else {
+                        if (path.startsWith(EnvUtil.getTelegramPath().getAbsolutePath())) {
+                            try {
+                                file.delete();
+                                so.mediaExists = false;
+                            } catch (Exception ignore) {
+                                file.deleteOnExit();
+                            }
+                        } else {
+                            Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileExternal"), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                    if (messageCell != null) {
+                        checkAutoDownloadMessage(so);
+                        messageCell.updateButtonState(false, true, false);
+                    }
+
+                    Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileSuccessed"), Toast.LENGTH_LONG).show();
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel"), (dialog, which) -> {
+                });
+                builder.show();
                 break;
             }
             case 93: {
