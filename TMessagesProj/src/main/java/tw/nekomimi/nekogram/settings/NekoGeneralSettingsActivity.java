@@ -93,6 +93,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell hideProxyByDefaultRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
     private final NekomuraTGCell useSystemDNSRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useSystemDNS));
     private final NekomuraTGCell customDoHRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextInput(null, NekomuraConfig.customDoH, "https://1.0.0.1/dns-query", null));
+    private final NekomuraTGCell customPublicProxyIPRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextInput(null, NekomuraConfig.customPublicProxyIP, "", null));
     private final NekomuraTGCell divider1 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header2 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Translate")));

@@ -166,6 +166,7 @@ public class NekomuraConfig {
     public static ConfigItem migrate = addConfig("NekoConfigMigrate", configTypeBool, false);
     public static ConfigItem largeAvatarInDrawer = addConfig("AvatarAsBackground", configTypeInt, 0); // 0:TG Default 1:NekoX Default 2:Large Avatar
     public static ConfigItem unreadBadgeOnBackButton = addConfig("unreadBadgeOnBackButton", configTypeBool, false);
+    public static ConfigItem customPublicProxyIP = addConfig("customPublicProxyIP", configTypeString, "");
 
     // From NekoConfig
     // TODO sort

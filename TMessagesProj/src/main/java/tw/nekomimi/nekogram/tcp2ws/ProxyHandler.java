@@ -145,7 +145,7 @@ public class ProxyHandler implements Runnable {
         }
 
         if (okhttpClient == null) {
-            okhttpClient = new OkHttpClient();
+            okhttpClient = new OkHttpClient.Builder().dns(new WsLoader.CustomDns()).build();
         }
 
         ((OkHttpClient) okhttpClient)
