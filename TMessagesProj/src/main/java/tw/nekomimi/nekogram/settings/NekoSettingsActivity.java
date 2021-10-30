@@ -199,7 +199,6 @@ public class NekoSettingsActivity extends BaseFragment {
 
     }
 
-    //TODO save NekomuraConfig
     private String backupSettingsJson() throws JSONException {
 
         JSONObject configJson = new JSONObject();
@@ -274,7 +273,7 @@ public class NekoSettingsActivity extends BaseFragment {
         spToJSON("mainconfig", configJson, mainconfig::contains);
         spToJSON("themeconfig", configJson, null);
 
-        spToJSON("nekoconfig", configJson, null);
+        spToJSON("nkmrcfg", configJson, null);
 
         return configJson.toString(4);
     }

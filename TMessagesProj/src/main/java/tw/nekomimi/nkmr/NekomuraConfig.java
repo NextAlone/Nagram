@@ -133,7 +133,11 @@ public class NekomuraConfig {
         }
 
         public void setConfigString(String v) {
-            value = v;
+            if (v == null) {
+                value = "";
+            } else {
+                value = v;
+            }
             if (forceDefault) {
                 value = defaultValue;
             }
@@ -292,6 +296,132 @@ public class NekomuraConfig {
 
     static {
         loadConfig(false);
+
+        // TODO remove this after some versions.
+        if (!migrate.Bool()) {
+            migrate.setConfigBool(true);
+
+            // NekoConfig.java read & migrate
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+
+            typeface.setConfigBool(preferences.getInt("typeface", 0) != 0);
+            nameOrder.setConfigInt(preferences.getInt("nameOrder", 1));
+            mapPreviewProvider.setConfigInt(preferences.getInt("mapPreviewProvider", 0));
+            transparentStatusBar.setConfigBool(preferences.getBoolean("transparentStatusBar", false));
+            residentNotification.setConfigBool(preferences.getBoolean("residentNotification", false));
+            hideProxySponsorChannel.setConfigBool(preferences.getBoolean("hideProxySponsorChannel", false));
+            showAddToSavedMessages.setConfigBool(preferences.getBoolean("showAddToSavedMessages", true));
+            showReport.setConfigBool(preferences.getBoolean("showReport", true));
+            showViewHistory.setConfigBool(preferences.getBoolean("showViewHistory", true));
+            showAdminActions.setConfigBool(preferences.getBoolean("showAdminActions", true));
+            showChangePermissions.setConfigBool(preferences.getBoolean("showChangePermissions", true));
+            showDeleteDownloadedFile.setConfigBool(preferences.getBoolean("showDeleteDownloadedFile", true));
+            showMessageDetails.setConfigBool(preferences.getBoolean("showMessageDetails", false));
+            showTranslate.setConfigBool(preferences.getBoolean("showTranslate", true));
+            showRepeat.setConfigBool(preferences.getBoolean("showRepeat", false));
+            showMessageHide.setConfigBool(preferences.getBoolean("showMessageHide", false));
+
+            eventType.setConfigInt(preferences.getInt("eventType", 0));
+            actionBarDecoration.setConfigInt(preferences.getInt("actionBarDecoration", 0));
+            newYear.setConfigBool(preferences.getBoolean("newYear", false));
+            stickerSize.setConfigFloat(preferences.getFloat("stickerSize", 14.0f));
+            unlimitedFavedStickers.setConfigBool(preferences.getBoolean("unlimitedFavedStickers", false));
+            unlimitedPinnedDialogs.setConfigBool(preferences.getBoolean("unlimitedPinnedDialogs", false));
+            translationProvider.setConfigInt(preferences.getInt("translationProvider", 1));
+            disablePhotoSideAction.setConfigBool(preferences.getBoolean("disablePhotoSideAction", true));
+            openArchiveOnPull.setConfigBool(preferences.getBoolean("openArchiveOnPull", false));
+            //showHiddenFeature.setConfigBool(preferences.getBoolean("showHiddenFeature", false));
+            hideKeyboardOnChatScroll.setConfigBool(preferences.getBoolean("hideKeyboardOnChatScroll", false));
+            avatarBackgroundBlur.setConfigBool(preferences.getBoolean("avatarBackgroundBlur", false));
+            avatarBackgroundDarken.setConfigBool(preferences.getBoolean("avatarBackgroundDarken", false));
+            useSystemEmoji.setConfigBool(preferences.getBoolean("useSystemEmoji", false));
+            showTabsOnForward.setConfigBool(preferences.getBoolean("showTabsOnForward", false));
+            rearVideoMessages.setConfigBool(preferences.getBoolean("rearVideoMessages", false));
+            hideAllTab.setConfigBool(preferences.getBoolean("hideAllTab", false));
+            pressTitleToOpenAllChats.setConfigBool(preferences.getBoolean("pressTitleToOpenAllChats", false));
+
+            disableChatAction.setConfigBool(preferences.getBoolean("disable_chat_action", false));
+            sortByUnread.setConfigBool(preferences.getBoolean("sort_by_unread", false));
+            sortByUnmuted.setConfigBool(preferences.getBoolean("sort_by_unmuted", true));
+            sortByUser.setConfigBool(preferences.getBoolean("sort_by_user", true));
+            sortByContacts.setConfigBool(preferences.getBoolean("sort_by_contacts", true));
+
+            disableUndo.setConfigBool(preferences.getBoolean("disable_undo", false));
+
+            filterUsers.setConfigBool(preferences.getBoolean("filter_users", true));
+            filterContacts.setConfigBool(preferences.getBoolean("filter_contacts", true));
+            filterGroups.setConfigBool(preferences.getBoolean("filter_groups", true));
+            filterChannels.setConfigBool(preferences.getBoolean("filter_channels", true));
+            filterBots.setConfigBool(preferences.getBoolean("filter_bots", true));
+            filterAdmins.setConfigBool(preferences.getBoolean("filter_admins", true));
+            filterUnmuted.setConfigBool(preferences.getBoolean("filter_unmuted", true));
+            filterUnread.setConfigBool(preferences.getBoolean("filter_unread", true));
+            filterUnmutedAndUnread.setConfigBool(preferences.getBoolean("filter_unmuted_and_unread", true));
+
+            disableSystemAccount.setConfigBool(preferences.getBoolean("disable_system_account", false));
+            disableProxyWhenVpnEnabled.setConfigBool(preferences.getBoolean("disable_proxy_when_vpn_enabled", false));
+            skipOpenLinkConfirm.setConfigBool(preferences.getBoolean("skip_open_link_confirm", false));
+
+            ignoreMutedCount.setConfigBool(preferences.getBoolean("ignore_muted_count", true));
+            useDefaultTheme.setConfigBool(preferences.getBoolean("use_default_theme", false));
+            showIdAndDc.setConfigBool(preferences.getBoolean("show_id_and_dc", false));
+
+            googleCloudTranslateKey.setConfigString(preferences.getString("google_cloud_translate_key", null));
+            cachePath.setConfigString(preferences.getString("cache_path", null));
+
+            translateToLang.setConfigString(preferences.getString("trans_to_lang", null));
+            translateInputLang.setConfigString(preferences.getString("trans_input_to_lang", "en"));
+
+            ccToLang.setConfigString(preferences.getString("opencc_to_lang", null));
+            ccInputLang.setConfigString(preferences.getString("opencc_input_to_lang", null));
+
+            tabsTitleType.setConfigInt(preferences.getInt("tabsTitleType", TITLE_TYPE_TEXT));
+            confirmAVMessage.setConfigBool(preferences.getBoolean("confirmAVMessage", false));
+            askBeforeCall.setConfigBool(preferences.getBoolean("askBeforeCall", false));
+            disableNumberRounding.setConfigBool(preferences.getBoolean("disableNumberRounding", false));
+
+            useSystemDNS.setConfigBool(preferences.getBoolean("useSystemDNS", false));
+            customDoH.setConfigString(preferences.getString("customDoH", ""));
+            hideProxyByDefault.setConfigBool(preferences.getBoolean("hide_proxy_by_default", false));
+            useProxyItem.setConfigBool(preferences.getBoolean("use_proxy_item", true));
+
+            disableAppBarShadow.setConfigBool(preferences.getBoolean("disableAppBarShadow", false));
+            mediaPreview.setConfigBool(preferences.getBoolean("mediaPreview", true));
+
+            proxyAutoSwitch.setConfigBool(preferences.getBoolean("proxy_auto_switch", false));
+
+            usePersianCalendar.setConfigBool(preferences.getInt("persian_calendar", 0) != 0);
+            displayPersianCalendarByLatin.setConfigBool(preferences.getBoolean("displayPersianCalendarByLatin", false));
+            openPGPApp.setConfigString(preferences.getString("openPGPApp", ""));
+            openPGPKeyId.setConfigLong(preferences.getLong("openPGPKeyId", 0L));
+
+            disableVibration.setConfigBool(preferences.getBoolean("disableVibration", false));
+            autoPauseVideo.setConfigBool(preferences.getBoolean("autoPauseVideo", false));
+            disableProximityEvents.setConfigBool(preferences.getBoolean("disableProximityEvents", false));
+
+            ignoreContentRestrictions.setConfigBool(preferences.getBoolean("ignoreContentRestrictions", !BuildVars.isPlay));
+            useChatAttachMediaMenu.setConfigBool(preferences.getBoolean("useChatAttachMediaMenu", true));
+            disableLinkPreviewByDefault.setConfigBool(preferences.getBoolean("disableLinkPreviewByDefault", false));
+            sendCommentAfterForward.setConfigBool(preferences.getBoolean("sendCommentAfterForward", true));
+            increaseVoiceMessageQuality.setConfigBool(preferences.getBoolean("increaseVoiceMessageQuality", true));
+            acceptSecretChat.setConfigBool(preferences.getBoolean("acceptSecretChat", true));
+            disableTrending.setConfigBool(preferences.getBoolean("disableTrending", true));
+            dontSendGreetingSticker.setConfigBool(preferences.getBoolean("dontSendGreetingSticker", false));
+            hideTimeForSticker.setConfigBool(preferences.getBoolean("hideTimeForSticker", false));
+            takeGIFasVideo.setConfigBool(preferences.getBoolean("takeGIFasVideo", false));
+            maxRecentStickerCount.setConfigInt(preferences.getInt("maxRecentStickerCount", 20));
+            disableSwipeToNext.setConfigBool(preferences.getBoolean("disableSwipeToNext", true));
+            disableRemoteEmojiInteractions.setConfigBool(preferences.getBoolean("disableRemoteEmojiInteractions", true));
+            disableChoosingSticker.setConfigBool(preferences.getBoolean("disableChoosingSticker", false));
+
+            disableAutoDownloadingWin32Executable.setConfigBool(preferences.getBoolean("disableAutoDownloadingWin32Executable", true));
+            disableAutoDownloadingArchive.setConfigBool(preferences.getBoolean("disableAutoDownloadingArchive", true));
+
+            enableStickerPin.setConfigBool(preferences.getBoolean("enableStickerPin", false));
+            useMediaStreamInVoip.setConfigBool(preferences.getBoolean("useMediaStreamInVoip", false));
+            customAudioBitrate.setConfigInt(preferences.getInt("customAudioBitrate", 32));
+            disableGroupVoipAudioProcessing.setConfigBool(preferences.getBoolean("disableGroupVoipAudioProcessing", false));
+        }
     }
 
     public static ConfigItem addConfig(String k, int t, Object d) {
