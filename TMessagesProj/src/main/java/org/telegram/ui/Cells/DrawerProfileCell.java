@@ -59,7 +59,7 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class DrawerProfileCell extends FrameLayout {
@@ -96,7 +96,7 @@ public class DrawerProfileCell extends FrameLayout {
         imageReceiver.setCrossfadeWithOldImage(true);
         imageReceiver.setForceCrossfade(true);
         imageReceiver.setDelegate((imageReceiver, set, thumb, memCache) -> {
-            if (NekoConfig.avatarBackgroundDarken || NekoConfig.avatarBackgroundBlur) {
+            if (NekomuraConfig.avatarBackgroundDarken.Bool() || NekomuraConfig.avatarBackgroundBlur.Bool()) {
                 if (thumb || allowInvalidate) {
                     return;
                 }
@@ -107,19 +107,19 @@ public class DrawerProfileCell extends FrameLayout {
                             imageReceiver.setCrossfadeWithOldImage(false);
                             imageReceiver.setImageBitmap(new BitmapDrawable(null, lastBitmap), false);
                         }
-                        int width = NekoConfig.avatarBackgroundBlur ? 150 : bmp.bitmap.getWidth();
-                        int height = NekoConfig.avatarBackgroundBlur ? 150 : bmp.bitmap.getHeight();
+                        int width = NekomuraConfig.avatarBackgroundBlur.Bool() ? 150 : bmp.bitmap.getWidth();
+                        int height = NekomuraConfig.avatarBackgroundBlur.Bool() ? 150 : bmp.bitmap.getHeight();
                         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         Canvas canvas = new Canvas(bitmap);
                         canvas.drawBitmap(bmp.bitmap, null, new Rect(0, 0, width, height), new Paint(Paint.FILTER_BITMAP_FLAG));
-                        if (NekoConfig.avatarBackgroundBlur) {
+                        if (NekomuraConfig.avatarBackgroundBlur.Bool()) {
                             try {
                                 Utilities.stackBlurBitmap(bitmap, 3);
                             } catch (Exception e) {
                                 FileLog.e(e);
                             }
                         }
-                        if (NekoConfig.avatarBackgroundDarken) {
+                        if (NekomuraConfig.avatarBackgroundDarken.Bool()) {
                             final Palette palette = Palette.from(bmp.bitmap).generate();
                             Paint paint = new Paint();
                             paint.setColor((palette.getDarkMutedColor(0xFF547499) & 0x00FFFFFF) | 0x44000000);
@@ -260,10 +260,10 @@ public class DrawerProfileCell extends FrameLayout {
             phoneTextView.getTextView().setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
         }
 
-        if (Theme.getEventType() == 0 || NekoConfig.actionBarDecoration == 1) {
+        if (Theme.getEventType() == 0 || NekomuraConfig.actionBarDecoration.Int() == 1) {
             snowflakesEffect = new SnowflakesEffect();
             snowflakesEffect.setColorKey(Theme.key_chats_menuName);
-        } else if (NekoConfig.actionBarDecoration == 2) {
+        } else if (NekomuraConfig.actionBarDecoration.Int() == 2) {
             fireworksEffect = new FireworksEffect();
         }
     }
@@ -315,7 +315,7 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     private boolean useAdb() {
-        return NekoConfig.avatarAsDrawerBackground && ImageLocation.isUserHasPhoto(user);
+        return NekomuraConfig.largeAvatarInDrawer.Int() > 0 && ImageLocation.isUserHasPhoto(user);
     }
 
     @Override
@@ -421,7 +421,7 @@ public class DrawerProfileCell extends FrameLayout {
         accountsShown = accounts;
         setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
-        if (!NekoConfig.hidePhone) {
+        if (!NekomuraConfig.hidePhone.Bool()) {
             phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
         } else if (!TextUtils.isEmpty(user.username)) {
             phoneTextView.setText("@" + user.username);
@@ -431,9 +431,9 @@ public class DrawerProfileCell extends FrameLayout {
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setForUserOrChat(user, avatarDrawable);
-        if (NekoConfig.avatarAsDrawerBackground) {
+        if (NekomuraConfig.largeAvatarInDrawer.Int() > 0) {
             ImageLocation imageLocation = ImageLocation.getForUser(user, ImageLocation.TYPE_BIG);
-            allowInvalidate = !useAdb() || !(NekoConfig.avatarBackgroundDarken || NekoConfig.avatarBackgroundBlur);
+            allowInvalidate = !useAdb() || !(NekomuraConfig.avatarBackgroundDarken.Bool() || NekomuraConfig.avatarBackgroundBlur.Bool());
             imageReceiver.setImage(imageLocation, "512_512", null, null, new ColorDrawable(0x00000000), 0, null, user, 1);
             avatarImageView.setVisibility(INVISIBLE);
         } else {

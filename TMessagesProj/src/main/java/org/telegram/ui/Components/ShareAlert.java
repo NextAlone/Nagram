@@ -100,7 +100,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ShareAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1281,13 +1281,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             if (sendingMessageObjects != null) {
                 for (int a = 0; a < selectedDialogs.size(); a++) {
                     long key = selectedDialogs.keyAt(a);
-                    if (NekoConfig.sendCommentAfterForward) {
+                    if (NekomuraConfig.sendCommentAfterForward.Bool()) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, false, false, true, 0);
                     }
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0, null);
                     }
-                    if (!NekoConfig.sendCommentAfterForward) {
+                    if (!NekomuraConfig.sendCommentAfterForward.Bool()) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, false, false, true, 0);
                     }
                 }
@@ -1302,13 +1302,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 if (sendingText[num] != null) {
                     for (int a = 0; a < selectedDialogs.size(); a++) {
                         long key = selectedDialogs.keyAt(a);
-                    if (NekoConfig.sendCommentAfterForward) {
+                    if (NekomuraConfig.sendCommentAfterForward.Bool()) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null);
                     }
                         if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                             SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0, null);
                         }
-                        if (!NekoConfig.sendCommentAfterForward) {
+                        if (!NekomuraConfig.sendCommentAfterForward.Bool()) {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null);
                     }
                 }

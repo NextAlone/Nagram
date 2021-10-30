@@ -26,7 +26,7 @@ import java.util.HashMap;
 import androidx.collection.LongSparseArray;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -579,9 +579,9 @@ public class DownloadController extends BaseController implements NotificationCe
         if (messageObject.getDocument() != null) {
             String documentName = messageObject.getDocument().file_name;
             if (StrUtil.isNotBlank(documentName)) {
-                if ((NekoConfig.disableAutoDownloadingWin32Executable &&
+                if ((NekomuraConfig.disableAutoDownloadingWin32Executable.Bool() &&
                         documentName.toLowerCase().matches(".*\\.(cmd|bat|com|exe|lnk|msi|ps1|reg|vb|vbe|vbs|vbscript)")
-                ) || (NekoConfig.disableAutoDownloadingArchive &&
+                ) || (NekomuraConfig.disableAutoDownloadingArchive.Bool() &&
                         documentName.toLowerCase().matches(".*\\.(apk|zip|7z|tar|gz|zst|iso|xz|lha|lzh)")
                 )
                 ) return false;

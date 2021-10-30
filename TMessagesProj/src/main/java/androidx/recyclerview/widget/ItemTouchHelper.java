@@ -44,7 +44,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 /**
  * This is a utility class to add swipe to dismiss and drag & drop support to RecyclerView.
@@ -681,7 +681,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
             mSelected = selected;
 
             if (actionState == ACTION_STATE_DRAG) {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     mSelected.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
             }

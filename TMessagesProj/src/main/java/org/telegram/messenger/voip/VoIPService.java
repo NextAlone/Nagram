@@ -133,7 +133,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 @SuppressLint("NewApi")
 public class VoIPService extends Service implements SensorEventListener, AudioManager.OnAudioFocusChangeListener, VoIPController.ConnectionStateListener, NotificationCenter.NotificationCenterDelegate {
@@ -3435,7 +3435,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 	}
 
 	private void loadResources() {
-		if (NekoConfig.useMediaStreamInVoip) {
+		if (NekomuraConfig.useMediaStreamInVoip.Bool()) {
 			currentStreamType = AudioManager.STREAM_MUSIC;
 			if (Build.VERSION.SDK_INT >= 21)
 				WebRtcAudioTrack.setAudioTrackUsageAttribute(AudioAttributes.USAGE_MEDIA);

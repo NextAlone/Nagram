@@ -45,7 +45,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -352,7 +352,6 @@ public class ApplicationLoader extends Application {
 
         // Since static init is thread-safe, no lock is needed there.
         Utilities.stageQueue.postRunnable(() -> {
-            NekoConfig.preferences.contains("qwq");
             NekoXConfig.preferences.contains("qwq");
 
             SignturesKt.checkMT(this);

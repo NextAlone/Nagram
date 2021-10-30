@@ -7,7 +7,6 @@ import android.os.storage.StorageManager
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
-import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nkmr.NekomuraConfig
 import java.io.File
 import java.util.*
@@ -48,7 +47,7 @@ object EnvUtil {
     @JvmStatic
     fun getTelegramPath(): File {
 
-        if (NekoConfig.cachePath == null) {
+        if (NekomuraConfig.cachePath.String() == null) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 // https://github.com/NekoX-Dev/NekoX/issues/284
@@ -59,7 +58,7 @@ object EnvUtil {
 
         }
 
-        var telegramPath = File(NekoConfig.cachePath)
+        var telegramPath = File(NekomuraConfig.cachePath.String())
 
         if (telegramPath.isDirectory || telegramPath.mkdirs()) {
 

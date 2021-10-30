@@ -79,6 +79,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class NotificationsController extends BaseController {
 
@@ -783,7 +784,7 @@ public class NotificationsController extends BaseController {
                         messageObject.messageOwner.silent && (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined))) {
                     continue;
                 }
-                if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
 
@@ -4211,7 +4212,7 @@ public class NotificationsController extends BaseController {
             int rowsMid = 0;
             for (int a = messageObjects.size() - 1; a >= 0; a--) {
                 MessageObject messageObject = messageObjects.get(a);
-                if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
                 String message = getShortStringForMessage(messageObject, senderName, preview);

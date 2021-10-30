@@ -120,7 +120,7 @@ import java.util.HashMap;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
@@ -1961,7 +1961,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public void showOpenUrlAlert(final String url, boolean ask) {
-        if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm) {
+        if (Browser.isInternalUrl(url, null) || !ask || NekomuraConfig.skipOpenLinkConfirm.Bool()) {
             Browser.openUrl(getParentActivity(), url, true);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());

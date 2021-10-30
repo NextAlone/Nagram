@@ -267,7 +267,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.MessageDetailsActivity;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
 import tw.nekomimi.nekogram.parts.PollTransUpdatesKt;
@@ -2147,7 +2147,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     Integer end = ids.get(ids.size() - 1);
                     for (int i = 0; i < messages.size(); i++) {
                         int msgId = messages.get(i).getId();
-                        if (NekoConfig.ignoreBlocked && getMessagesController().blockePeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
+                        if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
                             continue;
                         if (msgId > begin && msgId < end && selectedMessagesIds[0].indexOfKey(msgId) < 0) {
                             MessageObject message = messages.get(i);
@@ -2853,7 +2853,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeOtherItem.addSubItem(unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
         actionModeOtherItem.addSubItem(save, R.drawable.baseline_bookmark_24, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
 
-        if (NekoConfig.showMessageHide) {
+        if (NekomuraConfig.showMessageHide.Bool()) {
             actionModeOtherItem.addSubItem(hide, R.drawable.baseline_remove_circle_24, LocaleController.getString("Hide", R.string.Hide));
         }
 
@@ -4169,7 +4169,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else if (startedTrackingSlidingView) {
                         if (Math.abs(dx) >= AndroidUtilities.dp(50)) {
                             if (!wasTrackingVibrate) {
-                                if (!NekoConfig.disableVibration) {
+                                if (!NekomuraConfig.disableVibration.Bool()) {
                                     try {
                                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     } catch (Exception ignore) {
@@ -4211,7 +4211,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (e.getAction() == MotionEvent.ACTION_DOWN) {
                     scrollByTouch = true;
                 }
-                if (!NekoConfig.disableSwipeToNext && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
+                if (!NekomuraConfig.disableSwipeToNext.Bool() && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
                     float progress = Math.min(1f, pullingDownOffset / AndroidUtilities.dp(110));
                     if (e.getAction() == MotionEvent.ACTION_UP && progress == 1 && pullingDownDrawable != null && !pullingDownDrawable.emptyStub) {
                         if (pullingDownDrawable.animationIsRunning()) {
@@ -4346,7 +4346,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     drawReplyButton(c);
                 }
 
-                if (!NekoConfig.disableSwipeToNext && pullingDownOffset != 0) {
+                if (!NekomuraConfig.disableSwipeToNext.Bool() && pullingDownOffset != 0) {
                     c.save();
                     float transitionOffset = 0;
                     if (pullingDownAnimateProgress != 0) {
@@ -4381,7 +4381,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 drawLaterRoundProgressCell = null;
 
                 canvas.save();
-                if (!NekoConfig.disableSwipeToNext && fromPullingDownTransition && !toPullingDownTransition) {
+                if (!NekomuraConfig.disableSwipeToNext.Bool() && fromPullingDownTransition && !toPullingDownTransition) {
                     canvas.clipRect(0, chatListViewPaddingTop - chatListViewPaddingVisibleOffset - AndroidUtilities.dp(4), getMeasuredWidth(), getMeasuredHeight());
                 }
 
@@ -5308,7 +5308,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             @Override
             public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-                if (!NekoConfig.disableSwipeToNext && dy < 0 && pullingDownOffset != 0) {
+                if (!NekomuraConfig.disableSwipeToNext.Bool() && dy < 0 && pullingDownOffset != 0) {
                     pullingDownOffset += dy;
                     if (pullingDownOffset < 0) {
                         dy = (int) pullingDownOffset;
@@ -5341,7 +5341,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!foundTopView) {
                     scrolled = super.scrollVerticallyBy(dy, recycler, state);
                 }
-                if (!NekoConfig.disableSwipeToNext && dy > 0 && scrolled == 0 && ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect()) {
+                if (!NekomuraConfig.disableSwipeToNext.Bool() && dy > 0 && scrolled == 0 && ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect()) {
                     if (pullingDownOffset == 0 && pullingDownDrawable != null) {
                         pullingDownDrawable.updateDialog();
                     }
@@ -5458,7 +5458,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         wasManualScroll = true;
                         scrollingChatListView = true;
                     } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        if (NekoConfig.hideKeyboardOnChatScroll) {
+                        if (NekomuraConfig.hideKeyboardOnChatScroll.Bool()) {
                             AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
                         }
                         pollHintCell = null;
@@ -9851,7 +9851,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (getParentActivity() == null || fragmentView == null || hide && voiceHintTextView == null || chatMode != 0 || chatActivityEnterView == null || chatActivityEnterView.getAudioVideoButtonContainer() == null || chatActivityEnterView.getAudioVideoButtonContainer().getVisibility() != View.VISIBLE) {
             return;
         }
-        if (NekoConfig.useChatAttachMediaMenu) return;
+        if (NekomuraConfig.useChatAttachMediaMenu.Bool()) return;
         if (voiceHintTextView == null) {
             SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
             int index = frameLayout.indexOfChild(chatActivityEnterView);
@@ -10736,7 +10736,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return dialog != chatAttachAlert && super.dismissDialogOnPause(dialog);
     }
 
-    private boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault;
+    private boolean disableLinkPreview = NekomuraConfig.disableLinkPreviewByDefault.Bool();
 
     private void searchLinks(final CharSequence charSequence, final boolean force) {
         if (currentEncryptedChat != null && getMessagesController().secretWebpagePreview == 0 || editingMessageObject != null && !editingMessageObject.isWebpage()) {
@@ -10967,7 +10967,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     public void beforeMessageSend(boolean notify, int scheduleDate, boolean beforeSend) {
-        if (beforeSend != NekoConfig.sendCommentAfterForward) return;
+        if (beforeSend != NekomuraConfig.sendCommentAfterForward.Bool()) return;
         if (forwardingMessages != null) {
             ArrayList<MessageObject> messagesToForward = new ArrayList<>();
             forwardingMessages.getSelectedMessages(messagesToForward);
@@ -15603,12 +15603,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (voters.chosen) {
                                 if (voters.correct) {
                                     fireworksOverlay.start();
-                                    if (!NekoConfig.disableVibration) {
+                                    if (!NekomuraConfig.disableVibration.Bool()) {
                                         pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     }
                                 } else {
                                     ((ChatMessageCell) pollView).shakeView();
-                                    if (!NekoConfig.disableVibration) {
+                                    if (!NekomuraConfig.disableVibration.Bool()) {
                                         pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     }
                                     showPollSolution(cell.getMessageObject(), results);
@@ -19184,7 +19184,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (shareKeyItem != null) {
-            if (currentChat != null && ChatObject.canSendMessages(currentChat) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+            if (currentChat != null && ChatObject.canSendMessages(currentChat) && StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
                 shareKeyItem.setVisibility(View.VISIBLE);
             } else {
                 shareKeyItem.setVisibility(View.GONE);
@@ -20208,7 +20208,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(12);
                             icons.add(R.drawable.baseline_edit_24);
                         }
-                        if (NekoConfig.showReport && selectedObject.contentType == 0 && !selectedObject.isMediaEmptyWebpage() && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
+                        if (NekomuraConfig.showReport.Bool() && selectedObject.contentType == 0 && !selectedObject.isMediaEmptyWebpage() && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
                             items.add(LocaleController.getString("ReportChat", R.string.ReportChat));
                             options.add(23);
                             icons.add(R.drawable.baseline_report_24);
@@ -20341,7 +20341,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
                                     options.add(11);
                                     icons.add(R.drawable.deproko_baseline_gif_24);
-                                } else if (NekoConfig.showDeleteDownloadedFile) {
+                                } else if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
                                     items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
                                     options.add(91);
                                     icons.add(R.drawable.baseline_delete_sweep_24);
@@ -20363,7 +20363,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekoConfig.showDeleteDownloadedFile) {
+                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
                                 options.add(91);
                                 icons.add(R.drawable.baseline_delete_sweep_24);
@@ -20378,7 +20378,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekoConfig.showDeleteDownloadedFile) {
+                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
                                 options.add(91);
                                 icons.add(R.drawable.baseline_delete_sweep_24);
@@ -20401,7 +20401,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekoConfig.showDeleteDownloadedFile) {
+                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
                                 options.add(91);
                                 icons.add(R.drawable.baseline_delete_sweep_24);
@@ -20416,7 +20416,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(10);
                             icons.add(R.drawable.baseline_file_download_24);
-                            if (NekoConfig.showDeleteDownloadedFile) {
+                            if (NekomuraConfig.showDeleteDownloadedFile.Bool()) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
                                 options.add(91);
                                 icons.add(R.drawable.baseline_delete_sweep_24);
@@ -20496,14 +20496,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.baseline_fast_forward_24);
                         }
                         if (chatMode != MODE_SCHEDULED) {
-                            if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages) {
+                            if (!UserObject.isUserSelf(currentUser) && NekomuraConfig.showAddToSavedMessages.Bool()) {
                                 items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
                                 options.add(93);
                                 icons.add(R.drawable.baseline_bookmark_24);
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                            if (allowRepeat && NekoConfig.showRepeat) {
+                            if (allowRepeat && NekomuraConfig.showRepeat.Bool()) {
                                 items.add(LocaleController.getString("Repeat", R.string.Repeat));
                                 options.add(94);
                                 icons.add(R.drawable.msg_repeat);
@@ -20513,7 +20513,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             boolean allowViewHistory = currentUser == null
                                     && (currentChat != null && !currentChat.broadcast && message.isFromUser());
 
-                            if (allowViewHistory && NekoConfig.showViewHistory) {
+                            if (allowViewHistory && NekomuraConfig.showViewHistory.Bool()) {
                                 items.add(LocaleController.getString("ViewUserHistory", R.string.ViewHistory));
                                 options.add(90);
                                 icons.add(R.drawable.baseline_schedule_24);
@@ -20527,7 +20527,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     }
                                 }
                             }
-                            if (NekoConfig.showTranslate) {
+                            if (NekomuraConfig.showTranslate.Bool()) {
                                 if (messageObject != null || docsWithMessages) {
                                     boolean td;
                                     if (messageObject != null) {
@@ -20540,7 +20540,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     icons.add(R.drawable.ic_translate);
                                 }
                             }
-                            if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+                            if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
                                 if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                                     items.add(LocaleController.getString("PGPVerify", R.string.PGPVerify));
                                     options.add(200);
@@ -20560,12 +20560,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                             }
                         }
-                        if (NekoConfig.showMessageDetails) {
+                        if (NekomuraConfig.showMessageDetails.Bool()) {
                             items.add(LocaleController.getString("MessageDetails", R.string.MessageDetails));
                             options.add(89);
                             icons.add(R.drawable.menu_info);
                         }
-                        if (NekoConfig.showMessageHide) {
+                        if (NekomuraConfig.showMessageHide.Bool()) {
                             items.add(LocaleController.getString("Hide", R.string.Hide));
                             options.add(204);
                             icons.add(R.drawable.baseline_remove_circle_24);
@@ -20609,7 +20609,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                                 options.add(23);
                                 icons.add(R.drawable.baseline_report_24);
-                            } else if (NekoConfig.showReport) {
+                            } else if (NekomuraConfig.showReport.Bool()) {
                                 items.add(LocaleController.getString("ReportChat", R.string.ReportChat));
 
                                 options.add(23);
@@ -20713,7 +20713,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                             }
                         }
-                        if (NekoConfig.showTranslate) {
+                        if (NekomuraConfig.showTranslate.Bool()) {
                             if (messageObject != null || docsWithMessages) {
                                 boolean td;
                                 if (messageObject != null) {
@@ -20726,7 +20726,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.ic_translate);
                             }
                         }
-                        if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp)) {
+                        if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
                             if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                                 items.add(LocaleController.getString("PGPVerify", R.string.PGPVerify));
                                 options.add(200);
@@ -20745,7 +20745,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.baseline_vpn_key_24);
                             }
                         }
-                        if (NekoConfig.showMessageHide) {
+                        if (NekomuraConfig.showMessageHide.Bool()) {
                             items.add(LocaleController.getString("Hide", R.string.Hide));
                             options.add(204);
                             icons.add(R.drawable.baseline_remove_circle_24);
@@ -20782,13 +20782,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 editingAdmin = participant instanceof TLRPC.TL_chatParticipantAdmin;
                             }
 
-                            if (canEditAdmin && NekoConfig.showAdminActions) {
+                            if (canEditAdmin && NekomuraConfig.showAdminActions.Bool()) {
                                 items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
                                 icons.add(R.drawable.baseline_stars_24);
                                 options.add(97);
                                 selectedParticipant = participant;
                             }
-                            if (canRestrict && NekoConfig.showChangePermissions) {
+                            if (canRestrict && NekomuraConfig.showChangePermissions.Bool()) {
                                 items.add(LocaleController.getString("ChangePermissions", R.string.ChangePermissions));
                                 icons.add(R.drawable.baseline_block_24);
                                 options.add(98);
@@ -22287,7 +22287,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 Intent open = new Intent(Intent.ACTION_SEND);
                 open.setType("application/pgp-message");
                 open.putExtra(Intent.EXTRA_TEXT, messageObject.messageOwner.message);
-                open.setClassName(NekoConfig.openPGPApp, NekoConfig.openPGPApp + ".ui.DecryptActivity");
+                open.setClassName(NekomuraConfig.openPGPApp.String(), NekomuraConfig.openPGPApp.String() + ".ui.DecryptActivity");
 
                 try {
 
@@ -22317,8 +22317,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case 202:
             case 203: {
 
-                Intent open = new Intent(NekoConfig.openPGPApp + ".action.IMPORT_KEY");
-                open.putExtra(NekoConfig.openPGPApp + ".EXTRA_KEY_BYTES", StrUtil.utf8Bytes(selectedObject.messageOwner.message));
+                Intent open = new Intent(NekomuraConfig.openPGPApp.String() + ".action.IMPORT_KEY");
+                open.putExtra(NekomuraConfig.openPGPApp.String() + ".EXTRA_KEY_BYTES", StrUtil.utf8Bytes(selectedObject.messageOwner.message));
 
                 try {
 
@@ -22477,11 +22477,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             hideFieldPanel(false);
             for (int a = 0; a < dids.size(); a++) {
                 long did = dids.get(a);
-                if (message != null && !NekoConfig.sendCommentAfterForward) {
+                if (message != null && !NekomuraConfig.sendCommentAfterForward.Bool()) {
                     getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
                 }
                 forwardMessages(fmessages, noForwardQuote, true, 0, did);
-                if (message != null && NekoConfig.sendCommentAfterForward) {
+                if (message != null && NekomuraConfig.sendCommentAfterForward.Bool()) {
                     getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
                 }
             }
@@ -23391,7 +23391,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 Browser.openUrl(getParentActivity(), url, inlineReturn == 0, false);
             } else if (type == 2) {
                 // NekoX: Fix skipOpenLinkConfirm broken in 7.6.0, since processExternalUrl is imported in 7.6.0
-                if (NekoConfig.skipOpenLinkConfirm)
+                if (NekomuraConfig.skipOpenLinkConfirm.Bool())
                     Browser.openUrl(getParentActivity(), url, inlineReturn == 0);
                 else
                     AlertsCreator.showOpenUrlAlert(ChatActivity.this, url, true, true, true);
@@ -24559,7 +24559,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             return;
                         }
                         fireworksOverlay.start();
-                        if (!NekoConfig.disableVibration) {
+                        if (!NekomuraConfig.disableVibration.Bool()) {
                             fireworksOverlay.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
                     }
@@ -24690,7 +24690,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (position >= messagesStartRow && position < messagesEndRow) {
                 MessageObject message = messages.get(position - messagesStartRow);
                 View view = holder.itemView;
-                boolean fromUserBlocked = getMessagesController().blockePeers.indexOfKey(message.getFromChatId()) >= 0 && NekoConfig.ignoreBlocked;
+                boolean fromUserBlocked = getMessagesController().blockePeers.indexOfKey(message.getFromChatId()) >= 0 && NekomuraConfig.ignoreBlocked.Bool();
 
                 if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;

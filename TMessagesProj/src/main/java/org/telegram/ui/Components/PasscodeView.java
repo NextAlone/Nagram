@@ -73,7 +73,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class PasscodeView extends FrameLayout {
@@ -130,7 +130,7 @@ public class PasscodeView extends FrameLayout {
                 return;
             }
             try {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
             } catch (Exception e) {
@@ -253,7 +253,7 @@ public class PasscodeView extends FrameLayout {
                 return false;
             }
             try {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
             } catch (Exception e) {

@@ -181,7 +181,7 @@ import kotlin.Unit;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.InternalUpdater;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoXSettingActivity;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
@@ -1965,7 +1965,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 avatarContainer2.setPivotX(avatarContainer2.getMeasuredWidth() / 2f);
                 AndroidUtilities.updateViewVisibilityAnimated(avatarContainer2, !expanded, 0.95f, true);
 
-                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc)
+                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekomuraConfig.showIdAndDc.Bool())
                     idTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
 
                 callItem.setVisibility(expanded || !callItemVisible ? GONE : INVISIBLE);
@@ -2893,7 +2893,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == phoneRow) {
                     final TLRPC.User user = getMessagesController().getUser(userId);
                     if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null
-                            || (NekoConfig.hidePhone && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
+                            || (NekomuraConfig.hidePhone.Bool() && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
                         return;
                     }
 
@@ -4718,7 +4718,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setScaleY(nameScale);
                 }
 
-                if (diff > 0.85 && !searchMode && NekoConfig.showIdAndDc) {
+                if (diff > 0.85 && !searchMode && NekomuraConfig.showIdAndDc.Bool()) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {
                     idTextView.setVisibility(View.GONE);
@@ -6636,7 +6636,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setVisibility(View.VISIBLE);
         nameTextView[1].setVisibility(View.VISIBLE);
         onlineTextView[1].setVisibility(View.VISIBLE);
-        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc)
+        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekomuraConfig.showIdAndDc.Bool())
             idTextView.setVisibility(View.VISIBLE);
 
         actionBar.onSearchFieldVisibilityChanged(searchTransitionProgress > 0.5f);
@@ -7156,7 +7156,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         String text;
                         final TLRPC.User user = getMessagesController().getUser(userId);
                         if (!TextUtils.isEmpty(user.phone)
-                                && !(NekoConfig.hidePhone && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
+                                && !(NekomuraConfig.hidePhone.Bool() && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
                             text = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
                             text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);

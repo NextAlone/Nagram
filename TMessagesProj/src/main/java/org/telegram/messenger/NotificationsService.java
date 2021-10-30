@@ -23,6 +23,7 @@ import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class NotificationsService extends Service {
 

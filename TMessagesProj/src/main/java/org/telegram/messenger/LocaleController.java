@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.parts.LocFiltersKt;
 import tw.nekomimi.nekogram.shamsicalendar.PersianCalendar;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -1019,7 +1019,7 @@ public class LocaleController {
     }
 
     public static void reloadPersianCalendarConfig() {
-        usePersianCalendar = NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(getInstance().currentLocaleInfo.pluralLangCode);
+        usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool() && "fa".equals(getInstance().currentLocaleInfo.pluralLangCode);
     }
 
     public LocaleInfo getCurrentLocaleInfo() {
@@ -1937,7 +1937,7 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
-        if (NekoConfig.disableNumberRounding) {
+        if (NekomuraConfig.disableNumberRounding.Bool()) {
             if (rounded != null) {
                 rounded[0] = number;
             }

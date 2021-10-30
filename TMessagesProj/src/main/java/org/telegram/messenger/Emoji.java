@@ -38,6 +38,7 @@ import java.util.Locale;
 
 import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class Emoji {
 
@@ -278,7 +279,7 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (!NekoConfig.useSystemEmoji && EmojiProvider.containsEmoji) {
+            if (!NekomuraConfig.useSystemEmoji.Bool() && EmojiProvider.containsEmoji) {
                 if (!isLoaded()) {
                     loadEmoji(info.page, info.page2);
                     canvas.drawRect(getBounds(), placeholderPaint);
@@ -290,12 +291,12 @@ public class Emoji {
 
             String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
 
-            if (!NekoConfig.useSystemEmoji && EmojiProvider.isFont) {
+            if (!NekomuraConfig.useSystemEmoji.Bool() && EmojiProvider.isFont) {
                 try {
                     textPaint.setTypeface(EmojiProvider.getFont());
                 } catch (RuntimeException ignored) {
                 }
-            } else if (NekoConfig.useSystemEmoji) {
+            } else if (NekomuraConfig.useSystemEmoji.Bool()) {
                 try {
                     textPaint.setTypeface(NekoConfig.getSystemEmojiTypeface());
                 } catch (RuntimeException ignored) {
@@ -322,7 +323,7 @@ public class Emoji {
         }
 
         public boolean isLoaded() {
-            if (!EmojiProvider.containsEmoji || NekoConfig.useSystemEmoji) {
+            if (!EmojiProvider.containsEmoji || NekomuraConfig.useSystemEmoji.Bool()) {
                 return true;
             }
             return emojiBmp[info.page][info.page2] != null;

@@ -114,7 +114,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
@@ -987,7 +987,7 @@ public class AlertsCreator {
             return;
         }
         long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
-        if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm) {
+        if (Browser.isInternalUrl(url, null) || !ask || NekomuraConfig.skipOpenLinkConfirm.Bool()) {
             Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph);
         } else {
             String urlFinal;
@@ -2302,7 +2302,7 @@ public class AlertsCreator {
         });
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
             try {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
             } catch (Exception ignore) {
@@ -2490,7 +2490,7 @@ public class AlertsCreator {
         });
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
             try {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
             } catch (Exception ignore) {
@@ -2694,7 +2694,7 @@ public class AlertsCreator {
         dayPicker.setFormatter(value -> "" + value);
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
             try {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
             } catch (Exception ignore) {

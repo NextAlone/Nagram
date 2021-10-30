@@ -43,7 +43,7 @@ import org.telegram.ui.FilteredSearchView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class SharedLinkCell extends FrameLayout {
 
@@ -74,7 +74,7 @@ public class SharedLinkCell extends FrameLayout {
         public void run() {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
                 if (pressedLink >= 0) {

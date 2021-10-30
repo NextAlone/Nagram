@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 
@@ -880,7 +880,7 @@ public class ConnectionsManager extends BaseController {
                 if (!hasIpv4) {
                     ipStrategy = USE_IPV6_ONLY;
                 }
-                if (NekoConfig.useIPv6) {
+                if (NekomuraConfig.useIPv6.Bool()) {
                     ipStrategy = USE_IPV4_IPV6_RANDOM;
                 }
                 return ipStrategy;

@@ -158,7 +158,7 @@ import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.ExternalGcm;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.sub.SubInfo;
@@ -4259,7 +4259,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
-        if (NekoConfig.disableProxyWhenVpnEnabled) {
+        if (NekomuraConfig.disableProxyWhenVpnEnabled.Bool()) {
             if (SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
                 SharedConfig.setProxyEnable(false);
             } else if (!ProxyUtil.isVPNEnabled()) {

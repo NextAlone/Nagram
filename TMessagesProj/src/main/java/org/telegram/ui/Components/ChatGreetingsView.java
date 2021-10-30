@@ -22,7 +22,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ChatGreetingsView extends LinearLayout {
 
@@ -87,7 +87,7 @@ public class ChatGreetingsView extends LinearLayout {
             stickerToSendView.setImage(ImageLocation.getForDocument(sticker), createFilter(sticker), ImageLocation.getForDocument(thumb, sticker), null, 0, sticker);
         }
         stickerToSendView.setOnClickListener(v -> {
-            if (NekoConfig.dontSendGreetingSticker)
+            if (NekomuraConfig.dontSendGreetingSticker.Bool())
                 return;
             if (listener != null) {
                 listener.onGreetings(sticker);

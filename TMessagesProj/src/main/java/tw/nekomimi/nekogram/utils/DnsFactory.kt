@@ -5,7 +5,7 @@ import cn.hutool.http.HttpUtil
 import org.telegram.messenger.FileLog
 import org.telegram.tgnet.ConnectionsManager
 import org.xbill.DNS.*
-import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nkmr.NekomuraConfig
 import java.net.InetAddress
 import java.util.*
 import kotlin.collections.ArrayList
@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 
 object DnsFactory {
 
-    fun providers() = if (NekoConfig.customDoH.isNotBlank()) arrayOf(NekoConfig.customDoH)
+    fun providers() = if (NekomuraConfig.customDoH.String().isNotBlank()) arrayOf(NekomuraConfig.customDoH.String())
     else if (Locale.getDefault().country == "CN") arrayOf(
             // 1.1.1.1 / 8.8.8.8 seems blocked
             "https://101.101.101.101/dns-query", //Taiwan
@@ -30,7 +30,7 @@ object DnsFactory {
     @JvmOverloads
     fun lookup(domain: String, fallback: Boolean = false): List<InetAddress> {
 
-        if (!NekoConfig.useSystemDNS) {
+        if (!NekomuraConfig.useSystemDNS.Bool()) {
 
             FileLog.d("Lookup $domain")
 
@@ -40,7 +40,7 @@ object DnsFactory {
 
             val type = if (noFallback) {
                 if (ConnectionsManager.hasIpv4) Type.A else Type.AAAA
-            } else if (NekoConfig.useIPv6 xor !fallback) Type.A else Type.AAAA
+            } else if (NekomuraConfig.useIPv6.Bool() xor !fallback) Type.A else Type.AAAA
 
             val dc = DClass.IN
             val name = Name.fromConstantString("$domain.")

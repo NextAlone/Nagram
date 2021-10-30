@@ -63,7 +63,7 @@ import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ThemesHorizontalListCell extends RecyclerListView implements NotificationCenter.NotificationCenterDelegate {
 
@@ -197,7 +197,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     if (action == MotionEvent.ACTION_DOWN) {
                         pressed = true;
                     } else {
-                        if (!NekoConfig.disableVibration) {
+                        if (!NekomuraConfig.disableVibration.Bool()) {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                         }
                         showOptionsForTheme(themeInfo);

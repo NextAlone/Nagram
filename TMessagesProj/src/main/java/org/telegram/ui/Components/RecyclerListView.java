@@ -53,7 +53,7 @@ import java.util.HashSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class RecyclerListView extends RecyclerView {
 
@@ -608,14 +608,14 @@ public class RecyclerListView extends RecyclerView {
                     View child = currentChildView;
                     if (onItemLongClickListener != null) {
                         if (onItemLongClickListener.onItemClick(currentChildView, currentChildPosition)) {
-                            if (!NekoConfig.disableVibration) {
+                            if (!NekomuraConfig.disableVibration.Bool()) {
                                 child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                             }
                             child.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                         }
                     } else {
                         if (onItemLongClickListenerExtended.onItemClick(currentChildView, currentChildPosition, event.getX() - currentChildView.getX(), event.getY() - currentChildView.getY())) {
-                            if (!NekoConfig.disableVibration) {
+                            if (!NekomuraConfig.disableVibration.Bool()) {
                                 child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                             }
                             child.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);

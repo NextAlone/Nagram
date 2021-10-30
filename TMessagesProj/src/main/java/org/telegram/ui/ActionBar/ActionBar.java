@@ -55,7 +55,7 @@ import org.telegram.ui.Components.SnowflakesEffect;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ActionBar extends FrameLayout {
@@ -264,11 +264,11 @@ public class ActionBar extends FrameLayout {
                     }
                 }
             }
-            if (NekoConfig.actionBarDecoration == 2) {
+            if (NekomuraConfig.actionBarDecoration.Int() == 2) {
                 if (fireworksEffect == null) {
                     fireworksEffect = new FireworksEffect();
                 }
-            } else if (NekoConfig.actionBarDecoration == 1 || Theme.canStartHolidayAnimation()) {
+            } else if (NekomuraConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
                 if (snowflakesEffect == null) {
                     snowflakesEffect = new SnowflakesEffect();
                 }

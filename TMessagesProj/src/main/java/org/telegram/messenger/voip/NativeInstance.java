@@ -11,7 +11,7 @@ import org.webrtc.VideoSink;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class NativeInstance {
 
@@ -74,7 +74,7 @@ public class NativeInstance {
         instance.requestBroadcastPartCallback = requestBroadcastPartCallback;
         instance.cancelRequestBroadcastPartCallback = cancelRequestBroadcastPartCallback;
         instance.isGroup = true;
-        instance.nativePtr = makeGroupNativeInstance(instance, logPath, SharedConfig.disableVoiceAudioEffects, videoCapturer, screencast, noiseSupression, NekoConfig.customAudioBitrate);
+        instance.nativePtr = makeGroupNativeInstance(instance, logPath, SharedConfig.disableVoiceAudioEffects, videoCapturer, screencast, noiseSupression, (short) NekomuraConfig.customAudioBitrate.Int());
         return instance;
     }
 

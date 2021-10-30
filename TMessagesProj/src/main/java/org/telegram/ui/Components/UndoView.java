@@ -57,7 +57,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 import java.util.ArrayList;
 
@@ -448,7 +448,7 @@ public class UndoView extends FrameLayout {
         timeLeft = 5000;
         currentInfoObject = infoObject;
 
-        if (NekoConfig.disableUndo && !isTooltipAction()) {
+        if (NekomuraConfig.disableUndo.Bool() && !isTooltipAction()) {
             if (actionRunnable != null) actionRunnable.run();
             return;
         }

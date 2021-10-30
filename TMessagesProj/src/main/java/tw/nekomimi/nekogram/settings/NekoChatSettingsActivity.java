@@ -66,6 +66,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Chat")));
+    private final NekomuraTGCell unreadBadgeOnBackButton = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unreadBadgeOnBackButton));
     private final NekomuraTGCell ignoreBlockedRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreBlocked, LocaleController.getString("IgnoreBlockedAbout")));
     private final NekomuraTGCell ignoreMutedCountRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreMutedCount));
     private final NekomuraTGCell disableChatActionRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableChatAction));
@@ -103,7 +104,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final NekomuraTGCell archiveRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableAutoDownloadingArchive));
     private final NekomuraTGCell divider2 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
-    private final NekomuraTGCell header3 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Chat")));
+    private final NekomuraTGCell header3 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Folder")));
     private final NekomuraTGCell showTabsOnForwardRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.showTabsOnForward));
     private final NekomuraTGCell hideAllTabRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideAllTab, LocaleController.getString("HideAllTabAbout")));
     private final NekomuraTGCell pressTitleToOpenAllChatsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.pressTitleToOpenAllChats));

@@ -14,7 +14,6 @@ import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.NumberPicker
 import tw.nekomimi.nekogram.BottomBuilder
-import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
 import tw.nekomimi.nkmr.NekomuraConfig
 import java.util.*

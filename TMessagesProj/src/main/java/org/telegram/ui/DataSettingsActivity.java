@@ -53,7 +53,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nkmr.NekomuraConfig;
 
@@ -342,7 +342,7 @@ public class DataSettingsActivity extends BaseFragment {
                 AtomicReference<String> target = new AtomicReference<>();
 
                 builder.addRadioItems(EnvUtil.getAvailableDirectories(),
-                        (index, path) -> path.equals(NekoConfig.cachePath), (__, path, cell) -> {
+                        (index, path) -> path.equals(NekomuraConfig.cachePath.String()), (__, path, cell) -> {
 
                             target.set(path);
                             builder.doRadioCheck(cell);
@@ -482,7 +482,7 @@ public class DataSettingsActivity extends BaseFragment {
                     } else if (position == dataUsageRow) {
                         textCell.setText(LocaleController.getString("NetworkUsage", R.string.NetworkUsage), true);
                     } else if (position == storageNumRow) {
-                        textCell.setTextAndValue(LocaleController.getString("StoragePath", R.string.StoragePath), NekoConfig.cachePath, false);
+                        textCell.setTextAndValue(LocaleController.getString("StoragePath", R.string.StoragePath), NekomuraConfig.cachePath.String(), false);
                     } else if (position == proxyRow) {
                         textCell.setText(LocaleController.getString("ProxySettings", R.string.ProxySettings), false);
                     } else if (position == resetDownloadRow) {

@@ -159,7 +159,7 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
@@ -1360,7 +1360,7 @@ public class AndroidUtilities {
 
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
-            if (NekoConfig.typeface == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (NekomuraConfig.typeface.Bool() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (assetPath.contains("medium") && assetPath.contains("italic")) {
                     return Typeface.create("sans-serif-medium", Typeface.ITALIC);
                 }
@@ -1712,7 +1712,7 @@ public class AndroidUtilities {
                 provider = 1;
             }
         } else {
-            if (NekoConfig.mapPreviewProvider == 1) {
+            if (NekomuraConfig.mapPreviewProvider.Int() == 1) {
                 provider = 1;
             }
         }
@@ -1798,7 +1798,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isTablet() {
-        if (isTablet == null) switch (NekoConfig.tabletMode) {
+        if (isTablet == null) switch (NekomuraConfig.tabletMode.Int()) {
             case 0:
                 isTablet = ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
                 break;
@@ -4196,14 +4196,14 @@ public class AndroidUtilities {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final View decorView = window.getDecorView();
             int flags = decorView.getSystemUiVisibility();
-            if (!SharedConfig.noStatusBar && NekoConfig.transparentStatusBar) {
+            if (!SharedConfig.noStatusBar && NekomuraConfig.transparentStatusBar.Bool()) {
                 window.setStatusBarColor(Color.TRANSPARENT);
             }
             if (enable) {
                 if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) == 0) {
                     flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
-                    if (!SharedConfig.noStatusBar && !NekoConfig.transparentStatusBar) {
+                    if (!SharedConfig.noStatusBar && !NekomuraConfig.transparentStatusBar.Bool()) {
                         window.setStatusBarColor(0x0f000000);
                     }
                 }
@@ -4211,7 +4211,7 @@ public class AndroidUtilities {
                 if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) != 0) {
                     flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
-                    if (!SharedConfig.noStatusBar && !NekoConfig.transparentStatusBar) {
+                    if (!SharedConfig.noStatusBar && !NekomuraConfig.transparentStatusBar.Bool()) {
                         window.setStatusBarColor(0x33000000);
                     }
                 }

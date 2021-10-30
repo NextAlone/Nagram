@@ -144,7 +144,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView {
 
@@ -836,7 +836,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean needHideMessage() {
         return currentMessageObject.messageOwner.hide ||
                 MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0 &&
-                        NekoConfig.ignoreBlocked && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
+                        NekomuraConfig.ignoreBlocked.Bool() && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
     }
 
     public ChatMessageCell(Context context) {
@@ -4665,7 +4665,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
 
                 int maxVote = 0;
-                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !NekoConfig.disableVibration) {
+                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !NekomuraConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
                 animatePollAnswerAlpha = animatePollAnswer = attachedToWindow && (pollVoteInProgress || pollUnvoteInProgress);
@@ -5064,9 +5064,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             currentMapProvider = -1;
                         }
                     } else {
-                        if (NekoConfig.mapPreviewProvider == 0) {
+                        if (NekomuraConfig.mapPreviewProvider.Int() == 0) {
                             currentMapProvider = 2;
-                        } else if (NekoConfig.mapPreviewProvider == 1) {
+                        } else if (NekomuraConfig.mapPreviewProvider.Int() == 1) {
                             currentMapProvider = 1;
                         } else {
                             currentMapProvider = -1;
@@ -5105,9 +5105,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     float maxHeight;
                     float maxWidth;
                     if (AndroidUtilities.isTablet()) {
-                        maxHeight = maxWidth = AndroidUtilities.getMinTabletSide() * (0.4f + (NekoConfig.stickerSize - 14.0f) / 40);
+                        maxHeight = maxWidth = AndroidUtilities.getMinTabletSide() * (0.4f + (NekomuraConfig.stickerSize.Float() - 14.0f) / 40);
                     } else {
-                        maxHeight = maxWidth = Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (NekoConfig.stickerSize - 14.0f) / 30);
+                        maxHeight = maxWidth = Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (NekomuraConfig.stickerSize.Float() - 14.0f) / 30);
                     }
                     String filter;
                     if (messageObject.isAnimatedEmoji() || messageObject.isDice()) {
@@ -10818,7 +10818,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekoConfig.hideTimeForSticker)) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekomuraConfig.hideTimeForSticker.Bool())) {
             drawTime(canvas, 1f, false);
         }
 

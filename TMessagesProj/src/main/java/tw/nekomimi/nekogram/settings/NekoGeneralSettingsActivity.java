@@ -58,6 +58,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -306,6 +307,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
                         return Unit.INSTANCE;
                     });
+                } else if (position == rows.indexOf(nameOrderRow)) {
+                    LocaleController.getInstance().recreateFormatters();
                 }
             }
         });
@@ -362,8 +365,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
             } else if (key.equals(NekomuraConfig.avatarBackgroundBlur.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+                listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
             } else if (key.equals(NekomuraConfig.avatarBackgroundDarken.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+                listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
             } else if (key.equals(NekomuraConfig.disableAppBarShadow.getKey())) {
                 ActionBarLayout.headerShadowDrawable = (boolean) newValue ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
@@ -678,9 +683,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         } else if (position == rows.indexOf(pgpAppRow)) {
                             textCell.setTextAndValue(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp), NekoConfig.getOpenPGPAppName(), true);
                         } else if (position == rows.indexOf(translateToLangRow)) {
-                            textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekoConfig.translateToLang), true);
+                            textCell.setTextAndValue(LocaleController.getString("TransToLang", R.string.TransToLang), NekoConfig.formatLang(NekomuraConfig.translateToLang.String()), true);
                         } else if (position == rows.indexOf(translateInputToLangRow)) {
-                            textCell.setTextAndValue(LocaleController.getString("TransInputToLang", R.string.TransInputToLang), NekoConfig.formatLang(NekoConfig.translateInputLang), true);
+                            textCell.setTextAndValue(LocaleController.getString("TransInputToLang", R.string.TransInputToLang), NekoConfig.formatLang(NekomuraConfig.translateInputLang.String()), true);
                         }
                     }
                 } else {
