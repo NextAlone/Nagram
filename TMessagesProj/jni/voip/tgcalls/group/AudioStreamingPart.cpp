@@ -298,9 +298,8 @@ public:
         int outPcmSampleOffset = 0;
         ReadPcmResult result;
 
-        if(_channelCount==0)
-        {
-            RTC_LOG(LS_WARNING) << "_channelCount == 0, returned.";
+        if (_channelCount == 0) {
+            RTC_LOG(LS_WARNING) << "ReadPcmResult readPcm: _channelCount == 0, returned.";
             return result;
         }
 
