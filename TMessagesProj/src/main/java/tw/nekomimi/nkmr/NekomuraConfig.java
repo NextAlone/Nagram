@@ -241,7 +241,7 @@ public class NekomuraConfig {
     public static ConfigItem googleCloudTranslateKey = addConfig("GoogleCloudTransKey", configTypeString, "");
     public static ConfigItem cachePath = addConfig("cache_path", configTypeString, "");
 
-    public static ConfigItem translateToLang = addConfig("TransToLang", configTypeString, "");
+    public static ConfigItem translateToLang = addConfig("TransToLang", configTypeString, "zh-CN");
     public static ConfigItem translateInputLang = addConfig("TransInputToLang", configTypeString, "en");
 
     public static ConfigItem ccToLang = addConfig("opencc_to_lang", configTypeString, "");
@@ -371,7 +371,7 @@ public class NekomuraConfig {
             googleCloudTranslateKey.setConfigString(preferences.getString("google_cloud_translate_key", null));
             cachePath.setConfigString(preferences.getString("cache_path", null));
 
-            translateToLang.setConfigString(preferences.getString("trans_to_lang", null));
+            translateToLang.setConfigString(preferences.getString("trans_to_lang", "zh-CN"));
             translateInputLang.setConfigString(preferences.getString("trans_input_to_lang", "en"));
 
             ccToLang.setConfigString(preferences.getString("opencc_to_lang", null));

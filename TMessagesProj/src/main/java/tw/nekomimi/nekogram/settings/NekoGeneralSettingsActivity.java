@@ -58,7 +58,6 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -355,15 +354,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 TransitionManager.beginDelayedTransition(profilePreviewCell);
                 listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
-                //TODO Support remove and insert rows.
-//                if (NekomuraConfig.largeAvatarInDrawer.Int() > 0) {
-//                    updateRows(false);
-//                    listAdapter.notifyItemRangeInserted(rows.indexOf(avatarBackgroundBlurRow), 2);
-//                } else {
-//                    listAdapter.notifyItemRangeRemoved(rows.indexOf(avatarBackgroundBlurRow), 2);
-//                    updateRows(false);
-//                }
-
+                setAvatarOptionsVisibility();
             } else if (key.equals(NekomuraConfig.avatarBackgroundBlur.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
@@ -693,6 +684,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     // Default binds
                     a.onBindViewHolder(holder);
                 }
+                // Other things
+                setAvatarOptionsVisibility();
             }
         }
 
@@ -772,5 +765,18 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         keyField.requestFocus();
         AndroidUtilities.showKeyboard(keyField);
+    }
+
+    private void setAvatarOptionsVisibility() {
+        //TODO hideItemFromRecyclerView
+        TextCheckCell cell1 = ((NekomuraTGTextCheck) avatarBackgroundBlurRow).cell;
+        TextCheckCell cell2 = ((NekomuraTGTextCheck) avatarBackgroundDarkenRow).cell;
+        if (NekomuraConfig.largeAvatarInDrawer.Int() > 0) {
+            Cells.hideItemFromRecyclerView(cell1, false);
+            Cells.hideItemFromRecyclerView(cell2, false);
+        } else {
+            Cells.hideItemFromRecyclerView(cell1, true);
+            Cells.hideItemFromRecyclerView(cell2, true);
+        }
     }
 }

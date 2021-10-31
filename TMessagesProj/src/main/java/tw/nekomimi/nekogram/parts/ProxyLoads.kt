@@ -3,7 +3,6 @@ package tw.nekomimi.nekogram.parts
 import android.util.Base64
 import cn.hutool.http.HttpResponse
 import cn.hutool.http.HttpUtil
-import com.google.android.exoplayer2.util.Log
 import kotlinx.coroutines.*
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.ProxyUtil.parseProxies
@@ -60,10 +59,12 @@ fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Excepti
                             }
 
                             if (ret.getAndSet(true)) return@launch
-                            Log.e("NekoPublicProxy", reqURL)
+//                            Log.e("NekoPublicProxy", reqURL)
                             it.resume(proxies)
                         } catch (e: Exception) {
-                            Log.e("NekoPublicProxy", e.stackTraceToString())
+//                            Log.e("NekoPublicProxy", e.stackTraceToString())
+                            FileLog.d(url)
+                            FileLog.e(e.stackTraceToString())
                             exceptions[url] = e
                             if (cl.decrementAndGet() == 0) {
                                 it.resumeWithException(e)

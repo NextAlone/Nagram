@@ -4257,8 +4257,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             passcodeView.onResume();
         }
-        ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
-        updateCurrentConnectionState(currentAccount);
+
         if (NekomuraConfig.disableProxyWhenVpnEnabled.Bool()) {
             if (SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
                 SharedConfig.setProxyEnable(false);
@@ -4266,6 +4265,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 SharedConfig.setProxyEnable(true);
             }
         }
+
+        ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
+        updateCurrentConnectionState(currentAccount);
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
         }

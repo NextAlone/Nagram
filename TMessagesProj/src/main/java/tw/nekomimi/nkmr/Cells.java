@@ -1,6 +1,8 @@
 package tw.nekomimi.nkmr;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,6 +77,19 @@ public class Cells {
         void onBindViewHolder(RecyclerView.ViewHolder holder);
     }
 
+    public static void hideItemFromRecyclerView(View cell, boolean hide) {
+        if (cell == null) return;
+        if (cell != null) return; //TODO hideItemFromRecyclerView
+        ViewGroup.LayoutParams params = cell.getLayoutParams();
+        if (hide) {
+            cell.setVisibility(View.GONE);
+            params.height = 0;
+        } else {
+            cell.setVisibility(View.VISIBLE);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+        cell.setLayoutParams(params);
+    }
 
     //TG Cells
 
@@ -161,10 +176,12 @@ public class Cells {
             cell.setTextAndValue(title, StrUtil.isNotBlank(bindConfig.String()) ? bindConfig.String() : hint , !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
         }
     }
+
     public class NekomuraTGTextCheck implements NekomuraTGCell {
         private final NekomuraConfig.ConfigItem bindConfig;
         private final String title;
         private final String subtitle;
+        public TextCheckCell cell; //TODO getCell() in NekomuraTGCell
 
         public NekomuraTGTextCheck(NekomuraConfig.ConfigItem bind) {
             this.bindConfig = bind;
@@ -188,6 +205,7 @@ public class Cells {
 
         public void onBindViewHolder(RecyclerView.ViewHolder holder) {
             TextCheckCell cell = (TextCheckCell) holder.itemView;
+            this.cell = cell;
             if (subtitle == null) {
                 cell.setTextAndCheck(title, bindConfig.Bool(), !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
             } else {

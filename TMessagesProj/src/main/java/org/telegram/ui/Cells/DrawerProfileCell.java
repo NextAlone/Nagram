@@ -253,8 +253,9 @@ public class DrawerProfileCell extends FrameLayout {
 
         LayoutParams lp = NekomuraConfig.largeAvatarInDrawer.Int() == 2 ? // correct the position of this button
                 LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 10, 6, 0) :
-                LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90);
+                LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 10, 6, 90);
         addView(darkThemeView, lp);
+
         if (NekomuraConfig.largeAvatarInDrawer.Int() == 2) { // add shadow
             nameTextView.setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
             phoneTextView.getTextView().setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
@@ -303,7 +304,8 @@ public class DrawerProfileCell extends FrameLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int heightBase = NekomuraConfig.largeAvatarInDrawer.Int() == 2 ? MeasureSpec.getSize(widthMeasureSpec) : AndroidUtilities.dp(148);
         if (Build.VERSION.SDK_INT >= 21) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightBase, MeasureSpec.EXACTLY));
+            heightBase -= NekomuraConfig.largeAvatarInDrawer.Int() == 2 ? AndroidUtilities.statusBarHeight : 0;
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightBase + AndroidUtilities.statusBarHeight, MeasureSpec.EXACTLY));
         } else {
             try {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightBase, MeasureSpec.EXACTLY));
