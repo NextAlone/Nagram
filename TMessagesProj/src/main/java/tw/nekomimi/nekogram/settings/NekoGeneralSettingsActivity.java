@@ -92,7 +92,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell hideProxyByDefaultRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
     private final NekomuraTGCell useSystemDNSRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useSystemDNS));
     private final NekomuraTGCell customDoHRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextInput(null, NekomuraConfig.customDoH, "https://1.0.0.1/dns-query", null));
-    private final NekomuraTGCell customPublicProxyIPRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextInput(null, NekomuraConfig.customPublicProxyIP, "", null));
+    private final NekomuraTGCell customPublicProxyIPRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextDetail(NekomuraConfig.customPublicProxyIP, (view, position) -> {
+        customDialog_BottomInputString(position, NekomuraConfig.customPublicProxyIP, LocaleController.getString("customPublicProxyIPNotice"), "IP");
+    }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
     private final NekomuraTGCell divider1 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header2 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Translate")));
@@ -100,7 +102,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell translateToLangRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell translateInputToLangRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell googleCloudTranslateKeyRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextDetail(NekomuraConfig.googleCloudTranslateKey, (view, position) -> {
-        customDialog_googleCloudTranslateKey(position);
+        customDialog_BottomInputString(position, NekomuraConfig.googleCloudTranslateKey, LocaleController.getString("GoogleCloudTransKeyNotice"), "Key");
     }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
     private final NekomuraTGCell divider2 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
@@ -729,20 +731,18 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     //Custom dialogs
 
-    private void customDialog_googleCloudTranslateKey(int position) {
+    private void customDialog_BottomInputString(int position, NekomuraConfig.ConfigItem bind, String subtitle, String hint) {
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
         builder.addTitle(
-                LocaleController.getString("GoogleCloudTransKey", R.string.GoogleCloudTransKey),
-                LocaleController.getString("GoogleCloudTransKeyNotice", R.string.GoogleCloudTransKeyNotice)
+                LocaleController.getString(bind.getKey()),
+                subtitle
         );
 
-        EditText keyField = builder.addEditText("Key");
+        EditText keyField = builder.addEditText(hint);
 
-        if (StrUtil.isNotBlank(NekomuraConfig.googleCloudTranslateKey.String())) {
-
-            keyField.setText(NekomuraConfig.googleCloudTranslateKey.String());
-
+        if (StrUtil.isNotBlank(bind.String())) {
+            keyField.setText(bind.String());
         }
 
         builder.addCancelButton();
@@ -753,7 +753,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
             if (StrUtil.isBlank(key)) key = null;
 
-            NekomuraConfig.googleCloudTranslateKey.setConfigString(key);
+            bind.setConfigString(key);
 
             listAdapter.notifyItemChanged(position);
 
