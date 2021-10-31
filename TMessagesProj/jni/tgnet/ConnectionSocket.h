@@ -35,12 +35,6 @@ public:
     void setOverrideProxy(std::string address, uint16_t port, std::string username, std::string password, std::string secret);
     void onHostNameResolved(std::string host, std::string ip, bool ipv6);
 
-    std::string overrideProxyUser = "";
-    std::string overrideProxyPassword = "";
-    std::string overrideProxyAddress = "";
-    std::string overrideProxySecret = "";
-    uint16_t overrideProxyPort = 1080;
-
 protected:
     int32_t instanceNum;
     void onEvent(uint32_t events);
@@ -51,6 +45,12 @@ protected:
     virtual void onDisconnected(int32_t reason, int32_t error) = 0;
     virtual void onConnected() = 0;
     virtual bool hasPendingRequests() = 0;
+
+    std::string overrideProxyUser = "";
+    std::string overrideProxyPassword = "";
+    std::string overrideProxyAddress = "";
+    std::string overrideProxySecret = "";
+    uint16_t overrideProxyPort = 1080;
 
 private:
     ByteStream *outgoingByteStream = nullptr;
