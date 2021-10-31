@@ -83,6 +83,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final NekomuraTGCell disableTrendingRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableTrending));
     private final NekomuraTGCell dontSendGreetingStickerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.dontSendGreetingSticker));
     private final NekomuraTGCell hideTimeForStickerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideTimeForSticker));
+    private final NekomuraTGCell hideGroupStickerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideGroupSticker));
     private final NekomuraTGCell takeGIFasVideoRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.takeGIFasVideo));
     private final NekomuraTGCell maxRecentStickerCountRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell disableSwipeToNextRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableSwipeToNext));

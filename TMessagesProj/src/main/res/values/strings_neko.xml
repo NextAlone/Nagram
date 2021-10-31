@@ -114,6 +114,7 @@
     <string name="TakeGIFasVideo">Take GIF as video</string>
     <string name="UseMediaStreamInVoip">Use media stream in VoIP</string>
     <string name="HideTimeForSticker">Hide time for stickers</string>
+    <string name="hideGroupSticker">Hide group sticker</string>
     <string name="useSystemDNS">Use system DNS</string>
     <string name="customDoH">Custom DoH</string>
     <string name="customGroupVoipAudioBitrate">Group VoIP Audio Bitrate</string>

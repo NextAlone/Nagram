@@ -3328,7 +3328,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             stickerSets.add(pack);
         }
-        if (info != null) {
+        if (info != null && (!NekomuraConfig.hideGroupSticker.Bool())) {
             long hiddenStickerSetId = MessagesController.getEmojiSettings(currentAccount).getLong("group_hide_stickers_" + info.id, -1);
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(info.id);
             if (chat == null || info.stickerset == null || !ChatObject.hasAdminRights(chat)) {
@@ -3370,8 +3370,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     stickerSets.remove(0);
                     a--;
                 } else {
-                    hasChatStickers = true;
-                    stickersTab.addStickerTab(chat);
+                        hasChatStickers = true;
+                        stickersTab.addStickerTab(chat);
                 }
             } else {
                 TLRPC.TL_messages_stickerSet stickerSet = stickerSets.get(a);
