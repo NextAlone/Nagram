@@ -44,6 +44,7 @@ object EnvUtil {
 
         }.map { it.path }.toTypedArray()
 
+    // This is the only media path of NekoX, don't use other!
     @JvmStatic
     fun getTelegramPath(): File {
 

@@ -837,6 +837,10 @@ public class AndroidUtilities {
             if (pathString.matches(Pattern.quote(new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
                 return false;
             }
+            // NekoX: Allow send media
+            if (pathString.startsWith(EnvUtil.getTelegramPath().toString())) {
+                return false;
+            }
             int tries = 0;
             while (true) {
                 if (pathString != null && pathString.length() > 4096) {
