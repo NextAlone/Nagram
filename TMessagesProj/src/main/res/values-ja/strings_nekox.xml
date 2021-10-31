@@ -216,4 +216,24 @@
     <string name="HideDeviceInfo">デバイスモデルを非表示</string>
     <string name="HideDeviceInfoOff">ログイン後、アプリが2回目に起動したときに、デバイスモデルがアップロードされます。</string>
     <string name="HideDeviceInfoOn">これは後で設定で変更できます。</string>
+    <string name="ArchiveFiles">アーカイブファイル</string>
+    <string name="AddProxyWs">WebSocketリレーの追加</string>
+    <string name="ProxyInfoWS">WebSocketリレーの設定</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="AutoDownload">自動ダウンロード</string>
+    <string name="Win32ExecutableFiles">Win32実行ファイル</string>
+    <string name="VersionUpdateTitle">新バージョン発売</string>
+    <string name="BackupSettings">バックアップ設定</string>
+    <string name="ImportSettings">インポート設定</string>
+    <string name="AutoCheckUpdateSwitch">自動更新</string>
+    <string name="UsePersiancalendar">ペルシャのカレンダーを使う</string>
+    <string name="DisplayPersianCalendarByLatin">ペルシャのカレンダーをラテン語で表示</string>
+    <string name="nekoXPaymentRemovedToast">決済機能は廃止されました。</string>
+    <string name="AutoCheckUpdateStable">安定版</string>
+    <string name="VersionUpdateConfirm">アップデート</string>
+    <string name="AutoCheckUpdateOFF">閉じる</string>
+    <string name="VersionUpdateIgnore">無視</string>
+    <string name="VersionUpdateNotNow">今ではありません</string>
+    <string name="AutoLockImmediately">すぐに</string>
+    <string name="PinSticker">ピン</string>
 </resources>
