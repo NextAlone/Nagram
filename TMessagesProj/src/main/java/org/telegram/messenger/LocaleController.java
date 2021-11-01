@@ -983,7 +983,8 @@ public class LocaleController {
             currentLocale = newLocale;
             currentLocaleInfo = localeInfo;
 
-            reloadPersianCalendarConfig();
+            // reloadPersianCalendarConfig
+            usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool();
 
             if (!TextUtils.isEmpty(currentLocaleInfo.pluralLangCode)) {
                 currentPluralRules = allRules.get(currentLocaleInfo.pluralLangCode);
@@ -1016,10 +1017,6 @@ public class LocaleController {
             changingConfiguration = false;
         }
         recreateFormatters();
-    }
-
-    public static void reloadPersianCalendarConfig() {
-        usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool() && "fa".equals(getInstance().currentLocaleInfo.pluralLangCode);
     }
 
     public LocaleInfo getCurrentLocaleInfo() {
