@@ -153,8 +153,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell disableNumberRoundingRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableNumberRounding, "4.8K -> 4777"));
     private final NekomuraTGCell openArchiveOnPullRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.openArchiveOnPull));
     private final NekomuraTGCell nameOrderRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.nameOrder, new String[]{
-            LocaleController.getString("FirstLast", R.string.FirstLast),
-            LocaleController.getString("LastFirst", R.string.LastFirst)
+            LocaleController.getString("LastFirst", R.string.LastFirst),
+            LocaleController.getString("FirstLast", R.string.FirstLast)
     }, null));
     private final NekomuraTGCell usePersianCalendarRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.usePersianCalendar, LocaleController.getString("UsePersiancalendarInfo")));
     private final NekomuraTGCell displayPersianCalendarByLatinRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.displayPersianCalendarByLatin));
