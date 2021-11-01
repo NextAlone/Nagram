@@ -53,7 +53,7 @@ public class NekoConfig {
 
     public static String formatLang(String name) {
 
-        if (name == null) {
+        if (name == null || name.isEmpty()) {
 
             return LocaleController.getString("Default", R.string.Default);
 

@@ -24,11 +24,19 @@ fun <T : HttpRequest> T.applyProxy(): T {
 }
 
 val String.code2Locale: Locale by receiveLazy<String, Locale> {
+    var ret: Locale
+    if (this == null || this.isBlank()) {
+        ret = LocaleController.getInstance().currentLocale
+    } else {
+        val args = replace('-', '_').split('_')
 
-    val args = replace('-', '_').split('_')
-
-    if (args.size == 1) Locale(args[0]) else Locale(args[0], args[1])
-
+        if (args.size == 1) {
+            ret = Locale(args[0])
+        } else {
+            ret = Locale(args[0], args[1])
+        }
+    }
+    ret
 }
 
 val Locale.locale2code by receiveLazy<Locale, String> {

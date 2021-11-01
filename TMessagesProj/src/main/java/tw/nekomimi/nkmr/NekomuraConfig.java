@@ -241,7 +241,7 @@ public class NekomuraConfig {
     public static ConfigItem googleCloudTranslateKey = addConfig("GoogleCloudTransKey", configTypeString, "");
     public static ConfigItem cachePath = addConfig("cache_path", configTypeString, "");
 
-    public static ConfigItem translateToLang = addConfig("TransToLang", configTypeString, "zh-CN");
+    public static ConfigItem translateToLang = addConfig("TransToLang", configTypeString, ""); // "" -> translate to current language (MessageTrans.kt & Translator.kt)
     public static ConfigItem translateInputLang = addConfig("TransInputToLang", configTypeString, "en");
 
     public static ConfigItem ccToLang = addConfig("opencc_to_lang", configTypeString, "");
@@ -294,7 +294,6 @@ public class NekomuraConfig {
     public static ConfigItem useMediaStreamInVoip = addConfig("UseMediaStreamInVoip", configTypeBool, false);
     public static ConfigItem customAudioBitrate = addConfig("customAudioBitrate", configTypeInt, 32);
     public static ConfigItem disableGroupVoipAudioProcessing = addConfig("disableGroupVoipAudioProcessing", configTypeBool, false);
-
 
     static {
         loadConfig(false);
