@@ -249,4 +249,13 @@
 \n请从GitHub手动下载。</string>
     <string name="VersionUpdateTitle">新版本可用</string>
     <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+
+    <string name="unreadBadgeOnBackButton">聊天窗口返回按钮上显示未读数</string>
+    <string name="customPublicProxyIP">设置公共代理的 IP</string>
+    <string name="customPublicProxyIPNotice">在某些地区，指定公共代理 CDN（例如 Cloudflare）的 IP 可以加快访问速度。</string>
+    <string name="DeleteDownloadedFileConfirm">从本地缓存中删除此文件？</string>
+    <string name="DeleteDownloadedFileSucceed">已删除</string>
+    <string name="DeleteDownloadedFileExternal">外部文件被跳过。</string>
+
+    <string name="valuesLargeAvatarInDrawer">Telegram 默认\n使用头像作为背景\n使用大只头像作为背景</string>
 </resources>

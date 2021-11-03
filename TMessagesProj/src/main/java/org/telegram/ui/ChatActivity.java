@@ -22178,7 +22178,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         messageCell.updateButtonState(false, true, false);
                     }
 
-                    Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileSuccessed"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileSucceed"), Toast.LENGTH_LONG).show();
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel"), (dialog, which) -> {
                 });
