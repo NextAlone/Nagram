@@ -1,5 +1,6 @@
 package tw.nekomimi.nkmr;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -76,6 +78,8 @@ public class Cells {
 
         void onBindViewHolder(RecyclerView.ViewHolder holder);
     }
+
+    //Utils
 
     public static void hideItemFromRecyclerView(View cell, boolean hide) {
         if (cell == null) return;
@@ -181,6 +185,7 @@ public class Cells {
         private final NekomuraConfig.ConfigItem bindConfig;
         private final String title;
         private final String subtitle;
+        public boolean enabled = true;
         public TextCheckCell cell; //TODO getCell() in NekomuraTGCell
 
         public NekomuraTGTextCheck(NekomuraConfig.ConfigItem bind) {
@@ -200,7 +205,7 @@ public class Cells {
         }
 
         public boolean isEnabled() {
-            return true;
+            return enabled;
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder holder) {
@@ -211,9 +216,12 @@ public class Cells {
             } else {
                 cell.setTextAndValueAndCheck(title, subtitle, bindConfig.Bool(), true, !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
             }
+            cell.setEnabled(enabled, null);
         }
 
         public void onClick(TextCheckCell cell) {
+            if (!enabled) return;
+
             boolean newV = bindConfig.toggleConfigBool();
             cell.setChecked(newV);
 

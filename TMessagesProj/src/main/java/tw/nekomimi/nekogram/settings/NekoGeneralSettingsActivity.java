@@ -58,6 +58,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -125,6 +126,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell useDefaultThemeRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useDefaultTheme));
     private final NekomuraTGCell useSystemEmojiRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
     private final NekomuraTGCell transparentStatusBarRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.transparentStatusBar));
+    private final NekomuraTGCell appBarShadowRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableAppBarShadow));
     private final NekomuraTGCell newYearRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.newYear));
     private final NekomuraTGCell actionBarDecorationRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.actionBarDecoration, new String[]{
             LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
@@ -195,6 +197,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
+
+        // Before listAdapter
+        setCanNotChange();
 
         listView = new RecyclerListView(context);
         listView.setVerticalScrollBarEnabled(false);
@@ -355,8 +360,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekomuraConfig.largeAvatarInDrawer.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 TransitionManager.beginDelayedTransition(profilePreviewCell);
-                listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
-                setAvatarOptionsVisibility();
+                setCanNotChange();
+                listAdapter.notifyDataSetChanged();
             } else if (key.equals(NekomuraConfig.avatarBackgroundBlur.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(rows.indexOf(profilePreviewRow));
@@ -687,7 +692,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     a.onBindViewHolder(holder);
                 }
                 // Other things
-                setAvatarOptionsVisibility();
             }
         }
 
@@ -729,6 +733,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         }
     }
 
+    private void setCanNotChange() {
+        boolean enabled;
+
+        enabled = NekomuraConfig.largeAvatarInDrawer.Int() > 0;
+        ((NekomuraTGTextCheck) avatarBackgroundBlurRow).enabled = enabled;
+        ((NekomuraTGTextCheck) avatarBackgroundDarkenRow).enabled = enabled;
+    }
+
     //Custom dialogs
 
     private void customDialog_BottomInputString(int position, NekomuraConfig.ConfigItem bind, String subtitle, String hint) {
@@ -765,18 +777,5 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         keyField.requestFocus();
         AndroidUtilities.showKeyboard(keyField);
-    }
-
-    private void setAvatarOptionsVisibility() {
-        //TODO hideItemFromRecyclerView
-        TextCheckCell cell1 = ((NekomuraTGTextCheck) avatarBackgroundBlurRow).cell;
-        TextCheckCell cell2 = ((NekomuraTGTextCheck) avatarBackgroundDarkenRow).cell;
-        if (NekomuraConfig.largeAvatarInDrawer.Int() > 0) {
-            Cells.hideItemFromRecyclerView(cell1, false);
-            Cells.hideItemFromRecyclerView(cell2, false);
-        } else {
-            Cells.hideItemFromRecyclerView(cell1, true);
-            Cells.hideItemFromRecyclerView(cell2, true);
-        }
     }
 }

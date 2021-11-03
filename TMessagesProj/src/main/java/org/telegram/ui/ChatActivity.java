@@ -20494,7 +20494,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (NekomuraConfig.showDeleteDownloadedFile.Bool() && NekomuraUtil.messageObjectIsFile(type, selectedObject)) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
                                 options.add(91); //TODO nkbtn here
-                                icons.add(R.drawable.menu_clearcache);
+                                icons.add(R.drawable.baseline_delete_sweep_24);
                             }
 
                             if (allowViewHistory && NekomuraConfig.showViewHistory.Bool()) {

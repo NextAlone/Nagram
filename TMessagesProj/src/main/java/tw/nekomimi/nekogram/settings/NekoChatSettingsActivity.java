@@ -70,6 +70,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final NekomuraTGCell ignoreBlockedRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreBlocked, LocaleController.getString("IgnoreBlockedAbout")));
     private final NekomuraTGCell ignoreMutedCountRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreMutedCount));
     private final NekomuraTGCell disableChatActionRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableChatAction));
+    private final NekomuraTGCell disableChoosingStickerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableChoosingSticker));
     private final NekomuraTGCell disablePhotoSideActionRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disablePhotoSideAction));
     private final NekomuraTGCell hideKeyboardOnChatScrollRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hideKeyboardOnChatScroll));
     private final NekomuraTGCell disableVibrationRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableVibration));
@@ -87,7 +88,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final NekomuraTGCell takeGIFasVideoRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.takeGIFasVideo));
     private final NekomuraTGCell maxRecentStickerCountRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final NekomuraTGCell disableSwipeToNextRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableSwipeToNext));
-    //private final NekomuraTGCell disableChoosingStickerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableChoosingSticker));
     private final NekomuraTGCell disableRemoteEmojiInteractionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableRemoteEmojiInteractions));
     private final NekomuraTGCell mapPreviewRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.mapPreviewProvider,
             new String[]{
@@ -155,6 +155,9 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 }
             }
         });
+
+        // Before listAdapter
+        setCanNotChange();
 
         listAdapter = new ListAdapter(context);
 
@@ -557,5 +560,13 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
+    }
+
+    private void setCanNotChange() {
+        boolean enabled;
+
+        enabled = NekoXConfig.developerMode || NekoXConfig.customApi > 0;
+        ((NekomuraTGTextCheck) disableChatActionRow).enabled = enabled;
+        ((NekomuraTGTextCheck) disableChoosingStickerRow).enabled = enabled;
     }
 }
