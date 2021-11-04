@@ -1890,16 +1890,16 @@ void ConnectionsManager::setUserId(int64_t userId) {
 }
 
 void ConnectionsManager::switchBackend(bool restart) {
-    //scheduleTask([&, restart] {
-    currentDatacenterId = 1;
-    testBackend = !testBackend;
-    datacenters.clear();
-    initDatacenters();
-    saveConfig();
-    if (restart) {
-        exit(1);
-    }
-    //});
+    scheduleTask([&, restart] {
+        currentDatacenterId = 1;
+        testBackend = !testBackend;
+        datacenters.clear();
+        initDatacenters();
+        saveConfig();
+        if (restart) {
+            exit(1);
+        }
+    });
 }
 
 void ConnectionsManager::removeRequestFromGuid(int32_t requestToken) {

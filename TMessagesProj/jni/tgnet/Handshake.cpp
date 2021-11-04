@@ -390,6 +390,8 @@ void Handshake::processHandshakeResponse(TLObject *message, int64_t messageId) {
                     loadCdnConfig(currentDatacenter);
                 } else {
                     if (LOGS_ENABLED) DEBUG_E("account%u dc%u handshake: can't find valid server public key, type = %d", currentDatacenter->instanceNum, currentDatacenter->datacenterId, handshakeType);
+                    serverPublicKeys.clear();
+                    serverPublicKeysFingerprints.clear();
                     beginHandshake(false);
                 }
                 return;
