@@ -43,7 +43,7 @@ def getStringForConfig(String s) {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion '31.0.0'
+    buildToolsVersion '32.0.0'
     ndkVersion "21.4.7075529"
 
     defaultConfig.applicationId = "org.forkclient.messenger"
@@ -62,10 +62,6 @@ android {
         disable 'BlockedPrivateApi'
     }
 
-    dexOptions {
-        jumboMode = true
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -73,7 +69,12 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
-    def flavorsConfig = "config/debug"
+    def fdroid = false
+    def appSuffix = fdroid ? "" : ".beta"
+    def flavorsConfig = fdroid ? "config/release" : "config/debug"
+    if (fdroid) {
+        defaultConfig.applicationId = "org.forkgram.messenger"
+    }
 
     signingConfigs {
         def github = System.getenv("GITHUB_REPOSITORY")
@@ -90,6 +91,20 @@ android {
                 storePassword System.getenv("KEYSTORE_PASS")
                 keyAlias System.getenv("ALIAS_NAME")
                 keyPassword System.getenv("ALIAS_PASS")
+            }
+        } else if (fdroid) {
+            debug {
+                storeFile file("")
+                storePassword ""
+                keyAlias ""
+                keyPassword ""
+            }
+
+            release {
+                storeFile file("")
+                storePassword ""
+                keyAlias ""
+                keyPassword ""
             }
         } else {
             debug {
@@ -113,7 +128,7 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
-            applicationIdSuffix ".beta"
+            applicationIdSuffix appSuffix
             minifyEnabled false
             shrinkResources false
             multiDexEnabled true
@@ -124,7 +139,7 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
-            applicationIdSuffix ".beta"
+            applicationIdSuffix appSuffix
             minifyEnabled true
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -153,7 +168,7 @@ android {
             debuggable false
             jniDebuggable false
             signingConfig signingConfigs.debug
-            applicationIdSuffix ".beta"
+            applicationIdSuffix appSuffix
             minifyEnabled true
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -173,7 +188,7 @@ android {
             debuggable false
             jniDebuggable false
             signingConfig signingConfigs.release
-            applicationIdSuffix ".beta"
+            applicationIdSuffix appSuffix
             minifyEnabled true
             shrinkResources false
             multiDexEnabled true
@@ -319,9 +334,22 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = "app.apk"
+            if (!fdroid) {
+                outputFileName = "app.apk"
+            }
             output.versionCodeOverride = defaultConfig.versionCode * 10 + variant.productFlavors.get(0).abiVersionCode
         }
+    }
+
+    task buildNativeDeps(type: Exec, description: 'Build native dependencies.') {
+        def ndkDir = android.ndkDirectory
+        println ndkDir
+        workingDir "${projectDir}/jni"
+        commandLine 'python3', 'prepare.py', 'silent', 'ndk=' + ndkDir, 'arm', 'arm64'
+    }
+
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn buildNativeDeps
     }
 
     defaultConfig.versionCode = defaultConfig.versionCode * 10
@@ -341,9 +369,15 @@ android {
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
         buildConfigField 'int', 'APP_ID', System.getenv("APP_ID")
         buildConfigField 'String', 'APP_HASH', getStringForConfig(System.getenv("APP_HASH"))
-        buildConfigField 'int', 'USER_ID_OWNER', System.getenv("USER_ID_OWNER")
-        buildConfigField 'String', 'USER_REPO', getStringForConfig(System.getenv("USER_REPO"))
-        buildConfigField 'int', 'CHECK_UPDATES', System.getenv("CHECK_UPDATES")
+        if (fdroid) {
+            buildConfigField 'int', 'USER_ID_OWNER', "0"
+            buildConfigField 'String', 'USER_REPO', getStringForConfig("")
+            buildConfigField 'int', 'CHECK_UPDATES', "0"
+        } else {
+            buildConfigField 'int', 'USER_ID_OWNER', System.getenv("USER_ID_OWNER")
+            buildConfigField 'String', 'USER_REPO', getStringForConfig(System.getenv("USER_REPO"))
+            buildConfigField 'int', 'CHECK_UPDATES', System.getenv("CHECK_UPDATES")
+        }
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
