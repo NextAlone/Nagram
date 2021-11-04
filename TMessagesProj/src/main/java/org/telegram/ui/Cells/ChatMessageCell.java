@@ -10759,6 +10759,36 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
+    private void ensureForwardDateTime() {
+        if (currentMessageObject.messageOwner.fwd_from.date != 0) {
+            return;
+        }
+        AndroidUtilities.runOnUIThread(() -> {
+            if (currentMessageObject == null) {
+                return;
+            }
+            org.telegram.messenger.forkgram.ForkApi.TLRPCMessages(
+                currentAccount,
+                new ArrayList<>(Arrays.asList(currentMessageObject)),
+                (ArrayList<TLRPC.Message> msgs, org.telegram.tgnet.TLRPC.TL_error e) -> {
+                    if ((e != null)
+                        || (msgs.size() != 1)
+                        || (msgs.get(0).fwd_from == null)
+                        || (currentMessageObject == null)
+                        || (currentMessageObject.messageOwner == null)
+                        || (currentMessageObject.messageOwner.fwd_from == null)) {
+                        return null;
+                    }
+                    currentMessageObject.messageOwner.fwd_from.date = msgs.get(0).fwd_from.date;
+                    AndroidUtilities.runOnUIThread(() -> {
+                        forceResetMessageObject();
+                        invalidateWithParent();
+                    }, 100);
+                    return null;
+                });
+        }, 300);
+    }
+
     private void setMessageObjectInternal(MessageObject messageObject) {
         if (((messageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0 || messageObject.messageOwner.replies != null) && !currentMessageObject.scheduled && !currentMessageObject.isSponsored()) {
             if (!currentMessageObject.viewsReloaded) {
@@ -10907,7 +10937,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
             // Time and date of forwarded messages.
             java.util.Date dateOfFwdMsg = new java.util.Date((long)messageObject.messageOwner.fwd_from.date * 1000); 
-            String timeOfFwdMsg = "Date: " + new java.text.SimpleDateFormat("dd.MM.yyyy' 'HH:mm:ss").format(dateOfFwdMsg);
+            String timeOfFwdMsg = (messageObject.messageOwner.fwd_from.date == 0)
+                ? "Date: Loading..."
+                : "Date: " + new java.text.SimpleDateFormat("dd.MM.yyyy' 'HH:mm:ss").format(dateOfFwdMsg);
 
             if (messageObject.messageOwner.fwd_from.from_name != null) {
                 currentForwardName = messageObject.messageOwner.fwd_from.from_name;
@@ -10965,6 +10997,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 try {
                     forwardedNameLayout[0] = new StaticLayout(lastLine, Theme.chat_forwardNamePaint, forwardedNameWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     lastLine = TextUtils.ellipsize(timeOfFwdMsg, Theme.chat_forwardNamePaint, forwardedNameWidth, TextUtils.TruncateAt.END);
+                    if (messageObject.messageOwner.fwd_from.date == 0) {
+                        ensureForwardDateTime();
+                    }
                     forwardedNameLayout[1] = new StaticLayout(lastLine, Theme.chat_forwardNamePaint, forwardedNameWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     forwardedNameWidth = Math.max((int) Math.ceil(forwardedNameLayout[0].getLineWidth(0)), (int) Math.ceil(forwardedNameLayout[1].getLineWidth(0)));
                     if (hasPsaHint) {
