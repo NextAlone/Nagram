@@ -2228,7 +2228,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         String dcId = phone.substring(5, 6);
                         final TLRPC.TL_auth_signIn reqI = new TLRPC.TL_auth_signIn();
                         reqI.phone_number = phone;
-                        reqI.phone_code = dcId + dcId + dcId + dcId + dcId + dcId;
+                        reqI.phone_code = dcId + dcId + dcId + dcId + dcId;
                         reqI.phone_code_hash = phoneHash;
                         int reqIdI = ConnectionsManager.getInstance(currentAccount).sendRequest(reqI, (responseI, errorI) -> AndroidUtilities.runOnUIThread(() -> {
                             boolean ok = false;
