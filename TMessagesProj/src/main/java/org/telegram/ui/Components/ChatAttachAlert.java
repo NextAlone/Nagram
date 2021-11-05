@@ -2992,4 +2992,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     public BaseFragment getBaseFragment() {
         return baseFragment;
     }
+
+    public EditTextEmoji getCommentTextView() {
+        return commentTextView;
+    }
 }

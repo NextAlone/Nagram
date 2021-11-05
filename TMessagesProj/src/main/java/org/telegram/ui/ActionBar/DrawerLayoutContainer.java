@@ -91,6 +91,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private PreviewForegroundDrawable previewForegroundDrawable;
     private boolean drawCurrentPreviewFragmentAbove;
     private float startY;
+    private boolean keyboardVisibility;
+    private int imeHeight;
 
     public DrawerLayoutContainer(Context context) {
         super(context);
@@ -102,6 +104,15 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (Build.VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
             setOnApplyWindowInsetsListener((v, insets) -> {
+                if (Build.VERSION.SDK_INT >= 30) {
+                    boolean newKeyboardVisibility = insets.isVisible(WindowInsets.Type.ime());
+                    int imeHeight = insets.getInsets(WindowInsets.Type.ime()).bottom;
+                    if (keyboardVisibility != newKeyboardVisibility || this.imeHeight != imeHeight) {
+                        keyboardVisibility = newKeyboardVisibility;
+                        this.imeHeight = imeHeight;
+                        requestLayout();
+                    }
+                }
                 final DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) v;
                 if (AndroidUtilities.statusBarHeight != insets.getSystemWindowInsetTop()) {
                     drawerLayoutContainer.requestLayout();

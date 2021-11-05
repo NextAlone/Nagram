@@ -1152,7 +1152,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                                             if (searchResultUsernamesMap.indexOfKey(peerId) >= 0 || !isSearchingMentions && peerId == currentUserId) {
                                                 continue;
                                             }
-                                            if (peerId > 0) {
+                                            if (peerId >= 0) {
                                                 TLRPC.User user = messagesController.getUser(peerId);
                                                 if (user == null) {
                                                     return;

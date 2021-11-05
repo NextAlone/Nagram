@@ -92,6 +92,10 @@ public class AccountInstance {
         return MessagesController.getNotificationsSettings(currentAccount);
     }
 
+    public MemberRequestsController getMemberRequestsController() {
+        return MemberRequestsController.getInstance(currentAccount);
+    }
+
     public int getCurrentAccount() {
         return currentAccount;
     }

@@ -221,11 +221,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                             if (view instanceof SharedDocumentCell) {
                                 top += AndroidUtilities.dp(8f);
                             }
-                            final int topOffset = top - object.viewY;
+                            final int topOffset = (int) (top - object.viewY);
                             if (topOffset > view.getHeight()) {
                                 listView.scrollBy(0, -(topOffset + pinnedHeader.getHeight()));
                             } else {
-                                int bottomOffset = object.viewY - listView.getHeight();
+                                int bottomOffset = (int) (object.viewY - listView.getHeight());
                                 if (view instanceof SharedDocumentCell) {
                                     bottomOffset -= AndroidUtilities.dp(8f);
                                 }
@@ -1229,8 +1229,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
 
         @Override
-        public int getPositionForScrollProgress(float progress) {
-            return 0;
+        public void getPositionForScrollProgress(RecyclerListView listView, float progress, int[] position) {
+            position[0] = 0;
+            position[1] = 0;
         }
     }
 
@@ -1422,8 +1423,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
 
         @Override
-        public int getPositionForScrollProgress(float progress) {
-            return 0;
+        public void getPositionForScrollProgress(RecyclerListView listView, float progress, int[] position) {
+            position[0] = 0;
+            position[1] = 0;
         }
     }
 
