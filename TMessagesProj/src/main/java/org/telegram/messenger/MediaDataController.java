@@ -85,7 +85,7 @@ public class MediaDataController extends BaseController {
 
     public static String SHORTCUT_CATEGORY = "org.telegram.messenger.SHORTCUT_SHARE";
 
-    private static volatile MediaDataController[] Instance = new MediaDataController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static SparseArray<MediaDataController> Instance = new SparseArray<>();
 
     public static MediaDataController getInstance(int num) {
         MediaDataController localInstance = Instance.get(num);
@@ -2369,11 +2369,11 @@ public class MediaDataController extends BaseController {
     public final static int MEDIA_TYPES_COUNT = 8;
 
 
-    public void loadMedia(long dialogId, int count, int max_id, int type, int fromCache, int classGuid, int requestIndex){
-        loadMedia(dialogId, count, max_id, type, fromCache, classGuid, requestIndex, false);
+    public void loadMedia(long dialogId, int count, int max_id, int min_id, int type, int fromCache, int classGuid, int requestIndex) {
+        loadMedia(dialogId, count, max_id, min_id, type, fromCache, classGuid, requestIndex, false);
     }
 
-    public void loadMedia(long dialogId, int count, int max_id, int type, int fromCache, int classGuid, int requestIndex, boolean skipPhotos) {
+    public void loadMedia(long dialogId, int count, int max_id, int min_id, int type, int fromCache, int classGuid, int requestIndex, boolean skipPhotos) {
         boolean isChannel = DialogObject.isChatDialog(dialogId) && ChatObject.isChannel(-dialogId, currentAccount);
 
         if (BuildVars.LOGS_ENABLED) {

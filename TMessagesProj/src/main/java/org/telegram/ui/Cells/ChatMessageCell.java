@@ -10526,7 +10526,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice())) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekomuraConfig.hideTimeForSticker.Bool())) {
             drawTime(canvas, 1f, false);
         }
 
@@ -10893,50 +10893,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (resourcesProvider != null) {
                 return resourcesProvider.getCurrentColor(Theme.key_chat_outBubbleGradient1) != null;
             } else {
-                if (currentMessageObject.isOutOwner()) {
-                    replyStartX = backgroundDrawableLeft + AndroidUtilities.dp(12) + getExtraTextX();
-                } else {
-                    if (mediaBackground) {
-                        replyStartX = backgroundDrawableLeft + AndroidUtilities.dp(12) + getExtraTextX();
-                    } else {
-                        replyStartX = backgroundDrawableLeft + AndroidUtilities.dp(drawPinnedBottom ? 12 : 18) + getExtraTextX();
-                    }
-                }
-                replyStartY = AndroidUtilities.dp(12 + (drawForwardedName && forwardedNameLayout[0] != null ? 36 : 0) + (drawNameLayout && nameLayout != null ? 20 : 0));
-            }
-        }
-        if (currentPosition == null && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice())) {
-            drawNamesLayout(canvas, 1f);
-        }
-
-        if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
-            drawOverlays(canvas);
-        }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekomuraConfig.hideTimeForSticker.Bool())) {
-            drawTime(canvas, 1f, false);
-        }
-
-        if ((controlsAlpha != 1.0f || timeAlpha != 1.0f) && currentMessageObject.type != 5) {
-            long newTime = System.currentTimeMillis();
-            long dt = Math.abs(lastControlsAlphaChangeTime - newTime);
-            if (dt > 17) {
-                dt = 17;
-            }
-            totalChangeTime += dt;
-            if (totalChangeTime > 100) {
-                totalChangeTime = 100;
-            }
-            lastControlsAlphaChangeTime = newTime;
-            if (controlsAlpha != 1.0f) {
-                controlsAlpha = AndroidUtilities.decelerateInterpolator.getInterpolation(totalChangeTime / 100.0f);
-            }
-            if (timeAlpha != 1.0f) {
-                timeAlpha = AndroidUtilities.decelerateInterpolator.getInterpolation(totalChangeTime / 100.0f);
-            }
-            invalidate();
-            if (forceNotDrawTime && currentPosition != null && currentPosition.last && getParent() != null) {
-                View parent = (View) getParent();
-                parent.invalidate();
+                return Theme.getColorOrNull(Theme.key_chat_outBubbleGradient1) != null;
             }
         }
         return false;

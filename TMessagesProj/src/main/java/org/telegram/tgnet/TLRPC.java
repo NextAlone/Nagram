@@ -55313,4 +55313,32 @@ public class TLRPC {
             stream.writeInt32(constructor);
         }
     }
+
+    public static class TL_account_contentSettings extends TLObject {
+        public static int constructor = 0x57e28221;
+
+        public int flags;
+        public boolean sensitive_enabled;
+        public boolean sensitive_can_change;
+
+        public static TL_account_contentSettings TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            if (TL_account_contentSettings.constructor != constructor) {
+                if (exception) {
+                    throw new RuntimeException(String.format("can't parse magic %x in TL_account_contentSettings", constructor));
+                } else {
+                    return null;
+                }
+            }
+            TL_account_contentSettings result = new TL_account_contentSettings();
+            result.readParams(stream, exception);
+            return result;
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            flags = stream.readInt32(exception);
+            sensitive_enabled = (flags & 1) != 0;
+            sensitive_can_change = (flags & 2) != 0;
+
+        }
+    }
 }

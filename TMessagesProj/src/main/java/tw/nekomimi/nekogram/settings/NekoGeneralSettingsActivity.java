@@ -349,6 +349,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekomuraConfig.newYear.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekomuraConfig.usePersianCalendar.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekomuraConfig.displayPersianCalendarByLatin.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekomuraConfig.disableSystemAccount.getKey())) {
                 if (NekomuraConfig.disableSystemAccount.Bool()) {
                     getContactsController().deleteUnknownAppAccounts();
