@@ -1,6 +1,5 @@
 package tw.nekomimi.nkmr;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -93,6 +91,10 @@ public class Cells {
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
         cell.setLayoutParams(params);
+    }
+
+    public boolean needSetDivider(NekomuraTGCell cell) {
+        return !(rows.get(rows.indexOf(cell) + 1) instanceof NekomuraTGDivider);
     }
 
     //TG Cells
@@ -177,7 +179,7 @@ public class Cells {
 
         public void onBindViewHolder(RecyclerView.ViewHolder holder) {
             TextDetailSettingsCell cell = (TextDetailSettingsCell) holder.itemView;
-            cell.setTextAndValue(title, StrUtil.isNotBlank(bindConfig.String()) ? bindConfig.String() : hint , !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
+            cell.setTextAndValue(title, StrUtil.isNotBlank(bindConfig.String()) ? bindConfig.String() : hint, needSetDivider(this));
         }
     }
 
@@ -212,9 +214,9 @@ public class Cells {
             TextCheckCell cell = (TextCheckCell) holder.itemView;
             this.cell = cell;
             if (subtitle == null) {
-                cell.setTextAndCheck(title, bindConfig.Bool(), !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
+                cell.setTextAndCheck(title, bindConfig.Bool(), needSetDivider(this));
             } else {
-                cell.setTextAndValueAndCheck(title, subtitle, bindConfig.Bool(), true, !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
+                cell.setTextAndValueAndCheck(title, subtitle, bindConfig.Bool(), true, needSetDivider(this));
             }
             cell.setEnabled(enabled, null);
         }
@@ -268,7 +270,11 @@ public class Cells {
 
         public void onBindViewHolder(RecyclerView.ViewHolder holder) {
             TextSettingsCell cell = (TextSettingsCell) holder.itemView;
-            cell.setTextAndValue(title, selectList == null ? "" : selectList[bindConfig.Int()], !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
+            String valueText = "";
+            if (selectList != null && bindConfig.Int() < selectList.length) {
+                valueText = selectList[bindConfig.Int()];
+            }
+            cell.setTextAndValue(title, valueText, needSetDivider(this));
         }
 
         public void onClick() {
@@ -347,7 +353,7 @@ public class Cells {
 
         public void onBindViewHolder(RecyclerView.ViewHolder holder) {
             TextSettingsCell cell = (TextSettingsCell) holder.itemView;
-            cell.setTextAndValue(title, bindConfig.String(), !(rows.get(rows.indexOf(this) + 1) instanceof NekomuraTGDivider));
+            cell.setTextAndValue(title, bindConfig.String(), needSetDivider(this));
         }
 
         public void onClick() {

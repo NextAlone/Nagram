@@ -462,10 +462,6 @@ public class NekomuraConfig {
             if (preferences.contains("proxy_auto_switch"))
                 proxyAutoSwitch.setConfigBool(preferences.getBoolean("proxy_auto_switch", false));
 
-            if (preferences.contains("persian_calendar"))
-                usePersianCalendar.setConfigBool(preferences.getInt("persian_calendar", 0) != 0);
-            if (preferences.contains("displayPersianCalendarByLatin"))
-                displayPersianCalendarByLatin.setConfigBool(preferences.getBoolean("displayPersianCalendarByLatin", false));
             if (preferences.contains("openPGPApp"))
                 openPGPApp.setConfigString(preferences.getString("openPGPApp", ""));
             if (preferences.contains("openPGPKeyId"))
