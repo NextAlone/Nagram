@@ -4271,10 +4271,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             } else if (!ProxyUtil.isVPNEnabled()) {
                 SharedConfig.setProxyEnable(true);
             }
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
         }
 
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
+
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
         }
