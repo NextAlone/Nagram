@@ -2,9 +2,11 @@
 
 NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
-[![Get it on F-Droid](https://i.imgur.com/HDicnzz.png)](https://f-droid.org/packages/nekox.messenger)
+中文
 
-We are no longer able to update versions on the Play Store, check https://telegra.ph/So-they-solved-the-person-who-asked-the-question-04-28 .
+[![Get it on F-Droid](https://i.imgur.com/HDicnzz.png)](https://f-droid.org/packages/nekox.messenger) Fdroid releases can not upgrade to other releases.
+
+~~We are no longer able to update versions on the Play Store, check https://telegra.ph/So-they-solved-the-person-who-asked-the-question-04-28 .~~
 
 - [Update News Telegram](https://t.me/NekogramX)
 - [GitHub Feedback](https://github.com/NekoX-Dev/NekoX/issues)
@@ -20,14 +22,14 @@ We are no longer able to update versions on the Play Store, check https://telegr
 - Most of Nekogram's features
 - Unlimited login accounts
 - OpenCC Chinese Convert
-- Built-in VMess, Shadowsocks, SSR, Trojan-GFW proxies support
-- Built-in public proxy list / Proxy subscription support
+- Built-in VMess, Shadowsocks, SSR, Trojan-GFW proxies support (No longer maintained)
+- Built-in public proxy (WebSocket relay via Cloudflare CDN), [documentation and for PC](https://github.com/arm64v8a/NekoXProxy)
+- Proxy subscription support
 - Ipv6 MTProxy support
 - Able to parse all proxy subscription format: SIP008, ssr, v2rayN, vmess1, shit ios app formats, clash config and more
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc
 - Scan the QR code (any link, can add a proxy)
 - The ( vmess / vmess1 / ss / ssr / trojan ) proxy link in the message can be clicked
-- Built-in WebSocket relay support (Connect via Cloudflare CDN)
 - Allow auto-disabling proxy when VPN is enabled
 - Proxy automatic switcher
 - Add stickers without sticker pack
