@@ -47,6 +47,7 @@ fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Excepti
 
                             var content = req.execute().body()
                             content = content.replace("\\\"", "", false)
+                            content = content.replace(" ", "", false)
 
                             val proxiesString = NekomuraUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
                             if (proxiesString.equals(content)) {
