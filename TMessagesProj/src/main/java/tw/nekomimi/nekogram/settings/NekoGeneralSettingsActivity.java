@@ -84,6 +84,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell largeAvatarInDrawerRow = addNekomuraTGCell(nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.largeAvatarInDrawer, LocaleController.getString("valuesLargeAvatarInDrawer"), null));
     private final NekomuraTGCell avatarBackgroundBlurRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundBlur));
     private final NekomuraTGCell avatarBackgroundDarkenRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundDarken));
+    private final NekomuraTGCell hidePhoneRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hidePhone));
     private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Connection")));
@@ -145,7 +146,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell divider6 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
 
     private final NekomuraTGCell header7 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("General")));
-    private final NekomuraTGCell hidePhoneRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.hidePhone));
     private final NekomuraTGCell disableUndoRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.disableUndo));
     private final NekomuraTGCell showIdAndDcRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.showIdAndDc));
     private final NekomuraTGCell inappCameraRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.inappCamera));

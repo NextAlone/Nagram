@@ -2901,10 +2901,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 } else if (position == phoneRow) {
                     final TLRPC.User user = getMessagesController().getUser(userId);
-                    if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null
-                            || (NekomuraConfig.hidePhone.Bool() && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
-                        return;
-                    }
 
                     String number = PhoneFormat.getInstance().format("+" + user.phone);
 
@@ -7212,8 +7208,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (position == phoneRow) {
                         String text;
                         final TLRPC.User user = getMessagesController().getUser(userId);
-                        if (!TextUtils.isEmpty(user.phone)
-                                && !(NekomuraConfig.hidePhone.Bool() && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
+                        if (!TextUtils.isEmpty(user.phone)) {
                             text = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
                             text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);

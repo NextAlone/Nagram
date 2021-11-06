@@ -250,16 +250,7 @@ public class DrawerProfileCell extends FrameLayout {
             }
             switchTheme(themeInfo, toDark);
         });
-
-        LayoutParams lp = NekomuraConfig.largeAvatarInDrawer.Int() == 2 ? // correct the position of this button
-                LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 10, 6, 0) :
-                LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 10, 6, 90);
-        addView(darkThemeView, lp);
-
-        if (NekomuraConfig.largeAvatarInDrawer.Int() == 2) { // add shadow
-            nameTextView.setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
-            phoneTextView.getTextView().setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
-        }
+        addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 10, 6, 90));
 
         if (Theme.getEventType() == 0 || NekomuraConfig.actionBarDecoration.Int() == 1) {
             snowflakesEffect = new SnowflakesEffect();
@@ -398,6 +389,7 @@ public class DrawerProfileCell extends FrameLayout {
         setArrowState(animated);
     }
 
+    // called by onBindViewHolder
     public void setUser(TLRPC.User user, boolean accounts) {
         if (user == null) {
             return;
@@ -423,6 +415,17 @@ public class DrawerProfileCell extends FrameLayout {
             avatarImageView.setVisibility(INVISIBLE);
         } else {
             avatarImageView.setVisibility(VISIBLE);
+        }
+        if (NekomuraConfig.largeAvatarInDrawer.Int() == 2) {
+            // add shadow
+            nameTextView.setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
+            phoneTextView.getTextView().setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
+
+            // correct the position of night button
+            LayoutParams lp = NekomuraConfig.largeAvatarInDrawer.Int() == 2 ?
+                    LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, AndroidUtilities.statusBarHeight / getResources().getDisplayMetrics().density, 6, 0) :
+                    LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 10, 6, 90);
+            darkThemeView.setLayoutParams(lp);
         }
 
         applyBackground(true);
