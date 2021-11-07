@@ -40,7 +40,9 @@ object EnvUtil {
 
             }
 
-            add(Environment.getExternalStoragePublicDirectory("NekoX"))
+            if (Build.VERSION.SDK_INT < 30) {
+                add(Environment.getExternalStoragePublicDirectory("NekoX"))
+            }
 
         }.map { it.path }.toTypedArray()
 
