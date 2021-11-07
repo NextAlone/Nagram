@@ -31,7 +31,7 @@ public class ChatCCTarget implements Mappable {
 
     @Override
     public void read(NitriteMapper mapper, Document document) {
-        chatId = ((int) document.get("chatId"));
+        chatId = ((long) document.get("chatId"));
         ccTarget = ((String) document.get("ccTarget"));
     }
 
