@@ -98,10 +98,10 @@ index fd3532664..7fcfb1627 100644
 -    DEPENDS all_tests bssl_shim handshaker fips_specific_tests_if_any
 -    USES_TERMINAL)
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
-index e940f7d5f..f5221d70d 100644
+index 9c724b74d..72c1e4fd2 100644
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
-@@ -85,7 +85,6 @@ function(perlasm dest src)
+@@ -91,7 +91,6 @@ function(perlasm dest src)
  endfunction()
  
  add_subdirectory(fipsmodule)
@@ -109,7 +109,7 @@ index e940f7d5f..f5221d70d 100644
  
  if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -466,96 +466,3 @@ endif()
+@@ -471,97 +470,3 @@ endif()
  if(USE_CUSTOM_LIBCXX)
    target_link_libraries(crypto libcxx)
  endif()
@@ -143,6 +143,7 @@ index e940f7d5f..f5221d70d 100644
 -  cipher_extra/cipher_test.cc
 -  cmac/cmac_test.cc
 -  compiler_test.cc
+-  conf/conf_test.cc
 -  constant_time_test.cc
 -  cpu-arm-linux_test.cc
 -  crypto_test.cc
