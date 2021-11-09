@@ -50,15 +50,9 @@ object EnvUtil {
     @JvmStatic
     fun getTelegramPath(): File {
 
-        if (NekomuraConfig.cachePath.String() == null) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // https://github.com/NekoX-Dev/NekoX/issues/284
-                NekomuraConfig.cachePath.setConfigString(File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
-            } else {
-                NekomuraConfig.cachePath.setConfigString(ApplicationLoader.applicationContext.getExternalFilesDir("files")?.parent ?: File(ApplicationLoader.getDataDirFixed(), "cache/media").path)
-            }
-
+        if (NekomuraConfig.cachePath.String() == "") {
+            // https://github.com/NekoX-Dev/NekoX/issues/284
+            NekomuraConfig.cachePath.setConfigString(availableDirectories[2]);
         }
 
         var telegramPath = File(NekomuraConfig.cachePath.String())
@@ -68,6 +62,8 @@ object EnvUtil {
             return telegramPath
 
         }
+
+        // fallback
 
         telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null) ?: File(ApplicationLoader.getDataDirFixed(), "cache/files")
 
