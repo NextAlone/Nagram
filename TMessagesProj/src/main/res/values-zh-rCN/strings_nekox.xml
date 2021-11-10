@@ -256,6 +256,7 @@
     <string name="DeleteDownloadedFileConfirm">从本地缓存中删除此文件？</string>
     <string name="DeleteDownloadedFileSucceed">已删除</string>
     <string name="DeleteDownloadedFileExternal">外部文件被跳过。</string>
+    <string name="update_download_soucre">选择更新源</string>
 
     <string name="valuesLargeAvatarInDrawer">Telegram 默认\n使用头像作为背景\n使用大只头像作为背景</string>
 </resources>
