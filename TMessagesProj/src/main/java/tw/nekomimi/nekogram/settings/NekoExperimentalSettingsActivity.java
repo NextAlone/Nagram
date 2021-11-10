@@ -42,8 +42,9 @@ import kotlin.Unit;
 
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nkmr.Cells;
-import tw.nekomimi.nkmr.Cells.*;
+import tw.nekomimi.nkmr.CellGroup;
+import tw.nekomimi.nkmr.NekomuraTGCell;
+import tw.nekomimi.nkmr.cells.*;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -55,22 +56,21 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private boolean sensitiveCanChange = false;
     private boolean sensitiveEnabled = false;
 
-    private ArrayList<NekomuraTGCell> rows = new ArrayList<>();
-    private Cells nkmrCells = new Cells(this, rows);
+    private final CellGroup cellGroup = new CellGroup(this);
 
-    private final NekomuraTGCell header1 = addNekomuraTGCell(nkmrCells.new NekomuraTGHeader(LocaleController.getString("Experiment")));
-    private final NekomuraTGCell smoothKeyboardRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
-    private final NekomuraTGCell increaseVoiceMessageQualityRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
-    private final NekomuraTGCell mediaPreviewRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
-    private final NekomuraTGCell proxyAutoSwitchRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.proxyAutoSwitch));
-    private final NekomuraTGCell disableFilteringRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_CHECK, true));
+    private final NekomuraTGCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Experiment")));
+    private final NekomuraTGCell smoothKeyboardRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
+    private final NekomuraTGCell increaseVoiceMessageQualityRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
+    private final NekomuraTGCell mediaPreviewRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
+    private final NekomuraTGCell proxyAutoSwitchRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.proxyAutoSwitch));
+    private final NekomuraTGCell disableFilteringRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
     //    private final NekomuraTGCell ignoreContentRestrictionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreContentRestrictions, LocaleController.getString("IgnoreContentRestrictionsNotice")));
-    private final NekomuraTGCell unlimitedFavedStickersRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
-    private final NekomuraTGCell unlimitedPinnedDialogsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
-    private final NekomuraTGCell enableStickerPinRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
-    private final NekomuraTGCell useMediaStreamInVoipRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.useMediaStreamInVoip));
-    private final NekomuraTGCell customAudioBitrateRow = addNekomuraTGCell(nkmrCells.new NekomuraTGCustom(Cells.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final NekomuraTGCell divider0 = addNekomuraTGCell(nkmrCells.new NekomuraTGDivider());
+    private final NekomuraTGCell unlimitedFavedStickersRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
+    private final NekomuraTGCell unlimitedPinnedDialogsRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
+    private final NekomuraTGCell enableStickerPinRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
+    private final NekomuraTGCell useMediaStreamInVoipRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useMediaStreamInVoip));
+    private final NekomuraTGCell customAudioBitrateRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final NekomuraTGCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
 
     private UndoView tooltip;
 
@@ -115,7 +115,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
-            NekomuraTGCell a = rows.get(position);
+            NekomuraTGCell a = cellGroup.rows.get(position);
             if (a instanceof NekomuraTGTextCheck) {
                 ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof NekomuraTGSelectBox) {
@@ -131,7 +131,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     }
                 }
             } else if (a instanceof NekomuraTGCustom) { // Custom onclick
-                if (position == rows.indexOf(disableFilteringRow)) {
+                if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
                     sensitiveEnabled = !sensitiveEnabled;
                     TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
                     req.sensitive_enabled = sensitiveEnabled;
@@ -147,7 +147,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                             AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
                         }
                     }));
-                } else if (position == rows.indexOf(customAudioBitrateRow)) {
+                } else if (position == cellGroup.rows.indexOf(customAudioBitrateRow)) {
                     PopupBuilder builder = new PopupBuilder(view);
                     builder.setItems(new String[]{
                             "32 (" + LocaleController.getString("Default", R.string.Default) + ")",
@@ -186,7 +186,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         });
 
         // Cells: Set OnSettingChanged Callbacks
-        nkmrCells.callBackSettingsChanged = (key, newValue) -> {
+        cellGroup.callBackSettingsChanged = (key, newValue) -> {
             if (key.equals(NekomuraConfig.smoothKeyboard.getKey())) {
                 if ((boolean) newValue != NekomuraConfig.smoothKeyboard.Bool()) {
                     SharedConfig.toggleSmoothKeyboard();
@@ -213,19 +213,13 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         };
 
         //Cells: Set ListAdapter
-        nkmrCells.setListAdapter(listView, listAdapter);
+        cellGroup.setListAdapter(listView, listAdapter);
 
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
     }
-
-    public NekomuraTGCell addNekomuraTGCell(NekomuraTGCell a) {
-        rows.add(a);
-        return a;
-    }
-
 
     @Override
     public void onResume() {
@@ -296,7 +290,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     View child = listView.getChildAt(a);
                     RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.getChildViewHolder(child);
                     int position = holder.getAdapterPosition();
-                    if (position == rows.indexOf(disableFilteringRow)) {
+                    if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
                         TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                         checkCell.setChecked(sensitiveEnabled);
                         checkCell.setEnabled(sensitiveCanChange, animators);
@@ -338,13 +332,13 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            return rows.size();
+            return cellGroup.rows.size();
         }
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            NekomuraTGCell a = rows.get(position);
+            NekomuraTGCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.isEnabled();
             }
@@ -353,30 +347,30 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            NekomuraTGCell a = rows.get(position);
+            NekomuraTGCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.getType();
             }
-            return Cells.ITEM_TYPE_TEXT_DETAIL;
+            return CellGroup.ITEM_TYPE_TEXT_DETAIL;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            NekomuraTGCell a = rows.get(position);
+            NekomuraTGCell a = cellGroup.rows.get(position);
             if (a != null) {
                 if (a instanceof NekomuraTGCustom) {
                     // Custom binds
                     if (holder.itemView instanceof TextCheckCell) {
                         TextCheckCell textCell = (TextCheckCell) holder.itemView;
                         textCell.setEnabled(true, null);
-                        if (position == rows.indexOf(disableFilteringRow)) {
+                        if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
                             textCell.setTextAndValueAndCheck(LocaleController.getString("SensitiveDisableFiltering", R.string.SensitiveDisableFiltering), LocaleController.getString("SensitiveAbout", R.string.SensitiveAbout), sensitiveEnabled, true, true);
                             textCell.setEnabled(sensitiveCanChange, null);
                         }
                     } else if (holder.itemView instanceof TextSettingsCell) {
                         TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                        if (position == rows.indexOf(customAudioBitrateRow)) {
+                        if (position == cellGroup.rows.indexOf(customAudioBitrateRow)) {
                             String value = String.valueOf(NekomuraConfig.customAudioBitrate.Int()) + "kbps";
                             if (NekomuraConfig.customAudioBitrate.Int() == 32)
                                 value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
@@ -386,7 +380,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 } else {
                     // Default binds
                     a.onBindViewHolder(holder);
-                    if (position == rows.indexOf(smoothKeyboardRow) && AndroidUtilities.isTablet()) {
+                    if (position == cellGroup.rows.indexOf(smoothKeyboardRow) && AndroidUtilities.isTablet()) {
                         holder.itemView.setVisibility(View.GONE);
                     }
                 }
@@ -398,26 +392,26 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
-                case Cells.ITEM_TYPE_DIVIDER:
+                case CellGroup.ITEM_TYPE_DIVIDER:
                     view = new ShadowSectionCell(mContext);
                     break;
-                case Cells.ITEM_TYPE_TEXT_SETTINGS_CELL:
+                case CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL:
                     view = new TextSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case Cells.ITEM_TYPE_TEXT_CHECK:
+                case CellGroup.ITEM_TYPE_TEXT_CHECK:
                     view = new TextCheckCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case Cells.ITEM_TYPE_HEADER:
+                case CellGroup.ITEM_TYPE_HEADER:
                     view = new HeaderCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case Cells.ITEM_TYPE_TEXT_DETAIL:
+                case CellGroup.ITEM_TYPE_TEXT_DETAIL:
                     view = new TextDetailSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case Cells.ITEM_TYPE_TEXT:
+                case CellGroup.ITEM_TYPE_TEXT:
                     view = new TextInfoPrivacyCell(mContext);
                     // view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
