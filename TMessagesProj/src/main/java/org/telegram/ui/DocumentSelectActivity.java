@@ -100,6 +100,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.hutool.core.collection.CollectionUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
@@ -1407,7 +1408,7 @@ public class DocumentSelectActivity extends BaseFragment {
         ListItem fs = new ListItem();
 
         try {
-            File telegramPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+            File telegramPath = EnvUtil.getTelegramPath();
             if (telegramPath.exists()) {
                 fs = new ListItem();
                 fs.title = "Telegram";
