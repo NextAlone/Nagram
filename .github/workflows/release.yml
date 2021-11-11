@@ -253,12 +253,8 @@ jobs:
         flavor:
           - FullRelease
           - FullReleaseNoGcm
-          - FullAppleEmojiRelease
-          - FullAppleEmojiReleaseNoGcm
           - MiniRelease
           - MiniReleaseNoGcm
-          - MiniAppleEmojiRelease
-          - MiniAppleEmojiReleaseNoGcm
     steps:
       - name: Checkout
         uses: actions/checkout@v2

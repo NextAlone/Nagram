@@ -326,11 +326,7 @@ android {
         mini {
             isDefault true
         }
-        miniAppleEmoji {
-        }
         full {
-        }
-        fullAppleEmoji {
         }
         miniPlay {
             versionNameSuffix "-play"
