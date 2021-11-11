@@ -255,4 +255,5 @@
     <string name="DeleteDownloadedFileExternal">External file is skipped.</string>
 
     <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
+    <string name="hideSponsoredMessage">Hide sponsored messages</string>
 </resources>

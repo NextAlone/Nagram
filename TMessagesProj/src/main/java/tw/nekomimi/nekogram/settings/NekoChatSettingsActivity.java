@@ -61,7 +61,7 @@ import tw.nekomimi.nkmr.cells.NekomuraTGTextInput;
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private final CellGroup cellGroup = new CellGroup(this);
-    private final boolean showCensoredFeatures = NekoXConfig.developerMode || NekoXConfig.customApi > 0 || Arrays.stream(NekoXConfig.developers).anyMatch(id -> id == getUserConfig().getCurrentUser().id);
+    private final boolean showCensoredFeatures = NekomuraConfig.showCensoredFeatures(getUserConfig().clientUserId);
     private final NekomuraTGCell header0 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("StickerSize")));
     private final NekomuraTGCell stickerSizeRow = cellGroup.appendCell(new NekomuraTGCustom(998, true));
     private final NekomuraTGCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
@@ -159,9 +159,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         });
 
         // Before listAdapter
-        ((NekomuraTGTextCheck) disableChatActionRow).enabled = showCensoredFeatures;
-        ((NekomuraTGTextCheck) disableChoosingStickerRow).enabled = showCensoredFeatures;
-
+        if (!showCensoredFeatures) {
+            cellGroup.rows.remove(disableChatActionRow);
+            cellGroup.rows.remove(disableChoosingStickerRow);
+        }
 
         listAdapter = new ListAdapter(context);
 

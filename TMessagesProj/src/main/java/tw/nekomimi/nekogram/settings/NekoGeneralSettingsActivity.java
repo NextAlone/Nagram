@@ -77,6 +77,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private ValueAnimator statusBarColorAnimator;
     private DrawerProfilePreviewCell profilePreviewCell;
+    private final boolean showCensoredFeatures = NekomuraConfig.showCensoredFeatures(getUserConfig().clientUserId);
 
     private final CellGroup cellGroup = new CellGroup(this);
 
@@ -150,6 +151,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final NekomuraTGCell showIdAndDcRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.showIdAndDc));
     private final NekomuraTGCell inappCameraRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.inappCamera));
     private final NekomuraTGCell hideProxySponsorChannelRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxySponsorChannel));
+    private final NekomuraTGCell hideSponsoredMessageRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideSponsoredMessage));
     private final NekomuraTGCell askBeforeCallRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.askBeforeCall));
     private final NekomuraTGCell autoPauseVideoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
     private final NekomuraTGCell disableNumberRoundingRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableNumberRounding, "4.8K -> 4777"));
@@ -711,6 +713,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     }
 
     private void setCanNotChange() {
+        if(!showCensoredFeatures)
+            cellGroup.rows.remove(hideSponsoredMessageRow);
+
         boolean enabled;
 
         enabled = NekomuraConfig.largeAvatarInDrawer.Int() > 0;

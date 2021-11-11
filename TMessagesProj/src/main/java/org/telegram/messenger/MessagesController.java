@@ -69,6 +69,7 @@ import java.util.stream.Collectors;
 import cn.hutool.core.thread.ThreadUtil;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.InternalFilters;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -14047,6 +14048,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public ArrayList<MessageObject> getSponsoredMessages(long dialogId) {
+        if (NekomuraConfig.hideSponsoredMessage.Bool())
+            return null;
         SponsoredMessagesInfo info = sponsoredMessages.get(dialogId);
         if (info != null && (info.loading || Math.abs(SystemClock.elapsedRealtime() - info.loadTime) <= 5 * 60 * 1000)) {
             return info.messages;
