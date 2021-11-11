@@ -2,10 +2,7 @@ package tw.nekomimi.nkmr.cells;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.NekomuraTGCell;
-
-public class NekomuraTGCustom extends NekomuraTGCell {
+public class NekomuraTGCustom extends AbstractCell {
     public final int type;
     public final boolean enabled;
 

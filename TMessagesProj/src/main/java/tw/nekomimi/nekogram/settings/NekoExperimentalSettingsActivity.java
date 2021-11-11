@@ -43,7 +43,7 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.NekomuraTGCell;
+import tw.nekomimi.nkmr.cells.AbstractCell;
 import tw.nekomimi.nkmr.cells.*;
 
 @SuppressLint("RtlHardcoded")
@@ -58,19 +58,19 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
     private final CellGroup cellGroup = new CellGroup(this);
 
-    private final NekomuraTGCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Experiment")));
-    private final NekomuraTGCell smoothKeyboardRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
-    private final NekomuraTGCell increaseVoiceMessageQualityRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
-    private final NekomuraTGCell mediaPreviewRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
-    private final NekomuraTGCell proxyAutoSwitchRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.proxyAutoSwitch));
-    private final NekomuraTGCell disableFilteringRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
+    private final AbstractCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Experiment")));
+    private final AbstractCell smoothKeyboardRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
+    private final AbstractCell increaseVoiceMessageQualityRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
+    private final AbstractCell mediaPreviewRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
+    private final AbstractCell proxyAutoSwitchRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.proxyAutoSwitch));
+    private final AbstractCell disableFilteringRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
     //    private final NekomuraTGCell ignoreContentRestrictionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreContentRestrictions, LocaleController.getString("IgnoreContentRestrictionsNotice")));
-    private final NekomuraTGCell unlimitedFavedStickersRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
-    private final NekomuraTGCell unlimitedPinnedDialogsRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
-    private final NekomuraTGCell enableStickerPinRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
-    private final NekomuraTGCell useMediaStreamInVoipRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useMediaStreamInVoip));
-    private final NekomuraTGCell customAudioBitrateRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final NekomuraTGCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell unlimitedFavedStickersRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
+    private final AbstractCell unlimitedPinnedDialogsRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
+    private final AbstractCell enableStickerPinRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
+    private final AbstractCell useMediaStreamInVoipRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useMediaStreamInVoip));
+    private final AbstractCell customAudioBitrateRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
 
     private UndoView tooltip;
 
@@ -115,7 +115,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a instanceof NekomuraTGTextCheck) {
                 ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof NekomuraTGSelectBox) {
@@ -338,7 +338,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.isEnabled();
             }
@@ -347,7 +347,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.getType();
             }
@@ -356,7 +356,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a != null) {
                 if (a instanceof NekomuraTGCustom) {
                     // Custom binds

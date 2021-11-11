@@ -7,9 +7,8 @@ import org.telegram.ui.Cells.TextCheckCell;
 
 import tw.nekomimi.nkmr.CellGroup;
 import tw.nekomimi.nkmr.ConfigItem;
-import tw.nekomimi.nkmr.NekomuraTGCell;
 
-public class NekomuraTGTextCheck extends NekomuraTGCell {
+public class NekomuraTGTextCheck extends AbstractCell {
     private final ConfigItem bindConfig;
     private final String title;
     private final String subtitle;

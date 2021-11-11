@@ -29,14 +29,15 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.zip.GZIPInputStream;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nkmr.Cells;
+import tw.nekomimi.nkmr.CellGroup;
 import tw.nekomimi.nkmr.MiniCDNDrive;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.NekomuraUtil;
+import tw.nekomimi.nkmr.cells.NekomuraTGSelectBox;
 
 //TODO use UpdateAppAlertDialog / BlockingUpdateView?
 
@@ -54,6 +55,10 @@ public class InternalUpdater {
     private static class ApkMetadata {
         String name;
         String browser_download_url;
+    }
+
+    private static class GithubApiContents {
+        String content;
     }
 
     // as a base64 encoded json
@@ -88,6 +93,16 @@ public class InternalUpdater {
             ReleaseMetadata[] releases = new Gson().fromJson(ret, ReleaseMetadata[].class);
 
             ReleaseMetadata release = null;
+            String releaseChannel = "stable";
+            switch (NekoXConfig.autoUpdateReleaseChannel) {
+                case 2:
+                    releaseChannel = "rc";
+                    break;
+                case 3:
+                    releaseChannel = "preview";
+                    break;
+            }
+
             for (ReleaseMetadata rel : releases) {
                 if (rel.name.equals("v" + BuildConfig.VERSION_NAME))
                     break;
@@ -110,20 +125,26 @@ public class InternalUpdater {
             final ApkMetadata apk = matchBuild(release.assets);
 
             // match apk urls
-            byte[] gzipped = Base64.decode(NekomuraUtil.getSubString(release.body, "#NekoXStart#", "#NekoXEnd#"), Base64.NO_PADDING);
-            final NekoXReleaseNote nekoXReleaseNote = new Gson().fromJson(new String(NekomuraUtil.uncompress(gzipped)), NekoXReleaseNote.class);
             String urlChannel = "";
             String urlCDNDrive = "";
             String sha1 = "";
-            if (apk != null && nekoXReleaseNote != null) {
-                for (NekoXAPK napk : nekoXReleaseNote.apks) {
-                    if (napk.name.equals(apk.name)) {
-                        sha1 = napk.sha1;
-                        for (String url : napk.urls) {
-                            if (url.startsWith("https://t.me/")) urlChannel = url;
-                            if (url.startsWith("bdex://")) urlCDNDrive = url;
+            if (apk != null) {
+                final String newBody = HttpUtil.get("https://api.github.com/repos/NekoX-Dev/updates/contents/" + releaseChannel + ".txt?ref=main");
+                final GithubApiContents releaseNoteApi = new Gson().fromJson(newBody, GithubApiContents.class);
+                final String releaseNoteString = new String(Base64.decode(releaseNoteApi.content, Base64.DEFAULT));
+                final byte[] gzipped = Base64.decode(NekomuraUtil.getSubString(releaseNoteString, "#NekoXStart#", "#NekoXEnd#"), Base64.NO_PADDING);
+                final NekoXReleaseNote nekoXReleaseNote = new Gson().fromJson(new String(NekomuraUtil.uncompress(gzipped)), NekoXReleaseNote.class);
+
+                if (nekoXReleaseNote != null && nekoXReleaseNote.apks != null) {
+                    for (NekoXAPK napk : nekoXReleaseNote.apks) {
+                        if (napk.name.equals(apk.name)) {
+                            sha1 = napk.sha1;
+                            for (String url : napk.urls) {
+                                if (url.startsWith("https://t.me/")) urlChannel = url;
+                                if (url.startsWith("bdex://")) urlCDNDrive = url;
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
@@ -166,7 +187,7 @@ public class InternalUpdater {
     }
 
     public static void showSelectDownloadSource(Context ctx, String title, String browser_download_url, String urlChannel, String urlCDNDrive, String sha1) {
-        Cells nkmrCells = new Cells(null, null);
+        CellGroup nkmrCells = new CellGroup(null);
 
         nkmrCells.callBackSettingsChanged = ((k, v) -> {
             int source = NekomuraConfig.update_download_soucre.Int();
@@ -221,7 +242,8 @@ public class InternalUpdater {
         String[] sources_ = new String[sources.size()];
         sources.toArray(sources_);
 
-        Cells.NekomuraTGSelectBox sb = nkmrCells.new NekomuraTGSelectBox(null, NekomuraConfig.update_download_soucre, sources_, null);
+        NekomuraTGSelectBox sb = new NekomuraTGSelectBox(null, NekomuraConfig.update_download_soucre, sources_, null);
+        nkmrCells.appendCell(sb); // new
         sb.onClick(ctx);
     }
 

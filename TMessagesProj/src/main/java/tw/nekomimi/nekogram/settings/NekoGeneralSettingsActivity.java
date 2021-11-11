@@ -67,7 +67,7 @@ import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nkmr.ConfigItem;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.NekomuraTGCell;
+import tw.nekomimi.nkmr.cells.AbstractCell;
 import tw.nekomimi.nkmr.cells.*;
 
 @SuppressLint("RtlHardcoded")
@@ -81,88 +81,88 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private final CellGroup cellGroup = new CellGroup(this);
 
-    private final NekomuraTGCell profilePreviewRow = cellGroup.appendCell(new NkmrDrawerProfilePreviewCell());
-    private final NekomuraTGCell largeAvatarInDrawerRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.largeAvatarInDrawer, LocaleController.getString("valuesLargeAvatarInDrawer"), null));
-    private final NekomuraTGCell avatarBackgroundBlurRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundBlur));
-    private final NekomuraTGCell avatarBackgroundDarkenRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundDarken));
-    private final NekomuraTGCell hidePhoneRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hidePhone));
-    private final NekomuraTGCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell profilePreviewRow = cellGroup.appendCell(new NkmrDrawerProfilePreviewCell());
+    private final AbstractCell largeAvatarInDrawerRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.largeAvatarInDrawer, LocaleController.getString("valuesLargeAvatarInDrawer"), null));
+    private final AbstractCell avatarBackgroundBlurRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundBlur));
+    private final AbstractCell avatarBackgroundDarkenRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.avatarBackgroundDarken));
+    private final AbstractCell hidePhoneRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hidePhone));
+    private final AbstractCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Connection")));
-    private final NekomuraTGCell useIPv6Row = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useIPv6));
-    private final NekomuraTGCell disableProxyWhenVpnEnabledRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableProxyWhenVpnEnabled));
-    private final NekomuraTGCell useProxyItemRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useProxyItem));
-    private final NekomuraTGCell hideProxyByDefaultRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
-    private final NekomuraTGCell useSystemDNSRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemDNS));
-    private final NekomuraTGCell customDoHRow = cellGroup.appendCell(new NekomuraTGTextInput(null, NekomuraConfig.customDoH, "https://1.0.0.1/dns-query", null));
-    private final NekomuraTGCell customPublicProxyIPRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.customPublicProxyIP, (view, position) -> {
+    private final AbstractCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Connection")));
+    private final AbstractCell useIPv6Row = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useIPv6));
+    private final AbstractCell disableProxyWhenVpnEnabledRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableProxyWhenVpnEnabled));
+    private final AbstractCell useProxyItemRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useProxyItem));
+    private final AbstractCell hideProxyByDefaultRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
+    private final AbstractCell useSystemDNSRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemDNS));
+    private final AbstractCell customDoHRow = cellGroup.appendCell(new NekomuraTGTextInput(null, NekomuraConfig.customDoH, "https://1.0.0.1/dns-query", null));
+    private final AbstractCell customPublicProxyIPRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.customPublicProxyIP, (view, position) -> {
         customDialog_BottomInputString(position, NekomuraConfig.customPublicProxyIP, LocaleController.getString("customPublicProxyIPNotice"), "IP");
     }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
-    private final NekomuraTGCell divider1 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell divider1 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header2 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Translate")));
-    private final NekomuraTGCell translationProviderRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final NekomuraTGCell translateToLangRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final NekomuraTGCell translateInputToLangRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final NekomuraTGCell googleCloudTranslateKeyRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.googleCloudTranslateKey, (view, position) -> {
+    private final AbstractCell header2 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Translate")));
+    private final AbstractCell translationProviderRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractCell translateToLangRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractCell translateInputToLangRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractCell googleCloudTranslateKeyRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.googleCloudTranslateKey, (view, position) -> {
         customDialog_BottomInputString(position, NekomuraConfig.googleCloudTranslateKey, LocaleController.getString("GoogleCloudTransKeyNotice"), "Key");
     }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
-    private final NekomuraTGCell divider2 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell divider2 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header3 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("OpenKayChain")));
-    private final NekomuraTGCell pgpAppRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final NekomuraTGCell keyRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.openPGPKeyId, (view, position) -> {
+    private final AbstractCell header3 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("OpenKayChain")));
+    private final AbstractCell pgpAppRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractCell keyRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.openPGPKeyId, (view, position) -> {
         requestKey(new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID));
     }, "0"));
-    private final NekomuraTGCell divider3 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell divider3 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header4 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("DialogsSettings")));
-    private final NekomuraTGCell sortMenuRow = cellGroup.appendCell(new NekomuraTGSelectBox(LocaleController.getString("SortMenu"), null, null, () -> {
+    private final AbstractCell header4 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("DialogsSettings")));
+    private final AbstractCell sortMenuRow = cellGroup.appendCell(new NekomuraTGSelectBox(LocaleController.getString("SortMenu"), null, null, () -> {
         showSortMenuAlert();
     }));
-    private final NekomuraTGCell acceptSecretChatRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.acceptSecretChat));
-    private final NekomuraTGCell divider4 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell acceptSecretChatRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.acceptSecretChat));
+    private final AbstractCell divider4 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header5 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Appearance")));
-    private final NekomuraTGCell typefaceRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.typeface));
-    private final NekomuraTGCell useDefaultThemeRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useDefaultTheme));
-    private final NekomuraTGCell useSystemEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
-    private final NekomuraTGCell transparentStatusBarRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.transparentStatusBar));
-    private final NekomuraTGCell appBarShadowRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableAppBarShadow));
-    private final NekomuraTGCell newYearRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.newYear));
-    private final NekomuraTGCell actionBarDecorationRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.actionBarDecoration, new String[]{
+    private final AbstractCell header5 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Appearance")));
+    private final AbstractCell typefaceRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.typeface));
+    private final AbstractCell useDefaultThemeRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useDefaultTheme));
+    private final AbstractCell useSystemEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
+    private final AbstractCell transparentStatusBarRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.transparentStatusBar));
+    private final AbstractCell appBarShadowRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableAppBarShadow));
+    private final AbstractCell newYearRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.newYear));
+    private final AbstractCell actionBarDecorationRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.actionBarDecoration, new String[]{
             LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
             LocaleController.getString("Snowflakes", R.string.Snowflakes),
             LocaleController.getString("Fireworks", R.string.Fireworks)
     }, null));
-    private final NekomuraTGCell tabletModeRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.tabletMode, new String[]{
+    private final AbstractCell tabletModeRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.tabletMode, new String[]{
             LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
             LocaleController.getString("Enable", R.string.Enable),
             LocaleController.getString("Disable", R.string.Disable)
     }, null));
-    private final NekomuraTGCell divider5 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell divider5 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header6 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("PrivacyTitle")));
-    private final NekomuraTGCell disableSystemAccountRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableSystemAccount));
-    private final NekomuraTGCell divider6 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell header6 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("PrivacyTitle")));
+    private final AbstractCell disableSystemAccountRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableSystemAccount));
+    private final AbstractCell divider6 = cellGroup.appendCell(new NekomuraTGDivider());
 
-    private final NekomuraTGCell header7 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("General")));
-    private final NekomuraTGCell disableUndoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableUndo));
-    private final NekomuraTGCell showIdAndDcRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.showIdAndDc));
-    private final NekomuraTGCell inappCameraRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.inappCamera));
-    private final NekomuraTGCell hideProxySponsorChannelRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxySponsorChannel));
-    private final NekomuraTGCell hideSponsoredMessageRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideSponsoredMessage));
-    private final NekomuraTGCell askBeforeCallRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.askBeforeCall));
-    private final NekomuraTGCell autoPauseVideoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
-    private final NekomuraTGCell disableNumberRoundingRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableNumberRounding, "4.8K -> 4777"));
-    private final NekomuraTGCell openArchiveOnPullRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.openArchiveOnPull));
-    private final NekomuraTGCell nameOrderRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.nameOrder, new String[]{
+    private final AbstractCell header7 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("General")));
+    private final AbstractCell disableUndoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableUndo));
+    private final AbstractCell showIdAndDcRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.showIdAndDc));
+    private final AbstractCell inappCameraRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.inappCamera));
+    private final AbstractCell hideProxySponsorChannelRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxySponsorChannel));
+    private final AbstractCell hideSponsoredMessageRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideSponsoredMessage));
+    private final AbstractCell askBeforeCallRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.askBeforeCall));
+    private final AbstractCell autoPauseVideoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
+    private final AbstractCell disableNumberRoundingRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableNumberRounding, "4.8K -> 4777"));
+    private final AbstractCell openArchiveOnPullRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.openArchiveOnPull));
+    private final AbstractCell nameOrderRow = cellGroup.appendCell(new NekomuraTGSelectBox(null, NekomuraConfig.nameOrder, new String[]{
             LocaleController.getString("LastFirst", R.string.LastFirst),
             LocaleController.getString("FirstLast", R.string.FirstLast)
     }, null));
-    private final NekomuraTGCell usePersianCalendarRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.usePersianCalendar, LocaleController.getString("UsePersiancalendarInfo")));
-    private final NekomuraTGCell displayPersianCalendarByLatinRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.displayPersianCalendarByLatin));
-    private final NekomuraTGCell divider7 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractCell usePersianCalendarRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.usePersianCalendar, LocaleController.getString("UsePersiancalendarInfo")));
+    private final AbstractCell displayPersianCalendarByLatinRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.displayPersianCalendarByLatin));
+    private final AbstractCell divider7 = cellGroup.appendCell(new NekomuraTGDivider());
 
 
     private UndoView restartTooltip;
@@ -214,7 +214,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a instanceof NekomuraTGTextCheck) {
                 ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof NekomuraTGSelectBox) {
@@ -371,7 +371,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         return fragmentView;
     }
 
-    private class NkmrDrawerProfilePreviewCell extends NekomuraTGCell {
+    private class NkmrDrawerProfilePreviewCell extends AbstractCell {
         public int getType() {
             return 999;
         }
@@ -606,7 +606,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.isEnabled();
             }
@@ -615,7 +615,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.getType();
             }
@@ -624,7 +624,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            NekomuraTGCell a = cellGroup.rows.get(position);
+            AbstractCell a = cellGroup.rows.get(position);
             if (a != null) {
                 if (a instanceof NekomuraTGCustom) {
                     // Custom binds

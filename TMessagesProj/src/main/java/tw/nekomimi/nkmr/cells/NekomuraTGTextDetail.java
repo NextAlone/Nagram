@@ -9,10 +9,8 @@ import org.telegram.ui.Components.RecyclerListView;
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nkmr.CellGroup;
 import tw.nekomimi.nkmr.ConfigItem;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nkmr.NekomuraTGCell;
 
-public class NekomuraTGTextDetail extends NekomuraTGCell {
+public class NekomuraTGTextDetail extends AbstractCell {
     private final ConfigItem bindConfig;
     private final String title;
     private final String hint;

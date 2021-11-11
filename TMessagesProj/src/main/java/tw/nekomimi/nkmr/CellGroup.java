@@ -1,31 +1,16 @@
 package tw.nekomimi.nkmr;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.RadioColorCell;
-import org.telegram.ui.Cells.TextCheckCell;
-import org.telegram.ui.Cells.TextDetailSettingsCell;
-import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.EditTextBoldCursor;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
+import tw.nekomimi.nkmr.cells.AbstractCell;
 import tw.nekomimi.nkmr.cells.NekomuraTGDivider;
 
 public class CellGroup {
@@ -39,7 +24,7 @@ public class CellGroup {
     public BaseFragment thisFragment;
     public RecyclerListView listView;
     public RecyclerListView.SelectionAdapter listAdapter;
-    public ArrayList<NekomuraTGCell> rows;
+    public ArrayList<AbstractCell> rows;
 
     public CallBackSettingsChanged callBackSettingsChanged;
 
@@ -53,15 +38,15 @@ public class CellGroup {
         this.listAdapter = la;
     }
 
-    public NekomuraTGCell appendCell(NekomuraTGCell cell) {
+    public AbstractCell appendCell(AbstractCell cell) {
         cell.bindCellGroup(this);
         this.rows.add(cell);
         return cell;
     }
 
-    public NekomuraTGCell appendCell(NekomuraTGCell cell, boolean display) {
+    public AbstractCell appendCell(AbstractCell cell, boolean display) {
         cell.bindCellGroup(this);
-        if (display)
+        if (display) // For censored features, don't show it forever.
             this.rows.add(cell);
         return cell;
     }
@@ -98,14 +83,8 @@ public class CellGroup {
         cell.setLayoutParams(params);
     }
 
-    public boolean needSetDivider(NekomuraTGCell cell) {
+    public boolean needSetDivider(AbstractCell cell) {
         return !(rows.get(rows.indexOf(cell) + 1) instanceof NekomuraTGDivider);
     }
-
-    //TG Cells
-
-
-    //TextDetailSettingsCell
-
 
 }

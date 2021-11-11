@@ -1,10 +1,14 @@
-package tw.nekomimi.nkmr;
+package tw.nekomimi.nkmr.cells;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class NekomuraTGCell {
+import tw.nekomimi.nkmr.CellGroup;
+
+public abstract class AbstractCell {
+    // can not be null!
     protected CellGroup cellGroup;
 
+    // called by CellGroup.java
     public void bindCellGroup(CellGroup cellGroup) {
         this.cellGroup = cellGroup;
     }

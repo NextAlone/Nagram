@@ -16,10 +16,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import tw.nekomimi.nkmr.CellGroup;
 import tw.nekomimi.nkmr.ConfigItem;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nkmr.NekomuraTGCell;
 
-public class NekomuraTGTextInput extends NekomuraTGCell {
+public class NekomuraTGTextInput extends AbstractCell {
     private final ConfigItem bindConfig;
     private final String hint;
     private final String title;

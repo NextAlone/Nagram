@@ -2,14 +2,11 @@ package tw.nekomimi.nkmr.cells;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import org.telegram.ui.Cells.HeaderCell;
 
 import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.NekomuraTGCell;
 
-public class NekomuraTGHeader extends NekomuraTGCell {
+public class NekomuraTGHeader extends AbstractCell {
     private final String title;
 
     public NekomuraTGHeader(String title) {

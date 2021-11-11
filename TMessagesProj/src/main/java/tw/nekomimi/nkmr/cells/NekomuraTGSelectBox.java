@@ -15,11 +15,10 @@ import org.telegram.ui.Cells.TextSettingsCell;
 
 import tw.nekomimi.nkmr.CellGroup;
 import tw.nekomimi.nkmr.ConfigItem;
-import tw.nekomimi.nkmr.NekomuraTGCell;
 
 // TextSettingsCell, select from a list
 // Can be used without select list（custom）
-public class NekomuraTGSelectBox extends NekomuraTGCell {
+public class NekomuraTGSelectBox extends AbstractCell {
     private final ConfigItem bindConfig;
     private final String[] selectList; // split by \n
     private final String title;
