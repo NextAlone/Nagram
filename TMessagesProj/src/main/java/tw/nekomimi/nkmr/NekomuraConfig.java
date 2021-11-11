@@ -43,6 +43,7 @@ public class NekomuraConfig {
     public static ConfigItem unreadBadgeOnBackButton = addConfig("unreadBadgeOnBackButton", configTypeBool, false);
     public static ConfigItem customPublicProxyIP = addConfig("customPublicProxyIP", configTypeString, "");
     public static ConfigItem update_download_soucre = addConfig("update_download_soucre", configTypeInt, 0); // 0: Github 1: Channel 2:CDNDrive
+    public static ConfigItem useCustomEmoji = addConfig("useCustomEmoji", configTypeBool, false);
 
     // From NekoConfig
     // TODO sort

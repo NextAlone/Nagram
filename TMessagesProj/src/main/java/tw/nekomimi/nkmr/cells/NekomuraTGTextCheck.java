@@ -27,6 +27,12 @@ public class NekomuraTGTextCheck extends AbstractCell {
         this.subtitle = subtitle;
     }
 
+    public NekomuraTGTextCheck(ConfigItem bind, String subtitle, String customTitle) {
+        this.bindConfig = bind;
+        this.title = customTitle;
+        this.subtitle = subtitle;
+    }
+
     public int getType() {
         return CellGroup.ITEM_TYPE_TEXT_CHECK;
     }

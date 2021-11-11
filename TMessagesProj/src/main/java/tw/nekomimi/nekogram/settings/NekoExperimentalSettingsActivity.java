@@ -4,18 +4,28 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.os.Parcelable;
+import android.provider.DocumentsContract;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
@@ -37,12 +47,16 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import kotlin.Unit;
 
 import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nekogram.utils.ZipUtil;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.CellGroup;
+import tw.nekomimi.nkmr.NekomuraUtil;
 import tw.nekomimi.nkmr.cells.AbstractCell;
 import tw.nekomimi.nkmr.cells.*;
 
@@ -59,6 +73,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final CellGroup cellGroup = new CellGroup(this);
 
     private final AbstractCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Experiment")));
+    private final AbstractCell useSystemEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
+    private final AbstractCell useCustomEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useCustomEmoji));
     private final AbstractCell smoothKeyboardRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
     private final AbstractCell increaseVoiceMessageQualityRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
     private final AbstractCell mediaPreviewRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
@@ -188,9 +204,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         // Cells: Set OnSettingChanged Callbacks
         cellGroup.callBackSettingsChanged = (key, newValue) -> {
             if (key.equals(NekomuraConfig.smoothKeyboard.getKey())) {
-                if ((boolean) newValue != NekomuraConfig.smoothKeyboard.Bool()) {
-                    SharedConfig.toggleSmoothKeyboard();
-                }
+                SharedConfig.setSmoothKeyboard((boolean) newValue);
                 if (SharedConfig.smoothKeyboard && getParentActivity() != null) {
                     getParentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                 }
@@ -208,8 +222,18 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            }
+            } else if (key.equals(NekomuraConfig.useCustomEmoji.getKey())) {
+                // Check
+                if (!(boolean) newValue) return;
+                NekomuraConfig.useCustomEmoji.setConfigBool(false);
 
+                // Open picker
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/zip");
+                Activity act = getParentActivity();
+                act.startActivityFromChild(act, intent, 114);
+            }
         };
 
         //Cells: Set ListAdapter
@@ -219,6 +243,40 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
+    }
+
+    @Override
+    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 114 && resultCode == Activity.RESULT_OK) {
+            try {
+                // copy emoji zip
+                Uri uri = data.getData();
+                String zipPath = MediaController.copyFileToCache(uri, "file");
+
+                if (zipPath == null || zipPath.isEmpty()) {
+                    throw new Exception("zip copy failed");
+                }
+
+                //dirs
+                File dir = new File(ApplicationLoader.applicationContext.getFilesDir(), "custom_emoji");
+                if (dir.exists()) {
+                    NekomuraUtil.deleteDirectory(dir);
+                }
+                dir.mkdir();
+
+                //process zip
+                ZipUtil.unzip(new FileInputStream(zipPath), dir);
+                if (!new File(ApplicationLoader.applicationContext.getFilesDir(), "custom_emoji/emoji/0_0.png").exists()) {
+                    throw new Exception(LocaleController.getString("useCustomEmojiInvalid"));
+                }
+                NekomuraConfig.useCustomEmoji.setConfigBool(true);
+            } catch (Exception e) {
+                FileLog.e(e);
+                NekomuraConfig.useCustomEmoji.setConfigBool(false);
+                Toast.makeText(ApplicationLoader.applicationContext, "Failed: " + e.toString(), Toast.LENGTH_LONG).show();
+            }
+            listAdapter.notifyItemChanged(cellGroup.rows.indexOf(useCustomEmojiRow));
+        }
     }
 
     @Override

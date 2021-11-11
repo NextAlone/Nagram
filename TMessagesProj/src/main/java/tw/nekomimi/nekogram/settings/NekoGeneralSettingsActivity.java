@@ -126,7 +126,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractCell header5 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Appearance")));
     private final AbstractCell typefaceRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.typeface));
     private final AbstractCell useDefaultThemeRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useDefaultTheme));
-    private final AbstractCell useSystemEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
     private final AbstractCell transparentStatusBarRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.transparentStatusBar));
     private final AbstractCell appBarShadowRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableAppBarShadow));
     private final AbstractCell newYearRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.newYear));

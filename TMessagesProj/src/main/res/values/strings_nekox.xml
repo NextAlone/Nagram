@@ -254,6 +254,8 @@
     <string name="DeleteDownloadedFileSucceed">Deleted</string>
     <string name="DeleteDownloadedFileExternal">External file is skipped.</string>
     <string name="update_download_soucre">Select download soucre</string>
+    <string name="useCustomEmoji">Use Custom Emoji</string>
+    <string name="useCustomEmojiInvalid">Not a vaild emoji zip.</string>
 
     <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
     <string name="hideSponsoredMessage">Hide sponsored messages</string>

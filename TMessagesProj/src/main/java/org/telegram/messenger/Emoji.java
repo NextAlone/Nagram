@@ -30,11 +30,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -129,7 +132,14 @@ public class Emoji {
             }
             Bitmap bitmap = null;
             try {
-                InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "%d_%d.png", page, page2));
+                InputStream is;
+                String entry = "emoji/" + String.format(Locale.US, "%d_%d.png", page, page2);
+                if (NekomuraConfig.useCustomEmoji.Bool()) {
+                    entry = "custom_emoji/" + entry;
+                    is = new FileInputStream(new File(ApplicationLoader.applicationContext.getFilesDir(), entry));
+                } else {
+                    is = ApplicationLoader.applicationContext.getAssets().open(entry);
+                }
                 BitmapFactory.Options opts = new BitmapFactory.Options();
                 opts.inJustDecodeBounds = false;
                 opts.inSampleSize = imageResize;
