@@ -1476,6 +1476,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private final static int video_call = 33;
     private final static int hideTitle = 34;
     private final static int goToFirstMessage = 35;
+    private final static int deleteAllYourMessages = 36;
 
     private final static int attach_photo = 0;
     private final static int attach_gallery = 1;
@@ -2683,6 +2684,11 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     // This is timestamp of launch date of the Telegram.
                     // August 2013.
                     jumpToDate(1375350800);
+                } else if (id == deleteAllYourMessages) {
+                    org.telegram.messenger.forkgram.ForkDialogs.CreateDeleteAllYourMessagesAlert(
+                        currentAccount,
+                        dialog_id,
+                        getParentActivity());
                 }
             }
         });
@@ -3128,6 +3134,13 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 headerItem.addSubItem(bot_settings, R.drawable.msg_settings_old, LocaleController.getString("BotSettings", R.string.BotSettings), themeDelegate);
                 headerItem.addSubItem(bot_help, R.drawable.msg_help, LocaleController.getString("BotHelp", R.string.BotHelp), themeDelegate);
                 updateBotButtons();
+            }
+            if (ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) {
+                headerItem.addSubItem(
+                    deleteAllYourMessages,
+                    R.drawable.msg_delete,
+                    LocaleController.getString("DeleteAllYourMessages", R.string.DeleteAllYourMessages),
+                    themeDelegate);
             }
 
             String hideTitleString = "";
