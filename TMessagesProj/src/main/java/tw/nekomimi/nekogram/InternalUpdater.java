@@ -85,6 +85,11 @@ public class InternalUpdater {
     public static void checkUpdate(Context ctx, boolean isAutoCheck) {
         if (BuildVars.isFdroid)
             return;
+
+        //cleanup
+        File f = new File(ApplicationLoader.getDataDirFixed(), "cache/new.apk");
+        if (f.exists()) f.delete();
+
         try {
             NekoXConfig.setNextUpdateCheck(System.currentTimeMillis() / 1000 + 24 * 3600);
 
@@ -129,7 +134,7 @@ public class InternalUpdater {
             String urlChannel = "";
             String urlCDNDrive = "";
             String sha1 = "";
-            if (apk != null) {
+            try {
                 final String newBody = HttpUtil.get("https://api.github.com/repos/NekoX-Dev/updates/contents/" + release.name + ".txt?ref=main");
                 final GithubApiContents releaseNoteApi = new Gson().fromJson(newBody, GithubApiContents.class);
                 final String releaseNoteString = new String(Base64.decode(releaseNoteApi.content, Base64.DEFAULT));
@@ -148,6 +153,7 @@ public class InternalUpdater {
                         }
                     }
                 }
+            } catch (Exception ignored) {
             }
 
             String finalsha1 = sha1;
