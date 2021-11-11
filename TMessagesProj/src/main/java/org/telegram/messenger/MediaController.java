@@ -3949,6 +3949,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             new Thread(() -> {
                 try {
                     boolean result = true;
+                    final String folderName = "NekoX";
                     if (Build.VERSION.SDK_INT >= 29) {
                         try {
                             ContentValues contentValues = new ContentValues();
@@ -3960,27 +3961,28 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             Uri uriToInsert = null;
                             if (type == 0) {
                                 uriToInsert = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                    File dirDest = new File(Environment.DIRECTORY_PICTURES, "NekoX");
-                                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
-                                }
+                                File dirDest = new File(Environment.DIRECTORY_PICTURES, folderName);
+                                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                                 contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, AndroidUtilities.generateFileName(0, extension));
                                 contentValues.put(MediaStore.Images.Media.MIME_TYPE, mimeType);
                             } else if (type == 1) {
-                                File dirDest = new File(Environment.DIRECTORY_MOVIES, "NekoX");
+                                File dirDest = new File(Environment.DIRECTORY_MOVIES, folderName);
                                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                                 uriToInsert = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                                 contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, AndroidUtilities.generateFileName(1, extension));
+                                contentValues.put(MediaStore.Video.Media.MIME_TYPE, mimeType);
                             } else if (type == 2) {
-                                File dirDest = new File(Environment.DIRECTORY_DOWNLOADS, "NekoX");
+                                File dirDest = new File(Environment.DIRECTORY_DOWNLOADS, folderName);
                                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                                 uriToInsert = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                                 contentValues.put(MediaStore.Downloads.DISPLAY_NAME, sourceFile.getName());
+                                contentValues.put(MediaStore.Downloads.MIME_TYPE, mimeType);
                             } else {
-                                File dirDest = new File(Environment.DIRECTORY_MUSIC, "NekoX");
+                                File dirDest = new File(Environment.DIRECTORY_MUSIC, folderName);
                                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                                 uriToInsert = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                                 contentValues.put(MediaStore.Audio.Media.DISPLAY_NAME, sourceFile.getName());
+                                contentValues.put(MediaStore.Audio.Media.MIME_TYPE, mimeType);
                             }
 
                             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
@@ -3999,11 +4001,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     } else {
                         File destFile;
                         if (type == 0) {
-                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NekoX");
+                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), folderName);
                             destFile.mkdirs();
                             destFile = new File(destFile, AndroidUtilities.generateFileName(0, FileLoader.getFileExtension(sourceFile)));
                         } else if (type == 1) {
-                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "NekoX");
+                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), folderName);
                             destFile.mkdirs();
                             destFile = new File(destFile, AndroidUtilities.generateFileName(1, FileLoader.getFileExtension(sourceFile)));
                         } else {
@@ -4013,7 +4015,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             } else {
                                 dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
                             }
-                            dir = new File(dir, "NekoX");
+                            dir = new File(dir, folderName);
                             dir.mkdirs();
                             destFile = new File(dir, name);
                             if (destFile.exists()) {

@@ -21833,7 +21833,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectedObjectToEditCaption = null;
                     return;
                 }
-                MediaController.saveFile(path, getParentActivity(), 0, null, null);
+                MediaController.saveFile(path, getParentActivity(), selectedObject.isVideo() ? 1 : 0, null, null);
                 BulletinFactory.createSaveToGalleryBulletin(this, selectedObject.isVideo(), themeDelegate).show();
                 break;
             }
