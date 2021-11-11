@@ -91,8 +91,9 @@ public class InternalUpdater {
             //TODO update URL when api.github.com get banned.
             String ret = HttpRequest.get(API_URL_RELEASE).header("accept", "application/vnd.github.v3+json").execute().body();
             ReleaseMetadata[] releases = new Gson().fromJson(ret, ReleaseMetadata[].class);
-
             ReleaseMetadata release = null;
+
+            // Not now.
             String releaseChannel = "stable";
             switch (NekoXConfig.autoUpdateReleaseChannel) {
                 case 2:
@@ -124,12 +125,12 @@ public class InternalUpdater {
             // match release apk urls
             final ApkMetadata apk = matchBuild(release.assets);
 
-            // match apk urls
+            // match apk urls. these can be empty.
             String urlChannel = "";
             String urlCDNDrive = "";
             String sha1 = "";
             if (apk != null) {
-                final String newBody = HttpUtil.get("https://api.github.com/repos/NekoX-Dev/updates/contents/" + releaseChannel + ".txt?ref=main");
+                final String newBody = HttpUtil.get("https://api.github.com/repos/NekoX-Dev/updates/contents/" + release.name + ".txt?ref=main");
                 final GithubApiContents releaseNoteApi = new Gson().fromJson(newBody, GithubApiContents.class);
                 final String releaseNoteString = new String(Base64.decode(releaseNoteApi.content, Base64.DEFAULT));
                 final byte[] gzipped = Base64.decode(NekomuraUtil.getSubString(releaseNoteString, "#NekoXStart#", "#NekoXEnd#"), Base64.NO_PADDING);
