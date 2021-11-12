@@ -27108,13 +27108,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (checkSlowMode(chatActivityEnterView.getSendButton())) {
                     return;
                 }
-                ArrayList<MessageObject> messages = new ArrayList<>();
-                if (selectedObjectGroup != null) {
-                    messages.addAll(selectedObjectGroup.messages);
-                } else {
-                    messages.add(selectedObject);
+
+                final ArrayList<MessageObject> messages = new ArrayList<>();
+                messages.add(selectedObject);
+
+                if (!NekomuraConfig.repeatConfirm.Bool()) {
+                    forwardMessages(messages, false, false, true, 0);
+                    return;
                 }
-                forwardMessages(messages, false, false, true, 0);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
+                builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                    forwardMessages(messages, false, false, true, 0);
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                showDialog(builder.create());
                 break;
             }
             case nkbtn_forward_noquote: {

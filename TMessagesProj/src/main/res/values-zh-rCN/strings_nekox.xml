@@ -259,6 +259,8 @@
     <string name="update_download_soucre">选择更新源</string>
     <string name="useCustomEmoji">使用自定义 emoji</string>
     <string name="useCustomEmojiInvalid">不是有效的 emoji zip 文件</string>
+    <string name="repeatConfirm">复读前确认</string>
+    <string name="repeatConfirmText">确定要复读这条消息？</string>
 
     <string name="valuesLargeAvatarInDrawer">Telegram 默认\n使用头像作为背景\n使用大只头像作为背景</string>
 </resources>

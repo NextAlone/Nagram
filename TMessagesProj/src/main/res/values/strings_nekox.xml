@@ -256,6 +256,8 @@
     <string name="update_download_soucre">Select download soucre</string>
     <string name="useCustomEmoji">Use Custom Emoji</string>
     <string name="useCustomEmojiInvalid">Not a vaild emoji zip.</string>
+    <string name="repeatConfirm">Ask before repeat</string>
+    <string name="repeatConfirmText">Are you sure to repeat?</string>
 
     <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
     <string name="hideSponsoredMessage">Hide sponsored messages</string>

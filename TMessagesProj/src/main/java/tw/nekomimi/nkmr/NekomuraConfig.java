@@ -44,9 +44,9 @@ public class NekomuraConfig {
     public static ConfigItem customPublicProxyIP = addConfig("customPublicProxyIP", configTypeString, "");
     public static ConfigItem update_download_soucre = addConfig("update_download_soucre", configTypeInt, 0); // 0: Github 1: Channel 2:CDNDrive
     public static ConfigItem useCustomEmoji = addConfig("useCustomEmoji", configTypeBool, false);
+    public static ConfigItem repeatConfirm = addConfig("repeatConfirm", configTypeBool, false);
 
     // From NekoConfig
-    // TODO sort
     public static ConfigItem useIPv6 = addConfig("IPv6", configTypeBool, false);
     public static ConfigItem hidePhone = addConfig("HidePhone", configTypeBool, true);
     public static ConfigItem ignoreBlocked = addConfig("IgnoreBlocked", configTypeBool, false);

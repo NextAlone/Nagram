@@ -99,6 +99,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractCell messageMenuRow = cellGroup.appendCell(new NekomuraTGSelectBox(LocaleController.getString("MessageMenu"), null, null, () -> {
         showMessageMenuAlert();
     }));
+    private final AbstractCell repeatConfirmRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.repeatConfirm));
     private final AbstractCell divider1 = cellGroup.appendCell(new NekomuraTGDivider());
     private final AbstractCell header2 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("AutoDownload")));
     private final AbstractCell win32Row = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableAutoDownloadingWin32Executable));
