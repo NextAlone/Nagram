@@ -1842,6 +1842,13 @@ public class SharedConfig {
         editor.commit();
     }
 
+    public static void setInappCamera(boolean inappCamera) {
+       SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("inappCamera", inappCamera);
+        editor.commit();
+    }
+
     public static void toggleRoundCamera16to9() {
         roundCamera16to9 = !roundCamera16to9;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();

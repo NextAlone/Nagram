@@ -312,14 +312,13 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     }
                 }
             } else if (key.equals(NekomuraConfig.inappCamera.getKey())) {
-                if (SharedConfig.inappCamera != (boolean) newValue)
-                    SharedConfig.toggleInappCamera();
+                SharedConfig.setInappCamera((boolean) newValue);
             } else if (key.equals(NekomuraConfig.hidePhone.getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(cellGroup.rows.indexOf(profilePreviewRow));
             } else if (key.equals(NekomuraConfig.transparentStatusBar.getKey())) {
-                AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, false));
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekomuraConfig.hideProxySponsorChannel.getKey())) {
                 for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
@@ -337,7 +336,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekomuraConfig.displayPersianCalendarByLatin.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekomuraConfig.disableSystemAccount.getKey())) {
-                if (NekomuraConfig.disableSystemAccount.Bool()) {
+                if ((boolean) newValue) {
                     getContactsController().deleteUnknownAppAccounts();
                 } else {
                     for (int a : SharedConfig.activeAccounts) {
@@ -712,7 +711,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     }
 
     private void setCanNotChange() {
-        if(!showCensoredFeatures)
+        if (!showCensoredFeatures)
             cellGroup.rows.remove(hideSponsoredMessageRow);
 
         boolean enabled;

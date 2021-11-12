@@ -213,18 +213,21 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
             } else if (key.equals(NekomuraConfig.mediaPreview.getKey())) {
-                if (NekomuraConfig.mediaPreview.Bool()) {
+                if ((boolean) newValue) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
             } else if (key.equals(NekomuraConfig.enableStickerPin.getKey())) {
-                if (NekomuraConfig.mediaPreview.Bool()) {
+                if ((boolean) newValue) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
             } else if (key.equals(NekomuraConfig.useCustomEmoji.getKey())) {
                 // Check
-                if (!(boolean) newValue) return;
+                if (!(boolean) newValue) {
+                    tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                    return;
+                }
                 NekomuraConfig.useCustomEmoji.setConfigBool(false);
 
                 // Open picker
@@ -265,16 +268,20 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 dir.mkdir();
 
                 //process zip
-                ZipUtil.unzip(new FileInputStream(zipPath), dir);
+                File zipFile = new File(zipPath);
+                ZipUtil.unzip(new FileInputStream(zipFile), dir);
+                zipFile.delete();
                 if (!new File(ApplicationLoader.applicationContext.getFilesDir(), "custom_emoji/emoji/0_0.png").exists()) {
                     throw new Exception(LocaleController.getString("useCustomEmojiInvalid"));
                 }
+
                 NekomuraConfig.useCustomEmoji.setConfigBool(true);
             } catch (Exception e) {
                 FileLog.e(e);
                 NekomuraConfig.useCustomEmoji.setConfigBool(false);
                 Toast.makeText(ApplicationLoader.applicationContext, "Failed: " + e.toString(), Toast.LENGTH_LONG).show();
             }
+            tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             listAdapter.notifyItemChanged(cellGroup.rows.indexOf(useCustomEmojiRow));
         }
     }
