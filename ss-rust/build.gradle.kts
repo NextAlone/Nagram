@@ -21,12 +21,12 @@ android {
 
     ndkVersion = rootProject.extra.get("ndkVersion").toString()
 
-    compileSdkVersion(30)
+    compileSdk = 31
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(30)
+        minSdk = 23
+        targetSdk = 31
     }
-    buildToolsVersion = "30.0.3"
+    buildToolsVersion = "31.0.0"
 
     if (targetAbi.isNotBlank()) splits.abi {
         reset()

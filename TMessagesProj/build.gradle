@@ -39,6 +39,7 @@ configurations {
 def keystorePwd = null
 def alias = null
 def pwd = null
+def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
 
 Properties properties
 def base64 = System.getenv("LOCAL_PROPERTIES")
@@ -259,24 +260,21 @@ android {
 
         main {
             jni.srcDirs = []
+            assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
         }
 
         debug {
             java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
-            jni {
-                srcDirs = ["./jni/"]
-            }
-            jniLibs {
-                srcDirs = []
-            }
+            jni.srcDirs = ["./jni/"]
             manifest {
                 srcFile "src/gservcies/AndroidManifest.xml"
             }
         }
 
         releaseNoGcm {
+            jni.srcDirs = []
             jniLibs {
                 srcDir "src/main/libs"
             }
@@ -286,6 +284,7 @@ android {
             java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
+            jni.srcDirs = []
             jniLibs {
                 srcDir "src/main/libs"
             }
@@ -304,18 +303,14 @@ android {
             jni {
                 srcDirs = ["./jni/"]
             }
-            jniLibs {
-                srcDirs = []
-            }
+            jniLibs.srcDirs = []
         }
 
         fdroidArm64Release {
             jni {
                 srcDirs = ["./jni/"]
             }
-            jniLibs {
-                srcDirs = []
-            }
+            jniLibs.srcDirs = []
         }
 
     }
@@ -340,15 +335,6 @@ android {
                 implementation fileTree("libs")
             }
         }
-        if (set.name.matches("(mini|full).*")) {
-            if (set.name.contains("Apple")) {
-                set.assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
-                /*} else if (set.name.contains("Twitter")) {
-                    set.assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]*/
-            } else {
-                set.assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
-            }
-        }
     }
 
     tasks.all { task ->
@@ -356,6 +342,9 @@ android {
             task.enabled = false
         }
         if (task.name.contains("uploadCrashlyticsMappingFile")) {
+            enabled = false
+        }
+        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo")) {
             enabled = false
         }
     }
