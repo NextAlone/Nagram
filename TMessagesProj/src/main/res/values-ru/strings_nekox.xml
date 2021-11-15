@@ -249,6 +249,4 @@
     <string name="VersionUpdateConfirm">Обновить</string>
     <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения. Скачайте обновление вручную.</string>
     <string name="VersionUpdateTitle">Доступна новая версия</string>
-    <string name="OpenCC" translatable="false"/>
-    <string name="NekoX" translatable="false"/>
 </resources>

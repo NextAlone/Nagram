@@ -218,34 +218,5 @@
     <string name="AutoDownload">自動下載</string>
     <string name="ArchiveFiles">壓縮文件</string>
     <string name="Win32ExecutableFiles">Win32 可執行文件</string>
-    <string name="UnpinSticker"/>
-    <string name="PinSticker"/>
-    <string name="AppLinkFDroid"/>
     <string name="EnableStickerPin">啟用貼紙集置頂</string>
-    <string name="SetPinnedSuffix"/>
-    <string name="DisplayPersianCalendarByLatin"/>
-    <string name="VersionUpdateConfirm"/>
-    <string name="AutoCheckUpdateStable"/>
-    <string name="VersionUpdateTitle"/>
-    <string name="AutoCheckUpdateOFF"/>
-    <string name="OpenCC" translatable="false"/>
-    <string name="AutoCheckUpdateSwitch"/>
-    <string name="VersionUpdateNoUpdate"/>
-    <string name="ImportSettings"/>
-    <string name="VersionUpdateNotNow"/>
-    <string name="BackupSettings"/>
-    <string name="EnableStickerPinAbout"/>
-    <string name="ProxyInfoWS"/>
-    <string name="UsePersiancalendarInfo"/>
-    <string name="AutoLockImmediately"/>
-    <string name="nekoXPaymentRemovedToast"/>
-    <string name="UsePersiancalendar"/>
-    <string name="VersionUpdateVariantNotMatch"/>
-    <string name="AddProxyWs"/>
-    <string name="WsPayload"/>
-    <string name="VersionUpdateIgnore"/>
-    <string name="AutoCheckUpdateRc"/>
-    <string name="EnableStickerPinTip"/>
-    <string name="ImportSettingsAlert"/>
-    <string name="NekoX" translatable="false"/>
 </resources>
