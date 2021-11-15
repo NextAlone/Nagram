@@ -251,6 +251,4 @@
     <string name="ArchiveFiles">Arquivos de arquivo</string>
     <string name="Win32ExecutableFiles">Arquivos executáveis Win32</string>
     <string name="AutoDownload">DownloadAuto</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

@@ -251,6 +251,4 @@
     <string name="VersionUpdateVariantNotMatch">فشل متغيرات الإصدار في المطابقة تلقائيا.
 \nيرجى تحميل التطبيق يدويا من GitHub.</string>
     <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
 </resources>
