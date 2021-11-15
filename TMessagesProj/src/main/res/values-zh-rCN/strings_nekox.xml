@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">默认禁用链接预览</string>
     <string name="DisableLinkPreviewByDefaultNotice">默认情况下, 在输入过程中禁用链接预览请求，以防止服务器知道该链接在 Telegram 被分享。</string>
     <string name="CustomApi">自定义 API</string>
-    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
+    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。
+\n
+\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
     <string name="CustomApiNo">不使用自定义 API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -147,10 +149,10 @@
     <string name="ImportStickersX">从文件导入贴纸集</string>
     <string name="ImportStickersList">导入贴纸集</string>
     <string name="StickerSets">贴纸集</string>
-    <string name="InvalidStickersFile">无效的贴纸集文件： </string>
-    <string name="InvalidProxyFile">无效的代理列表文件： </string>
-    <string name="ImportedProxies">已导入的代理服务器： </string>
-    <string name="ErrorsInImport">导入错误： </string>
+    <string name="InvalidStickersFile">无效的贴纸集文件：</string>
+    <string name="InvalidProxyFile">无效的代理列表文件：</string>
+    <string name="ImportedProxies">已导入的代理服务器：</string>
+    <string name="ErrorsInImport">导入错误：</string>
     <string name="NoProxy">您还没有添加任何代理服务器.</string>
     <string name="DeleteAllServer">删除所有服务器</string>
     <string name="DeleteUnavailableServer">删除不可用的服务器</string>

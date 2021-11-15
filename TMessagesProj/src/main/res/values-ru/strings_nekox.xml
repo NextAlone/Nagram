@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Отправлять ссылки без превью</string>
     <string name="DisableLinkPreviewByDefaultNotice">Чтобы сервер не узнал о передаче ссылки через Telegram.</string>
     <string name="CustomApi">Пользовательский API</string>
-    <string name="UseCustomApiNotice">Используйте на свой страх и риск. Есть шанс, что ваш аккаунт будет удален, а номер заблокирован.\n\nПримечание: пуш-уведомления работать не будут.</string>
+    <string name="UseCustomApiNotice">Используйте на свой страх и риск. Есть шанс, что ваш аккаунт будет удален, а номер заблокирован.
+\n
+\nПримечание: пуш-уведомления работать не будут.</string>
     <string name="CustomApiNo">Не использовать (рекомендуется)</string>
     <string name="CustomApiOfficial">Telegram для Android</string>
     <string name="CustomApiTGX">Telegram X</string>
@@ -31,7 +33,7 @@
     <string name="LinkedChannelChat">Привязанный канал</string>
     <string name="DevModeTitle">** Ваш аккаунт может быть заблокирован **</string>
     <string name="DevModeNotice">Мы не несем ответственности за использование функций разработчика.</string>
-    <string name="TapToDisable">Нажмите, чтобы скрыть. Вам это не нужно.</string>
+    <string name="TapToDisable">Нажмите, чтобы скрыть уведомление</string>
     <string name="PlaceHolder">Бесполезное уведомление - пожалуйста, отключите</string>
     <string name="CustomBackend">Выбрать DC</string>
     <string name="CustomBackendNotice">Только для опытных пользователей! При одновременном логине на разных DC ваш аккаунт может быть удален, а номер заблокирован.</string>
@@ -93,12 +95,12 @@
     <string name="FilterMenu">Фильтры чатов</string>
     <string name="DisableProxyWhenVpnEnabled">Отключать прокси если включен VPN</string>
     <string name="UseProxyItem">Настройки прокси в боковом меню</string>
-    <string name="HideProxyByDefault">Скрыть настройки прокси, если прокси не настроен</string>
+    <string name="HideProxyByDefault">Скрыть 🛡️, если прокси не настроен</string>
     <string name="SkipOpenLinkConfirm">Открывать ссылки без подтверждения</string>
     <string name="DeleteAllInChat">Удалить все сообщения</string>
     <string name="DeleteAllInChatAlert">Внимание! Это **удалит все сообщения** в этом чате для **всех**.</string>
     <string name="UnblockAll">Очистить ЧС</string>
-    <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**?</string>
+    <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**\?</string>
     <string name="BlockedListEmpty">В вашем ЧС пусто, как у гоблина в голове :)</string>
     <string name="ProxyTypeVmess">VMess-прокси</string>
     <string name="AddProxySocks5">SOCKS5-прокси</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">Импорт стикеров</string>
     <string name="ImportStickersList">Импорт стикеров</string>
     <string name="StickerSets">Наборы стикеров</string>
-    <string name="InvalidStickersFile">Неверный список стикеров: </string>
-    <string name="InvalidProxyFile">Неверный список прокси: </string>
-    <string name="ImportedProxies">Импортированные прокси: </string>
-    <string name="ErrorsInImport">Ошибка импорта: </string>
+    <string name="InvalidStickersFile">Неверный список стикеров:</string>
+    <string name="InvalidProxyFile">Неверный список прокси:</string>
+    <string name="ImportedProxies">Импортированные прокси:</string>
+    <string name="ErrorsInImport">Ошибка импорта:</string>
     <string name="NoProxy">Вы не добавили ни одного прокси.</string>
     <string name="DeleteAllServer">Удалить все</string>
     <string name="DeleteUnavailableServer">Удалить недоступные</string>
-    <string name="DeleteAllServerConfirm">Вы уверены, что хотите **удалить все прокси**?</string>
-    <string name="DeleteUnavailableServerConfirm">Вы уверены, что хотите ** удалить недоступные**?</string>
+    <string name="DeleteAllServerConfirm">Вы уверены, что хотите **удалить все прокси**\?</string>
+    <string name="DeleteUnavailableServerConfirm">Вы уверены, что хотите ** удалить недоступные**\?</string>
     <string name="MinApi21Required">Требуется Android 5 и выше (API21).</string>
     <string name="MinApi23Required">Требуется Android 6 и выше (API23).</string>
     <string name="MiniVersionAlert">Mini-версия не поддерживает этот тип прокси. Скачайте full-версию.</string>
@@ -192,7 +194,7 @@
     <string name="QRLoginConfirm">Подтвердить вход</string>
     <string name="StorageReset">Стереть все данные</string>
     <string name="StorageResetInfo">Все данные будут удалены (также вы выйдете из всех аккаунтов).</string>
-    <string name="FCTitle">Хотите подписаться?</string>
+    <string name="FCTitle">Хотите подписаться\?</string>
     <string name="FCInfo">Информация о новых версиях и ссылки доступны на канале @NekogramX.</string>
     <string name="CCTitle">OpenCC (китайский язык)</string>
     <string name="CCTarget">Цель</string>
@@ -237,15 +239,16 @@
     <string name="AddProxyWs">Добавить WebSocket реле</string>
     <string name="WsPayload">Полезная нагрузка</string>
     <string name="ImportSettingsAlert">Вы точно хотите перезаписать настройки\? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
-    <string name="AutoCheckUpdateRc">Кандидат на полноценный выпуск</string>
-    <string name="AutoCheckUpdateStable">Стабильный</string>
+    <string name="AutoCheckUpdateRc">RC</string>
+    <string name="AutoCheckUpdateStable">Stable</string>
     <string name="AutoCheckUpdateSwitch">Автообновление</string>
-    <string name="AutoCheckUpdateOFF">ВЫКЛ.</string>
-    <string name="VersionUpdateNoUpdate">Нет обновления.</string>
+    <string name="AutoCheckUpdateOFF">Отключено</string>
+    <string name="VersionUpdateNoUpdate">Обновлений не найдено.</string>
     <string name="VersionUpdateNotNow">Не сейчас</string>
     <string name="VersionUpdateIgnore">Игнорировать</string>
-    <string name="VersionUpdateConfirm">ОБНОВЛЕНИЕ</string>
-    <string name="VersionUpdateVariantNotMatch">Варианты версий не прошли автоматическую проверку.
-\nПожалуйста, скачайте вручную с GitHub.</string>
+    <string name="VersionUpdateConfirm">Обновить</string>
+    <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения. Скачайте обновление вручную.</string>
     <string name="VersionUpdateTitle">Доступна новая версия</string>
+    <string name="OpenCC" translatable="false"/>
+    <string name="NekoX" translatable="false"/>
 </resources>

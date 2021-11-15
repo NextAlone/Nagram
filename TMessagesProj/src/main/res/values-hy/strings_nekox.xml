@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Անջատեք հղման նախադիտումը լռելյայն</string>
     <string name="DisableLinkPreviewByDefaultNotice">Լռելյայնորեն անջատեք հղման նախադիտման հայցը լռելյայնորեն, որպեսզի սերվերը չիմանա, որ հղումը տարածվում է Telegram- ի միջոցով:</string>
     <string name="CustomApi">Հատուկ API</string>
-    <string name="UseCustomApiNotice">Մուտք գործեք հատուկ api- ով, եթե չեք կարող գրանցվել կամ մուտք գործել, դա կարող է օգնել:\n\nՆշում. Fcm- ը չի աշխատի, եթե դուք օգտագործում եք թողարկման տարբերակը.</string>
+    <string name="UseCustomApiNotice">Մուտք գործեք հատուկ api- ով, եթե չեք կարող գրանցվել կամ մուտք գործել, դա կարող է օգնել:
+\n
+\nՆշում. Fcm- ը չի աշխատի, եթե դուք օգտագործում եք թողարկման տարբերակը.</string>
     <string name="CustomApiNo">Մի օգտագործեք հատուկ API</string>
     <string name="CustomApiOfficial">Հեռագիր Android</string>
     <string name="CustomApiTGX">Հեռագիր Android X</string>
@@ -147,10 +149,10 @@
     <string name="ImportStickersX">Ներմուծեք պիտակները ֆայլից</string>
     <string name="ImportStickersList">Ներմուծեք պիտակները</string>
     <string name="StickerSets">Կպչուն պիտակներ</string>
-    <string name="InvalidStickersFile">Կպչուկների անվավեր ֆայլ ՝ </string>
-    <string name="InvalidProxyFile">Վստահված անձի ցուցակի անվավեր ֆայլ ՝ </string>
-    <string name="ImportedProxies">Ներմուծված վստահված սերվերներ. </string>
-    <string name="ErrorsInImport">Ներմուծման սխալներ. </string>
+    <string name="InvalidStickersFile">Կպչուկների անվավեր ֆայլ ՝</string>
+    <string name="InvalidProxyFile">Վստահված անձի ցուցակի անվավեր ֆայլ ՝</string>
+    <string name="ImportedProxies">Ներմուծված վստահված սերվերներ.</string>
+    <string name="ErrorsInImport">Ներմուծման սխալներ.</string>
     <string name="NoProxy">Դուք վստահված սերվեր չեք ավելացրել:</string>
     <string name="DeleteAllServer">Deleteնջել բոլոր սերվերները</string>
     <string name="DeleteUnavailableServer">Deleteնջել անհասանելի սերվերները</string>
@@ -238,4 +240,16 @@
     <string name="ArchiveFiles">Արխիվացնել ֆայլերը</string>
     <string name="Win32ExecutableFiles">Win32 գործադիր ֆայլեր</string>
     <string name="AutoDownload">Ավտոմատ ներբեռնում</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="AutoCheckUpdateOFF"></string>
+    <string name="VersionUpdateTitle"></string>
+    <string name="AutoCheckUpdateStable"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="VersionUpdateNoUpdate"></string>
+    <string name="VersionUpdateConfirm"></string>
+    <string name="VersionUpdateNotNow"></string>
+    <string name="AutoCheckUpdateSwitch"></string>
+    <string name="VersionUpdateIgnore"></string>
+    <string name="AutoCheckUpdateRc"></string>
 </resources>

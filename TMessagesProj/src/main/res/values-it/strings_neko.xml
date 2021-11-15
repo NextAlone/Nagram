@@ -121,4 +121,5 @@
     <string name="disableSwipeToNextChannel">Disabilita scorri al canale successivo</string>
     <string name="disableRemoteEmojiInteractions">Disabilita interazione emoji remota</string>
     <string name="disableChoosingSticker">Mostra sta scegliendo uno sticker</string>
+    <string name="hideGroupSticker">Nascondi sticker gruppo</string>
 </resources>

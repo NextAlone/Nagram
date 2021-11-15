@@ -8,7 +8,9 @@
     <string name="ChatAttachEnterMenuEnableLinkPreview">Linkvorschau aktivieren</string>
     <string name="DisableLinkPreviewByDefault">Standardmäßig die Linkvorschau deaktivieren</string>
     <string name="CustomApi">Benutzerdefinierte API</string>
-    <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.\n\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
+    <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.
+\n
+\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
     <string name="CustomApiNo">Verwenden Sie keine benutzerdefinierte API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -95,7 +97,7 @@
     <string name="DeleteAllInChat">Alles im Chat löschen</string>
     <string name="DeleteAllInChatAlert">Achtung! Dies wird **alle Nachrichten** in diesem Chat für **alle** Teilnehmer löschen.</string>
     <string name="UnblockAll">Alle entsperren</string>
-    <string name="UnblockAllWarn">Bist du sicher, dass du **alle Benutzer und Bots** entsperren möchtest?</string>
+    <string name="UnblockAllWarn">Bist du sicher, dass du **alle Benutzer und Bots** entsperren möchtest\?</string>
     <string name="BlockedListEmpty">Du hast niemanden blockiert :)</string>
     <string name="ProxyTypeVmess">VMess-Proxy</string>
     <string name="AddProxySocks5">SOCKS5-Proxy hinzufügen</string>
@@ -141,15 +143,15 @@
     <string name="ImportStickersX">Sticker aus Datei importieren</string>
     <string name="ImportStickersList">Importiere Sticker</string>
     <string name="StickerSets">Sticker-Sammlungen</string>
-    <string name="InvalidStickersFile">Ungültige Sticker-Datei: </string>
-    <string name="InvalidProxyFile">Ungültige Proxy-Listen-Datei: </string>
-    <string name="ImportedProxies">Importierte Proxy-Server: </string>
-    <string name="ErrorsInImport">Importfehler: </string>
+    <string name="InvalidStickersFile">Ungültige Sticker-Datei:</string>
+    <string name="InvalidProxyFile">Ungültige Proxy-Listen-Datei:</string>
+    <string name="ImportedProxies">Importierte Proxy-Server:</string>
+    <string name="ErrorsInImport">Importfehler:</string>
     <string name="NoProxy">Sie haben keine Proxy-Server hinzugefügt.</string>
     <string name="DeleteAllServer">Alle Server löschen</string>
     <string name="DeleteUnavailableServer">Nicht verfügbare Server löschen</string>
-    <string name="DeleteAllServerConfirm">Bist du sicher, dass du **alle Server löschen** möchtest?</string>
-    <string name="DeleteUnavailableServerConfirm">Bist du sicher, dass du **nicht erreichbare Server löschen** möchtest?</string>
+    <string name="DeleteAllServerConfirm">Bist du sicher, dass du **alle Server löschen** möchtest\?</string>
+    <string name="DeleteUnavailableServerConfirm">Bist du sicher, dass du **nicht erreichbare Server löschen** möchtest\?</string>
     <string name="MinApi21Required">Entschuldigung, Du benötigst mindestens Android 5 (API21).</string>
     <string name="MinApi23Required">Entschuldigung, Sie benötigen mindestens Android 6 (API23).</string>
     <string name="MiniVersionAlert">Leider unterstützt die Mini-Version diesen Proxy-Typ nicht. Bitte wechsle die Version in den Einstellungen.</string>
@@ -182,7 +184,7 @@
     <string name="ImportLogin">QR Anmeldung</string>
     <string name="QRLoginConfirm">Anmeldung bestätigen</string>
     <string name="StorageResetInfo">Alle Daten dieser Anwendung werden dauerhaft gelöscht (versuchen Sie zuerst, sich von allen Konten abzumelden).</string>
-    <string name="FCInfo">Folgen Sie unseren Ankündigungen- und Aktualisierungskanal?</string>
+    <string name="FCInfo">Folgen Sie unseren Ankündigungen- und Aktualisierungskanal\?</string>
     <string name="CCTitle">OpenCC (Chinesische Konvertierung)</string>
     <string name="CCTarget">Ziel</string>
     <string name="CCNo">Keiner</string>
@@ -219,4 +221,34 @@
     <string name="UnpinSticker">Loslösen</string>
     <string name="PinSticker">Anheften</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="Win32ExecutableFiles"></string>
+    <string name="EnableStickerPinTip"></string>
+    <string name="AutoDownload"></string>
+    <string name="UsePersiancalendarInfo"></string>
+    <string name="AddProxyWs"></string>
+    <string name="ProxyInfoWS"></string>
+    <string name="UsePersiancalendar"></string>
+    <string name="EnableStickerPin"></string>
+    <string name="DisplayPersianCalendarByLatin"></string>
+    <string name="DismissForYourself"></string>
+    <string name="EnableStickerPinAbout"></string>
+    <string name="ArchiveFiles"></string>
+    <string name="VersionUpdateTitle"></string>
+    <string name="nekoXPaymentRemovedToast"></string>
+    <string name="ImportSettingsAlert"></string>
+    <string name="ImportSettings"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="AutoLockImmediately"></string>
+    <string name="AutoCheckUpdateOFF"></string>
+    <string name="VersionUpdateNoUpdate"></string>
+    <string name="VersionUpdateNotNow"></string>
+    <string name="VersionUpdateIgnore"></string>
+    <string name="VersionUpdateConfirm"></string>
+    <string name="WsPayload"></string>
+    <string name="BackupSettings"></string>
+    <string name="AutoCheckUpdateStable"></string>
+    <string name="AutoCheckUpdateSwitch"></string>
+    <string name="AutoCheckUpdateRc"></string>
 </resources>

@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Desativar a prévia de link por padrão</string>
     <string name="DisableLinkPreviewByDefaultNotice">Desative a solicitação de visualização do link durante a entrada por padrão para evitar que o servidor saiba que o link é compartilhado através do Telegram.</string>
     <string name="CustomApi">API Personalizada</string>
-    <string name="UseCustomApiNotice">Efetue login usando a API personalizada. Se você não conseguir se registrar ou efetuar login, isso pode ajudar.\n\nNota: o fcm não vai funcionar se você estiver usando a versão de final.</string>
+    <string name="UseCustomApiNotice">Efetue login usando a API personalizada. Se você não conseguir se registrar ou efetuar login, isso pode ajudar.
+\n
+\nNota: o fcm não vai funcionar se você estiver usando a versão de final.</string>
     <string name="CustomApiNo">Não use a API personalizada</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Excluir tudo na conversa</string>
     <string name="DeleteAllInChatAlert">Aviso! Isto irá **excluir todas as mensagens** deste chat para **todos** os participantes.</string>
     <string name="UnblockAll">Desbloquear Tudo</string>
-    <string name="UnblockAllWarn">Você tem certeza que deseja desbloquear **todos os usuários e bots**?</string>
+    <string name="UnblockAllWarn">Você tem certeza que deseja desbloquear **todos os usuários e bots**\?</string>
     <string name="BlockedListEmpty">Você não bloqueou ninguém :)</string>
     <string name="ProxyTypeVmess">Proxy de VMesas</string>
     <string name="AddProxySocks5">Adicionar Proxy SOCKS5</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">Importar stickers de arquivo</string>
     <string name="ImportStickersList">Importar Stickers</string>
     <string name="StickerSets">Pacote de Sticker</string>
-    <string name="InvalidStickersFile">Arquivo de stickers inválido: </string>
-    <string name="InvalidProxyFile">Arquivo de lista de proxy inválido: </string>
-    <string name="ImportedProxies">Servidores proxy importados: </string>
-    <string name="ErrorsInImport">Erros de importação: </string>
+    <string name="InvalidStickersFile">Arquivo de stickers inválido:</string>
+    <string name="InvalidProxyFile">Arquivo de lista de proxy inválido:</string>
+    <string name="ImportedProxies">Servidores proxy importados:</string>
+    <string name="ErrorsInImport">Erros de importação:</string>
     <string name="NoProxy">Você não adicionou nenhum servidor proxy.</string>
     <string name="DeleteAllServer">Excluir todos os servidores</string>
     <string name="DeleteUnavailableServer">Excluir servidores indisponíveis</string>
-    <string name="DeleteAllServerConfirm">Tem certeza de que deseja **excluir todos os servidores**?</string>
-    <string name="DeleteUnavailableServerConfirm">Tem certeza de que deseja **excluir servidores indisponíveis**?</string>
+    <string name="DeleteAllServerConfirm">Tem certeza de que deseja **excluir todos os servidores**\?</string>
+    <string name="DeleteUnavailableServerConfirm">Tem certeza de que deseja **excluir servidores indisponíveis**\?</string>
     <string name="MinApi21Required">Desculpe, você precisa pelo menos do Android 5 (API21).</string>
     <string name="MinApi23Required">Você precisa pelo menos do Android 6 (API23).</string>
     <string name="MiniVersionAlert">Desculpe, a versão mini não é compatível com esse tipo de proxy. Altere a versão nas configurações.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">Desafixar todas as mensagens</string>
     <string name="DismissForYourself">Recusar por você mesmo</string>
     <string name="ImportLogin">QR Login</string>
-    <string name="QRLoginNotice">Este código QR / link permite que alguém acesse sua conta do Telegram. É você que está fazendo essa operação?</string>
+    <string name="QRLoginNotice">Este código QR / link permite que alguém acesse sua conta do Telegram. É você que está fazendo essa operação\?</string>
     <string name="QRLoginConfirm">Confirmar Login</string>
     <string name="StorageReset">Limpar armazenamento</string>
     <string name="StorageResetInfo">Todos os dados deste aplicativo serão excluídos permanentemente (e tente encerrar a sessão de todas as contas primeiro).</string>
     <string name="FCTitle">Sobre atualizações do app</string>
-    <string name="FCInfo">Seguir nosso canal de novidades e atualizações?</string>
+    <string name="FCInfo">Seguir nosso canal de novidades e atualizações\?</string>
     <string name="CCTitle">OpenCC (Convertido em Chinês)</string>
     <string name="CCTarget">Alvo</string>
     <string name="CCNo">Nenhuma</string>
@@ -249,4 +251,6 @@
     <string name="ArchiveFiles">Arquivos de arquivo</string>
     <string name="Win32ExecutableFiles">Arquivos executáveis Win32</string>
     <string name="AutoDownload">DownloadAuto</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoX" translatable="false"></string>
 </resources>

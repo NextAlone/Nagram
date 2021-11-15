@@ -121,4 +121,5 @@
     <string name="disableSwipeToNextChannel">تعطيل السحب إلى القناة التالية</string>
     <string name="disableRemoteEmojiInteractions">تعطيل تفاعلات الرموز التعبيرية من جهاز الطرف الاخر</string>
     <string name="disableChoosingSticker">أرسل الكتابة بدلاً من اختيار الملصق</string>
+    <string name="hideGroupSticker">إخفاء ملصق المجموعة</string>
 </resources>

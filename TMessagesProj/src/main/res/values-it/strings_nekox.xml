@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Disabilita anteprima link da default</string>
     <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima dei link durante l\'input da default per evitare che il server sappia che il link è condiviso tramite Telegram.</string>
     <string name="CustomApi">API personalizzata</string>
-    <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto.\n\nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
+    <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto.
+\n
+\nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
     <string name="CustomApiNo">Non utilizzare l\'API personalizzata</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Elimina tutto nella chat</string>
     <string name="DeleteAllInChatAlert">Attenzione! Questo **eliminerà tutti i messaggi** in questa chat per **tutti** i partecipanti.</string>
     <string name="UnblockAll">Sblocca Tutto</string>
-    <string name="UnblockAllWarn">Sei sicuro di voler sbloccare **tutti gli utenti e bot**?</string>
+    <string name="UnblockAllWarn">Sei sicuro di voler sbloccare **tutti gli utenti e bot**\?</string>
     <string name="BlockedListEmpty">Non hai bloccato nessuno :)</string>
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Aggiungi Proxy SOCKS5</string>
@@ -149,13 +151,13 @@
     <string name="StickerSets">Set di stickers</string>
     <string name="InvalidStickersFile">File stickers non valido:</string>
     <string name="InvalidProxyFile">File lista proxy non valido:</string>
-    <string name="ImportedProxies">Server proxy importati: </string>
-    <string name="ErrorsInImport">Errori di importazione: </string>
+    <string name="ImportedProxies">Server proxy importati:</string>
+    <string name="ErrorsInImport">Errori di importazione:</string>
     <string name="NoProxy">Non hai aggiunto alcun server proxy.</string>
     <string name="DeleteAllServer">Elimina tutti i server</string>
     <string name="DeleteUnavailableServer">Elimina server non disponibili</string>
-    <string name="DeleteAllServerConfirm">Sei sicuro di voler **eliminare tutti i server**?</string>
-    <string name="DeleteUnavailableServerConfirm">Sei sicuro di voler **eliminare i server non disponibili**?</string>
+    <string name="DeleteAllServerConfirm">Sei sicuro di voler **eliminare tutti i server**\?</string>
+    <string name="DeleteUnavailableServerConfirm">Sei sicuro di voler **eliminare i server non disponibili**\?</string>
     <string name="MinApi21Required">Siamo spiacenti, hai bisogno di almeno Android 5 (API21).</string>
     <string name="MinApi23Required">Siamo spiacenti, devi disporre almeno di Android 6 (API23).</string>
     <string name="MiniVersionAlert">Siamo spiacenti, versione mini non supporta questo tipo di proxy, si prega di cambiare versione nelle impostazioni.</string>
@@ -193,7 +195,7 @@
     <string name="StorageReset">Pulisci Database</string>
     <string name="StorageResetInfo">Tutti i dati di questa applicazione verranno eliminati definitivamente (prima prova a disconnetterti da tutti gli account).</string>
     <string name="FCTitle">Info update applicazione</string>
-    <string name="FCInfo">Seguire il nostro canale di annunci e aggiornamenti?</string>
+    <string name="FCInfo">Seguire il nostro canale di annunci e aggiornamenti\?</string>
     <string name="CCTitle">OpenCC (Conversione Cinese)</string>
     <string name="CCTarget">Bersaglio</string>
     <string name="CCNo">Nessuno</string>
@@ -246,4 +248,6 @@
     <string name="VersionUpdateNotNow">Non ora</string>
     <string name="VersionUpdateIgnore">Ignora</string>
     <string name="VersionUpdateTitle">Nuova Versione Disponibile</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

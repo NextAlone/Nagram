@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">השבת תצוגה מקדימה של קישור כברירת מחדל</string>
     <string name="DisableLinkPreviewByDefaultNotice">השבת את בקשת התצוגה המקדימה של הקישור במהלך הקלט כברירת מחדל כדי למנוע מהשרת לדעת שהקישור משותף באמצעות Telegram.</string>
     <string name="CustomApi">ממשק API מותאם אישית</string>
-    <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.\n\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
+    <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.
+\n
+\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
     <string name="CustomApiNo">אל תשתמש בממשק API מותאם אישית</string>
     <string name="CustomApiOfficial">טלגרם אנדרואיד</string>
     <string name="CustomApiTGX">טלגרם אנדרואיד</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">מחק את הכל בצ\'אט</string>
     <string name="DeleteAllInChatAlert">אזהרה! פעולה זו תמחק את כל ההודעות ** בצ\'אט זה עבור ** כל ** המשתתפים.</string>
     <string name="UnblockAll">בטל את חסימת הכל</string>
-    <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **?</string>
+    <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **\?</string>
     <string name="BlockedListEmpty">לא חסמת אף אחד :)</string>
     <string name="ProxyTypeVmess">VMess פרוקסי</string>
     <string name="AddProxySocks5">הוסף SOCKS5 Proxy</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">ייבא שרתים מקובץ</string>
     <string name="ImportStickersList">יבוא מדבקות</string>
     <string name="StickerSets">סטים של מדבקה</string>
-    <string name="InvalidStickersFile">קובץ מדבקות לא חוקי: </string>
-    <string name="InvalidProxyFile">קובץ רשימת proxy לא חוקי: </string>
-    <string name="ImportedProxies">שרתי פרוקסי מיובאים: </string>
-    <string name="ErrorsInImport">שגיאות ייבוא: </string>
+    <string name="InvalidStickersFile">קובץ מדבקות לא חוקי:</string>
+    <string name="InvalidProxyFile">קובץ רשימת proxy לא חוקי:</string>
+    <string name="ImportedProxies">שרתי פרוקסי מיובאים:</string>
+    <string name="ErrorsInImport">שגיאות ייבוא:</string>
     <string name="NoProxy">לא הוספת שרתי פרוקסי.</string>
     <string name="DeleteAllServer">מחק את כל השרתים</string>
     <string name="DeleteUnavailableServer">מחק שרתים לא זמינים</string>
-    <string name="DeleteAllServerConfirm">האם אתה בטוח שברצונך ** למחוק את כל השרתים **?</string>
-    <string name="DeleteUnavailableServerConfirm">האם אתה בטוח שברצונך ** למחוק שרתים שלא זמינים **?</string>
+    <string name="DeleteAllServerConfirm">האם אתה בטוח שברצונך ** למחוק את כל השרתים **\?</string>
+    <string name="DeleteUnavailableServerConfirm">האם אתה בטוח שברצונך ** למחוק שרתים שלא זמינים **\?</string>
     <string name="MinApi21Required">מצטערים, אתה זקוק לפחות ל- Android 5 (API21).</string>
     <string name="MinApi23Required">מצטערים, אתה זקוק לפחות ל- Android 6 (API23).</string>
     <string name="MiniVersionAlert">מצטערים, גרסת מיני אינה תומכת בסוג זה של פרוקסי, אנא החלף גרסה בהגדרות.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">בטל את הצמדה של כל ההודעות</string>
     <string name="DismissForYourself">דחה בעצמך</string>
     <string name="ImportLogin">כניסה QR</string>
-    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך?</string>
+    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך\?</string>
     <string name="QRLoginConfirm">אשר כניסה</string>
     <string name="StorageReset">פנה אחסון</string>
     <string name="StorageResetInfo">כל הנתונים של יישום זה יימחקו לצמיתות (ונסה קודם להתנתק מכל החשבונות).</string>
     <string name="FCTitle">אודות עדכוני יישומים</string>
-    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו?</string>
+    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו\?</string>
     <string name="CCTitle">OpenCC (המרה סינית)</string>
     <string name="CCTarget">יַעַד</string>
     <string name="CCNo">אף אחד</string>
@@ -249,4 +251,6 @@
     <string name="VersionUpdateNoUpdate">אין עדכון.</string>
     <string name="VersionUpdateNotNow">לא עכשיו</string>
     <string name="VersionUpdateIgnore">התעלמות</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoX" translatable="false"></string>
 </resources>

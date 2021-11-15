@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">기본적으로 링크 미리보기 비활성화</string>
     <string name="DisableLinkPreviewByDefaultNotice">기본적으로 입력 중에 링크 미리보기 요청을 비활성화하여 서버가 Telegram을 통해 링크가 공유되었음을 알지 못하도록합니다.</string>
     <string name="CustomApi">사용자 정의 API</string>
-    <string name="UseCustomApiNotice">사용자 정의 API를 사용하여 로그인 시, 등록하거나 로그인 할 수 없으면, 이 항목이 도움이 될 수 있습니다.\n\n참고: 정식 버전을 사용하는 경우 fcm이 작동하지 않습니다.</string>
+    <string name="UseCustomApiNotice">사용자 정의 API를 사용하여 로그인 시, 등록하거나 로그인 할 수 없으면, 이 항목이 도움이 될 수 있습니다.
+\n
+\n참고: 정식 버전을 사용하는 경우 fcm이 작동하지 않습니다.</string>
     <string name="CustomApiNo">사용자 정의 API 사용하지 않기</string>
     <string name="CustomApiOfficial">텔레그램 안드로이드</string>
     <string name="CustomApiTGX">텔레그램 안드로이드 X</string>
@@ -96,9 +98,9 @@
     <string name="HideProxyByDefault">기본적으로 프록시 설정 숨기기</string>
     <string name="SkipOpenLinkConfirm">링크 열기 확인 건너 뛰기</string>
     <string name="DeleteAllInChat">채팅에서 모두 삭제</string>
-    <string name="DeleteAllInChatAlert">정말 이 채팅방의 \"내 모든 대화 내용\"을 비우시겠습니까?</string>
+    <string name="DeleteAllInChatAlert">정말 이 채팅방의 \"내 모든 대화 내용\"을 비우시겠습니까\?</string>
     <string name="UnblockAll">모두 차단 해제</string>
-    <string name="UnblockAllWarn">**모든 사용자와 봇** 을 차단 해제 하시겠습니까?</string>
+    <string name="UnblockAllWarn">**모든 사용자와 봇** 을 차단 해제 하시겠습니까\?</string>
     <string name="BlockedListEmpty">아무도 차단하지 않았습니다.</string>
     <string name="ProxyTypeVmess">VMess 프록시</string>
     <string name="AddProxySocks5">SOCKS5 프록시 추가</string>
@@ -154,8 +156,8 @@
     <string name="NoProxy">프록시 서버를 추가하지 않았습니다.</string>
     <string name="DeleteAllServer">모든 서버 삭제</string>
     <string name="DeleteUnavailableServer">사용할 수 없는 서버 삭제</string>
-    <string name="DeleteAllServerConfirm">**모든 서버를 삭제** 하시겠습니까?</string>
-    <string name="DeleteUnavailableServerConfirm">** 사용할 수 없는 서버를 삭제** 하시겠습니까?</string>
+    <string name="DeleteAllServerConfirm">**모든 서버를 삭제** 하시겠습니까\?</string>
+    <string name="DeleteUnavailableServerConfirm">** 사용할 수 없는 서버를 삭제** 하시겠습니까\?</string>
     <string name="MinApi21Required">죄송합니다. Android 5 (API21) 이상이 필요합니다.</string>
     <string name="MinApi23Required">죄송합니다. Android 6 (API23) 이상이 필요합니다.</string>
     <string name="MiniVersionAlert">죄송합니다. 미니 버전은이 유형의 프록시를 지원하지 않습니다. 설정에서 버전을 전환하십시오.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">모든 메시지 고정 해제</string>
     <string name="DismissForYourself">스스로 해산</string>
     <string name="ImportLogin">QR 로그인</string>
-    <string name="QRLoginNotice">이 QR 코드 / 링크를 통해 누군가가 귀하의 Telegram 계정에 로그인 할 수 있습니다. 이것은 당신 자신의 작업입니까?</string>
+    <string name="QRLoginNotice">이 QR 코드 / 링크를 통해 누군가가 귀하의 Telegram 계정에 로그인 할 수 있습니다. 이것은 당신 자신의 작업입니까\?</string>
     <string name="QRLoginConfirm">로그인 확인</string>
     <string name="StorageReset">저장 공간을 비우기</string>
     <string name="StorageResetInfo">이 응용 프로그램의 모든 데이터는 영구적으로 삭제됩니다 (먼저 모든 계정에서 로그 아웃).</string>
     <string name="FCTitle">애플리케이션 업데이트 정보</string>
-    <string name="FCInfo">공지 사항 및 업데이트 채널을 따르시겠습니까?</string>
+    <string name="FCInfo">공지 사항 및 업데이트 채널을 따르시겠습니까\?</string>
     <string name="CCTitle">OpenCC (중국어 변환)</string>
     <string name="CCTarget">표적</string>
     <string name="CCNo">없음</string>
@@ -216,4 +218,37 @@
     <string name="HideDeviceInfo">장치 모델 숨기기</string>
     <string name="HideDeviceInfoOff">로그인 후 앱이 두 번째로 시작되면 기기 모델이 업로드됩니다.</string>
     <string name="HideDeviceInfoOn">나중에 설정에서 변경할 수 있습니다.</string>
+    <string name="ArchiveFiles"></string>
+    <string name="Win32ExecutableFiles"></string>
+    <string name="PinSticker"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="AppLinkFDroid"></string>
+    <string name="UsePersiancalendarInfo"></string>
+    <string name="UsePersiancalendar"></string>
+    <string name="VersionUpdateTitle"></string>
+    <string name="AutoCheckUpdateRc"></string>
+    <string name="AutoCheckUpdateStable"></string>
+    <string name="AutoCheckUpdateSwitch"></string>
+    <string name="AutoCheckUpdateOFF"></string>
+    <string name="VersionUpdateNoUpdate"></string>
+    <string name="WsPayload"></string>
+    <string name="AddProxyWs"></string>
+    <string name="BackupSettings"></string>
+    <string name="EnableStickerPinTip"></string>
+    <string name="EnableStickerPinAbout"></string>
+    <string name="DisplayPersianCalendarByLatin"></string>
+    <string name="ImportSettingsAlert"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="AutoLockImmediately"></string>
+    <string name="ImportSettings"></string>
+    <string name="ProxyInfoWS"></string>
+    <string name="VersionUpdateNotNow"></string>
+    <string name="AutoDownload"></string>
+    <string name="SetPinnedSuffix"></string>
+    <string name="VersionUpdateIgnore"></string>
+    <string name="nekoXPaymentRemovedToast"></string>
+    <string name="EnableStickerPin"></string>
+    <string name="UnpinSticker"></string>
+    <string name="VersionUpdateConfirm"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

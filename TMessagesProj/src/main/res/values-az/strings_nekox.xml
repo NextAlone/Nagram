@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Varsayılan olaraq link önizləməsini deaktiv edin</string>
     <string name="DisableLinkPreviewByDefaultNotice">Vərdiş olaraq serverin keçidin Telegram vasitəsilə paylaşıldığını bilməməsi üçün giriş zamanı önizləmə tələbini söndürün.</string>
     <string name="CustomApi">Xüsusi API</string>
-    <string name="UseCustomApiNotice">Xüsusi api istifadə edərək daxil olun, qeydiyyatdan keçə və ya daxil ola bilmirsinizsə, bu kömək edə bilər.\n\nQeyd: buraxılış versiyasından istifadə edirsinizsə fcm işləməyəcəkdir.</string>
+    <string name="UseCustomApiNotice">Xüsusi api istifadə edərək daxil olun, qeydiyyatdan keçə və ya daxil ola bilmirsinizsə, bu kömək edə bilər.
+\n
+\nQeyd: buraxılış versiyasından istifadə edirsinizsə fcm işləməyəcəkdir.</string>
     <string name="CustomApiNo">Xüsusi API istifadə etməyin</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Söhbətin hamısını silin</string>
     <string name="DeleteAllInChatAlert">Xəbərdarlıq! Bu ** bütün ** iştirakçılar üçün bu söhbətdəki ** bütün mesajları ** siləcəkdir.</string>
     <string name="UnblockAll">Hamısını blokdan çıxarın</string>
-    <string name="UnblockAllWarn">** bütün istifadəçiləri və botları ** blokdan çıxarmaq istədiyinizə əminsiniz?</string>
+    <string name="UnblockAllWarn">** bütün istifadəçiləri və botları ** blokdan çıxarmaq istədiyinizə əminsiniz\?</string>
     <string name="BlockedListEmpty">Heç kəsi blok etməmisiniz :)</string>
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">SOCKS5 Proxy əlavə edin</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">Etiketləri fayldan idxal edin</string>
     <string name="ImportStickersList">Etiketləri idxal edin</string>
     <string name="StickerSets">Etiket dəstləri</string>
-    <string name="InvalidStickersFile">Yanlış stikerlər faylı: </string>
-    <string name="InvalidProxyFile">Yanlış proxy siyahısı faylı: </string>
-    <string name="ImportedProxies">İdxal olunan proxy serverlər: </string>
-    <string name="ErrorsInImport">İdxal səhvləri: </string>
+    <string name="InvalidStickersFile">Yanlış stikerlər faylı:</string>
+    <string name="InvalidProxyFile">Yanlış proxy siyahısı faylı:</string>
+    <string name="ImportedProxies">İdxal olunan proxy serverlər:</string>
+    <string name="ErrorsInImport">İdxal səhvləri:</string>
     <string name="NoProxy">Heç bir proxy server əlavə etməmisiniz.</string>
     <string name="DeleteAllServer">Bütün serverləri silin</string>
     <string name="DeleteUnavailableServer">Əlçatan olmayan serverləri silin</string>
-    <string name="DeleteAllServerConfirm">** bütün serverləri ** silmək istədiyinizə əminsiniz?</string>
-    <string name="DeleteUnavailableServerConfirm">** mövcud olmayan serverləri ** silmək istədiyinizə əminsiniz?</string>
+    <string name="DeleteAllServerConfirm">** bütün serverləri ** silmək istədiyinizə əminsiniz\?</string>
+    <string name="DeleteUnavailableServerConfirm">** mövcud olmayan serverləri ** silmək istədiyinizə əminsiniz\?</string>
     <string name="MinApi21Required">Bağışlayın, ən azı Android 5 (API21) ehtiyacınız var.</string>
     <string name="MinApi23Required">Bağışlayın, ən azı Android 6 (API23) ehtiyacınız var.</string>
     <string name="MiniVersionAlert">Üzr istəyirik, mini versiya bu tip proxy-ni dəstəkləmir, xahiş edirəm versiyanı parametrlərdə dəyişin.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">Bütün mesajları açın</string>
     <string name="DismissForYourself">Özünüz üçün işdən çıxarın</string>
     <string name="ImportLogin">QR Giriş</string>
-    <string name="QRLoginNotice">Bu qr kodu / linki kiminsə Telegram hesabınıza daxil olmasına imkan verir. Bu sizin öz əməliyyatınızdır?</string>
+    <string name="QRLoginNotice">Bu qr kodu / linki kiminsə Telegram hesabınıza daxil olmasına imkan verir. Bu sizin öz əməliyyatınızdır\?</string>
     <string name="QRLoginConfirm">Girişi təsdiq edin</string>
     <string name="StorageReset">Yaddaşı təmizləyin</string>
     <string name="StorageResetInfo">Bu tətbiqin bütün məlumatları həmişəlik silinəcəkdir (və əvvəlcə bütün hesablardan çıxmağa çalışın).</string>
     <string name="FCTitle">Tətbiq yeniləmələri haqqında</string>
-    <string name="FCInfo">Elan və yeniləmə kanalımızı izləyin?</string>
+    <string name="FCInfo">Elan və yeniləmə kanalımızı izləyin\?</string>
     <string name="CCTitle">OpenCC (Çin çevirmə)</string>
     <string name="CCTarget">Hədəf</string>
     <string name="CCNo">Yoxdur</string>
@@ -216,4 +218,37 @@
     <string name="HideDeviceInfo">Cihaz modelini gizlədin</string>
     <string name="HideDeviceInfoOff">Cihaz modeli tətbiq daxil olduqdan sonra ikinci dəfə başlayanda yüklənəcəkdir.</string>
     <string name="HideDeviceInfoOn">Bunu daha sonra ayarlarda dəyişə bilərsiniz.</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="ImportSettings"></string>
+    <string name="BackupSettings"></string>
+    <string name="PinSticker"></string>
+    <string name="EnableStickerPin"></string>
+    <string name="AppLinkFDroid"></string>
+    <string name="AutoDownload"></string>
+    <string name="VersionUpdateIgnore"></string>
+    <string name="VersionUpdateConfirm"></string>
+    <string name="AutoCheckUpdateRc"></string>
+    <string name="AutoCheckUpdateStable"></string>
+    <string name="ArchiveFiles"></string>
+    <string name="ProxyInfoWS"></string>
+    <string name="AddProxyWs"></string>
+    <string name="SetPinnedSuffix"></string>
+    <string name="AutoCheckUpdateSwitch"></string>
+    <string name="AutoLockImmediately"></string>
+    <string name="AutoCheckUpdateOFF"></string>
+    <string name="Win32ExecutableFiles"></string>
+    <string name="nekoXPaymentRemovedToast"></string>
+    <string name="VersionUpdateTitle"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="UsePersiancalendarInfo"></string>
+    <string name="WsPayload"></string>
+    <string name="VersionUpdateNotNow"></string>
+    <string name="UnpinSticker"></string>
+    <string name="VersionUpdateNoUpdate"></string>
+    <string name="EnableStickerPinAbout"></string>
+    <string name="ImportSettingsAlert"></string>
+    <string name="UsePersiancalendar"></string>
+    <string name="DisplayPersianCalendarByLatin"></string>
+    <string name="EnableStickerPinTip"></string>
 </resources>

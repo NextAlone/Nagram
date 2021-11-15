@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">デフォルトではリンクプレビューを無効にします</string>
     <string name="DisableLinkPreviewByDefaultNotice">サーバーがTelegramを通じてリンクが共有されていることを知らないようにするために、デフォルトでリンクのプレビュー要求を無効にします.</string>
     <string name="CustomApi">カスタムAPI</string>
-    <string name="UseCustomApiNotice">カスタムAPIを使用してログインします。登録やログインができない場合は、これが役に立つことがあります。\n\n注意: リリースバージョンを使用している場合、fcmは動作しません。</string>
+    <string name="UseCustomApiNotice">カスタムAPIを使用してログインします。登録やログインができない場合は、これが役に立つことがあります。
+\n
+\n注意: リリースバージョンを使用している場合、fcmは動作しません。</string>
     <string name="CustomApiNo">カスタムAPIを使用しない</string>
     <string name="CustomApiOfficial">テレグラムAndroid</string>
     <string name="CustomApiTGX">テレグラムAndroid X</string>
@@ -147,10 +149,10 @@
     <string name="ImportStickersX">ファイルからステッカーをインポート</string>
     <string name="ImportStickersList">ステッカーをインポート</string>
     <string name="StickerSets">ステッカーセット</string>
-    <string name="InvalidStickersFile">ステッカーファイルが無効です: </string>
-    <string name="InvalidProxyFile">無効なプロキシリストファイル: </string>
-    <string name="ImportedProxies">インポートされたプロキシサーバー: </string>
-    <string name="ErrorsInImport">インポートエラー: </string>
+    <string name="InvalidStickersFile">ステッカーファイルが無効です:</string>
+    <string name="InvalidProxyFile">無効なプロキシリストファイル:</string>
+    <string name="ImportedProxies">インポートされたプロキシサーバー:</string>
+    <string name="ErrorsInImport">インポートエラー:</string>
     <string name="NoProxy">あなたはプロキシサーバーを追加していません。</string>
     <string name="DeleteAllServer">すべてのサーバーを削除</string>
     <string name="DeleteUnavailableServer">使用できないサーバーを削除する</string>
@@ -236,4 +238,17 @@
     <string name="VersionUpdateNotNow">今ではありません</string>
     <string name="AutoLockImmediately">すぐに</string>
     <string name="PinSticker">ピン</string>
+    <string name="UnpinSticker"></string>
+    <string name="SetPinnedSuffix"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="AutoCheckUpdateRc"></string>
+    <string name="WsPayload"></string>
+    <string name="ImportSettingsAlert"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="EnableStickerPinAbout"></string>
+    <string name="UsePersiancalendarInfo"></string>
+    <string name="EnableStickerPinTip"></string>
+    <string name="EnableStickerPin"></string>
+    <string name="VersionUpdateNoUpdate"></string>
 </resources>

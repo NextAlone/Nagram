@@ -38,11 +38,11 @@
     <string name="TestBackend">Backend de Prueba</string>
     <string name="TestBackendOn">Esta cuenta se conectará con el backend de prueba.</string>
     <string name="TestBackendOff">Esta cuenta se conectará con el backend de producción.</string>
-    <string name="HideProxySponsorChannel">Ocultar sponsor del proxy</string>
+    <string name="HideProxySponsorChannel">Ocultar patrocinador del proxy</string>
     <string name="ViewHistory">Ver historial</string>
     <string name="Nya">¡Miau!</string>
     <string name="SaveCacheToExternalFilesDir">Aislamiento del almacenamiento</string>
-    <string name="SaveCacheToExternalFilesDirAbout">Guarda la carpeta \"Telegram\" en un directorio específico de la aplicación para mantener el almacenamiento compartido ordenado.</string>
+    <string name="SaveCacheToExternalFilesDirAbout">Guarda la carpeta \"Telegram\" en un directorio específico de la app para mantener el almacenamiento compartido ordenado.</string>
     <string name="SensitiveDisableFiltering">Desactivar filtrado de contenido sensible</string>
     <string name="SensitiveAbout">Mostrar multimedia sensible en canales públicos en todos tus dispositivos.</string>
     <string name="StickerSize">Tamaño de stickers</string>
@@ -109,4 +109,14 @@
     <string name="ProviderDeepLTranslate">DeepL Translate</string>
     <string name="ProviderMicrosoftTranslator">Traductor de Microsoft</string>
     <string name="ProviderYouDao">YouDao Translate</string>
+    <string name="UseMediaStreamInVoip">Usar flujo de medios en VoIP</string>
+    <string name="HideTimeForSticker">Ocultar la hora para los stickers</string>
+    <string name="maxRecentStickerCount">stickers recientes</string>
+    <string name="disableSwipeToNextChannel">Deshabilitar deslizar al canal próximo</string>
+    <string name="pressTitleToOpenAllChats">Presionar el título para abrir la pestaña \"Todos los chats\"</string>
+    <string name="DontSendGreetingSticker">No enviar el sticker para saludar</string>
+    <string name="TakeGIFasVideo">Tratar el sticker como vídeo</string>
+    <string name="hideGroupSticker">"Ocultar paquete de sticker  de cada grupo"</string>
+    <string name="customGroupVoipAudioBitrate">Tasa de bits de audio VoIP del grupo</string>
+    <string name="disableRemoteEmojiInteractions">Deshabilitar interacciones remotas de emoticonos</string>
 </resources>

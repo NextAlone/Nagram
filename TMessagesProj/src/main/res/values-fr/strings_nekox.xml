@@ -86,7 +86,7 @@
     <string name="DeleteAllInChat">Tout supprimer du chat</string>
     <string name="DeleteAllInChatAlert">Attention! Cela **supprimera tous les messages** dans ce chat pour **tous** les participants.</string>
     <string name="UnblockAll">Tout débloquer</string>
-    <string name="UnblockAllWarn">Êtes-vous sûr de vouloir débloquer **tous les utilisateurs et tous les bots**?</string>
+    <string name="UnblockAllWarn">Êtes-vous sûr de vouloir débloquer **tous les utilisateurs et tous les bots**\?</string>
     <string name="BlockedListEmpty">Vous n\'avez bloqué personne :)</string>
     <string name="ProxyTypeVmess">Proxy VMess</string>
     <string name="AddProxySocks5">Ajouter un proxy SOCKS5</string>
@@ -135,14 +135,14 @@
     <string name="ImportStickersX">Importer des autocollants depuis un fichier</string>
     <string name="ImportStickersList">Importer des autocollants</string>
     <string name="StickerSets">Ensembles d\'autocollants</string>
-    <string name="InvalidStickersFile">Fichier d\'autocollants invalide: </string>
-    <string name="ImportedProxies">Serveurs de proxy importés : </string>
-    <string name="ErrorsInImport">Erreurs d\'importation : </string>
+    <string name="InvalidStickersFile">Fichier d\'autocollants invalide:</string>
+    <string name="ImportedProxies">Serveurs de proxy importés :</string>
+    <string name="ErrorsInImport">Erreurs d\'importation :</string>
     <string name="NoProxy">Vous n\'avez pas ajouté de serveur proxy.</string>
     <string name="DeleteAllServer">Supprimer tous les serveurs</string>
     <string name="DeleteUnavailableServer">Supprimer les serveurs indisponibles</string>
-    <string name="DeleteAllServerConfirm">Êtes-vous sûr de vouloir **supprimer tous les serveurs** ?</string>
-    <string name="DeleteUnavailableServerConfirm">Êtes-vous sûr de vouloir **supprimer les serveurs indisponibles**?</string>
+    <string name="DeleteAllServerConfirm">Êtes-vous sûr de vouloir **supprimer tous les serveurs** \?</string>
+    <string name="DeleteUnavailableServerConfirm">Êtes-vous sûr de vouloir **supprimer les serveurs indisponibles**\?</string>
     <string name="MinApi21Required">Désolé, vous devez avoir au moins Android 5 (API21).</string>
     <string name="MinApi23Required">Désolé, vous devez avoir au moins Android 6 (API23).</string>
     <string name="MiniVersionAlert">Désolé, la version mini ne prend pas en charge ce type de proxy, veuillez changer de version dans les paramètres.</string>
@@ -172,12 +172,12 @@
     <string name="UnpinMessageX">Désépingler le message</string>
     <string name="UnpinMessagesAll">Désépingler tous les messages</string>
     <string name="ImportLogin">Connexion via QR Code</string>
-    <string name="QRLoginNotice">Ce QR code / lien permet à quelqu\'un de se connecter à votre compte Telegram. Est-ce vous ?</string>
+    <string name="QRLoginNotice">Ce QR code / lien permet à quelqu\'un de se connecter à votre compte Telegram. Est-ce vous \?</string>
     <string name="QRLoginConfirm">Confirmer la connexion</string>
     <string name="StorageReset">Vider le stockage</string>
     <string name="StorageResetInfo">Toutes les données de cette application seront supprimées définitivement (et essayez d\'abord de vous déconnecter de tous les comptes).</string>
     <string name="FCTitle">À propos des mises à jour de l\'application</string>
-    <string name="FCInfo">Rejoindre notre canal d\'annonces et de mises à jour?</string>
+    <string name="FCInfo">Rejoindre notre canal d\'annonces et de mises à jour\?</string>
     <string name="CCTitle">OpenCC (Conversion Chinoise)</string>
     <string name="CCTarget">Cible</string>
     <string name="CCNo">Aucune</string>
@@ -208,4 +208,45 @@
 \n
 \nNote : fcm ne fonctionnera pas si vous utilisez la version release.</string>
     <string name="DisableLinkPreviewByDefaultNotice">Désactiver l\'aperçu de lien par défaut afin d\'empêcher le serveur Telegram de lire vos liens échangés.</string>
+    <string name="DismissForYourself"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="EnableStickerPin"></string>
+    <string name="PrivacyNoticeAddByPhone"></string>
+    <string name="Win32ExecutableFiles"></string>
+    <string name="EnableStickerPinAbout"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="VersionUpdateTitle"></string>
+    <string name="ImportSettingsAlert"></string>
+    <string name="AutoCheckUpdateStable"></string>
+    <string name="AutoCheckUpdateOFF"></string>
+    <string name="BackupSettings"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="ProxyInfoWS"></string>
+    <string name="UsePersiancalendarInfo"></string>
+    <string name="DisplayPersianCalendarByLatin"></string>
+    <string name="ImportSettings"></string>
+    <string name="Sign"></string>
+    <string name="UserRestrictionsSendInline"></string>
+    <string name="ArchiveFiles"></string>
+    <string name="InvalidProxyFile"></string>
+    <string name="VersionUpdateConfirm"></string>
+    <string name="AddProxyWs"></string>
+    <string name="EnableStickerPinTip"></string>
+    <string name="AutoLockImmediately"></string>
+    <string name="VersionUpdateNoUpdate"></string>
+    <string name="IgnoreMutedCount"></string>
+    <string name="AutoCheckUpdateSwitch"></string>
+    <string name="AutoCheckUpdateRc"></string>
+    <string name="GoogleCloudTransKeyNotice"></string>
+    <string name="UsePersiancalendar"></string>
+    <string name="nekoXPaymentRemovedToast"></string>
+    <string name="FilterMenu"></string>
+    <string name="AllowFlashCall"></string>
+    <string name="WsPayload"></string>
+    <string name="VersionUpdateNotNow"></string>
+    <string name="PrivacyNoticeP2p"></string>
+    <string name="PrivacyNotice2fa"></string>
+    <string name="IgnoreContentRestrictionsNotice"></string>
+    <string name="AutoDownload"></string>
+    <string name="VersionUpdateIgnore"></string>
 </resources>

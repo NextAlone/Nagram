@@ -244,4 +244,9 @@
     <string name="SubscriptionUrls">URLs</string>
     <string name="VmessAlterId">Alterar ID</string>
     <string name="VmessUserId">ID de usuário</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="Win32ExecutableFiles"></string>
+    <string name="AppLinkFDroid"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="ProxyTypeVmess"></string>
 </resources>
