@@ -251,6 +251,4 @@
     <string name="VersionUpdateVariantNotMatch">Biến thể phiên bản không thể khớp tự động.
 \nVui lòng tải xuống thủ công từ GitHub.</string>
     <string name="VersionUpdateTitle">Có phiên bản mới</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

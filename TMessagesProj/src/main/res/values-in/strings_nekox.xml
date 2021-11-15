@@ -251,6 +251,4 @@
     <string name="VersionUpdateVariantNotMatch">Gagal mencocokkan versi varian secara otomatis.
 \n Silakan unduh manual dari GitHub.</string>
     <string name="VersionUpdateTitle">Tersedia Versi Baru</string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
 </resources>

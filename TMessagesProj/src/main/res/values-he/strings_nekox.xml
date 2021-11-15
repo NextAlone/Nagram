@@ -251,6 +251,4 @@
     <string name="VersionUpdateNoUpdate">אין עדכון.</string>
     <string name="VersionUpdateNotNow">לא עכשיו</string>
     <string name="VersionUpdateIgnore">התעלמות</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

@@ -240,16 +240,4 @@
     <string name="ArchiveFiles">Արխիվացնել ֆայլերը</string>
     <string name="Win32ExecutableFiles">Win32 գործադիր ֆայլեր</string>
     <string name="AutoDownload">Ավտոմատ ներբեռնում</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="AutoCheckUpdateOFF"></string>
-    <string name="VersionUpdateTitle"></string>
-    <string name="AutoCheckUpdateStable"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="VersionUpdateVariantNotMatch"></string>
-    <string name="VersionUpdateNoUpdate"></string>
-    <string name="VersionUpdateConfirm"></string>
-    <string name="VersionUpdateNotNow"></string>
-    <string name="AutoCheckUpdateSwitch"></string>
-    <string name="VersionUpdateIgnore"></string>
-    <string name="AutoCheckUpdateRc"></string>
 </resources>

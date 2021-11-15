@@ -221,34 +221,4 @@
     <string name="UnpinSticker">Loslösen</string>
     <string name="PinSticker">Anheften</string>
     <string name="AppLinkFDroid">F-Droid</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="Win32ExecutableFiles"></string>
-    <string name="EnableStickerPinTip"></string>
-    <string name="AutoDownload"></string>
-    <string name="UsePersiancalendarInfo"></string>
-    <string name="AddProxyWs"></string>
-    <string name="ProxyInfoWS"></string>
-    <string name="UsePersiancalendar"></string>
-    <string name="EnableStickerPin"></string>
-    <string name="DisplayPersianCalendarByLatin"></string>
-    <string name="DismissForYourself"></string>
-    <string name="EnableStickerPinAbout"></string>
-    <string name="ArchiveFiles"></string>
-    <string name="VersionUpdateTitle"></string>
-    <string name="nekoXPaymentRemovedToast"></string>
-    <string name="ImportSettingsAlert"></string>
-    <string name="ImportSettings"></string>
-    <string name="VersionUpdateVariantNotMatch"></string>
-    <string name="AutoLockImmediately"></string>
-    <string name="AutoCheckUpdateOFF"></string>
-    <string name="VersionUpdateNoUpdate"></string>
-    <string name="VersionUpdateNotNow"></string>
-    <string name="VersionUpdateIgnore"></string>
-    <string name="VersionUpdateConfirm"></string>
-    <string name="WsPayload"></string>
-    <string name="BackupSettings"></string>
-    <string name="AutoCheckUpdateStable"></string>
-    <string name="AutoCheckUpdateSwitch"></string>
-    <string name="AutoCheckUpdateRc"></string>
 </resources>

@@ -248,6 +248,4 @@
     <string name="VersionUpdateNotNow">Non ora</string>
     <string name="VersionUpdateIgnore">Ignora</string>
     <string name="VersionUpdateTitle">Nuova Versione Disponibile</string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
 </resources>

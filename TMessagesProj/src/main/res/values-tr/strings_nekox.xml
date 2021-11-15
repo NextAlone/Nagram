@@ -251,6 +251,4 @@
     <string name="VersionUpdateVariantNotMatch">Sürüm çeşitleri otomatik olarak eşleşmiyor.
 \nLütfen GitHub\'dan elle indirin.</string>
     <string name="VersionUpdateTitle">Yeni Sürüm Var</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

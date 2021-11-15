@@ -240,16 +240,4 @@
     <string name="ArchiveFiles">Архіви</string>
     <string name="Win32ExecutableFiles">Файли запуску Windows</string>
     <string name="AutoDownload">Автозавантаження</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="AutoCheckUpdateOFF"></string>
-    <string name="VersionUpdateTitle"></string>
-    <string name="VersionUpdateNoUpdate"></string>
-    <string name="VersionUpdateNotNow"></string>
-    <string name="VersionUpdateIgnore"></string>
-    <string name="VersionUpdateConfirm"></string>
-    <string name="VersionUpdateVariantNotMatch"></string>
-    <string name="AutoCheckUpdateStable"></string>
-    <string name="AutoCheckUpdateRc"></string>
-    <string name="AutoCheckUpdateSwitch"></string>
 </resources>

@@ -248,6 +248,4 @@
     <string name="TextReplace">Zastąp</string>
     <string name="TextOrigin">Źródło</string>
     <string name="ReplaceText">Zastąp tekst</string>
-    <string name="OpenCC" translatable="false"/>
-    <string name="NekoX" translatable="false"/>
 </resources>

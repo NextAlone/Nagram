@@ -238,17 +238,4 @@
     <string name="VersionUpdateNotNow">今ではありません</string>
     <string name="AutoLockImmediately">すぐに</string>
     <string name="PinSticker">ピン</string>
-    <string name="UnpinSticker"></string>
-    <string name="SetPinnedSuffix"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="AutoCheckUpdateRc"></string>
-    <string name="WsPayload"></string>
-    <string name="ImportSettingsAlert"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="VersionUpdateVariantNotMatch"></string>
-    <string name="EnableStickerPinAbout"></string>
-    <string name="UsePersiancalendarInfo"></string>
-    <string name="EnableStickerPinTip"></string>
-    <string name="EnableStickerPin"></string>
-    <string name="VersionUpdateNoUpdate"></string>
 </resources>

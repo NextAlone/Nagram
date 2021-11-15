@@ -251,6 +251,4 @@
     <string name="VersionUpdateVariantNotMatch">نوع نسخه بطور خودکار تشخیص داده نشد.
 \nلطفا بصورت دستی از گیت‌هاب دانلود کنید.</string>
     <string name="VersionUpdateTitle">نسخه جدید در دسترس است</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

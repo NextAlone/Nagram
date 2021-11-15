@@ -218,37 +218,4 @@
     <string name="HideDeviceInfo">장치 모델 숨기기</string>
     <string name="HideDeviceInfoOff">로그인 후 앱이 두 번째로 시작되면 기기 모델이 업로드됩니다.</string>
     <string name="HideDeviceInfoOn">나중에 설정에서 변경할 수 있습니다.</string>
-    <string name="ArchiveFiles"></string>
-    <string name="Win32ExecutableFiles"></string>
-    <string name="PinSticker"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="AppLinkFDroid"></string>
-    <string name="UsePersiancalendarInfo"></string>
-    <string name="UsePersiancalendar"></string>
-    <string name="VersionUpdateTitle"></string>
-    <string name="AutoCheckUpdateRc"></string>
-    <string name="AutoCheckUpdateStable"></string>
-    <string name="AutoCheckUpdateSwitch"></string>
-    <string name="AutoCheckUpdateOFF"></string>
-    <string name="VersionUpdateNoUpdate"></string>
-    <string name="WsPayload"></string>
-    <string name="AddProxyWs"></string>
-    <string name="BackupSettings"></string>
-    <string name="EnableStickerPinTip"></string>
-    <string name="EnableStickerPinAbout"></string>
-    <string name="DisplayPersianCalendarByLatin"></string>
-    <string name="ImportSettingsAlert"></string>
-    <string name="VersionUpdateVariantNotMatch"></string>
-    <string name="AutoLockImmediately"></string>
-    <string name="ImportSettings"></string>
-    <string name="ProxyInfoWS"></string>
-    <string name="VersionUpdateNotNow"></string>
-    <string name="AutoDownload"></string>
-    <string name="SetPinnedSuffix"></string>
-    <string name="VersionUpdateIgnore"></string>
-    <string name="nekoXPaymentRemovedToast"></string>
-    <string name="EnableStickerPin"></string>
-    <string name="UnpinSticker"></string>
-    <string name="VersionUpdateConfirm"></string>
-    <string name="OpenCC" translatable="false"></string>
 </resources>

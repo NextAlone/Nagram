@@ -210,44 +210,4 @@
     <string name="AcceptSecretChat">Aceptar nuevo chat secreto</string>
     <string name="TabletMode">Modo tablet</string>
     <string name="TabletModeDefault">Depende del dispositivo</string>
-    <string name="OpenCC" translatable="false"/>
-    <string name="NekoX" translatable="false"/>
-    <string name="Win32ExecutableFiles">Archivos Win32 ejecutables</string>
-    <string name="ReplaceRegex">Usar regex</string>
-    <string name="EnableStickerPinTip">Esta función todavía está en desarrollo, la sincronización en la nube no podría trabajar como se espera</string>
-    <string name="PinSticker">Anclar</string>
-    <string name="TextOrigin">Origen</string>
-    <string name="TextReplace">Reemplazar</string>
-    <string name="UnpinSticker">Desanclar</string>
-    <string name="ArchiveFiles">Guardar archivos</string>
-    <string name="BackupSettings">Configuración del respaldo</string>
-    <string name="EnableStickerPin">Habilitar anclado de sticker</string>
-    <string name="ImportSettingsAlert">¿Está seguro de querer sobreescribir la configuración\? Importar configuraciones desde sitios desconocidos puede ocasionar que el PIN sea sobreescrito y que la aplicación se bloquee</string>
-    <string name="UsePersiancalendarInfo">Mostrar la fecha con el calendario Solar Hijri</string>
-    <string name="VersionUpdateIgnore">Ignorar</string>
-    <string name="VersionUpdateConfirm">Actualizar</string>
-    <string name="SetPinnedSuffix">(Anclado)</string>
-    <string name="AppLinkFDroid">F-Droid</string>
-    <string name="AutoDownload">Autodescarga</string>
-    <string name="AutoCheckUpdateRc">Candidata a publicarse</string>
-    <string name="nekoXPaymentRemovedToast">La función de pago ha sido eliminada</string>
-    <string name="DisplayPersianCalendarByLatin">Mostrar el calendario persa en vez del Latino</string>
-    <string name="EnableStickerPinAbout">Anclar stickers y sincronizarlos en la nube cuando se agreguen nuevos stickers
-\nRelacionado con Deshabilitar Favoritos y Recientes</string>
-    <string name="VersionUpdateTitle">Nueva versión disponible</string>
-    <string name="AutoLockImmediately">Inmediatamente</string>
-    <string name="VersionUpdateVariantNotMatch">Las variantes de la versión fallaron para coincidir automáticamente.
-\nPor favor descargar manualmente desde GitHub</string>
-    <string name="VersionUpdateNoUpdate">Sin actualizar</string>
-    <string name="ProxyInfoWS">Configuración del Relevo WebSocket</string>
-    <string name="AutoCheckUpdateSwitch">Actualización automática</string>
-    <string name="DisableTrending">Deshabilitar tendencia</string>
-    <string name="ImportSettings">Importar configuración</string>
-    <string name="VersionUpdateNotNow">Ahora no</string>
-    <string name="AddProxyWs">Agregar Relevo WebSocket</string>
-    <string name="AutoCheckUpdateOFF">Apagado</string>
-    <string name="AutoCheckUpdateStable">Estable</string>
-    <string name="ReplaceText">Reemplazar el texto</string>
-    <string name="WsPayload">Carga útil</string>
-    <string name="UsePersiancalendar">Usar el calendario Persa</string>
 </resources>
