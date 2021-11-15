@@ -59,6 +59,7 @@ object MiniCDNDrive {
                                 .build()
                         val response2 = client.newCall(request2).execute()
                         data2 = readPhotoBytes(response2.body!!.bytes())
+                        break
                     } catch (e: Exception) {
                         if (i == try_max - 1) {
                             throw e
