@@ -217,9 +217,8 @@ public class InternalUpdater {
                             AndroidUtilities.runOnUIThread(() -> {
                                 progressDialog.setProgress(percent);
                             });
-                        }, (success) -> {
+                        }, () -> {
                             progressDialog.dismiss();
-                            if (!success) return;
 
                             try {
                                 if (NekomuraUtil.calcSHA1(f).equals(sha1)) {

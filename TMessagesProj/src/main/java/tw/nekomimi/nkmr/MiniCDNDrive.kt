@@ -32,47 +32,48 @@ object MiniCDNDrive {
         fun callbackPercent(percent: Int);
     }
 
-    interface CallbackFinished {
-        fun callbackFinished(success: Boolean);
-    }
-
-    fun Download(f: File, metaURL: String, callbackPercent: CallbackPercent, callbackFinished: CallbackFinished) {
+    fun Download(f: File, metaURL: String, callbackPercent: CallbackPercent, callbackFinished: Runnable) {
         thread {
-            try {
-                var output = FileOutputStream(f, false)
-                val client = OkHttpClient();
+            var output = FileOutputStream(f, false)
+            val client = OkHttpClient();
 
-                val request = Request.Builder()
-                        .url(meta2Real(metaURL))
-                        .build()
-                val response = client.newCall(request).execute()
-                val data = readPhotoBytes(response.body!!.bytes())
+            val request = Request.Builder()
+                    .url(meta2Real(metaURL))
+                    .build()
+            val response = client.newCall(request).execute()
+            val data = readPhotoBytes(response.body!!.bytes())
 
-                val meta = Gson().fromJson(String(data, Charset.forName("UTF-8")), metaJSON::class.java)
+            val meta = Gson().fromJson(String(data, Charset.forName("UTF-8")), metaJSON::class.java)
 
-                var counter = 0
-                for (block in meta.block) {
-                    val url = block.url.replace("http://", "https://")
+            var counter = 0
+            for (block in meta.block) {
+                lateinit var data2: ByteArray
+                val try_max = 3
 
-                    val request2 = Request.Builder()
-                            .url(url)
-                            .build()
-                    val response2 = client.newCall(request2).execute()
-                    val data2 = readPhotoBytes(response2.body!!.bytes())
+                for (i in 0 until try_max) {
+                    try {
+                        val url = block.url.replace("http://", "https://")
 
-                    output.write(data2)
-
-                    //TODO progress
-                    counter++
-                    callbackPercent.callbackPercent((counter * 100.0 / meta.block.size).roundToInt())
+                        val request2 = Request.Builder()
+                                .url(url)
+                                .build()
+                        val response2 = client.newCall(request2).execute()
+                        data2 = readPhotoBytes(response2.body!!.bytes())
+                    } catch (e: Exception) {
+                        if (i == try_max - 1) {
+                            throw e
+                        }
+                    }
                 }
+                output.write(data2)
 
-                output.close()
-                callbackFinished.callbackFinished(true)
-            } catch (e: Exception) {
-                FileLog.e(e)
-                callbackFinished.callbackFinished(false)
+                //TODO progress
+                counter++
+                callbackPercent.callbackPercent((counter * 100.0 / meta.block.size).roundToInt())
             }
+
+            output.close()
+            callbackFinished.run()
         }
     }
 
