@@ -2,11 +2,9 @@
 
 NekoX is an **free and open source** third-party Telegram client, based on Telegram-FOSS with features added.
 
-中文
+[中文FAQ](https://github.com/NekoX-Dev/NekoX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
 
 [![Get it on F-Droid](https://i.imgur.com/HDicnzz.png)](https://f-droid.org/packages/nekox.messenger) Fdroid releases can not upgrade to other releases.
-
-~~We are no longer able to update versions on the Play Store, check https://telegra.ph/So-they-solved-the-person-who-asked-the-question-04-28 .~~
 
 - [Update News Telegram](https://t.me/NekogramX)
 - [GitHub Feedback](https://github.com/NekoX-Dev/NekoX/issues)
@@ -32,6 +30,7 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - The ( vmess / vmess1 / ss / ssr / trojan ) proxy link in the message can be clicked
 - Allow auto-disabling proxy when VPN is enabled
 - Proxy automatic switcher
+- Custom [Emoji packs](https://github.com/NekoX-Dev/NekoX/wiki/emoji)
 - Add stickers without sticker pack
 - Allow disabling vibration
 - Allow clicking on links in self profile
