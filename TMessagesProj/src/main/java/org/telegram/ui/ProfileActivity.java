@@ -3105,7 +3105,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 7) {
                                 VoIPHelper.showCallDebugSettings(getParentActivity());
                             } else if (which == 8) {
-                                NekomuraConfig.residentNotification.toggleConfigBool();
+                                SharedConfig.toggleRoundCamera16to9();
                             } else if (which == 9) {
                             } else if (which == 10) {
                                 getMessagesStorage().readAllDialogs(-1);

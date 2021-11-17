@@ -58,7 +58,6 @@ public class NekomuraConfig {
     public static ConfigItem nameOrder = addConfig("NameOrder", configTypeInt, 1);
     public static ConfigItem mapPreviewProvider = addConfig("MapPreviewProvider", configTypeInt, 0);
     public static ConfigItem transparentStatusBar = addConfig("TransparentStatusBar", configTypeBool, false);
-    public static ConfigItem residentNotification = addConfig("EnableResidentNotification", configTypeBool, false);
     public static ConfigItem hideProxySponsorChannel = addConfig("HideProxySponsorChannel", configTypeBool, false);
     public static ConfigItem showAddToSavedMessages = addConfig("showAddToSavedMessages", configTypeBool, true);
     public static ConfigItem showReport = addConfig("showReport", configTypeBool, true);
@@ -320,8 +319,6 @@ public class NekomuraConfig {
             mapPreviewProvider.setConfigInt(preferences.getInt("mapPreviewProvider", 0));
         if (preferences.contains("transparentStatusBar"))
             transparentStatusBar.setConfigBool(preferences.getBoolean("transparentStatusBar", false));
-        if (preferences.contains("residentNotification"))
-            residentNotification.setConfigBool(preferences.getBoolean("residentNotification", false));
         if (preferences.contains("hideProxySponsorChannel"))
             hideProxySponsorChannel.setConfigBool(preferences.getBoolean("hideProxySponsorChannel", false));
         if (preferences.contains("showAddToSavedMessages"))
