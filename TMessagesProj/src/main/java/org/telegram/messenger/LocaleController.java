@@ -103,7 +103,7 @@ public class LocaleController {
     private HashMap<String, String> translitChars;
     private HashMap<String, String> ruTranslitChars;
 
-    public static boolean usePersianCalendar;
+    public static boolean usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool(); // need restart
 
     private class TimeZoneChangedReceiver extends BroadcastReceiver {
         @Override
@@ -982,9 +982,6 @@ public class LocaleController {
             }
             currentLocale = newLocale;
             currentLocaleInfo = localeInfo;
-
-            // reloadPersianCalendarConfig
-            usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool();
 
             if (!TextUtils.isEmpty(currentLocaleInfo.pluralLangCode)) {
                 currentPluralRules = allRules.get(currentLocaleInfo.pluralLangCode);
