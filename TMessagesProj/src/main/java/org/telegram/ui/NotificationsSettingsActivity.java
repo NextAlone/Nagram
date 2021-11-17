@@ -545,23 +545,26 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 editor.putBoolean("badgeNumberMessages", getNotificationsController().showBadgeMessages);
                 editor.commit();
                 getNotificationsController().updateBadge();
+            } else if (position == notificationsServiceRow) {
+                SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+                enabled = preferences.getBoolean("pushService", getMessagesController().keepAliveService);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("pushService", !enabled);
+                editor.apply();
+                ApplicationLoader.startPushService();
             } else if (position == notificationsServiceConnectionRow) {
                 SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                 enabled = preferences.getBoolean("pushConnection", getMessagesController().backgroundConnection);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("pushConnection", !enabled);
-                editor.commit();
-                if (!enabled) {
-                    ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(true);
-                } else {
-                    ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(false);
-                }
+                editor.apply();
+                ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(!enabled);
             } else if (position == accountsAllRow) {
                 SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
                 enabled = preferences.getBoolean("AllAccounts", true);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("AllAccounts", !enabled);
-                editor.commit();
+                editor.apply();
                 SharedConfig.showNotificationsForAllAccounts = !enabled;
                 for (int a : SharedConfig.activeAccounts) {
                     if (SharedConfig.showNotificationsForAllAccounts) {
@@ -573,22 +576,6 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             NotificationsController.getInstance(a).hideNotifications();
                         }
                     }
-                }
-            } else if (position == notificationsServiceRow) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    if (ApplicationLoader.isNotificationListenerEnabled()) {
-                        AlertUtil.showToast(LocaleController.getString("DisablePushAlert", R.string.DisablePushAlert));
-                    } else {
-                        AlertUtil.showToast(LocaleController.getString("EnablePushAlert", R.string.EnablePushAlert));
-                    }
-                    AndroidUtilities.runOnUIThread(this::openNotificationListenSettings, 500L);
-                } else {
-                    SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                    enabled = preferences.getBoolean("pushService", getMessagesController().keepAliveService);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("pushService", !enabled);
-                    editor.apply();
-                    ApplicationLoader.startPushService();
                 }
             } else if (position == callsVibrateRow) {
                 if (getParentActivity() == null) {
@@ -859,7 +846,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == androidAutoAlertRow) {
                         checkCell.setTextAndCheck("Android Auto", preferences.getBoolean("EnableAutoNotifications", false), true);
                     } else if (position == notificationsServiceRow) {
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? ApplicationLoader.isNotificationListenerEnabled() : preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
                     } else if (position == notificationsServiceConnectionRow) {
                         checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", getMessagesController().backgroundConnection), true, true);
                     } else if (position == badgeNumberShowRow) {

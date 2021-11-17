@@ -394,31 +394,23 @@ public class ApplicationLoader extends Application {
     }
 
     private static void startPushServiceInternal() {
-        if (ExternalGcm.checkPlayServices() || (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && isNotificationListenerEnabled())) {
+        if (ExternalGcm.checkPlayServices()) {
             return;
         }
-        SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
         boolean enabled;
         if (preferences.contains("pushService")) {
-            enabled = preferences.getBoolean("pushService", true);
-            if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                if (!preferences.getBoolean("pushConnection", true)) return;
-            }
+            enabled = preferences.getBoolean("pushService", false);
         } else {
-            enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", true);
+            enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", false);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("pushService", enabled);
             editor.putBoolean("pushConnection", enabled);
             editor.apply();
-            SharedPreferences preferencesCA = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
-            SharedPreferences.Editor editorCA = preferencesCA.edit();
-            editorCA.putBoolean("pushConnection", enabled);
-            editorCA.putBoolean("pushService", enabled);
-            editorCA.apply();
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).setPushConnectionEnabled(true);
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).setPushConnectionEnabled(enabled);
         }
         if (enabled) {
-            UIUtil.runOnUIThread(() -> {
+            AndroidUtilities.runOnUIThread(() -> {
                 try {
                     Log.d("TFOSS", "Trying to start push service every 10 minutes");
                     // Telegram-FOSS: unconditionally enable push service
@@ -440,7 +432,7 @@ public class ApplicationLoader extends Application {
                 }
             });
 
-        } else UIUtil.runOnUIThread(() -> {
+        } else AndroidUtilities.runOnUIThread(() -> {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
 
             PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
@@ -450,14 +442,6 @@ public class ApplicationLoader extends Application {
                 alarm.cancel(pendingIntent);
             }
         });
-    }
-
-    public static boolean isNotificationListenerEnabled() {
-        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(applicationContext);
-        if (packageNames.contains(applicationContext.getPackageName())) {
-            return true;
-        }
-        return false;
     }
 
     @Override
