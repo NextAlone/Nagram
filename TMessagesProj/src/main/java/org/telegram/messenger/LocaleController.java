@@ -16,6 +16,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -1047,12 +1049,27 @@ public class LocaleController {
                 }
             }
         }
-        if (value == null) {
+        if (value == null || "".equals(value)) {
             value = "LOC_ERR:" + key;
+            if (getFallbackResources() != null)
+                value = getFallbackResources().getString(res);
         } else {
             value = LocFiltersKt.filter(value);
         }
         return value;
+    }
+
+    private static Resources fallbackResources = null;
+
+    private static Resources getFallbackResources() {
+        if (fallbackResources == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Configuration conf = ApplicationLoader.applicationContext.getResources().getConfiguration();
+            conf = new Configuration(conf);
+            conf.setLocale(new Locale("en"));
+            Context localizedContext = ApplicationLoader.applicationContext.createConfigurationContext(conf);
+            fallbackResources = localizedContext.getResources();
+        }
+        return fallbackResources;
     }
 
     public static String getServerString(String key) {
