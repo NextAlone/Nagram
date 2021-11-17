@@ -261,4 +261,5 @@
 
     <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
     <string name="hideSponsoredMessage">Hide sponsored messages</string>
+    <string name="rememberAllBackMessages">Remember all clicked replies</string>
 </resources>

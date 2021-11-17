@@ -260,6 +260,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -660,6 +661,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int startFromVideoMessageId;
     private boolean needSelectFromMessageId;
     private int returnToMessageId;
+    private final Stack<Integer> returnToMessageIdsStack = new Stack<>();
     private int returnToLoadIndex;
     private int createUnreadMessageAfterId;
     private boolean createUnreadMessageAfterIdLoading;
@@ -6041,7 +6043,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             textSelectionHelper.cancelTextSelectionRunnable();
             if (createUnreadMessageAfterId != 0) {
                 scrollToMessageId(createUnreadMessageAfterId, 0, false, returnToLoadIndex, true, 0);
-            } else if (returnToMessageId > 0) {
+            } else if (returnToMessageId > 0 || (NekomuraConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())) {
+                returnToMessageId = returnToMessageIdsStack.pop();
                 scrollToMessageId(returnToMessageId, 0, true, returnToLoadIndex, true, 0);
             } else {
                 scrollToLastMessage(false);
@@ -6051,6 +6054,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         });
+        if (NekomuraConfig.rememberAllBackMessages.Bool()) {
+            pagedownButton.setOnLongClickListener(view -> {
+                returnToMessageId = 0;
+                returnToMessageIdsStack.clear();
+                scrollToLastMessage(true);
+                return true;
+            });
+        }
 
         mentiondownButton = new FrameLayout(context);
         mentiondownButton.setVisibility(View.INVISIBLE);
@@ -12262,6 +12273,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
         returnToMessageId = fromMessageId;
+        if (NekomuraConfig.rememberAllBackMessages.Bool() && fromMessageId > 0)
+            returnToMessageIdsStack.push(returnToMessageId);
         returnToLoadIndex = loadIndex;
         needSelectFromMessageId = select;
     }
@@ -12325,6 +12338,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         } else {
             returnToMessageId = 0;
+            returnToMessageIdsStack.clear();
             newUnreadMessageCount = 0;
             if (pagedownButton.getTag() != null) {
                 pagedownButton.setTag(null);
@@ -12386,6 +12400,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         } else {
             returnToMessageId = 0;
+            returnToMessageIdsStack.clear();
             if (mentiondownButton.getTag() != null) {
                 mentiondownButton.setTag(null);
                 if (mentiondownButtonAnimation != null) {
