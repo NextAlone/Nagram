@@ -100,6 +100,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
+
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private RecyclerListView cameraPhotoRecyclerView;
@@ -616,7 +619,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     return;
                 } else if (noGalleryPermissions) {
                     try {
-                        parentAlert.baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                        if (NekoConfig.forceSystemPicker) {
+                            menu.onItemClick(open_in); // Use system photo picker
+                        } else {
+                            parentAlert.baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                        }
                     } catch (Exception ignore) {
 
                     }

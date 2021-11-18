@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.os.Build;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -32,6 +34,8 @@ public class NekoConfig {
     public static final int TITLE_TYPE_TEXT = 0;
     public static final int TITLE_TYPE_ICON = 1;
     public static final int TITLE_TYPE_MIX = 2;
+
+    public static boolean forceSystemPicker = false; // SDK23+ and no storage permission
 
     public static String getOpenPGPAppName() {
 
@@ -74,6 +78,16 @@ public class NekoConfig {
     }
 
     static {
+        checkForceSystemPicker();
+    }
+
+    public static void checkForceSystemPicker() {
+        // TODO show alert?
+        // TODO not working: send photo (upstream bug)
+        if (Build.VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            forceSystemPicker = true;
+            BuildVars.NO_SCOPED_STORAGE = false;
+        }
     }
 
 

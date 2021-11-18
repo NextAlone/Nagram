@@ -160,6 +160,7 @@ import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.ExternalGcm;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -4044,6 +4045,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", R.string.VoipNeedCameraPermission));
             }
         } else if (requestCode == 4) {
+            NekoConfig.checkForceSystemPicker();
             if (!granted) {
                 showPermissionErrorAlert(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
             } else {
