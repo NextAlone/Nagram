@@ -30,7 +30,7 @@ public class ChatLanguage implements Mappable {
     }
 
     @Override public void read(NitriteMapper mapper, Document document) {
-        chatId = ((int) document.get("chatId"));
+        chatId = ((long) document.get("chatId"));
         language = ((String) document.get("language"));
     }
 
