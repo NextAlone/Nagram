@@ -149,6 +149,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractCell disableUndoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableUndo));
     private final AbstractCell showIdAndDcRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.showIdAndDc));
     private final AbstractCell inappCameraRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.inappCamera));
+    private final AbstractCell disableInstantCameraRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableInstantCamera));
     private final AbstractCell hideProxySponsorChannelRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxySponsorChannel));
     private final AbstractCell hideSponsoredMessageRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideSponsoredMessage));
     private final AbstractCell askBeforeCallRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.askBeforeCall));
@@ -313,6 +314,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }
             } else if (key.equals(NekomuraConfig.inappCamera.getKey())) {
                 SharedConfig.setInappCamera((boolean) newValue);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekomuraConfig.hidePhone.getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);

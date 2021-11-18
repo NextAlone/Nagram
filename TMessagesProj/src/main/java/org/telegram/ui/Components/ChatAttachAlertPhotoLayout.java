@@ -617,7 +617,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
                     }
                     return;
-                } else if (noGalleryPermissions) {
+                } else if (noGalleryPermissions && position != 0) {
                     try {
                         if (NekoConfig.forceSystemPicker) {
                             menu.onItemClick(open_in); // Use system photo picker
@@ -662,6 +662,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 PhotoViewer.getInstance().setCaption(parentAlert.getCommentTextView().getText());
             } else {
                 if (SharedConfig.inappCamera) {
+                    if (NekomuraConfig.disableInstantCamera.Bool()) {
+                        showCamera();
+                    }
                     openCamera(true);
                 } else {
                     if (parentAlert.delegate != null) {
@@ -1620,10 +1623,15 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             }
         }
+        if (deviceHasGoodCamera && NekomuraConfig.disableInstantCamera.Bool()) {
+            // Clear cached bitmap
+            File file = new File(ApplicationLoader.getFilesDirFixed(), "cthumb.jpg");
+            if (file.exists()) file.delete();
+        }
         if ((old != deviceHasGoodCamera || old2 != noCameraPermissions) && adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if (parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.baseFragment != null && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened) {
+        if (parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.baseFragment != null && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened && !NekomuraConfig.disableInstantCamera.Bool()) {
             showCamera();
         }
     }
@@ -1912,7 +1920,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     private void saveLastCameraBitmap() {
-        if (!canSaveCameraPreview) {
+        if (!canSaveCameraPreview || NekomuraConfig.disableInstantCamera.Bool()) {
             return;
         }
         try {
