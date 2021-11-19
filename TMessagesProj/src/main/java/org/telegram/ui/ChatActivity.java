@@ -8078,8 +8078,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         contentView.addView(fireworksOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         textSelectionHelper.setParentView(chatListView);
 
-        long searchFromUserId = getArguments().getInt("search_from_user_id", 0);
-        long searchFromChatId = getArguments().getInt("search_from_chat_id", 0);
+        long searchFromUserId = getArguments().getLong("search_from_user_id", 0);
+        long searchFromChatId = getArguments().getLong("search_from_chat_id", 0);
         if (searchFromUserId != 0) {
             TLRPC.User user = getMessagesController().getUser(searchFromUserId);
             if (user != null) {
@@ -27277,9 +27277,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case nkbtn_view_history: {
-                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.from_id.user_id);
-                getMediaDataController().searchMessagesInChat("", dialog_id, mergeDialogId, classGuid, 0, 0, user, null);
-                showMessagesSearchListView(true);
+                // same as "search_from_user_id"
+                TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.from_id.user_id);
+                if (user != null) {
+                    openSearchWithText("");
+                    searchUserButton.callOnClick();
+                    searchUserMessages(user, null);
+                }
                 break;
             }
             case nkbtn_editAdmin: {
