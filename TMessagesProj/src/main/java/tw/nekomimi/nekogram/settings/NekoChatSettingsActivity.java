@@ -37,6 +37,7 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,6 +88,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractCell hideTimeForStickerRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideTimeForSticker));
     private final AbstractCell hideGroupStickerRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideGroupSticker));
     private final AbstractCell takeGIFasVideoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.takeGIFasVideo));
+    private final AbstractCell showSeconds = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.showSeconds));
     private final AbstractCell maxRecentStickerCountRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractCell disableSwipeToNextRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableSwipeToNext));
     private final AbstractCell disableRemoteEmojiInteractionsRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableRemoteEmojiInteractions));
@@ -117,10 +119,12 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix)
             }, null));
     private final AbstractCell divider3 = cellGroup.appendCell(new NekomuraTGDivider());
+
     private RecyclerListView listView;
     private ListAdapter listAdapter;
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
+    private UndoView tooltip;
 
     @Override
     public boolean onFragmentCreate() {
@@ -224,11 +228,16 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NekomuraConfig.disableProximityEvents.getKey())) {
                 MediaController.getInstance().recreateProximityWakeLock();
+            } else if (key.equals(NekomuraConfig.showSeconds.getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };
 
         //Cells: Set ListAdapter
         cellGroup.setListAdapter(listView, listAdapter);
+
+        tooltip = new UndoView(context);
+        frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
     }

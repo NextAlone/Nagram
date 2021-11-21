@@ -46,6 +46,7 @@ public class NekomuraConfig {
     public static ConfigItem useCustomEmoji = addConfig("useCustomEmoji", configTypeBool, false);
     public static ConfigItem repeatConfirm = addConfig("repeatConfirm", configTypeBool, false);
     public static ConfigItem disableInstantCamera = addConfig("DisableInstantCamera", configTypeBool, false);
+    public static ConfigItem showSeconds = addConfig("showSeconds", configTypeBool, false);
 
     // From NekoConfig
     public static ConfigItem useIPv6 = addConfig("IPv6", configTypeBool, false);

@@ -262,5 +262,6 @@
     <string name="hideSponsoredMessage">Hide sponsored messages</string>
     <string name="rememberAllBackMessages">Remember all clicked replies</string>
     <string name="DisableInstantCamera">Disable instant camera</string>
+    <string name="showSeconds">Show timestamp in seconds</string>
     
 </resources>
