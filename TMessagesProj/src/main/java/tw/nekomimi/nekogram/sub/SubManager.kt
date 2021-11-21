@@ -27,12 +27,6 @@ object SubManager {
                 enable = public?.enable ?: true
 
                 urls = listOf(
-                        "doh://1.1.1.1/dns-query", // Domain is hardcoded in ProxyLoads.kt
-                        "doh://1.0.0.1/dns-query",
-                        "doh://101.101.101.101/dns-query",
-                        "doh://8.8.8.8/resolve",
-                        "doh://8.8.4.4/resolve",
-                        "doh://[2606:4700:4700::1111]/dns-query",
                         "https://nekox.pages.dev/proxy_list_pro",  // Note: NO DoH apply to here and neko.services now.
                         "https://github.com/NekoX-Dev/ProxyList/blob/master/proxy_list_pro@js-file-line\">@<",
                         "https://api.github.com/repos/NekoX-Dev/ProxyList/contents/proxy_list_pro?ref=master@\"content\": \"@\"",

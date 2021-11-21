@@ -5,9 +5,9 @@ import cn.hutool.http.HttpResponse
 import cn.hutool.http.HttpUtil
 import kotlinx.coroutines.*
 import org.telegram.messenger.FileLog
+import tw.nekomimi.nekogram.utils.DnsFactory
 import tw.nekomimi.nekogram.utils.ProxyUtil.parseProxies
 import tw.nekomimi.nkmr.NekomuraUtil
-import java.util.ArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
@@ -15,77 +15,26 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Exception>): List<String> {
-    val urlsDoH = ArrayList<String>()
-    val urlsOld = ArrayList<String>()
-
-    for (url in urls) {
-        if (url.startsWith("doh://")) {
-            urlsDoH.add(url)
-        } else {
-            urlsOld.add(url)
-        }
-    }
-
     // Try DoH first ( github.com is often blocked
     try {
-        return runBlocking {
-            var jobs = ArrayList<Job>()
+        var content = DnsFactory.getTxts("nachonekodayo.sekai.icu").joinToString()
 
-            var a: List<String> = suspendCoroutine {
-                val ret = AtomicBoolean()
-                val cl = AtomicInteger(urlsDoH.size)
-
-                for (url in urlsDoH) {
-                    jobs.add(launch(Dispatchers.IO) {
-                        try {
-                            val para = "?name=nekogramx-public-proxy-v1.seyana.moe&type=TXT"
-                            val reqURL = url.replace("doh://", "https://", false) + para
-
-                            val req = HttpUtil.createGet(reqURL)
-                            req.addHeaders(mapOf("accept" to "application/dns-json"))
-                            req.timeout(10 * 1000)
-
-                            var content = req.execute().body()
-                            content = content.replace("\\\"", "", false)
-                            content = content.replace(" ", "", false)
-
-                            val proxiesString = NekomuraUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
-                            if (proxiesString.equals(content)) {
-                                throw Exception("DoH get public proxy: Not found")
-                            }
-
-                            val proxies = parseProxies(proxiesString)
-                            if (proxies.count() == 0) {
-                                throw Exception("DoH get public proxy: Empty")
-                            }
-
-                            if (ret.getAndSet(true)) return@launch
-//                            Log.e("NekoPublicProxy", reqURL)
-                            it.resume(proxies)
-                        } catch (e: Exception) {
-//                            Log.e("NekoPublicProxy", e.stackTraceToString())
-                            FileLog.d(url)
-                            FileLog.e(e.stackTraceToString())
-                            exceptions[url] = e
-                            if (cl.decrementAndGet() == 0) {
-                                it.resumeWithException(e)
-                            }
-                        }
-                    })
-                }
-            }
-
-            // Quit when the first success
-            for (job in jobs) {
-                // TODO cannot cancel Hutool HTTPRequest now...
-                job.cancel()
-            }
-            a
+        val proxiesString = NekomuraUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
+        if (proxiesString.equals(content)) {
+            throw Exception("DoH get public proxy: Not found")
         }
+
+        val proxies = parseProxies(proxiesString)
+        if (proxies.count() == 0) {
+            throw Exception("DoH get public proxy: Empty")
+        }
+        return proxies
     } catch (e: Exception) {
-        // Try Other Urls
-        return loadProxies(urlsOld, exceptions)
+        FileLog.e(e.stackTraceToString())
     }
+
+    // Try Other Urls
+    return loadProxies(urls, exceptions)
 }
 
 
@@ -129,7 +78,7 @@ fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): 
 
                         if (url.contains("https://api.github.com")) {
                             content = content.replace("\\n", "", false)
-                            content = String(Base64.decode(content, Base64.DEFAULT))
+                            content = String(Base64.decode(content, Base64.NO_PADDING))
                         }
 
                         val proxies = parseProxies(content)
