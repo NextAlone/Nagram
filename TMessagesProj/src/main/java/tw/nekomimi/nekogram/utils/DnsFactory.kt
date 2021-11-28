@@ -29,7 +29,7 @@ object DnsFactory {
             // behaviour: try all concurrently and stop when the first result returns.
             "https://1.1.1.1/dns-query",
             "https://1.0.0.1/dns-query",
-            "https://8.8.8.8/resolve",
+            "https://8.8.8.8/dns-query",
             "https://101.101.101.101/dns-query",
             "https://9.9.9.9/dns-query",
             "https://185.222.222.222/dns-query",
@@ -133,7 +133,11 @@ object DnsFactory {
                                     it.resume(ret)
                                 }
                             } catch (e: Exception) {
-                                if (e is CustomException) FileLog.e(e)
+                                if (e is CustomException) {
+                                    FileLog.e(e)
+                                } else {
+                                    FileLog.w(e.stackTraceToString())
+                                }
                             }
                             if (counterAll.incrementAndGet() == providers().size && counterGood.get() == 0) {
                                 it.resume(null)
@@ -222,7 +226,11 @@ object DnsFactory {
                                 it.resume(ret)
                             }
                         } catch (e: Exception) {
-                            if (e is CustomException) FileLog.e(e)
+                            if (e is CustomException) {
+                                FileLog.e(e)
+                            } else {
+                                FileLog.w(e.stackTraceToString())
+                            }
                         }
                         if (counterAll.incrementAndGet() == providers().size && counterGood.get() == 0) {
                             //all failed

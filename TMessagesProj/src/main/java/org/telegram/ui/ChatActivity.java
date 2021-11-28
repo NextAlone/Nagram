@@ -64,6 +64,7 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -20394,7 +20395,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             } else {
                                 if (!selectedObject.isAnimatedSticker()) {
                                     items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
-                                    options.add(nkbtn_savemessage);
+                                    options.add(nkbtn_stickerdl);
                                     icons.add(R.drawable.baseline_image_24);
                                 }
                                 items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
@@ -23482,6 +23483,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void markSponsoredAsRead(MessageObject object) {
+        if (object.isSponsored() && NekomuraConfig.hideSponsoredMessage.Bool()) {
+            ArrayList<Integer> mids = new ArrayList<>();
+            mids.add(object.messageOwner.id);
+            AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, -dialog_id, false));
+        }
         if (!object.isSponsored() || object.viewsReloaded) {
             return;
         }
@@ -23490,7 +23496,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         req.channel = MessagesController.getInputChannel(currentChat);
         req.random_id = object.sponsoredId;
         getConnectionsManager().sendRequest(req, (response, error) -> {
-
         });
         getMessagesController().markSponsoredAsRead(dialog_id, object);
     }
