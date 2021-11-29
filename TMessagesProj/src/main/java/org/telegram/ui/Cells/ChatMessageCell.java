@@ -14526,6 +14526,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
+    public boolean isSeekbarCell() {
+        return currentMessageObject.isVoice() || currentMessageObject.isRoundVideo() || currentMessageObject.isMusic();
+    }
+
     @Override
     public boolean onHoverEvent(MotionEvent event) {
         int x = (int) event.getX();

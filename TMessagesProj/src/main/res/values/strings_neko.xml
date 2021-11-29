@@ -143,5 +143,6 @@
     <string name="showBottomActionsWhenSelecting">Show bottom actions when selecting</string>
     <string name="channelLabel">channel</string>
     <string name="SelectAnIcon">Choose an icon</string>
-
+    <string name="MutualContact">Mutual contact</string>
+    <string name="MutualContactDescription">This contact is a mutual contact.</string>
 </resources>
