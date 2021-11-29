@@ -26,6 +26,7 @@ import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
@@ -34,6 +35,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
@@ -50,6 +52,7 @@ public class UserCell extends FrameLayout {
     private CheckBoxSquare checkBoxBig;
     private TextView adminTextView;
     private TextView addButton;
+    private ImageView mutualView;
 
     private AvatarDrawable avatarDrawable;
     private Object currentObject;
@@ -78,6 +81,10 @@ public class UserCell extends FrameLayout {
     }
 
     public UserCell(Context context, int padding, int checkbox, boolean admin, boolean needAddButton) {
+        this(context, padding, checkbox, admin, needAddButton, false);
+    }
+
+    public UserCell(Context context, int padding, int checkbox, boolean admin, boolean needAddButton, boolean needMutualIcon) {
         super(context);
 
         int additionalPadding;
@@ -140,6 +147,18 @@ public class UserCell extends FrameLayout {
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon));
             adminTextView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
             addView(adminTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 23 : 0, 10, LocaleController.isRTL ? 0 : 23, 0));
+        }
+
+        if (needMutualIcon) {
+            mutualView = new ImageView(context);
+            mutualView.setImageResource(R.drawable.ic_round_swap_horiz_24);
+            mutualView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_player_actionBarSelector)));
+            mutualView.setScaleType(ImageView.ScaleType.CENTER);
+            mutualView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+            mutualView.setVisibility(GONE);
+            mutualView.setContentDescription(LocaleController.getString("MutualContact", R.string.MutualContact));
+            mutualView.setOnClickListener(v -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString("MutualContactDescription", R.string.MutualContactDescription)));
+            addView(mutualView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, LocaleController.isRTL ? 8 : 0, 0, LocaleController.isRTL ? 0 : 8, 0));
         }
 
         setFocusable(true);
@@ -491,6 +510,10 @@ public class UserCell extends FrameLayout {
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         if (adminTextView != null) {
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon));
+        }
+
+        if (mutualView != null) {
+            mutualView.setVisibility(currentUser != null && currentUser.mutual_contact ? VISIBLE : GONE);
         }
     }
 
