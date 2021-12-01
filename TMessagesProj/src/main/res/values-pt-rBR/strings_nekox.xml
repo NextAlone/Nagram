@@ -251,4 +251,17 @@
     <string name="ArchiveFiles">Arquivos de arquivo</string>
     <string name="Win32ExecutableFiles">Arquivos executáveis Win32</string>
     <string name="AutoDownload">DownloadAuto</string>
+    <string name="DeleteDownloadedFileSucceed">Excluído</string>
+    <string name="DeleteDownloadedFileConfirm">Excluir este arquivo do cache local\?</string>
+    <string name="repeatConfirm">Pergunte antes de repetir</string>
+    <string name="repeatConfirmText">Tem certeza que quer repetir\?</string>
+    <string name="valuesLargeAvatarInDrawer">Padrão do Telegram
+\nAvatar de fundo
+\nAvatar grande de fundo</string>
+    <string name="hideSponsoredMessage">Ocultar mensagens patrocinadas</string>
+    <string name="update_download_soucre">Selecione a fonte do download</string>
+    <string name="useCustomEmoji">Usar Emoji Personalizado</string>
+    <string name="useCustomEmojiInvalid">Zip de emojis inválido.</string>
+    <string name="unreadBadgeOnBackButton"></string>
+    <string name="customPublicProxyIP">Definir IP do proxy público</string>
 </resources>

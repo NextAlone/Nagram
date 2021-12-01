@@ -210,4 +210,57 @@
     <string name="AcceptSecretChat">Aceptar nuevo chat secreto</string>
     <string name="TabletMode">Modo tablet</string>
     <string name="TabletModeDefault">Depende del dispositivo</string>
+    <string name="ReplaceRegex">Usar regex</string>
+    <string name="PinSticker">Fijar</string>
+    <string name="TextOrigin">Origen</string>
+    <string name="TextReplace">Reemplazar</string>
+    <string name="UnpinSticker">Desfijar</string>
+    <string name="ArchiveFiles">Ficheros de archivo</string>
+    <string name="DisplayPersianCalendarByLatin">Mostrar el calendario persa en latín</string>
+    <string name="SetPinnedSuffix">(Fijado)</string>
+    <string name="AutoLockImmediately">Inmediatamente</string>
+    <string name="VersionUpdateVariantNotMatch">Las variantes de la versión fallaron para coincidir automáticamente.
+\nPor favor descargue manualmente desde GitHub.</string>
+    <string name="UsePersiancalendarInfo">Mostrar la fecha con el calendario Solar Hijri</string>
+    <string name="AutoCheckUpdateSwitch">Actualización automática</string>
+    <string name="DisableTrending">Deshabilitar tendencia</string>
+    <string name="ImportSettings">Ajustes de importación</string>
+    <string name="Win32ExecutableFiles">Archivos Win32 ejecutables</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="BackupSettings">Ajustes de la copia de seguridad</string>
+    <string name="AutoDownload">Autodescarga</string>
+    <string name="nekoXPaymentRemovedToast">La función de pago ha sido eliminada.</string>
+    <string name="useCustomEmojiInvalid">No es un zip válido de emoji.</string>
+    <string name="repeatConfirm">Preguntar antes de repetir</string>
+    <string name="repeatConfirmText">¿Está seguro de que quiere clonar\?</string>
+    <string name="AddProxyWs">Agregar relevo WebSocket</string>
+    <string name="UsePersiancalendar">Usar el calendario Persa</string>
+    <string name="hideSponsoredMessage">Ocultar mensajes patrocinados</string>
+    <string name="DeleteDownloadedFileConfirm">¿Eliminar este archivo de la caché local\?</string>
+    <string name="customPublicProxyIP">Establecer la IP del proxy público</string>
+    <string name="unreadBadgeOnBackButton">Icono de no leído en el botón de \'atrás\'</string>
+    <string name="customPublicProxyIPNotice">En algunas zonas, especificar la IP del proxy CDN público (por ejemplo, Cloudflare) puede acelerar el acceso.</string>
+    <string name="DeleteDownloadedFileSucceed">Eliminado</string>
+    <string name="DeleteDownloadedFileExternal">Se omite el archivo externo.</string>
+    <string name="update_download_soucre">Seleccionar fuente descarga</string>
+    <string name="valuesLargeAvatarInDrawer">Por defecto de Telegram
+\nAvatar como fondo
+\nAvatar grande como fondo</string>
+    <string name="ReplaceText">Reemplazar texto</string>
+    <string name="ProxyInfoWS">Configuración del relevo WebSocket</string>
+    <string name="WsPayload">Carga útil</string>
+    <string name="VersionUpdateNotNow">Ahora no</string>
+    <string name="VersionUpdateTitle">Nueva versión disponible</string>
+    <string name="AutoCheckUpdateStable">Estable</string>
+    <string name="useCustomEmoji">Usar emojis personalizados</string>
+    <string name="AutoCheckUpdateRc">Candidato de lanzamiento</string>
+    <string name="ImportSettingsAlert">¿Estás seguro de que quieres sobrescribir los ajustes\? Importar ajustes de fuentes desconocidas puede hacer que se sobrescriba el pin y que la aplicación se bloquee.</string>
+    <string name="VersionUpdateConfirm">ACTUALIZAR</string>
+    <string name="VersionUpdateIgnore">Ignorar</string>
+    <string name="EnableStickerPin">Habilitar el fijado de stickers</string>
+    <string name="VersionUpdateNoUpdate">No actualizar.</string>
+    <string name="EnableStickerPinAbout">Fijar stickers y sincronizarlos con la nube incluso al añadir nuevos stickers.
+\nEmparejado con Desactivar Favoritos y Recientes.</string>
+    <string name="EnableStickerPinTip">Esta función todavía está en desarrollo, la sincronización en la nube no podría trabajar como se espera.</string>
+    <string name="AutoCheckUpdateOFF">Desactivado</string>
 </resources>

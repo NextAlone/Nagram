@@ -231,7 +231,7 @@
     <string name="DisplayPersianCalendarByLatin">Иранский календарь латиницей</string>
     <string name="UsePersiancalendarInfo">Отключите для нормального отображения даты.</string>
     <string name="UsePersiancalendar">Иранский календарь</string>
-    <string name="nekoXPaymentRemovedToast">Функция оплаты была удалена.</string>
+    <string name="nekoXPaymentRemovedToast">Платежи через Telegram недоступны в NekoX.</string>
     <string name="ImportSettings">Импорт настроек</string>
     <string name="BackupSettings">Экспорт настроек</string>
     <string name="AutoLockImmediately">Немедленно</string>

@@ -121,4 +121,5 @@
     <string name="disableSwipeToNextChannel">Tắt vuốt sang kênh tiếp theo</string>
     <string name="disableRemoteEmojiInteractions">Tắt tương tác emoji từ xa</string>
     <string name="disableChoosingSticker">Gửi nhập thay vì chọn hình dán</string>
+    <string name="hideGroupSticker">Ẩn hình dán nhóm</string>
 </resources>

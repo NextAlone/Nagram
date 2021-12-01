@@ -251,4 +251,19 @@
     <string name="VersionUpdateVariantNotMatch">Biến thể phiên bản không thể khớp tự động.
 \nVui lòng tải xuống thủ công từ GitHub.</string>
     <string name="VersionUpdateTitle">Có phiên bản mới</string>
+    <string name="DeleteDownloadedFileConfirm">Xoá tệp này khỏi bộ nhớ đệm cục bộ\?</string>
+    <string name="useCustomEmojiInvalid">Không phải tệp zip emoji hợp lệ.</string>
+    <string name="useCustomEmoji">Sử dụng emoji tuỳ chỉnh</string>
+    <string name="repeatConfirmText">Bạn có chắc muốn lặp lại không\?</string>
+    <string name="unreadBadgeOnBackButton">Nhãn chưa đọc trên nút quay lại</string>
+    <string name="DeleteDownloadedFileSucceed">Đã xoá</string>
+    <string name="DeleteDownloadedFileExternal">Tệp ngoài được bỏ qua.</string>
+    <string name="customPublicProxyIPNotice">Ở một số khu vực, việc chỉ định IP của CDN proxy công cộng (vd: Cloudflare) có thể làm tăng tốc việc truy cập.</string>
+    <string name="update_download_soucre">Chọn nguồn tải xuống</string>
+    <string name="repeatConfirm">Hỏi trước khi lặp lại</string>
+    <string name="customPublicProxyIP">Đặt IP của proxy công cộng</string>
+    <string name="hideSponsoredMessage">Ẩn tin nhắn được tài trợ</string>
+    <string name="valuesLargeAvatarInDrawer">Mặc định Telegram
+\nẢnh đại diện làm nền
+\nẢnh đại diện lớn làm nền</string>
 </resources>
