@@ -262,6 +262,11 @@
     <string name="update_download_soucre">Selecione a fonte do download</string>
     <string name="useCustomEmoji">Usar Emoji Personalizado</string>
     <string name="useCustomEmojiInvalid">Zip de emojis inválido.</string>
-    <string name="unreadBadgeOnBackButton"></string>
+    <string name="unreadBadgeOnBackButton">Selo de não lido no botão de voltar</string>
     <string name="customPublicProxyIP">Definir IP do proxy público</string>
+    <string name="showSeconds">Mostrar carimbo de data/hora em segundos</string>
+    <string name="rememberAllBackMessages">Lembrar de todas as respostas clicadas</string>
+    <string name="DisableInstantCamera">Desativar câmera instantânea</string>
+    <string name="DeleteDownloadedFileExternal">O arquivo externo é ignorado.</string>
+    <string name="customPublicProxyIPNotice">Em algumas áreas, especificando o IP do proxy público CDN(p. ex. Cloudflare) pode acelerar o acesso.</string>
 </resources>
