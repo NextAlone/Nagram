@@ -22181,30 +22181,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             }
             case nkbtn_repeat: {
-                ArrayList<MessageObject> messages = new ArrayList<>();
-                messages.add(selectedObject);
-                if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
-                    CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
-                    if (caption == null) {
-                        caption = getMessageContent(selectedObject, 0, false);
-                    }
-                    if (caption != null) {
-                        StringBuilder toSend = new StringBuilder();
-                        for (int i = 0; i < caption.length(); i++) {
-                            char c = caption.charAt(i);
-                            if (c == '我') {
-                                toSend.append('你');
-                            } else if (c == '你') {
-                                toSend.append('我');
-                            } else {
-                                toSend.append(c);
-                            }
-                        }
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(toSend.toString(), dialog_id, selectedObject, null, null,
-                                false, null, null, null, true, 0, null);
-                        return 2;
-                    }
-                }
+                repeatMessage(true);
+                return 2;
             }
         }
         return 0;
@@ -27130,7 +27108,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return;
             presentFragment(new ChatActivity(args), true);
         } else if (id == nkbtn_repeat) {
-            nkbtn_onclick(nkbtn_repeat);
+            repeatMessage(false);
             clearSelectionMode();
         }
     }
@@ -27139,32 +27117,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         // from "items"
         switch (id) {
             case nkbtn_repeat: {
-                if (checkSlowMode(chatActivityEnterView.getSendButton())) {
-                    return;
-                }
-
-                final ArrayList<MessageObject> messages = new ArrayList<>();
-                if (selectedObject != null)
-                    messages.add(selectedObject);
-                else {
-                    for (int k = 0; k < selectedMessagesIds[0].size(); k++)
-                        if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
-                            messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
-                }
-
-                if (!NekomuraConfig.repeatConfirm.Bool()) {
-                    forwardMessages(messages, false, false, true, 0);
-                    return;
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
-                builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-                    forwardMessages(messages, false, false, true, 0);
-                });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                showDialog(builder.create());
+                repeatMessage(false);
                 break;
             }
             case nkbtn_forward_noquote: {
@@ -27402,5 +27355,54 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             }
         }
+    }
+
+    private void repeatMessage(boolean isLongClick) {
+        if (selectedObject != null && (isLongClick || isThreadChat()) && selectedObject.replyMessageObject != null) {
+            // If selected message contains `replyTo`:
+            // When longClick it will reply to the `replyMessage` of selectedMessage
+            // When not LongClick but in a threadchat: reply to the Thread
+            MessageObject replyTo = isLongClick ? selectedObject.replyMessageObject : getThreadMessage();
+            if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
+                CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
+                if (caption == null) {
+                    caption = getMessageContent(selectedObject, 0, false);
+                }
+                if (!TextUtils.isEmpty(caption)) {
+                    SendMessagesHelper.getInstance(currentAccount)
+                            .sendMessage(caption.toString(), dialog_id, replyTo,
+                                    isThreadChat() ? getThreadMessage() : null, null,
+                                    false, null, null, null,
+                                    true, 0, null);
+                }
+            }
+            return;
+        }
+        if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+            return;
+        }
+
+        final ArrayList<MessageObject> messages = new ArrayList<>();
+        if (selectedObject != null)
+            messages.add(selectedObject);
+        else {
+            for (int k = 0; k < selectedMessagesIds[0].size(); k++)
+                if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
+                    messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
+        }
+
+        if (!NekomuraConfig.repeatConfirm.Bool()) {
+            forwardMessages(messages, false, false, true, 0);
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
+        builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            forwardMessages(messages, false, false, true, 0);
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        showDialog(builder.create());
     }
 }
