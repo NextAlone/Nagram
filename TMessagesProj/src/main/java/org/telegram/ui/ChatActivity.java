@@ -2732,6 +2732,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeOtherItem.addSubItem(nkbtn_translate, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
         actionModeOtherItem.addSubItem(nkbtn_unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
         actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.baseline_bookmark_24, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
+        if (NekomuraConfig.showRepeat.Bool())
+            actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString("Repeat", R.string.Repeat));
 
         if (NekomuraConfig.showMessageHide.Bool()) {
             actionModeOtherItem.addSubItem(nkbtn_hide, R.drawable.baseline_remove_circle_24, LocaleController.getString("Hide", R.string.Hide));
@@ -27127,6 +27129,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
                 return;
             presentFragment(new ChatActivity(args), true);
+        } else if (id == nkbtn_repeat) {
+            nkbtn_onclick(nkbtn_repeat);
+            clearSelectionMode();
         }
     }
 
@@ -27139,7 +27144,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 final ArrayList<MessageObject> messages = new ArrayList<>();
-                messages.add(selectedObject);
+                if (selectedObject != null)
+                    messages.add(selectedObject);
+                else {
+                    for (int k = 0; k < selectedMessagesIds[0].size(); k++)
+                        if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
+                            messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
+                }
 
                 if (!NekomuraConfig.repeatConfirm.Bool()) {
                     forwardMessages(messages, false, false, true, 0);
