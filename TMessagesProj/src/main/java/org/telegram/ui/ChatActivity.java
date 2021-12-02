@@ -6045,7 +6045,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (createUnreadMessageAfterId != 0) {
                 scrollToMessageId(createUnreadMessageAfterId, 0, false, returnToLoadIndex, true, 0);
             } else if (returnToMessageId > 0 || (NekomuraConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())) {
-                returnToMessageId = returnToMessageIdsStack.pop();
+                if (NekomuraConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())
+                    returnToMessageId = returnToMessageIdsStack.pop();
                 scrollToMessageId(returnToMessageId, 0, true, returnToLoadIndex, true, 0);
             } else {
                 scrollToLastMessage(false);
