@@ -27371,10 +27371,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!TextUtils.isEmpty(caption)) {
                     SendMessagesHelper.getInstance(currentAccount)
                             .sendMessage(caption.toString(), dialog_id, replyTo,
-                                    isThreadChat() ? getThreadMessage() : null, null,
+                                    getThreadMessage(), null,
                                     false, null, null, null,
                                     true, 0, null);
                 }
+            } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
+                SendMessagesHelper.getInstance(currentAccount)
+                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
             }
             return;
         }
