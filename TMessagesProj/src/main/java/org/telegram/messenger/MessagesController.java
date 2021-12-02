@@ -14095,6 +14095,8 @@ public class MessagesController extends BaseController implements NotificationCe
                             message.entities = sponsoredMessage.entities;
                             message.flags |= 128;
                         }
+                        if (NekomuraConfig.hideSponsoredMessage.Bool())
+                            message.hide = true;
                         message.peer_id = getPeer(dialogId);
                         message.from_id = sponsoredMessage.from_id;
                         message.flags |= 256;

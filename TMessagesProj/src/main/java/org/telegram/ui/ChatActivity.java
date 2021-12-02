@@ -23484,11 +23484,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void markSponsoredAsRead(MessageObject object) {
-        if (object.isSponsored() && NekomuraConfig.hideSponsoredMessage.Bool()) {
-            ArrayList<Integer> mids = new ArrayList<>();
-            mids.add(object.messageOwner.id);
-            AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, -dialog_id, false));
-        }
         if (!object.isSponsored() || object.viewsReloaded) {
             return;
         }
