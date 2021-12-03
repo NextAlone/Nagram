@@ -122,5 +122,7 @@
     <string name="disableSwipeToNextChannel">Disable swipe to next channel</string>
     <string name="disableChoosingSticker">Send typing instead of choosing sticker</string>
     <string name="disableRemoteEmojiInteractions">Disable emoji interactions from remote</string>
+    <string name="enablePublicProxy">NekoX Public Proxy</string>
+    <string name="autoUpdateSubInfo">Update proxies automatically</string>
 
 </resources>

@@ -9,6 +9,8 @@ object SubManager {
 
     val database by lazy { mkDatabase("proxy_sub") }
 
+    const val publicProxySubID = 1L
+
     @JvmStatic
     val count
         get() = subList.find().totalCount()
@@ -18,7 +20,7 @@ object SubManager {
 
         database.getRepository("proxy_sub", SubInfo::class.java).apply {
 
-            val public = find(ObjectFilters.eq("id", 1L)).firstOrDefault()
+            val public = find(ObjectFilters.eq("id", publicProxySubID)).firstOrDefault()
 
             update(SubInfo().apply {
                 // SubManager.kt -> SubInfo.java -> ProxyLoads.kt
@@ -32,7 +34,7 @@ object SubManager {
                         "https://api.github.com/repos/NekoX-Dev/ProxyList/contents/proxy_list_pro?ref=master@\"content\": \"@\"",
                 )
 
-                id = 1L
+                id = publicProxySubID
                 internal = true
 
                 proxies = public?.proxies ?: listOf()

@@ -7,6 +7,7 @@ import kotlinx.coroutines.*
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.DnsFactory
 import tw.nekomimi.nekogram.utils.ProxyUtil.parseProxies
+import tw.nekomimi.nkmr.NekomuraConfig
 import tw.nekomimi.nkmr.NekomuraUtil
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -15,6 +16,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Exception>): List<String> {
+    if (!NekomuraConfig.enablePublicProxy.Bool())
+        return emptyList()
     // Try DoH first ( github.com is often blocked
     try {
         var content = DnsFactory.getTxts("nachonekodayo.sekai.icu").joinToString()

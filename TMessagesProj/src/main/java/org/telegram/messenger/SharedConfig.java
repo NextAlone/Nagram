@@ -21,7 +21,6 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.pm.ShortcutManagerCompat;
 
 import com.v2ray.ang.V2RayConfig;
@@ -29,15 +28,12 @@ import com.v2ray.ang.dto.AngConfig;
 import com.v2ray.ang.util.Utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.dizitart.no2.objects.filters.ObjectFilters;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
-import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.tgnet.TLRPC;
 
@@ -65,6 +61,7 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
@@ -1963,224 +1960,111 @@ public class SharedConfig {
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
         for (SubInfo subInfo : SubManager.getSubList().find()) {
-
             if (!subInfo.enable) continue;
 
-//            if (subInfo.id == 1L) {
-//
-//                try {
-//                    RelayBatonProxy publicProxy = (RelayBatonProxy) parseProxyInfo(RelayBatonLoader.publicServer);
-//                    publicProxy.setRemarks(LocaleController.getString("NekoXProxy",R.string.NekoXProxy));
-//                    publicProxy.subId = subInfo.id;
-//                    proxyList.add(publicProxy);
-//                    if (publicProxy.hashCode() == current) {
-//                        currentProxy = publicProxy;
-//                        UIUtil.runOnIoDispatcher(publicProxy::start);
-//                    }
-//                } catch (InvalidProxyException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-
             for (String proxy : subInfo.proxies) {
-
                 try {
-
                     ProxyInfo info = parseProxyInfo(proxy);
-
                     info.subId = subInfo.id;
-
                     if (info.hashCode() == current) {
-
                         currentProxy = info;
-
                         if (info instanceof ExternalSocks5Proxy) {
-
                             UIUtil.runOnIoDispatcher(() -> {
-
                                 try {
-
                                     ((ExternalSocks5Proxy) info).start();
-
                                 } catch (Exception e) {
-
                                     FileLog.e(e);
                                     AlertUtil.showToast(e);
-
                                 }
-
                             });
-
                         }
-
                     }
-
                     proxyList.add(info);
-
                 } catch (Exception e) {
-
                     FileLog.d("load sub proxy failed: " + e);
-
                 }
-
             }
-
         }
 
         File proxyListFile = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "nekox/proxy_list.json");
-
         boolean error = false;
-
         if (proxyListFile.isFile()) {
-
             try {
-
                 JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(proxyListFile));
-
                 for (int a = 0; a < proxyArray.length(); a++) {
-
                     JSONObject proxyObj = proxyArray.getJSONObject(a);
-
                     ProxyInfo info;
-
                     try {
-
                         info = ProxyInfo.fromJson(proxyObj);
-
                     } catch (Exception ex) {
-
                         FileLog.d("load proxy failed: " + ex);
-
                         error = true;
-
                         continue;
-
                     }
-
                     proxyList.add(info);
-
                     if (info.hashCode() == current) {
-
                         currentProxy = info;
-
                         if (info instanceof ExternalSocks5Proxy) {
-
                             UIUtil.runOnIoDispatcher(() -> {
-
                                 try {
-
                                     ((ExternalSocks5Proxy) info).start();
-
                                 } catch (Exception e) {
-
                                     FileLog.e(e);
                                     AlertUtil.showToast(e);
-
                                 }
-
                             });
-
                         }
-
                     }
-
                 }
-
             } catch (Exception ex) {
-
                 FileLog.d("invalid proxy list json format" + ex);
-
             }
-
         }
 
         if (error) saveProxyList();
-
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-
         boolean proxyEnabledValue = preferences.getBoolean("proxy_enabled", false);
-
         if (proxyEnabledValue && currentProxy == null) proxyEnabledValue = false;
-
         proxyEnabled = proxyEnabledValue;
-
     }
 
     public static ProxyInfo parseProxyInfo(String url) throws InvalidProxyException {
-
         if (url.startsWith(V2RayConfig.VMESS_PROTOCOL) || url.startsWith(V2RayConfig.VMESS1_PROTOCOL) || url.startsWith(V2RayConfig.TROJAN_PROTOCOL)) {
-
             try {
-
                 return new VmessProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } else if (url.startsWith(SS_PROTOCOL)) {
-
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
                 throw new InvalidProxyException("shadowsocks requires min api 21");
-
             }
-
             try {
-
                 return new ShadowsocksProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } else if (url.startsWith(SSR_PROTOCOL)) {
-
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
                 throw new InvalidProxyException("shadowsocksR requires min api 21");
-
             }
-
             try {
-
                 return new ShadowsocksRProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } else if (url.startsWith(WS_PROTOCOL) || url.startsWith(WSS_PROTOCOL)) {
-
             try {
-
                 return new WsProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         }/* else if (url.startsWith(RB_PROTOCOL)) {
-
             try {
-
                 return new RelayBatonProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } */
 
         if (url.startsWith("tg:proxy") ||
@@ -2191,9 +2075,7 @@ public class SharedConfig {
                 url.startsWith("https://t.me/socks")) {
             return ProxyInfo.fromUrl(url);
         }
-
         throw new InvalidProxyException();
-
     }
 
     public static class InvalidProxyException extends Exception {

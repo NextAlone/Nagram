@@ -34,12 +34,12 @@ public class SubInfo implements Mappable {
 
     public String displayName() {
 
-        if (id == 1) return LocaleController.getString("PublicPrefix", R.string.PublicPrefix);
+        if (id == SubManager.publicProxySubID)
+            return LocaleController.getString("PublicPrefix", R.string.PublicPrefix);
 
         if (name.length() < 10) return name;
 
         return name.substring(0, 10) + "...";
-
     }
 
     public List<String> reloadProxies() throws IOException {
@@ -47,7 +47,7 @@ public class SubInfo implements Mappable {
         HashMap<String, Exception> exceptions = new HashMap<>();
 
         try {
-            return internal ? ProxyLoadsKt.loadProxiesPublic(urls, exceptions) : ProxyLoadsKt.loadProxies(urls, exceptions);
+            return id == SubManager.publicProxySubID ? ProxyLoadsKt.loadProxiesPublic(urls, exceptions) : ProxyLoadsKt.loadProxies(urls, exceptions);
         } catch (Exception ignored) {
         }
 
@@ -130,6 +130,5 @@ public class SubInfo implements Mappable {
         internal = document.get("internal", Boolean.class);
 
     }
-
 
 }

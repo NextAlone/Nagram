@@ -916,7 +916,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
             ExternalGcm.checkUpdate(this);
 
-            for (SubInfo subInfo : SubManager.getSubList().find()) {
+            if (NekomuraConfig.autoUpdateSubInfo.Bool()) for (SubInfo subInfo : SubManager.getSubList().find()) {
 
                 if (subInfo == null || !subInfo.enable) continue;
 

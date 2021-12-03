@@ -93,6 +93,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractCell disableProxyWhenVpnEnabledRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableProxyWhenVpnEnabled));
     private final AbstractCell useProxyItemRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useProxyItem));
     private final AbstractCell hideProxyByDefaultRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
+    private final AbstractCell autoUpdateSubInfoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.autoUpdateSubInfo));
     private final AbstractCell useSystemDNSRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemDNS));
     private final AbstractCell customDoHRow = cellGroup.appendCell(new NekomuraTGTextInput(null, NekomuraConfig.customDoH, "https://1.0.0.1/dns-query", null));
     private final AbstractCell customPublicProxyIPRow = cellGroup.appendCell(new NekomuraTGTextDetail(NekomuraConfig.customPublicProxyIP, (view, position) -> {

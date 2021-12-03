@@ -48,6 +48,9 @@ public class NekomuraConfig {
     public static ConfigItem disableInstantCamera = addConfig("DisableInstantCamera", configTypeBool, false);
     public static ConfigItem showSeconds = addConfig("showSeconds", configTypeBool, false);
 
+    public static ConfigItem enablePublicProxy = addConfig("enablePublicProxy", configTypeBool, true);
+    public static ConfigItem autoUpdateSubInfo = addConfig("autoUpdateSubInfo", configTypeBool, true);
+
     // From NekoConfig
     public static ConfigItem useIPv6 = addConfig("IPv6", configTypeBool, false);
     public static ConfigItem hidePhone = addConfig("HidePhone", configTypeBool, true);
