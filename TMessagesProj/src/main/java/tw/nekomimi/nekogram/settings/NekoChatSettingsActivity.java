@@ -169,6 +169,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         if (!showCensoredFeatures) {
             cellGroup.rows.remove(disableChatActionRow);
             cellGroup.rows.remove(disableChoosingStickerRow);
+            cellGroup.rows.remove(ignoreBlockedRow);
+            NekomuraConfig.disableChatAction.setConfigBool(false);
+            NekomuraConfig.disableChoosingSticker.setConfigBool(false);
+            NekomuraConfig.ignoreBlocked.setConfigBool(false);
         }
 
         listAdapter = new ListAdapter(context);

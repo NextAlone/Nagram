@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import cn.hutool.core.util.ArrayUtil;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -527,7 +528,7 @@ public class NekomuraConfig {
     }
 
     public static boolean showCensoredFeatures(long myId) {
-        return NekoXConfig.developerMode || Arrays.stream(NekoXConfig.developers).anyMatch(id -> id == myId);
+        return NekoXConfig.developerMode || NekoXConfig.customApi > 0 || ArrayUtil.contains(NekoXConfig.developers, myId);
     }
 
 }
