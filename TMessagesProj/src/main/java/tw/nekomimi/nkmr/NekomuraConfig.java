@@ -112,7 +112,7 @@ public class NekomuraConfig {
     public static ConfigItem filterUnmutedAndUnread = addConfig("filter_unmuted_and_unread", configTypeBool, true);
 
     public static ConfigItem disableSystemAccount = addConfig("DisableSystemAccount", configTypeBool, false);
-    public static ConfigItem disableProxyWhenVpnEnabled = addConfig("DisableProxyWhenVpnEnabled", configTypeBool, false);
+//    public static ConfigItem disableProxyWhenVpnEnabled = addConfig("DisableProxyWhenVpnEnabled", configTypeBool, false);
     public static ConfigItem skipOpenLinkConfirm = addConfig("SkipOpenLinkConfirm", configTypeBool, false);
 
     public static ConfigItem ignoreMutedCount = addConfig("IgnoreMutedCount", configTypeBool, true);
@@ -419,8 +419,6 @@ public class NekomuraConfig {
 
         if (preferences.contains("disable_system_account"))
             disableSystemAccount.setConfigBool(preferences.getBoolean("disable_system_account", false));
-        if (preferences.contains("disable_proxy_when_vpn_enabled"))
-            disableProxyWhenVpnEnabled.setConfigBool(preferences.getBoolean("disable_proxy_when_vpn_enabled", false));
         if (preferences.contains("skip_open_link_confirm"))
             skipOpenLinkConfirm.setConfigBool(preferences.getBoolean("skip_open_link_confirm", false));
 

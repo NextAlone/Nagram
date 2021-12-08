@@ -4270,15 +4270,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             passcodeView.onResume();
         }
 
-        if (NekomuraConfig.disableProxyWhenVpnEnabled.Bool()) {
-            if (SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
-                SharedConfig.setProxyEnable(false);
-            } else if (!ProxyUtil.isVPNEnabled()) {
-                SharedConfig.setProxyEnable(true);
-            }
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-        }
-
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(currentAccount);
 

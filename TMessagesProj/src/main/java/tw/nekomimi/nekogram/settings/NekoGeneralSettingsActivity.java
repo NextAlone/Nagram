@@ -90,7 +90,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private final AbstractCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Connection")));
     private final AbstractCell useIPv6Row = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useIPv6));
-    private final AbstractCell disableProxyWhenVpnEnabledRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.disableProxyWhenVpnEnabled));
     private final AbstractCell useProxyItemRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useProxyItem));
     private final AbstractCell hideProxyByDefaultRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.hideProxyByDefault));
     private final AbstractCell autoUpdateSubInfoRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.autoUpdateSubInfo));
