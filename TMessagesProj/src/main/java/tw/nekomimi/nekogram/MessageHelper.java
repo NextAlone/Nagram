@@ -299,9 +299,9 @@ public class MessageHelper extends BaseController {
         if (offset == 0) {
             getMessagesStorage().deleteUserChatHistory(chat.id, userId);
         }
-        TLRPC.TL_channels_deleteUserHistory req = new TLRPC.TL_channels_deleteUserHistory();
+        TLRPC.TL_channels_deleteParticipantHistory req = new TLRPC.TL_channels_deleteParticipantHistory();
         req.channel = getMessagesController().getInputChannel(chat.id);
-        req.user_id = getMessagesController().getInputUser(userId);
+        req.participant = getMessagesController().getInputPeer(userId);
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;

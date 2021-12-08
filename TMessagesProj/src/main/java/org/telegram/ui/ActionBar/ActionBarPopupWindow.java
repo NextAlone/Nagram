@@ -121,6 +121,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         public ActionBarPopupWindowLayout(Context context, boolean verticalScrollBarEnabled) {
             this(context, verticalScrollBarEnabled, R.drawable.popup_fixed_alert2, null);
         }
+        public ActionBarPopupWindowLayout(Context context, int resId, Theme.ResourcesProvider resourcesProvider) {
+            this(context, false, resId, resourcesProvider);
+        }
 
         public ActionBarPopupWindowLayout(Context context, boolean verticalScrollBarEnabled, int resId, Theme.ResourcesProvider resourcesProvider) {
             super(context);

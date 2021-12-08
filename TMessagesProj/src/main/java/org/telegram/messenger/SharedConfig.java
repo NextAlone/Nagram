@@ -167,6 +167,7 @@ public class SharedConfig {
     public static int distanceSystemType;
     public static int mediaColumnsCount = 3;
     public static int fastScrollHintCount = 3;
+    public static boolean dontAskManageStorage;
 
     public static CopyOnWriteArraySet<Integer> activeAccounts;
     public static int loginingAccount = -1;
@@ -1269,6 +1270,7 @@ public class SharedConfig {
             }
             mediaColumnsCount = preferences.getInt("mediaColumnsCount", 3);
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
+            dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
@@ -2289,5 +2291,10 @@ public class SharedConfig {
             fastScrollHintCount = count;
             ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("fastScrollHintCount", fastScrollHintCount).apply();
         }
+    }
+
+    public static void setDontAskManageStorage(boolean b) {
+        dontAskManageStorage = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("dontAskManageStorage", dontAskManageStorage).apply();
     }
 }

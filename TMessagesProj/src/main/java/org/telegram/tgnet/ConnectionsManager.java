@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
 
+import com.google.android.exoplayer2.util.Log;
 import com.v2ray.ang.util.Utils;
 
 import org.telegram.messenger.AccountInstance;
@@ -975,7 +976,7 @@ public class ConnectionsManager extends BaseController {
                 buffer.writeBytes(bytes);
                 return buffer;
             } catch (Throwable e) {
-                FileLog.e(e);
+                FileLog.e(e, false);
             }
             return null;
         }
