@@ -2947,8 +2947,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (position == setAvatarRow) {
                 } else if (position == versionRow) {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
-                    if (BuildVars.LOGS_ENABLED) pressCount++;
-                    if (pressCount == 8) NekoXConfig.developerModeEntrance = true;
 
                     BottomBuilder builder = new BottomBuilder(getParentActivity());
                     String message = cell.getTextView().getText().toString();
@@ -3022,7 +3020,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         });
                     }
 
-                    if (NekoXConfig.developerModeEntrance || NekoXConfig.developerMode || ArrayUtil.contains(NekoXConfig.developers, getUserConfig().clientUserId)) {
+                    if (NekomuraConfig.showCensoredFeatures(getUserConfig().clientUserId)) {
                         builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                             BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
                             devBuilder.addTitle(LocaleController.getString("DevModeTitle", R.string.DevModeTitle), LocaleController.getString("DevModeNotice", R.string.DevModeNotice));

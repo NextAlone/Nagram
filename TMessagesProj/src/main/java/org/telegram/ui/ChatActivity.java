@@ -27776,6 +27776,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void repeatMessage(boolean isLongClick) {
+        // TODO remove about selectedObject.replyMessageObject
+        boolean isNoForwards = getMessagesController().isChatNoForwardsOffical(currentChat);
+
+        if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+            return;
+        }
+
+        // copy
         if (selectedObject != null && (isLongClick || isThreadChat()) && selectedObject.replyMessageObject != null) {
             // If selected message contains `replyTo`:
             // When longClick it will reply to the `replyMessage` of selectedMessage
@@ -27799,9 +27807,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             return;
         }
-        if (checkSlowMode(chatActivityEnterView.getSendButton())) {
-            return;
-        }
 
         final ArrayList<MessageObject> messages = new ArrayList<>();
         if (selectedObject != null)
@@ -27812,6 +27817,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
         }
 
+        // forward
         if (!NekomuraConfig.repeatConfirm.Bool()) {
             forwardMessages(messages, false, false, true, 0);
             return;
