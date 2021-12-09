@@ -266,4 +266,7 @@
     <string name="customPublicProxyIPNotice">في بعض المجالات، وتحديدا IP من CDN الوكيل العام(على سبيل المثال. Cloudflare) يمكن تسريع الوصول.</string>
     <string name="update_download_soucre">حدد درجة التنزيل</string>
     <string name="DeleteDownloadedFileSucceed">محذوف</string>
+    <string name="rememberAllBackMessages">تذكر جميع الردود التي تم النقر عليها</string>
+    <string name="DisableInstantCamera">تعطيل الكاميرا الفورية</string>
+    <string name="showSeconds">إظهار الطابع الزمني بالثواني</string>
 </resources>

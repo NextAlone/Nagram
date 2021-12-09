@@ -259,4 +259,14 @@
     <string name="DeleteDownloadedFileExternal">קובץ חיצוני לא עובד.</string>
     <string name="customPublicProxyIPNotice">בחלק מהאזורים, ציון ה־IP של CDN במתווך ציבורי (למשל: Cloudflare) יכול להאיץ את הגישה.</string>
     <string name="update_download_soucre">נא לבחור מקור הורדה</string>
+    <string name="rememberAllBackMessages">לזכור את כל התגובות עליהן לחצת</string>
+    <string name="showSeconds">הצגת חותמת הזמן בשניות</string>
+    <string name="DisableInstantCamera">השבתת מצלמה מיידית</string>
+    <string name="useCustomEmojiInvalid">לא zip תקני של אמוג׳י.</string>
+    <string name="valuesLargeAvatarInDrawer">ברירת המחדל של טלגרם
+\nתמונה ייצוגית כרקע
+\nתמונה ייצוגית גדולה כרקע</string>
+    <string name="repeatConfirm">לשאול לפני חזרה</string>
+    <string name="repeatConfirmText">לחזור\?</string>
+    <string name="hideSponsoredMessage">הסתרת הודעות פרסומיות</string>
 </resources>

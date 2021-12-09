@@ -264,4 +264,5 @@
     <string name="unreadBadgeOnBackButton">Счетчик непрочтённых рядом с кнопкой «Назад»</string>
     <string name="useCustomEmojiInvalid">С zip-архивом эмодзи что-то не так.</string>
     <string name="DeleteDownloadedFileSucceed">Удалено</string>
+    <string name="DisableInstantCamera">Выключить мгновенную камеру</string>
 </resources>

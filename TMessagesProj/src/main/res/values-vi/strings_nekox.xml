@@ -266,4 +266,7 @@
     <string name="valuesLargeAvatarInDrawer">Mặc định Telegram
 \nẢnh đại diện làm nền
 \nẢnh đại diện lớn làm nền</string>
+    <string name="rememberAllBackMessages">Ghi nhớ tất cả câu trả lời đã nhấn</string>
+    <string name="showSeconds">Hiện dấu thời gian bằng giây</string>
+    <string name="DisableInstantCamera">Tắt máy ảnh kích hoạt ngay</string>
 </resources>
