@@ -5261,7 +5261,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                     }
                 } else if (a == 1) {
-                    cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+                    cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
                 } else if (a == 2) {
                     cell.setTextAndIcon(LocaleController.getString("ReplacePhoto", R.string.ReplacePhoto), R.drawable.msg_replace);
                 } else if (a == 3) {

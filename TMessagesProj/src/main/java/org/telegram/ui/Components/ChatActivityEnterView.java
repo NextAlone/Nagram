@@ -4081,7 +4081,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (!UserObject.isUserSelf(user) && slowModeTimer == 0 && !isInScheduleMode()) {
 
                 cell = new ActionBarMenuSubItem(getContext(), parentFragment.canScheduleMessage(), true);
-                cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+                cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
                 cell.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
