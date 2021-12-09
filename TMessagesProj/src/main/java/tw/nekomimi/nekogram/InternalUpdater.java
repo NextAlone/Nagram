@@ -34,7 +34,6 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.MiniCDNDrive;
 import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nkmr.NekomuraUtil;
 import tw.nekomimi.nkmr.cells.NekomuraTGSelectBox;
@@ -69,7 +68,7 @@ public class InternalUpdater {
     private static class NekoXAPK {
         String name;
         String sha1;
-        String[] urls;  // https://t.me/xxx or bdex://xxx
+        String[] urls;  // https://t.me/xxx or bdex://xxx, bdex removed
     }
 
     private static ApkMetadata matchBuild(ApkMetadata[] apks) {
@@ -132,7 +131,6 @@ public class InternalUpdater {
 
             // match apk urls. these can be empty.
             String urlChannel = "";
-            String urlCDNDrive = "";
             String sha1 = "";
             try {
                 final String newBody = HttpUtil.get("https://api.github.com/repos/NekoX-Dev/updates/contents/" + release.name + ".txt?ref=main");
@@ -147,7 +145,6 @@ public class InternalUpdater {
                             sha1 = napk.sha1;
                             for (String url : napk.urls) {
                                 if (url.startsWith("https://t.me/")) urlChannel = url;
-                                if (url.startsWith("bdex://")) urlCDNDrive = url;
                             }
                             break;
                         }
@@ -157,7 +154,6 @@ public class InternalUpdater {
             }
 
             String finalsha1 = sha1;
-            String finalUrlCDNDrive = urlCDNDrive;
             String finalUrlChannel = urlChannel;
             ReleaseMetadata finalRelease = release;
 
@@ -180,7 +176,7 @@ public class InternalUpdater {
                 builder.setPositiveButton(LocaleController.getString("VersionUpdateConfirm", R.string.VersionUpdateConfirm), (dialog, which) -> {
                     showSelectDownloadSource(ctx, apk != null ? apk.name : finalRelease.name,
                             apk != null ? apk.browser_download_url : finalRelease.html_url,
-                            finalUrlChannel, finalUrlCDNDrive, finalsha1);
+                            finalUrlChannel, finalsha1);
                 });
                 builder.setNeutralButton(LocaleController.getString("VersionUpdateIgnore", R.string.VersionUpdateIgnore), (dialog, which) -> NekoXConfig.setIgnoredUpdateTag(finalRelease.name));
                 builder.setNegativeButton(LocaleController.getString("VersionUpdateNotNow", R.string.VersionUpdateNotNow), (dialog, which) -> NekoXConfig.setNextUpdateCheck(System.currentTimeMillis() / 1000 + 3 * 24 * 3600));
@@ -193,7 +189,7 @@ public class InternalUpdater {
         }
     }
 
-    public static void showSelectDownloadSource(Context ctx, String title, String browser_download_url, String urlChannel, String urlCDNDrive, String sha1) {
+    public static void showSelectDownloadSource(Context ctx, String title, String browser_download_url, String urlChannel, String sha1) {
         CellGroup nkmrCells = new CellGroup(null);
 
         nkmrCells.callBackSettingsChanged = ((k, v) -> {
@@ -205,45 +201,12 @@ public class InternalUpdater {
                 case 1:
                     Browser.openUrl(ctx, urlChannel);
                     break;
-                case 2:
-                    AlertDialog progressDialog = new AlertDialog(ctx, 2);
-                    progressDialog.setTitle(title);
-                    progressDialog.setCanCacnel(false);
-                    progressDialog.show();
-                    try {
-                        File f = new File(ApplicationLoader.getDataDirFixed(), "cache/new.apk");
-                        f.createNewFile();
-                        MiniCDNDrive.INSTANCE.Download(f, urlCDNDrive, (percent) -> {
-                            AndroidUtilities.runOnUIThread(() -> {
-                                progressDialog.setProgress(percent);
-                            });
-                        }, () -> {
-                            progressDialog.dismiss();
-
-                            try {
-                                if (NekomuraUtil.calcSHA1(f).equals(sha1)) {
-                                    openApkInstall((Activity) ctx, f);
-                                } else {
-                                    Toast.makeText(ctx, "Checksum mismatch!", Toast.LENGTH_LONG).show();
-                                }
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                                Toast.makeText(ctx, LocaleController.getString("DownloadFailed") + e.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (Exception e) {
-                        progressDialog.dismiss();
-                        FileLog.e(e);
-                        Toast.makeText(ctx, LocaleController.getString("DownloadFailed") + e.toString(), Toast.LENGTH_LONG).show();
-                    }
-                    break;
             }
         });
 
         ArrayList<String> sources = new ArrayList<>();
         sources.add("Github Release"); // base of Current
         if (!urlChannel.isEmpty()) sources.add("Telegram Channel");
-        if (!urlCDNDrive.isEmpty()) sources.add("CDN");
 
         String[] sources_ = new String[sources.size()];
         sources.toArray(sources_);

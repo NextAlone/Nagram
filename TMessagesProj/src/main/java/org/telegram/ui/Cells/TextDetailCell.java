@@ -68,6 +68,13 @@ public class TextDetailCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
+    public void setTextWithEmojiAndValue(String text, CharSequence value, boolean divider) {
+        textView.setText(Emoji.replaceEmoji(text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+        valueTextView.setText(value);
+        needDivider = divider;
+        setWillNotDraw(!divider);
+    }
+
     public void setContentDescriptionValueFirst(boolean contentDescriptionValueFirst) {
         this.contentDescriptionValueFirst = contentDescriptionValueFirst;
     }
