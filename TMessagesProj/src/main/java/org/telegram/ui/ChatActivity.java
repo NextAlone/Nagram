@@ -18553,7 +18553,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     bottomOverlayChat.setVisibility(View.INVISIBLE);
                     chatActivityEnterView.setFieldFocused();
                     AndroidUtilities.runOnUIThread(() -> chatActivityEnterView.openKeyboard(), 100);
-                } else {
+                } else if (!canSendInCommentGroup()) {
                     bottomOverlayChat.setVisibility(View.VISIBLE);
                     chatActivityEnterView.setFieldFocused(false);
                     chatActivityEnterView.setVisibility(View.INVISIBLE);
