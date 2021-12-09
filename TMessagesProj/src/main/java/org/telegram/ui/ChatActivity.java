@@ -27776,14 +27776,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void repeatMessage(boolean isLongClick) {
-        // TODO remove about selectedObject.replyMessageObject
-        boolean isNoForwards = getMessagesController().isChatNoForwardsOffical(currentChat);
-
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {
             return;
         }
+        final ArrayList<MessageObject> messages = new ArrayList<>();
+        if (selectedObject != null)
+            messages.add(selectedObject);
+        else {
+            for (int k = 0; k < selectedMessagesIds[0].size(); k++)
+                if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
+                    messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
+        }
+        if (!NekomuraConfig.repeatConfirm.Bool()) {
+            doRepeatMessage(isLongClick, messages);
+            return;
+        }
 
-        // copy
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
+        builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            doRepeatMessage(isLongClick, messages);
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        showDialog(builder.create());
+    }
+
+    private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages) {
         if (selectedObject != null && (isLongClick || isThreadChat()) && selectedObject.replyMessageObject != null) {
             // If selected message contains `replyTo`:
             // When longClick it will reply to the `replyMessage` of selectedMessage
@@ -27808,28 +27827,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
 
-        final ArrayList<MessageObject> messages = new ArrayList<>();
-        if (selectedObject != null)
-            messages.add(selectedObject);
-        else {
-            for (int k = 0; k < selectedMessagesIds[0].size(); k++)
-                if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
-                    messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
-        }
-
-        // forward
-        if (!NekomuraConfig.repeatConfirm.Bool()) {
-            forwardMessages(messages, false, false, true, 0);
-            return;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
-        builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-            forwardMessages(messages, false, false, true, 0);
-        });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        showDialog(builder.create());
+        forwardMessages(messages, false, false, true, 0);
     }
 }
