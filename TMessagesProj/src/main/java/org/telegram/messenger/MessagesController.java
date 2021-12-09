@@ -2851,11 +2851,6 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isChatNoForwards(TLRPC.Chat chat) {
-        return !NekoXConfig.developerMode && isChatNoForwardsOffical(chat);
-    }
-
-    //Offical
-    public boolean isChatNoForwardsOffical(TLRPC.Chat chat) {
         if (chat == null) return false;
         if (chat.migrated_to != null) {
             TLRPC.Chat migratedTo = getChat(chat.migrated_to.channel_id);
