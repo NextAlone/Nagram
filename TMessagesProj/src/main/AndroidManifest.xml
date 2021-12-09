@@ -4,6 +4,15 @@
     package="org.telegram.messenger"
     android:installLocation="auto">
 
+    <queries>
+        <intent>
+            <action android:name="org.openintents.openpgp.IOpenPgpService2" />
+        </intent>
+        <intent>
+            <action android:name="org.openintents.openpgp.action.*" />
+        </intent>
+    </queries>
+
     <uses-sdk tools:overrideLibrary="io.nekohasekai.ss_rust,io.nekohasekai.ssr_libev" />
 
     <supports-screens android:anyDensity="true"
