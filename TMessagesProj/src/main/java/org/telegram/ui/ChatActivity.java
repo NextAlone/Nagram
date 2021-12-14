@@ -16080,7 +16080,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private boolean sponsoredMessagesAdded;
     private void addSponsoredMessages(boolean animated) {
-        if (sponsoredMessagesAdded || chatMode != 0 || !ChatObject.isChannel(currentChat) || currentChat.megagroup || currentChat.gigagroup || !forwardEndReached[0]) {
+        if (true || sponsoredMessagesAdded || chatMode != 0 || !ChatObject.isChannel(currentChat) || currentChat.megagroup || currentChat.gigagroup || !forwardEndReached[0]) {
             return;
         }
         ArrayList<MessageObject> arrayList = getMessagesController().getSponsoredMessages(dialog_id);
