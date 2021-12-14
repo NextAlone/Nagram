@@ -12105,17 +12105,17 @@ public class MessagesController extends BaseController implements NotificationCe
                     value = getMessagesStorage().getDialogReadMax(true, dialogId);
                 }
                 dialogs_read_outbox_max.put(dialogId, Math.max(value, update.max_id));
-            } else if (baseUpdate instanceof TLRPC.TL_updateDeleteMessages) {
-                TLRPC.TL_updateDeleteMessages update = (TLRPC.TL_updateDeleteMessages) baseUpdate;
-                if (deletedMessages == null) {
-                    deletedMessages = new LongSparseArray<>();
-                }
-                ArrayList<Integer> arrayList = deletedMessages.get(0);
-                if (arrayList == null) {
-                    arrayList = new ArrayList<>();
-                    deletedMessages.put(0, arrayList);
-                }
-                arrayList.addAll(update.messages);
+//            } else if (baseUpdate instanceof TLRPC.TL_updateDeleteMessages) {
+//                TLRPC.TL_updateDeleteMessages update = (TLRPC.TL_updateDeleteMessages) baseUpdate;
+//                if (deletedMessages == null) {
+//                    deletedMessages = new LongSparseArray<>();
+//                }
+//                ArrayList<Integer> arrayList = deletedMessages.get(0);
+//                if (arrayList == null) {
+//                    arrayList = new ArrayList<>();
+//                    deletedMessages.put(0, arrayList);
+//                }
+//                arrayList.addAll(update.messages);
             } else if (baseUpdate instanceof TLRPC.TL_updateDeleteScheduledMessages) {
                 TLRPC.TL_updateDeleteScheduledMessages update = (TLRPC.TL_updateDeleteScheduledMessages) baseUpdate;
 
@@ -12578,21 +12578,21 @@ public class MessagesController extends BaseController implements NotificationCe
                     value = getMessagesStorage().getDialogReadMax(true, dialogId);
                 }
                 dialogs_read_outbox_max.put(dialogId, Math.max(value, update.max_id));
-            } else if (baseUpdate instanceof TLRPC.TL_updateDeleteChannelMessages) {
-                TLRPC.TL_updateDeleteChannelMessages update = (TLRPC.TL_updateDeleteChannelMessages) baseUpdate;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d(baseUpdate + " channelId = " + update.channel_id);
-                }
-                if (deletedMessages == null) {
-                    deletedMessages = new LongSparseArray<>();
-                }
-                long dialogId = -update.channel_id;
-                ArrayList<Integer> arrayList = deletedMessages.get(dialogId);
-                if (arrayList == null) {
-                    arrayList = new ArrayList<>();
-                    deletedMessages.put(dialogId, arrayList);
-                }
-                arrayList.addAll(update.messages);
+//            } else if (baseUpdate instanceof TLRPC.TL_updateDeleteChannelMessages) {
+//                TLRPC.TL_updateDeleteChannelMessages update = (TLRPC.TL_updateDeleteChannelMessages) baseUpdate;
+//                if (BuildVars.LOGS_ENABLED) {
+//                    FileLog.d(baseUpdate + " channelId = " + update.channel_id);
+//                }
+//                if (deletedMessages == null) {
+//                    deletedMessages = new LongSparseArray<>();
+//                }
+//                long dialogId = -update.channel_id;
+//                ArrayList<Integer> arrayList = deletedMessages.get(dialogId);
+//                if (arrayList == null) {
+//                    arrayList = new ArrayList<>();
+//                    deletedMessages.put(dialogId, arrayList);
+//                }
+//                arrayList.addAll(update.messages);
             } else if (baseUpdate instanceof TLRPC.TL_updateChannel) {
                 if (BuildVars.LOGS_ENABLED) {
                     TLRPC.TL_updateChannel update = (TLRPC.TL_updateChannel) baseUpdate;
