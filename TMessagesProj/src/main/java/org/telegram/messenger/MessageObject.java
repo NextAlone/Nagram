@@ -4755,6 +4755,7 @@ public class MessageObject {
     }
 
     public boolean needDrawBluredPreview() {
+        if (true) return false;
         if (messageOwner instanceof TLRPC.TL_message_secret) {
             int ttl = Math.max(messageOwner.ttl, messageOwner.media.ttl_seconds);
             return ttl > 0 && ((messageOwner.media instanceof TLRPC.TL_messageMediaPhoto || isVideo() || isGif()) && ttl <= 60 || isRoundVideo());
@@ -5698,10 +5699,12 @@ public class MessageObject {
     }
 
     public boolean canForwardMessage() {
+        if (true) return true;
         return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16 && !isSponsored();
     }
 
     public boolean canEditMedia() {
+        if (true) return true;
         if (isSecretMedia()) {
             return false;
         } else if (messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {

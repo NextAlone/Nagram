@@ -19506,7 +19506,7 @@ public class TLRPC {
             bot_chat_history = (flags & 32768) != 0;
             bot_nochats = (flags & 65536) != 0;
             verified = (flags & 131072) != 0;
-            restricted = (flags & 262144) != 0;
+            restricted = false;
             min = (flags & 1048576) != 0;
             bot_inline_geo = (flags & 2097152) != 0;
             support = (flags & 8388608) != 0;
@@ -19637,7 +19637,7 @@ public class TLRPC {
             bot_chat_history = (flags & 32768) != 0;
             bot_nochats = (flags & 65536) != 0;
             verified = (flags & 131072) != 0;
-            restricted = (flags & 262144) != 0;
+            restricted = false;
             min = (flags & 1048576) != 0;
             bot_inline_geo = (flags & 2097152) != 0;
             support = (flags & 8388608) != 0;
@@ -19768,7 +19768,7 @@ public class TLRPC {
             bot_chat_history = (flags & 32768) != 0;
             bot_nochats = (flags & 65536) != 0;
             verified = (flags & 131072) != 0;
-            restricted = (flags & 262144) != 0;
+            restricted = false;
             min = (flags & 1048576) != 0;
             bot_inline_geo = (flags & 2097152) != 0;
             support = (flags & 8388608) != 0;
@@ -20084,7 +20084,7 @@ public class TLRPC {
 			bot_chat_history = (flags & 32768) != 0;
 			bot_nochats = (flags & 65536) != 0;
 			verified = (flags & 131072) != 0;
-			restricted = (flags & 262144) != 0;
+			restricted = false;
 			min = (flags & 1048576) != 0;
 			bot_inline_geo = (flags & 2097152) != 0;
 			id = stream.readInt32(exception);
