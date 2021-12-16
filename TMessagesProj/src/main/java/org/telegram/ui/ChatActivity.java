@@ -19523,7 +19523,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (shareKeyItem != null) {
-            if (currentChat != null && ChatObject.canSendMessages(currentChat) && StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
+            if ((currentChat != null && ChatObject.canSendMessages(currentChat) || user != null && !user.self) && StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
                 shareKeyItem.setVisibility(View.VISIBLE);
             } else {
                 shareKeyItem.setVisibility(View.GONE);
