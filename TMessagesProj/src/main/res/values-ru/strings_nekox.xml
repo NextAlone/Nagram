@@ -182,6 +182,7 @@
     <string name="PGPImport">Импорт открытого ключа</string>
     <string name="PGPImportPrivate">Импорт закрытого ключа</string>
     <string name="ShareMyKey">Отправить открытый ключ</string>
+    <string name="ShareMessages">Поделиться</string>
     <string name="DisableVibration">Отключить вибрацию</string>
     <string name="IgnoreContentRestrictions">Игнорировать ограничения контента</string>
     <string name="IgnoreContentRestrictionsNotice">Разрешает отображение сообщений, недоступных для показа на Android.</string>

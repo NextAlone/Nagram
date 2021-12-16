@@ -181,6 +181,7 @@
     <string name="PGPImport">Import Public Key</string>
     <string name="PGPImportPrivate">Import Private Key</string>
     <string name="ShareMyKey">Share My Public Key</string>
+    <string name="ShareMessages">Share</string>
     <string name="DisableVibration">Disable Vibration</string>
     <string name="IgnoreContentRestrictions">Ignore content restrictions</string>
     <string name="IgnoreContentRestrictionsNotice">Ignores play restrictions on messages.</string>

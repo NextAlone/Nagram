@@ -303,6 +303,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_hide = 2009;
     private final static int nkbtn_savemessage = 2010;
     private final static int nkbtn_forward_noquote = 2011;
+    private final static int nkbtn_sharemessage = 2030;
 
     // chat click menu buttons
     private final static int nkbtn_detail = 2012;
@@ -2865,6 +2866,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         actionModeOtherItem.addSubItem(nkbtn_translate, R.drawable.ic_translate, LocaleController.getString("Translate", R.string.Translate));
+        if (NekomuraConfig.showShareMessages.Bool()) 
+            actionModeOtherItem.addSubItem(nkbtn_sharemessage, R.drawable.baseline_share_24, LocaleController.getString("ShareMessages", R.string.ShareMessages));
         actionModeOtherItem.addSubItem(nkbtn_unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
         if (!noforward)
             actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.baseline_bookmark_24, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
@@ -13347,6 +13350,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 actionModeOtherItem.setSubItemVisibility(nkbtn_translate, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 0);
+                actionModeOtherItem.setSubItemVisibility(nkbtn_sharemessage, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 0);
 
                 boolean allowPin = false;
                 if (currentChat != null) {
@@ -20891,6 +20895,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     icons.add(R.drawable.ic_translate);
                                 }
                             }
+                            if (NekomuraConfig.showShareMessages.Bool()) {
+                                if (messageObject != null || docsWithMessages) {
+                                    items.add(LocaleController.getString("ShareMessages", R.string.ShareMessages));
+                                    options.add(nkbtn_sharemessage);
+                                    icons.add(R.drawable.baseline_share_24);
+                                }
+                            }
                             if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
                                 if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                                     items.add(LocaleController.getString("PGPVerify", R.string.PGPVerify));
@@ -27646,6 +27657,29 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 forwardMessages(messages, false, true, 0, getUserConfig().getClientUserId());
                 undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
+                break;
+            }
+            case nkbtn_sharemessage: {
+                MessageObject messageObject = null;
+                if (selectedObjectGroup != null) {
+                    if (!TextUtils.isEmpty(selectedObjectGroup.messages.get(0).messageOwner.message)) {
+                        messageObject = selectedObjectGroup.messages.get(0);
+                    }
+                } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
+                    messageObject = selectedObject;
+                }
+                if (messageObject == null) {
+                    return;
+                }
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String body = messageObject.messageOwner.message;
+                intent.putExtra(Intent.EXTRA_TEXT,body);
+                try {
+                    getParentActivity().startActivity(intent);
+                } catch (Exception e) {
+                    AlertUtil.showToast(e);
+                }
                 break;
             }
             case nkbtn_stickerdl: {

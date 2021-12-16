@@ -74,6 +74,7 @@ public class NekomuraConfig {
     public static ConfigItem showMessageDetails = addConfig("showMessageDetails", configTypeBool, false);
     public static ConfigItem showTranslate = addConfig("showTranslate", configTypeBool, true);
     public static ConfigItem showRepeat = addConfig("showRepeat", configTypeBool, false);
+    public static ConfigItem showShareMessages = addConfig("showShareMessages", configTypeBool, false);
     public static ConfigItem showMessageHide = addConfig("showMessageHide", configTypeBool, false);
 
     public static ConfigItem eventType = addConfig("eventType", configTypeInt, 0);
@@ -346,6 +347,8 @@ public class NekomuraConfig {
             showTranslate.setConfigBool(preferences.getBoolean("showTranslate", true));
         if (preferences.contains("showRepeat"))
             showRepeat.setConfigBool(preferences.getBoolean("showRepeat", false));
+        if (preferences.contains("showShareMessages"))
+            showShareMessages.setConfigBool(preferences.getBoolean("showShareMessages", false));
         if (preferences.contains("showMessageHide"))
             showMessageHide.setConfigBool(preferences.getBoolean("showMessageHide", false));
 
