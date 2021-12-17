@@ -269,7 +269,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                 updates.add(update);
                             }
                             MessagesController.getInstance(accountFinal).processUpdateArray(updates, null, null, false, 0);
-                        } else if (false) {
+                        } else if ("MESSAGE_DELETED".equals(loc_key)) {
                             String messages = custom.getString("messages");
                             String[] messagesArgs = messages.split(",");
                             LongSparseArray<ArrayList<Integer>> deletedMessages = new LongSparseArray<>();
