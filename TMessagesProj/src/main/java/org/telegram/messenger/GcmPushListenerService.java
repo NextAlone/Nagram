@@ -270,20 +270,20 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                             }
                             MessagesController.getInstance(accountFinal).processUpdateArray(updates, null, null, false, 0);
                         } else if ("MESSAGE_DELETED".equals(loc_key)) {
-                            String messages = custom.getString("messages");
-                            String[] messagesArgs = messages.split(",");
-                            LongSparseArray<ArrayList<Integer>> deletedMessages = new LongSparseArray<>();
-                            ArrayList<Integer> ids = new ArrayList<>();
-                            for (int a = 0; a < messagesArgs.length; a++) {
-                                ids.add(Utilities.parseInt(messagesArgs[a]));
-                            }
-                            deletedMessages.put(-channel_id, ids);
-                            NotificationsController.getInstance(currentAccount).removeDeletedMessagesFromNotifications(deletedMessages);
-
-                            MessagesController.getInstance(currentAccount).deleteMessagesByPush(dialogId, ids, channel_id);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("GCM received " + loc_key + " for dialogId = " + dialogId + " mids = " + TextUtils.join(",", ids));
-                            }
+//                            String messages = custom.getString("messages");
+//                            String[] messagesArgs = messages.split(",");
+//                            LongSparseArray<ArrayList<Integer>> deletedMessages = new LongSparseArray<>();
+//                            ArrayList<Integer> ids = new ArrayList<>();
+//                            for (int a = 0; a < messagesArgs.length; a++) {
+//                                ids.add(Utilities.parseInt(messagesArgs[a]));
+//                            }
+//                            deletedMessages.put(-channel_id, ids);
+//                            NotificationsController.getInstance(currentAccount).removeDeletedMessagesFromNotifications(deletedMessages);
+//
+//                            MessagesController.getInstance(currentAccount).deleteMessagesByPush(dialogId, ids, channel_id);
+//                            if (BuildVars.LOGS_ENABLED) {
+//                                FileLog.d("GCM received " + loc_key + " for dialogId = " + dialogId + " mids = " + TextUtils.join(",", ids));
+//                            }
                         } else if (!TextUtils.isEmpty(loc_key)) {
                             int msg_id;
                             if (custom.has("msg_id")) {
