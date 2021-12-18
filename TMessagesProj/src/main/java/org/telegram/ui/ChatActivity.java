@@ -20302,6 +20302,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
             }
+            if (!selectedObject.isMusic() && !(options.contains(4) && options.contains(7))) {
+                items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                options.add(4);
+                icons.add(R.drawable.msg_gallery);
+            }
+            if (!options.contains(10)) {
+                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                options.add(10);
+                icons.add(R.drawable.msg_download);
+            }
             if (options.isEmpty()) {
                 return;
             }
