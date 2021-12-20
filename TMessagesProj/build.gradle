@@ -61,17 +61,10 @@ keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
 alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
 
-def targetAbi = ""
 def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
     if (gradle.startParameter.taskNames.size == 1) {
         targetTask = gradle.startParameter.taskNames[0].toLowerCase()
-        if (targetTask.contains("arm64")) {
-            targetAbi = "arm64"
-        } else if (targetTask.contains("arm")) {
-            targetAbi = "arm"
-            verCode -= 1
-        }
     }
 }
 
@@ -88,20 +81,16 @@ android {
     splits {
 
         abi {
-
-            enable true
-            universalApk false
-
-            if (!targetAbi.isBlank()) {
-                reset()
-                if (targetAbi == "arm64") {
-                    include "arm64-v8a"
-                } else if (targetAbi == "arm") {
-                    include "armeabi-v7a"
+            if (targetTask.contains("fdroid")) {
+                enable false
+                universalApk true
+            } else {
+                enable true
+                universalApk false
+                if (!nativeTarget.isBlank()) {
+                    reset()
+                    include nativeTarget
                 }
-            } else if (!nativeTarget.isBlank()) {
-                reset()
-                include nativeTarget
             }
         }
 
@@ -245,12 +234,7 @@ android {
             matchingFallbacks = ["release", "debug"]
         }
 
-        fdroidArmRelease {
-            initWith foss
-            matchingFallbacks = ["release", "debug"]
-        }
-
-        fdroidArm64Release {
+        fdroidRelease {
             initWith foss
             matchingFallbacks = ["release", "debug"]
         }
@@ -299,14 +283,7 @@ android {
             }
         }
 
-        fdroidArmRelease {
-            jni {
-                srcDirs = ["./jni/"]
-            }
-            jniLibs.srcDirs = []
-        }
-
-        fdroidArm64Release {
+        fdroidRelease {
             jni {
                 srcDirs = ["./jni/"]
             }
@@ -347,22 +324,12 @@ android {
         if (task.name.contains("uploadCrashlyticsMappingFile")) {
             enabled = false
         }
-        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo")) {
+        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo") && !targetTask.contains("fdroid")) {
             enabled = false
         }
     }
 
     applicationVariants.all { variant ->
-        def flavor = variant.mergedFlavor
-        if (variant.buildType.name == "fdroidArmRelease") {
-            variant.outputs.each { output ->
-                output.versionNameOverride = flavor.versionName + "-arm"
-            }
-        } else if (variant.buildType.name == "fdroidArm64Release") {
-            variant.outputs.each { output ->
-                output.versionNameOverride = flavor.versionName + "-arm64"
-            }
-        }
         variant.outputs.all { output ->
             outputFileName = outputFileName.replace("TMessagesProj", "NekoX")
         }
