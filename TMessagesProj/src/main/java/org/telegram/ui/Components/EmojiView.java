@@ -1109,9 +1109,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         };*/
 
         tabIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_emoticon_outline_24, R.drawable.baseline_emoticon_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.deproko_baseline_gif_24, R.drawable.deproko_baseline_gif_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.deproko_baseline_stickers_24, R.drawable.deproko_baseline_stickers_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected))
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.baseline_emoticon_outline_24, R.drawable.baseline_emoticon_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.deproko_baseline_gif_24, R.drawable.deproko_baseline_gif_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.deproko_baseline_stickers_24, R.drawable.deproko_baseline_stickers_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected))
         };
 
        /* emojiIcons = new Drawable[]{
@@ -1127,20 +1127,20 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         };*/
 
         emojiIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_access_time_24, R.drawable.baseline_access_time_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_emoticon_outline_24, R.drawable.baseline_emoticon_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.deproko_baseline_animals_outline_24, R.drawable.deproko_baseline_animals_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.baseline_access_time_24, R.drawable.baseline_access_time_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.baseline_emoticon_outline_24, R.drawable.baseline_emoticon_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.deproko_baseline_animals_outline_24, R.drawable.deproko_baseline_animals_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
                 Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_restaurant_menu_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.outline_sports_baseball_24, R.drawable.baseline_sports_baseball_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.outline_sports_baseball_24, R.drawable.baseline_sports_baseball_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
                 Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_directions_car_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.deproko_baseline_lamp_24, R.drawable.deproko_baseline_lamp_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.deproko_baseline_lamp_24, R.drawable.deproko_baseline_lamp_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
                 Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_emoji_symbols_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.deproko_baseline_flag_outline_24, R.drawable.deproko_baseline_flag_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine))
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.deproko_baseline_flag_outline_24, R.drawable.deproko_baseline_flag_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine))
         };
 
         stickerIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_access_time_24, R.drawable.baseline_access_time_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_star_border_24, R.drawable.baseline_star_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.baseline_access_time_24, R.drawable.baseline_access_time_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.baseline_star_border_24, R.drawable.baseline_star_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
                 Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_trending3, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
                 new LayerDrawable(new Drawable[]{
                         searchIconDrawable = Theme.createEmojiIconSelectorDrawable(context, R.drawable.emoji_tabs_new1, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
@@ -1149,7 +1149,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         };
 
         gifIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, R.drawable.baseline_access_time_24, R.drawable.baseline_access_time_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
+                Theme.createEmojiIconSelectorDrawableWithPressedResources(context, R.drawable.baseline_access_time_24, R.drawable.baseline_access_time_filled_24, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelStickerPackSelectorLine)),
                 Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_gifs_trending, getThemedColor(Theme.key_chat_messagePanelIcons), getThemedColor(Theme.key_chat_emojiPanelIconSelected)),
         };
 
