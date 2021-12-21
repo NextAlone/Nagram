@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;

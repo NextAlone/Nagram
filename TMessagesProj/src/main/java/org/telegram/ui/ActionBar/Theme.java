@@ -2616,6 +2616,7 @@ public class Theme {
 
     public static ArrayList<ThemeInfo> themes;
     public static final ArrayList<ChatThemeBottomSheet.ChatThemeItem> defaultEmojiThemes = new ArrayList<>();
+    private static boolean tryToFixMissingEmojiThemes = false;
     private static ArrayList<ThemeInfo> otherThemes;
     private static HashMap<String, ThemeInfo> themesDict;
     private static ThemeInfo currentTheme;
@@ -7365,6 +7366,13 @@ public class Theme {
                     PatternsLoader.createLoader(true);
                 }
                 generateEmojiPreviewThemes(emojiPreviewThemes, currentAccount);
+            } else if (response instanceof TLRPC.TL_account_themesNotModified) {
+                if (defaultEmojiThemes.isEmpty() && !tryToFixMissingEmojiThemes) {
+                    // Fix Missing Emoji Themes in v8.3.0-preview01?
+                    remoteThemesHash.put(currentAccount, 0);
+                    tryToFixMissingEmojiThemes = true;
+                    loadRemoteThemes(currentAccount, true);
+                }
             }
         }));
     }
