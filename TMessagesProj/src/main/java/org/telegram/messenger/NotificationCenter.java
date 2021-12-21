@@ -240,8 +240,8 @@ public class NotificationCenter {
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();
     private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
-    private ArrayList<Runnable> delayedRunnables = new ArrayList<>(10);
-    private ArrayList<Runnable> delayedRunnablesTmp = new ArrayList<>(10);
+    private ArrayList<Runnable> delayedRunnables  = new ArrayList<>(10);
+    private ArrayList<Runnable> delayedRunnablesTmp  = new ArrayList<>(10);
     private ArrayList<DelayedPost> delayedPostsTmp = new ArrayList<>(10);
     private ArrayList<PostponeNotificationCallback> postponeCallbackList = new ArrayList<>(10);
 
