@@ -122,4 +122,6 @@
     <string name="disableRemoteEmojiInteractions">השבתת אינטראקציה עם אמוג׳י מהצד המרוחק</string>
     <string name="disableChoosingSticker">לשלוח הקלדה במקום בחירת מדבקה</string>
     <string name="hideGroupSticker">הסתרת מדבקה קבוצתית</string>
+    <string name="enablePublicProxy">המתווך הציבורי של NekoX</string>
+    <string name="autoUpdateSubInfo">עדכון מתווכים אוטומטית</string>
 </resources>
