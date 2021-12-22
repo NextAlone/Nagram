@@ -2,6 +2,8 @@
 
 (c) Bender Bending Rodríguez
 
+![Telegraher](/TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher_sa.png)
+
 ## Telegraher
 
 * **No one gets to decide** what i run on my device
