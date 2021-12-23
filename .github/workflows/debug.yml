@@ -134,6 +134,10 @@ jobs:
         run: |
           cd TMessagesProj/jni
           ./patch_boringssl.sh
+      - name: Native Build (libvpx)
+        if: matrix.flavor == 'x86' || matrix.flavor == 'x86_64'
+        run: |
+          - ./bin/init/libs/libvpx_x86.sh
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |

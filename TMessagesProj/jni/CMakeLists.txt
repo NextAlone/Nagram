@@ -761,7 +761,7 @@ target_link_libraries(${NATIVE_LIB}
 
 if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
     target_link_libraries(${NATIVE_LIB}
-            -Wl,--whole-archive libvpx_yasm -Wl,--no-whole-archive)
+            libvpx_yasm -Wl,--no-whole-archive)
 endif ()
 
 #if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
