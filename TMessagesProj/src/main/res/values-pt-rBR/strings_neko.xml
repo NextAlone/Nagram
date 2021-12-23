@@ -122,4 +122,6 @@
     <string name="disableChoosingSticker">Envie digitando em vez de escolher sticker</string>
     <string name="disableRemoteEmojiInteractions">Desativar interações de emoji remotamente</string>
     <string name="hideGroupSticker">Ocultar sticker do grupo</string>
+    <string name="enablePublicProxy">Proxy Público do NekoX</string>
+    <string name="autoUpdateSubInfo">Atualizar proxies automaticamente</string>
 </resources>

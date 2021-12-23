@@ -122,4 +122,6 @@
     <string name="disableRemoteEmojiInteractions">تعطيل تفاعلات الرموز التعبيرية من جهاز الطرف الاخر</string>
     <string name="disableChoosingSticker">أرسل الكتابة بدلاً من اختيار الملصق</string>
     <string name="hideGroupSticker">إخفاء ملصق المجموعة</string>
+    <string name="enablePublicProxy">وكيل NekoX العام</string>
+    <string name="autoUpdateSubInfo">تحديث الوكلاء تلقائيًا</string>
 </resources>

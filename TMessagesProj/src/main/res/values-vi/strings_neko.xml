@@ -122,4 +122,6 @@
     <string name="disableRemoteEmojiInteractions">Tắt tương tác emoji từ xa</string>
     <string name="disableChoosingSticker">Gửi nhập thay vì chọn hình dán</string>
     <string name="hideGroupSticker">Ẩn hình dán nhóm</string>
+    <string name="enablePublicProxy">NekoX Public Proxy</string>
+    <string name="autoUpdateSubInfo">Cập nhật proxy tự động</string>
 </resources>

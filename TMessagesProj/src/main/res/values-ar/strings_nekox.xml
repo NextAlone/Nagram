@@ -269,4 +269,5 @@
     <string name="rememberAllBackMessages">تذكر جميع الردود التي تم النقر عليها</string>
     <string name="DisableInstantCamera">تعطيل الكاميرا الفورية</string>
     <string name="showSeconds">إظهار الطابع الزمني بالثواني</string>
+    <string name="ShareMessages">مشاركة</string>
 </resources>

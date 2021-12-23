@@ -269,4 +269,5 @@
     <string name="DisableInstantCamera">Desativar câmera instantânea</string>
     <string name="DeleteDownloadedFileExternal">O arquivo externo é ignorado.</string>
     <string name="customPublicProxyIPNotice">Em algumas áreas, especificando o IP do proxy público CDN(p. ex. Cloudflare) pode acelerar o acesso.</string>
+    <string name="ShareMessages">Compartilhar</string>
 </resources>

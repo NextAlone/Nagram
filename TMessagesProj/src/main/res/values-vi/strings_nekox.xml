@@ -264,9 +264,10 @@
     <string name="customPublicProxyIP">Đặt IP của proxy công cộng</string>
     <string name="hideSponsoredMessage">Ẩn tin nhắn được tài trợ</string>
     <string name="valuesLargeAvatarInDrawer">Mặc định Telegram
-\nẢnh đại diện làm nền
+\nĐặt ảnh đại diện làm nền
 \nẢnh đại diện lớn làm nền</string>
     <string name="rememberAllBackMessages">Ghi nhớ tất cả câu trả lời đã nhấn</string>
     <string name="showSeconds">Hiện dấu thời gian bằng giây</string>
     <string name="DisableInstantCamera">Tắt máy ảnh kích hoạt ngay</string>
+    <string name="ShareMessages">Chia sẻ</string>
 </resources>

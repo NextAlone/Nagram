@@ -122,4 +122,6 @@
     <string name="TakeGIFasVideo">GIF 显示为视频</string>
     <string name="DontSendGreetingSticker">不要发送问候贴纸</string>
     <string name="hideGroupSticker">隐藏群组贴纸</string>
+    <string name="enablePublicProxy">NekoX 公共代理</string>
+    <string name="autoUpdateSubInfo">自动更新代理</string>
 </resources>

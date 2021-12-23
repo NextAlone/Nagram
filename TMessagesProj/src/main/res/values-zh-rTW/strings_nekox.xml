@@ -219,4 +219,25 @@
     <string name="ArchiveFiles">壓縮文件</string>
     <string name="Win32ExecutableFiles">Win32 可執行文件</string>
     <string name="EnableStickerPin">啟用貼紙集置頂</string>
+    <string name="DisplayPersianCalendarByLatin">以拉丁字母顯示波斯日曆</string>
+    <string name="ImportSettingsAlert">確定要覆蓋設定嗎？從未知來源匯入設定可能導致PIN被覆蓋從而導致應用程式被鎖定。</string>
+    <string name="BackupSettings">備份設定</string>
+    <string name="VersionUpdateConfirm">更新</string>
+    <string name="ImportSettings">匯入設定</string>
+    <string name="VersionUpdateTitle">新版本可用</string>
+    <string name="UnpinSticker">取消置頂</string>
+    <string name="ProxyInfoWS">WebSocket 中繼設定</string>
+    <string name="UsePersiancalendarInfo">用太陽回曆顯示日期</string>
+    <string name="AutoLockImmediately">立即</string>
+    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="UsePersiancalendar">使用伊朗歷</string>
+    <string name="AddProxyWs">新增 WebSocket 中繼</string>
+    <string name="WsPayload">Payload</string>
+    <string name="VersionUpdateVariantNotMatch">版本變體自動匹配失敗。
+\n請從GitHub手動下載。</string>
+    <string name="VersionUpdateIgnore">忽略</string>
+    <string name="PinSticker">置頂</string>
+    <string name="ShareMessages">分享</string>
+    <string name="SetPinnedSuffix">(置頂)</string>
+    <string name="AppLinkFDroid">F-Droid</string>
 </resources>

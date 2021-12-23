@@ -42,9 +42,9 @@
     <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
-    <string name="GoogleCloudTransKey">Google 云翻译密钥</string>
-    <string name="GoogleCloudTransKeyNotice">如果您设置了一个谷歌云密钥： 云翻译API将被调用，而不是模拟表单提交到网页版 (快速、稳定和节省流量)。</string>
-    <string name="TransToLang">翻译目标语言</string>
+    <string name="GoogleCloudTransKey">Google Cloud翻译密钥</string>
+    <string name="GoogleCloudTransKeyNotice">如果您设置了一个Google Cloud密钥： 云翻译API将被调用，而不是提交模拟表单到网页版 (更快速、稳定和节省流量)。</string>
+    <string name="TransToLang">目标翻译语言</string>
     <string name="TransInputToLang">输入翻译目标语言</string>
     <string name="More">更多</string>
     <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
@@ -267,4 +267,7 @@
 \n使用大只头像作为背景</string>
     <string name="hideSponsoredMessage">隐藏赞助消息</string>
     <string name="DisableInstantCamera">禁用相机即时预览</string>
+    <string name="showSeconds">以秒为单位显示时间戳</string>
+    <string name="rememberAllBackMessages">记住所有点击的回复</string>
+    <string name="ShareMessages">分享</string>
 </resources>
