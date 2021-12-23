@@ -188,10 +188,6 @@ public class SecretChatHelper extends BaseController {
         TLRPC.EncryptedChat existingChat = getMessagesController().getEncryptedChatDB(newChat.id, false);
 
         if (newChat instanceof TLRPC.TL_encryptedChatRequested && existingChat == null) {
-            if (!NekomuraConfig.acceptSecretChat.Bool()) {
-                declineSecretChat(newChat.id, true);
-                return;
-            }
 
             long userId = newChat.participant_id;
             if (userId == getUserConfig().getClientUserId()) {

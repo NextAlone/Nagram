@@ -120,7 +120,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractCell sortMenuRow = cellGroup.appendCell(new NekomuraTGSelectBox(LocaleController.getString("SortMenu"), null, null, () -> {
         showSortMenuAlert();
     }));
-    private final AbstractCell acceptSecretChatRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.acceptSecretChat));
     private final AbstractCell divider4 = cellGroup.appendCell(new NekomuraTGDivider());
 
     private final AbstractCell header5 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Appearance")));
