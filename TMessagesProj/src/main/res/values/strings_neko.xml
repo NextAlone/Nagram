@@ -124,5 +124,6 @@
     <string name="disableRemoteEmojiInteractions">Disable emoji interactions from remote</string>
     <string name="enablePublicProxy">NekoX Public Proxy</string>
     <string name="autoUpdateSubInfo">Update proxies automatically</string>
+    <string name="hideSendAsChannel">Hide send as channel</string>
 
 </resources>

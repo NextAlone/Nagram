@@ -7581,6 +7581,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (parentFragment == null) {
             return;
         }
+        if (NekomuraConfig.hideSendAsChannel.Bool())
+            return;
         TLRPC.ChatFull full = parentFragment.getMessagesController().getChatFull(-dialog_id);
         TLRPC.Peer defPeer = full != null ? full.default_send_as : null;
         if (defPeer == null && delegate.getSendAsPeers() != null && !delegate.getSendAsPeers().peers.isEmpty()) {
