@@ -1,6 +1,7 @@
 package tw.nekomimi.nkmr.cells;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +14,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nkmr.CellGroup;
 import tw.nekomimi.nkmr.ConfigItem;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 // TextSettingsCell, select from a list
 // Can be used without select list（custom）
@@ -62,24 +66,11 @@ public class NekomuraTGSelectBox extends AbstractCell {
         cell.setTextAndValue(title, valueText, cellGroup.needSetDivider(this));
     }
 
-    public void onClick(Context ctx) {
+    public void onClickWithDialog(Context ctx) {
         ctxCustom = ctx;
-        onClick();
-    }
-
-    public void onClick() {
-        if (onClickCustom != null) {
-            try {
-                onClickCustom.run();
-            } catch (Exception e) {
-            }
-            return;
-        }
-
         Context context = ctxCustom != null ? ctxCustom : cellGroup.thisFragment.getParentActivity();
-        if (context == null) {
+        if (context == null)
             return;
-        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context); //TODO Replace with pop-up menu
         builder.setTitle(LocaleController.getString(bindConfig.getKey()));
@@ -113,5 +104,38 @@ public class NekomuraTGSelectBox extends AbstractCell {
         } else {
             builder.show();
         }
+    }
+
+    public void onClick(View view) {
+        if (onClickCustom != null) {
+            try {
+                onClickCustom.run();
+            } catch (Exception e) {
+            }
+            return;
+        }
+
+        Context context = ctxCustom != null ? ctxCustom : cellGroup.thisFragment.getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        PopupBuilder builder = new PopupBuilder(view);
+
+        builder.setItems(this.selectList, (i, __) -> {
+            bindConfig.setConfigInt(i);
+
+            if (cellGroup.listAdapter != null)
+                cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
+            if (cellGroup.thisFragment != null)
+                cellGroup.thisFragment.parentLayout.rebuildAllFragmentViews(false, false);
+
+            cellGroup.runCallback(bindConfig.getKey(), i);
+
+            return Unit.INSTANCE;
+        });
+        builder.show();
+
+
     }
 }

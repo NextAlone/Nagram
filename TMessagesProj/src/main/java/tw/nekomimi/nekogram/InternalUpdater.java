@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
-import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -213,7 +212,7 @@ public class InternalUpdater {
 
         NekomuraTGSelectBox sb = new NekomuraTGSelectBox(null, NekomuraConfig.update_download_soucre, sources_, null);
         nkmrCells.appendCell(sb); // new
-        sb.onClick(ctx);
+        sb.onClickWithDialog(ctx);
     }
 
     public static boolean openApkInstall(Activity activity, File f) {

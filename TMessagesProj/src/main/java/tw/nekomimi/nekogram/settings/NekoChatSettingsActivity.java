@@ -194,7 +194,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             if (a instanceof NekomuraTGTextCheck) {
                 ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof NekomuraTGSelectBox) {
-                ((NekomuraTGSelectBox) a).onClick();
+                ((NekomuraTGSelectBox) a).onClick(view);
             } else if (a instanceof NekomuraTGTextInput) {
                 ((NekomuraTGTextInput) a).onClick();
             } else if (a instanceof NekomuraTGTextDetail) {
