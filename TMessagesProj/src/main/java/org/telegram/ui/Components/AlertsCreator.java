@@ -4274,6 +4274,7 @@ public class AlertsCreator {
                 FrameLayout frameLayout = new FrameLayout(activity);
                 int num = 0;
                 for (int a = 0; a < 3; a++) {
+                    if (loadParticipant == 0) break;
                     if (a == 1 && channel_id < 0) continue;
                     if ((loadParticipant == 2 || !canBan) && a == 0) {
                         continue;
