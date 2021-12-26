@@ -96,16 +96,16 @@ android {
     signingConfigs {
         release {
             storeFile file("config/release.keystore")
-            storePassword keystorePwd != null ? keystorePwd : System.getenv("KEYSTORE_PASS")
-            keyAlias alias != null ? alias : System.getenv("ALIAS_NAME")
-            keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
+            storePassword RELEASE_KEY_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_STORE_PASSWORD
         }
     }
 
     buildTypes {
         debug {
             signingConfig signingConfigs.release
-            applicationIdSuffix ".beta"
+//            applicationIdSuffix ".beta"
         }
 
         release {
