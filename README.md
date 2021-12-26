@@ -156,10 +156,14 @@ It's very simple
 Feel free to use the "issues section". I'm not an Android programmer, i'm a Java developper.
 Probably it's a good thing 😃
 
+### Already installed this version?
+Android will offer you to reinstall, simply accept this option and it the app will be reinstalled and it will keep all the settings/accounts.
+
 ### Coffee
 
 * Here is my [PayPal](https://paypal.me/nikitasius) `https://paypal.me/nikitasius`
 * Here is
   my [BTC](bitcoin:bc1q5egmj6vjejmsu4lu3nmdshvx6p0kcajlw5u9a0?message=github_telegraher) `bc1q5egmj6vjejmsu4lu3nmdshvx6p0kcajlw5u9a0`
+* Here is my [Yoomoney](https://yoomoney.ru/to/410015481871381) `https://yoomoney.ru/to/410015481871381`  
 
 > In fact, forget the park!
