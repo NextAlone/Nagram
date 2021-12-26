@@ -249,57 +249,57 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int callsIcon;
         int savedIcon;
         int settingsIcon;
-        int inviteIcon;
-        int helpIcon;
+//        int inviteIcon;
+//        int helpIcon;
         int peopleNearbyIcon;
         if (eventType == 0) {
             newGroupIcon = R.drawable.menu_groups_ny;
-            //newSecretIcon = R.drawable.menu_secret_ny;
-            //newChannelIcon = R.drawable.menu_channel_ny;
+            newSecretIcon = R.drawable.menu_secret_ny;
+            newChannelIcon = R.drawable.menu_channel_ny;
             contactsIcon = R.drawable.menu_contacts_ny;
             callsIcon = R.drawable.menu_calls_ny;
             savedIcon = R.drawable.menu_bookmarks_ny;
             settingsIcon = R.drawable.menu_settings_ny;
-            inviteIcon = R.drawable.menu_invite_ny;
-            helpIcon = R.drawable.menu_help_ny;
+//            inviteIcon = R.drawable.menu_invite_ny;
+//            helpIcon = R.drawable.menu_help_ny;
             peopleNearbyIcon = R.drawable.menu_nearby_ny;
         } else if (eventType == 1) {
             newGroupIcon = R.drawable.menu_groups_14;
-            //newSecretIcon = R.drawable.menu_secret_14;
-            //newChannelIcon = R.drawable.menu_broadcast_14;
+            newSecretIcon = R.drawable.menu_secret_14;
+            newChannelIcon = R.drawable.menu_broadcast_14;
             contactsIcon = R.drawable.menu_contacts_14;
             callsIcon = R.drawable.menu_calls_14;
             savedIcon = R.drawable.menu_bookmarks_14;
             settingsIcon = R.drawable.menu_settings_14;
-            inviteIcon = R.drawable.menu_secret_ny;
-            helpIcon = R.drawable.menu_help;
+//            inviteIcon = R.drawable.menu_secret_ny;
+//            helpIcon = R.drawable.menu_help;
             peopleNearbyIcon = R.drawable.menu_secret_14;
         } else if (eventType == 2) {
             newGroupIcon = R.drawable.menu_groups_hw;
-            //newSecretIcon = R.drawable.menu_secret_hw;
-            //newChannelIcon = R.drawable.menu_broadcast_hw;
+            newSecretIcon = R.drawable.menu_secret_hw;
+            newChannelIcon = R.drawable.menu_broadcast_hw;
             contactsIcon = R.drawable.menu_contacts_hw;
             callsIcon = R.drawable.menu_calls_hw;
             savedIcon = R.drawable.menu_bookmarks_hw;
             settingsIcon = R.drawable.menu_settings_hw;
-            inviteIcon = R.drawable.menu_invite_hw;
-            helpIcon = R.drawable.menu_help_hw;
+//            inviteIcon = R.drawable.menu_invite_hw;
+//            helpIcon = R.drawable.menu_help_hw;
             peopleNearbyIcon = R.drawable.menu_secret_hw;
         } else {
             newGroupIcon = R.drawable.menu_groups;
-            //newSecretIcon = R.drawable.menu_secret;
-            //newChannelIcon = R.drawable.menu_broadcast;
+            newSecretIcon = R.drawable.menu_secret;
+            newChannelIcon = R.drawable.menu_broadcast;
             contactsIcon = R.drawable.menu_contacts;
             callsIcon = R.drawable.menu_calls;
             savedIcon = R.drawable.menu_saved;
             settingsIcon = R.drawable.menu_settings;
-            inviteIcon = R.drawable.menu_invite;
-            helpIcon = R.drawable.menu_help;
+//            inviteIcon = R.drawable.menu_invite;
+//            helpIcon = R.drawable.menu_help;
             peopleNearbyIcon = R.drawable.menu_nearby;
         }
         items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
-        //items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
-        //items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
+        items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
+        items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
         items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
         if (hasGps) {
@@ -307,9 +307,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         }
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
-        items.add(null); // divider
-        items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
-        items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
+//        items.add(null); // divider
+//        items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
+//        items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
     }
 
     public int getId(int position) {
