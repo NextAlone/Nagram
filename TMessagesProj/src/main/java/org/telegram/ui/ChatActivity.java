@@ -22791,7 +22791,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         }
-        if (message.isVideo() || message.isPhoto()) {
+        if (message.isVideo()) {
+            sendSecretMessageRead(message, true);
+        }
+        if (message.isPhoto() && isSecretChat()) {
             sendSecretMessageRead(message, true);
         }
         PhotoViewer.getInstance().setParentActivity(getParentActivity(), themeDelegate);
