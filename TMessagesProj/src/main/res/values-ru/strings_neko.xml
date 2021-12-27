@@ -122,4 +122,6 @@
     <string name="disableChoosingSticker">Отправлять «печатает» вместо «выбирает стикер»</string>
     <string name="hideGroupSticker">Скрыть «Стикеры группы»</string>
     <string name="disableRemoteEmojiInteractions">Отключить эффекты при нажатии на эмодзи</string>
+    <string name="enablePublicProxy">Публичный прокси NekoX</string>
+    <string name="autoUpdateSubInfo">Автоматическое обновление прокси-серверов</string>
 </resources>

@@ -248,4 +248,23 @@
     <string name="TextReplace">Zastąp</string>
     <string name="TextOrigin">Źródło</string>
     <string name="ReplaceText">Zastąp tekst</string>
+    <string name="showSeconds">Pokaż znacznik czasu w sekundach</string>
+    <string name="rememberAllBackMessages">Zapamiętaj wszystkie kliknięte odpowiedzi</string>
+    <string name="DisableInstantCamera">Wyłącz natychmiastową kamerę</string>
+    <string name="DeleteDownloadedFileExternal">Plik zewnętrzny jest pomijany.</string>
+    <string name="useCustomEmojiInvalid">Nieprawidłowe archiwum emoji.</string>
+    <string name="repeatConfirmText">Czy na pewno powtórzyć\?</string>
+    <string name="repeatConfirm">Zapytaj przed powtórzeniem</string>
+    <string name="DeleteDownloadedFileSucceed">Usunięto</string>
+    <string name="useCustomEmoji">Użyj niestandardowych Emoji</string>
+    <string name="hideSponsoredMessage">Ukryj sponsorowane wiadomości</string>
+    <string name="update_download_soucre">Wybierz źródło pobierania</string>
+    <string name="customPublicProxyIP">Ustaw IP publicznego proxy</string>
+    <string name="customPublicProxyIPNotice">W niektórych obszarach, określenie IP publicznego serwera proxy CDN (np. Cloudflare) może przyspieszyć dostęp.</string>
+    <string name="DeleteDownloadedFileConfirm">Usunąć ten plik z lokalnej pamięci podręcznej\?</string>
+    <string name="valuesLargeAvatarInDrawer">Domyślne Telegrama
+\nAwatar jako tło
+\nDuży awatar jako tło</string>
+    <string name="ShareMessages">Udostępnij</string>
+    <string name="unreadBadgeOnBackButton">Licznik nieprzeczytanych na przycisku \"Wstecz\"</string>
 </resources>

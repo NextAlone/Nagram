@@ -266,4 +266,5 @@
     <string name="DisableInstantCamera">Disabilita fotocamera istantanea</string>
     <string name="showSeconds">Mostra i secondi nell\'orario</string>
     <string name="rememberAllBackMessages">Ricorda tutte le risposte cliccate</string>
+    <string name="ShareMessages">Condividi</string>
 </resources>

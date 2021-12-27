@@ -124,4 +124,5 @@
     <string name="hideGroupSticker">إخفاء ملصق المجموعة</string>
     <string name="enablePublicProxy">وكيل NekoX العام</string>
     <string name="autoUpdateSubInfo">تحديث الوكلاء تلقائيًا</string>
+    <string name="hideSendAsChannel">إخفاء الإرسال كقناة</string>
 </resources>

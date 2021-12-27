@@ -266,4 +266,6 @@
     <string name="useCustomEmojiInvalid">С zip-архивом эмодзи что-то не так.</string>
     <string name="DeleteDownloadedFileSucceed">Удалено</string>
     <string name="DisableInstantCamera">Выключить мгновенную камеру</string>
+    <string name="rememberAllBackMessages">Запомнить все нажатые ответы</string>
+    <string name="showSeconds">Показывать временную метку в секундах</string>
 </resources>

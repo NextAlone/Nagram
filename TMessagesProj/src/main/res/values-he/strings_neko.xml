@@ -124,4 +124,5 @@
     <string name="hideGroupSticker">הסתרת מדבקה קבוצתית</string>
     <string name="enablePublicProxy">המתווך הציבורי של NekoX</string>
     <string name="autoUpdateSubInfo">עדכון מתווכים אוטומטית</string>
+    <string name="hideSendAsChannel">הסתרת שליחה כערוץ</string>
 </resources>
