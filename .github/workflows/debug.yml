@@ -135,7 +135,7 @@ jobs:
           cd TMessagesProj/jni
           ./patch_boringssl.sh
       - name: Native Build (libvpx)
-        if: matrix.flavor == 'x86' || matrix.flavor == 'x86_64'
+        if: (matrix.flavor == 'x86' || matrix.flavor == 'x86_64') && steps.cache.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install yasm -y
           ./run init libs libvpx_x86
