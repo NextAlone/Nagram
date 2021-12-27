@@ -4911,18 +4911,18 @@ public class MessagesController extends BaseController implements NotificationCe
         });
     }
 
-    public void deleteChannelUserChannelHistory(TLRPC.Chat chat, long channel_id, int offset) {
+    public void deleteChannelUserChatHistory(TLRPC.Chat chat, TLRPC.Chat fromChat, int offset) {
         if (offset == 0) {
-            getMessagesStorage().deleteUserChatHistory(-chat.id, channel_id);
+            getMessagesStorage().deleteUserChatHistory(-chat.id, fromChat.id);
         }
         TLRPC.TL_channels_deleteParticipantHistory req = new TLRPC.TL_channels_deleteParticipantHistory();
         req.channel = getInputChannel(chat);
-        req.participant = getInputPeer(channel_id);
+        req.participant = getInputPeer(fromChat);
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;
                 if (res.offset > 0) {
-                    deleteChannelUserChannelHistory(chat, channel_id, res.offset);
+                    deleteChannelUserChatHistory(chat, fromChat, res.offset);
                 }
                 processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
             }

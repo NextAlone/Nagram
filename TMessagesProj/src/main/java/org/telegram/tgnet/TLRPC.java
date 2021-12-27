@@ -49954,10 +49954,10 @@ public class TLRPC {
     }
 
 	public static class TL_channels_reportSpam extends TLObject {
-		public static int constructor = 0xfe087810;
+        public static int constructor = 0xf44a8315;
 
 		public InputChannel channel;
-		public InputUser user_id;
+        public InputPeer participant;
 		public ArrayList<Integer> id = new ArrayList<>();
 
 		public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -49967,7 +49967,7 @@ public class TLRPC {
 		public void serializeToStream(AbstractSerializedData stream) {
 			stream.writeInt32(constructor);
 			channel.serializeToStream(stream);
-			user_id.serializeToStream(stream);
+            participant.serializeToStream(stream);
 			stream.writeInt32(0x1cb5c415);
 			int count = id.size();
 			stream.writeInt32(count);
