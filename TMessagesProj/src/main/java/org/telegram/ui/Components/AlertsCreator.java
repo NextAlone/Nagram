@@ -4179,6 +4179,7 @@ public class AlertsCreator {
         int myMessagesCount = 0;
         boolean canDeleteInbox = encryptedChat == null && user != null && canRevokeInbox && revokeTimeLimit == 0x7fffffff;
         if (chat != null && chat.megagroup && !scheduled) {
+            long linked_channel_id = - MessagesController.getInstance(currentAccount).getChatFull(chat.id).linked_chat_id;
             boolean canBan = ChatObject.canBlockUsers(chat);
             if (selectedMessage != null) {
                 if (selectedMessage.messageOwner.action == null || selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionEmpty ||
@@ -4192,6 +4193,9 @@ public class AlertsCreator {
                     } else if (selectedMessage.messageOwner.from_id.chat_id != 0) {
                         actionChat = MessagesController.getInstance(currentAccount).getChat(selectedMessage.messageOwner.from_id.chat_id);
                     }
+                    if (actionChat != null && actionChat.id == -linked_channel_id) {
+                        actionChat = null;
+                    }
                 }
                 boolean hasOutgoing = !selectedMessage.isSendError() && selectedMessage.getDialogId() == mergeDialogId && (selectedMessage.messageOwner.action == null || selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionEmpty) && selectedMessage.isOut() && (currentDate - selectedMessage.messageOwner.date) <= revokeTimeLimit;
                 if (hasOutgoing) {
@@ -4199,6 +4203,7 @@ public class AlertsCreator {
                 }
             } else {
                 long from_id = -1;
+                long from_channel_id = -1;
                 for (int a = 1; a >= 0; a--) {
                     long channelId = 0;
                     for (int b = 0; b < selectedMessages[a].size(); b++) {
@@ -4206,7 +4211,13 @@ public class AlertsCreator {
                         if (from_id == -1) {
                             from_id = msg.getFromChatId();
                         }
+                        if (from_id < 0 && from_id == msg.getSenderId() && from_id != linked_channel_id) {
+                            from_channel_id = from_id;
+                            continue;
+                        }
                         if (from_id < 0 || from_id != msg.getSenderId()) {
+                            if (from_channel_id != msg.getSenderId())
+                                from_channel_id = 0;
                             from_id = -2;
                             break;
                         }
@@ -4229,6 +4240,9 @@ public class AlertsCreator {
                 }
                 if (from_id != -1) {
                     actionUser = MessagesController.getInstance(currentAccount).getUser(from_id);
+                }
+                if(actionUser == null && from_channel_id != -1) {
+                    actionChat = MessagesController.getInstance(currentAccount).getChat(-from_channel_id);
                 }
             }
             if ((actionUser != null && actionUser.id != UserConfig.getInstance(currentAccount).getClientUserId()) || (actionChat != null && !ChatObject.hasAdminRights(actionChat))) {
