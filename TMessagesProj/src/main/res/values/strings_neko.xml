@@ -188,6 +188,7 @@
 
     <!-- Nagram force allow copy -->
     <string name="ForceAllowCopy">Force allow copy</string>
+    <string name="DisableChatActionSending">Disable chat action sending</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>

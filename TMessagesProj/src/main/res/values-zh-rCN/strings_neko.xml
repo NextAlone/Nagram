@@ -181,6 +181,7 @@
     <string name="TranslatorTypeExternal">外部应用</string>
 
     <string name="ForceAllowCopy">强行复制</string>
+    <string name="DisableChatActionSending">禁用发送输入状态</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">无障碍设置</string>

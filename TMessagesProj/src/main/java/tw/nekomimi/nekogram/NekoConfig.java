@@ -117,9 +117,11 @@ public class NekoConfig {
     public static boolean disableJumpToNextChannel = false;
     public static boolean useExternalTranslator = false;
     public static boolean disableVoiceMessageAutoPlay = false;
-    
-    // Nagram force allow copy
+
+    // Nagram
     public static boolean forceAllowCopy = false;
+    public static boolean disableChatActionSending = false;
+
     
     public static final String WS_ADDRESS = "ws.neko";
     private static int socksPort = -1;
@@ -259,8 +261,9 @@ public class NekoConfig {
             useExternalTranslator = preferences.getBoolean("useExternalTranslator", false);
             disableVoiceMessageAutoPlay = preferences.getBoolean("disableVoiceMessageAutoPlay", false);
             transType = preferences.getInt("transType", TRANS_TYPE_NEKO);
-            // Nagram force allow copy
+            // Nagram
             forceAllowCopy = preferences.getBoolean("forceAllowCopy", false);
+            disableChatActionSending = preferences.getBoolean("disableChatActionSending", false);
             configLoaded = true;
         }
     }
@@ -279,8 +282,7 @@ public class NekoConfig {
     
     public static void setWsUseMTP(boolean use) {
         wsUseMTP = use;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig",
-                Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("wsUseMTP", wsUseMTP);
         editor.commit();
@@ -787,27 +789,32 @@ public class NekoConfig {
     
     public static void toggleDisableVoiceMessageAutoPlay() {
         disableVoiceMessageAutoPlay = !disableVoiceMessageAutoPlay;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig",
-                Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableVoiceMessageAutoPlay", disableVoiceMessageAutoPlay);
         editor.commit();
     }
-    
-    // Nagram force allow copy
+
+    // Nagram
     public static void toggleForceAllowCopy() {
         forceAllowCopy = !forceAllowCopy;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig",
-                Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("forceAllowCopy", forceAllowCopy);
         editor.commit();
     }
-    
+
+    // Nagram
+    public static void toggleDisableChatActionSending() {
+        disableChatActionSending = !disableChatActionSending;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableChatActionSending", disableChatActionSending);
+        editor.commit();
+    }
     public static void setMaxRecentStickers(int size) {
         maxRecentStickers = size;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig",
-                Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("maxRecentStickers", maxRecentStickers);
         editor.commit();
