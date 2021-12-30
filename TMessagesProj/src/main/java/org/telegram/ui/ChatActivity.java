@@ -22068,28 +22068,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (checkSlowMode(chatActivityEnterView.getSendButton())) {
                     return;
                 }
-                TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.from_id.user_id);
-                if (user.username != null) {
-                    getSendMessagesHelper().sendMessage("好耶", dialog_id, selectedObject,
-                            threadMessageObject, null, false,
-                            null, null, null, true, 0, null);
-                } else {
-                    SpannableString spannableString = new SpannableString("好耶");
-                    spannableString.setSpan(new URLSpanUserMention(Long.toString(user.id), 1), 6, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    CharSequence[] cs = new CharSequence[]{spannableString};
-                    boolean supportsSendingNewEntities = true;
-                    long peer = getDialogId();
-                    if ((int) peer == 0) {
-                        int high_id = (int) (peer >> 32);
-                        TLRPC.EncryptedChat encryptedChat = getMessagesController().getEncryptedChat(high_id);
-                        if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 101) {
-                            supportsSendingNewEntities = false;
-                        }
-                    }
-                    ArrayList<TLRPC.MessageEntity> entities = getMediaDataController().getEntities(cs, supportsSendingNewEntities);
-                    getSendMessagesHelper().sendMessage(spannableString.toString(), dialog_id, selectedObject, threadMessageObject, null, false,
-                            entities, null, null, true, 0, null);
-                }
+                getSendMessagesHelper().sendMessage("好耶", dialog_id, selectedObject,
+                        threadMessageObject, null, false,
+                        null, null, null, true, 0, null);
                 break;
             } case 91: {
                 if (Build.VERSION.SDK_INT >= 23 && (Build.VERSION.SDK_INT <= 28 || BuildVars.NO_SCOPED_STORAGE) && getParentActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -22260,28 +22241,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (checkSlowMode(chatActivityEnterView.getSendButton())) {
                     return false;
                 }
-                TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.from_id.user_id);
-                if (user.username != null) {
-                    getSendMessagesHelper().sendMessage("呜呜", dialog_id, selectedObject,
-                            threadMessageObject, null, false,
-                            null, null, null, true, 0, null);
-                } else {
-                    SpannableString spannableString = new SpannableString("呜呜");
-                    spannableString.setSpan(new URLSpanUserMention(Long.toString(user.id), 1), 6, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    CharSequence[] cs = new CharSequence[]{spannableString};
-                    boolean supportsSendingNewEntities = true;
-                    long peer = getDialogId();
-                    if ((int) peer == 0) {
-                        int high_id = (int) (peer >> 32);
-                        TLRPC.EncryptedChat encryptedChat = getMessagesController().getEncryptedChat(high_id);
-                        if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 101) {
-                            supportsSendingNewEntities = false;
-                        }
-                    }
-                    ArrayList<TLRPC.MessageEntity> entities = getMediaDataController().getEntities(cs, supportsSendingNewEntities);
-                    getSendMessagesHelper().sendMessage(spannableString.toString(), dialog_id, selectedObject, threadMessageObject, null, false,
-                            entities, null, null, true, 0, null);
-                }
+                getSendMessagesHelper().sendMessage("破烂", dialog_id, selectedObject,
+                        threadMessageObject, null, false,
+                        null, null, null, true, 0, null);
                 return true;
         }
         return false;
