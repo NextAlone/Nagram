@@ -3590,7 +3590,8 @@ public class AndroidUtilities {
     }
 
     public static void setFlagSecure(BaseFragment parentFragment, boolean set) {
-        if (parentFragment == null || parentFragment.getParentActivity() == null) {
+//        if (parentFragment == null || parentFragment.getParentActivity() == null) {
+        if (true || parentFragment == null || parentFragment.getParentActivity() == null) {
             return;
         }
         if (set) {
