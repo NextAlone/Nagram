@@ -7,3 +7,6 @@ local.properties
 .cxx
 .DS_Store
 /TMessagesProj/src/main/java/tw/nekomimi/nekogram/Extra.java
+/TMessagesProj/google-services.json
+/TMessagesProj/config/release.keystore
+
