@@ -23335,6 +23335,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (message.isVideo()) {
             sendSecretMessageRead(message, true);
         }
+        if (message.isPhoto() && isSecretChat()) {
+            sendSecretMessageRead(message, true);
+        }
         PhotoViewer.getInstance().setParentActivity(getParentActivity(), themeDelegate);
         MessageObject playingObject = MediaController.getInstance().getPlayingMessageObject();
         if (cell != null && playingObject != null && playingObject.isVideo()) {
