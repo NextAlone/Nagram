@@ -462,8 +462,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             info2.setTopPadding(0);
             info2.setBottomPadding(16);
             info2.setFocusable(true);
-            info2.setText(LocaleController.getString("TranslateMessagesInfo2", R.string.TranslateMessagesInfo2));
-            info2.setContentDescription(LocaleController.getString("TranslateMessagesInfo2", R.string.TranslateMessagesInfo2));
+            info2.setText(LocaleController.getString("TranslateMessagesInfo2", R.string.TranslateMessagesInfo2).replace("Google", "DuckDuckGo"));
+            info2.setContentDescription(LocaleController.getString("TranslateMessagesInfo2", R.string.TranslateMessagesInfo2).replace("Google", "DuckDuckGo"));
             info2.setAlpha(value ? 0f : 1f);
             addView(info2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
