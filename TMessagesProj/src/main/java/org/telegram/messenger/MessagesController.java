@@ -3944,6 +3944,13 @@ public class MessagesController extends BaseController implements NotificationCe
             currentDeleteTaskRunnable = null;
             LongSparseArray<ArrayList<Integer>> task = currentDeletingTaskMids != null ? currentDeletingTaskMids.clone() : null;
             LongSparseArray<ArrayList<Integer>> taskMedia = currentDeletingTaskMediaMids != null ? currentDeletingTaskMediaMids.clone() : null;
+            Utilities.stageQueue.postRunnable(() -> {
+                getNewDeleteTask(task, taskMedia);
+                currentDeletingTaskTime = 0;
+                currentDeletingTaskMids = null;
+                currentDeletingTaskMediaMids = null;
+            });
+            if (true) return true;
             AndroidUtilities.runOnUIThread(() -> {
                 if (task != null) {
                     for (int a = 0, N = task.size(); a < N; a++) {
@@ -3956,12 +3963,12 @@ public class MessagesController extends BaseController implements NotificationCe
                         getMessagesStorage().emptyMessagesMedia(taskMedia.keyAt(a), taskMedia.valueAt(a));
                     }
                 }
-                Utilities.stageQueue.postRunnable(() -> {
-                    getNewDeleteTask(task, taskMedia);
-                    currentDeletingTaskTime = 0;
-                    currentDeletingTaskMids = null;
-                    currentDeletingTaskMediaMids = null;
-                });
+//                Utilities.stageQueue.postRunnable(() -> {
+//                    getNewDeleteTask(task, taskMedia);
+//                    currentDeletingTaskTime = 0;
+//                    currentDeletingTaskMids = null;
+//                    currentDeletingTaskMediaMids = null;
+//                });
             });
             return true;
         }
