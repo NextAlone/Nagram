@@ -268,7 +268,6 @@ public class UpdateHelper {
     }
 
     public void checkNewVersionAvailable(UpdateHelperDelegate delegate) {
-        NewsHelper.getInstance().checkNews();
         checkNewVersionAvailable(delegate, false);
     }
 
