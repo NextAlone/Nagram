@@ -4930,6 +4930,10 @@ public class MessagesController extends BaseController implements NotificationCe
         deleteDialog(did, 1, onlyHistory, 0, revoke, null, 0);
     }
 
+    public void deleteDialog(final long did, int onlyHistory, boolean revoke, boolean isSelf) {
+        deleteDialog(did, 1, onlyHistory, 0, revoke, null, 0, isSelf);
+    }
+
     public void setDialogHistoryTTL(long did, int ttl) {
         TLRPC.TL_messages_setHistoryTTL req = new TLRPC.TL_messages_setHistoryTTL();
         req.peer = getInputPeer(did);
@@ -5006,7 +5010,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (first == 1 && max_id == 0) {
             TLRPC.InputPeer peerFinal = peer;
             getMessagesStorage().getDialogMaxMessageId(did, (param) -> {
-                deleteDialog(did, 2, onlyHistory, Math.max(0, param), revoke, peerFinal, taskId);
+                deleteDialog(did, 2, onlyHistory, Math.max(0, param), revoke, peerFinal, taskId, true);
                 checkIfFolderEmpty(1);
             });
             return;
