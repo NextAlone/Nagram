@@ -78,6 +78,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int shouldNOTTrustMeRow;
     private int forceAllowCopyRow; // Nagram
     private int disableChatActionSendingRow; // Nagram
+    private int hideGroupStickerRow;
     private int hidden2Row;
 
     NekoExperimentalSettingsActivity(boolean sensitiveCanChange, boolean sensitiveEnabled) {
@@ -229,7 +230,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.shouldNOTTrustMe);
                 }
-            } else if (position == forceAllowCopyRow) { // Nagram force allow copy
+            } else if (position == forceAllowCopyRow) { // Nagram
                 NekoConfig.toggleForceAllowCopy();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.forceAllowCopy);
@@ -238,6 +239,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 NekoConfig.toggleDisableChatActionSending();
                 if (view instanceof  TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableChatActionSending);
+                }
+            } else if (position == hideGroupStickerRow) { // Nagram
+                NekoConfig.toggleHideGroupSticker();
+                if (view instanceof  TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NekoConfig.hideGroupSticker);
                 }
             } else if (position == emojiRow) {
                 if (!TextUtils.isEmpty(NekoConfig.customEmojiFontPath) && (LocaleController.isRTL && x <= AndroidUtilities.dp(76) || !LocaleController.isRTL && x >= view.getMeasuredWidth() - AndroidUtilities.dp(76))) {
@@ -365,6 +371,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             shouldNOTTrustMeRow = rowCount++;
             forceAllowCopyRow = rowCount++; // Nagram
             disableChatActionSendingRow = rowCount++; // Nagram
+            hideGroupStickerRow = rowCount++; // Nagram
             hidden2Row = rowCount++;
         } else {
             deleteAccountRow = -1;
@@ -372,6 +379,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             shouldNOTTrustMeRow = -1;
             forceAllowCopyRow = -1; // Nagram
             disableChatActionSendingRow = -1; // Nagram
+            hideGroupStickerRow = -1; // Nagram
             hidden2Row = -1;
         }
         if (listAdapter != null) {
@@ -479,6 +487,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("ForceAllowCopyRow", R.string.ForceAllowCopy), NekoConfig.forceAllowCopy, true);
                     } else if (position == disableChatActionSendingRow) { // Nagram
                         textCell.setTextAndCheck(LocaleController.getString("DisableChatActionSending", R.string.DisableChatActionSending), NekoConfig.disableChatActionSending, false);
+                    } else if (position == hideGroupStickerRow) { // Nagram
+                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.hideGroupSticker), NekoConfig.hideGroupSticker, false);
                     } else if (position == blockSponsoredMessageRow) {
                         textCell.setTextAndCheck(LocaleController.getString("BlockSponsoredMessage", R.string.BlockSponsoredMessage), NekoConfig.blockSponsoredMessage, true);
                     }
@@ -557,7 +567,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 return 4;
             } else if (position == emojiRow) {
                 return TextUtils.isEmpty(NekoConfig.customEmojiFontPath) ? 2 : 5;
-            } else if (position == shouldNOTTrustMeRow || position == blockSponsoredMessageRow || position == forceAllowCopyRow || position == disableChatActionSendingRow /* Nagram */) {
+            } else if (position == shouldNOTTrustMeRow || position == blockSponsoredMessageRow || position == forceAllowCopyRow || position == disableChatActionSendingRow || position == hideGroupStickerRow /* Nagram */) {
                 return 3;
             }
             return 2;

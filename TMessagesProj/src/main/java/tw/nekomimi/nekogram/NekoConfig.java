@@ -121,6 +121,7 @@ public class NekoConfig {
     // Nagram
     public static boolean forceAllowCopy = false;
     public static boolean disableChatActionSending = false;
+    public static boolean hideGroupSticker = false;
 
     
     public static final String WS_ADDRESS = "ws.neko";
@@ -264,6 +265,7 @@ public class NekoConfig {
             // Nagram
             forceAllowCopy = preferences.getBoolean("forceAllowCopy", false);
             disableChatActionSending = preferences.getBoolean("disableChatActionSending", false);
+            hideGroupSticker = preferences.getBoolean("hideGroupSticker", false);
             configLoaded = true;
         }
     }
@@ -812,6 +814,16 @@ public class NekoConfig {
         editor.putBoolean("disableChatActionSending", disableChatActionSending);
         editor.commit();
     }
+    
+    // Nagram
+    public static void toggleHideGroupSticker() {
+        hideGroupSticker = !hideGroupSticker;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("hideGroupSticker", hideGroupSticker);
+        editor.commit();
+    }
+    
     public static void setMaxRecentStickers(int size) {
         maxRecentStickers = size;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);

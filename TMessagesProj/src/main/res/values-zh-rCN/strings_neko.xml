@@ -182,6 +182,7 @@
 
     <string name="ForceAllowCopy">强行复制</string>
     <string name="DisableChatActionSending">禁用发送输入状态</string>
+    <string name="hideGroupSticker">隐藏群组贴纸</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">无障碍设置</string>
