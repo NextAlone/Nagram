@@ -145,9 +145,9 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
             } else if (position == websiteRow) {
-                Browser.openUrl(getParentActivity(), "https://gitlab.com/JasonKhew96/Nekogram");
+                Browser.openUrl(getParentActivity(), "https://nextalone.xyz");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://gitlab.com/JasonKhew96/Nekogram");
+                Browser.openUrl(getParentActivity(), "https://github.com/NextAlone/Nekogram");
             } else if (position == checkUpdateRow) {
                 ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                 checkingUpdate = true;
@@ -313,7 +313,7 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
                     if (position == channelRow) {
                         textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@" + LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), true);
                     } else if (position == websiteRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialSite", R.string.OfficialSite), "nekogram.app", true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialSite", R.string.OfficialSite), "nextalone.xyz", true);
                     } else if (position == sourceCodeRow) {
                         textCell.setText(LocaleController.getString("ViewSourceCode", R.string.ViewSourceCode), true);
                     }
@@ -407,7 +407,7 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
     @Override
     public void onProvideAssistContent(AssistContent outContent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            outContent.setWebUri(Uri.parse("https://nekogram.app"));
+            outContent.setWebUri(Uri.parse("https://nextalone.xyz"));
         }
     }
 }
