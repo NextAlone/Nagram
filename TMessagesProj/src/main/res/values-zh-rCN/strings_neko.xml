@@ -82,8 +82,8 @@
     <string name="IgnoreBlockedAbout">您将不会再看到被屏蔽的用户在群组中的消息。</string>
     <string name="Donate">捐赠</string>
     <string name="DonateAbout">支持我们的开发。</string>
-    <string name="TranslationAbout">帮助我们将 Nekogram 翻译成您的语言。</string>
-    <string name="Translation">翻译 Nekogram</string>
+    <string name="TranslationAbout">帮助我们将 Nagram 翻译成您的语言。</string>
+    <string name="Translation">翻译 Nagram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">重置贴纸大小</string>
     <string name="OfficialChannelUsername">NextAloneAlone</string>
@@ -100,7 +100,7 @@
     <string name="AutoPauseVideoAbout">当锁定屏幕/切换到后台时。</string>
     <string name="DisableProximityEvents">禁用距离传感器事件</string>
     <string name="CustomEmojiTypeface">自定义 Emoji 字体</string>
-    <string name="Page1Message2">Nekogram 是使用 Telegram API\n的**非官方**应用</string>
+    <string name="Page1Message2">Nagram 是使用 Telegram API\n的**非官方**应用</string>
     <string name="MapDriftingFix">地图定位漂移修复</string>
     <string name="IncreaseVoiceMessageQuality">提升语音消息质量</string>
     <string name="DisableInstantCamera">禁用即时相机</string>
@@ -136,7 +136,7 @@
     <string name="WsEnableTls">启用 TLS</string>
     <string name="WsLocalProxy">本地代理</string>
     <string name="WsEnableDoh">启用 DoH</string>
-    <string name="UpdateNagram">更新 Nekogram</string>
+    <string name="UpdateNekogram">更新 Nekogram</string>
     <string name="TranslationTarget">目标语言</string>
     <string name="TranslationTargetApp">跟随应用</string>
     <string name="Translator">翻译</string>
@@ -165,11 +165,11 @@
     <string name="MutualContact">双向联系人</string>
     <string name="MutualContactDescription">此联系人是一个双向联系人。</string>
     <string name="NoUpdateAvailable">没有可用的更新。</string>
-    <string name="InviteTextNa">嗨，我在使用 Nekogram 聊天。加入我们吧！从这里下载：%1$s</string>
-    <string name="ShareNagram">分享 Nekogram...</string>
-    <string name="NagramVersion">Nekogram %1$s\n基于 Telegram %2$s\n由 %3$s 设计</string>
+    <string name="InviteTextNa">嗨，我在使用 Nagram 聊天。加入我们吧！从这里下载：%1$s</string>
+    <string name="ShareNagram">分享 Nagram...</string>
+    <string name="NagramVersion">Nagram %1$s\n基于 Telegram %2$s\n由 %3$s 设计</string>
     <string name="UpdateInstalling">正在安装更新...</string>
-    <string name="UpdateInstallingRelaunch">Nekogram 将在更新完成后重新启动。</string>
+    <string name="UpdateInstallingRelaunch">Nagram 将在更新完成后重新启动。</string>
     <string name="UpdateFailedToInstall">无法安装更新：%d</string>
     <string name="QRLoginMessage">使用其他设备扫描二维码以登录。</string>
     <string name="QRLoginTitle">二维码登陆</string>
