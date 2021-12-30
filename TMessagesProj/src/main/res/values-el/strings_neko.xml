@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Settings</string>
+    <string name="NaSettings">Neko Settings</string>
     <string name="IPv6">Try connecting through IPv6</string>
     <string name="MessageMenu">Message menu</string>
     <string name="HidePhone">Hide my phone number</string>
@@ -21,7 +21,7 @@
     <string name="CreateMention">Δημιουργία Αναφοράς</string>
     <string name="ForceTabletMode">Εξαναγκασμός λειτουργίας tablet</string>
     <string name="TransparentStatusBar">Διάφανη γραμμή κατάστασης</string>
-    <string name="NekogramRunning">Το Nekogram εκτελείται</string>
+    <string name="NagramRunning">Το Nekogram εκτελείται</string>
     <string name="ChristmasHat">Εμφάνιση χριστουγεννιάτικου καπέλου καθημερινά</string>
     <string name="DependsOnDate">Εξαρτάται από την ημερομηνία</string>
     <string name="Christmas">Χριστούγεννα</string>

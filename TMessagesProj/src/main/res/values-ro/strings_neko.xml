@@ -23,7 +23,7 @@
     <string name="TransparentStatusBar">Bară de stare transparentă</string>
     <string name="EnableResidentNotification">Afișează o notificare rezidentă</string>
     <string name="DisableResidentNotification">Dezactivează notificarea rezidentă</string>
-    <string name="NekogramRunning">Nekogram rulează</string>
+    <string name="NagramRunning">Nekogram rulează</string>
     <string name="EventType">Set pictograme bară laterală</string>
     <string name="ChristmasHat">Arată pălăria de Crăciun zilnic</string>
     <string name="DependsOnDate">În funcție de dată</string>
@@ -131,7 +131,7 @@
     <string name="WsEnableTls">Activați TLS</string>
     <string name="WsLocalProxy">Proxy local</string>
     <string name="WsEnableDoh">Activați DoH</string>
-    <string name="UpdateNekogram">Actualizați Nekogram</string>
+    <string name="UpdateNagram">Actualizați Nekogram</string>
     <string name="TranslationTarget">Limbă țintă</string>
     <string name="TranslationTargetApp">Urmăriți aplicația</string>
     <string name="Translator">Traducător</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">喵設定</string>
+    <string name="NaSettings">喵設定</string>
     <string name="IPv6">優先嚐試使用 IPv6 連線</string>
     <string name="MessageMenu">訊息選單</string>
     <string name="HidePhone">隱藏您的手機號碼</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">使用完全透明的狀態列</string>
     <string name="EnableResidentNotification">請讓貓咪住在通知列裡吧</string>
     <string name="DisableResidentNotification">果然通知列還是太擠了</string>
-    <string name="NekogramRunning">貓貓奔跑中</string>
+    <string name="NagramRunning">貓貓奔跑中</string>
     <string name="EventType">抽屜圖示集</string>
     <string name="ChristmasHat">每天顯示聖誕帽</string>
     <string name="DependsOnDate">基於日期</string>
@@ -133,7 +133,7 @@
     <string name="WsEnableTls">啟用 TLS</string>
     <string name="WsLocalProxy">本地 Proxy</string>
     <string name="WsEnableDoh">啟動 EoH</string>
-    <string name="UpdateNekogram">更新 Nekogram</string>
+    <string name="UpdateNagram">更新 Nekogram</string>
     <string name="TranslationTarget">目標語言</string>
     <string name="TranslationTargetApp">跟隨應用</string>
     <string name="Translator">翻譯</string>

@@ -114,7 +114,7 @@ public class Translator {
     public static void showTranslatorTypeSelector(Context context, View view, Runnable callback, Theme.ResourcesProvider resourcesProvider) {
         ArrayList<String> arrayList = new ArrayList<>();
         ArrayList<Integer> types = new ArrayList<>();
-        arrayList.add(LocaleController.getString("TranslatorTypeNeko", R.string.TranslatorTypeNeko));
+        arrayList.add(LocaleController.getString("TranslatorTypeNeko", R.string.TranslatorTypeNa));
         types.add(NekoConfig.TRANS_TYPE_NEKO);
         arrayList.add(LocaleController.getString("TranslatorTypeTG", R.string.TranslatorTypeTG));
         types.add(NekoConfig.TRANS_TYPE_TG);

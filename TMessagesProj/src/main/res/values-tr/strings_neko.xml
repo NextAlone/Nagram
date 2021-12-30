@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Ayarları</string>
+    <string name="NaSettings">Neko Ayarları</string>
     <string name="IPv6">IPv6 aracılığıyla bağlanmayı dene</string>
     <string name="MessageMenu">Mesaj Menüsü</string>
     <string name="HidePhone">Telefon numaramı gizle</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Saydam durum çubuğu</string>
     <string name="EnableResidentNotification">Kalıcı bildirim göster</string>
     <string name="DisableResidentNotification">Kalıcı bildirimi devre dışı bırak</string>
-    <string name="NekogramRunning">Nekogram çalışıyor</string>
+    <string name="NagramRunning">Nekogram çalışıyor</string>
     <string name="EventType">Kenar çubuğu ikon ayarı</string>
     <string name="ChristmasHat">Her gün Noel şapkası göster</string>
     <string name="DependsOnDate">Tarihe bağlı</string>
@@ -133,7 +133,7 @@
     <string name="WsEnableTls">TLS\'yi etkinleştir</string>
     <string name="WsLocalProxy">Yerel proxy</string>
     <string name="WsEnableDoh">DoH\'u etkinleştir</string>
-    <string name="UpdateNekogram">Nekogram\'ı Güncelleştir</string>
+    <string name="UpdateNagram">Nekogram\'ı Güncelleştir</string>
     <string name="TranslationTarget">Hedef dil</string>
     <string name="TranslationTargetApp">Uygulamayı takip et</string>
     <string name="Translator">Çevirmen</string>
@@ -162,9 +162,9 @@
     <string name="MutualContact">Karşılıklı iletişim</string>
     <string name="MutualContactDescription">Bu iletişim karşılıklı bir iletişimdir.</string>
     <string name="NoUpdateAvailable">Güncelleme mevcut değil.</string>
-    <string name="InviteTextNeko">Hey, sohbet etmek için Nekogram kullanıyorum. Bana katıl! Buradan indirilebilirsin: %1$s</string>
-    <string name="ShareNekogram">Nekogram\'ı paylaş...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nTelegram %2$s tabanlı\n%3$s tarafından tasarlandı</string>
+    <string name="InviteTextNa">Hey, sohbet etmek için Nekogram kullanıyorum. Bana katıl! Buradan indirilebilirsin: %1$s</string>
+    <string name="ShareNagram">Nekogram\'ı paylaş...</string>
+    <string name="NagramVersion">Nekogram %1$s\nTelegram %2$s tabanlı\n%3$s tarafından tasarlandı</string>
     <string name="UpdateInstalling">Güncelleme yükleniyor...</string>
     <string name="UpdateInstallingRelaunch">Güncelleme tamamlandığında Nekogram yeniden başlayacak.</string>
     <string name="UpdateFailedToInstall">Güncelleme yüklenemedi: %d</string>

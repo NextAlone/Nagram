@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">喵設定</string>
+    <string name="NaSettings">喵設定</string>
     <string name="IPv6">IPv6 で接続することを優先する</string>
     <string name="MessageMenu">メッセージメニュー</string>
     <string name="HidePhone">あなたの携帯電話番号を隠す</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">完全に透明なステータスバーを使う</string>
     <string name="EnableResidentNotification">常駐通知を表示する</string>
     <string name="DisableResidentNotification">常駐通知を無効にする</string>
-    <string name="NekogramRunning">Nekogram ランニング</string>
+    <string name="NagramRunning">Nekogram ランニング</string>
     <string name="EventType">サイドバーアイコンの設定</string>
     <string name="ChristmasHat">クリスマスの帽子を毎日表示</string>
     <string name="DependsOnDate">日付に依存</string>
