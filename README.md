@@ -2,11 +2,11 @@
 [![Crowdin](https://badges.crowdin.net/e/a094217ac83905ae1625526d59bba8dc/localized.svg)](https://neko.crowdin.com/nekogram)  
 Nekogram is a third-party Telegram client with not many but useful modifications.
 
-- Official site: https://nekogram.app
-- Telegram channel: https://t.me/nekoupdates
-- Telegram channel (Chinese): https://t.me/zuragram
-- Downloads: https://nekogram.app/download
-- Feedback: https://gitlab.com/Nekogram/Nekogram/-/issues
+- Official site: https://nextalone.xyz
+- Telegram channel: https://t.me/NextAloneAlone
+- Telegram channel (Chinese): https://t.me/NextAloneAlone
+- Downloads: https://github.com/NextAlone/Nekogram/releases
+- Feedback: https://github.com/NextAlone/Nekogram/-/issues
 
 ## API, Protocol documentation
 

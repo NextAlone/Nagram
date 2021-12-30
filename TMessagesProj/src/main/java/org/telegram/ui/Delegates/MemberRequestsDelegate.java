@@ -1,10 +1,5 @@
 package org.telegram.ui.Delegates;
 
-import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -78,14 +73,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener {
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
+public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener {
+    
     public final boolean isChannel;
     public boolean isNeedRestoreList;
-
+    
     private final List<TLRPC.TL_chatInviteImporter> currentImporters = new ArrayList<>();
     private final LongSparseArray<TLRPC.User> users = new LongSparseArray<>();
-
+    
     private final ArrayList<TLRPC.TL_chatInviteImporter> allImporters = new ArrayList<>();
     private final Adapter adapter = new Adapter();
     private final BaseFragment fragment;

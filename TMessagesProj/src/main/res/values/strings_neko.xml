@@ -92,7 +92,7 @@
     <string name="Translation">Translate Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">Reset sticker size</string>
-    <string name="OfficialChannelUsername">nekoupdates</string>
+    <string name="OfficialChannelUsername">NextAloneAlone</string>
     <string name="RestartAppToTakeEffect">Restart the app to take effect.</string>
     <string name="DisableAppBarShadow">Disable title bar shadow</string>
     <string name="MediaPreview">Media preview in dialog list</string>
@@ -185,6 +185,9 @@
     <string name="TranslatorTypeNeko">In message</string>
     <string name="TranslatorTypeTG">Popup dialog</string>
     <string name="TranslatorTypeExternal">External app</string>
+
+    <!-- Nagram force allow copy -->
+    <string name="ForceAllowCopy">Force allow copy</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>

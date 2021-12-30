@@ -14,7 +14,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.assist.AssistContent;
 import android.content.Context;
@@ -115,7 +114,6 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -2114,7 +2112,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     allowPullingDown = true;
                     isPulledDown = true;
                     if (otherItem != null) {
-                        if (!getMessagesController().isChatNoForwards(currentChat)) {
+                        // Nagram force allow copy
+                        if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                             otherItem.showSubItem(gallery_menu_save);
                         } else {
                             otherItem.hideSubItem(gallery_menu_save);
@@ -4442,7 +4441,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (allowPullingDown && (openingAvatar || expandProgress >= 0.33f)) {
                     if (!isPulledDown) {
                         if (otherItem != null) {
-                            if (!getMessagesController().isChatNoForwards(currentChat)) {
+                            // Nagram force allow copy
+                            if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                 otherItem.showSubItem(gallery_menu_save);
                             } else {
                                 otherItem.hideSubItem(gallery_menu_save);
@@ -6408,20 +6408,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString("AddShortcut", R.string.AddShortcut));
         }
-
+    
         if (imageUpdater != null) {
-            otherItem.addSubItem(add_photo, R.drawable.msg_addphoto, LocaleController.getString("AddPhoto", R.string.AddPhoto));
-            otherItem.addSubItem(set_as_main, R.drawable.menu_private, LocaleController.getString("SetAsMain", R.string.SetAsMain));
-            otherItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+            otherItem.addSubItem(add_photo, R.drawable.msg_addphoto, LocaleController.getString("AddPhoto",
+             R.string.AddPhoto));
+            otherItem.addSubItem(set_as_main, R.drawable.menu_private, LocaleController.getString("SetAsMain",
+             R.string.SetAsMain));
+            otherItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery"
+            , R.string.SaveToGallery));
             //otherItem.addSubItem(edit_avatar, R.drawable.photo_paint, LocaleController.getString("EditPhoto", R.string.EditPhoto));
-            otherItem.addSubItem(delete_avatar, R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete));
+            otherItem.addSubItem(delete_avatar, R.drawable.msg_delete, LocaleController.getString("Delete",
+             R.string.Delete));
         } else {
-            otherItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+            otherItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery"
+            , R.string.SaveToGallery));
         }
-        if (getMessagesController().isChatNoForwards(currentChat)) {
+        // Nagram force allow copy
+        if (!NekoConfig.forceAllowCopy && getMessagesController().isChatNoForwards(currentChat)) {
             otherItem.hideSubItem(gallery_menu_save);
         }
-
+    
         if (selfUser) {
             otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString("LogOut", R.string.LogOut));
         }
