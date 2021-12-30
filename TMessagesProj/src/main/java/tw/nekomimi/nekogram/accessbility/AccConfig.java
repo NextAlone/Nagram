@@ -56,42 +56,42 @@ public class AccConfig {
     public static void setTypeOfRewind(int value) {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("accconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(TYPE_OF_REWIND_KEY, value).commit();
+        editor.putInt(TYPE_OF_REWIND_KEY, value).apply();
         TYPE_OF_REWIND = value;
     }
 
     public static void setTypeOfRewindVideo(int value) {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("accconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(TYPE_OF_REWIND_VIDEO_KEY, value).commit();
+        editor.putInt(TYPE_OF_REWIND_VIDEO_KEY, value).apply();
         TYPE_OF_REWIND_VIDEO = value;
     }
 
     public static void setAddTypeOfChatToDescription(int value) {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("accconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(ADD_TYPE_OF_CHAT_TO_DESCRIPTION_KEY, value).commit();
+        editor.putInt(ADD_TYPE_OF_CHAT_TO_DESCRIPTION_KEY, value).apply();
         ADD_TYPE_OF_CHAT_TO_DESCRIPTION = value;
     }
 
     public static void saveShowNumbersOfItems() {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("accconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SHOW_NUMBERS_OF_ITEMS_KEY, !SHOW_NUMBERS_OF_ITEMS).commit();
+        editor.putBoolean(SHOW_NUMBERS_OF_ITEMS_KEY, !SHOW_NUMBERS_OF_ITEMS).apply();
         SHOW_NUMBERS_OF_ITEMS = !SHOW_NUMBERS_OF_ITEMS;
     }
 
     public static void saveShowIndexOfItem() {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("accconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SHOW_INDEX_OF_ITEM_KEY, !SHOW_INDEX_OF_ITEM).commit();
+        editor.putBoolean(SHOW_INDEX_OF_ITEM_KEY, !SHOW_INDEX_OF_ITEM).apply();
         SHOW_INDEX_OF_ITEM = !SHOW_INDEX_OF_ITEM;
     }
 
     public static void saveShowSeekbarValueChanges() {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("accconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SHOW_SEEKBAR_VALUE_CHANGES_KEY, !SHOW_SEEKBAR_VALUE_CHANGES).commit();
+        editor.putBoolean(SHOW_SEEKBAR_VALUE_CHANGES_KEY, !SHOW_SEEKBAR_VALUE_CHANGES).apply();
         SHOW_SEEKBAR_VALUE_CHANGES = !SHOW_SEEKBAR_VALUE_CHANGES;
     }
 }
