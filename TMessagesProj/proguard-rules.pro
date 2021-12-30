@@ -27,6 +27,9 @@
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleOutputBuffer { *; }
 
+# https://developers.google.com/ml-kit/known-issues#android_issues
+-keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
+
 # Constant folding for resource integers may mean that a resource passed to this method appears to be unused. Keep the method to prevent this from happening.
 -keep class com.google.android.exoplayer2.upstream.RawResourceDataSource {
   public static android.net.Uri buildRawResourceUri(int);
@@ -106,6 +109,9 @@
 }
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
+}
+-keepclassmembernames class tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity {
+    private int translatorTypeRow;
 }
 
 -dontwarn org.jetbrains.annotations.NotNull

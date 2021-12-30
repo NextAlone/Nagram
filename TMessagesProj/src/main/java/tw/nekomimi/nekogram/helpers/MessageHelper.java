@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -68,13 +67,13 @@ public class MessageHelper extends BaseController {
         super(num);
     }
 
-    public Bitmap createQR(Context context, String key) {
+    public Bitmap createQR(String key) {
         try {
             HashMap<EncodeHintType, Object> hints = new HashMap<>();
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
             hints.put(EncodeHintType.MARGIN, 0);
             QRCodeWriter writer = new QRCodeWriter();
-            return writer.encode(key, BarcodeFormat.QR_CODE, 768, 768, hints, null, context);
+            return writer.encode(key, 768, 768, hints, null);
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -163,7 +162,7 @@ public class MessageHelper extends BaseController {
         MessageObject messageObject = null;
         if (selectedObjectGroup != null && !selectedObjectGroup.isDocuments) {
             messageObject = getTargetMessageObjectFromGroup(selectedObjectGroup);
-        } else if (!selectedObject.isAnimatedEmoji() && !TextUtils.isEmpty(selectedObject.messageOwner.message) || (!NekoConfig.useExternalTranslator && selectedObject.type == MessageObject.TYPE_POLL)) {
+        } else if (!selectedObject.isAnimatedEmoji() && !TextUtils.isEmpty(selectedObject.messageOwner.message) || (NekoConfig.transType == NekoConfig.TRANS_TYPE_NEKO && selectedObject.type == MessageObject.TYPE_POLL)) {
             messageObject = selectedObject;
         }
         return messageObject;
