@@ -145,9 +145,9 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
             } else if (position == websiteRow) {
-                Browser.openUrl(getParentActivity(), "https://nekogram.app");
+                Browser.openUrl(getParentActivity(), "https://gitlab.com/JasonKhew96/Nekogram");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://gitlab.com/Nekogram/Nekogram");
+                Browser.openUrl(getParentActivity(), "https://gitlab.com/JasonKhew96/Nekogram");
             } else if (position == checkUpdateRow) {
                 ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                 checkingUpdate = true;

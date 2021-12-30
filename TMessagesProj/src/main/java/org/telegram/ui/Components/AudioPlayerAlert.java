@@ -98,14 +98,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, DownloadController.FileDownloadProgressListener {
+import tw.nekomimi.nekogram.NekoConfig;
 
+public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate,
+ DownloadController.FileDownloadProgressListener {
+    
     private ActionBar actionBar;
     private View actionBarShadow;
     private View playerShadow;
     private boolean searchWas;
     private boolean searching;
-
+    
     private RecyclerListView listView;
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
@@ -1877,7 +1880,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             } else {
                 optionsButton.setVisibility(View.VISIBLE);
             }
-            if (MessagesController.getInstance(currentAccount).isChatNoForwards(messageObject.getChatId())) {
+            // Nagram force allow copy
+            if (!NekoConfig.forceAllowCopy && MessagesController.getInstance(currentAccount).isChatNoForwards(messageObject.getChatId())) {
                 optionsButton.hideSubItem(1);
                 optionsButton.hideSubItem(2);
                 optionsButton.hideSubItem(5);

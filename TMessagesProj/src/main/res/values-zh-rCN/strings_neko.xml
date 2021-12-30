@@ -179,6 +179,9 @@
     <string name="TranslatorTypeNeko">消息内</string>
     <string name="TranslatorTypeTG">弹出对话框</string>
     <string name="TranslatorTypeExternal">外部应用</string>
+
+    <string name="ForceAllowCopy">强行复制</string>
+
     <!-- Accessibility -->
     <string name="AccessibilitySettings">无障碍设置</string>
 </resources>
