@@ -4572,46 +4572,46 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     }
 
-                    if (qrItem != null) {
-                        boolean setQrVisible = diff > 0.5f;
-                        if (setQrVisible != isQrItemVisible) {
-                            isQrItemVisible = setQrVisible;
-                            if (qrItemAnimation != null) {
-                                qrItemAnimation.cancel();
-                                qrItemAnimation = null;
-                            }
-                            if (animated) {
-                                qrItemAnimation = new AnimatorSet();
-                                if (setQrVisible) {
-                                    qrItemAnimation.setInterpolator(new DecelerateInterpolator());
-                                    qrItemAnimation.playTogether(
-                                            ObjectAnimator.ofFloat(qrItem, View.ALPHA, 1.0f),
-                                            ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 1f),
-                                            ObjectAnimator.ofFloat(avatarsViewPagerIndicatorView, View.TRANSLATION_X, -AndroidUtilities.dp(48))
-                                    );
-                                } else {
-                                    qrItemAnimation.setInterpolator(new AccelerateInterpolator());
-                                    qrItemAnimation.playTogether(
-                                            ObjectAnimator.ofFloat(qrItem, View.ALPHA, 0.0f),
-                                            ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 0f),
-                                            ObjectAnimator.ofFloat(avatarsViewPagerIndicatorView, View.TRANSLATION_X, 0)
-                                    );
-                                }
-                                qrItemAnimation.setDuration(150);
-                                qrItemAnimation.addListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        qrItemAnimation = null;
-                                    }
-                                });
-                                qrItemAnimation.start();
-                            } else {
-                                qrItem.setAlpha(setQrVisible ? 1.0f : 0.0f);
-                                qrItem.setTranslationX(setQrVisible ? 0f : AndroidUtilities.dp(48f));
-                                avatarsViewPagerIndicatorView.setTranslationX(setQrVisible ? 0f : -AndroidUtilities.dp(48f));
-                            }
-                        }
-                    }
+//                    if (qrItem != null) {
+//                        boolean setQrVisible = diff > 0.5f;
+//                        if (setQrVisible != isQrItemVisible) {
+//                            isQrItemVisible = setQrVisible;
+//                            if (qrItemAnimation != null) {
+//                                qrItemAnimation.cancel();
+//                                qrItemAnimation = null;
+//                            }
+//                            if (animated) {
+//                                qrItemAnimation = new AnimatorSet();
+//                                if (setQrVisible) {
+//                                    qrItemAnimation.setInterpolator(new DecelerateInterpolator());
+//                                    qrItemAnimation.playTogether(
+//                                            ObjectAnimator.ofFloat(qrItem, View.ALPHA, 1.0f),
+//                                            ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 1f),
+//                                            ObjectAnimator.ofFloat(avatarsViewPagerIndicatorView, View.TRANSLATION_X, -AndroidUtilities.dp(48))
+//                                    );
+//                                } else {
+//                                    qrItemAnimation.setInterpolator(new AccelerateInterpolator());
+//                                    qrItemAnimation.playTogether(
+//                                            ObjectAnimator.ofFloat(qrItem, View.ALPHA, 0.0f),
+//                                            ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 0f),
+//                                            ObjectAnimator.ofFloat(avatarsViewPagerIndicatorView, View.TRANSLATION_X, 0)
+//                                    );
+//                                }
+//                                qrItemAnimation.setDuration(150);
+//                                qrItemAnimation.addListener(new AnimatorListenerAdapter() {
+//                                    @Override
+//                                    public void onAnimationEnd(Animator animation) {
+//                                        qrItemAnimation = null;
+//                                    }
+//                                });
+//                                qrItemAnimation.start();
+//                            } else {
+//                                qrItem.setAlpha(setQrVisible ? 1.0f : 0.0f);
+//                                qrItem.setTranslationX(setQrVisible ? 0f : AndroidUtilities.dp(48f));
+//                                avatarsViewPagerIndicatorView.setTranslationX(setQrVisible ? 0f : -AndroidUtilities.dp(48f));
+//                            }
+//                        }
+//                    }
                 }
             }
 
