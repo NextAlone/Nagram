@@ -459,7 +459,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 if (!unofficialLanguages.isEmpty()) {
                     count += unofficialLanguages.size() + 1;
                 }
-                return 2 + count;
+                return count;
             }
         }
 
@@ -468,8 +468,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             View view;
             switch (viewType) {
                 case 0: {
-//                    view = new LanguageCell(mContext, false);
-                    view = new TextRadioCell(mContext);
+                    view = new LanguageCell(mContext, false);
+//                    view = new TextRadioCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 }
@@ -477,12 +477,12 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 //                    TranslateSettings translateSettings = new TranslateSettings(mContext);
 //                    view = translateSettings;
 //                    break;
-                case 3:
-                    HeaderCell header = new HeaderCell(mContext);
-                    header.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    header.setText(LocaleController.getString("Language", R.string.Language));
-                    view = header;
-                    break;
+//                case 3:
+//                    HeaderCell header = new HeaderCell(mContext);
+//                    header.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+//                    header.setText(LocaleController.getString("Language", R.string.Language));
+//                    view = header;
+//                    break;
                 case 1:
                 default: {
                     view = new ShadowSectionCell(mContext);
@@ -496,8 +496,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0: {
-                    if (!search)
-                        position -= 2;
                     LanguageCell textSettingsCell = (LanguageCell) holder.itemView;
 //                    TextRadioCell textSettingsCell = (TextRadioCell) holder.itemView;
                     LocaleController.LocaleInfo localeInfo;
@@ -524,8 +522,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     break;
                 }
                 case 1: {
-                    if (!search)
-                        position--;
                     ShadowSectionCell sectionCell = (ShadowSectionCell) holder.itemView;
                     if (!unofficialLanguages.isEmpty() && position == unofficialLanguages.size()) {
                         sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
@@ -539,12 +535,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         @Override
         public int getItemViewType(int i) {
-            if (!search)
-                i -= 2;
-            if (i == -2)
-                return 2;
-            if (i == -1)
-                return 3;
             if (search) {
                 return 0;
             }
