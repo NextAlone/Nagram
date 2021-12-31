@@ -18,6 +18,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.TypedValue;
@@ -42,6 +43,7 @@ import org.telegram.ui.Components.ViewHelper;
 import java.util.ArrayList;
 
 public class TextCheckCell extends FrameLayout {
+    private boolean isAnimatingToThumbInsteadOfTouch;
 
     private TextView textView;
     private TextView valueTextView;
@@ -127,6 +129,11 @@ public class TextCheckCell extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         lastTouchX = event.getX();
         return super.onTouchEvent(event);
+    }
+
+    public void setDivider(boolean divider) {
+        needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
@@ -275,18 +282,50 @@ public class TextCheckCell extends FrameLayout {
 
     private void setAnimationProgress(float value) {
         animationProgress = value;
-        float rad = Math.max(lastTouchX, getMeasuredWidth() - lastTouchX) + AndroidUtilities.dp(40);
-        float cx = lastTouchX;
+        float tx = getLastTouchX();
+        float rad = Math.max(tx, getMeasuredWidth() - tx) + AndroidUtilities.dp(40);
+        float cx = tx;
         int cy = getMeasuredHeight() / 2;
         float animatedRad = rad * animationProgress;
         checkBox.setOverrideColorProgress(cx, cy, animatedRad);
     }
 
+    public void setBackgroundColorAnimatedReverse(int color) {
+        if (animator != null) {
+            animator.cancel();
+            animator = null;
+        }
+
+        int from = animatedColorBackground != 0 ? animatedColorBackground : getBackground() instanceof ColorDrawable ? ((ColorDrawable) getBackground()).getColor() : 0;
+        if (animationPaint == null) animationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        animationPaint.setColor(from);
+
+        setBackgroundColor(color);
+        checkBox.setOverrideColor(1);
+        animatedColorBackground = color;
+        animator = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, 1, 0).setDuration(240);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setBackgroundColor(color);
+                animatedColorBackground = 0;
+                invalidate();
+            }
+        });
+        animator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        animator.start();
+    }
+
+    private float getLastTouchX() {
+        return isAnimatingToThumbInsteadOfTouch ? (LocaleController.isRTL ? AndroidUtilities.dp(22) : getMeasuredWidth() - AndroidUtilities.dp(42)) : lastTouchX;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (animatedColorBackground != 0) {
-            float rad = Math.max(lastTouchX, getMeasuredWidth() - lastTouchX) + AndroidUtilities.dp(40);
-            float cx = lastTouchX;
+            float tx = getLastTouchX();
+            float rad = Math.max(tx, getMeasuredWidth() - tx) + AndroidUtilities.dp(40);
+            float cx = tx;
             int cy = getMeasuredHeight() / 2;
             float animatedRad = rad * animationProgress;
             canvas.drawCircle(cx, cy, animatedRad, animationPaint);
@@ -294,6 +333,10 @@ public class TextCheckCell extends FrameLayout {
         if (needDivider) {
             canvas.drawLine(0, getMeasuredHeight() - 3, getMeasuredWidth(), getMeasuredHeight() - 3, Theme.dividerPaint);
         }
+    }
+
+    public void setAnimatingToThumbInsteadOfTouch(boolean animatingToThumbInsteadOfTouch) {
+        isAnimatingToThumbInsteadOfTouch = animatingToThumbInsteadOfTouch;
     }
 
     @Override

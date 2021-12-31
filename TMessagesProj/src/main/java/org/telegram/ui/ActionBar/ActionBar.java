@@ -214,7 +214,7 @@ public class ActionBar extends FrameLayout {
                 manualStart = true;
                 if (snowflakesEffect == null) {
                     fireworksEffect = null;
-                    snowflakesEffect = new SnowflakesEffect();
+                    snowflakesEffect = new SnowflakesEffect(0);
                     titleTextView[0].invalidate();
                     invalidate();
                 } else {
@@ -270,7 +270,7 @@ public class ActionBar extends FrameLayout {
                 }
             } else if (NekomuraConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
                 if (snowflakesEffect == null) {
-                    snowflakesEffect = new SnowflakesEffect();
+                    snowflakesEffect = new SnowflakesEffect(0);
                 }
             } else if (!manualStart) {
                 if (snowflakesEffect != null) {

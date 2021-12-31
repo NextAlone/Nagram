@@ -10,9 +10,8 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -26,7 +25,6 @@ import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -83,11 +81,7 @@ import org.telegram.ui.Components.StroageUsageView;
 import org.telegram.ui.Components.UndoView;
 
 import java.io.File;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import cn.hutool.core.thread.ThreadUtil;
 import kotlin.Unit;
@@ -132,7 +126,6 @@ public class CacheControlActivity extends BaseFragment {
     private boolean calculating = true;
 
     private volatile boolean canceled = false;
-    private boolean hasOldFolder;
 
     private View bottomSheetView;
     private BottomSheet bottomSheet;
@@ -216,24 +209,6 @@ public class CacheControlActivity extends BaseFragment {
         });
 
         fragmentCreateTime = System.currentTimeMillis();
-
-        if (Build.VERSION.SDK_INT >= 30) {
-            File path = Environment.getExternalStorageDirectory();
-            if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                ArrayList<File> dirs = AndroidUtilities.getRootDirs();
-                if (dirs != null) {
-                    for (int a = 0, N = dirs.size(); a < N; a++) {
-                        File dir = dirs.get(a);
-                        if (dir.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                            path = dir;
-                            break;
-                        }
-                    }
-                }
-            }
-            File oldDirectory = new File(path, "Telegram");
-            hasOldFolder = oldDirectory.exists();
-        }
         updateRows();
         return true;
     }
@@ -935,5 +910,22 @@ public class CacheControlActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(bottomSheetView, 0, null, null, null, null, Theme.key_statisticChartLine_orange));
         arrayList.add(new ThemeDescription(bottomSheetView, 0, null, null, null, null, Theme.key_statisticChartLine_indigo));
         return arrayList;
+    }
+
+    @Override
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 4) {
+            boolean allGranted = true;
+            for (int a = 0; a < grantResults.length; a++) {
+                if (grantResults[a] != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+//            if (allGranted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && FilesMigrationService.filesMigrationBottomSheet != null) {
+//                FilesMigrationService.filesMigrationBottomSheet.migrateOldFolder();
+//            }
+
+        }
     }
 }
