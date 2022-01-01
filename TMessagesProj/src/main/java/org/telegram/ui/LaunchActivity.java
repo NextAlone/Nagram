@@ -3585,7 +3585,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         updateTextView = new SimpleTextView(this);
         updateTextView.setTextSize(15);
         updateTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        updateTextView.setText(LocaleController.getString("UpdateNekogram", R.string.UpdateNekogram));
+        updateTextView.setText(LocaleController.getString("UpdateNekogram", R.string.UpdateNagram));
         updateTextView.setTextColor(0xffffffff);
         updateTextView.setGravity(Gravity.LEFT);
         updateLayout.addView(updateTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 74, 0, 0, 0));
@@ -3620,7 +3620,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     showSize = false;
                 } else {
                     updateLayoutIcon.setIcon(MediaActionDrawable.ICON_DOWNLOAD, true, animated);
-                    updateTextView.setText(LocaleController.getString("UpdateNekogram", R.string.UpdateNekogram));
+                    updateTextView.setText(LocaleController.getString("UpdateNekogram", R.string.UpdateNagram));
                     showSize = true;
                 }
             }

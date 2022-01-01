@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko-Einstellungen</string>
+    <string name="NaSettings">Neko-Einstellungen</string>
     <string name="IPv6">Über IPv6 versuchen zu verbinden</string>
     <string name="MessageMenu">Nachrichten-Menü</string>
     <string name="HidePhone">Meine Telefonnummer ausblenden</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Transparente Statusleiste</string>
     <string name="EnableResidentNotification">Permanente Benachrichtigung anzeigen</string>
     <string name="DisableResidentNotification">Permanente Benachrichtigung deaktivieren</string>
-    <string name="NekogramRunning">Nekogram wird ausgeführt</string>
+    <string name="NagramRunning">Nekogram wird ausgeführt</string>
     <string name="EventType">Symbol-Set Seitenleiste</string>
     <string name="ChristmasHat">Weihnachtsmütze jeden Tag anzeigen</string>
     <string name="DependsOnDate">Abhängig vom Datum</string>
@@ -133,7 +133,7 @@
     <string name="WsEnableTls">TLS aktivieren</string>
     <string name="WsLocalProxy">Lokaler Proxy</string>
     <string name="WsEnableDoh">DoH aktivieren</string>
-    <string name="UpdateNekogram">Nekogram aktualisieren</string>
+    <string name="UpdateNagram">Nekogram aktualisieren</string>
     <string name="TranslationTarget">Zielsprache</string>
     <string name="TranslationTargetApp">System folgen</string>
     <string name="Translator">Übersetzer</string>

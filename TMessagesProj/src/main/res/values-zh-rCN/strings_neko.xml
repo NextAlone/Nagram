@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">先进设置</string>
+    <string name="NaSettings">先进设置</string>
     <string name="IPv6">优先尝试使用 IPv6 连接</string>
     <string name="MessageMenu">消息菜单</string>
     <string name="HidePhone">隐藏您的手机号码</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">使用完全透明的状态栏</string>
     <string name="EnableResidentNotification">请让猫咪住在通知栏里吧</string>
     <string name="DisableResidentNotification">果然通知栏还是太挤了</string>
-    <string name="NekogramRunning">猫猫奔跑中</string>
+    <string name="NagramRunning">猫猫奔跑中</string>
     <string name="EventType">抽屉图标集</string>
     <string name="ChristmasHat">每天显示圣诞帽</string>
     <string name="DependsOnDate">基于日期</string>
@@ -42,8 +42,8 @@
     <string name="SensitiveDisableFiltering">禁用敏感内容过滤</string>
     <string name="SensitiveAbout">在您所有设备上显示公共频道中的敏感媒体内容。</string>
     <string name="StickerSize">贴纸大小</string>
-    <string name="StickerSizeDialogMessage">呜好可爱！黑色猫猫！</string>
-    <string name="StickerSizeDialogMessageReplyTo">喵</string>
+    <string name="StickerSizeDialogMessage">呜好可爱！是NextAlone！</string>
+    <string name="StickerSizeDialogMessageReplyTo">好耶</string>
     <string name="Experiment">实验性</string>
     <string name="UnlimitedFavoredStickers">无限的收藏贴纸</string>
     <string name="UnlimitedFavoredStickersAbout">向收藏夹添加无限贴纸，贴纸可能将不能同步到其它设备。</string>
@@ -82,8 +82,8 @@
     <string name="IgnoreBlockedAbout">您将不会再看到被屏蔽的用户在群组中的消息。</string>
     <string name="Donate">捐赠</string>
     <string name="DonateAbout">支持我们的开发。</string>
-    <string name="TranslationAbout">帮助我们将 Nekogram 翻译成您的语言。</string>
-    <string name="Translation">翻译 Nekogram</string>
+    <string name="TranslationAbout">帮助我们将 Nagram 翻译成您的语言。</string>
+    <string name="Translation">翻译 Nagram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">重置贴纸大小</string>
     <string name="OfficialChannelUsername">NextAloneAlone</string>
@@ -100,7 +100,7 @@
     <string name="AutoPauseVideoAbout">当锁定屏幕/切换到后台时。</string>
     <string name="DisableProximityEvents">禁用距离传感器事件</string>
     <string name="CustomEmojiTypeface">自定义 Emoji 字体</string>
-    <string name="Page1Message2">Nekogram 是使用 Telegram API\n的**非官方**应用</string>
+    <string name="Page1Message2">Nagram 是使用 Telegram API\n的**非官方**应用</string>
     <string name="MapDriftingFix">地图定位漂移修复</string>
     <string name="IncreaseVoiceMessageQuality">提升语音消息质量</string>
     <string name="DisableInstantCamera">禁用即时相机</string>
@@ -165,22 +165,24 @@
     <string name="MutualContact">双向联系人</string>
     <string name="MutualContactDescription">此联系人是一个双向联系人。</string>
     <string name="NoUpdateAvailable">没有可用的更新。</string>
-    <string name="InviteTextNeko">嗨，我在使用 Nekogram 聊天。加入我们吧！从这里下载：%1$s</string>
-    <string name="ShareNekogram">分享 Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\n基于 Telegram %2$s\n由 %3$s 设计</string>
+    <string name="InviteTextNa">嗨，我在使用 Nagram 聊天。加入我们吧！从这里下载：%1$s</string>
+    <string name="ShareNagram">分享 Nagram...</string>
+    <string name="NagramVersion">Nagram %1$s\n基于 Telegram %2$s\n由 %3$s 设计</string>
     <string name="UpdateInstalling">正在安装更新...</string>
-    <string name="UpdateInstallingRelaunch">Nekogram 将在更新完成后重新启动。</string>
+    <string name="UpdateInstallingRelaunch">Nagram 将在更新完成后重新启动。</string>
     <string name="UpdateFailedToInstall">无法安装更新：%d</string>
     <string name="QRLoginMessage">使用其他设备扫描二维码以登录。</string>
     <string name="QRLoginTitle">二维码登陆</string>
     <string name="NoTranslatorAppInstalled">您没有安装可以处理翻译意图的应用，请先安装一个再继续</string>
     <string name="DisableVoiceMessagesAutoPlay">禁用语音留言自动播放</string>
     <string name="TranslatorType">类型</string>
-    <string name="TranslatorTypeNeko">消息内</string>
+    <string name="TranslatorTypeNa">消息内</string>
     <string name="TranslatorTypeTG">弹出对话框</string>
     <string name="TranslatorTypeExternal">外部应用</string>
 
     <string name="ForceAllowCopy">强行复制</string>
+    <string name="DisableChatActionSending">禁用发送输入状态</string>
+    <string name="hideGroupSticker">隐藏群组贴纸</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">无障碍设置</string>

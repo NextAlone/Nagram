@@ -3564,7 +3564,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private String getNekoTitle(String title) {
-        return LocaleController.getString("NekogramEmojiDialogs", R.string.NekogramEmojiDialogs) + " " + title;
+        return LocaleController.getString("NekogramEmojiDialogs", R.string.NagramEmojiDialogs) + " " + title;
     }
 
     private void updateAppUpdateViews(boolean animated) {

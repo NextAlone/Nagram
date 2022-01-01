@@ -38,7 +38,6 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import tw.nekomimi.nekogram.NekoConfig;
@@ -1018,14 +1017,14 @@ public class LocaleController {
     private String getStringInternal(String key, String fallback, int res) {
         if (key.equals("AppName")) {
             try {
-                return ApplicationLoader.applicationContext.getString(R.string.Nekogram);
+                return ApplicationLoader.applicationContext.getString(R.string.Nagram);
             } catch (Exception e) {
                 FileLog.e(e);
             }
         }
         if (key.equals("AppNameBeta")) {
             try {
-                return ApplicationLoader.applicationContext.getString(R.string.NekogramBeta);
+                return ApplicationLoader.applicationContext.getString(R.string.NagramBeta);
             } catch (Exception e) {
                 FileLog.e(e);
             }

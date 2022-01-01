@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Indstillinger</string>
+    <string name="NaSettings">Neko Indstillinger</string>
     <string name="IPv6">Prøv at oprette forbindelse via IPv6</string>
     <string name="MessageMenu">Meddelelse menu</string>
     <string name="HidePhone">Skjul mit telefonnummer</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Gennemsigtig statuslinje</string>
     <string name="EnableResidentNotification">Vis en resident underretning</string>
     <string name="DisableResidentNotification">Deaktiver residente notifikationer</string>
-    <string name="NekogramRunning">Nekogram kører</string>
+    <string name="NagramRunning">Nekogram kører</string>
     <string name="EventType">Sidebar ikon sæt</string>
     <string name="ChristmasHat">Vis nissehue hver dag</string>
     <string name="DependsOnDate">Afhænger af dato</string>
@@ -133,7 +133,7 @@
     <string name="WsEnableTls">Aktiver TLS</string>
     <string name="WsLocalProxy">Lokal proxy</string>
     <string name="WsEnableDoh">Aktiver DoH</string>
-    <string name="UpdateNekogram">Opdater Nekogram</string>
+    <string name="UpdateNagram">Opdater Nekogram</string>
     <string name="TranslationTarget">Målsprog</string>
     <string name="TranslationTargetApp">Følg app</string>
     <string name="Translator">Oversætter</string>
@@ -162,9 +162,9 @@
     <string name="MutualContact">Gensidig kontakt</string>
     <string name="MutualContactDescription">Denne kontakt er en gensidig kontakt.</string>
     <string name="NoUpdateAvailable">Der er ingen tilgængelig opdatering.</string>
-    <string name="InviteTextNeko">Hej, jeg bruger Nekogram til at chatte med. Tilmeld dig mig! Download det her: %1$s</string>
-    <string name="ShareNekogram">Del Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nBaseret på Telegram %2$s\nDesignet af %3$s</string>
+    <string name="InviteTextNa">Hej, jeg bruger Nekogram til at chatte med. Tilmeld dig mig! Download det her: %1$s</string>
+    <string name="ShareNagram">Del Nekogram...</string>
+    <string name="NagramVersion">Nekogram %1$s\nBaseret på Telegram %2$s\nDesignet af %3$s</string>
     <string name="UpdateInstalling">Installerer opdatering...</string>
     <string name="UpdateInstallingRelaunch">Nekogram vil genstarte, når opdateringen er færdig.</string>
     <string name="UpdateFailedToInstall">Opdateringen kunne ikke installeres: %d</string>

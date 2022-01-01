@@ -22,7 +22,7 @@
     <string name="TransparentStatusBar">Gjennomsiktig statuslinje</string>
     <string name="EnableResidentNotification">Vis en stedlig varsling</string>
     <string name="DisableResidentNotification">Deaktiver varsling om beboere</string>
-    <string name="NekogramRunning">Nekogram kjører</string>
+    <string name="NagramRunning">Nekogram kjører</string>
     <string name="EventType">Sidefelt ikon sett</string>
     <string name="ChristmasHat">Vis julehatt hver dag</string>
     <string name="DependsOnDate">Avhenger av dato</string>

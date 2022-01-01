@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Impostazioni Neko</string>
+    <string name="NaSettings">Impostazioni Neko</string>
     <string name="IPv6">Prova a connetterti via IPv6</string>
     <string name="MessageMenu">Menu messaggio</string>
     <string name="HidePhone">Nascondi il mio numero</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Barra di stato trasparente</string>
     <string name="EnableResidentNotification">Mostra notifica persistente</string>
     <string name="DisableResidentNotification">Disabilita notifica persistente</string>
-    <string name="NekogramRunning">Nekogram è in esecuzione</string>
+    <string name="NagramRunning">Nekogram è in esecuzione</string>
     <string name="EventType">Set di icone barra laterale</string>
     <string name="ChristmasHat">Mostra il cappello di Natale ogni giorno</string>
     <string name="DependsOnDate">Dipende dalla data</string>
@@ -134,7 +134,7 @@
     <string name="WsEnableTls">Abilita TLS</string>
     <string name="WsLocalProxy">Proxy locale</string>
     <string name="WsEnableDoh">Abilita DoH</string>
-    <string name="UpdateNekogram">Aggiorna Nekogram</string>
+    <string name="UpdateNagram">Aggiorna Nekogram</string>
     <string name="TranslationTarget">Lingua di destinazione</string>
     <string name="TranslationTargetApp">Segui l\'app</string>
     <string name="Translator">Traduttore</string>
@@ -163,9 +163,9 @@
     <string name="MutualContact">Contatto reciproco</string>
     <string name="MutualContactDescription">Questo contatto è un contatto reciproco.</string>
     <string name="NoUpdateAvailable">Nessun aggiornamento disponibile.</string>
-    <string name="InviteTextNeko">Hey, sto usando Nekogram per chattare. Unisciti a me! Scaricalo qui: %1$s</string>
-    <string name="ShareNekogram">Condividi Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nBasato su Telegram %2$s\nProgettato da %3$s</string>
+    <string name="InviteTextNa">Hey, sto usando Nekogram per chattare. Unisciti a me! Scaricalo qui: %1$s</string>
+    <string name="ShareNagram">Condividi Nekogram...</string>
+    <string name="NagramVersion">Nekogram %1$s\nBasato su Telegram %2$s\nProgettato da %3$s</string>
     <string name="UpdateInstalling">Installazione aggiornamento...</string>
     <string name="UpdateInstallingRelaunch">Nekogram si riavverà una volta che gli aggiornamenti saranno completati.</string>
     <string name="UpdateFailedToInstall">Installazione aggiornamento non riuscita: %d</string>

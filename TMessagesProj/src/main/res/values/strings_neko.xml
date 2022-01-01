@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppNameNeko" translatable="false">@string/Nekogram</string>
-    <string name="Nekogram" translatable="false">Nagram</string>
-    <string name="NekogramBeta" translatable="false">Nagram Beta</string>
-    <string name="NekogramEmojiDialogs" translatable="false">&#128566;</string>
-    <string name="NekoSettings">Neko Settings</string>
+    <string name="AppNameNa" translatable="false">@string/Nagram</string>
+    <string name="Nagram" translatable="false">Nagram</string>
+    <string name="NagramBeta" translatable="false">Nagram Beta</string>
+    <string name="NagramEmojiDialogs" translatable="false">&#128566;</string>
+    <string name="NaSettings">Na Settings</string>
     <string name="IPv6">Try connecting through IPv6</string>
     <string name="MessageMenu">Message menu</string>
     <string name="HidePhone">Hide my phone number</string>
@@ -30,7 +30,7 @@
     <string name="TransparentStatusBar">Transparent status bar</string>
     <string name="EnableResidentNotification">Show a resident notification</string>
     <string name="DisableResidentNotification">Disable resident notification</string>
-    <string name="NekogramRunning">Nekogram is running</string>
+    <string name="NagramRunning">Nagram is running</string>
     <string name="EventType">Sidebar icon set</string>
     <string name="ChristmasHat">Show christmas hat everyday</string>
     <string name="DependsOnDate">Depends on date</string>
@@ -48,8 +48,8 @@
     <string name="SensitiveDisableFiltering">Disable sensitive content filtering</string>
     <string name="SensitiveAbout">Display sensitive media in public channels on all your devices.</string>
     <string name="StickerSize">Sticker size</string>
-    <string name="StickerSizeDialogMessage">Oh so cute! A black cat!</string>
-    <string name="StickerSizeDialogMessageReplyTo">Meow</string>
+    <string name="StickerSizeDialogMessage">Oh so cute! It\'s NextAlone!</string>
+    <string name="StickerSizeDialogMessageReplyTo">Great</string>
     <string name="Experiment">Experimental</string>
     <string name="UnlimitedFavoredStickers">Unlimited favored stickers</string>
     <string name="UnlimitedFavoredStickersAbout">Add unlimited stickers to favorites. Stickers may not be synchronized to other devices.</string>
@@ -88,8 +88,8 @@
     <string name="IgnoreBlockedAbout">You\'ll no longer see messages from blocked users in groups.</string>
     <string name="Donate">Donate</string>
     <string name="DonateAbout">Support our development.</string>
-    <string name="TranslationAbout">Help us to translate Nekogram to your language.</string>
-    <string name="Translation">Translate Nekogram</string>
+    <string name="TranslationAbout">Help us to translate Ngram to your language.</string>
+    <string name="Translation">Translate Nagram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">Reset sticker size</string>
     <string name="OfficialChannelUsername">NextAloneAlone</string>
@@ -106,7 +106,7 @@
     <string name="AutoPauseVideoAbout">When lock screen/switch to background.</string>
     <string name="DisableProximityEvents">Disable proximity events</string>
     <string name="CustomEmojiTypeface">Custom emoji font</string>
-    <string name="Page1Message2">Nekogram is an **unofficial** messaging app\nthat uses Telegram\'s API.</string>
+    <string name="Page1Message2">Nagram is an **unofficial** messaging app\nthat uses Telegram\'s API.</string>
     <string name="MapDriftingFix">Map drifting fix for Mainland China</string>
     <string name="IncreaseVoiceMessageQuality">Increase voice messages quality</string>
     <string name="DisableInstantCamera">Disable instant camera</string>
@@ -142,7 +142,7 @@
     <string name="WsEnableTls">Enable TLS</string>
     <string name="WsLocalProxy">Local proxy</string>
     <string name="WsEnableDoh">Enable DoH</string>
-    <string name="UpdateNekogram">Update Nekogram</string>
+    <string name="UpdateNagram">Update Nagram</string>
     <string name="TranslationTarget">Target language</string>
     <string name="TranslationTargetApp">Follow app</string>
     <string name="Translator">Translator</string>
@@ -171,23 +171,25 @@
     <string name="MutualContact">Mutual contact</string>
     <string name="MutualContactDescription">This contact is a mutual contact.</string>
     <string name="NoUpdateAvailable">No update available.</string>
-    <string name="InviteTextNeko">Hey, I\'m using Nekogram to chat. Join me! Download it here: %1$s</string>
-    <string name="ShareNekogram">Share Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nBased on Telegram %2$s\nDesigned by %3$s</string>
+    <string name="InviteTextNa">Hey, I\'m using Nagram to chat. Join me! Download it here: %1$s</string>
+    <string name="ShareNagram">Share Nagram...</string>
+    <string name="NagramVersion">Nagram %1$s\nBased on Telegram %2$s\nDesigned by %3$s</string>
     <string name="UpdateInstalling">Installing update...</string>
-    <string name="UpdateInstallingRelaunch">Nekogram will relaunch when update completes.</string>
+    <string name="UpdateInstallingRelaunch">Nagram will relaunch when update completes.</string>
     <string name="UpdateFailedToInstall">Failed to install update: %d</string>
     <string name="QRLoginMessage">Scan QRCode with another device to login.</string>
     <string name="QRLoginTitle">QR Login</string>
     <string name="NoTranslatorAppInstalled">You don\'t have applications that can handle translate intent, please install one to continue</string>
     <string name="DisableVoiceMessagesAutoPlay">Disable auto-play of voice messages</string>
     <string name="TranslatorType">Type</string>
-    <string name="TranslatorTypeNeko">In message</string>
+    <string name="TranslatorTypeNa">In message</string>
     <string name="TranslatorTypeTG">Popup dialog</string>
     <string name="TranslatorTypeExternal">External app</string>
 
     <!-- Nagram force allow copy -->
     <string name="ForceAllowCopy">Force allow copy</string>
+    <string name="DisableChatActionSending">Disable chat action sending</string>
+    <string name="hideGroupSticker">Hide group sticker</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>

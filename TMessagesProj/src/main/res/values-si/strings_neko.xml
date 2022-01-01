@@ -23,7 +23,7 @@
     <string name="TransparentStatusBar">විනිවිද පෙනෙන තත්ව තීරුව</string>
     <string name="EnableResidentNotification">Show a resident notification</string>
     <string name="DisableResidentNotification">Disable resident notification</string>
-    <string name="NekogramRunning">නෙකෝග්‍රෑම් වැඩ කරමින්</string>
+    <string name="NagramRunning">නෙකෝග්‍රෑම් වැඩ කරමින්</string>
     <string name="EventType">පැති තීරුවෙහි නිරූපක කට්ටලය</string>
     <string name="ChristmasHat">සෑම දිනකම නත්තල් තොප්පිය පෙන්වන්න</string>
     <string name="DependsOnDate">දිනය මත රදා පවතී</string>

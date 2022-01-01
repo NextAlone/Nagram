@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Paramètres Neko</string>
+    <string name="NaSettings">Paramètres Neko</string>
     <string name="IPv6">Essayez de se connecter en IPv6</string>
     <string name="MessageMenu">Menu de message</string>
     <string name="HidePhone">Masquer mon numéro de téléphone</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Barre de statut transparente</string>
     <string name="EnableResidentNotification">Afficher une notification de résident</string>
     <string name="DisableResidentNotification">Désactiver la notification de résident</string>
-    <string name="NekogramRunning">Nekogram est en cours d\'exécution</string>
+    <string name="NagramRunning">Nekogram est en cours d\'exécution</string>
     <string name="EventType">Réglage d\'icônes de la barre latérale</string>
     <string name="ChristmasHat">Afficher le chapeau de Noël tous les jours</string>
     <string name="DependsOnDate">Dépend de la date</string>
@@ -133,7 +133,7 @@
     <string name="WsEnableTls">Activer le TLS</string>
     <string name="WsLocalProxy">Proxy local</string>
     <string name="WsEnableDoh">Activer le DoH</string>
-    <string name="UpdateNekogram">Mettre à jour Nekogram</string>
+    <string name="UpdateNagram">Mettre à jour Nekogram</string>
     <string name="TranslationTarget">Langue cible</string>
     <string name="TranslationTargetApp">Suivre l\'application</string>
     <string name="Translator">Traducteur</string>
@@ -162,9 +162,9 @@
     <string name="MutualContact">Contact commun</string>
     <string name="MutualContactDescription">Ce contact est un contact commun.</string>
     <string name="NoUpdateAvailable">Aucune mise à jour disponible.</string>
-    <string name="InviteTextNeko">Hey, j\'utilise Nekogram pour échanger. Rejoignez-moi ! Téléchargez-la ici : %1$s</string>
-    <string name="ShareNekogram">Partager Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nBasé sur Telegram %2$s\nConçu par %3$s</string>
+    <string name="InviteTextNa">Hey, j\'utilise Nekogram pour échanger. Rejoignez-moi ! Téléchargez-la ici : %1$s</string>
+    <string name="ShareNagram">Partager Nekogram...</string>
+    <string name="NagramVersion">Nekogram %1$s\nBasé sur Telegram %2$s\nConçu par %3$s</string>
     <string name="UpdateInstalling">Installation de la mise à jour...</string>
     <string name="UpdateFailedToInstall">Échec d\'installation de la mise à jour : %d</string>
     <string name="QRLoginMessage">Scannez ce QRCode avec un autre appareil pour vous connecter.</string>

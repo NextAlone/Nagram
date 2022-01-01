@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Налаштування Neko</string>
+    <string name="NaSettings">Налаштування Neko</string>
     <string name="IPv6">Спробувати з\'єднуватись через IPv6</string>
     <string name="MessageMenu">Меню повідомлення</string>
     <string name="HidePhone">Заховати мій номер телефону</string>
@@ -23,7 +23,7 @@
     <string name="Prpr">Пероперо</string>
     <string name="TransparentStatusBar">Прозорий рядок стану</string>
     <string name="EnableResidentNotification">Включити сповіщення</string>
-    <string name="NekogramRunning">Некограм запущений</string>
+    <string name="NagramRunning">Некограм запущений</string>
     <string name="EventType">Зображення бокової панелі</string>
     <string name="ChristmasHat">Відображати Різдвяний капелюх</string>
     <string name="DependsOnDate">Залежить від дати</string>
@@ -133,7 +133,7 @@
     <string name="WsEnableTls">Увімкнути TLS</string>
     <string name="WsLocalProxy">Локальне проксі</string>
     <string name="WsEnableDoh">Увімкнути DoH</string>
-    <string name="UpdateNekogram">Оновити Nekogram</string>
+    <string name="UpdateNagram">Оновити Nekogram</string>
     <string name="TranslationTarget">Цільова мова</string>
     <string name="TranslationTargetApp">Мова додатку</string>
     <string name="Translator">Перекладач</string>
@@ -161,9 +161,9 @@
     <string name="MutualContact">Спільний контакт</string>
     <string name="MutualContactDescription">Цей контакт є спільним контактом.</string>
     <string name="NoUpdateAvailable">Немає доступних оновлень.</string>
-    <string name="InviteTextNeko">Привіт, я використовую Nekogram для спілкування. Приєднуйся до мене! Завантаж його тут: %1$s</string>
-    <string name="ShareNekogram">Поділитися Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nБазується на Telegram %2$s\nРозроблений %3$s</string>
+    <string name="InviteTextNa">Привіт, я використовую Nekogram для спілкування. Приєднуйся до мене! Завантаж його тут: %1$s</string>
+    <string name="ShareNagram">Поділитися Nekogram...</string>
+    <string name="NagramVersion">Nekogram %1$s\nБазується на Telegram %2$s\nРозроблений %3$s</string>
     <string name="UpdateInstalling">Встановлюємо оновлення...</string>
     <string name="UpdateInstallingRelaunch">Nekogram буде перезапущено після завершення оновлення.</string>
     <string name="UpdateFailedToInstall">Помилка під час встановлення оновлення: %d</string>

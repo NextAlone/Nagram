@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Configurações Neko</string>
+    <string name="NaSettings">Configurações Neko</string>
     <string name="IPv6">Tentar conexão via IPv6</string>
     <string name="MessageMenu">Menu de mensagens</string>
     <string name="HidePhone">Ocultar meu número de telefone</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">Barra de status transparente</string>
     <string name="EnableResidentNotification">Mostrar notificação de residente</string>
     <string name="DisableResidentNotification">Desativar notificação persistente</string>
-    <string name="NekogramRunning">Nekogram está em execução</string>
+    <string name="NagramRunning">Nekogram está em execução</string>
     <string name="EventType">Conjunto de ícones da barra lateral</string>
     <string name="ChristmasHat">Mostrar chapéu de Natal todos os dias</string>
     <string name="DependsOnDate">Depende da data</string>
@@ -135,7 +135,7 @@
     <string name="WsEnableTls">Habilitar TLS</string>
     <string name="WsLocalProxy">Proxy local</string>
     <string name="WsEnableDoh">Habilitar TLS</string>
-    <string name="UpdateNekogram">Atualizar Nekogram</string>
+    <string name="UpdateNagram">Atualizar Nekogram</string>
     <string name="TranslationTarget">Idioma de destino</string>
     <string name="TranslationTargetApp">Seguir o aplicativo</string>
     <string name="Translator">Tradutor</string>
@@ -164,9 +164,9 @@
     <string name="MutualContact">Contato em comum</string>
     <string name="MutualContactDescription">Este é um contato em comum.</string>
     <string name="NoUpdateAvailable">Nenhuma atualização disponível.</string>
-    <string name="InviteTextNeko">Ei, estou usando Nekogram para conversar. Junte-se a mim! Baixe aqui: %1$s</string>
-    <string name="ShareNekogram">Compartilhar Nekogram...</string>
-    <string name="NekogramVersion">Nekogram %1$s\nCom base no Telegram %2$s\nProjetado por %3$s</string>
+    <string name="InviteTextNa">Ei, estou usando Nekogram para conversar. Junte-se a mim! Baixe aqui: %1$s</string>
+    <string name="ShareNagram">Compartilhar Nekogram...</string>
+    <string name="NagramVersion">Nekogram %1$s\nCom base no Telegram %2$s\nProjetado por %3$s</string>
     <string name="UpdateInstalling">Instalando atualização...</string>
     <string name="UpdateInstallingRelaunch">O Nekogram irá reiniciar assim que a atualização for concluída.</string>
     <string name="UpdateFailedToInstall">Falha ao instalar a atualização: %d</string>
@@ -175,7 +175,7 @@
     <string name="NoTranslatorAppInstalled">Você não possui aplicativos que lidam com intents de tradução, por favor instale um para continuar</string>
     <string name="DisableVoiceMessagesAutoPlay">Desativar reprodução automática das mensagens de voz</string>
     <string name="TranslatorType">Tipo</string>
-    <string name="TranslatorTypeNeko">Na mensagem</string>
+    <string name="TranslatorTypeNa">Na mensagem</string>
     <string name="TranslatorTypeTG">Diálogo popup</string>
     <string name="TranslatorTypeExternal">Aplicativo externo</string>
     <!-- Accessibility -->

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">네코그램 설정</string>
+    <string name="NaSettings">네코그램 설정</string>
     <string name="IPv6">IPv6 를 통한 접속</string>
     <string name="MessageMenu">메세지 메뉴</string>
     <string name="HidePhone">내 번호 숨기기</string>
@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">투명 상태 표시줄</string>
     <string name="EnableResidentNotification">참가자 알림 표시</string>
     <string name="DisableResidentNotification">참가자 알림 중지</string>
-    <string name="NekogramRunning">네코그램이 실행 중 입니다</string>
+    <string name="NagramRunning">네코그램이 실행 중 입니다</string>
     <string name="EventType">사이드바 아이콘 세트</string>
     <string name="ChristmasHat">크리스마스 모자 매일 보여주기</string>
     <string name="DependsOnDate">날짜에 따라</string>
@@ -135,7 +135,7 @@
     <string name="WsEnableTls">TLS 활성화</string>
     <string name="WsLocalProxy">로컬 프록시</string>
     <string name="WsEnableDoh">DoH 활성화</string>
-    <string name="UpdateNekogram">Nekogram 업데이트</string>
+    <string name="UpdateNagram">Nekogram 업데이트</string>
     <string name="TranslationTarget">번역 언어</string>
     <string name="TranslationTargetApp">기기 언어 따라가기</string>
     <string name="Translator">번역기</string>
@@ -164,9 +164,9 @@
     <string name="MutualContact">공통 연락처</string>
     <string name="MutualContactDescription">이 연락처는 공통 연락처 입니다.</string>
     <string name="NoUpdateAvailable">사용할 수 있는 업데이트가 없습니다.</string>
-    <string name="InviteTextNeko">안녕, 나는 네코그램을 사용하고 있어요. 한번 사용해 보실래요? 여기에서 다운로드 하세요: %1$s</string>
-    <string name="ShareNekogram">네코그램 공유하기</string>
-    <string name="NekogramVersion">네코그램 %1$s 은 텔레그램 %2$s 기반으로 %3$s 이 제작 하였습니다</string>
+    <string name="InviteTextNa">안녕, 나는 네코그램을 사용하고 있어요. 한번 사용해 보실래요? 여기에서 다운로드 하세요: %1$s</string>
+    <string name="ShareNagram">네코그램 공유하기</string>
+    <string name="NagramVersion">네코그램 %1$s 은 텔레그램 %2$s 기반으로 %3$s 이 제작 하였습니다</string>
     <string name="UpdateInstalling">업데이트 설치 중...</string>
     <string name="UpdateInstallingRelaunch">업데이트가 완료되면 네코그램이 다시 시작됩니다.</string>
     <string name="UpdateFailedToInstall">업데이트를 설치하지 못했습니다: %d</string>
@@ -175,7 +175,7 @@
     <string name="NoTranslatorAppInstalled">번역을 할 수 있는 프로그램이 없습니다. 번역 프로그램을 설치해 주십시오.</string>
     <string name="DisableVoiceMessagesAutoPlay">음성 메시지 자동 재생 비활성화</string>
     <string name="TranslatorType">종류</string>
-    <string name="TranslatorTypeNeko">메시지 에서</string>
+    <string name="TranslatorTypeNa">메시지 에서</string>
     <string name="TranslatorTypeTG">팝업 대화 상자</string>
     <string name="TranslatorTypeExternal">외부 앱</string>
     <!-- Accessibility -->

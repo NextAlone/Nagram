@@ -422,7 +422,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             addView(header, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
             TextSettingsCell cell = new TextSettingsCell(context);
-            cell.setText(LocaleController.getString("NekoSettings", R.string.NekoSettings), false);
+            cell.setText(LocaleController.getString("NekoSettings", R.string.NaSettings), false);
             cell.setBackground(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector)));
             cell.setOnClickListener(e -> {
                 presentFragment(new NekoGeneralSettingsActivity());

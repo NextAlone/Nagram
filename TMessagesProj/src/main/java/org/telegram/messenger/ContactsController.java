@@ -304,7 +304,7 @@ public class ContactsController extends BaseController {
     }
 
     public String getInviteText(int contacts) {
-        return LocaleController.formatString("InviteTextNeko", R.string.InviteTextNeko, "https://github.com/NextAlone/Nekogram/releases");
+        return LocaleController.formatString("InviteTextNeko", R.string.InviteTextNa, "https://github.com/NextAlone/Nekogram/releases");
     }
 
     public void checkAppAccount() {
