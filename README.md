@@ -10,10 +10,11 @@ Nagram is a third-party Telegram client based on Nekogram with not many but usef
 
 ## Features
 
-1. Forced copy
-2. Disable chat action sending
-3. Hide group sticker
-4. You added or feature request
+1. Quick reply "好耶" and "破烂"
+2. Forced copy
+3. Disable chat action sending
+4. Hide group sticker
+5. You added or feature request
 
 ## API, Protocol documentation
 
