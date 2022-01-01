@@ -474,7 +474,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 desctiptionLines[a * 2 + 1].setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
                 desctiptionLines[a * 2 + 1].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                 if (a == 0) {
-                    desctiptionLines[a* 2 + 1].setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+                    desctiptionLines[a * 2 + 1].setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
                     desctiptionLines[a * 2 + 1].setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
                     String text = LocaleController.getString("AuthAnotherClientInfo1", R.string.AuthAnotherClientInfo1);
                     SpannableStringBuilder spanned = new SpannableStringBuilder(text);

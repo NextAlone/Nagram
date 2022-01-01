@@ -23,7 +23,6 @@
         <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_ex</item>
         <item name="android:actionBarItemBackground">@drawable/bar_selector_style</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
-
     </style>
 
     <style name="Theme.TMessages.PopupNotification" parent="Theme.TMessages">
