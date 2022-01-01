@@ -3202,7 +3202,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 getNotificationCenter().postNotificationName(NotificationCenter.newSuggestionsAvailable);
                             } else if (which == 18) {
                                 getNotificationsController().cleanupNotificationChannels();
-                            } else if (which == 18) {
+                            } else if (which == 19) {
                                 SharedConfig.toggleDrawSnowInChat();
                             }
                         });
