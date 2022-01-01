@@ -5438,6 +5438,7 @@ public class MediaDataController extends BaseController {
     }
 
     public String getDoubleTapReaction() {
+        if (true) return null;
         if (doubleTapReaction != null) {
             return doubleTapReaction;
         }
