@@ -20189,19 +20189,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return caption;
     }
 
-    private static boolean isEmoji(String message){
-        return message.matches("(?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|" +
-            "[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|" +
-            "[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|" +
-            "[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|" +
-            "[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|" +
-            "[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|" +
-            "[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|" +
-            "[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|" +
-            "[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|" +
-            "[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|" +
-            "[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?)+");
-    }
     private void createMenu(View v, boolean single, boolean listView, float x, float y, boolean searchGroup) {
         if (actionBar.isActionModeShowed() || reportType >= 0) {
             return;
@@ -20358,11 +20345,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             ArrayList<CharSequence> items = new ArrayList<>();
             final ArrayList<Integer> options = new ArrayList<>();
 
-            CharSequence messageText = null;
+            //CharSequence messageText = null;
             if (type >= 0 || type == -1 && single && (message.isSending() || message.isEditing()) && currentEncryptedChat == null) {
                 selectedObject = message;
                 selectedObjectGroup = groupedMessages;
-                messageText = getMessageCaption(selectedObject, selectedObjectGroup); // used only in translations
+                /*messageText = getMessageCaption(selectedObject, selectedObjectGroup); // used only in translations
                 if (messageText == null && selectedObject.isPoll()) {
                     try {
                         TLRPC.Poll poll = ((TLRPC.TL_messageMediaPoll) selectedObject.messageOwner.media).poll;
@@ -20378,7 +20365,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (messageText != null) {
                     if (isEmoji(messageText.toString()))
                         messageText = null; // message fully consists of emojis, do not translate
-                }
+                }*/
 
                 if (type == -1) {
                     // Nagram force allow copy
@@ -20423,7 +20410,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(OPTION_EDIT);
                             icons.add(R.drawable.msg_edit);
                         }
-                        if (NekoConfig.showTranslate && !selectedObject.isOutOwner() && !(NekoConfig.transType == NekoConfig.TRANS_TYPE_EXTERNAL && getMessagesController().isChatNoForwards(currentChat))) {
+                        if (NekoConfig.showTranslate && !(NekoConfig.transType == NekoConfig.TRANS_TYPE_EXTERNAL && getMessagesController().isChatNoForwards(currentChat))) {
                             MessageObject messageObject = getMessageHelper().getMessageForTranslate(selectedObject, selectedObjectGroup);
                             if (messageObject != null) {
                                 items.add(messageObject.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
@@ -20755,6 +20742,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     icons.add(R.drawable.menu_recent);
                                 }
                             }
+                            if (NekoConfig.showTranslate && !(NekoConfig.transType == NekoConfig.TRANS_TYPE_EXTERNAL && getMessagesController().isChatNoForwards(currentChat))) {
+                                MessageObject messageObject = getMessageHelper().getMessageForTranslate(selectedObject, selectedObjectGroup);
+                                if (messageObject != null) {
+                                    items.add(messageObject.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
+                                    options.add(88);
+                                    icons.add(R.drawable.msg_translate);
+                                }
+                            }
                         }
                         if (message.messageOwner.forwards > 0 && ChatObject.hasAdminRights(getCurrentChat())) {
                             items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
@@ -20779,14 +20774,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("MessageScheduleEditTime", R.string.MessageScheduleEditTime));
                             options.add(102);
                             icons.add(R.drawable.msg_schedule);
-                        }
-                        if (NekoConfig.showTranslate && !selectedObject.isOutOwner() && !(NekoConfig.transType == NekoConfig.TRANS_TYPE_EXTERNAL && getMessagesController().isChatNoForwards(currentChat))) {
-                            MessageObject messageObject = getMessageHelper().getMessageForTranslate(selectedObject, selectedObjectGroup);
-                            if (messageObject != null) {
-                                items.add(messageObject.translated ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
-                                options.add(88);
-                                icons.add(R.drawable.msg_translate);
-                            }
                         }
                         if (chatMode != MODE_SCHEDULED && selectedObject.contentType == 0 && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
                             if (UserObject.isReplyUser(currentUser)) {
@@ -21386,10 +21373,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         );
                         cell.setOnClickListener(e -> {
-                            if (selectedObject == null || i >= options.size()) {
+                            if (selectedObject == null || i >= options.size() || getParentActivity() == null) {
                                 return;
                             }
-                            TranslateAlert.showAlert(getParentActivity(), this, fromLang[0], toLang, finalMessageText, currentChat.noforwards);
+                            boolean noForwards = currentChat != null && currentChat.noforwards;
+                            TranslateAlert.showAlert(getParentActivity(), this, fromLang[0], toLang, finalMessageText, noForwards);
                             scrimView = null;
                             contentView.invalidate();
                             chatListView.invalidate();
@@ -21405,10 +21393,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }, 250);
                     } else {
                         cell.setOnClickListener(e -> {
-                            if (selectedObject == null || i >= options.size()) {
+                            if (selectedObject == null || i >= options.size() || getParentActivity() == null) {
                                 return;
                             }
-                            TranslateAlert.showAlert(getParentActivity(), this, "und", toLang, finalMessageText, currentChat.noforwards);
+                            boolean noForwards = currentChat != null && currentChat.noforwards;
+                            TranslateAlert.showAlert(getParentActivity(), this, "und", toLang, finalMessageText, noForwards);
                             scrimView = null;
                             contentView.invalidate();
                             chatListView.invalidate();
@@ -21995,10 +21984,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         if (NekoConfig.transType != NekoConfig.TRANS_TYPE_NEKO) {
-            Translator.showTranslateDialog(getParentActivity(), messageObject.messageOwner.message, getMessagesController().isChatNoForwards(currentChat));
+            String message;
+            if (messageObject.isPoll()) {
+                TLRPC.Poll poll = ((TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media).poll;
+                StringBuilder pollText = new StringBuilder(poll.question).append("\n");
+                for (TLRPC.TL_pollAnswer answer : poll.answers) {
+                    pollText.append("\n\uD83D\uDD18 ");
+                    pollText.append(answer.text);
+                }
+                message = pollText.toString();
+            } else {
+                message = messageObject.messageOwner.message;
+            }
+            Translator.showTranslateDialog(getParentActivity(), message, getMessagesController().isChatNoForwards(currentChat));
             return;
         }
-        Object original = messageObject.type == MessageObject.TYPE_POLL ? ((TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media).poll : messageObject.messageOwner.message;
+        Object original = messageObject.isPoll() ? ((TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media).poll : messageObject.messageOwner.message;
         messageObject.originalMessage = original;
         final MessageObject finalMessageObject = messageObject;
         Translator.translate(original, new Translator.TranslateCallBack() {
@@ -24623,6 +24624,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                     @Override
                     public void didPressReaction(ChatMessageCell cell, TLRPC.TL_reactionCount reaction, boolean longpress) {
+                        if (getParentActivity() == null) {
+                            return;
+                        }
                         if (longpress) {
                             if (!ChatObject.isChannelAndNotMegaGroup(currentChat)) {
                                 cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
@@ -25113,7 +25117,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     @Override
-                    public String getAdminRank(long uid) {
+                    public String getAdminRank(long uid, boolean accessibility) {
                         if (ChatObject.isChannel(currentChat) && currentChat.megagroup) {
                             return getMessagesController().getAdminRank(currentChat.id, uid);
                         }
@@ -26849,6 +26853,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         themeDescriptions.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_chat_inReactionButtonBackground));
         themeDescriptions.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_chat_inReactionButtonText));
         themeDescriptions.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_chat_outReactionButtonText));
+        themeDescriptions.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_chat_inReactionButtonTextSelected));
+        themeDescriptions.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_chat_inReactionButtonTextSelected));
 
         if (chatActivityEnterView != null) {
             themeDescriptions.add(new ThemeDescription(chatActivityEnterView.botCommandsMenuContainer.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{BotCommandsMenuView.BotCommandView.class}, new String[]{"description"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
