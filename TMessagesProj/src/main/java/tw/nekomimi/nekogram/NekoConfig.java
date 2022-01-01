@@ -87,7 +87,9 @@ public class NekoConfig {
     public static boolean showTranslate = true;
     public static boolean showRepeat = true;
     public static boolean showNoQuoteForward = true;
-
+    // Nagram
+    public static boolean showReReply = false;
+    
     public static boolean hidePhone = true;
     public static boolean transparentStatusBar = false;
     public static boolean forceTablet = false;
@@ -122,7 +124,6 @@ public class NekoConfig {
     public static boolean forceAllowCopy = false;
     public static boolean disableChatActionSending = false;
     public static boolean hideGroupSticker = false;
-
     
     public static final String WS_ADDRESS = "ws.neko";
     private static int socksPort = -1;
@@ -212,6 +213,7 @@ public class NekoConfig {
             showMessageDetails = preferences.getBoolean("showMessageDetails", false);
             showTranslate = preferences.getBoolean("showTranslate", true);
             showRepeat = preferences.getBoolean("showRepeat", true);
+            showReReply = preferences.getBoolean("showReReply", false);
             eventType = preferences.getInt("eventType", 0);
             newYear = preferences.getBoolean("newYear", false);
             stickerSize = preferences.getFloat("stickerSize", 14.0f);
@@ -378,7 +380,14 @@ public class NekoConfig {
         editor.putBoolean("showRepeat", showRepeat);
         editor.commit();
     }
-
+    
+    public static void toggleShowReReply() {
+        showReReply = !showReReply;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("showReReply", showReReply);
+        editor.commit();
+    }
     public static void toggleIPv6() {
         useIPv6 = !useIPv6;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);

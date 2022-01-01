@@ -20731,6 +20731,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                             }
                         }
+                        if (NekoConfig.showReReply) {
+                            if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
+                                items.add(LocaleController.getString("ReReply", R.string.ReReply));
+                                options.add(1001);
+                                icons.add(R.drawable.msg_reset);
+                            }
+                        }
                         if (chatMode != MODE_SCHEDULED) {
                             if (NekoConfig.showPrPr && allowChatActions) {
                                 items.add(LocaleController.getString("Prpr", R.string.Prpr));
@@ -22782,6 +22789,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }, null, themeDelegate);
                 break;
             }
+            case 1001:
+                if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+                    return;
+                }
+                processReReply();
+                break;
         }
         selectedObject = null;
         selectedObjectGroup = null;
@@ -22890,7 +22903,50 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         return false;
     }
-
+    
+    public boolean processReReply() {
+        try{
+            var messageObject = getMessageHelper().getMessageForRepeat(selectedObject, selectedObjectGroup);
+            if (messageObject != null) {
+                if (messageObject.isAnyKindOfSticker() && !messageObject.isAnimatedEmoji() && !messageObject.isDice()) {
+                    getSendMessagesHelper().sendSticker(
+                            selectedObject.getDocument(), null, dialog_id, messageObject.replyMessageObject,
+                            threadMessageObject, null, null, true, 0);
+                    return true;
+                } else {
+                    var message = messageObject.messageOwner.message;
+                    if (!TextUtils.isEmpty(message)) {
+                        ArrayList<TLRPC.MessageEntity> entities;
+                        if (messageObject.messageOwner.entities != null && !messageObject.messageOwner.entities.isEmpty()) {
+                            entities = new ArrayList<>();
+                            for (TLRPC.MessageEntity entity : messageObject.messageOwner.entities) {
+                                if (entity instanceof TLRPC.TL_messageEntityMentionName) {
+                                    TLRPC.TL_inputMessageEntityMentionName mention = new TLRPC.TL_inputMessageEntityMentionName();
+                                    mention.length = entity.length;
+                                    mention.offset = entity.offset;
+                                    mention.user_id = getMessagesController().getInputUser(((TLRPC.TL_messageEntityMentionName) entity).user_id);
+                                    entities.add(mention);
+                                } else {
+                                    entities.add(entity);
+                                }
+                            }
+                        } else {
+                            entities = null;
+                        }
+                        getSendMessagesHelper().sendMessage(
+                                message, dialog_id, messageObject.replyMessageObject,
+                                threadMessageObject, null, false, entities,
+                                null, null, true, 0, null);
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception ignore) {
+            return false;
+        }
+        return false;
+    }
+    
     @Override
     public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
         if (forwardingMessage == null && selectedMessagesIds[0].size() == 0 && selectedMessagesIds[1].size() == 0) {
