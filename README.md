@@ -8,6 +8,13 @@ Nagram is a third-party Telegram client based on Nekogram with not many but usef
 - Downloads: https://github.com/NextAlone/Nagram/releases
 - Feedback: https://github.com/NextAlone/Nagram/-/issues
 
+## Features
+
+1. Forced copy
+2. Disable chat action sending
+3. Hide group sticker
+4. You added or feature request
+
 ## API, Protocol documentation
 
 Telegram API manuals: https://core.telegram.org/api
@@ -29,3 +36,4 @@ MTproto protocol manuals: https://core.telegram.org/mtproto
 Nagram is forked from Telegram, thus most locales follows the translations of Telegram for Android, checkout https://translations.telegram.org/en/android/.
 
 As for the Nagram specialized strings, we use Crowdin to translate Nagram. Join project at https://neko.crowdin.com/nekogram. Help us bring Nagram to the world!
+
