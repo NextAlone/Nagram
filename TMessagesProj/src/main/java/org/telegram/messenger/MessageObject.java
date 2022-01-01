@@ -4705,6 +4705,10 @@ public class MessageObject {
         return messageOwner.from_id instanceof TLRPC.TL_peerChannel && messageOwner.fwd_from != null && messageOwner.fwd_from.channel_post != 0 && messageOwner.fwd_from.saved_from_peer instanceof TLRPC.TL_peerChannel && messageOwner.from_id.channel_id == messageOwner.fwd_from.saved_from_peer.channel_id;
     }
 
+    public boolean isSenderChannel() {
+        return messageOwner.from_id instanceof TLRPC.TL_peerChannel;
+    }
+
     public boolean isUnread() {
         return messageOwner.unread;
     }

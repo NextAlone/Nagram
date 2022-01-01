@@ -148,6 +148,7 @@ import tw.nekomimi.nekogram.accessibility.AccConfig;
 import xyz.nextalone.nagram.NaConfig;
 
 import java.io.File;
+import java.lang.Character;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10312,6 +10313,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     adminLabel = LocaleController.getString("ChatAdmin", R.string.ChatAdmin);
                 }
                 adminString = adminLabel;
+                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
+                nameWidth -= adminWidth;
+            } else if (isMegagroup && currentChat != null && currentMessageObject.isSenderChannel()) {
+                adminString = new String(Character.toChars(0x1F4E2));
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;
             } else {
