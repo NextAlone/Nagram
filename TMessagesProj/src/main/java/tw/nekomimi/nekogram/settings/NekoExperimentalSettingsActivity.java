@@ -488,7 +488,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     } else if (position == disableChatActionSendingRow) { // Nagram
                         textCell.setTextAndCheck(LocaleController.getString("DisableChatActionSending", R.string.DisableChatActionSending), NekoConfig.disableChatActionSending, false);
                     } else if (position == hideGroupStickerRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.hideGroupSticker), NekoConfig.hideGroupSticker, false);
+                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.HideGroupSticker), NekoConfig.hideGroupSticker, false);
                     } else if (position == blockSponsoredMessageRow) {
                         textCell.setTextAndCheck(LocaleController.getString("BlockSponsoredMessage", R.string.BlockSponsoredMessage), NekoConfig.blockSponsoredMessage, true);
                     }
