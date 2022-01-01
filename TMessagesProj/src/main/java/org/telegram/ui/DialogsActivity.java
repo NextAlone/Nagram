@@ -1883,6 +1883,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             accountInstance.getMediaDataController().loadRecents(MediaDataController.TYPE_FAVE, false, true, false);
             accountInstance.getMediaDataController().loadRecents(MediaDataController.TYPE_GREETINGS, false, true, false);
             accountInstance.getMediaDataController().checkFeaturedStickers();
+            accountInstance.getMediaDataController().checkReactions();
             for (String emoji : messagesController.diceEmojies) {
                 accountInstance.getMediaDataController().loadStickersByEmojiOrName(emoji, true, true);
             }
@@ -2595,6 +2596,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPage.addView(viewPage.progressView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
             viewPage.listView = new DialogsRecyclerView(context, viewPage);
+            viewPage.listView.setAccessibilityEnabled(false);
             viewPage.listView.setAnimateEmptyView(true, 0);
             viewPage.listView.setClipToPadding(false);
             viewPage.listView.setPivotY(0);
@@ -6472,6 +6474,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 askingForPermissions = false;
                 showFiltersHint();
             }
+        } else if (requestCode == 4) {
+            boolean allGranted = true;
+            for (int a = 0; a < grantResults.length; a++) {
+                if (grantResults[a] != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+//            if (allGranted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && FilesMigrationService.filesMigrationBottomSheet != null) {
+//                FilesMigrationService.filesMigrationBottomSheet.migrateOldFolder();
+//            }
+
         }
     }
 

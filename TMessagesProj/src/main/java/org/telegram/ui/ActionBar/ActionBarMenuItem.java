@@ -1632,6 +1632,7 @@ public class ActionBarMenuItem extends FrameLayout {
             popupLayout.getItemAt(a).setVisibility(GONE);
         }
         measurePopup = true;
+        checkHideMenuItem();
     }
 
     public boolean isSubItemVisible(int id) {

@@ -144,7 +144,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         }
         isPrivate = !isForcePublic && TextUtils.isEmpty(currentChat.username);
         isChannel = ChatObject.isChannel(currentChat) && !currentChat.megagroup;
-        isSaveRestricted = /*isPrivate && */currentChat.noforwards;
+        isSaveRestricted = currentChat.noforwards;
         if (isForcePublic && TextUtils.isEmpty(currentChat.username) || isPrivate && currentChat.creator) {
             TLRPC.TL_channels_checkUsername req = new TLRPC.TL_channels_checkUsername();
             req.username = "1";
@@ -472,7 +472,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     private void processDone() {
-        if (/*isPrivate && */currentChat.noforwards != isSaveRestricted) {
+        if (currentChat.noforwards != isSaveRestricted) {
             getMessagesController().toggleChatNoForwards(chatId, currentChat.noforwards = isSaveRestricted);
         }
         if (trySetUsername()) {
@@ -615,7 +615,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             }
             publicContainer.setVisibility(isPrivate ? View.GONE : View.VISIBLE);
             privateContainer.setVisibility(isPrivate ? View.VISIBLE : View.GONE);
-            //saveContainer.setVisibility(isPrivate ? View.VISIBLE : View.GONE);
+            //saveContainer.setVisibility(View.VISIBLE);
             manageLinksTextView.setVisibility(View.VISIBLE);
             manageLinksInfoCell.setVisibility(View.VISIBLE);
             linkContainer.setPadding(0, 0, 0, isPrivate ? 0 : AndroidUtilities.dp(7));

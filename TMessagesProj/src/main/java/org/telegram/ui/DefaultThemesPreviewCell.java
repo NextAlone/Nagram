@@ -112,7 +112,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                 }
             }
 
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, info, true, null, accentId);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, info, false, null, accentId);
 
             selectedPosition = position;
             for (int i = 0; i < adapter.items.size(); i++) {
@@ -248,7 +248,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
 
             if (!Theme.isCurrentThemeDay()) {
                 darkThemeDrawable.setCurrentFrame(darkThemeDrawable.getFramesCount() - 1);
-                dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDaytMode", R.string.SettingsSwitchToDayMode), darkThemeDrawable, true);
+                dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", R.string.SettingsSwitchToDayMode), darkThemeDrawable, true);
             } else {
                 dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", R.string.SettingsSwitchToNightMode), darkThemeDrawable, true);
             }

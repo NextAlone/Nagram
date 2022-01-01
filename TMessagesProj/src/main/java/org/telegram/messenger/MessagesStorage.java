@@ -21,6 +21,9 @@ import android.util.SparseIntArray;
 
 import androidx.annotation.UiThread;
 
+import androidx.annotation.UiThread;
+import androidx.collection.LongSparseArray;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
@@ -121,7 +124,7 @@ public class MessagesStorage extends BaseController {
     private CountDownLatch openSync = new CountDownLatch(1);
 
     private static SparseArray<MessagesStorage> Instance = new SparseArray();
-    private final static int LAST_DB_VERSION = 86;
+    private final static int LAST_DB_VERSION = 87;
     private boolean databaseMigrationInProgress;
 
     public static MessagesStorage getInstance(int num) {
@@ -296,7 +299,7 @@ public class MessagesStorage extends BaseController {
         shmCacheFile = new File(filesDir, "cache4.db-shm");
 
         boolean createTable = false;
-        //cacheFile.delete();
+
         if (!cacheFile.exists()) {
             createTable = true;
         }
@@ -426,6 +429,7 @@ public class MessagesStorage extends BaseController {
                 database.executeFast("CREATE TABLE polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
                 database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
 
+                database.executeFast("CREATE TABLE reactions(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
                 //version
                 database.executeFast("PRAGMA user_version = " + LAST_DB_VERSION).stepThis().dispose();
             } else {
@@ -456,6 +460,9 @@ public class MessagesStorage extends BaseController {
                     }
                     cursor.dispose();
                 } catch (Exception e) {
+                    if (e.getMessage() != null && e.getMessage().contains("malformed")) {
+                        throw new RuntimeException("malformed");
+                    }
                     FileLog.e(e);
                     try {
                         database.executeFast("CREATE TABLE IF NOT EXISTS params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
@@ -1553,6 +1560,12 @@ public class MessagesStorage extends BaseController {
             executeNoException("UPDATE scheduled_messages_v2 SET replydata = NULL");
             database.executeFast("PRAGMA user_version = 86").stepThis().dispose();
             version = 86;
+        }
+
+        if (version == 86) {
+            database.executeFast("CREATE TABLE IF NOT EXISTS reactions(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
+            database.executeFast("PRAGMA user_version = 87").stepThis().dispose();
+            version = 87;
         }
 
         FileLog.d("MessagesStorage db migration finished");
@@ -6041,6 +6054,9 @@ public class MessagesStorage extends BaseController {
                             participant = TLRPC.ChannelParticipant.TLdeserialize(data, data.readInt32(false), false);
                             data.reuse();
                         }
+                        if (participant != null && participant.user_id == getUserConfig().clientUserId) {
+                            user = getUserConfig().getCurrentUser();
+                        }
                         if (user != null && participant != null) {
                             if (user.status != null) {
                                 user.status.expires = cursor.intValue(1);
@@ -8774,7 +8790,7 @@ public class MessagesStorage extends BaseController {
             try {
                 SQLitePreparedStatement state = database.executeFast("UPDATE messages_v2 SET replies_data = ? WHERE mid = ? AND uid = ?");
                 TLRPC.MessageReplies currentReplies = null;
-                SQLiteCursor cursor = database.queryFinalized(String.format("SELECT replies_data FROM messages_v2 WHERE mid = %d AND uid = %d", mid, -chatId));
+                SQLiteCursor cursor = database.queryFinalized(String.format(Locale.ENGLISH, "SELECT replies_data FROM messages_v2 WHERE mid = %d AND uid = %d", mid, -chatId));
                 if (cursor.next()) {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
