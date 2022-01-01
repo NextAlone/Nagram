@@ -37,3 +37,7 @@ Nagram is forked from Telegram, thus most locales follows the translations of Te
 
 As for the Nagram specialized strings, we use Crowdin to translate Nagram. Join project at https://neko.crowdin.com/nekogram. Help us bring Nagram to the world!
 
+## Thanks
+
+- [Nekogram](https://gitlab.com/Nekogram/Nekogram)
+- [Pigeongram](https://gitlab.com/JasonKhew96/Nekogram)
