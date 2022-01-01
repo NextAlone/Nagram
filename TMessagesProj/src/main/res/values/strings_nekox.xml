@@ -235,7 +235,7 @@
     <string name="AutoLockImmediately">Immediately</string>
     <string name="BackupSettings">Backup settings</string>
     <string name="ImportSettings">Import settings</string>
-    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
+    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings\? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
     <string name="nekoXPaymentRemovedToast">The payment function has been removed.</string>
     <string name="VersionUpdateTitle">New Version Available</string>
     <string name="VersionUpdateVariantNotMatch">Version variants fail to match automatically.\nPlease download manually from GitHub.</string>
@@ -247,7 +247,6 @@
     <string name="AutoCheckUpdateSwitch">Automatic Update</string>
     <string name="AutoCheckUpdateStable">Stable</string>
     <string name="AutoCheckUpdateRc">Release Candidate</string>
-
     <string name="unreadBadgeOnBackButton">Unread badge on back button</string>
     <string name="customPublicProxyIP">Set IP of public proxy</string>
     <string name="customPublicProxyIPNotice">In some areas, specifying the IP of public proxy CDN(eg. Cloudflare) can speed up access.</string>
@@ -264,5 +263,4 @@
     <string name="rememberAllBackMessages">Remember all clicked replies</string>
     <string name="DisableInstantCamera">Disable instant camera</string>
     <string name="showSeconds">Show timestamp in seconds</string>
-    
 </resources>

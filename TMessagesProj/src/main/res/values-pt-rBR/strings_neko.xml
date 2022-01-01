@@ -124,4 +124,5 @@
     <string name="hideGroupSticker">Ocultar sticker do grupo</string>
     <string name="enablePublicProxy">Proxy Público do NekoX</string>
     <string name="autoUpdateSubInfo">Atualizar proxies automaticamente</string>
+    <string name="hideSendAsChannel">Ocultar enviar como canal</string>
 </resources>

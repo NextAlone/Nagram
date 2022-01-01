@@ -201,7 +201,7 @@
     <string name="HideDeviceInfoOff">Das Gerätemodell wird beim zweiten Start der App nach dem Anmelden hochgeladen.</string>
     <string name="HideDeviceInfo">Gerätemodell ausblenden</string>
     <string name="DisableTrending">Trend deaktivieren</string>
-    <string name="ReplaceRegex">Verwenden Sie Regex</string>
+    <string name="ReplaceRegex">Regex verwenden</string>
     <string name="TextReplace">Ersetzen</string>
     <string name="TextOrigin">Ursprung</string>
     <string name="ReplaceText">Text ersetzen</string>
@@ -221,4 +221,16 @@
     <string name="UnpinSticker">Loslösen</string>
     <string name="PinSticker">Anheften</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="DismissForYourself">Für dich selbst verwerfen</string>
+    <string name="EnableStickerPin">Sticker anheften ermöglichen</string>
+    <string name="ShareMessages">Teilen</string>
+    <string name="AutoDownload">Automatisches Herunterladen</string>
+    <string name="ArchiveFiles">Archiv-Dateien</string>
+    <string name="EnableStickerPinAbout">Heftet Sticker an und synchronisiert diese mit der Cloud, selbst wenn neue Sticker zugefügt werden.
+\nDeaktiviert zugleich Beliebte und Letzte Sticker.</string>
+    <string name="UsePersiancalendar">Persischen Kalender benutzen</string>
+    <string name="AddProxyWs">WebSocket-Relay hinzufügen</string>
+    <string name="ProxyInfoWS">WebSocket-Relay Einstellungen</string>
+    <string name="AutoLockImmediately">Sofort</string>
+    <string name="WsPayload">WebSocket-Payload</string>
 </resources>
