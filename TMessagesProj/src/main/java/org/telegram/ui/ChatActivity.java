@@ -2703,34 +2703,52 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             editTextItem.setTag(null);
             editTextItem.setVisibility(View.GONE);
             SpannableStringBuilder stringBuilder;
-            if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
-                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
-                TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-                run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
-                stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                editTextItem.addSubItem(text_strike, stringBuilder);
+            if (NekoConfig.showTextStrike) {
+                if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
+                    stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
+                    TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
+                    run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
+                    stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    editTextItem.addSubItem(text_strike, stringBuilder);
+                }
             }
-            editTextItem.addSubItem(text_spoiler, LocaleController.getString("Spoiler", R.string.Spoiler));
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
-            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            editTextItem.addSubItem(text_bold, stringBuilder);
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
-            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            editTextItem.addSubItem(text_italic, stringBuilder);
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
-            stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            editTextItem.addSubItem(text_mono, stringBuilder);
-            if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
-                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
-                TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-                run.flags |= TextStyleSpan.FLAG_STYLE_UNDERLINE;
-                stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                editTextItem.addSubItem(text_underline, stringBuilder);
+            if (NekoConfig.showTextSpoiler) {
+                editTextItem.addSubItem(text_spoiler, LocaleController.getString("Spoiler", R.string.Spoiler));
             }
-            editTextItem.addSubItem(text_link, LocaleController.getString("CreateLink", R.string.CreateLink));
-            editTextItem.addSubItem(text_mention, LocaleController.getString("CreateMention", R.string.CreateMention));
-            editTextItem.addSubItem(text_regular, LocaleController.getString("Regular", R.string.Regular));
-
+            if (NekoConfig.showTextBold) {
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
+                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                editTextItem.addSubItem(text_bold, stringBuilder);
+            }
+            if (NekoConfig.showTextItalic) {
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
+                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                editTextItem.addSubItem(text_italic, stringBuilder);
+            }
+            if (NekoConfig.showTextMono) {
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
+                stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                editTextItem.addSubItem(text_mono, stringBuilder);
+            }
+            if (NekoConfig.showTextUnderline) {
+                if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
+                    stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
+                    TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
+                    run.flags |= TextStyleSpan.FLAG_STYLE_UNDERLINE;
+                    stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    editTextItem.addSubItem(text_underline, stringBuilder);
+                }
+            }
+            if (NekoConfig.showTextCreateLink) {
+                editTextItem.addSubItem(text_link, LocaleController.getString("CreateLink", R.string.CreateLink));
+            }
+            if (NekoConfig.showTextCreateMention) {
+                editTextItem.addSubItem(text_mention, LocaleController.getString("CreateMention", R.string.CreateMention));
+            }
+            if (NekoConfig.showTextRegular) {
+                editTextItem.addSubItem(text_regular, LocaleController.getString("Regular", R.string.Regular));
+            }
+    
             if (searchItem != null) {
                 headerItem.addSubItem(search, R.drawable.msg_search, LocaleController.getString("Search", R.string.Search), themeDelegate);
             }
@@ -18200,32 +18218,51 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         int order = 6;
         SpannableStringBuilder stringBuilder;
-        if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
-            TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-            run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
-            stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            menu.add(R.id.menu_groupbolditalic, R.id.menu_strike, order++, stringBuilder);}
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_spoiler, order++, LocaleController.getString("Spoiler", R.string.Spoiler));
-        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
-        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_bold, order++, stringBuilder);
-        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
-        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_italic, order++, stringBuilder);
-        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
-        stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, order++, stringBuilder);
-        if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
-            TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-            run.flags |= TextStyleSpan.FLAG_STYLE_UNDERLINE;
-            stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            menu.add(R.id.menu_groupbolditalic, R.id.menu_underline, order++, stringBuilder);
+        if (NekoConfig.showTextStrike) {
+            if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
+                TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
+                run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
+                stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                menu.add(R.id.menu_groupbolditalic, R.id.menu_strike, order++, stringBuilder);
+            }
         }
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_link, order++, LocaleController.getString("CreateLink", R.string.CreateLink));
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_mention, order++, LocaleController.getString("CreateMention", R.string.CreateMention));
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, order++, LocaleController.getString("Regular", R.string.Regular));
+        if (NekoConfig.showTextSpoiler) {
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_spoiler, order++, LocaleController.getString("Spoiler", R.string.Spoiler));
+        }
+        if (NekoConfig.showTextBold) {
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
+            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_bold, order++, stringBuilder);
+        }
+        if (NekoConfig.showTextItalic) {
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
+            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_italic, order++, stringBuilder);
+        }
+        if (NekoConfig.showTextMono) {
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
+            stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, order++, stringBuilder);
+        }
+        if (NekoConfig.showTextUnderline) {
+            if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
+                TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
+                run.flags |= TextStyleSpan.FLAG_STYLE_UNDERLINE;
+                stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                menu.add(R.id.menu_groupbolditalic, R.id.menu_underline, order++, stringBuilder);
+            }
+        }
+        if (NekoConfig.showTextCreateLink) {
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_link, order++, LocaleController.getString("CreateLink", R.string.CreateLink));
+        }
+        if (NekoConfig.showTextCreateMention) {
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_mention, order++, LocaleController.getString("CreateMention", R.string.CreateMention));
+        }
+        if (NekoConfig.showTextRegular) {
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, order++, LocaleController.getString("Regular", R.string.Regular));
+        }
     }
 
     private void updateScheduledInterface(boolean animated) {

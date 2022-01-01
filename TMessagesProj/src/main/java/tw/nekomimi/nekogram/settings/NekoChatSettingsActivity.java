@@ -77,14 +77,16 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int disableVoiceMessageAutoPlayRow;
     private int autoPauseVideoRow;
     private int messageMenuRow;
+    // Nagram
+    private int textStyleRow;
     private int chat2Row;
-
+    
     private int foldersRow;
     private int showTabsOnForwardRow;
     private int hideAllTabRow;
     private int tabsTitleTypeRow;
     private int folders2Row;
-
+    
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -149,6 +151,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 }
             } else if (position == messageMenuRow) {
                 showMessageMenuAlert();
+            } else if (position == textStyleRow) {
+                showTextStyleAlert();
             } else if (position == disablePhotoSideActionRow) {
                 NekoConfig.toggleDisablePhotoSideAction();
                 if (view instanceof TextCheckCell) {
@@ -264,6 +268,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         disableVoiceMessageAutoPlayRow = rowCount++;
         autoPauseVideoRow = rowCount++;
         messageMenuRow = rowCount++;
+        textStyleRow = rowCount++;
         chat2Row = rowCount++;
 
         foldersRow = rowCount++;
@@ -459,7 +464,122 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         builder.setView(linearLayout);
         showDialog(builder.create());
     }
-
+    
+    private void showTextStyleAlert() {
+        if (getParentActivity() == null) {
+            return;
+        }
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString("TextStyle", R.string.TextStyle));
+        
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        
+        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
+        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        
+        int count = 9;
+        for (int a = 0; a < count; a++) {
+            TextCheckCell textCell = new TextCheckCell(context);
+            switch (a) {
+                case 0: {
+                    textCell.setTextAndCheck(LocaleController.getString("Strike", R.string.Strike), NekoConfig.showTextStrike, false);
+                    break;
+                }
+                case 1: {
+                    textCell.setTextAndCheck(LocaleController.getString("Spoiler", R.string.Spoiler), NekoConfig.showTextSpoiler, false);
+                    break;
+                }
+                case 2: {
+                    textCell.setTextAndCheck(LocaleController.getString("Bold", R.string.Bold), NekoConfig.showTextBold, false);
+                    break;
+                }
+                case 3: {
+                    textCell.setTextAndCheck(LocaleController.getString("Italic", R.string.Italic), NekoConfig.showTextItalic, false);
+                    break;
+                }
+                case 4: {
+                    textCell.setTextAndCheck(LocaleController.getString("Mono", R.string.Mono), NekoConfig.showTextMono, false);
+                    break;
+                }
+                case 5: {
+                    textCell.setTextAndCheck(LocaleController.getString("Underline", R.string.Underline), NekoConfig.showTextUnderline, false);
+                    break;
+                }
+                case 6: {
+                    textCell.setTextAndCheck(LocaleController.getString("CreateLink", R.string.CreateLink), NekoConfig.showTextCreateLink, false);
+                    break;
+                }
+                case 7: {
+                    textCell.setTextAndCheck(LocaleController.getString("CreateMention", R.string.CreateMention), NekoConfig.showTextCreateMention, false);
+                    break;
+                }
+                case 8: {
+                    textCell.setTextAndCheck(LocaleController.getString("Regular", R.string.Regular), NekoConfig.showTextRegular, false);
+                    break;
+                }
+            }
+            textCell.setTag(a);
+            textCell.setBackground(Theme.getSelectorDrawable(false));
+            linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            textCell.setOnClickListener(v2 -> {
+                Integer tag = (Integer) v2.getTag();
+                switch (tag) {
+                    case 0: {
+                        NekoConfig.toggleShowTextStrike();
+                        textCell.setChecked(NekoConfig.showTextStrike);
+                        break;
+                    }
+                    case 1: {
+                        NekoConfig.toggleShowTextSpoiler();
+                        textCell.setChecked(NekoConfig.showTextSpoiler);
+                        break;
+                    }
+                    case 2: {
+                        NekoConfig.toggleShowTextBold();
+                        textCell.setChecked(NekoConfig.showTextBold);
+                        break;
+                    }
+                    case 3: {
+                        NekoConfig.toggleShowTextItalic();
+                        textCell.setChecked(NekoConfig.showTextItalic);
+                        break;
+                    }
+                    case 4: {
+                        NekoConfig.toggleShowTextMono();
+                        textCell.setChecked(NekoConfig.showTextMono);
+                        break;
+                    }
+                    case 5: {
+                        NekoConfig.toggleShowTextUnderline();
+                        textCell.setChecked(NekoConfig.showTextUnderline);
+                        break;
+                    }
+                    case 6: {
+                        NekoConfig.toggleShowTextCreateLink();
+                        textCell.setChecked(NekoConfig.showTextCreateLink);
+                        break;
+                    }
+                    case 7: {
+                        NekoConfig.toggleShowTextCreateMention();
+                        textCell.setChecked(NekoConfig.showTextCreateMention);
+                        break;
+                    }
+                    case 8: {
+                        NekoConfig.toggleShowTextRegular();
+                        textCell.setChecked(NekoConfig.showTextRegular);
+                        break;
+                    }
+                }
+            });
+        }
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setView(linearLayout);
+        showDialog(builder.create());
+    }
+    
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.emojiLoaded) {
@@ -468,7 +588,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             }
         }
     }
-
+    
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
@@ -588,6 +708,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndValue(LocaleController.getString("StickerSize", R.string.StickerSize), String.valueOf(Math.round(NekoConfig.stickerSize)), true);
                     } else if (position == messageMenuRow) {
                         textCell.setText(LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
+                    } else if (position == textStyleRow) {
+                        textCell.setText(LocaleController.getString("TextStyle", R.string.TextStyle), false);
                     } else if (position == tabsTitleTypeRow) {
                         String value;
                         switch (NekoConfig.tabsTitleType) {
@@ -713,7 +835,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         public int getItemViewType(int position) {
             if (position == chat2Row || position == stickerSize2Row) {
                 return 1;
-            } else if (position == messageMenuRow || position == tabsTitleTypeRow) {
+            } else if (position == messageMenuRow || position == textStyleRow || position == tabsTitleTypeRow) {
                 return 2;
             } else if (position == showTabsOnForwardRow || position == hideAllTabRow ||
                     (position > chatRow && position < messageMenuRow)) {
