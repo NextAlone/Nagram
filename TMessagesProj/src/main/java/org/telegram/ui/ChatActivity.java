@@ -22861,6 +22861,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     toSend.append('你');
                                 } else if (c == '你') {
                                     toSend.append('我');
+                                } else if (c == '咱') {
+                                    toSend.append('您');
+                                } else if (c == '您') {
+                                    toSend.append('咱');
                                 } else {
                                     toSend.append(c);
                                 }
