@@ -1,0 +1,46 @@
+name: Debug build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Gradle Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+      - name: Native Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/.cxx
+            TMessagesProj/build
+          key: build-cache
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - name: Prepare Environment
+        run: |
+          sudo apt-get install bison gcc make curl ninja-build ccache -y
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+      - name: Debug Build
+        run: |
+          echo -e "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}\nRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}\nRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}">>local.properties
+          ./gradlew TMessagesProj:assemble
+
+      - uses: actions/upload-artifact@v2
+        name: Upload apk
+        with:
+          name: Nullgram
+          path: TMessagesProj/build/outputs/apk

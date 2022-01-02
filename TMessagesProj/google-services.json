@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "760348033671",
-    "firebase_url": "https://tmessages2.firebaseio.com",
-    "project_id": "tmessages2",
-    "storage_bucket": "tmessages2.appspot.com"
+    "project_number": "218019652733",
+    "firebase_url": "https://nullgram-c415d-default-rtdb.firebaseio.com",
+    "project_id": "nullgram-c415d",
+    "storage_bucket": "nullgram-c415d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:760348033671:android:f6afd7b67eae3860",
+        "mobilesdk_app_id": "1:218019652733:android:2e95d1dad87c2bc5adfd14",
         "android_client_info": {
-          "package_name": "org.telegram.messenger"
+          "package_name": "top.qwq2333.nullgram"
         }
       },
       "oauth_client": [
         {
-          "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+          "client_id": "218019652733-s2gonc2ar19hdagkmo5fjro8vf65dna2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"
+          "current_key": "AIzaSyCPOX02ywCT9cM-KHvOTuZok77HXN8-1eI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+              "client_id": "218019652733-s2gonc2ar19hdagkmo5fjro8vf65dna2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,27 +37,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:760348033671:android:dc022572c167a16c",
+        "mobilesdk_app_id": "1:218019652733:android:196d9b2c6f2bbdc7adfd14",
         "android_client_info": {
-          "package_name": "org.telegram.messenger.beta"
+          "package_name": "top.qwq2333.nullgram.beta"
         }
       },
       "oauth_client": [
         {
-          "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+          "client_id": "218019652733-s2gonc2ar19hdagkmo5fjro8vf65dna2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"
+          "current_key": "AIzaSyCPOX02ywCT9cM-KHvOTuZok77HXN8-1eI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+              "client_id": "218019652733-s2gonc2ar19hdagkmo5fjro8vf65dna2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -66,27 +66,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:760348033671:android:7396e651423888c3f66e22",
+        "mobilesdk_app_id": "1:218019652733:android:8ebe5d1e5fae0953adfd14",
         "android_client_info": {
-          "package_name": "org.telegram.messenger.web"
+          "package_name": "top.qwq2333.nullgram.web"
         }
       },
       "oauth_client": [
         {
-          "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+          "client_id": "218019652733-s2gonc2ar19hdagkmo5fjro8vf65dna2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"
+          "current_key": "AIzaSyCPOX02ywCT9cM-KHvOTuZok77HXN8-1eI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+              "client_id": "218019652733-s2gonc2ar19hdagkmo5fjro8vf65dna2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
