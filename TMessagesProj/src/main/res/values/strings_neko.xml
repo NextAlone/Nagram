@@ -184,13 +184,6 @@
     <string name="TranslatorTypeTG">Popup dialog</string>
     <string name="TranslatorTypeExternal">External app</string>
 
-    <!-- Nagram -->
-    <string name="ForceAllowCopy">Force allow copy</string>
-    <string name="DisableChatActionSending">Disable chat action sending</string>
-    <string name="HideGroupSticker">Hide group sticker</string>
-    <string name="ReReply">Re-reply</string>
-    <string name="TextStyle">Text style</string>
-
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>
     <string name="AccRewindHeading">Settings of rewind</string>

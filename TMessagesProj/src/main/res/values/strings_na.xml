@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ForceAllowCopy">Force allow copy</string>
+    <string name="DisableChatActionSending">Disable chat action sending</string>
+    <string name="HideGroupSticker">Hide group sticker</string>
+    <string name="ReReply">Re-reply</string>
+    <string name="TextStyle">Text style</string>
+</resources>
