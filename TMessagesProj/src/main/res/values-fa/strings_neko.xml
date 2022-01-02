@@ -118,4 +118,10 @@
     <string name="UseMediaStreamInVoip">استفاده از حالت صدای رسانه در تماس</string>
     <string name="TakeGIFasVideo">نمایش گیف بصورت ویدیو</string>
     <string name="DontSendGreetingSticker">عدم ارسال استیکر خوش‌آمد گویی</string>
+    <string name="enablePublicProxy">پروکسی عمومی NekoX</string>
+    <string name="autoUpdateSubInfo">بروزرسانی خودکار پروکسی‌های عمومی</string>
+    <string name="hideSendAsChannel">مخفی کردن «ارسال به عنوان کانال»</string>
+    <string name="disableSwipeToNextChannel">غیرفعال کردن کشیدن انگشت به کانال بعدی</string>
+    <string name="disableChoosingSticker">فرستادن «در‌حال‌نوشتن...» به جای «در‌حال‌انتخاب‌استیکر...»</string>
+    <string name="hideGroupSticker">پنهان‌سازی استیکر گروه</string>
 </resources>
