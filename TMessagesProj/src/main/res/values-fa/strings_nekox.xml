@@ -251,4 +251,8 @@
     <string name="VersionUpdateVariantNotMatch">نوع نسخه بطور خودکار تشخیص داده نشد.
 \nلطفا بصورت دستی از گیت‌هاب دانلود کنید.</string>
     <string name="VersionUpdateTitle">نسخه جدید در دسترس است</string>
+    <string name="customPublicProxyIP">تنظیم آی‌پی پروکسی عمومی</string>
+    <string name="ShareMessages">به اشتراک گذاری</string>
+    <string name="unreadBadgeOnBackButton">نمایش تعداد پیام‌های خوانده نشده روی دکمه‌ی بازگشت</string>
+    <string name="customPublicProxyIPNotice">در بعضی از مناطق، تنظیم آی‌پی پروکسی سی‌دی‌ان (مثل Cloudflare) می‌تواند سرعت دسترسی را بهبود دهد.</string>
 </resources>
