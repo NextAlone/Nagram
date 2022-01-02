@@ -48,6 +48,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.PopupHelper;
+import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -387,7 +388,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 }
                 case 11: {
-                    textCell.setTextAndCheck(LocaleController.getString("ReReply", R.string.ReReply), NekoConfig.showReReply, false);
+                    textCell.setTextAndCheck(LocaleController.getString("ReReply", R.string.ReReply), NaConfig.showReReply, false);
                     break;
                 }
             }
@@ -453,8 +454,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         break;
                     }
                     case 11:{
-                        NekoConfig.toggleShowReReply();
-                        textCell.setChecked(NekoConfig.showReReply);
+                        NaConfig.toggleShowReReply();
+                        textCell.setChecked(NaConfig.showReReply);
                         break;
                     }
                 }
@@ -485,39 +486,39 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
                 case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("Strike", R.string.Strike), NekoConfig.showTextStrike, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Strike", R.string.Strike), NaConfig.showTextStrike, false);
                     break;
                 }
                 case 1: {
-                    textCell.setTextAndCheck(LocaleController.getString("Spoiler", R.string.Spoiler), NekoConfig.showTextSpoiler, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Spoiler", R.string.Spoiler), NaConfig.showTextSpoiler, false);
                     break;
                 }
                 case 2: {
-                    textCell.setTextAndCheck(LocaleController.getString("Bold", R.string.Bold), NekoConfig.showTextBold, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Bold", R.string.Bold), NaConfig.showTextBold, false);
                     break;
                 }
                 case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("Italic", R.string.Italic), NekoConfig.showTextItalic, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Italic", R.string.Italic), NaConfig.showTextItalic, false);
                     break;
                 }
                 case 4: {
-                    textCell.setTextAndCheck(LocaleController.getString("Mono", R.string.Mono), NekoConfig.showTextMono, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Mono", R.string.Mono), NaConfig.showTextMono, false);
                     break;
                 }
                 case 5: {
-                    textCell.setTextAndCheck(LocaleController.getString("Underline", R.string.Underline), NekoConfig.showTextUnderline, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Underline", R.string.Underline), NaConfig.showTextUnderline, false);
                     break;
                 }
                 case 6: {
-                    textCell.setTextAndCheck(LocaleController.getString("CreateLink", R.string.CreateLink), NekoConfig.showTextCreateLink, false);
+                    textCell.setTextAndCheck(LocaleController.getString("CreateLink", R.string.CreateLink), NaConfig.showTextCreateLink, false);
                     break;
                 }
                 case 7: {
-                    textCell.setTextAndCheck(LocaleController.getString("CreateMention", R.string.CreateMention), NekoConfig.showTextCreateMention, false);
+                    textCell.setTextAndCheck(LocaleController.getString("CreateMention", R.string.CreateMention), NaConfig.showTextCreateMention, false);
                     break;
                 }
                 case 8: {
-                    textCell.setTextAndCheck(LocaleController.getString("Regular", R.string.Regular), NekoConfig.showTextRegular, false);
+                    textCell.setTextAndCheck(LocaleController.getString("Regular", R.string.Regular), NaConfig.showTextRegular, false);
                     break;
                 }
             }
@@ -528,48 +529,48 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 Integer tag = (Integer) v2.getTag();
                 switch (tag) {
                     case 0: {
-                        NekoConfig.toggleShowTextStrike();
-                        textCell.setChecked(NekoConfig.showTextStrike);
+                        NaConfig.toggleShowTextStrike();
+                        textCell.setChecked(NaConfig.showTextStrike);
                         break;
                     }
                     case 1: {
-                        NekoConfig.toggleShowTextSpoiler();
-                        textCell.setChecked(NekoConfig.showTextSpoiler);
+                        NaConfig.toggleShowTextSpoiler();
+                        textCell.setChecked(NaConfig.showTextSpoiler);
                         break;
                     }
                     case 2: {
-                        NekoConfig.toggleShowTextBold();
-                        textCell.setChecked(NekoConfig.showTextBold);
+                        NaConfig.toggleShowTextBold();
+                        textCell.setChecked(NaConfig.showTextBold);
                         break;
                     }
                     case 3: {
-                        NekoConfig.toggleShowTextItalic();
-                        textCell.setChecked(NekoConfig.showTextItalic);
+                        NaConfig.toggleShowTextItalic();
+                        textCell.setChecked(NaConfig.showTextItalic);
                         break;
                     }
                     case 4: {
-                        NekoConfig.toggleShowTextMono();
-                        textCell.setChecked(NekoConfig.showTextMono);
+                        NaConfig.toggleShowTextMono();
+                        textCell.setChecked(NaConfig.showTextMono);
                         break;
                     }
                     case 5: {
-                        NekoConfig.toggleShowTextUnderline();
-                        textCell.setChecked(NekoConfig.showTextUnderline);
+                        NaConfig.toggleShowTextUnderline();
+                        textCell.setChecked(NaConfig.showTextUnderline);
                         break;
                     }
                     case 6: {
-                        NekoConfig.toggleShowTextCreateLink();
-                        textCell.setChecked(NekoConfig.showTextCreateLink);
+                        NaConfig.toggleShowTextCreateLink();
+                        textCell.setChecked(NaConfig.showTextCreateLink);
                         break;
                     }
                     case 7: {
-                        NekoConfig.toggleShowTextCreateMention();
-                        textCell.setChecked(NekoConfig.showTextCreateMention);
+                        NaConfig.toggleShowTextCreateMention();
+                        textCell.setChecked(NaConfig.showTextCreateMention);
                         break;
                     }
                     case 8: {
-                        NekoConfig.toggleShowTextRegular();
-                        textCell.setChecked(NekoConfig.showTextRegular);
+                        NaConfig.toggleShowTextRegular();
+                        textCell.setChecked(NaConfig.showTextRegular);
                         break;
                     }
                 }

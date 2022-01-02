@@ -119,6 +119,7 @@ import java.util.List;
 import java.util.Map;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class EmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -3293,7 +3294,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             stickerSets.add(pack);
         }
-        if (info != null && !NekoConfig.hideGroupSticker) {
+        if (info != null && !NaConfig.hideGroupSticker) {
             long hiddenStickerSetId = MessagesController.getEmojiSettings(currentAccount).getLong("group_hide_stickers_" + info.id, -1);
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(info.id);
             if (chat == null || info.stickerset == null || !ChatObject.hasAdminRights(chat)) {

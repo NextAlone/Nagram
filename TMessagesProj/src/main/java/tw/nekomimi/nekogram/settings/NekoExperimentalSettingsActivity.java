@@ -50,6 +50,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.PopupHelper;
+import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -231,19 +232,19 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(NekoConfig.shouldNOTTrustMe);
                 }
             } else if (position == forceAllowCopyRow) { // Nagram
-                NekoConfig.toggleForceAllowCopy();
+                NaConfig.toggleForceAllowCopy();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.forceAllowCopy);
+                    ((TextCheckCell) view).setChecked(NaConfig.forceAllowCopy);
                 }
             } else if (position == disableChatActionSendingRow) { // Nagram
-                NekoConfig.toggleDisableChatActionSending();
+                NaConfig.toggleDisableChatActionSending();
                 if (view instanceof  TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.disableChatActionSending);
+                    ((TextCheckCell) view).setChecked(NaConfig.disableChatActionSending);
                 }
             } else if (position == hideGroupStickerRow) { // Nagram
-                NekoConfig.toggleHideGroupSticker();
+                NaConfig.toggleHideGroupSticker();
                 if (view instanceof  TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NekoConfig.hideGroupSticker);
+                    ((TextCheckCell) view).setChecked(NaConfig.hideGroupSticker);
                 }
             } else if (position == emojiRow) {
                 if (!TextUtils.isEmpty(NekoConfig.customEmojiFontPath) && (LocaleController.isRTL && x <= AndroidUtilities.dp(76) || !LocaleController.isRTL && x >= view.getMeasuredWidth() - AndroidUtilities.dp(76))) {
@@ -484,11 +485,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     } else if (position == shouldNOTTrustMeRow) {
                         textCell.setTextAndCheck("", NekoConfig.shouldNOTTrustMe, true);
                     } else if (position == forceAllowCopyRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("ForceAllowCopyRow", R.string.ForceAllowCopy), NekoConfig.forceAllowCopy, true);
+                        textCell.setTextAndCheck(LocaleController.getString("ForceAllowCopyRow", R.string.ForceAllowCopy), NaConfig.forceAllowCopy, true);
                     } else if (position == disableChatActionSendingRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("DisableChatActionSending", R.string.DisableChatActionSending), NekoConfig.disableChatActionSending, false);
+                        textCell.setTextAndCheck(LocaleController.getString("DisableChatActionSending", R.string.DisableChatActionSending), NaConfig.disableChatActionSending, false);
                     } else if (position == hideGroupStickerRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.HideGroupSticker), NekoConfig.hideGroupSticker, false);
+                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.HideGroupSticker), NaConfig.hideGroupSticker, false);
                     } else if (position == blockSponsoredMessageRow) {
                         textCell.setTextAndCheck(LocaleController.getString("BlockSponsoredMessage", R.string.BlockSponsoredMessage), NekoConfig.blockSponsoredMessage, true);
                     }

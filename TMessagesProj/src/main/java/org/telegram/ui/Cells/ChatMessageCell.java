@@ -143,6 +143,7 @@ import org.telegram.ui.SecretMediaViewer;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.accessibility.AccConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -2627,8 +2628,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     private boolean checkTextSelection(MotionEvent event) {
         TextSelectionHelper.ChatListTextSelectionHelper textSelectionHelper = delegate.getTextSelectionHelper();
-        // Nagram force allow copy
-        if (textSelectionHelper == null || !NekoConfig.forceAllowCopy && MessagesController.getInstance(currentAccount).isChatNoForwards(currentMessageObject.getChatId())) {
+        if (textSelectionHelper == null || !NaConfig.forceAllowCopy && MessagesController.getInstance(currentAccount).isChatNoForwards(currentMessageObject.getChatId())) {
             return false;
         }
         boolean hasTextBlocks =

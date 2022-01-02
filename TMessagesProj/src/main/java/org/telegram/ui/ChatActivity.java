@@ -275,6 +275,8 @@ import tw.nekomimi.nekogram.MessageDetailsActivity;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.translator.Translator;
 
+import xyz.nextalone.nagram.NaConfig;
+
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate,
  DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate,
@@ -2703,7 +2705,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             editTextItem.setTag(null);
             editTextItem.setVisibility(View.GONE);
             SpannableStringBuilder stringBuilder;
-            if (NekoConfig.showTextStrike) {
+            if (NaConfig.showTextStrike) {
                 if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
                     stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
                     TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
@@ -2712,25 +2714,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     editTextItem.addSubItem(text_strike, stringBuilder);
                 }
             }
-            if (NekoConfig.showTextSpoiler) {
+            if (NaConfig.showTextSpoiler) {
                 editTextItem.addSubItem(text_spoiler, LocaleController.getString("Spoiler", R.string.Spoiler));
             }
-            if (NekoConfig.showTextBold) {
+            if (NaConfig.showTextBold) {
                 stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
                 stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editTextItem.addSubItem(text_bold, stringBuilder);
             }
-            if (NekoConfig.showTextItalic) {
+            if (NaConfig.showTextItalic) {
                 stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
                 stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editTextItem.addSubItem(text_italic, stringBuilder);
             }
-            if (NekoConfig.showTextMono) {
+            if (NaConfig.showTextMono) {
                 stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
                 stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editTextItem.addSubItem(text_mono, stringBuilder);
             }
-            if (NekoConfig.showTextUnderline) {
+            if (NaConfig.showTextUnderline) {
                 if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
                     stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
                     TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
@@ -2739,13 +2741,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     editTextItem.addSubItem(text_underline, stringBuilder);
                 }
             }
-            if (NekoConfig.showTextCreateLink) {
+            if (NaConfig.showTextCreateLink) {
                 editTextItem.addSubItem(text_link, LocaleController.getString("CreateLink", R.string.CreateLink));
             }
-            if (NekoConfig.showTextCreateMention) {
+            if (NaConfig.showTextCreateMention) {
                 editTextItem.addSubItem(text_mention, LocaleController.getString("CreateMention", R.string.CreateMention));
             }
-            if (NekoConfig.showTextRegular) {
+            if (NaConfig.showTextRegular) {
                 editTextItem.addSubItem(text_regular, LocaleController.getString("Regular", R.string.Regular));
             }
     
@@ -2867,7 +2869,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         // Nagram force allow copy
-        actionMode.getItem(copy).setVisibility(NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+        actionMode.getItem(copy).setVisibility(NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(star).setVisibility(selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
         checkActionBarMenu(false);
@@ -8151,7 +8153,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         try {
             // Nagram force allow copy
             if (currentEncryptedChat != null && Build.VERSION.SDK_INT >= 23 && (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) ||
-                    (!NekoConfig.forceAllowCopy && getMessagesController().isChatNoForwards(currentChat) && getOtherSameChatsDiff() >= 0)) {
+                    (!NaConfig.forceAllowCopy && getMessagesController().isChatNoForwards(currentChat) && getOtherSameChatsDiff() >= 0)) {
                 AndroidUtilities.setFlagSecure(this, true);
             }
         } catch (Throwable e) {
@@ -10112,7 +10114,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private void showTextSelectionHint(MessageObject messageObject) {
         // Nagram force allow copy
-        if (getParentActivity() == null || !NekoConfig.forceAllowCopy && getMessagesController().isChatNoForwards(messageObject.getChatId())) {
+        if (getParentActivity() == null || !NaConfig.forceAllowCopy && getMessagesController().isChatNoForwards(messageObject.getChatId())) {
             return;
         }
         CharSequence text;
@@ -12853,9 +12855,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else {
                         canForwardMessagesCount--;
                     }
-                    if (messageObject.isMusic() && (NekoConfig.forceAllowCopy || !noforwards)) {
+                    if (messageObject.isMusic() && (NaConfig.forceAllowCopy || !noforwards)) {
                         canSaveMusicCount--;
-                    } else if (messageObject.isDocument() && (NekoConfig.forceAllowCopy || !noforwards)) {
+                    } else if (messageObject.isDocument() && (NaConfig.forceAllowCopy || !noforwards)) {
                         canSaveDocumentsCount--;
                     } else {
                         cantSaveMessagesCount--;
@@ -12891,9 +12893,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else {
                         canForwardMessagesCount++;
                     }
-                    if (messageObject.isMusic() && (NekoConfig.forceAllowCopy && !noforwards)) {
+                    if (messageObject.isMusic() && (NaConfig.forceAllowCopy && !noforwards)) {
                         canSaveMusicCount++;
-                    } else if (messageObject.isDocument() && (NekoConfig.forceAllowCopy && !noforwards)) {
+                    } else if (messageObject.isDocument() && (NaConfig.forceAllowCopy && !noforwards)) {
                         canSaveDocumentsCount++;
                     } else {
                         cantSaveMessagesCount++;
@@ -13004,7 +13006,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int copyVisible = copyItem.getVisibility();
                 int starVisible = starItem.getVisibility();
                 // Nagram force allow copy
-                copyItem.setVisibility(NekoConfig.forceAllowCopy || (!noforwards && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0) ? View.VISIBLE : View.GONE);
+                copyItem.setVisibility(NaConfig.forceAllowCopy || (!noforwards && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0) ? View.VISIBLE : View.GONE);
                 starItem.setVisibility(getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount ? View.VISIBLE : View.GONE);
                 int newCopyVisible = copyItem.getVisibility();
                 int newStarVisible = starItem.getVisibility();
@@ -14830,7 +14832,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 AndroidUtilities.setFlagSecure(this, true);
                             } else if (getOtherSameChatsDiff() >= 0) {
                                 // Nagram force allow copy
-                                AndroidUtilities.setFlagSecure(this, (!NekoConfig.forceAllowCopy && getMessagesController().isChatNoForwards(currentChat)));
+                                AndroidUtilities.setFlagSecure(this, (!NaConfig.forceAllowCopy && getMessagesController().isChatNoForwards(currentChat)));
                             }
                         }
                     } catch (Throwable e) {
@@ -18218,7 +18220,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         int order = 6;
         SpannableStringBuilder stringBuilder;
-        if (NekoConfig.showTextStrike) {
+        if (NaConfig.showTextStrike) {
             if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
                 stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
                 TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
@@ -18227,25 +18229,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 menu.add(R.id.menu_groupbolditalic, R.id.menu_strike, order++, stringBuilder);
             }
         }
-        if (NekoConfig.showTextSpoiler) {
+        if (NaConfig.showTextSpoiler) {
             menu.add(R.id.menu_groupbolditalic, R.id.menu_spoiler, order++, LocaleController.getString("Spoiler", R.string.Spoiler));
         }
-        if (NekoConfig.showTextBold) {
+        if (NaConfig.showTextBold) {
             stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             menu.add(R.id.menu_groupbolditalic, R.id.menu_bold, order++, stringBuilder);
         }
-        if (NekoConfig.showTextItalic) {
+        if (NaConfig.showTextItalic) {
             stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             menu.add(R.id.menu_groupbolditalic, R.id.menu_italic, order++, stringBuilder);
         }
-        if (NekoConfig.showTextMono) {
+        if (NaConfig.showTextMono) {
             stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
             stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, order++, stringBuilder);
         }
-        if (NekoConfig.showTextUnderline) {
+        if (NaConfig.showTextUnderline) {
             if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
                 stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
                 TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
@@ -18254,13 +18256,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 menu.add(R.id.menu_groupbolditalic, R.id.menu_underline, order++, stringBuilder);
             }
         }
-        if (NekoConfig.showTextCreateLink) {
+        if (NaConfig.showTextCreateLink) {
             menu.add(R.id.menu_groupbolditalic, R.id.menu_link, order++, LocaleController.getString("CreateLink", R.string.CreateLink));
         }
-        if (NekoConfig.showTextCreateMention) {
+        if (NaConfig.showTextCreateMention) {
             menu.add(R.id.menu_groupbolditalic, R.id.menu_mention, order++, LocaleController.getString("CreateMention", R.string.CreateMention));
         }
-        if (NekoConfig.showTextRegular) {
+        if (NaConfig.showTextRegular) {
             menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, order++, LocaleController.getString("Regular", R.string.Regular));
         }
     }
@@ -20409,7 +20411,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 if (type == -1) {
                     // Nagram force allow copy
-                    if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
+                    if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
                         items.add(LocaleController.getString("Copy", R.string.Copy));
                         options.add(OPTION_COPY);
                         icons.add(R.drawable.msg_copy);
@@ -20481,7 +20483,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     options.add(OPTION_RETRY);
                     icons.add(R.drawable.msg_retry);
                     // Nagram force allow copy
-                    if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                    if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                         items.add(LocaleController.getString("Copy", R.string.Copy));
                         options.add(OPTION_COPY);
                         icons.add(R.drawable.msg_copy);
@@ -20514,7 +20516,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.msg_reply);
                         }
                         // Nagram force allow copy
-                        if ((selectedObject.type == 0 || selectedObject.isDice() || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
+                        if ((selectedObject.type == 0 || selectedObject.isDice() || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
                             items.add(LocaleController.getString("Copy", R.string.Copy));
                             options.add(3);
                             icons.add(R.drawable.msg_copy);
@@ -20553,18 +20555,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         icons.add(R.drawable.msg_pollstop);
                                     }
                                     // Nagram force allow copy
-                                } else if (selectedObject.isMusic() && (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
+                                } else if (selectedObject.isMusic() && (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
                                     items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
                                     options.add(10);
                                     icons.add(R.drawable.msg_download);
-                                } else if (selectedObject.isDocument() && (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
+                                } else if (selectedObject.isDocument() && (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
                                     items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                     options.add(10);
                                     icons.add(R.drawable.msg_download);
                                 }
                             }
                             // Nagram force allow copy
-                        } else if (type == 3 && (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
+                        } else if (type == 3 && (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
                             if (selectedObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && MessageObject.isNewGifDocument(selectedObject.messageOwner.media.webpage.document)) {
                                 items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
                                 options.add(11);
@@ -20578,7 +20580,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.msg_clear);
                             }
                             // Nagram force allow copy
-                            if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                            if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                 if (selectedObject.isVideo()) {
                                     if (!selectedObject.needDrawBluredPreview()) {
                                         items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
@@ -20621,7 +20623,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(5);
                             icons.add(R.drawable.msg_language);
                             // Nagram force allow copy
-                            if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                            if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                 items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                 options.add(10);
                                 icons.add(R.drawable.msg_download);
@@ -20634,7 +20636,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(5);
                             icons.add(R.drawable.msg_theme);
                             // Nagram force allow copy
-                            if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                            if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                 items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                 options.add(10);
                                 icons.add(R.drawable.msg_download);
@@ -20662,7 +20664,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.msg_clear);
                             }
                             // Nagram force allow copy
-                            if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                            if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                 items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                 options.add(7);
                                 icons.add(R.drawable.msg_gallery);
@@ -20713,7 +20715,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
                                 // Nagram force allow copy
-                                if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                                if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                     items.add(LocaleController.getString("Copy", R.string.Copy));
                                     options.add(16);
                                     icons.add(R.drawable.msg_copy);
@@ -20768,7 +20770,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                             }
                         }
-                        if (NekoConfig.showReReply) {
+                        if (NaConfig.showReReply) {
                             if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                                 items.add(LocaleController.getString("ReReply", R.string.ReReply));
                                 options.add(1001);
@@ -20846,7 +20848,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.msg_reply);
                         }
                         // Nagram force allow copy
-                        if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
+                        if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat))) {
                             items.add(LocaleController.getString("Copy", R.string.Copy));
                             options.add(3);
                             icons.add(R.drawable.msg_copy);
@@ -20912,7 +20914,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
                                 // Nagram force allow copy
-                                if (NekoConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
+                                if (NaConfig.forceAllowCopy || !getMessagesController().isChatNoForwards(currentChat)) {
                                     items.add(LocaleController.getString("Copy", R.string.Copy));
                                     options.add(16);
                                     icons.add(R.drawable.msg_copy);

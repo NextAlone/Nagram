@@ -251,6 +251,7 @@ import java.util.Map;
 import tw.nekomimi.nekogram.accessibility.AccConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.translator.Translator;
+import xyz.nextalone.nagram.NaConfig;
 
 @SuppressWarnings("unchecked")
 public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener {
@@ -10123,8 +10124,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     menuItem.showSubItem(gallery_menu_openin);
                     setItemVisible(pipItem, true, false);
                 } else if (isVideo) {
-                    // Nagram force allow copy
-                    if ((NekoConfig.forceAllowCopy || !noforwards) || (slideshowMessageId == 0 ?
+                                if ((NaConfig.forceAllowCopy || !noforwards) || (slideshowMessageId == 0 ?
                      newMessageObject.messageOwner.media.webpage != null && newMessageObject.messageOwner.media.webpage.url != null :
                             imagesArr.get(0).messageOwner.media.webpage != null && imagesArr.get(0).messageOwner.media.webpage.url != null)) {
                         menuItem.showSubItem(gallery_menu_openin);
@@ -10300,8 +10300,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     setItemVisible(sendItem, false, false);
                     setItemVisible(sendNoQuoteItem, false, false);
                 }
-                // Nagram force allow copy
-                if (isEmbedVideo || newMessageObject.messageOwner.ttl != 0 && newMessageObject.messageOwner.ttl < 60 * 60 || !NekoConfig.forceAllowCopy && MessagesController.getInstance(UserConfig.selectedAccount).isChatNoForwards(newMessageObject.getChatId())) {
+                        if (isEmbedVideo || newMessageObject.messageOwner.ttl != 0 && newMessageObject.messageOwner.ttl < 60 * 60 || !NaConfig.forceAllowCopy && MessagesController.getInstance(UserConfig.selectedAccount).isChatNoForwards(newMessageObject.getChatId())) {
                     allowShare = false;
                     menuItem.hideSubItem(gallery_menu_save);
                     bottomButtonsLayout.setVisibility(View.GONE);
@@ -10385,16 +10384,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, switchingToIndex + 1,
                   imagesArrLocations.size()));
             }
-            // Nagram force allow copy
-            boolean noforwards =
+                boolean noforwards =
                     avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwards(-avatarsDialogId);
-            if (!NekoConfig.forceAllowCopy && noforwards) {
+            if (!NaConfig.forceAllowCopy && noforwards) {
                 menuItem.hideSubItem(gallery_menu_save);
             } else {
                 menuItem.showSubItem(gallery_menu_save);
             }
             allowShare = !noforwards;
-            shareButton.setVisibility(NekoConfig.forceAllowCopy || allowShare ? View.VISIBLE : View.GONE);
+            shareButton.setVisibility(NaConfig.forceAllowCopy || allowShare ? View.VISIBLE : View.GONE);
 
             bottomButtonsLayout.setVisibility(!videoPlayerControlVisible ? View.VISIBLE : View.GONE);
             if (bottomButtonsLayout.getVisibility() == View.VISIBLE) {
@@ -10608,8 +10606,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             caption = pageBlocksAdapter.getCaption(switchingToIndex);
             isVideo = pageBlocksAdapter.isVideo(switchingToIndex);
             if (isVideo) {
-                // Nagram force allow copy
-                if (NekoConfig.forceAllowCopy || !MessagesController.getInstance(UserConfig.selectedAccount).isChatNoForwards(-currentDialogId)) {
+                        if (NaConfig.forceAllowCopy || !MessagesController.getInstance(UserConfig.selectedAccount).isChatNoForwards(-currentDialogId)) {
                     menuItem.showSubItem(gallery_menu_openin);
                 } else {
                     menuItem.hideSubItem(gallery_menu_openin);

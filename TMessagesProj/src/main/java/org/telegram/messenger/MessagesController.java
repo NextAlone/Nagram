@@ -69,6 +69,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -6203,7 +6204,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean sendTyping(long dialogId, int threadMsgId, int action, String emojicon, int classGuid) {
-        if (NekoConfig.disableChatActionSending) {
+        if (NaConfig.disableChatActionSending) {
             return true;
         }
         if (action < 0 || action >= sendingTypings.length || dialogId == 0) {
