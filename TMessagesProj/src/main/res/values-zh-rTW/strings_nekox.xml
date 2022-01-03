@@ -41,7 +41,7 @@
     <string name="CustomBackendTestDC">官方測試資料中心</string>
     <string name="AllowFlashCall">允許電話呼叫</string>
     <string name="ChangeTranslateProvider">修改翻譯源</string>
-    <string name="ProviderYandexTranslate">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex 翻譯</string>
     <string name="GoogleCloudTransKey">Google 雲翻譯金鑰</string>
     <string name="GoogleCloudTransKeyNotice">如果您設定了一個谷歌雲金鑰： 雲翻譯API將被呼叫，而不是模擬表單提交到網頁版 (快速、穩定和節省流量)。</string>
     <string name="TransToLang">翻譯目標語言</string>
@@ -232,7 +232,7 @@
     <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
     <string name="UsePersiancalendar">使用伊朗歷</string>
     <string name="AddProxyWs">新增 WebSocket 中繼</string>
-    <string name="WsPayload">Payload</string>
+    <string name="WsPayload">有效載荷</string>
     <string name="VersionUpdateVariantNotMatch">版本變體自動匹配失敗。
 \n請從GitHub手動下載。</string>
     <string name="VersionUpdateIgnore">忽略</string>
@@ -240,4 +240,31 @@
     <string name="ShareMessages">分享</string>
     <string name="SetPinnedSuffix">(置頂)</string>
     <string name="AppLinkFDroid">F-Droid</string>
+    <string name="EnableStickerPinTip">本功能仍在開發，雲端同步或未如理想。</string>
+    <string name="customPublicProxyIP">設置公共代理的IP地址</string>
+    <string name="DeleteDownloadedFileConfirm">從本地緩存裡刪除此檔案？</string>
+    <string name="customPublicProxyIPNotice">在某些地區，指定公共代理CDN的ip地址(例如Cloudflare)能加快存取。</string>
+    <string name="AutoCheckUpdateOFF">關</string>
+    <string name="AutoCheckUpdateSwitch">自動更新</string>
+    <string name="VersionUpdateNotNow">稍後</string>
+    <string name="AutoCheckUpdateStable">穩定版</string>
+    <string name="DeleteDownloadedFileSucceed">已刪除</string>
+    <string name="update_download_soucre">選擇下載來源</string>
+    <string name="useCustomEmoji">使用自訂表情</string>
+    <string name="repeatConfirm">重複前詢問</string>
+    <string name="repeatConfirmText">你是否確定要重複？</string>
+    <string name="hideSponsoredMessage">隱藏贊助信息</string>
+    <string name="rememberAllBackMessages">記住所有已點擊的回覆</string>
+    <string name="DisableInstantCamera">禁用相機即時預覽</string>
+    <string name="showSeconds">以秒數顯示時間戳</string>
+    <string name="VersionUpdateNoUpdate">沒有更新。</string>
+    <string name="DeleteDownloadedFileExternal">外部檔案已被跳過。</string>
+    <string name="useCustomEmojiInvalid">並非可用的表情壓縮檔。</string>
+    <string name="EnableStickerPinAbout">在新增貼紙時依然置頂並與雲端同步。
+\n與“禁用最愛及最近”配對。</string>
+    <string name="AutoCheckUpdateRc">候選版本</string>
+    <string name="unreadBadgeOnBackButton">返回鍵上顯示未讀數</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram預設
+\n以頭像為背景
+\n以大頭像為背景</string>
 </resources>
