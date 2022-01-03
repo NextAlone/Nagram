@@ -13797,7 +13797,6 @@ public class MessagesController extends BaseController implements NotificationCe
                         for (int a = 0, size2 = arrayList.size(); a < size2; a++) {
                             if (
                                     !oldObject.messageText.toString().equals(arrayList.get(a).messageText.toString())
-                                            && arrayList.get(a).emojiAnimatedSticker == null
                                             && arrayList.get(a).messageOwner.from_id != null
                                             && arrayList.get(a).messageOwner.peer_id != null
                                             && arrayList.get(a).botButtonsLayout == null
