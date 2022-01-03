@@ -154,5 +154,4 @@ public class NaConfig {
         editor.putBoolean("showTextRegular", showTextRegular);
         editor.commit();
     }
-    
 }
