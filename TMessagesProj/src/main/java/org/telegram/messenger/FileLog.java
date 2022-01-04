@@ -102,7 +102,7 @@ public class FileLog {
      * @deprecated use {@link LogUtilKt#e(Throwable, String)} instead
      */
     public static void e(final String message, final Throwable exception) {
-        LogUtilKt.e(exception, message);
+        LogUtilKt.e(message, exception);
     }
 
     /**
@@ -126,7 +126,7 @@ public class FileLog {
         if (needSent(e) && logToAppCenter) {
             AndroidUtilities.appCenterLog(e);
         }
-        LogUtilKt.e(e,"");
+        LogUtilKt.e("",e);
     }
 
     private static boolean needSent(Throwable e) {
