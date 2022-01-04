@@ -2,4 +2,13 @@
 <resources>
     <string name="NullgramName">Nullgram</string>
     <string name="NullgramPushService">Nullgram Push Service</string>
+    <string name="NullSettings">Nullgram Settings</string>
+    <string name="OfficialChannel">Official Channel</string>
+    <string name="Chat">Chat</string>
+    <string name="Experiment">Experiment</string>
+    <string name="OfficialSite">Official Site</string>
+    <string name="ViewSourceCode">View Source Code</string>
+    <string name="Categories">Categories</string>
+    <string name="About">About</string>
+    <string name="OfficialChannelName">NullgramClient</string>
 </resources>

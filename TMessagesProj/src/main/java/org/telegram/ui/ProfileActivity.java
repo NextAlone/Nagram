@@ -14,7 +14,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -65,7 +64,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Keep;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
@@ -80,7 +78,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -113,7 +127,6 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -161,24 +174,7 @@ import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.TimerDrawable;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import top.qwq2333.nullgram.activity.MainSettingActivity;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate {
 
@@ -395,6 +391,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int usernameRow;
     private int notificationsDividerRow;
     private int notificationsRow;
+    private int nullRow;
     private int infoSectionRow;
     private int sendMessageRow;
     private int reportRow;
@@ -2674,14 +2671,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
                 builder1.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
                 builder1.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder1.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-                    SharedConfig.pushAuthKey = null;
-                    SharedConfig.pushAuthKeyId = null;
-                    SharedConfig.saveConfig();
-                    getConnectionsManager().switchBackend(true);
-                });
-                builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder1.setPositiveButton(LocaleController.getString("OK", R.string.OK),
+                    (dialogInterface, i) -> {
+                        SharedConfig.pushAuthKey = null;
+                        SharedConfig.pushAuthKeyId = null;
+                        SharedConfig.saveConfig();
+                        getConnectionsManager().switchBackend(true);
+                    });
+                builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel),
+                    null);
                 showDialog(builder1.create());
+            } else if (position == nullRow) {
+                presentFragment(new MainSettingActivity());
             } else if (position == languageRow) {
                 presentFragment(new LanguageSelectActivity());
             } else if (position == setUsernameRow) {
@@ -2691,7 +2692,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(new ChangeBioActivity());
                 }
             } else if (position == numberRow) {
-                presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
+                presentFragment(
+                    new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
             } else if (position == setAvatarRow) {
                 onWriteButtonClick();
             } else {
@@ -5513,6 +5515,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         settingsSectionRow = -1;
         settingsSectionRow2 = -1;
         notificationRow = -1;
+        nullRow = -1;
         languageRow = -1;
         privacyRow = -1;
         dataRow = -1;
@@ -5614,6 +5617,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     filtersRow = rowCount++;
                 }
                 devicesRow = rowCount++;
+                nullRow = rowCount++;
                 languageRow = rowCount++;
                 devicesSectionRow = rowCount++;
                 helpHeaderRow = rowCount++;
@@ -7208,18 +7212,32 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == sendMessageRow) {
                         textCell.setText(LocaleController.getString("SendMessageLocation", R.string.SendMessageLocation), true);
                     } else if (position == reportRow) {
-                        textCell.setText(LocaleController.getString("ReportUserLocation", R.string.ReportUserLocation), false);
+                        textCell.setText(LocaleController.getString("ReportUserLocation",
+                            R.string.ReportUserLocation), false);
                         textCell.setColors(null, Theme.key_windowBackgroundWhiteRedText5);
+                    } else if (position == nullRow) {
+                        textCell.setTextAndIcon(
+                            LocaleController.getString("NullSettings", R.string.NullSettings),
+                            R.drawable.menu_settings, false);
                     } else if (position == languageRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, false);
+                        textCell.setTextAndIcon(
+                            LocaleController.getString("Language", R.string.Language),
+                            R.drawable.menu_language, false);
                     } else if (position == notificationRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, true);
+                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds",
+                            R.string.NotificationsAndSounds), R.drawable.menu_notifications, true);
                     } else if (position == privacyRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, true);
+                        textCell.setTextAndIcon(
+                            LocaleController.getString("PrivacySettings", R.string.PrivacySettings),
+                            R.drawable.menu_secret, true);
                     } else if (position == dataRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
+                        textCell.setTextAndIcon(
+                            LocaleController.getString("DataSettings", R.string.DataSettings),
+                            R.drawable.menu_data, true);
                     } else if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(
+                            LocaleController.getString("ChatSettings", R.string.ChatSettings),
+                            R.drawable.menu_chats, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
@@ -7367,12 +7385,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             if (notificationRow != -1) {
                 int position = holder.getAdapterPosition();
-                return position == notificationRow || position == numberRow || position == privacyRow ||
-                        position == languageRow || position == setUsernameRow || position == bioRow ||
-                        position == versionRow || position == dataRow || position == chatRow ||
-                        position == questionRow || position == devicesRow || position == filtersRow ||
-                        position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
-                        position == clearLogsRow || position == switchBackendRow || position == setAvatarRow;
+                return position == notificationRow || position == numberRow
+                    || position == privacyRow ||
+                    position == languageRow || position == setUsernameRow || position == bioRow ||
+                    position == versionRow || position == dataRow || position == chatRow ||
+                    position == questionRow || position == devicesRow || position == filtersRow ||
+                    position == faqRow || position == policyRow || position == sendLogsRow
+                    || position == sendLastLogsRow ||
+                    position == clearLogsRow || position == switchBackendRow
+                    || position == setAvatarRow || position == nullRow;
             }
             if (holder.itemView instanceof UserCell) {
                 UserCell userCell = (UserCell) holder.itemView;
@@ -7403,23 +7424,31 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return 2;
             } else if (position == userInfoRow || position == channelInfoRow) {
                 return 3;
-            } else if (position == settingsTimerRow || position == settingsKeyRow || position == reportRow ||
-                    position == subscribersRow || position == subscribersRequestsRow || position == administratorsRow || position == blockedUsersRow ||
-                    position == addMemberRow || position == joinRow || position == unblockRow ||
-                    position == sendMessageRow || position == notificationRow || position == privacyRow ||
-                    position == languageRow || position == dataRow || position == chatRow ||
-                    position == questionRow || position == devicesRow || position == filtersRow ||
-                    position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
-                    position == clearLogsRow || position == switchBackendRow || position == setAvatarRow) {
+            } else if (position == settingsTimerRow || position == settingsKeyRow
+                || position == reportRow ||
+                position == subscribersRow || position == subscribersRequestsRow
+                || position == administratorsRow || position == blockedUsersRow ||
+                position == addMemberRow || position == joinRow || position == unblockRow ||
+                position == sendMessageRow || position == notificationRow || position == privacyRow
+                ||
+                position == languageRow || position == dataRow || position == chatRow ||
+                position == questionRow || position == devicesRow || position == filtersRow ||
+                position == faqRow || position == policyRow || position == sendLogsRow
+                || position == sendLastLogsRow ||
+                position == clearLogsRow || position == switchBackendRow || position == setAvatarRow
+                || position == nullRow) {
                 return 4;
             } else if (position == notificationsDividerRow) {
                 return 5;
             } else if (position == notificationsRow) {
                 return 6;
-            } else if (position == infoSectionRow || position == lastSectionRow || position == membersSectionRow ||
-                    position == secretSettingsSectionRow || position == settingsSectionRow || position == devicesSectionRow ||
-                    position == helpSectionCell || position == setAvatarSectionRow || position == passwordSuggestionSectionRow ||
-                    position == phoneSuggestionSectionRow) {
+            } else if (position == infoSectionRow || position == lastSectionRow
+                || position == membersSectionRow ||
+                position == secretSettingsSectionRow || position == settingsSectionRow
+                || position == devicesSectionRow ||
+                position == helpSectionCell || position == setAvatarSectionRow
+                || position == passwordSuggestionSectionRow ||
+                position == phoneSuggestionSectionRow) {
                 return 7;
             } else if (position >= membersStartRow && position < membersEndRow) {
                 return 8;
@@ -8313,6 +8342,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, settingsSectionRow, sparseIntArray);
             put(++pointer, settingsSectionRow2, sparseIntArray);
             put(++pointer, notificationRow, sparseIntArray);
+            put(++pointer, nullRow, sparseIntArray);
             put(++pointer, languageRow, sparseIntArray);
             put(++pointer, privacyRow, sparseIntArray);
             put(++pointer, dataRow, sparseIntArray);

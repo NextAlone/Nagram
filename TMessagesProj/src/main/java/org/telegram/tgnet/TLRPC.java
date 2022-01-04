@@ -11,13 +11,11 @@ package org.telegram.tgnet;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.text.TextUtils;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.Utilities;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {
@@ -44772,14 +44770,39 @@ public class TLRPC {
         }
     }
 
+    public static class TL_auth_importBotAuthorization extends TLObject {
+
+        public static int constructor = 0x67a3ff2c;
+
+        public int flags;
+        public int api_id;
+        public String api_hash;
+        public String bot_auth_token;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor,
+            boolean exception) {
+            return TL_auth_authorization.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt32(flags);
+            stream.writeInt32(api_id);
+            stream.writeString(api_hash);
+            stream.writeString(bot_auth_token);
+        }
+    }
+
     public static class TL_auth_exportLoginToken extends TLObject {
+
         public static int constructor = 0xb7e085fe;
 
         public int api_id;
         public String api_hash;
         public ArrayList<Long> except_ids = new ArrayList<>();
 
-        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor,
+            boolean exception) {
             return auth_LoginToken.TLdeserialize(stream, constructor, exception);
         }
 
@@ -53251,7 +53274,8 @@ public class TLRPC {
                     break;
             }
             if (result == null && exception) {
-                 throw new RuntimeException(String.format("can't parse magic %x in Message", constructor));
+                throw new RuntimeException(
+                    String.format("can't parse magic %x in Message", constructor));
             }
             if (result != null) {
                 result.readParams(stream, exception);
@@ -53263,16 +53287,19 @@ public class TLRPC {
         }
 
         public void readAttachPath(AbstractSerializedData stream, long currentUserId) {
-            boolean hasMedia = media != null && !(media instanceof TL_messageMediaEmpty) && !(media instanceof TL_messageMediaWebPage);
+            boolean hasMedia = media != null && !(media instanceof TL_messageMediaEmpty)
+                && !(media instanceof TL_messageMediaWebPage);
             boolean fixCaption = !TextUtils.isEmpty(message) &&
-                    (media instanceof TL_messageMediaPhoto_old ||
-                            media instanceof TL_messageMediaPhoto_layer68 ||
-                            media instanceof TL_messageMediaPhoto_layer74 ||
-                            media instanceof TL_messageMediaDocument_old ||
-                            media instanceof TL_messageMediaDocument_layer68 ||
-                            media instanceof TL_messageMediaDocument_layer74)
-                    && message.startsWith("-1");
-            if ((out || peer_id != null && from_id != null && peer_id.user_id != 0 && peer_id.user_id == from_id.user_id && from_id.user_id == currentUserId) && (id < 0 || hasMedia || send_state == 3) || legacy) {
+                (media instanceof TL_messageMediaPhoto_old ||
+                    media instanceof TL_messageMediaPhoto_layer68 ||
+                    media instanceof TL_messageMediaPhoto_layer74 ||
+                    media instanceof TL_messageMediaDocument_old ||
+                    media instanceof TL_messageMediaDocument_layer68 ||
+                    media instanceof TL_messageMediaDocument_layer74)
+                && message.startsWith("-1");
+            if ((out || peer_id != null && from_id != null && peer_id.user_id != 0
+                && peer_id.user_id == from_id.user_id && from_id.user_id == currentUserId) && (
+                id < 0 || hasMedia || send_state == 3) || legacy) {
                 if (hasMedia && fixCaption) {
                     if (message.length() > 6 && message.charAt(2) == '_') {
                         params = new HashMap<>();
@@ -57030,9 +57057,75 @@ public class TLRPC {
         }
     }
 
+
+    public static class TL_account_setContentSettings extends TLObject {
+
+        public static int constructor = 0xb574b16b;
+
+        public int flags;
+        public boolean sensitive_enabled;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor,
+            boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            flags = sensitive_enabled ? (flags | 1) : (flags & ~1);
+            stream.writeInt32(flags);
+        }
+    }
+
+    public static class TL_account_getContentSettings extends TLObject {
+
+        public static int constructor = 0x8b9b4dae;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor,
+            boolean exception) {
+            return TL_account_contentSettings.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_account_contentSettings extends TLObject {
+
+        public static int constructor = 0x57e28221;
+
+        public int flags;
+        public boolean sensitive_enabled;
+        public boolean sensitive_can_change;
+
+        public static TL_account_contentSettings TLdeserialize(AbstractSerializedData stream,
+            int constructor, boolean exception) {
+            if (TL_account_contentSettings.constructor != constructor) {
+                if (exception) {
+                    throw new RuntimeException(
+                        String.format("can't parse magic %x in TL_account_contentSettings",
+                            constructor));
+                } else {
+                    return null;
+                }
+            }
+            TL_account_contentSettings result = new TL_account_contentSettings();
+            result.readParams(stream, exception);
+            return result;
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            flags = stream.readInt32(exception);
+            sensitive_enabled = (flags & 1) != 0;
+            sensitive_can_change = (flags & 2) != 0;
+        }
+    }
+
     //functions
 
     public static class Vector extends TLObject {
+
         public static int constructor = 0x1cb5c415;
         public ArrayList<Object> objects = new ArrayList<>();
     }
