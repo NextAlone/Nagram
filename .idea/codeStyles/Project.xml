@@ -2,9 +2,7 @@
   <code_scheme name="Project" version="173">
     <option name="OTHER_INDENT_OPTIONS">
       <value>
-        <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
       </value>
     </option>
     <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
@@ -43,8 +41,8 @@
       <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
       <option name="IMPORT_LAYOUT_TABLE">
         <value>
-          <package name="" withSubpackages="true" static="true" />
           <emptyLine />
+          <package name="" withSubpackages="true" static="true" />
           <package name="" withSubpackages="true" static="false" />
         </value>
       </option>
@@ -131,11 +129,6 @@
       <option name="DOWHILE_BRACE_FORCE" value="3" />
       <option name="WHILE_BRACE_FORCE" value="3" />
       <option name="FOR_BRACE_FORCE" value="3" />
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JSON">
       <indentOptions>
@@ -144,6 +137,10 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JavaScript">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
       <option name="RIGHT_MARGIN" value="80" />
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
@@ -160,10 +157,6 @@
       <option name="DOWHILE_BRACE_FORCE" value="3" />
       <option name="WHILE_BRACE_FORCE" value="3" />
       <option name="FOR_BRACE_FORCE" value="3" />
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="ObjectiveC">
       <option name="RIGHT_MARGIN" value="80" />
@@ -177,29 +170,25 @@
       <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
       <option name="FOR_STATEMENT_WRAP" value="1" />
       <option name="ASSIGNMENT_WRAP" value="1" />
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-      </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="PROTO">
-      <option name="RIGHT_MARGIN" value="80" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="2" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
+      <option name="RIGHT_MARGIN" value="80" />
     </codeStyleSettings>
     <codeStyleSettings language="Python">
-      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
-      <option name="RIGHT_MARGIN" value="80" />
-      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
-      <option name="PARENT_SETTINGS_INSTALLED" value="true" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
+      <option name="RIGHT_MARGIN" value="80" />
+      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+      <option name="PARENT_SETTINGS_INSTALLED" value="true" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
     </codeStyleSettings>
     <codeStyleSettings language="SASS">
       <indentOptions>
@@ -256,7 +245,7 @@
                 <AND>
                   <NAME>.*:id</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -290,7 +279,7 @@
                 <AND>
                   <NAME>.*:.*Style</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
               <order>BY_NAME</order>
@@ -302,7 +291,7 @@
                 <AND>
                   <NAME>.*:layout_width</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -313,7 +302,7 @@
                 <AND>
                   <NAME>.*:layout_height</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -324,7 +313,7 @@
                 <AND>
                   <NAME>.*:layout_weight</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -335,7 +324,7 @@
                 <AND>
                   <NAME>.*:layout_margin</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -346,7 +335,7 @@
                 <AND>
                   <NAME>.*:layout_marginTop</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -357,7 +346,7 @@
                 <AND>
                   <NAME>.*:layout_marginBottom</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -368,7 +357,7 @@
                 <AND>
                   <NAME>.*:layout_marginStart</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -379,7 +368,7 @@
                 <AND>
                   <NAME>.*:layout_marginEnd</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -390,7 +379,7 @@
                 <AND>
                   <NAME>.*:layout_marginLeft</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -401,7 +390,7 @@
                 <AND>
                   <NAME>.*:layout_marginRight</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -412,7 +401,7 @@
                 <AND>
                   <NAME>.*:layout_.*</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
               <order>BY_NAME</order>
@@ -424,7 +413,7 @@
                 <AND>
                   <NAME>.*:padding</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -435,7 +424,7 @@
                 <AND>
                   <NAME>.*:paddingTop</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -446,7 +435,7 @@
                 <AND>
                   <NAME>.*:paddingBottom</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -457,7 +446,7 @@
                 <AND>
                   <NAME>.*:paddingStart</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -468,7 +457,7 @@
                 <AND>
                   <NAME>.*:paddingEnd</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -479,7 +468,7 @@
                 <AND>
                   <NAME>.*:paddingLeft</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -490,7 +479,7 @@
                 <AND>
                   <NAME>.*:paddingRight</NAME>
                   <XML_ATTRIBUTE />
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
             </rule>
@@ -500,7 +489,7 @@
               <match>
                 <AND>
                   <NAME>.*</NAME>
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android\n</XML_NAMESPACE>
                 </AND>
               </match>
               <order>BY_NAME</order>
@@ -511,7 +500,7 @@
               <match>
                 <AND>
                   <NAME>.*</NAME>
-                  <XML_NAMESPACE>http://schemas.android.com/apk/res-auto</XML_NAMESPACE>
+                  <XML_NAMESPACE>http://schemas.android.com/apk/res-auto\n</XML_NAMESPACE>
                 </AND>
               </match>
               <order>BY_NAME</order>
@@ -543,12 +532,12 @@
       </arrangement>
     </codeStyleSettings>
     <codeStyleSettings language="protobuf">
-      <option name="RIGHT_MARGIN" value="80" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="2" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
+      <option name="RIGHT_MARGIN" value="80" />
     </codeStyleSettings>
   </code_scheme>
 </component>
