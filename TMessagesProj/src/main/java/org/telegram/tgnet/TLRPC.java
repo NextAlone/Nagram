@@ -36635,7 +36635,7 @@ public class TLRPC {
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             flags = stream.readInt32(exception);
-            inactive = (flags & 1) != 0;
+            inactive = false;
             reaction = stream.readString(exception);
             title = stream.readString(exception);
             static_icon = Document.TLdeserialize(stream, stream.readInt32(exception), exception);
