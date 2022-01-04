@@ -82,6 +82,10 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+
     def keystorePwd = null
     def alias = null
     def pwd = null
