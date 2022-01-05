@@ -16195,11 +16195,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private boolean sponsoredMessagesAdded;
     private void addSponsoredMessages(boolean animated) {
-//        if (sponsoredMessagesAdded || chatMode != 0 || !ChatObject.isChannel(currentChat) || currentChat.megagroup || currentChat.gigagroup || !forwardEndReached[0]) {
-        if (true || sponsoredMessagesAdded || chatMode != 0 || !ChatObject.isChannel(currentChat) || currentChat.megagroup || currentChat.gigagroup || !forwardEndReached[0]) {
+        if (sponsoredMessagesAdded || chatMode != 0 || !ChatObject.isChannel(currentChat) || currentChat.megagroup || currentChat.gigagroup || !forwardEndReached[0]) {
             return;
         }
         ArrayList<MessageObject> arrayList = getMessagesController().getSponsoredMessages(dialog_id);
+        ArrayList<MessageObject> arrayList2 = new ArrayList<>();
         if (arrayList == null) {
             return;
         }
@@ -16211,11 +16211,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (messageObject.sponsoredChannelPost != 0) {
                 messageId = messageObject.sponsoredChannelPost;
             }
-            getMessagesController().ensureMessagesLoaded(dialogId, messageId, null);
+            if (!messageObject.isSponsored()) {
+                getMessagesController().ensureMessagesLoaded(dialogId, messageId, null);
+                arrayList2.add(messageObject);
+            } else {
+                markSponsoredAsRead(messageObject);
+            }
+//            getMessagesController().ensureMessagesLoaded(dialogId, messageId, null);
 
         }
         sponsoredMessagesAdded = true;
-        processNewMessages(arrayList);
+//        processNewMessages(arrayList);
+        if (arrayList2.isEmpty()) return;
+        processNewMessages(arrayList2);
     }
 
     private void checkGroupCallJoin(boolean fromServer) {
