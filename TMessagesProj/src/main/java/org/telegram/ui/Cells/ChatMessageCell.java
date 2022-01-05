@@ -7280,7 +7280,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                 @Override
                 public int getOpacity() {
-                    return PixelFormat.TRANSPARENT;
+                    return PixelFormat.OPAQUE;
                 }
             };
             ColorStateList colorStateList = new ColorStateList(
