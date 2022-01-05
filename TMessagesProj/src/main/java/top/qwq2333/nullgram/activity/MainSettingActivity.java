@@ -109,11 +109,11 @@ public class MainSettingActivity extends BaseFragment {
             LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == chatRow) {
-                presentFragment(null);
+                presentFragment(new ChatSettingActivity());
             } else if (position == generalRow) {
-                presentFragment(null);
+                presentFragment(new GeneralSettingActivity());
             } else if (position == experimentRow) {
-                presentFragment(null);
+                presentFragment(new ExperimentSettingActivity());
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName(
                     LocaleController.getString("OfficialChannelName", R.string.OfficialChannelName),

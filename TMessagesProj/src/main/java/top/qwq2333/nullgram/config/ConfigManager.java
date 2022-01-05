@@ -64,6 +64,16 @@ public class ConfigManager {
     }
 
     /**
+     * 获取boolean值
+     *
+     * @param key key
+     * @return key所对应值 默认为false
+     */
+    public static boolean getBooleanOrFalse(@NonNull String key) {
+        return preferences.getBoolean(key, false);
+    }
+
+    /**
      * 获取String值
      *
      * @param key key
