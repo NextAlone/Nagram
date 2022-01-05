@@ -78,16 +78,15 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int disableVoiceMessageAutoPlayRow;
     private int autoPauseVideoRow;
     private int messageMenuRow;
-    // Nagram
     private int textStyleRow;
     private int chat2Row;
-    
+
     private int foldersRow;
     private int showTabsOnForwardRow;
     private int hideAllTabRow;
     private int tabsTitleTypeRow;
     private int folders2Row;
-    
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -339,7 +338,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        int count = 12;
+        int count = 13;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
@@ -388,6 +387,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 }
                 case 11: {
+                    textCell.setTextAndCheck(LocaleController.getString("CopyPhoto", R.string.CopyPhoto), NekoConfig.showCopyPhoto, false);
+                    break;
+                }
+                case 12: {
                     textCell.setTextAndCheck(LocaleController.getString("ReReply", R.string.ReReply), NaConfig.showReReply, false);
                     break;
                 }
@@ -453,7 +456,12 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setChecked(NekoConfig.showMessageDetails);
                         break;
                     }
-                    case 11:{
+                    case 11: {
+                        NekoConfig.toggleShowCopyPhoto();
+                        textCell.setChecked(NekoConfig.showCopyPhoto);
+                        break;
+                    }
+                    case 12:{
                         NaConfig.toggleShowReReply();
                         textCell.setChecked(NaConfig.showReReply);
                         break;
@@ -465,7 +473,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         builder.setView(linearLayout);
         showDialog(builder.create());
     }
-    
+
     private void showTextStyleAlert() {
         if (getParentActivity() == null) {
             return;
@@ -473,14 +481,14 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         Context context = getParentActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(LocaleController.getString("TextStyle", R.string.TextStyle));
-        
+
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        
+
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        
+
         int count = 9;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
@@ -580,7 +588,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         builder.setView(linearLayout);
         showDialog(builder.create());
     }
-    
+
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.emojiLoaded) {
@@ -589,7 +597,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             }
         }
     }
-    
+
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();

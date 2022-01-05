@@ -75,7 +75,7 @@ public class NekoConfig {
     public static int idType = ID_TYPE_API;
     public static int maxRecentStickers = 20;
     public static int transType = TRANS_TYPE_NEKO;
-    
+
     public static boolean showAddToSavedMessages = true;
     public static boolean showReport = false;
     public static boolean showPrPr = false;
@@ -87,7 +87,8 @@ public class NekoConfig {
     public static boolean showTranslate = true;
     public static boolean showRepeat = true;
     public static boolean showNoQuoteForward = true;
-    
+    public static boolean showCopyPhoto = false;
+
     public static boolean hidePhone = true;
     public static boolean transparentStatusBar = false;
     public static boolean forceTablet = false;
@@ -117,7 +118,7 @@ public class NekoConfig {
     public static boolean disableJumpToNextChannel = false;
     public static boolean useExternalTranslator = false;
     public static boolean disableVoiceMessageAutoPlay = false;
-    
+
     public static final String WS_ADDRESS = "ws.neko";
     private static int socksPort = -1;
     private static boolean tcp2wsStarted = false;
@@ -125,7 +126,7 @@ public class NekoConfig {
     public static boolean wsEnableTLS = true;
     public static boolean wsUseMTP = false;
     public static boolean wsUseDoH = true;
-    
+
     public static boolean residentNotification = false;
 
     public static boolean shouldNOTTrustMe = false;
@@ -256,6 +257,7 @@ public class NekoConfig {
             useExternalTranslator = preferences.getBoolean("useExternalTranslator", false);
             disableVoiceMessageAutoPlay = preferences.getBoolean("disableVoiceMessageAutoPlay", false);
             transType = preferences.getInt("transType", TRANS_TYPE_NEKO);
+            showCopyPhoto = preferences.getBoolean("showCopyPhoto", false);
             configLoaded = true;
         }
     }
@@ -271,7 +273,7 @@ public class NekoConfig {
         editor.putInt("transType", transType);
         editor.commit();
     }
-    
+
     public static void setWsUseMTP(boolean use) {
         wsUseMTP = use;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -368,7 +370,7 @@ public class NekoConfig {
         editor.putBoolean("showRepeat", showRepeat);
         editor.commit();
     }
-    
+
     public static void toggleIPv6() {
         useIPv6 = !useIPv6;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -376,7 +378,7 @@ public class NekoConfig {
         editor.putBoolean("useIPv6", useIPv6);
         editor.commit();
     }
-    
+
     public static void toggleHidePhone() {
         hidePhone = !hidePhone;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -763,6 +765,14 @@ public class NekoConfig {
         editor.commit();
     }
 
+    public static void toggleShowCopyPhoto() {
+        showCopyPhoto = !showCopyPhoto;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("showCopyPhoto", showCopyPhoto);
+        editor.commit();
+    }
+
     public static void toggleBlockSponsoredMessage() {
         blockSponsoredMessage = !blockSponsoredMessage;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -778,7 +788,7 @@ public class NekoConfig {
         editor.putBoolean("useExternalTranslator", useExternalTranslator);
         editor.commit();
     }
-    
+
     public static void toggleDisableVoiceMessageAutoPlay() {
         disableVoiceMessageAutoPlay = !disableVoiceMessageAutoPlay;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -786,7 +796,7 @@ public class NekoConfig {
         editor.putBoolean("disableVoiceMessageAutoPlay", disableVoiceMessageAutoPlay);
         editor.commit();
     }
-    
+
     public static void setMaxRecentStickers(int size) {
         maxRecentStickers = size;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
@@ -794,7 +804,7 @@ public class NekoConfig {
         editor.putInt("maxRecentStickers", maxRecentStickers);
         editor.commit();
     }
-    
+
     public static void toggleCustomEmojiFont() {
         customEmojiFont = !customEmojiFont;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);

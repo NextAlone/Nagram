@@ -200,6 +200,7 @@ public class ReactionsContainerLayout extends FrameLayout {
                     outRect.right = AndroidUtilities.dp(8);
             }
         });
+        recyclerListView.setContentDescription(LocaleController.getString("Reactions", R.string.Reactions));
         addView(recyclerListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         invalidateShaders();
 
