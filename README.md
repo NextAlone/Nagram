@@ -93,7 +93,8 @@ So **all the code changes** are in `noshit_8.3.1`.
         * WTF apple can do that, we can do it
           too! ([0256c](https://github.com/nikitasius/Telegraher/commit/0256c6891b657975566b98700a349afb55fe81b1))
 * GIFs have controls
-    * you can start/stop GIFs or navigate on a timeline
+    * you can start/stop GIFs or navigate on a
+      timeline ([a8a22](https://github.com/nikitasius/Telegraher/commit/a8a22c09d7215f7c138513e9c2dec4260771b8d3))
 * KEEP CACHED chats
     * cached chats are always with you even if you're BANNED (
       [03307](https://github.com/nikitasius/Telegraher/commit/03307a9d90b86bcb5864880592110c4ee3427ebb))
@@ -112,9 +113,11 @@ So **all the code changes** are in `noshit_8.3.1`.
     * this also affect bots, so when your bots edit their messages, you will see old/new versions
 * NO MORE timer
     * when someone send you a media with a timer in a secret (green) chat this message will be
-      deleted on a device who sent it once you open it
+      deleted on a device who sent it once you open
+      it ([3fb56](https://github.com/nikitasius/Telegraher/commit/3fb5636d5141758796561e32810eda35dd4812ba) [b427e](https://github.com/nikitasius/Telegraher/commit/b427e9936fd5b1d1a0547fea83baaffa86b4e2b9))
     * when someone send you a media with a timer in a private (NON-green) chat this message will be
-      deleted on a device who sent it once OR twice you open it
+      deleted on a device who sent it once OR twice you open it (
+      2491b5f4ad7b968c8e3f954fe377a27502fca831)
         * EASY AND SHORT: open photo twice and it will WIPE it from a device who sent it ;-)
         * LONG AND DETAILED: due it will send an event only if full file is downloaded by your
           client when you open this (guess due file size). In most of cases client download media
@@ -126,7 +129,8 @@ So **all the code changes** are in `noshit_8.3.1`.
       edited ([9b871](https://github.com/nikitasius/Telegraher/commit/9b87154dce324cb4eeb0cd3c02e32f7815c67359) [80fc8](https://github.com/nikitasius/Telegraher/commit/80fc81ceabd250fb87d23d516eb065c7ca72b889))
     * now if message contains signs of editions it will marked
 * DISABLED emulator detections
-    * idk why the client use this, but i disabled it (26033c0ebc982c8097bfc3587cdf95ebde39d792)
+    * idk why the client use this, but i disabled
+      it ([26033](https://github.com/nikitasius/Telegraher/commit/26033c0ebc982c8097bfc3587cdf95ebde39d792))
     * if i want to run it on emulator telegram no need to know it
 * APP name changed & APP icon changed & APP package changed
     * of you want to run using old name just rollback those commits and build the app
