@@ -2150,9 +2150,6 @@
     <string name="AppUpdateChangelogEmpty">**무엇이 달라졌나요?**\n\n• 버그 수정 및 기능 개선.</string>
     <string name="Permanent">기존 링크</string>
     <string name="LinkHashExpired">링크가 더 이상 유효하지 않습니다</string>
-    <string name="CancelForward">전달 취소</string>
-    <string name="SelectOtherChat">다른 대화 선택</string>
-    <string name="CancelForwardMessage">전달을 취소하거나 다른 대화로 전달하겠습니까?</string>
     <string name="ChatListSwipeGesture">대화 목록의 스와이프 제스처</string>
     <string name="SwipeSettingsPin">고정</string>
     <string name="SwipeSettingsRead">읽기</string>
@@ -2387,7 +2384,6 @@
     <string name="NoOtherSessionsInfo">동일한 전화번호를 사용하여 다른 모바일, 태블릿, 데스크탑 장치에서 텔레그램에 로그인하실 수 있습니다. 모든 데이터가 즉시 동기화됩니다.</string>
     <string name="OtherSessions">활성 세션</string>
     <string name="SessionsInfo">다른 기기의 세션을 제어하세요.</string>
-    <string name="TerminateSessionInfo">세션을 종료하려면 짧게 누르세요.</string>
     <string name="TerminateSessionQuestion">이 세션을 종료할까요?</string>
     <string name="TerminateSessionText">정말 이 세션을 종료하시겠습니까?</string>
     <string name="ClearOtherSessionsHelp">본 기기 외의 모든 기기에서 로그아웃합니다.</string>
@@ -2505,7 +2501,6 @@
     <string name="EnterCurrentPasscode">현재 암호를 입력하세요</string>
     <string name="EnterNewFirstPasscode">암호를 입력하세요</string>
     <string name="EnterNewPasscode">새 암호를 입력하세요</string>
-    <string name="EnterYourPasscode">암호를 입력하세요</string>
     <string name="ReEnterYourPasscode">암호를 다시 입력하세요</string>
     <string name="PasscodeDoNotMatch">암호가 일치하지 않습니다.</string>
     <string name="AutoLock">자동 잠금</string>
@@ -3097,9 +3092,7 @@
     <string name="ActionUserInvitedToChannel">un1님이 채널에 초대했습니다</string>
     <string name="ActionGroupCallStarted">un1 님이 음성 대화를 시작했습니다</string>
     <string name="ActionGroupCallStartedByYou">음성 대화를 시작했습니다</string>
-    <string name="ActionGroupCallJustStarted">음성 대화가 시작되었습니다</string>
     <string name="ActionGroupCallScheduled">음성 대화를 %1$s에 예약함</string>
-    <string name="ActionGroupCallEnded">음성 대화 종료됨 (%s)</string>
     <string name="ActionGroupCallInvited">un1님이  un2님을 음성 대화에 초대했습니다</string>
     <string name="ActionGroupCallYouInvited">un2 님을 음성 대화에 초대하셨습니다</string>
     <string name="ActionGroupCallInvitedYou">un1 님이 음성 대화에 초대했습니다</string>
@@ -3542,7 +3535,6 @@
     <string name="VoipGroupLeave">나가기</string>
     <string name="VoipGroupEnd">종료</string>
     <string name="VoipGroupMuteMemberAlertTitle">마이크 음소거</string>
-    <string name="VoipGroupMuteMemberAlertText">정말 **%1$s**님을 음성 대화에서 음소거 하겠습니까?</string>
     <string name="VoipGroupRemoveMemberAlertTitle2">참가자 추방</string>
     <string name="VoipGroupRemoveMemberAlertText2">%1$s님을 음성대화에서 추방하고, %2$s에서 차단하겠습니까?</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s**님이 그룹에서 내보내졌습니다</string>
@@ -3569,8 +3561,6 @@
     <string name="VoipGroupInviteAlreadyParticipant">선택한 사용자는 이미 음성 대화에 참여 중입니다.</string>
     <string name="VoipGroupJoinAnonymousAdmin">죄송하지만, 익명 관리자로 음성 대화에 참여할 수 없습니다.</string>
     <string name="VoipGroupTooMuch">죄송합니다, 이 음성 대화방이 다 찼습니다.</string>
-    <string name="VoipGroupInvitedToVoiceChat">음성 대화에 un1님이 un2님을 초대했습니다</string>
-    <string name="VoipGroupJoinCall">음성 대화 참여</string>
     <string name="VoipGroupInviteText">안녕하세요! 음성 대화에 참여해보세요: %1$s</string>
     <string name="VoipGroupInviteMember">참가자 초대</string>
     <string name="VoipGroupShareLink">초대 링크 공유</string>
@@ -3583,7 +3573,6 @@
     <string name="VoipGroupCopyInviteLink">초대 링크 복사</string>
     <string name="VoipGroupCopyInviteLinkCopied">초대 링크가 클립보드에 복사되었습니다.</string>
     <string name="VoipGroupUnmute">마이크 켜기</string>
-    <string name="VoipGroupEndedStartNew">음성 대화가 종료되었습니다. 새로운 음성 대화를 시작하겠습니까?</string>
     <string name="VoipGroupAddMemberTitle">참가자 추가</string>
     <string name="VoipGroupAddMemberText">**%1$s**님을 **%2$s**에 추가하시겠습니까?</string>
     <string name="VoipGroupInvitedUser">**%1$s**님을 음성 대화에 초대했습니다</string>
@@ -3595,7 +3584,6 @@
     <string name="MembersTalkingNobody">들어가려면 누르세요</string>
     <string name="VoipGroupRecordCall">녹음 시작</string>
     <string name="VoipGroupStopRecordCall">녹음 중단</string>
-    <string name="VoipGroupStartAs">다음으로 음성 대화를 시작...</string>
     <string name="VoipGroupJoinAs">음성 대화를 다음으로 참가...</string>
     <string name="VoipGroupDisplayAs">다음으로 나를 표시...</string>
     <string name="VoipGroupStartAsInfo">개인 계정 혹은 소유하고 있는 채널로 표시될지 선택해주세요.</string>
@@ -3668,7 +3656,6 @@
     <string name="VoipSetNewPhoto">새로운 사진 설정</string>
     <string name="VoipCamera">카메라</string>
     <string name="VideoPreview">영상 미리보기</string>
-    <string name="VideoPreviewDesrciption">음성 대화에 참여중인 다른 참가자들에게 내 카메라 영상이 공유 됩니다</string>
     <string name="ShareVideo">카메라 영상 공유</string>
     <string name="CallVideoPreviewTitle">미리보기</string>
     <string name="CallVideoPin">고정</string>

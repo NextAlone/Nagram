@@ -2150,9 +2150,6 @@
     <string name="AppUpdateChangelogEmpty">**ما الجديد؟**\n\n• إصلاح للمشاكل وتحسينات أخرى.</string>
     <string name="Permanent">الرابط الأساسي</string>
     <string name="LinkHashExpired">لم يعد الرابط نشطًا</string>
-    <string name="CancelForward">إلغاء التحويل</string>
-    <string name="SelectOtherChat">اختيار محادثة أخرى</string>
-    <string name="CancelForwardMessage">هل تريد إلغاء التحويل أم تحويل الرسائل إلى محادثة أخرى؟</string>
     <string name="ChatListSwipeGesture">إجراءات السحْب لقائمة المحادثات</string>
     <string name="SwipeSettingsPin">تثبيت</string>
     <string name="SwipeSettingsRead">مقروءة</string>
@@ -2387,7 +2384,6 @@
     <string name="NoOtherSessionsInfo">يمكنك تسجيل الدخول لحسابك في تيليجرام عبر جوال، جهاز لوحي، أو جهاز حاسوب آخر باستخدام رقم الهاتف ذاته. سيقوم تيليجرام بمزامنة كافة بياناتك بشكل فوري.</string>
     <string name="OtherSessions">الجلسات النشطة</string>
     <string name="SessionsInfo">تحكم بجلساتك على الأجهزة الأخرى.</string>
-    <string name="TerminateSessionInfo">اضغط على أي جلسة لإنهائها.</string>
     <string name="TerminateSessionQuestion">إنهاء هذه الجلسة؟</string>
     <string name="TerminateSessionText">هل ترغب حقًا في إنهاء هذه الجلسة؟</string>
     <string name="ClearOtherSessionsHelp">لتسجيل الخروج من جميع الأجهزة عدا هذا الجهاز</string>
@@ -2505,7 +2501,6 @@
     <string name="EnterCurrentPasscode">قم بإدخال رمز قفلك الحالي</string>
     <string name="EnterNewFirstPasscode">أدخل رمز القفل</string>
     <string name="EnterNewPasscode">قم بإدخال رمز قفلك الجديد</string>
-    <string name="EnterYourPasscode">أدخل رمز قفلك</string>
     <string name="ReEnterYourPasscode">أعد إدخالَ رمز قفلك الجديد</string>
     <string name="PasscodeDoNotMatch">رموز القفل غير متطابقة</string>
     <string name="AutoLock">القفل التلقائي</string>
@@ -3097,9 +3092,7 @@
     <string name="ActionUserInvitedToChannel">دعاك un1 إلى هذه القناة</string>
     <string name="ActionGroupCallStarted">بدأ un1 محادثة صوتية</string>
     <string name="ActionGroupCallStartedByYou">"أنت بدأت محادثة صوتية "</string>
-    <string name="ActionGroupCallJustStarted">المحادثة الصوتية بدأت</string>
     <string name="ActionGroupCallScheduled">تمت جدولة المحادثة الصوتية إلى %1$s</string>
-    <string name="ActionGroupCallEnded">انتهت المحادثة الصوتية (%s)</string>
     <string name="ActionGroupCallInvited">"قام un1 بدعوة un2 إلى المحادثة الصوتية "</string>
     <string name="ActionGroupCallYouInvited">قمت بدعوة un2 إلى المحادثة الصوتية</string>
     <string name="ActionGroupCallInvitedYou">دعاك un1 إلى المحادثة الصوتية</string>
@@ -3542,7 +3535,6 @@
     <string name="VoipGroupLeave">مغادرة</string>
     <string name="VoipGroupEnd">إنهاء</string>
     <string name="VoipGroupMuteMemberAlertTitle">كتم المايكروفون</string>
-    <string name="VoipGroupMuteMemberAlertText">هل ترغب حقًا في منع **%1$s** من التحدث في المحادثة الصوتية؟</string>
     <string name="VoipGroupRemoveMemberAlertTitle2">إزالة مشارك</string>
     <string name="VoipGroupRemoveMemberAlertText2">هل تريد إزالة %1$s من المحادثة الصوتية وحظرهم في %2$s؟</string>
     <string name="VoipGroupRemovedFromGroup">تمت إزالة **%1$s** من المجموعة.</string>
@@ -3569,8 +3561,6 @@
     <string name="VoipGroupInviteAlreadyParticipant">"المستخدم المحدد موجود في هذه المحادثة الصوتية. "</string>
     <string name="VoipGroupJoinAnonymousAdmin">عذرًا، لايمكنك الانضمام إلى المحادثات الصوتية كمشرف مجهول.</string>
     <string name="VoipGroupTooMuch">عذرًا، المحادثة الصوتية ممتلئة.</string>
-    <string name="VoipGroupInvitedToVoiceChat">قام un1 بدعوة un2 إلى المحادثة الصوتية</string>
-    <string name="VoipGroupJoinCall">الانضمام للمحادثة الصوتية</string>
     <string name="VoipGroupInviteText">مرحبا! انضم إلى محادثتنا الصوتية: %1$s</string>
     <string name="VoipGroupInviteMember">دعوة أعضاء</string>
     <string name="VoipGroupShareLink">مشاركة رابط الدعوة</string>
@@ -3583,7 +3573,6 @@
     <string name="VoipGroupCopyInviteLink">نسخ رابط الدعوة</string>
     <string name="VoipGroupCopyInviteLinkCopied">تم نسخ رابط الدعوة إلى الحافظة</string>
     <string name="VoipGroupUnmute">إلغاء الكتم</string>
-    <string name="VoipGroupEndedStartNew">"انتهت المحادثة الصوتية. بدء واحدة جديدة؟ "</string>
     <string name="VoipGroupAddMemberTitle">إضافة عضو</string>
     <string name="VoipGroupAddMemberText">"هل تريد إضافة **%1$s** إلى **%2$s**؟ "</string>
     <string name="VoipGroupInvitedUser">أنت دعوت **%1$s** إلى المحادثة الصوتية.</string>
@@ -3595,7 +3584,6 @@
     <string name="MembersTalkingNobody">اضغط للانضمام</string>
     <string name="VoipGroupRecordCall">بدء التسجيل</string>
     <string name="VoipGroupStopRecordCall">إيقاف التسجيل</string>
-    <string name="VoipGroupStartAs">بدء المحادثة الصوتية بـ...</string>
     <string name="VoipGroupJoinAs">الانضمام إلى المحادثة الصوتية بـ...</string>
     <string name="VoipGroupDisplayAs">إظهاري بـ...</string>
     <string name="VoipGroupStartAsInfo">يمكنك اختيار ما إذا كنت تريد الظهور بحسابك الشخصي أم بقناتك.</string>
@@ -3668,7 +3656,6 @@
     <string name="VoipSetNewPhoto">تعيين صورة جديدة</string>
     <string name="VoipCamera">الكاميرا</string>
     <string name="VideoPreview">معاينة الفيديو</string>
-    <string name="VideoPreviewDesrciption">ستتم مشاركة فيديو الكاميرا الخاصة بك مع بقية المشاركين في هذه المحادثة الصوتية.</string>
     <string name="ShareVideo">مشاركة فيديو الكاميرا</string>
     <string name="CallVideoPreviewTitle">معاينة</string>
     <string name="CallVideoPin">تثبيت</string>

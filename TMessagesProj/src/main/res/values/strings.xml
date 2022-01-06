@@ -4975,4 +4975,5 @@
     <string name="PushChatReactGame">%1$s: %3$s to your game in %2$s</string>
     <string name="PushChatReactInvoice">%1$s: %3$s to your invoice in %2$s</string>
     <string name="PushChatReactGif">%1$s: %3$s to your GIF in %2$s</string>
+    <string name="LastUpdateRecently">Last successfully checked just now.</string>
 </resources>

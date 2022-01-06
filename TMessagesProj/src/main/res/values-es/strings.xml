@@ -2150,9 +2150,6 @@
     <string name="AppUpdateChangelogEmpty">**¿Qué hay de nuevo?**\n\n• Corrección de errores y mejoras.</string>
     <string name="Permanent">Enlace primario</string>
     <string name="LinkHashExpired">El enlace ya no está activo</string>
-    <string name="CancelForward">Cancelar reenvío</string>
-    <string name="SelectOtherChat">Elegir otro chat</string>
-    <string name="CancelForwardMessage">¿Quieres cancelar el reenvío o reenviar los mensajes a un chat diferente?</string>
     <string name="ChatListSwipeGesture">Gesto de deslizar de lista de chats</string>
     <string name="SwipeSettingsPin">Fijar</string>
     <string name="SwipeSettingsRead">Leído</string>
@@ -2387,7 +2384,6 @@
     <string name="NoOtherSessionsInfo">Puedes iniciar sesión en Telegram desde otro móvil, tablet o computadora, usando el mismo número de teléfono. Todos tus datos se sincronizarán al instante.</string>
     <string name="OtherSessions">Sesiones activas</string>
     <string name="SessionsInfo">Controla tus sesiones en otros dispositivos.</string>
-    <string name="TerminateSessionInfo">Toca en una sesión para cerrarla.</string>
     <string name="TerminateSessionQuestion">¿Cerrar esta sesión?</string>
     <string name="TerminateSessionText">¿Quieres cerrar esta sesión?</string>
     <string name="ClearOtherSessionsHelp">Sale de todos los dispositivos, excepto este.</string>
@@ -2505,7 +2501,6 @@
     <string name="EnterCurrentPasscode">Pon tu código actual</string>
     <string name="EnterNewFirstPasscode">Pon un código</string>
     <string name="EnterNewPasscode">Pon tu nuevo código</string>
-    <string name="EnterYourPasscode">Pon tu código</string>
     <string name="ReEnterYourPasscode">Repite tu nuevo código</string>
     <string name="PasscodeDoNotMatch">Los códigos no coinciden</string>
     <string name="AutoLock">Autobloqueo</string>
@@ -3097,9 +3092,7 @@
     <string name="ActionUserInvitedToChannel">un1 te añadió a este canal</string>
     <string name="ActionGroupCallStarted">un1 inició un chat de voz</string>
     <string name="ActionGroupCallStartedByYou">Iniciaste un chat de voz</string>
-    <string name="ActionGroupCallJustStarted">Chat de voz iniciado</string>
     <string name="ActionGroupCallScheduled">Chat de voz programado para el %1$s</string>
-    <string name="ActionGroupCallEnded">Chat de voz finalizado (%s)</string>
     <string name="ActionGroupCallInvited">un1 invitó a un2 al chat de voz</string>
     <string name="ActionGroupCallYouInvited">Invitaste a un2 al chat de voz</string>
     <string name="ActionGroupCallInvitedYou">un1 te invitó al chat de voz</string>
@@ -3542,7 +3535,6 @@
     <string name="VoipGroupLeave">Salir</string>
     <string name="VoipGroupEnd">Finalizar</string>
     <string name="VoipGroupMuteMemberAlertTitle">Silenciar micrófono</string>
-    <string name="VoipGroupMuteMemberAlertText">¿Quieres silenciar a **%1$s** en este chat de voz?</string>
     <string name="VoipGroupRemoveMemberAlertTitle2">Eliminar participante</string>
     <string name="VoipGroupRemoveMemberAlertText2">¿Quieres eliminar a %1$s del chat de voz y expulsarlo de %2$s?</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** fue eliminado del grupo.</string>
@@ -3569,8 +3561,6 @@
     <string name="VoipGroupInviteAlreadyParticipant">El usuario elegido ya está en este chat de voz.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Lo sentimos, no puedes unirte a chats de voz como administrador anónimo.</string>
     <string name="VoipGroupTooMuch">Lo sentimos, este chat de voz está lleno.</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 invitó a un2 al chat de voz</string>
-    <string name="VoipGroupJoinCall">Unirme al chat de voz</string>
     <string name="VoipGroupInviteText">¡Oye! Únete a nuestro chat de voz: %1$s</string>
     <string name="VoipGroupInviteMember">Invitar miembros</string>
     <string name="VoipGroupShareLink">Compartir enlace de invitación</string>
@@ -3583,7 +3573,6 @@
     <string name="VoipGroupCopyInviteLink">Copiar enlace de invitación</string>
     <string name="VoipGroupCopyInviteLinkCopied">Enlace de invitación copiado al portapapeles.</string>
     <string name="VoipGroupUnmute">Toca para activar</string>
-    <string name="VoipGroupEndedStartNew">Chat de voz finalizado. ¿Quieres iniciar uno nuevo?</string>
     <string name="VoipGroupAddMemberTitle">Añadir miembro</string>
     <string name="VoipGroupAddMemberText">¿Quieres añadir a **%1$s** a **%2$s**?</string>
     <string name="VoipGroupInvitedUser">Invitaste a **%1$s** al chat de voz.</string>
@@ -3595,7 +3584,6 @@
     <string name="MembersTalkingNobody">Toca para unirte</string>
     <string name="VoipGroupRecordCall">Iniciar grabación</string>
     <string name="VoipGroupStopRecordCall">Detener grabación</string>
-    <string name="VoipGroupStartAs">Iniciar chat de voz como…</string>
     <string name="VoipGroupJoinAs">Unirme al chat de voz como…</string>
     <string name="VoipGroupDisplayAs">Mostrarme como…</string>
     <string name="VoipGroupStartAsInfo">Elige si quieres ser mostrado con tu cuenta personal o como tu canal.</string>
@@ -3668,7 +3656,6 @@
     <string name="VoipSetNewPhoto">Poner nueva foto</string>
     <string name="VoipCamera">Cámara</string>
     <string name="VideoPreview">Vista previa de video</string>
-    <string name="VideoPreviewDesrciption">Se compartirá video desde tu cámara con otros miembros de este chat de voz</string>
     <string name="ShareVideo">Compartir video de la cámara</string>
     <string name="CallVideoPreviewTitle">Vista previa</string>
     <string name="CallVideoPin">Fijar</string>

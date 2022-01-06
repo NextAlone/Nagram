@@ -2150,9 +2150,6 @@
     <string name="AppUpdateChangelogEmpty">**What\'s new?**\n\n• Bug fixes and improvements.</string>
     <string name="Permanent">Primaire link</string>
     <string name="LinkHashExpired">Link is no longer active</string>
-    <string name="CancelForward">Cancel Forward</string>
-    <string name="SelectOtherChat">Select another chat</string>
-    <string name="CancelForwardMessage">Do you want to cancel forwarding or to forward messages to a different chat?</string>
     <string name="ChatListSwipeGesture">Chat list swipe gesture</string>
     <string name="SwipeSettingsPin">Pin</string>
     <string name="SwipeSettingsRead">Read</string>
@@ -2387,7 +2384,6 @@
     <string name="NoOtherSessionsInfo">Je kunt in Telegram inloggen vanaf andere apparaten (mobiel, tablet, desktop) met hetzelfde telefoonnummer. Al je data zal direct worden gesynchroniseerd.</string>
     <string name="OtherSessions">Actieve sessies</string>
     <string name="SessionsInfo">Beheer je sessies van andere apparaten.</string>
-    <string name="TerminateSessionInfo">Tik op een sessie om deze te beëindigen.</string>
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
     <string name="TerminateSessionText">Deze sessie echt beëindigen?</string>
     <string name="ClearOtherSessionsHelp">Logt alle apparaten behalve deze uit.</string>
@@ -2505,7 +2501,6 @@
     <string name="EnterCurrentPasscode">Huidige toegangscode invoeren</string>
     <string name="EnterNewFirstPasscode">Toegangscode invoeren</string>
     <string name="EnterNewPasscode">Nieuwe toegangscode invoeren</string>
-    <string name="EnterYourPasscode">Toegangscode invoeren</string>
     <string name="ReEnterYourPasscode">Toegangscode opnieuw invoeren</string>
     <string name="PasscodeDoNotMatch">Toegangscodes komen niet overeen</string>
     <string name="AutoLock">Automatisch vergrendelen</string>
@@ -3097,9 +3092,7 @@
     <string name="ActionUserInvitedToChannel">un1 heeft je uitgenodigd voor dit kanaal</string>
     <string name="ActionGroupCallStarted">un1 startte een spraakchat</string>
     <string name="ActionGroupCallStartedByYou">Je startte een spraakchat</string>
-    <string name="ActionGroupCallJustStarted">Voice chat started</string>
     <string name="ActionGroupCallScheduled">Voice chat scheduled on %1$s</string>
-    <string name="ActionGroupCallEnded">Spraakchat beëindigd (%s)</string>
     <string name="ActionGroupCallInvited">un1 nodigde un2 uit voor de spraakchat</string>
     <string name="ActionGroupCallYouInvited">Je hebt un2 uitgenodigd voor de spraakchat.</string>
     <string name="ActionGroupCallInvitedYou">un1 heeft je uitgenodigd voor de spraakchat</string>
@@ -3542,7 +3535,6 @@
     <string name="VoipGroupLeave">Verlaten</string>
     <string name="VoipGroupEnd">Beëindigen</string>
     <string name="VoipGroupMuteMemberAlertTitle">Microfoon dempen</string>
-    <string name="VoipGroupMuteMemberAlertText">Weet je zeker dat je **%1$s** wilt dempen in deze spraakchat?</string>
     <string name="VoipGroupRemoveMemberAlertTitle2">Remove participant</string>
     <string name="VoipGroupRemoveMemberAlertText2">Do you want to remove %1$s from the voice chat and ban them in %2$s?</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** verwijderd van de groep.</string>
@@ -3569,8 +3561,6 @@
     <string name="VoipGroupInviteAlreadyParticipant">De geselecteerde gebruiker is al in deze spraakchat.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Sorry, je kan niet deelnemen aan spraakchats als een anonieme beheerder.</string>
     <string name="VoipGroupTooMuch">Sorry, this voice chat is full.</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 nodigde un2 uit voor de spraakchat</string>
-    <string name="VoipGroupJoinCall">Deelnemen aan spraakchat</string>
     <string name="VoipGroupInviteText">Hoi! Neem deel aan onze spraakchat: %1$s</string>
     <string name="VoipGroupInviteMember">Leden uitnodigen</string>
     <string name="VoipGroupShareLink">Share Invite Link</string>
@@ -3583,7 +3573,6 @@
     <string name="VoipGroupCopyInviteLink">Uitnodigingslink kopiëren</string>
     <string name="VoipGroupCopyInviteLinkCopied">Uitnodigingslink gekopieerd naar klembord.</string>
     <string name="VoipGroupUnmute">Geluid aan</string>
-    <string name="VoipGroupEndedStartNew">Spraakchat beëindigt. Een nieuwe starten?</string>
     <string name="VoipGroupAddMemberTitle">Lid toevoegen</string>
     <string name="VoipGroupAddMemberText">Wil je **%1$s** toevoegen aan **%2$s**?</string>
     <string name="VoipGroupInvitedUser">Je hebt **%1$s** uitgenodigd voor de spraakchat</string>
@@ -3595,7 +3584,6 @@
     <string name="MembersTalkingNobody">Tik om deel te nemen</string>
     <string name="VoipGroupRecordCall">Start opname</string>
     <string name="VoipGroupStopRecordCall">Stop opname</string>
-    <string name="VoipGroupStartAs">Start Voice Chat as...</string>
     <string name="VoipGroupJoinAs">Join Voice Chat as...</string>
     <string name="VoipGroupDisplayAs">Display me as...</string>
     <string name="VoipGroupStartAsInfo">Choose whether you want to be displayed as your personal account or as your channel.</string>
@@ -3668,7 +3656,6 @@
     <string name="VoipSetNewPhoto">Set New Photo</string>
     <string name="VoipCamera">Camera</string>
     <string name="VideoPreview">Video Preview</string>
-    <string name="VideoPreviewDesrciption">Video from your camera will be shared with other members of this voice chat</string>
     <string name="ShareVideo">Share Camera Video</string>
     <string name="CallVideoPreviewTitle">Preview</string>
     <string name="CallVideoPin">Pin</string>

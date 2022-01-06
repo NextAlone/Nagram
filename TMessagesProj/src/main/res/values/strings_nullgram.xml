@@ -11,4 +11,20 @@
     <string name="Categories">Categories</string>
     <string name="About">About</string>
     <string name="OfficialChannelName">NullgramClient</string>
+    <string name="noAvailableUpdate">No Update.</string>
+    <string name="updateAvailable">New Update Available</string>
+    <string name="variantsNotFound">Release variants fail to match automatically.\nPlease download manually from GitHub.</string>
+    <string name="skipUpdate">Ignore</string>
+    <string name="notNow">Not Now</string>
+    <string name="updateConfirm">UPDATE</string>
+    <string name="CheckUpdate">Check for update</string>
+    <string name="CheckingUpdate">Checking for update…</string>
+    <string name="LastUpdateNever">Never checked since install.</string>
+    <string name="LastUpdateDateFormatted">Last successfully checked on %1$s.</string>
+    <string name="LastUpdateFormatted">Last successfully checked %1$s.</string>
+  <string name="BotLogin">Bot Login</string>
+    <string name="BotToken">API Key</string>
+    <string name="InvalidAccessToken">Invalid access token</string>
+  <string name="QRLoginTitle">QR Login</string>
+    <string name="QRLoginMessage">Scan QRCode with another device to login.</string>
 </resources>

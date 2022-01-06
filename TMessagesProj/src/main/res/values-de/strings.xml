@@ -2150,9 +2150,6 @@
     <string name="AppUpdateChangelogEmpty">**Was ist neu?**\n\n• Fehlerbehebungen und Verbesserungen</string>
     <string name="Permanent">Primärer Link</string>
     <string name="LinkHashExpired">Link ist nicht mehr aktiv</string>
-    <string name="CancelForward">Weiterleitung abbrechen</string>
-    <string name="SelectOtherChat">Anderen Chat wählen</string>
-    <string name="CancelForwardMessage">Weiterleitung abbrechen oder möchtest du Nachrichten an einen anderen Chat senden?</string>
     <string name="ChatListSwipeGesture">Wischgeste für Chatliste</string>
     <string name="SwipeSettingsPin">Anheften</string>
     <string name="SwipeSettingsRead">Gelesen</string>
@@ -2387,7 +2384,6 @@
     <string name="NoOtherSessionsInfo">Du kannst dich von jedem Handy, Tablet und Computer bei Telegram mit derselben Telefonnummer anmelden. Alles wird immer sofort synchronisiert.</string>
     <string name="OtherSessions">Aktive Sitzungen</string>
     <string name="SessionsInfo">Überprüfe alle deine angemeldeten Sitzungen.</string>
-    <string name="TerminateSessionInfo">Tippe auf eine Sitzung, um sie zu beenden.</string>
     <string name="TerminateSessionQuestion">Diese Sitzung abmelden?</string>
     <string name="TerminateSessionText">Bist du sicher, dass du diese Sitzung beenden möchtest?</string>
     <string name="ClearOtherSessionsHelp">Alle Sitzungen außer dieser werden beendet.</string>
@@ -2505,7 +2501,6 @@
     <string name="EnterCurrentPasscode">Aktuellen Pincode eingeben</string>
     <string name="EnterNewFirstPasscode">Pincode eingeben</string>
     <string name="EnterNewPasscode">Neuen Pincode eingeben</string>
-    <string name="EnterYourPasscode">Deinen Pincode eingeben</string>
     <string name="ReEnterYourPasscode">Neuen Pincode erneut eingben</string>
     <string name="PasscodeDoNotMatch">Pincode falsch</string>
     <string name="AutoLock">Auto-Sperre</string>
@@ -3097,9 +3092,7 @@
     <string name="ActionUserInvitedToChannel">un1 hat dich in diesen Kanal eingeladen</string>
     <string name="ActionGroupCallStarted">un1 hat einen Sprachchat gestartet</string>
     <string name="ActionGroupCallStartedByYou">Du hast einen Sprachchat gestartet</string>
-    <string name="ActionGroupCallJustStarted">Sprachchat gestartet</string>
     <string name="ActionGroupCallScheduled">Sprachchat geplant für %1$s</string>
-    <string name="ActionGroupCallEnded">Sprachchat beendet (%s)</string>
     <string name="ActionGroupCallInvited">un1 hat un2 in den Sprachchat eingeladen</string>
     <string name="ActionGroupCallYouInvited">Du hast un2 in den Sprachchat eingeladen</string>
     <string name="ActionGroupCallInvitedYou">un1 hat dich in den Sprachchat eingeladen</string>
@@ -3542,7 +3535,6 @@
     <string name="VoipGroupLeave">Verlassen</string>
     <string name="VoipGroupEnd">Beenden</string>
     <string name="VoipGroupMuteMemberAlertTitle">Mikrofon stummschalten</string>
-    <string name="VoipGroupMuteMemberAlertText">Wirklich **%1$s** in diesem Sprachchat stummschalten?</string>
     <string name="VoipGroupRemoveMemberAlertTitle2">Teilnehmer entfernen</string>
     <string name="VoipGroupRemoveMemberAlertText2">Möchtest du %1$s aus dem Sprachchat entfernen und bei %2$s sperren?</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** aus der Gruppe entfernt.</string>
@@ -3569,8 +3561,6 @@
     <string name="VoipGroupInviteAlreadyParticipant">Ausgewählter Nutzer ist bereits in diesem Sprachchat.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Leider kannst du an Sprachchats als anonymer Admin nicht teilnehmen.</string>
     <string name="VoipGroupTooMuch">Dieser Sprachchat ist voll.</string>
-    <string name="VoipGroupInvitedToVoiceChat">un1 hat un2 in den Sprachchat eingeladen</string>
-    <string name="VoipGroupJoinCall">Am Sprachchat teilnehmen</string>
     <string name="VoipGroupInviteText">Hallo! Tritt unserem Sprachchat bei: %1$s</string>
     <string name="VoipGroupInviteMember">Mitglieder einladen</string>
     <string name="VoipGroupShareLink">Einladungslink teilen</string>
@@ -3583,7 +3573,6 @@
     <string name="VoipGroupCopyInviteLink">Einladungslink kopieren</string>
     <string name="VoipGroupCopyInviteLinkCopied">Einladungslink in Zwischenablage kopiert.</string>
     <string name="VoipGroupUnmute">Stumm aus</string>
-    <string name="VoipGroupEndedStartNew">Sprachchat beendet. Neuen starten?</string>
     <string name="VoipGroupAddMemberTitle">Mitglied hinzufügen</string>
     <string name="VoipGroupAddMemberText">**%1$s** zu **%2$s** hinzufügen?</string>
     <string name="VoipGroupInvitedUser">Du hast **%1$s** in den Sprachchat eingeladen.</string>
@@ -3595,7 +3584,6 @@
     <string name="MembersTalkingNobody">Zum Beitreten antippen</string>
     <string name="VoipGroupRecordCall">Aufnahme starten</string>
     <string name="VoipGroupStopRecordCall">Aufnahme beenden</string>
-    <string name="VoipGroupStartAs">Sprachchat starten als...</string>
     <string name="VoipGroupJoinAs">Sprachchat beitreten als...</string>
     <string name="VoipGroupDisplayAs">Zeige mich als...</string>
     <string name="VoipGroupStartAsInfo">Möchtest du mit deinem privaten Konto oder lieber als Kanal angezeigt werden?</string>
@@ -3668,7 +3656,6 @@
     <string name="VoipSetNewPhoto">Neues Bild festlegen</string>
     <string name="VoipCamera">Kamera</string>
     <string name="VideoPreview">Videovorschau</string>
-    <string name="VideoPreviewDesrciption">Das Video deiner Kamera wird mit anderen Teilnehmern des Sprachchats geteilt.</string>
     <string name="ShareVideo">Video von der Kamera teilen</string>
     <string name="CallVideoPreviewTitle">Vorschau</string>
     <string name="CallVideoPin">Anheften</string>
