@@ -159,7 +159,7 @@
     <string name="NekoXFaq">NekoX 常見問題</string>
     <string name="TransSite">翻譯平台</string>
     <string name="OpenKayChain">OpenPGP 客戶端</string>
-    <string name="OpenPGPApp">OpenPGP 提供应用</string>
+    <string name="OpenPGPApp">OpenPGP 客戶端</string>
     <string name="OpenPGPKey">PGP 密鑰</string>
     <string name="None">無</string>
     <string name="Sign">簽名</string>
@@ -194,4 +194,5 @@
     <string name="UseChatAttachEnterMenuNotice">將錄製按鈕轉做輸入選單，再加多個連結預覽開關。</string>
     <string name="MinApi23Required">抱歉，您至少需要 Android 6 (API23)。</string>
     <string name="DismissForYourself">暫時對自己隱藏</string>
+    <string name="StorageReset">清理儲存空間</string>
 </resources>
