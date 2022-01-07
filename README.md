@@ -15,7 +15,8 @@ Nagram is a third-party Telegram client based on Nekogram with not many but usef
 3. Disable chat action sending
 4. Hide group sticker
 5. Text style editable
-6. You added or feature request
+6. Add '您' '咱' repeat longClick pair
+7. You added or feature request
 
 ## API, Protocol documentation
 
