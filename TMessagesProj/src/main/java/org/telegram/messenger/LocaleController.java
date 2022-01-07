@@ -1599,7 +1599,7 @@ public class LocaleController {
             PersianDate pdate = new PersianDate(date);
             if (dateDay == day && year == dateYear) {
                 if (usePersianCalendar){
-                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    if ( NekomuraConfig.displayPersianCalendarByLatin) {
                         return getInstance().formatterDay.format(new Date(date));
                     } else {
                         PersianDateFormat pdformater1 = new PersianDateFormat("B:S");
@@ -1666,7 +1666,7 @@ public class LocaleController {
             PersianDate pdate = new PersianDate(date);
 	        if (dateDay == day && year == dateYear) {
                 if (usePersianCalendar){
-                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    if ( NekomuraConfig.displayPersianCalendarByLatin) {
                         return getInstance().formatterDay.format(new Date(date));
                       }else {
                         return LanguageUtils.getPersianNumbers("" + getInstance().formatterDay.format(new Date(date)));
@@ -1676,7 +1676,7 @@ public class LocaleController {
                 }
             } else if (dateDay + 1 == day && year == dateYear) {
                 if (usePersianCalendar) {
-                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    if ( NekomuraConfig.displayPersianCalendarByLatin) {
                         return LocaleController.formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
                       }else {
                         return LocaleController.formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, LanguageUtils.getPersianNumbers("" + getInstance().formatterDay.format(new Date(date))));
@@ -1765,7 +1765,7 @@ public class LocaleController {
             PersianDate pdate = new PersianDate(date);
             if (dateDay == day && year == dateYear) {
                 if (usePersianCalendar) {
-                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    if ( NekomuraConfig.displayPersianCalendarByLatin) {
                         return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, getInstance().formatterDay.format(new Date(date)));
                     } else {
                         return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, LanguageUtils.getPersianNumbers(String.valueOf(getInstance().formatterDay.format(new Date(date)))));
@@ -1791,7 +1791,7 @@ public class LocaleController {
                 }
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 if (usePersianCalendar) {
-                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    if ( NekomuraConfig.displayPersianCalendarByLatin) {
                         String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianMonthDay(), getInstance().formatterDay.format(new Date(date)));
                         return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);                    
                     } else {
@@ -1804,7 +1804,7 @@ public class LocaleController {
                 }
             } else {
                 if (usePersianCalendar) {
-                    if (NekoConfig.displayPersianCalendarByLatin) {
+                    if ( NekomuraConfig.displayPersianCalendarByLatin) {
                         String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, pdate.getPersianShortDate(), getInstance().formatterDay.format(new Date(date))); 
                         return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
                     } else {
@@ -1999,7 +1999,7 @@ public class LocaleController {
                 int dayDiff = dateDay - day;
                 if (dayDiff == 0 || dayDiff == -1 && System.currentTimeMillis() - date < 60 * 60 * 8 * 1000) {
                     if (usePersianCalendar){
-                        if (NekoConfig.displayPersianCalendarByLatin) {
+                        if ( NekomuraConfig.displayPersianCalendarByLatin) {
                             return getInstance().formatterDay.format(new Date(date));
                         } else {
                             PersianDateFormat pdformater1 = new PersianDateFormat("B:S");

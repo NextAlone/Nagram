@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class PersianDate {
 
@@ -197,7 +198,7 @@ public class PersianDate {
   }
 
   public String getPersianShortDate() {
-    if (NekoConfig.displayPersianCalendarByLatin) {
+    if (NekomuraConfig.displayPersianCalendarByLatin) {
         return "" + formatToMilitary(this.getShYear()) + this.delimiter + formatToMilitary(getShMonth() + 1) + this.delimiter + formatToMilitary(this.getShDay());
     } else {
         return LanguageUtils.getPersianNumbers("" + formatToMilitary(this.getShYear()) + this.delimiter + formatToMilitary(this.getShMonth() + 1) + this.delimiter + formatToMilitary(this.getShDay()));
@@ -205,7 +206,7 @@ public class PersianDate {
   }
 
   public String getPersianNormalDate() {
-    if (NekoConfig.displayPersianCalendarByLatin) {
+    if (NekomuraConfig.displayPersianCalendarByLatin) {
       return this.getShDay() + " " + this.monthNamesLatin() + " " + this.getShYear();
     } else {
       return LanguageUtils.getPersianNumbers(String.valueOf(this.getShDay())) + " " +  this.monthName() + " " + LanguageUtils.getPersianNumbers(String.valueOf(this.getShYear()));
@@ -214,7 +215,7 @@ public class PersianDate {
 
   //like 9 شهریور
   public String getPersianMonthDay() {
-    if (NekoConfig.displayPersianCalendarByLatin) {
+    if (NekomuraConfig.displayPersianCalendarByLatin) {
       return this.getShDay() + " " + this.monthNamesLatin();
     } else {
       return LanguageUtils.getPersianNumbers(String.valueOf(this.getShDay())) + " " + this.monthName();

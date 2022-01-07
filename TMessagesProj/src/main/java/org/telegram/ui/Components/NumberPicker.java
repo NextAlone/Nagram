@@ -184,7 +184,7 @@ public class NumberPicker extends LinearLayout {
         paint.setAntiAlias(true);
         paint.setTextAlign(Align.CENTER);
         paint.setTextSize(mTextSize);
-        if (NekoConfig.usePersianCalendar == 2 || NekoConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
+        if (NekomuraConfig.usePersianCalendar == 2 || NekomuraConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
             paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         } else {
             paint.setTypeface(mInputText.getTypeface());

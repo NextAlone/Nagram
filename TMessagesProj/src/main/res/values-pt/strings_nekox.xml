@@ -127,9 +127,9 @@
     <string name="FilterMenu">Menu de Filtro de Conversas</string>
     <string name="DisableSystemAccount">Desativar Conta do Sistema</string>
     <string name="DisableUndo">Desativar Desfazer</string>
-    <string name="DisablePushAlert">Por favor desative \"Serviço de Notificação NekoX\"</string>
-    <string name="EnablePushAlert">Por favor ative o \"Serviço de Notificação NekoX\"</string>
-    <string name="NekoXPushService">Serviço de Notificação NekoX</string>
+    <string name="DisablePushAlert">Por favor desative \"Serviço de Notificação TeleTux\"</string>
+    <string name="EnablePushAlert">Por favor ative o \"Serviço de Notificação TeleTux\"</string>
+    <string name="TeleTuxPushService">Serviço de Notificação TeleTux</string>
     <string name="SortByContacts">Ordenar por Contatos</string>
     <string name="SortByUser">Ordenar por Utilizador</string>
     <string name="SortByUnmuted">Ordenar por Não-silenciadas</string>
@@ -157,7 +157,7 @@
     <string name="FakeScreenshot">Simular captura de ecrã</string>
     <string name="DisableChatAction">Não enviar o meu estado de entrada</string>
     <string name="PublicPrefix">Público</string>
-    <string name="NekoXProxy">Proxy Público do NekoX</string>
+    <string name="NekoXProxy">Proxy Público do TeleTux</string>
     <string name="RemoveTitleEmoji">Remover emoji no título</string>
     <string name="DoNotRemindAgain">Não lembrar novamente</string>
     <string name="ApplySuggestion">OK, Aplicar</string>
@@ -169,7 +169,7 @@
     <string name="NightMode">Modo Noturno</string>
     <string name="UseDefaultTheme">Usar o tema padrão *</string>
     <string name="ShowIdAndDc">Mostrar ID / DC no perfil</string>
-    <string name="NekoXUpdatesChannel">Canal de atualizações do NekoX</string>
+    <string name="NekoXUpdatesChannel">Canal de atualizações do TeleTux</string>
     <string name="More">Mais</string>
     <string name="TransInputToLang">Idioma de destino da tradução para envio de mensagens</string>
     <string name="TransToLang">Idioma de destino para tradução</string>
