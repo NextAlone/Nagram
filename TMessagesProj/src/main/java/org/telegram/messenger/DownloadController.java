@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.util.LongSparseArray;
 import android.util.Pair;
 import android.util.SparseArray;
 
@@ -24,20 +23,18 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.collection.LongSparseArray;
+
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
     public interface FileDownloadProgressListener {
         void onFailedDownload(String fileName, boolean canceled);
-
         void onSuccessDownload(String fileName);
-
         void onProgressDownload(String fileName, long downloadSize, long totalSize);
-
         void onProgressUpload(String fileName, long downloadSize, long totalSize, boolean isEncrypted);
-
         int getObserverTag();
     }
 
@@ -152,17 +149,17 @@ public class DownloadController extends BaseController implements NotificationCe
                 if (settings.photo_size_max != 0 && !settings.disabled) {
                     mask[a] |= AUTODOWNLOAD_TYPE_PHOTO;
                 } else {
-                    mask[a] &= ~AUTODOWNLOAD_TYPE_PHOTO;
+                    mask[a] &=~ AUTODOWNLOAD_TYPE_PHOTO;
                 }
                 if (settings.video_size_max != 0 && !settings.disabled) {
                     mask[a] |= AUTODOWNLOAD_TYPE_VIDEO;
                 } else {
-                    mask[a] &= ~AUTODOWNLOAD_TYPE_VIDEO;
+                    mask[a] &=~ AUTODOWNLOAD_TYPE_VIDEO;
                 }
                 if (settings.file_size_max != 0 && !settings.disabled) {
                     mask[a] |= AUTODOWNLOAD_TYPE_DOCUMENT;
                 } else {
-                    mask[a] &= ~AUTODOWNLOAD_TYPE_DOCUMENT;
+                    mask[a] &=~ AUTODOWNLOAD_TYPE_DOCUMENT;
                 }
             }
         }
@@ -578,9 +575,9 @@ public class DownloadController extends BaseController implements NotificationCe
         if (messageObject.getDocument() != null) {
             String documentName = messageObject.getDocument().file_name;
             if (StrUtil.isNotBlank(documentName)) {
-                if ((NekoConfig.disableAutoDownloadingWin32Executable &&
+                if ((NekomuraConfig.disableAutoDownloadingWin32Executable.Bool() &&
                         documentName.toLowerCase().matches(".*\\.(cmd|bat|com|exe|lnk|msi|ps1|reg|vb|vbe|vbs|vbscript)")
-                ) || (NekoConfig.disableAutoDownloadingArchive &&
+                ) || (NekomuraConfig.disableAutoDownloadingArchive.Bool() &&
                         documentName.toLowerCase().matches(".*\\.(apk|zip|7z|tar|gz|zst|iso|xz|lha|lzh)")
                 )
                 ) return false;
@@ -647,7 +644,7 @@ public class DownloadController extends BaseController implements NotificationCe
                     index = 2;
                 }
             } else {
-                TLRPC.Chat chat = message.peer_id != null && message.peer_id.channel_id != 0 ? getMessagesController().getChat(message.peer_id.channel_id) : null;
+                TLRPC.Chat chat = message.peer_id.channel_id != 0 ? getMessagesController().getChat(message.peer_id.channel_id) : null;
                 if (ChatObject.isChannel(chat) && chat.megagroup) {
                     if (message.from_id instanceof TLRPC.TL_peerUser && getContactsController().contactsDict.containsKey(message.from_id.user_id)) {
                         index = 0;

@@ -128,8 +128,12 @@ public class ProxyHandler implements Runnable {
         for (int i = 1; target == null && i < 4; i++) {
             target = mapper.get(server.substring(0, server.length() - i));
         }
-        if (target == null) {
-            FileLog.e("No route for ip " + server);
+        if (target == null || target.equals(-1)) {
+            // Too many logs
+            if (!mapper.containsKey(server)) {
+                mapper.put(server, -1);
+                FileLog.e("No route for ip " + server);
+            }
             close();
             return;
         }
@@ -145,7 +149,7 @@ public class ProxyHandler implements Runnable {
         }
 
         if (okhttpClient == null) {
-            okhttpClient = new OkHttpClient();
+            okhttpClient = new OkHttpClient.Builder().dns(new WsLoader.CustomDns()).build();
         }
 
         ((OkHttpClient) okhttpClient)

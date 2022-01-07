@@ -47,7 +47,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.URLSpan;
-import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -86,6 +85,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManagerFixed;
@@ -173,7 +173,7 @@ import java.util.Locale;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -640,6 +640,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     };
 
+    private boolean closeAnimationInProgress;
+
     private class WindowView extends FrameLayout {
 
         private final Paint blackPaint = new Paint();
@@ -654,7 +656,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int startedTrackingX;
         private int startedTrackingY;
         private VelocityTracker tracker;
-        private boolean closeAnimationInProgress;
         private float innerTranslationX;
         private float alpha;
 
@@ -1092,7 +1093,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (checkingForLongPress && windowView != null) {
                 checkingForLongPress = false;
                 if (pressedLink != null) {
-                    if (!NekoConfig.disableVibration) {
+                    if (!NekomuraConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                     showCopyPopup(pressedLink.getUrl());
@@ -1107,11 +1108,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     } else {
                         textSelectionHelper.trySelect(pressedLinkOwnerView);
                     }
-                    if (textSelectionHelper.isSelectionMode() && !NekoConfig.disableVibration) {
+                    if (textSelectionHelper.isSelectionMode() && !NekomuraConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                 } else if (pressedLinkOwnerLayout != null && pressedLinkOwnerView != null) {
-                    if (!NekoConfig.disableVibration) {
+                    if (!NekomuraConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                     int[] location = new int[2];
@@ -3715,12 +3716,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             @Override
             public void onTextCopied() {
-                BulletinFactory.of(containerView).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                BulletinFactory.of(containerView, null).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
             }
         });
         containerView.addView(textSelectionHelper.getOverlayView(activity));
 
-        pinchToZoomHelper = new PinchToZoomHelper(containerView);
+        pinchToZoomHelper = new PinchToZoomHelper(containerView, windowView);
         pinchToZoomHelper.setClipBoundsListener(new PinchToZoomHelper.ClipBoundsListener() {
             @Override
             public void getClipTopBottom(float[] topBottom) {
@@ -4077,7 +4078,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return;
         }
         Bundle args = new Bundle();
-        args.putInt("user_id", user.id);
+        args.putLong("user_id", user.id);
         args.putString("botUser", "webpage" + wid);
         ((LaunchActivity) parentActivity).presentFragment(new ChatActivity(args), false, true);
         close(false, true);
@@ -4545,7 +4546,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void close(boolean byBackPress, boolean force) {
-        if (parentActivity == null || !isVisible || checkAnimation()) {
+        if (parentActivity == null || closeAnimationInProgress || !isVisible || checkAnimation()) {
             return;
         }
         if (fullscreenVideoContainer.getVisibility() == View.VISIBLE) {
@@ -4724,7 +4725,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             AndroidUtilities.runOnUIThread(() -> cell.setState(2, false));
             AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(currentAccount).loadFullChat(channel.id, 0, true), 1000);
-            MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList<>(), null, true, channel.id);
+            MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(-channel.id, channel.id, new ArrayList<>(), null, true);
         });
     }
 
@@ -10327,9 +10328,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 String currentUrl = AndroidUtilities.formapMapUrl(false, currentBlock.geo.lat, currentBlock.geo._long, (int) (photoWidth / AndroidUtilities.density), (int) (height / AndroidUtilities.density), true, 15);
                 WebFile currentWebFile = WebFile.createWithGeoPoint(currentBlock.geo, (int) (photoWidth / AndroidUtilities.density), (int) (height / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil(AndroidUtilities.density)));
 
-                if (NekoConfig.mapPreviewProvider == 0) {
+                if (NekomuraConfig.mapPreviewProvider.Int() == 0) {
                     currentMapProvider = 2;
-                } else if (NekoConfig.mapPreviewProvider == 1) {
+                } else if (NekomuraConfig.mapPreviewProvider.Int() == 1) {
                     currentMapProvider = 1;
                 } else {
                     currentMapProvider = -1;

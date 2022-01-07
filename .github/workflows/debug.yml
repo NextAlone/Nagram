@@ -134,6 +134,11 @@ jobs:
         run: |
           cd TMessagesProj/jni
           ./patch_boringssl.sh
+      - name: Native Build (libvpx)
+        if: (matrix.flavor == 'x86' || matrix.flavor == 'x86_64') && steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get install yasm -y
+          ./run init libs libvpx_x86
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -241,12 +246,8 @@ jobs:
         flavor:
           - MiniRelease
           - MiniReleaseNoGcm
-          - MiniAppleEmojiRelease
-          - MiniAppleEmojiReleaseNoGcm
           - FullRelease
           - FullReleaseNoGcm
-          - FullAppleEmojiRelease
-          - FullAppleEmojiReleaseNoGcm
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -306,8 +307,6 @@ jobs:
           sed -i -e "s/16384/6144/g" gradle.properties
           echo "sdk.dir=${ANDROID_HOME}" >> local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" >> local.properties
-      - name: Fix Compile SDK 31.0.0
-        run: ./run init env
       - name: Gradle cache
         uses: actions/cache@v2
         with:
@@ -347,3 +346,104 @@ jobs:
         with:
           name: NekoX-${{ matrix.flavor }}-x86
           path: ${{ env.APK_FILE_X86 }}
+
+  build-dev:
+    name: Gradle Build
+    runs-on: ubuntu-latest
+    needs:
+      - native
+      - v2ray
+      - telegram-bot-api
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+      - name: Fetch Status
+        run: |
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
+          git submodule status 'ssr-libev/*' > shadowsocksr_status
+          git submodule status v2ray > v2ray_status
+      - name: Native Cache (arm64-v8a)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
+      - name: V2ray Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/libv2ray.aar
+          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
+      - name: Configure Gradle
+        run: |
+          sed -i -e "s/16384/6144/g" gradle.properties
+          echo "sdk.dir=${ANDROID_HOME}" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" >> local.properties
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - name: Download Telegram Bot API Binary
+        uses: actions/download-artifact@master
+        with:
+          name: telegram-bot-api-binary
+          path: .
+      - name: Debug Build
+        run: |
+          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          export DEBUG_BUILD=true
+          export NATIVE_TARGET=arm64-v8a
+          ./gradlew TMessagesProj:assembleMiniRelease
+      - name: Send Build
+        run: |
+          chmod +x telegram-bot-api-binary
+          ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 2>&1 > /dev/null &
+          apk=$(find TMessagesProj/build/outputs/apk/mini/release -name '*arm64-v8a*.apk' | head -n 1)
+          curl http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendDocument \
+            -X POST \
+            -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
+            -F document="@$apk" \
+            -F caption="$GITHUB_SHA" \
+            --silent --show-error --fail >/dev/null
+          pkill telegram-bot
+
+  telegram-bot-api:
+    name: Telegram Bot API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Clone Telegram Bot API
+        run: |
+          git clone --recursive https://github.com/tdlib/telegram-bot-api.git
+          git status telegram-bot-api >> telegram-bot-api-status
+      - name: Cache Bot API Binary
+        id: cache-bot-api
+        uses: actions/cache@v2
+        with:
+          path: telegram-bot-api-binary
+          key: CI-telegram-bot-api-${{ hashFiles('telegram-bot-api-status') }}
+      - name: Compile Telegram Bot API
+        if: steps.cache-bot-api.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install make git zlib1g-dev libssl-dev gperf cmake g++
+          cd telegram-bot-api
+          rm -rf build
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. ..
+          cmake --build . --target install -j$(nproc)
+          cd ../..
+          ls -l telegram-bot-api/bin/telegram-bot-api*
+          cp telegram-bot-api/bin/telegram-bot-api telegram-bot-api-binary
+      - name: Upload Binary
+        uses: actions/upload-artifact@master
+        with:
+          name: telegram-bot-api-binary
+          path: telegram-bot-api-binary

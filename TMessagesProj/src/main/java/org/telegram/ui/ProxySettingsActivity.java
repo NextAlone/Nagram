@@ -106,7 +106,7 @@ public class ProxySettingsActivity extends BaseFragment {
 
     private static final int done_button = 1;
 
-    public class TypeCell extends FrameLayout {
+    public static class TypeCell extends FrameLayout {
 
         private TextView textView;
         private ImageView checkImage;
@@ -357,7 +357,7 @@ public class ProxySettingsActivity extends BaseFragment {
                             }
                         } else {
                             if (start >= 0) {
-                                phoneField.setSelection(start <= phoneField.length() ? start : phoneField.length());
+                                phoneField.setSelection(Math.min(start, phoneField.length()));
                             }
                         }
                         ignoreOnTextChange = false;
@@ -424,7 +424,7 @@ public class ProxySettingsActivity extends BaseFragment {
             bottomCells[i].setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             if (i == 0) {
                 bottomCells[i].setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
-            } else if (i == 1) {
+            } else {
                 bottomCells[i].setText(LocaleController.getString("UseProxyTelegramInfo", R.string.UseProxyTelegramInfo) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", R.string.UseProxyTelegramInfo2));
                 bottomCells[i].setVisibility(View.GONE);
             }

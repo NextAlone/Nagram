@@ -14,26 +14,25 @@ public class NekoXConfig {
 
     //  public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
     public static String FAQ_URL = "https://github.com/TeleTux/TeleTux#faq";
-    public static int[] officialChats = {
+    public static long[] officialChats = {
             1223771542, // TeleTux Updates
             1199446479, // TeleTux Chat
             1199446479, // TeleTux Chat Channel
             1336955033, // TeleTux APKs
     };
 
-    public static int[] developers = {
+    public static long[] developers = {
             1160156558, // freetux
             247133452
     };
 
-    public static int[] maindevelopers = {
+    public static long[] maindevelopers = {
         1160156558 // freetux
 };
 
 
     public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
 
-    public static boolean developerModeEntrance;
     public static boolean developerMode = preferences.getBoolean("developer_mode", false);
 
     public static boolean disableFlagSecure = preferences.getBoolean("disable_flag_secure", false);

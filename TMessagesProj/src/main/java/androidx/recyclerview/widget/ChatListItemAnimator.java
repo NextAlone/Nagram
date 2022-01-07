@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.Interpolator;
@@ -15,13 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BotHelpCell;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ChatActivity;
@@ -57,14 +55,14 @@ public class ChatListItemAnimator extends DefaultItemAnimator {
     private ChatGreetingsView chatGreetingsView;
 
     private boolean reversePositions;
+    private final Theme.ResourcesProvider resourcesProvider;
 
-    public ChatListItemAnimator(ChatActivity activity, RecyclerListView listView) {
+    public ChatListItemAnimator(ChatActivity activity, RecyclerListView listView, Theme.ResourcesProvider resourcesProvider) {
+        this.resourcesProvider = resourcesProvider;
         this.activity = activity;
         this.recyclerListView = listView;
         translationInterpolator = DEFAULT_INTERPOLATOR;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            listView.getElevation();
-        }
+        setSupportsChangeAnimations(false);
     }
 
     @Override
@@ -295,12 +293,12 @@ public class ChatListItemAnimator extends DefaultItemAnimator {
             if (activity.getChatActivityEnterView().canShowMessageTransition()) {
                 if (chatMessageCell.getMessageObject().isVoice()) {
                     if (Math.abs(view.getTranslationY()) < view.getMeasuredHeight() * 3f) {
-                        VoiceMessageEnterTransition transition = new VoiceMessageEnterTransition(chatMessageCell, activity.getChatActivityEnterView(), recyclerListView, activity.messageEnterTransitionContainer);
+                        VoiceMessageEnterTransition transition = new VoiceMessageEnterTransition(chatMessageCell, activity.getChatActivityEnterView(), recyclerListView, activity.messageEnterTransitionContainer, resourcesProvider);
                         transition.start();
                     }
                 } else {
                     if (SharedConfig.getDevicePerformanceClass() != SharedConfig.PERFORMANCE_CLASS_LOW && Math.abs(view.getTranslationY()) < recyclerListView.getMeasuredHeight()) {
-                        TextMessageEnterTransition transition = new TextMessageEnterTransition(chatMessageCell, activity, recyclerListView, activity.messageEnterTransitionContainer);
+                        TextMessageEnterTransition transition = new TextMessageEnterTransition(chatMessageCell, activity, recyclerListView, activity.messageEnterTransitionContainer, resourcesProvider);
                         transition.start();
                     }
                 }
@@ -496,8 +494,9 @@ public class ChatListItemAnimator extends DefaultItemAnimator {
 
                 if (group == null && params.wasDraw) {
                     boolean isOut = chatMessageCell.getMessageObject().isOutOwner();
-                    if ((isOut && params.lastDrawingBackgroundRect.left != chatMessageCell.getBackgroundDrawableLeft()) ||
-                            (!isOut && params.lastDrawingBackgroundRect.right != chatMessageCell.getBackgroundDrawableRight()) ||
+                    boolean widthChanged = (isOut && params.lastDrawingBackgroundRect.left != chatMessageCell.getBackgroundDrawableLeft()) ||
+                            (!isOut && params.lastDrawingBackgroundRect.right != chatMessageCell.getBackgroundDrawableRight());
+                    if (widthChanged ||
                             params.lastDrawingBackgroundRect.top != chatMessageCell.getBackgroundDrawableTop() ||
                             params.lastDrawingBackgroundRect.bottom != chatMessageCell.getBackgroundDrawableBottom()) {
                         moveInfo.deltaBottom = chatMessageCell.getBackgroundDrawableBottom() - params.lastDrawingBackgroundRect.bottom;
@@ -510,6 +509,7 @@ public class ChatListItemAnimator extends DefaultItemAnimator {
                         moveInfo.animateBackgroundOnly = true;
 
                         params.animateBackgroundBoundsInner = true;
+                        params.animateBackgroundWidth = widthChanged;
                         params.deltaLeft = -moveInfo.deltaLeft;
                         params.deltaRight = -moveInfo.deltaRight;
                         params.deltaTop = -moveInfo.deltaTop;
@@ -1209,6 +1209,9 @@ public class ChatListItemAnimator extends DefaultItemAnimator {
     }
 
     public void groupWillChanged(MessageObject.GroupedMessages groupedMessages) {
+        if (groupedMessages == null) {
+            return;
+        }
         if (groupedMessages.messages.size() == 0) {
             groupedMessages.transitionParams.drawBackgroundForDeletedItems = true;
         } else {

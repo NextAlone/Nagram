@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Deshabilitar la vista previa del enlace de forma predeterminada</string>
     <string name="DisableLinkPreviewByDefaultNotice">Desactive la solicitud de vista previa del enlace durante la entrada de forma predeterminada para evitar que el servidor sepa que el enlace se comparte a través de Telegram.</string>
     <string name="CustomApi">API personalizada</string>
-    <string name="UseCustomApiNotice">Inicie sesión con la Api personalizada, si no puede registrarse o iniciar sesión, esto puede ayudar.\n\n Nota: fcm no funcionará si está utilizando la versión de lanzamiento.</string>
+    <string name="UseCustomApiNotice">Inicie sesión con la Api personalizada, si no puede registrarse o iniciar sesión, esto puede ayudar.
+\n
+\n Nota: fcm no funcionará si está utilizando la versión de lanzamiento.</string>
     <string name="CustomApiNo">No usar API personalizada</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -43,7 +45,7 @@
     <string name="GoogleCloudTransKey">Clave del traductor de Google Cloud</string>
     <string name="GoogleCloudTransKeyNotice">Si configura una clave de Google Cloud Trans, la API de traducción a la nube será llamada en lugar de enviar un formulario falso a la versión web al traducir (más rápido, estable y ahorrando tráfico).</string>
     <string name="TransToLang">Idioma destino de la traducción</string>
-    <string name="TransInputToLang">Idioma destino de la traducción</string>
+    <string name="TransInputToLang">Idioma de origen de la traducción</string>
     <string name="More">Más</string>
     <string name="TeleTuxUpdatesChannel">Canal de actualizaciones TeleTux</string>
     <string name="ShowIdAndDc">Mostrar ID / DC en el perfil</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Borrar todo en el chat</string>
     <string name="DeleteAllInChatAlert">¡Advertencia! Esto **eliminará todos los mensajes** en este chat para **todos** los participantes.</string>
     <string name="UnblockAll">Desbloquear todo</string>
-    <string name="UnblockAllWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios y bots**?</string>
+    <string name="UnblockAllWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios y bots**\?</string>
     <string name="BlockedListEmpty">No has bloqueado a nadie :)</string>
     <string name="ProxyTypeVmess">Proxy VMess</string>
     <string name="AddProxySocks5">Añadir Proxy Socks5</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">Importar stickers desde archivo</string>
     <string name="ImportStickersList">Importar stickers</string>
     <string name="StickerSets">Conjunto de Stickers</string>
-    <string name="InvalidStickersFile">Archivo de stickers inválido: </string>
-    <string name="InvalidProxyFile">Archivo de lista de proxy inválido: </string>
-    <string name="ImportedProxies">Servidores proxy importados: </string>
-    <string name="ErrorsInImport">Errores de importación: </string>
+    <string name="InvalidStickersFile">Archivo de stickers inválido:</string>
+    <string name="InvalidProxyFile">Archivo de lista de proxy inválido:</string>
+    <string name="ImportedProxies">Servidores proxy importados:</string>
+    <string name="ErrorsInImport">Errores de importación:</string>
     <string name="NoProxy">No ha agregado ningún servidor proxy.</string>
     <string name="DeleteAllServer">Borrar todos los servidores</string>
     <string name="DeleteUnavailableServer">Borrar servidores no disponibles</string>
-    <string name="DeleteAllServerConfirm">¿Estás seguro de que quieres **eliminar todos los servidores**?</string>
-    <string name="DeleteUnavailableServerConfirm">¿Estás seguro de que quieres **eliminar servidores no disponibles**?</string>
+    <string name="DeleteAllServerConfirm">¿Estás seguro de que quieres **eliminar todos los servidores**\?</string>
+    <string name="DeleteUnavailableServerConfirm">¿Estás seguro de que quieres **eliminar servidores no disponibles**\?</string>
     <string name="MinApi21Required">Lo sentimos, necesitas al menos Android 5 (API21).</string>
     <string name="MinApi23Required">Lo sentimos, necesita al menos Android 6 (API23).</string>
     <string name="MiniVersionAlert">Lo sentimos, la mini versión no es compatible con este tipo de proxy, por favor cambie la versión en ajustes.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">Desanclar todos los mensajes</string>
     <string name="DismissForYourself">Descartar para ti mismo</string>
     <string name="ImportLogin">Iniciar sesión con QR</string>
-    <string name="QRLoginNotice">Este código / enlace QR permite que alguien inicie sesión en su cuenta de Telegram. ¿Es esta tu propia operación?</string>
+    <string name="QRLoginNotice">Este código / enlace QR permite que alguien inicie sesión en su cuenta de Telegram. ¿Es esta tu propia operación\?</string>
     <string name="QRLoginConfirm">Confirmar inicio de sesión</string>
     <string name="StorageReset">Limpiar almacenamiento</string>
     <string name="StorageResetInfo">Todos los datos de esta aplicación se eliminarán de forma permanente (e intente cerrar sesión en todas las cuentas primero).</string>
     <string name="FCTitle">Acerca de las actualizaciones de la aplicación</string>
-    <string name="FCInfo">¿Sigue nuestro canal de anuncios y actualizaciones?</string>
+    <string name="FCInfo">¿Sigue nuestro canal de anuncios y actualizaciones\?</string>
     <string name="CCTitle">OpenCC (conversión de chino)</string>
     <string name="CCTarget">Objetivo</string>
     <string name="CCNo">Ninguna</string>
@@ -208,4 +210,57 @@
     <string name="AcceptSecretChat">Aceptar nuevo chat secreto</string>
     <string name="TabletMode">Modo tablet</string>
     <string name="TabletModeDefault">Depende del dispositivo</string>
+    <string name="ReplaceRegex">Usar regex</string>
+    <string name="PinSticker">Fijar</string>
+    <string name="TextOrigin">Origen</string>
+    <string name="TextReplace">Reemplazar</string>
+    <string name="UnpinSticker">Desfijar</string>
+    <string name="ArchiveFiles">Ficheros de archivo</string>
+    <string name="DisplayPersianCalendarByLatin">Mostrar el calendario persa en latín</string>
+    <string name="SetPinnedSuffix">(Fijado)</string>
+    <string name="AutoLockImmediately">Inmediatamente</string>
+    <string name="VersionUpdateVariantNotMatch">Las variantes de la versión fallaron para coincidir automáticamente.
+\nPor favor descargue manualmente desde GitHub.</string>
+    <string name="UsePersiancalendarInfo">Mostrar la fecha con el calendario Solar Hijri</string>
+    <string name="AutoCheckUpdateSwitch">Actualización automática</string>
+    <string name="DisableTrending">Deshabilitar tendencia</string>
+    <string name="ImportSettings">Ajustes de importación</string>
+    <string name="Win32ExecutableFiles">Archivos Win32 ejecutables</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="BackupSettings">Ajustes de la copia de seguridad</string>
+    <string name="AutoDownload">Autodescarga</string>
+    <string name="nekoXPaymentRemovedToast">La función de pago ha sido eliminada.</string>
+    <string name="useCustomEmojiInvalid">No es un zip válido de emoji.</string>
+    <string name="repeatConfirm">Preguntar antes de repetir</string>
+    <string name="repeatConfirmText">¿Está seguro de que quiere clonar\?</string>
+    <string name="AddProxyWs">Agregar relevo WebSocket</string>
+    <string name="UsePersiancalendar">Usar el calendario Persa</string>
+    <string name="hideSponsoredMessage">Ocultar mensajes patrocinados</string>
+    <string name="DeleteDownloadedFileConfirm">¿Eliminar este archivo de la caché local\?</string>
+    <string name="customPublicProxyIP">Establecer la IP del proxy público</string>
+    <string name="unreadBadgeOnBackButton">Icono de no leído en el botón de \'atrás\'</string>
+    <string name="customPublicProxyIPNotice">En algunas zonas, especificar la IP del proxy CDN público (por ejemplo, Cloudflare) puede acelerar el acceso.</string>
+    <string name="DeleteDownloadedFileSucceed">Eliminado</string>
+    <string name="DeleteDownloadedFileExternal">Se omite el archivo externo.</string>
+    <string name="update_download_soucre">Seleccionar fuente descarga</string>
+    <string name="valuesLargeAvatarInDrawer">Por defecto de Telegram
+\nAvatar como fondo
+\nAvatar grande como fondo</string>
+    <string name="ReplaceText">Reemplazar texto</string>
+    <string name="ProxyInfoWS">Configuración del relevo WebSocket</string>
+    <string name="WsPayload">Carga útil</string>
+    <string name="VersionUpdateNotNow">Ahora no</string>
+    <string name="VersionUpdateTitle">Nueva versión disponible</string>
+    <string name="AutoCheckUpdateStable">Estable</string>
+    <string name="useCustomEmoji">Usar emojis personalizados</string>
+    <string name="AutoCheckUpdateRc">Candidato de lanzamiento</string>
+    <string name="ImportSettingsAlert">¿Estás seguro de que quieres sobrescribir los ajustes\? Importar ajustes de fuentes desconocidas puede hacer que se sobrescriba el pin y que la aplicación se bloquee.</string>
+    <string name="VersionUpdateConfirm">ACTUALIZAR</string>
+    <string name="VersionUpdateIgnore">Ignorar</string>
+    <string name="EnableStickerPin">Habilitar el fijado de stickers</string>
+    <string name="VersionUpdateNoUpdate">No actualizar.</string>
+    <string name="EnableStickerPinAbout">Fijar stickers y sincronizarlos con la nube incluso al añadir nuevos stickers.
+\nEmparejado con Desactivar Favoritos y Recientes.</string>
+    <string name="EnableStickerPinTip">Esta función todavía está en desarrollo, la sincronización en la nube no podría trabajar como se espera.</string>
+    <string name="AutoCheckUpdateOFF">Desactivado</string>
 </resources>

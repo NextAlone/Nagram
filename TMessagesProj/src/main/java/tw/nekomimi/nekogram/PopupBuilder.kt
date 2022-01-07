@@ -35,6 +35,23 @@ class PopupBuilder @JvmOverloads constructor(anchor: View, dialog: Boolean = fal
 
     }
 
+    fun setItems(items: List<CharSequence?>, listener: (Int, CharSequence) -> Unit) {
+
+        removeAllSubItems()
+
+        for (item in items) {
+            if (item == null) continue
+            addSubItem(items.indexOf(item), item)
+        }
+
+        setDelegate {
+
+            listener(it, items[it]!!)
+
+        }
+
+    }
+
     fun show() {
 
         toggleSubMenu()

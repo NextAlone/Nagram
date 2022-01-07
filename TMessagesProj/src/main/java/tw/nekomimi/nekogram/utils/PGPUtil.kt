@@ -5,7 +5,7 @@ import org.openintents.openpgp.util.OpenPgpApi
 import org.openintents.openpgp.util.OpenPgpServiceConnection
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
-import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nkmr.NekomuraConfig
 
 object PGPUtil {
 
@@ -27,7 +27,7 @@ object PGPUtil {
 
         serviceConnection = OpenPgpServiceConnection(
                 ApplicationLoader.applicationContext,
-                NekoConfig.openPGPApp
+                NekomuraConfig.openPGPApp.String()
         )
 
 

@@ -52,6 +52,7 @@
 #include "rtc_base/third_party/base64/base64.h"
 #include "rtc_base/trace_event.h"
 #include "system_wrappers/include/metrics.h"
+#include "../../../tgcalls/group/GroupInstanceCustomImpl.h"
 
 #if WEBRTC_ENABLE_PROTOBUF
 RTC_PUSH_IGNORING_WUNDEF()
@@ -1105,6 +1106,11 @@ class WebRtcVoiceMediaChannel::WebRtcAudioSendStream
         max_send_bitrate_bps_, rtp_parameters_.encodings[0].max_bitrate_bps,
         *audio_codec_spec_);
 
+    if (tgcalls::GroupInstanceCustomImpl::customAudioBitrate != 0) {
+      config_.send_codec_spec->target_bitrate_bps = tgcalls::GroupInstanceCustomImpl::customAudioBitrate;
+      config_.max_bitrate_bps = tgcalls::GroupInstanceCustomImpl::customAudioBitrate;
+      config_.min_bitrate_bps = tgcalls::GroupInstanceCustomImpl::customAudioBitrate;
+    }
     UpdateAllowedBitrateRange();
 
     // Encoder will only use two channels if the stereo parameter is set.
@@ -1831,7 +1837,7 @@ bool WebRtcVoiceMediaChannel::SetSendCodecs(
     // "unchanged" so that BWE isn't affected.
     bitrate_config.start_bitrate_bps = -1;
   }
-  call_->GetTransportControllerSend()->SetSdpBitrateParameters(bitrate_config);
+  call_->GetTransportControllerSend()->SetSdpBitrateParameters(bitrate_config); // here
 
   // Check if the transport cc feedback or NACK status has changed on the
   // preferred send codec, and in that case reconfigure all receive streams.

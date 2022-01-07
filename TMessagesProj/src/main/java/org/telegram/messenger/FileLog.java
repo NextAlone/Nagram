@@ -12,6 +12,14 @@ import android.util.Log;
 
 import cn.hutool.core.util.StrUtil;
 
+import org.telegram.messenger.time.FastDateFormat;
+import org.telegram.messenger.video.MediaCodecVideoConvertor;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Locale;
+
 public class FileLog {
 
     public static String getNetworkLogPath() {
@@ -42,6 +50,17 @@ public class FileLog {
 
     public static void e(final Throwable e) {
         Log.e(mkTag(), mkMessage(e), e);
+    }
+
+    public static void e(final Throwable e, boolean dummyException) {
+        e(e);
+    }
+
+    private static boolean needSent(Throwable e) {
+        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException) {
+            return false;
+        }
+        return true;
     }
 
     public static void d(final String message) {

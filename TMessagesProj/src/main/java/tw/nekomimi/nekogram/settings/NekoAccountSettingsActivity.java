@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -106,33 +108,51 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                 builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
                 builder.setTitle(LocaleController.getString("DeleteAccount", R.string.DeleteAccount));
                 builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), (dialog, which) -> {
-                    ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(getMessagesController().getAllDialogs());
-                    for (TLRPC.Dialog TLdialog : dialogs) {
-                        if (TLdialog instanceof TLRPC.TL_dialogFolder) {
-                            continue;
-                        }
-                        TLRPC.Peer peer = getMessagesController().getPeer((int) TLdialog.id);
-                        if (peer.channel_id != 0) {
-                            TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
-                            if (!chat.broadcast) {
-                                if (ChatObject.isChannel(chat) && chat.megagroup && ChatObject.canUserDoAction(chat, ChatObject.ACTION_DELETE_MESSAGES)) {
-                                    getMessagesController().deleteUserChannelHistory(chat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
-                                } else {
-                                    MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(null, TLdialog.id, getMessagesController().getUser(getUserConfig().clientUserId));
-                                }
-                            }
-                        }
-                        if (peer.user_id != 0) {
-                            getMessagesController().deleteDialog(TLdialog.id, 0, true);
-                        }
-                    }
                     AlertDialog.Builder builder12 = new AlertDialog.Builder(getParentActivity());
                     builder12.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
                     builder12.setTitle(LocaleController.getString("DeleteAccount", R.string.DeleteAccount));
+
+                    LinearLayout linearLayout = new LinearLayout(context);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                    EditTextBoldCursor editText = new EditTextBoldCursor(context);
+                    editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                    editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    editText.setHint("Type 'yes' in capital to continue.");
+                    linearLayout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, AndroidUtilities.dp(8), 0, AndroidUtilities.dp(10), 0));
+
+                    builder12.setView(linearLayout);
+
                     builder12.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), (dialogInterface, i) -> {
+
+                        if (!editText.getText().toString().equals("YES")) return;
+
                         final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
                         progressDialog.setCanCacnel(false);
+                        progressDialog.show();
 
+                        // delete dialogs
+                        ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(getMessagesController().getAllDialogs());
+                        for (TLRPC.Dialog TLdialog : dialogs) {
+                            if (TLdialog instanceof TLRPC.TL_dialogFolder) {
+                                continue;
+                            }
+                            TLRPC.Peer peer = getMessagesController().getPeer((int) TLdialog.id);
+                            if (peer.channel_id != 0) {
+                                TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
+                                if (!chat.broadcast) {
+                                    if (ChatObject.isChannel(chat) && chat.megagroup && ChatObject.canUserDoAction(chat, ChatObject.ACTION_DELETE_MESSAGES)) {
+                                        getMessagesController().deleteUserChannelHistory(chat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
+                                    } else {
+                                        MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(null, TLdialog.id, getMessagesController().getUser(getUserConfig().clientUserId));
+                                    }
+                                }
+                            }
+                            if (peer.user_id != 0) {
+                                getMessagesController().deleteDialog(TLdialog.id, 0, true);
+                            }
+                        }
+                        // delete account
                         TLRPC.TL_account_deleteAccount req = new TLRPC.TL_account_deleteAccount();
                         req.reason = "Meow";
                         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -155,7 +175,6 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                                 builder1.show();
                             }
                         }));
-                        progressDialog.show();
                     });
                     builder12.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     AlertDialog dialog12 = builder12.create();

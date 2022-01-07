@@ -101,4 +101,22 @@
     <string name="Connection">Conexão</string>
     <string name="IgnoreBlocked">Ignore utilizadores bloqueados no grupo</string>
     <string name="InvalidAccessToken">Token de acesso inválido</string>
+    <string name="disableRemoteEmojiInteractions">Desativar interações de emoji remotamente</string>
+    <string name="disableChoosingSticker">Envie digitando em vez de escolher adesivo</string>
+    <string name="disableSwipeToNextChannel">Desativar deslizar para o próximo canal</string>
+    <string name="maxRecentStickerCount">Máximo de adesivos recentes</string>
+    <string name="customGroupVoipAudioBitrate">Grupo VOIP áudio Bitrate</string>
+    <string name="customDoH">Customização DoH</string>
+    <string name="useSystemDNS">Use sistema DNS</string>
+    <string name="HideTimeForSticker">Ocultar tempo para adesivos</string>
+    <string name="UseMediaStreamInVoip">Use stream de mídia em VoIP</string>
+    <string name="TakeGIFasVideo">Leve GIF como vídeo</string>
+    <string name="DontSendGreetingSticker">Não envie adesivo de saudação</string>
+    <string name="pressTitleToOpenAllChats">Pressione o título para abrir a guia \"Todos os bate-papos\"</string>
+    <string name="AutoPauseVideoAbout">Ao bloquear a tela / alternar para o plano de fundo.</string>
+    <string name="GooglePlay">Google Play</string>
+    <string name="TabTitleTypeIcon">Emoticons</string>
+    <string name="ProviderLingocloud">Lingocloud</string>
+    <string name="UnlimitedFavoredStickersAbout">Adicione adesivos ilimitados aos favoritos. Os adesivos podem não ser sincronizados com outros dispositivos.</string>
+    <string name="Experiment">Experimental</string>
 </resources>

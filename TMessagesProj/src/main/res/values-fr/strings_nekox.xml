@@ -86,7 +86,7 @@
     <string name="DeleteAllInChat">Tout supprimer du chat</string>
     <string name="DeleteAllInChatAlert">Attention! Cela **supprimera tous les messages** dans ce chat pour **tous** les participants.</string>
     <string name="UnblockAll">Tout débloquer</string>
-    <string name="UnblockAllWarn">Êtes-vous sûr de vouloir débloquer **tous les utilisateurs et tous les bots**?</string>
+    <string name="UnblockAllWarn">Êtes-vous sûr de vouloir débloquer **tous les utilisateurs et tous les bots**\?</string>
     <string name="BlockedListEmpty">Vous n\'avez bloqué personne :)</string>
     <string name="ProxyTypeVmess">Proxy VMess</string>
     <string name="AddProxySocks5">Ajouter un proxy SOCKS5</string>
@@ -100,8 +100,8 @@
     <string name="ShareProxy">Partager le Proxy</string>
     <string name="ProxyDelete">Supprimer le Proxy</string>
     <string name="ProxyInfoVmess">Paramètres du proxy Vmess</string>
-    <string name="VmessUserId">Id de l\'utilisateur</string>
-    <string name="VmessAlterId">Modifier l\'id</string>
+    <string name="VmessUserId">ID de l\'utilisateur</string>
+    <string name="VmessAlterId">Modifier l\'ID</string>
     <string name="VmessSecurity">Sécurité</string>
     <string name="VmessNetwork">Réseau</string>
     <string name="VmessHeadType">Type d\'en-tête</string>
@@ -135,14 +135,14 @@
     <string name="ImportStickersX">Importer des autocollants depuis un fichier</string>
     <string name="ImportStickersList">Importer des autocollants</string>
     <string name="StickerSets">Ensembles d\'autocollants</string>
-    <string name="InvalidStickersFile">Fichier d\'autocollants invalide: </string>
-    <string name="ImportedProxies">Serveurs de proxy importés : </string>
-    <string name="ErrorsInImport">Erreurs d\'importation : </string>
+    <string name="InvalidStickersFile">Fichier d\'autocollants invalide:</string>
+    <string name="ImportedProxies">Serveurs de proxy importés :</string>
+    <string name="ErrorsInImport">Erreurs d\'importation :</string>
     <string name="NoProxy">Vous n\'avez pas ajouté de serveur proxy.</string>
     <string name="DeleteAllServer">Supprimer tous les serveurs</string>
     <string name="DeleteUnavailableServer">Supprimer les serveurs indisponibles</string>
-    <string name="DeleteAllServerConfirm">Êtes-vous sûr de vouloir **supprimer tous les serveurs** ?</string>
-    <string name="DeleteUnavailableServerConfirm">Êtes-vous sûr de vouloir **supprimer les serveurs indisponibles**?</string>
+    <string name="DeleteAllServerConfirm">Êtes-vous sûr de vouloir **supprimer tous les serveurs** \?</string>
+    <string name="DeleteUnavailableServerConfirm">Êtes-vous sûr de vouloir **supprimer les serveurs indisponibles**\?</string>
     <string name="MinApi21Required">Désolé, vous devez avoir au moins Android 5 (API21).</string>
     <string name="MinApi23Required">Désolé, vous devez avoir au moins Android 6 (API23).</string>
     <string name="MiniVersionAlert">Désolé, la version mini ne prend pas en charge ce type de proxy, veuillez changer de version dans les paramètres.</string>
@@ -171,13 +171,13 @@
     <string name="SendCommentAfterForward">Envoyer un commentaire après le transfert</string>
     <string name="UnpinMessageX">Désépingler le message</string>
     <string name="UnpinMessagesAll">Désépingler tous les messages</string>
-    <string name="ImportLogin">Connexion via QR Code</string>
-    <string name="QRLoginNotice">Ce QR code / lien permet à quelqu\'un de se connecter à votre compte Telegram. Est-ce vous ?</string>
+    <string name="ImportLogin">Connection via QR Code</string>
+    <string name="QRLoginNotice">Ce QR code / lien permet à quelqu\'un de se connecter à votre compte Telegram. Est-ce vous \?</string>
     <string name="QRLoginConfirm">Confirmer la connexion</string>
     <string name="StorageReset">Vider le stockage</string>
     <string name="StorageResetInfo">Toutes les données de cette application seront supprimées définitivement (et essayez d\'abord de vous déconnecter de tous les comptes).</string>
     <string name="FCTitle">À propos des mises à jour de l\'application</string>
-    <string name="FCInfo">Rejoindre notre canal d\'annonces et de mises à jour?</string>
+    <string name="FCInfo">Rejoindre notre canal d\'annonces et de mises à jour \?</string>
     <string name="CCTitle">OpenCC (Conversion Chinoise)</string>
     <string name="CCTarget">Cible</string>
     <string name="CCNo">Aucune</string>
@@ -186,7 +186,7 @@
     <string name="CCTT">Chinois traditionnel (Taïwan)</string>
     <string name="CCSC">Chinois simplifié</string>
     <string name="CCSP">Chinois simplifié (Chine)</string>
-    <string name="CCJP">Nouveau Kanji japonais (Shinjitai)</string>
+    <string name="CCJP">Nouveaux Kanjis japonais (Shinjitai)</string>
     <string name="UserRestrictionsSendGames">Envoyer des jeux</string>
     <string name="AcceptSecretChat">Accepter un nouveau chat secret</string>
     <string name="TabletMode">Mode Tablette</string>
@@ -208,4 +208,63 @@
 \n
 \nNote : fcm ne fonctionnera pas si vous utilisez la version release.</string>
     <string name="DisableLinkPreviewByDefaultNotice">Désactiver l\'aperçu de lien par défaut afin d\'empêcher le serveur Telegram de lire vos liens échangés.</string>
+    <string name="PrivacyNoticeAddByPhone">Le paramètre \"Autoriser à me trouver par le biais de mon numéro de téléphone\" n\'a pas été désactivé, ce qui peut permettre à un pirate contrôlé par le gouvernement de trouver votre véritable identité, désactivez-le !</string>
+    <string name="FilterMenu">Menu de filtre des conversations</string>
+    <string name="AllowFlashCall">Permettre les appels rapides</string>
+    <string name="IgnoreMutedCount">Ignorer les compteurs de messages non lus mis en sourdine dans l\'onglet des dossiers</string>
+    <string name="PrivacyNotice2fa">Aucun mot de passe n\'a été défini pour votre compte, ce qui peut permettre à un pirate contrôlé par le gouvernement de trouver votre véritable identité, définissez-en un !</string>
+    <string name="GoogleCloudTransKeyNotice">Si vous configurez une clé Google Cloud Trans, l\'API de traduction dans le cloud sera sollicitée au lieu de soumettre un faux formulaire à la version web lors d\'une traduction (plus rapide, plus stable et économise du trafic).</string>
+    <string name="PrivacyNoticeP2p">Le paramètre \"Permettre les appels P2P\" n\'a pas été désactivé, ce qui peut permettre à un pirate contrôlé par le gouvernement de trouver votre véritable identité, désactivez-le !</string>
+    <string name="InvalidProxyFile">Fichier de liste de proxy invalide :</string>
+    <string name="DismissForYourself">Rejeter pour soi-même</string>
+    <string name="EnableStickerPin">Activer l\'épinglage des vignettes</string>
+    <string name="Win32ExecutableFiles">Fichiers exécutables Win32</string>
+    <string name="EnableStickerPinAbout">Épingler les vignettes et les synchroniser dans le cloud lors de l\'ajout de nouvelles.
+\nAssocié avec l\'option \"Désactiver les vignettes favorites et récentes\".</string>
+    <string name="VersionUpdateConfirm">MISE À JOUR</string>
+    <string name="AddProxyWs">Ajouter un WebSocket Relay</string>
+    <string name="EnableStickerPinTip">Cette fonction est toujours en développement, la synchronisation dans le cloud peut ne pas fonctionner comme prévu.</string>
+    <string name="UsePersiancalendarInfo">Afficher la date avec le calendrier solaire Hijiri</string>
+    <string name="VersionUpdateVariantNotMatch">Les variantes de version échouent à correspondre automatiquement.
+\nVeuillez télécharger manuellement depuis GitHub.</string>
+    <string name="WsPayload">Charge</string>
+    <string name="IgnoreContentRestrictionsNotice">Ignorer les restrictions de lecture sur les messages.</string>
+    <string name="ImportSettings">Importer les paramètres</string>
+    <string name="VersionUpdateNoUpdate">Pas de Mise à jour.</string>
+    <string name="DisplayPersianCalendarByLatin">Afficher le calendrier persan en caractères latins</string>
+    <string name="Sign">Signer</string>
+    <string name="useCustomEmoji">Utiliser des émoticônes personnalisées</string>
+    <string name="AutoDownload">Téléchargement auto</string>
+    <string name="UsePersiancalendar">Utiliser le calendrier persan</string>
+    <string name="nekoXPaymentRemovedToast">La fonctionnalité de paiement a été retirée.</string>
+    <string name="UserRestrictionsSendInline">Envoyer via Inline Bots</string>
+    <string name="ProxyInfoWS">Configuration du WebSocket Relay</string>
+    <string name="AutoLockImmediately">Immédiatement</string>
+    <string name="AutoCheckUpdateOFF">DÉSACTIVÉ</string>
+    <string name="AutoCheckUpdateStable">Stable</string>
+    <string name="unreadBadgeOnBackButton">Badge des non-lus sur le bouton retour</string>
+    <string name="customPublicProxyIP">Configurer l\'IP du proxy pulic</string>
+    <string name="customPublicProxyIPNotice">Dans certaines régions, spécifier l\'IP du proxy public CDN (ex : Cloudflare) peut accélérer l\'accès.</string>
+    <string name="DeleteDownloadedFileExternal">Le fichier externe est ignoré.</string>
+    <string name="AutoCheckUpdateSwitch">Mise à jour Automatique</string>
+    <string name="AutoCheckUpdateRc">Candidat pour la publication</string>
+    <string name="DeleteDownloadedFileSucceed">Supprimé</string>
+    <string name="update_download_soucre">Sélectionner la source de téléchargement</string>
+    <string name="repeatConfirm">Demander avant de répéter</string>
+    <string name="repeatConfirmText">Êtes-vous sûr de répéter \?</string>
+    <string name="DeleteDownloadedFileConfirm">Supprimer ce fichier du cache local \?</string>
+    <string name="VersionUpdateTitle">Nouvelle version disponible</string>
+    <string name="hideSponsoredMessage">Cacher les messages sponsorisés</string>
+    <string name="VersionUpdateIgnore">Ignorer</string>
+    <string name="valuesLargeAvatarInDrawer">Par défaut de Telegram
+\nAvatar comme arrière-plan
+\nGrand avatar comme arrière-plan</string>
+    <string name="ImportSettingsAlert">Êtes-vous sûr de vouloir écraser les paramètres \? Importer des paramètres d\'une source inconnue peut entraîner le changement du code PIN et par conséquent le verrouillage de l\'application.</string>
+    <string name="DisableInstantCamera">Désactiver la caméra instantanée</string>
+    <string name="VersionUpdateNotNow">Pas maintenant</string>
+    <string name="showSeconds">Afficher l\'horodatage en secondes</string>
+    <string name="useCustomEmojiInvalid">Archive zip d\'émoticônes invalide.</string>
+    <string name="rememberAllBackMessages">Se souvenir de toutes les réponses cliquées</string>
+    <string name="BackupSettings">Sauvegarder les paramètres</string>
+    <string name="ArchiveFiles">Fichiers archives</string>
 </resources>

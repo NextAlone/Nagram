@@ -23,28 +23,32 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class PhotoAttachPermissionCell extends FrameLayout {
 
+    private final Theme.ResourcesProvider resourcesProvider;
     private ImageView imageView;
     private ImageView imageView2;
     private TextView textView;
     private int itemSize;
 
-    public PhotoAttachPermissionCell(Context context) {
+    public PhotoAttachPermissionCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
+        this.resourcesProvider = resourcesProvider;
 
         imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_attachPermissionImage), PorterDuff.Mode.SRC_IN));
+        imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_attachPermissionImage), PorterDuff.Mode.SRC_IN));
         addView(imageView, LayoutHelper.createFrame(44, 44, Gravity.CENTER, 5, 0, 0, 27));
 
         imageView2 = new ImageView(context);
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_attachPermissionMark), PorterDuff.Mode.SRC_IN));
+        imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_attachPermissionMark), PorterDuff.Mode.SRC_IN));
         addView(imageView2, LayoutHelper.createFrame(44, 44, Gravity.CENTER, 5, 0, 0, 27));
 
         textView = new TextView(context);
-        textView.setTextColor(Theme.getColor(Theme.key_chat_attachPermissionText));
+        textView.setTextColor(getThemedColor(Theme.key_chat_attachPermissionText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView.setGravity(Gravity.CENTER);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Bold.ttf"));
@@ -70,6 +74,11 @@ public class PhotoAttachPermissionCell extends FrameLayout {
             imageView.setImageResource(R.drawable.permissions_gallery1);
             imageView2.setImageResource(R.drawable.permissions_gallery2);
             textView.setText(LocaleController.getString("GalleryPermissionText", R.string.GalleryPermissionText));
+            if (NekoConfig.forceSystemPicker) {
+                imageView.setImageResource(R.drawable.baseline_open_in_browser_24);
+                imageView2.setVisibility(GONE);
+                textView.setText(LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            }
 
             imageView.setLayoutParams(LayoutHelper.createFrame(44, 44, Gravity.CENTER, 0, 0, 2, 27));
             imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44, Gravity.CENTER, 0, 0, 2, 27));
@@ -79,5 +88,10 @@ public class PhotoAttachPermissionCell extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(itemSize, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(itemSize + AndroidUtilities.dp(5), MeasureSpec.EXACTLY));
+    }
+
+    private int getThemedColor(String key) {
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
+        return color != null ? color : Theme.getColor(key);
     }
 }

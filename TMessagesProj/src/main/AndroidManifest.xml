@@ -4,6 +4,15 @@
     package="org.telegram.messenger"
     android:installLocation="auto">
 
+    <queries>
+        <intent>
+            <action android:name="org.openintents.openpgp.IOpenPgpService2" />
+        </intent>
+        <intent>
+            <action android:name="org.openintents.openpgp.action.*" />
+        </intent>
+    </queries>
+
     <uses-sdk tools:overrideLibrary="io.nekohasekai.ss_rust,io.nekohasekai.ssr_libev" />
 
     <supports-screens android:anyDensity="true"
@@ -88,7 +97,6 @@
     <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ"/>
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE"/>
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" />
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -104,6 +112,7 @@
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
+        android:preserveLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="false"
         android:theme="@style/Theme.TMessages.Start"
@@ -167,11 +176,10 @@
                 <data android:host="t.me" android:scheme="http" />
                 <data android:host="t.me" android:scheme="https" />
             </intent-filter>
-            <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher" android:priority="1">
+            <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher" android:priority="1" android:enabled="${is_full_version}">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="tg" />
 
                 <data android:scheme="vmess" />
                 <data android:scheme="vmess1" />
@@ -387,25 +395,15 @@
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </service>
-        <service
-            android:name="tw.mimi.nekogram.NekoXPushService"
-            android:enabled="true"
-            android:label="@string/TeleTuxPushService"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
-        <!--<service android:name=".WearDataLayerListenerService">-->
-        <!--    <intent-filter>-->
-        <!--        &lt;!&ndash; listeners receive events that match the action and data filters &ndash;&gt;-->
-        <!--        <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />-->
-        <!--        <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />-->
-        <!--        <action android:name="com.google.android.gms.wearable.CAPABILITY_CHANGED" />-->
-        <!--        <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />-->
-        <!--        <data android:scheme="wear" android:host="*" />-->
-        <!--    </intent-filter>-->
-        <!--</service>-->
+<!--        <service-->
+<!--            android:name="tw.nekomimi.nekogram.NekoXPushService"-->
+<!--            android:enabled="true"-->
+<!--            android:label="@string/NekoXPushService"-->
+<!--            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.service.notification.NotificationListenerService" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
         <service android:name=".voip.TelegramConnectionService" android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
                 <action android:name="android.telecom.ConnectionService" />
@@ -511,9 +509,9 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".FeedWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+<!--        <service android:name=".FeedWidgetService"-->
+<!--            android:permission="android.permission.BIND_REMOTEVIEWS"-->
+<!--            android:exported="false" />-->
 
         <uses-library android:name="com.sec.android.app.multiwindow" android:required="false" />
         <meta-data android:name="com.sec.android.support.multiwindow" android:value="true" />

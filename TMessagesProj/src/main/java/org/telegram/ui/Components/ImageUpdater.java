@@ -49,7 +49,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoAlbumPickerActivity;
 import org.telegram.ui.PhotoCropActivity;
@@ -336,9 +335,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                         return;
                     }
                     if (button == 8 || button == 7) {
-                        if (button != 8) {
-                            chatAttachAlert.dismiss();
-                        }
                         HashMap<Object, Object> photos = chatAttachAlert.getPhotoLayout().getSelectedPhotos();
                         ArrayList<Object> order = chatAttachAlert.getPhotoLayout().getSelectedPhotosOrder();
 
@@ -383,6 +379,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                             }
                         }
                         didSelectPhotos(media);
+
+                        if (button != 8) {
+                            chatAttachAlert.dismiss();
+                        }
                         return;
                     } else {
                         chatAttachAlert.dismissWithButtonClick(button);
@@ -712,7 +712,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             try {
                 Bitmap b = BitmapFactory.decodeFile(FileLoader.getPathToAttach(smallPhoto, true).getAbsolutePath());
                 String key = smallPhoto.location.volume_id + "_" + smallPhoto.location.local_id + "@50_50";
-                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(b), key);
+                ImageLoader.getInstance().putImageToCache(new BitmapDrawable(b), key, true);
             } catch (Throwable ignore) {
 
             }
@@ -864,7 +864,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                         try {
                             Bitmap b = BitmapFactory.decodeFile(FileLoader.getPathToAttach(smallPhoto, true).getAbsolutePath());
                             String key = smallPhoto.location.volume_id + "_" + smallPhoto.location.local_id + "@50_50";
-                            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(b), key);
+                            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(b), key, true);
                         } catch (Throwable ignore) {
 
                         }

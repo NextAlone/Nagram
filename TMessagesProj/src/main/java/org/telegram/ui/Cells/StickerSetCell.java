@@ -43,7 +43,7 @@ import org.telegram.ui.Components.RadialProgressView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.PinnedStickerHelper;
 
@@ -194,7 +194,7 @@ public class StickerSetCell extends FrameLayout {
         }
 
         // NekoX: Pinned Sticker Mark
-        if (NekoConfig.enableStickerPin && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(set.set.id)) {
+        if (NekomuraConfig.enableStickerPin.Bool() && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(set.set.id)) {
             pinnedImageView.setVisibility(VISIBLE);
         } else {
             pinnedImageView.setVisibility(INVISIBLE);
@@ -239,7 +239,7 @@ public class StickerSetCell extends FrameLayout {
 
     // NekoX: Pinned Sticker Mark -> Change Visibility
     public void setPinnedMarkVisibility(boolean visible) {
-        if (!NekoConfig.enableStickerPin) {
+        if (!NekomuraConfig.enableStickerPin.Bool()) {
             pinnedImageView.setVisibility(INVISIBLE);
             return;
         }

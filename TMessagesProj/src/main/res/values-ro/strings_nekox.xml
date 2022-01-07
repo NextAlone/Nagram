@@ -83,7 +83,7 @@
     <string name="DeleteAllInChat">Șterge tot în chat</string>
     <string name="DeleteAllInChatAlert">Atenție! Acest lucru va **șterge toate mesajele de la tine** în acest chat pentru **toți** participanți.</string>
     <string name="UnblockAll">Deblocați pe toți</string>
-    <string name="UnblockAllWarn">Sigur doriți să deblocați ** toți utilizatorii și roboții **?</string>
+    <string name="UnblockAllWarn">Sigur doriți să deblocați ** toți utilizatorii și roboții **\?</string>
     <string name="BlockedListEmpty">Nu ai blocat pe nimeni :)</string>
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Adaugă Proxy-ul SOCKS5</string>
@@ -106,8 +106,8 @@
     <string name="ProxyInfoSSR">Setări Proxyului ShadowsocksR</string>
     <string name="SSRProtocol">Protocol</string>
     <string name="ProxyInfoTrojan">Setări Proxyului Trojan</string>
-    <string name="DeleteAllServerConfirm">Sunteți sigur că vreți să **ștergeți toate serverele**?</string>
-    <string name="DeleteUnavailableServerConfirm">Sunteți sigur că vreți să **ștergeți servere indisponibile**?</string>
+    <string name="DeleteAllServerConfirm">Sunteți sigur că vreți să **ștergeți toate serverele**\?</string>
+    <string name="DeleteUnavailableServerConfirm">Sunteți sigur că vreți să **ștergeți servere indisponibile**\?</string>
     <string name="MinApi21Required">Ne pare rău, aveți nevoie de cel puțin Android 5 (API21).</string>
     <string name="MinApi23Required">Ne pare rău, aveți nevoie de cel puțin Android 6 (API23).</string>
     <string name="MiniVersionAlert">Ne pare rău, versiunea mini nu suportă acest tip de proxy, vă rugăm să schimbați versiunea în setări.</string>
@@ -139,12 +139,12 @@
     <string name="UnpinMessagesAll">Anulați fixarea tuturor mesajelor</string>
     <string name="DismissForYourself">Renunță pentru tine</string>
     <string name="ImportLogin">Conectare QR</string>
-    <string name="QRLoginNotice">Acest cod QR / link permite unei persoane să se conecteze la contul dvs. Telegram. Aceasta este operația dvs.?</string>
+    <string name="QRLoginNotice">Acest cod QR / link permite unei persoane să se conecteze la contul dvs. Telegram. Aceasta este operația dvs.\?</string>
     <string name="QRLoginConfirm">Confirmă autentificare</string>
     <string name="StorageReset">Eliberați spațiu</string>
     <string name="StorageResetInfo">Toate datele acestei aplicații vor fi șterse definitiv (mai întâi încercați să vă deconectați de la toate conturile).</string>
     <string name="FCTitle">Despre actualizările aplicației</string>
-    <string name="FCInfo">Urmăriți canalul nostru de anunțuri și actualizări?</string>
+    <string name="FCInfo">Urmăriți canalul nostru de anunțuri și actualizări\?</string>
     <string name="CCTitle">OpenCC (convertire chineză)</string>
     <string name="CCTarget">Ţintă</string>
     <string name="CCNo">Niciunul</string>

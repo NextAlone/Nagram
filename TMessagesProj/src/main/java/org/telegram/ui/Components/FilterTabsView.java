@@ -57,6 +57,7 @@ import org.telegram.ui.ActionBar.Theme;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class FilterTabsView extends FrameLayout {
 
@@ -983,7 +984,7 @@ public class FilterTabsView extends FrameLayout {
             delegate.onPageSelected(id, scrollingForward);
         }
         scrollToChild(position);
-        if (NekoConfig.hideAllTab && showAllChatsTab && id != Integer.MAX_VALUE)
+        if (NekomuraConfig.hideAllTab.Bool() && showAllChatsTab && id != Integer.MAX_VALUE)
             toggleAllTabs(false);
     }
 
@@ -1294,7 +1295,7 @@ public class FilterTabsView extends FrameLayout {
             manualScrollingToId = -1;
             currentPosition = position;
             selectedTabId = id;
-            if (NekoConfig.hideAllTab && showAllChatsTab)
+            if (NekomuraConfig.hideAllTab.Bool() && showAllChatsTab)
                 toggleAllTabs(false);
         }
     }
@@ -1516,7 +1517,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (!isEditing || ((showAllChatsTab && viewHolder.getAdapterPosition() == 0) && !NekoConfig.pressTitleToOpenAllChats)) {
+            if (!isEditing || ((showAllChatsTab && viewHolder.getAdapterPosition() == 0) && !NekomuraConfig.pressTitleToOpenAllChats.Bool())) {
                 return makeMovementFlags(0, 0);
             }
             return makeMovementFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
@@ -1558,7 +1559,7 @@ public class FilterTabsView extends FrameLayout {
         return listView;
     }
 
-    public boolean showAllChatsTab = !NekoConfig.hideAllTab;
+    public boolean showAllChatsTab = !NekomuraConfig.hideAllTab.Bool();
 
     public void toggleAllTabs(boolean show) {
         if (show == showAllChatsTab)
@@ -1570,7 +1571,7 @@ public class FilterTabsView extends FrameLayout {
         ArrayList<MessagesController.DialogFilter> filters = AccountInstance.getInstance(UserConfig.selectedAccount).getMessagesController().dialogFilters;
         for (int a = 0, N = filters.size(); a < N; a++) {
             MessagesController.DialogFilter dialogFilter = filters.get(a);
-            switch (NekoConfig.tabsTitleType) {
+            switch (NekomuraConfig.tabsTitleType.Int()) {
                 case NekoConfig.TITLE_TYPE_TEXT:
                     addTab(a, filters.get(a).localId, dialogFilter.name);
                     break;

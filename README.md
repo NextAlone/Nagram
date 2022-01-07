@@ -13,16 +13,17 @@ TeleTux is fork of NekoX with jalali calendar
 - Most of Nekogram's features
 - Unlimited login accounts
 - OpenCC Chinese Convert
-- Built-in VMess, Shadowsocks, SSR, Trojan-GFW proxies support
-- Built-in public proxy list / Proxy subscription support
+- Built-in VMess, Shadowsocks, SSR, Trojan-GFW proxies support (No longer maintained)
+- Built-in public proxy (WebSocket relay via Cloudflare CDN), [documentation and for PC](https://github.com/arm64v8a/NekoXProxy)
+- Proxy subscription support
 - Ipv6 MTProxy support
 - Able to parse all proxy subscription format: SIP008, ssr, v2rayN, vmess1, shit ios app formats, clash config and more
 - Proxies import and export, remarks, speed measurement, sorting, delete unusable nodes, etc
 - Scan the QR code (any link, can add a proxy)
 - The ( vmess / vmess1 / ss / ssr / trojan ) proxy link in the message can be clicked
-- Built-in WebSocket relay support (Connect via Cloudflare CDN)
 - Allow auto-disabling proxy when VPN is enabled
 - Proxy automatic switcher
+- Custom [Emoji packs](https://github.com/NekoX-Dev/NekoX/wiki/emoji)
 - Add stickers without sticker pack
 - Allow disabling vibration
 - Allow clicking on links in self profile
@@ -78,6 +79,12 @@ Consider using a Linux VM or dual booting.**
 
 **Important:**
 
+0. Checkout all submodules
+```
+git submodule init
+git submodule update
+```
+
 1. Install Android SDK and NDK (default location is $HOME/Android/SDK, otherwise you need to specify $ANDROID_HOME for it)
 
 It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.
@@ -101,11 +108,24 @@ rustup default $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 
+This step can be skipped if you want to build a `mini` release.
+
 4. Build native dependencies: `./run init libs`
-5. Build external libraries and native code: `./run libs update`
-6. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
-7. Replace TMessagesProj/google-services.json if you want fcm to work.
-8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
+5. Build external libraries and native code: 
+
+For full release:
+
+`./run libs update`
+
+For mini release:
+```
+./run libs v2ray
+./run libs native # libtmessages.so
+```
+ 
+9. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
+10. Replace TMessagesProj/google-services.json if you want fcm to work.
+11. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
 
 `./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 

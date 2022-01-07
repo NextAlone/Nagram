@@ -14,8 +14,8 @@ import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.Components.EditTextBoldCursor
 import org.telegram.ui.Components.NumberPicker
 import tw.nekomimi.nekogram.BottomBuilder
-import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.PopupBuilder
+import tw.nekomimi.nkmr.NekomuraConfig
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
@@ -252,7 +252,7 @@ object AlertUtil {
 
                 reference.get().dismiss()
 
-                NekoConfig.setTranslationProvider(item + 1)
+                NekomuraConfig.translationProvider.setConfigInt(item + 1)
 
                 retryRunnable.run()
 

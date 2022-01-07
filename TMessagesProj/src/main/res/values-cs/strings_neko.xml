@@ -110,4 +110,11 @@
     <string name="DisableResidentNotification">Zakázat rezidentní oznámení</string>
     <string name="EnableResidentNotification">Zobrazit rezidentní oznámení</string>
     <string name="TransparentStatusBar">Průhledný stavový řádek</string>
+    <string name="useSystemDNS">Použít systémovou DNS</string>
+    <string name="hideGroupSticker">Schovat skupinovou samolepku</string>
+    <string name="enablePublicProxy">NekoX Veřejná Proxy</string>
+    <string name="autoUpdateSubInfo">Aktualizovat proxy automaticky</string>
+    <string name="DontSendGreetingSticker">Neposílat samolepku s pozdravem</string>
+    <string name="HideTimeForSticker">Schovat čas pro samolepky</string>
+    <string name="customDoH">Vlastní DoH</string>
 </resources>

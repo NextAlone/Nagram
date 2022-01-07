@@ -42,10 +42,10 @@ import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -110,9 +110,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private TextPaint lengthTextPaint;
     private String lengthText;
+    private final Theme.ResourcesProvider resourcesProvider;
 
-    public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, final View window) {
+    public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, final View window, Theme.ResourcesProvider resourcesProvider) {
         super(context);
+        this.resourcesProvider = resourcesProvider;
         paint.setColor(0x7f000000);
         setWillNotDraw(false);
         setFocusable(true);
@@ -153,7 +155,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         lengthTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         lengthTextPaint.setColor(0xffd9d9d9);
 
-        messageEditText = new EditTextCaption(context) {
+        messageEditText = new EditTextCaption(context, null) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 try {
@@ -197,6 +199,17 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
         };
 
+        messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                messageEditText.invalidateEffects();
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
+        });
         messageEditText.setWindowView(windowView);
         messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         messageEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -318,7 +331,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     sendButtonColorAnimator = ValueAnimator.ofFloat(sendButtonEnabled ? 0 : 1f, sendButtonEnabled ? 1f : 0);
                     sendButtonColorAnimator.addUpdateListener(valueAnimator -> {
                         sendButtonEnabledProgress = (float) valueAnimator.getAnimatedValue();
-                        int color = Theme.getColor(Theme.key_dialogFloatingIcon);
+                        int color = getThemedColor(Theme.key_dialogFloatingIcon);
                         int alpha = Color.alpha(color);
                         Theme.setDrawableColor(checkDrawable, ColorUtils.setAlphaComponent(color, (int) (alpha * (0.58f + 0.42f * sendButtonEnabledProgress))));
                         doneButton.invalidate();
@@ -445,8 +458,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void updateColors() {
-        Theme.setDrawableColor(doneDrawable, Theme.getColor(Theme.key_dialogFloatingButton));
-        int color = Theme.getColor(Theme.key_dialogFloatingIcon);
+        Theme.setDrawableColor(doneDrawable, getThemedColor(Theme.key_dialogFloatingButton));
+        int color = getThemedColor(Theme.key_dialogFloatingIcon);
         int alpha = Color.alpha(color);
         Theme.setDrawableColor(checkDrawable, ColorUtils.setAlphaComponent(color, (int) (alpha * (0.58f + 0.42f * sendButtonEnabledProgress))));
         if (emojiView != null) {
@@ -537,7 +550,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (emojiView != null) {
             return;
         }
-        emojiView = new EmojiView(false, false, getContext(), false, null);
+        emojiView = new EmojiView(false, false, getContext(), false, null, null, null);
         emojiView.setDelegate(new EmojiView.EmojiViewDelegate() {
             @Override
             public boolean onBackspace() {
@@ -822,5 +835,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public EditTextCaption getMessageEditText() {
         return messageEditText;
+    }
+
+    private int getThemedColor(String key) {
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
+        return color != null ? color : Theme.getColor(key);
     }
 }

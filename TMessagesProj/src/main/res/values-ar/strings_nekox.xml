@@ -130,8 +130,8 @@
     <string name="ProxyInfoSSR">إعدادات وكيل ShadowsocksR</string>
     <string name="SSRProtocol">برتوكول</string>
     <string name="SSRProtocolParams">بروتوكول Params</string>
-    <string name="SSRObfs">Obfs</string>
-    <string name="SSRObfsParam">Obfs Param</string>
+    <string name="SSRObfs">Obfs(أو بی اِف اِس)</string>
+    <string name="SSRObfsParam">Obfs متغيرات</string>
     <string name="ProxyInfoTrojan">إعدادات البروكسي في تروجان</string>
     <string name="TrojanSNI">SNI (اختياري)</string>
     <string name="ProxyRemarks">ملاحظات</string>
@@ -149,10 +149,10 @@
     <string name="ImportStickersX">استيراد ملصقات من الملف</string>
     <string name="ImportStickersList">تصدير الملصقات</string>
     <string name="StickerSets">مجموعات الملصقات</string>
-    <string name="InvalidStickersFile">ملف الملصقات غير صالح: </string>
-    <string name="InvalidProxyFile">ملف قائمة البروكسي غير صالح: </string>
-    <string name="ImportedProxies">خوادم الوكيل المستوردة: </string>
-    <string name="ErrorsInImport">أخطاء الاستيراد: </string>
+    <string name="InvalidStickersFile">ملف الملصقات غير صالح:</string>
+    <string name="InvalidProxyFile">ملف قائمة البروكسي غير صالح:</string>
+    <string name="ImportedProxies">خوادم الوكيل المستوردة:</string>
+    <string name="ErrorsInImport">أخطاء الاستيراد:</string>
     <string name="NoProxy">لم تقم بإضافة أي سيرفرات بروكسي.</string>
     <string name="DeleteAllServer">حذف جميع الخوادم</string>
     <string name="DeleteUnavailableServer">حذف الخوادم غير المتاحة</string>
@@ -240,4 +240,34 @@
     <string name="ImportSettings">استيراد الإعدادات</string>
     <string name="BackupSettings">إعدادات النسخ الاحتياطي</string>
     <string name="AutoLockImmediately">فورا</string>
+    <string name="AutoCheckUpdateRc">مرشح للاصدار</string>
+    <string name="AutoCheckUpdateStable">مستقر</string>
+    <string name="AutoCheckUpdateSwitch">التحديث التلقائي</string>
+    <string name="AutoCheckUpdateOFF">إيقاف</string>
+    <string name="VersionUpdateNoUpdate">لا يوجد تحديث.</string>
+    <string name="VersionUpdateNotNow">ليس الآن</string>
+    <string name="VersionUpdateIgnore">تجاهل</string>
+    <string name="VersionUpdateConfirm">تحديث</string>
+    <string name="VersionUpdateVariantNotMatch">فشل متغيرات الإصدار في المطابقة تلقائيا.
+\nيرجى تحميل التطبيق يدويا من GitHub.</string>
+    <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
+    <string name="unreadBadgeOnBackButton">شارة غير المقروءة على زر الرجوع</string>
+    <string name="customPublicProxyIP">تعيين عنوان IP للوكيل العام</string>
+    <string name="DeleteDownloadedFileConfirm">حذف هذا الملف من ذاكرة التخزين المؤقت المحلية؟</string>
+    <string name="hideSponsoredMessage">إخفاء الرسائل الدعائية</string>
+    <string name="valuesLargeAvatarInDrawer">تيليجرام الافتراضي
+\nالصورة الرمزية كخلفية
+\nصورة رمزية كبيرة كخلفية</string>
+    <string name="repeatConfirm">اسأل قبل التكرار</string>
+    <string name="DeleteDownloadedFileExternal">تم تخطي الملف الخارجي.</string>
+    <string name="repeatConfirmText">هل أنت متأكد من التكرار؟</string>
+    <string name="useCustomEmoji">استخدام الرموز التعبيرية المخصصة</string>
+    <string name="useCustomEmojiInvalid">ليس رمزًا تعبيريًا صالحًا.</string>
+    <string name="customPublicProxyIPNotice">في بعض المجالات، وتحديدا IP من CDN الوكيل العام(على سبيل المثال. Cloudflare) يمكن تسريع الوصول.</string>
+    <string name="update_download_soucre">حدد درجة التنزيل</string>
+    <string name="DeleteDownloadedFileSucceed">محذوف</string>
+    <string name="rememberAllBackMessages">تذكر جميع الردود التي تم النقر عليها</string>
+    <string name="DisableInstantCamera">تعطيل الكاميرا الفورية</string>
+    <string name="showSeconds">إظهار الطابع الزمني بالثواني</string>
+    <string name="ShareMessages">مشاركة</string>
 </resources>

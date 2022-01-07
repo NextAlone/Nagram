@@ -109,7 +109,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 @TargetApi(18)
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -223,10 +223,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private int textureViewSize;
     private boolean isMessageTransition;
     private boolean updateTextureViewSize;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     @SuppressLint("ClickableViewAccessibility")
-    public InstantCameraView(Context context, ChatActivity parentFragment) {
+    public InstantCameraView(Context context, ChatActivity parentFragment, Theme.ResourcesProvider resourcesProvider) {
         super(context);
+        this.resourcesProvider = resourcesProvider;
         parentView = parentFragment.getFragmentView();
         setWillNotDraw(false);
 
@@ -356,7 +358,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         addView(textureOverlayView, new FrameLayout.LayoutParams(AndroidUtilities.roundPlayingMessageSize, AndroidUtilities.roundPlayingMessageSize, Gravity.CENTER));
 
         setVisibility(INVISIBLE);
-        blurBehindDrawable = new BlurBehindDrawable(parentView, this);
+        blurBehindDrawable = new BlurBehindDrawable(parentView, this, 0, null);
     }
 
     @Override
@@ -538,7 +540,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             textureOverlayView.setImageResource(R.drawable.icplaceholder);
         }
         cameraReady = false;
-        isFrontface = !NekoConfig.rearVideoMessages;
+        isFrontface = !NekomuraConfig.rearVideoMessages.Bool();
         selectedCamera = null;
         recordedTime = 0;
         progress = 0;
@@ -2044,7 +2046,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                 startAnimation(false);
                             }, () -> {
                                 startAnimation(false);
-                            });
+                            }, resourcesProvider);
                         } else {
                             baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, videoFile.getAbsolutePath(), 0, true, 0, 0, 0), videoEditedInfo, true, 0, false);
                         }
@@ -2194,7 +2196,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (cancelled) {
                         return;
                     }
-                    if (!NekoConfig.disableVibration) {
+                    if (!NekomuraConfig.disableVibration.Bool()) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignore) {
@@ -2611,7 +2613,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (zoom > 0f) {
             finishZoomTransition = ValueAnimator.ofFloat(zoom, 0);
             finishZoomTransition.addUpdateListener(valueAnimator -> {
-                cameraSession.setZoom((float) valueAnimator.getAnimatedValue());
+                if (cameraSession != null) {
+                    cameraSession.setZoom((float) valueAnimator.getAnimatedValue());
+                }
             });
             finishZoomTransition.addListener(new AnimatorListenerAdapter() {
                 @Override

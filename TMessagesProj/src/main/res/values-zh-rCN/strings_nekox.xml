@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">默认禁用链接预览</string>
     <string name="DisableLinkPreviewByDefaultNotice">默认情况下, 在输入过程中禁用链接预览请求，以防止服务器知道该链接在 Telegram 被分享。</string>
     <string name="CustomApi">自定义 API</string>
-    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。\n\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
+    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。
+\n
+\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
     <string name="CustomApiNo">不使用自定义 API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -40,9 +42,9 @@
     <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
-    <string name="GoogleCloudTransKey">Google 云翻译密钥</string>
-    <string name="GoogleCloudTransKeyNotice">如果您设置了一个谷歌云密钥： 云翻译API将被调用，而不是模拟表单提交到网页版 (快速、稳定和节省流量)。</string>
-    <string name="TransToLang">翻译目标语言</string>
+    <string name="GoogleCloudTransKey">Google Cloud翻译密钥</string>
+    <string name="GoogleCloudTransKeyNotice">如果您设置了一个Google Cloud密钥： 云翻译API将被调用，而不是提交模拟表单到网页版 (更快速、稳定和节省流量)。</string>
+    <string name="TransToLang">目标翻译语言</string>
     <string name="TransInputToLang">输入翻译目标语言</string>
     <string name="More">更多</string>
     <string name="TeleTuxUpdatesChannel">TeleTux 更新频道</string>
@@ -147,10 +149,10 @@
     <string name="ImportStickersX">从文件导入贴纸集</string>
     <string name="ImportStickersList">导入贴纸集</string>
     <string name="StickerSets">贴纸集</string>
-    <string name="InvalidStickersFile">无效的贴纸集文件： </string>
-    <string name="InvalidProxyFile">无效的代理列表文件： </string>
-    <string name="ImportedProxies">已导入的代理服务器： </string>
-    <string name="ErrorsInImport">导入错误： </string>
+    <string name="InvalidStickersFile">无效的贴纸集文件：</string>
+    <string name="InvalidProxyFile">无效的代理列表文件：</string>
+    <string name="ImportedProxies">已导入的代理服务器：</string>
+    <string name="ErrorsInImport">导入错误：</string>
     <string name="NoProxy">您还没有添加任何代理服务器.</string>
     <string name="DeleteAllServer">删除所有服务器</string>
     <string name="DeleteUnavailableServer">删除不可用的服务器</string>
@@ -192,8 +194,8 @@
     <string name="QRLoginConfirm">确认登录</string>
     <string name="StorageReset">清除存储</string>
     <string name="StorageResetInfo">该应用程序的所有数据将被永久删除（并先尝试登出所有帐户）。</string>
-    <string name="FCTitle">关于本应用之更新</string>
-    <string name="FCInfo">要跟随我们的公告与更新频道吗 ？</string>
+    <string name="FCTitle">关于本应用的更新</string>
+    <string name="FCInfo">要关注我们的公告与更新频道吗 ？</string>
     <string name="CCTitle">OpenCC (简繁转换)</string>
     <string name="CCTarget">目标</string>
     <string name="CCNo">无</string>
@@ -234,4 +236,38 @@
     <string name="ProxyInfoWS">WebSocket 中继设置</string>
     <string name="WsPayload">Payload</string>
     <string name="AutoLockImmediately">立即</string>
+    <string name="ImportSettings">导入设置</string>
+    <string name="BackupSettings">备份设置</string>
+    <string name="ImportSettingsAlert">确定要覆盖设置吗？从未知来源导入设置可能导致PIN被覆盖从而导致应用被锁定。</string>
+    <string name="AutoCheckUpdateRc">候选版</string>
+    <string name="AutoCheckUpdateStable">稳定版</string>
+    <string name="AutoCheckUpdateSwitch">自动更新</string>
+    <string name="AutoCheckUpdateOFF">关闭</string>
+    <string name="VersionUpdateNoUpdate">无更新。</string>
+    <string name="VersionUpdateNotNow">推迟</string>
+    <string name="VersionUpdateIgnore">忽略</string>
+    <string name="VersionUpdateConfirm">更新</string>
+    <string name="VersionUpdateVariantNotMatch">版本变体自动匹配失败。
+\n请从GitHub手动下载。</string>
+    <string name="VersionUpdateTitle">新版本可用</string>
+    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="unreadBadgeOnBackButton">聊天窗口返回按钮上显示未读数</string>
+    <string name="customPublicProxyIP">设置公共代理的 IP</string>
+    <string name="customPublicProxyIPNotice">在某些地区，指定公共代理 CDN（例如 Cloudflare）的 IP 可以加快访问速度。</string>
+    <string name="DeleteDownloadedFileConfirm">从本地缓存中删除此文件？</string>
+    <string name="DeleteDownloadedFileSucceed">已删除</string>
+    <string name="DeleteDownloadedFileExternal">外部文件被跳过。</string>
+    <string name="update_download_soucre">选择更新源</string>
+    <string name="useCustomEmoji">使用自定义 emoji</string>
+    <string name="useCustomEmojiInvalid">不是有效的 emoji zip 文件</string>
+    <string name="repeatConfirm">复读前确认</string>
+    <string name="repeatConfirmText">确定要复读这条消息？</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram 默认
+\n使用头像作为背景
+\n使用大只头像作为背景</string>
+    <string name="hideSponsoredMessage">隐藏赞助消息</string>
+    <string name="DisableInstantCamera">禁用相机即时预览</string>
+    <string name="showSeconds">以秒为单位显示时间戳</string>
+    <string name="rememberAllBackMessages">记住所有点击的回复</string>
+    <string name="ShareMessages">分享</string>
 </resources>

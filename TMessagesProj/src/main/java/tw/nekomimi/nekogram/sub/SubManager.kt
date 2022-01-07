@@ -9,6 +9,8 @@ object SubManager {
 
     val database by lazy { mkDatabase("proxy_sub") }
 
+    const val publicProxySubID = 1L
+
     @JvmStatic
     val count
         get() = subList.find().totalCount()
@@ -18,20 +20,21 @@ object SubManager {
 
         database.getRepository("proxy_sub", SubInfo::class.java).apply {
 
-            val public = find(ObjectFilters.eq("id", 1L)).firstOrDefault()
+            val public = find(ObjectFilters.eq("id", publicProxySubID)).firstOrDefault()
 
             update(SubInfo().apply {
+                // SubManager.kt -> SubInfo.java -> ProxyLoads.kt
 
                 name = LocaleController.getString("TeleTuxProxy", R.string.TeleTuxProxy)
                 enable = public?.enable ?: true
 
                 urls = listOf(
-                        "https://nekox.pages.dev/proxy_list_pro",
+                        "https://nekox.pages.dev/proxy_list_pro",  // Note: NO DoH apply to here and neko.services now.
                         "https://github.com/NekoX-Dev/ProxyList/blob/master/proxy_list_pro@js-file-line\">@<",
-                        "https://gitee.com/nekoshizuku/AwesomeRepo/raw/master/proxy_list_pro"
+                        "https://api.github.com/repos/NekoX-Dev/ProxyList/contents/proxy_list_pro?ref=master@\"content\": \"@\"",
                 )
 
-                id = 1L
+                id = publicProxySubID
                 internal = true
 
                 proxies = public?.proxies ?: listOf()

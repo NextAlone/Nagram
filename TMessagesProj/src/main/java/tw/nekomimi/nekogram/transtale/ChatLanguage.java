@@ -10,14 +10,14 @@ import org.dizitart.no2.objects.Index;
 public class ChatLanguage implements Mappable {
 
     @Id
-    public int chatId;
+    public long chatId;
 
     public String language;
 
     public ChatLanguage() {
     }
 
-    public ChatLanguage(int chatId, String language) {
+    public ChatLanguage(long chatId, String language) {
         this.chatId = chatId;
         this.language = language;
     }
@@ -30,7 +30,7 @@ public class ChatLanguage implements Mappable {
     }
 
     @Override public void read(NitriteMapper mapper, Document document) {
-        chatId = ((int) document.get("chatId"));
+        chatId = ((long) document.get("chatId"));
         language = ((String) document.get("language"));
     }
 

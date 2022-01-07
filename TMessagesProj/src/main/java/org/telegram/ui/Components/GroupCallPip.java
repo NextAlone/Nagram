@@ -37,7 +37,7 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.GroupCallActivity;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
@@ -131,7 +131,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                             return;
                         }
                         AndroidUtilities.runOnUIThread(micRunnable, 90);
-                        if (!NekoConfig.disableVibration) {
+                        if (!NekomuraConfig.disableVibration.Bool()) {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
                         pressed = true;
@@ -257,7 +257,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                         if (pressed) {
                             if (VoIPService.getSharedInstance() != null) {
                                 VoIPService.getSharedInstance().setMicMute(true, false, false);
-                                if (!NekoConfig.disableVibration) {
+                                if (!NekomuraConfig.disableVibration.Bool()) {
                                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 }
                             }
@@ -676,7 +676,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     private void updateAvatars(boolean animated) {
-        if (avatarsImageView.transitionProgressAnimator == null) {
+        if (avatarsImageView.avatarsDarawable.transitionProgressAnimator == null) {
             ChatObject.Call call;
 
             VoIPService voIPService = VoIPService.getSharedInstance();
@@ -686,7 +686,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 call = null;
             }
             if (call != null) {
-                int selfId = voIPService.getSelfId();
+                long selfId = voIPService.getSelfId();
                 for (int a = 0, N = call.sortedParticipants.size(), k = 0; k < 2; a++) {
                     if (a < N) {
                         TLRPC.TL_groupCallParticipant participant = call.sortedParticipants.get(a);
@@ -891,7 +891,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 iconView.playAnimation();
             }
             if (prepare) {
-                if (!NekoConfig.disableVibration) {
+                if (!NekomuraConfig.disableVibration.Bool()) {
                     button.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
             }

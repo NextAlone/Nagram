@@ -181,6 +181,7 @@
     <string name="PGPImport">Import Public Key</string>
     <string name="PGPImportPrivate">Import Private Key</string>
     <string name="ShareMyKey">Share My Public Key</string>
+    <string name="ShareMessages">Share</string>
     <string name="DisableVibration">Disable Vibration</string>
     <string name="IgnoreContentRestrictions">Ignore content restrictions</string>
     <string name="IgnoreContentRestrictionsNotice">Ignores play restrictions on messages.</string>
@@ -234,7 +235,7 @@
     <string name="AutoLockImmediately">Immediately</string>
     <string name="BackupSettings">Backup settings</string>
     <string name="ImportSettings">Import settings</string>
-    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
+    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings\? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
     <string name="nekoXPaymentRemovedToast">The payment function has been removed.</string>
     <string name="VersionUpdateTitle">New Version Available</string>
     <string name="VersionUpdateVariantNotMatch">Version variants fail to match automatically.\nPlease download manually from GitHub.</string>
@@ -246,4 +247,20 @@
     <string name="AutoCheckUpdateSwitch">Automatic Update</string>
     <string name="AutoCheckUpdateStable">Stable</string>
     <string name="AutoCheckUpdateRc">Release Candidate</string>
+    <string name="unreadBadgeOnBackButton">Unread badge on back button</string>
+    <string name="customPublicProxyIP">Set IP of public proxy</string>
+    <string name="customPublicProxyIPNotice">In some areas, specifying the IP of public proxy CDN(eg. Cloudflare) can speed up access.</string>
+    <string name="DeleteDownloadedFileConfirm">Delete this file from local cache?</string>
+    <string name="DeleteDownloadedFileSucceed">Deleted</string>
+    <string name="DeleteDownloadedFileExternal">External file is skipped.</string>
+    <string name="update_download_soucre">Select download soucre</string>
+    <string name="useCustomEmoji">Use Custom Emoji</string>
+    <string name="useCustomEmojiInvalid">Not a vaild emoji zip.</string>
+    <string name="repeatConfirm">Ask before repeat</string>
+    <string name="repeatConfirmText">Are you sure to repeat?</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
+    <string name="hideSponsoredMessage">Hide sponsored messages</string>
+    <string name="rememberAllBackMessages">Remember all clicked replies</string>
+    <string name="DisableInstantCamera">Disable instant camera</string>
+    <string name="showSeconds">Show timestamp in seconds</string>
 </resources>

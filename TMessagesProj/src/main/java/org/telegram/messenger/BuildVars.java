@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 @SuppressWarnings("ConstantConditions")
 public class BuildVars {
@@ -20,9 +21,9 @@ public class BuildVars {
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean LOGS_ENABLED = DEBUG_PRIVATE_VERSION;
     public static boolean USE_CLOUD_STRINGS = true;
-    public static boolean NO_SCOPED_STORAGE = true;
+    public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
 
-    public static int BUILD_VERSION;
+    public static int BUILD_VERSION; // generated
     public static String BUILD_VERSION_STRING;
 
     public static int OFFICAL_APP_ID = 4;

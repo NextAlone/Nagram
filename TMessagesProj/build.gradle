@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "7.9.3"
-def verCode = 380
+def verName = "8.4.2-preview01"
+def verCode = 520
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1")
 }
 
-def officialVer = "7.9.3"
-def officialCode = 2390
+def officialVer = "8.4.2"
+def officialCode = 2526
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -39,6 +39,7 @@ configurations {
 def keystorePwd = null
 def alias = null
 def pwd = null
+def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
 
 Properties properties
 def base64 = System.getenv("LOCAL_PROPERTIES")
@@ -60,17 +61,10 @@ keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
 alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
 
-def targetAbi = ""
 def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
     if (gradle.startParameter.taskNames.size == 1) {
         targetTask = gradle.startParameter.taskNames[0].toLowerCase()
-        if (targetTask.contains("arm64")) {
-            targetAbi = "arm64"
-        } else if (targetTask.contains("arm")) {
-            targetAbi = "arm"
-            verCode -= 1
-        }
     }
 }
 
@@ -87,20 +81,16 @@ android {
     splits {
 
         abi {
-
-            enable true
-            universalApk false
-
-            if (!targetAbi.isBlank()) {
-                reset()
-                if (targetAbi == "arm64") {
-                    include "arm64-v8a"
-                } else if (targetAbi == "arm") {
-                    include "armeabi-v7a"
+            if (targetTask.contains("fdroid")) {
+                enable false
+                universalApk true
+            } else {
+                enable true
+                universalApk false
+                if (!nativeTarget.isBlank()) {
+                    reset()
+                    include nativeTarget
                 }
-            } else if (!nativeTarget.isBlank()) {
-                reset()
-                include nativeTarget
             }
         }
 
@@ -109,7 +99,7 @@ android {
     defaultConfig {
         minSdkVersion 16
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         versionName verName
         versionCode verCode
@@ -244,12 +234,7 @@ android {
             matchingFallbacks = ["release", "debug"]
         }
 
-        fdroidArmRelease {
-            initWith foss
-            matchingFallbacks = ["release", "debug"]
-        }
-
-        fdroidArm64Release {
+        fdroidRelease {
             initWith foss
             matchingFallbacks = ["release", "debug"]
         }
@@ -259,24 +244,21 @@ android {
 
         main {
             jni.srcDirs = []
+            assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
         }
 
         debug {
             java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
-            jni {
-                srcDirs = ["./jni/"]
-            }
-            jniLibs {
-                srcDirs = []
-            }
+            jni.srcDirs = ["./jni/"]
             manifest {
                 srcFile "src/gservcies/AndroidManifest.xml"
             }
         }
 
         releaseNoGcm {
+            jni.srcDirs = []
             jniLibs {
                 srcDir "src/main/libs"
             }
@@ -286,6 +268,7 @@ android {
             java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
+            jni.srcDirs = []
             jniLibs {
                 srcDir "src/main/libs"
             }
@@ -300,22 +283,11 @@ android {
             }
         }
 
-        fdroidArmRelease {
+        fdroidRelease {
             jni {
                 srcDirs = ["./jni/"]
             }
-            jniLibs {
-                srcDirs = []
-            }
-        }
-
-        fdroidArm64Release {
-            jni {
-                srcDirs = ["./jni/"]
-            }
-            jniLibs {
-                srcDirs = []
-            }
+            jniLibs.srcDirs = []
         }
 
     }
@@ -325,16 +297,15 @@ android {
     productFlavors {
         mini {
             isDefault true
-        }
-        miniAppleEmoji {
+            manifestPlaceholders = [is_full_version: "false"]
         }
         full {
-        }
-        fullAppleEmoji {
+            manifestPlaceholders = [is_full_version: "true"]
         }
         miniPlay {
             versionNameSuffix "-play"
             versionCode verCode - 2
+            manifestPlaceholders = [is_full_version: "false"]
         }
     }
 
@@ -342,15 +313,6 @@ android {
         if (set.name.startsWith("full")) {
             set.dependencies {
                 implementation fileTree("libs")
-            }
-        }
-        if (set.name.matches("(mini|full).*")) {
-            if (set.name.contains("Apple")) {
-                set.assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
-                /*} else if (set.name.contains("Twitter")) {
-                    set.assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]*/
-            } else {
-                set.assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
             }
         }
     }
@@ -362,19 +324,12 @@ android {
         if (task.name.contains("uploadCrashlyticsMappingFile")) {
             enabled = false
         }
+        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo") && !targetTask.contains("fdroid")) {
+            enabled = false
+        }
     }
 
     applicationVariants.all { variant ->
-        def flavor = variant.mergedFlavor
-        if (variant.buildType.name == "fdroidArmRelease") {
-            variant.outputs.each { output ->
-                output.versionNameOverride = flavor.versionName + "-arm"
-            }
-        } else if (variant.buildType.name == "fdroidArm64Release") {
-            variant.outputs.each { output ->
-                output.versionNameOverride = flavor.versionName + "-arm64"
-            }
-        }
         variant.outputs.all { output ->
             outputFileName = outputFileName.replace("TMessagesProj", "TeleTux")
         }
@@ -385,12 +340,12 @@ android {
 def okHttpVersion = "5.0.0-alpha.2"
 def fcmVersion = "21.1.0"
 def crashlyticsVersion = "18.2.0"
-def playCoreVersion = "1.10.0"
+def playCoreVersion = "1.10.1"
 
 dependencies {
 
-    implementation "androidx.browser:browser:1.3.0"
-    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.browser:browser:1.4.0"
+    implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.exifinterface:exifinterface:1.3.3"
@@ -406,19 +361,19 @@ dependencies {
     //noinspection GradleDependency
     implementation "com.googlecode.mp4parser:isoparser:1.0.6"
 
-    implementation "com.google.code.gson:gson:2.8.7"
+    implementation "com.google.code.gson:gson:2.8.8"
     implementation "org.osmdroid:osmdroid-android:6.1.10"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1-native-mt"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation 'dnsjava:dnsjava:3.4.0'
+    implementation 'dnsjava:dnsjava:3.4.1'
     implementation "org.dizitart:nitrite:3.4.3"
 
-    implementation "cn.hutool:hutool-core:5.7.5"
-    implementation "cn.hutool:hutool-crypto:5.7.5"
+    implementation "cn.hutool:hutool-core:5.7.13"
+    implementation "cn.hutool:hutool-crypto:5.7.13"
     implementation 'cn.hutool:hutool-http:5.7.5'
-    implementation "com.jakewharton:process-phoenix:2.0.0"
+    implementation "com.jakewharton:process-phoenix:2.1.2"
 
     compileOnly 'org.yaml:snakeyaml:1.29'
     fullImplementation 'org.yaml:snakeyaml:1.29'

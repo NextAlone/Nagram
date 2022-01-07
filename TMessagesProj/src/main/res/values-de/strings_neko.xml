@@ -109,4 +109,15 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Übersetzer</string>
     <string name="ProviderYouDao">YouDao Übersetzer</string>
     <string name="AutoPauseVideoAbout">Beim Sperren des Bildschirms / Umschalten auf Hintergrund.</string>
+    <string name="enablePublicProxy">öffentliches Proxy von NekoX</string>
+    <string name="autoUpdateSubInfo">Proxies automatisch aktualisieren</string>
+    <string name="pressTitleToOpenAllChats">Tippe auf den Titel, um den „Alle Chats“-Tab zu öffnen</string>
+    <string name="hideGroupSticker">Gruppensticker verstecken</string>
+    <string name="hideSendAsChannel">Verstecke als Kanal senden</string>
+    <string name="TakeGIFasVideo">Nehme GIF als Video auf</string>
+    <string name="HideTimeForSticker">Versteckzeit für Sticker</string>
+    <string name="useSystemDNS">System-DNS benutzen</string>
+    <string name="customGroupVoipAudioBitrate">Gruppen VoIP Audio Bitrate</string>
+    <string name="disableSwipeToNextChannel">Wischen für nächsten Kanal deaktivieren</string>
+    <string name="DontSendGreetingSticker">Sende keine Begrüßungssticker</string>
 </resources>

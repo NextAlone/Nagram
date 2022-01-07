@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
@@ -47,6 +48,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private int emojiHeight;
     private float emojiOffset;
     private boolean animationInProgress;
+    private boolean skipBackgroundDrawing;
+    SnowflakesEffect snowflakesEffect;
 
     public interface SizeNotifierFrameLayoutDelegate {
         void onSizeChanged(int keyboardHeight, boolean isWidthGreater);
@@ -213,12 +216,12 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (backgroundDrawable == null) {
+        if (backgroundDrawable == null || skipBackgroundDrawing) {
             super.onDraw(canvas);
             return;
         }
         //int kbHeight = SharedConfig.smoothKeyboard ? 0 : keyboardHeight;
-        Drawable newDrawable = Theme.getCachedWallpaperNonBlocking();
+        Drawable newDrawable = getNewDrawable();
         if (newDrawable != backgroundDrawable && newDrawable != null) {
             if (Theme.isAnimatingColor()) {
                 oldBackgroundDrawable = backgroundDrawable;
@@ -256,6 +259,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
                     drawable.setBounds(x, y, x + width, y + height);
                     drawable.draw(canvas);
+                    checkSnowflake(canvas);
                     canvas.restore();
                 } else {
                     if (bottomClip != 0) {
@@ -282,6 +286,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 }
                 drawable.setBounds(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight());
                 drawable.draw(canvas);
+                checkSnowflake(canvas);
                 if (bottomClip != 0) {
                     canvas.restore();
                 }
@@ -292,6 +297,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 }
                 drawable.setBounds(0, backgroundTranslationY, getMeasuredWidth(), backgroundTranslationY + getRootView().getMeasuredHeight());
                 drawable.draw(canvas);
+                checkSnowflake(canvas);
                 if (bottomClip != 0) {
                     canvas.restore();
                 }
@@ -303,6 +309,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     canvas.scale(scale, scale);
                     drawable.setBounds(0, 0, (int) Math.ceil(getMeasuredWidth() / scale), (int) Math.ceil(getRootView().getMeasuredHeight() / scale));
                     drawable.draw(canvas);
+                    checkSnowflake(canvas);
                     canvas.restore();
                 } else {
                     int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
@@ -318,6 +325,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
                     drawable.setBounds(x, y, x + width, y + height);
                     drawable.draw(canvas);
+                    checkSnowflake(canvas);
                     canvas.restore();
                 }
             }
@@ -328,11 +336,34 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
+    private void checkSnowflake(Canvas canvas) {
+        if (SharedConfig.drawSnowInChat || Theme.canStartHolidayAnimation()) {
+            if (snowflakesEffect == null) {
+                snowflakesEffect = new SnowflakesEffect(1);
+            }
+            snowflakesEffect.onDraw(this, canvas);
+        }
+    }
+
     protected boolean isActionBarVisible() {
         return true;
     }
 
     protected AdjustPanLayoutHelper createAdjustPanLayoutHelper() {
         return null;
+    }
+
+    public void setSkipBackgroundDrawing(boolean skipBackgroundDrawing) {
+        this.skipBackgroundDrawing = skipBackgroundDrawing;
+        invalidate();
+    }
+
+    protected Drawable getNewDrawable() {
+        return Theme.getCachedWallpaperNonBlocking();
+    }
+
+    @Override
+    protected boolean verifyDrawable(Drawable who) {
+        return who == getBackgroundImage() || super.verifyDrawable(who);
     }
 }

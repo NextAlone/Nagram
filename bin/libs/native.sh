@@ -5,6 +5,7 @@ source "bin/init/env.sh"
 OUT=TMessagesProj/build/intermediates/stripped_native_libs/miniFoss/out/lib
 DIR=TMessagesProj/src/main/libs
 
+export COMPILE_NATIVE=1
 ./gradlew TMessagesProj:stripMiniFossDebugSymbols || exit 1
 
 function install() {

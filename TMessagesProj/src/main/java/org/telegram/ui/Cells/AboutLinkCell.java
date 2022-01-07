@@ -105,6 +105,7 @@ public class AboutLinkCell extends FrameLayout {
         }
         stringBuilder = new SpannableStringBuilder(oldText);
         MessageObject.addLinks(false, stringBuilder, false, false, !parseLinks);
+        Emoji.replaceEmoji(stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
         if (TextUtils.isEmpty(value)) {
             valueTextView.setVisibility(GONE);
         } else {

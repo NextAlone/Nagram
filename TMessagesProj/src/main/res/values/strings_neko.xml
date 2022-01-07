@@ -111,8 +111,19 @@
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="pressTitleToOpenAllChats">Press title to open \"All Chats\" tab</string>
     <string name="DontSendGreetingSticker">Don\'t send greeting sticker</string>
-    <string name="TakeGIFasVideo">Take GIF as Video</string>
-    <string name="UseMediaStreamInVoip">Use media stream in Voip</string>
+    <string name="TakeGIFasVideo">Take GIF as video</string>
+    <string name="UseMediaStreamInVoip">Use media stream in VoIP</string>
     <string name="HideTimeForSticker">Hide time for stickers</string>
+    <string name="hideGroupSticker">Hide group sticker</string>
+    <string name="useSystemDNS">Use system DNS</string>
+    <string name="customDoH">Custom DoH</string>
+    <string name="customGroupVoipAudioBitrate">Group VoIP Audio Bitrate</string>
+    <string name="maxRecentStickerCount">Max recent stickers</string>
+    <string name="disableSwipeToNextChannel">Disable swipe to next channel</string>
+    <string name="disableChoosingSticker">Send typing instead of choosing sticker</string>
+    <string name="disableRemoteEmojiInteractions">Disable emoji interactions from remote</string>
+    <string name="enablePublicProxy">NekoX Public Proxy</string>
+    <string name="autoUpdateSubInfo">Update proxies automatically</string>
+    <string name="hideSendAsChannel">Hide send as channel</string>
 
 </resources>

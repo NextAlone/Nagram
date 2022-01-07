@@ -1,8 +1,19 @@
+From 02952ace408e331237a1ccd724f072b3e67ceb20 Mon Sep 17 00:00:00 2001
+From: thermatk <thermatk@thermatk.com>
+Date: Wed, 23 Jan 2019 22:16:34 +0100
+Subject: [PATCH] only build what we need
+
+---
+ CMakeLists.txt        | 36 ---------------------
+ crypto/CMakeLists.txt | 74 -------------------------------------------
+ ssl/CMakeLists.txt    | 18 ------------------
+ 3 files changed, 128 deletions(-)
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index f58e853cd..a56305ce5 100644
+index fd3532664..7fcfb1627 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -564,44 +564,8 @@ if(USE_CUSTOM_LIBCXX)
+@@ -562,44 +562,8 @@ if(USE_CUSTOM_LIBCXX)
    target_link_libraries(libcxx libcxxabi)
  endif()
 
@@ -47,11 +58,10 @@ index f58e853cd..a56305ce5 100644
 
  if(FUZZ)
    if(LIBFUZZER_FROM_DEPS)
-@@ -617,39 +581,4 @@ endif()
-
+@@ -589,38 +564,3 @@ endif()
  if(UNIX AND NOT APPLE AND NOT ANDROID)
    set(HANDSHAKER_ARGS "-handshaker-path" $<TARGET_FILE:handshaker>)
--endif()
+ endif()
 -
 -if(FIPS)
 -  add_custom_target(
@@ -87,13 +97,11 @@ index f58e853cd..a56305ce5 100644
 -    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 -    DEPENDS all_tests bssl_shim handshaker fips_specific_tests_if_any
 -    USES_TERMINAL)
-+endif()
-\ No newline at end of file
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
-index cde92b591..1807d036a 100644
+index e940f7d5f..f5221d70d 100644
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
-@@ -91,7 +91,6 @@ function(perlasm dest src)
+@@ -85,7 +85,6 @@ function(perlasm dest src)
  endfunction()
 
  add_subdirectory(fipsmodule)
@@ -101,10 +109,13 @@ index cde92b591..1807d036a 100644
 
  if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
-@@ -475,93 +474,4 @@ endif()
-
- # urandom_test is a separate binary because it needs to be able to observe the
- # PRNG initialisation, which means that it can't have other tests running before
+@@ -466,96 +466,3 @@ endif()
+ if(USE_CUSTOM_LIBCXX)
+   target_link_libraries(crypto libcxx)
+ endif()
+-
+-# urandom_test is a separate binary because it needs to be able to observe the
+-# PRNG initialisation, which means that it can't have other tests running before
 -# it does.
 -add_executable(
 -  urandom_test
@@ -132,6 +143,7 @@ index cde92b591..1807d036a 100644
 -  cipher_extra/cipher_test.cc
 -  cmac/cmac_test.cc
 -  compiler_test.cc
+-  conf/conf_test.cc
 -  constant_time_test.cc
 -  cpu-arm-linux_test.cc
 -  crypto_test.cc
@@ -182,7 +194,6 @@ index cde92b591..1807d036a 100644
 -  x509/x509_test.cc
 -  x509/x509_time_test.cc
 -  x509v3/tab_test.cc
--  x509v3/v3name_test.cc
 -
 -  $<TARGET_OBJECTS:crypto_test_data>
 -  $<TARGET_OBJECTS:boringssl_gtest_main>
@@ -195,8 +206,6 @@ index cde92b591..1807d036a 100644
 -  target_link_libraries(crypto_test ws2_32)
 -endif()
 -add_dependencies(all_tests crypto_test)
-+# it does.
-\ No newline at end of file
 diff --git a/ssl/CMakeLists.txt b/ssl/CMakeLists.txt
 index 0fb532eae..f5cab9807 100644
 --- a/ssl/CMakeLists.txt
@@ -223,3 +232,6 @@ index 0fb532eae..f5cab9807 100644
 -  target_link_libraries(ssl_test ws2_32)
 -endif()
 -add_dependencies(all_tests ssl_test)
+--
+2.20.1
+

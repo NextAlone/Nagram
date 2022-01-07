@@ -1,17 +1,45 @@
 package tw.nekomimi.nekogram.parts
 
+import android.util.Base64
 import cn.hutool.http.HttpResponse
 import cn.hutool.http.HttpUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.telegram.messenger.FileLog
+import tw.nekomimi.nekogram.utils.DnsFactory
 import tw.nekomimi.nekogram.utils.ProxyUtil.parseProxies
+import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nkmr.NekomuraUtil
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+
+fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Exception>): List<String> {
+    if (!NekomuraConfig.enablePublicProxy.Bool())
+        return emptyList()
+    // Try DoH first ( github.com is often blocked
+    try {
+        var content = DnsFactory.getTxts("nachonekodayo.sekai.icu").joinToString()
+
+        val proxiesString = NekomuraUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
+        if (proxiesString.equals(content)) {
+            throw Exception("DoH get public proxy: Not found")
+        }
+
+        val proxies = parseProxies(proxiesString)
+        if (proxies.count() == 0) {
+            throw Exception("DoH get public proxy: Empty")
+        }
+        return proxies
+    } catch (e: Exception) {
+        FileLog.e(e.stackTraceToString())
+    }
+
+    // Try Other Urls
+    return loadProxies(urls, exceptions)
+}
+
 
 fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): List<String> {
 
@@ -38,7 +66,7 @@ fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): 
                         var nextUrl = url
                         var resp: HttpResponse
                         while (true) {
-                            resp = HttpUtil.createGet(nextUrl).execute();
+                            resp = HttpUtil.createGet(nextUrl).timeout(10 * 1000).execute();
                             if (resp.status == 301 || resp.status == 302 || resp.status == 307) {
                                 nextUrl = resp.header("Location");
                                 continue;
@@ -50,6 +78,12 @@ fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): 
                             content = content.substringAfter(subX)
                                     .substringBefore(subY)
                         }
+
+                        if (url.contains("https://api.github.com")) {
+                            content = content.replace("\\n", "", false)
+                            content = String(Base64.decode(content, Base64.NO_PADDING))
+                        }
+
                         val proxies = parseProxies(content)
                         if (urlFinal.contains("https://gitee.com/") && cl.decrementAndGet() > 0) {
                             defer = proxies
@@ -71,12 +105,8 @@ fun loadProxies(urls: List<String>, exceptions: MutableMap<String, Exception>): 
                             }
                         }
                     }
-
                 }
             }
-
         }
-
     }
-
 }

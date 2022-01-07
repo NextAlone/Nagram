@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Matikan tinjauan link secara default</string>
     <string name="DisableLinkPreviewByDefaultNotice">Matikan permintaan tinjauan tautan saat input secara default untuk mencegah server mengetahui bahwa tautan dibagikan melalui Telegram.</string>
     <string name="CustomApi">API Khusus</string>
-    <string name="UseCustomApiNotice">Gunakan API khusus untuk masuk, ini mungkin bisa membantu Anda ketika tidak bisa mendaftar atau masuk.\n\nCatatan: FCM tidak akan bekerja jika Anda menggunakan versi rilis.</string>
+    <string name="UseCustomApiNotice">Gunakan API khusus untuk masuk, ini mungkin bisa membantu Anda ketika tidak bisa mendaftar atau masuk.
+\n
+\nCatatan: FCM tidak akan bekerja jika Anda menggunakan versi rilis.</string>
     <string name="CustomApiNo">Jangan gunakan API khusus</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Hapus semua pesan dalam obrolan</string>
     <string name="DeleteAllInChatAlert">Peringatan! Ini akan menghapus **semua pesan** di obrolan ini untuk **semua** peserta.</string>
     <string name="UnblockAll">Buka Semua Yang Diblokir</string>
-    <string name="UnblockAllWarn">Anda yakin ingin membuka blokir untuk **semua pengguna dan robot**?</string>
+    <string name="UnblockAllWarn">Anda yakin ingin membuka blokir untuk **semua pengguna dan robot**\?</string>
     <string name="BlockedListEmpty">Anda belum memblokir siapa pun</string>
     <string name="ProxyTypeVmess">Proksi VMess</string>
     <string name="AddProxySocks5">Tambahkan Proxy SOCKS5</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">Impor stiker dari berkas</string>
     <string name="ImportStickersList">Impor stiker</string>
     <string name="StickerSets">Atur Stiker</string>
-    <string name="InvalidStickersFile">File stiker tidak valid: </string>
-    <string name="InvalidProxyFile">File daftar Proxy tidak valid: </string>
-    <string name="ImportedProxies">Daftar server Proxy yang diimpor: </string>
-    <string name="ErrorsInImport">Kesalahan impor: </string>
+    <string name="InvalidStickersFile">File stiker tidak valid:</string>
+    <string name="InvalidProxyFile">File daftar Proxy tidak valid:</string>
+    <string name="ImportedProxies">Daftar server Proxy yang diimpor:</string>
+    <string name="ErrorsInImport">Kesalahan impor:</string>
     <string name="NoProxy">Anda belum menambahkan server Proxy apa pun.</string>
     <string name="DeleteAllServer">Hapus semua server</string>
     <string name="DeleteUnavailableServer">Hapus server Proxy yang tidak aktif</string>
-    <string name="DeleteAllServerConfirm">Anda yakin ingin **menghapus semua server**?</string>
-    <string name="DeleteUnavailableServerConfirm">Anda yakin ingin **menghapus semua server yang tidak aktif**?</string>
+    <string name="DeleteAllServerConfirm">Anda yakin ingin **menghapus semua server**\?</string>
+    <string name="DeleteUnavailableServerConfirm">Anda yakin ingin **menghapus semua server yang tidak aktif**\?</string>
     <string name="MinApi21Required">Maaf, anda butuh setidaknya Android versi 5 (API 21).</string>
     <string name="MinApi23Required">Maaf, anda butuh setidaknya Android versi 6 (API23).</string>
     <string name="MiniVersionAlert">Maaf, versi mini tidak mendukung jenis Proxy ini, mohon alihkan versi pada pengaturan.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">Lepas semua pesan tersemat</string>
     <string name="DismissForYourself">Singkirkan untuk diri sendiri</string>
     <string name="ImportLogin">Masuk dengan QR</string>
-    <string name="QRLoginNotice">Kode QR / link ini membolehkan seseorang untuk masuk ke akun telegrammu. Apakah ini tindakan anda sendiri?</string>
+    <string name="QRLoginNotice">Kode QR / link ini membolehkan seseorang untuk masuk ke akun telegrammu. Apakah ini tindakan anda sendiri\?</string>
     <string name="QRLoginConfirm">Konfirmasi login</string>
     <string name="StorageReset">Hapus penyimpanan</string>
     <string name="StorageResetInfo">Semua data di aplikasi ini akan dihapus selamanya (dan coba untuk keluar dari semua akun terlebih dahulu).</string>
     <string name="FCTitle">Tentang pembaruan aplikasi</string>
-    <string name="FCInfo">Ikuti kanal pengumuman dan pembaruan kami?</string>
+    <string name="FCInfo">Ikuti kanal pengumuman dan pembaruan kami\?</string>
     <string name="CCTitle">OpenCC (Konversi Cina)</string>
     <string name="CCTarget">Target</string>
     <string name="CCNo">Kosong</string>
@@ -238,4 +240,15 @@
     <string name="ArchiveFiles">Arsipkan file</string>
     <string name="Win32ExecutableFiles">Win32 file yang dapat dieksekusi</string>
     <string name="AutoDownload">UnduhOtomatis</string>
+    <string name="AutoCheckUpdateRc">Kandidat Rilis</string>
+    <string name="AutoCheckUpdateStable">Stabil</string>
+    <string name="AutoCheckUpdateSwitch">Perbarui Otomatis</string>
+    <string name="AutoCheckUpdateOFF">MATI</string>
+    <string name="VersionUpdateNoUpdate">Tidak ada pembaruan.</string>
+    <string name="VersionUpdateNotNow">Tidak</string>
+    <string name="VersionUpdateIgnore">Abaikan</string>
+    <string name="VersionUpdateConfirm">PERBARUI</string>
+    <string name="VersionUpdateVariantNotMatch">Gagal mencocokkan versi varian secara otomatis.
+\n Silakan unduh manual dari GitHub.</string>
+    <string name="VersionUpdateTitle">Tersedia Versi Baru</string>
 </resources>

@@ -74,7 +74,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     private ListAdapter listViewAdapter;
     private RecyclerListView listView;
 
-    private int chatId;
+    private long chatId;
     private TLRPC.User currentUser;
     private TLRPC.Chat currentChat;
     private TLObject participant;
@@ -141,12 +141,12 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     private final static int done_button = 1;
 
-    public ChatRightsEditActivity(int userId, int channelId, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBannedDefault, TLRPC.TL_chatBannedRights rightsBanned, String rank, int type, boolean edit, boolean addingNew, TLObject part) {
+    public ChatRightsEditActivity(long userId, long channelId, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBannedDefault, TLRPC.TL_chatBannedRights rightsBanned, String rank, int type, boolean edit, boolean addingNew, TLObject part) {
         this(userId, channelId, rightsAdmin, rightsBannedDefault, rightsBanned, rank, type, edit, addingNew);
         participant = part;
     }
 
-    public ChatRightsEditActivity(int userId, int channelId, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBannedDefault, TLRPC.TL_chatBannedRights rightsBanned, String rank, int type, boolean edit, boolean addingNew) {
+    public ChatRightsEditActivity(long userId, long channelId, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBannedDefault, TLRPC.TL_chatBannedRights rightsBanned, String rank, int type, boolean edit, boolean addingNew) {
         super();
         isAddingNew = addingNew;
         chatId = channelId;
@@ -324,7 +324,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         listView.setOnItemClickListener((view, position) -> {
             if (position == 0) {
                 Bundle args = new Bundle();
-                args.putInt("user_id", currentUser.id);
+                args.putLong("user_id", currentUser.id);
                 presentFragment(new ProfileActivity(args));
             } else if (!canEdit && (!currentChat.creator || currentType != TYPE_ADMIN || position != anonymousRow)) {
                 return;

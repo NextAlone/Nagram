@@ -9,6 +9,10 @@ function build_one {
     NM="${CROSS_PREFIX}nm"
     STRIP="${CROSS_PREFIX}strip"
 
+	echo "Cleaning..."
+	rm -f config.h
+	make clean || true
+	rm -rf ${TOOLCHAIN_PREFIX}
 
 	echo "Toolchain..."
 	python $NDK/build/tools/make_standalone_toolchain.py \
@@ -71,6 +75,7 @@ function build_one {
 	--enable-avresample \
 	--enable-swscale \
 	--enable-protocol=file \
+	--enable-decoder=opus \
 	--enable-decoder=h264 \
 	--enable-decoder=mpeg4 \
 	--enable-decoder=mjpeg \
@@ -78,6 +83,7 @@ function build_one {
 	--enable-decoder=alac \
 	--enable-demuxer=mov \
 	--enable-demuxer=gif \
+	--enable-demuxer=ogg \
 	--enable-hwaccels \
 	$ADDITIONAL_CONFIGURE_FLAG
 
@@ -85,12 +91,6 @@ function build_one {
 	#read
 	make -j$COMPILATION_PROC_COUNT
 	make install
-
-	echo "Cleaning..."
-	rm -f config.h
-	make clean || true
-	rm -rf ${TOOLCHAIN_PREFIX}
-
 }
 
 function setCurrentPlatform {

@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">השבת תצוגה מקדימה של קישור כברירת מחדל</string>
     <string name="DisableLinkPreviewByDefaultNotice">השבת את בקשת התצוגה המקדימה של הקישור במהלך הקלט כברירת מחדל כדי למנוע מהשרת לדעת שהקישור משותף באמצעות Telegram.</string>
     <string name="CustomApi">ממשק API מותאם אישית</string>
-    <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.\n\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
+    <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.
+\n
+\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
     <string name="CustomApiNo">אל תשתמש בממשק API מותאם אישית</string>
     <string name="CustomApiOfficial">טלגרם אנדרואיד</string>
     <string name="CustomApiTGX">טלגרם אנדרואיד</string>
@@ -41,7 +43,7 @@
     <string name="ChangeTranslateProvider">החלף ספק</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">מפתח הענן של גוגל</string>
-    <string name="GoogleCloudTransKeyNotice">אם תגדיר מפתח Cloud Cloud של גוגל, API של תרגום ענן ייקרא במקום להגיש טופס מזויף לגרסת האינטרנט בעת התרגום (תנועה מהירה יותר, יציבה וחוסכת).</string>
+    <string name="GoogleCloudTransKeyNotice">הגדרת מפתח תרגום מול Google Cloud תוביל להפניית הקריאות ל־API של ענן התרגום במקום הגשת טופס מזויף בגרסת הדפדפן בעת בקשת תרגום (מהיר יותר, יציב וחוסך בתעבורה).</string>
     <string name="TransToLang">שפת יעד לתרגום</string>
     <string name="TransInputToLang">שפת יעד קלט לתרגום</string>
     <string name="More">יותר</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">מחק את הכל בצ\'אט</string>
     <string name="DeleteAllInChatAlert">אזהרה! פעולה זו תמחק את כל ההודעות ** בצ\'אט זה עבור ** כל ** המשתתפים.</string>
     <string name="UnblockAll">בטל את חסימת הכל</string>
-    <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **?</string>
+    <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **\?</string>
     <string name="BlockedListEmpty">לא חסמת אף אחד :)</string>
     <string name="ProxyTypeVmess">VMess פרוקסי</string>
     <string name="AddProxySocks5">הוסף SOCKS5 Proxy</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">ייבא שרתים מקובץ</string>
     <string name="ImportStickersList">יבוא מדבקות</string>
     <string name="StickerSets">סטים של מדבקה</string>
-    <string name="InvalidStickersFile">קובץ מדבקות לא חוקי: </string>
-    <string name="InvalidProxyFile">קובץ רשימת proxy לא חוקי: </string>
-    <string name="ImportedProxies">שרתי פרוקסי מיובאים: </string>
-    <string name="ErrorsInImport">שגיאות ייבוא: </string>
+    <string name="InvalidStickersFile">קובץ מדבקות לא חוקי:</string>
+    <string name="InvalidProxyFile">קובץ רשימת proxy לא חוקי:</string>
+    <string name="ImportedProxies">שרתי פרוקסי מיובאים:</string>
+    <string name="ErrorsInImport">שגיאות ייבוא:</string>
     <string name="NoProxy">לא הוספת שרתי פרוקסי.</string>
     <string name="DeleteAllServer">מחק את כל השרתים</string>
     <string name="DeleteUnavailableServer">מחק שרתים לא זמינים</string>
-    <string name="DeleteAllServerConfirm">האם אתה בטוח שברצונך ** למחוק את כל השרתים **?</string>
-    <string name="DeleteUnavailableServerConfirm">האם אתה בטוח שברצונך ** למחוק שרתים שלא זמינים **?</string>
+    <string name="DeleteAllServerConfirm">האם אתה בטוח שברצונך ** למחוק את כל השרתים **\?</string>
+    <string name="DeleteUnavailableServerConfirm">האם אתה בטוח שברצונך ** למחוק שרתים שלא זמינים **\?</string>
     <string name="MinApi21Required">מצטערים, אתה זקוק לפחות ל- Android 5 (API21).</string>
     <string name="MinApi23Required">מצטערים, אתה זקוק לפחות ל- Android 6 (API23).</string>
     <string name="MiniVersionAlert">מצטערים, גרסת מיני אינה תומכת בסוג זה של פרוקסי, אנא החלף גרסה בהגדרות.</string>
@@ -182,18 +184,18 @@
     <string name="ShareMyKey">שתף את המפתח הציבורי שלי</string>
     <string name="DisableVibration">השבת רטט</string>
     <string name="IgnoreContentRestrictions">התעלם ממגבלות תוכן</string>
-    <string name="IgnoreContentRestrictionsNotice">מתעלם ממגבלות אנדרואיד על הודעות באופן מקומי. ייתכן שהשרת יאסר בעתיד, ותצטרך להעריך בעצמך את החוקיות המקומית של אפשרות זו.</string>
+    <string name="IgnoreContentRestrictionsNotice">התעלמות מהגבלות השמעה על הודעות.</string>
     <string name="SendCommentAfterForward">שלח תגובה לאחר העברה</string>
     <string name="UnpinMessageX">בטל הצמדה של הודעה</string>
     <string name="UnpinMessagesAll">בטל את הצמדה של כל ההודעות</string>
     <string name="DismissForYourself">דחה בעצמך</string>
     <string name="ImportLogin">כניסה QR</string>
-    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך?</string>
+    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך\?</string>
     <string name="QRLoginConfirm">אשר כניסה</string>
     <string name="StorageReset">פנה אחסון</string>
     <string name="StorageResetInfo">כל הנתונים של יישום זה יימחקו לצמיתות (ונסה קודם להתנתק מכל החשבונות).</string>
     <string name="FCTitle">אודות עדכוני יישומים</string>
-    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו?</string>
+    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו\?</string>
     <string name="CCTitle">OpenCC (המרה סינית)</string>
     <string name="CCTarget">יַעַד</string>
     <string name="CCNo">אף אחד</string>
@@ -216,4 +218,56 @@
     <string name="HideDeviceInfo">הסתר את דגם המכשיר</string>
     <string name="HideDeviceInfoOff">דגם המכשיר יעלה בפעם השנייה שהאפליקציה מתחילה לאחר הכניסה.</string>
     <string name="HideDeviceInfoOn">תוכל לשנות זאת בהגדרות מאוחר יותר.</string>
+    <string name="UsePersiancalendarInfo">להציג תאריך עם לוח שנה היג׳רי לפי השמש</string>
+    <string name="UsePersiancalendar">להשתמש בלוח השנה הפרסי</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="SetPinnedSuffix">(נעוץ)</string>
+    <string name="UnpinSticker">שחרור</string>
+    <string name="PinSticker">הצמדה</string>
+    <string name="EnableStickerPinAbout">ניתן להצמיד מדבקות ולסנכרן עם הענן אפילו בעת הוספת מדבקות חדשות.
+\nצמוד להשבתת מועדף והאחרונים.</string>
+    <string name="EnableStickerPin">הפעלת מדבקה נצמדת</string>
+    <string name="ArchiveFiles">קובצי ארכיון</string>
+    <string name="Win32ExecutableFiles">קובצי הפעלה מסוג Win32</string>
+    <string name="AutoDownload">הורדה אוטומטית</string>
+    <string name="VersionUpdateVariantNotMatch">תיאום הגווני הגרסאות אוטומטית כשל.
+\nנא להוריד ידנית מ־GitHub.</string>
+    <string name="VersionUpdateConfirm">עדכון</string>
+    <string name="VersionUpdateTitle">קיימת גרסה חדשה</string>
+    <string name="nekoXPaymentRemovedToast">יכולת התשלום הוסרה.</string>
+    <string name="ImportSettings">ייבוא הגדות</string>
+    <string name="ImportSettingsAlert">לשכתב את ההגדרות\? ייבוא הגדרות ממקורות לא ידועים עלול לשכתב את הקוד הסודי ולהוביל לנעילת היישום.</string>
+    <string name="BackupSettings">הגדרות גיבוי</string>
+    <string name="AutoLockImmediately">מיידית</string>
+    <string name="WsPayload">מטען</string>
+    <string name="ProxyInfoWS">הגדרות ממסר WebSocket</string>
+    <string name="AddProxyWs">הוספת ממסר WebSocket</string>
+    <string name="DisplayPersianCalendarByLatin">הצגת לוח שנה פרסי בכתב לטיני</string>
+    <string name="EnableStickerPinTip">יכולת זו עדיין בהליכי פיתוח, סנכרון מול הענן כנראה לא יעבוד כראוי.</string>
+    <string name="AutoCheckUpdateRc">מועמד להפצה</string>
+    <string name="AutoCheckUpdateStable">יציב</string>
+    <string name="AutoCheckUpdateSwitch">עדכון אוטומטי</string>
+    <string name="AutoCheckUpdateOFF">כבוי</string>
+    <string name="VersionUpdateNoUpdate">אין עדכון.</string>
+    <string name="VersionUpdateNotNow">לא עכשיו</string>
+    <string name="VersionUpdateIgnore">התעלמות</string>
+    <string name="DeleteDownloadedFileConfirm">למחוק את הקובץ הזה מהמטמון המקומי\?</string>
+    <string name="customPublicProxyIP">הגדרת IP של מתווך ציבורי</string>
+    <string name="unreadBadgeOnBackButton">עיטור „לא נקראו” על כפתור החזרה</string>
+    <string name="DeleteDownloadedFileSucceed">נמחק</string>
+    <string name="useCustomEmoji">להשתמש באמוג׳י משלך</string>
+    <string name="DeleteDownloadedFileExternal">קובץ חיצוני לא עובד.</string>
+    <string name="customPublicProxyIPNotice">בחלק מהאזורים, ציון ה־IP של CDN במתווך ציבורי (למשל: Cloudflare) יכול להאיץ את הגישה.</string>
+    <string name="update_download_soucre">נא לבחור מקור הורדה</string>
+    <string name="rememberAllBackMessages">לזכור את כל התגובות עליהן לחצת</string>
+    <string name="showSeconds">הצגת חותמת הזמן בשניות</string>
+    <string name="DisableInstantCamera">השבתת מצלמה מיידית</string>
+    <string name="useCustomEmojiInvalid">לא zip תקני של אמוג׳י.</string>
+    <string name="valuesLargeAvatarInDrawer">ברירת המחדל של טלגרם
+\nתמונה ייצוגית כרקע
+\nתמונה ייצוגית גדולה כרקע</string>
+    <string name="repeatConfirm">לשאול לפני חזרה</string>
+    <string name="repeatConfirmText">לחזור\?</string>
+    <string name="hideSponsoredMessage">הסתרת הודעות פרסומיות</string>
+    <string name="ShareMessages">שיתוף</string>
 </resources>

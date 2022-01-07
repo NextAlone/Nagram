@@ -149,10 +149,10 @@
     <string name="ImportStickersX">وارد کردن استیکر ها از فایل</string>
     <string name="ImportStickersList">وارد کردن استیکر ها</string>
     <string name="StickerSets">دسته های استیکر</string>
-    <string name="InvalidStickersFile">فایل استیکر نامعتبر: </string>
-    <string name="InvalidProxyFile">فایل لیست پروکسی نامعتبر: </string>
-    <string name="ImportedProxies">سرور های پروکسی وارد شده: </string>
-    <string name="ErrorsInImport">مشکل در وارد کردن فایل: </string>
+    <string name="InvalidStickersFile">فایل استیکر نامعتبر:</string>
+    <string name="InvalidProxyFile">فایل لیست پروکسی نامعتبر:</string>
+    <string name="ImportedProxies">سرور های پروکسی وارد شده:</string>
+    <string name="ErrorsInImport">مشکل در وارد کردن فایل:</string>
     <string name="NoProxy">شما هیچ سرور پروکسی ای اضافه نکرده اید.</string>
     <string name="DeleteAllServer">حذف تمامی سرور ها</string>
     <string name="DeleteUnavailableServer">حذف سرور های غیرقابل دسترس</string>
@@ -240,4 +240,15 @@
     <string name="nekoXPaymentRemovedToast">عملکرد پرداخت حذف شده است.</string>
     <string name="ImportSettingsAlert">آیا از دوباره ‌نویسی تنظیمات اطمینان دارید؟ وارد کردن تنظیمات از منابع ناشناس ممکن است باعث دوباره نویسی سنجاق‌شده‌ها و قفل‌شدن برنامه شود.</string>
     <string name="ImportSettings">وارد کردن تنظیمات</string>
+    <string name="AutoCheckUpdateRc">کاندیدای انتشار</string>
+    <string name="AutoCheckUpdateStable">پایدار</string>
+    <string name="AutoCheckUpdateSwitch">به‌روزرسانی خودکار</string>
+    <string name="AutoCheckUpdateOFF">خاموش</string>
+    <string name="VersionUpdateNoUpdate">به‌روزرسانی موجود نیست.</string>
+    <string name="VersionUpdateNotNow">الان نه</string>
+    <string name="VersionUpdateIgnore">نادیده‌گیری</string>
+    <string name="VersionUpdateConfirm">به‌روزرسانی</string>
+    <string name="VersionUpdateVariantNotMatch">نوع نسخه بطور خودکار تشخیص داده نشد.
+\nلطفا بصورت دستی از گیت‌هاب دانلود کنید.</string>
+    <string name="VersionUpdateTitle">نسخه جدید در دسترس است</string>
 </resources>

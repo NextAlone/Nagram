@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Відключити передогляд посилань за замовчуванням</string>
     <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення за замовчуванням, щоб запобігти знанню сервера про те, що посилання передається через Telegram.</string>
     <string name="CustomApi">Користувацький API</string>
-    <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.\n\nПримітка: fcm не буде працювати, якщо ви використовуєте версію релізу.</string>
+    <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.
+\n
+\nПримітка: fcm не буде працювати, якщо ви використовуєте версію релізу.</string>
     <string name="CustomApiNo">Не використовувати користувацький API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Видалити все у чаті</string>
     <string name="DeleteAllInChatAlert">Увага! Це **видалить усі повідомлення** в цьому чаті для **всіх ** учасників.</string>
     <string name="UnblockAll">Розблокувати всі</string>
-    <string name="UnblockAllWarn">Ви дійсно хочете розблокувати **всіх користувачів і ботів**?</string>
+    <string name="UnblockAllWarn">Ви дійсно хочете розблокувати **всіх користувачів і ботів**\?</string>
     <string name="BlockedListEmpty">Ви не заблокували нікого :)</string>
     <string name="ProxyTypeVmess">VMess проксі</string>
     <string name="AddProxySocks5">Додати SOCKS5 проксі</string>
@@ -147,15 +149,15 @@
     <string name="ImportStickersX">Імпортувати стікери з файлу</string>
     <string name="ImportStickersList">Імпортуйте наклейки</string>
     <string name="StickerSets">Набори стікерів</string>
-    <string name="InvalidStickersFile">Некоректний файл стікерів: </string>
-    <string name="InvalidProxyFile">Недопустимий файл списку проксі: </string>
-    <string name="ImportedProxies">Імпортовані проксі-сервери: </string>
-    <string name="ErrorsInImport">Помилки імпорту: </string>
+    <string name="InvalidStickersFile">Некоректний файл стікерів:</string>
+    <string name="InvalidProxyFile">Недопустимий файл списку проксі:</string>
+    <string name="ImportedProxies">Імпортовані проксі-сервери:</string>
+    <string name="ErrorsInImport">Помилки імпорту:</string>
     <string name="NoProxy">Ви ще не додали будь-яких проксі-серверів.</string>
     <string name="DeleteAllServer">Видалити усі сервери</string>
     <string name="DeleteUnavailableServer">Видалити недоступні сервери</string>
-    <string name="DeleteAllServerConfirm">Ви дійсно бажаєте **видалити всі сервери**?</string>
-    <string name="DeleteUnavailableServerConfirm">Ви впевнені, що хочете ** видалити недоступні сервери **?</string>
+    <string name="DeleteAllServerConfirm">Ви дійсно бажаєте **видалити всі сервери**\?</string>
+    <string name="DeleteUnavailableServerConfirm">Ви впевнені, що хочете ** видалити недоступні сервери **\?</string>
     <string name="MinApi21Required">Необхідно хоча б Android 5 (API21).</string>
     <string name="MinApi23Required">Вибачте, вам потрібно принаймні Android 6 (API23).</string>
     <string name="MiniVersionAlert">Вибачте, міні-версія не підтримує цей тип проксі, будь ласка, увімкніть версію в налаштуваннях.</string>
@@ -188,12 +190,12 @@
     <string name="UnpinMessagesAll">Відкріпити всі повідомлення</string>
     <string name="DismissForYourself">Сховати для себе</string>
     <string name="ImportLogin">QR Login</string>
-    <string name="QRLoginNotice">Цей QR-код / посилання дозволяє комусь входити у ваш обліковий запис Telegram. Це ваша власна операція?</string>
+    <string name="QRLoginNotice">Цей QR-код / посилання дозволяє комусь входити у ваш обліковий запис Telegram. Це ваша власна операція\?</string>
     <string name="QRLoginConfirm">Підтвердьте вхід</string>
     <string name="StorageReset">Очистити сховище</string>
     <string name="StorageResetInfo">Усі дані цієї програми буде остаточно видалено (і спробуйте спочатку вийти з усіх облікових записів).</string>
     <string name="FCTitle">Про оновлення програми</string>
-    <string name="FCInfo">Слідкуйте за нашими каналами оголошень та оновлень?</string>
+    <string name="FCInfo">Слідкуйте за нашими каналами оголошень та оновлень\?</string>
     <string name="CCTitle">OpenCC (китайська конвертація)</string>
     <string name="CCTarget">Цільова</string>
     <string name="CCNo">Без ефекту</string>
@@ -219,7 +221,7 @@
     <string name="nekoXPaymentRemovedToast">Функція оплати була видалена.</string>
     <string name="ImportSettingsAlert">Чи дійсно ви впевнені, що хочете перезаписати налаштування\? Імпортування налаштувань з невідомих джерел може спричинити перезапис пін-коду і спричити блокування додатку.</string>
     <string name="EnableStickerPinTip">Ця функція ще на стадії розробки, синхронізація з хмарним сховищем може не працювати належним чином.</string>
-    <string name="EnableStickerPinAbout">Закріпити стікери і синхронізувати з хмарним сховищем, навіть коли додаєте нові стікери. 
+    <string name="EnableStickerPinAbout">Закріпити стікери і синхронізувати з хмарним сховищем, навіть коли додаєте нові стікери.
 \nПов\'язано з вимкненням улюблених та недавніх стікерів.</string>
     <string name="EnableStickerPin">Ввімкнути закріплення стікеру</string>
     <string name="ImportSettings">Імпортувати налаштування</string>

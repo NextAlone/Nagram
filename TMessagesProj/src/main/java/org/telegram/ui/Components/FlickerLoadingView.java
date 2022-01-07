@@ -31,6 +31,11 @@ public class FlickerLoadingView extends View {
     public final static int USERS2_TYPE = 10;
     public final static int BOTS_MENU_TYPE = 11;
     public final static int SHARE_ALERT_TYPE = 12;
+    public final static int MESSAGE_SEEN_TYPE = 13;
+    public final static int CHAT_THEMES_TYPE = 14;
+    public final static int MEMBER_REQUESTS_TYPE = 15;
+    public final static int REACTED_TYPE = 16;
+    public final static int QR_TYPE = 17;
 
     private int gradientWidth;
     private LinearGradient gradient;
@@ -56,8 +61,15 @@ public class FlickerLoadingView extends View {
     private String colorKey2 = Theme.key_windowBackgroundGray;
     private String colorKey3;
     private int itemsCount = 1;
+    private final Theme.ResourcesProvider resourcesProvider;
 
     float[] randomParams;
+    private Paint backgroundPaint;
+    private int parentWidth;
+    private int parentHeight;
+    private float parentXOffset;
+
+    FlickerLoadingView globalGradientView;
 
     public void setViewType(int type) {
         this.viewType = type;
@@ -91,7 +103,12 @@ public class FlickerLoadingView extends View {
     }
 
     public FlickerLoadingView(Context context) {
+        this(context, null);
+    }
+
+    public FlickerLoadingView(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
+        this.resourcesProvider = resourcesProvider;
         matrix = new Matrix();
     }
 
@@ -110,24 +127,23 @@ public class FlickerLoadingView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int color0 = Theme.getColor(colorKey1);
-        int color1 = Theme.getColor(colorKey2);
-        if (this.color1 != color1 || this.color0 != color0) {
-            this.color0 = color0;
-            this.color1 = color1;
-            if (isSingleCell) {
-                gradient = new LinearGradient(0, 0, gradientWidth = AndroidUtilities.dp(200), 0, new int[]{color1, color0, color0, color1}, new float[]{0.0f, 0.4f, 0.6f, 1f}, Shader.TileMode.CLAMP);
-            } else {
-                gradient = new LinearGradient(0, 0, 0, gradientWidth = AndroidUtilities.dp(600), new int[]{color1, color0, color0, color1}, new float[]{0.0f, 0.4f, 0.6f, 1f}, Shader.TileMode.CLAMP);
+        Paint paint = this.paint;
+        if (globalGradientView != null) {
+            if (getParent() != null) {
+                View parent = (View) getParent();
+                globalGradientView.setParentSize(parent.getMeasuredWidth(), parent.getMeasuredHeight(), -getX());
             }
-            paint.setShader(gradient);
+            paint = globalGradientView.paint;
         }
+
+        updateColors();
+        updateGradient();
 
         int h = paddingTop;
         if (useHeaderOffset) {
             h += AndroidUtilities.dp(32);
             if (colorKey3 != null) {
-                headerPaint.setColor(Theme.getColor(colorKey3));
+                headerPaint.setColor(getThemedColor(colorKey3));
             }
             canvas.drawRect(0,0, getMeasuredWidth(), AndroidUtilities.dp(32), colorKey3 != null ? headerPaint : paint);
         }
@@ -411,29 +427,163 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        }
+        } else if (getViewType() == MESSAGE_SEEN_TYPE) {
+            float cy = getMeasuredHeight() / 2f;
 
+            AndroidUtilities.rectTmp.set(AndroidUtilities.dp(40), cy - AndroidUtilities.dp(4), getMeasuredWidth() - AndroidUtilities.dp(120), cy + AndroidUtilities.dp(4));
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(4), AndroidUtilities.dp(4), paint);
+
+            if (backgroundPaint == null) {
+                backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                backgroundPaint.setColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+            }
+
+            for (int i = 0; i < 3; i++) {
+                canvas.drawCircle(getMeasuredWidth() - AndroidUtilities.dp(8 + 24 + 12 + 12) + AndroidUtilities.dp(13) + AndroidUtilities.dp(12) * i, cy, AndroidUtilities.dp(13f), backgroundPaint);
+                canvas.drawCircle(getMeasuredWidth() - AndroidUtilities.dp(8 + 24 + 12 + 12) + AndroidUtilities.dp(13) + AndroidUtilities.dp(12) * i, cy, AndroidUtilities.dp(12f), paint);
+            }
+        } else if (getViewType() == CHAT_THEMES_TYPE || getViewType() == QR_TYPE) {
+            int x = AndroidUtilities.dp(12);
+            int itemWidth = AndroidUtilities.dp(77);
+            int INNER_RECT_SPACE = AndroidUtilities.dp(4);
+            float BUBBLE_HEIGHT = AndroidUtilities.dp(21);
+            float BUBBLE_WIDTH = AndroidUtilities.dp(41);
+
+            while (x < getMeasuredWidth()) {
+
+                if (backgroundPaint == null) {
+                    backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    backgroundPaint.setColor(Theme.getColor(Theme.key_dialogBackground));
+                }
+
+                AndroidUtilities.rectTmp.set(x + AndroidUtilities.dp(4), AndroidUtilities.dp(4), x + itemWidth - AndroidUtilities.dp(4), getMeasuredHeight() - AndroidUtilities.dp(4));
+                canvas.drawRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);
+
+                if (getViewType() == CHAT_THEMES_TYPE) {
+                    float bubbleTop = INNER_RECT_SPACE + AndroidUtilities.dp(8);
+                    float bubbleLeft = INNER_RECT_SPACE + AndroidUtilities.dp(22);
+                    rectF.set(x + bubbleLeft, bubbleTop, x + bubbleLeft + BUBBLE_WIDTH, bubbleTop + BUBBLE_HEIGHT);
+                    canvas.drawRoundRect(rectF, rectF.height() * 0.5f, rectF.height() * 0.5f, backgroundPaint);
+                    bubbleLeft = INNER_RECT_SPACE + AndroidUtilities.dp(5);
+                    bubbleTop += BUBBLE_HEIGHT + AndroidUtilities.dp(4);
+                    rectF.set(x + bubbleLeft, bubbleTop, x + bubbleLeft + BUBBLE_WIDTH, bubbleTop + BUBBLE_HEIGHT);
+                    canvas.drawRoundRect(rectF, rectF.height() * 0.5f, rectF.height() * 0.5f, backgroundPaint);
+                } else if (getViewType() == QR_TYPE) {
+                    float radius = AndroidUtilities.dp(5);
+                    float squareSize = AndroidUtilities.dp(32);
+                    float left = x + (itemWidth - squareSize) / 2;
+                    int top = AndroidUtilities.dp(21);
+                    AndroidUtilities.rectTmp.set(left, top, left + squareSize, top + AndroidUtilities.dp(32));
+                    canvas.drawRoundRect(AndroidUtilities.rectTmp, radius, radius, backgroundPaint);
+                }
+
+
+                canvas.drawCircle(x + itemWidth / 2, getMeasuredHeight() - AndroidUtilities.dp(20), AndroidUtilities.dp(8), backgroundPaint);
+                x += itemWidth;
+            }
+        } else if (getViewType() == MEMBER_REQUESTS_TYPE) {
+            int count = 0;
+            int radius = AndroidUtilities.dp(23);
+            int rectRadius = AndroidUtilities.dp(4);
+            while (h <= getMeasuredHeight()) {
+                canvas.drawCircle(checkRtl(paddingLeft + AndroidUtilities.dp(12)) + radius, h + AndroidUtilities.dp(8) + radius, radius, paint);
+
+                rectF.set(paddingLeft + AndroidUtilities.dp(74), h + AndroidUtilities.dp(12), paddingLeft + AndroidUtilities.dp(260), h + AndroidUtilities.dp(20));
+                checkRtl(rectF);
+                canvas.drawRoundRect(rectF, rectRadius, rectRadius, paint);
+
+                rectF.set(paddingLeft + AndroidUtilities.dp(74), h + AndroidUtilities.dp(36), paddingLeft + AndroidUtilities.dp(140), h + AndroidUtilities.dp(42));
+                checkRtl(rectF);
+                canvas.drawRoundRect(rectF, rectRadius, rectRadius, paint);
+
+                h += getCellHeight(getMeasuredWidth());
+                count++;
+                if (isSingleCell && count >= itemsCount) {
+                    break;
+                }
+            }
+        } else if (getViewType() == REACTED_TYPE) {
+            int k = 0;
+            while (h <= getMeasuredHeight()) {
+                int r = AndroidUtilities.dp(16);
+                canvas.drawCircle(checkRtl(paddingLeft + AndroidUtilities.dp(13) + r), h + AndroidUtilities.dp(24), r, paint);
+
+                rectF.set(paddingLeft + AndroidUtilities.dp(53), h + AndroidUtilities.dp(20), getWidth() - AndroidUtilities.dp(53), h + AndroidUtilities.dp(28));
+                checkRtl(rectF);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(8), AndroidUtilities.dp(8), paint);
+
+                if (k < 4) {
+                    r = AndroidUtilities.dp(12);
+                    canvas.drawCircle(checkRtl(getWidth() - AndroidUtilities.dp(12) - r), h + AndroidUtilities.dp(24), r, paint);
+                }
+
+                h += getCellHeight(getMeasuredWidth());
+                k++;
+                if (isSingleCell && k >= itemsCount) {
+                    break;
+                }
+            }
+        }
+        invalidate();
+    }
+
+    public void updateGradient() {
+        if (globalGradientView != null) {
+            globalGradientView.updateGradient();
+            return;
+        }
         long newUpdateTime = SystemClock.elapsedRealtime();
         long dt = Math.abs(lastUpdateTime - newUpdateTime);
         if (dt > 17) {
             dt = 16;
         }
-        lastUpdateTime = newUpdateTime;
-        if (isSingleCell) {
-            totalTranslation += dt * getMeasuredWidth() / 400.0f;
-            if (totalTranslation >= getMeasuredWidth() * 2) {
-                totalTranslation = -gradientWidth * 2;
-            }
-            matrix.setTranslate(totalTranslation, 0);
-        } else {
-            totalTranslation += dt * getMeasuredHeight() / 400.0f;
-            if (totalTranslation >= getMeasuredHeight() * 2) {
-                totalTranslation = -gradientWidth * 2;
-            }
-            matrix.setTranslate(0, totalTranslation);
+        if (dt < 4) {
+            dt = 0;
         }
-        gradient.setLocalMatrix(matrix);
-        invalidate();
+        int width = parentWidth;
+        if (width == 0) {
+            width = getMeasuredWidth();
+        }
+        int height = parentHeight;
+        if (height == 0) {
+            height = getMeasuredHeight();
+        }
+        lastUpdateTime = newUpdateTime;
+        if (isSingleCell || viewType == MESSAGE_SEEN_TYPE || getViewType() == CHAT_THEMES_TYPE || getViewType() == QR_TYPE) {
+            totalTranslation += dt * width / 400.0f;
+            if (totalTranslation >= width * 2) {
+                totalTranslation = -gradientWidth * 2;
+            }
+            matrix.setTranslate(totalTranslation + parentXOffset, 0);
+        } else {
+            totalTranslation += dt * height / 400.0f;
+            if (totalTranslation >= height * 2) {
+                totalTranslation = -gradientWidth * 2;
+            }
+            matrix.setTranslate(parentXOffset, totalTranslation);
+        }
+        if (gradient != null) {
+            gradient.setLocalMatrix(matrix);
+        }
+    }
+
+    public void updateColors() {
+        if (globalGradientView != null) {
+            globalGradientView.updateColors();
+            return;
+        }
+        int color0 = getThemedColor(colorKey1);
+        int color1 = getThemedColor(colorKey2);
+        if (this.color1 != color1 || this.color0 != color0) {
+            this.color0 = color0;
+            this.color1 = color1;
+            if (isSingleCell || viewType == MESSAGE_SEEN_TYPE || viewType == CHAT_THEMES_TYPE || viewType == QR_TYPE) {
+                gradient = new LinearGradient(0, 0, gradientWidth = AndroidUtilities.dp(200), 0, new int[]{color1, color0, color0, color1}, new float[]{0.0f, 0.4f, 0.6f, 1f}, Shader.TileMode.CLAMP);
+            } else {
+                gradient = new LinearGradient(0, 0, 0, gradientWidth = AndroidUtilities.dp(600), new int[]{color1, color0, color0, color1}, new float[]{0.0f, 0.4f, 0.6f, 1f}, Shader.TileMode.CLAMP);
+            }
+            paint.setShader(gradient);
+        }
     }
 
     private float checkRtl(float x) {
@@ -459,9 +609,9 @@ public class FlickerLoadingView extends View {
             int photoWidth = (width - (AndroidUtilities.dp(2) * (getColumnsCount() - 1))) / getColumnsCount();
             return photoWidth + AndroidUtilities.dp(2);
         } else if (getViewType() == 3) {
-            return AndroidUtilities.dp(56) + 1;
+            return AndroidUtilities.dp(56);
         } else if (getViewType() == 4) {
-            return AndroidUtilities.dp(56) + 1;
+            return AndroidUtilities.dp(56);
         } else if (getViewType() == 5) {
             return AndroidUtilities.dp(80);
         } else if (getViewType() == USERS_TYPE) {
@@ -476,6 +626,10 @@ public class FlickerLoadingView extends View {
             return AndroidUtilities.dp(36);
         } else if (getViewType() == SHARE_ALERT_TYPE) {
             return AndroidUtilities.dp(103);
+        } else if (getViewType() == MEMBER_REQUESTS_TYPE) {
+            return AndroidUtilities.dp(107);
+        } else if (getViewType() == REACTED_TYPE) {
+            return AndroidUtilities.dp(48);
         }
         return 0;
     }
@@ -504,5 +658,24 @@ public class FlickerLoadingView extends View {
 
     public void setItemsCount(int i) {
         this.itemsCount = i;
+    }
+
+    private int getThemedColor(String key) {
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
+        return color != null ? color : Theme.getColor(key);
+    }
+
+    public void setGlobalGradientView(FlickerLoadingView globalGradientView) {
+        this.globalGradientView = globalGradientView;
+    }
+
+    public void setParentSize(int parentWidth, int parentHeight, float parentXOffset) {
+        this.parentWidth = parentWidth;
+        this.parentHeight = parentHeight;
+        this.parentXOffset = parentXOffset;
+    }
+
+    public Paint getPaint() {
+        return paint;
     }
 }

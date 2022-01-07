@@ -57,20 +57,13 @@ public:
     void applyDatacenterAddress(uint32_t datacenterId, std::string ipAddress, uint32_t port);
     void setDelegate(ConnectiosManagerDelegate *connectiosManagerDelegate);
     ConnectionState getConnectionState();
-    void setUserId(int32_t userId);
+    void setUserId(int64_t userId);
     void switchBackend(bool restart);
     void resumeNetwork(bool partial);
     void pauseNetwork();
     void setNetworkAvailable(bool value, int32_t type, bool slow);
-
     void setIpStrategy(uint8_t value);
-
-    void init(uint32_t version, int32_t layer, int32_t apiId, std::string deviceModel,
-              std::string systemVersion, std::string appVersion, std::string langCode,
-              std::string systemLangCode, std::string configPath, std::string logPath,
-              std::string regId, std::string cFingerprint, std::string installerId,
-             std::string packageId, int32_t timezoneOffset, int32_t userId, bool isPaused, bool enablePushConnection,
-              bool hasNetwork, int32_t networkType);
+    void init(uint32_t version, int32_t layer, int32_t apiId, std::string deviceModel, std::string systemVersion, std::string appVersion, std::string langCode, std::string systemLangCode, std::string configPath, std::string logPath, std::string regId, std::string cFingerprint, std::string installerId, std::string packageId, int32_t timezoneOffset, int64_t userId, bool isPaused, bool enablePushConnection, bool hasNetwork, int32_t networkType);
     void setProxySettings(std::string address, uint16_t port, std::string username, std::string password, std::string secret);
     void setLangCode(std::string langCode);
     void setRegId(std::string regId);
@@ -129,11 +122,8 @@ private:
     TLObject *getRequestWithMessageId(int64_t messageId);
     void onDatacenterHandshakeComplete(Datacenter *datacenter, HandshakeType type, int32_t timeDiff);
     void onDatacenterExportAuthorizationComplete(Datacenter *datacenter);
-
     int64_t generateMessageId();
-
     uint8_t getIpStratagy();
-
     bool isNetworkAvailable();
 
     void scheduleCheckProxyInternal(ProxyCheckInfo *proxyCheckInfo);
@@ -234,7 +224,7 @@ private:
     std::string currentSystemLangCode;
     std::string currentConfigPath;
     std::string currentLogPath;
-    int32_t currentUserId = 0;
+    int64_t currentUserId = 0;
     bool registeredForInternalPush = false;
     bool pushConnectionEnabled = true;
 
@@ -259,7 +249,6 @@ private:
     friend class Config;
     friend class FileLog;
     friend class Handshake;
-
 };
 
 #ifdef ANDROID

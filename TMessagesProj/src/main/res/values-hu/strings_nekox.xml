@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">Alapértelmezés szerint tiltsa le a link előnézetét</string>
     <string name="DisableLinkPreviewByDefaultNotice">Alapértelmezés szerint tiltsa le a link előnézeti kérését a bevitel során, hogy megakadályozza a kiszolgálót abban, hogy tudja, hogy a linket a Telegramon keresztül osztják meg.</string>
     <string name="CustomApi">Egyéni API</string>
-    <string name="UseCustomApiNotice">Jelentkezzen be az egyéni api használatával, ha nem tud regisztrálni vagy bejelentkezni, ez segíthet.\n\nMegjegyzés: Az fcm nem fog működni, ha a kiadási verziót használja.</string>
+    <string name="UseCustomApiNotice">Jelentkezzen be az egyéni api használatával, ha nem tud regisztrálni vagy bejelentkezni, ez segíthet.
+\n
+\nMegjegyzés: Az fcm nem fog működni, ha a kiadási verziót használja.</string>
     <string name="CustomApiNo">Ne használjon egyéni API-t</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -98,7 +100,7 @@
     <string name="DeleteAllInChat">Az összes törlése a csevegésben</string>
     <string name="DeleteAllInChatAlert">Figyelem! Ez ** minden üzenetet ** töröl a csevegésből ** az összes ** résztvevő számára.</string>
     <string name="UnblockAll">Összes feloldása</string>
-    <string name="UnblockAllWarn">Biztosan fel akarja oldani ** az összes felhasználó és bot ** feloldását?</string>
+    <string name="UnblockAllWarn">Biztosan fel akarja oldani ** az összes felhasználó és bot ** feloldását\?</string>
     <string name="BlockedListEmpty">Még senkit sem blokkoltál :)</string>
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Adja hozzá a SOCKS5 Proxy-t</string>
@@ -146,15 +148,15 @@
     <string name="ImportStickersX">Matricák importálása fájlból</string>
     <string name="ImportStickersList">Matricák importálása</string>
     <string name="StickerSets">Matrica készletek</string>
-    <string name="InvalidStickersFile">Érvénytelen matricafájl: </string>
-    <string name="InvalidProxyFile">Érvénytelen proxylista-fájl: </string>
-    <string name="ImportedProxies">Importált proxy szerverek: </string>
-    <string name="ErrorsInImport">Importálási hibák: </string>
+    <string name="InvalidStickersFile">Érvénytelen matricafájl:</string>
+    <string name="InvalidProxyFile">Érvénytelen proxylista-fájl:</string>
+    <string name="ImportedProxies">Importált proxy szerverek:</string>
+    <string name="ErrorsInImport">Importálási hibák:</string>
     <string name="NoProxy">Még nem adott hozzá proxykiszolgálót.</string>
     <string name="DeleteAllServer">Törölje az összes szervert</string>
     <string name="DeleteUnavailableServer">Törölje a nem elérhető szervereket</string>
-    <string name="DeleteAllServerConfirm">Biztosan ** törölni szeretné az összes szervert **?</string>
-    <string name="DeleteUnavailableServerConfirm">Biztosan ** törölni kívánja a nem elérhető szervereket **?</string>
+    <string name="DeleteAllServerConfirm">Biztosan ** törölni szeretné az összes szervert **\?</string>
+    <string name="DeleteUnavailableServerConfirm">Biztosan ** törölni kívánja a nem elérhető szervereket **\?</string>
     <string name="MinApi21Required">Sajnos legalább Android 5-re (API21) van szükséged.</string>
     <string name="MinApi23Required">Sajnos legalább Android 6-ra (API23) van szükséged.</string>
     <string name="MiniVersionAlert">Sajnáljuk, a mini verzió nem támogatja ezt a típusú proxyt. Kérjük, váltson verziót a beállításokban.</string>

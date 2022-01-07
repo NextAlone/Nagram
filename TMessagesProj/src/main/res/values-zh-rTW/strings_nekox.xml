@@ -11,7 +11,9 @@
     <string name="DisableLinkPreviewByDefault">預設禁用連結預覽</string>
     <string name="DisableLinkPreviewByDefaultNotice">預設情況下, 在輸入過程中禁用連結預覽請求，以防止伺服器知道該連結在 Telegram 被分享。</string>
     <string name="CustomApi">自定義 API</string>
-    <string name="UseCustomApiNotice">使用自定義 Api 登入，如果您無法註冊或登入，這可能會有幫助。\n\n注意：如果您正在使用 release 版本，谷歌雲推送將無法工作。</string>
+    <string name="UseCustomApiNotice">使用自定義 Api 登入，如果您無法註冊或登入，這可能會有幫助。
+\n
+\n注意：如果您正在使用 release 版本，谷歌雲推送將無法工作。</string>
     <string name="CustomApiNo">不使用自定義 API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -147,10 +149,10 @@
     <string name="ImportStickersX">從檔案匯入貼紙集</string>
     <string name="ImportStickersList">匯入貼紙集</string>
     <string name="StickerSets">貼紙集</string>
-    <string name="InvalidStickersFile">無效的貼紙集檔案： </string>
-    <string name="InvalidProxyFile">無效的代理列表檔案： </string>
-    <string name="ImportedProxies">已匯入的代理伺服器： </string>
-    <string name="ErrorsInImport">匯入錯誤： </string>
+    <string name="InvalidStickersFile">無效的貼紙集檔案：</string>
+    <string name="InvalidProxyFile">無效的代理列表檔案：</string>
+    <string name="ImportedProxies">已匯入的代理伺服器：</string>
+    <string name="ErrorsInImport">匯入錯誤：</string>
     <string name="NoProxy">您還沒有新增任何代理伺服器.</string>
     <string name="DeleteAllServer">刪除所有伺服器</string>
     <string name="DeleteUnavailableServer">刪除不可用的伺服器</string>
@@ -213,4 +215,29 @@
     <string name="TextReplace">替換</string>
     <string name="ReplaceRegex">正規表示式</string>
     <string name="DisableTrending">禁用趨勢推薦</string>
+    <string name="AutoDownload">自動下載</string>
+    <string name="ArchiveFiles">壓縮文件</string>
+    <string name="Win32ExecutableFiles">Win32 可執行文件</string>
+    <string name="EnableStickerPin">啟用貼紙集置頂</string>
+    <string name="DisplayPersianCalendarByLatin">以拉丁字母顯示波斯日曆</string>
+    <string name="ImportSettingsAlert">確定要覆蓋設定嗎？從未知來源匯入設定可能導致PIN被覆蓋從而導致應用程式被鎖定。</string>
+    <string name="BackupSettings">備份設定</string>
+    <string name="VersionUpdateConfirm">更新</string>
+    <string name="ImportSettings">匯入設定</string>
+    <string name="VersionUpdateTitle">新版本可用</string>
+    <string name="UnpinSticker">取消置頂</string>
+    <string name="ProxyInfoWS">WebSocket 中繼設定</string>
+    <string name="UsePersiancalendarInfo">用太陽回曆顯示日期</string>
+    <string name="AutoLockImmediately">立即</string>
+    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="UsePersiancalendar">使用伊朗歷</string>
+    <string name="AddProxyWs">新增 WebSocket 中繼</string>
+    <string name="WsPayload">Payload</string>
+    <string name="VersionUpdateVariantNotMatch">版本變體自動匹配失敗。
+\n請從GitHub手動下載。</string>
+    <string name="VersionUpdateIgnore">忽略</string>
+    <string name="PinSticker">置頂</string>
+    <string name="ShareMessages">分享</string>
+    <string name="SetPinnedSuffix">(置頂)</string>
+    <string name="AppLinkFDroid">F-Droid</string>
 </resources>

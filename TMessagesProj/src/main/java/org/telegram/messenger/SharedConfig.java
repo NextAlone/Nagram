@@ -21,7 +21,6 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.pm.ShortcutManagerCompat;
 
 import com.v2ray.ang.V2RayConfig;
@@ -29,20 +28,27 @@ import com.v2ray.ang.dto.AngConfig;
 import com.v2ray.ang.util.Utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.dizitart.no2.objects.filters.ObjectFilters;
 import org.json.JSONArray;
 import org.json.JSONException;
+import androidx.annotation.IntDef;
+import androidx.core.content.pm.ShortcutManagerCompat;
+
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
+import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.SwipeGestureSettingsView;
+import org.telegram.ui.Components.SwipeGestureSettingsView;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Arrays;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -62,16 +68,21 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.WSS_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.WS_PROTOCOL;
+import java.util.Locale;
 
 public class SharedConfig {
 
     public static String pushString = "";
     public static String pushStringStatus = "";
+    public static long pushStringGetTimeStart;
+    public static long pushStringGetTimeEnd;
+    public static boolean pushStatSent;
     public static byte[] pushAuthKey;
     public static byte[] pushAuthKeyId;
 
@@ -100,9 +111,11 @@ public class SharedConfig {
     public static int textSelectionHintShows;
     public static int scheduledOrNoSoundHintShows;
     public static int lockRecordAudioVideoHint;
+    public static boolean forwardingOptionsHintShown;
     public static boolean searchMessagesAsListUsed;
     public static boolean stickersReorderingHintUsed;
     public static boolean disableVoiceAudioEffects;
+    public static boolean drawSnowInChat;
     private static int lastLocalId = -210000;
 
     public static String storageCacheDir;
@@ -142,10 +155,12 @@ public class SharedConfig {
     public static boolean showNotificationsForAllAccounts = true;
     public static int repeatMode;
     public static boolean allowBigEmoji;
-    public static boolean useSystemEmoji;
     public static int fontSize = 12;
     public static int bubbleRadius = 3;
     public static int ivFontSize = 12;
+    public static int messageSeenHintCount;
+    public static int emojiInteractionsHintCount;
+    public static int dayNightThemeSwitchHintCount;
 
     public static TLRPC.TL_help_appUpdate pendingAppUpdate;
     public static int pendingAppUpdateBuildVersion;
@@ -159,6 +174,9 @@ public class SharedConfig {
     private static int chatSwipeAction;
 
     public static int distanceSystemType;
+    public static int mediaColumnsCount = 3;
+    public static int fastScrollHintCount = 3;
+    public static boolean dontAskManageStorage;
 
     public static CopyOnWriteArraySet<Integer> activeAccounts;
     public static int loginingAccount = -1;
@@ -1013,6 +1031,21 @@ public class SharedConfig {
     private static boolean proxyListLoaded;
     public static ProxyInfo currentProxy;
 
+    public static Proxy getActiveSocks5Proxy() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return null;
+        // https://stackoverflow.com/questions/36205896/how-to-use-httpurlconnection-over-socks-proxy-on-android
+        // Android did not support socks proxy natively(using HURL) on devices previous than Marshmallow
+        // Hutool use HttpURLConnection too
+        if (!(currentProxy instanceof ExternalSocks5Proxy) || currentProxy instanceof WsProxy)
+            return null;
+        final ExternalSocks5Proxy proxy = (ExternalSocks5Proxy) currentProxy;
+        if (!proxy.isStarted())
+            return null;
+        FileLog.w("Return socks5 proxy: " + currentProxy.toString() + " port:" + currentProxy.port);
+        return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(currentProxy.address, currentProxy.port));
+    }
+
     public static void saveConfig() {
         synchronized (sync) {
             try {
@@ -1032,6 +1065,7 @@ public class SharedConfig {
                 editor.putBoolean("useFingerprint", useFingerprint);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putString("pushString2", pushString);
+                editor.putBoolean("pushStatSent", pushStatSent);
                 editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, Base64.DEFAULT) : "");
                 editor.putInt("lastLocalId", lastLocalId);
                 editor.putString("passportConfigJson", passportConfigJson);
@@ -1040,6 +1074,7 @@ public class SharedConfig {
                 editor.putBoolean("sortFilesByName", sortFilesByName);
                 editor.putInt("textSelectionHintShows", textSelectionHintShows);
                 editor.putInt("scheduledOrNoSoundHintShows", scheduledOrNoSoundHintShows);
+                editor.putBoolean("forwardingOptionsHintShown", forwardingOptionsHintShown);
                 editor.putInt("lockRecordAudioVideoHint", lockRecordAudioVideoHint);
                 editor.putString("storageCacheDir", !TextUtils.isEmpty(storageCacheDir) ? storageCacheDir : "");
 
@@ -1102,6 +1137,7 @@ public class SharedConfig {
             allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
             lastLocalId = preferences.getInt("lastLocalId", -210000);
             pushString = preferences.getString("pushString2", "");
+            pushStatSent = preferences.getBoolean("pushStatSent", false);
             passportConfigJson = preferences.getString("passportConfigJson", "");
             passportConfigHash = preferences.getInt("passportConfigHash", 0);
             storageCacheDir = preferences.getString("storageCacheDir", null);
@@ -1176,7 +1212,6 @@ public class SharedConfig {
             bubbleRadius = preferences.getInt("bubbleRadius", 3);
             ivFontSize = preferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = preferences.getBoolean("allowBigEmoji", true);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             smoothKeyboard = preferences.getBoolean("smoothKeyboard2", true);
@@ -1202,10 +1237,14 @@ public class SharedConfig {
             stickersReorderingHintUsed = preferences.getBoolean("stickersReorderingHintUsed", false);
             textSelectionHintShows = preferences.getInt("textSelectionHintShows", 0);
             scheduledOrNoSoundHintShows = preferences.getInt("scheduledOrNoSoundHintShows", 0);
+            forwardingOptionsHintShown = preferences.getBoolean("forwardingOptionsHintShown", false);
             lockRecordAudioVideoHint = preferences.getInt("lockRecordAudioVideoHint", 0);
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
             noiseSupression = preferences.getBoolean("noiseSupression", false);
             chatSwipeAction = preferences.getInt("ChatSwipeAction", -1);
+            messageSeenHintCount = preferences.getInt("messageSeenCount", 3);
+            emojiInteractionsHintCount = preferences.getInt("emojiInteractionsHintCount", 3);
+            dayNightThemeSwitchHintCount = preferences.getInt("dayNightThemeSwitchHintCount", 3);
             activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
             if (!preferences.contains("activeAccountsLoaded")) {
@@ -1238,6 +1277,11 @@ public class SharedConfig {
 
                 preferences.edit().putBoolean("activeAccountsLoaded", true).apply();
             }
+            mediaColumnsCount = preferences.getInt("mediaColumnsCount", 3);
+            fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
+            dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
+            drawSnowInChat = preferences.getBoolean("drawSnowInChat", BuildVars.DEBUG_VERSION);
+
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
 
@@ -1397,6 +1441,10 @@ public class SharedConfig {
         textSelectionHintShows = 0;
         scheduledOrNoSoundHintShows = 0;
         lockRecordAudioVideoHint = 0;
+        forwardingOptionsHintShown = false;
+        messageSeenHintCount = 3;
+        emojiInteractionsHintCount = 3;
+        dayNightThemeSwitchHintCount = 3;
         saveConfig();
     }
 
@@ -1442,6 +1490,14 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("scheduledOrNoSoundHintShows", ++scheduledOrNoSoundHintShows);
+        editor.commit();
+    }
+
+    public static void forwardingOptionsHintHintShowed() {
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        forwardingOptionsHintShown = true;
+        editor.putBoolean("forwardingOptionsHintShown", forwardingOptionsHintShown);
         editor.commit();
     }
 
@@ -1559,6 +1615,14 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableVoiceAudioEffects", disableVoiceAudioEffects);
+        editor.commit();
+    }
+
+    public static void toggleDrawSnowInChat() {
+        drawSnowInChat = !drawSnowInChat;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("drawSnowInChat", drawSnowInChat);
         editor.commit();
     }
 
@@ -1772,6 +1836,13 @@ public class SharedConfig {
         editor.commit();
     }
 
+    public static void setSmoothKeyboard(boolean smoothKeyboard) {
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("smoothKeyboard2", smoothKeyboard);
+        editor.commit();
+    }
+
     public static void togglePauseMusicOnRecord() {
         pauseMusicOnRecord = !pauseMusicOnRecord;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
@@ -1783,6 +1854,13 @@ public class SharedConfig {
     public static void toggleInappCamera() {
         inappCamera = !inappCamera;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("inappCamera", inappCamera);
+        editor.commit();
+    }
+
+    public static void setInappCamera(boolean inappCamera) {
+       SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("inappCamera", inappCamera);
         editor.commit();
@@ -1902,224 +1980,111 @@ public class SharedConfig {
         int current = MessagesController.getGlobalMainSettings().getInt("current_proxy", 0);
 
         for (SubInfo subInfo : SubManager.getSubList().find()) {
-
             if (!subInfo.enable) continue;
 
-//            if (subInfo.id == 1L) {
-//
-//                try {
-//                    RelayBatonProxy publicProxy = (RelayBatonProxy) parseProxyInfo(RelayBatonLoader.publicServer);
-//                    publicProxy.setRemarks(LocaleController.getString("NekoXProxy",R.string.NekoXProxy));
-//                    publicProxy.subId = subInfo.id;
-//                    proxyList.add(publicProxy);
-//                    if (publicProxy.hashCode() == current) {
-//                        currentProxy = publicProxy;
-//                        UIUtil.runOnIoDispatcher(publicProxy::start);
-//                    }
-//                } catch (InvalidProxyException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-
             for (String proxy : subInfo.proxies) {
-
                 try {
-
                     ProxyInfo info = parseProxyInfo(proxy);
-
                     info.subId = subInfo.id;
-
                     if (info.hashCode() == current) {
-
                         currentProxy = info;
-
                         if (info instanceof ExternalSocks5Proxy) {
-
                             UIUtil.runOnIoDispatcher(() -> {
-
                                 try {
-
                                     ((ExternalSocks5Proxy) info).start();
-
                                 } catch (Exception e) {
-
                                     FileLog.e(e);
                                     AlertUtil.showToast(e);
-
                                 }
-
                             });
-
                         }
-
                     }
-
                     proxyList.add(info);
-
                 } catch (Exception e) {
-
                     FileLog.d("load sub proxy failed: " + e);
-
                 }
-
             }
-
         }
 
         File proxyListFile = new File(ApplicationLoader.applicationContext.getFilesDir().getParentFile(), "nekox/proxy_list.json");
-
         boolean error = false;
-
         if (proxyListFile.isFile()) {
-
             try {
-
                 JSONArray proxyArray = new JSONArray(FileUtil.readUtf8String(proxyListFile));
-
                 for (int a = 0; a < proxyArray.length(); a++) {
-
                     JSONObject proxyObj = proxyArray.getJSONObject(a);
-
                     ProxyInfo info;
-
                     try {
-
                         info = ProxyInfo.fromJson(proxyObj);
-
                     } catch (Exception ex) {
-
                         FileLog.d("load proxy failed: " + ex);
-
                         error = true;
-
                         continue;
-
                     }
-
                     proxyList.add(info);
-
                     if (info.hashCode() == current) {
-
                         currentProxy = info;
-
                         if (info instanceof ExternalSocks5Proxy) {
-
                             UIUtil.runOnIoDispatcher(() -> {
-
                                 try {
-
                                     ((ExternalSocks5Proxy) info).start();
-
                                 } catch (Exception e) {
-
                                     FileLog.e(e);
                                     AlertUtil.showToast(e);
-
                                 }
-
                             });
-
                         }
-
                     }
-
                 }
-
             } catch (Exception ex) {
-
                 FileLog.d("invalid proxy list json format" + ex);
-
             }
-
         }
 
         if (error) saveProxyList();
-
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-
         boolean proxyEnabledValue = preferences.getBoolean("proxy_enabled", false);
-
         if (proxyEnabledValue && currentProxy == null) proxyEnabledValue = false;
-
         proxyEnabled = proxyEnabledValue;
-
     }
 
     public static ProxyInfo parseProxyInfo(String url) throws InvalidProxyException {
-
         if (url.startsWith(V2RayConfig.VMESS_PROTOCOL) || url.startsWith(V2RayConfig.VMESS1_PROTOCOL) || url.startsWith(V2RayConfig.TROJAN_PROTOCOL)) {
-
             try {
-
                 return new VmessProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } else if (url.startsWith(SS_PROTOCOL)) {
-
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
                 throw new InvalidProxyException("shadowsocks requires min api 21");
-
             }
-
             try {
-
                 return new ShadowsocksProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } else if (url.startsWith(SSR_PROTOCOL)) {
-
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
                 throw new InvalidProxyException("shadowsocksR requires min api 21");
-
             }
-
             try {
-
                 return new ShadowsocksRProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } else if (url.startsWith(WS_PROTOCOL) || url.startsWith(WSS_PROTOCOL)) {
-
             try {
-
                 return new WsProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         }/* else if (url.startsWith(RB_PROTOCOL)) {
-
             try {
-
                 return new RelayBatonProxy(url);
-
             } catch (Exception ex) {
-
                 throw new InvalidProxyException(ex);
-
             }
-
         } */
 
         if (url.startsWith("tg:proxy") ||
@@ -2130,9 +2095,7 @@ public class SharedConfig {
                 url.startsWith("https://t.me/socks")) {
             return ProxyInfo.fromUrl(url);
         }
-
         throw new InvalidProxyException();
-
     }
 
     public static class InvalidProxyException extends Exception {
@@ -2280,29 +2243,61 @@ public class SharedConfig {
         preferences.edit().putInt("ChatSwipeAction", chatSwipeAction).apply();
     }
 
+    public static void updateMessageSeenHintCount(int count) {
+        messageSeenHintCount = count;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        preferences.edit().putInt("messageSeenCount", messageSeenHintCount).apply();
+    }
+
+    public static void updateEmojiInteractionsHintCount(int count) {
+        emojiInteractionsHintCount = count;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        preferences.edit().putInt("emojiInteractionsHintCount", emojiInteractionsHintCount).apply();
+    }
+
+
+    public static void updateDayNightThemeSwitchHintCount(int count) {
+        dayNightThemeSwitchHintCount = count;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        preferences.edit().putInt("dayNightThemeSwitchHintCount", dayNightThemeSwitchHintCount).apply();
+    }
+
     public final static int PERFORMANCE_CLASS_LOW = 0;
     public final static int PERFORMANCE_CLASS_AVERAGE = 1;
     public final static int PERFORMANCE_CLASS_HIGH = 2;
 
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({
+            PERFORMANCE_CLASS_LOW,
+            PERFORMANCE_CLASS_AVERAGE,
+            PERFORMANCE_CLASS_HIGH
+    })
+    public @interface PerformanceClass {}
+
+    @PerformanceClass
     public static int getDevicePerformanceClass() {
         if (devicePerformanceClass == -1) {
-            int maxCpuFreq = -1;
-            try {
-                RandomAccessFile reader = new RandomAccessFile("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq", "r");
-                String line = reader.readLine();
-                if (line != null) {
-                    maxCpuFreq = Utilities.parseInt(line) / 1000;
-                }
-                reader.close();
-            } catch (Throwable ignore) {
-
-            }
             int androidVersion = Build.VERSION.SDK_INT;
             int cpuCount = ConnectionsManager.CPU_COUNT;
             int memoryClass = ((ActivityManager) ApplicationLoader.applicationContext.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+            int totalCpuFreq = 0;
+            int freqResolved = 0;
+            for (int i = 0; i < cpuCount; i++) {
+                try {
+                    RandomAccessFile reader = new RandomAccessFile(String.format(Locale.ENGLISH, "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_max_freq", i), "r");
+                    String line = reader.readLine();
+                    if (line != null) {
+                        totalCpuFreq += Utilities.parseInt(line) / 1000;
+                        freqResolved++;
+                    }
+                    reader.close();
+                } catch (Throwable ignore) {}
+            }
+            int maxCpuFreq = freqResolved == 0 ? -1 : (int) Math.ceil(totalCpuFreq / (float) freqResolved);
+
             if (androidVersion < 21 || cpuCount <= 2 || memoryClass <= 100 || cpuCount <= 4 && maxCpuFreq != -1 && maxCpuFreq <= 1250 || cpuCount <= 4 && maxCpuFreq <= 1600 && memoryClass <= 128 && androidVersion <= 21 || cpuCount <= 4 && maxCpuFreq <= 1300 && memoryClass <= 128 && androidVersion <= 24) {
                 devicePerformanceClass = PERFORMANCE_CLASS_LOW;
-            } else if (cpuCount < 8 || memoryClass <= 160 || maxCpuFreq != -1 && maxCpuFreq <= 1650 || maxCpuFreq == -1 && cpuCount == 8 && androidVersion <= 23) {
+            } else if (cpuCount < 8 || memoryClass <= 160 || maxCpuFreq != -1 && maxCpuFreq <= 2050 || maxCpuFreq == -1 && cpuCount == 8 && androidVersion <= 23) {
                 devicePerformanceClass = PERFORMANCE_CLASS_AVERAGE;
             } else {
                 devicePerformanceClass = PERFORMANCE_CLASS_HIGH;
@@ -2313,5 +2308,24 @@ public class SharedConfig {
         }
 
         return devicePerformanceClass;
+    }
+
+    public static void setMediaColumnsCount(int count) {
+        if (mediaColumnsCount != count) {
+            mediaColumnsCount = count;
+            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("mediaColumnsCount", mediaColumnsCount).apply();
+        }
+    }
+
+    public static void setFastScrollHintCount(int count) {
+        if (fastScrollHintCount != count) {
+            fastScrollHintCount = count;
+            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("fastScrollHintCount", fastScrollHintCount).apply();
+        }
+    }
+
+    public static void setDontAskManageStorage(boolean b) {
+        dontAskManageStorage = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("dontAskManageStorage", dontAskManageStorage).apply();
     }
 }

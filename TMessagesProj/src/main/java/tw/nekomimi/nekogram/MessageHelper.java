@@ -142,7 +142,7 @@ public class MessageHelper extends BaseController {
                 } else if ((int) did != 0) {
                     ArrayList<MessageObject> arrayList = new ArrayList<>();
                     arrayList.add(messageObject);
-                    getSendMessagesHelper().sendMessage(arrayList, did, notify, scheduleDate);
+                    getSendMessagesHelper().sendMessage(arrayList, did, false, false, notify, scheduleDate);
                 }
             } else if (messageObject.messageOwner.message != null) {
                 TLRPC.WebPage webPage = null;
@@ -153,7 +153,7 @@ public class MessageHelper extends BaseController {
             } else if ((int) did != 0) {
                 ArrayList<MessageObject> arrayList = new ArrayList<>();
                 arrayList.add(messageObject);
-                getSendMessagesHelper().sendMessage(arrayList, did, notify, scheduleDate);
+                getSendMessagesHelper().sendMessage(arrayList, did, true, false, notify, scheduleDate);
             }
         }
     }
@@ -188,7 +188,7 @@ public class MessageHelper extends BaseController {
                 TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
                 ArrayList<Integer> ids = new ArrayList<>();
                 ArrayList<Long> random_ids = new ArrayList<>();
-                int channelId = 0;
+                long channelId = 0;
                 int indey = index;
                 for (int a = 0; a < res.messages.size(); a++) {
                     TLRPC.Message message = res.messages.get(a);
@@ -211,8 +211,7 @@ public class MessageHelper extends BaseController {
                     if (progress != null) uDismiss(progress);
                     return;
                 }
-                int finalChannelId = channelId;
-                AndroidUtilities.runOnUIThread(() -> getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, finalChannelId, true, false));
+                AndroidUtilities.runOnUIThread(() -> getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, true, false));
                 if (progress != null) uUpdate(progress, ">> " + indey);
                 deleteUserChannelHistoryWithSearch(progress, dialog_id, user, lastMessageId, indey);
             } else {
@@ -261,13 +260,13 @@ public class MessageHelper extends BaseController {
                         }
                         getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, channelId, true, false);
                          */
-                        HashSet<Integer> ids = new HashSet<>();
+                        HashSet<Long> ids = new HashSet<>();
                         ArrayList<Integer> msgIds = new ArrayList<>();
                         ArrayList<Long> random_ids = new ArrayList<>();
-                        int channelId = 0;
                         for (int a = 0; a < res.messages.size(); a++) {
                             TLRPC.Message message = res.messages.get(a);
-                            ids.add(message.id);
+//                            ids.add(message.id);
+                            msgIds.add(message.id);
                             if (message.from_id.user_id > 0) {
                                 ids.add(message.peer_id.user_id);
                             } else {
@@ -280,11 +279,11 @@ public class MessageHelper extends BaseController {
                                 lastMessageId = message.id;
                             }
                         }
-                        for (int userId : ids) {
+                        for (long userId : ids) {
                             deleteUserChannelHistory(chat, userId, 0);
                         }
                         if (!msgIds.isEmpty()) {
-                            getMessagesController().deleteMessages(msgIds, random_ids, null, dialog_id, channelId, true, false);
+                            getMessagesController().deleteMessages(msgIds, random_ids, null, dialog_id, true, false);
                         }
                         deleteChannelHistory(dialog_id, chat, lastMessageId);
 
@@ -296,13 +295,13 @@ public class MessageHelper extends BaseController {
         }), ConnectionsManager.RequestFlagFailOnServerErrors);
     }
 
-    public void deleteUserChannelHistory(final TLRPC.Chat chat, int userId, int offset) {
+    public void deleteUserChannelHistory(final TLRPC.Chat chat, long userId, int offset) {
         if (offset == 0) {
-            getMessagesStorage().deleteUserChatHistory(chat.id, chat.id, userId);
+            getMessagesStorage().deleteUserChatHistory(chat.id, userId);
         }
-        TLRPC.TL_channels_deleteUserHistory req = new TLRPC.TL_channels_deleteUserHistory();
+        TLRPC.TL_channels_deleteParticipantHistory req = new TLRPC.TL_channels_deleteParticipantHistory();
         req.channel = getMessagesController().getInputChannel(chat.id);
-        req.user_id = getMessagesController().getInputUser(userId);
+        req.participant = getMessagesController().getInputPeer(userId);
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;

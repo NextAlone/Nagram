@@ -2,7 +2,9 @@
 <resources>
     <string name="Locked">鎖定</string>
     <string name="CustomApi">自定義API</string>
-    <string name="UseCustomApiNotice">使用自定義api登錄，如果您無法註冊或登錄，這可能會有所幫助。\n\n注意：如果您正在使用 release 版本，谷歌云推送將不起作用。</string>
+    <string name="UseCustomApiNotice">使用自定義api登錄，如果您無法註冊或登錄，這可能會有所幫助。
+\n
+\n注意：如果您正在使用 release 版本，谷歌云推送將不起作用。</string>
     <string name="CustomApiNo">不要使用自定義API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -88,7 +90,7 @@
     <string name="DeleteAllInChat">刪除群組所有消息</string>
     <string name="DeleteAllInChatAlert">警告！這將**刪除此聊天中所有用戶**的**所有消息**。</string>
     <string name="UnblockAll">解除所有</string>
-    <string name="UnblockAllWarn">您確定要解除屏蔽**所有用戶與機器人**嗎?</string>
+    <string name="UnblockAllWarn">您確定要解除屏蔽**所有用戶與機器人**嗎\?</string>
     <string name="BlockedListEmpty">您还没有屏蔽任何人 :)</string>
     <string name="ProxyTypeVmess">VMess 代理</string>
     <string name="AddProxySocks5">添加 SOCKS5 代理</string>
@@ -134,10 +136,10 @@
     <string name="ImportStickersX">從文件導入貼紙集</string>
     <string name="ImportStickersList">導入貼紙集</string>
     <string name="StickerSets">貼紙集</string>
-    <string name="InvalidStickersFile">無效的貼紙集文件： </string>
-    <string name="InvalidProxyFile">無效的代理列表文件: </string>
-    <string name="ImportedProxies">已導入的代理伺服器列表: </string>
-    <string name="ErrorsInImport">導入出錯: </string>
+    <string name="InvalidStickersFile">無效的貼紙集文件：</string>
+    <string name="InvalidProxyFile">無效的代理列表文件:</string>
+    <string name="ImportedProxies">已導入的代理伺服器列表:</string>
+    <string name="ErrorsInImport">導入出錯:</string>
     <string name="NoProxy">您還沒有添加任何代理伺服器.</string>
     <string name="DeleteAllServer">刪除所有伺服器</string>
     <string name="DeleteUnavailableServer">刪除不可用的伺服器</string>

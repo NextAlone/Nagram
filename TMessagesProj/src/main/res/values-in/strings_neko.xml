@@ -110,4 +110,12 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">Terjemahan YouDao</string>
     <string name="pressTitleToOpenAllChats">Tekan judul untuk membuka tab \"Semua Obrolan\"</string>
+    <string name="maxRecentStickerCount">Maksimal Stiker Terbaru</string>
+    <string name="customGroupVoipAudioBitrate">Kecepatan Bit Audio Voip Grup</string>
+    <string name="customDoH">DoH khusus</string>
+    <string name="useSystemDNS">Gunakan DNS sistem</string>
+    <string name="HideTimeForSticker">Sembunyikan waktu untuk stiker</string>
+    <string name="UseMediaStreamInVoip">Stream media di Voip</string>
+    <string name="TakeGIFasVideo">Ambil GIF sebagai Video</string>
+    <string name="DontSendGreetingSticker">Jangan kirim stiker sapaan</string>
 </resources>

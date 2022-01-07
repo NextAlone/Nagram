@@ -4,15 +4,17 @@ import cn.hutool.core.util.StrUtil
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nkmr.NekomuraConfig
 import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
+import tw.nekomimi.nekogram.transtale.applyProxy
+import tw.nekomimi.nekogram.utils.applyIf
 
 object GoogleAppTranslator : Translator {
 
     override suspend fun doTranslate(from: String, to: String, query: String): String {
 
-        if (NekoConfig.translationProvider != 2 && StrUtil.isNotBlank(NekoConfig.googleCloudTranslateKey)) return GoogleCloudTranslator.doTranslate(from, to, query)
+        if (NekomuraConfig.translationProvider.Int() != 2 && StrUtil.isNotBlank(NekomuraConfig.googleCloudTranslateKey.String())) return GoogleCloudTranslator.doTranslate(from, to, query)
 
         if (to !in targetLanguages) {
 
@@ -20,7 +22,7 @@ object GoogleAppTranslator : Translator {
 
         }
 
-        val url = "https://translate.google." + (if (NekoConfig.translationProvider == 2) "cn" else "com") + "/translate_a/single?dj=1" +
+        val url = "https://translate.google." + (if (NekomuraConfig.translationProvider.Int() == 2) "cn" else "com") + "/translate_a/single?dj=1" +
                 "&q=" + TransUtils.encodeURIComponent(query) +
                 "&sl=auto" +
                 "&tl=" + to +
@@ -28,6 +30,7 @@ object GoogleAppTranslator : Translator {
 
         val response = cn.hutool.http.HttpUtil
                 .createGet(url)
+                .applyIf(NekomuraConfig.translationProvider.Int() != 2) { applyProxy() }
                 .header("User-Agent", "GoogleTranslate/6.14.0.04.343003216 (Linux; U; Android 10; Redmi K20 Pro)")
                 .execute()
 

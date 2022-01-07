@@ -13,14 +13,20 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Application;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.os.storage.StorageManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -29,10 +35,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -57,6 +65,7 @@ import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
+import org.telegram.ui.Cells.TextCheckBoxCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.PhotoPickerActivity;
@@ -175,8 +184,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
     };
 
-    public ChatAttachAlertDocumentLayout(ChatAttachAlert alert, Context context, boolean music) {
-        super(alert, context);
+    public ChatAttachAlertDocumentLayout(ChatAttachAlert alert, Context context, boolean music, Theme.ResourcesProvider resourcesProvider) {
+        super(alert, context, resourcesProvider);
         allowMusic = music;
         sortByName = SharedConfig.sortFilesByName;
         loadRecentFiles();
@@ -234,16 +243,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
         EditTextBoldCursor editText = searchItem.getSearchField();
-        editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        editText.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
-        editText.setHintTextColor(Theme.getColor(Theme.key_chat_messagePanelHint));
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setCursorColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setHintTextColor(getThemedColor(Theme.key_chat_messagePanelHint));
 
         sortItem = menu.addItem(sort_button, sortByName ? R.drawable.contacts_sort_time : R.drawable.contacts_sort_name);
         sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", R.string.AccDescrContactSorting));
 
-        addView(loadingView = new FlickerLoadingView(context));
+        addView(loadingView = new FlickerLoadingView(context, resourcesProvider));
 
-        emptyView = new StickerEmptyView(context, loadingView, StickerEmptyView.STICKER_TYPE_SEARCH) {
+        emptyView = new StickerEmptyView(context, loadingView, StickerEmptyView.STICKER_TYPE_SEARCH, resourcesProvider) {
             @Override
             public void setTranslationY(float translationY) {
                 super.setTranslationY(translationY + additionalTranslationY);
@@ -258,7 +267,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         emptyView.setVisibility(View.GONE);
         emptyView.setOnTouchListener((v, event) -> true);
 
-        listView = new RecyclerListView(context);
+        listView = new RecyclerListView(context, resourcesProvider);
         listView.setSectionsType(2);
         listView.setVerticalScrollBarEnabled(false);
         listView.setLayoutManager(layoutManager = new FillLastLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false, AndroidUtilities.dp(56), listView) {
@@ -334,7 +343,13 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (object instanceof ListItem) {
                 ListItem item = (ListItem) object;
                 File file = item.file;
-                if (file == null) {
+                boolean isExternalStorageManager = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    isExternalStorageManager = Environment.isExternalStorageManager();
+                }
+                if (!BuildVars.NO_SCOPED_STORAGE && (item.icon == R.drawable.files_storage || item.icon == R.drawable.files_internal) && !isExternalStorageManager) {
+                    delegate.startDocumentSelectActivity();
+                } else if (file == null) {
                     if (item.icon == R.drawable.files_gallery) {
                         HashMap<Object, Object> selectedPhotos = new HashMap<>();
                         ArrayList<Object> selectedPhotosOrder = new ArrayList<>();
@@ -377,8 +392,6 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                         if (delegate != null) {
                             delegate.startMusicSelectActivity();
                         }
-                    } else if (!BuildVars.NO_SCOPED_STORAGE && item.icon == R.drawable.files_storage) {
-                        delegate.startDocumentSelectActivity();
                     } else {
                         int top = getTopForScroll();
                         HistoryEntry he = history.remove(history.size() - 1);
@@ -425,12 +438,12 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             return onItemClick(view, object);
         });
 
-        filtersView = new FiltersView(context);
+        filtersView = new FiltersView(context, resourcesProvider);
         filtersView.setOnItemClickListener((view, position) -> {
             filtersView.cancelClickRunnables(true);
             searchAdapter.addSearchFilter(filtersView.getFilterAt(position));
         });
-        filtersView.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+        filtersView.setBackgroundColor(getThemedColor(Theme.key_dialogBackground));
         addView(filtersView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP));
         filtersView.setTranslationY(-AndroidUtilities.dp(44));
         filtersView.setVisibility(INVISIBLE);
@@ -940,7 +953,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     private void showErrorBox(String error) {
-        new AlertDialog.Builder(getContext()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(error).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+        new AlertDialog.Builder(getContext(), resourcesProvider).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(error).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
     }
 
     @SuppressLint("NewApi")
@@ -950,13 +963,17 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         items.clear();
 
         HashSet<String> paths = new HashSet<>();
-        if (!BuildVars.NO_SCOPED_STORAGE) {
-            ListItem ext = new ListItem();
-            ext.title = LocaleController.getString("InternalStorage", R.string.InternalStorage);
-            ext.icon = R.drawable.files_storage;
-            ext.subtitle = LocaleController.getString("InternalFolderInfo", R.string.InternalFolderInfo);
-            items.add(ext);
-        } else {
+        boolean isExternalStorageManager = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            isExternalStorageManager = Environment.isExternalStorageManager();
+        }
+//        if (!BuildVars.NO_SCOPED_STORAGE && !isExternalStorageManager) {
+//            ListItem ext = new ListItem();
+//            ext.title = LocaleController.getString("InternalStorage", R.string.InternalStorage);
+//            ext.icon = R.drawable.files_storage;
+//            ext.subtitle = LocaleController.getString("InternalFolderInfo", R.string.InternalFolderInfo);
+//            items.add(ext);
+//        } else {
             String defaultPath = Environment.getExternalStorageDirectory().getPath();
             String defaultPathState = Environment.getExternalStorageState();
             if (defaultPathState.equals(Environment.MEDIA_MOUNTED) || defaultPathState.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
@@ -1031,7 +1048,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     }
                 }
             }
-        }
+        //}
 
         ListItem fs;
         try {
@@ -1146,15 +1163,15 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             View view;
             switch (viewType) {
                 case 0:
-                    view = new HeaderCell(mContext);
+                    view = new HeaderCell(mContext, resourcesProvider);
                     break;
                 case 1:
-                    view = new SharedDocumentCell(mContext, SharedDocumentCell.VIEW_TYPE_PICKER);
+                    view = new SharedDocumentCell(mContext, SharedDocumentCell.VIEW_TYPE_PICKER, resourcesProvider);
                     break;
                 case 2:
                     view = new ShadowSectionCell(mContext);
                     Drawable drawable = Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
+                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(getThemedColor(Theme.key_windowBackgroundGray)), drawable);
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
                     break;
@@ -1321,7 +1338,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             }
 
             if (!canSelectOnlyImageFiles && history.isEmpty()) {
-                int dialogId = 0;
+                long dialogId = 0;
                 long minDate = 0;
                 long maxDate = 0;
                 for (int i = 0; i < currentSearchFilters.size(); i++) {
@@ -1499,7 +1516,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     req.q = query;
                     req.limit = 20;
                     req.filter = currentSearchFilter.filter;
-                    req.peer = accountInstance.getMessagesController().getInputPeer((int) dialogId);
+                    req.peer = accountInstance.getMessagesController().getInputPeer(dialogId);
                     if (minDate > 0) {
                         req.min_date = (int) (minDate / 1000);
                     }
@@ -1535,7 +1552,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                         MessageObject lastMessage = messages.get(messages.size() - 1);
                         req.offset_id = lastMessage.getId();
                         req.offset_rate = nextSearchRate;
-                        int id;
+                        long id;
                         if (lastMessage.messageOwner.peer_id.channel_id != 0) {
                             id = -lastMessage.messageOwner.peer_id.channel_id;
                         } else if (lastMessage.messageOwner.peer_id.chat_id != 0) {
@@ -1790,8 +1807,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         public View getSectionHeaderView(int section, View view) {
             GraySectionCell sectionCell = (GraySectionCell) view;
             if (sectionCell == null) {
-                sectionCell = new GraySectionCell(mContext);
-                sectionCell.setBackgroundColor(Theme.getColor(Theme.key_graySection) & 0xf2ffffff);
+                sectionCell = new GraySectionCell(mContext, resourcesProvider);
+                sectionCell.setBackgroundColor(getThemedColor(Theme.key_graySection) & 0xf2ffffff);
             }
             if (section == 0 || section == 1 && searchResult.isEmpty()) {
                 sectionCell.setAlpha(0f);
@@ -1821,16 +1838,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             View view;
             switch (viewType) {
                 case 0:
-                    view = new GraySectionCell(mContext);
+                    view = new GraySectionCell(mContext, resourcesProvider);
                     break;
                 case 1:
                 case 4:
-                    SharedDocumentCell documentCell = new SharedDocumentCell(mContext, viewType == 1 ? SharedDocumentCell.VIEW_TYPE_PICKER : SharedDocumentCell.VIEW_TYPE_GLOBAL_SEARCH);
+                    SharedDocumentCell documentCell = new SharedDocumentCell(mContext, viewType == 1 ? SharedDocumentCell.VIEW_TYPE_PICKER : SharedDocumentCell.VIEW_TYPE_GLOBAL_SEARCH, resourcesProvider);
                     documentCell.setDrawDownloadIcon(false);
                     view = documentCell;
                     break;
                 case 2:
-                    FlickerLoadingView flickerLoadingView = new FlickerLoadingView(mContext);
+                    FlickerLoadingView flickerLoadingView = new FlickerLoadingView(mContext, resourcesProvider);
                     flickerLoadingView.setViewType(FlickerLoadingView.FILES_TYPE);
                     flickerLoadingView.setIsSingleCell(true);
                     view = flickerLoadingView;
@@ -1947,8 +1964,9 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         @Override
-        public int getPositionForScrollProgress(float progress) {
-            return 0;
+        public void getPositionForScrollProgress(RecyclerListView listView, float progress, int[] position) {
+            position[0] = 0;
+            position[1] = 0;
         }
     }
 
