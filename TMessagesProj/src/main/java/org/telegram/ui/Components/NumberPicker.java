@@ -112,6 +112,7 @@ public class NumberPicker extends LinearLayout {
     private final Theme.ResourcesProvider resourcesProvider;
 
     private boolean drawDividers = true;
+    public static boolean usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool();
 
     public interface OnValueChangeListener {
         void onValueChange(NumberPicker picker, int oldVal, int newVal);
@@ -185,7 +186,7 @@ public class NumberPicker extends LinearLayout {
         paint.setAntiAlias(true);
         paint.setTextAlign(Align.CENTER);
         paint.setTextSize(mTextSize);
-        if (NekomuraConfig.usePersianCalendar == 2 || NekomuraConfig.usePersianCalendar == 0 && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
+        if (usePersianCalendar && "fa".equals(LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode)) { 
             paint.setTypeface(AndroidUtilities.getTypeface("fonts/Vazir-Regular.ttf"));
         } else {
             paint.setTypeface(mInputText.getTypeface());
