@@ -44,6 +44,7 @@ import org.telegram.ui.ActionBar.Theme;
 import java.util.Locale;
 import tw.nekomimi.nekogram.NekoConfig;
 import org.telegram.messenger.LocaleController;
+import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class NumberPicker extends LinearLayout {
 
