@@ -20,6 +20,8 @@
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:navigationBarColor">#000000</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ic_launcher_background</item>
     </style>
 
     <style name="Theme.TMessages" parent="@android:style/Theme.Material.Light">
@@ -47,6 +49,7 @@
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ic_launcher_background</item>
     </style>
 
     <style name="Theme.TMessages.PopupNotification" parent="Theme.TMessages">
@@ -58,6 +61,7 @@
         <item name="android:colorPrimaryDark">#99000000</item>
         <item name="android:navigationBarColor">#000000</item>
         <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ic_launcher_background</item>
     </style>
 
     <style name="Theme.TMessages.Dialog.Alert" parent="android:style/Theme.Material.Light.Dialog.Alert">
@@ -150,6 +154,8 @@
     </style>
 
     <style name="TransparentDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+        <item name="android:windowElevation">24dp</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:background">@null</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -163,6 +169,11 @@
         <item name="android:colorControlActivated">#808080</item>
         <item name="android:textColorHighlight">#60808080</item>
         <item name="android:windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="DialogAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/rd_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/rd_dialog_exit</item>
     </style>
 
     <style name="TransparentDialog2" parent="TransparentDialog">
