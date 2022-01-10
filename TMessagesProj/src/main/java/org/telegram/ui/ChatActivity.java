@@ -18608,7 +18608,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 removeSelfFromStack();
                 fragment.finishFragment();
             } else {
-                finishFragment();
+//                finishFragment();
             }
         }
     }
