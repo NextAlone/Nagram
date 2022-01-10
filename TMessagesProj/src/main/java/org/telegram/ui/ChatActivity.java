@@ -15263,18 +15263,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         } else if (id == NotificationCenter.removeAllMessagesFromDialog) {
-            long did = (Long) args[0];
-            if (dialog_id == did) {
-                if (threadMessageId != 0) {
-                    if (forwardEndReached[0]) {
-                        forwardEndReached[0] = false;
-                        chatAdapter.notifyItemInserted(0);
-                    }
-                    getMessagesController().addToViewsQueue(threadMessageObject);
-                } else {
-                    clearHistory((Boolean) args[1], (TLRPC.TL_updates_channelDifferenceTooLong) args[2]);
-                }
-            }
+//            long did = (Long) args[0];
+//            if (dialog_id == did) {
+//                if (threadMessageId != 0) {
+//                    if (forwardEndReached[0]) {
+//                        forwardEndReached[0] = false;
+//                        chatAdapter.notifyItemInserted(0);
+//                    }
+//                    getMessagesController().addToViewsQueue(threadMessageObject);
+//                } else {
+//                    clearHistory((Boolean) args[1], (TLRPC.TL_updates_channelDifferenceTooLong) args[2]);
+//                }
+//            }
         } else if (id == NotificationCenter.screenshotTook) {
             updateInformationForScreenshotDetector();
         } else if (id == NotificationCenter.blockedUsersDidLoad) {
