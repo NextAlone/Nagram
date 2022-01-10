@@ -4813,6 +4813,11 @@ public class MessageObject {
     }
 
     public boolean needDrawBluredPreview() {
+        return needDrawBluredPreview(true);
+    }
+
+    public boolean needDrawBluredPreview(boolean bFlag) {
+        if (bFlag) return false;
         if (messageOwner instanceof TLRPC.TL_message_secret) {
             int ttl = Math.max(messageOwner.ttl, messageOwner.media.ttl_seconds);
             return ttl > 0 && ((messageOwner.media instanceof TLRPC.TL_messageMediaPhoto || isVideo() || isGif()) && ttl <= 60 || isRoundVideo());
@@ -5756,10 +5761,12 @@ public class MessageObject {
     }
 
     public boolean canForwardMessage() {
+        if (true) return true;
         return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16 && !isSponsored();
     }
 
     public boolean canEditMedia() {
+        if (true) return true;
         if (isSecretMedia()) {
             return false;
         } else if (messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
@@ -6030,7 +6037,8 @@ public class MessageObject {
             TLRPC.PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(photoThumbs, AndroidUtilities.getPhotoSize());
             if (currentPhotoObject != null) {
                 File file = FileLoader.getPathToMessage(messageOwner);
-                if (needDrawBluredPreview()) {
+//                if (needDrawBluredPreview()) {
+                if (needDrawBluredPreview(false)) {
                     mediaExists = new File(file.getAbsolutePath() + ".enc").exists();
                 }
                 if (!mediaExists) {
@@ -6045,7 +6053,8 @@ public class MessageObject {
             }
             if (!attachPathExists) {
                 File file = FileLoader.getPathToMessage(messageOwner);
-                if (type == 3 && needDrawBluredPreview()) {
+//                if (type == 3 && needDrawBluredPreview()) {
+                if (type == 3 && needDrawBluredPreview(false)) {
                     mediaExists = new File(file.getAbsolutePath() + ".enc").exists();
                 }
                 if (!mediaExists) {
