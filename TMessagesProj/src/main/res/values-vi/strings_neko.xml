@@ -124,4 +124,5 @@
     <string name="hideGroupSticker">Ẩn hình dán nhóm</string>
     <string name="enablePublicProxy">NekoX Public Proxy</string>
     <string name="autoUpdateSubInfo">Cập nhật proxy tự động</string>
+    <string name="hideSendAsChannel">Ẩn gửi với tư cách kênh</string>
 </resources>
