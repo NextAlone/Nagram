@@ -36,7 +36,8 @@ Follow the ~~white rabbit~~ the git flow:
 
 It gives us `telegram` -> `master` -> `master_8.3.1` -> `noshit_8.3.1`
 
-So **all the code changes** are in `noshit_8.3.1` (when this project started)
+So **all the code changes** are in `noshit_8.3.1` (when this project started, actual version is
+different)
 
 ### Detailed summary / noshit_8.4.3
 
@@ -46,8 +47,8 @@ So **all the code changes** are in `noshit_8.3.1` (when this project started)
         * we still count views for this ADS to hide our behavior of the app "who don't earn money
           for TG"
 * EVERY element have `save to downloads`/`save to gallery`
-    * messages are elements too, you still can click but cannot save them into downloads
-        * however i do not recomment this
+    * ~~messages are elements too, you still can click but cannot save them into downloads~~ fixed
+        * ~~however i do not recomment this~~
     * use it wisely
 * 6 accounts instead of 3
     * client support upto 6 accounts
@@ -142,31 +143,19 @@ It's very simple
 
 ### APKs & sha256
 
-[comment]: <> (* **sdk23** mean for android 4.2+, the other are working from 6+)
-
-[comment]: <> (* arm64-v8a &#40;new devices&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.arm64-v8a.apk]&#40;--https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.arm64-v8a.apk&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.arm64-v8a-sdk23.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.arm64-v8a-sdk23.apk&#41;)
-
-[comment]: <> (* armeabi-v7a &#40;old devices&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.armeabi-v7a.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.armeabi-v7a.apk&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.armeabi-v7a-sdk23.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.armeabi-v7a-sdk23.apk&#41;)
-
-[comment]: <> (* PC x86, 32 bits &#40;for an emulator for example&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.x86.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.x86.apk&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.x86-sdk23.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.x86-sdk23.apk&#41;)
-
-[comment]: <> (* PC x86, 64 bits &#40;for 64 bits CPU&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.x86-64.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.x86-64.apk&#41;)
-
-[comment]: <> (    * `-`  [Telegraher.8.4.2.x86-64-sdk23.apk]&#40;https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.2_release3/Telegraher.8.4.2.x86-64-sdk23.apk&#41;)
+* **sdk23** mean for android 4.2+, the other are working from 6+
+* arm64-v8a (new devices)
+    * `0330b380bda785058f92972ef5489b5078f3212d3f2aeff53d57c525364fc834`  [Telegraher.8.4.3.arm64-v8a.apk](--https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.arm64-v8a.apk)
+    * `5938058641db2539aaea8a21323f0738af38b6e1f8d8d8fa3bae238f6199294b`  [Telegraher.8.4.3.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.arm64-v8a-sdk23.apk)
+* armeabi-v7a (old devices)
+    * `2d475546cf1da4a1c98667bdbe75a43c36702ff8ce941c650c2fa8e20d8843c3`  [Telegraher.8.4.3.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.armeabi-v7a.apk)
+    * `53fb75ddfe51441a0ec0755aef652cf14083c22bb238e3f9190b24ebe7f1129d`  [Telegraher.8.4.3.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.armeabi-v7a-sdk23.apk)
+* PC x86, 32 bits (for an emulator for example)
+    * `3e4f3df803fbaf3defb519ab353f507e8675108a3fc4ae14d6cc8022ddeaabbe`  [Telegraher.8.4.3.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86.apk)
+    * `243f10499129e9b87902b6fec638b70f179c3b1d220cfd53dcb84a1612c339db`  [Telegraher.8.4.3.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86-sdk23.apk)
+* PC x86, 64 bits (for 64 bits CPU)
+    * `866e009ba007e8b5e4d9d5155d1530da433162dcb9653c6b1632680b0ca457e8`  [Telegraher.8.4.3.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86-64.apk)
+    * `c14a2287f8a6f7a7c5b5208eefc1bc2c552317f0d5ea802c39ad7cad9be3c238`  [Telegraher.8.4.3.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86-64-sdk23.apk)
 
 ### Issues/Wishlist
 
