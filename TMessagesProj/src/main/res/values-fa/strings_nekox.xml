@@ -255,4 +255,6 @@
     <string name="ShareMessages">به اشتراک گذاری</string>
     <string name="unreadBadgeOnBackButton">نمایش تعداد پیام‌های خوانده نشده روی دکمه‌ی بازگشت</string>
     <string name="customPublicProxyIPNotice">در بعضی از مناطق، تنظیم آی‌پی پروکسی سی‌دی‌ان (مثل Cloudflare) می‌تواند سرعت دسترسی را بهبود دهد.</string>
+    <string name="DeleteDownloadedFileSucceed">حذف‌شده</string>
+    <string name="DeleteDownloadedFileConfirm">این فایل از حافظه‌کش داخلی حذف شود؟</string>
 </resources>
