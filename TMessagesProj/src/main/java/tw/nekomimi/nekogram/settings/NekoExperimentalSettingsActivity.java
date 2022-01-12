@@ -77,9 +77,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private int deleteAccountRow;
     private int blockSponsoredMessageRow;
     private int shouldNOTTrustMeRow;
-    private int forceAllowCopyRow; // Nagram
-    private int disableChatActionSendingRow; // Nagram
-    private int hideGroupStickerRow;
     private int hidden2Row;
 
     NekoExperimentalSettingsActivity(boolean sensitiveCanChange, boolean sensitiveEnabled) {
@@ -231,21 +228,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.shouldNOTTrustMe);
                 }
-            } else if (position == forceAllowCopyRow) { // Nagram
-                NaConfig.toggleForceAllowCopy();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NaConfig.forceAllowCopy);
-                }
-            } else if (position == disableChatActionSendingRow) { // Nagram
-                NaConfig.toggleDisableChatActionSending();
-                if (view instanceof  TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NaConfig.disableChatActionSending);
-                }
-            } else if (position == hideGroupStickerRow) { // Nagram
-                NaConfig.toggleHideGroupSticker();
-                if (view instanceof  TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(NaConfig.hideGroupSticker);
-                }
             } else if (position == emojiRow) {
                 if (!TextUtils.isEmpty(NekoConfig.customEmojiFontPath) && (LocaleController.isRTL && x <= AndroidUtilities.dp(76) || !LocaleController.isRTL && x >= view.getMeasuredWidth() - AndroidUtilities.dp(76))) {
                     NotificationsCheckCell checkCell = (NotificationsCheckCell) view;
@@ -370,17 +352,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             deleteAccountRow = rowCount++;
             blockSponsoredMessageRow = rowCount++;
             shouldNOTTrustMeRow = rowCount++;
-            forceAllowCopyRow = rowCount++; // Nagram
-            disableChatActionSendingRow = rowCount++; // Nagram
-            hideGroupStickerRow = rowCount++; // Nagram
             hidden2Row = rowCount++;
         } else {
             deleteAccountRow = -1;
             blockSponsoredMessageRow = -1;
             shouldNOTTrustMeRow = -1;
-            forceAllowCopyRow = -1; // Nagram
-            disableChatActionSendingRow = -1; // Nagram
-            hideGroupStickerRow = -1; // Nagram
             hidden2Row = -1;
         }
         if (listAdapter != null) {
@@ -484,12 +460,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("IncreaseVoiceMessageQuality", R.string.IncreaseVoiceMessageQuality), NekoConfig.increaseVoiceMessageQuality, true);
                     } else if (position == shouldNOTTrustMeRow) {
                         textCell.setTextAndCheck("", NekoConfig.shouldNOTTrustMe, true);
-                    } else if (position == forceAllowCopyRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("ForceAllowCopyRow", R.string.ForceAllowCopy), NaConfig.forceAllowCopy, true);
-                    } else if (position == disableChatActionSendingRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("DisableChatActionSending", R.string.DisableChatActionSending), NaConfig.disableChatActionSending, false);
-                    } else if (position == hideGroupStickerRow) { // Nagram
-                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.HideGroupSticker), NaConfig.hideGroupSticker, false);
                     } else if (position == blockSponsoredMessageRow) {
                         textCell.setTextAndCheck(LocaleController.getString("BlockSponsoredMessage", R.string.BlockSponsoredMessage), NekoConfig.blockSponsoredMessage, true);
                     }
@@ -568,7 +538,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 return 4;
             } else if (position == emojiRow) {
                 return TextUtils.isEmpty(NekoConfig.customEmojiFontPath) ? 2 : 5;
-            } else if (position == shouldNOTTrustMeRow || position == blockSponsoredMessageRow || position == forceAllowCopyRow || position == disableChatActionSendingRow || position == hideGroupStickerRow /* Nagram */) {
+            } else if (position == shouldNOTTrustMeRow || position == blockSponsoredMessageRow) {
                 return 3;
             }
             return 2;

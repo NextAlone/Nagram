@@ -75,12 +75,14 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private int swipeToPiPRow;
     private int disableJumpToNextRow;
     private int disableGreetingStickerRow;
+    private int hideGroupStickerRow;
     private int disableVoiceMessageAutoPlayRow;
     private int autoPauseVideoRow;
     private int messageMenuRow;
     private int textStyleRow;
+    private int forceAllowCopyRow;
+    private int disableChatActionSendingRow;
     private int chat2Row;
-
     private int foldersRow;
     private int showTabsOnForwardRow;
     private int hideAllTabRow;
@@ -234,6 +236,21 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(NekoConfig.disableVoiceMessageAutoPlay);
                 }
+            } else if (position == forceAllowCopyRow) {
+                NaConfig.toggleForceAllowCopy();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NaConfig.forceAllowCopy);
+                }
+            } else if (position == disableChatActionSendingRow) {
+                NaConfig.toggleDisableChatActionSending();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NaConfig.disableChatActionSending);
+                }
+            } else if (position == hideGroupStickerRow) {
+                NaConfig.toggleHideGroupSticker();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(NaConfig.hideGroupSticker);
+                }
             }
         });
 
@@ -265,10 +282,13 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         swipeToPiPRow = rowCount++;
         disableJumpToNextRow = rowCount++;
         disableGreetingStickerRow = rowCount++;
+        hideGroupStickerRow = rowCount++;
         disableVoiceMessageAutoPlayRow = rowCount++;
         autoPauseVideoRow = rowCount++;
-        messageMenuRow = rowCount++;
+        forceAllowCopyRow = rowCount++;
+        disableChatActionSendingRow = rowCount++;
         textStyleRow = rowCount++;
+        messageMenuRow = rowCount++;
         chat2Row = rowCount++;
 
         foldersRow = rowCount++;
@@ -718,7 +738,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     } else if (position == messageMenuRow) {
                         textCell.setText(LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
                     } else if (position == textStyleRow) {
-                        textCell.setText(LocaleController.getString("TextStyle", R.string.TextStyle), false);
+                        textCell.setText(LocaleController.getString("TextStyle", R.string.TextStyle), true);
                     } else if (position == tabsTitleTypeRow) {
                         String value;
                         switch (NekoConfig.tabsTitleType) {
@@ -765,8 +785,14 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         textCell.setTextAndCheck(LocaleController.getString("DisableJumpToNextChannel", R.string.DisableJumpToNextChannel), NekoConfig.disableJumpToNextChannel, true);
                     } else if (position == disableGreetingStickerRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableGreetingSticker", R.string.DisableGreetingSticker), NekoConfig.disableGreetingSticker, true);
+                    } else if (position == hideGroupStickerRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker",R.string.HideGroupSticker), NaConfig.hideGroupSticker, true);
                     } else if (position == disableVoiceMessageAutoPlayRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DisableVoiceMessagesAutoPlay", R.string.DisableVoiceMessagesAutoPlay), NekoConfig.disableVoiceMessageAutoPlay, true);
+                    } else if (position == forceAllowCopyRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("ForceAllowCopyRow", R.string.ForceAllowCopy), NaConfig.forceAllowCopy, true);
+                    } else if (position == disableChatActionSendingRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableChatActionSending", R.string.DisableChatActionSending), NaConfig.disableChatActionSending, true);
                     }
                     break;
                 }
