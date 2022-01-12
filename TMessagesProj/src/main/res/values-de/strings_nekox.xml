@@ -269,4 +269,5 @@
     <string name="customPublicProxyIPNotice">In manchen Gegenden kann das Einstellen eines öffentlichen Proxy-CDNs (z.B. Cloudflare) die Geschwindigkeit erhöhen.</string>
     <string name="DeleteDownloadedFileSucceed">Gelöscht</string>
     <string name="update_download_soucre">Wähle die Quelle zum Herunterladen aus</string>
+    <string name="Win32ExecutableFiles">Ausführbare Win32-Dateien</string>
 </resources>
