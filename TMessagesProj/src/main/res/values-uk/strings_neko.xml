@@ -110,4 +110,19 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Перекладач</string>
     <string name="ProviderYouDao">YouDao Переклад</string>
     <string name="pressTitleToOpenAllChats">Натисніть на заголовок, щоб відкрити папку \"Всі чати\"</string>
+    <string name="enablePublicProxy">Загальнодоступний проксі NekoX</string>
+    <string name="autoUpdateSubInfo">Оновлювати проксі автоматично</string>
+    <string name="hideSendAsChannel">Сховати надсилання як канал</string>
+    <string name="DontSendGreetingSticker">Не слати вітальної наліпки</string>
+    <string name="TakeGIFasVideo">Прокручувати GIF як відео</string>
+    <string name="UseMediaStreamInVoip">Використовувати медіапотік у VoIP</string>
+    <string name="HideTimeForSticker">Ховати час наліпок</string>
+    <string name="customDoH">Власні DoH</string>
+    <string name="hideGroupSticker">Ховати наліпки груп</string>
+    <string name="useSystemDNS">Системні DNS</string>
+    <string name="customGroupVoipAudioBitrate">Аудіобітрейт групових VoIP</string>
+    <string name="maxRecentStickerCount">Ліміт недавніх наліпок</string>
+    <string name="disableSwipeToNextChannel">Вимкнути гортання до наступного каналу</string>
+    <string name="disableChoosingSticker">Стан \"пише\" замість \"вибирає наліпку\"</string>
+    <string name="disableRemoteEmojiInteractions">Нехтувати взаємодією інших з емодзі</string>
 </resources>
