@@ -114,9 +114,17 @@ different)
 * DISABLED emulator detections
     * idk why the client use this, but i disabled it
     * if i want to run it on emulator telegram no need to know it
+* LEGIT Phone
+    * for the app and TG you have simcard, sim is online, phone is actual
+        * app don't check it anymore, it's disabled
+* Hi, i'm Vanilla 💅
+    * we use actual sha256 fingerprint from vanilla version 8.4.3
+    * we say we're `org.telegram.messenger`
+    * we say Google installed us `com.android.vending`
 * APP name changed & APP icon changed & APP package changed
     * of you want to run using old name just rollback those commits and build the app
 * APPs api & hash are changed for legit TG client
+    * actually they are all on `4`/`014b35b6184100b085b0d0572f9b5103`
 
 ### Build
 
@@ -145,22 +153,53 @@ It's very simple
 
 * **sdk23** mean for android 4.2+, the other are working from 6+
 * arm64-v8a (new devices)
-    * `0330b380bda785058f92972ef5489b5078f3212d3f2aeff53d57c525364fc834`  [Telegraher.8.4.3.arm64-v8a.apk](--https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.arm64-v8a.apk)
-    * `5938058641db2539aaea8a21323f0738af38b6e1f8d8d8fa3bae238f6199294b`  [Telegraher.8.4.3.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.arm64-v8a-sdk23.apk)
+    * `35064dd3222a05e0876d36d66a91b948141d887851c9bdf437680076bdf26ea0`  [Telegraher.8.4.3.arm64-v8a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.arm64-v8a.apk)
+    * `a835691be431264f16b24558b7999f8bc8ac01fa6d881e0e769dcef59ae336d6`  [Telegraher.8.4.3.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.arm64-v8a-sdk23.apk)
 * armeabi-v7a (old devices)
-    * `2d475546cf1da4a1c98667bdbe75a43c36702ff8ce941c650c2fa8e20d8843c3`  [Telegraher.8.4.3.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.armeabi-v7a.apk)
-    * `53fb75ddfe51441a0ec0755aef652cf14083c22bb238e3f9190b24ebe7f1129d`  [Telegraher.8.4.3.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.armeabi-v7a-sdk23.apk)
+    * `b8a5e7d1dbb60d8de9a0f4503956f16a5900781d42cb64e712ed17a4463a01e3`  [Telegraher.8.4.3.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.armeabi-v7a.apk)
+    * `9b277e3a50c4e34ce997c4b0d49766f766a9f119a5e6864f1001915df7789794`  [Telegraher.8.4.3.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.armeabi-v7a-sdk23.apk)
 * PC x86, 32 bits (for an emulator for example)
-    * `3e4f3df803fbaf3defb519ab353f507e8675108a3fc4ae14d6cc8022ddeaabbe`  [Telegraher.8.4.3.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86.apk)
-    * `243f10499129e9b87902b6fec638b70f179c3b1d220cfd53dcb84a1612c339db`  [Telegraher.8.4.3.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86-sdk23.apk)
+    * `35bec3a4593506ee8a9d5f6fa161002ff5ac65096513c53cb5baa4d448598e6d`  [Telegraher.8.4.3.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.x86.apk)
+    * `3a31b339c47c9bbe4e8d96f12f71f4e12635cc530b21d633181ed6499c3b74fd`  [Telegraher.8.4.3.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.x86-sdk23.apk)
 * PC x86, 64 bits (for 64 bits CPU)
-    * `866e009ba007e8b5e4d9d5155d1530da433162dcb9653c6b1632680b0ca457e8`  [Telegraher.8.4.3.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86-64.apk)
-    * `c14a2287f8a6f7a7c5b5208eefc1bc2c552317f0d5ea802c39ad7cad9be3c238`  [Telegraher.8.4.3.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release1/Telegraher.8.4.3.x86-64-sdk23.apk)
+    * `70329341262e930473f6c01cf15a07a2794898523da1cfd86589a332a8876ed4`  [Telegraher.8.4.3.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.x86-64.apk)
+    * `22b31220301bcdce52fd0497ec8edda5d6229f8f51d73f71cdcca9cfad267824`  [Telegraher.8.4.3.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.3_release2/Telegraher.8.4.3.x86-64-sdk23.apk)
 
 ### Issues/Wishlist
 
 Feel free to use the "issues section". I'm not an Android programmer, i'm a Java developper.
 Probably it's a good thing 😃
+
+### Changes
+
+* noshit_8.4.3_release2
+    * we use now fingerprint, package name and referer (who installed us, i.e. Google Play) from a
+      vanilla version
+    * APP lost few permission due it not need it anymore
+        * app do not check number, sim state or is number is the actual you use on
+          regitration/login, due we just say "yes"/`true`
+    * due app is from github official "check update" disabled, so app will not ask TG servers if
+      there are new one.
+    * api keys are `4`/`014b35b6184100b085b0d0572f9b5103` due gplay/store/web versions are use them
+* noshit_8.4.3_release1
+    * update to 8.4.3
+    * disabled access to all reactions
+        * since TG again moderate/censor your private (non-green) chats you can't use them anymore,
+          because server simply ignores it and reject w/ an error.
+* noshit_8.4.2_release3
+    * now the ads is **loaded**, views are **counted** but **the ads isn't displayed**
+* noshit_8.4.2_release2
+    * fixed issue #4
+    * fixed save menu buttons
+    * disabled auto reaction on doubletap
+    * fixed `edit_hide`
+    * all **official** reaction are available for private messages
+        * doesn't work in groups/channels due TG servers are using whitelists
+* noshit_8.4.2_release1
+    * use Telegram 8.4.2 code base now
+    * added video controls to GIFs
+* noshit_8.3.1_release2
+    * Fixed issues #1 and #2
 
 ### Already installed this version?
 
@@ -174,8 +213,7 @@ and it will keep all the settings/accounts.
     * autosync from github
 * HTTPS: https://git.evildayz.com/Telegraher/
     * manually sync (add a script later 😀)
-    * `releases` w/ actual releases and cloned `Telegraher` & `Telegraher.git` as is and
-      in `.tar.gz`
+    * `releases` w/ actual releases and cloned `Telegraher` & `Telegraher.git` in `.tar.gz`
 
 ### Coffee
 
