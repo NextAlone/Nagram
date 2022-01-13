@@ -1049,7 +1049,7 @@ public class DialogCell extends BaseCell {
                                     }
                                 }
                             }
-                            if (chat != null && chat.id > 0 && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
+                            if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                                 if (message.isOutOwner()) {
                                     messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
                                 } else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null) {
@@ -1064,8 +1064,6 @@ public class DialogCell extends BaseCell {
                                     } else {
                                         messageNameString = UserObject.getFirstName(fromUser).replace("\n", "");
                                     }
-                                } else if (fromChat != null) {
-                                    messageNameString = fromChat.title.replace("\n", "");
                                 } else {
                                     messageNameString = "DELETED";
                                 }
