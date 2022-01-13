@@ -167,6 +167,16 @@ Probably it's a good thing 😃
 Android will offer you to reinstall, simply accept this option and it the app will be reinstalled
 and it will keep all the settings/accounts.
 
+### Code mirrors
+
+* Github: https://github.com/nikitasius/Telegraher
+* Gitlab: https://gitlab.com/nikitasius/Telegraher
+    * autosync from github
+* HTTPS: https://git.evildayz.com/Telegraher/
+    * manually sync (add a script later 😀)
+    * `releases` w/ actual releases and cloned `Telegraher` & `Telegraher.git` as is and
+      in `.tar.gz`
+
 ### Coffee
 
 * Here is my [PayPal](https://paypal.me/nikitasius) `https://paypal.me/nikitasius`
