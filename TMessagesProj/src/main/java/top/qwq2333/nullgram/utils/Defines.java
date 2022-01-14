@@ -30,7 +30,7 @@ public class Defines {
         966253902,  // Developer
         1668888324, // Channel
         1578562490, // Developer Channel
-        1752491036, // CI Channel
+        1645976613, // CI Channel
         1477185964  // Discussion Group
     };
     public static final String showBotAPIID = "showBotAPIID";
