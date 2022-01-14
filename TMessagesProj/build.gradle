@@ -38,6 +38,10 @@ dependencies {
     implementation 'com.stripe:stripe-android:2.0.2'
     implementation 'com.google.mlkit:language-id:16.1.1'
     implementation files('libs/libgsaverification-client.aar')
+    implementation 'cn.hutool:hutool-all:5.7.18'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    implementation 'com.alibaba:fastjson:1.2.79'
+
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation "androidx.core:core-ktx:1.6.0"
@@ -125,10 +129,8 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def abi = output.getFilter('ABI')
-            if (abi == null) abi = 'universal'
+            buildConfigField 'String', 'BUILD_ABI', "\""+ abi + "\""
             outputFileName = "Nullgram-${defaultConfig.versionName}-${defaultConfig.versionCode}-${abi}.apk"
-            def abiVersionCode = project.ext.abiCodes.get(abi)
-            output.versionCodeOverride = defaultConfig.versionCode * 10 + abiVersionCode
         }
     }
 
@@ -147,7 +149,7 @@ android {
 
     splits.abi {
         enable true
-        universalApk true
+        universalApk false
     }
 
     dependenciesInfo.includeInApk false

@@ -27,6 +27,13 @@
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleOutputBuffer { *; }
 
+-keep class org.dizitart.no2.**  { *; }
+-keep class org.slf4j.** { *; }
+-keep class org.h2.** { *; }
+-keep class org.objenesis.** { *; }
+-keep class com.fasterxml.jackson.** { *; }
+-keep class com.alibaba.fastjson.** { *; }
+-keep class cn.hutool.** { *; }
 # https://developers.google.com/ml-kit/known-issues#android_issues
 -keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
 

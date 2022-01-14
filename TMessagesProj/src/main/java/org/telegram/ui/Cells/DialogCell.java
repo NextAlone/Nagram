@@ -33,7 +33,9 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ChatThemeController;
@@ -73,11 +75,6 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.Components.SwipeGestureSettingsView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 
 public class DialogCell extends BaseCell {
 
@@ -96,7 +93,7 @@ public class DialogCell extends BaseCell {
 
     public static class FixedWidthSpan extends ReplacementSpan {
 
-        private int width;
+        private final int width;
 
         public FixedWidthSpan(int w) {
             width = w;
@@ -137,7 +134,7 @@ public class DialogCell extends BaseCell {
 
     private int paintIndex;
 
-    private int currentAccount;
+    private final int currentAccount;
     private CustomDialog customDialog;
     private long currentDialogId;
     private int currentDialogFolderId;
@@ -181,14 +178,14 @@ public class DialogCell extends BaseCell {
     private float archiveBackgroundProgress;
 
     private boolean hasMessageThumb;
-    private ImageReceiver thumbImage = new ImageReceiver(this);
+    private final ImageReceiver thumbImage = new ImageReceiver(this);
     private boolean drawPlay;
 
-    private ImageReceiver avatarImage = new ImageReceiver(this);
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private final ImageReceiver avatarImage = new ImageReceiver(this);
+    private final AvatarDrawable avatarDrawable = new AvatarDrawable();
     private boolean animatingArchiveAvatar;
     private float animatingArchiveAvatarProgress;
-    private BounceInterpolator interpolator = new BounceInterpolator();
+    private final BounceInterpolator interpolator = new BounceInterpolator();
     private PullForegroundDrawable archivedChatsDrawable;
 
     private TLRPC.User user;
@@ -238,8 +235,8 @@ public class DialogCell extends BaseCell {
     private int messageLeft;
     private StaticLayout messageLayout;
 
-    private Stack<SpoilerEffect> spoilersPool = new Stack<>();
-    private List<SpoilerEffect> spoilers = new ArrayList<>();
+    private final Stack<SpoilerEffect> spoilersPool = new Stack<>();
+    private final List<SpoilerEffect> spoilers = new ArrayList<>();
 
     private int messageNameTop;
     private int messageNameLeft;
@@ -283,7 +280,7 @@ public class DialogCell extends BaseCell {
 
     private boolean isSelected;
 
-    private RectF rect = new RectF();
+    private final RectF rect = new RectF();
     private DialogsAdapter.DialogsPreloader preloader;
 
     private int animateToStatusDrawableParams;
@@ -295,7 +292,7 @@ public class DialogCell extends BaseCell {
     long lastDialogChangedTime;
     private int statusDrawableLeft;
 
-    private DialogsActivity parentFragment;
+    private final DialogsActivity parentFragment;
 
     private StaticLayout swipeMessageTextLayout;
     private int swipeMessageTextId;
@@ -406,10 +403,8 @@ public class DialogCell extends BaseCell {
                 return true;
             }
         }
-        if (user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime()) {
-            return true;
-        }
-        return false;
+        return user.status != null && user.status.expires > ConnectionsManager.getInstance(
+            currentAccount).getCurrentTime();
     }
 
     private void checkGroupCall() {
@@ -824,7 +819,7 @@ public class DialogCell extends BaseCell {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
                         } else {
-                            drawVerified = chat.verified;
+                            drawVerified = chat.verifiedExtended();
                         }
                         if (SharedConfig.drawDialogIcons) {
                             if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
@@ -869,7 +864,7 @@ public class DialogCell extends BaseCell {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
                         } else {
-                            drawVerified = user.verified;
+                            drawVerified = user.verifiedExtended();
                         }
                         if (SharedConfig.drawDialogIcons && user.bot) {
                             drawNameBot = true;
