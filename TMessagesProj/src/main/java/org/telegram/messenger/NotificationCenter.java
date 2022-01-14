@@ -10,9 +10,7 @@ package org.telegram.messenger;
 
 import android.os.SystemClock;
 import android.util.SparseArray;
-
 import androidx.annotation.UiThread;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +19,7 @@ public class NotificationCenter {
 
     private static int totalEvents = 1;
 
+    public static final int onUpdateLoginToken = totalEvents++;
     public static final int didReceiveNewMessages = totalEvents++;
     public static final int updateInterfaces = totalEvents++;
     public static final int dialogsNeedReload = totalEvents++;
@@ -231,14 +230,15 @@ public class NotificationCenter {
     public static final int reactionsDidLoad = totalEvents++;
     public static final int chatAvailableReactionsUpdated = totalEvents++;
 
-    private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
-    private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
-    private SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();
-    private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
-    private ArrayList<Runnable> delayedRunnables  = new ArrayList<>(10);
-    private ArrayList<Runnable> delayedRunnablesTmp  = new ArrayList<>(10);
-    private ArrayList<DelayedPost> delayedPostsTmp = new ArrayList<>(10);
-    private ArrayList<PostponeNotificationCallback> postponeCallbackList = new ArrayList<>(10);
+    private final SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
+    private final SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
+    private final SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();
+    private final ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
+    private final ArrayList<Runnable> delayedRunnables = new ArrayList<>(10);
+    private final ArrayList<Runnable> delayedRunnablesTmp = new ArrayList<>(10);
+    private final ArrayList<DelayedPost> delayedPostsTmp = new ArrayList<>(10);
+    private final ArrayList<PostponeNotificationCallback> postponeCallbackList = new ArrayList<>(
+        10);
 
     private Runnable checkForExpiredNotifications;
 
@@ -262,13 +262,13 @@ public class NotificationCenter {
             this.args = args;
         }
 
-        private int id;
-        private Object[] args;
+        private final int id;
+        private final Object[] args;
     }
 
-    private int currentAccount;
+    private final int currentAccount;
     private int currentHeavyOperationFlags;
-    private static volatile NotificationCenter[] Instance = new NotificationCenter[UserConfig.MAX_ACCOUNT_COUNT];
+    private static final NotificationCenter[] Instance = new NotificationCenter[UserConfig.MAX_ACCOUNT_COUNT];
     private static volatile NotificationCenter globalInstance;
 
     @UiThread

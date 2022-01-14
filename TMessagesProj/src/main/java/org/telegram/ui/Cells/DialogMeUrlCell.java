@@ -14,7 +14,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLoader;
@@ -34,8 +33,8 @@ public class DialogMeUrlCell extends BaseCell {
 
     private TLRPC.RecentMeUrl recentMeUrl;
 
-    private ImageReceiver avatarImage = new ImageReceiver(this);
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private final ImageReceiver avatarImage = new ImageReceiver(this);
+    private final AvatarDrawable avatarDrawable = new AvatarDrawable();
 
     public boolean useSeparator;
 
@@ -49,17 +48,17 @@ public class DialogMeUrlCell extends BaseCell {
     private int nameLockLeft;
     private int nameLockTop;
 
-    private int messageTop = AndroidUtilities.dp(40);
+    private final int messageTop = AndroidUtilities.dp(40);
     private int messageLeft;
     private StaticLayout messageLayout;
 
     private boolean drawVerified;
 
-    private int avatarTop = AndroidUtilities.dp(10);
+    private final int avatarTop = AndroidUtilities.dp(10);
 
     private boolean isSelected;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private final int currentAccount = UserConfig.selectedAccount;
 
     public DialogMeUrlCell(Context context) {
         super(context);
@@ -118,7 +117,7 @@ public class DialogMeUrlCell extends BaseCell {
                 drawNameGroup = true;
                 nameLockTop = AndroidUtilities.dp(17.5f);
             }
-            drawVerified = chat.verified;
+            drawVerified = chat.verifiedExtended();
 
             if (!LocaleController.isRTL) {
                 nameLockLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -149,7 +148,7 @@ public class DialogMeUrlCell extends BaseCell {
                         nameLeft = AndroidUtilities.dp(14);
                     }
                 }
-                drawVerified = user.verified;
+                drawVerified = user.verifiedExtended();
             }
             nameString = UserObject.getUserName(user);
             avatarDrawable.setInfo(user);
@@ -179,8 +178,9 @@ public class DialogMeUrlCell extends BaseCell {
                     drawNameGroup = true;
                     nameLockTop = AndroidUtilities.dp(17.5f);
                 }
-                drawVerified = recentMeUrl.chat_invite.chat.verified;
-                avatarImage.setForUserOrChat(recentMeUrl.chat_invite.chat, avatarDrawable, recentMeUrl);
+                drawVerified = recentMeUrl.chat_invite.chat.verifiedExtended();
+                avatarImage.setForUserOrChat(recentMeUrl.chat_invite.chat, avatarDrawable,
+                    recentMeUrl);
             } else {
                 nameString = recentMeUrl.chat_invite.title;
                 avatarDrawable.setInfo(5, recentMeUrl.chat_invite.title, null);

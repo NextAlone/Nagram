@@ -22,9 +22,8 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
 import androidx.core.graphics.ColorUtils;
-
+import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -48,30 +47,28 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.WaveDrawable;
 
-import java.util.ArrayList;
-
 public class GroupCallUserCell extends FrameLayout {
 
     private AvatarWavesDrawable avatarWavesDrawable;
 
-    private BackupImageView avatarImageView;
-    private SimpleTextView nameTextView;
-    private SimpleTextView[] statusTextView = new SimpleTextView[5];
-    private SimpleTextView fullAboutTextView;
+    private final BackupImageView avatarImageView;
+    private final SimpleTextView nameTextView;
+    private final SimpleTextView[] statusTextView = new SimpleTextView[5];
+    private final SimpleTextView fullAboutTextView;
     private RLottieImageView muteButton;
     private RLottieDrawable muteDrawable;
     private RLottieDrawable shakeHandDrawable;
 
-    private RadialProgressView avatarProgressView;
+    private final RadialProgressView avatarProgressView;
 
-    private AvatarDrawable avatarDrawable;
+    private final AvatarDrawable avatarDrawable;
 
     private ChatObject.Call currentCall;
     private TLRPC.TL_groupCallParticipant participant;
     private TLRPC.User currentUser;
     private TLRPC.Chat currentChat;
 
-    private Paint dividerPaint;
+    private final Paint dividerPaint;
 
     private boolean lastMuted;
     private boolean lastRaisedHand;
@@ -84,13 +81,13 @@ public class GroupCallUserCell extends FrameLayout {
     private int currentStatus;
     private long selfId;
 
-    private Runnable shakeHandCallback = () -> {
+    private final Runnable shakeHandCallback = () -> {
         shakeHandDrawable.setOnFinishCallback(null, 0);
         muteDrawable.setOnFinishCallback(null, 0);
         muteButton.setAnimation(muteDrawable);
     };
 
-    private Runnable raiseHandCallback = () -> {
+    private final Runnable raiseHandCallback = () -> {
         int num = Utilities.random.nextInt(100);
         int endFrame;
         int startFrame;
@@ -119,15 +116,15 @@ public class GroupCallUserCell extends FrameLayout {
 
     private String grayIconColor = Theme.key_voipgroup_mutedIcon;
 
-    private Runnable checkRaiseRunnable = () -> applyParticipantChanges(true, true);
+    private final Runnable checkRaiseRunnable = () -> applyParticipantChanges(true, true);
 
-    private Runnable updateRunnable = () -> {
+    private final Runnable updateRunnable = () -> {
         isSpeaking = false;
         applyParticipantChanges(true, true);
         avatarWavesDrawable.setAmplitude(0);
         updateRunnableScheduled = false;
     };
-    private Runnable updateVoiceRunnable = () -> {
+    private final Runnable updateVoiceRunnable = () -> {
         applyParticipantChanges(true, true);
         updateVoiceRunnableScheduled = false;
     };
@@ -136,7 +133,7 @@ public class GroupCallUserCell extends FrameLayout {
     private boolean isSpeaking;
     private boolean hasAvatar;
 
-    private Drawable speakingDrawable;
+    private final Drawable speakingDrawable;
 
     private AnimatorSet animatorSet;
 
@@ -185,11 +182,8 @@ public class GroupCallUserCell extends FrameLayout {
 
     public void setUploadProgress(float progress, boolean animated) {
         avatarProgressView.setProgress(progress);
-        if (progress < 1f) {
-            AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, true, 1f, animated);
-        } else {
-            AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, false, 1f, animated);
-        }
+        AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, progress < 1f, 1f,
+            animated);
     }
 
     public void setDrawAvatar(boolean draw) {
@@ -200,7 +194,7 @@ public class GroupCallUserCell extends FrameLayout {
 
     private static class VerifiedDrawable extends Drawable {
 
-        private Drawable[] drawables = new Drawable[2];
+        private final Drawable[] drawables = new Drawable[2];
 
         public VerifiedDrawable(Context context) {
             super();
@@ -259,7 +253,7 @@ public class GroupCallUserCell extends FrameLayout {
         addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 11, 6, LocaleController.isRTL ? 11 : 0, 0));
 
         avatarProgressView = new RadialProgressView(context) {
-            private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             {
                 paint.setColor(0x55000000);
             }
@@ -460,7 +454,9 @@ public class GroupCallUserCell extends FrameLayout {
             avatarDrawable.setInfo(currentUser);
 
             nameTextView.setText(UserObject.getUserName(currentUser));
-            nameTextView.setRightDrawable(currentUser != null && currentUser.verified ? new VerifiedDrawable(getContext()) : null);
+            nameTextView.setRightDrawable(
+                currentUser != null && currentUser.verifiedExtended() ? new VerifiedDrawable(
+                    getContext()) : null);
             avatarImageView.getImageReceiver().setCurrentAccount(account.getCurrentAccount());
             if (uploadingAvatar != null) {
                 hasAvatar = true;
@@ -477,7 +473,8 @@ public class GroupCallUserCell extends FrameLayout {
 
             if (currentChat != null) {
                 nameTextView.setText(currentChat.title);
-                nameTextView.setRightDrawable(currentChat.verified ? new VerifiedDrawable(getContext()) : null);
+                nameTextView.setRightDrawable(
+                    currentChat.verifiedExtended() ? new VerifiedDrawable(getContext()) : null);
                 avatarImageView.getImageReceiver().setCurrentAccount(account.getCurrentAccount());
                 if (uploadingAvatar != null) {
                     hasAvatar = true;
@@ -898,8 +895,8 @@ public class GroupCallUserCell extends FrameLayout {
         float wavesEnter = 0f;
         boolean showWaves;
 
-        private BlobDrawable blobDrawable;
-        private BlobDrawable blobDrawable2;
+        private final BlobDrawable blobDrawable;
+        private final BlobDrawable blobDrawable2;
 
         private boolean hasCustomColor;
         private int isMuted;

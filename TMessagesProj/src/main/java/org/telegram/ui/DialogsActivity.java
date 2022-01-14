@@ -68,7 +68,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -76,7 +75,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
+import java.io.File;
+import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -172,9 +172,9 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
-
-import java.io.File;
-import java.util.ArrayList;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.helpers.UpdateHelper;
+import top.qwq2333.nullgram.utils.UIUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -222,7 +222,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private RLottieImageView floatingButton;
     private FrameLayout floatingButtonContainer;
     private ChatAvatarContainer avatarContainer;
-    private UndoView[] undoView = new UndoView[2];
+    private final UndoView[] undoView = new UndoView[2];
     private FilterTabsView filterTabsView;
     private boolean askingForPermissions;
     private RLottieDrawable passcodeDrawable;
@@ -234,7 +234,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private Paint scrimPaint;
     private View scrimView;
     private boolean scrimViewSelected;
-    private int[] scrimViewLocation = new int[2];
+    private final int[] scrimViewLocation = new int[2];
     private AnimatorSet scrimAnimatorSet;
     private ActionBarPopupWindow scrimPopupWindow;
     private ActionBarMenuSubItem[] scrimPopupWindowItems;
@@ -253,7 +253,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private DialogCell movingView;
     private boolean allowMoving;
     private boolean movingWas;
-    private ArrayList<MessagesController.DialogFilter> movingDialogFilters = new ArrayList<>();
+    private final ArrayList<MessagesController.DialogFilter> movingDialogFilters = new ArrayList<>();
     private boolean waitingForScrollFinished;
     private boolean allowSwipeDuringCurrentTouch;
     private boolean updatePullAfterScroll;
@@ -261,10 +261,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private MenuDrawable menuDrawable;
     private BackDrawable backDrawable;
 
-    private Paint actionBarDefaultPaint = new Paint();
+    private final Paint actionBarDefaultPaint = new Paint();
 
     private NumberTextView selectedDialogsCountTextView;
-    private ArrayList<View> actionModeViews = new ArrayList<>();
+    private final ArrayList<View> actionModeViews = new ArrayList<>();
     private ActionBarMenuItem deleteItem;
     private ActionBarMenuItem pinItem;
     private ActionBarMenuItem muteItem;
@@ -346,7 +346,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private DialogsActivityDelegate delegate;
 
-    private ArrayList<Long> selectedDialogs = new ArrayList<>();
+    private final ArrayList<Long> selectedDialogs = new ArrayList<>();
 
     private int canReadCount;
     private int canPinCount;
@@ -425,8 +425,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private class ContentView extends SizeNotifierFrameLayout {
 
-        private Paint actionBarSearchPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private Paint windowBackgroundPaint = new Paint();
+        private final Paint actionBarSearchPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint windowBackgroundPaint = new Paint();
         private int inputFieldHeight;
 
         public ContentView(Context context) {
@@ -438,7 +438,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         private int startedTrackingY;
         private VelocityTracker velocityTracker;
         private boolean globalIgnoreLayout;
-        private int[] pos = new int[2];
+        private final int[] pos = new int[2];
 
         private boolean prepareForMoving(MotionEvent ev, boolean forward) {
             int id = filterTabsView.getNextPageId(forward);
@@ -1487,7 +1487,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         private RecyclerView.ViewHolder currentItemViewHolder;
         private boolean swipingFolder;
         private boolean swipeFolderBack;
-        private ViewPage parentPage;
+        private final ViewPage parentPage;
 
         public SwipeController(ViewPage page) {
             parentPage = page;
@@ -2288,7 +2288,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
                     popupLayout.setOnTouchListener(new View.OnTouchListener() {
 
-                        private int[] pos = new int[2];
+                        private final int[] pos = new int[2];
 
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
@@ -2987,11 +2987,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     animated = true;
                 }
                 if (searching && searchWas && searchViewPager.emptyView != null) {
-                    if (search || searchViewPager.dialogsSearchAdapter.getItemCount() != 0) {
-                        searchViewPager.emptyView.showProgress(true, animated);
-                    } else {
-                        searchViewPager.emptyView.showProgress(false, animated);
-                    }
+                    searchViewPager.emptyView.showProgress(
+                        search || searchViewPager.dialogsSearchAdapter.getItemCount() != 0,
+                        animated);
                 }
                 if (search && searchViewPager.dialogsSearchAdapter.getItemCount() == 0) {
                     searchViewPager.cancelEnterAnimation();
@@ -3342,8 +3340,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (searchString == null && initialDialogsType == 0) {
             updateLayout = new FrameLayout(context) {
 
-                private Paint paint = new Paint();
-                private Matrix matrix = new Matrix();
+                private final Paint paint = new Paint();
+                private final Matrix matrix = new Matrix();
                 private LinearGradient updateGradient;
                 private int lastGradientWidth;
 
@@ -3539,6 +3537,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             FilesMigrationService.checkBottomSheet(this);
         }
         updateMenuButton(false);
+        if (System.currentTimeMillis() / 1000 > ConfigManager.getLongOrDefault(
+            "nextUpdateCheckTime", 0)) {
+            UIUtil.runOnIoDispatcher(() -> UpdateHelper.checkUpdate(getParentActivity(), true),
+                6000);
+        }
         return fragmentView;
     }
 
@@ -7672,11 +7675,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         if (drawerTransition != isDrawerTransition) {
             isDrawerTransition = drawerTransition;
-            if (isDrawerTransition) {
-                setFragmentIsSliding(true);
-            } else {
-                setFragmentIsSliding(false);
-            }
+            setFragmentIsSliding(isDrawerTransition);
             if (fragmentView != null) {
                 fragmentView.requestLayout();
             }

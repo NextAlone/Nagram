@@ -37,7 +37,6 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
@@ -45,12 +44,14 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import top.qwq2333.nullgram.helpers.UpdateHelper;
 
 @SuppressLint("NotifyDataSetChanged")
 public class MainSettingActivity extends BaseFragment {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
+    private boolean checkingUpdate = false;
 
     private int rowCount;
 
@@ -65,6 +66,7 @@ public class MainSettingActivity extends BaseFragment {
     private int websiteRow;
     private int sourceCodeRow;
     private int about2Row;
+    private int updateRow;
 
 
     @Override
@@ -122,6 +124,12 @@ public class MainSettingActivity extends BaseFragment {
                 Browser.openUrl(getParentActivity(), "https://qwq2333.top");
             } else if (position == sourceCodeRow) {
                 Browser.openUrl(getParentActivity(), "https://github.com/qwq233/Nullgram");
+            } else if (position == updateRow) {
+                checkingUpdate = true;
+                listAdapter.notifyItemChanged(updateRow);
+                new Thread(() -> UpdateHelper.checkUpdate(getParentActivity(), false)).start();
+                checkingUpdate = false;
+                listAdapter.notifyItemChanged(updateRow);
             }
         });
 
@@ -148,6 +156,8 @@ public class MainSettingActivity extends BaseFragment {
         websiteRow = rowCount++;
         sourceCodeRow = rowCount++;
         about2Row = rowCount++;
+
+        updateRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -224,9 +234,15 @@ public class MainSettingActivity extends BaseFragment {
                     }
                     break;
                 }
-                case 6: {
-                    TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
-                    textCell.setMultilineDetail(true);
+                case 5: {
+                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    if (position == updateRow) {
+                        textCell.setTextAndValue(
+                            LocaleController.getString("CheckUpdate", R.string.CheckUpdate),
+                            "Click Me",
+                            true);
+
+                    }
                     break;
                 }
             }
@@ -235,7 +251,7 @@ public class MainSettingActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 6;
+            return type == 2 || type == 3 || type == 5;
         }
 
         @NonNull
@@ -259,7 +275,7 @@ public class MainSettingActivity extends BaseFragment {
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 5:
-                    view = new NotificationsCheckCell(mContext);
+                    view = new TextSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 6:
@@ -281,7 +297,9 @@ public class MainSettingActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == categories2Row || position == about2Row) {
+            if (position == updateRow) {
+                return 5;
+            } else if (position == categories2Row || position == about2Row) {
                 return 1;
             } else if (position > categoriesRow && position < categories2Row) {
                 return 2;

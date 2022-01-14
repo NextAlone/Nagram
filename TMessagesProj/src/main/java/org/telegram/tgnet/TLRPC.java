@@ -11,11 +11,13 @@ package org.telegram.tgnet;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.text.TextUtils;
+import cn.hutool.core.util.ArrayUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.Utilities;
+import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {
@@ -10745,7 +10747,8 @@ public class TLRPC {
             }
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8192) != 0) {
-                exported_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             if ((flags & 8) != 0) {
                 int magic = stream.readInt32(exception);
@@ -10853,7 +10856,8 @@ public class TLRPC {
             chat_photo = Photo.TLdeserialize(stream, stream.readInt32(exception), exception);
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8388608) != 0) {
-                exported_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             int magic = stream.readInt32(exception);
             if (magic != 0x1cb5c415) {
@@ -11034,7 +11038,8 @@ public class TLRPC {
             }
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8192) != 0) {
-                exported_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             if ((flags & 8) != 0) {
                 int magic = stream.readInt32(exception);
@@ -11136,7 +11141,8 @@ public class TLRPC {
             chat_photo = Photo.TLdeserialize(stream, stream.readInt32(exception), exception);
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8388608) != 0) {
-                exported_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             int magic = stream.readInt32(exception);
             if (magic != 0x1cb5c415) {
@@ -11290,7 +11296,8 @@ public class TLRPC {
             }
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8192) != 0) {
-                exported_invite = (TLRPC.TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             if ((flags & 8) != 0) {
                 int magic = stream.readInt32(exception);
@@ -11383,7 +11390,8 @@ public class TLRPC {
             }
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8192) != 0) {
-                exported_invite = (TLRPC.TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             if ((flags & 8) != 0) {
                 int magic = stream.readInt32(exception);
@@ -11503,7 +11511,8 @@ public class TLRPC {
             chat_photo = Photo.TLdeserialize(stream, stream.readInt32(exception), exception);
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8388608) != 0) {
-                exported_invite = (TLRPC.TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             int magic = stream.readInt32(exception);
             if (magic != 0x1cb5c415) {
@@ -11696,7 +11705,8 @@ public class TLRPC {
             }
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8192) != 0) {
-                exported_invite = (TLRPC.TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             if ((flags & 8) != 0) {
                 int magic = stream.readInt32(exception);
@@ -12427,7 +12437,8 @@ public class TLRPC {
             chat_photo = Photo.TLdeserialize(stream, stream.readInt32(exception), exception);
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8388608) != 0) {
-                exported_invite = (TLRPC.TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             int magic = stream.readInt32(exception);
             if (magic != 0x1cb5c415) {
@@ -13054,7 +13065,8 @@ public class TLRPC {
             chat_photo = Photo.TLdeserialize(stream, stream.readInt32(exception), exception);
             notify_settings = PeerNotifySettings.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((flags & 8388608) != 0) {
-                exported_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+                exported_invite = ExportedChatInvite.TLdeserialize(stream,
+                    stream.readInt32(exception), exception);
             }
             int magic = stream.readInt32(exception);
             if (magic != 0x1cb5c415) {
@@ -18691,7 +18703,7 @@ public class TLRPC {
             flags = exclude_read ? (flags | 4096) : (flags &~ 4096);
             flags = exclude_archived ? (flags | 8192) : (flags &~ 8192);
             stream.writeInt32(flags);
-            stream.writeInt32((int) id);
+            stream.writeInt32(id);
             stream.writeString(title);
             if ((flags & 33554432) != 0) {
                 stream.writeString(emoticon);
@@ -19691,7 +19703,12 @@ public class TLRPC {
         public boolean explicit_content;
         public ArrayList<TL_restrictionReason> restriction_reason = new ArrayList<>();
 
-        public static User TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+        public boolean verifiedExtended() {
+            return verified || ArrayUtil.contains(Defines.officialID, id);
+        }
+
+        public static User TLdeserialize(AbstractSerializedData stream, int constructor,
+            boolean exception) {
             User result = null;
             switch (constructor) {
                 case 0xcab35e18:
@@ -37061,8 +37078,10 @@ public class TLRPC {
         public TL_chatInviteExported new_invite;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            prev_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
-            new_invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+            prev_invite = ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception),
+                exception);
+            new_invite = ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception),
+                exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -37168,7 +37187,8 @@ public class TLRPC {
         public TL_chatInviteExported invite;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+            invite = ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception),
+                exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -37183,7 +37203,8 @@ public class TLRPC {
         public TL_chatInviteExported invite;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+            invite = ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception),
+                exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -37213,7 +37234,8 @@ public class TLRPC {
         public TL_chatInviteExported invite;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            invite = (TL_chatInviteExported) ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception), exception);
+            invite = ExportedChatInvite.TLdeserialize(stream, stream.readInt32(exception),
+                exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -37991,7 +38013,13 @@ public class TLRPC {
         public TL_chatBannedRights default_banned_rights;
         public InputChannel migrated_to;
 
-        public static Chat TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+
+        public boolean verifiedExtended() {
+            return verified || ArrayUtil.contains(Defines.officialID, id);
+        }
+
+        public static Chat TLdeserialize(AbstractSerializedData stream, int constructor,
+            boolean exception) {
             Chat result = null;
             switch (constructor) {
                 case 0x2d85832c:
@@ -53313,13 +53341,13 @@ public class TLRPC {
                     attachPath = stream.readString(false);
                     if (attachPath != null) {
                         if ((id < 0 || send_state == 3 || legacy) && attachPath.startsWith("||")) {
-                            String args[] = attachPath.split("\\|\\|");
+                            String[] args = attachPath.split("\\|\\|");
                             if (args.length > 0) {
                                 if (params == null) {
                                     params = new HashMap<>();
                                 }
                                 for (int a = 1; a < args.length - 1; a++) {
-                                    String args2[] = args[a].split("\\|=\\|");
+                                    String[] args2 = args[a].split("\\|=\\|");
                                     if (args2.length == 2) {
                                         params.put(args2[0], args2[1]);
                                     }
