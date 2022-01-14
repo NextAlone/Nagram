@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -48,7 +47,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.accessibility.AccessibilitySettingsActivity;
-import tw.nekomimi.nekogram.helpers.UpdateHelper;
+import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
 
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
 public class NekoSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -141,7 +140,7 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
             } else if (position == accessibilityRow) {
                 presentFragment(new AccessibilitySettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName(LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), this, 1);
+                getMessagesController().openByUserName(LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), this, 1);
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
             } else if (position == websiteRow) {
