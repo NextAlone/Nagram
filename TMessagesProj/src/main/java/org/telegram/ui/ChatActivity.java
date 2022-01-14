@@ -87,7 +87,6 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -102,9 +101,24 @@ import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -252,24 +266,8 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewHelper;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -281,9 +279,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private long chatInviterId;
 
-    private ArrayList<ChatMessageCell> chatMessageCellsCache = new ArrayList<>();
+    private final ArrayList<ChatMessageCell> chatMessageCellsCache = new ArrayList<>();
 
-    private HashMap<MessageObject, Boolean> alreadyPlayedStickers = new HashMap<>();
+    private final HashMap<MessageObject, Boolean> alreadyPlayedStickers = new HashMap<>();
 
     private Dialog closeChatDialog;
     private boolean showCloseChatDialogLater;
@@ -321,7 +319,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private ChatGreetingsView greetingsViewContainer;
     public SizeNotifierFrameLayout contentView;
     private ChatBigEmptyView bigEmptyView;
-    private ArrayList<View> actionModeViews = new ArrayList<>();
+    private final ArrayList<View> actionModeViews = new ArrayList<>();
     private ChatAvatarContainer avatarContainer;
     private TextView bottomOverlayText;
     private NumberTextView selectedMessagesCountTextView;
@@ -388,12 +386,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private PinnedLineView pinnedLineView;
     private boolean setPinnedTextTranslationX;
     private AnimatorSet pinnedMessageViewAnimator;
-    private BackupImageView[] pinnedMessageImageView = new BackupImageView[2];
-    private SimpleTextView[] pinnedNameTextView = new SimpleTextView[2];
-    private SimpleTextView[] pinnedMessageTextView = new SimpleTextView[2];
+    private final BackupImageView[] pinnedMessageImageView = new BackupImageView[2];
+    private final SimpleTextView[] pinnedNameTextView = new SimpleTextView[2];
+    private final SimpleTextView[] pinnedMessageTextView = new SimpleTextView[2];
     private NumberTextView pinnedCounterTextView;
     private int pinnedCounterTextViewX;
-    private AnimatorSet[] pinnedNextAnimation = new AnimatorSet[2];
+    private final AnimatorSet[] pinnedNextAnimation = new AnimatorSet[2];
     private ImageView closePinned;
     private RadialProgressView pinnedProgress;
     private ImageView pinnedListButton;
@@ -460,19 +458,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int threadMaxOutboxReadId;
     private int replyMaxReadId;
     private Runnable delayedReadRunnable;
-    private SparseArray<MessageObject> pendingSendMessagesDict = new SparseArray<>();
-    private ArrayList<MessageObject> pendingSendMessages = new ArrayList<>();
+    private final SparseArray<MessageObject> pendingSendMessagesDict = new SparseArray<>();
+    private final ArrayList<MessageObject> pendingSendMessages = new ArrayList<>();
     private int threadUnreadMessagesCount;
 
     public ArrayList<MessageObject> animatingMessageObjects = new ArrayList<>();
-    private HashMap<TLRPC.Document, Integer> animatingDocuments = new HashMap<>();
+    private final HashMap<TLRPC.Document, Integer> animatingDocuments = new HashMap<>();
     private MessageObject needAnimateToMessage;
 
     private int scrollToPositionOnRecreate = -1;
     private int scrollToOffsetOnRecreate = 0;
 
-    private ArrayList<MessageObject> pollsToCheck = new ArrayList<>(10);
-    private ArrayList<MessageObject> reactionsToCheck = new ArrayList<>(10);
+    private final ArrayList<MessageObject> pollsToCheck = new ArrayList<>(10);
+    private final ArrayList<MessageObject> reactionsToCheck = new ArrayList<>(10);
 
     private int editTextStart;
     private int editTextEnd;
@@ -494,9 +492,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private ArrayList<Integer> pinnedMessageIds = new ArrayList<>();
     private HashMap<Integer, MessageObject> pinnedMessageObjects = new HashMap<>();
-    private SparseArray<Boolean> loadingPinnedMessages = new SparseArray<>();
+    private final SparseArray<Boolean> loadingPinnedMessages = new SparseArray<>();
     private int currentPinnedMessageId;
-    private int[] currentPinnedMessageIndex = new int[1];
+    private final int[] currentPinnedMessageIndex = new int[1];
     private int forceNextPinnedMessageId;
     private boolean forceScrollToFirst;
     private int loadedPinnedMessagesCount;
@@ -568,9 +566,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private boolean scrollToTopUnReadOnResume;
     private long dialog_id;
     private int lastLoadIndex = 1;
-    private SparseArray<MessageObject>[] selectedMessagesIds = new SparseArray[]{new SparseArray<>(), new SparseArray<>()};
-    private SparseArray<MessageObject>[] selectedMessagesCanCopyIds = new SparseArray[]{new SparseArray<>(), new SparseArray<>()};
-    private SparseArray<MessageObject>[] selectedMessagesCanStarIds = new SparseArray[]{new SparseArray<>(), new SparseArray<>()};
+    private final SparseArray<MessageObject>[] selectedMessagesIds = new SparseArray[]{
+        new SparseArray<>(), new SparseArray<>()};
+    private final SparseArray<MessageObject>[] selectedMessagesCanCopyIds = new SparseArray[]{
+        new SparseArray<>(), new SparseArray<>()};
+    private final SparseArray<MessageObject>[] selectedMessagesCanStarIds = new SparseArray[]{
+        new SparseArray<>(), new SparseArray<>()};
     private boolean hasUnfavedSelected;
     private int cantDeleteMessagesCount;
     private int cantForwardMessagesCount;
@@ -579,7 +580,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int cantSaveMessagesCount;
     private int canSaveMusicCount;
     private int canSaveDocumentsCount;
-    private ArrayList<Integer> waitingForLoad = new ArrayList<>();
+    private final ArrayList<Integer> waitingForLoad = new ArrayList<>();
     private boolean needRemovePreviousSameChatActivity = true;
 
     private int newUnreadMessageCount;
@@ -587,23 +588,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int newMentionsCount;
     private boolean hasAllMentionsLocal;
 
-    private ArrayList<ChatMessageCell> animateSendingViews = new ArrayList<>();
+    private final ArrayList<ChatMessageCell> animateSendingViews = new ArrayList<>();
 
-    private SparseArray<MessageObject>[] messagesDict = new SparseArray[]{new SparseArray<>(), new SparseArray<>()};
-    private SparseArray<MessageObject> repliesMessagesDict = new SparseArray<>();
-    private SparseArray<ArrayList<Integer>> replyMessageOwners = new SparseArray<>();
-    private HashMap<String, ArrayList<MessageObject>> messagesByDays = new HashMap<>();
+    private final SparseArray<MessageObject>[] messagesDict = new SparseArray[]{new SparseArray<>(),
+        new SparseArray<>()};
+    private final SparseArray<MessageObject> repliesMessagesDict = new SparseArray<>();
+    private final SparseArray<ArrayList<Integer>> replyMessageOwners = new SparseArray<>();
+    private final HashMap<String, ArrayList<MessageObject>> messagesByDays = new HashMap<>();
     protected ArrayList<MessageObject> messages = new ArrayList<>();
-    private SparseArray<MessageObject> waitingForReplies = new SparseArray<>();
-    private LongSparseArray<ArrayList<MessageObject>> polls = new LongSparseArray<>();
-    private LongSparseArray<MessageObject.GroupedMessages> groupedMessagesMap = new LongSparseArray<>();
-    private int[] maxMessageId = new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE};
-    private int[] minMessageId = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
-    private int[] maxDate = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
-    private int[] minDate = new int[2];
-    private boolean[] endReached = new boolean[2];
-    private boolean[] cacheEndReached = new boolean[2];
-    private boolean[] forwardEndReached = new boolean[]{true, true};
+    private final SparseArray<MessageObject> waitingForReplies = new SparseArray<>();
+    private final LongSparseArray<ArrayList<MessageObject>> polls = new LongSparseArray<>();
+    private final LongSparseArray<MessageObject.GroupedMessages> groupedMessagesMap = new LongSparseArray<>();
+    private final int[] maxMessageId = new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE};
+    private final int[] minMessageId = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
+    private final int[] maxDate = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
+    private final int[] minDate = new int[2];
+    private final boolean[] endReached = new boolean[2];
+    private final boolean[] cacheEndReached = new boolean[2];
+    private final boolean[] forwardEndReached = new boolean[]{true, true};
     private boolean loading;
     private boolean firstLoading = true;
     private boolean chatWasReset;
@@ -644,7 +646,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     protected TLRPC.ChatFull chatInfo;
     protected TLRPC.UserFull userInfo;
 
-    private LongSparseArray<TLRPC.BotInfo> botInfo = new LongSparseArray<>();
+    private final LongSparseArray<TLRPC.BotInfo> botInfo = new LongSparseArray<>();
     private String botUser;
     private long inlineReturn;
     private String voiceChatHash;
@@ -666,30 +668,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private boolean scrollToVideo;
     private Path aspectPath;
     private Paint aspectPaint;
-    private Runnable destroyTextureViewRunnable = this::destroyTextureView;
+    private final Runnable destroyTextureViewRunnable = this::destroyTextureView;
 
     private Paint scrimPaint;
     private View scrimView;
-    private int popupAnimationIndex = -1;
+    private final int popupAnimationIndex = -1;
     private AnimatorSet scrimAnimatorSet;
     private ActionBarPopupWindow scrimPopupWindow;
     private int scrimPopupX, scrimPopupY;
     private ActionBarMenuSubItem[] scrimPopupWindowItems;
     private ActionBarMenuSubItem menuDeleteItem;
-    private Runnable updateDeleteItemRunnable = new Runnable() {
+    private final Runnable updateDeleteItemRunnable = new Runnable() {
         @Override
         public void run() {
             if (selectedObject == null || menuDeleteItem == null) {
                 return;
             }
-            int remaining = Math.max(0, selectedObject.messageOwner.ttl_period - (getConnectionsManager().getCurrentTime() - selectedObject.messageOwner.date));
+            int remaining = Math.max(0,
+                selectedObject.messageOwner.ttl_period - (getConnectionsManager().getCurrentTime()
+                    - selectedObject.messageOwner.date));
             String ramainingStr;
             if (remaining < 24 * 60 * 60) {
                 ramainingStr = AndroidUtilities.formatDuration(remaining, false);
             } else {
-                ramainingStr = LocaleController.formatPluralString("Days", Math.round(remaining / (24 * 60 * 60.0f)));
+                ramainingStr = LocaleController.formatPluralString("Days",
+                    Math.round(remaining / (24 * 60 * 60.0f)));
             }
-            menuDeleteItem.setSubtext(LocaleController.formatString("AutoDeleteIn", R.string.AutoDeleteIn, ramainingStr));
+            menuDeleteItem.setSubtext(
+                LocaleController.formatString("AutoDeleteIn", R.string.AutoDeleteIn, ramainingStr));
             AndroidUtilities.runOnUIThread(updateDeleteItemRunnable, 1000);
         }
     };
@@ -760,7 +766,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private float pullingDownAnimateProgress;
     private AnimatorSet fragmentTransition;
     private ChatActivity backToPreviousFragment;
-    private Runnable fragmentTransitionRunnable = new Runnable() {
+    private final Runnable fragmentTransitionRunnable = new Runnable() {
         @Override
         public void run() {
             if (fragmentTransition != null && !fragmentTransition.isRunning()) {
@@ -837,14 +843,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         showPinnedProgress(false);
     };
 
-    private NotificationCenter.PostponeNotificationCallback postponeNotificationsWhileLoadingCallback = new NotificationCenter.PostponeNotificationCallback() {
+    private final NotificationCenter.PostponeNotificationCallback postponeNotificationsWhileLoadingCallback = new NotificationCenter.PostponeNotificationCallback() {
         @Override
         public boolean needPostpone(int id, int currentAccount, Object[] args) {
             if (id == NotificationCenter.didReceiveNewMessages) {
                 long did = (Long) args[0];
-                if (firstLoading && did == dialog_id) {
-                    return true;
-                }
+                return firstLoading && did == dialog_id;
             }
             return false;
         }
@@ -916,16 +920,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         private int currentCounter;
         private String currentCounterString;
         private int textWidth;
-        private TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private RectF rect = new RectF();
+        private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF rect = new RectF();
         private int circleWidth;
         private int rippleColor;
 
         private StaticLayout textLayout;
         private StaticLayout textLayoutOut;
         private int layoutTextWidth;
-        private TextPaint layoutPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        private final TextPaint layoutPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
         Drawable selectableBackground;
 
@@ -1134,28 +1138,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    private PhotoViewer.PhotoViewerProvider photoViewerProvider = new PhotoViewer.EmptyPhotoViewerProvider() {
+    private final PhotoViewer.PhotoViewerProvider photoViewerProvider = new PhotoViewer.EmptyPhotoViewerProvider() {
 
         @Override
-        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
-            return ChatActivity.this.getPlaceForPhoto(messageObject, fileLocation, needPreview, false);
+        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject,
+            TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
+            return ChatActivity.this.getPlaceForPhoto(messageObject, fileLocation, needPreview,
+                false);
         }
 
         @Override
         public boolean validateGroupId(long groupId) {
             MessageObject.GroupedMessages groupedMessages = groupedMessagesMap.get(groupId);
-            if (groupedMessages != null && groupedMessages.messages.size() > 1) {
-                return true;
-            }
-            return false;
+            return groupedMessages != null && groupedMessages.messages.size() > 1;
         }
     };
 
     private ArrayList<Object> botContextResults;
-    private PhotoViewer.PhotoViewerProvider botContextProvider = new PhotoViewer.EmptyPhotoViewerProvider() {
+    private final PhotoViewer.PhotoViewerProvider botContextProvider = new PhotoViewer.EmptyPhotoViewerProvider() {
 
         @Override
-        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
+        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject,
+            TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
             if (index < 0 || index >= botContextResults.size()) {
                 return null;
             }
@@ -1290,12 +1294,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     if (messageObject.contentType == 0) {
-                        if (selected && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() >= 100) {
-                            limitReached = true;
-                        } else {
-                            limitReached = false;
-                        }
-                        RecyclerView.ViewHolder holder = chatListView.findViewHolderForAdapterPosition(position);
+                        limitReached = selected
+                            && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() >= 100;
+                        RecyclerView.ViewHolder holder = chatListView.findViewHolderForAdapterPosition(
+                            position);
                         if (holder != null && holder.itemView instanceof ChatMessageCell) {
                             processRowSelect(holder.itemView, false, x, y);
                         } else {
@@ -1313,12 +1315,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (i >= 0 && i < messages.size()) {
                     MessageObject messageObject = messages.get(i);
                     if (messageObject.contentType == 0) {
-                        if (!unselect && alreadySelectedMessagesIds.get(messageObject.getId(), null) == null) {
+                        if (!unselect && alreadySelectedMessagesIds.get(messageObject.getId(), null)
+                            == null) {
                             return true;
                         }
-                        if (unselect && alreadySelectedMessagesIds.get(messageObject.getId(), null) != null) {
-                            return true;
-                        }
+                        return unselect
+                            && alreadySelectedMessagesIds.get(messageObject.getId(), null) != null;
                     }
                 }
                 return false;
@@ -2784,14 +2786,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             int lastWidth;
 
-            ArrayList<ChatMessageCell> drawTimeAfter = new ArrayList<>();
-            ArrayList<ChatMessageCell> drawNamesAfter = new ArrayList<>();
-            ArrayList<ChatMessageCell> drawCaptionAfter = new ArrayList<>();
+            final ArrayList<ChatMessageCell> drawTimeAfter = new ArrayList<>();
+            final ArrayList<ChatMessageCell> drawNamesAfter = new ArrayList<>();
+            final ArrayList<ChatMessageCell> drawCaptionAfter = new ArrayList<>();
 
             Paint backgroundPaint;
             int backgroundColor;
 
-            AdjustPanLayoutHelper adjustPanLayoutHelper = new AdjustPanLayoutHelper(this) {
+            final AdjustPanLayoutHelper adjustPanLayoutHelper = new AdjustPanLayoutHelper(this) {
 
                 @Override
                 protected void onTransitionStart(boolean keyboardVisible, int contentHeight) {
@@ -2836,19 +2838,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 @Override
                 protected boolean heightAnimationEnabled() {
                     ActionBarLayout actionBarLayout = getParentLayout();
-                    if (inPreviewMode || inBubbleMode || AndroidUtilities.isInMultiwindow || actionBarLayout == null || fixedKeyboardHeight > 0) {
+                    if (inPreviewMode || inBubbleMode || AndroidUtilities.isInMultiwindow
+                        || actionBarLayout == null || fixedKeyboardHeight > 0) {
                         return false;
                     }
                     if (System.currentTimeMillis() - activityResumeTime < 250) {
                         return false;
                     }
-                    if ((ChatActivity.this == actionBarLayout.getLastFragment() && actionBarLayout.isTransitionAnimationInProgress()) || actionBarLayout.isPreviewOpenAnimationInProgress() || isPaused || !openAnimationEnded || (chatAttachAlert != null && chatAttachAlert.isShowing())) {
+                    if ((ChatActivity.this == actionBarLayout.getLastFragment()
+                        && actionBarLayout.isTransitionAnimationInProgress())
+                        || actionBarLayout.isPreviewOpenAnimationInProgress() || isPaused
+                        || !openAnimationEnded || (chatAttachAlert != null
+                        && chatAttachAlert.isShowing())) {
                         return false;
                     }
-                    if (chatActivityEnterView != null && chatActivityEnterView.getTrendingStickersAlert() != null && chatActivityEnterView.getTrendingStickersAlert().isShowing()) {
-                        return false;
-                    }
-                    return true;
+                    return chatActivityEnterView == null
+                        || chatActivityEnterView.getTrendingStickersAlert() == null
+                        || !chatActivityEnterView.getTrendingStickersAlert().isShowing();
                 }
 
                 @Override
@@ -6269,7 +6275,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         mentionLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mentionGridLayoutManager = new ExtendedGridLayoutManager(context, 100) {
 
-            private Size size = new Size();
+            private final Size size = new Size();
 
             @Override
             protected Size getSizeForItem(int i) {
@@ -6874,10 +6880,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             @Override
             protected boolean pannelAnimationEnabled() {
-                if (!openAnimationEnded) {
-                    return false;
-                }
-                return true;
+                return openAnimationEnded;
             }
 
             @Override
@@ -8881,7 +8884,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 videoPlayerContainer = new FrameLayout(getParentActivity()) {
 
-                    RectF rect = new RectF();
+                    final RectF rect = new RectF();
 
                     @Override
                     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -9091,7 +9094,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             bottomOverlayProgress.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             bottomOverlayProgress.setScaleX(show ? 1.0f : 0.1f);
             bottomOverlayProgress.setScaleY(show ? 1.0f : 0.1f);
-            bottomOverlayProgress.setAlpha(show ? 1.0f : 1.0f);
+            bottomOverlayProgress.setAlpha(1.0f);
             bottomOverlayChatText.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
             bottomOverlayChatText.setScaleX(show ? 0.1f : 1.0f);
             bottomOverlayChatText.setScaleY(show ? 0.1f : 1.0f);
@@ -10367,29 +10370,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 FileLog.e(e);
             }
         } else if (which == attach_gallery) {
-            if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= 23 &&
+                getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
                 try {
-                    getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                    getParentActivity().requestPermissions(
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
                 } catch (Throwable ignore) {
 
                 }
                 return;
             }
             boolean allowGifs;
-            if (ChatObject.isChannel(currentChat) && currentChat.banned_rights != null && currentChat.banned_rights.send_gifs) {
-                allowGifs = false;
-            } else {
-                allowGifs = true;
-            }
-            PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(PhotoAlbumPickerActivity.SELECT_TYPE_ALL, allowGifs, true, ChatActivity.this);
-            if (currentChat != null && !ChatObject.hasAdminRights(currentChat) && currentChat.slowmode_enabled) {
+            allowGifs = !ChatObject.isChannel(currentChat) || currentChat.banned_rights == null
+                || !currentChat.banned_rights.send_gifs;
+            PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(
+                PhotoAlbumPickerActivity.SELECT_TYPE_ALL, allowGifs, true, ChatActivity.this);
+            if (currentChat != null && !ChatObject.hasAdminRights(currentChat)
+                && currentChat.slowmode_enabled) {
                 fragment.setMaxSelectedPhotos(10, true);
             } else {
-                fragment.setMaxSelectedPhotos(editingMessageObject != null ? 1 : 0, editingMessageObject == null);
+                fragment.setMaxSelectedPhotos(editingMessageObject != null ? 1 : 0,
+                    editingMessageObject == null);
             }
             fragment.setDelegate(new PhotoAlbumPickerActivity.PhotoAlbumPickerActivityDelegate() {
                 @Override
-                public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) {
+                public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos,
+                    boolean notify, int scheduleDate) {
 
                 }
 
@@ -10444,11 +10451,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     public boolean allowSendGifs() {
-        if (ChatObject.isChannel(currentChat) && currentChat.banned_rights != null && currentChat.banned_rights.send_gifs) {
-            return false;
-        } else {
-            return true;
-        }
+        return !ChatObject.isChannel(currentChat) || currentChat.banned_rights == null
+            || !currentChat.banned_rights.send_gifs;
     }
 
     public void openPollCreate(Boolean quiz) {
@@ -12787,15 +12791,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 starItem.setIcon(hasUnfavedSelected ? R.drawable.msg_fave : R.drawable.msg_unfave);
                 final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 ? View.VISIBLE : View.GONE;
                 if (replyButton != null) {
-                    boolean allowChatActions = true;
-                    if (bottomOverlayChat != null && bottomOverlayChat.getVisibility() == View.VISIBLE ||
-                            currentChat != null && (ChatObject.isNotInChat(currentChat) && !isThreadChat() || ChatObject.isChannel(currentChat) && !ChatObject.canPost(currentChat) && !currentChat.megagroup || !ChatObject.canSendMessages(currentChat))) {
-                        allowChatActions = false;
-                    }
+                    boolean allowChatActions = (bottomOverlayChat == null
+                        || bottomOverlayChat.getVisibility() != View.VISIBLE) &&
+                        (currentChat == null || (
+                            (!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (
+                                !ChatObject.isChannel(currentChat) || ChatObject.canPost(
+                                    currentChat) || currentChat.megagroup)
+                                && ChatObject.canSendMessages(currentChat)));
 
                     int newVisibility;
 
-                    if (chatMode == MODE_SCHEDULED || !allowChatActions || selectedMessagesIds[0].size() != 0 && selectedMessagesIds[1].size() != 0) {
+                    if (chatMode == MODE_SCHEDULED || !allowChatActions
+                        || selectedMessagesIds[0].size() != 0
+                        && selectedMessagesIds[1].size() != 0) {
                         newVisibility = View.GONE;
                     } else if (selectedCount == 1) {
                         newVisibility = View.VISIBLE;
@@ -13019,9 +13027,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 TLRPC.BotInfo info = botInfo.valueAt(b);
                 for (int a = 0; a < info.commands.size(); a++) {
                     TLRPC.TL_botCommand command = info.commands.get(a);
-                    if (command.command.toLowerCase().equals("help")) {
+                    if (command.command.equalsIgnoreCase("help")) {
                         hasHelp = true;
-                    } else if (command.command.toLowerCase().equals("settings")) {
+                    } else if (command.command.equalsIgnoreCase("settings")) {
                         hasSettings = true;
                     }
                     if (hasSettings && hasHelp) {
@@ -14298,7 +14306,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                     }
                     if (dateObjectIndex >= 0) {
-                        chatLayoutManager.scrollToPositionWithOffset(chatAdapter.messagesStartRow + dateObjectIndex, (int) (AndroidUtilities.dp(4)), false);
+                        chatLayoutManager.scrollToPositionWithOffset(
+                            chatAdapter.messagesStartRow + dateObjectIndex,
+                            AndroidUtilities.dp(4), false);
                     } else if (closeDateObjectIndex >= 0) {
                         chatLayoutManager.scrollToPositionWithOffset(chatAdapter.messagesStartRow + closeDateObjectIndex, chatListView.getMeasuredHeight() / 2 - AndroidUtilities.dp(24), false);
                     }
@@ -14684,7 +14694,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (outbox != null) {
                 for (int b = 0, size = outbox.size(); b < size; b++) {
                     long key = outbox.keyAt(b);
-                    int messageId = (int) outbox.get(key);
+                    int messageId = outbox.get(key);
                     if (key != dialog_id) {
                         continue;
                     }
@@ -18402,7 +18412,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (animated) {
                         ValueAnimator animator = ValueAnimator.ofFloat(pinnedMessageEnterOffset, 0);
                         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            int position = -1;
+                            final int position = -1;
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
                                 pinnedMessageEnterOffset = (float) animation.getAnimatedValue();
@@ -19155,10 +19165,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             MediaController.getInstance().setAllowStartRecord(false);
         } else if (currentChat != null && !ChatObject.canSendMedia(currentChat)) {
             MediaController.getInstance().setAllowStartRecord(false);
-        } else if (!ApplicationLoader.mainInterfacePaused && (bottomOverlayChat == null || bottomOverlayChat.getVisibility() != View.VISIBLE) && (bottomOverlay == null || bottomOverlay.getVisibility() != View.VISIBLE) && (searchContainer == null || searchContainer.getVisibility() != View.VISIBLE)) {
-            MediaController.getInstance().setAllowStartRecord(true);
         } else {
-            MediaController.getInstance().setAllowStartRecord(false);
+            MediaController.getInstance().setAllowStartRecord(
+                !ApplicationLoader.mainInterfacePaused && (bottomOverlayChat == null
+                    || bottomOverlayChat.getVisibility() != View.VISIBLE) && (bottomOverlay == null
+                    || bottomOverlay.getVisibility() != View.VISIBLE) && (searchContainer == null
+                    || searchContainer.getVisibility() != View.VISIBLE));
         }
     }
 
@@ -20951,7 +20963,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             };
             scrimPopupContainerLayout.setOnTouchListener(new View.OnTouchListener() {
 
-                private int[] pos = new int[2];
+                private final int[] pos = new int[2];
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -22585,11 +22597,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         fillEditingMediaWithCaption(photoEntry.caption, photoEntry.entities);
         if (photoEntry.isVideo) {
-            if (videoEditedInfo != null) {
-                SendMessagesHelper.prepareSendingVideo(getAccountInstance(), photoEntry.path, videoEditedInfo, dialog_id, replyingMessageObject, getThreadMessage(), photoEntry.caption, photoEntry.entities, photoEntry.ttl, editingMessageObject, notify, scheduleDate, forceDocument);
-            } else {
-                SendMessagesHelper.prepareSendingVideo(getAccountInstance(), photoEntry.path, null, dialog_id, replyingMessageObject, getThreadMessage(), photoEntry.caption, photoEntry.entities, photoEntry.ttl, editingMessageObject, notify, scheduleDate, forceDocument);
-            }
+            SendMessagesHelper.prepareSendingVideo(getAccountInstance(), photoEntry.path,
+                videoEditedInfo, dialog_id, replyingMessageObject, getThreadMessage(),
+                photoEntry.caption, photoEntry.entities, photoEntry.ttl, editingMessageObject,
+                notify, scheduleDate, forceDocument);
             afterMessageSend();
         } else {
             if (photoEntry.imagePath != null) {
@@ -23397,8 +23408,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public class ChatActivityAdapter extends RecyclerAnimationScrollHelper.AnimatableAdapter {
 
-        private Context mContext;
-        private boolean isBot;
+        private final Context mContext;
+        private final boolean isBot;
         private int rowCount;
         private int botInfoRow = -5;
         private int botInfoEmptyRow = -5;
@@ -24483,21 +24494,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ChatLoadingCell loadingCell = (ChatLoadingCell) holder.itemView;
                 loadingCell.setProgressVisible(loadsCount > 1);
             } else if (position >= messagesStartRow && position < messagesEndRow) {
-                ArrayList<MessageObject> messages = isFrozen ? frozenMessages : ChatActivity.this.messages;
+                ArrayList<MessageObject> messages =
+                    isFrozen ? frozenMessages : ChatActivity.this.messages;
 
                 MessageObject message = messages.get(position - messagesStartRow);
                 View view = holder.itemView;
+                boolean fromUserBlocked =
+                    getMessagesController().blockePeers.indexOfKey(message.getFromChatId()) >= 0
+                        && ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser);
 
                 if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;
                     MessageObject.GroupedMessages groupedMessages = getValidGroupedMessage(message);
-                    messageCell.isChat = currentChat != null || UserObject.isUserSelf(currentUser) || UserObject.isReplyUser(currentUser);
+                    messageCell.isChat = currentChat != null || UserObject.isUserSelf(currentUser)
+                        || UserObject.isReplyUser(currentUser);
                     messageCell.isBot = currentUser != null && currentUser.bot;
-                    messageCell.isMegagroup = ChatObject.isChannel(currentChat) && currentChat.megagroup;
+                    messageCell.isMegagroup =
+                        ChatObject.isChannel(currentChat) && currentChat.megagroup;
                     messageCell.isThreadChat = threadMessageId != 0;
-                    messageCell.hasDiscussion = chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat) && currentChat.has_link && !currentChat.megagroup;
-                    messageCell.isPinned = chatMode == 0 && (pinnedMessageObjects.containsKey(message.getId()) || groupedMessages != null && !groupedMessages.messages.isEmpty() && pinnedMessageObjects.containsKey(groupedMessages.messages.get(0).getId()));
-                    messageCell.linkedChatId = chatMode != MODE_SCHEDULED && chatInfo != null ? chatInfo.linked_chat_id : 0;
+                    messageCell.hasDiscussion =
+                        chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat)
+                            && currentChat.has_link && !currentChat.megagroup;
+                    messageCell.isPinned =
+                        chatMode == 0 && (pinnedMessageObjects.containsKey(message.getId())
+                            || groupedMessages != null && !groupedMessages.messages.isEmpty()
+                            && pinnedMessageObjects.containsKey(
+                            groupedMessages.messages.get(0).getId()));
+                    messageCell.linkedChatId =
+                        chatMode != MODE_SCHEDULED && chatInfo != null ? chatInfo.linked_chat_id
+                            : 0;
                     messageCell.isRepliesChat = UserObject.isReplyUser(currentUser);
                     messageCell.isPinnedChat = chatMode == MODE_PINNED;
                     boolean pinnedBottom = false;
@@ -24839,11 +24864,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             chatActivityEnterView.hideTopView(true);
                         }
                     }
-                    if (!animatingDocuments.isEmpty() && animatingDocuments.containsKey(message.getDocument())) {
+                    if (!animatingDocuments.isEmpty() && animatingDocuments.containsKey(
+                        message.getDocument())) {
                         animatingDocuments.remove(message.getDocument());
                         if (chatListItemAnimator != null) {
-                            chatListItemAnimator.onGreetingStickerTransition(holder, greetingsViewContainer);
+                            chatListItemAnimator.onGreetingStickerTransition(holder,
+                                greetingsViewContainer);
                         }
+                    }
+                    if (fromUserBlocked) {
+                        messageCell.setVisibility(View.GONE);
+                    } else {
+                        messageCell.setVisibility(View.VISIBLE);
                     }
                 } else if (view instanceof ChatActionCell) {
                     ChatActionCell actionCell = (ChatActionCell) view;
@@ -26265,7 +26297,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         private ValueAnimator patternIntensityAnimator;
         private Bitmap serviceBitmap;
         private Bitmap serviceBitmapSource;
-        private Paint paint = new Paint();
+        private final Paint paint = new Paint();
         private Canvas serviceCanvas;
         private BitmapShader serviceShader;
         private BitmapShader serviceShaderSource;
@@ -26412,7 +26444,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override
         public boolean isWallpaperMotion() {
-            return chatTheme != null ? false : Theme.isWallpaperMotion();
+            return chatTheme == null && Theme.isWallpaperMotion();
         }
 
         public void setCurrentTheme(final EmojiThemes chatTheme, boolean animated, Boolean forceDark) {

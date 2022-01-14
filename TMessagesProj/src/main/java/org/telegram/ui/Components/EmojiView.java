@@ -114,34 +114,34 @@ import top.qwq2333.nullgram.utils.Defines;
 public class EmojiView extends FrameLayout implements
     NotificationCenter.NotificationCenterDelegate {
 
-    private ArrayList<View> views = new ArrayList<>();
-    private ViewPager pager;
-    private FrameLayout bottomTabContainer;
-    private View bottomTabContainerBackground;
+    private final ArrayList<View> views = new ArrayList<>();
+    private final ViewPager pager;
+    private final FrameLayout bottomTabContainer;
+    private final View bottomTabContainerBackground;
     private ImageView floatingButton;
     private PagerSlidingTabStrip typeTabs;
-    private ImageView backspaceButton;
+    private final ImageView backspaceButton;
     private ImageView stickerSettingsButton;
     private ImageView searchButton;
-    private View shadowLine;
-    private View topShadow;
+    private final View shadowLine;
+    private final View topShadow;
     private AnimatorSet bottomTabContainerAnimation;
     private AnimatorSet backspaceButtonAnimation;
     private AnimatorSet stickersButtonAnimation;
     private float lastBottomScrollDy;
 
-    private ScrollSlidingTabStrip emojiTabs;
-    private FrameLayout emojiContainer;
-    private View emojiTabsShadow;
-    private RecyclerListView emojiGridView;
-    private GridLayoutManager emojiLayoutManager;
-    private EmojiGridAdapter emojiAdapter;
-    private EmojiSearchAdapter emojiSearchAdapter;
+    private final ScrollSlidingTabStrip emojiTabs;
+    private final FrameLayout emojiContainer;
+    private final View emojiTabsShadow;
+    private final RecyclerListView emojiGridView;
+    private final GridLayoutManager emojiLayoutManager;
+    private final EmojiGridAdapter emojiAdapter;
+    private final EmojiSearchAdapter emojiSearchAdapter;
     private SearchField emojiSearchField;
     private AnimatorSet emojiTabShadowAnimator;
     private RecyclerAnimationScrollHelper scrollHelper;
     private boolean firstEmojiAttach = true;
-    private boolean needEmojiSearch;
+    private final boolean needEmojiSearch;
     private int hasRecentEmoji = -1;
     private boolean hasChatStickers;
 
@@ -149,7 +149,7 @@ public class EmojiView extends FrameLayout implements
     private RecyclerListView gifGridView;
     private GifLayoutManager gifLayoutManager;
     private GifAdapter gifSearchAdapter;
-    private GifSearchPreloader gifSearchPreloader = new GifSearchPreloader();
+    private final GifSearchPreloader gifSearchPreloader = new GifSearchPreloader();
     private final Map<String, TLRPC.messages_BotResults> gifCache = new HashMap<>();
     private RecyclerListView.OnItemClickListener gifOnItemClickListener;
     private GifAdapter gifAdapter;
@@ -177,18 +177,19 @@ public class EmojiView extends FrameLayout implements
 
     private AnimatorSet searchAnimation;
 
-    private TextView mediaBanTooltip;
+    private final TextView mediaBanTooltip;
     private DragListener dragListener;
     private boolean showing;
 
     private final int[] tabsMinusDy = new int[3];
-    private ObjectAnimator[] tabsYAnimators = new ObjectAnimator[3];
+    private final ObjectAnimator[] tabsYAnimators = new ObjectAnimator[3];
     private boolean firstTabUpdate;
     private ChooseStickerActionTracker chooseStickerActionTracker;
 
     @IntDef({Type.STICKERS, Type.EMOJIS, Type.GIFS})
     @Retention(RetentionPolicy.SOURCE)
     private @interface Type {
+
         int STICKERS = 0;
         int EMOJIS = 1;
         int GIFS = 2;
@@ -196,16 +197,16 @@ public class EmojiView extends FrameLayout implements
 
     private String[] lastSearchKeyboardLanguage;
 
-    private Drawable[] tabIcons;
-    private Drawable[] emojiIcons;
-    private Drawable[] stickerIcons;
-    private Drawable[] gifIcons;
-    private String[] emojiTitles;
+    private final Drawable[] tabIcons;
+    private final Drawable[] emojiIcons;
+    private final Drawable[] stickerIcons;
+    private final Drawable[] gifIcons;
+    private final String[] emojiTitles;
 
-    private int searchFieldHeight;
+    private final int searchFieldHeight;
 
-    private int currentAccount = UserConfig.selectedAccount;
-    private ArrayList<TLRPC.TL_messages_stickerSet> stickerSets = new ArrayList<>();
+    private final int currentAccount = UserConfig.selectedAccount;
+    private final ArrayList<TLRPC.TL_messages_stickerSet> stickerSets = new ArrayList<>();
     private int groupStickerPackNum;
     private int groupStickerPackPosition;
     private boolean groupStickersHidden;
@@ -214,26 +215,26 @@ public class EmojiView extends FrameLayout implements
     private ArrayList<TLRPC.Document> recentGifs = new ArrayList<>();
     private ArrayList<TLRPC.Document> recentStickers = new ArrayList<>();
     private ArrayList<TLRPC.Document> favouriteStickers = new ArrayList<>();
-    private ArrayList<TLRPC.StickerSetCovered> featuredStickerSets = new ArrayList<>();
+    private final ArrayList<TLRPC.StickerSetCovered> featuredStickerSets = new ArrayList<>();
 
-    private Paint dotPaint;
+    private final Paint dotPaint;
 
     private EmojiViewDelegate delegate;
 
     private long currentChatId;
 
-    private TLRPC.StickerSetCovered[] primaryInstallingStickerSets = new TLRPC.StickerSetCovered[10];
-    private LongSparseArray<TLRPC.StickerSetCovered> installingStickerSets = new LongSparseArray<>();
-    private LongSparseArray<TLRPC.StickerSetCovered> removingStickerSets = new LongSparseArray<>();
+    private final TLRPC.StickerSetCovered[] primaryInstallingStickerSets = new TLRPC.StickerSetCovered[10];
+    private final LongSparseArray<TLRPC.StickerSetCovered> installingStickerSets = new LongSparseArray<>();
+    private final LongSparseArray<TLRPC.StickerSetCovered> removingStickerSets = new LongSparseArray<>();
 
     private int currentPage;
 
-    private EmojiColorPickerView pickerView;
-    private EmojiPopupWindow pickerViewPopup;
-    private int popupWidth;
-    private int popupHeight;
-    private int emojiSize;
-    private int location[] = new int[2];
+    private final EmojiColorPickerView pickerView;
+    private final EmojiPopupWindow pickerViewPopup;
+    private final int popupWidth;
+    private final int popupHeight;
+    private final int emojiSize;
+    private final int[] location = new int[2];
     private int stickersTabOffset;
     private int recentTabBum = -2;
     private int favTabBum = -2;
@@ -252,7 +253,7 @@ public class EmojiView extends FrameLayout implements
 
     private boolean backspacePressed;
     private boolean backspaceOnce;
-    private boolean showGifs;
+    private final boolean showGifs;
 
     private ImageViewEmoji emojiTouchedView;
     private float emojiLastX;
@@ -262,10 +263,10 @@ public class EmojiView extends FrameLayout implements
     private float lastStickersX;
     private boolean expandStickersByDragg;
     private final Theme.ResourcesProvider resourcesProvider;
-    private Drawable searchIconDrawable;
-    private Drawable searchIconDotDrawable;
+    private final Drawable searchIconDrawable;
+    private final Drawable searchIconDotDrawable;
 
-    private Runnable checkExpandStickerTabsRunnable = new Runnable() {
+    private final Runnable checkExpandStickerTabsRunnable = new Runnable() {
         @Override
         public void run() {
             if (!stickersTab.isDragging()) {
@@ -371,9 +372,10 @@ public class EmojiView extends FrameLayout implements
         void onDrag(int offset);
     }
 
-    private ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate = new ContentPreviewViewer.ContentPreviewViewerDelegate() {
+    private final ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate = new ContentPreviewViewer.ContentPreviewViewerDelegate() {
         @Override
-        public void sendSticker(TLRPC.Document sticker, String query, Object parent, boolean notify, int scheduleDate) {
+        public void sendSticker(TLRPC.Document sticker, String query, Object parent, boolean notify,
+            int scheduleDate) {
             delegate.onStickerSelected(null, sticker, query, parent, null, notify, scheduleDate);
         }
 
@@ -455,13 +457,13 @@ public class EmojiView extends FrameLayout implements
 
     private class SearchField extends FrameLayout {
 
-        private View searchBackground;
-        private ImageView searchIconImageView;
-        private ImageView clearSearchImageView;
-        private CloseProgressDrawable2 progressDrawable;
+        private final View searchBackground;
+        private final ImageView searchIconImageView;
+        private final ImageView clearSearchImageView;
+        private final CloseProgressDrawable2 progressDrawable;
         private EditTextBoldCursor searchEditText;
-        private View shadowView;
-        private View backgroundView;
+        private final View shadowView;
+        private final View backgroundView;
         private AnimatorSet shadowAnimator;
 
         public SearchField(Context context, int type) {
@@ -471,15 +473,22 @@ public class EmojiView extends FrameLayout implements
             shadowView.setAlpha(0.0f);
             shadowView.setTag(1);
             shadowView.setBackgroundColor(getThemedColor(Theme.key_chat_emojiPanelShadowLine));
-            addView(shadowView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.getShadowHeight(), Gravity.BOTTOM | Gravity.LEFT));
+            addView(shadowView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                AndroidUtilities.getShadowHeight(), Gravity.BOTTOM | Gravity.LEFT));
 
             backgroundView = new View(context);
             backgroundView.setBackgroundColor(getThemedColor(Theme.key_chat_emojiPanelBackground));
-            addView(backgroundView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, searchFieldHeight));
+            addView(backgroundView,
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    searchFieldHeight));
 
             searchBackground = new View(context);
-            searchBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), getThemedColor(Theme.key_chat_emojiSearchBackground)));
-            addView(searchBackground, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 14, 14, 14, 0));
+            searchBackground.setBackgroundDrawable(
+                Theme.createRoundRectDrawable(AndroidUtilities.dp(18),
+                    getThemedColor(Theme.key_chat_emojiSearchBackground)));
+            addView(searchBackground,
+                LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP,
+                    14, 14, 14, 0));
 
             searchIconImageView = new ImageView(context);
             searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -977,13 +986,13 @@ public class EmojiView extends FrameLayout implements
 
     private class EmojiColorPickerView extends View {
 
-        private Drawable backgroundDrawable;
-        private Drawable arrowDrawable;
+        private final Drawable backgroundDrawable;
+        private final Drawable arrowDrawable;
         private String currentEmoji;
         private int arrowX;
         private int selection;
-        private Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private RectF rect = new RectF();
+        private final Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF rect = new RectF();
 
         public void setEmoji(String emoji, int arrowPosition) {
             currentEmoji = emoji;
@@ -1832,7 +1841,7 @@ public class EmojiView extends FrameLayout implements
             if (parentView != null) {
                 stickersTabContainer = new FrameLayout(context) {
 
-                    Paint paint = new Paint();
+                    final Paint paint = new Paint();
                     @Override
                     protected void dispatchDraw(Canvas canvas) {
                         float searchProgress = delegate.getProgressToSearchOpened();
@@ -3295,8 +3304,10 @@ public class EmojiView extends FrameLayout implements
                 groupStickersHidden = hiddenStickerSetId == info.stickerset.id;
             }
             if (info.stickerset != null) {
-                TLRPC.TL_messages_stickerSet pack = mediaDataController.getGroupStickerSetById(info.stickerset);
-                if (pack != null && pack.documents != null && !pack.documents.isEmpty() && pack.set != null) {
+                TLRPC.TL_messages_stickerSet pack = mediaDataController.getGroupStickerSetById(
+                    info.stickerset);
+                if (pack != null && pack.documents != null && !pack.documents.isEmpty()
+                    && pack.set != null) {
                     TLRPC.TL_messages_stickerSet set = new TLRPC.TL_messages_stickerSet();
                     set.documents = pack.documents;
                     set.packs = pack.packs;
@@ -4099,13 +4110,13 @@ public class EmojiView extends FrameLayout implements
 
     private class StickersGridAdapter extends RecyclerListView.SelectionAdapter {
 
-        private Context context;
+        private final Context context;
         private int stickersPerRow;
-        private SparseArray<Object> rowStartPack = new SparseArray<>();
-        private HashMap<Object, Integer> packStartPosition = new HashMap<>();
-        private SparseArray<Object> cache = new SparseArray<>();
-        private SparseArray<Object> cacheParents = new SparseArray<>();
-        private SparseIntArray positionToRow = new SparseIntArray();
+        private final SparseArray<Object> rowStartPack = new SparseArray<>();
+        private final HashMap<Object, Integer> packStartPosition = new HashMap<>();
+        private final SparseArray<Object> cache = new SparseArray<>();
+        private final SparseArray<Object> cacheParents = new SparseArray<>();
+        private final SparseIntArray positionToRow = new SparseIntArray();
         private int totalItems;
 
         public StickersGridAdapter(Context context) {
@@ -4478,8 +4489,8 @@ public class EmojiView extends FrameLayout implements
 
     private class EmojiGridAdapter extends RecyclerListView.SelectionAdapter {
 
-        private SparseIntArray positionToSection = new SparseIntArray();
-        private SparseIntArray sectionToPosition = new SparseIntArray();
+        private final SparseIntArray positionToSection = new SparseIntArray();
+        private final SparseIntArray sectionToPosition = new SparseIntArray();
         private int itemCount;
 
         @Override
@@ -4691,17 +4702,20 @@ public class EmojiView extends FrameLayout implements
                                         return;
                                     }
                                     loadingUrl[0] = true;
-                                    final AlertDialog progressDialog[] = new AlertDialog[]{new AlertDialog(getContext(), 3)};
+                                    final AlertDialog[] progressDialog = new AlertDialog[]{
+                                        new AlertDialog(getContext(), 3)};
 
                                     TLRPC.TL_messages_getEmojiURL req = new TLRPC.TL_messages_getEmojiURL();
-                                    req.lang_code = lastSearchAlias != null ? lastSearchAlias : lastSearchKeyboardLanguage[0];
-                                    int requestId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
-                                                AndroidUtilities.runOnUIThread(() -> {
-                                                    try {
-                                                        progressDialog[0].dismiss();
-                                                    } catch (Throwable ignore) {
+                                    req.lang_code = lastSearchAlias != null ? lastSearchAlias
+                                        : lastSearchKeyboardLanguage[0];
+                                    int requestId = ConnectionsManager.getInstance(currentAccount)
+                                        .sendRequest(req, (response, error) -> {
+                                            AndroidUtilities.runOnUIThread(() -> {
+                                                try {
+                                                    progressDialog[0].dismiss();
+                                                } catch (Throwable ignore) {
 
-                                                    }
+                                                }
                                                     progressDialog[0] = null;
 
                                                     if (response instanceof TLRPC.TL_emojiURL) {
@@ -4885,8 +4899,8 @@ public class EmojiView extends FrameLayout implements
         private boolean searchEndReached;
         private boolean lastSearchIsEmoji;
         private String lastSearchImageString;
-        private ArrayList<TLRPC.BotInlineResult> results = new ArrayList<>();
-        private HashMap<String, TLRPC.BotInlineResult> resultsMap = new HashMap<>();
+        private final ArrayList<TLRPC.BotInlineResult> results = new ArrayList<>();
+        private final HashMap<String, TLRPC.BotInlineResult> resultsMap = new HashMap<>();
 
         private Runnable searchRunnable;
         private boolean searchingUser;
@@ -5335,7 +5349,7 @@ public class EmojiView extends FrameLayout implements
 
     private class GifLayoutManager extends ExtendedGridLayoutManager {
 
-        private Size size = new Size();
+        private final Size size = new Size();
 
         public GifLayoutManager(Context context) {
             super(context, 100, true);
@@ -5485,21 +5499,21 @@ public class EmojiView extends FrameLayout implements
 
     private class StickersSearchGridAdapter extends RecyclerListView.SelectionAdapter {
 
-        private Context context;
-        private SparseArray<Object> rowStartPack = new SparseArray<>();
-        private SparseArray<Object> cache = new SparseArray<>();
-        private SparseArray<Object> cacheParent = new SparseArray<>();
-        private SparseIntArray positionToRow = new SparseIntArray();
-        private SparseArray<String> positionToEmoji = new SparseArray<>();
+        private final Context context;
+        private final SparseArray<Object> rowStartPack = new SparseArray<>();
+        private final SparseArray<Object> cache = new SparseArray<>();
+        private final SparseArray<Object> cacheParent = new SparseArray<>();
+        private final SparseIntArray positionToRow = new SparseIntArray();
+        private final SparseArray<String> positionToEmoji = new SparseArray<>();
         private int totalItems;
 
-        private ArrayList<TLRPC.StickerSetCovered> serverPacks = new ArrayList<>();
-        private ArrayList<TLRPC.TL_messages_stickerSet> localPacks = new ArrayList<>();
-        private HashMap<TLRPC.TL_messages_stickerSet, Boolean> localPacksByShortName = new HashMap<>();
-        private HashMap<TLRPC.TL_messages_stickerSet, Integer> localPacksByName = new HashMap<>();
-        private HashMap<ArrayList<TLRPC.Document>, String> emojiStickers = new HashMap<>();
-        private ArrayList<ArrayList<TLRPC.Document>> emojiArrays = new ArrayList<>();
-        private SparseArray<TLRPC.StickerSetCovered> positionsToSets = new SparseArray<>();
+        private final ArrayList<TLRPC.StickerSetCovered> serverPacks = new ArrayList<>();
+        private final ArrayList<TLRPC.TL_messages_stickerSet> localPacks = new ArrayList<>();
+        private final HashMap<TLRPC.TL_messages_stickerSet, Boolean> localPacksByShortName = new HashMap<>();
+        private final HashMap<TLRPC.TL_messages_stickerSet, Integer> localPacksByName = new HashMap<>();
+        private final HashMap<ArrayList<TLRPC.Document>, String> emojiStickers = new HashMap<>();
+        private final ArrayList<ArrayList<TLRPC.Document>> emojiArrays = new ArrayList<>();
+        private final SparseArray<TLRPC.StickerSetCovered> positionsToSets = new SparseArray<>();
 
         private int reqId;
         private int reqId2;
@@ -5507,7 +5521,7 @@ public class EmojiView extends FrameLayout implements
         private int emojiSearchId;
         boolean cleared;
         private String searchQuery;
-        private Runnable searchRunnable = new Runnable() {
+        private final Runnable searchRunnable = new Runnable() {
 
             private void clear() {
                 if (cleared) {
