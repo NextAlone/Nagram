@@ -12,9 +12,9 @@
     <string name="IgnoreBlocked">Ігнорувати заблокованих користувачів у групі</string>
     <string name="Connection">З\'єднання</string>
     <string name="Chat">Чат</string>
-    <string name="NameOrder">Назвати замовлення</string>
-    <string name="FirstLast">Перше прізвище</string>
-    <string name="LastFirst">Спершу</string>
+    <string name="NameOrder">Порядок імен</string>
+    <string name="FirstLast">Ім\'я, прізвище</string>
+    <string name="LastFirst">Прізвище, ім\'я</string>
     <string name="TypefaceUseDefault">Використовувати типовий системний шрифт</string>
     <string name="NoQuoteForward">Не цитувати вперед</string>
     <string name="Repeat">Повторити</string>
@@ -72,10 +72,10 @@
     <string name="HideKeyboardOnChatScroll">Приховати клавіатуру на прокрутці чату</string>
     <string name="UserRestrictionsSendStickers2">Надіслати наліпки</string>
     <string name="UserRestrictionsSendGifs">Надіслати GIF</string>
-    <string name="ShowTabsOnForward">Показувати вкладки вперед</string>
+    <string name="ShowTabsOnForward">Вкладки при пересиланні</string>
     <string name="CheckAllAdministrated">Додати адміністративну</string>
     <string name="RearVideoMessages">Задня камера в відеоповідомленнях</string>
-    <string name="HideAllTab">Сховати вкладку \"Усі чат\"</string>
+    <string name="HideAllTab">Сховати вкладку \"Усі чати\"</string>
     <string name="HideAllTabAbout">Натисніть \"Назад\" на головній сторінці, щоб відкрити її.</string>
     <string name="TabTitleType">Показувати на вкладках</string>
     <string name="TabTitleTypeTip">Смайли синхронізуються в Telegram.</string>
