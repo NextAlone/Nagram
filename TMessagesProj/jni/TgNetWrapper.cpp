@@ -154,23 +154,47 @@ void bindRequestToGuid(JNIEnv *env, jclass c, jint instanceNum, jint requestToke
     return ConnectionsManager::getInstance(instanceNum).bindRequestToGuid(requestToken, guid);
 }
 
-void applyDatacenterAddress(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId, jstring ipAddress, jint port) {
+void applyDatacenterAddress(JNIEnv *env,
+                            jclass c,
+                            jint instanceNum,
+                            jint datacenterId,
+                            jstring ipAddress,
+                            jint port) {
     const char *valueStr = env->GetStringUTFChars(ipAddress, 0);
 
-    ConnectionsManager::getInstance(instanceNum).applyDatacenterAddress((uint32_t) datacenterId, std::string(valueStr), (uint32_t) port);
+    ConnectionsManager::getInstance(instanceNum).applyDatacenterAddress((uint32_t) datacenterId,
+                                                                        std::string(
+                                                                                valueStr),
+                                                                        (uint32_t) port);
 
     if (valueStr != 0) {
         env->ReleaseStringUTFChars(ipAddress, valueStr);
     }
 }
 
-void setProxySettings(JNIEnv *env, jclass c, jint instanceNum, jstring address, jint port, jstring username, jstring password, jstring secret) {
+void
+moveToDatacenter(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId) {
+    ConnectionsManager::getInstance(instanceNum).moveToDatacenter((uint32_t) datacenterId);
+}
+
+void setProxySettings(JNIEnv *env,
+                      jclass c,
+                      jint instanceNum,
+                      jstring address,
+                      jint port,
+                      jstring username,
+                      jstring password,
+                      jstring secret) {
     const char *addressStr = env->GetStringUTFChars(address, 0);
     const char *usernameStr = env->GetStringUTFChars(username, 0);
     const char *passwordStr = env->GetStringUTFChars(password, 0);
     const char *secretStr = env->GetStringUTFChars(secret, 0);
 
-    ConnectionsManager::getInstance(instanceNum).setProxySettings(addressStr, (uint16_t) port, usernameStr, passwordStr, secretStr);
+    ConnectionsManager::getInstance(instanceNum).setProxySettings(addressStr,
+                                                                  (uint16_t) port,
+                                                                  usernameStr,
+                                                                  passwordStr,
+                                                                  secretStr);
 
     if (addressStr != 0) {
         env->ReleaseStringUTFChars(address, addressStr);
@@ -312,7 +336,9 @@ class Delegate : public ConnectiosManagerDelegate {
     }
 
     void onProxyError(int32_t instanceNum) {
-        jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager, jclass_ConnectionsManager_onProxyError);
+        jniEnv[instanceNum]->CallStaticVoidMethod(jclass_ConnectionsManager,
+                                                  jclass_ConnectionsManager_onProxyError,
+                                                  instanceNum);
     }
 
     void getHostByName(std::string domain, int32_t instanceNum, ConnectionSocket *socket) {
@@ -432,22 +458,33 @@ static const char *ConnectionsManagerClassPathName = "org/telegram/tgnet/Connect
 static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_getCurrentTimeMillis", "(I)J", (void *) getCurrentTimeMillis},
         {"native_getCurrentTime", "(I)I", (void *) getCurrentTime},
-        {"native_getCurrentDatacenterId", "(I)I", (void *) getCurrentDatacenterId},
+        {"native_getCurrentDatacenterId", "(I)I",
+         (void *) getCurrentDatacenterId},
         {"native_isTestBackend", "(I)I", (void *) isTestBackend},
         {"native_getTimeDifference", "(I)I", (void *) getTimeDifference},
-        {"native_sendRequest", "(IJLorg/telegram/tgnet/RequestDelegateInternal;Lorg/telegram/tgnet/QuickAckDelegate;Lorg/telegram/tgnet/WriteToSocketDelegate;IIIZI)V", (void *) sendRequest},
+        {"native_sendRequest",
+         "(IJLorg/telegram/tgnet/RequestDelegateInternal;Lorg/telegram/tgnet/QuickAckDelegate;Lorg/telegram/tgnet/WriteToSocketDelegate;IIIZI)V",
+         (void *) sendRequest},
         {"native_cancelRequest", "(IIZ)V", (void *) cancelRequest},
         {"native_cleanUp", "(IZ)V", (void *) cleanUp},
-        {"native_cancelRequestsForGuid", "(II)V", (void *) cancelRequestsForGuid},
+        {"native_cancelRequestsForGuid", "(II)V",
+         (void *) cancelRequestsForGuid},
         {"native_bindRequestToGuid", "(III)V", (void *) bindRequestToGuid},
-        {"native_applyDatacenterAddress", "(IILjava/lang/String;I)V", (void *) applyDatacenterAddress},
-        {"native_setProxySettings", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *) setProxySettings},
+        {"native_applyDatacenterAddress", "(IILjava/lang/String;I)V",
+         (void *) applyDatacenterAddress},
+        {"native_moveToDatacenter", "(II)V", (void *) moveToDatacenter},
+        {"native_setProxySettings",
+         "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+         (void *) setProxySettings},
         {"native_getConnectionState", "(I)I", (void *) getConnectionState},
         {"native_setUserId", "(IJ)V", (void *) setUserId},
-        {"native_init", "(IIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJZZI)V", (void *) init},
+        {"native_init",
+         "(IIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJZZI)V",
+         (void *) init},
         {"native_setLangCode", "(ILjava/lang/String;)V", (void *) setLangCode},
         {"native_setRegId", "(ILjava/lang/String;)V", (void *) setRegId},
-        {"native_setSystemLangCode", "(ILjava/lang/String;)V", (void *) setSystemLangCode},
+        {"native_setSystemLangCode", "(ILjava/lang/String;)V",
+         (void *) setSystemLangCode},
         {"native_switchBackend", "(IZ)V", (void *) switchBackend},
         {"native_pauseNetwork", "(I)V", (void *) pauseNetwork},
         {"native_resumeNetwork", "(IZ)V", (void *) resumeNetwork},
@@ -563,7 +600,10 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
     if (jclass_ConnectionsManager_onRequestNewServerIpAndPort == 0) {
         return JNI_FALSE;
     }
-    jclass_ConnectionsManager_onProxyError = env->GetStaticMethodID(jclass_ConnectionsManager, "onProxyError", "()V");
+    jclass_ConnectionsManager_onProxyError = env->GetStaticMethodID(
+            jclass_ConnectionsManager,
+            "onProxyError",
+            "(I)V");
     if (jclass_ConnectionsManager_onProxyError == 0) {
         return JNI_FALSE;
     }

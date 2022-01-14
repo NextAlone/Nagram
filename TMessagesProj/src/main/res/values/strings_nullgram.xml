@@ -22,9 +22,13 @@
     <string name="LastUpdateNever">Never checked since install.</string>
     <string name="LastUpdateDateFormatted">Last successfully checked on %1$s.</string>
     <string name="LastUpdateFormatted">Last successfully checked %1$s.</string>
-  <string name="BotLogin">Bot Login</string>
+    <string name="BotLogin">Bot Login</string>
     <string name="BotToken">API Key</string>
     <string name="InvalidAccessToken">Invalid access token</string>
-  <string name="QRLoginTitle">QR Login</string>
+    <string name="QRLoginTitle">QR Login</string>
     <string name="QRLoginMessage">Scan QRCode with another device to login.</string>
+    <string name="NullgramVersion">Nullgram %1$s\nBased on Telegram %2$s\nDesigned by %3$s</string>
+    <string name="RestrictionReason">Restriction reason</string>
+    <string name="Hide">Hide</string>
+    <string name="showBotAPIID">Show Bot API ID</string>
 </resources>

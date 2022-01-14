@@ -9,28 +9,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-
-import com.google.android.exoplayer2.util.Log;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.telegram.messenger.AccountInstance;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BaseController;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.EmuDetector;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.KeepAliveJob;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.StatsController;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -54,6 +33,23 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.telegram.messenger.AccountInstance;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BaseController;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.EmuDetector;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.KeepAliveJob;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.StatsController;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 
 public class ConnectionsManager extends BaseController {
 
@@ -95,12 +91,12 @@ public class ConnectionsManager extends BaseController {
     private boolean appPaused = true;
     private boolean isUpdating;
     private int connectionState;
-    private AtomicInteger lastRequestToken = new AtomicInteger(1);
+    private final AtomicInteger lastRequestToken = new AtomicInteger(1);
     private int appResumeCount;
 
     private static AsyncTask currentTask;
 
-    private static HashMap<String, ResolveHostByNameTask> resolvingHostnameTasks = new HashMap<>();
+    private static final HashMap<String, ResolveHostByNameTask> resolvingHostnameTasks = new HashMap<>();
 
     public static final Executor DNS_THREAD_POOL_EXECUTOR;
     public static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
@@ -137,11 +133,11 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
-    private static HashMap<String, ResolvedDomain> dnsCache = new HashMap<>();
+    private static final HashMap<String, ResolvedDomain> dnsCache = new HashMap<>();
 
     private static int lastClassGuid = 1;
-    
-    private static volatile ConnectionsManager[] Instance = new ConnectionsManager[UserConfig.MAX_ACCOUNT_COUNT];
+
+    private static final ConnectionsManager[] Instance = new ConnectionsManager[UserConfig.MAX_ACCOUNT_COUNT];
     public static ConnectionsManager getInstance(int num) {
         ConnectionsManager localInstance = Instance[num];
         if (localInstance == null) {
@@ -617,14 +613,19 @@ public class ConnectionsManager extends BaseController {
         });
     }
 
-    public static void onProxyError() {
-        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3));
+    public static void onProxyError(int instanceNum) {
+        if (instanceNum != UserConfig.selectedAccount) {
+            return;
+        }
+        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance()
+            .postNotificationName(NotificationCenter.needShowAlert, 3));
     }
 
     public static void getHostByName(String hostName, long address) {
         AndroidUtilities.runOnUIThread(() -> {
             ResolvedDomain resolvedDomain = dnsCache.get(hostName);
-            if (resolvedDomain != null && SystemClock.elapsedRealtime() - resolvedDomain.ttl < 5 * 60 * 1000) {
+            if (resolvedDomain != null
+                && SystemClock.elapsedRealtime() - resolvedDomain.ttl < 5 * 60 * 1000) {
                 native_onHostNameResolved(hostName, address, resolvedDomain.getAddress());
             } else {
                 ResolveHostByNameTask task = resolvingHostnameTasks.get(hostName);
@@ -717,7 +718,11 @@ public class ConnectionsManager extends BaseController {
     public static native void native_setUserId(int currentAccount, long id);
     public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, String installer, String packageId, int timezoneOffset, long userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
     public static native void native_setProxySettings(int currentAccount, String address, int port, String username, String password, String secret);
+
     public static native void native_setLangCode(int currentAccount, String langCode);
+
+    public static native void native_moveToDatacenter(int currentAccount, int datacenterId);
+
     public static native void native_setRegId(int currentAccount, String regId);
     public static native void native_setSystemLangCode(int currentAccount, String langCode);
     public static native void native_seSystemLangCode(int currentAccount, String langCode);
@@ -826,8 +831,8 @@ public class ConnectionsManager extends BaseController {
 
     private static class ResolveHostByNameTask extends AsyncTask<Void, Void, ResolvedDomain> {
 
-        private ArrayList<Long> addresses = new ArrayList<>();
-        private String currentHostName;
+        private final ArrayList<Long> addresses = new ArrayList<>();
+        private final String currentHostName;
 
         public ResolveHostByNameTask(String hostName) {
             super();
@@ -869,7 +874,7 @@ public class ConnectionsManager extends BaseController {
                     }
                 }
 
-                JSONObject jsonObject = new JSONObject(new String(outbuf.toByteArray()));
+                JSONObject jsonObject = new JSONObject(outbuf.toString());
                 if (jsonObject.has("Answer")) {
                     JSONArray array = jsonObject.getJSONArray("Answer");
                     int len = array.length();
@@ -931,7 +936,7 @@ public class ConnectionsManager extends BaseController {
 
     private static class DnsTxtLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
 
-        private int currentAccount;
+        private final int currentAccount;
         private int responseDate;
 
         public DnsTxtLoadTask(int instance) {
@@ -987,7 +992,7 @@ public class ConnectionsManager extends BaseController {
                         }
                     }
 
-                    JSONObject jsonObject = new JSONObject(new String(outbuf.toByteArray()));
+                    JSONObject jsonObject = new JSONObject(outbuf.toString());
                     JSONArray array = jsonObject.getJSONArray("Answer");
                     len = array.length();
                     ArrayList<String> arrayList = new ArrayList<>(len);
@@ -1060,7 +1065,7 @@ public class ConnectionsManager extends BaseController {
 
     private static class GoogleDnsLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
 
-        private int currentAccount;
+        private final int currentAccount;
         private int responseDate;
 
         public GoogleDnsLoadTask(int instance) {
@@ -1106,7 +1111,7 @@ public class ConnectionsManager extends BaseController {
                     }
                 }
 
-                JSONObject jsonObject = new JSONObject(new String(outbuf.toByteArray()));
+                JSONObject jsonObject = new JSONObject(outbuf.toString());
                 JSONArray array = jsonObject.getJSONArray("Answer");
                 len = array.length();
                 ArrayList<String> arrayList = new ArrayList<>(len);
@@ -1178,7 +1183,7 @@ public class ConnectionsManager extends BaseController {
 
     private static class MozillaDnsLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
 
-        private int currentAccount;
+        private final int currentAccount;
         private int responseDate;
 
         public MozillaDnsLoadTask(int instance) {
@@ -1225,7 +1230,7 @@ public class ConnectionsManager extends BaseController {
                     }
                 }
 
-                JSONObject jsonObject = new JSONObject(new String(outbuf.toByteArray()));
+                JSONObject jsonObject = new JSONObject(outbuf.toString());
                 JSONArray array = jsonObject.getJSONArray("Answer");
                 len = array.length();
                 ArrayList<String> arrayList = new ArrayList<>(len);
@@ -1293,7 +1298,7 @@ public class ConnectionsManager extends BaseController {
 
     private static class FirebaseTask extends AsyncTask<Void, Void, NativeByteBuffer> {
 
-        private int currentAccount;
+        private final int currentAccount;
         private FirebaseRemoteConfig firebaseRemoteConfig;
 
         public FirebaseTask(int instance) {

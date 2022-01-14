@@ -92,3 +92,28 @@ fun e(msg: String, throwable: Throwable) {
     Log.e(TAG, msg, throwable)
     AndroidUtilities.appCenterLog(throwable)
 }
+
+/**
+ * 日志等级 Info
+ * @param throwable 异常
+ */
+fun i(throwable: Throwable) {
+    Log.i(TAG, "", throwable)
+}
+
+/**
+ * 日志等级 Warn
+ * @param throwable 异常
+ */
+fun w(throwable: Throwable) {
+    Log.w(TAG, "", throwable)
+}
+
+/**
+ * 日志等级 Error
+ * @param throwable 异常
+ */
+fun e(throwable: Throwable) {
+    Log.e(TAG, "", throwable)
+    AndroidUtilities.appCenterLog(throwable)
+}

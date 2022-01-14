@@ -23,7 +23,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import org.telegram.messenger.ApplicationLoader;
-import top.qwq2333.nullgram.utils.LogUtilKt;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class ConfigManager {
 
@@ -81,7 +81,7 @@ public class ConfigManager {
      * @return key所对应值
      */
     @NonNull
-    public String getStringOrDefault(@NonNull String key, @NonNull String def) {
+    public static String getStringOrDefault(@NonNull String key, @NonNull String def) {
         return preferences.getString(key, def);
     }
 
@@ -96,7 +96,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putInt(key, value).apply();
             } catch (Throwable thr) {
-                LogUtilKt.e("putInt: ", thr);
+                LogUtilsKt.e("putInt: ", thr);
             }
         }
     }
@@ -112,7 +112,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putLong(key, value).apply();
             } catch (Throwable thr) {
-                LogUtilKt.e("putLong: ", thr);
+                LogUtilsKt.e("putLong: ", thr);
             }
         }
     }
@@ -128,7 +128,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putBoolean(key, value).apply();
             } catch (Throwable thr) {
-                LogUtilKt.e("putBoolean: ", thr);
+                LogUtilsKt.e("putBoolean: ", thr);
             }
         }
     }
@@ -144,7 +144,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putString(key, value).apply();
             } catch (Throwable thr) {
-                LogUtilKt.e("putString: ", thr);
+                LogUtilsKt.e("putString: ", thr);
             }
         }
     }

@@ -8,20 +8,18 @@
 
 package org.telegram.messenger;
 
-import android.util.Log;
-
-import org.telegram.messenger.time.FastDateFormat;
-import org.telegram.messenger.video.MediaCodecVideoConvertor;
-
 import java.io.File;
 import java.io.OutputStreamWriter;
-import top.qwq2333.nullgram.utils.LogUtilKt;
+import org.telegram.messenger.time.FastDateFormat;
+import org.telegram.messenger.video.MediaCodecVideoConvertor;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class FileLog {
-    private OutputStreamWriter streamWriter = null;
-    private FastDateFormat dateFormat = null;
-    private DispatchQueue logQueue = null;
-    private File currentFile = null;
+
+    private final OutputStreamWriter streamWriter = null;
+    private final FastDateFormat dateFormat = null;
+    private final DispatchQueue logQueue = null;
+    private final File currentFile = null;
     private File networkFile = null;
     private File tonlibFile = null;
     private boolean initied;
@@ -29,6 +27,7 @@ public class FileLog {
     private final static String tag = "tmessages";
 
     private static volatile FileLog Instance = null;
+
     public static FileLog getInstance() {
         FileLog localInstance = Instance;
         if (localInstance == null) {
@@ -99,61 +98,65 @@ public class FileLog {
     }
 
     /**
-     * @deprecated use {@link LogUtilKt#e(Throwable, String)} instead
+     * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
      */
+    @Deprecated
     public static void e(final String message, final Throwable exception) {
-        LogUtilKt.e(message, exception);
+        LogUtilsKt.e(message, exception);
     }
 
     /**
-     * @deprecated use {@link LogUtilKt#e(String msg)} instead
+     * @deprecated use {@link LogUtilsKt#e(String msg)} instead
      */
+    @Deprecated
     public static void e(final String message) {
-        LogUtilKt.e(message);
+        LogUtilsKt.e(message);
     }
 
     /**
-     * @deprecated use {@link LogUtilKt#e(Throwable, String)} instead
+     * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
      */
     public static void e(final Throwable e) {
         e(e, true);
     }
 
     /**
-     * @deprecated use {@link LogUtilKt#e(Throwable, String)} instead
+     * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
      */
+    @Deprecated
     public static void e(final Throwable e, boolean logToAppCenter) {
         if (needSent(e) && logToAppCenter) {
             AndroidUtilities.appCenterLog(e);
         }
-        LogUtilKt.e("",e);
+        LogUtilsKt.e("", e);
     }
 
     private static boolean needSent(Throwable e) {
-        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException) {
-            return false;
-        }
-        return true;
+        return !(e instanceof InterruptedException)
+            && !(e instanceof MediaCodecVideoConvertor.ConversionCanceledException);
     }
 
     /**
      * @deprecated use {@link #e(String)} instead
      * @param message
      */
+    @Deprecated
     public static void d(final String message) {
-        LogUtilKt.d(message);
+        LogUtilsKt.d(message);
     }
 
     /**
-     * @deprecated use {@link LogUtilKt#w(String msg)} )} instead
+     * @deprecated use {@link LogUtilsKt#w(String msg)} )} instead
      */
+    @Deprecated
     public static void w(final String message) {
-        LogUtilKt.w(message);
+        LogUtilsKt.w(message);
     }
 
     /**
      * @deprecated
      */
+    @Deprecated
     public static void cleanupLogs() {
     }
 }
