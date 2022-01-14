@@ -17,8 +17,8 @@ public class BuildVars {
     public static boolean DEBUG_VERSION = false;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean CHECK_UPDATES = true;
-    public static int BUILD_VERSION = 2526;
-    public static String BUILD_VERSION_STRING = "8.4.2";
+    public static int BUILD_VERSION = 2531;
+    public static String BUILD_VERSION_STRING = "8.4.3";
     public static boolean LOGS_ENABLED = true;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
