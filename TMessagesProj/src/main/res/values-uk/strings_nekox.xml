@@ -8,8 +8,8 @@
     <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути передогляд посилання</string>
     <string name="UseChatAttachEnterMenu">Використовувати меню введення</string>
     <string name="UseChatAttachEnterMenuNotice">Змініть кнопку запису на меню вводу і додайте перемикач попереднього перегляду посилань.</string>
-    <string name="DisableLinkPreviewByDefault">Відключити передогляд посилань за замовчуванням</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення за замовчуванням, щоб запобігти знанню сервера про те, що посилання передається через Telegram.</string>
+    <string name="DisableLinkPreviewByDefault">Без передогляду посилань</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення, щоб сервер не знав, що посилання поширили в Telegram.</string>
     <string name="CustomApi">Користувацький API</string>
     <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.
 \n
@@ -214,7 +214,7 @@
     <string name="TextOrigin">Походження</string>
     <string name="TextReplace">Заміняти</string>
     <string name="ReplaceRegex">Використовуйте регулярний вираз</string>
-    <string name="DisableTrending">Вимкнути тенденцію</string>
+    <string name="DisableTrending">Сховати популярні наліпки</string>
     <string name="HideDeviceInfo">Сховати модель пристрою</string>
     <string name="HideDeviceInfoOff">Модель пристрою буде завантажена вдруге, коли програма запуститься після входу в систему.</string>
     <string name="HideDeviceInfoOn">Ви можете змінити це в налаштуваннях пізніше.</string>
@@ -232,7 +232,7 @@
     <string name="AddProxyWs">Додати WebSocket проксі</string>
     <string name="DisplayPersianCalendarByLatin">Показувати перський календар латиницею</string>
     <string name="UsePersiancalendarInfo">Показувати дату у форматі Solar Hijri (перський календар)</string>
-    <string name="UsePersiancalendar">Використовувати персидський календар</string>
+    <string name="UsePersiancalendar">Перський календар</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="SetPinnedSuffix">(Закріплено)</string>
     <string name="UnpinSticker">Прибрати закріплення</string>
