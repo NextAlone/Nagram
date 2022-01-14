@@ -31,4 +31,7 @@
     <string name="RestrictionReason">Restriction reason</string>
     <string name="Hide">Hide</string>
     <string name="showBotAPIID">Show Bot API ID</string>
+    <string name="hideGroupSticker">Hide Group Sticker Pack</string>
+    <string name="ignoreBlockedUser">Ignore Blocked User Messages</string>
+    <string name="blockSponsorAds">Block Sponsor Ads</string>
 </resources>

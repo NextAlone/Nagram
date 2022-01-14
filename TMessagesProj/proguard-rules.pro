@@ -34,6 +34,67 @@
 -keep class com.fasterxml.jackson.** { *; }
 -keep class com.alibaba.fastjson.** { *; }
 -keep class cn.hutool.** { *; }
+-keep class org.springframework.** { *; }
+-keep class org.thymeleaf.** { *; }
+-keep class org.tinylog.** { *; }
+-keep class org.wltea.** { *; }
+-keep class org.yaml.** { *; }
+-keep class oshi.** { *; }
+-keep class redis.clients.** { *; }
+-keep class retrofit2.** { *; }
+-keep class springfox.documentation.spring.web.json.Json
+
+-keep class ch.ethz.** { *; }
+-keep class cn.beecp.** { *; }
+-keep class com.alibaba.** { *; }
+-keep class com.chenlb.** { *; }
+-keep class com.github.houbb.** { *; }
+-keep class com.github.promeg.** { *; }
+-keep class com.github.stuxuhai.** { *; }
+-keep class com.google.common.** { *; }
+-keep class com.google.zxing.** { *; }
+-keep class com.googlecode.** { *; }
+-keep class com.hankcs.** { *; }
+-keep class com.jcraft.** { *; }
+-keep class com.jfinal.** { *; }
+-keep class com.jfirer.** { *; }
+-keep class com.mayabot.** { *; }
+-keep class com.mchange.** { *; }
+-keep class com.mongodb.** { *; }
+-keep class com.rnkrsoft.** { *; }
+-keep class com.rnkrsoft.bopomofo4j.ToneType
+-keep class com.sun.net.** { *; }
+-keep class com.vdurmont.** { *; }
+-keep class com.zaxxer.** { *; }
+-keep class freemarker.** { *; }
+-keep class io.github.logtube.** { *; }
+-keep class java.awt.** { *; }
+-keep class java.beans.** { *; }
+-keep class java.lang.management.ClassLoadingMXBean
+-keep class javax.** { *; }
+-keep class net.sf.** { *; }
+-keep class net.sourceforge.** { *; }
+-keep class okhttp3.** { *; }
+-keep class org.ansj.** { *; }
+-keep class org.apache.** { *; }
+-keep class org.apdplat.** { *; }
+-keep class org.beetl.** { *; }
+-keep class org.bouncycastle.** { *; }
+-keep class org.febit.** { *; }
+-keep class org.glassfish.** { *; }
+-keep class org.javamoney.** { *; }
+-keep class org.jboss.** { *; }
+-keep class org.jboss.** { *; }
+-keep class org.joda.** { *; }
+-keep class org.lionsoul.** { *; }
+-keep class org.mozilla.** { *; }
+-keep class org.mvel2.** { *; }
+-keep class org.ofdrw.** { *; }
+-keep class org.openxmlformats.** { *; }
+-keep class org.pmw.tinylog.** { *; }
+-keep class org.rythmengine.** { *; }
+-keep class org.slf4j.** { *; }
+
 # https://developers.google.com/ml-kit/known-issues#android_issues
 -keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
 

@@ -1,38 +1,15 @@
-/*
- * Copyright (C) 2019-2022 qwq233 <qwq233@qwq2333.top>
- * https://github.com/qwq233/Nullgram
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this software.
- *  If not, see
- * <https://www.gnu.org/licenses/>
- */
-
 package top.qwq2333.nullgram.activity;
 
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
-import android.text.TextUtils;
-import android.transition.TransitionManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.ColorUtils;
-import androidx.core.text.HtmlCompat;
-import androidx.core.util.Pair;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,14 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -59,7 +30,6 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -72,11 +42,17 @@ public class ChatSettingActivity extends BaseFragment {
 
     private int rowCount;
 
+    private int chatRow;
+    private int ignoreBlockedUserMessagesRow;
+    private int hideGroupStickerRow;
+    private int chat2Row;
+
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        updateRows(true);
+        updateRows();
 
         return true;
     }
@@ -98,24 +74,40 @@ public class ChatSettingActivity extends BaseFragment {
             }
         });
 
-        listAdapter = new ChatSettingActivity.ListAdapter(context);
+        listAdapter = new ListAdapter(context);
 
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         listView = new RecyclerListView(context);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(
+            new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        frameLayout.addView(listView,
+            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
+            if (position == ignoreBlockedUserMessagesRow) {
+                ConfigManager.putBoolean(Defines.ignoreBlockedUser,
+                    !ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser));
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser));
+                }
+            } else if (position == hideGroupStickerRow) {
+                ConfigManager.putBoolean(Defines.hideGroupSticker,
+                    !ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
+                }
+            }
         });
 
         return fragmentView;
     }
-
 
     @Override
     public void onResume() {
@@ -125,10 +117,26 @@ public class ChatSettingActivity extends BaseFragment {
         }
     }
 
-    private void updateRows(boolean notify) {
+    public String getFileName(Uri uri) {
+        String result = null;
+        try (Cursor cursor = getParentActivity().getContentResolver()
+            .query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        }
+        return result;
+    }
+
+
+    private void updateRows() {
         rowCount = 0;
 
-        if (notify && listAdapter != null) {
+        chatRow = rowCount++;
+        ignoreBlockedUserMessagesRow = rowCount++;
+        hideGroupStickerRow = rowCount++;
+        chat2Row = rowCount++;
+        if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
     }
@@ -234,12 +242,6 @@ public class ChatSettingActivity extends BaseFragment {
         }
 
         @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 2 || type == 3;
-        }
-
-        @Override
         public int getItemCount() {
             return rowCount;
         }
@@ -248,17 +250,55 @@ public class ChatSettingActivity extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1: {
-                    holder.itemView.setBackground(
-                        Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                            Theme.key_windowBackgroundGrayShadow));
+                    if (position == chat2Row) {
+                        holder.itemView.setBackground(
+                            Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom,
+                                Theme.key_windowBackgroundGrayShadow));
+                    } else {
+                        holder.itemView.setBackground(
+                            Theme.getThemedDrawable(mContext, R.drawable.greydivider,
+                                Theme.key_windowBackgroundGrayShadow));
+                    }
                     break;
                 }
                 case 2: {
+                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    break;
+                }
+                case 3: {
+                    TextCheckCell textCell = (TextCheckCell) holder.itemView;
+                    textCell.setEnabled(true, null);
+                    if (position == ignoreBlockedUserMessagesRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("ignoreBlockedUser",
+                            R.string.ignoreBlockedUser), ConfigManager.getBooleanOrFalse(
+                            Defines.ignoreBlockedUser), true);
+                    } else if (position == hideGroupStickerRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker",
+                            R.string.hideGroupSticker), ConfigManager.getBooleanOrFalse(
+                            Defines.hideGroupSticker), true);
+                    }
+                    break;
+                }
+                case 4: {
+                    HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (position == chatRow) {
+                        headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
+                    }
+                    break;
+                }
+                case 5: {
+                    NotificationsCheckCell textCell = (NotificationsCheckCell) holder.itemView;
                     break;
                 }
             }
         }
 
+        @Override
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            int type = holder.getItemViewType();
+            return type == 2 || type == 3 || type == 6 || type == 5;
+        }
 
         @NonNull
         @Override
@@ -272,6 +312,27 @@ public class ChatSettingActivity extends BaseFragment {
                     view = new TextSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
+                case 3:
+                    view = new TextCheckCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 4:
+                    view = new HeaderCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 5:
+                    view = new NotificationsCheckCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 6:
+                    view = new TextDetailSettingsCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 7:
+                    view = new TextInfoPrivacyCell(mContext);
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider,
+                        Theme.key_windowBackgroundGrayShadow));
+                    break;
             }
             //noinspection ConstantConditions
             view.setLayoutParams(
@@ -282,8 +343,12 @@ public class ChatSettingActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            return 2;
+            if (position == chat2Row) {
+                return 1;
+            } else if (position == chatRow) {
+                return 4;
+            }
+            return 3;
         }
     }
-
 }

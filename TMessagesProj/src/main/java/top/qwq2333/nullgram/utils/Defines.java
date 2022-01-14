@@ -25,15 +25,14 @@ package top.qwq2333.nullgram.utils;
  */
 public class Defines {
 
-    public static final String ignoredUpdateTag = "skipUpdate";
-    public static final long[] officialID = {
-        966253902,  // Developer
-        1668888324, // Channel
-        1578562490, // Developer Channel
-        1645976613, // CI Channel
-        1477185964  // Discussion Group
-    };
+    // Function
     public static final String showBotAPIID = "showBotAPIID";
+    public static final String ignoreBlockedUser = "ignoreBlockedUser";
+    public static final String blockSponsorAds = "blockSponsorMessages";
+    public static final String hideGroupSticker = "hideGroupSticker";
+
+    // Auto Update
+    public static final String ignoredUpdateTag = "skipUpdate";
     public static final String lastCheckUpdateTime = "lastCheckUpdateTime";
     public static final String nextUpdateCheckTime = "nextUpdateCheckTime";
     public static final String skipUpdateVersion = "skipUpdateVersion";
@@ -42,5 +41,15 @@ public class Defines {
      * 0为release 1为ci构筑
      */
     public static String releaseChannel = "releaseChannel";
+
+    // Misc
+    public static final long[] officialID = {
+        966253902,  // Developer
+        1668888324, // Channel
+        1578562490, // Developer Channel
+        1645976613, // CI Channel
+        1477185964  // Discussion Group
+    };
+
 
 }
