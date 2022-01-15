@@ -27,73 +27,73 @@
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleOutputBuffer { *; }
 
--dontwarn org.dizitart.no2.**  { *; }
--dontwarn org.slf4j.** { *; }
--dontwarn org.h2.** { *; }
--dontwarn org.objenesis.** { *; }
--dontwarn com.fasterxml.jackson.** { *; }
--dontwarn com.alibaba.fastjson.** { *; }
--dontwarn cn.hutool.** { *; }
--dontwarn org.springframework.** { *; }
--dontwarn org.thymeleaf.** { *; }
--dontwarn org.tinylog.** { *; }
--dontwarn org.wltea.** { *; }
--dontwarn org.yaml.** { *; }
--dontwarn oshi.** { *; }
--dontwarn redis.clients.** { *; }
--dontwarn retrofit2.** { *; }
+-dontwarn org.dizitart.no2.**  
+-dontwarn org.slf4j.** 
+-dontwarn org.h2.** 
+-dontwarn org.objenesis.** 
+-dontwarn com.fasterxml.jackson.** 
+-dontwarn com.alibaba.fastjson.** 
+-dontwarn cn.hutool.** 
+-dontwarn org.springframework.** 
+-dontwarn org.thymeleaf.** 
+-dontwarn org.tinylog.** 
+-dontwarn org.wltea.** 
+-dontwarn org.yaml.** 
+-dontwarn oshi.** 
+-dontwarn redis.clients.** 
+-dontwarn retrofit2.** 
 -dontwarn springfox.documentation.spring.web.json.Json
 
--dontwarn ch.ethz.** { *; }
--dontwarn cn.beecp.** { *; }
--dontwarn com.alibaba.** { *; }
--dontwarn com.chenlb.** { *; }
--dontwarn com.github.houbb.** { *; }
--dontwarn com.github.promeg.** { *; }
--dontwarn com.github.stuxuhai.** { *; }
--dontwarn com.google.common.** { *; }
--dontwarn com.google.zxing.** { *; }
--dontwarn com.googlecode.** { *; }
--dontwarn com.hankcs.** { *; }
--dontwarn com.jcraft.** { *; }
--dontwarn com.jfinal.** { *; }
--dontwarn com.jfirer.** { *; }
--dontwarn com.mayabot.** { *; }
--dontwarn com.mchange.** { *; }
--dontwarn com.mongodb.** { *; }
--dontwarn com.rnkrsoft.** { *; }
+-dontwarn ch.ethz.** 
+-dontwarn cn.beecp.** 
+-dontwarn com.alibaba.** 
+-dontwarn com.chenlb.** 
+-dontwarn com.github.houbb.** 
+-dontwarn com.github.promeg.** 
+-dontwarn com.github.stuxuhai.** 
+-dontwarn com.google.common.** 
+-dontwarn com.google.zxing.** 
+-dontwarn com.googlecode.** 
+-dontwarn com.hankcs.** 
+-dontwarn com.jcraft.** 
+-dontwarn com.jfinal.** 
+-dontwarn com.jfirer.** 
+-dontwarn com.mayabot.** 
+-dontwarn com.mchange.** 
+-dontwarn com.mongodb.** 
+-dontwarn com.rnkrsoft.** 
 -dontwarn com.rnkrsoft.bopomofo4j.ToneType
--dontwarn com.sun.net.** { *; }
--dontwarn com.vdurmont.** { *; }
--dontwarn com.zaxxer.** { *; }
--dontwarn freemarker.** { *; }
--dontwarn io.github.logtube.** { *; }
--dontwarn java.awt.** { *; }
--dontwarn java.beans.** { *; }
+-dontwarn com.sun.net.** 
+-dontwarn com.vdurmont.** 
+-dontwarn com.zaxxer.** 
+-dontwarn freemarker.** 
+-dontwarn io.github.logtube.** 
+-dontwarn java.awt.** 
+-dontwarn java.beans.** 
 -dontwarn java.lang.management.ClassLoadingMXBean
--dontwarn javax.** { *; }
--dontwarn net.sf.** { *; }
--dontwarn net.sourceforge.** { *; }
--dontwarn okhttp3.** { *; }
--dontwarn org.ansj.** { *; }
--dontwarn org.apache.** { *; }
--dontwarn org.apdplat.** { *; }
--dontwarn org.beetl.** { *; }
--dontwarn org.bouncycastle.** { *; }
--dontwarn org.febit.** { *; }
--dontwarn org.glassfish.** { *; }
--dontwarn org.javamoney.** { *; }
--dontwarn org.jboss.** { *; }
--dontwarn org.jboss.** { *; }
--dontwarn org.joda.** { *; }
--dontwarn org.lionsoul.** { *; }
--dontwarn org.mozilla.** { *; }
--dontwarn org.mvel2.** { *; }
--dontwarn org.ofdrw.** { *; }
--dontwarn org.openxmlformats.** { *; }
--dontwarn org.pmw.tinylog.** { *; }
--dontwarn org.rythmengine.** { *; }
--dontwarn org.slf4j.** { *; }
+-dontwarn javax.** 
+-dontwarn net.sf.** 
+-dontwarn net.sourceforge.** 
+-dontwarn okhttp3.** 
+-dontwarn org.ansj.** 
+-dontwarn org.apache.** 
+-dontwarn org.apdplat.** 
+-dontwarn org.beetl.** 
+-dontwarn org.bouncycastle.** 
+-dontwarn org.febit.** 
+-dontwarn org.glassfish.** 
+-dontwarn org.javamoney.** 
+-dontwarn org.jboss.** 
+-dontwarn org.jboss.** 
+-dontwarn org.joda.** 
+-dontwarn org.lionsoul.** 
+-dontwarn org.mozilla.** 
+-dontwarn org.mvel2.** 
+-dontwarn org.ofdrw.** 
+-dontwarn org.openxmlformats.** 
+-dontwarn org.pmw.tinylog.** 
+-dontwarn org.rythmengine.** 
+-dontwarn org.slf4j.** 
 
 # https://developers.google.com/ml-kit/known-issues#android_issues
 -keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
