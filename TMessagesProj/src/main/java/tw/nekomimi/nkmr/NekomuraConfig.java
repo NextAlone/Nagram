@@ -527,9 +527,4 @@ public class NekomuraConfig {
         if (preferences.contains("disableGroupVoipAudioProcessing"))
             disableGroupVoipAudioProcessing.setConfigBool(preferences.getBoolean("disableGroupVoipAudioProcessing", false));
     }
-
-    public static boolean showCensoredFeatures(long myId) {
-        return NekoXConfig.developerMode || NekoXConfig.customApi > 0 || ArrayUtil.contains(NekoXConfig.developers, myId);
-    }
-
 }

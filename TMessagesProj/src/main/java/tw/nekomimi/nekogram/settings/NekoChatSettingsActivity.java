@@ -62,7 +62,7 @@ import tw.nekomimi.nkmr.cells.NekomuraTGTextInput;
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private final CellGroup cellGroup = new CellGroup(this);
-    private final boolean showCensoredFeatures = NekomuraConfig.showCensoredFeatures(getUserConfig().clientUserId);
+    private final boolean showCensoredFeatures = NekoXConfig.showCensoredFeatures();
 
     private final AbstractCell header0 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("StickerSize")));
     private final AbstractCell stickerSizeRow = cellGroup.appendCell(new NekomuraTGCustom(998, true));

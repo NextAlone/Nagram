@@ -58,6 +58,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.PopupBuilder;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -77,7 +78,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private ValueAnimator statusBarColorAnimator;
     private DrawerProfilePreviewCell profilePreviewCell;
-    private final boolean showCensoredFeatures = NekomuraConfig.showCensoredFeatures(getUserConfig().clientUserId);
+    private final boolean showCensoredFeatures = NekoXConfig.showCensoredFeatures();
 
     private final CellGroup cellGroup = new CellGroup(this);
 
