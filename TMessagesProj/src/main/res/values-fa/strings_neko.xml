@@ -110,12 +110,19 @@
     <string name="ProviderMicrosoftTranslator">مترجم مایکروسافت</string>
     <string name="ProviderYouDao">مترجم YouDao</string>
     <string name="pressTitleToOpenAllChats">لمس عنوان برای بازکردن تب \"همه گفتگو‌ها\"</string>
-    <string name="maxRecentStickerCount">حداکثر استیکرهای اخیر</string>
-    <string name="customGroupVoipAudioBitrate">نرخ بیت صدای گفتگوی صوتی</string>
+    <string name="maxRecentStickerCount">حداکثر تعداد استیکرهای اخیر</string>
+    <string name="customGroupVoipAudioBitrate">بیت‌ریت صوت حین گفتگوی گروهی</string>
     <string name="customDoH">DoH سفارشی</string>
     <string name="useSystemDNS">استفاده از DNS سیستم</string>
     <string name="HideTimeForSticker">مخفی کردن زمان برای استیکرها</string>
-    <string name="UseMediaStreamInVoip">استفاده از حالت صدای رسانه در تماس</string>
-    <string name="TakeGIFasVideo">نمایش گیف بصورت ویدیو</string>
+    <string name="UseMediaStreamInVoip">استفاده از رسانه‌شناور در تماس</string>
+    <string name="TakeGIFasVideo">نمایش گیف بصورت ویدئو</string>
     <string name="DontSendGreetingSticker">عدم ارسال استیکر خوش‌آمد گویی</string>
+    <string name="enablePublicProxy">پروکسی عمومی NekoX</string>
+    <string name="autoUpdateSubInfo">بروزرسانی خودکار پروکسی‌های عمومی</string>
+    <string name="hideSendAsChannel">مخفی کردن «ارسال به عنوان کانال»</string>
+    <string name="disableSwipeToNextChannel">غیرفعال کردن نمایش کانال بعدی با کشیدن انگشت</string>
+    <string name="disableChoosingSticker">فرستادن «در‌حال‌نوشتن...» بجای «در‌حال‌انتخاب‌استیکر...»</string>
+    <string name="hideGroupSticker">عدم نمایش استیکر گروه</string>
+    <string name="disableRemoteEmojiInteractions">غیرفعالسازی تعاملات ایموجی ازراه‌دور</string>
 </resources>

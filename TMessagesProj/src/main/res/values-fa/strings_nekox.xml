@@ -251,4 +251,23 @@
     <string name="VersionUpdateVariantNotMatch">نوع نسخه بطور خودکار تشخیص داده نشد.
 \nلطفا بصورت دستی از گیت‌هاب دانلود کنید.</string>
     <string name="VersionUpdateTitle">نسخه جدید در دسترس است</string>
+    <string name="customPublicProxyIP">تنظیم آی‌پی پروکسی عمومی</string>
+    <string name="ShareMessages">اشتراک</string>
+    <string name="unreadBadgeOnBackButton">نمایش تعداد پیام‌های خوانده نشده روی دکمه بازگشت</string>
+    <string name="customPublicProxyIPNotice">در بعضی از مناطق، تنظیم آی‌پی سی‌دی‌ان پروکسی (مثل کلادفلیر) می‌تواند سرعت دسترسی را بهبود دهد.</string>
+    <string name="DeleteDownloadedFileSucceed">حذف‌شده</string>
+    <string name="DeleteDownloadedFileConfirm">این فایل از حافظه‌کش داخلی حذف شود؟</string>
+    <string name="useCustomEmojiInvalid">فایل ایموجی معتبر نیست.</string>
+    <string name="DeleteDownloadedFileExternal">فایل خارجی نادیده گرفته شد.</string>
+    <string name="update_download_soucre">منبع دانلود را انتخاب کنید</string>
+    <string name="hideSponsoredMessage">عدم نمایش تبلیغات‌های تلگرام زیر کانالها</string>
+    <string name="rememberAllBackMessages">بخاطر داشتن همه ریپلای‌های کلیک شده</string>
+    <string name="useCustomEmoji">تنظیم ایموجی اختصاصی</string>
+    <string name="valuesLargeAvatarInDrawer">پیشفرض تلگرام
+\nعکس‌پروفایل بعنوان پس‌زمینه
+\nعکس‌پروفایل بزرگ بعنوان پس‌زمینه</string>
+    <string name="DisableInstantCamera">غیرفعال کردن دوربین فوری</string>
+    <string name="repeatConfirmText">آیا از تکرارپیام اطمینان دارید؟</string>
+    <string name="repeatConfirm">پرسش قبل از ارسال تکرارپیام</string>
+    <string name="showSeconds">نمایش ثانیه حین نمایش زمان</string>
 </resources>

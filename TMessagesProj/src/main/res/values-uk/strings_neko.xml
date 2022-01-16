@@ -12,9 +12,9 @@
     <string name="IgnoreBlocked">Ігнорувати заблокованих користувачів у групі</string>
     <string name="Connection">З\'єднання</string>
     <string name="Chat">Чат</string>
-    <string name="NameOrder">Назвати замовлення</string>
-    <string name="FirstLast">Перше прізвище</string>
-    <string name="LastFirst">Спершу</string>
+    <string name="NameOrder">Порядок імен</string>
+    <string name="FirstLast">Ім\'я, прізвище</string>
+    <string name="LastFirst">Прізвище, ім\'я</string>
     <string name="TypefaceUseDefault">Використовувати типовий системний шрифт</string>
     <string name="NoQuoteForward">Не цитувати вперед</string>
     <string name="Repeat">Повторити</string>
@@ -72,10 +72,10 @@
     <string name="HideKeyboardOnChatScroll">Приховати клавіатуру на прокрутці чату</string>
     <string name="UserRestrictionsSendStickers2">Надіслати наліпки</string>
     <string name="UserRestrictionsSendGifs">Надіслати GIF</string>
-    <string name="ShowTabsOnForward">Показувати вкладки вперед</string>
+    <string name="ShowTabsOnForward">Вкладки при пересиланні</string>
     <string name="CheckAllAdministrated">Додати адміністративну</string>
     <string name="RearVideoMessages">Задня камера в відеоповідомленнях</string>
-    <string name="HideAllTab">Сховати вкладку \"Усі чат\"</string>
+    <string name="HideAllTab">Сховати вкладку \"Усі чати\"</string>
     <string name="HideAllTabAbout">Натисніть \"Назад\" на головній сторінці, щоб відкрити її.</string>
     <string name="TabTitleType">Показувати на вкладках</string>
     <string name="TabTitleTypeTip">Смайли синхронізуються в Telegram.</string>
@@ -110,4 +110,19 @@
     <string name="ProviderMicrosoftTranslator">Microsoft Перекладач</string>
     <string name="ProviderYouDao">YouDao Переклад</string>
     <string name="pressTitleToOpenAllChats">Натисніть на заголовок, щоб відкрити папку \"Всі чати\"</string>
+    <string name="enablePublicProxy">Загальнодоступний проксі NekoX</string>
+    <string name="autoUpdateSubInfo">Оновлювати проксі автоматично</string>
+    <string name="hideSendAsChannel">Сховати надсилання як канал</string>
+    <string name="DontSendGreetingSticker">Не слати вітальної наліпки</string>
+    <string name="TakeGIFasVideo">Прокручувати GIF як відео</string>
+    <string name="UseMediaStreamInVoip">Використовувати медіапотік у VoIP</string>
+    <string name="HideTimeForSticker">Ховати час наліпок</string>
+    <string name="customDoH">Власні DoH</string>
+    <string name="hideGroupSticker">Ховати наліпки груп</string>
+    <string name="useSystemDNS">Системні DNS</string>
+    <string name="customGroupVoipAudioBitrate">Аудіобітрейт групових VoIP</string>
+    <string name="maxRecentStickerCount">Ліміт недавніх наліпок</string>
+    <string name="disableSwipeToNextChannel">Вимкнути гортання до наступного каналу</string>
+    <string name="disableChoosingSticker">Стан \"пише\" замість \"вибирає наліпку\"</string>
+    <string name="disableRemoteEmojiInteractions">Нехтувати взаємодією інших з емодзі</string>
 </resources>
