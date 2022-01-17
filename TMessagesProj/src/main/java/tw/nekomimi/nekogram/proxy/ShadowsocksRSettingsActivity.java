@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.proxy;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -45,6 +45,7 @@ import java.util.ArrayList;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.PopupBuilder;
 
 public class ShadowsocksRSettingsActivity extends BaseFragment {
 

@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.proxy;
 
 import android.content.Context;
 import android.os.Build;
@@ -40,8 +40,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import cn.hutool.core.util.StrUtil;
 import kotlin.collections.ArraysKt;
 import kotlin.collections.CollectionsKt;
-import tw.nekomimi.nekogram.sub.SubInfo;
-import tw.nekomimi.nekogram.sub.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 

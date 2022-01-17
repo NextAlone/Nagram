@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.tcp2ws;
+package tw.nekomimi.nekogram.proxy.tcp2ws;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +22,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okhttp3.internal.NativeImageTestsAccessorsKt;
 import okio.ByteString;
-import tw.nekomimi.nekogram.WsLoader;
+import tw.nekomimi.nekogram.proxy.WsLoader;
 
 public class ProxyHandler implements Runnable {
 

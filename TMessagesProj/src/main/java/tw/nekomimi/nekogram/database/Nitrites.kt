@@ -2,7 +2,7 @@ package tw.nekomimi.nekogram.database
 
 import org.dizitart.no2.Nitrite
 import org.telegram.messenger.ApplicationLoader
-import tw.nekomimi.nekogram.sub.SubInfo
+import tw.nekomimi.nekogram.proxy.SubInfo
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 

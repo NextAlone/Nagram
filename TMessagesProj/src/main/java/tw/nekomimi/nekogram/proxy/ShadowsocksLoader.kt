@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram
+package tw.nekomimi.nekogram.proxy
 
 import android.annotation.SuppressLint
 import cn.hutool.core.codec.Base64

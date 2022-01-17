@@ -1,13 +1,11 @@
-package tw.nekomimi.nekogram
+package tw.nekomimi.nekogram.proxy
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import cn.hutool.core.codec.Base64
 import cn.hutool.core.util.StrUtil
 import okhttp3.Dns
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import tw.nekomimi.nekogram.tcp2ws.Tcp2wsServer
+import tw.nekomimi.nekogram.proxy.tcp2ws.Tcp2wsServer
 import tw.nekomimi.nkmr.NekomuraConfig
 import java.net.InetAddress
 

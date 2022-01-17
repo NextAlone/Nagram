@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.tcp2ws;
+package tw.nekomimi.nekogram.proxy.tcp2ws;
 
 import androidx.annotation.Nullable;
 

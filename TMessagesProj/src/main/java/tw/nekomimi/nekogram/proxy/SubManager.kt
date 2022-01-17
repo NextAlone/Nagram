@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.sub
+package tw.nekomimi.nekogram.proxy
 
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.telegram.messenger.LocaleController

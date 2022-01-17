@@ -18,13 +18,10 @@
  *                                                                             *
  *******************************************************************************/
 
-package tw.nekomimi.nekogram
+package tw.nekomimi.nekogram.proxy
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.SystemClock
-import android.system.ErrnoException
-import android.system.Os
 import android.system.OsConstants
 import androidx.annotation.MainThread
 import kotlinx.coroutines.*

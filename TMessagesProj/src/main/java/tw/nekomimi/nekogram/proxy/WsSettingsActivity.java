@@ -6,11 +6,9 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.proxy;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -22,53 +20,37 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
-
-import com.github.shadowsocks.plugin.PluginConfiguration;
-import com.github.shadowsocks.plugin.PluginContract;
-import com.github.shadowsocks.plugin.PluginList;
-import com.github.shadowsocks.plugin.PluginManager;
-import com.github.shadowsocks.plugin.PluginOptions;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
-import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
 import cn.hutool.core.util.StrUtil;
-import kotlin.Unit;
-import tw.nekomimi.nekogram.utils.AlertUtil;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class ShadowsocksSettingsActivity extends BaseFragment {
+public class WsSettingsActivity extends BaseFragment {
 
     private EditTextBoldCursor[] inputFields;
 
     private EditTextBoldCursor ipField;
-    private EditTextBoldCursor portField;
-    private EditTextBoldCursor passwordField;
-    private TextSettingsCell methodField;
-    private TextSettingsCell pluginField;
-    private TextSettingsCell pluginOptsField;
+    private EditTextBoldCursor payloadField;
+    private TextCheckCell useTlsField;
     private EditTextBoldCursor remarksField;
 
     private ScrollView scrollView;
@@ -76,12 +58,10 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
     private LinearLayout inputFieldsContainer;
 
     private TextInfoPrivacyCell bottomCell;
+    private ActionBarMenuItem doneItem;
 
-    private SharedConfig.ShadowsocksProxy currentProxyInfo;
-    private ShadowsocksLoader.Bean currentBean;
-    private PluginConfiguration plugin;
-
-    private boolean ignoreOnTextChange;
+    private SharedConfig.WsProxy currentProxyInfo;
+    private WsLoader.Bean currentBean;
 
     private static final int done_button = 1;
 
@@ -136,17 +116,15 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
         }
     }
 
-    public ShadowsocksSettingsActivity() {
+    public WsSettingsActivity() {
         super();
-        currentBean = new ShadowsocksLoader.Bean();
-        plugin = new PluginConfiguration("");
+        currentBean = new WsLoader.Bean();
     }
 
-    public ShadowsocksSettingsActivity(SharedConfig.ShadowsocksProxy proxyInfo) {
+    public WsSettingsActivity(SharedConfig.WsProxy proxyInfo) {
         super();
         currentProxyInfo = proxyInfo;
         currentBean = proxyInfo.bean;
-        plugin = new PluginConfiguration(currentBean.getPlugin());
     }
 
 
@@ -185,33 +163,23 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StrUtil.isBlank(portField.getText())) {
+                    if (StrUtil.isBlank(payloadField.getText())) {
 
-                        portField.requestFocus();
-                        AndroidUtilities.showKeyboard(portField);
-
-                        return;
-
-                    }
-
-                    if (StrUtil.isBlank(passwordField.getText()) && !"plain".equals(methodField.getTextView().getText().toString().toLowerCase())) {
-
-                        passwordField.requestFocus();
-                        AndroidUtilities.showKeyboard(passwordField);
+                        payloadField.requestFocus();
+                        AndroidUtilities.showKeyboard(payloadField);
 
                         return;
 
                     }
 
-                    currentBean.setHost(ipField.getText().toString());
-                    currentBean.setRemotePort(Utilities.parseInt(portField.getText().toString()));
-                    currentBean.setPassword(passwordField.getText().toString());
-                    currentBean.setMethod(methodField.getValueTextView().getText().toString());
-                    currentBean.setPlugin(plugin.toString());
+
+                    currentBean.setServer(ipField.getText().toString());
+                    currentBean.setPayloadStr(payloadField.getText().toString());
+                    currentBean.setTls(useTlsField.isChecked());
                     currentBean.setRemarks(remarksField.getText().toString());
 
                     if (currentProxyInfo == null) {
-                        currentProxyInfo = new SharedConfig.ShadowsocksProxy(currentBean);
+                        currentProxyInfo = new SharedConfig.WsProxy(currentBean);
                         SharedConfig.addProxy(currentProxyInfo);
                         SharedConfig.setCurrentProxy(currentProxyInfo);
                     } else {
@@ -228,7 +196,7 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
             }
         });
 
-        ActionBarMenuItem doneItem = actionBar.createMenu().addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        doneItem = actionBar.createMenu().addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
         doneItem.setContentDescription(LocaleController.getString("Done", R.string.Done));
 
         fragmentView = new FrameLayout(context);
@@ -254,9 +222,9 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
         }
         linearLayout2.addView(inputFieldsContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        inputFields = new EditTextBoldCursor[4];
+        inputFields = new EditTextBoldCursor[5];
 
-        for (int a = 0; a < 4; a++) {
+        for (int a = 0; a < 5; a++) {
             FrameLayout container = new FrameLayout(context);
             EditTextBoldCursor cursor = mkCursor();
             inputFields[a] = cursor;
@@ -266,21 +234,15 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
                     ipField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress));
-                    cursor.setText(currentBean.getHost());
+                    cursor.setText(currentBean.getServer());
                     break;
                 case 1:
-                    portField = cursor;
+                    payloadField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    cursor.setHintText(LocaleController.getString("UseProxyPort", R.string.UseProxyPort));
-                    cursor.setText("" + currentBean.getRemotePort());
+                    cursor.setHintText(LocaleController.getString("WsPayload", R.string.WsPayload));
+                    cursor.setText(currentBean.getPayloadStr());
                     break;
                 case 2:
-                    passwordField = cursor;
-                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    cursor.setHintText(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword));
-                    cursor.setText(currentBean.getPassword());
-                    break;
-                case 3:
                     remarksField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("ProxyRemarks", R.string.ProxyRemarks));
@@ -295,198 +257,27 @@ public class ShadowsocksSettingsActivity extends BaseFragment {
         }
 
         inputFieldsContainer.addView((View) ipField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-        inputFieldsContainer.addView((View) portField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-        inputFieldsContainer.addView((View) passwordField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+        inputFieldsContainer.addView((View) payloadField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         FrameLayout container = new FrameLayout(context);
+        useTlsField = new TextCheckCell(context);
+        useTlsField.setBackground(Theme.getSelectorDrawable(false));
+        useTlsField.setTextAndCheck(LocaleController.getString("VmessTls", R.string.VmessTls), currentBean.getTls(), false);
+        container.addView(useTlsField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
-        methodField = new TextSettingsCell(context);
-        methodField.setBackground(Theme.getSelectorDrawable(false));
-        methodField.setTextAndValue(LocaleController.getString("SSMethod", R.string.SSMethod), currentBean.getMethod(), false);
-        container.addView(methodField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+        useTlsField.setOnClickListener((v) -> useTlsField.setChecked(!useTlsField.isChecked()));
+
         inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-
-        methodField.setOnClickListener((v) -> {
-
-            PopupBuilder select = new PopupBuilder(v);
-
-            select.setItems(ShadowsocksLoader.Companion.getMethods(), (__, value) -> {
-
-                methodField.getValueTextView().setText(value);
-
-                return Unit.INSTANCE;
-
-            });
-
-            select.show();
-
-        });
-
-        container = new FrameLayout(context);
-        pluginField = new TextSettingsCell(context);
-        pluginField.setBackground(Theme.getSelectorDrawable(false));
-        pluginField.setTextAndValue(LocaleController.getString("SSPlugin", R.string.SSPlugin), plugin.getSelectedName(), false);
-        container.addView(pluginField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
-        inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-
-        pluginField.setOnClickListener((v) -> {
-
-            PluginList plugins = PluginManager.fetchPlugins();
-
-            PopupBuilder select = new PopupBuilder(v);
-
-            try {
-
-                select.setItems(plugins.getLookupNames(), (index, __) -> {
-
-                    String pluginId = plugins.get(index).getId();
-
-                    plugin.setSelected(pluginId);
-
-                    ((View) pluginOptsField.getParent()).setVisibility(StrUtil.isBlank(pluginId) ? View.GONE : View.VISIBLE);
-
-                    pluginField.getValueTextView().setText(plugin.getSelectedName());
-                    pluginOptsField.getValueTextView().setText(plugin.getOptions(pluginId).toString());
-
-                    return Unit.INSTANCE;
-
-                });
-
-                select.show();
-
-            } catch (Exception e) {
-
-                AlertUtil.showSimpleAlert(getParentActivity(),e.getMessage());
-
-            }
-
-        });
-
-        container = new FrameLayout(context);
-        pluginOptsField = new TextSettingsCell(context);
-        pluginOptsField.setBackground(Theme.getSelectorDrawable(false));
-        pluginOptsField.setTextAndValue(LocaleController.getString("SSPluginOpts", R.string.SSPluginOpts), plugin.getOptions().toString(), false);
-        container.addView(pluginOptsField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
-        inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-
-        pluginOptsField.setOnClickListener((v) -> {
-
-            Intent intent = PluginManager.buildIntent(plugin.getSelected(), PluginContract.ACTION_CONFIGURE);
-            intent.putExtra(PluginContract.EXTRA_OPTIONS, plugin.getOptions().toString());
-
-            if (intent.resolveActivity(getParentActivity().getPackageManager()) == null) {
-                showPluginEditor();
-            } else {
-                startActivityForResult(intent, 1919);
-            }
-
-        });
-
-        ((View) pluginOptsField.getParent()).setVisibility(StrUtil.isBlank(plugin.getSelected()) ? View.GONE : View.VISIBLE);
 
         inputFieldsContainer.addView((View) remarksField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         bottomCell = new TextInfoPrivacyCell(context);
         bottomCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-        bottomCell.setText(LocaleController.getString("ProxyInfoSS", R.string.ProxyInfoSS));
+        bottomCell.setText(LocaleController.getString("ProxyInfoWS", R.string.ProxyInfoWS));
         linearLayout2.addView(bottomCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         return fragmentView;
 
-    }
-
-    @Override public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1919) {
-
-            if (resultCode == Activity.RESULT_OK) {
-
-                String options = data.getStringExtra(PluginContract.EXTRA_OPTIONS);
-
-                if (options != null) {
-
-                    onPreferenceChange(options);
-
-                }
-
-            } else if (resultCode == PluginContract.RESULT_FALLBACK) {
-
-                showPluginEditor();
-
-            }
-
-        } else if (requestCode == 810) {
-
-            if (resultCode == Activity.RESULT_OK) {
-
-                CharSequence helpMessage = data.getCharSequenceExtra(PluginContract.EXTRA_HELP_MESSAGE);
-
-                if (StrUtil.isBlank(helpMessage)) {
-
-                    helpMessage = "No Help :(";
-
-                }
-
-                AlertUtil.showSimpleAlert(getParentActivity(),LocaleController.getString("BotHelp",R.string.BotHelp),helpMessage.toString());
-
-            } else {
-
-                AlertUtil.showSimpleAlert(getParentActivity(),"Get Help Message Error :(");
-
-            }
-
-        }
-
-    }
-
-    private void showPluginEditor() {
-
-        BottomBuilder builder = new BottomBuilder(getParentActivity());
-
-        builder.addTitle(LocaleController.getString("SSPluginOpts", R.string.SSPluginOpts));
-
-        EditText options = builder.addEditText();
-        options.setSingleLine(false);
-        options.setGravity(Gravity.TOP | LocaleController.generateFlagStart());
-        options.setMinLines(3);
-        options.setText(plugin.getOptions().toString());
-
-        Intent intent = PluginManager.buildIntent(plugin.getSelected(), PluginContract.ACTION_HELP);
-        intent.putExtra(PluginContract.EXTRA_OPTIONS, plugin.getOptions().toString());
-        if (intent.resolveActivity(getParentActivity().getPackageManager()) != null) {
-
-            builder.addButton(LocaleController.getString("BotHelp", R.string.BotHelp), false,true, (it) -> {
-
-                getParentActivity().startActivityForResult(intent, 810);
-
-                return Unit.INSTANCE;
-
-            });
-
-            builder.addCancelButton(false);
-
-        } else {
-
-            builder.addCancelButton();
-
-        }
-
-        builder.addOkButton((it) -> {
-
-            onPreferenceChange(options.getText().toString());
-
-            return Unit.INSTANCE;
-
-        });
-
-        builder.show();
-
-    }
-
-    private void onPreferenceChange(String newValue) {
-        String selected = plugin.getSelected();
-        plugin.getPluginsOptions().put(selected, new PluginOptions(selected, newValue));
-        pluginOptsField.getValueTextView().setText(newValue);
     }
 
     EditTextBoldCursor mkCursor() {

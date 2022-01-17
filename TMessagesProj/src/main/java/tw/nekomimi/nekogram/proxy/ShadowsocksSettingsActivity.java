@@ -6,9 +6,11 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.proxy;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -20,14 +22,20 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.v2ray.ang.V2RayConfig;
-import com.v2ray.ang.dto.AngConfig;
+import androidx.annotation.RequiresApi;
+
+import com.github.shadowsocks.plugin.PluginConfiguration;
+import com.github.shadowsocks.plugin.PluginContract;
+import com.github.shadowsocks.plugin.PluginList;
+import com.github.shadowsocks.plugin.PluginManager;
+import com.github.shadowsocks.plugin.PluginOptions;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -39,7 +47,6 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -49,21 +56,21 @@ import java.util.ArrayList;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 
-public class VmessSettingsActivity extends BaseFragment {
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+public class ShadowsocksSettingsActivity extends BaseFragment {
 
     private EditTextBoldCursor[] inputFields;
 
     private EditTextBoldCursor ipField;
     private EditTextBoldCursor portField;
-    private EditTextBoldCursor userIdField;
-    private EditTextBoldCursor alterIdField;
-    private TextSettingsCell securityField;
-    private TextSettingsCell networkField;
-    private TextSettingsCell headTypeField;
-    private EditTextBoldCursor requestHostField;
-    private EditTextBoldCursor pathField;
-    private TextCheckCell useTlsField;
+    private EditTextBoldCursor passwordField;
+    private TextSettingsCell methodField;
+    private TextSettingsCell pluginField;
+    private TextSettingsCell pluginOptsField;
     private EditTextBoldCursor remarksField;
 
     private ScrollView scrollView;
@@ -71,18 +78,14 @@ public class VmessSettingsActivity extends BaseFragment {
     private LinearLayout inputFieldsContainer;
 
     private TextInfoPrivacyCell bottomCell;
-    private ActionBarMenuItem doneItem;
 
-    private SharedConfig.VmessProxy currentProxyInfo;
-    private AngConfig.VmessBean currentBean;
+    private SharedConfig.ShadowsocksProxy currentProxyInfo;
+    private ShadowsocksLoader.Bean currentBean;
+    private PluginConfiguration plugin;
 
     private boolean ignoreOnTextChange;
 
     private static final int done_button = 1;
-
-    private static String[] securitySet = { "chacha20-poly1305","aes-128-gcm","auto","none","zero" };
-    private static String[] networkSet = { "tcp","kcp","ws","h2","quic" };
-    private static String[] headTypeSet = { "none","http","srtp","utp","wechat-video","dtls","wireguard" };
 
     public class TypeCell extends FrameLayout {
 
@@ -135,16 +138,17 @@ public class VmessSettingsActivity extends BaseFragment {
         }
     }
 
-    public VmessSettingsActivity() {
+    public ShadowsocksSettingsActivity() {
         super();
-        currentBean = new AngConfig.VmessBean();
-        currentBean.setConfigType(V2RayConfig.EConfigType.Vmess);
+        currentBean = new ShadowsocksLoader.Bean();
+        plugin = new PluginConfiguration("");
     }
 
-    public VmessSettingsActivity(SharedConfig.VmessProxy proxyInfo) {
+    public ShadowsocksSettingsActivity(SharedConfig.ShadowsocksProxy proxyInfo) {
         super();
         currentProxyInfo = proxyInfo;
         currentBean = proxyInfo.bean;
+        plugin = new PluginConfiguration(currentBean.getPlugin());
     }
 
 
@@ -192,38 +196,24 @@ public class VmessSettingsActivity extends BaseFragment {
 
                     }
 
-                    if (StrUtil.isBlank(userIdField.getText())) {
+                    if (StrUtil.isBlank(passwordField.getText()) && !"plain".equals(methodField.getTextView().getText().toString().toLowerCase())) {
 
-                        userIdField.requestFocus();
-                        AndroidUtilities.showKeyboard(userIdField);
-
-                        return;
-
-                    }
-
-                    if (StrUtil.isBlank(alterIdField.getText())) {
-
-                        alterIdField.requestFocus();
-                        AndroidUtilities.showKeyboard(alterIdField);
+                        passwordField.requestFocus();
+                        AndroidUtilities.showKeyboard(passwordField);
 
                         return;
 
                     }
 
-                    currentBean.setAddress(ipField.getText().toString());
-                    currentBean.setPort(Utilities.parseInt(portField.getText().toString()));
-                    currentBean.setId(userIdField.getText().toString());
-                    currentBean.setAlterId(Utilities.parseInt(alterIdField.getText().toString()));
-                    currentBean.setSecurity(securityField.getValueTextView().getText().toString());
-                    currentBean.setNetwork(networkField.getValueTextView().getText().toString());
-                    currentBean.setHeaderType(headTypeField.getValueTextView().getText().toString());
-                    currentBean.setRequestHost(requestHostField.getText().toString());
-                    currentBean.setPath(pathField.getText().toString());
-                    currentBean.setStreamSecurity(useTlsField.isChecked() ? "tls" : "");
+                    currentBean.setHost(ipField.getText().toString());
+                    currentBean.setRemotePort(Utilities.parseInt(portField.getText().toString()));
+                    currentBean.setPassword(passwordField.getText().toString());
+                    currentBean.setMethod(methodField.getValueTextView().getText().toString());
+                    currentBean.setPlugin(plugin.toString());
                     currentBean.setRemarks(remarksField.getText().toString());
 
                     if (currentProxyInfo == null) {
-                        currentProxyInfo = new SharedConfig.VmessProxy(currentBean);
+                        currentProxyInfo = new SharedConfig.ShadowsocksProxy(currentBean);
                         SharedConfig.addProxy(currentProxyInfo);
                         SharedConfig.setCurrentProxy(currentProxyInfo);
                     } else {
@@ -240,7 +230,7 @@ public class VmessSettingsActivity extends BaseFragment {
             }
         });
 
-        doneItem = actionBar.createMenu().addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        ActionBarMenuItem doneItem = actionBar.createMenu().addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
         doneItem.setContentDescription(LocaleController.getString("Done", R.string.Done));
 
         fragmentView = new FrameLayout(context);
@@ -266,9 +256,9 @@ public class VmessSettingsActivity extends BaseFragment {
         }
         linearLayout2.addView(inputFieldsContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        inputFields =  new EditTextBoldCursor[7];
+        inputFields = new EditTextBoldCursor[4];
 
-        for (int a = 0; a < 7; a++) {
+        for (int a = 0; a < 4; a++) {
             FrameLayout container = new FrameLayout(context);
             EditTextBoldCursor cursor = mkCursor();
             inputFields[a] = cursor;
@@ -278,39 +268,21 @@ public class VmessSettingsActivity extends BaseFragment {
                     ipField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress));
-                    cursor.setText(currentBean.getAddress());
+                    cursor.setText(currentBean.getHost());
                     break;
                 case 1:
                     portField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_NUMBER);
                     cursor.setHintText(LocaleController.getString("UseProxyPort", R.string.UseProxyPort));
-                    cursor.setText("" + currentBean.getPort());
+                    cursor.setText("" + currentBean.getRemotePort());
                     break;
                 case 2:
-                    userIdField = cursor;
+                    passwordField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    cursor.setHintText(LocaleController.getString("VmessUserId", R.string.VmessUserId));
-                    cursor.setText(currentBean.getId());
+                    cursor.setHintText(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword));
+                    cursor.setText(currentBean.getPassword());
                     break;
                 case 3:
-                    alterIdField = cursor;
-                    cursor.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    cursor.setHintText(LocaleController.getString("VmessAlterId", R.string.VmessAlterId));
-                    cursor.setText("" + currentBean.getAlterId());
-                    break;
-                case 4:
-                    requestHostField = cursor;
-                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    cursor.setHintText(LocaleController.getString("VmessRequestHost", R.string.VmessRequestHost));
-                    cursor.setText(currentBean.getRequestHost());
-                    break;
-                case 5:
-                    pathField = cursor;
-                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    cursor.setHintText(LocaleController.getString("VmessPath", R.string.VmessPath));
-                    cursor.setText(currentBean.getPath());
-                    break;
-                case 6:
                     remarksField = cursor;
                     cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("ProxyRemarks", R.string.ProxyRemarks));
@@ -326,23 +298,23 @@ public class VmessSettingsActivity extends BaseFragment {
 
         inputFieldsContainer.addView((View) ipField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
         inputFieldsContainer.addView((View) portField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-        inputFieldsContainer.addView((View) userIdField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-        inputFieldsContainer.addView((View) alterIdField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+        inputFieldsContainer.addView((View) passwordField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         FrameLayout container = new FrameLayout(context);
 
-        securityField = new TextSettingsCell(context);
-        securityField.setBackground(Theme.getSelectorDrawable(false));
-        securityField.setTextAndValue(LocaleController.getString("VmessSecurity", R.string.VmessSecurity), currentBean.getSecurity(), false);
-        container.addView(securityField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+        methodField = new TextSettingsCell(context);
+        methodField.setBackground(Theme.getSelectorDrawable(false));
+        methodField.setTextAndValue(LocaleController.getString("SSMethod", R.string.SSMethod), currentBean.getMethod(), false);
+        container.addView(methodField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+        inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
-        securityField.setOnClickListener((v) -> {
+        methodField.setOnClickListener((v) -> {
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(securitySet, (__,value) -> {
+            select.setItems(ShadowsocksLoader.Companion.getMethods(), (__, value) -> {
 
-                securityField.getValueTextView().setText(value);
+                methodField.getValueTextView().setText(value);
 
                 return Unit.INSTANCE;
 
@@ -352,78 +324,171 @@ public class VmessSettingsActivity extends BaseFragment {
 
         });
 
+        container = new FrameLayout(context);
+        pluginField = new TextSettingsCell(context);
+        pluginField.setBackground(Theme.getSelectorDrawable(false));
+        pluginField.setTextAndValue(LocaleController.getString("SSPlugin", R.string.SSPlugin), plugin.getSelectedName(), false);
+        container.addView(pluginField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
         inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
-        container = new FrameLayout(context);
-        networkField = new TextSettingsCell(context);
-        networkField.setBackground(Theme.getSelectorDrawable(false));
-        networkField.setTextAndValue(LocaleController.getString("VmessNetwork", R.string.VmessNetwork), currentBean.getNetwork(), false);
-        container.addView(networkField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+        pluginField.setOnClickListener((v) -> {
 
-        networkField.setOnClickListener((v) -> {
+            PluginList plugins = PluginManager.fetchPlugins();
 
             PopupBuilder select = new PopupBuilder(v);
 
-            select.setItems(networkSet, (__,value) -> {
+            try {
 
-                networkField.getValueTextView().setText(value);
+                select.setItems(plugins.getLookupNames(), (index, __) -> {
 
-                return Unit.INSTANCE;
+                    String pluginId = plugins.get(index).getId();
 
-            });
+                    plugin.setSelected(pluginId);
 
-            select.show();
+                    ((View) pluginOptsField.getParent()).setVisibility(StrUtil.isBlank(pluginId) ? View.GONE : View.VISIBLE);
 
-        });
+                    pluginField.getValueTextView().setText(plugin.getSelectedName());
+                    pluginOptsField.getValueTextView().setText(plugin.getOptions(pluginId).toString());
 
-        inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+                    return Unit.INSTANCE;
 
-        container = new FrameLayout(context);
-        headTypeField = new TextSettingsCell(context);
-        headTypeField.setBackground(Theme.getSelectorDrawable(false));
-        headTypeField.setTextAndValue(LocaleController.getString("VmessHeadType", R.string.VmessHeadType), currentBean.getHeaderType(), false);
-        container.addView(headTypeField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+                });
 
-        headTypeField.setOnClickListener((v) -> {
+                select.show();
 
-            PopupBuilder select = new PopupBuilder(v);
+            } catch (Exception e) {
 
-            select.setItems(headTypeSet, (__,value) -> {
+                AlertUtil.showSimpleAlert(getParentActivity(),e.getMessage());
 
-                headTypeField.getValueTextView().setText(value);
-
-                return Unit.INSTANCE;
-
-            });
-
-            select.show();
+            }
 
         });
 
-        inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-
-        inputFieldsContainer.addView((View) requestHostField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-        inputFieldsContainer.addView((View) pathField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
-
         container = new FrameLayout(context);
-        useTlsField = new TextCheckCell(context);
-        useTlsField.setBackground(Theme.getSelectorDrawable(false));
-        useTlsField.setTextAndCheck(LocaleController.getString("VmessTls", R.string.VmessTls), !StrUtil.isBlank(currentBean.getStreamSecurity()), false);
-        container.addView(useTlsField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
-
-        useTlsField.setOnClickListener((v) -> useTlsField.setChecked(!useTlsField.isChecked()));
-
+        pluginOptsField = new TextSettingsCell(context);
+        pluginOptsField.setBackground(Theme.getSelectorDrawable(false));
+        pluginOptsField.setTextAndValue(LocaleController.getString("SSPluginOpts", R.string.SSPluginOpts), plugin.getOptions().toString(), false);
+        container.addView(pluginOptsField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
         inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+
+        pluginOptsField.setOnClickListener((v) -> {
+
+            Intent intent = PluginManager.buildIntent(plugin.getSelected(), PluginContract.ACTION_CONFIGURE);
+            intent.putExtra(PluginContract.EXTRA_OPTIONS, plugin.getOptions().toString());
+
+            if (intent.resolveActivity(getParentActivity().getPackageManager()) == null) {
+                showPluginEditor();
+            } else {
+                startActivityForResult(intent, 1919);
+            }
+
+        });
+
+        ((View) pluginOptsField.getParent()).setVisibility(StrUtil.isBlank(plugin.getSelected()) ? View.GONE : View.VISIBLE);
 
         inputFieldsContainer.addView((View) remarksField.getParent(), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
         bottomCell = new TextInfoPrivacyCell(context);
         bottomCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-        bottomCell.setText(LocaleController.getString("ProxyInfoVmess", R.string.ProxyInfoVmess));
+        bottomCell.setText(LocaleController.getString("ProxyInfoSS", R.string.ProxyInfoSS));
         linearLayout2.addView(bottomCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         return fragmentView;
 
+    }
+
+    @Override public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1919) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                String options = data.getStringExtra(PluginContract.EXTRA_OPTIONS);
+
+                if (options != null) {
+
+                    onPreferenceChange(options);
+
+                }
+
+            } else if (resultCode == PluginContract.RESULT_FALLBACK) {
+
+                showPluginEditor();
+
+            }
+
+        } else if (requestCode == 810) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                CharSequence helpMessage = data.getCharSequenceExtra(PluginContract.EXTRA_HELP_MESSAGE);
+
+                if (StrUtil.isBlank(helpMessage)) {
+
+                    helpMessage = "No Help :(";
+
+                }
+
+                AlertUtil.showSimpleAlert(getParentActivity(),LocaleController.getString("BotHelp",R.string.BotHelp),helpMessage.toString());
+
+            } else {
+
+                AlertUtil.showSimpleAlert(getParentActivity(),"Get Help Message Error :(");
+
+            }
+
+        }
+
+    }
+
+    private void showPluginEditor() {
+
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+        builder.addTitle(LocaleController.getString("SSPluginOpts", R.string.SSPluginOpts));
+
+        EditText options = builder.addEditText();
+        options.setSingleLine(false);
+        options.setGravity(Gravity.TOP | LocaleController.generateFlagStart());
+        options.setMinLines(3);
+        options.setText(plugin.getOptions().toString());
+
+        Intent intent = PluginManager.buildIntent(plugin.getSelected(), PluginContract.ACTION_HELP);
+        intent.putExtra(PluginContract.EXTRA_OPTIONS, plugin.getOptions().toString());
+        if (intent.resolveActivity(getParentActivity().getPackageManager()) != null) {
+
+            builder.addButton(LocaleController.getString("BotHelp", R.string.BotHelp), false,true, (it) -> {
+
+                getParentActivity().startActivityForResult(intent, 810);
+
+                return Unit.INSTANCE;
+
+            });
+
+            builder.addCancelButton(false);
+
+        } else {
+
+            builder.addCancelButton();
+
+        }
+
+        builder.addOkButton((it) -> {
+
+            onPreferenceChange(options.getText().toString());
+
+            return Unit.INSTANCE;
+
+        });
+
+        builder.show();
+
+    }
+
+    private void onPreferenceChange(String newValue) {
+        String selected = plugin.getSelected();
+        plugin.getPluginsOptions().put(selected, new PluginOptions(selected, newValue));
+        pluginOptsField.getValueTextView().setText(newValue);
     }
 
     EditTextBoldCursor mkCursor() {

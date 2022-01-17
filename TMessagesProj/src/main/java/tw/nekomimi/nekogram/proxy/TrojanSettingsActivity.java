@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.proxy;
 
 import android.content.Context;
 import android.graphics.Canvas;

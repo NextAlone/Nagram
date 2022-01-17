@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.tcp2ws;
+package tw.nekomimi.nekogram.proxy.tcp2ws;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

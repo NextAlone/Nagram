@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.tcp2ws;
+package tw.nekomimi.nekogram.proxy.tcp2ws;
 
 import org.telegram.messenger.FileLog;
 
@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
-import tw.nekomimi.nekogram.WsLoader;
+import tw.nekomimi.nekogram.proxy.WsLoader;
 
 public class Tcp2wsServer extends Thread {
 

@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram
+package tw.nekomimi.nekogram.proxy
 
 import cn.hutool.core.codec.Base64
 import com.v2ray.ang.V2RayConfig.SSR_PROTOCOL

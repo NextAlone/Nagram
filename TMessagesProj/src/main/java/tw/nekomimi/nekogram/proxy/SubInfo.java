@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.sub;
+package tw.nekomimi.nekogram.proxy;
 
 import androidx.annotation.NonNull;
 
