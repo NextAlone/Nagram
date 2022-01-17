@@ -1915,6 +1915,8 @@ public class NotificationsController extends BaseController {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder(text);
+        if (NekoConfig.showSpoilersDirectly.Bool())
+            return stringBuilder.toString();
         for (int i = 0; i < messageObject.messageOwner.entities.size(); i++) {
             if (messageObject.messageOwner.entities.get(i) instanceof TLRPC.TL_messageEntitySpoiler) {
                 TLRPC.TL_messageEntitySpoiler spoiler = (TLRPC.TL_messageEntitySpoiler) messageObject.messageOwner.entities.get(i);

@@ -327,7 +327,7 @@ public class SharedLinkCell extends FrameLayout {
                         int start = entity.offset, end = entity.offset + entity.length;
                         for (TLRPC.MessageEntity e : message.messageOwner.entities) {
                             int ss = e.offset, se = e.offset + e.length;
-                            if (e instanceof TLRPC.TL_messageEntitySpoiler && start <= se && end >= ss) {
+                            if (NekoConfig.showSpoilersDirectly.Bool() && e instanceof TLRPC.TL_messageEntitySpoiler && start <= se && end >= ss) {
                                 TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
                                 run.flags |= TextStyleSpan.FLAG_STYLE_SPOILER;
                                 sb.setSpan(new TextStyleSpan(run), Math.max(start, ss), Math.min(end, se) + offset, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -1093,7 +1093,8 @@ public class DialogCell extends BaseCell {
                                         emoji = "\uD83D\uDCCE ";
                                     }
                                     SpannableStringBuilder msgBuilder = new SpannableStringBuilder(mess);
-                                    MediaDataController.addTextStyleRuns(message.messageOwner.entities, message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER);
+                                    if (!NekoConfig.showSpoilersDirectly.Bool())
+                                        MediaDataController.addTextStyleRuns(message.messageOwner.entities, message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER);
                                     stringBuilder = AndroidUtilities.formatSpannable(messageFormat, new SpannableStringBuilder(emoji).append(AndroidUtilities.replaceNewLines(msgBuilder)), messageNameString);
                                 } else if (message.messageOwner.media != null && !message.isMediaEmpty()) {
                                     currentMessagePaint = Theme.dialogs_messagePrintingPaint[paintIndex];
@@ -1152,7 +1153,8 @@ public class DialogCell extends BaseCell {
                                         mess = AndroidUtilities.replaceNewLines(mess);
                                     }
                                     mess = new SpannableStringBuilder(mess);
-                                    MediaDataController.addTextStyleRuns(message, (Spannable) mess, TextStyleSpan.FLAG_STYLE_SPOILER);
+                                    if (!NekoConfig.showSpoilersDirectly.Bool())
+                                        MediaDataController.addTextStyleRuns(message, (Spannable) mess, TextStyleSpan.FLAG_STYLE_SPOILER);
                                     stringBuilder = AndroidUtilities.formatSpannable(messageFormat, mess, messageNameString);
                                 } else {
                                     stringBuilder = SpannableStringBuilder.valueOf("");
@@ -1222,7 +1224,8 @@ public class DialogCell extends BaseCell {
                                         messageString = emoji + str;
                                     } else {
                                         SpannableStringBuilder msgBuilder = new SpannableStringBuilder(message.caption);
-                                        MediaDataController.addTextStyleRuns(message.messageOwner.entities, message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER);
+                                        if (!NekoConfig.showSpoilersDirectly.Bool())
+                                            MediaDataController.addTextStyleRuns(message.messageOwner.entities, message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER);
                                         messageString = new SpannableStringBuilder(emoji).append(msgBuilder);
                                     }
                                 } else {
@@ -1245,7 +1248,8 @@ public class DialogCell extends BaseCell {
                                             messageString = AndroidUtilities.ellipsizeCenterEnd(messageString, message.highlightedWords.get(0), w, currentMessagePaint, 130).toString();
                                         } else {
                                             SpannableStringBuilder stringBuilder = new SpannableStringBuilder(msgText);
-                                            MediaDataController.addTextStyleRuns(message, stringBuilder, TextStyleSpan.FLAG_STYLE_SPOILER);
+                                            if (!NekoConfig.showSpoilersDirectly.Bool())
+                                                MediaDataController.addTextStyleRuns(message, stringBuilder, TextStyleSpan.FLAG_STYLE_SPOILER);
                                             messageString = stringBuilder;
                                         }
                                         AndroidUtilities.highlightText(messageString, message.highlightedWords, resourcesProvider);
@@ -1705,7 +1709,8 @@ public class DialogCell extends BaseCell {
             }
             spoilersPool.addAll(spoilers);
             spoilers.clear();
-            SpoilerEffect.addSpoilers(this, messageLayout, spoilersPool, spoilers);
+            if (!NekoConfig.showSpoilersDirectly.Bool())
+                SpoilerEffect.addSpoilers(this, messageLayout, spoilersPool, spoilers);
         } catch (Exception e) {
             messageLayout = null;
             FileLog.e(e);

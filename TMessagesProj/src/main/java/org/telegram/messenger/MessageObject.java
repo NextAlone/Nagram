@@ -134,7 +134,7 @@ public class MessageObject {
     public boolean isRestrictedMessage;
     public long loadedFileSize;
 
-    public boolean isSpoilersRevealed;
+    public boolean isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool();
     public byte[] sponsoredId;
     public int sponsoredChannelPost;
     public TLRPC.ChatInvite sponsoredChatInvite;

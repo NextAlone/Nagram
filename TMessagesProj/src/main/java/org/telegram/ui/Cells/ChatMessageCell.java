@@ -209,6 +209,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public boolean hasSpoilers() {
+        if (NekoConfig.showSpoilersDirectly.Bool()) return false;
         if (hasCaptionLayout() && !captionSpoilers.isEmpty() || replyTextLayout != null && !replySpoilers.isEmpty()) {
             return true;
         }
