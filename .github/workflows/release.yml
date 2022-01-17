@@ -375,7 +375,7 @@ jobs:
       - name: Release
         run: |
           chmod +x telegram-bot-api-binary
-          ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 2>&1 > /dev/null &
+          ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
           function upload() {
