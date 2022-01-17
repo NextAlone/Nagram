@@ -48,7 +48,7 @@ import org.telegram.ui.ActionBar.Theme;
 import java.util.List;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -196,7 +196,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
         } else {
 
-            Translator.translate(TranslateDb.getChatLanguage(delegate.getCurrentChat(), TranslatorKt.getCode2Locale(NekomuraConfig.translateInputLang.String())), text, new Translator.Companion.TranslateCallBack() {
+            Translator.translate(TranslateDb.getChatLanguage(delegate.getCurrentChat(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())), text, new Translator.Companion.TranslateCallBack() {
 
                 AlertDialog status = AlertUtil.showProgress(getContext());
 

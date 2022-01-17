@@ -29,7 +29,6 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import androidx.core.app.NotificationManagerCompat;
 import androidx.multidex.MultiDex;
 
 import org.telegram.messenger.voip.VideoCapturerDevice;
@@ -42,14 +41,11 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
-import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static android.os.Build.VERSION.SDK_INT;
 

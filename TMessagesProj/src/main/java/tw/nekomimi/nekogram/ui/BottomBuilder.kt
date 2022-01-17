@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram
+package tw.nekomimi.nekogram.ui
 
 import android.content.Context
 import android.text.TextUtils

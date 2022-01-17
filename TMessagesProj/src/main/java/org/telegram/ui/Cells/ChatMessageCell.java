@@ -68,8 +68,6 @@ import android.widget.Toast;
 
 import androidx.core.graphics.ColorUtils;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -153,7 +151,7 @@ import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView, NotificationCenter.NotificationCenterDelegate {
 
@@ -953,7 +951,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean needHideMessage() {
         return currentMessageObject.messageOwner.hide ||
                 MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0 &&
-                        NekomuraConfig.ignoreBlocked.Bool() && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
+                        NekoConfig.ignoreBlocked.Bool() && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
     }
 
     public ChatMessageCell(Context context) {
@@ -5058,7 +5056,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
 
                 int maxVote = 0;
-                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !NekomuraConfig.disableVibration.Bool()) {
+                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !NekoConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
                 animatePollAnswerAlpha = animatePollAnswer = attachedToWindow && (pollVoteInProgress || pollUnvoteInProgress);
@@ -5489,9 +5487,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             currentMapProvider = -1;
                         }
                     } else {
-                        if (NekomuraConfig.mapPreviewProvider.Int() == 0) {
+                        if (NekoConfig.mapPreviewProvider.Int() == 0) {
                             currentMapProvider = 2;
-                        } else if (NekomuraConfig.mapPreviewProvider.Int() == 1) {
+                        } else if (NekoConfig.mapPreviewProvider.Int() == 1) {
                             currentMapProvider = 1;
                         } else {
                             currentMapProvider = -1;
@@ -5540,10 +5538,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     float maxHeight;
                     int maxWidth;
                     if (AndroidUtilities.isTablet()) {
-                        maxHeight = AndroidUtilities.getMinTabletSide() * (0.4f + (NekomuraConfig.stickerSize.Float() - 14.0f) / 40);
+                        maxHeight = AndroidUtilities.getMinTabletSide() * (0.4f + (NekoConfig.stickerSize.Float() - 14.0f) / 40);
                         maxWidth = (int) maxHeight;
                     } else {
-                        maxHeight = Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (NekomuraConfig.stickerSize.Float() - 14.0f) / 30);
+                        maxHeight = Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (NekoConfig.stickerSize.Float() - 14.0f) / 30);
                         maxWidth = (int) maxHeight;
                     }
                     String filter;
@@ -11012,7 +11010,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekomuraConfig.hideTimeForSticker.Bool())) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInPorgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekoConfig.hideTimeForSticker.Bool())) {
             drawTime(canvas, 1f, false);
         }
 

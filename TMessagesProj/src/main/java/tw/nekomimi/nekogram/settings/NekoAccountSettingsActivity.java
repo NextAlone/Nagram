@@ -40,7 +40,7 @@ import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.MessageHelper;
+import tw.nekomimi.nekogram.ui.MessageHelper;
 
 @SuppressLint("RtlHardcoded")
 public class NekoAccountSettingsActivity extends BaseFragment {

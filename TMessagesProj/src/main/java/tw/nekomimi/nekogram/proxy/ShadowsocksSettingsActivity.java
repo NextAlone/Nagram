@@ -56,8 +56,8 @@ import java.util.ArrayList;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.ui.PopupBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

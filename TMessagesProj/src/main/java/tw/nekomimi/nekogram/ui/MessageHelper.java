@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.ui;
 
 import static tw.nekomimi.nekogram.utils.LangsKt.uDismiss;
 import static tw.nekomimi.nekogram.utils.LangsKt.uUpdate;

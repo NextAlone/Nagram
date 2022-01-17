@@ -56,7 +56,7 @@ import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class SharedLinkCell extends FrameLayout {
     private final static int SPOILER_TYPE_LINK = 0,
@@ -90,7 +90,7 @@ public class SharedLinkCell extends FrameLayout {
         public void run() {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
-                if (!NekomuraConfig.disableVibration.Bool()) {
+                if (!NekoConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
                 if (pressedLink >= 0) {

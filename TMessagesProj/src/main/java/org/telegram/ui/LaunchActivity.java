@@ -155,10 +155,9 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.proxy.SubInfo;
@@ -911,7 +910,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
             ExternalGcm.checkUpdate(this);
 
-            if (NekomuraConfig.autoUpdateSubInfo.Bool()) for (SubInfo subInfo : SubManager.getSubList().find()) {
+            if (NekoConfig.autoUpdateSubInfo.Bool()) for (SubInfo subInfo : SubManager.getSubList().find()) {
 
                 if (subInfo == null || !subInfo.enable) continue;
 
@@ -4040,7 +4039,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", R.string.VoipNeedCameraPermission));
             }
         } else if (requestCode == 4) {
-            NekoConfig.checkForceSystemPicker();
+            NekoXConfig.checkForceSystemPicker();
             if (!granted) {
                 showPermissionErrorAlert(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
             } else {

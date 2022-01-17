@@ -40,7 +40,6 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.Keep;
 
-import androidx.annotation.Keep;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
@@ -57,7 +56,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class ActionBarLayout extends FrameLayout {
@@ -338,7 +337,7 @@ public class ActionBarLayout extends FrameLayout {
 
         if (layerShadowDrawable == null) {
             layerShadowDrawable = getResources().getDrawable(R.drawable.layer_shadow);
-            headerShadowDrawable = NekomuraConfig.disableAppBarShadow.Bool() ? null : getResources().getDrawable(R.drawable.header_shadow).mutate();
+            headerShadowDrawable = NekoConfig.disableAppBarShadow.Bool() ? null : getResources().getDrawable(R.drawable.header_shadow).mutate();
             scrimPaint = new Paint();
         }
     }
@@ -665,7 +664,7 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = lastFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = lastFragment.createView(parentActivity);
-            if (NekomuraConfig.disableVibration.Bool()) {
+            if (NekoConfig.disableVibration.Bool()) {
                 VibrateUtil.disableHapticFeedback(fragmentView);
             }
         }
@@ -1081,7 +1080,7 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = fragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = fragment.createView(parentActivity);
-            if (NekomuraConfig.disableVibration.Bool()) {
+            if (NekoConfig.disableVibration.Bool()) {
                 VibrateUtil.disableHapticFeedback(fragmentView);
             }
         } else {
@@ -1432,7 +1431,7 @@ public class ActionBarLayout extends FrameLayout {
                 }
             });
             animatorSet.start();
-            if (!NekomuraConfig.disableVibration.Bool()) {
+            if (!NekoConfig.disableVibration.Bool()) {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
 
@@ -1479,7 +1478,7 @@ public class ActionBarLayout extends FrameLayout {
             View fragmentView = previousFragment.fragmentView;
             if (fragmentView == null) {
                 fragmentView = previousFragment.createView(parentActivity);
-                if (NekomuraConfig.disableVibration.Bool()) {
+                if (NekoConfig.disableVibration.Bool()) {
                     VibrateUtil.disableHapticFeedback(fragmentView);
                 }
             }
@@ -1667,7 +1666,7 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = previousFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = previousFragment.createView(parentActivity);
-            if (NekomuraConfig.disableVibration.Bool()) {
+            if (NekoConfig.disableVibration.Bool()) {
                 VibrateUtil.disableHapticFeedback(fragmentView);
             }
         } else {

@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram
+package tw.nekomimi.nekogram.proxy
 
 import java.net.InetSocketAddress
 import java.net.ServerSocket

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import org.telegram.messenger.ApplicationLoader
-import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nekogram.NekoConfig
 
 object VibrateUtil {
 
@@ -18,7 +18,7 @@ object VibrateUtil {
     @JvmOverloads
     fun vibrate(time: Long = 200L) {
 
-        if (NekomuraConfig.disableVibration.Bool()) return
+        if (NekoConfig.disableVibration.Bool()) return
 
         if (!::vibrator.isInitialized) {
 

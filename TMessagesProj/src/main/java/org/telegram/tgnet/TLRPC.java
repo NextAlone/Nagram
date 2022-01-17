@@ -22,9 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.hutool.core.util.ArrayUtil;
-import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {

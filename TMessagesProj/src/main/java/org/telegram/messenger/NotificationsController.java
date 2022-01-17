@@ -21,7 +21,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -45,7 +44,6 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 
 
 import androidx.collection.LongSparseArray;
@@ -58,14 +56,10 @@ import androidx.core.content.LocusIdCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-import android.text.TextUtils;
-import android.util.SparseArray;
 
-import org.json.JSONArray;
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BubbleActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PopupNotificationActivity;
@@ -78,8 +72,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class NotificationsController extends BaseController {
 
@@ -784,7 +778,7 @@ public class NotificationsController extends BaseController {
                         messageObject.messageOwner.silent && (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined))) {
                     continue;
                 }
-                if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
 
@@ -3746,7 +3740,7 @@ public class NotificationsController extends BaseController {
                     .setGroupSummary(true)
                     .setShowWhen(true)
                     .setWhen(((long) lastMessageObject.messageOwner.date) * 1000)
-                    .setColor(NekoConfig.getNotificationColor());
+                    .setColor(NekoXConfig.getNotificationColor());
 
             long[] vibrationPattern = null;
             Uri sound = null;
@@ -4238,7 +4232,7 @@ public class NotificationsController extends BaseController {
             int rowsMid = 0;
             for (int a = messageObjects.size() - 1; a >= 0; a--) {
                 MessageObject messageObject = messageObjects.get(a);
-                if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
                 String message = getShortStringForMessage(messageObject, senderName, preview);
@@ -4454,7 +4448,7 @@ public class NotificationsController extends BaseController {
                     .setContentText(text.toString())
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
-                    .setColor(NekoConfig.getNotificationColor())
+                    .setColor(NekoXConfig.getNotificationColor())
                     .setGroupSummary(false)
                     .setWhen(date)
                     .setShowWhen(true)

@@ -3,7 +3,7 @@ package tw.nekomimi.nekogram.transtale
 import org.dizitart.no2.objects.ObjectRepository
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.telegram.messenger.LocaleController
-import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.database.mkDatabase
 import tw.nekomimi.nekogram.utils.UIUtil
 import java.util.*
@@ -51,14 +51,14 @@ class TranslateDb(val code: String) {
         }
 
         @JvmStatic
-        fun currentTarget() = NekomuraConfig.translateToLang.String()?.transDbByCode
+        fun currentTarget() = NekoConfig.translateToLang.String()?.transDbByCode
                 ?: LocaleController.getInstance().currentLocale.transDb
 
         @JvmStatic
         fun forLocale(locale: Locale) = locale.transDb
 
         @JvmStatic
-        fun currentInputTarget() = NekomuraConfig.translateInputLang.String().transDbByCode
+        fun currentInputTarget() = NekoConfig.translateInputLang.String().transDbByCode
 
         @JvmStatic
         fun clearAll() {

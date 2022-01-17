@@ -61,7 +61,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class VoIPHelper {
 
@@ -103,7 +103,7 @@ public class VoIPHelper {
             return;
         }
 
-        if (!confirmed && NekomuraConfig.askBeforeCall.Bool()) {
+        if (!confirmed && NekoConfig.askBeforeCall.Bool()) {
             new AlertDialog.Builder(activity)
                     .setTitle(LocaleController.getString("ConfirmCall", R.string.ConfirmCall))
                     .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallTo", R.string.CallTo,

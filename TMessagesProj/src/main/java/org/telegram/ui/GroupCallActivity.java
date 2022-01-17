@@ -35,8 +35,6 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.os.Vibrator;
-import android.provider.Settings;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
@@ -44,9 +42,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Property;
-import android.util.SparseArray;
-import android.util.SparseBooleanArray;
-import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -133,7 +128,6 @@ import org.telegram.ui.Components.GroupVoipInviteAlert;
 import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.JoinCallAlert;
-import org.telegram.ui.Components.GroupVoipInviteAlert;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.ProfileGalleryView;
@@ -160,11 +154,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 import static android.content.Context.AUDIO_SERVICE;
-
-import com.google.android.exoplayer2.util.Log;
 
 public class GroupCallActivity extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, VoIPService.StateListener {
 
@@ -421,7 +413,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         if (call == null || !scheduled || VoIPService.getSharedInstance() == null) {
             return;
         }
-        if (!NekomuraConfig.disableVibration.Bool()) {
+        if (!NekoConfig.disableVibration.Bool()) {
             muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
         updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
@@ -4074,7 +4066,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         updateMuteButton(MUTE_BUTTON_STATE_UNMUTE, true);
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().setMicMute(true, true, false);
-                            if (!NekomuraConfig.disableVibration.Bool()) {
+                            if (!NekoConfig.disableVibration.Bool()) {
                                 muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             }
                         }
@@ -4202,13 +4194,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     } else if (muteButtonState == MUTE_BUTTON_STATE_UNMUTE) {
                         updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
                         VoIPService.getSharedInstance().setMicMute(false, false, true);
-                        if (!NekomuraConfig.disableVibration.Bool()) {
+                        if (!NekoConfig.disableVibration.Bool()) {
                             muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
                     } else {
                         updateMuteButton(MUTE_BUTTON_STATE_UNMUTE, true);
                         VoIPService.getSharedInstance().setMicMute(true, false, true);
-                        if (!NekomuraConfig.disableVibration.Bool()) {
+                        if (!NekoConfig.disableVibration.Bool()) {
                             muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
                     }

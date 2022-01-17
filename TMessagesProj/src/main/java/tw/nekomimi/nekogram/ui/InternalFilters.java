@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.ui;
 
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;

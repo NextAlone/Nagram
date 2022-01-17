@@ -39,8 +39,6 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ChatThemeController;
-import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
@@ -81,8 +79,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import tw.nekomimi.nekogram.MessageHelper;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.ui.MessageHelper;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class DialogCell extends BaseCell {
 
@@ -1025,7 +1023,7 @@ public class DialogCell extends BaseCell {
                             currentMessagePaint = Theme.dialogs_messagePrintingPaint[paintIndex];
                         } else {
                             boolean needEmoji = true;
-                            if (NekomuraConfig.mediaPreview.Bool() && TextUtils.isEmpty(restrictionReason) && currentDialogFolderId == 0 && encryptedChat == null && !message.needDrawBluredPreview() && (message.isPhoto() || message.isNewGif() || message.isVideo())) {
+                            if (NekoConfig.mediaPreview.Bool() && TextUtils.isEmpty(restrictionReason) && currentDialogFolderId == 0 && encryptedChat == null && !message.needDrawBluredPreview() && (message.isPhoto() || message.isNewGif() || message.isVideo())) {
                                 String type = message.isWebpage() ? message.messageOwner.media.webpage.type : null;
                                 if (!("app".equals(type) || "profile".equals(type) || "article".equals(type) || type != null && type.startsWith("telegram_"))) {
                                     TLRPC.PhotoSize smallThumb = FileLoader.getClosestPhotoSizeWithSize(message.photoThumbs, 40);
@@ -2030,7 +2028,7 @@ public class DialogCell extends BaseCell {
                     if (mask == 0) {
                         clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
                         message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
-                        if (message != null && NekomuraConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
+                        if (message != null && NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
                             if (MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id) != null)
                                 message = MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id);
                             else {
@@ -2316,7 +2314,7 @@ public class DialogCell extends BaseCell {
         if (isSliding && !swipeCanceled) {
             boolean prevValue = drawRevealBackground;
             drawRevealBackground = Math.abs(translationX) >= getMeasuredWidth() * 0.45f;
-            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !NekomuraConfig.disableVibration.Bool()) {
+            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !NekoConfig.disableVibration.Bool()) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {

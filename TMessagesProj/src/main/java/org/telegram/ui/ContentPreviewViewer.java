@@ -57,15 +57,13 @@ import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.StickerCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.ChatAvatarContainer;
-import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ContentPreviewViewer {
 
@@ -264,7 +262,7 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                if (!NekomuraConfig.disableVibration.Bool()) {
+                if (!NekoConfig.disableVibration.Bool()) {
                     containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
                 if (delegate != null && delegate.needRemove()) {
@@ -358,7 +356,7 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                if (!NekomuraConfig.disableVibration.Bool()) {
+                if (!NekoConfig.disableVibration.Bool()) {
                     containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
                 if (canDelete) {

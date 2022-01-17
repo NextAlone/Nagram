@@ -61,7 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 public class ImageUpdater implements NotificationCenter.NotificationCenterDelegate, PhotoCropActivity.PhotoEditActivityDelegate {
 

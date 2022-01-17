@@ -6,7 +6,7 @@ import okhttp3.Dns
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tw.nekomimi.nekogram.proxy.tcp2ws.Tcp2wsServer
-import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nekogram.NekoConfig
 import java.net.InetAddress
 
 class WsLoader {
@@ -75,7 +75,7 @@ class WsLoader {
     class CustomDns : Dns {
         override fun lookup(hostname: String): List<InetAddress> {
             val list = ArrayList<InetAddress>()
-            val ip = NekomuraConfig.customPublicProxyIP.String()
+            val ip = NekoConfig.customPublicProxyIP.String()
             if (StrUtil.isBlank(ip)) {
                 return Dns.SYSTEM.lookup(hostname)
             }

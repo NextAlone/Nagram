@@ -179,9 +179,9 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import libv2ray.Libv2ray;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.InternalUpdater;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
@@ -1975,7 +1975,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 avatarContainer2.setPivotX(avatarContainer2.getMeasuredWidth() / 2f);
                 AndroidUtilities.updateViewVisibilityAnimated(avatarContainer2, !expanded, 0.95f, true);
 
-                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekomuraConfig.showIdAndDc.Bool())
+                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc.Bool())
                     idTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
 
                 callItem.setVisibility(expanded || !callItemVisible ? GONE : INVISIBLE);
@@ -4849,7 +4849,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setScaleY(nameScale);
                 }
 
-                if (diff > 0.85 && !searchMode && NekomuraConfig.showIdAndDc.Bool()) {
+                if (diff > 0.85 && !searchMode && NekoConfig.showIdAndDc.Bool()) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {
                     idTextView.setVisibility(View.GONE);
@@ -6800,7 +6800,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setVisibility(View.VISIBLE);
         nameTextView[1].setVisibility(View.VISIBLE);
         onlineTextView[1].setVisibility(View.VISIBLE);
-        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekomuraConfig.showIdAndDc.Bool())
+        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc.Bool())
             idTextView.setVisibility(View.VISIBLE);
 
         actionBar.onSearchFieldVisibilityChanged(searchTransitionProgress > 0.5f);

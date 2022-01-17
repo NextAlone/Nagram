@@ -40,9 +40,6 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
 import androidx.collection.LongSparseArray;
-import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
-import androidx.core.graphics.drawable.IconCompat;
 
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
@@ -79,10 +76,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.collection.LongSparseArray;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.PinnedStickerHelper;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -433,7 +428,7 @@ public class MediaDataController extends BaseController {
 
     public ArrayList<TLRPC.Document> getRecentStickers(int type, int padding) {
         ArrayList<TLRPC.Document> arrayList = recentStickers[type];
-        return new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), NekomuraConfig.maxRecentStickerCount.Int() + padding)));
+        return new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), NekoConfig.maxRecentStickerCount.Int() + padding)));
     }
 
     public ArrayList<TLRPC.Document> getRecentStickersNoCopy(int type) {
@@ -495,7 +490,7 @@ public class MediaDataController extends BaseController {
                     AndroidUtilities.runOnUIThread(() -> getMediaDataController().loadRecents(MediaDataController.TYPE_FAVE, false, false, true));
                 }
             });
-            maxCount = NekomuraConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
+            maxCount = NekoConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
         } else {
             if (type == TYPE_IMAGE && remove) {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_STICKER, document, StickerSetBulletinLayout.TYPE_REMOVED_FROM_RECENT);
@@ -890,7 +885,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadRecents(int type, boolean gif, boolean cache, boolean force) {
-        if (NekomuraConfig.unlimitedFavedStickers.Bool() && type == TYPE_FAVE && !cache) {
+        if (NekoConfig.unlimitedFavedStickers.Bool() && type == TYPE_FAVE && !cache) {
             return;
         }
         if (gif) {
@@ -1062,7 +1057,7 @@ public class MediaDataController extends BaseController {
                         if (type == TYPE_GREETINGS) {
                             maxCount = 200;
                         } else if (type == TYPE_FAVE) {
-                            maxCount = NekomuraConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
+                            maxCount = NekoConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
                         } else {
                             maxCount = getMessagesController().maxRecentStickersCount;
                         }
@@ -1222,7 +1217,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadFeaturedStickers(boolean cache, boolean force) {
-        if (loadingFeaturedStickers || NekomuraConfig.disableTrending.Bool()) {
+        if (loadingFeaturedStickers || NekoConfig.disableTrending.Bool()) {
             return;
         }
         loadingFeaturedStickers = true;
@@ -1552,7 +1547,7 @@ public class MediaDataController extends BaseController {
         } else {
             LongSparseArray<TLRPC.TL_messages_stickerSet> newStickerSets = new LongSparseArray<>();
             // NekoX: Pin Sticker
-            if (NekomuraConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE) {
+            if (NekoConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE) {
                 PinnedStickerHelper ins = PinnedStickerHelper.getInstance(UserConfig.selectedAccount);
                 if (ins.reorderPinnedStickersForSS(res.sets, true))
                     AndroidUtilities.runOnUIThread(() -> {
@@ -2071,7 +2066,7 @@ public class MediaDataController extends BaseController {
 
         int type = stickerSet.masks ? TYPE_MASK : TYPE_IMAGE;
 
-        if (NekomuraConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
+        if (NekoConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
             PinnedStickerHelper.getInstance(currentAccount).removePinnedStickerLocal(stickerSet.id);
         }
 
@@ -2108,7 +2103,7 @@ public class MediaDataController extends BaseController {
             toggleStickerSetInternal(context, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, false);
         } else {
             StickerSetBulletinLayout bulletinLayout = new StickerSetBulletinLayout(context, stickerSetObject, toggle);
-            int finalCurrentIndex = NekomuraConfig.enableStickerPin.Bool() && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
+            int finalCurrentIndex = NekoConfig.enableStickerPin.Bool() && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
                     ? PinnedStickerHelper.getInstance(UserConfig.selectedAccount).pinnedList.size()
                     : currentIndex;
             // NekoX: Pin Sticker, Fix undo for Archiving and Deleting

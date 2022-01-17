@@ -1,15 +1,15 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.ui.Cells.HeaderCell;
 
-import tw.nekomimi.nkmr.CellGroup;
+import tw.nekomimi.nekogram.config.CellGroup;
 
-public class NekomuraTGHeader extends AbstractCell {
+public class ConfigCellHeader extends AbstractConfigCell {
     private final String title;
 
-    public NekomuraTGHeader(String title) {
+    public ConfigCellHeader(String title) {
         this.title = title;
     }
 

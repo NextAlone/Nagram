@@ -1,33 +1,33 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Cells.TextCheckCell;
 
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.ConfigItem;
+import tw.nekomimi.nekogram.config.CellGroup;
+import tw.nekomimi.nekogram.config.ConfigItem;
 
-public class NekomuraTGTextCheck extends AbstractCell {
+public class ConfigCellTextCheck extends AbstractConfigCell {
     private final ConfigItem bindConfig;
     private final String title;
     private final String subtitle;
     public boolean enabled = true;
     public TextCheckCell cell; //TODO getCell() in NekomuraTGCell
 
-    public NekomuraTGTextCheck(ConfigItem bind) {
+    public ConfigCellTextCheck(ConfigItem bind) {
         this.bindConfig = bind;
         this.title = LocaleController.getString(bindConfig.getKey());
         this.subtitle = null;
     }
 
-    public NekomuraTGTextCheck(ConfigItem bind, String subtitle) {
+    public ConfigCellTextCheck(ConfigItem bind, String subtitle) {
         this.bindConfig = bind;
         this.title = LocaleController.getString(bindConfig.getKey());
         this.subtitle = subtitle;
     }
 
-    public NekomuraTGTextCheck(ConfigItem bind, String subtitle, String customTitle) {
+    public ConfigCellTextCheck(ConfigItem bind, String subtitle, String customTitle) {
         this.bindConfig = bind;
         this.title = customTitle;
         this.subtitle = subtitle;

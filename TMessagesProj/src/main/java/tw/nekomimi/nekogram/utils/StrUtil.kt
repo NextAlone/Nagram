@@ -48,4 +48,24 @@ object StrUtil {
         textView.text = stringBuilder ?: text
     }
 
+    @JvmStatic
+    fun getSubString(text: String, left: String?, right: String?): String {
+        var llen: Int
+        if (left == null || left.isEmpty()) {
+            llen = 0
+        } else {
+            llen = text.indexOf(left)
+            if (llen > -1) {
+                llen += left.length
+            } else {
+                llen = 0
+            }
+        }
+        var rlen = text.indexOf(right!!, llen)
+        if (rlen < 0 || right.isEmpty()) {
+            rlen = text.length
+        }
+        return text.substring(llen, rlen)
+    }
+
 }

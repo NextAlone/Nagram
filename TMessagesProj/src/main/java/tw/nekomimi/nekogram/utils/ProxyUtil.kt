@@ -43,7 +43,7 @@ import org.json.JSONException
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
 import org.yaml.snakeyaml.Yaml
-import tw.nekomimi.nekogram.BottomBuilder
+import tw.nekomimi.nekogram.ui.BottomBuilder
 import tw.nekomimi.nekogram.proxy.ShadowsocksLoader
 import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader
 import tw.nekomimi.nekogram.utils.AlertUtil.showToast

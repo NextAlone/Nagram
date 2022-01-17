@@ -22,8 +22,6 @@ import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DispatchQueuePool;
@@ -42,7 +40,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
@@ -1010,7 +1008,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             } else if (nextRenderingBitmap != null && (renderingBitmap == null || timeDiff >= timeCheck) && isCurrentParentViewMaster()) {
                 if (vibrationPattern != null && currentParentView != null) {
                     Integer force = vibrationPattern.get(currentFrame - 1);
-                    if (force != null && !NekomuraConfig.disableVibration.Bool()) {
+                    if (force != null && !NekoConfig.disableVibration.Bool()) {
                         currentParentView.performHapticFeedback(force == 1 ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                 }

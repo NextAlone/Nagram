@@ -45,7 +45,7 @@ import java.util.ArrayList;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nekogram.ui.PopupBuilder;
 
 public class ShadowsocksRSettingsActivity extends BaseFragment {
 

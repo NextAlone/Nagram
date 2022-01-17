@@ -23,7 +23,7 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 public class PhotoAttachPermissionCell extends FrameLayout {
 
@@ -72,7 +72,7 @@ public class PhotoAttachPermissionCell extends FrameLayout {
             imageView.setImageResource(R.drawable.permissions_gallery1);
             imageView2.setImageResource(R.drawable.permissions_gallery2);
             textView.setText(LocaleController.getString("GalleryPermissionText", R.string.GalleryPermissionText));
-            if (NekoConfig.forceSystemPicker) {
+            if (NekoXConfig.forceSystemPicker) {
                 imageView.setImageResource(R.drawable.baseline_open_in_browser_24);
                 imageView2.setVisibility(GONE);
                 textView.setText(LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));

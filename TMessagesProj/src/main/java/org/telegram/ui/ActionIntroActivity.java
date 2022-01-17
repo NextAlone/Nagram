@@ -59,7 +59,7 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 import java.util.ArrayList;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 @TargetApi(23)
 public class ActionIntroActivity extends BaseFragment implements LocationController.LocationFetchCallback {

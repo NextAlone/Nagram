@@ -61,7 +61,6 @@ import android.widget.FrameLayout;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.video.MediaCodecVideoConvertor;
@@ -83,7 +82,6 @@ import org.telegram.ui.PhotoViewer;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -102,7 +100,6 @@ import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.SaveToDownloadReceiver;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
@@ -574,7 +571,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     private ArrayList<ByteBuffer> recordBuffers = new ArrayList<>();
     private ByteBuffer fileBuffer;
     public int recordBufferSize = 1280;
-    public int sampleRate = NekomuraConfig.increaseVoiceMessageQuality.Bool() ? 48000 : 16000;
+    public int sampleRate = NekoConfig.increaseVoiceMessageQuality.Bool() ? 48000 : 16000;
     private int sendAfterDone;
     private boolean sendAfterDoneNotify;
     private int sendAfterDoneScheduleDate;
@@ -858,7 +855,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void recreateProximityWakeLock() {
 
-        if (NekomuraConfig.disableProximityEvents.Bool()) {
+        if (NekoConfig.disableProximityEvents.Bool()) {
             proximityWakeLock = null;
             return;
         }
@@ -879,7 +876,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         recordQueue.postRunnable(() -> {
             try {
-                sampleRate = NekomuraConfig.increaseVoiceMessageQuality.Bool() ? 48000 : 16000;
+                sampleRate = NekoConfig.increaseVoiceMessageQuality.Bool() ? 48000 : 16000;
                 int minBuferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
                 if (minBuferSize <= 0) {
                     minBuferSize = 1280;
@@ -1434,7 +1431,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private boolean isNearToSensor(float value) {
-        return !NekomuraConfig.disableProximityEvents.Bool() && value < 5.0f && value != proximitySensor.getMaximumRange();
+        return !NekoConfig.disableProximityEvents.Bool() && value < 5.0f && value != proximitySensor.getMaximumRange();
     }
 
     public boolean isRecordingOrListeningByProximity() {
@@ -3459,7 +3456,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         requestAudioFocus(true);
 
-        if (!NekomuraConfig.disableVibration.Bool()) {
+        if (!NekoConfig.disableVibration.Bool()) {
             try {
                 feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {
@@ -3489,7 +3486,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             recordingAudioFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), FileLoader.getAttachFileName(recordingAudio));
 
             try {
-                if (startRecord(recordingAudioFile.getAbsolutePath(), NekomuraConfig.increaseVoiceMessageQuality.Bool() ? 48000 : 16000) == 0) {
+                if (startRecord(recordingAudioFile.getAbsolutePath(), NekoConfig.increaseVoiceMessageQuality.Bool() ? 48000 : 16000) == 0) {
                     AndroidUtilities.runOnUIThread(() -> {
                         recordStartRunnable = null;
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recordStartError, guid);
@@ -3647,7 +3644,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (send == 0) {
                 stopRecordingInternal(0, false, 0);
             }
-            if (!NekomuraConfig.disableVibration.Bool()) {
+            if (!NekoConfig.disableVibration.Bool()) {
                 try {
                     feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {

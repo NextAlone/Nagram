@@ -28,14 +28,12 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.text.util.Linkify;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -46,7 +44,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -100,7 +97,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -1668,7 +1665,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         sendPopupWindow.dismiss();
                     }
                     if (num == 0) {
-                        translateComment(parentFragment.getParentActivity(), TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekomuraConfig.translateInputLang.String())));
+                        translateComment(parentFragment.getParentActivity(), TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
                     } else if (num == 1) {
                         AlertsCreator.createScheduleDatePickerDialog(getContext(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                             if (currentAttachLayout == photoLayout) {
@@ -1721,7 +1718,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             view.getLocationInWindow(location);
             sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - sendPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8), location[1] - sendPopupLayout.getMeasuredHeight() - AndroidUtilities.dp(2));
             sendPopupWindow.dimBehind();
-            if (!NekomuraConfig.disableVibration.Bool()) {
+            if (!NekoConfig.disableVibration.Bool()) {
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             }
 

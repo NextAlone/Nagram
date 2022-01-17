@@ -15,7 +15,7 @@ import org.telegram.ui.Components.Rect;
 
 import java.util.UUID;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class EntityView extends FrameLayout {
 
@@ -59,7 +59,7 @@ public class EntityView extends FrameLayout {
 
                 recognizedLongPress = true;
                 if (delegate != null) {
-                    if (!NekomuraConfig.disableVibration.Bool()) {
+                    if (!NekoConfig.disableVibration.Bool()) {
                         performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                     delegate.onEntityLongClicked(EntityView.this);

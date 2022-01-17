@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.ui;
 
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.MessagesController;

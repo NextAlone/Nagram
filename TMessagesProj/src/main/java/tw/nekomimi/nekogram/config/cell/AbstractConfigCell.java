@@ -1,10 +1,10 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import tw.nekomimi.nkmr.CellGroup;
+import tw.nekomimi.nekogram.config.CellGroup;
 
-public abstract class AbstractCell {
+public abstract class AbstractConfigCell {
     // can not be null!
     protected CellGroup cellGroup;
 

@@ -21,7 +21,6 @@ import android.util.SparseIntArray;
 
 import androidx.annotation.UiThread;
 
-import androidx.annotation.UiThread;
 import androidx.collection.LongSparseArray;
 
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -52,8 +51,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import androidx.collection.LongSparseArray;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class MessagesStorage extends BaseController {
 
@@ -2565,7 +2563,7 @@ public class MessagesStorage extends BaseController {
                         continue;
                     }
                     flags = filter.flags;
-                    if (NekomuraConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                    if (NekoConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
                         flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                     }
                 } else {
@@ -4735,7 +4733,7 @@ public class MessagesStorage extends BaseController {
                 }
                 unreadCount = filter.pendingUnreadCount;
                 flags = filter.flags;
-                if (NekomuraConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                if (NekoConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
                     flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                 }
             } else {

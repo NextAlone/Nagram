@@ -41,7 +41,7 @@ import java.util.Collections;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.jvm.functions.Function0;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
@@ -273,7 +273,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
-        if (NekomuraConfig.useProxyItem.Bool() && (!NekomuraConfig.hideProxyByDefault.Bool() || SharedConfig.proxyEnabled)) {
+        if (NekoConfig.useProxyItem.Bool() && (!NekoConfig.hideProxyByDefault.Bool() || SharedConfig.proxyEnabled)) {
             items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.baseline_security_24, () -> SharedConfig.proxyEnabled, () -> {
                 SharedConfig.setProxyEnable(!SharedConfig.proxyEnabled);
                 return true;

@@ -1,4 +1,4 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,16 +7,16 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.RecyclerListView;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.ConfigItem;
+import tw.nekomimi.nekogram.config.CellGroup;
+import tw.nekomimi.nekogram.config.ConfigItem;
 
-public class NekomuraTGTextDetail extends AbstractCell {
+public class ConfigCellTextDetail extends AbstractConfigCell {
     private final ConfigItem bindConfig;
     private final String title;
     private final String hint;
     public final RecyclerListView.OnItemClickListener onItemClickListener;
 
-    public NekomuraTGTextDetail(ConfigItem bind, RecyclerListView.OnItemClickListener onItemClickListener, String hint) {
+    public ConfigCellTextDetail(ConfigItem bind, RecyclerListView.OnItemClickListener onItemClickListener, String hint) {
         this.bindConfig = bind;
         this.title = LocaleController.getString(bindConfig.getKey());
         this.hint = hint == null ? "" : hint;

@@ -67,10 +67,6 @@ import androidx.core.graphics.ColorUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.core.graphics.ColorUtils;
-
-import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -135,11 +131,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.core.graphics.ColorUtils;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class Theme {
 
@@ -4877,7 +4869,7 @@ public class Theme {
         themeInfo.previewOutColor = 0xffd0e6ff;
         themeInfo.sortIndex = 1;
         themeInfo.firstAccentIsDefault = true;
-        if (NekomuraConfig.useDefaultTheme.Bool())
+        if (NekoConfig.useDefaultTheme.Bool())
             themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
         themeInfo.setAccentColorOptions(
                 new int[]    { 0xFF5890C5,                     0xFF239853,                    0xFFCE5E82,                    0xFF7F63C3,                    0xFF2491AD,                    0xFF299C2F,                    0xFF8854B4,                    0xFF328ACF,                    0xFF43ACC7,                    0xFF52AC44,                    0xFFCD5F93,                    0xFFD28036,                    0xFF8366CC,                    0xFFCE4E57,                    0xFFD3AE40,                    0xFF7B88AB },
@@ -4903,7 +4895,7 @@ public class Theme {
         themeInfo.previewInColor = Color.parseColor("#c0ffffff");
         themeInfo.previewOutColor = Color.parseColor("#3f51b5");
         themeInfo.sortIndex = 0;
-        if (!NekomuraConfig.useDefaultTheme.Bool())
+        if (!NekoConfig.useDefaultTheme.Bool())
             themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
         themes.add(themeInfo);
         themesDict.put("NekoX", themeInfo);
@@ -5581,7 +5573,7 @@ public class Theme {
                 canStartHolidayAnimation = false;
             }
             if (dialogs_holidayDrawable == null) {
-                if (getEventType() == 0 || NekomuraConfig.newYear.Bool()) {
+                if (getEventType() == 0 || NekoConfig.newYear.Bool()) {
                     dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -AndroidUtilities.dp(3);
                     dialogs_holidayDrawableOffsetY = -AndroidUtilities.dp(1);

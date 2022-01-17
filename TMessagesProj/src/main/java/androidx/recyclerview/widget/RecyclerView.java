@@ -95,7 +95,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 /**
@@ -7002,7 +7002,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             try {
                 TraceCompat.beginSection(TRACE_CREATE_VIEW_TAG);
                 final VH holder = onCreateViewHolder(parent, viewType);
-                if (NekomuraConfig.disableVibration.Bool()) {
+                if (NekoConfig.disableVibration.Bool()) {
                     VibrateUtil.disableHapticFeedback(holder.itemView);
                 }
                 if (holder.itemView.getParent() != null) {

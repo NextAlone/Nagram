@@ -94,16 +94,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import androidx.annotation.Keep;
 import androidx.core.graphics.ColorUtils;
-import androidx.exifinterface.media.ExifInterface;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
 
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -621,7 +615,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     return;
                 } else if (noGalleryPermissions && position != 0) {
                     try {
-                        if (NekoConfig.forceSystemPicker) {
+                        if (NekoXConfig.forceSystemPicker) {
                             menu.onItemClick(open_in); // Use system photo picker
                         } else {
                             parentAlert.baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
@@ -664,7 +658,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 PhotoViewer.getInstance().setCaption(parentAlert.getCommentTextView().getText());
             } else {
                 if (SharedConfig.inappCamera) {
-                    if (NekomuraConfig.disableInstantCamera.Bool()) {
+                    if (NekoConfig.disableInstantCamera.Bool()) {
                         showCamera();
                     }
                     openCamera(true);
@@ -1625,7 +1619,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             }
         }
-        if (deviceHasGoodCamera && NekomuraConfig.disableInstantCamera.Bool()) {
+        if (deviceHasGoodCamera && NekoConfig.disableInstantCamera.Bool()) {
             // Clear cached bitmap
             File file = new File(ApplicationLoader.getFilesDirFixed(), "cthumb.jpg");
             if (file.exists()) file.delete();
@@ -1633,7 +1627,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if ((old != deviceHasGoodCamera || old2 != noCameraPermissions) && adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if (parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.baseFragment != null && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened && !NekomuraConfig.disableInstantCamera.Bool()) {
+        if (parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.baseFragment != null && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened && !NekoConfig.disableInstantCamera.Bool()) {
             showCamera();
         }
     }
@@ -1922,7 +1916,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     private void saveLastCameraBitmap() {
-        if (!canSaveCameraPreview || NekomuraConfig.disableInstantCamera.Bool()) {
+        if (!canSaveCameraPreview || NekoConfig.disableInstantCamera.Bool()) {
             return;
         }
         try {

@@ -8,8 +8,8 @@ import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.messenger.SharedConfig
-import tw.nekomimi.nkmr.NekomuraConfig
-import tw.nekomimi.nekogram.PopupBuilder
+import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.ui.PopupBuilder
 import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
 import tw.nekomimi.nekogram.transtale.source.*
@@ -70,7 +70,8 @@ interface Translator {
     companion object {
 
         @Throws(Exception::class)
-        suspend fun translate(query: String) = translate(NekomuraConfig.translateToLang.String()?.code2Locale
+        suspend fun translate(query: String) = translate(
+            NekoConfig.translateToLang.String()?.code2Locale
                 ?: LocaleController.getInstance().currentLocale, query)
 
         const val providerGoogle = 1
@@ -90,7 +91,7 @@ interface Translator {
             if (language == "in") language = "id"
             if (country.lowercase() == "duang") country = "CN"
 
-            val provider = NekomuraConfig.translationProvider.Int()
+            val provider = NekoConfig.translationProvider.Int()
             when (provider) {
                 providerYouDao -> if (language == "zh") {
                     language = "zh-CHS"
@@ -243,7 +244,7 @@ interface Translator {
 
         @JvmStatic
         @JvmOverloads
-        fun translate(to: Locale = NekomuraConfig.translateToLang.String()?.code2Locale
+        fun translate(to: Locale = NekoConfig.translateToLang.String()?.code2Locale
                 ?: LocaleController.getInstance().currentLocale, query: String, translateCallBack: TranslateCallBack) {
 
             UIUtil.runOnIoDispatcher {

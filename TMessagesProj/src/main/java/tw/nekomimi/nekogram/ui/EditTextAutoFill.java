@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram;
+package tw.nekomimi.nekogram.ui;
 
 import android.annotation.TargetApi;
 import android.content.Context;

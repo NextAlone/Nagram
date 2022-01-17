@@ -24,9 +24,6 @@ import android.text.format.DateFormat;
 import android.util.Xml;
 import android.view.Gravity;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import org.telegram.messenger.support.ArrayUtils;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
@@ -47,10 +44,9 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.LocFiltersKt;
 import tw.nekomimi.nekogram.shamsicalendar.PersianCalendar;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -107,7 +103,7 @@ public class LocaleController {
     private HashMap<String, String> translitChars;
     private HashMap<String, String> ruTranslitChars;
 
-    public static boolean usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool(); // need restart
+    public static boolean usePersianCalendar = NekoConfig.usePersianCalendar.Bool(); // need restart
 
     private class TimeZoneChangedReceiver extends BroadcastReceiver {
         @Override
@@ -1814,7 +1810,7 @@ public class LocaleController {
         formatterWeekLong = createFormatter(locale, getStringInternal("formatterWeekLong", R.string.formatterWeekLong), "EEEE");
         formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateSchedule", R.string.formatDateSchedule), "MMM d");
         formatterScheduleYear = createFormatter(locale, getStringInternal("formatDateScheduleYear", R.string.formatDateScheduleYear), "MMM d yyyy");
-        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, (is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H)).replace(":mm", NekomuraConfig.showSeconds.Bool() ? ":mm:ss" : ":mm"), (is24HourFormat ? "HH:mm" : "h:mm a").replace(":mm", NekomuraConfig.showSeconds.Bool() ? ":mm:ss" : ":mm"));
+        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, (is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H)).replace(":mm", NekoConfig.showSeconds.Bool() ? ":mm:ss" : ":mm"), (is24HourFormat ? "HH:mm" : "h:mm a").replace(":mm", NekoConfig.showSeconds.Bool() ? ":mm:ss" : ":mm"));
         formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
         formatterBannedUntil = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntil24H", R.string.formatterBannedUntil24H) : getStringInternal("formatterBannedUntil12H", R.string.formatterBannedUntil12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
         formatterBannedUntilThisYear = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntilThisYear24H", R.string.formatterBannedUntilThisYear24H) : getStringInternal("formatterBannedUntilThisYear12H", R.string.formatterBannedUntilThisYear12H), is24HourFormat ? "MMM dd, HH:mm" : "MMM dd, h:mm a");
@@ -1962,7 +1958,7 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
-        if (NekomuraConfig.disableNumberRounding.Bool()) {
+        if (NekoConfig.disableNumberRounding.Bool()) {
             if (rounded != null) {
                 rounded[0] = number;
             }

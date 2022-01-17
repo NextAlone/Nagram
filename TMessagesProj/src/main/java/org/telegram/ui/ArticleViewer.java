@@ -177,17 +177,12 @@ import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-
-import static org.telegram.messenger.MessageObject.POSITION_FLAG_BOTTOM;
-import static org.telegram.messenger.MessageObject.POSITION_FLAG_LEFT;
-import static org.telegram.messenger.MessageObject.POSITION_FLAG_RIGHT;
-import static org.telegram.messenger.MessageObject.POSITION_FLAG_TOP;
 
 public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1097,7 +1092,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (checkingForLongPress && windowView != null) {
                 checkingForLongPress = false;
                 if (pressedLink != null) {
-                    if (!NekomuraConfig.disableVibration.Bool()) {
+                    if (!NekoConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                     showCopyPopup(pressedLink.getUrl());
@@ -1112,11 +1107,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     } else {
                         textSelectionHelper.trySelect(pressedLinkOwnerView);
                     }
-                    if (textSelectionHelper.isSelectionMode() && !NekomuraConfig.disableVibration.Bool()) {
+                    if (textSelectionHelper.isSelectionMode() && !NekoConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                 } else if (pressedLinkOwnerLayout != null && pressedLinkOwnerView != null) {
-                    if (!NekomuraConfig.disableVibration.Bool()) {
+                    if (!NekoConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     }
                     int[] location = new int[2];
@@ -10330,9 +10325,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 String currentUrl = AndroidUtilities.formapMapUrl(false, currentBlock.geo.lat, currentBlock.geo._long, (int) (photoWidth / AndroidUtilities.density), (int) (height / AndroidUtilities.density), true, 15);
                 WebFile currentWebFile = WebFile.createWithGeoPoint(currentBlock.geo, (int) (photoWidth / AndroidUtilities.density), (int) (height / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil(AndroidUtilities.density)));
 
-                if (NekomuraConfig.mapPreviewProvider.Int() == 0) {
+                if (NekoConfig.mapPreviewProvider.Int() == 0) {
                     currentMapProvider = 2;
-                } else if (NekomuraConfig.mapPreviewProvider.Int() == 1) {
+                } else if (NekoConfig.mapPreviewProvider.Int() == 1) {
                     currentMapProvider = 1;
                 } else {
                     currentMapProvider = -1;

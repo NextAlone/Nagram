@@ -1,4 +1,4 @@
-package tw.nekomimi.nkmr;
+package tw.nekomimi.nekogram.config;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +10,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nkmr.cells.AbstractCell;
-import tw.nekomimi.nkmr.cells.NekomuraTGDivider;
+import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
+import tw.nekomimi.nekogram.config.cell.ConfigCellDivider;
 
 public class CellGroup {
     public static final int ITEM_TYPE_DIVIDER = 1;
@@ -24,7 +24,7 @@ public class CellGroup {
     public BaseFragment thisFragment;
     public RecyclerListView listView;
     public RecyclerListView.SelectionAdapter listAdapter;
-    public ArrayList<AbstractCell> rows;
+    public ArrayList<AbstractConfigCell> rows;
 
     public CallBackSettingsChanged callBackSettingsChanged;
 
@@ -38,13 +38,13 @@ public class CellGroup {
         this.listAdapter = la;
     }
 
-    public AbstractCell appendCell(AbstractCell cell) {
+    public AbstractConfigCell appendCell(AbstractConfigCell cell) {
         cell.bindCellGroup(this);
         this.rows.add(cell);
         return cell;
     }
 
-    public AbstractCell appendCell(AbstractCell cell, boolean display) {
+    public AbstractConfigCell appendCell(AbstractConfigCell cell, boolean display) {
         cell.bindCellGroup(this);
         if (display) // For censored features, don't show it forever.
             this.rows.add(cell);
@@ -83,8 +83,8 @@ public class CellGroup {
         cell.setLayoutParams(params);
     }
 
-    public boolean needSetDivider(AbstractCell cell) {
-        return !(rows.get(rows.indexOf(cell) + 1) instanceof NekomuraTGDivider);
+    public boolean needSetDivider(AbstractConfigCell cell) {
+        return !(rows.get(rows.indexOf(cell) + 1) instanceof ConfigCellDivider);
     }
 
 }

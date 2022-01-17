@@ -1,4 +1,4 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import android.content.Context;
 import android.widget.LinearLayout;
@@ -14,17 +14,17 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.ConfigItem;
+import tw.nekomimi.nekogram.config.CellGroup;
+import tw.nekomimi.nekogram.config.ConfigItem;
 
-public class NekomuraTGTextInput extends AbstractCell {
+public class ConfigCellTextInput extends AbstractConfigCell {
     private final ConfigItem bindConfig;
     private final String hint;
     private final String title;
     private final Runnable onClickCustom;
 
     // default: customTitle=null customOnClick=null
-    public NekomuraTGTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick) {
+    public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick) {
         this.bindConfig = bind;
         if (hint == null) {
             this.hint = "";

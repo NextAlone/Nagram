@@ -51,13 +51,12 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 import java.util.ArrayList;
 
@@ -449,7 +448,7 @@ public class UndoView extends FrameLayout {
         timeLeft = 5000;
         currentInfoObject = infoObject;
 
-        if (NekomuraConfig.disableUndo.Bool() && !isTooltipAction()) {
+        if (NekoConfig.disableUndo.Bool() && !isTooltipAction()) {
             if (actionRunnable != null) actionRunnable.run();
             return;
         }

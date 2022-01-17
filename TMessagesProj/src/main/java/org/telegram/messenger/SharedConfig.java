@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
-import tw.nekomimi.nekogram.ProxyManager;
+import tw.nekomimi.nekogram.proxy.ProxyManager;
 import tw.nekomimi.nekogram.proxy.ShadowsocksLoader;
 import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.proxy.VmessLoader;

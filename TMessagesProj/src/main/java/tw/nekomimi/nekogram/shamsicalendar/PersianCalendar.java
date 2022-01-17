@@ -3,7 +3,7 @@ package tw.nekomimi.nekogram.shamsicalendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class PersianCalendar extends GregorianCalendar {
     private static final long serialVersionUID = 5541422440580682494L;
@@ -54,7 +54,7 @@ public class PersianCalendar extends GregorianCalendar {
     }
 
     public String getPersianYearName() {
-        if (NekomuraConfig.displayPersianCalendarByLatin.Bool()) {
+        if (NekoConfig.displayPersianCalendarByLatin.Bool()) {
             return getPersianYear() + "";
         } else {
             return LanguageUtils.getPersianNumbers(String.valueOf(this.persianYear));
@@ -66,7 +66,7 @@ public class PersianCalendar extends GregorianCalendar {
     }
 
     public String getPersianMonthName() {
-        if (NekomuraConfig.displayPersianCalendarByLatin.Bool()) {
+        if (NekoConfig.displayPersianCalendarByLatin.Bool()) {
             return PersianCalendarConstants.persianMonthNamesLatin[this.persianMonth];
         } else {
             return PersianCalendarConstants.persianMonthNames[this.persianMonth];
@@ -78,7 +78,7 @@ public class PersianCalendar extends GregorianCalendar {
     }
 
     public String getPersianDayName() {
-        if (NekomuraConfig.displayPersianCalendarByLatin.Bool()) {
+        if (NekoConfig.displayPersianCalendarByLatin.Bool()) {
             return getPersianDay() + "";
         } else {
             return LanguageUtils.getPersianNumbers(String.valueOf(this.persianDay));

@@ -1,12 +1,12 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NekomuraTGCustom extends AbstractCell {
+public class ConfigCellCustom extends AbstractConfigCell {
     public final int type;
     public final boolean enabled;
 
-    public NekomuraTGCustom(int type, boolean enabled) {
+    public ConfigCellCustom(int type, boolean enabled) {
         this.type = type;
         this.enabled = enabled;
     }

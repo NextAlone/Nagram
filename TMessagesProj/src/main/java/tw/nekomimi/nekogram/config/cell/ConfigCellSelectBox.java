@@ -1,4 +1,4 @@
-package tw.nekomimi.nkmr.cells;
+package tw.nekomimi.nekogram.config.cell;
 
 import android.content.Context;
 import android.view.View;
@@ -15,14 +15,13 @@ import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.PopupBuilder;
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.ConfigItem;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.ui.PopupBuilder;
+import tw.nekomimi.nekogram.config.CellGroup;
+import tw.nekomimi.nekogram.config.ConfigItem;
 
 // TextSettingsCell, select from a list
 // Can be used without select list（custom）
-public class NekomuraTGSelectBox extends AbstractCell {
+public class ConfigCellSelectBox extends AbstractConfigCell {
     private final ConfigItem bindConfig;
     private final String[] selectList; // split by \n
     private final String title;
@@ -30,7 +29,7 @@ public class NekomuraTGSelectBox extends AbstractCell {
     private Context ctxCustom;
 
     // default: customTitle=null customOnClick=null
-    public NekomuraTGSelectBox(String customTitle, ConfigItem bind, Object selectList_s, Runnable customOnClick) {
+    public ConfigCellSelectBox(String customTitle, ConfigItem bind, Object selectList_s, Runnable customOnClick) {
         this.bindConfig = bind;
         if (selectList_s == null) {
             this.selectList = null;

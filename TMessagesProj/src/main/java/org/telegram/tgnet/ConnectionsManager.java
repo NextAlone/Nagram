@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
 
-import com.google.android.exoplayer2.util.Log;
 import com.v2ray.ang.util.Utils;
 
 import org.telegram.messenger.AccountInstance;
@@ -50,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 
@@ -881,7 +880,7 @@ public class ConnectionsManager extends BaseController {
                 if (!hasIpv4) {
                     ipStrategy = USE_IPV6_ONLY;
                 }
-                if (NekomuraConfig.useIPv6.Bool()) {
+                if (NekoConfig.useIPv6.Bool()) {
                     ipStrategy = USE_IPV4_IPV6_RANDOM;
                 }
                 return ipStrategy;
