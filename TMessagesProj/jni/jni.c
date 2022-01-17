@@ -9,6 +9,11 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include "genuine.h"
+#include <android/log.h>
+#include <errno.h>
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "Nullgram", __VA_ARGS__)
+
 
 int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env);
 int videoOnJNILoad(JavaVM *vm, JNIEnv *env);
@@ -18,10 +23,15 @@ int tgvoipOnJNILoad(JavaVM *vm, JNIEnv *env);
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 	JNIEnv *env = 0;
     srand(time(NULL));
-    
+
 	if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
 		return -1;
 	}
+
+    if (!checkGenuine(env)) {
+        LOGE("checkGenuine: failed!");
+        return JNI_ERR;
+    }
 
     if (imageOnJNILoad(vm, env) != JNI_TRUE) {
         return -1;
