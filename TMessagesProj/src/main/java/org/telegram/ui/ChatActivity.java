@@ -1470,6 +1470,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (reaction == null) {
                 return false;
             }
+            if (NekoConfig.disableDoubleTabReactions.Bool()) return false;
             boolean available = dialog_id >= 0;
             if (!available && chatInfo != null) {
                 for (String s : chatInfo.available_reactions) {
@@ -1497,6 +1498,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (reaction == null) {
                 return;
             }
+            if (NekoConfig.disableDoubleTabReactions.Bool()) return;
             boolean available = dialog_id >= 0;
             if (!available && chatInfo != null) {
                 for (String s : chatInfo.available_reactions) {
