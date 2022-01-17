@@ -47,6 +47,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.accessibility.AccessibilitySettingsActivity;
+import tw.nekomimi.nekogram.helpers.remote.ConfigHelper;
 import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
 
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
@@ -54,6 +55,7 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
+    private final ArrayList<ConfigHelper.NewsItem> news = ConfigHelper.getNews();
 
     private boolean sensitiveCanChange = false;
     private boolean sensitiveEnabled = false;
@@ -151,6 +153,9 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
                 ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                 checkingUpdate = true;
                 listAdapter.notifyItemChanged(checkUpdateRow);
+            } else if (position >= sponsorRow && position < sponsor2Row) {
+                ConfigHelper.NewsItem item = news.get(position - sponsorRow);
+                Browser.openUrl(getParentActivity(), item.url);
             }
         });
         listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {
@@ -336,6 +341,9 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
                         textCell.setTextAndValue(LocaleController.getString("CheckUpdate", R.string.CheckUpdate),
                                 checkingUpdate ? LocaleController.getString("CheckingUpdate", R.string.CheckingUpdate) :
                                         UpdateHelper.formatDateUpdate(SharedConfig.lastUpdateCheckTime), position + 1 != about2Row);
+                    } else if (position >= sponsorRow && position < sponsor2Row) {
+                        ConfigHelper.NewsItem item = news.get(position - sponsorRow);
+                        textCell.setTextAndValue(item.title, item.summary, position + 1 != sponsor2Row);
                     }
                     break;
                 }

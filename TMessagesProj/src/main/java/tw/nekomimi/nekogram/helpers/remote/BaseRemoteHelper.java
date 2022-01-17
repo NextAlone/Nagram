@@ -70,9 +70,10 @@ public abstract class BaseRemoteHelper {
         }
     }
 
-    private void onGetMessageSuccess(String tag, int dialog_id, TLObject response, Delegate delegate) {
+    private void onGetMessageSuccess(TLObject response, Delegate delegate) {
+        var tag = "#" + getTag();
         final var res = (TLRPC.messages_Messages) response;
-        getMessagesController().removeDeletedMessagesFromArray(dialog_id, res.messages);
+        getMessagesController().removeDeletedMessagesFromArray(Extra.UPDATE_CHANNEL_ID, res.messages);
         ArrayList<JSONObject> responses = new ArrayList<>();
         for (var message : res.messages) {
             if (TextUtils.isEmpty(message.message) || !message.message.startsWith(tag)) {
@@ -96,7 +97,7 @@ public abstract class BaseRemoteHelper {
     }
 
     private void load(boolean forceRefreshAccessHash, Delegate delegate) {
-        var tag = getTag();
+        var tag = "#" + getTag();
         int dialog_id = Extra.UPDATE_CHANNEL_ID;
         TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
         req.limit = 10;
@@ -126,7 +127,7 @@ public abstract class BaseRemoteHelper {
                 req.peer.access_hash = resolvedPeer.chats.get(0).access_hash;
                 getConnectionsManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
-                        onGetMessageSuccess(tag, dialog_id, response, delegate);
+                        onGetMessageSuccess(response, delegate);
                     } else {
                         onError(error.text, delegate);
                     }
@@ -135,7 +136,7 @@ public abstract class BaseRemoteHelper {
         } else {
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
-                    onGetMessageSuccess(tag, dialog_id, response, delegate);
+                    onGetMessageSuccess(response, delegate);
                 } else {
                     load(true, delegate);
                 }

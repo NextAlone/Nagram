@@ -28,9 +28,12 @@ public class IconSelectorAlert {
 
         GridAdapter gridAdapter = new GridAdapter();
         RecyclerListView recyclerListView = new RecyclerListView(context);
+        recyclerListView.setClipToPadding(false);
         recyclerListView.setPadding(AndroidUtilities.dp(8), 0, AndroidUtilities.dp(8), 0);
         recyclerListView.setLayoutManager(new ExtendedGridLayoutManager(recyclerListView.getContext(), 6));
         recyclerListView.setAdapter(gridAdapter);
+        recyclerListView.setSelectorType(5);
+        recyclerListView.setSelectorDrawableColor(Theme.getColor(Theme.key_listSelector));
         recyclerListView.setOnItemClickListener((view, position) -> {
             onIconSelectedListener.onIconSelected((String) view.getTag());
             builder.getDismissRunnable().run();
