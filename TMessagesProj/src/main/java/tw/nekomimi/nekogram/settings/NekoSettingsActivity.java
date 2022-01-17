@@ -153,9 +153,6 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
                 ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                 checkingUpdate = true;
                 listAdapter.notifyItemChanged(checkUpdateRow);
-            } else if (position >= sponsorRow && position < sponsor2Row) {
-                ConfigHelper.NewsItem item = news.get(position - sponsorRow);
-                Browser.openUrl(getParentActivity(), item.url);
             }
         });
         listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {
@@ -341,9 +338,6 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
                         textCell.setTextAndValue(LocaleController.getString("CheckUpdate", R.string.CheckUpdate),
                                 checkingUpdate ? LocaleController.getString("CheckingUpdate", R.string.CheckingUpdate) :
                                         UpdateHelper.formatDateUpdate(SharedConfig.lastUpdateCheckTime), position + 1 != about2Row);
-                    } else if (position >= sponsorRow && position < sponsor2Row) {
-                        ConfigHelper.NewsItem item = news.get(position - sponsorRow);
-                        textCell.setTextAndValue(item.title, item.summary, position + 1 != sponsor2Row);
                     }
                     break;
                 }
