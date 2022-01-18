@@ -14325,7 +14325,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
-    public boolean isSeekbarCell() {
+    private boolean isSeekbarCell() {
         return AccConfig.TYPE_OF_REWIND != AccConfig.TYPE_NO_REWIND && (currentMessageObject.isVoice() || currentMessageObject.isRoundVideo() || currentMessageObject.isMusic());
     }
 

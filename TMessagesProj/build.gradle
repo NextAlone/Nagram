@@ -25,16 +25,17 @@ dependencies {
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
-    implementation 'com.google.android.gms:play-services-maps:18.0.1'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
     implementation 'com.google.android.gms:play-services-wearable:17.1.0'
-    implementation 'com.google.android.gms:play-services-location:19.0.0'
-    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
     implementation files('libs/libgsaverification-client.aar')
 
     implementation "androidx.browser:browser:1.4.0"
+    implementation 'com.android.billingclient:billing:4.0.0'
     implementation 'io.github.vvb2060.ndk:xposeddetector:2.2'
     implementation files('libs/org.deepl.jar')
     implementation files('libs/tcp2ws.jar')
@@ -137,7 +138,7 @@ android {
         externalNativeBuild {
             cmake {
                 version '3.10.2'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21'
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', "-DNDK_CCACHE=ccache", "-j=16"
             }
         }
     }
@@ -152,4 +153,18 @@ android {
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:none'
+}
+
+def patchBundleReleaseManifest = task('patchBundleReleaseManifest').doLast {
+    def manifest = Paths.get(project.buildDir.path, 'intermediates',
+            'bundle_manifest', 'release', 'AndroidManifest.xml')
+    def newManifest = manifest.getText()
+    newManifest = newManifest.replace("<uses-permission android:name=\"android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION\" />", "")
+    newManifest = newManifest.replace("<uses-permission android:name=\"android.permission.READ_CALL_LOG\" />", "")
+    newManifest = newManifest.replace("nekogram.apks", "nekogram.bundle")
+    Files.write(manifest, newManifest.getBytes())
+}
+
+afterEvaluate {
+    tasks.getByName("processApplicationManifestReleaseForBundle").finalizedBy patchBundleReleaseManifest
 }

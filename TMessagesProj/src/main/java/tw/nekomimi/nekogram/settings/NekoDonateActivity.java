@@ -1,30 +1,34 @@
 package tw.nekomimi.nekogram.settings;
 
 import android.annotation.SuppressLint;
-import android.app.assist.AssistContent;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
-import android.view.HapticFeedbackConstants;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.browser.Browser;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -37,68 +41,91 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.accessibility.AccessibilitySettingsActivity;
-import tw.nekomimi.nekogram.helpers.remote.ConfigHelper;
-import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
-
-@SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
-public class NekoSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+public class NekoDonateActivity extends BaseFragment implements PurchasesUpdatedListener {
+    private static final List<String> SKUS = Arrays.asList("donate001", "donate002", "donate005", "donate010", "donate020", "donate050", "donate100");
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
-    private final ArrayList<ConfigHelper.NewsItem> news = ConfigHelper.getNews();
-
-    private boolean sensitiveCanChange = false;
-    private boolean sensitiveEnabled = false;
-    private boolean checkingUpdate = false;
 
     private int rowCount;
 
-    private int categoriesRow;
-    private int generalRow;
-    private int chatRow;
-    private int experimentRow;
-    private int accessibilityRow;
-    private int categories2Row;
+    private int donateRow;
+    private int donate2Row;
 
-    private int aboutRow;
-    private int channelRow;
-    private int websiteRow;
-    private int sourceCodeRow;
-    private int translationRow;
-    private int checkUpdateRow;
-    private int about2Row;
-
-    private void checkSensitive() {
-        TLRPC.TL_account_getContentSettings req = new TLRPC.TL_account_getContentSettings();
-        getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-            if (error == null) {
-                TLRPC.TL_account_contentSettings settings = (TLRPC.TL_account_contentSettings) response;
-                sensitiveEnabled = settings.sensitive_enabled;
-                sensitiveCanChange = settings.sensitive_can_change;
-            } else {
-                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, this, req));
-            }
-        }));
-    }
+    private BillingClient billingClient;
+    private List<SkuDetails> skuDetails;
 
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.appUpdateAvailable);
         updateRows();
 
+        billingClient = BillingClient.newBuilder(ApplicationLoader.applicationContext)
+                .setListener(this)
+                .enablePendingPurchases()
+                .build();
+
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingServiceDisconnected() {
+
+            }
+
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    SkuDetailsParams params = SkuDetailsParams.newBuilder()
+                            .setSkusList(SKUS)
+                            .setType(BillingClient.SkuType.INAPP)
+                            .build();
+                    billingClient.querySkuDetailsAsync(params, (queryResult, list) -> {
+                        if (queryResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                            if (list != null && list.size() > 0) {
+                                AndroidUtilities.runOnUIThread(() -> {
+                                    if (listAdapter != null) {
+                                        skuDetails = list;
+                                        updateRows();
+                                        listAdapter.notifyItemRangeChanged(donateRow, 7);
+                                    }
+                                });
+                            }
+                        } else {
+                            showErrorAlert(queryResult);
+                        }
+                    });
+                } else {
+                    showErrorAlert(billingResult);
+                }
+            }
+        });
+
         return true;
+    }
+
+    private void showErrorAlert(BillingResult result) {
+        if (getParentActivity() == null || result.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED || result.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+            return;
+        }
+        AndroidUtilities.runOnUIThread(() -> {
+            if (TextUtils.isEmpty(result.getDebugMessage())) {
+                BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + ": " + result.getResponseCode()).show();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
+                builder.setMessage(result.getDebugMessage());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                showDialog(builder.create());
+            }
+        });
     }
 
 
@@ -106,7 +133,7 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NekoSettings", R.string.NaSettings));
+        actionBar.setTitle(LocaleController.getString("Donate", R.string.Donate));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -133,47 +160,13 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == chatRow) {
-                presentFragment(new NekoChatSettingsActivity());
-            } else if (position == generalRow) {
-                presentFragment(new NekoGeneralSettingsActivity());
-            } else if (position == experimentRow) {
-                presentFragment(new NekoExperimentalSettingsActivity(sensitiveCanChange, sensitiveEnabled));
-            } else if (position == accessibilityRow) {
-                presentFragment(new AccessibilitySettingsActivity());
-            } else if (position == channelRow) {
-                getMessagesController().openByUserName(LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), this, 1);
-           } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://neko.crowdin.com/nekogram");
-            } else if (position == websiteRow) {
-                Browser.openUrl(getParentActivity(), "https://nextalone.xyz");
-            } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/NextAlone/Nekogram");
-            } else if (position == checkUpdateRow) {
-                ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
-                checkingUpdate = true;
-                listAdapter.notifyItemChanged(checkUpdateRow);
-           }
-        });
-        listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {
-
-            private int pressCount = 0;
-
-            @Override
-            public boolean onItemClick(View view, int position) {
-                if (position == experimentRow) {
-                    pressCount++;
-                    if (pressCount >= 2) {
-                        NekoConfig.toggleShowHiddenFeature();
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                        if (NekoConfig.showHiddenFeature) {
-                            AndroidUtilities.shakeView(view, 2, 0);
-                        }
-                        EmbedBottomSheet.show(getParentActivity(), null, null, NekoConfig.isChineseUser ? "BiliBili" : "YouTube", "Nekogram Secrets", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://www.youtube.com/embed/dQw4w9WgXcQ", 1280, 720, 0, false);
-                        return true;
-                    }
+            if (position >= donateRow && position < donate2Row) {
+                if (skuDetails != null && skuDetails.size() > position - donateRow) {
+                    BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                            .setSkuDetails(skuDetails.get(position - donateRow))
+                            .build();
+                    billingClient.launchBillingFlow(getParentActivity(), flowParams);
                 }
-                return false;
             }
         });
 
@@ -184,36 +177,24 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
     public void onResume() {
         super.onResume();
         if (listAdapter != null) {
-            checkSensitive();
             listAdapter.notifyDataSetChanged();
         }
     }
 
+    @Override
+    public void onFragmentDestroy() {
+        super.onFragmentDestroy();
+
+        billingClient.endConnection();
+    }
+
     private void updateRows() {
         rowCount = 0;
-        categoriesRow = rowCount++;
-        generalRow = rowCount++;
-        chatRow = rowCount++;
-        experimentRow = rowCount++;
-        AccessibilityManager am = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        if (am != null && am.isTouchExplorationEnabled()) {
-            accessibilityRow = rowCount++;
-        } else {
-            accessibilityRow = -1;
-        }
-        categories2Row = rowCount++;
 
-        aboutRow = rowCount++;
-        channelRow = rowCount++;
-        websiteRow = rowCount++;
-        sourceCodeRow = rowCount++;
-        translationRow = rowCount++;
-        checkUpdateRow = !NekoConfig.installedFromPlay ? rowCount++ : -1;
-        about2Row = rowCount++;
-        
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
-        }
+        donateRow = rowCount++;
+        rowCount += 6;
+
+        donate2Row = rowCount++;
     }
 
     @Override
@@ -258,18 +239,25 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.appUpdateAvailable) {
-            checkingUpdate = false;
-            AndroidUtilities.runOnUIThread(() -> listAdapter.notifyItemChanged(checkUpdateRow));
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+                    ConsumeParams params = ConsumeParams.newBuilder()
+                            .setPurchaseToken(purchase.getPurchaseToken())
+                            .build();
+                    billingClient.consumeAsync(params, (billingResult1, s) -> {
+                        if (billingResult1.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                            AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("DonateThankYou", R.string.DonateThankYou)).show());
+                        } else {
+                            showErrorAlert(billingResult1);
+                        }
+                    });
+                }
+            }
+        } else {
+            showErrorAlert(billingResult);
         }
-    }
-
-    @Override
-    public void onFragmentDestroy() {
-        super.onFragmentDestroy();
-
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.appUpdateAvailable);
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
@@ -289,55 +277,26 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1: {
-                    if (position == about2Row) {
-                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    } else {
-                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    }
+                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 }
                 case 2: {
                     TextCell textCell = (TextCell) holder.itemView;
-                    if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.menu_chats, true);
-                    } else if (position == generalRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_theme, true);
-                    } else if (position == experimentRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, accessibilityRow != -1);
-                    } else if (position == accessibilityRow) {
-                        textCell.setText(LocaleController.getString("AccessibilitySettings", R.string.AccessibilitySettings), false);
+                    if (position >= donateRow && position < donate2Row) {
+                        if (skuDetails != null) {
+                            if (skuDetails.size() > position - donateRow) {
+                                textCell.setText(skuDetails.get(position - donateRow).getPrice(), rowCount + 1 != donate2Row);
+                            }
+                        } else {
+                            textCell.setText(LocaleController.getString("Loading", R.string.Loading), rowCount + 1 != donate2Row);
+                        }
                     }
                     break;
                 }
-                case 3: {
-                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@" + LocaleController.getString("OfficialChannelUsername", R.string.OfficialChannelUsername), true);
-                    } else if (position == websiteRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialSite", R.string.OfficialSite), "nextalone.xyz", true);
-                    } else if (position == sourceCodeRow) {
-                        textCell.setText(LocaleController.getString("ViewSourceCode", R.string.ViewSourceCode), true);
-                    }
-                    break;
-                }
-                case 4: {
-                    HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    if (position == categoriesRow) {
-                        headerCell.setText(LocaleController.getString("Categories", R.string.Categories));
-                    } else if (position == aboutRow) {
-                        headerCell.setText(LocaleController.getString("About", R.string.About));
-                    }
-                    break;
-                }
-                case 6: {
-                    TextDetailSettingsCell textCell = (TextDetailSettingsCell) holder.itemView;
-                    textCell.setMultilineDetail(true);
-                    if (position == translationRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Translation", R.string.Translation), LocaleController.getString("TranslationAbout", R.string.TranslationAbout), true);
-                    } else if (position == checkUpdateRow) {
-                        textCell.setTextAndValue(LocaleController.getString("CheckUpdate", R.string.CheckUpdate),
-                                checkingUpdate ? LocaleController.getString("CheckingUpdate", R.string.CheckingUpdate) :
-                                        UpdateHelper.formatDateUpdate(SharedConfig.lastUpdateCheckTime), position + 1 != about2Row);
+                case 7: {
+                    TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
+                    if (position == donate2Row) {
+                        cell.setText(LocaleController.getString("DonateEvilGoogle", R.string.DonateEvilGoogle));
                     }
                     break;
                 }
@@ -347,7 +306,7 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 6;
+            return skuDetails != null && type == 2;
         }
 
         @NonNull
@@ -390,25 +349,12 @@ public class NekoSettingsActivity extends BaseFragment implements NotificationCe
 
         @Override
         public int getItemViewType(int position) {
-            if (position == categories2Row || position == about2Row) {
-                return 1;
-            } else if (position > categoriesRow && position < categories2Row) {
+            if (position == donate2Row) {
+                return 7;
+            } else if (position >= donateRow && position < donate2Row) {
                 return 2;
-            } else if (position >= channelRow && position < translationRow) {
-                return 3;
-            } else if (position == categoriesRow || position == aboutRow) {
-                return 4;
-            } else if ((position >= translationRow && position < about2Row)) {
-                return 6;
             }
             return 2;
-        }
-    }
-
-    @Override
-    public void onProvideAssistContent(AssistContent outContent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            outContent.setWebUri(Uri.parse("https://nextalone.xyz"));
         }
     }
 }
