@@ -20819,7 +20819,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                             }
                         }
-                        if (NaConfig.showReReply) {
+                        if (NaConfig.showReReply && allowChatActions && !isThreadChat()) {
                             if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
                                 items.add(LocaleController.getString("ReReply", R.string.ReReply));
                                 options.add(1001);
