@@ -133,5 +133,7 @@
     <string name="SaveToDownloadCount_few">Saving %1$d files to downloads</string>
     <string name="SaveToDownloadCount_many">Saving %1$d files to downloads</string>
     <string name="SaveToDownloadCount_other">Saving %1$d files to downloads</string>
+    <string name="NekoGeneralNotification">Notification</string>
+    <string name="disableNotificationBubbles">Disable Bubbles in notification</string>
 
 </resources>

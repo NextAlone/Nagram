@@ -119,6 +119,8 @@ public class NekoConfig {
     public static ConfigItem translateToLang = addConfig("TransToLang", configTypeString, ""); // "" -> translate to current language (MessageTrans.kt & Translator.kt)
     public static ConfigItem translateInputLang = addConfig("TransInputToLang", configTypeString, "en");
 
+    public static ConfigItem disableNotificationBubbles = addConfig("disableNotificationBubbles", configTypeBool, false);
+
     public static ConfigItem ccToLang = addConfig("opencc_to_lang", configTypeString, "");
     public static ConfigItem ccInputLang = addConfig("opencc_input_to_lang", configTypeString, "");
 
