@@ -68,6 +68,9 @@ import androidx.core.graphics.ColorUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.annotation.UiThread;
+import androidx.core.graphics.ColorUtils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -3461,6 +3464,7 @@ public class Theme {
     public static final String key_chat_inTextSelectionHighlight = "chat_inTextSelectionHighlight";
     public static final String key_chat_recordedVoiceHighlight = "key_chat_recordedVoiceHighlight";
     public static final String key_chat_TextSelectionCursor = "chat_TextSelectionCursor";
+    public static final String key_chat_BlurAlpha = "chat_BlurAlpha";
 
     public static final String key_voipgroup_listSelector = "voipgroup_listSelector";
     public static final String key_voipgroup_inviteMembersBackground = "voipgroup_inviteMembersBackground";
@@ -4454,6 +4458,7 @@ public class Theme {
         defaultColors.put(key_chat_outTextSelectionHighlight, 0x2E3F9923);
         defaultColors.put(key_chat_inTextSelectionHighlight, 0x5062A9E3);
         defaultColors.put(key_chat_TextSelectionCursor, 0xFF419FE8);
+        defaultColors.put(key_chat_BlurAlpha, 0xAF000000);
 
         defaultColors.put(key_statisticChartSignature, 0x7f252529);
         defaultColors.put(key_statisticChartSignatureAlpha, 0x7f252529);
@@ -7754,7 +7759,8 @@ public class Theme {
                         if (gradientRotation == null) {
                             gradientRotation = 45;
                         }
-                        final int[] gradientColors = {backColor, gradientToColor2};
+                        int gradientToColorInt = gradientToColor2 == null ? 0 : gradientToColor2;
+                        final int[] gradientColors = {backColor, gradientToColorInt};
                         wallpaperDrawable = BackgroundGradientDrawable.createDitheredGradientBitmapDrawable(gradientRotation, gradientColors, bitmap.getWidth(), bitmap.getHeight() - 120);
                         quality = 90;
                     }

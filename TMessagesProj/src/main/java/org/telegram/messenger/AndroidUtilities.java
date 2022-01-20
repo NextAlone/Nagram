@@ -96,6 +96,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.android.internal.telephony.ITelephony;
 
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -205,6 +206,7 @@ public class AndroidUtilities {
     private static RectF bitmapRect;
 
     public static final RectF rectTmp = new RectF();
+    public static final Rect rectTmp2 = new Rect();
 
     public static Pattern WEB_URL = null;
     public static Pattern BAD_CHARS_PATTERN = null;

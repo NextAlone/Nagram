@@ -3099,7 +3099,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
                                 "Reset all notification channels",
-                                SharedConfig.drawSnowInChat ? "Hide snow in chat" : "Show snow in chat"
+                                SharedConfig.canBlurChat() ? (SharedConfig.chatBlur ? "Disable blur in chat" : "Enable blur in chat") : null
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -3199,7 +3199,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 18) {
                                 getNotificationsController().cleanupNotificationChannels();
                             } else if (which == 19) {
-                                SharedConfig.toggleDrawSnowInChat();
+                                SharedConfig.toggleDebugChatBlur();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

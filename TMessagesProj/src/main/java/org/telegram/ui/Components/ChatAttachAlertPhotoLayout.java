@@ -57,6 +57,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import androidx.annotation.Keep;
+import androidx.core.graphics.ColorUtils;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -365,6 +373,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     cell.showCheck(true);
                 }
             }
+        }
+
+        @Override
+        public void onApplyCaption(CharSequence caption) {
+            parentAlert.commentTextView.setText(caption);
         }
 
         @Override
@@ -2527,16 +2540,25 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
     @Override
     void applyCaption(CharSequence text) {
-        int imageId = (Integer) selectedPhotosOrder.get(0);
-        Object entry = selectedPhotos.get(imageId);
-        if (entry instanceof MediaController.PhotoEntry) {
-            MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) entry;
-            photoEntry.caption = text;
-            photoEntry.entities = MediaDataController.getInstance(UserConfig.selectedAccount).getEntities(new CharSequence[] {text}, false);
-        } else if (entry instanceof MediaController.SearchImage) {
-            MediaController.SearchImage searchImage = (MediaController.SearchImage) entry;
-            searchImage.caption = text;
-            searchImage.entities = MediaDataController.getInstance(UserConfig.selectedAccount).getEntities(new CharSequence[] {text}, false);
+        for (int a = 0; a < selectedPhotosOrder.size(); a++) {
+            Object o = selectedPhotos.get(selectedPhotosOrder.get(a));
+            if (o instanceof MediaController.PhotoEntry) {
+                MediaController.PhotoEntry photoEntry1 = (MediaController.PhotoEntry) o;
+                if (a == 0) {
+                    photoEntry1.caption = text;
+                    photoEntry1.entities = MediaDataController.getInstance(UserConfig.selectedAccount).getEntities(new CharSequence[] {text}, false);
+                } else {
+                    photoEntry1.caption = null;
+                }
+            } else if (o instanceof MediaController.SearchImage) {
+                MediaController.SearchImage photoEntry1 = (MediaController.SearchImage) o;
+                if (a == 0) {
+                    photoEntry1.caption = text;
+                    photoEntry1.entities = MediaDataController.getInstance(UserConfig.selectedAccount).getEntities(new CharSequence[] {text}, false);
+                } else {
+                    photoEntry1.caption = null;
+                }
+            }
         }
     }
 
