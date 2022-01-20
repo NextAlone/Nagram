@@ -124,4 +124,5 @@
     <string name="hideGroupSticker">隐藏群组贴纸</string>
     <string name="enablePublicProxy">NekoX 公共代理</string>
     <string name="autoUpdateSubInfo">自动更新代理</string>
+    <string name="hideSendAsChannel">隐藏转发源</string>
 </resources>
