@@ -174,6 +174,7 @@ import org.telegram.ui.Components.ViewPagerFixed;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
@@ -3612,7 +3613,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         updateMenuButton(false);
 
         PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
-        UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
+        if (new Random().nextInt(100) < 20)
+            UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
         if (!BuildVars.isFdroid && !BuildVars.isPlay && NekoXConfig.autoUpdateReleaseChannel != 0 && System.currentTimeMillis() / 1000 > NekoXConfig.nextUpdateCheck)
             UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), true), 6000);
 
