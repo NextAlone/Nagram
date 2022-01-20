@@ -19720,7 +19720,7 @@ public class TLRPC {
         public ArrayList<TL_restrictionReason> restriction_reason = new ArrayList<>();
 
         public boolean verifiedExtended() {
-            return verified || (ArrayUtil.contains(NekoXConfig.developers, id) && NekoXConfig.showCensoredFeatures());
+            return verified || (ArrayUtil.contains(NekoXConfig.developers, id) && NekoXConfig.isDeveloper());
         }
 
 		public static User TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -38048,7 +38048,7 @@ public class TLRPC {
         public InputChannel migrated_to;
 
         public boolean verifiedExtended() {
-            return verified ||( ArrayUtil.contains(NekoXConfig.officialChats, id) && NekoXConfig.showCensoredFeatures());
+            return verified ||( ArrayUtil.contains(NekoXConfig.officialChats, id) && NekoXConfig.isDeveloper());
         }
 
         public static Chat TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {

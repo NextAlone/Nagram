@@ -3616,6 +3616,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (!BuildVars.isFdroid && !BuildVars.isPlay && NekoXConfig.autoUpdateReleaseChannel != 0 && System.currentTimeMillis() / 1000 > NekoXConfig.nextUpdateCheck)
             UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), true), 6000);
 
+        if (NekoXConfig.developerMode && !NekoXConfig.isDeveloper())
+            NekoXConfig.toggleDeveloperMode();
         return fragmentView;
     }
 
