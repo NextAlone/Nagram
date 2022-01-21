@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">喵設定</string>
+    <string name="NekoSettings">Na設定</string>
     <string name="IPv6">IPv6を介した接続</string>
     <string name="MessageMenu">メッセージメニュー</string>
     <string name="HidePhone">あなたの携帯電話番号を隠す</string>
