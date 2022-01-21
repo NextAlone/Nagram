@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoX" translatable="false">Nekogram X</string>
+    <string name="NekoX" translatable="false">Nagram</string>
     <string name="Locked">Locked</string>
     <string name="AccDescrChatAttachEnterMenu">Chat input menu</string>
     <string name="ChatAttachEnterMenuRecordVideo">Record Video</string>
