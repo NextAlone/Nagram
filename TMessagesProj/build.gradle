@@ -51,7 +51,7 @@ dependencies {
 ext.abiCodes = ['armeabi-v7a':1, 'arm64-v8a':5, x86:2, x86_64:6, 'universal':0]
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion '32.0.0'
     ndkVersion "21.4.7075529"
 
@@ -124,7 +124,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2531
+    defaultConfig.versionCode = 2538
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -137,7 +137,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionName "8.4.3"
+        versionName "8.4.4"
 
         externalNativeBuild {
             cmake {

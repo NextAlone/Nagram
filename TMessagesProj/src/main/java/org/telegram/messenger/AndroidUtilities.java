@@ -190,6 +190,7 @@ public class AndroidUtilities {
     private static RectF bitmapRect;
 
     public static final RectF rectTmp = new RectF();
+    public static final Rect rectTmp2 = new Rect();
 
     public static Pattern WEB_URL = null;
     public static Pattern BAD_CHARS_PATTERN = null;
