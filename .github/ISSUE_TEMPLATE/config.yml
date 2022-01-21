@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: channel
+    url: https://t.me/NullgramClient
+    about: Our Telegram Channel 
+  - name: smart-question
+    url: http://www.catb.org/~esr/faqs/smart-questions.html
+    about: READ BEFORE YOU ASKING ANY QUESTION
