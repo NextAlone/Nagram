@@ -77,6 +77,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import xyz.nextalone.nagram.NaConfig;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -2922,7 +2923,15 @@ public class MessagesController extends BaseController implements NotificationCe
     public boolean isChatNoForwards(long chatId) {
         return isChatNoForwards(getChat(chatId));
     }
-
+    
+    public boolean isChatNoForwardsForced(TLRPC.Chat chat){
+        return !NaConfig.INSTANCE.getForceCopy().Bool() && isChatNoForwards(chat);
+    }
+    
+    public boolean isChatNoForwardsForced(long chatId){
+        return !NaConfig.INSTANCE.getForceCopy().Bool() && isChatNoForwards(chatId);
+    }
+    
     public TLRPC.User getUser(Long id) {
         if (id == 0) {
             return UserConfig.getInstance(currentAccount).getCurrentUser();
@@ -13395,6 +13404,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, update);
                     } else if (baseUpdate instanceof TLRPC.TL_updateUserName) {
                         TLRPC.TL_updateUserName update = (TLRPC.TL_updateUserName) baseUpdate;
+                  
                         TLRPC.User currentUser = getUser(update.user_id);
                         if (currentUser != null) {
                             if (!UserObject.isContact(currentUser)) {

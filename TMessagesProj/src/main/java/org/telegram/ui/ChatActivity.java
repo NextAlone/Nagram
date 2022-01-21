@@ -3139,7 +3139,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("Forward", R.string.Forward));
         }
 
-        boolean noforward = getMessagesController().isChatNoForwards(currentChat);
+        boolean noforward = getMessagesController().isChatNoForwardsForced(currentChat);
 
         if (currentEncryptedChat == null || NekoXConfig.disableFlagSecure && !noforward) {
             actionModeOtherItem.addSubItem(nkbtn_forward_noquote, R.drawable.baseline_fast_forward_24, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
@@ -3162,7 +3162,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         actionMode.getItem(nkactionbarbtn_reply).setVisibility(ChatObject.canSendMessages(currentChat) && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(copy).setVisibility(!getMessagesController().isChatNoForwards(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+        actionMode.getItem(copy).setVisibility(!getMessagesController().isChatNoForwardsForced(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
 
         actionModeOtherItem.setSubItemVisibility(star, selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0);
@@ -11038,7 +11038,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void showTextSelectionHint(MessageObject messageObject) {
-        if (getParentActivity() == null || getMessagesController().isChatNoForwards(messageObject.getChatId()) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards)) {
+        if (getParentActivity() == null || getMessagesController().isChatNoForwardsForced(messageObject.getChatId()) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards)) {
             return;
         }
         CharSequence text;
@@ -13874,14 +13874,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         cantDeleteMessagesCount--;
                     }
                     boolean noforwards = getMessagesController().isChatNoForwards(currentChat);
+                    boolean noforwardsForced = getMessagesController().isChatNoForwardsForced(currentChat);
                     if (chatMode == MODE_SCHEDULED || !messageObject.canForwardMessage() || noforwards) {
                         cantForwardMessagesCount--;
                     } else {
                         canForwardMessagesCount--;
                     }
-                    if (messageObject.isMusic() && !noforwards) {
+                    if (messageObject.isMusic() && !noforwardsForced) {
                         canSaveMusicCount--;
-                    } else if (messageObject.isDocument() && !noforwards) {
+                    } else if (messageObject.isDocument() && !noforwardsForced) {
                         canSaveDocumentsCount--;
                     } else {
                         cantSaveMessagesCount--;
@@ -13911,14 +13912,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         cantDeleteMessagesCount++;
                     }
                     boolean noforwards = getMessagesController().isChatNoForwards(currentChat);
+                    boolean noforwardsForced = getMessagesController().isChatNoForwardsForced(currentChat);
                     if (chatMode == MODE_SCHEDULED || !messageObject.canForwardMessage() || noforwards) {
                         cantForwardMessagesCount++;
                     } else {
                         canForwardMessagesCount++;
                     }
-                    if (messageObject.isMusic() && !noforwards) {
+                    if (messageObject.isMusic() && !noforwardsForced) {
                         canSaveMusicCount++;
-                    } else if (messageObject.isDocument() && !noforwards) {
+                    } else if (messageObject.isDocument() && !noforwardsForced) {
                         canSaveDocumentsCount++;
                     } else {
                         cantSaveMessagesCount++;
@@ -21446,6 +21448,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         allowPin = allowPin && message.getId() > 0 && (message.messageOwner.action == null || message.messageOwner.action instanceof TLRPC.TL_messageActionEmpty);
         boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || message.messageOwner.noforwards;
+        boolean noforwardsForced = getMessagesController().isChatNoForwardsForced(currentChat) || message.messageOwner.noforwards;
         boolean allowUnpin = message.getDialogId() != mergeDialogId && allowPin && (pinnedMessageObjects.containsKey(message.getId()) || groupedMessages != null && !groupedMessages.messages.isEmpty() && pinnedMessageObjects.containsKey(groupedMessages.messages.get(0).getId()));
         boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId;
         if (allowEdit && groupedMessages != null) {
@@ -21502,7 +21505,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 if (type == -1) {
-                    if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwards) {
+                    if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwardsForced) {
                         items.add(LocaleController.getString("Copy", R.string.Copy));
                         options.add(OPTION_COPY);
                         icons.add(R.drawable.baseline_content_copy_24);
@@ -21575,8 +21578,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else if (type == 20) {
                     items.add(LocaleController.getString("Retry", R.string.Retry));
                     options.add(OPTION_RETRY);
-                    icons.add(R.drawable.baseline_replay_24);
-                    if (!noforwards) {
+                    icons.add(R.drawable.msg_retry);
+                    if (!noforwardsForced) {
                         items.add(LocaleController.getString("Copy", R.string.Copy));
                         options.add(OPTION_COPY);
                         icons.add(R.drawable.baseline_content_copy_24);
@@ -21607,7 +21610,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(8);
                             icons.add(R.drawable.baseline_reply_24);
                         }
-                        if ((selectedObject.type == 0 || selectedObject.isDice() || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwards) {
+                        if ((selectedObject.type == 0 || selectedObject.isDice() || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwardsForced) {
                             items.add(LocaleController.getString("Copy", R.string.Copy));
                             options.add(3);
                             icons.add(R.drawable.baseline_content_copy_24);
@@ -21649,24 +21652,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         options.add(26);
                                         icons.add(R.drawable.msg_pollstop);
                                     }
-                                } else if (selectedObject.isMusic() && !noforwards) {
+                                } else if (selectedObject.isMusic() && !noforwardsForced) {
                                     items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
                                     options.add(10);
                                     icons.add(R.drawable.msg_download);
-                                } else if (selectedObject.isDocument() && !noforwards) {
+                                } else if (selectedObject.isDocument() && !noforwardsForced) {
                                     items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                     options.add(10);
                                     icons.add(R.drawable.msg_download);
                                 }
                             }
-                        } else if (type == 3 && !noforwards) {
+                        } else if (type == 3 && !noforwardsForced) {
                             if (selectedObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && MessageObject.isNewGifDocument(selectedObject.messageOwner.media.webpage.document)) {
                                 items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
                                 options.add(11);
                                 icons.add(R.drawable.deproko_baseline_gif_24);
                             }
                         } else if (type == 4) {
-                            if (!noforwards) {
+                            if (!noforwardsForced) {
                                 if (selectedObject.isVideo()) {
                                     if (!selectedObject.needDrawBluredPreview()) {
                                         items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
@@ -21706,8 +21709,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else if (type == 5) {
                             items.add(LocaleController.getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
                             options.add(5);
-                            icons.add(R.drawable.baseline_language_24);
-                            if (!noforwards) {
+                            icons.add(R.drawable.msg_language);
+                            if (!noforwardsForced) {
                                 items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                 options.add(10);
                                 icons.add(R.drawable.baseline_file_download_24);
@@ -21737,7 +21740,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 items.add(LocaleController.getString("ImportSettings", R.string.ImportSettings));
                                 icons.add(R.drawable.baseline_security_24);
                             }
-                            if (!noforwards) {
+                            if (!noforwardsForced) {
                                 items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                 options.add(10);
                                 icons.add(R.drawable.baseline_file_download_24);
@@ -21745,7 +21748,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(6);
                                 icons.add(R.drawable.baseline_share_24);
                             }
-                        } else if (type == 6 && !noforwards) {
+                        } else if (type == 6 && !noforwardsForced) {
                             items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                             options.add(7);
                             icons.add(R.drawable.baseline_image_24);
@@ -21794,7 +21797,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.baseline_person_add_24);
                             }
                             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
-                                if (!noforwards) {
+                                if (!noforwardsForced) {
                                     items.add(LocaleController.getString("Copy", R.string.Copy));
                                     options.add(16);
                                     icons.add(R.drawable.baseline_content_copy_24);
@@ -21823,6 +21826,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                         boolean noforward = getMessagesController().isChatNoForwards(currentChat);
+                        boolean noforwardForced = getMessagesController().isChatNoForwardsForced(currentChat);
                         if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16 && !noforwards) {
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(2);
@@ -21837,7 +21841,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         if (chatMode != MODE_SCHEDULED) {
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages.Bool()) {
-                                if (!noforward) {
+                                if (!noforwardForced) {
                                     items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
                                     options.add(nkbtn_savemessage);
                                     icons.add(R.drawable.baseline_bookmark_24);
@@ -21845,7 +21849,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforward) {
+                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforwardForced) {
                                 items.add(LocaleController.getString("Repeat", R.string.Repeat));
                                 options.add(nkbtn_repeat);
                                 icons.add(R.drawable.msg_repeat);
@@ -21987,7 +21991,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(8);
                             icons.add(R.drawable.baseline_reply_24);
                         }
-                        if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwards) {
+                        if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwardsForced) {
                             items.add(LocaleController.getString("Copy", R.string.Copy));
                             options.add(3);
                             icons.add(R.drawable.baseline_content_copy_24);
@@ -22005,7 +22009,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.baseline_forum_24);
                             items.add(LocaleController.getString("ViewInChat", R.string.ViewInChat));
                         }
-                        if (type == 4 && !noforwards) {
+                        if (type == 4 && !noforwardsForced) {
                             if (selectedObject.isVideo()) {
                                 items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                 options.add(4);
@@ -22060,7 +22064,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.baseline_person_add_24);
                             }
                             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
-                                if (!noforwards) {
+                                if (!noforwardsForced) {
                                     items.add(LocaleController.getString("Copy", R.string.Copy));
                                     options.add(16);
                                     icons.add(R.drawable.baseline_content_copy_24);
@@ -24879,8 +24883,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards);
+        boolean noforwardsForced = getMessagesController().isChatNoForwardsForced(currentChat) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards);
         if (url instanceof URLSpanMono) {
-            if (!noforwards) {
+            if (!noforwardsForced) {
                 ((URLSpanMono) url).copyToClipboard();
                 getUndoView().showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
             }
@@ -29316,11 +29321,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages) {
-        if (selectedObject != null && (isLongClick || isThreadChat()) && selectedObject.replyMessageObject != null) {
+        if (selectedObject != null && (isLongClick || isThreadChat() || getMessagesController().isChatNoForwards(currentChat))) {
             // If selected message contains `replyTo`:
             // When longClick it will reply to the `replyMessage` of selectedMessage
             // When not LongClick but in a threadchat: reply to the Thread
-            MessageObject replyTo = isLongClick ? selectedObject.replyMessageObject : getThreadMessage();
+            MessageObject replyTo = selectedObject.replyMessageObject != null ? isLongClick ? selectedObject.replyMessageObject : getThreadMessage() : getThreadMessage();
             if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
                 CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
                 if (caption == null) {

@@ -10496,7 +10496,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else {
                 actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, switchingToIndex + 1, imagesArrLocations.size()));
             }
-            boolean noforwards = avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwards(-avatarsDialogId);
+            boolean noforwards = avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwardsForced(-avatarsDialogId);
             if (noforwards) {
                 menuItem.hideSubItem(gallery_menu_save);
             } else {
@@ -10717,7 +10717,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             caption = pageBlocksAdapter.getCaption(switchingToIndex);
             isVideo = pageBlocksAdapter.isVideo(switchingToIndex);
             if (isVideo) {
-                if (!MessagesController.getInstance(currentAccount).isChatNoForwards(-currentDialogId)) {
+                if (!MessagesController.getInstance(currentAccount).isChatNoForwardsForced(-currentDialogId)) {
                     menuItem.showSubItem(gallery_menu_openin);
                 } else {
                     menuItem.hideSubItem(gallery_menu_openin);
@@ -10739,7 +10739,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             bottomLayout.setTag(null);
 
-            allowShare = !MessagesController.getInstance(currentAccount).isChatNoForwards(-currentDialogId);
+            allowShare = !MessagesController.getInstance(currentAccount).isChatNoForwardsForced(-currentDialogId);
             shareItem.setVisibility(allowShare ? View.VISIBLE : View.GONE);
 
             if (currentAnimation != null) {
@@ -12246,8 +12246,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
             }
             if (chatActivity != null && chatActivity.getCurrentEncryptedChat() != null ||
-                    avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwards(-avatarsDialogId) ||
-                    messageObject != null && (MessagesController.getInstance(currentAccount).isChatNoForwards(messageObject.getChatId()) || (messageObject.messageOwner != null && messageObject.messageOwner.noforwards))) {
+                    avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwardsForced(-avatarsDialogId) ||
+                    messageObject != null && (MessagesController.getInstance(currentAccount).isChatNoForwardsForced(messageObject.getChatId()) || (messageObject.messageOwner != null && messageObject.messageOwner.noforwards))) {
                 if (!NekoXConfig.disableFlagSecure)
                     windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
             } else {
