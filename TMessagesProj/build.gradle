@@ -76,7 +76,7 @@ android {
     buildToolsVersion "31.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "nekox.messenger"
+    defaultConfig.applicationId = "me.luvletter.nekox"
 
     splits {
 
