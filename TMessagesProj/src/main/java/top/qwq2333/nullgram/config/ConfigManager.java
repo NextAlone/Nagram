@@ -148,4 +148,20 @@ public class ConfigManager {
             }
         }
     }
+
+    /**
+     * 切换boolean值 若原为false或未设置则切换为true 若原为true则切换为false
+     *
+     * @param key key
+     */
+    public static void toggleBoolean(@NonNull String key) {
+        synchronized (preferences) {
+            try {
+                boolean originValue = preferences.getBoolean(key, false);
+                preferences.edit().putBoolean(key, !originValue).apply();
+            } catch (Throwable thr) {
+                LogUtilsKt.e(thr);
+            }
+        }
+    }
 }
