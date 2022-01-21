@@ -125,4 +125,12 @@
     <string name="enablePublicProxy">وكيل NekoX العام</string>
     <string name="autoUpdateSubInfo">تحديث الوكلاء تلقائيًا</string>
     <string name="hideSendAsChannel">إخفاء الإرسال كقناة</string>
+    <string name="disableDoubleTabReactions">تعطيل تفاعلات النقر المزدوج</string>
+    <string name="SaveToDownloadCount_zero">حفظ ملف %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_few">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_other">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_two">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="showSpoilersDirectly">عرض رسائل مباشرة لحرق المحتوى</string>
+    <string name="SaveToDownloadCount_one">حفظ ملف %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_many">حفظ ملفات %1$d إلى التنزيلات</string>
 </resources>

@@ -125,4 +125,6 @@
     <string name="enablePublicProxy">המתווך הציבורי של NekoX</string>
     <string name="autoUpdateSubInfo">עדכון מתווכים אוטומטית</string>
     <string name="hideSendAsChannel">הסתרת שליחה כערוץ</string>
+    <string name="showSpoilersDirectly">הצגת הודעות ספויילר ישירות</string>
+    <string name="SaveToDownloadCount_zero">%1$d קבצים נשמרים להורדות</string>
 </resources>
