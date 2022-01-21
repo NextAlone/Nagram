@@ -4028,9 +4028,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         else if (new Random().nextInt(100) < 20)
             UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
 
-        if (NekoXConfig.developerMode && !NekoXConfig.isDeveloper())
-            NekoXConfig.toggleDeveloperMode();
-
         return fragmentView;
     }
 
