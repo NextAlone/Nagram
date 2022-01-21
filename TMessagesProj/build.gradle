@@ -104,8 +104,8 @@ android {
         versionName verName
         versionCode verCode
 
-        def appId = "1391584"
-        def appHash = "355c91550b0d658cfb7ff89dcf91a08c"
+        def appId = "4798925"
+        def appHash = "69e7d5f6a8e69339680ea7b906e67026"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
@@ -186,6 +186,17 @@ android {
             keyAlias alias
             keyPassword pwd
         }
+
+        releasePriv {
+            def privSingingFile = project.file("priv-signing.properties")
+            def privSinging = new Properties()
+            privSinging.load(new FileInputStream(privSingingFile))
+
+            keyAlias privSinging['keyAlias']
+            keyPassword privSinging['keyPassword']
+            storeFile file(privSinging['storeFile'])
+            storePassword privSinging['storePassword']
+        }
     }
 
     buildTypes {
@@ -195,7 +206,8 @@ android {
             jniDebuggable true
             multiDexEnabled true
             zipAlignEnabled true;
-            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
+            signingConfig signingConfigs.releasePriv
+            versionNameSuffix "-priv"
             ndk.debugSymbolLevel = "FULL"
         }
 
@@ -220,7 +232,8 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             matchingFallbacks = ["release", "debug"]
-            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
+            signingConfig signingConfigs.releasePriv
+            versionNameSuffix "-priv"
         }
 
         foss {
