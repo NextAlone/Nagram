@@ -88,11 +88,10 @@ public class ExperimentSettingActivity extends BaseFragment {
             LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == blockSponsorAdsRow) {
-                ConfigManager.putBoolean(Defines.showBotAPIID,
-                    !ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
+                ConfigManager.toggleBoolean(Defines.blockSponsorAds);
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
+                        ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds));
                 }
             }
         });
