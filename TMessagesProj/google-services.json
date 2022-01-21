@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "124118418489",
-    "firebase_url": "https://nekox-114.firebaseio.com",
-    "project_id": "nekox-114",
-    "storage_bucket": "nekox-114.appspot.com"
+    "project_number": "937278340283",
+    "project_id": "nekox-luvletter23333",
+    "storage_bucket": "nekox-luvletter23333.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:124118418489:android:3dc02bf5a16e92600d39e8",
+        "mobilesdk_app_id": "1:937278340283:android:023d1f8f8bc824950e7d9e",
         "android_client_info": {
-          "package_name": "nekox.messenger"
+          "package_name": "me.luvletter.nekox"
         }
       },
       "oauth_client": [
         {
-          "client_id": "124118418489-lm9tuk7lbedjal3tgr8g68id1ue8gv2m.apps.googleusercontent.com",
+          "client_id": "937278340283-u3vflk3so1hendh4ctrtdsua0296m8eg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAGMJyrCKui9kUWANoRYbEa3Gt4fsqm1sE"
+          "current_key": "AIzaSyDghBP40t_CDMzPmQ-2polQsRG1CrNQUiA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "124118418489-lm9tuk7lbedjal3tgr8g68id1ue8gv2m.apps.googleusercontent.com",
+              "client_id": "937278340283-u3vflk3so1hendh4ctrtdsua0296m8eg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
