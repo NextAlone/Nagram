@@ -16,7 +16,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -72,9 +71,9 @@ public class NekoXConfig {
     public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
 //    public static long nextUpdateCheck = preferences.getLong("nextUpdateCheckTimestamp", 0);
 
-//    public static int customApi = preferences.getInt("custom_api", 0);
-//    public static int customAppId = preferences.getInt("custom_app_id", 0);
-//    public static String customAppHash = preferences.getString("custom_app_hash", "");
+    public static int customApi = preferences.getInt("custom_api", 0);
+    public static int customAppId = preferences.getInt("custom_app_id", 0);
+    public static String customAppHash = preferences.getString("custom_app_hash", "");
 
     public static void toggleDeveloperMode() {
         preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
@@ -95,10 +94,38 @@ public class NekoXConfig {
         preferences.edit().putBoolean("disable_screenshot_detection", disableScreenshotDetection = !disableScreenshotDetection).apply();
     }
 
-    private static Boolean hasDeveloper = null;
-
     public static int currentAppId() {
-        return BuildConfig.APP_ID;
+        switch (customApi) {
+            case 0:
+                return BuildConfig.APP_ID;
+            case 1:
+                return BuildVars.OFFICAL_APP_ID;
+            case 2:
+                return BuildVars.TGX_APP_ID;
+            default:
+                return customAppId;
+        }
+    }
+
+    public static String currentAppHash() {
+        switch (customApi) {
+            case 0:
+                return BuildConfig.APP_HASH;
+            case 1:
+                return BuildVars.OFFICAL_APP_HASH;
+            case 2:
+                return BuildVars.TGX_APP_HASH;
+            default:
+                return customAppHash;
+        }
+    }
+
+    public static void saveCustomApi() {
+        preferences.edit()
+                .putInt("custom_api", customApi)
+                .putInt("custom_app_id", customAppId)
+                .putString("custom_app_hash", customAppHash)
+                .apply();
     }
 
     public static void toggleDisableStatusUpdate() {
@@ -119,27 +146,13 @@ public class NekoXConfig {
         preferences.edit().putString("ignoredUpdateTag", ignoredUpdateTag = ignored).apply();
     }
 
-    public static String currentAppHash() {
-        return BuildConfig.APP_HASH;
-    }
-
 //    public static void setNextUpdateCheck(long timestamp) {
 //        preferences.edit().putLong("nextUpdateCheckTimestamp", nextUpdateCheck = timestamp).apply();
 //    }
 
-    public static boolean isDeveloper() {
-        if (hasDeveloper != null)
-            return hasDeveloper;
-        hasDeveloper = false;
-        if (BuildVars.DEBUG_VERSION) hasDeveloper = true;
-        for (int acc : SharedConfig.activeAccounts) {
-            long myId = UserConfig.getInstance(acc).clientUserId;
-            if (ArrayUtil.contains(NekoXConfig.developers, myId)) {
-                hasDeveloper = true;
-                break;
-            }
-        }
-        return hasDeveloper;
+    public static boolean showCensoredFeatures() {
+        long myId = UserConfig.getInstance(UserConfig.selectedAccount).clientUserId;
+        return NekoXConfig.developerMode || NekoXConfig.customApi > 0 || ArrayUtil.contains(NekoXConfig.developers, myId);
     }
 
     public static String getOpenPGPAppName() {
