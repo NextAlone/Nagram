@@ -88,8 +88,7 @@ public class GeneralSettingActivity extends BaseFragment {
             LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == showBotAPIRow) {
-                ConfigManager.putBoolean(Defines.showBotAPIID,
-                    !ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
+                ConfigManager.toggleBoolean(Defines.showBotAPIID);
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));

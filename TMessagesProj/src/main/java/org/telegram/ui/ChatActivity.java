@@ -672,7 +672,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private Paint scrimPaint;
     private View scrimView;
     private String scrimViewReaction;
-    private int popupAnimationIndex = -1;
+    private final int popupAnimationIndex = -1;
     private AnimatorSet scrimAnimatorSet;
     private ActionBarPopupWindow scrimPopupWindow;
     private int scrimPopupX, scrimPopupY;
@@ -1204,6 +1204,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private final static int copy = 10;
     private final static int forward = 11;
+    private final static int forward_noquote = 95;
     private final static int delete = 12;
     private final static int chat_enc_timer = 13;
     private final static int chat_menu_attach = 14;
@@ -1223,6 +1224,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int bot_settings = 31;
     private final static int call = 32;
     private final static int video_call = 33;
+
+    private final static int delete_history = 101;
+
 
     private final static int attach_photo = 0;
     private final static int attach_gallery = 1;
@@ -9009,10 +9013,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void openForward(boolean fromActionBar) {
+        openForward(fromActionBar, false);
+    }
+
+    private void openForward(boolean fromActionBar, boolean noquote) {
         if (getMessagesController().isChatNoForwards(currentChat)) {
             // We should update text if user changed locale without re-opening chat activity
-            String str = ChatObject.isChannel(currentChat) && !currentChat.megagroup ? LocaleController.getString("ForwardsRestrictedInfoChannel", R.string.ForwardsRestrictedInfoChannel) :
-                    LocaleController.getString("ForwardsRestrictedInfoGroup", R.string.ForwardsRestrictedInfoGroup);
+            String str = ChatObject.isChannel(currentChat) && !currentChat.megagroup
+                ? LocaleController.getString("ForwardsRestrictedInfoChannel",
+                R.string.ForwardsRestrictedInfoChannel) :
+                LocaleController.getString("ForwardsRestrictedInfoGroup",
+                    R.string.ForwardsRestrictedInfoGroup);
             if (fromActionBar) {
                 if (fwdRestrictedTopHint == null) {
                     SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
@@ -9027,7 +9038,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 fwdRestrictedTopHint.setText(str);
-                fwdRestrictedTopHint.showForView(actionBar.getActionMode().getItem(forward), true);
+                fwdRestrictedTopHint.showForView(
+                    actionBar.getActionMode().getItem(noquote ? forward_noquote : forward), true);
             } else {
                 if (fwdRestrictedBottomHint == null) {
                     SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;

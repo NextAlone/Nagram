@@ -89,15 +89,13 @@ public class ChatSettingActivity extends BaseFragment {
             LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == ignoreBlockedUserMessagesRow) {
-                ConfigManager.putBoolean(Defines.ignoreBlockedUser,
-                    !ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser));
+                ConfigManager.toggleBoolean(Defines.ignoreBlockedUser);
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser));
                 }
             } else if (position == hideGroupStickerRow) {
-                ConfigManager.putBoolean(Defines.hideGroupSticker,
-                    !ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
+                ConfigManager.toggleBoolean(Defines.hideGroupSticker);
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
