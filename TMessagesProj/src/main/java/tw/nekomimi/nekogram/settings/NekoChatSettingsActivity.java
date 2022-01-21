@@ -62,6 +62,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private final CellGroup cellGroup = new CellGroup(this);
+    private final boolean showCensoredFeatures = NekoXConfig.showCensoredFeatures();
 
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("StickerSize")));
     private final AbstractConfigCell stickerSizeRow = cellGroup.appendCell(new ConfigCellCustom(998, true));
@@ -175,7 +176,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         });
 
         // Before listAdapter
-        if (!NekoXConfig.isDeveloper()) {
+        if (!showCensoredFeatures) {
             cellGroup.rows.remove(disableChatActionRow);
             cellGroup.rows.remove(disableChoosingStickerRow);
             cellGroup.rows.remove(ignoreBlockedRow);
