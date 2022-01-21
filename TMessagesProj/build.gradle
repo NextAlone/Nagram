@@ -331,7 +331,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "NekoX")
+            outputFileName = outputFileName.replace("TMessagesProj", "NekoX-v" + versionName)
         }
     }
 
