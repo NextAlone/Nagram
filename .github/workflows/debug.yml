@@ -42,10 +42,10 @@ jobs:
       - name: Debug Build
         run: |
           echo -e "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}\nRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}\nRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}">>local.properties
-          ./gradlew TMessagesProj:assemble
+          ./gradlew TMessagesProj:assembleRelease
 
       - uses: actions/upload-artifact@v2
         name: Upload apk
         with:
           name: Nullgram
-          path: TMessagesProj/build/outputs/apk
+          path: TMessagesProj/build/outputs/apk/release/*
