@@ -58,6 +58,8 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.FrameLayout;
 
+import androidx.annotation.RequiresApi;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
@@ -3942,7 +3944,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 try {
 
                     boolean result = true;
-                    final String folderName = "NekoX";
+                    final String folderName = NekoConfig.customSavePath.String();
                     if (Build.VERSION.SDK_INT >= 29) {
                         result = saveFileInternal(type, sourceFile, null);
                     } else {
@@ -4047,6 +4049,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private static boolean saveFileInternal(int type, File sourceFile, String filename) {
         try {
             int selectedType = type;
@@ -4065,7 +4068,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     selectedType = 1;
                 }
             }
-            final String folderName = "NekoX";
+            final String folderName = NekoConfig.customSavePath.String();
             if (selectedType == 0) {
                 if (filename == null) {
                     filename = AndroidUtilities.generateFileName(0, extension);

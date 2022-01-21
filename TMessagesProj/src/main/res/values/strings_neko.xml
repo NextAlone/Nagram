@@ -138,5 +138,7 @@
     <string name="doubleTapSendReactions">Send Reaction when double tap (Default)</string>
     <string name="doubleTapShowReactions">Show reactions when double tap only</string>
     <string name="ReactionsDisabled">Disable</string>
+    <string name="customSavePath">Custom Save Path</string>
+    <string name="customSavePathHint">Leave blank to save directly</string>
 
 </resources>

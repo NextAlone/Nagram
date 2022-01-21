@@ -14,6 +14,8 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
+import java.util.function.Function;
+
 import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.ConfigItem;
 
@@ -22,9 +24,14 @@ public class ConfigCellTextInput extends AbstractConfigCell {
     private final String hint;
     private final String title;
     private final Runnable onClickCustom;
+    private final Function<String, String> inputChecker;
+
+    public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick) {
+        this(customTitle, bind, hint, customOnClick, null);
+    }
 
     // default: customTitle=null customOnClick=null
-    public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick) {
+    public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick, Function<String, String> inputChecker) {
         this.bindConfig = bind;
         if (hint == null) {
             this.hint = "";
@@ -37,6 +44,7 @@ public class ConfigCellTextInput extends AbstractConfigCell {
             title = customTitle;
         }
         this.onClickCustom = customOnClick;
+        this.inputChecker = inputChecker;
     }
 
     public int getType() {
@@ -80,6 +88,8 @@ public class ConfigCellTextInput extends AbstractConfigCell {
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (d, v) -> {
             String newV = editText.getText().toString();
+            if (this.inputChecker != null)
+                newV = this.inputChecker.apply(newV);
             bindConfig.setConfigString(newV);
 
             //refresh
