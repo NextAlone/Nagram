@@ -355,10 +355,6 @@ public class ApplicationLoader extends Application {
             applicationContext = getApplicationContext();
         }
 
-        // Since static init is thread-safe, no lock is needed there.
-        Utilities.stageQueue.postRunnable(() -> {
-            SignturesKt.checkMT(this);
-        });
 
         try {
             Class.forName("org.robolectric.android.internal.AndroidTestEnvironment");
