@@ -166,7 +166,7 @@ public class NekoConfig {
     public static ConfigItem rememberAllBackMessages = addConfig("rememberAllBackMessages", configTypeBool, false);
     public static ConfigItem hideSendAsChannel = addConfig("hideSendAsChannel", configTypeBool, false);
     public static ConfigItem showSpoilersDirectly = addConfig("showSpoilersDirectly", configTypeBool, false);
-    public static ConfigItem disableDoubleTabReactions = addConfig("disableDoubleTabReactions", configTypeBool, false);
+    public static ConfigItem reactions = addConfig("reactions", configTypeInt, 0);
 
     public static ConfigItem disableAutoDownloadingWin32Executable = addConfig("Win32ExecutableFiles", configTypeBool, true);
     public static ConfigItem disableAutoDownloadingArchive = addConfig("ArchiveFiles", configTypeBool, true);

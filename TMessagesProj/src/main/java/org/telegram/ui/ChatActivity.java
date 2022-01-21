@@ -1325,6 +1325,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (textSelectionHelper.isTryingSelect() || textSelectionHelper.isSelectionMode() || inPreviewMode) {
                 return false;
             }
+            if((scrimPopupWindow != null && NekoConfig.reactions.Int() == 1))
+                return false;
             wasManualScroll = true;
             if (!actionBar.isActionModeShowed() && reportType < 0) {
                 createMenu(view, false, true, x, y);
@@ -1474,11 +1476,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override
         public boolean hasDoubleTap(View view, int position) {
+            if (view instanceof ChatMessageCell && NekoConfig.reactions.Int() == 1){
+                ChatMessageCell cell = (ChatMessageCell) view;
+                return !cell.getMessageObject().isSending() && !cell.getMessageObject().isEditing() && cell.getMessageObject().type != 16 && !actionBar.isActionModeShowed() && !isSecretChat() && !isInScheduleMode();
+            }
             TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(getMediaDataController().getDoubleTapReaction());
             if (reaction == null) {
                 return false;
             }
-            if (NekoConfig.disableDoubleTabReactions.Bool()) return false;
+            if (NekoConfig.reactions.Int() == 2) return false;
             boolean available = dialog_id >= 0;
             if (!available && chatInfo != null) {
                 for (String s : chatInfo.available_reactions) {
@@ -1500,6 +1506,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (!(view instanceof ChatMessageCell) || getParentActivity() == null || isSecretChat() || isInScheduleMode()) {
                 return;
             }
+            if (NekoConfig.reactions.Int() == 2) return;
+            if (NekoConfig.reactions.Int() == 1) {
+                createMenu(view, true, false, x, y, true, true);
+                return;
+            }
             ChatMessageCell cell = (ChatMessageCell) view;
             MessageObject primaryMessage = cell.getPrimaryMessageObject();
             ReactionsEffectOverlay.removeCurrent(false);
@@ -1507,7 +1518,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (reaction == null) {
                 return;
             }
-            if (NekoConfig.disableDoubleTabReactions.Bool()) return;
             boolean available = dialog_id >= 0;
             if (!available && chatInfo != null) {
                 for (String s : chatInfo.available_reactions) {
@@ -20634,10 +20644,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         textSelectionHintWasShowed = false;
     }
 
-    private void createMenu(View v, boolean single, boolean listView, float x, float y) {
-        createMenu(v, single, listView, x, y, true);
-    }
-
     private CharSequence getMessageCaption(MessageObject messageObject, MessageObject.GroupedMessages group) {
         String restrictionReason = MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason);
         if (!TextUtils.isEmpty(restrictionReason)) {
@@ -20675,7 +20681,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             "[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|" +
             "[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?)+");
     }
+
+    private void createMenu(View v, boolean single, boolean listView, float x, float y) {
+        createMenu(v, single, listView, x, y, true);
+    }
+
     private void createMenu(View v, boolean single, boolean listView, float x, float y, boolean searchGroup) {
+        createMenu(v, single, listView, x, y, searchGroup, false);
+    }
+
+    private void createMenu(View v, boolean single, boolean listView, float x, float y, boolean searchGroup, boolean onDoubleTapped) {
         if (actionBar.isActionModeShowed() || reportType >= 0) {
             return;
         }
@@ -21523,7 +21538,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Rect rect = new Rect();
 
             List<TLRPC.TL_availableReaction> availableReacts = getMediaDataController().getEnabledReactionsList();
-            boolean isReactionsViewAvailable = !isSecretChat() && !isInScheduleMode() && currentUser == null && message.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !availableReacts.isEmpty() && message.messageOwner.reactions.can_see_list;
+            boolean nekoXShowReactionsView = (NekoConfig.reactions.Int() == 0 || onDoubleTapped); // Show reactions and hide them from tap
+            boolean isReactionsViewAvailable = nekoXShowReactionsView && !isSecretChat() && !isInScheduleMode() && currentUser == null && message.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !availableReacts.isEmpty() && message.messageOwner.reactions.can_see_list;
             boolean isReactionsAvailable;
             boolean needLoadReactionsChat = false;
             if (message.isForwardedChannelPost()) {
@@ -21532,10 +21548,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     isReactionsAvailable = true;
                     needLoadReactionsChat = true;
                 } else {
-                    isReactionsAvailable = !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty()) && !availableReacts.isEmpty();
+                    isReactionsAvailable = nekoXShowReactionsView && !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty()) && !availableReacts.isEmpty();
                 }
             } else {
-                isReactionsAvailable = !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty() || (chatInfo == null && !ChatObject.isChannel(currentChat)) || currentUser != null) && !availableReacts.isEmpty();
+                isReactionsAvailable = nekoXShowReactionsView && !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty() || (chatInfo == null && !ChatObject.isChannel(currentChat)) || currentUser != null) && !availableReacts.isEmpty();
             }
             boolean showMessageSeen = !isReactionsViewAvailable && !isInScheduleMode() && currentChat != null && message.isOutOwner() && message.isSent() && !message.isEditing() && !message.isSending() && !message.isSendError() && !message.isContentUnread() && !message.isUnread() && (ConnectionsManager.getInstance(currentAccount).getCurrentTime() - message.messageOwner.date < getMessagesController().chatReadMarkExpirePeriod)  && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat)) && chatInfo != null && chatInfo.participants_count < getMessagesController().chatReadMarkSizeThreshold && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest) && (v instanceof ChatMessageCell);
 

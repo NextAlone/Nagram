@@ -126,7 +126,6 @@
     <string name="autoUpdateSubInfo">Update proxies automatically</string>
     <string name="hideSendAsChannel">Hide send as channel</string>
     <string name="showSpoilersDirectly">Display Spoiler messages directly</string>
-    <string name="disableDoubleTabReactions">Disable double tap reactions</string>
     <string name="SaveToDownloadCount_zero">Saving %1$d files to downloads</string>
     <string name="SaveToDownloadCount_one">Saving %1$d file to downloads</string>
     <string name="SaveToDownloadCount_two">Saving %1$d files to downloads</string>
@@ -135,5 +134,9 @@
     <string name="SaveToDownloadCount_other">Saving %1$d files to downloads</string>
     <string name="NekoGeneralNotification">Notification</string>
     <string name="disableNotificationBubbles">Disable Bubbles in notification</string>
+    <string name="reactions">Reactions in Menu</string>
+    <string name="doubleTapSendReactions">Send Reaction when double tap (Default)</string>
+    <string name="doubleTapShowReactions">Show reactions when double tap only</string>
+    <string name="ReactionsDisabled">Disable</string>
 
 </resources>
