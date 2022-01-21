@@ -349,8 +349,6 @@ public class ApplicationLoader extends Application {
 
         // Since static init is thread-safe, no lock is needed there.
         Utilities.stageQueue.postRunnable(() -> {
-            NekoXConfig.preferences.contains("qwq");
-
             SignturesKt.checkMT(this);
         });
 
