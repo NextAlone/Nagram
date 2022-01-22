@@ -123,7 +123,7 @@ android {
         externalNativeBuild {
             cmake {
                 version "3.10.2"
-                arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-16", "-j=${Runtime.getRuntime().availableProcessors()}"
+                arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-16", "-DNDK_CCACHE=ccache", "-j=${Runtime.getRuntime().availableProcessors()}"
             }
         }
 
