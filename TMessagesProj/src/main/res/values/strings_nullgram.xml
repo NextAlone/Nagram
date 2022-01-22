@@ -37,4 +37,17 @@
     <string name="DeleteAllFromSelfAdmin">With admin rights</string>
     <string name="DeleteAllFromSelf">Delete own messages</string>
     <string name="DeleteAllFromSelfAlert">Warning! This will **delete all messages from you** in this chat for **all** participants.</string>
+  <string name="MutualContactDescription">This contact is a mutual contact.</string>
+    <string name="MutualContact">Mutual contact</string>
+    <string name="SelectBetween">Select between</string>
+    <string name="StickerSavedHint">Sticker saved to gallery</string>
+    <string name="MessageDetails">Details</string>
+    <string name="formatterDay12HSec">h:mm:ss a</string>
+    <string name="formatterDay24HSec">HH:mm:ss</string>
+    <string name="DeleteDownloadedFile">Delete downloaded file</string>
+    <string name="Repeat">Repeat</string>
+    <string name="saveMessages">Save Messages</string>
+    <string name="ViewHistory">View history</string>
+    <string name="NoQuoteForward">NoQuote forward</string>
+    <string name="MessageMenu">Message menu</string>
 </resources>
