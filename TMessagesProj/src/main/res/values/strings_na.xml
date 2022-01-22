@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NaConfig">NaConfig</string>
-    <string name="NaConfigForceCopy">ForceCopy</string>
+    <string name="N_Config">N-Config</string>
+    <string name="ForceCopy">Force Copy</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Na設置</string>
+    <string name="NekoSettings">N-設置</string>
     <string name="MessageMenu">消息菜單</string>
     <string name="HidePhone">隱藏咱的手機號</string>
     <string name="Hide">隱藏</string>
