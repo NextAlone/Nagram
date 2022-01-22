@@ -57,6 +57,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
+import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint("RtlHardcoded")
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -324,8 +325,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-
-        int count = NekoXConfig.developerMode ? 11 : 10;
+    
+        int count = NekoXConfig.developerMode ? 11 + 1 : 10 + 1;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
@@ -342,34 +343,38 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 }
                 case 3: {
+                    textCell.setTextAndCheck(LocaleController.getString("InvertReply", R.string.InvertReply), NaConfig.INSTANCE.getShowInvertReply().Bool(), false);
+                    break;
+                }
+                case 3 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("ViewHistory", R.string.ViewHistory), NekoConfig.showViewHistory.Bool(), false);
                     break;
                 }
-                case 4: {
+                case 4 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("Translate", R.string.Translate), NekoConfig.showTranslate.Bool(), false);
                     break;
                 }
-                case 5: {
+                case 5 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("ReportChat", R.string.ReportChat), NekoConfig.showReport.Bool(), false);
                     break;
                 }
-                case 6: {
+                case 6 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("EditAdminRights", R.string.EditAdminRights), NekoConfig.showAdminActions.Bool(), false);
                     break;
                 }
-                case 7: {
+                case 7 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("ChangePermissions", R.string.ChangePermissions), NekoConfig.showChangePermissions.Bool(), false);
                     break;
                 }
-                case 8: {
+                case 8 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("Hide", R.string.Hide), NekoConfig.showMessageHide.Bool(), false);
                     break;
                 }
-                case 9: {
+                case 9 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("ShareMessages", R.string.ShareMessages), NekoConfig.showShareMessages.Bool(), false);
                     break;
                 }
-                case 10: {
+                case 10 + 1: {
                     textCell.setTextAndCheck(LocaleController.getString("MessageDetails", R.string.MessageDetails), NekoConfig.showMessageDetails.Bool(), false);
                     break;
                 }
@@ -393,34 +398,38 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         break;
                     }
                     case 3: {
+                        textCell.setChecked(NaConfig.INSTANCE.getShowInvertReply().toggleConfigBool());
+                        break;
+                    }
+                    case 3 + 1: {
                         textCell.setChecked(NekoConfig.showViewHistory.toggleConfigBool());
                         break;
                     }
-                    case 4: {
+                    case 4 + 1: {
                         textCell.setChecked(NekoConfig.showTranslate.toggleConfigBool());
                         break;
                     }
-                    case 5: {
+                    case 5 + 1: {
                         textCell.setChecked(NekoConfig.showReport.toggleConfigBool());
                         break;
                     }
-                    case 6: {
+                    case 6 + 1: {
                         textCell.setChecked(NekoConfig.showAdminActions.toggleConfigBool());
                         break;
                     }
-                    case 7: {
+                    case 7 + 1: {
                         textCell.setChecked(NekoConfig.showChangePermissions.toggleConfigBool());
                         break;
                     }
-                    case 8: {
+                    case 8 + 1: {
                         textCell.setChecked(NekoConfig.showMessageHide.toggleConfigBool());
                         break;
                     }
-                    case 9: {
+                    case 9 + 1: {
                         textCell.setChecked(NekoConfig.showShareMessages.toggleConfigBool());
                         break;
                     }
-                    case 10: {
+                    case 10 + 1:{
                         textCell.setChecked(NekoConfig.showMessageDetails.toggleConfigBool());
                         break;
                     }

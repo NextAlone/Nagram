@@ -2,4 +2,5 @@
 <resources>
     <string name="N_Config">N-Config</string>
     <string name="ForceCopy">Force Copy</string>
+    <string name="InvertReply">Invert</string>
 </resources>

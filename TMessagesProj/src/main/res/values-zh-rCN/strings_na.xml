@@ -2,4 +2,5 @@
 <resources>
     <string name="N_Config">N-设置</string>
     <string name="ForceCopy">强制复制</string>
+    <string name="InvertReply">反转</string>
 </resources>
