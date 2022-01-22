@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NaConfig">Na设置</string>
-    <string name="NaConfigForceCopy">强制复制</string>
+    <string name="N_Config">N-设置</string>
+    <string name="ForceCopy">强制复制</string>
 </resources>
