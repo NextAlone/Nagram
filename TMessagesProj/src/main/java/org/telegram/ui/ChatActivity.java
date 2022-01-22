@@ -340,6 +340,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_PGPImportPrivate = 2023;
     private final static int nkbtn_PGPImport = 2024;
     private final static int nkbtm_invertReply = 2025;
+    private final static int nkbtm_greatOrPoor = 2026;
+    
 
     protected TLRPC.Chat currentChat;
     protected TLRPC.User currentUser;
@@ -21963,6 +21965,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(nkbtm_invertReply);
                                 icons.add(R.drawable.msg_reset);
                             }
+                            if (NaConfig.INSTANCE.getShowGreatOrPoor().Bool()) {
+                                items.add(LocaleController.getString("Great", R.string.Great));
+                                options.add(nkbtm_greatOrPoor);
+                                icons.add(R.drawable.msg_prpr);
+                            }
                         }
                         if (chatMode != MODE_SCHEDULED) {
                             boolean allowViewHistory = currentUser == null
@@ -23979,6 +23986,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case nkbtm_invertReply: {
                 invertReplyMessage(true);
+                return 2;
+            }
+            case nkbtm_greatOrPoor: {
+                sendGreatOrGreat(true);
                 return 2;
             }
         }
@@ -29169,6 +29180,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == nkbtm_invertReply) {
             invertReplyMessage(false);
             clearSelectionMode();
+        } else if (id == nkbtm_greatOrPoor) {
+            sendGreatOrGreat(false);
+            clearSelectionMode();
         }
     }
 
@@ -29181,6 +29195,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case nkbtm_invertReply: {
                 invertReplyMessage(false);
+                break;
+            }
+            case nkbtm_greatOrPoor: {
+                sendGreatOrGreat(false);
                 break;
             }
             case nkbtn_forward_noquote: {
@@ -29537,5 +29555,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
             }
         }
+    }
+    
+    public void sendGreatOrGreat(boolean isLongClick) {
+        if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+            return;
+        }
+        getSendMessagesHelper().sendMessage(isLongClick ? "破烂" : "好耶", dialog_id, selectedObject, threadMessageObject, null, false, null, null, null, true, 0, null);
     }
 }
