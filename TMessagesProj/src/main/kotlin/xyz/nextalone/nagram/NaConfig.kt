@@ -37,6 +37,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    var showGreatOrPoor =
+        addConfig(
+            "GreatOrPoor",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     fun addConfig(
         k: String,
