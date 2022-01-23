@@ -11,9 +11,12 @@ package org.telegram.messenger;
 import java.io.File;
 import java.io.OutputStreamWriter;
 import org.telegram.messenger.time.FastDateFormat;
-import org.telegram.messenger.video.MediaCodecVideoConvertor;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
 
+/**
+ * @deprecated use {@link LogUtilsKt} instead
+ */
+@Deprecated
 public class FileLog {
 
     private final OutputStreamWriter streamWriter = null;
@@ -116,6 +119,7 @@ public class FileLog {
     /**
      * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
      */
+    @Deprecated
     public static void e(final Throwable e) {
         e(e, true);
     }
@@ -125,15 +129,7 @@ public class FileLog {
      */
     @Deprecated
     public static void e(final Throwable e, boolean logToAppCenter) {
-        if (needSent(e) && logToAppCenter) {
-            AndroidUtilities.appCenterLog(e);
-        }
-        LogUtilsKt.e("", e);
-    }
-
-    private static boolean needSent(Throwable e) {
-        return !(e instanceof InterruptedException)
-            && !(e instanceof MediaCodecVideoConvertor.ConversionCanceledException);
+        LogUtilsKt.e(e);
     }
 
     /**
