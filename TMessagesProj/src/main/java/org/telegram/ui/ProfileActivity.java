@@ -3007,7 +3007,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                     if (!BuildVars.isFdroid && !BuildVars.isPlay) {
                         builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
-                            UIUtil.runOnIoDispatcher(() -> InternalUpdater.checkUpdate(getParentActivity(), false));
+                            Browser.openUrl(context, "tg://update");
                             return Unit.INSTANCE;
                         });
 
@@ -3021,6 +3021,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 break;
                             case 2:
                                 currentChannel += LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc);
+                                break;
+                            case 3:
+                                currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
                                 break;
                         }
 
@@ -3039,6 +3042,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             });
                             switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc), NekoXConfig.autoUpdateReleaseChannel == 2, (radioButtonCell) -> {
                                 NekoXConfig.setAutoUpdateReleaseChannel(2);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), NekoXConfig.autoUpdateReleaseChannel == 3, (radioButtonCell) -> {
+                                NekoXConfig.setAutoUpdateReleaseChannel(3);
                                 switchBuilder.doRadioCheck(radioButtonCell);
                                 return Unit.INSTANCE;
                             });

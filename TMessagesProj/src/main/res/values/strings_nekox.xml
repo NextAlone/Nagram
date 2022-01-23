@@ -247,6 +247,7 @@
     <string name="AutoCheckUpdateSwitch">Automatic Update</string>
     <string name="AutoCheckUpdateStable">Stable</string>
     <string name="AutoCheckUpdateRc">Release Candidate</string>
+    <string name="AutoCheckUpdatePreview">Preview (Unstable)</string>
     <string name="unreadBadgeOnBackButton">Unread badge on back button</string>
     <string name="customPublicProxyIP">Set IP of public proxy</string>
     <string name="customPublicProxyIPNotice">In some areas, specifying the IP of public proxy CDN(eg. Cloudflare) can speed up access.</string>
@@ -263,4 +264,6 @@
     <string name="rememberAllBackMessages">Remember all clicked replies</string>
     <string name="DisableInstantCamera">Disable instant camera</string>
     <string name="showSeconds">Show timestamp in seconds</string>
+    <string name="AppUpdateNekoX">Update Nekogram X</string>
+    <string name="NekoXUpdateTranslationHint">Press to translate the change log</string>
 </resources>

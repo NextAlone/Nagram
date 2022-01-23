@@ -1345,41 +1345,21 @@ public class SharedConfig {
     }
 
     public static boolean isAppUpdateAvailable() {
-        if (pendingAppUpdate == null || pendingAppUpdate.document == null || !AndroidUtilities.isStandaloneApp()) {
+        if (pendingAppUpdate == null || pendingAppUpdate.document == null) {
             return false;
         }
-        int currentVersion;
-        try {
-            PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            currentVersion = pInfo.versionCode;
-        } catch (Exception e) {
-            FileLog.e(e);
-            currentVersion = BuildVars.BUILD_VERSION;
-        }
-        return pendingAppUpdateBuildVersion == currentVersion;
+        return pendingAppUpdateBuildVersion == BuildVars.BUILD_VERSION;
     }
 
     public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
-        String updateVersionString = null;
-        int versionCode = 0;
-        try {
-            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            versionCode = packageInfo.versionCode;
-            updateVersionString = packageInfo.versionName;
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        if (versionCode == 0) {
-            versionCode = BuildVars.BUILD_VERSION;
-        }
-        if (updateVersionString == null) {
-            updateVersionString = BuildVars.BUILD_VERSION_STRING;
-        }
-        if (update.version == null || updateVersionString.compareTo(update.version) >= 0) {
+        if (update == null) {
+            pendingAppUpdate = null;
+            pendingAppUpdateBuildVersion = 0;
+            saveConfig();
             return false;
         }
         pendingAppUpdate = update;
-        pendingAppUpdateBuildVersion = versionCode;
+        pendingAppUpdateBuildVersion = BuildConfig.VERSION_CODE;
         saveConfig();
         return true;
     }
