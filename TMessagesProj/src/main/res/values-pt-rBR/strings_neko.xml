@@ -125,4 +125,12 @@
     <string name="enablePublicProxy">Proxy Público do NekoX</string>
     <string name="autoUpdateSubInfo">Atualizar proxies automaticamente</string>
     <string name="hideSendAsChannel">Ocultar enviar como canal</string>
+    <string name="disableDoubleTabReactions">Desativar reações de toque duplo</string>
+    <string name="SaveToDownloadCount_other">Salvando %1$d arquivos para downloads</string>
+    <string name="showSpoilersDirectly">Exibir mensagens de spoiler diretamente</string>
+    <string name="SaveToDownloadCount_one">Salvando %1$d arquivo para downloads</string>
+    <string name="SaveToDownloadCount_two">Salvando %1$d arquivos para downloads</string>
+    <string name="SaveToDownloadCount_zero">Salvando %1$d arquivos para downloads</string>
+    <string name="SaveToDownloadCount_few">Salvando %1$d arquivos para downloads</string>
+    <string name="SaveToDownloadCount_many">Salvando %1$d arquivos para downloads</string>
 </resources>
