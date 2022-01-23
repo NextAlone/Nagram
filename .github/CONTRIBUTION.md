@@ -3,6 +3,7 @@
 **First of all, Thanks for contributing to this project!!!!**
 
 ## Before you contribute
+
 **Please read [Code of Conduct](CODE_OF_CONDUCT.md) first.**
 
 ## Commits
@@ -16,7 +17,7 @@
 
 1. Make sure your editor supports EditorConfig,otherwise you should pay attention to your encoding, row bit sequence and other things.
 
-2. If you're coding with Android Studio/IDEA, make sure you have applied the default Code Style.
+2. If you're coding with Android Studio/IDEA, make sure you have applied the project Code Style.
 
 3. Encode in UTF-8, with LF as the end of line sequence.
 
