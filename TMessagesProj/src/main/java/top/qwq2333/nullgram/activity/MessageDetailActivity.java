@@ -241,34 +241,22 @@ public class MessageDetailActivity extends BaseFragment implements
         });
         listView.setOnItemLongClickListener((view, position) -> {
             if (position == filePathRow) {
-                if (getMessagesController().isChatNoForwards(toChat)) {
-                    if (toChat.broadcast) {
-                        BulletinFactory.of(this).createErrorBulletin(
-                            LocaleController.getString("ForwardsRestrictedInfoChannel",
-                                R.string.ForwardsRestrictedInfoChannel)).show();
-                    } else {
-                        BulletinFactory.of(this).createErrorBulletin(
-                            LocaleController.getString("ForwardsRestrictedInfoGroup",
-                                R.string.ForwardsRestrictedInfoGroup)).show();
-                    }
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("application/octet-stream");
-                    if (Build.VERSION.SDK_INT >= 24) {
-                        try {
-                            intent.putExtra(Intent.EXTRA_STREAM,
-                                FileProvider.getUriForFile(getParentActivity(),
-                                    BuildConfig.APPLICATION_ID + ".provider", new File(filePath)));
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        } catch (Exception ignore) {
-                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
-                        }
-                    } else {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("application/octet-stream");
+                if (Build.VERSION.SDK_INT >= 24) {
+                    try {
+                        intent.putExtra(Intent.EXTRA_STREAM,
+                            FileProvider.getUriForFile(getParentActivity(),
+                                BuildConfig.APPLICATION_ID + ".provider", new File(filePath)));
+                        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (Exception ignore) {
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
                     }
-                    startActivityForResult(Intent.createChooser(intent,
-                        LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                } else {
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
                 }
+                startActivityForResult(Intent.createChooser(intent,
+                    LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
             } else if (position == channelRow || position == groupRow) {
                 if (toChat != null) {
                     Bundle args = new Bundle();

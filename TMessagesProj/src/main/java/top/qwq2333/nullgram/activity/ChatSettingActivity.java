@@ -378,7 +378,7 @@ public class ChatSettingActivity extends BaseFragment {
         linearLayout.addView(linearLayoutInviteContainer,
             LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        int count = 5;
+        int count = 6;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {

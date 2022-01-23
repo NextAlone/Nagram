@@ -20797,6 +20797,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.menu_recent);
                             }
                         }
+                        if (ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail)) {
+                            items.add(LocaleController.getString("MessageDetails", R.string.MessageDetails));
+                            options.add(89);
+                            icons.add(R.drawable.menu_info);
+                        }
                         if (message.messageOwner.forwards > 0 && ChatObject.hasAdminRights(
                             getCurrentChat())) {
                             items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
