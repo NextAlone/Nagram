@@ -119,7 +119,7 @@ public class InternalUpdater {
             }
             TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
             req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_APKS_ID);
-            req.offset_id = metadata.apkChannelMessageID;
+            req.min_id = metadata.apkChannelMessageID;
             req.limit = MAX_READ_COUNT;
 
             Runnable sendReq = () -> accountInstance.getConnectionsManager().sendRequest(req, (response, error) -> {
