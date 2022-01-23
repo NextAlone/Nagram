@@ -257,7 +257,7 @@ android {
 
         main {
             jni.srcDirs = []
-            assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
+            assets.srcDirs = ["src/main/assets", "src/emojis/apple"]
         }
 
         debug {
