@@ -317,22 +317,9 @@ public class SharedConfig {
                 }
                 if (pendingAppUpdate != null) {
                     long updateTime = 0;
-                    int updateVersion = 0;
-                    String updateVersionString = null;
-                    try {
-                        PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-                        updateVersion = packageInfo.versionCode;
-                        updateVersionString = packageInfo.versionName;
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    if (updateVersion == 0) {
-                        updateVersion = BuildVars.BUILD_VERSION;
-                    }
-                    if (updateVersionString == null) {
-                        updateVersionString = BuildVars.BUILD_VERSION_STRING;
-                    }
-                    if (pendingAppUpdateBuildVersion != updateVersion || pendingAppUpdate.version == null || updateVersionString.compareTo(pendingAppUpdate.version) >= 0) {
+                    int currentVersion = BuildConfig.VERSION_CODE;
+                    String updateVersionString = BuildConfig.VERSION_NAME;
+                    if (pendingAppUpdateBuildVersion != currentVersion || pendingAppUpdate.version == null || updateVersionString.compareTo("v" + pendingAppUpdate.version) >= 0) {
                         pendingAppUpdate = null;
                         AndroidUtilities.runOnUIThread(SharedConfig::saveConfig);
                     }
@@ -505,41 +492,21 @@ public class SharedConfig {
     }
 
     public static boolean isAppUpdateAvailable() {
-        if (pendingAppUpdate == null || pendingAppUpdate.document == null || !BuildVars.isStandaloneApp()) {
+        if (pendingAppUpdate == null || pendingAppUpdate.document == null) {
             return false;
         }
-        int currentVersion;
-        try {
-            PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            currentVersion = pInfo.versionCode;
-        } catch (Exception e) {
-            FileLog.e(e);
-            currentVersion = BuildVars.BUILD_VERSION;
-        }
-        return pendingAppUpdateBuildVersion == currentVersion;
+        return pendingAppUpdateBuildVersion == BuildConfig.VERSION_CODE;
     }
 
     public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
-        String updateVersionString = null;
-        int versionCode = 0;
-        try {
-            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            versionCode = packageInfo.versionCode;
-            updateVersionString = packageInfo.versionName;
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        if (versionCode == 0) {
-            versionCode = BuildVars.BUILD_VERSION;
-        }
-        if (updateVersionString == null) {
-            updateVersionString = BuildVars.BUILD_VERSION_STRING;
-        }
-        if (update.version == null || updateVersionString.compareTo(update.version) >= 0) {
+        if (update == null) {
+            pendingAppUpdate = null;
+            pendingAppUpdateBuildVersion = 0;
+            saveConfig();
             return false;
         }
         pendingAppUpdate = update;
-        pendingAppUpdateBuildVersion = versionCode;
+        pendingAppUpdateBuildVersion = BuildConfig.VERSION_CODE;
         saveConfig();
         return true;
     }

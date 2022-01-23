@@ -23,7 +23,7 @@ object Common {
                 string.substring(0, 7)
             }
             println("commit_id: $result")
-            return ".$result"
+            return "$result"
         } else {
             println("WARN: .git/HEAD does NOT exist")
             return ""
@@ -32,7 +32,9 @@ object Common {
 
     @JvmStatic
     fun getTimestamp(): Int {
-        return (System.currentTimeMillis() / 1000L).toInt()
+        val currentTimestamp = (System.currentTimeMillis() / 1000L).toInt()
+        println("currentTimestamp: $currentTimestamp")
+        return currentTimestamp
     }
 
 

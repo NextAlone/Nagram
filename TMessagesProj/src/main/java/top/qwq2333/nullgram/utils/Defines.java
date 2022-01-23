@@ -20,6 +20,8 @@
 package top.qwq2333.nullgram.utils;
 
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * ConfigManager用到的Key都塞这 统一管理比较方便些
  */
@@ -50,14 +52,14 @@ public class Defines {
     public static final String lastCheckUpdateTime = "lastCheckUpdateTime";
     public static final String nextUpdateCheckTime = "nextUpdateCheckTime";
     public static final String skipUpdateVersion = "skipUpdateVersion";
+    public static final String updateChannel = "updateChannel";
+    public static final int stableChannel = 1;
+    public static final int disableAutoUpdate = 0;
+    public static final int ciChannel = 2;
+    public static final String updateChannelSkip = "updateChannelSkip";
 
     // Storage
     public static final String cachePath = "cachePath";
-
-    /**
-     * 0为release 1为ci构筑
-     */
-    public static String releaseChannel = "releaseChannel";
 
     // Misc
     public static final long[] officialID = {
@@ -67,6 +69,5 @@ public class Defines {
         1645976613, // CI Channel
         1477185964  // Discussion Group
     };
-
 
 }

@@ -90,6 +90,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import kotlin.Unit;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -172,6 +173,8 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import top.qwq2333.nullgram.activity.MainSettingActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.ui.BottomBuilder;
+import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 
 public class ProfileActivity extends BaseFragment implements
@@ -2950,7 +2953,64 @@ public class ProfileActivity extends BaseFragment implements
                     ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
             } else if (position == setAvatarRow) {
                 onWriteButtonClick();
-            } else {
+            } if (position == versionRow) {
+                    TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
+
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+                    String message = cell.getTextView().getText().toString();
+                    builder.addTitle(message);
+                    String finalMessage = message;
+                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, (it) -> {
+                        AndroidUtilities.addToClipboard(finalMessage);
+                        AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
+                        return Unit.INSTANCE;
+                    });
+                    builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.msg_replace, (it) -> {
+                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/qwq233/Nullgram/releases");
+                        return Unit.INSTANCE;
+                    });
+                        builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.menu_search, (it) -> {
+                            Browser.openUrl(context, "tg://update");
+                            return Unit.INSTANCE;
+                        });
+
+                        String currentChannel = " - ";
+                        switch (ConfigManager.getIntOrDefault(Defines.updateChannel,1)) {
+                            case Defines.disableAutoUpdate:
+                                currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
+                                break;
+                            case Defines.stableChannel:
+                                currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
+                                break;
+                            case Defines.ciChannel:
+                                currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
+                                break;
+                        }
+
+                        builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.baseline_system_update_24, (it) -> {
+                            BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
+                            switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), ConfigManager.getIntOrDefault(Defines.updateChannel,Defines.stableChannel) == Defines.disableAutoUpdate, (radioButtonCell) -> {
+                                ConfigManager.putInt(Defines.updateChannel,Defines.disableAutoUpdate);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), ConfigManager.getIntOrDefault(Defines.updateChannel,Defines.stableChannel) == Defines.stableChannel, (radioButtonCell) -> {
+                                ConfigManager.putInt(Defines.updateChannel,Defines.stableChannel);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), ConfigManager.getIntOrDefault(Defines.updateChannel,Defines.stableChannel) == Defines.ciChannel, (radioButtonCell) -> {
+                                ConfigManager.putInt(Defines.updateChannel,Defines.ciChannel);
+                                switchBuilder.doRadioCheck(radioButtonCell);
+                                return Unit.INSTANCE;
+                            });
+                            showDialog(switchBuilder.create());
+                            return Unit.INSTANCE;
+                        });
+
+                    builder.show();
+                } else {
                 processOnClickOrPress(position);
             }
         });

@@ -24,6 +24,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,8 +32,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -42,9 +46,15 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.UpdateAppAlertDialog;
+import org.telegram.ui.LaunchActivity;
+import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.UpdateHelper;
+import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 @SuppressLint("NotifyDataSetChanged")
 public class MainSettingActivity extends BaseFragment {
@@ -127,7 +137,7 @@ public class MainSettingActivity extends BaseFragment {
             } else if (position == updateRow) {
                 checkingUpdate = true;
                 listAdapter.notifyItemChanged(updateRow);
-                new Thread(() -> UpdateHelper.checkUpdate(getParentActivity(), false)).start();
+                Browser.openUrl(context, "tg://update");
                 checkingUpdate = false;
                 listAdapter.notifyItemChanged(updateRow);
             }

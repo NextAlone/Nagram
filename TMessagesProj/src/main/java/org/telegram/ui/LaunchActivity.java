@@ -12,6 +12,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -162,6 +163,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.helpers.UpdateHelper;
+import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
@@ -1991,6 +1996,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                         } else {
                                             open_settings = 1;
                                         }
+                                    }  else if (url.startsWith("tg:upgrade") || url.startsWith("tg://upgrade") || url.startsWith("tg:update") || url.startsWith("tg://update")) {
+                                        checkAppUpdate(true);
                                     } else if ((url.startsWith("tg:search") || url.startsWith("tg://search"))) {
                                         url = url.replace("tg:search", "tg://telegram.org").replace("tg://search", "tg://telegram.org");
                                         data = Uri.parse(url);
@@ -3667,48 +3674,52 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void checkAppUpdate(boolean force) {
-        if (!force && BuildVars.DEBUG_VERSION || !force && !BuildVars.CHECK_UPDATES) {
+        if (ConfigManager.getIntOrDefault(Defines.updateChannel, Defines.stableChannel)
+            == Defines.disableAutoUpdate) {
             return;
         }
-        if (!force && Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) < MessagesController.getInstance(0).updateCheckDelay * 1000) {
+        if (!force && System.currentTimeMillis()
+            < ConfigManager.getLongOrDefault(Defines.lastCheckUpdateTime, 0L) + 1000L * 60 * 60) {
             return;
         }
-        TLRPC.TL_help_getAppUpdate req = new TLRPC.TL_help_getAppUpdate();
-        try {
-            req.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-        } catch (Exception ignore) {
-
-        }
-        if (req.source == null) {
-            req.source = "";
-        }
+        ConfigManager.putLong(Defines.lastCheckUpdateTime, System.currentTimeMillis());
+        LogUtilsKt.d("checking update");
         final int accountNum = currentAccount;
-        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
-            SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
-            SharedConfig.saveConfig();
-            if (response instanceof TLRPC.TL_help_appUpdate) {
-                final TLRPC.TL_help_appUpdate res = (TLRPC.TL_help_appUpdate) response;
-                AndroidUtilities.runOnUIThread(() -> {
-                    if (SharedConfig.pendingAppUpdate != null && SharedConfig.pendingAppUpdate.version.equals(res.version)) {
-                        return;
+        UpdateHelper.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (res != null) {
+                LogUtilsKt.d("checkUpdate: res is not null");
+                SharedConfig.setNewAppVersionAvailable(res);
+                if (res.can_not_skip) {
+                    showUpdateActivity(accountNum, res, false);
+                } else {
+                    drawerLayoutAdapter.notifyDataSetChanged();
+                    try {
+                        (new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum)).show();
+                    } catch (Exception e) {
+                        LogUtilsKt.e(e);
                     }
-                    if (SharedConfig.setNewAppVersionAvailable(res)) {
-                        if (res.can_not_skip) {
-                            showUpdateActivity(accountNum, res, false);
-                        } else {
-                            drawerLayoutAdapter.notifyDataSetChanged();
-                            try {
-                                (new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum)).show();
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        }
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+                }
+            } else {
+                LogUtilsKt.d("checkUpdate: res is null");
+                if (force) {
+                    if (error) {
+                        Toast.makeText(LaunchActivity.this,
+                            LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred),
+                            Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LaunchActivity.this,
+                            LocaleController.getString("VersionUpdateNoUpdate",
+                                R.string.VersionUpdateNoUpdate), Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+                SharedConfig.setNewAppVersionAvailable(null);
+                drawerLayoutAdapter.notifyDataSetChanged();
             }
-        });
+            NotificationCenter.getGlobalInstance()
+                .postNotificationName(NotificationCenter.appUpdateAvailable);
+        }));
     }
 
     public AlertDialog showAlertDialog(AlertDialog.Builder builder) {

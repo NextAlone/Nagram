@@ -20,185 +20,267 @@ import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.APKUtils;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
+import org.telegram.messenger.AccountInstance;
+import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
+import org.webrtc.EglBase;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class UpdateHelper {
 
-    private static final String API_URL_RELEASE = "https://api.github.com/repos/qwq233/Nullgram/releases/latest";
+    static final int MAX_READ_COUNT = 20;
+    static final long CHANNEL_METADATA_ID = 1514826137;
+    static final String CHANNEL_METADATA_NAME = "NullgramMetaData";
+    static final long CHANNEL_APKS_ID = 1645976613;
+    static final String CHANNEL_APKS_NAME = "NullgramCI";
 
-    private static JSONObject matchBuild(@NonNull JSONArray assets) {
-        try {
-            String target = APKUtils.getAbi();
-            for (Object obj : assets) {
-                JSONObject jsonObject = (JSONObject) obj;
-                LogUtilsKt.d(jsonObject.getString("name"));
-                if (jsonObject.getString("name").contains(target)) {
-                    return jsonObject;
+    static void retrieveUpdateMetadata(retrieveUpdateMetadataCallback callback) {
+        final int localVersionCode = BuildConfig.VERSION_CODE;
+        AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
+        TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
+        req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_METADATA_ID);
+        req.offset_id = 0;
+        req.limit = MAX_READ_COUNT;
+        Runnable sendReq = () -> accountInstance.getConnectionsManager()
+            .sendRequest(req, (response, error) -> {
+                if (error != null) {
+                    LogUtilsKt.e("Error when retrieving update metadata from channel " + error);
+                    callback.apply(null, true);
+                    return;
                 }
-            }
-            return null;
-        } catch (Exception e) {
-            LogUtilsKt.e(e);
-            return null;
+                TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                List<UpdateMetadata> metas = new ArrayList<>();
+                for (TLRPC.Message message : res.messages) {
+                    if (!(message instanceof TLRPC.TL_message)) {
+                        LogUtilsKt.i("CheckUpdate: Not TL_message");
+                        continue;
+                    }
+                    if (!message.message.startsWith("v")) {
+                        LogUtilsKt.i("CheckUpdate: Not startsWith v");
+                        continue;
+                    }
+                    String[] split = message.message.split(",");
+                    if (split.length < 4) {
+                        LogUtilsKt.i("CheckUpdate: split < 4");
+                        continue;
+                    }
+                    UpdateMetadata metaData = new UpdateMetadata(message.id, split);
+                    metas.add(metaData);
+                }
+                Collections.sort(metas,
+                    (o1, o2) -> o2.versionCode - o1.versionCode); // versionCode Desc
+                UpdateMetadata found = null;
+                int releaseChannel = ConfigManager.getIntOrDefault(Defines.updateChannel,
+                    Defines.stableChannel);
+                for (UpdateMetadata metaData : metas) {
+                    if (metaData.versionCode <= localVersionCode) {
+                        LogUtilsKt.i("versionCode <= localVersionCode , ignore.");
+                        break;
+                    }
+                    if (releaseChannel < Defines.ciChannel && metaData.versionName.contains(
+                        "preview")) {
+                        LogUtilsKt.i("Current Release Channe"+ConfigManager.getIntOrDefault(Defines.updateChannel,-1));
+                        LogUtilsKt.i("Found preview metaData, but ignore.");
+                        continue;
+                    }
+                    found = metaData;
+                    break;
+                }
+                if (found != null) {
+                    for (TLRPC.Message message : res.messages) {
+                        if (!(message instanceof TLRPC.TL_message)) {
+                            continue;
+                        }
+                        if (message.id == found.UpdateLogMessageID) {
+                            found.updateLog = message.message;
+                            found.updateLogEntities = message.entities;
+                            break;
+                        }
+                    }
+                }
+                if (found == null) {
+                    LogUtilsKt.d("Cannot find Update Metadata");
+                    callback.apply(null, false);
+                    return;
+                }
+                LogUtilsKt.i(
+                    "Found Update Metadata " + found.versionName + " " + found.versionCode);
+                callback.apply(found, false);
+            });
+        if (req.peer.access_hash != 0) {
+            sendReq.run();
+        } else {
+            TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
+            resolve.username = CHANNEL_METADATA_NAME;
+            accountInstance.getConnectionsManager().sendRequest(resolve, (response1, error1) -> {
+                if (error1 != null) {
+                    LogUtilsKt.e("Error when checking update, unable to resolve metadata channel "
+                        + error1.text);
+                    callback.apply(null, true);
+                    return;
+                }
+                if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
+                    LogUtilsKt.e(
+                        "Error when checking update, unable to resolve metadata channel, unexpected responseType "
+                            + response1.getClass().getName());
+                    callback.apply(null, true);
+                    return;
+                }
+                TLRPC.TL_contacts_resolvedPeer resolvedPeer = (TLRPC.TL_contacts_resolvedPeer) response1;
+                accountInstance.getMessagesController().putUsers(resolvedPeer.users, false);
+                accountInstance.getMessagesController().putChats(resolvedPeer.chats, false);
+                accountInstance.getMessagesStorage()
+                    .putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false, true);
+                if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
+                    LogUtilsKt.e(
+                        "Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
+                    callback.apply(null, true);
+                    return;
+                }
+                req.peer = new TLRPC.TL_inputPeerChannel();
+                req.peer.channel_id = resolvedPeer.chats.get(0).id;
+                req.peer.access_hash = resolvedPeer.chats.get(0).access_hash;
+                sendReq.run();
+            });
         }
-
     }
 
-    public static void checkUpdate(Context ctx, boolean isAutoCheck) {
-        try {
-            ConfigManager.putLong(Defines.lastCheckUpdateTime, System.currentTimeMillis());
-            ConfigManager.putLong(Defines.nextUpdateCheckTime,
-                System.currentTimeMillis() / 1000 + 24 * 3600);
-
-            String ret = HttpRequest.get(API_URL_RELEASE)
-                .header("accept", "application/vnd.github.v3+json").execute().body();
-            /*
-             * 0为release
-             * 1为ci构筑
-             * */
-            int releaseChannel = ConfigManager.getIntOrDefault(Defines.releaseChannel, 0);
-
-            /*
-             * 查找latest release
-             * 如果最新版的release name为v+BuildConfig.VERSION_NAME，则认为是已经安装了最新的release
-             * 如果release name包含preview。则认为是ci构筑
-             * 如果release name包含skipUpdate，则认为是跳过该更新
-             * 如果上面两种情况都不满足，则认为是未安装最新的release
-             */
-            JSONObject jsonObject = JSONObject.parseObject(ret);
-            boolean isLatest = false;
-            // 一般不太可能发生 也有可能超过到github api请求数限制了
-            if (jsonObject.getString("name") == null) {
-                throw new NullPointerException("Cannot get String \"name\" from JSONObject");
-            }
-            if (jsonObject.getString("name").equals("v" + BuildConfig.VERSION_NAME)) {
-                isLatest = true;
-            }
-            if (jsonObject.getString("name").contains(Defines.ignoredUpdateTag)) {
-                isLatest = true;
-            }
-            if (jsonObject.getString("name").contains("preview") && releaseChannel != 1) {
-                isLatest = true;
-            }
-            if (isLatest) {
-                LogUtilsKt.d("Already installed latest release - " + jsonObject.getString("name"));
-                if (!isAutoCheck) {
-                    AndroidUtilities.runOnUIThread(() -> Toast.makeText(ctx,
-                        LocaleController.getString("noAvailableUpdate",
-                            R.string.noAvailableUpdate), Toast.LENGTH_SHORT).show());
-                }
-                return;
-            } else if (
-                jsonObject.getString("name")
-                    .equals(ConfigManager.getStringOrDefault(Defines.skipUpdateVersion, ""))
-                    && isAutoCheck) {
-                LogUtilsKt.d("Skip update:" + jsonObject.getString("name"));
+    public static void checkUpdate(checkUpdateCallback callback) {
+        AccountInstance accountInstance = AccountInstance.getInstance(
+            UserConfig.selectedAccount);
+        retrieveUpdateMetadata((metadata, err) -> {
+            if (metadata == null) {
+                LogUtilsKt.d("checkUpdate: metadata is null");
+                callback.apply(null, err);
                 return;
             }
+            TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
+            req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_APKS_ID);
+            req.min_id = metadata.apkChannelMessageID;
+            req.limit = MAX_READ_COUNT;
 
-            JSONArray assets = jsonObject.getJSONArray("assets");
-            JSONObject targetAPK = matchBuild(assets);
-            //ReleaseMetadata finalRelease = rel;
-            AndroidUtilities.runOnUIThread(() -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setTitle(
-                    LocaleController.getString("updateAvailable", R.string.updateAvailable));
+            Runnable sendReq = () -> accountInstance.getConnectionsManager()
+                .sendRequest(req, (response, error) -> {
+                    try {
+                        if (error != null) {
+                            LogUtilsKt.e("Error when getting update document " + error.text);
+                            callback.apply(null, true);
+                            return;
+                        }
+                        TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                        LogUtilsKt.d("Retrieve update messages, size:" + res.messages.size());
+                        final String target = APKUtils.getAbi() + ".apk";
+                        LogUtilsKt.d("target:" + target);
+                        for (int i = 0; i < res.messages.size(); i++) {
+                            if (res.messages.get(i).media == null) {
+                                LogUtilsKt.i("CheckUpdate: res.messages.get(i).media == null");
+                                continue;
+                            }
 
-                String message = null;
-                try {
-                    message = targetAPK.getString("name") + "   " + LocaleController.formatDateChat(
-                        new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(
-                            jsonObject.getString("published_at")).getTime() / 1000) + "\n\n";
-                } catch (Exception e) {
-                    LogUtilsKt.e(e);
-                }
-                if (targetAPK == null) {
-                    message += LocaleController.getString("variantsNotFound",
-                        R.string.variantsNotFound);
-                } else {
-                    message += targetAPK.getString("name").replace(".apk", "");
-                }
-                builder.setMessage(message);
-
-                builder.setPositiveButton(LocaleController.getString("VersionUpdateConfirm",
-                    R.string.updateConfirm), (dialog, which) -> {
-                    if (targetAPK != null) {
-                        Browser.openUrl(ctx, targetAPK.getString("browser_download_url"));
-                    } else {
-                        Browser.openUrl(ctx, targetAPK.getString("html_url"));
+                            TLRPC.Document apkDocument = res.messages.get(i).media.document;
+                            String fileName = apkDocument.attributes.size() == 0 ? ""
+                                : apkDocument.attributes.get(0).file_name;
+                            LogUtilsKt.d("file_name： " + apkDocument.attributes.get(0).file_name);
+                            if (!(fileName.contains(APKUtils.getAbi()) && fileName.contains(
+                                metadata.versionName))) {
+                                continue;
+                            }
+                            TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
+                            update.version = metadata.versionName;
+                            update.document = apkDocument;
+                            update.can_not_skip = false;
+                            update.flags |= 2;
+                            if (metadata.updateLog != null) {
+                                update.text = metadata.updateLog;
+                                update.entities = metadata.updateLogEntities;
+                            }
+                            callback.apply(update, false);
+                            return;
+                        }
+                        callback.apply(null, false);
+                    } catch (Exception e) {
+                        LogUtilsKt.e(e);
                     }
                 });
-                builder.setNeutralButton(
-                    LocaleController.getString("skipUpdate", R.string.skipUpdate),
-                    (dialog, which) -> ConfigManager.putString(Defines.skipUpdateVersion,
-                        targetAPK.getString("name")));
-                builder.setNegativeButton(
-                    LocaleController.getString("notNow", R.string.notNow),
-                    (dialog, which) -> ConfigManager.putLong(Defines.nextUpdateCheckTime,
-                        System.currentTimeMillis() / 1000 + 24 * 3600));
-                builder.show();
-            });
-        } catch (Exception e) {
-            LogUtilsKt.e(e);
-            if (!isAutoCheck) {
-                AndroidUtilities.runOnUIThread(
-                    () -> Toast.makeText(ctx, "An exception occurred during checking updates.",
-                        Toast.LENGTH_SHORT).show());
-            }
-        }
-    }
-
-    /**
-     * @param date {long} - date in milliseconds
-     */
-    public static String formatDateUpdate(long date) {
-        long epoch;
-        try {
-            epoch = ConfigManager.getLongOrDefault(Defines.lastCheckUpdateTime, 0);
-        } catch (Exception e) {
-            epoch = 0;
-        }
-        if (date <= epoch) {
-            return LocaleController.formatString("LastUpdateNever", R.string.LastUpdateNever);
-        }
-        try {
-            Calendar rightNow = Calendar.getInstance();
-            int day = rightNow.get(Calendar.DAY_OF_YEAR);
-            int year = rightNow.get(Calendar.YEAR);
-            rightNow.setTimeInMillis(date);
-            int dateDay = rightNow.get(Calendar.DAY_OF_YEAR);
-            int dateYear = rightNow.get(Calendar.YEAR);
-
-            if (dateDay == day && year == dateYear) {
-                return LocaleController.formatString("LastUpdateFormatted",
-                    R.string.LastUpdateFormatted,
-                    LocaleController.formatString("TodayAtFormatted", R.string.TodayAtFormatted,
-                        LocaleController.getInstance().formatterDay.format(new Date(date))));
-            } else if (dateDay + 1 == day && year == dateYear) {
-                return LocaleController.formatString("LastUpdateFormatted",
-                    R.string.LastUpdateFormatted,
-                    LocaleController.formatString("YesterdayAtFormatted",
-                        R.string.YesterdayAtFormatted,
-                        LocaleController.getInstance().formatterDay.format(new Date(date))));
-            } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
-                String format = LocaleController.formatString("formatDateAtTime",
-                    R.string.formatDateAtTime,
-                    LocaleController.getInstance().formatterDayMonth.format(new Date(date)),
-                    LocaleController.getInstance().formatterDay.format(new Date(date)));
-                return LocaleController.formatString("LastUpdateDateFormatted",
-                    R.string.LastUpdateDateFormatted, format);
+            if (req.peer.access_hash != 0) {
+                sendReq.run();
             } else {
-                String format = LocaleController.formatString("formatDateAtTime",
-                    R.string.formatDateAtTime,
-                    LocaleController.getInstance().formatterYear.format(new Date(date)),
-                    LocaleController.getInstance().formatterDay.format(new Date(date)));
-                return LocaleController.formatString("LastUpdateDateFormatted",
-                    R.string.LastUpdateDateFormatted, format);
+                TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
+                resolve.username = CHANNEL_APKS_NAME;
+                accountInstance.getConnectionsManager()
+                    .sendRequest(resolve, (response1, error1) -> {
+                        if (error1 != null) {
+                            LogUtilsKt.e(
+                                "Error when checking update, unable to resolve metadata channel "
+                                    + error1);
+                            callback.apply(null, true);
+                            return;
+                        }
+                        if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
+                            LogUtilsKt.e(
+                                "Error when checking update, unable to resolve metadata channel, unexpected responseType "
+                                    + response1.getClass().getName());
+                            callback.apply(null, true);
+                            return;
+                        }
+                        TLRPC.TL_contacts_resolvedPeer resolvedPeer = (TLRPC.TL_contacts_resolvedPeer) response1;
+                        accountInstance.getMessagesController()
+                            .putUsers(resolvedPeer.users, false);
+                        accountInstance.getMessagesController()
+                            .putChats(resolvedPeer.chats, false);
+                        accountInstance.getMessagesStorage()
+                            .putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false,
+                                true);
+                        if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
+                            LogUtilsKt.e(
+                                "Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
+                            callback.apply(null, true);
+                            return;
+                        }
+                        req.peer = new TLRPC.TL_inputPeerChannel();
+                        req.peer.channel_id = resolvedPeer.chats.get(0).id;
+                        req.peer.access_hash = resolvedPeer.chats.get(0).access_hash;
+                        sendReq.run();
+                    });
             }
-        } catch (Exception e) {
-            LogUtilsKt.e(e);
-        }
-        return "LOC_ERR";
+        });
+
     }
 
+    public interface retrieveUpdateMetadataCallback {
+
+        void apply(UpdateMetadata metadata, boolean error);
+    }
+
+    public interface checkUpdateCallback {
+
+        void apply(TLRPC.TL_help_appUpdate resp, boolean error);
+    }
+
+    static class UpdateMetadata {
+
+        int messageID;
+        String versionName;
+        int versionCode;
+        int apkChannelMessageID;
+        int UpdateLogMessageID;
+        String updateLog = null;
+        ArrayList<TLRPC.MessageEntity> updateLogEntities = null;
+
+        UpdateMetadata(int messageID, String[] split) {
+            this.messageID = messageID;
+            versionName = split[0];
+            versionCode = Integer.parseInt(split[1]);
+            apkChannelMessageID = Integer.parseInt(split[2]);
+            UpdateLogMessageID = Integer.parseInt(split[3]);
+        }
+    }
 
 }

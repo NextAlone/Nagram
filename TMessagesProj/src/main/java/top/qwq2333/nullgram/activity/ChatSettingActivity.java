@@ -115,10 +115,12 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat));
                 }
             } else if (position == labelChannelUserRow) {
-                ConfigManager.toggleBoolean(Defines.labelChannelUser);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
+                if (!ConfigManager.getBooleanOrFalse(Defines.channelAlias)){
+                    ConfigManager.toggleBoolean(Defines.labelChannelUser);
+                    if (view instanceof TextCheckCell) {
+                        ((TextCheckCell) view).setChecked(
+                            ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
+                    }
                 }
             } else if (position == displaySpoilerDirectlyRow) {
                 ConfigManager.toggleBoolean(Defines.displaySpoilerMsgDirectly);
@@ -319,6 +321,9 @@ public class ChatSettingActivity extends BaseFragment {
                             ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat),
                             true, true);
                     } else if (position == labelChannelUserRow) {
+                        if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)){
+                            textCell.setEnabled(false,null);
+                        }
                         textCell.setTextAndValueAndCheck(
                             LocaleController.getString("labelChannelUser",
                                 R.string.labelChannelUser),

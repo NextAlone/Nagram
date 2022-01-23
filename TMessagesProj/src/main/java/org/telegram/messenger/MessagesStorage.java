@@ -47,6 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class MessagesStorage extends BaseController {
 
@@ -5473,14 +5474,18 @@ public class MessagesStorage extends BaseController {
                             data.reuse();
                         }
                     } catch (Exception e) {
-                        FileLog.e(e);
+                        LogUtilsKt.e(e);
                     }
                 }
                 cursor.dispose();
             } catch (Exception e) {
-                FileLog.e(e);
+                LogUtilsKt.e(e);
             } finally {
-                requestDelegate.run(result, null);
+                try {
+                    requestDelegate.run(result, null);
+                } catch (Throwable thr) {
+                    LogUtilsKt.e(thr);
+                }
             }
         });
     }

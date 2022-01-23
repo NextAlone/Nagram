@@ -67,4 +67,15 @@
     <string name="channelAlias">Channel Alias</string>
     <string name="channelAliasDetails">Require label channel user enabled.</string>
     <string name="setChannelAliasName">Set Alias</string>
+    <string name="AutoCheckUpdateOFF">OFF</string>
+    <string name="AutoCheckUpdateSwitch">Automatic Update</string>
+    <string name="AutoCheckUpdateStable">Stable</string>
+    <string name="AutoCheckUpdatePreview">Preview (Unstable)</string>
+    <string name="AppUpdateNullgram">Update Nullgram</string>
+    <string name="VersionUpdateNoUpdate">No Update</string>
+    <string name="DoNotRemindAgain">Don\'t remind again</string>
+    <string name="FCTitle">About application updates</string>
+    <string name="FCInfo">Follow our announcements and updates channel?</string>
+    <string name="SwitchVersion">Switch Release Channel</string>
+
 </resources>
