@@ -154,3 +154,6 @@ android {
 
     dependenciesInfo.includeInApk false
 }
+
+task replaceIcon (type: ReplaceIcon)
+preBuild.dependsOn replaceIcon
