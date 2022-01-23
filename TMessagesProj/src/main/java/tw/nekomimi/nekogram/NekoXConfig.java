@@ -46,6 +46,7 @@ public class NekoXConfig {
     public static long[] developers = {
             896711046, // nekohasekai
             380570774, // Haruhi
+            784901712, // NextAlone
     };
 
     public static final int TITLE_TYPE_TEXT = 0;
