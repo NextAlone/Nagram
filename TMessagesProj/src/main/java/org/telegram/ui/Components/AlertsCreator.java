@@ -58,7 +58,15 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.RequiresApi;
+import java.net.IDN;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -106,17 +114,6 @@ import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.ProfileNotificationsActivity;
 import org.telegram.ui.ThemePreviewActivity;
 import org.telegram.ui.TooManyCommunitiesActivity;
-
-import java.net.IDN;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.CountDownLatch;
-
-import androidx.annotation.RequiresApi;
 
 public class AlertsCreator {
 
@@ -3092,25 +3089,37 @@ public class AlertsCreator {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setMessage(LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+        builder.setMessage(
+            LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         fragment.showDialog(builder.create(), true, null);
     }
 
-    public static void showSendMediaAlert(int result, final BaseFragment fragment, Theme.ResourcesProvider resourcesProvider) {
+    public static void showSendMediaAlert(int result, final BaseFragment fragment) {
+        showSendMediaAlert(result, fragment, null);
+    }
+
+
+    public static void showSendMediaAlert(int result, final BaseFragment fragment,
+        Theme.ResourcesProvider resourcesProvider) {
         if (result == 0) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(),
+            resourcesProvider);
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         if (result == 1) {
-            builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickers", R.string.ErrorSendRestrictedStickers));
+            builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickers",
+                R.string.ErrorSendRestrictedStickers));
         } else if (result == 2) {
-            builder.setMessage(LocaleController.getString("ErrorSendRestrictedMedia", R.string.ErrorSendRestrictedMedia));
+            builder.setMessage(LocaleController.getString("ErrorSendRestrictedMedia",
+                R.string.ErrorSendRestrictedMedia));
         } else if (result == 3) {
-            builder.setMessage(LocaleController.getString("ErrorSendRestrictedPolls", R.string.ErrorSendRestrictedPolls));
+            builder.setMessage(LocaleController.getString("ErrorSendRestrictedPolls",
+                R.string.ErrorSendRestrictedPolls));
         } else if (result == 4) {
-            builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickersAll", R.string.ErrorSendRestrictedStickersAll));
+            builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickersAll",
+                R.string.ErrorSendRestrictedStickersAll));
         } else if (result == 5) {
             builder.setMessage(LocaleController.getString("ErrorSendRestrictedMediaAll", R.string.ErrorSendRestrictedMediaAll));
         } else if (result == 6) {

@@ -19,13 +19,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
-
-import org.telegram.messenger.time.FastDateFormat;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.xmlpull.v1.XmlPullParser;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,8 +31,12 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
+import org.telegram.messenger.time.FastDateFormat;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
+import org.xmlpull.v1.XmlPullParser;
 
 public class LocaleController {
 
@@ -62,6 +59,7 @@ public class LocaleController {
     public FastDateFormat formatterStats;
     public FastDateFormat formatterBannedUntil;
     public FastDateFormat formatterBannedUntilThisYear;
+    public FastDateFormat formatterDayWithSeconds;
     public FastDateFormat chatDate;
     public FastDateFormat chatFullDate;
     public FastDateFormat formatterScheduleDay;
@@ -69,7 +67,7 @@ public class LocaleController {
     public FastDateFormat formatterMonthYear;
     public FastDateFormat[] formatterScheduleSend = new FastDateFormat[15];
 
-    private HashMap<String, PluralRules> allRules = new HashMap<>();
+    private final HashMap<String, PluralRules> allRules = new HashMap<>();
 
     private Locale currentLocale;
     private Locale systemDefaultLocale;
@@ -214,7 +212,7 @@ public class LocaleController {
     public HashMap<String, LocaleInfo> remoteLanguagesDict = new HashMap<>();
     public HashMap<String, LocaleInfo> languagesDict = new HashMap<>();
 
-    private ArrayList<LocaleInfo> otherLanguages = new ArrayList<>();
+    private final ArrayList<LocaleInfo> otherLanguages = new ArrayList<>();
 
     private static volatile LocaleController Instance = null;
     public static LocaleController getInstance() {
@@ -1106,31 +1104,34 @@ public class LocaleController {
             if (ttl % 7 == 0) {
                 return LocaleController.formatPluralString("Weeks", days / 7);
             } else {
-                return String.format("%s %s", LocaleController.formatPluralString("Weeks", days / 7), LocaleController.formatPluralString("Days", days % 7));
+                return String.format("%s %s",
+                    LocaleController.formatPluralString("Weeks", days / 7),
+                    LocaleController.formatPluralString("Days", days % 7));
             }
         }
     }
 
-    private static char[] defaultNumbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    private static char[][] otherNumbers = new char[][]{
-            {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'},
-            {'۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'},
-            {'०', '१', '२', '३', '४', '५', '६', '७', '८', '९'},
-            {'૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'},
-            {'੦', '੧', '੨', '੩', '੪', '੫', '੬', '੭', '੮', '੯'},
-            {'০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'},
-            {'೦', '೧', '೨', '೩', '೪', '೫', '೬', '೭', '೮', '೯'},
-            {'୦', '୧', '୨', '୩', '୪', '୫', '୬', '୭', '୮', '୯'},
-            {'൦', '൧', '൨', '൩', '൪', '൫', '൬', '൭', '൮', '൯'},
-            {'௦', '௧', '௨', '௩', '௪', '௫', '௬', '௭', '௮', '௯'},
-            {'౦', '౧', '౨', '౩', '౪', '౫', '౬', '౭', '౮', '౯'},
-            {'၀', '၁', '၂', '၃', '၄', '၅', '၆', '၇', '၈', '၉'},
-            {'༠', '༡', '༢', '༣', '༤', '༥', '༦', '༧', '༨', '༩'},
-            {'᠐', '᠑', '᠒', '᠓', '᠔', '᠕', '᠖', '᠗', '᠘', '᠙'},
-            {'០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'},
-            {'๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'},
-            {'໐', '໑', '໒', '໓', '໔', '໕', '໖', '໗', '໘', '໙'},
-            {'꧐', '꧑', '꧒', '꧓', '꧔', '꧕', '꧖', '꧗', '꧘', '꧙'}
+    private static final char[] defaultNumbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9'};
+    private static final char[][] otherNumbers = new char[][]{
+        {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'},
+        {'۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'},
+        {'०', '१', '२', '३', '४', '५', '६', '७', '८', '९'},
+        {'૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'},
+        {'੦', '੧', '੨', '੩', '੪', '੫', '੬', '੭', '੮', '੯'},
+        {'০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'},
+        {'೦', '೧', '೨', '೩', '೪', '೫', '೬', '೭', '೮', '೯'},
+        {'୦', '୧', '୨', '୩', '୪', '୫', '୬', '୭', '୮', '୯'},
+        {'൦', '൧', '൨', '൩', '൪', '൫', '൬', '൭', '൮', '൯'},
+        {'௦', '௧', '௨', '௩', '௪', '௫', '௬', '௭', '௮', '௯'},
+        {'౦', '౧', '౨', '౩', '౪', '౫', '౬', '౭', '౮', '౯'},
+        {'၀', '၁', '၂', '၃', '၄', '၅', '၆', '၇', '၈', '၉'},
+        {'༠', '༡', '༢', '༣', '༤', '༥', '༦', '༧', '༨', '༩'},
+        {'᠐', '᠑', '᠒', '᠓', '᠔', '᠕', '᠖', '᠗', '᠘', '᠙'},
+        {'០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'},
+        {'๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'},
+        {'໐', '໑', '໒', '໓', '໔', '໕', '໖', '໗', '໘', '໙'},
+        {'꧐', '꧑', '꧒', '꧓', '꧔', '꧕', '꧖', '꧗', '꧘', '꧙'}
     };
 
     public static String fixNumbers(CharSequence numbers) {
@@ -1657,40 +1658,94 @@ public class LocaleController {
             lang = "en";
         }
         lang = lang.toLowerCase();
-        isRTL = lang.length() == 2 && (lang.equals("ar") || lang.equals("fa") || lang.equals("he") || lang.equals("iw")) ||
-                lang.startsWith("ar_") || lang.startsWith("fa_") || lang.startsWith("he_") || lang.startsWith("iw_")
-                || currentLocaleInfo != null && currentLocaleInfo.isRtl;
+        isRTL = lang.length() == 2 && (lang.equals("ar") || lang.equals("fa") || lang.equals("he")
+            || lang.equals("iw")) ||
+            lang.startsWith("ar_") || lang.startsWith("fa_") || lang.startsWith("he_")
+            || lang.startsWith("iw_")
+            || currentLocaleInfo != null && currentLocaleInfo.isRtl;
         nameDisplayOrder = lang.equals("ko") ? 2 : 1;
 
-        formatterMonthYear = createFormatter(locale, getStringInternal("formatterMonthYear", R.string.formatterMonthYear), "MMM yyyy");
-        formatterDayMonth = createFormatter(locale, getStringInternal("formatterMonth", R.string.formatterMonth), "dd MMM");
-        formatterYear = createFormatter(locale, getStringInternal("formatterYear", R.string.formatterYear), "dd.MM.yy");
-        formatterYearMax = createFormatter(locale, getStringInternal("formatterYearMax", R.string.formatterYearMax), "dd.MM.yyyy");
-        chatDate = createFormatter(locale, getStringInternal("chatDate", R.string.chatDate), "d MMMM");
-        chatFullDate = createFormatter(locale, getStringInternal("chatFullDate", R.string.chatFullDate), "d MMMM yyyy");
-        formatterWeek = createFormatter(locale, getStringInternal("formatterWeek", R.string.formatterWeek), "EEE");
-        formatterWeekLong = createFormatter(locale, getStringInternal("formatterWeekLong", R.string.formatterWeekLong), "EEEE");
-        formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateSchedule", R.string.formatDateSchedule), "MMM d");
-        formatterScheduleYear = createFormatter(locale, getStringInternal("formatDateScheduleYear", R.string.formatDateScheduleYear), "MMM d yyyy");
-        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
-        formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
-        formatterBannedUntil = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntil24H", R.string.formatterBannedUntil24H) : getStringInternal("formatterBannedUntil12H", R.string.formatterBannedUntil12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
-        formatterBannedUntilThisYear = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntilThisYear24H", R.string.formatterBannedUntilThisYear24H) : getStringInternal("formatterBannedUntilThisYear12H", R.string.formatterBannedUntilThisYear12H), is24HourFormat ? "MMM dd, HH:mm" : "MMM dd, h:mm a");
-        formatterScheduleSend[0] = createFormatter(locale, getStringInternal("SendTodayAt", R.string.SendTodayAt), "'Send today at' HH:mm");
-        formatterScheduleSend[1] = createFormatter(locale, getStringInternal("SendDayAt", R.string.SendDayAt), "'Send on' MMM d 'at' HH:mm");
-        formatterScheduleSend[2] = createFormatter(locale, getStringInternal("SendDayYearAt", R.string.SendDayYearAt), "'Send on' MMM d yyyy 'at' HH:mm");
-        formatterScheduleSend[3] = createFormatter(locale, getStringInternal("RemindTodayAt", R.string.RemindTodayAt), "'Remind today at' HH:mm");
-        formatterScheduleSend[4] = createFormatter(locale, getStringInternal("RemindDayAt", R.string.RemindDayAt), "'Remind on' MMM d 'at' HH:mm");
-        formatterScheduleSend[5] = createFormatter(locale, getStringInternal("RemindDayYearAt", R.string.RemindDayYearAt), "'Remind on' MMM d yyyy 'at' HH:mm");
-        formatterScheduleSend[6] = createFormatter(locale, getStringInternal("StartTodayAt", R.string.StartTodayAt), "'Start today at' HH:mm");
-        formatterScheduleSend[7] = createFormatter(locale, getStringInternal("StartDayAt", R.string.StartDayAt), "'Start on' MMM d 'at' HH:mm");
-        formatterScheduleSend[8] = createFormatter(locale, getStringInternal("StartDayYearAt", R.string.StartDayYearAt), "'Start on' MMM d yyyy 'at' HH:mm");
-        formatterScheduleSend[9] = createFormatter(locale, getStringInternal("StartShortTodayAt", R.string.StartShortTodayAt), "'Today,' HH:mm");
-        formatterScheduleSend[10] = createFormatter(locale, getStringInternal("StartShortDayAt", R.string.StartShortDayAt), "MMM d',' HH:mm");
-        formatterScheduleSend[11] = createFormatter(locale, getStringInternal("StartShortDayYearAt", R.string.StartShortDayYearAt), "MMM d yyyy, HH:mm");
-        formatterScheduleSend[12] = createFormatter(locale, getStringInternal("StartsTodayAt", R.string.StartsTodayAt), "'Starts today at' HH:mm");
-        formatterScheduleSend[13] = createFormatter(locale, getStringInternal("StartsDayAt", R.string.StartsDayAt), "'Starts on' MMM d 'at' HH:mm");
-        formatterScheduleSend[14] = createFormatter(locale, getStringInternal("StartsDayYearAt", R.string.StartsDayYearAt), "'Starts on' MMM d yyyy 'at' HH:mm");
+        formatterMonthYear = createFormatter(locale,
+            getStringInternal("formatterMonthYear", R.string.formatterMonthYear), "MMM yyyy");
+        formatterDayMonth = createFormatter(locale,
+            getStringInternal("formatterMonth", R.string.formatterMonth), "dd MMM");
+        formatterYear = createFormatter(locale,
+            getStringInternal("formatterYear", R.string.formatterYear), "dd.MM.yy");
+        formatterYearMax = createFormatter(locale,
+            getStringInternal("formatterYearMax", R.string.formatterYearMax), "dd.MM.yyyy");
+        chatDate = createFormatter(locale, getStringInternal("chatDate", R.string.chatDate),
+            "d MMMM");
+        chatFullDate = createFormatter(locale,
+            getStringInternal("chatFullDate", R.string.chatFullDate), "d MMMM yyyy");
+        formatterWeek = createFormatter(locale,
+            getStringInternal("formatterWeek", R.string.formatterWeek), "EEE");
+        formatterWeekLong = createFormatter(locale,
+            getStringInternal("formatterWeekLong", R.string.formatterWeekLong), "EEEE");
+        formatterScheduleDay = createFormatter(locale,
+            getStringInternal("formatDateSchedule", R.string.formatDateSchedule), "MMM d");
+        formatterScheduleYear = createFormatter(locale,
+            getStringInternal("formatDateScheduleYear", R.string.formatDateScheduleYear),
+            "MMM d yyyy");
+        formatterDay = createFormatter(
+            lang.equalsIgnoreCase("ar") || lang.equalsIgnoreCase("ko") ? locale : Locale.US,
+            is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H)
+                : getStringInternal("formatterDay12H", R.string.formatterDay12H),
+            is24HourFormat ? "HH:mm" : "h:mm a");
+        formatterDayWithSeconds = createFormatter(
+            lang.equalsIgnoreCase("ar") || lang.equalsIgnoreCase("ko") ? locale : Locale.US,
+            is24HourFormat ? getStringInternal("formatterDay24HSec", R.string.formatterDay24HSec)
+                : getStringInternal("formatterDay12HSec", R.string.formatterDay12HSec),
+            is24HourFormat ? "HH:mm:ss" : "h:mm:ss a");
+        formatterStats = createFormatter(locale,
+            is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H)
+                : getStringInternal("formatterStats12H", R.string.formatterStats12H),
+            is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
+        formatterBannedUntil = createFormatter(locale,
+            is24HourFormat ? getStringInternal("formatterBannedUntil24H",
+                R.string.formatterBannedUntil24H)
+                : getStringInternal("formatterBannedUntil12H", R.string.formatterBannedUntil12H),
+            is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
+        formatterBannedUntilThisYear = createFormatter(locale,
+            is24HourFormat ? getStringInternal("formatterBannedUntilThisYear24H",
+                R.string.formatterBannedUntilThisYear24H)
+                : getStringInternal("formatterBannedUntilThisYear12H",
+                    R.string.formatterBannedUntilThisYear12H),
+            is24HourFormat ? "MMM dd, HH:mm" : "MMM dd, h:mm a");
+        formatterScheduleSend[0] = createFormatter(locale,
+            getStringInternal("SendTodayAt", R.string.SendTodayAt), "'Send today at' HH:mm");
+        formatterScheduleSend[1] = createFormatter(locale,
+            getStringInternal("SendDayAt", R.string.SendDayAt), "'Send on' MMM d 'at' HH:mm");
+        formatterScheduleSend[2] = createFormatter(locale,
+            getStringInternal("SendDayYearAt", R.string.SendDayYearAt),
+            "'Send on' MMM d yyyy 'at' HH:mm");
+        formatterScheduleSend[3] = createFormatter(locale,
+            getStringInternal("RemindTodayAt", R.string.RemindTodayAt), "'Remind today at' HH:mm");
+        formatterScheduleSend[4] = createFormatter(locale,
+            getStringInternal("RemindDayAt", R.string.RemindDayAt), "'Remind on' MMM d 'at' HH:mm");
+        formatterScheduleSend[5] = createFormatter(locale,
+            getStringInternal("RemindDayYearAt", R.string.RemindDayYearAt),
+            "'Remind on' MMM d yyyy 'at' HH:mm");
+        formatterScheduleSend[6] = createFormatter(locale,
+            getStringInternal("StartTodayAt", R.string.StartTodayAt), "'Start today at' HH:mm");
+        formatterScheduleSend[7] = createFormatter(locale,
+            getStringInternal("StartDayAt", R.string.StartDayAt), "'Start on' MMM d 'at' HH:mm");
+        formatterScheduleSend[8] = createFormatter(locale,
+            getStringInternal("StartDayYearAt", R.string.StartDayYearAt),
+            "'Start on' MMM d yyyy 'at' HH:mm");
+        formatterScheduleSend[9] = createFormatter(locale,
+            getStringInternal("StartShortTodayAt", R.string.StartShortTodayAt), "'Today,' HH:mm");
+        formatterScheduleSend[10] = createFormatter(locale,
+            getStringInternal("StartShortDayAt", R.string.StartShortDayAt), "MMM d',' HH:mm");
+        formatterScheduleSend[11] = createFormatter(locale,
+            getStringInternal("StartShortDayYearAt", R.string.StartShortDayYearAt),
+            "MMM d yyyy, HH:mm");
+        formatterScheduleSend[12] = createFormatter(locale,
+            getStringInternal("StartsTodayAt", R.string.StartsTodayAt), "'Starts today at' HH:mm");
+        formatterScheduleSend[13] = createFormatter(locale,
+            getStringInternal("StartsDayAt", R.string.StartsDayAt), "'Starts on' MMM d 'at' HH:mm");
+        formatterScheduleSend[14] = createFormatter(locale,
+            getStringInternal("StartsDayYearAt", R.string.StartsDayYearAt),
+            "'Starts on' MMM d yyyy 'at' HH:mm");
     }
 
     public static boolean isRTLCharacter(char ch) {
@@ -1837,13 +1892,13 @@ public class LocaleController {
             if (K.length() == 2) {
                 return String.format(Locale.US, "%d.%dM", number, lastDec);
             } else {
-                return String.format(Locale.US, "%d.%d%s", number, lastDec, K.toString());
+                return String.format(Locale.US, "%d.%d%s", number, lastDec, K);
             }
         }
         if (K.length() == 2) {
             return String.format(Locale.US, "%dM", number);
         } else {
-            return String.format(Locale.US, "%d%s", number, K.toString());
+            return String.format(Locale.US, "%d%s", number, K);
         }
     }
 

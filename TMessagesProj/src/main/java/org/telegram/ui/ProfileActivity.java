@@ -10176,22 +10176,8 @@ public class ProfileActivity extends BaseFragment implements
                     Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
         }
 
-        idHintView.setText(getDCLocation(dc));
+        idHintView.setText(getMessageUtils().getDCLocation(dc));
         idHintView.showForView(idTextView, true);
     }
 
-    public String getDCLocation(int dc) {
-        switch (dc) {
-            case 1:
-            case 3:
-                return "Miami";
-            case 2:
-            case 4:
-                return "Amsterdam";
-            case 5:
-                return "Singapore";
-            default:
-                return "Unknown";
-        }
-    }
 }

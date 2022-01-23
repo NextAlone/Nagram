@@ -31,6 +31,14 @@ public class Defines {
     public static final String blockSponsorAds = "blockSponsorMessages";
     public static final String hideGroupSticker = "hideGroupSticker";
 
+    // Menu Display
+    public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";
+    public static final String showNoQuoteForward = "showNoQuoteForward";
+    public static final String showMessagesDetail = "showMessagesDetail";
+    public static final String showSaveMessages = "showSaveMessages";
+    public static final String showViewHistory = "showViewHistory";
+    public static final String showRepeat = "showRepeat";
+
     // Auto Update
     public static final String ignoredUpdateTag = "skipUpdate";
     public static final String lastCheckUpdateTime = "lastCheckUpdateTime";

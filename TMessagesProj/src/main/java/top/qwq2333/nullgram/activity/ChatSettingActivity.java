@@ -8,6 +8,7 @@ import android.provider.OpenableColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -44,6 +46,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int chatRow;
     private int ignoreBlockedUserMessagesRow;
     private int hideGroupStickerRow;
+    private int messageMenuRow;
     private int chat2Row;
 
 
@@ -100,6 +103,8 @@ public class ChatSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
                 }
+            } else if (position == messageMenuRow) {
+                showMessageMenuAlert();
             }
         });
 
@@ -114,6 +119,7 @@ public class ChatSettingActivity extends BaseFragment {
         }
     }
 
+    @SuppressLint("Range")
     public String getFileName(Uri uri) {
         String result = null;
         try (Cursor cursor = getParentActivity().getContentResolver()
@@ -132,6 +138,7 @@ public class ChatSettingActivity extends BaseFragment {
         chatRow = rowCount++;
         ignoreBlockedUserMessagesRow = rowCount++;
         hideGroupStickerRow = rowCount++;
+        messageMenuRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -261,6 +268,10 @@ public class ChatSettingActivity extends BaseFragment {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    if (position == messageMenuRow) {
+                        textCell.setText(
+                            LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
+                    }
                     break;
                 }
                 case 3: {
@@ -342,10 +353,121 @@ public class ChatSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == chat2Row) {
                 return 1;
+            } else if (position == messageMenuRow) {
+                return 2;
             } else if (position == chatRow) {
                 return 4;
             }
             return 3;
         }
+    }
+
+    private void showMessageMenuAlert() {
+        if (getParentActivity() == null) {
+            return;
+        }
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString("MessageMenu", R.string.MessageMenu));
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
+        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutInviteContainer,
+            LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        int count = 5;
+        for (int a = 0; a < count; a++) {
+            TextCheckCell textCell = new TextCheckCell(context);
+            switch (a) {
+                case 0: {
+                    textCell.setTextAndCheck(LocaleController.getString("DeleteDownloadedFile",
+                            R.string.DeleteDownloadedFile),
+                        ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles), false);
+                    break;
+                }
+                case 1: {
+                    textCell.setTextAndCheck(
+                        LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward),
+                        ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true), false);
+                    break;
+                }
+                case 2: {
+                    textCell.setTextAndCheck(
+                        LocaleController.getString("saveMessages", R.string.saveMessages),
+                        ConfigManager.getBooleanOrFalse(Defines.showSaveMessages), false);
+                    break;
+                }
+                case 3: {
+                    textCell.setTextAndCheck(LocaleController.getString("Repeat", R.string.Repeat),
+                        ConfigManager.getBooleanOrDefault(Defines.showRepeat, true), false);
+                    break;
+                }
+                case 4: {
+                    textCell.setTextAndCheck(
+                        LocaleController.getString("ViewHistory", R.string.ViewHistory),
+                        ConfigManager.getBooleanOrFalse(Defines.showViewHistory), false);
+                    break;
+                }
+                case 5: {
+                    textCell.setTextAndCheck(
+                        LocaleController.getString("MessageDetails", R.string.MessageDetails),
+                        ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail), false);
+                    break;
+                }
+            }
+            textCell.setTag(a);
+            textCell.setBackground(Theme.getSelectorDrawable(false));
+            linearLayoutInviteContainer.addView(textCell,
+                LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            textCell.setOnClickListener(v2 -> {
+                Integer tag = (Integer) v2.getTag();
+                switch (tag) {
+                    case 0: {
+                        ConfigManager.toggleBoolean(Defines.showDeleteDownloadFiles);
+                        textCell.setChecked(
+                            ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles));
+                        break;
+                    }
+                    case 1: {
+                        ConfigManager.putBoolean(Defines.showNoQuoteForward,
+                            !ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true));
+                        textCell.setChecked(
+                            ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true));
+                        break;
+                    }
+                    case 2: {
+                        ConfigManager.toggleBoolean(Defines.showSaveMessages);
+                        textCell.setChecked(
+                            ConfigManager.getBooleanOrFalse(Defines.showSaveMessages));
+                        break;
+                    }
+                    case 3: {
+                        ConfigManager.putBoolean(Defines.showRepeat,
+                            !ConfigManager.getBooleanOrDefault(Defines.showRepeat, true));
+                        textCell.setChecked(
+                            ConfigManager.getBooleanOrDefault(Defines.showRepeat, true));
+                        break;
+                    }
+                    case 4: {
+                        ConfigManager.toggleBoolean(Defines.showViewHistory);
+                        textCell.setChecked(
+                            ConfigManager.getBooleanOrFalse(Defines.showViewHistory));
+                        break;
+                    }
+                    case 5: {
+                        ConfigManager.toggleBoolean(Defines.showMessagesDetail);
+                        textCell.setChecked(
+                            ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail));
+                        break;
+                    }
+                }
+            });
+        }
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setView(linearLayout);
+        showDialog(builder.create());
     }
 }

@@ -15,9 +15,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -27,9 +27,7 @@ import android.view.ViewParent;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
-
-import com.google.android.exoplayer2.util.Log;
-
+import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -49,8 +47,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.LayoutHelper;
-
-import java.util.ArrayList;
+import top.qwq2333.nullgram.utils.MessageUtils;
 
 public abstract class BaseFragment {
 
@@ -332,6 +329,11 @@ public abstract class BaseFragment {
         }
         return parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2 - offset);
     }
+
+    public MessageUtils getMessageUtils() {
+        return MessageUtils.getInstance(currentAccount);
+    }
+
 
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {
 

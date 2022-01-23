@@ -3,9 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.os.Build;
 import android.widget.FrameLayout;
-
 import androidx.annotation.CheckResult;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsController;
@@ -32,6 +30,7 @@ public final class BulletinFactory {
     public static final int ICON_TYPE_WARNING = 1;
 
     public enum FileType {
+        STICKER("StickerSavedHint", R.string.StickerSavedHint, Icon.SAVED_TO_GALLERY),
 
         PHOTO("PhotoSavedHint", R.string.PhotoSavedHint, Icon.SAVED_TO_GALLERY),
         PHOTOS("PhotosSavedHint", Icon.SAVED_TO_GALLERY),
@@ -41,8 +40,10 @@ public final class BulletinFactory {
 
         MEDIA("MediaSavedHint", Icon.SAVED_TO_GALLERY),
 
-        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", R.string.PhotoSavedToDownloadsHint, Icon.SAVED_TO_DOWNLOADS),
-        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", R.string.VideoSavedToDownloadsHint, Icon.SAVED_TO_DOWNLOADS),
+        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", R.string.PhotoSavedToDownloadsHint,
+            Icon.SAVED_TO_DOWNLOADS),
+        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", R.string.VideoSavedToDownloadsHint,
+            Icon.SAVED_TO_DOWNLOADS),
 
         GIF("GifSavedToDownloadsHint", Icon.SAVED_TO_DOWNLOADS),
 
