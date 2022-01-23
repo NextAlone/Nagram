@@ -50,4 +50,6 @@
     <string name="ViewHistory">View history</string>
     <string name="NoQuoteForward">NoQuote forward</string>
     <string name="MessageMenu">Message menu</string>
+    <string name="allowScreenshotOnNoForwardChat">Bypass Screenshot Limit</string>
+    <string name="allowScreenshotOnNoForwardChatWarning">It will also allow you to bypass screenshot limit in SecureChat!</string>
 </resources>

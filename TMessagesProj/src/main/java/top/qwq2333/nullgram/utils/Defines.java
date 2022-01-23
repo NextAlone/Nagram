@@ -30,6 +30,7 @@ public class Defines {
     public static final String ignoreBlockedUser = "ignoreBlockedUser";
     public static final String blockSponsorAds = "blockSponsorMessages";
     public static final String hideGroupSticker = "hideGroupSticker";
+    public static final String allowScreenshotOnNoForwardChat = "allowScreenshotOnNoForwardChat";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";
