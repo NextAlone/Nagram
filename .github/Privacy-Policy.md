@@ -1,0 +1,1 @@
+> Nullgram will not share any user data or device information with anyone. It is based on the official Telegram, so in order to learn more about it, please check [Telegram Privacy Policy](https://telegram.org/privacy)
