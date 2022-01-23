@@ -153,6 +153,9 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          echo "${{ secrets.B64_SIGNING_KEY }}" | base64 --decode - > TMessagesProj/luvletter2333.jks
+          echo "${{ secrets.KEYSTORE_PASS }}" > TMessagesProj/priv-signing.properties
+          sha256sum TMessagesProj/luvletter2333.jks
           export NATIVE_TARGET="${{ matrix.flavor }}"
           ./run libs native
   v2ray:
@@ -187,7 +190,11 @@ jobs:
           go-version: 1.16
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ./run libs v2ray
+        run: |
+          echo "${{ secrets.B64_SIGNING_KEY }}" | base64 --decode - > TMessagesProj/luvletter2333.jks
+          echo "${{ secrets.KEYSTORE_PASS }}" > TMessagesProj/priv-signing.properties
+          sha256sum TMessagesProj/luvletter2333.jks
+          ./run libs v2ray
   shadowsocks:
     name: Native Build (Shadowsocks)
     runs-on: ubuntu-latest
@@ -218,7 +225,11 @@ jobs:
         run: ./run init action shadowsocks
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ./run libs shadowsocks
+        run: |
+          echo "${{ secrets.B64_SIGNING_KEY }}" | base64 --decode - > TMessagesProj/luvletter2333.jks
+          echo "${{ secrets.KEYSTORE_PASS }}" > TMessagesProj/priv-signing.properties
+          sha256sum TMessagesProj/luvletter2333.jks
+          ./run libs shadowsocks
   shadowsocksr:
     name: Native Build (ShadowsocksR)
     runs-on: ubuntu-latest
@@ -246,7 +257,11 @@ jobs:
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ./run libs ssr
+        run: |
+          echo "${{ secrets.B64_SIGNING_KEY }}" | base64 --decode - > TMessagesProj/luvletter2333.jks
+          echo "${{ secrets.KEYSTORE_PASS }}" > TMessagesProj/priv-signing.properties
+          sha256sum TMessagesProj/luvletter2333.jks
+          ./run libs ssr
   build:
     name: Gradle Build
     runs-on: ubuntu-latest
@@ -258,10 +273,7 @@ jobs:
     strategy:
       matrix:
         flavor:
-          - FullRelease
-          - FullReleaseNoGcm
           - MiniRelease
-          - MiniReleaseNoGcm
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -327,7 +339,9 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle') }}
       - name: Release Build
         run: |
-          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          echo "${{ secrets.B64_SIGNING_KEY }}" | base64 --decode - > TMessagesProj/luvletter2333.jks
+          echo "${{ secrets.KEYSTORE_PASS }}" > TMessagesProj/priv-signing.properties
+          sha256sum TMessagesProj/luvletter2333.jks
           ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
 
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
@@ -380,7 +394,7 @@ jobs:
           ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
           curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
            -X POST \
-           -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
+           --form-string chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
            -F text="==== ${{ github.event.inputs.tag }} ====" \
            --silent --show-error --fail >/dev/null
           mkdir apks
@@ -390,7 +404,7 @@ jobs:
               echo ">> Uploading $apk"
               curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
                 -X POST \
-                -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
+                --form-string chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
                 -F document="@$apk" \
                 --retry 5 \
                 --retry-delay 5 \
@@ -399,91 +413,7 @@ jobs:
             done
           }
           upload apks/NekoX-*-mini-*-release.apk
-          upload apks/NekoX-*-mini-*-releaseNoGcm.apk
-          upload apks/NekoX-*-full-*-release.apk
-          upload apks/NekoX-*-full-*-releaseNoGcm.apk
           pkill telegram-bot
-  play:
-    name: Publish to Play Store
-    if: github.event.inputs.play != 'y'
-    runs-on: ubuntu-latest
-    needs:
-      - native
-      - v2ray
-      - shadowsocks
-      - shadowsocksr
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v2
-      - name: Fetch Status
-        run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/boringssl > boringssl_status
-          git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
-          git submodule status 'ssr-libev/*' > shadowsocksr_status
-          git submodule status v2ray > v2ray_status
-      - name: Native Cache (armeabi-v7a)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
-      - name: Native Cache (arm64-v8a)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
-      - name: Native Cache (x86)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
-      - name: Native Cache (x86_64)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
-      - name: V2ray Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
-      - name: Shadowsocks Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/ss-rust-release.aar
-          key: ${{ hashFiles('shadowsocks_status') }}
-      - name: ShadowsocksR Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/ssr-libev-release.aar
-          key: ${{ hashFiles('shadowsocksr_status') }}
-      - name: Fix Gradle Memoery
-        run: |
-          sed -i -e "s/16384/6144/g" gradle.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
-      - name: Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle
-          key: gradle-${{ hashFiles('**/*.gradle') }}
-      - name: Publish to Play Store
-        run: |
-          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-          cat > service_account_credentials.json << EOF
-          ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
-          EOF
-          sed -i -e 's@<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />@@g' TMessagesProj/src/main/AndroidManifest.xml
-          ./gradlew TMessagesProj:publishMiniPlayReleaseApk
-
   telegram-bot-api:
     name: Telegram Bot API
     runs-on: ubuntu-latest
