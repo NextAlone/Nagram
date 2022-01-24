@@ -5,4 +5,4 @@ obj/
 TMessagesProj/.cxx
 *.iml
 local.properties
-app/src/main/res/drawable/icon.png
+TMessagesProj/src/main/res/drawable/icon.png
