@@ -31,6 +31,7 @@ public class Defines {
     public static final String blockSponsorAds = "blockSponsorMessages";
     public static final String hideGroupSticker = "hideGroupSticker";
     public static final String allowScreenshotOnNoForwardChat = "allowScreenshotOnNoForwardChat";
+    public static final String labelChannelUser = "labelChannelUser";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";

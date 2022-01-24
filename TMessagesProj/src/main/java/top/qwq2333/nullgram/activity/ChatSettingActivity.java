@@ -48,6 +48,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int hideGroupStickerRow;
     private int messageMenuRow;
     private int allowScreenshotOnNoForwardChatRow;
+    private int labelChannelUserRow;
     private int chat2Row;
 
 
@@ -106,11 +107,17 @@ public class ChatSettingActivity extends BaseFragment {
                 }
             } else if (position == messageMenuRow) {
                 showMessageMenuAlert();
-            } else if (position == allowScreenshotOnNoForwardChatRow){
+            } else if (position == allowScreenshotOnNoForwardChatRow) {
                 ConfigManager.toggleBoolean(Defines.allowScreenshotOnNoForwardChat);
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat));
+                }
+            } else if (position == labelChannelUserRow) {
+                ConfigManager.toggleBoolean(Defines.labelChannelUser);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
                 }
             }
         });
@@ -147,6 +154,7 @@ public class ChatSettingActivity extends BaseFragment {
         hideGroupStickerRow = rowCount++;
         messageMenuRow = rowCount++;
         allowScreenshotOnNoForwardChatRow = rowCount++;
+        labelChannelUserRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -293,13 +301,21 @@ public class ChatSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker",
                             R.string.hideGroupSticker), ConfigManager.getBooleanOrFalse(
                             Defines.hideGroupSticker), true);
-                    } else if (position == allowScreenshotOnNoForwardChatRow){
+                    } else if (position == allowScreenshotOnNoForwardChatRow) {
                         textCell.setTextAndValueAndCheck(
                             LocaleController.getString("allowScreenshotOnNoForwardChat",
                                 R.string.allowScreenshotOnNoForwardChat),
                             LocaleController.getString("allowScreenshotOnNoForwardChatWarning",
                                 R.string.allowScreenshotOnNoForwardChatWarning),
                             ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat),
+                            true, true);
+                    } else if (position == labelChannelUserRow) {
+                        textCell.setTextAndValueAndCheck(
+                            LocaleController.getString("labelChannelUser",
+                                R.string.labelChannelUser),
+                            LocaleController.getString("labelChannelUser",
+                                R.string.labelChannelUserDetails),
+                            ConfigManager.getBooleanOrFalse(Defines.labelChannelUser),
                             true, true);
                     }
                     break;

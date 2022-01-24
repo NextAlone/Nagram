@@ -64,7 +64,6 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeProvider;
 import android.view.animation.Interpolator;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.graphics.ColorUtils;
 import java.io.File;
@@ -951,11 +950,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     // Public for enter transition
     public List<SpoilerEffect> replySpoilers = new ArrayList<>();
-    private Stack<SpoilerEffect> replySpoilersPool = new Stack<>();
-    private List<SpoilerEffect> captionSpoilers = new ArrayList<>();
-    private Stack<SpoilerEffect> captionSpoilersPool = new Stack<>();
-    private AtomicReference<Layout> captionPatchedSpoilersLayout = new AtomicReference<>();
-    private Path sPath = new Path();
+    private final Stack<SpoilerEffect> replySpoilersPool = new Stack<>();
+    private final List<SpoilerEffect> captionSpoilers = new ArrayList<>();
+    private final Stack<SpoilerEffect> captionSpoilersPool = new Stack<>();
+    private final AtomicReference<Layout> captionPatchedSpoilersLayout = new AtomicReference<>();
+    private final Path sPath = new Path();
     public boolean isBlurred;
 
     public ChatMessageCell(Context context) {
@@ -8634,9 +8633,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (drawPhotoImage && drawInstantView && drawInstantViewType != 9) {
                 if (drawImageButton) {
                     int size = AndroidUtilities.dp(48);
-                    buttonX = this.buttonX = (int) (photoImage.getImageX() + (photoImage.getImageWidth() - size) / 2.0f);
-                    buttonY = this.buttonY = (int) (photoImage.getImageY() + (photoImage.getImageHeight() - size) / 2.0f);
-                    radialProgress.setProgressRect((int) buttonX, (int) buttonY, (int) buttonX + size, (int) buttonY + size);
+                    buttonX = this.buttonX = (int) (photoImage.getImageX()
+                        + (photoImage.getImageWidth() - size) / 2.0f);
+                    buttonY = this.buttonY = (int) (photoImage.getImageY()
+                        + (photoImage.getImageHeight() - size) / 2.0f);
+                    radialProgress.setProgressRect(buttonX, buttonY, buttonX + size, buttonY
+                        + size);
                 }
                 if (delegate == null || delegate.getPinchToZoomHelper() == null || !delegate.getPinchToZoomHelper().isInOverlayModeFor(this)) {
                     if (alpha != 1f) {
@@ -10348,11 +10350,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 adminString = LocaleController.getString("DiscussChannel", R.string.DiscussChannel);
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth; //TODO
-            } else if (currentUser != null && !currentMessageObject.isOutOwner() && !currentMessageObject.isAnyKindOfSticker() && currentMessageObject.type != 5 && delegate != null && (adminLabel = delegate.getAdminRank(currentUser.id)) != null) {
+            } else if (currentUser != null && !currentMessageObject.isOutOwner()
+                && !currentMessageObject.isAnyKindOfSticker() && currentMessageObject.type != 5
+                && delegate != null
+                && (adminLabel = delegate.getAdminRank(currentUser.id)) != null) {
                 if (adminLabel.length() == 0) {
                     adminLabel = LocaleController.getString("ChatAdmin", R.string.ChatAdmin);
                 }
                 adminString = adminLabel;
+                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
+                nameWidth -= adminWidth;
+            } else if (ConfigManager.getBooleanOrFalse(Defines.labelChannelUser) && isMegagroup
+                && currentChat != null && currentMessageObject.isSenderChannel()) {
+                adminString = "Channel";
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;
             } else {
