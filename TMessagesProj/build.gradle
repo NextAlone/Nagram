@@ -123,21 +123,27 @@ android {
             proguardFiles 'proguard-rules.pro'
         }
     }
-
+    /* DO NOT MODIFY THIS LINE
+    OTHERWISE YOU WILL GET ANNOYED MERGE CONFLICT
     defaultConfig.versionCode = 2538
+    */
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def abi = output.getFilter('ABI')
             buildConfigField 'String', 'BUILD_ABI', "\""+ abi + "\""
-            outputFileName = "Nullgram-${defaultConfig.versionName}-${defaultConfig.versionCode}-${abi}.apk"
+            outputFileName = "Nullgram-${defaultConfig.versionName}-${abi}.apk"
         }
     }
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
+        /*
         versionName "8.4.4"
+        */
+        versionName "8.4.4" + (Common.getGitHeadRefsSuffix(rootProject))
+        versionCode =  Common.getTimestamp()
 
         externalNativeBuild {
             cmake {

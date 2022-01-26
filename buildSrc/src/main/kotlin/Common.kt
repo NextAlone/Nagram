@@ -1,5 +1,7 @@
 import org.gradle.api.Project
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Common {
 
@@ -26,6 +28,11 @@ object Common {
             println("WARN: .git/HEAD does NOT exist")
             return ""
         }
+    }
+
+    @JvmStatic
+    fun getTimestamp(): Int {
+        return (System.currentTimeMillis() / 1000L).toInt()
     }
 
 

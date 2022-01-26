@@ -23,13 +23,19 @@ jobs:
           java-package: jdk
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
+        
+      - name: Build Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/build
+          key: build-cache
       - name: Native Cache
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/.cxx
-            TMessagesProj/build
-          key: build-cache
+          key: jni-${{ hashFiles('TMessagesProj/jni/**') }}
       - name: Gradle cache
         uses: actions/cache@v2
         with:
