@@ -33,6 +33,7 @@ public class Defines {
     public static final String allowScreenshotOnNoForwardChat = "allowScreenshotOnNoForwardChat";
     public static final String labelChannelUser = "labelChannelUser";
     public static final String displaySpoilerMsgDirectly = "displaySpoilerMsgDirectly";
+    public static final String codeSyntaxHighlight = "codeSyntaxHighlight";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";

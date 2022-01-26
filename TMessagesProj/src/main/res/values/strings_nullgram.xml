@@ -58,4 +58,9 @@
     <string name="StorageResetInfo">All data of this application will be permanently deleted (and try to log out of all accounts first).</string>
     <string name="SendLogsNoSuchThings">Please use logcat to catch logs manually</string>
     <string name="StorageReset">Clear Storage</string>
+    <string name="codeSyntaxHighlight">Code syntax highlight</string>
+    <string name="CreateMono">Create Monospace</string>
+    <string name="CreateMonoLanguage">Code language</string>
+    <string name="codeSyntaxHighlightDetails">Thanks to prismjs and nekogram</string>
+    <string name="CreateMention">Create mention</string>
 </resources>

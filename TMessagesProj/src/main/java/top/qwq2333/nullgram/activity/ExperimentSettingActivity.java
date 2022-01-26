@@ -2,9 +2,6 @@ package top.qwq2333.nullgram.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.OpenableColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -43,6 +40,7 @@ public class ExperimentSettingActivity extends BaseFragment {
 
     private int experimentRow;
     private int blockSponsorAdsRow;
+    private int syntaxHighlightRow;
     private int experiment2Row;
 
 
@@ -93,9 +91,14 @@ public class ExperimentSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds));
                 }
+            } else if (position == syntaxHighlightRow) {
+                ConfigManager.toggleBoolean(Defines.codeSyntaxHighlight);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight));
+                }
             }
         });
-
 
         return fragmentView;
     }
@@ -108,23 +111,13 @@ public class ExperimentSettingActivity extends BaseFragment {
         }
     }
 
-    public String getFileName(Uri uri) {
-        String result = null;
-        try (Cursor cursor = getParentActivity().getContentResolver()
-            .query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-            }
-        }
-        return result;
-    }
-
 
     private void updateRows() {
         rowCount = 0;
 
         experimentRow = rowCount++;
         blockSponsorAdsRow = rowCount++;
+        syntaxHighlightRow = rowCount++;
         experiment2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -263,6 +256,14 @@ public class ExperimentSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("blockSponsorAds",
                             R.string.blockSponsorAds), ConfigManager.getBooleanOrFalse(
                             Defines.blockSponsorAds), true);
+                    } else if (position == syntaxHighlightRow) {
+                        textCell.setTextAndValueAndCheck(
+                            LocaleController.getString("codeSyntaxHighlight",
+                                R.string.codeSyntaxHighlight),
+                            LocaleController.getString("codeSyntaxHighlightDetails",
+                                R.string.codeSyntaxHighlightDetails),
+                            ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight), true,
+                            true);
                     }
                     break;
                 }
