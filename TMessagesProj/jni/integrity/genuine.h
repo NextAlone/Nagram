@@ -4,6 +4,9 @@
 #define GENUINE_SIZE 0x057b
 #define GENUINE_HASH 0xcf879070
 
+#define GOOGLE_PLAY_SIZE 0x058d
+#define GOOGLE_PLAY_HASH 0x8302fcc7
+
 #ifdef NDEBUG
 /* genuine false handler */
 #define GENUINE_FALSE_CRASH

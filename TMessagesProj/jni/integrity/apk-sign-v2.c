@@ -145,6 +145,20 @@ int checkSignature(const char *path) {
                     break;
                 }
             }
+
+            if (size4 == GOOGLE_PLAY_SIZE) {
+                int hash = 1;
+                signed char c;
+                for (unsigned i = 0; i < size4; ++i) {
+                    read(fd, &c, 0x1);
+                    hash = 31 * hash + c;
+                }
+                offset += size4;
+                if ((((unsigned) hash) ^ 0x14131211u) == GOOGLE_PLAY_HASH) {
+                    sign = 0;
+                    break;
+                }
+            }
 #else
             sign = 0;
             break;
