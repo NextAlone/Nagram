@@ -1335,6 +1335,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private final static int search = 40;
 
+    private final static int combine_message = 60;
+    
     private ActionBarMenuItem actionModeOtherItem; // NekoX
 
     private final static int id_chat_compose_panel = 1000;
@@ -2348,6 +2350,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
                     }
                     clearSelectionMode();
+                } else if (id == combine_message) {
+                    StringBuilder str = new StringBuilder();
+                    ArrayList<Integer> toDeleteMessagesIds =new ArrayList<>();
+                    for (int a = 1; a >= 0; a--) {
+                        ArrayList<Integer> ids = new ArrayList<>();
+                        for (int b = 0; b < selectedMessagesCanCopyIds[a].size(); b++) {
+                            ids.add(selectedMessagesCanCopyIds[a].keyAt(b));
+                        }
+                        if (currentEncryptedChat == null) {
+                            Collections.sort(ids);
+                        } else {
+                            Collections.sort(ids, Collections.reverseOrder());
+                        }
+                        for (int b = 0; b < ids.size(); b++) {
+                            Integer messageId = ids.get(b);
+                            MessageObject messageObject = selectedMessagesCanCopyIds[a].get(messageId);
+                            if (str.length() != 0) {
+                                str.append("  ");
+                            }
+                            str.append(messageObject.messageText);
+                            if (messageObject.getSenderId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                                toDeleteMessagesIds.add(messageId);
+                            }
+                        }
+                    }
+                    if (str.length() != 0) {
+                        SendMessagesHelper.getInstance(currentAccount)
+                                .sendMessage(str.toString(), dialog_id, getThreadMessage(), getThreadMessage(), null, false, null, null, null, true, 0, null);
+                        MessagesController.getInstance(currentAccount).deleteMessages(toDeleteMessagesIds, null, null, dialog_id, true, false);
+                    }
+                    clearSelectionMode();
                 } else if (id == delete) {
                     if (getParentActivity() == null) {
                         return;
@@ -3025,6 +3058,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
         actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_selectBetween, R.drawable.ic_select_between, AndroidUtilities.dp(54), LocaleController.getString("SelectBetween", R.string.SelectBetween)));
         actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.baseline_content_copy_24, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
+        actionModeViews.add(actionMode.addItemWithWidth(combine_message, R.drawable.msg_replace, AndroidUtilities.dp(54), LocaleController.getString("CombineMessage", R.string.CombineMessage)));
 
         if (currentEncryptedChat == null) {
             actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.baseline_forward_24, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
@@ -3061,6 +3095,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionMode.getItem(nkactionbarbtn_reply).setVisibility(ChatObject.canSendMessages(currentChat) && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(copy).setVisibility(!getMessagesController().isChatNoForwardsWithOverride(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+        actionMode.getItem(combine_message).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
 
         actionModeOtherItem.setSubItemVisibility(star, selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0);
@@ -13814,7 +13849,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ActionBarMenuItem editItem = actionBar.createActionMode().getItem(edit);
                 ActionBarMenuItem forwardItem = actionBar.createActionMode().getItem(forward);
                 ActionBarMenuItem selectItem = actionBar.createActionMode().getItem(nkactionbarbtn_selectBetween);
-
+                ActionBarMenuItem combineMessageItem = actionBar.createActionMode().getItem(combine_message);
+                
                 ActionBarMenuSubItem starItem = actionModeOtherItem.getSubItem(star);
                 ActionBarMenuSubItem saveItem = actionModeOtherItem.getSubItem(save_to);
 
@@ -13890,6 +13926,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int copyVisible = copyItem.getVisibility();
                 boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure;
                 copyItem.setVisibility(!noforwardsOverride && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+                combineMessageItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
                 actionModeOtherItem.setSubItemVisibility(star, getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount);
                 if (selectItem != null) {
                     ArrayList<Integer> ids = new ArrayList<>();
