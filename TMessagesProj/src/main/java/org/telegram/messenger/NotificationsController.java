@@ -42,7 +42,8 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
-
+import android.text.TextUtils;
+import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -53,16 +54,6 @@ import androidx.core.content.LocusIdCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-import android.text.TextUtils;
-import android.util.SparseArray;
-
-import org.telegram.messenger.support.LongSparseIntArray;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.BubbleActivity;
-import org.telegram.ui.LaunchActivity;
-import org.telegram.ui.PopupNotificationActivity;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,27 +61,35 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.BubbleActivity;
+import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.PopupNotificationActivity;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class NotificationsController extends BaseController {
 
     public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
     public static String OTHER_NOTIFICATIONS_CHANNEL = null;
 
-    private static DispatchQueue notificationsQueue = new DispatchQueue("notificationsQueue");
-    private ArrayList<MessageObject> pushMessages = new ArrayList<>();
-    private ArrayList<MessageObject> delayedPushMessages = new ArrayList<>();
-    private LongSparseArray<SparseArray<MessageObject>> pushMessagesDict = new LongSparseArray<>();
-    private LongSparseArray<MessageObject> fcmRandomMessagesDict = new LongSparseArray<>();
-    private LongSparseArray<Point> smartNotificationsDialogs = new LongSparseArray<>();
+    private static final DispatchQueue notificationsQueue = new DispatchQueue("notificationsQueue");
+    private final ArrayList<MessageObject> pushMessages = new ArrayList<>();
+    private final ArrayList<MessageObject> delayedPushMessages = new ArrayList<>();
+    private final LongSparseArray<SparseArray<MessageObject>> pushMessagesDict = new LongSparseArray<>();
+    private final LongSparseArray<MessageObject> fcmRandomMessagesDict = new LongSparseArray<>();
+    private final LongSparseArray<Point> smartNotificationsDialogs = new LongSparseArray<>();
     private static NotificationManagerCompat notificationManager = null;
     private static NotificationManager systemNotificationManager = null;
-    private LongSparseArray<Integer> pushDialogs = new LongSparseArray<>();
-    private LongSparseArray<Integer> wearNotificationsIds = new LongSparseArray<>();
-    private LongSparseArray<Integer> lastWearNotifiedMessageId = new LongSparseArray<>();
-    private LongSparseArray<Integer> pushDialogsOverrideMention = new LongSparseArray<>();
+    private final LongSparseArray<Integer> pushDialogs = new LongSparseArray<>();
+    private final LongSparseArray<Integer> wearNotificationsIds = new LongSparseArray<>();
+    private final LongSparseArray<Integer> lastWearNotifiedMessageId = new LongSparseArray<>();
+    private final LongSparseArray<Integer> pushDialogsOverrideMention = new LongSparseArray<>();
     public ArrayList<MessageObject> popupMessages = new ArrayList<>();
     public ArrayList<MessageObject> popupReplyMessages = new ArrayList<>();
-    private HashSet<Long> openedInBubbleDialogs = new HashSet<>();
+    private final HashSet<Long> openedInBubbleDialogs = new HashSet<>();
     private long openedDialogId = 0;
     private int lastButtonId = 5000;
     private int total_unread_count = 0;
@@ -112,7 +111,7 @@ public class NotificationsController extends BaseController {
     public boolean showBadgeMuted;
     public boolean showBadgeMessages;
 
-    private Runnable notificationDelayRunnable;
+    private final Runnable notificationDelayRunnable;
     private PowerManager.WakeLock notificationDelayWakelock;
 
     private long lastSoundPlay;
@@ -127,8 +126,8 @@ public class NotificationsController extends BaseController {
     protected static AudioManager audioManager;
     private AlarmManager alarmManager;
 
-    private int notificationId;
-    private String notificationGroup;
+    private final int notificationId;
+    private final String notificationGroup;
 
     static {
         if (Build.VERSION.SDK_INT >= 26 && ApplicationLoader.applicationContext != null) {
@@ -139,7 +138,7 @@ public class NotificationsController extends BaseController {
         audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(Context.AUDIO_SERVICE);
     }
     
-    private static volatile NotificationsController[] Instance = new NotificationsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static final NotificationsController[] Instance = new NotificationsController[UserConfig.MAX_ACCOUNT_COUNT];
 
     public static NotificationsController getInstance(int num) {
         NotificationsController localInstance = Instance[num];
@@ -1853,6 +1852,9 @@ public class NotificationsController extends BaseController {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder(text);
+        if (ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)) {
+            return stringBuilder.toString();
+        }
         for (int i = 0; i < messageObject.messageOwner.entities.size(); i++) {
             if (messageObject.messageOwner.entities.get(i) instanceof TLRPC.TL_messageEntitySpoiler) {
                 TLRPC.TL_messageEntitySpoiler spoiler = (TLRPC.TL_messageEntitySpoiler) messageObject.messageOwner.entities.get(i);
@@ -3101,7 +3103,7 @@ public class NotificationsController extends BaseController {
                     }
                     newSettings.append(channelLedColor);
                     if (channelSound != null) {
-                        newSettings.append(channelSound.toString());
+                        newSettings.append(channelSound);
                     }
                     newSettings.append(channelImportance);
                     if (!isDefault && secretChat) {
@@ -3279,7 +3281,7 @@ public class NotificationsController extends BaseController {
             }
             newSettings.append(ledColor);
             if (sound != null) {
-                newSettings.append(sound.toString());
+                newSettings.append(sound);
             }
             newSettings.append(importance);
             if (!isDefault && secretChat) {
@@ -3324,11 +3326,7 @@ public class NotificationsController extends BaseController {
             AudioAttributes.Builder builder = new AudioAttributes.Builder();
             builder.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
             builder.setUsage(AudioAttributes.USAGE_NOTIFICATION);
-            if (sound != null) {
-                notificationChannel.setSound(sound, builder.build());
-            } else {
-                notificationChannel.setSound(null, builder.build());
-            }
+            notificationChannel.setSound(sound, builder.build());
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("create new channel " + channelId);
             }
@@ -3920,12 +3918,12 @@ public class NotificationsController extends BaseController {
         wearNotificationsIds.clear();
 
         class NotificationHolder {
-            int id;
-            long dialogId;
-            String name;
-            TLRPC.User user;
-            TLRPC.Chat chat;
-            NotificationCompat.Builder notification;
+            final int id;
+            final long dialogId;
+            final String name;
+            final TLRPC.User user;
+            final TLRPC.Chat chat;
+            final NotificationCompat.Builder notification;
 
             NotificationHolder(int i, long li, String n, TLRPC.User u, TLRPC.Chat c, NotificationCompat.Builder builder) {
                 id = i;

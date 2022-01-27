@@ -12,19 +12,19 @@ import android.text.Layout;
 import android.text.Spannable;
 import android.view.MotionEvent;
 import android.widget.TextView;
-
-import org.telegram.messenger.AndroidUtilities;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import org.telegram.messenger.AndroidUtilities;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class SpoilersTextView extends TextView {
-    private SpoilersClickDetector clickDetector;
-    private List<SpoilerEffect> spoilers = new ArrayList<>();
-    private Stack<SpoilerEffect> spoilersPool = new Stack<>();
+    private final SpoilersClickDetector clickDetector;
+    private final List<SpoilerEffect> spoilers = new ArrayList<>();
+    private final Stack<SpoilerEffect> spoilersPool = new Stack<>();
     private boolean isSpoilersRevealed;
-    private Path path = new Path();
+    private final Path path = new Path();
     private Paint xRefPaint;
 
     public SpoilersTextView(Context context) {
@@ -53,7 +53,7 @@ public class SpoilersTextView extends TextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        isSpoilersRevealed = false;
+        isSpoilersRevealed = ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly);
         super.setText(text, type);
     }
 
@@ -96,7 +96,8 @@ public class SpoilersTextView extends TextView {
         if (!spoilers.isEmpty()) {
             boolean useAlphaLayer = spoilers.get(0).getRippleProgress() != -1;
             if (useAlphaLayer) {
-                canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null, canvas.ALL_SAVE_FLAG);
+                canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null,
+                    Canvas.ALL_SAVE_FLAG);
             } else {
                 canvas.save();
             }

@@ -59,6 +59,8 @@ import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class MessageObject {
 
@@ -127,7 +129,8 @@ public class MessageObject {
     public boolean isRestrictedMessage;
     public long loadedFileSize;
 
-    public boolean isSpoilersRevealed;
+    public boolean isSpoilersRevealed = ConfigManager.getBooleanOrFalse(
+        Defines.displaySpoilerMsgDirectly);
     public byte[] sponsoredId;
     public int sponsoredChannelPost;
     public TLRPC.ChatInvite sponsoredChatInvite;

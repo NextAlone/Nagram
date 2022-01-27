@@ -49,6 +49,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int messageMenuRow;
     private int allowScreenshotOnNoForwardChatRow;
     private int labelChannelUserRow;
+    private int displaySpoilerDirectlyRow;
     private int chat2Row;
 
 
@@ -119,6 +120,13 @@ public class ChatSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
                 }
+            } else if (position == displaySpoilerDirectlyRow) {
+                ConfigManager.toggleBoolean(Defines.displaySpoilerMsgDirectly);
+                if (view instanceof  TextCheckCell){
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)
+                    );
+                }
             }
         });
 
@@ -155,6 +163,7 @@ public class ChatSettingActivity extends BaseFragment {
         messageMenuRow = rowCount++;
         allowScreenshotOnNoForwardChatRow = rowCount++;
         labelChannelUserRow = rowCount++;
+        displaySpoilerDirectlyRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -317,6 +326,12 @@ public class ChatSettingActivity extends BaseFragment {
                                 R.string.labelChannelUserDetails),
                             ConfigManager.getBooleanOrFalse(Defines.labelChannelUser),
                             true, true);
+                    } else if (position == displaySpoilerDirectlyRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("displaySpoilerDirectly",
+                                R.string.displaySpoilerDirectly),
+                            ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly),
+                            true);
                     }
                     break;
                 }

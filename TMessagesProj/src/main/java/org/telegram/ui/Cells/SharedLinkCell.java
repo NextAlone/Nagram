@@ -30,31 +30,31 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
-
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Emoji;
-import org.telegram.messenger.ImageLocation;
-import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.FileLog;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Components.CheckBox2;
-import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.LetterDrawable;
-import org.telegram.ui.Components.LinkPath;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.TextStyleSpan;
-import org.telegram.ui.Components.spoilers.SpoilerEffect;
-import org.telegram.ui.FilteredSearchView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.CheckBox2;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
+import org.telegram.ui.Components.LinkPath;
+import org.telegram.ui.Components.TextStyleSpan;
+import org.telegram.ui.Components.spoilers.SpoilerEffect;
+import org.telegram.ui.FilteredSearchView;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class SharedLinkCell extends FrameLayout {
     private final static int SPOILER_TYPE_LINK = 0,
@@ -121,13 +121,13 @@ public class SharedLinkCell extends FrameLayout {
     }
 
     private boolean linkPreviewPressed;
-    private LinkPath urlPath;
+    private final LinkPath urlPath;
     private int pressedLink;
 
-    private ImageReceiver linkImageView;
+    private final ImageReceiver linkImageView;
     private boolean drawLinkImageView;
-    private LetterDrawable letterDrawable;
-    private CheckBox2 checkBox;
+    private final LetterDrawable letterDrawable;
+    private final CheckBox2 checkBox;
 
     private SharedLinkCellDelegate delegate;
 
@@ -135,42 +135,42 @@ public class SharedLinkCell extends FrameLayout {
 
     ArrayList<CharSequence> links = new ArrayList<>();
     private int linkY;
-    private ArrayList<StaticLayout> linkLayout = new ArrayList<>();
-    private SparseArray<List<SpoilerEffect>> linkSpoilers = new SparseArray<>();
-    private List<SpoilerEffect> descriptionLayoutSpoilers = new ArrayList<>();
-    private List<SpoilerEffect> descriptionLayout2Spoilers = new ArrayList<>();
-    private Stack<SpoilerEffect> spoilersPool = new Stack<>();
-    private Path path = new Path();
+    private final ArrayList<StaticLayout> linkLayout = new ArrayList<>();
+    private final SparseArray<List<SpoilerEffect>> linkSpoilers = new SparseArray<>();
+    private final List<SpoilerEffect> descriptionLayoutSpoilers = new ArrayList<>();
+    private final List<SpoilerEffect> descriptionLayout2Spoilers = new ArrayList<>();
+    private final Stack<SpoilerEffect> spoilersPool = new Stack<>();
+    private final Path path = new Path();
     private SpoilerEffect spoilerPressed;
     private int spoilerTypePressed = -1;
 
-    private int titleY = AndroidUtilities.dp(10);
+    private final int titleY = AndroidUtilities.dp(10);
     private StaticLayout titleLayout;
 
     private int descriptionY = AndroidUtilities.dp(30);
     private StaticLayout descriptionLayout;
-    private AtomicReference<Layout> patchedDescriptionLayout = new AtomicReference<>();
+    private final AtomicReference<Layout> patchedDescriptionLayout = new AtomicReference<>();
 
     private int description2Y = AndroidUtilities.dp(30);
     private StaticLayout descriptionLayout2;
-    private AtomicReference<Layout> patchedDescriptionLayout2 = new AtomicReference<>();
+    private final AtomicReference<Layout> patchedDescriptionLayout2 = new AtomicReference<>();
 
     private int captionY = AndroidUtilities.dp(30);
     private StaticLayout captionLayout;
 
     private MessageObject message;
 
-    private TextPaint titleTextPaint;
-    private TextPaint descriptionTextPaint;
+    private final TextPaint titleTextPaint;
+    private final TextPaint descriptionTextPaint;
     private TextPaint description2TextPaint;
-    private TextPaint captionTextPaint;
+    private final TextPaint captionTextPaint;
 
     private int dateLayoutX;
     private StaticLayout dateLayout;
     private int fromInfoLayoutY = AndroidUtilities.dp(30);
     private StaticLayout fromInfoLayout;
 
-    private int viewType;
+    private final int viewType;
     public final static int VIEW_TYPE_DEFAULT = 0;
     public final static int VIEW_TYPE_GLOBAL_SEARCH = 1;
 
@@ -323,10 +323,14 @@ public class SharedLinkCell extends FrameLayout {
                         int start = entity.offset, end = entity.offset + entity.length;
                         for (TLRPC.MessageEntity e : message.messageOwner.entities) {
                             int ss = e.offset, se = e.offset + e.length;
-                            if (e instanceof TLRPC.TL_messageEntitySpoiler && start <= se && end >= ss) {
+                            if (
+                                ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)
+                                    && e instanceof TLRPC.TL_messageEntitySpoiler && start <= se
+                                    && end >= ss) {
                                 TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
                                 run.flags |= TextStyleSpan.FLAG_STYLE_SPOILER;
-                                sb.setSpan(new TextStyleSpan(run), Math.max(start, ss), Math.min(end, se) + offset, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                sb.setSpan(new TextStyleSpan(run), Math.max(start, ss),
+                                    Math.min(end, se) + offset, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                             }
                         }
                         links.add(sb);
