@@ -271,8 +271,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                 updates.add(update);
                             }
                             MessagesController.getInstance(accountFinal).processUpdateArray(updates, null, null, false, 0);
-//                        } else if ("MESSAGE_DELETED".equals(loc_key)) {
-                        } else if (false) {
+                        } else if ("MESSAGE_DELETED".equals(loc_key)) {
+//                        } else if (false) {
                             String messages = custom.getString("messages");
                             String[] messagesArgs = messages.split(",");
                             LongSparseArray<ArrayList<Integer>> deletedMessages = new LongSparseArray<>();
@@ -281,7 +281,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                 ids.add(Utilities.parseInt(messagesArgs[a]));
                             }
                             deletedMessages.put(-channel_id, ids);
-                            NotificationsController.getInstance(currentAccount).removeDeletedMessagesFromNotifications(deletedMessages);
+//                            NotificationsController.getInstance(currentAccount).removeDeletedMessagesFromNotifications(deletedMessages);
 
                             MessagesController.getInstance(currentAccount).deleteMessagesByPush(dialogId, ids, channel_id);
                             if (BuildVars.LOGS_ENABLED) {
