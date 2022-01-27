@@ -27,19 +27,16 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-
+import androidx.multidex.MultiDex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
-
+import java.io.File;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
-
-import java.io.File;
-
-import androidx.multidex.MultiDex;
+import top.qwq2333.nullgram.utils.FileUtils;
 
 public class ApplicationLoader extends Application {
 
@@ -70,21 +67,40 @@ public class ApplicationLoader extends Application {
     }
 
     public static File getFilesDirFixed() {
-        for (int a = 0; a < 10; a++) {
-            File path = ApplicationLoader.applicationContext.getFilesDir();
+
+        File filesDir = new File(getDataDirFixed(), "files");
+
+        FileUtils.initDir(filesDir);
+
+        return filesDir;
+
+    }
+
+    @SuppressLint("SdCardPath")
+    public static File getDataDirFixed() {
+        try {
+            File path = applicationContext.getFilesDir();
             if (path != null) {
-                return path;
+                return path.getParentFile();
             }
+        } catch (Exception ignored) {
         }
         try {
             ApplicationInfo info = applicationContext.getApplicationInfo();
-            File path = new File(info.dataDir, "files");
-            path.mkdirs();
-            return path;
-        } catch (Exception e) {
-            FileLog.e(e);
+            return new File(info.dataDir);
+        } catch (Exception ignored) {
         }
-        return new File("/data/data/org.telegram.messenger/files");
+        return new File("/data/data/" + BuildConfig.APPLICATION_ID + "/");
+    }
+
+    public static File getCacheDirFixed() {
+
+        File filesDir = new File(getDataDirFixed(), "cache");
+
+        FileUtils.initDir(filesDir);
+
+        return filesDir;
+
     }
 
     public static void postInitApplication() {

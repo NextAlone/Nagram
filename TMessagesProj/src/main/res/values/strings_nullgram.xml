@@ -54,4 +54,8 @@
     <string name="allowScreenshotOnNoForwardChatWarning">It will also allow you to bypass screenshot limit in SecureChat!</string>
     <string name="labelChannelUser">Label Channel User</string>
     <string name="labelChannelUserDetails">If message sender is Channel,it will label it as \"Channel\"</string>
+    <string name="displaySpoilerDirectly">Display Spoiler Messages Directly</string>
+    <string name="StorageResetInfo">All data of this application will be permanently deleted (and try to log out of all accounts first).</string>
+    <string name="SendLogsNoSuchThings">Please use logcat to catch logs manually</string>
+    <string name="StorageReset">Clear Storage</string>
 </resources>

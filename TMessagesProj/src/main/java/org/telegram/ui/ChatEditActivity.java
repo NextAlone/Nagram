@@ -33,7 +33,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -72,11 +75,6 @@ import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.UndoView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
 public class ChatEditActivity extends BaseFragment implements ImageUpdater.ImageUpdaterDelegate, NotificationCenter.NotificationCenterDelegate {
 
     private View doneButton;
@@ -90,8 +88,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     private View avatarOverlay;
     private AnimatorSet avatarAnimation;
     private RadialProgressView avatarProgressView;
-    private AvatarDrawable avatarDrawable;
-    private ImageUpdater imageUpdater;
+    private final AvatarDrawable avatarDrawable;
+    private final ImageUpdater imageUpdater;
     private EditTextEmoji nameTextView;
 
     private LinearLayout settingsContainer;
@@ -144,10 +142,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
     private int realAdminCount = 0;
 
-    private PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
+    private final PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
 
         @Override
-        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
+        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject,
+            TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
             if (fileLocation == null) {
                 return null;
             }
@@ -747,12 +746,24 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     buttons[a].setTag(a);
                     buttons[a].setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     if (a == 0) {
-                        buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible), LocaleController.getString("ChatHistoryVisibleInfo", R.string.ChatHistoryVisibleInfo), true, !historyHidden);
+                        buttons[a].setTextAndValueAndCheck(
+                            LocaleController.getString("ChatHistoryVisible",
+                                R.string.ChatHistoryVisible),
+                            LocaleController.getString("ChatHistoryVisibleInfo",
+                                R.string.ChatHistoryVisibleInfo), true, !historyHidden);
                     } else {
                         if (ChatObject.isChannel(currentChat)) {
-                            buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", R.string.ChatHistoryHiddenInfo), false, historyHidden);
+                            buttons[a].setTextAndValueAndCheck(
+                                LocaleController.getString("ChatHistoryHidden",
+                                    R.string.ChatHistoryHidden),
+                                LocaleController.getString("ChatHistoryHiddenInfo",
+                                    R.string.ChatHistoryHiddenInfo), false, historyHidden);
                         } else {
-                            buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo2", R.string.ChatHistoryHiddenInfo2), false, historyHidden);
+                            buttons[a].setTextAndValueAndCheck(
+                                LocaleController.getString("ChatHistoryHidden",
+                                    R.string.ChatHistoryHidden),
+                                LocaleController.getString("ChatHistoryHiddenInfo2",
+                                    R.string.ChatHistoryHiddenInfo2), false, historyHidden);
                         }
                     }
                     linearLayoutInviteContainer.addView(buttons[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));

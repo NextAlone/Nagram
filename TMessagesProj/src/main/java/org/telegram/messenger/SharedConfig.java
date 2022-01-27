@@ -14,29 +14,32 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.Build;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
-
 import androidx.annotation.IntDef;
 import androidx.core.content.pm.ShortcutManagerCompat;
-
+import cn.hutool.core.util.StrUtil;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
-
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
+import top.qwq2333.nullgram.utils.EnvironmentUtils;
 
 public class SharedConfig {
 
@@ -142,6 +145,10 @@ public class SharedConfig {
     public static int fastScrollHintCount = 3;
     public static boolean dontAskManageStorage;
 
+    public static CopyOnWriteArraySet<Integer> activeAccounts;
+    public static int loginingAccount = -1;
+
+
     static {
         loadConfig();
     }
@@ -238,6 +245,14 @@ public class SharedConfig {
                 FileLog.e(e);
             }
         }
+    }
+
+    public static void saveAccounts() {
+        FileLog.e("Save accounts: " + activeAccounts, new Exception());
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig",
+                Activity.MODE_PRIVATE).edit()
+            .putString("active_accounts", StringUtils.join(activeAccounts, ","))
+            .apply();
     }
 
     public static int getLastLocalId() {
@@ -368,10 +383,12 @@ public class SharedConfig {
             lastLogsCheckTime = preferences.getInt("lastLogsCheckTime", 0);
             searchMessagesAsListHintShows = preferences.getInt("searchMessagesAsListHintShows", 0);
             searchMessagesAsListUsed = preferences.getBoolean("searchMessagesAsListUsed", false);
-            stickersReorderingHintUsed = preferences.getBoolean("stickersReorderingHintUsed", false);
+            stickersReorderingHintUsed = preferences.getBoolean("stickersReorderingHintUsed",
+                false);
             textSelectionHintShows = preferences.getInt("textSelectionHintShows", 0);
             scheduledOrNoSoundHintShows = preferences.getInt("scheduledOrNoSoundHintShows", 0);
-            forwardingOptionsHintShown = preferences.getBoolean("forwardingOptionsHintShown", false);
+            forwardingOptionsHintShown = preferences.getBoolean("forwardingOptionsHintShown",
+                false);
             lockRecordAudioVideoHint = preferences.getInt("lockRecordAudioVideoHint", 0);
             disableVoiceAudioEffects = preferences.getBoolean("disableVoiceAudioEffects", false);
             noiseSupression = preferences.getBoolean("noiseSupression", false);
@@ -379,11 +396,51 @@ public class SharedConfig {
             messageSeenHintCount = preferences.getInt("messageSeenCount", 3);
             emojiInteractionsHintCount = preferences.getInt("emojiInteractionsHintCount", 3);
             dayNightThemeSwitchHintCount = preferences.getInt("dayNightThemeSwitchHintCount", 3);
+            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(","))
+                .filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(
+                    Collectors.toCollection(CopyOnWriteArraySet::new));
+
+            if (!preferences.contains("activeAccountsLoaded")) {
+                int maxAccounts;
+
+                File filesDir = ApplicationLoader.applicationContext.getFilesDir();
+                if (new File(filesDir, "account31").isDirectory()) {
+                    maxAccounts = 32;
+                } else if (new File(filesDir, "account15").isDirectory()) {
+                    maxAccounts = 16;
+                } else {
+                    maxAccounts = -1;
+                }
+
+                for (int i = 0; i < maxAccounts; i++) {
+                    SharedPreferences perf;
+                    if (i == 0) {
+                        perf = ApplicationLoader.applicationContext.getSharedPreferences(
+                            "userconfing", Context.MODE_PRIVATE);
+                    } else {
+                        perf = ApplicationLoader.applicationContext.getSharedPreferences(
+                            "userconfig" + i, Context.MODE_PRIVATE);
+                    }
+                    if (StrUtil.isNotBlank(perf.getString("user", null))) {
+                        activeAccounts.add(i);
+                    }
+                }
+
+                if (!SharedConfig.activeAccounts.isEmpty()) {
+                    preferences.edit()
+                        .putString("active_accounts", StringUtils.join(activeAccounts, ","))
+                        .apply();
+                }
+
+                preferences.edit().putBoolean("activeAccountsLoaded", true).apply();
+            }
+
             mediaColumnsCount = preferences.getInt("mediaColumnsCount", 3);
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
 
-            preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+            preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications",
+                Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
 
             configLoaded = true;
@@ -494,7 +551,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    byte[] passcodeBytes = passcode.getBytes("UTF-8");
+                    byte[] passcodeBytes = passcode.getBytes(StandardCharsets.UTF_8);
                     byte[] bytes = new byte[32 + passcodeBytes.length];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -508,7 +565,7 @@ public class SharedConfig {
             return result;
         } else {
             try {
-                byte[] passcodeBytes = passcode.getBytes("UTF-8");
+                byte[] passcodeBytes = passcode.getBytes(StandardCharsets.UTF_8);
                 byte[] bytes = new byte[32 + passcodeBytes.length];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -1063,10 +1120,10 @@ public class SharedConfig {
     public static void checkSaveToGalleryFiles() {
         Utilities.globalQueue.postRunnable(() -> {
             try {
-                File telegramPath = new File(Environment.getExternalStorageDirectory(), "Nullgram");
-                File imagePath = new File(telegramPath, "Nullgram Images");
+                File telegramPath = EnvironmentUtils.getTelegramPath();
+                File imagePath = new File(telegramPath, "images");
                 imagePath.mkdir();
-                File videoPath = new File(telegramPath, "Nullgram Video");
+                File videoPath = new File(telegramPath, "video");
                 videoPath.mkdir();
 
                 if (saveToGallery) {

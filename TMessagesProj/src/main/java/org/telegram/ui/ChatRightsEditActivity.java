@@ -30,7 +30,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.Calendar;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -45,7 +49,6 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.DialogRadioCell;
@@ -61,25 +64,18 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class ChatRightsEditActivity extends BaseFragment {
 
     private ListAdapter listViewAdapter;
     private RecyclerListView listView;
 
     private long chatId;
-    private TLRPC.User currentUser;
+    private final TLRPC.User currentUser;
     private TLRPC.Chat currentChat;
-    private int currentType;
+    private final int currentType;
     private boolean isChannel;
 
-    private boolean canEdit;
+    private final boolean canEdit;
 
     private TLRPC.TL_chatAdminRights adminRights;
     private TLRPC.TL_chatAdminRights myAdminRights;
@@ -87,7 +83,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     private TLRPC.TL_chatBannedRights defaultBannedRights;
     private String currentBannedRights = "";
     private String currentRank;
-    private String initialRank;
+    private final String initialRank;
 
     private int rowCount;
     private int changeInfoRow;
@@ -120,14 +116,17 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     private ChatRightsEditActivityDelegate delegate;
 
-    private boolean isAddingNew;
-    private boolean initialIsSet;
+    private final boolean isAddingNew;
+    private final boolean initialIsSet;
 
     public static final int TYPE_ADMIN = 0;
     public static final int TYPE_BANNED = 1;
 
     public interface ChatRightsEditActivityDelegate {
-        void didSetRights(int rights, TLRPC.TL_chatAdminRights rightsAdmin, TLRPC.TL_chatBannedRights rightsBanned, String rank);
+
+        void didSetRights(int rights, TLRPC.TL_chatAdminRights rightsAdmin,
+            TLRPC.TL_chatBannedRights rightsBanned, String rank);
+
         void didChangeOwner(TLRPC.User user);
     }
 
@@ -910,19 +909,24 @@ public class ChatRightsEditActivity extends BaseFragment {
             } else {
                 adminRights.post_messages = adminRights.edit_messages = false;
             }
-            if (!adminRights.change_info && !adminRights.post_messages && !adminRights.edit_messages &&
-                    !adminRights.delete_messages && !adminRights.ban_users && !adminRights.invite_users &&
-                    !adminRights.pin_messages && !adminRights.add_admins && !adminRights.anonymous && !adminRights.manage_call) {
-                adminRights.other = true;
-            } else {
-                adminRights.other = false;
-            }
-            MessagesController.getInstance(currentAccount).setUserAdminRole(chatId, currentUser, adminRights, currentRank, isChannel, getFragmentForAlert(1), isAddingNew);
+            adminRights.other =
+                !adminRights.change_info && !adminRights.post_messages && !adminRights.edit_messages
+                    &&
+                    !adminRights.delete_messages && !adminRights.ban_users
+                    && !adminRights.invite_users &&
+                    !adminRights.pin_messages && !adminRights.add_admins && !adminRights.anonymous
+                    && !adminRights.manage_call;
+            MessagesController.getInstance(currentAccount)
+                .setUserAdminRole(chatId, currentUser, adminRights, currentRank, isChannel,
+                    getFragmentForAlert(1), isAddingNew);
             if (delegate != null) {
                 delegate.didSetRights(
-                        adminRights.change_info || adminRights.post_messages || adminRights.edit_messages ||
-                        adminRights.delete_messages || adminRights.ban_users || adminRights.invite_users ||
-                        adminRights.pin_messages || adminRights.add_admins || adminRights.anonymous || adminRights.manage_call ||
+                    adminRights.change_info || adminRights.post_messages
+                        || adminRights.edit_messages ||
+                        adminRights.delete_messages || adminRights.ban_users
+                        || adminRights.invite_users ||
+                        adminRights.pin_messages || adminRights.add_admins || adminRights.anonymous
+                        || adminRights.manage_call ||
                         adminRights.other ? 1 : 0, adminRights, bannedRights, currentRank);
             }
         } else if (currentType == TYPE_BANNED) {
@@ -975,8 +979,9 @@ public class ChatRightsEditActivity extends BaseFragment {
             int left = MAX_RANK_LENGTH - (currentRank != null ? currentRank.codePointCount(0, currentRank.length()) : 0);
             if (left <= MAX_RANK_LENGTH - MAX_RANK_LENGTH * 0.7f) {
                 headerCell.setText2(String.format("%d", left));
-                SimpleTextView textView = headerCell.getTextView2();
-                String key = left < 0 ? Theme.key_windowBackgroundWhiteRedText5 : Theme.key_windowBackgroundWhiteGrayText3;
+                TextView textView = headerCell.getTextView2();
+                String key = left < 0 ? Theme.key_windowBackgroundWhiteRedText5
+                    : Theme.key_windowBackgroundWhiteGrayText3;
                 textView.setTextColor(Theme.getColor(key));
                 textView.setTag(key);
             } else {
@@ -992,7 +997,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
-        private Context mContext;
+        private final Context mContext;
         private boolean ignoreTextChange;
 
         public ListAdapter(Context context) {

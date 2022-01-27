@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -59,18 +59,16 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextBlockCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.EditTextEmoji;
-import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EditTextBoldCursor;
+import org.telegram.ui.Components.EditTextEmoji;
+import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkActionView;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
-
-import java.util.ArrayList;
 
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -117,10 +115,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     private boolean loadingAdminedChannels;
     private TextInfoPrivacyCell adminedInfoCell;
-    private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList<>();
+    private final ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList<>();
     private LoadingCell loadingAdminedCell;
 
-    private int currentStep;
+    private final int currentStep;
     private long chatId;
     private boolean canCreatePublic = true;
     private TLRPC.InputFile inputPhoto;
@@ -633,8 +631,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
             radioButtonCell1 = new RadioButtonCell(context);
             radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", R.string.ChannelPublic), LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo), false, !isPrivate);
-            linearLayout2.addView(radioButtonCell1, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            radioButtonCell1.setTextAndValueAndCheck(
+                LocaleController.getString("ChannelPublic", R.string.ChannelPublic),
+                LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo), false,
+                !isPrivate);
+            linearLayout2.addView(radioButtonCell1,
+                LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             radioButtonCell1.setOnClickListener(v -> {
                 if (!isPrivate) {
                     return;
@@ -645,8 +647,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
             radioButtonCell2 = new RadioButtonCell(context);
             radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate), LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo), false, isPrivate);
-            linearLayout2.addView(radioButtonCell2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            radioButtonCell2.setTextAndValueAndCheck(
+                LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate),
+                LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo),
+                false, isPrivate);
+            linearLayout2.addView(radioButtonCell2,
+                LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             radioButtonCell2.setOnClickListener(v -> {
                 if (isPrivate) {
                     return;

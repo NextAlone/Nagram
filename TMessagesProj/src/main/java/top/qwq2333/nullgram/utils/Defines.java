@@ -47,6 +47,9 @@ public class Defines {
     public static final String nextUpdateCheckTime = "nextUpdateCheckTime";
     public static final String skipUpdateVersion = "skipUpdateVersion";
 
+    // Storage
+    public static final String cachePath = "cachePath";
+
     /**
      * 0为release 1为ci构筑
      */

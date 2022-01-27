@@ -4974,4 +4974,5 @@
     <string name="PushChatReactInvoice">%1$s: %3$s to your invoice in %2$s</string>
     <string name="PushChatReactGif">%1$s: %3$s to your GIF in %2$s</string>
     <string name="LastUpdateRecently">Last successfully checked just now.</string>
+    <string name="NullgramPrivacyPolicyUrl">https://github.com/qwq233/Nullgram/wiki/Privacy-Policy</string>
 </resources>

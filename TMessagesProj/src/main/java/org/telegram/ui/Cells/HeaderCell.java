@@ -15,69 +15,92 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.core.view.ViewCompat;
-
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
-import java.util.ArrayList;
+public class HeaderCell extends LinearLayout {
 
-public class HeaderCell extends FrameLayout {
-
-    private TextView textView;
-    private SimpleTextView textView2;
-    private int height = 40;
+    private final TextView textView;
+    private final TextView textView2;
+    private final int height = 40;
     private final Theme.ResourcesProvider resourcesProvider;
 
     public HeaderCell(Context context) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false, null);
     }
 
     public HeaderCell(Context context, Theme.ResourcesProvider resourcesProvider) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, resourcesProvider);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false,
+            resourcesProvider);
     }
 
     public HeaderCell(Context context, int padding) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, false, null);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2) {
-        this(context, textColorKey, padding, topMargin, text2, null);
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin,
+        boolean text2) {
+        this(context, textColorKey, padding, topMargin, text2, false, null);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, Theme.ResourcesProvider resourcesProvider) {
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin,
+        boolean text2, boolean bigTitle) {
+        this(context, textColorKey, padding, topMargin, text2, bigTitle, null);
+    }
+
+
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin,
+        boolean text2, boolean bigTitle, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
+        setOrientation(LinearLayout.VERTICAL);
+        setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin),
+            AndroidUtilities.dp(padding), 0);
+
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        if (bigTitle) {
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+        }
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        textView.setMinHeight(AndroidUtilities.dp(height - topMargin));
+        textView.setGravity(
+            (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setTextColor(getThemedColor(textColorKey));
         textView.setTag(textColorKey);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, topMargin, padding, 0));
+        addView(textView, LayoutHelper.createLinear(-1, -2));
 
-        if (text2) {
-            textView2 = new SimpleTextView(getContext());
-            textView2.setTextSize(13);
-            textView2.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP);
-            addView(textView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, padding, 21, padding, 0));
+        textView2 = new TextView(getContext());
+        textView2.setTextSize(13);
+        textView2.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+        textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        addView(textView2, LayoutHelper.createLinear(-2, -2, 0, 4, 0, 0));
+
+        if (!text2) {
+            textView2.setVisibility(View.GONE);
         }
 
         ViewCompat.setAccessibilityHeading(this, true);
     }
 
+    @Override
+    public void setLayoutParams(ViewGroup.LayoutParams params) {
+        params.width = -1;
+        super.setLayoutParams(params);
+    }
+
     public void setHeight(int value) {
-        textView.setMinHeight(AndroidUtilities.dp(height = value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
+        textView.setMinHeight(
+            AndroidUtilities.dp(value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
@@ -88,18 +111,13 @@ public class HeaderCell extends FrameLayout {
         }
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-    }
-
     public void setText(CharSequence text) {
         textView.setText(text);
     }
 
     public void setText2(CharSequence text) {
-        if (textView2 == null) {
-            return;
+        if (textView2.getVisibility() != View.VISIBLE) {
+            textView2.setVisibility(View.VISIBLE);
         }
         textView2.setText(text);
     }
@@ -108,7 +126,7 @@ public class HeaderCell extends FrameLayout {
         return textView;
     }
 
-    public SimpleTextView getTextView2() {
+    public TextView getTextView2() {
         return textView2;
     }
 

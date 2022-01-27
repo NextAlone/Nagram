@@ -24,24 +24,25 @@ import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
+import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
 
-import java.util.ArrayList;
-
 public class TextCheckCell extends FrameLayout {
+
     private boolean isAnimatingToThumbInsteadOfTouch;
 
-    private TextView textView;
-    private TextView valueTextView;
-    private Switch checkBox;
+    private final TextView textView;
+    private final TextView valueTextView;
+    public Switch checkBox;
+    public CheckBoxSquare checkBoxSquare;
     private boolean needDivider;
     private boolean isMultiline;
     private int height = 50;

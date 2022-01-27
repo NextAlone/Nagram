@@ -13,20 +13,15 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Application;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
-import android.os.storage.StorageManager;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -35,12 +30,22 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.StringTokenizer;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -65,31 +70,20 @@ import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
-import org.telegram.ui.Cells.TextCheckBoxCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.PhotoPickerActivity;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.StringTokenizer;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
+import top.qwq2333.nullgram.utils.EnvironmentUtils;
 
 public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLayout {
 
     public interface DocumentSelectActivityDelegate {
-        void didSelectFiles(ArrayList<String> files, String caption, ArrayList<MessageObject> fmessages, boolean notify, int scheduleDate);
-        void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate);
+
+        void didSelectFiles(ArrayList<String> files, String caption,
+            ArrayList<MessageObject> fmessages, boolean notify, int scheduleDate);
+
+        void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify,
+            int scheduleDate);
 
         void startDocumentSelectActivity();
 
@@ -97,39 +91,39 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
     }
 
-    private RecyclerListView listView;
-    private ListAdapter listAdapter;
-    private SearchAdapter searchAdapter;
-    private LinearLayoutManager layoutManager;
-    private ActionBarMenuItem searchItem;
-    private ActionBarMenuItem sortItem;
+    private final RecyclerListView listView;
+    private final ListAdapter listAdapter;
+    private final SearchAdapter searchAdapter;
+    private final LinearLayoutManager layoutManager;
+    private final ActionBarMenuItem searchItem;
+    private final ActionBarMenuItem sortItem;
 
-    private FiltersView filtersView;
+    private final FiltersView filtersView;
     private AnimatorSet filtersViewAnimator;
-    private FlickerLoadingView loadingView;
+    private final FlickerLoadingView loadingView;
 
     private boolean sendPressed;
 
     private boolean ignoreLayout;
 
-    private StickerEmptyView emptyView;
+    private final StickerEmptyView emptyView;
     private float additionalTranslationY;
 
     private boolean hasFiles;
 
     private File currentDir;
-    private ArrayList<ListItem> items = new ArrayList<>();
+    private final ArrayList<ListItem> items = new ArrayList<>();
     private boolean receiverRegistered = false;
-    private ArrayList<HistoryEntry> history = new ArrayList<>();
+    private final ArrayList<HistoryEntry> history = new ArrayList<>();
     private DocumentSelectActivityDelegate delegate;
-    private HashMap<String, ListItem> selectedFiles = new HashMap<>();
-    private ArrayList<String> selectedFilesOrder = new ArrayList<>();
-    private HashMap<FilteredSearchView.MessageHashId, MessageObject> selectedMessages = new HashMap<>();
+    private final HashMap<String, ListItem> selectedFiles = new HashMap<>();
+    private final ArrayList<String> selectedFilesOrder = new ArrayList<>();
+    private final HashMap<FilteredSearchView.MessageHashId, MessageObject> selectedMessages = new HashMap<>();
     private boolean scrolling;
-    private ArrayList<ListItem> recentItems = new ArrayList<>();
+    private final ArrayList<ListItem> recentItems = new ArrayList<>();
     private int maxSelectedFiles = -1;
     private boolean canSelectOnlyImageFiles;
-    private boolean allowMusic;
+    private final boolean allowMusic;
 
     private boolean searching;
 
@@ -153,7 +147,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         String title;
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context arg0, Intent intent) {
             Runnable r = () -> {
@@ -1044,7 +1038,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
         ListItem fs;
         try {
-            File telegramPath = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), "Telegram");
+            File telegramPath = EnvironmentUtils.getTelegramPath();
             if (telegramPath.exists()) {
                 fs = new ListItem();
                 fs.title = "Telegram";
@@ -1098,7 +1092,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
-        private Context mContext;
+        private final Context mContext;
 
         public ListAdapter(Context context) {
             mContext = context;
@@ -1209,7 +1203,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     public class SearchAdapter extends RecyclerListView.SectionsAdapter  {
 
-        private Context mContext;
+        private final Context mContext;
 
         private ArrayList<ListItem> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
@@ -1223,21 +1217,22 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         private int searchIndex;
         private int nextSearchRate;
 
-        private final FilteredSearchView.MessageHashId messageHashIdTmp = new FilteredSearchView.MessageHashId(0, 0);
+        private final FilteredSearchView.MessageHashId messageHashIdTmp = new FilteredSearchView.MessageHashId(
+            0, 0);
 
         private String lastSearchFilterQueryString;
         private String lastMessagesSearchString;
         private String currentDataQuery;
 
-        private ArrayList<Object> localTipChats = new ArrayList<>();
-        private ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
+        private final ArrayList<Object> localTipChats = new ArrayList<>();
+        private final ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
 
         public ArrayList<MessageObject> messages = new ArrayList<>();
         public SparseArray<MessageObject> messagesById = new SparseArray<>();
         public ArrayList<String> sections = new ArrayList<>();
         public HashMap<String, ArrayList<MessageObject>> sectionArrays = new HashMap<>();
 
-        private ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
+        private final ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
 
         private boolean isLoading;
         private int requestIndex;
@@ -1245,7 +1240,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         private int animationIndex = -1;
         private boolean endReached;
 
-        private Runnable clearCurrentResultsRunnable = new Runnable() {
+        private final Runnable clearCurrentResultsRunnable = new Runnable() {
             @Override
             public void run() {
                 if (isLoading) {
