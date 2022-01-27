@@ -130,13 +130,13 @@ public class InternalUpdater {
                 }
                 TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
                 FileLog.d("Retrieve update messages, size:" + res.messages.size());
-                final String target = BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + ("debug".equals(BuildConfig.BUILD_TYPE) ? "release" : BuildConfig.BUILD_TYPE) + ".apk";
+                final String target = metadata.versionName + "-" + BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + ("debug".equals(BuildConfig.BUILD_TYPE) ? "release" : BuildConfig.BUILD_TYPE) + ".apk";
                 for (int i = 0; i < res.messages.size(); i++) {
                     if (res.messages.get(i).media == null) continue;
 
                     TLRPC.Document apkDocument = res.messages.get(i).media.document;
                     String fileName = apkDocument.attributes.size() == 0 ? "" : apkDocument.attributes.get(0).file_name;
-                    if (!(fileName.contains(target) && fileName.contains(metadata.versionName) ))
+                    if (!fileName.contains(target))
                         continue;
                     TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
                     update.version = metadata.versionName;
