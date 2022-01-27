@@ -336,8 +336,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_PGPDecrypt = 2022;
     private final static int nkbtn_PGPImportPrivate = 2023;
     private final static int nkbtn_PGPImport = 2024;
-    private final static int nkbtm_invertReply = 2025;
-    private final static int nkbtm_greatOrPoor = 2026;
+    private final static int nkbtn_invertReply = 2025;
+    private final static int nkbtn_greatOrPoor = 2026;
     
 
     protected TLRPC.Chat currentChat;
@@ -21859,12 +21859,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             if (NaConfig.INSTANCE.getShowInvertReply().Bool()) {
                                 items.add(LocaleController.getString("InvertReply", R.string.InvertReply));
-                                options.add(nkbtm_invertReply);
+                                options.add(nkbtn_invertReply);
                                 icons.add(R.drawable.msg_reset);
                             }
                             if (NaConfig.INSTANCE.getShowGreatOrPoor().Bool()) {
                                 items.add(LocaleController.getString("Great", R.string.Great));
-                                options.add(nkbtm_greatOrPoor);
+                                options.add(nkbtn_greatOrPoor);
                                 icons.add(R.drawable.msg_prpr);
                             }
                         }
@@ -23914,11 +23914,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 repeatMessage(true);
                 return 2;
             }
-            case nkbtm_invertReply: {
+            case nkbtn_invertReply: {
                 invertReplyMessage(true);
                 return 2;
             }
-            case nkbtm_greatOrPoor: {
+            case nkbtn_greatOrPoor: {
                 sendGreatOrGreat(true);
                 return 2;
             }
@@ -29044,10 +29044,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == nkbtn_repeat) {
             repeatMessage(false);
             clearSelectionMode();
-        } else if (id == nkbtm_invertReply) {
+        } else if (id == nkbtn_invertReply) {
             invertReplyMessage(false);
             clearSelectionMode();
-        } else if (id == nkbtm_greatOrPoor) {
+        } else if (id == nkbtn_greatOrPoor) {
             sendGreatOrGreat(false);
             clearSelectionMode();
         }
@@ -29060,11 +29060,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 repeatMessage(false);
                 break;
             }
-            case nkbtm_invertReply: {
+            case nkbtn_invertReply: {
                 invertReplyMessage(false);
                 break;
             }
-            case nkbtm_greatOrPoor: {
+            case nkbtn_greatOrPoor: {
                 sendGreatOrGreat(false);
                 break;
             }
