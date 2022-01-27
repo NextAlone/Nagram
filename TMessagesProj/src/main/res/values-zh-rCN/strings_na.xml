@@ -5,4 +5,5 @@
     <string name="InvertReply">反转</string>
     <string name="Great">好耶</string>
     <string name="Poor">破烂</string>
+    <string name="CombineMessage">Combine Message</string>
 </resources>
