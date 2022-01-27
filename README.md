@@ -140,11 +140,11 @@ different)
 
 It's very simple
 
-* download the repo `git clone --recurse-submodules git@github.com:nikitasius/Telegram.git`
+* download the repo `git clone https://github.com/nikitasius/Telegraher.git`
 * build it
     * you can use official guide `https://core.telegram.org/reproducible-builds`
         * open the folder with the repo
-        * git checkout lastest **noshit** branch (`git checkout remotes/origin/noshit_8.4.2` for
+        * git checkout lastest **noshit** branch (`git checkout remotes/origin/noshit_8.4.4` for
           example)
         * run `docker build -t telegram-build .`
         * run `docker run --rm -v "$PWD":/home/source telegram-build`
@@ -163,17 +163,17 @@ It's very simple
 
 * **sdk23** mean for android 4.2+, the other are working from 6+
 * arm64-v8a (new devices)
-    * `03ffae9f38e952a9c83e45575933d6a9d06e1c8e6242f12f012bf74a79830dd5`  [Telegraher.8.4.4.arm64-v8a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.arm64-v8a.apk)
-    * `a4435d0e423f6d66874762fa9105dc56cb4eafef47e546c257dff35d91e62416`  [Telegraher.8.4.4.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.arm64-v8a-sdk23.apk)
+    * `a5e2a859b45567ae008c433c9f133d1ada171d5180109261d454568abe9d0ee3`  [Telegraher.8.4.4r2.arm64-v8a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.arm64-v8a.apk)
+    * `c70865e2d2fbd384bbdcdc8a79d0b1be6eb67d2bb78c356b429e6ea26c75755f`  [Telegraher.8.4.4r2.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.arm64-v8a-sdk23.apk)
 * armeabi-v7a (old devices)
-    * `16b1d3579b5fadaa0845fd4c13f4e1ebd6db3db973c370adf63ccc9f8cd306ab`  [Telegraher.8.4.4.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.armeabi-v7a.apk)
-    * `adb4b8db7937516584e6f927048abc9dcc5bb074d8981ac433d22898508012c3`  [Telegraher.8.4.4.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.armeabi-v7a-sdk23.apk)
+    * `0b4e09203021f8d3d828f64c3fc3d58faf5f92567d8141292369ffb82fca068d`  [Telegraher.8.4.4r2.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.armeabi-v7a.apk)
+    * `8026de46a2e97bc51acaab5c3566b986ce3dba79f3cc4cc77e9b42866d0d9a5d`  [Telegraher.8.4.4r2.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.armeabi-v7a-sdk23.apk)
 * PC x86, 32 bits (for an emulator for example)
-    * `5cb6994bcea7caf50c531af74f486ce44cb4e0323fb11b99b954cf58a21833c4`  [Telegraher.8.4.4.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.x86.apk)
-    * `f40ae357a57d06a8439923f5d8f6f17467f89275bfefffff358488ed93d3c1d4`  [Telegraher.8.4.4.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.x86-sdk23.apk)
+    * `24d740fcbd2533dfe80d4fd2fe521ca8f5ff488a3539ce94271c1a425d07c4c4`  [Telegraher.8.4.4r2.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.x86.apk)
+    * `4cdea7ef40e8fc43d3b14ee8b63543c3281583c52755e97c564edfc7676abd38`  [Telegraher.8.4.4r2.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.x86-sdk23.apk)
 * PC x86, 64 bits (for 64 bits CPU)
-    * `bb1769241bd83b023edb7a55b52aeb9512adcd8c205b445cb55f8331a976b429`  [Telegraher.8.4.4.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.x86-64.apk)
-    * `86cdddc581e1ec14ee7a6074fa9c93036bda665f105c127accd35fa8861aacc4`  [Telegraher.8.4.4.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release01/Telegraher.8.4.4.x86-64-sdk23.apk)
+    * `a46bd83795a5fa976bb79a85722a207a221db408e3e1d79f7b7b17e56bea6f40`  [Telegraher.8.4.4r2.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.x86-64.apk)
+    * `962f36c7dd7e6469770ae780583b39f80f0e1efe3c83da3df4c31ebac09c43ab`  [Telegraher.8.4.4r2.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.4.4_release2/Telegraher.8.4.4r2.x86-64-sdk23.apk)
 
 ### Issues/Wishlist
 
@@ -182,6 +182,22 @@ Probably it's a good thing 😃
 
 ### Changes
 
+* noshit_8.4.4_release2
+    * added `delete` mark
+        * when someone wiped messages OR history you will see it, just need to close/open an actual
+          chat
+        * `deleted` will me marked on the place of `edited`
+        * remote deletions via GCM pushes should to work too (i have no gapps here, but some folks
+          have)
+        * if chat have a timer there are no `deleted` flag, i will add it later due we know that it
+          will be deleted once read (cause there are a timer :D )
+    * new internal variable `DUROV_RELOGIN`=`1` and a table
+        * here we store level of our changes, due we added new column `isdel` into `messages_v2`
+          table and made a new table `telegraher_init`
+        * i used vanilla code to apply DB update (same what TG use when you see "hi, tg updating
+          database etc")
+    * fixed an issue #6
+        * when we wiped remote chats they aren't wiped so not they are wiped
 * noshit_8.4.4_release1
     * keep using original TG fingerprint from 8.4.4 (same as 8.4.3)
     * snowflakes added back into menu
