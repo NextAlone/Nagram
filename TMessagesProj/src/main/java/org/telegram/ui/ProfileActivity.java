@@ -59,6 +59,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -152,6 +153,7 @@ import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CrossfadeDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.FragmentContextView;
 import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.IdenticonDrawable;
@@ -340,6 +342,7 @@ public class ProfileActivity extends BaseFragment implements
     private final static int gallery_menu_save = 21;
     private final static int view_discussion = 22;
     private final static int event_log = 23;
+    private final static int aliasChannelName = 24;
 
     private final static int edit_name = 30;
     private final static int logout = 31;
@@ -1687,6 +1690,8 @@ public class ProfileActivity extends BaseFragment implements
                     leaveChatPressed();
                 } else if (id == event_log) {
                     presentFragment(new ChannelAdminLogActivity(currentChat));
+                } else if ( id == aliasChannelName){
+                    setChannelAlias();
                 } else if (id == edit_channel) {
                     Bundle args = new Bundle();
                     args.putLong("chat_id", chatId);
@@ -4434,6 +4439,63 @@ public class ProfileActivity extends BaseFragment implements
             });
     }
 
+    private void setChannelAlias() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("setChannelAliasName", R.string.setChannelAliasName));
+
+        final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec,
+                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setHintText(
+            LocaleController.getString("Name", R.string.Name));
+        if (!ConfigManager.getStringOrDefault(Defines.channelAliasPrefix + getCurrentChat().id, "").equals("")) {
+            editText.setText(ConfigManager.getStringOrDefault(Defines.channelAliasPrefix + getCurrentChat().id, ""));
+        }
+        editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        editText.setSingleLine(true);
+        editText.setFocusable(true);
+        editText.setTransformHintToHeader(true);
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
+            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
+            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        builder.setView(editText);
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
+            (dialogInterface, i) -> {
+            if(editText.getText().toString().trim().equals("")){
+                ConfigManager.deleteValue(Defines.channelAliasPrefix + getCurrentChat().id);
+            } else {
+                ConfigManager.putString(Defines.channelAliasPrefix + getCurrentChat().id,
+                    editText.getText().toString());
+            }
+            });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.show().setOnShowListener(dialog -> {
+            editText.requestFocus();
+            AndroidUtilities.showKeyboard(editText);
+        });
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            editText.setLayoutParams(layoutParams);
+        }
+        editText.setSelection(0, editText.getText().length());
+    }
+
     private void getChannelParticipants(boolean reload) {
         if (loadingUsers || participantsMap == null || chatInfo == null) {
             return;
@@ -7167,6 +7229,11 @@ public class ProfileActivity extends BaseFragment implements
                     if (!TextUtils.isEmpty(chat.username)) {
                         otherItem.addSubItem(share, R.drawable.msg_share,
                             LocaleController.getString("BotShare", R.string.BotShare));
+                    }
+                    if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)){
+                        otherItem.addSubItem(aliasChannelName, R.drawable.ic_ab_fave,
+                            LocaleController.getString("setChannelAliasName",
+                                R.string.setChannelAliasName));
                     }
                     if (chatInfo != null && chatInfo.linked_chat_id != 0) {
                         otherItem.addSubItem(view_discussion, R.drawable.msg_discussion,

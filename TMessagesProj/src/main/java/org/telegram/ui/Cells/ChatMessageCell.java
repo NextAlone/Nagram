@@ -10364,7 +10364,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 nameWidth -= adminWidth;
             } else if (ConfigManager.getBooleanOrFalse(Defines.labelChannelUser) && isMegagroup
                 && currentChat != null && currentMessageObject.isSenderChannel()) {
-                adminString = "Channel";
+                if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
+                    String aliasName = ConfigManager.getStringOrDefault(Defines.channelAliasPrefix
+                        + currentMessageObject.messageOwner.from_id.channel_id, null);
+                    if (aliasName != null) {
+                        adminString = aliasName + " | Channel";
+                    } else {
+                        adminString = "Channel";
+                    }
+                } else {
+                    adminString = "Channel";
+                }
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;
             } else {

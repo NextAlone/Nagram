@@ -61,6 +61,10 @@
     <string name="codeSyntaxHighlight">Code syntax highlight</string>
     <string name="CreateMono">Create Monospace</string>
     <string name="CreateMonoLanguage">Code language</string>
-    <string name="codeSyntaxHighlightDetails">Thanks to prismjs and nekogram</string>
+    <string name="codeSyntaxHighlightDetails">Thanks to prismjs and Nekogram</string>
     <string name="CreateMention">Create mention</string>
+    <string name="Name">Name</string>
+    <string name="channelAlias">Channel Alias</string>
+    <string name="channelAliasDetails">Require label channel user enabled.</string>
+    <string name="setChannelAliasName">Set Alias</string>
 </resources>

@@ -41,6 +41,7 @@ public class ExperimentSettingActivity extends BaseFragment {
     private int experimentRow;
     private int blockSponsorAdsRow;
     private int syntaxHighlightRow;
+    private int aliasChannelRow;
     private int experiment2Row;
 
 
@@ -97,6 +98,16 @@ public class ExperimentSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight));
                 }
+            } else if (position == aliasChannelRow) {
+                boolean currentStatus = ConfigManager.getBooleanOrFalse(Defines.channelAlias);
+                if (!currentStatus && !ConfigManager.getBooleanOrFalse(Defines.labelChannelUser)){
+                    ConfigManager.putBoolean(Defines.labelChannelUser,true);
+                }
+                ConfigManager.toggleBoolean(Defines.channelAlias);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.channelAlias));
+                }
             }
         });
 
@@ -118,7 +129,9 @@ public class ExperimentSettingActivity extends BaseFragment {
         experimentRow = rowCount++;
         blockSponsorAdsRow = rowCount++;
         syntaxHighlightRow = rowCount++;
+        aliasChannelRow = rowCount++;
         experiment2Row = rowCount++;
+
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -263,6 +276,14 @@ public class ExperimentSettingActivity extends BaseFragment {
                             LocaleController.getString("codeSyntaxHighlightDetails",
                                 R.string.codeSyntaxHighlightDetails),
                             ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight), true,
+                            true);
+                    } else if (position == aliasChannelRow) {
+                        textCell.setTextAndValueAndCheck(
+                            LocaleController.getString("channelAlias",
+                                R.string.channelAlias),
+                            LocaleController.getString("channelAliasDetails",
+                                R.string.channelAliasDetails),
+                            ConfigManager.getBooleanOrFalse(Defines.channelAlias), true,
                             true);
                     }
                     break;

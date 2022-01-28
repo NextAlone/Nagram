@@ -22,6 +22,7 @@ package top.qwq2333.nullgram.config;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import org.telegram.messenger.ApplicationLoader;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
 
@@ -81,7 +82,7 @@ public class ConfigManager {
      * @return key所对应值
      */
     @NonNull
-    public static String getStringOrDefault(@NonNull String key, @NonNull String def) {
+    public static String getStringOrDefault(@NonNull String key, @Nullable String def) {
         return preferences.getString(key, def);
     }
 
@@ -142,6 +143,9 @@ public class ConfigManager {
     public static void putString(@NonNull String key, String value) {
         synchronized (preferences) {
             try {
+                if(value.equals("")){
+                    preferences.edit().remove(key).apply();
+                }
                 preferences.edit().putString(key, value).apply();
             } catch (Throwable thr) {
                 LogUtilsKt.e("putString: ", thr);
@@ -159,6 +163,21 @@ public class ConfigManager {
             try {
                 boolean originValue = preferences.getBoolean(key, false);
                 preferences.edit().putBoolean(key, !originValue).apply();
+            } catch (Throwable thr) {
+                LogUtilsKt.e(thr);
+            }
+        }
+    }
+
+    /**
+     * 删除key所对应Value 无视value类型
+     *
+     * @param key key
+     */
+    public static void deleteValue(@NonNull String key){
+        synchronized (preferences){
+            try {
+                preferences.edit().remove(key).apply();
             } catch (Throwable thr) {
                 LogUtilsKt.e(thr);
             }
