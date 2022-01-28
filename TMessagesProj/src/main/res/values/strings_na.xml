@@ -6,4 +6,5 @@
     <string name="Great">Great</string>
     <string name="Poor">Poor</string>
     <string name="CombineMessage">Combine Message</string>
+    <string name="TextStyle">Text Style</string>
 </resources>
