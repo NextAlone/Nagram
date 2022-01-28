@@ -5,5 +5,5 @@
     <string name="InvertReply">Invert</string>
     <string name="Great">Great</string>
     <string name="Poor">Poor</string>
-    <string name="CombineMessage">合并消息</string>
+    <string name="CombineMessage">Combine Message</string>
 </resources>
