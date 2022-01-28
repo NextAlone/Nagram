@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="0.205" x2="0.5" y2="0.849" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#cd230b"/>
+      <stop offset="1" stop-color="#cd2406"/>
+    </linearGradient>
+    <clipPath id="clip-Telegram-春节版-background">
+      <rect width="512" height="512"/>
+    </clipPath>
+  </defs>
+  <g id="Telegram-春节版-background" clip-path="url(#clip-Telegram-春节版-background)">
+    <rect width="512" height="512" fill="rgba(255,255,255,0)"/>
+    <rect id="矩形_1" data-name="矩形 1" width="512" height="512" fill="url(#linear-gradient)"/>
+  </g>
+</svg>
