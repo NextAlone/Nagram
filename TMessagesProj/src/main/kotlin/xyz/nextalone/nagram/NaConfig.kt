@@ -43,6 +43,60 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    var showTextBold =
+        addConfig(
+            "TextBold",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextItalic =
+        addConfig(
+            "TextItalic",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextMono =
+        addConfig(
+            "TextMonospace",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextStrikethrough =
+        addConfig(
+            "TextStrikethrough",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextUnderline =
+        addConfig(
+            "TextUnderline",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextSpoiler =
+        addConfig(
+            "TextSpoiler",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextCreateLink =
+        addConfig(
+            "TextLink",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextCreateMention =
+        addConfig(
+            "TextCreateMention",
+            ConfigItem.configTypeBool,
+            true
+        )
+    var showTextRegular =
+        addConfig(
+            "TextRegular",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     fun addConfig(
         k: String,
