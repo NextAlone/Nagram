@@ -97,6 +97,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    var combineMessage =
+        addConfig(
+            "CombineMessage",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     fun addConfig(
         k: String,
