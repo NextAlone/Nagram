@@ -7,4 +7,7 @@
     <string name="Poor">破烂</string>
     <string name="CombineMessage">合并消息</string>
     <string name="TextStyle">文本样式</string>
+    <string name="CombineMessageEnabledWithReply">合并并回复首条消息</string>
+    <string name="CombineMessageEnabled">仅合并消息</string>
+    <string name="CombineMessageDisabled">关闭</string>
 </resources>

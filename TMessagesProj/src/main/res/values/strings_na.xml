@@ -7,4 +7,7 @@
     <string name="Poor">Poor</string>
     <string name="CombineMessage">Combine Message</string>
     <string name="TextStyle">Text Style</string>
+    <string name="CombineMessageEnabledWithReply">Combine Message Enabled With Reply</string>
+    <string name="CombineMessageEnabled">Combine Message Enabled</string>
+    <string name="CombineMessageDisabled">Combine Message Disabled</string>
 </resources>
