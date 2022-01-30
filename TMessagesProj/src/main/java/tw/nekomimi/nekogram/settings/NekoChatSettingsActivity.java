@@ -113,6 +113,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell showBottomActionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBottomActionsWhenSelecting));
+    private final AbstractConfigCell combineMessageRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getCombineMessage(), new String[]{
+            LocaleController.getString("combineMessageEnabledWithReply", R.string.CombineMessageEnabledWithReply),
+            LocaleController.getString("combineMessageEnabled", R.string.CombineMessageEnabled),
+            LocaleController.getString("combineMessageDisabled", R.string.CombineMessageDisabled)
+    }, null));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
     private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("AutoDownload")));
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));

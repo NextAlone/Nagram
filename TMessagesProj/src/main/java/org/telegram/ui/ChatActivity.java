@@ -2352,7 +2352,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     clearSelectionMode();
                 } else if (id == combine_message) {
                     StringBuilder str = new StringBuilder();
-                    ArrayList<Integer> toDeleteMessagesIds =new ArrayList<>();
+                    ArrayList<Integer> toDeleteMessagesIds = new ArrayList<>();
+                    MessageObject replyTo = getThreadMessage();
                     for (int a = 1; a >= 0; a--) {
                         ArrayList<Integer> ids = new ArrayList<>();
                         for (int b = 0; b < selectedMessagesCanCopyIds[a].size(); b++) {
@@ -2366,6 +2367,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         for (int b = 0; b < ids.size(); b++) {
                             Integer messageId = ids.get(b);
                             MessageObject messageObject = selectedMessagesCanCopyIds[a].get(messageId);
+                            if (b == 0 && NaConfig.INSTANCE.getCombineMessage().Int() == 0) {
+                                replyTo = messageObject.replyMessageObject;
+                            }
                             if (str.length() != 0) {
                                 str.append("  ");
                             }
@@ -2377,7 +2381,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     if (str.length() != 0) {
                         SendMessagesHelper.getInstance(currentAccount)
-                                .sendMessage(str.toString(), dialog_id, getThreadMessage(), getThreadMessage(), null, false, null, null, null, true, 0, null);
+                                .sendMessage(str.toString(), dialog_id, replyTo, getThreadMessage(), null, false, null, null, null, true, 0, null);
                         MessagesController.getInstance(currentAccount).deleteMessages(toDeleteMessagesIds, null, null, dialog_id, true, false);
                     }
                     clearSelectionMode();
@@ -13926,7 +13930,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int copyVisible = copyItem.getVisibility();
                 boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure;
                 copyItem.setVisibility(!noforwardsOverride && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
-                combineMessageItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+                combineMessageItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? NaConfig.INSTANCE.getCombineMessage().Int() != 2 ? View.VISIBLE : View.GONE : View.GONE);
                 actionModeOtherItem.setSubItemVisibility(star, getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount);
                 if (selectItem != null) {
                     ArrayList<Integer> ids = new ArrayList<>();
