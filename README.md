@@ -11,7 +11,7 @@ Nullgram is an **free and open source** third-party Telegram client, based on Te
 Due to the fragmentation of the NekoX and Nekogram communities, and the serious problems with the main developers of NekoX and Nekogram[^1], I decided to make Nullgram to integrate both of their functions to avoid these problems.
 
 Null used in computer programming for an uninitialized, undefined, empty, or meaningless value.
-In the name of Nullgram, the purpose is to express that there is no such bullshit. Nullgram won't push FCM-Notification "nmsl"[^2] or somethings like that to your phone, won't send political spam[^3] or ads[^4] to channels, won't compete maliciously[^5] or publish malicious rumors about competitors
+In the name of Nullgram, the purpose is to express that there is no such bad things. Nullgram won't push FCM-Notification "nmsl"[^2] or somethings like that to your phone, won't send ads[^4] to channels, won't compete maliciously[^5] or publish malicious rumors about competitors
 
 ## How to Contribute
 
@@ -40,7 +40,7 @@ If you experience a crash, you can use logcat to catch the log (TAG:  `Nullgram`
 
 You will require Android Studio 3.4, Android NDK rev. 20 and Android SDK 8.1
 
-1. Download the Telegram source code from https://github.com/DrKLO/Telegram ( git clone https://github.com/DrKLO/Telegram.git )
+1. Download the Telegram source code from https://github.com/qwq233/Nullgram
 2. Copy your release.keystore into TMessagesProj/config
 3. Fill out RELEASE_KEY_PASSWORD, RELEASE_KEY_ALIAS, RELEASE_STORE_PASSWORD in gradle.properties to access your  release.keystore
 4.  Go to https://console.firebase.google.com/, create two android apps with application IDs `top.qwq2333.nullgram` and `top.qwq2333.nullgram.beta`, turn on firebase messaging and download google-services.json, which should be copied to the same folder as TMessagesProj.
