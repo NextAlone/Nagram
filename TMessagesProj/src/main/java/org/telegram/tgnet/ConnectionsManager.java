@@ -529,25 +529,17 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onSessionCreated(final int currentAccount) {
-        Utilities.stageQueue.postRunnable(
-            () -> AccountInstance.getInstance(currentAccount).getMessagesController()
-                .getDifference());
+        Utilities.stageQueue.postRunnable(() -> AccountInstance.getInstance(currentAccount).getMessagesController().getDifference());
     }
 
     public static void onConnectionStateChanged(final int state, final int currentAccount) {
         AndroidUtilities.runOnUIThread(() -> {
             getInstance(currentAccount).connectionState = state;
-            AccountInstance.getInstance(currentAccount).getNotificationCenter()
-                .postNotificationName(NotificationCenter.didUpdateConnectionState);
+            AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
         });
     }
 
-    public static boolean reseting;
-
     public static void onLogout(final int currentAccount) {
-        if (reseting) {
-            return;
-        }
         AndroidUtilities.runOnUIThread(() -> {
             AccountInstance accountInstance = AccountInstance.getInstance(currentAccount);
             if (accountInstance.getUserConfig().getClientUserId() != 0) {

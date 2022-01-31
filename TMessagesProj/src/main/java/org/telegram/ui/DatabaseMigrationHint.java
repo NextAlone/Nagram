@@ -1,7 +1,6 @@
 package org.telegram.ui;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -9,17 +8,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.core.content.ContextCompat;
+
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
-import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.EnvironmentUtils;
 
 public class DatabaseMigrationHint extends FrameLayout {
 
@@ -53,27 +48,19 @@ public class DatabaseMigrationHint extends FrameLayout {
         description1 = new TextView(context);
         description1.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
         description1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        description1.setText(LocaleController.getString("OptimizingTelegramDescription1",
-            R.string.OptimizingTelegramDescription1));
+        description1.setText(LocaleController.getString("OptimizingTelegramDescription1", R.string.OptimizingTelegramDescription1));
         description1.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         description1.setGravity(Gravity.CENTER_HORIZONTAL);
-        container.addView(description1,
-            LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0,
-                36, 20, 36, 0));
+        container.addView(description1, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 36, 20, 36, 0));
 
         description2 = new TextView(context);
         description2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        description2.setText(LocaleController.getString("OptimizingTelegramDescription2",
-            R.string.OptimizingTelegramDescription2));
+        description2.setText(LocaleController.getString("OptimizingTelegramDescription2", R.string.OptimizingTelegramDescription2));
         description2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         description2.setGravity(Gravity.CENTER_HORIZONTAL);
-        container.addView(description2,
-            LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0,
-                36, 24, 36, 0));
+        container.addView(description2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 36, 24, 36, 0));
 
-        addView(container,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT,
-                Gravity.CENTER_VERTICAL));
+        addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
         setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -81,16 +68,5 @@ public class DatabaseMigrationHint extends FrameLayout {
                 return true;
             }
         });
-
-        if (Build.VERSION.SDK_INT >= 30) {
-            ContextCompat.getMainExecutor(getContext()).execute(() -> {
-                if (!ConfigManager.getStringOrDefault(Defines.cachePath, "").contains("/data/")) {
-                    ConfigManager.putString(Defines.cachePath,
-                        EnvironmentUtils.getAvailableDirectories()[2]);
-                    ImageLoader.getInstance().checkMediaPaths();
-                }
-            });
-        }
-
     }
 }

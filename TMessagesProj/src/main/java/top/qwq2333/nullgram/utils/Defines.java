@@ -58,9 +58,6 @@ public class Defines {
     public static final int ciChannel = 2;
     public static final String updateChannelSkip = "updateChannelSkip";
 
-    // Storage
-    public static final String cachePath = "cachePath";
-
     // Misc
     public static final long[] officialID = {
         966253902,  // Developer

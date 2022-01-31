@@ -69,6 +69,7 @@ import android.widget.Toast;
 import androidx.annotation.Keep;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.NestedScrollingParent3;
 import androidx.core.view.NestedScrollingParentHelper;
@@ -79,7 +80,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -91,9 +96,12 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import kotlin.Unit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ChatThemeController;
@@ -2914,13 +2922,13 @@ public class ProfileActivity extends BaseFragment implements
                     LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
             } else if (position == policyRow) {
                 Browser.openUrl(getParentActivity(),
-                    LocaleController.getString("PrivacyPolicyUrl",
-                        R.string.NullgramPrivacyPolicyUrl));
+                    LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl));
             } else if (position == sendLogsRow) {
                 sendLogs(false);
             } else if (position == sendLastLogsRow) {
                 sendLogs(true);
             } else if (position == clearLogsRow) {
+                FileLog.cleanupLogs();
             } else if (position == switchBackendRow) {
                 if (getParentActivity() == null) {
                     return;
@@ -7900,12 +7908,104 @@ public class ProfileActivity extends BaseFragment implements
         if (getParentActivity() == null) {
             return;
         }
-        AlertDialog builder = new AlertDialog(getParentActivity(), 3);
-        builder.setTitle(LocaleController.getString("NullgramName", R.string.NullgramName));
-        builder.setMessage(
-            LocaleController.getString("SendLogsNoSuchThings", R.string.SendLogsNoSuchThings));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        builder.show();
+        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        progressDialog.setCanCacnel(false);
+        progressDialog.show();
+        Utilities.globalQueue.postRunnable(() -> {
+            try {
+                File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+                File dir = new File(sdCard.getAbsolutePath() + "/logs");
+
+                File zipFile = new File(dir, "logs.zip");
+                if (zipFile.exists()) {
+                    zipFile.delete();
+                }
+
+                File[] files = dir.listFiles();
+
+                boolean[] finished = new boolean[1];
+                long currentDate = System.currentTimeMillis();
+
+                BufferedInputStream origin = null;
+                ZipOutputStream out = null;
+                try {
+                    FileOutputStream dest = new FileOutputStream(zipFile);
+                    out = new ZipOutputStream(new BufferedOutputStream(dest));
+                    byte[] data = new byte[1024 * 64];
+
+                    for (int i = 0; i < files.length; i++) {
+                        if (last && (currentDate - files[i].lastModified()) > 24 * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        FileInputStream fi = new FileInputStream(files[i]);
+                        origin = new BufferedInputStream(fi, data.length);
+
+                        ZipEntry entry = new ZipEntry(files[i].getName());
+                        out.putNextEntry(entry);
+                        int count;
+                        while ((count = origin.read(data, 0, data.length)) != -1) {
+                            out.write(data, 0, count);
+                        }
+                        origin.close();
+                        origin = null;
+                    }
+                    finished[0] = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (origin != null) {
+                        origin.close();
+                    }
+                    if (out != null) {
+                        out.close();
+                    }
+                }
+
+                AndroidUtilities.runOnUIThread(() -> {
+                    try {
+                        progressDialog.dismiss();
+                    } catch (Exception ignore) {
+
+                    }
+                    if (finished[0]) {
+                        Uri uri;
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            uri = FileProvider.getUriForFile(getParentActivity(),
+                                BuildConfig.APPLICATION_ID + ".provider", zipFile);
+                        } else {
+                            uri = Uri.fromFile(zipFile);
+                        }
+
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        }
+                        i.setType("message/rfc822");
+                        i.putExtra(Intent.EXTRA_EMAIL, "");
+                        i.putExtra(Intent.EXTRA_SUBJECT,
+                            "Logs from " + LocaleController.getInstance().formatterStats.format(
+                                System.currentTimeMillis()));
+                        i.putExtra(Intent.EXTRA_STREAM, uri);
+                        if (getParentActivity() != null) {
+                            try {
+                                getParentActivity().startActivityForResult(
+                                    Intent.createChooser(i, "Select email application."), 500);
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                        }
+                    } else {
+                        if (getParentActivity() != null) {
+                            Toast.makeText(getParentActivity(),
+                                LocaleController.getString("ErrorOccurred",
+                                    R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {

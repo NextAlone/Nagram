@@ -151,8 +151,6 @@ import org.telegram.ui.ThemePreviewActivity;
 import org.telegram.ui.WallpapersListActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.EnvironmentUtils;
-import top.qwq2333.nullgram.utils.FileUtils;
 
 public class AndroidUtilities {
 
@@ -1550,14 +1548,45 @@ public class AndroidUtilities {
     }
 
     public static File getCacheDir() {
+        String state = null;
         try {
-            File file = new File(EnvironmentUtils.getTelegramPath(), "caches");
-            FileUtils.initDir(file);
-            return file;
-        } catch (Throwable e) {
+            state = Environment.getExternalStorageState();
+        } catch (Exception e) {
             FileLog.e(e);
         }
-        return new File(ApplicationLoader.getDataDirFixed(), "cache/media/caches");
+        if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
+            try {
+                File file;
+                if (Build.VERSION.SDK_INT >= 19) {
+                    File[] dirs = ApplicationLoader.applicationContext.getExternalCacheDirs();
+                    file = dirs[0];
+                    if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
+                        for (int a = 0; a < dirs.length; a++) {
+                            if (dirs[a] != null && dirs[a].getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                                file = dirs[a];
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    file = ApplicationLoader.applicationContext.getExternalCacheDir();
+                }
+                if (file != null) {
+                    return file;
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+        try {
+            File file = ApplicationLoader.applicationContext.getCacheDir();
+            if (file != null) {
+                return file;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return new File("");
     }
 
     public static int dp(float value) {

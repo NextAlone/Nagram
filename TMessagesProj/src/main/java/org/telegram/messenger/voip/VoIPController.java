@@ -13,11 +13,17 @@ import android.media.audiofx.AcousticEchoCanceler;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
 import android.os.SystemClock;
-import java.io.File;
+
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.MessagesController;
-import top.qwq2333.nullgram.utils.EnvironmentUtils;
+import org.telegram.ui.Components.voip.VoIPHelper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class VoIPController {
 
@@ -170,46 +176,61 @@ public class VoIPController {
 	public int getLastError() {
 		ensureNativeInstance();
 		return nativeGetLastError(nativeInst);
-    }
+	}
 
-    public void getStats(Stats stats) {
-        ensureNativeInstance();
-        if (stats == null) {
-            throw new NullPointerException("You're not supposed to pass null here");
-        }
-        nativeGetStats(nativeInst, stats);
-    }
+	public void getStats(Stats stats) {
+		ensureNativeInstance();
+		if (stats == null) {
+			throw new NullPointerException("You're not supposed to pass null here");
+		}
+		nativeGetStats(nativeInst, stats);
+	}
 
-    public static String getVersion() {
-        return nativeGetVersion();
-    }
+	public static String getVersion() {
+		return nativeGetVersion();
+	}
 
-    private String getLogFilePath(String name) {
-        return new File(EnvironmentUtils.getTelegramPath(), "logs/" + name + ".log").getPath();
-    }
+	private String getLogFilePath(String name) {
+		Calendar c = Calendar.getInstance();
+		return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_%s.txt", c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND), name)).getAbsolutePath();
+	}
 
-    private String getLogFilePath(long callID) {
-        return new File(EnvironmentUtils.getTelegramPath(), "logs/" + callID + ".log").getPath();
-    }
+	private String getLogFilePath(long callID) {
+		File dir = VoIPHelper.getLogsDir();
+		if (!BuildVars.DEBUG_VERSION) {
+			File[] _logs = dir.listFiles();
+			ArrayList<File> logs = new ArrayList<>(Arrays.asList(_logs));
+			while (logs.size() > 20) {
+				File oldest = logs.get(0);
+				for (File file : logs) {
+					if (file.getName().endsWith(".log") && file.lastModified() < oldest.lastModified()) {
+						oldest = file;
+					}
+				}
+				oldest.delete();
+				logs.remove(oldest);
+			}
+		}
+		return new File(dir, callID + ".log").getAbsolutePath();
+	}
 
+	public String getDebugLog() {
+		ensureNativeInstance();
+		return nativeGetDebugLog(nativeInst);
+	}
 
-    public String getDebugLog() {
-        ensureNativeInstance();
-        return nativeGetDebugLog(nativeInst);
-    }
+	public void setProxy(String address, int port, String username, String password) {
+		ensureNativeInstance();
+		if (address == null) {
+			throw new NullPointerException("address can't be null");
+		}
+		nativeSetProxy(nativeInst, address, port, username, password);
+	}
 
-    public void setProxy(String address, int port, String username, String password) {
-        ensureNativeInstance();
-        if (address == null) {
-            throw new NullPointerException("address can't be null");
-        }
-        nativeSetProxy(nativeInst, address, port, username, password);
-    }
-
-    public void setAudioOutputGainControlEnabled(boolean enabled) {
-        ensureNativeInstance();
-        nativeSetAudioOutputGainControlEnabled(nativeInst, enabled);
-    }
+	public void setAudioOutputGainControlEnabled(boolean enabled) {
+		ensureNativeInstance();
+		nativeSetAudioOutputGainControlEnabled(nativeInst, enabled);
+	}
 
 	public int getPeerCapabilities() {
 		ensureNativeInstance();

@@ -10,7 +10,6 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -27,20 +26,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.jakewharton.processphoenix.ProcessPhoenix;
-import java.io.File;
-import java.util.ArrayList;
-import kotlin.Unit;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -55,7 +50,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -76,10 +70,9 @@ import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.Components.StorageDiagramView;
 import org.telegram.ui.Components.StroageUsageView;
 import org.telegram.ui.Components.UndoView;
-import top.qwq2333.nullgram.ui.BottomBuilder;
-import top.qwq2333.nullgram.utils.EnvironmentUtils;
-import top.qwq2333.nullgram.utils.FileUtils;
-import top.qwq2333.nullgram.utils.UIUtil;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class CacheControlActivity extends BaseFragment {
 
@@ -109,8 +102,8 @@ public class CacheControlActivity extends BaseFragment {
     private long totalSize = -1;
     private long totalDeviceSize = -1;
     private long totalDeviceFreeSize = -1;
-    private final long migrateOldFolderRow = -1;
-    private final StorageDiagramView.ClearViewData[] clearViewData = new StorageDiagramView.ClearViewData[7];
+    private long migrateOldFolderRow = -1;
+    private StorageDiagramView.ClearViewData[] clearViewData = new StorageDiagramView.ClearViewData[7];
     private boolean calculating = true;
 
     private volatile boolean canceled = false;
@@ -122,7 +115,6 @@ public class CacheControlActivity extends BaseFragment {
     private UndoView cacheRemovedTooltip;
 
     long fragmentCreateTime;
-    private int resetDataRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -132,10 +124,6 @@ public class CacheControlActivity extends BaseFragment {
 
         Utilities.globalQueue.postRunnable(() -> {
             cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), 0);
-            cacheSize += getDirectorySize(new File(ApplicationLoader.getDataDirFixed(), "cache"),
-                0);
-            cacheSize += getDirectorySize(
-                ApplicationLoader.applicationContext.getExternalFilesDir("logs"), 0);
             if (canceled) {
                 return;
             }
@@ -162,7 +150,7 @@ public class CacheControlActivity extends BaseFragment {
             audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), 0);
             totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersSize;
 
-            File path = EnvironmentUtils.getTelegramPath();
+            File path;
             if (Build.VERSION.SDK_INT >= 19) {
                 ArrayList<File> storageDirs = AndroidUtilities.getRootDirs();
                 String dir = (path = storageDirs.get(0)).getAbsolutePath();
@@ -229,8 +217,6 @@ public class CacheControlActivity extends BaseFragment {
         cacheInfoRow = rowCount++;
         databaseRow = rowCount++;
         databaseInfoRow = rowCount++;
-
-        resetDataRow = rowCount++;
     }
 
     private void updateStorageUsageRow() {
@@ -329,22 +315,11 @@ public class CacheControlActivity extends BaseFragment {
                     file = FileLoader.checkDirectory(type);
                 }
                 if (file != null) {
-                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE,
-                        true);
+                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, false);
                 }
                 if (type == FileLoader.MEDIA_DIR_CACHE) {
-                    cacheSize = getDirectorySize(
-                        FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), documentsMusicType);
+                    cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), documentsMusicType);
                     imagesCleared = true;
-                    try {
-                        FileUtils.delete(new File(ApplicationLoader.getDataDirFixed(), "cache"));
-                    } catch (Exception ignored) {
-                    }
-
-                    try {
-                        FileUtils.delete(new File(EnvironmentUtils.getTelegramPath(), "logs"));
-                    } catch (Exception ignored) {
-                    }
                 } else if (type == FileLoader.MEDIA_DIR_AUDIO) {
                     audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), documentsMusicType);
                 } else if (type == FileLoader.MEDIA_DIR_DOCUMENT) {
@@ -403,48 +378,10 @@ public class CacheControlActivity extends BaseFragment {
                     FileLog.e(e);
                 }
 
-                cacheRemovedTooltip.setInfoText(
-                    LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared,
-                        AndroidUtilities.formatFileSize(finalClearedSize)));
-                cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null,
-                    null);
+                cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
+                cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             });
         });
-    }
-
-    private void resetData() {
-        BottomBuilder builder = new BottomBuilder(getParentActivity());
-        builder.addTitle(LocaleController.getString("StorageResetInfo", R.string.StorageResetInfo));
-        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear),
-            R.drawable.baseline_delete_sweep_24, true, (i) -> {
-                if (getParentActivity() == null) {
-                    return Unit.INSTANCE;
-                }
-                final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-                progressDialog.setCanCacnel(false);
-                progressDialog.show();
-                ConnectionsManager.reseting = true;
-                UIUtil.runOnIoDispatcher(() -> {
-                    FileUtils.delete(EnvironmentUtils.getTelegramPath());
-                    for (int a : SharedConfig.activeAccounts) {
-                        AccountInstance instance = AccountInstance.getInstance(a);
-                        if (instance.getUserConfig().isClientActivated()) {
-                            TLRPC.TL_auth_logOut req = new TLRPC.TL_auth_logOut();
-                            instance.getConnectionsManager().sendRequest(req, (response, error) -> {
-                            });
-                        }
-                    }
-                    FileUtils.delete(getParentActivity().getFilesDir().getParentFile());
-                    AndroidUtilities.runOnUIThread(() -> {
-                        progressDialog.dismiss();
-                        ProcessPhoenix.triggerRebirth(getParentActivity(),
-                            new Intent(getParentActivity(), LaunchActivity.class));
-                    }, 2000L);
-                });
-                return Unit.INSTANCE;
-            });
-        builder.addCancelItem();
-        builder.show();
     }
 
     @Override
@@ -476,10 +413,10 @@ public class CacheControlActivity extends BaseFragment {
             if (getParentActivity() == null) {
                 return;
             }
-            if (position == databaseRow) {
+            if (position == migrateOldFolderRow) {
+                migrateOldFolder();
+            } else if (position == databaseRow) {
                 clearDatabase();
-            } else if (position == resetDataRow) {
-                resetData();
             } else if (position == storageUsageRow) {
                 if (totalSize <= 0 || getParentActivity() == null) {
                     return;
@@ -556,6 +493,7 @@ public class CacheControlActivity extends BaseFragment {
                                 AndroidUtilities.shakeView(((CheckBoxCell) v).getCheckBoxView(), 2, 0);
                                 return;
                             }
+
 
                             clearViewData[num].setClear(!clearViewData[num].clear);
                             cell.setChecked(clearViewData[num].clear, true);
@@ -724,7 +662,7 @@ public class CacheControlActivity extends BaseFragment {
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
-        private final Context mContext;
+        private Context mContext;
 
         public ListAdapter(Context context) {
             mContext = context;
@@ -733,8 +671,7 @@ public class CacheControlActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == resetDataRow || position == databaseRow || (
-                position == storageUsageRow && (totalSize > 0) && !calculating);
+            return position == migrateOldFolderRow || position == databaseRow || (position == storageUsageRow && (totalSize > 0) && !calculating);
         }
 
         @Override
@@ -797,15 +734,9 @@ public class CacheControlActivity extends BaseFragment {
                 case 0:
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == databaseRow) {
-                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase",
-                                R.string.ClearLocalDatabase),
-                            AndroidUtilities.formatFileSize(databaseSize), false);
-                    } else if (position == resetDataRow) {
-                        textCell.setText(
-                            LocaleController.getString("StorageReset", R.string.StorageReset),
-                            false);
-                        textCell.setTextColor(
-                            Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), false);
+                    } else if (position == migrateOldFolderRow) {
+                        textCell.setTextAndValue(LocaleController.getString("MigrateOldFolder", R.string.MigrateOldFolder), null, false);
                     }
                     break;
                 case 1:

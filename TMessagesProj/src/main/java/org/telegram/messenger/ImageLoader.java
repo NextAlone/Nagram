@@ -8,6 +8,7 @@
 
 package org.telegram.messenger;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,11 +22,27 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.SparseArray;
+
 import androidx.exifinterface.media.ExifInterface;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.telegram.messenger.secretmedia.EncryptedFileInputStream;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.Components.AnimatedFileDrawable;
+import org.telegram.ui.Components.Point;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.SlotsDrawable;
+import org.telegram.ui.Components.ThemePreviewDrawable;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +60,8 @@ import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,62 +70,52 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.telegram.messenger.secretmedia.EncryptedFileInputStream;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.Components.AnimatedFileDrawable;
-import org.telegram.ui.Components.Point;
-import org.telegram.ui.Components.RLottieDrawable;
-import org.telegram.ui.Components.SlotsDrawable;
-import org.telegram.ui.Components.ThemePreviewDrawable;
-import top.qwq2333.nullgram.utils.EnvironmentUtils;
-import top.qwq2333.nullgram.utils.FileUtils;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 /**
- * image filter types suffixes: f - image is wallpaper isc - ignore cache for small images b - need
- * blur image g - autoplay
+ * image filter types
+ * suffixes:
+ * f - image is wallpaper
+ * isc - ignore cache for small images
+ * b - need blur image
+ * g - autoplay
  */
 public class ImageLoader {
 
-    private final HashMap<String, Integer> bitmapUseCounts = new HashMap<>();
-    private final LruCache<BitmapDrawable> smallImagesMemCache;
-    private final LruCache<BitmapDrawable> memCache;
-    private final LruCache<BitmapDrawable> wallpaperMemCache;
-    private final LruCache<RLottieDrawable> lottieMemCache;
-    private final HashMap<String, CacheImage> imageLoadingByUrl = new HashMap<>();
-    private final HashMap<String, CacheImage> imageLoadingByKeys = new HashMap<>();
-    private final SparseArray<CacheImage> imageLoadingByTag = new SparseArray<>();
-    private final HashMap<String, ThumbGenerateInfo> waitingForQualityThumb = new HashMap<>();
-    private final SparseArray<String> waitingForQualityThumbByTag = new SparseArray<>();
-    private final LinkedList<HttpImageTask> httpTasks = new LinkedList<>();
-    private final LinkedList<ArtworkLoadTask> artworkTasks = new LinkedList<>();
-    private final DispatchQueue cacheOutQueue = new DispatchQueue("cacheOutQueue");
-    private final DispatchQueue cacheThumbOutQueue = new DispatchQueue("cacheThumbOutQueue");
-    private final DispatchQueue thumbGeneratingQueue = new DispatchQueue("thumbGeneratingQueue");
-    private final DispatchQueue imageLoadQueue = new DispatchQueue("imageLoadQueue");
-    private final HashMap<String, String> replacedBitmaps = new HashMap<>();
-    private final ConcurrentHashMap<String, long[]> fileProgresses = new ConcurrentHashMap<>();
-    private final HashMap<String, ThumbGenerateTask> thumbGenerateTasks = new HashMap<>();
-    private final HashMap<String, Integer> forceLoadingImages = new HashMap<>();
-    private static final ThreadLocal<byte[]> bytesLocal = new ThreadLocal<>();
-    private static final ThreadLocal<byte[]> bytesThumbLocal = new ThreadLocal<>();
-    private static final byte[] header = new byte[12];
-    private static final byte[] headerThumb = new byte[12];
+    private HashMap<String, Integer> bitmapUseCounts = new HashMap<>();
+    private LruCache<BitmapDrawable> smallImagesMemCache;
+    private LruCache<BitmapDrawable> memCache;
+    private LruCache<BitmapDrawable> wallpaperMemCache;
+    private LruCache<RLottieDrawable> lottieMemCache;
+    private HashMap<String, CacheImage> imageLoadingByUrl = new HashMap<>();
+    private HashMap<String, CacheImage> imageLoadingByKeys = new HashMap<>();
+    private SparseArray<CacheImage> imageLoadingByTag = new SparseArray<>();
+    private HashMap<String, ThumbGenerateInfo> waitingForQualityThumb = new HashMap<>();
+    private SparseArray<String> waitingForQualityThumbByTag = new SparseArray<>();
+    private LinkedList<HttpImageTask> httpTasks = new LinkedList<>();
+    private LinkedList<ArtworkLoadTask> artworkTasks = new LinkedList<>();
+    private DispatchQueue cacheOutQueue = new DispatchQueue("cacheOutQueue");
+    private DispatchQueue cacheThumbOutQueue = new DispatchQueue("cacheThumbOutQueue");
+    private DispatchQueue thumbGeneratingQueue = new DispatchQueue("thumbGeneratingQueue");
+    private DispatchQueue imageLoadQueue = new DispatchQueue("imageLoadQueue");
+    private HashMap<String, String> replacedBitmaps = new HashMap<>();
+    private ConcurrentHashMap<String, long[]> fileProgresses = new ConcurrentHashMap<>();
+    private HashMap<String, ThumbGenerateTask> thumbGenerateTasks = new HashMap<>();
+    private HashMap<String, Integer> forceLoadingImages = new HashMap<>();
+    private static ThreadLocal<byte[]> bytesLocal = new ThreadLocal<>();
+    private static ThreadLocal<byte[]> bytesThumbLocal = new ThreadLocal<>();
+    private static byte[] header = new byte[12];
+    private static byte[] headerThumb = new byte[12];
     private int currentHttpTasksCount = 0;
     private int currentArtworkTasksCount = 0;
-    private final boolean canForce8888;
+    private boolean canForce8888;
 
-    private final ConcurrentHashMap<String, WebFile> testWebFile = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, WebFile> testWebFile = new ConcurrentHashMap<>();
 
-    private final LinkedList<HttpFileTask> httpFileLoadTasks = new LinkedList<>();
-    private final HashMap<String, HttpFileTask> httpFileLoadTasksByKeys = new HashMap<>();
-    private final HashMap<String, Runnable> retryHttpsTasks = new HashMap<>();
+    private LinkedList<HttpFileTask> httpFileLoadTasks = new LinkedList<>();
+    private HashMap<String, HttpFileTask> httpFileLoadTasksByKeys = new HashMap<>();
+    private HashMap<String, Runnable> retryHttpsTasks = new HashMap<>();
     private int currentHttpFileLoadTasksCount = 0;
 
     private String ignoreRemoval = null;
@@ -140,24 +148,23 @@ public class ImageLoader {
     }
 
     private static class ThumbGenerateInfo {
-
         private TLRPC.Document parentDocument;
         private String filter;
-        private final ArrayList<ImageReceiver> imageReceiverArray = new ArrayList<>();
-        private final ArrayList<Integer> imageReceiverGuidsArray = new ArrayList<>();
+        private ArrayList<ImageReceiver> imageReceiverArray = new ArrayList<>();
+        private ArrayList<Integer> imageReceiverGuidsArray = new ArrayList<>();
         private boolean big;
     }
 
     private class HttpFileTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String url;
-        private final File tempFile;
-        private final String ext;
+        private String url;
+        private File tempFile;
+        private String ext;
         private int fileSize;
         private RandomAccessFile fileOutputStream = null;
         private boolean canRetry = true;
         private long lastProgressTime;
-        private final int currentAccount;
+        private int currentAccount;
 
         public HttpFileTask(String url, File tempFile, String ext, int currentAccount) {
             this.url = url;
@@ -319,11 +326,11 @@ public class ImageLoader {
 
     private class ArtworkLoadTask extends AsyncTask<Void, Void, String> {
 
-        private final CacheImage cacheImage;
+        private CacheImage cacheImage;
         private boolean canRetry = true;
         private HttpURLConnection httpConnection;
 
-        private final boolean small;
+        private boolean small;
 
         public ArtworkLoadTask(CacheImage cacheImage) {
             this.cacheImage = cacheImage;
@@ -371,7 +378,7 @@ public class ImageLoader {
                     }
                 }
                 canRetry = false;
-                JSONObject object = new JSONObject(outbuf.toString());
+                JSONObject object = new JSONObject(new String(outbuf.toByteArray()));
                 JSONArray array = object.getJSONArray("results");
                 if (array.length() > 0) {
                     JSONObject media = array.getJSONObject(0);
@@ -445,7 +452,7 @@ public class ImageLoader {
 
     private class HttpImageTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final CacheImage cacheImage;
+        private CacheImage cacheImage;
         private RandomAccessFile fileOutputStream;
         private int imageSize;
         private long lastProgressTime;
@@ -664,9 +671,9 @@ public class ImageLoader {
 
     private class ThumbGenerateTask implements Runnable {
 
-        private final File originalPath;
-        private final int mediaType;
-        private final ThumbGenerateInfo info;
+        private File originalPath;
+        private int mediaType;
+        private ThumbGenerateInfo info;
 
         public ThumbGenerateTask(int type, File path, ThumbGenerateInfo i) {
             mediaType = type;
@@ -765,10 +772,7 @@ public class ImageLoader {
         if (file == null) {
             return "";
         }
-        try (GZIPInputStream gis = new GZIPInputStream(
-            new FileInputStream(file)); BufferedReader bufferedReader = new BufferedReader(
-            new InputStreamReader(gis,
-                StandardCharsets.UTF_8))) {
+        try (GZIPInputStream gis = new GZIPInputStream(new FileInputStream(file)); BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(gis, "UTF-8"))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 outStr.append(line);
@@ -783,7 +787,7 @@ public class ImageLoader {
         private Thread runningThread;
         private final Object sync = new Object();
 
-        private final CacheImage cacheImage;
+        private CacheImage cacheImage;
         private boolean isCancelled;
 
         public CacheOutTask(CacheImage image) {
@@ -1076,20 +1080,19 @@ public class ImageLoader {
                                     RandomAccessFile f = new RandomAccessFile(cacheFileFinal, "r");
                                     int len = (int) f.length();
                                     byte[] bytes = bytesLocal.get();
-                                    byte[] data =
-                                        bytes != null && bytes.length >= len ? bytes : null;
+                                    byte[] data = bytes != null && bytes.length >= len ? bytes : null;
                                     if (data == null) {
                                         bytes = data = new byte[len];
                                         bytesLocal.set(bytes);
                                     }
                                     f.readFully(data, 0, len);
                                     f.close();
-                                    EncryptedFileInputStream.decryptBytesWithKeyFile(data, 0, len,
-                                        secureDocumentKey);
+                                    EncryptedFileInputStream.decryptBytesWithKeyFile(data, 0, len, secureDocumentKey);
                                     byte[] hash = Utilities.computeSHA256(data, 0, len);
-                                    boolean error =
-                                        secureDocumentHash == null || !Arrays.equals(hash,
-                                            secureDocumentHash);
+                                    boolean error = false;
+                                    if (secureDocumentHash == null || !Arrays.equals(hash, secureDocumentHash)) {
+                                        error = true;
+                                    }
                                     int offset = (data[0] & 0xff);
                                     len -= offset;
                                     if (!error) {
@@ -1154,7 +1157,10 @@ public class ImageLoader {
                         }
                     }
                 } catch (Throwable e) {
-                    boolean sentLog = !(e instanceof FileNotFoundException);
+                    boolean sentLog = true;
+                    if (e instanceof FileNotFoundException) {
+                        sentLog = false;
+                    }
                     FileLog.e(e, sentLog);
                 }
 
@@ -1809,24 +1815,17 @@ public class ImageLoader {
         AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
 
-        FileLoader.delegateFactory = (a) -> {
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             final int currentAccount = a;
-            return new FileLoader.FileLoaderDelegate() {
+            FileLoader.getInstance(a).setDelegate(new FileLoader.FileLoaderDelegate() {
                 @Override
-                public void fileUploadProgressChanged(FileUploadOperation operation,
-                    final String location, long uploadedSize, long totalSize,
-                    final boolean isEncrypted) {
+                public void fileUploadProgressChanged(FileUploadOperation operation, final String location, long uploadedSize, long totalSize, final boolean isEncrypted) {
                     fileProgresses.put(location, new long[]{uploadedSize, totalSize});
                     long currentTime = SystemClock.elapsedRealtime();
-                    if (operation.lastProgressUpdateTime == 0
-                        || operation.lastProgressUpdateTime < currentTime - 100
-                        || uploadedSize == totalSize) {
+                    if (operation.lastProgressUpdateTime == 0 || operation.lastProgressUpdateTime < currentTime - 100 || uploadedSize == totalSize) {
                         operation.lastProgressUpdateTime = currentTime;
 
-                        AndroidUtilities.runOnUIThread(
-                            () -> NotificationCenter.getInstance(currentAccount)
-                                .postNotificationName(NotificationCenter.fileUploadProgressChanged,
-                                    location, uploadedSize, totalSize, isEncrypted));
+                        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.fileUploadProgressChanged, location, uploadedSize, totalSize, isEncrypted));
                     }
                 }
 
@@ -1870,23 +1869,16 @@ public class ImageLoader {
                 }
 
                 @Override
-                public void fileLoadProgressChanged(FileLoadOperation operation,
-                    final String location, long uploadedSize, long totalSize) {
+                public void fileLoadProgressChanged(FileLoadOperation operation, final String location, long uploadedSize, long totalSize) {
                     fileProgresses.put(location, new long[]{uploadedSize, totalSize});
                     long currentTime = SystemClock.elapsedRealtime();
-                    if (operation.lastProgressUpdateTime == 0
-                        || operation.lastProgressUpdateTime < currentTime - 500
-                        || uploadedSize == 0) {
+                    if (operation.lastProgressUpdateTime == 0 || operation.lastProgressUpdateTime < currentTime - 500 || uploadedSize == 0) {
                         operation.lastProgressUpdateTime = currentTime;
-                        AndroidUtilities.runOnUIThread(
-                            () -> NotificationCenter.getInstance(currentAccount)
-                                .postNotificationName(NotificationCenter.fileLoadProgressChanged,
-                                    location, uploadedSize, totalSize));
+                        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.fileLoadProgressChanged, location, uploadedSize, totalSize));
                     }
                 }
-            };
-        };
-
+            });
+        }
         FileLoader.setMediaDirs(mediaDirs);
 
         BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -1945,6 +1937,29 @@ public class ImageLoader {
         testWebFile.remove(url);
     }
 
+    @TargetApi(26)
+    private static void moveDirectory(File source, File target) {
+        if (!source.exists() || (!target.exists() && !target.mkdir())) {
+            return;
+        }
+        try (Stream<Path> files = Files.list(source.toPath())) {
+            files.forEach(path -> {
+                File dest = new File(target, path.getFileName().toString());
+                if (Files.isDirectory(path)) {
+                    moveDirectory(path.toFile(), dest);
+                } else {
+                    try {
+                        Files.move(path, dest.toPath());
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
     public SparseArray<File> createMediaPaths() {
         SparseArray<File> mediaDirs = new SparseArray<>();
         File cachePath = AndroidUtilities.getCacheDir();
@@ -1956,71 +1971,112 @@ public class ImageLoader {
             }
         }
         AndroidUtilities.createEmptyFile(new File(cachePath, ".nomedia"));
+
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("cache path = " + cachePath);
         }
 
         try {
-            telegramPath = EnvironmentUtils.getTelegramPath();
-
-            if (telegramPath.isDirectory()) {
-                try {
-                    File imagePath = new File(telegramPath, "images");
-                    FileUtils.initDir(imagePath);
-                    if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath,
-                        FileLoader.MEDIA_DIR_IMAGE)) {
-                        mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE, imagePath);
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("image path = " + imagePath);
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                File path = Environment.getExternalStorageDirectory();
+                if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
+                    ArrayList<File> dirs = AndroidUtilities.getRootDirs();
+                    if (dirs != null) {
+                        for (int a = 0, N = dirs.size(); a < N; a++) {
+                            File dir = dirs.get(a);
+                            if (dir.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                                path = dir;
+                                break;
+                            }
                         }
                     }
-                } catch (Exception e) {
-                    LogUtilsKt.e(e);
                 }
 
-                try {
-                    File videoPath = new File(telegramPath, "videos");
-                    FileUtils.initDir(videoPath);
-                    if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath,
-                        FileLoader.MEDIA_DIR_VIDEO)) {
-                        mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO, videoPath);
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("video path = " + videoPath);
+                if (Build.VERSION.SDK_INT >= 30) {
+                    File newPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+                    telegramPath = new File(newPath, "Nullgram");
+//                    File oldPath = new File(path, "Telegram");
+//                    long moveStart = System.currentTimeMillis();
+//                    moveDirectory(oldPath, telegramPath);
+//                    long dt = System.currentTimeMillis() - moveStart;
+//                    FileLog.d("move time = " + dt);
+                } else {
+                    telegramPath = new File(path, "Nullgram");
+                }
+                telegramPath.mkdirs();
+
+                if (Build.VERSION.SDK_INT >= 19 && !telegramPath.isDirectory()) {
+                    ArrayList<File> dirs = AndroidUtilities.getDataDirs();
+                    for (int a = 0, N = dirs.size(); a < N; a++) {
+                        File dir = dirs.get(a);
+                        if (dir.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                            path = dir;
+                            telegramPath = new File(path, "Nullgram");
+                            telegramPath.mkdirs();
+                            break;
                         }
                     }
-                } catch (Exception e) {
-                    FileLog.e(e);
                 }
 
-                try {
-                    File audioPath = new File(telegramPath, "audios");
-                    FileUtils.initDir(audioPath);
-                    if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath,
-                        FileLoader.MEDIA_DIR_AUDIO)) {
-                        AndroidUtilities.createEmptyFile(new File(audioPath, ".nomedia"));
-                        mediaDirs.put(FileLoader.MEDIA_DIR_AUDIO, audioPath);
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("audio path = " + audioPath);
+                if (telegramPath.isDirectory()) {
+                    try {
+                        File imagePath = new File(telegramPath, "Nullgram Images");
+                        imagePath.mkdir();
+                        if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
+                            mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE, imagePath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("image path = " + imagePath);
+                            }
                         }
+                    } catch (Exception e) {
+                        FileLog.e(e);
                     }
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
 
-                try {
-                    File documentPath = new File(telegramPath, "documents");
-                    FileUtils.initDir(documentPath);
-                    if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath,
-                        FileLoader.MEDIA_DIR_DOCUMENT)) {
-                        AndroidUtilities.createEmptyFile(new File(documentPath, ".nomedia"));
-                        mediaDirs.put(FileLoader.MEDIA_DIR_DOCUMENT, documentPath);
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("documents path = " + documentPath);
+                    try {
+                        File videoPath = new File(telegramPath, "Nullgram Video");
+                        videoPath.mkdir();
+                        if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
+                            mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO, videoPath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("video path = " + videoPath);
+                            }
                         }
+                    } catch (Exception e) {
+                        FileLog.e(e);
                     }
-                } catch (Exception e) {
-                    FileLog.e(e);
+
+                    try {
+                        File audioPath = new File(telegramPath, "Nullgram Audio");
+                        audioPath.mkdir();
+                        if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath, FileLoader.MEDIA_DIR_AUDIO)) {
+                            AndroidUtilities.createEmptyFile(new File(audioPath, ".nomedia"));
+                            mediaDirs.put(FileLoader.MEDIA_DIR_AUDIO, audioPath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("audio path = " + audioPath);
+                            }
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+
+                    try {
+                        File documentPath = new File(telegramPath, "Nullgram Documents");
+                        documentPath.mkdir();
+                        if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath, FileLoader.MEDIA_DIR_DOCUMENT)) {
+                            AndroidUtilities.createEmptyFile(new File(documentPath, ".nomedia"));
+                            mediaDirs.put(FileLoader.MEDIA_DIR_DOCUMENT, documentPath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("documents path = " + documentPath);
+                            }
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+            } else {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("this Android can't rename files");
                 }
             }
             SharedConfig.checkSaveToGalleryFiles();
@@ -2537,23 +2593,14 @@ public class ImageLoader {
                         } else if (imageLocation.document != null) {
                             TLRPC.Document document = imageLocation.document;
                             if (document instanceof TLRPC.TL_documentEncrypted) {
-                                cacheFile = new File(
-                                    FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), url);
-                            } else if (MessageObject.isVideoDocument(document)
-                                || MessageObject.isGifDocument(document)) {
-                                cacheFile = new File(
-                                    FileLoader.getDirectory(FileLoader.MEDIA_DIR_VIDEO), url);
-                            } else if (MessageObject.isStickerDocument(document)) {
-                                cacheFile = new File(
-                                    FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), url);
+                                cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), url);
+                            } else if (MessageObject.isVideoDocument(document)) {
+                                cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_VIDEO), url);
                             } else {
-                                cacheFile = new File(
-                                    FileLoader.getDirectory(FileLoader.MEDIA_DIR_DOCUMENT), url);
+                                cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_DOCUMENT), url);
                             }
                             if (AUTOPLAY_FILTER.equals(filter) && !cacheFile.exists()) {
-                                cacheFile = new File(
-                                    FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE),
-                                    document.dc_id + "_" + document.id + ".temp");
+                                cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), document.dc_id + "_" + document.id + ".temp");
                             }
                             if (document instanceof DocumentObject.ThemeDocument) {
                                 DocumentObject.ThemeDocument themeDocument = (DocumentObject.ThemeDocument) document;
