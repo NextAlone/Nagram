@@ -19,6 +19,9 @@ function build_one {
 	CXX=${CC_PREFIX}clang++
 	CROSS_PREFIX=${PREBUILT}/bin/${ARCH_NAME}-linux-${BIN_MIDDLE}-
 
+	INCLUDES=" -I../libvpx/${PREFIX}/include"
+	LIBS=" -L../libvpx/${PREFIX}/lib"
+
 	echo "Cleaning..."
 	rm -f config.h
 	make clean || true
@@ -45,9 +48,9 @@ function build_one {
 	--enable-x86asm \
 	--cross-prefix=$CROSS_PREFIX \
 	--sysroot="${LLVM_PREFIX}/sysroot" \
-	--extra-cflags="-Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-cflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
 	--extra-cxxflags="-Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-ldflags="-Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
+	--extra-ldflags="${LIBS} -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
 	\
 	--enable-version3 \
 	--enable-gpl \
@@ -72,6 +75,7 @@ function build_one {
 	--disable-postproc \
 	--disable-avdevice \
 	\
+	--enable-libvpx \
 	--enable-runtime-cpudetect \
 	--enable-pthreads \
 	--enable-avresample \
@@ -83,9 +87,12 @@ function build_one {
 	--enable-decoder=mjpeg \
 	--enable-decoder=gif \
 	--enable-decoder=alac \
+	--enable-decoder=libvpx_vp8 \
+	--enable-decoder=libvpx_vp9 \
 	--enable-demuxer=mov \
 	--enable-demuxer=gif \
 	--enable-demuxer=ogg \
+	--enable-demuxer=matroska \
 	--enable-hwaccels \
 	$ADDITIONAL_CONFIGURE_FLAG
 

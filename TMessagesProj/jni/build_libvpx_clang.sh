@@ -36,32 +36,33 @@ function build_one {
 
 
 	./configure \
-	--extra-cflags="-isystem ${LLVM_PREFIX}/sysroot/usr/include/${ARCH_NAME}-linux-${BIN_MIDDLE} -isystem ${LLVM_PREFIX}/sysroot/usr/include" \
+	--extra-cflags="-isystem ${LLVM_PREFIX}/sysroot/usr/include/${ARCH_NAME}-linux-${BIN_MIDDLE}" \
 	--libc="${LLVM_PREFIX}/sysroot" \
 	--prefix=${PREFIX} \
 	--target=${TARGET} \
-	--enable-runtime-cpu-detect \
-	--as=yasm \
-	--enable-static \
-	--enable-pic \
-	--disable-docs \
-	--disable-libyuv \
-	--disable-examples \
-	--disable-tools \
-	--disable-debug \
-	--disable-unit-tests \
-	--disable-install-docs \
-	--enable-realtime-only \
-	--enable-vp9-postproc \
-	--enable-vp9-highbitdepth \
-	--disable-webm-io \
-	--enable-postproc \
-	--enable-multi-res-encoding \
-	--enable-temporal-denoising \
-	--enable-vp9-temporal-denoising \
-	--disable-avx512
+	${CPU_DETECT} \
+	--as=auto \
+    --disable-docs \
+    --enable-pic \
+    --enable-libyuv \
+    --enable-static \
+    --enable-small \
+    --enable-optimizations \
+    --enable-better-hw-compatibility \
+    --enable-realtime-only \
+    --enable-vp8 \
+    --enable-vp9 \
+    --disable-webm-io \
+    --disable-examples \
+    --disable-tools \
+    --disable-debug \
+    --disable-unit-tests || exit 1
 
 	make -j$COMPILATION_PROC_COUNT install
+
+	# For voip/webrtc includes.
+	p=`pwd`
+	cd ${PREFIX}/include && ln -s vpx libvpx && cd $p
 }
 
 function cutX86 {
@@ -479,6 +480,7 @@ cd libvpx
 LLVM_PREFIX="${NDK}/toolchains/llvm/prebuilt/linux-x86_64"
 LLVM_BIN="${LLVM_PREFIX}/bin"
 VERSION="4.9"
+PREFIX_FIRST="./build"
 
 function build {
 	for arg in "$@"; do
@@ -494,10 +496,43 @@ function build {
 				CPU=x86_64
 				OPTIMIZE_CFLAGS="-O3 -march=x86-64 -mtune=intel -msse4.2 -mpopcnt -m64 -fPIC"
 				TARGET="x86_64-android-gcc"
-				PREFIX=./build/$CPU
+				PREFIX="${PREFIX_FIRST}/${CPU}"
+				CPU_DETECT="--enable-runtime-cpu-detect"
 				build_one
 				cutX8664
 				cp $PREFIX/lib/libvpx.a ../third_party/libvpx/source/libvpx/vpx_dsp/x86/libvpx_x86_64_yasm.a
+			;;
+			arm64)
+				ANDROID_API=21
+
+				ARCH=arm64
+				ARCH_NAME=aarch64
+				PREBUILT_ARCH=aarch64
+				PREBUILT_MIDDLE="-linux-android"
+				CLANG_PREFIX=aarch64
+				BIN_MIDDLE=android
+				CPU=arm64-v8a
+				OPTIMIZE_CFLAGS="-O3 -march=armv8-a"
+				PREFIX="${PREFIX_FIRST}/${CPU}"
+				TARGET="arm64-android-gcc"
+				CPU_DETECT="--disable-runtime-cpu-detect"
+				build_one
+			;;
+			arm)
+				ANDROID_API=16
+
+				ARCH=arm
+				ARCH_NAME=arm
+				PREBUILT_ARCH=arm
+				PREBUILT_MIDDLE="-linux-androideabi"
+				CLANG_PREFIX=armv7a
+				BIN_MIDDLE=androideabi
+				CPU=armv7-a
+				OPTIMIZE_CFLAGS="-Os -march=armv7-a -mfloat-abi=softfp -mfpu=neon -mtune=cortex-a8 -mthumb -D__thumb__"
+				PREFIX="${PREFIX_FIRST}/armeabi-v7a"
+				TARGET="armv7-android-gcc --enable-neon --disable-neon-asm"
+				CPU_DETECT="--disable-runtime-cpu-detect"
+				build_one
 			;;
 			x86)
       			# fails with but should be 16?
@@ -512,7 +547,8 @@ function build {
 				CPU=i686
 				OPTIMIZE_CFLAGS="-O3 -march=i686 -mtune=intel -msse3 -mfpmath=sse -m32 -fPIC"
 				TARGET="x86-android-gcc"
-				PREFIX=./build/$CPU
+				PREFIX="${PREFIX_FIRST}/${CPU}"
+				CPU_DETECT="--enable-runtime-cpu-detect"
 				build_one
 				cutX86
 				cp $PREFIX/lib/libvpx.a ../third_party/libvpx/source/libvpx/vpx_dsp/x86/libvpx_x86_yasm.a
