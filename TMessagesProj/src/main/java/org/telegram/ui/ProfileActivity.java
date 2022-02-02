@@ -7080,8 +7080,7 @@ public class ProfileActivity extends BaseFragment implements
                 idTextView.setText("ID: " + id + ", DC: " + user.photo.dc_id);
                 idTextView.setOnClickListener(v -> showIdHint(user.photo.dc_id));
             } else {
-                idTextView.setText("ID: " + id+ ", DC: " + user.photo.dc_id);
-                idTextView.setOnClickListener(v -> showIdHint(user.photo.dc_id));
+                idTextView.setText("ID: " + id);
             }
         } else if (chatId != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
