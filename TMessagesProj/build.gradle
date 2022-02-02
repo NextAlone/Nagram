@@ -52,6 +52,8 @@ dependencies {
 
 ext.abiCodes = ['armeabi-v7a':1, 'arm64-v8a':5, x86:2, x86_64:6, 'universal':0]
 
+def officialVersionName = "8.5.0"
+
 android {
     compileSdkVersion 31
     buildToolsVersion '32.0.0'
@@ -127,7 +129,7 @@ android {
     }
     /* DO NOT MODIFY THIS LINE
     OTHERWISE YOU WILL GET ANNOYED MERGE CONFLICT
-    defaultConfig.versionCode = 2538
+    defaultConfig.versionCode = 2547
     */
 
     applicationVariants.all { variant ->
@@ -141,14 +143,13 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        /*
-        versionName "8.4.4"
-        */
+
         if (isPreview){
-            versionName "v8.4.4" + "-preview-" + (Common.getGitHeadRefsSuffix(rootProject))
+            versionName "v" + officialVersionName + "-preview-" + (Common.getGitHeadRefsSuffix(rootProject))
         } else {
-            versionName "v8.4.4" + (Common.getGitHeadRefsSuffix(rootProject))
+            versionName "v" + officialVersionName + (Common.getGitHeadRefsSuffix(rootProject))
         }
+
 
         versionCode =  Common.getTimestamp()
 

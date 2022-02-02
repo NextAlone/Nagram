@@ -3527,16 +3527,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             private int lastGradientWidth;
 
             @Override
-            protected void onDraw(Canvas canvas) {
-                if (updateGradient == null) {
-                    return;
+            public void draw(Canvas canvas) {
+                if (updateGradient != null) {
+                    paint.setColor(0xffffffff);
+                    paint.setShader(updateGradient);
+                    updateGradient.setLocalMatrix(matrix);
+                    canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+                    updateLayoutIcon.setBackgroundGradientDrawable(updateGradient);
+                    updateLayoutIcon.draw(canvas);
                 }
-                paint.setColor(0xffffffff);
-                paint.setShader(updateGradient);
-                updateGradient.setLocalMatrix(matrix);
-                canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
-                updateLayoutIcon.setBackgroundGradientDrawable(updateGradient);
-                updateLayoutIcon.draw(canvas);
+                super.draw(canvas);
             }
 
             @Override
@@ -3553,7 +3553,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         updateLayout.setVisibility(View.INVISIBLE);
         updateLayout.setTranslationY(AndroidUtilities.dp(44));
         if (Build.VERSION.SDK_INT >= 21) {
-            updateLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor(Theme.key_listSelector), null));
+            updateLayout.setBackground(Theme.getSelectorDrawable(0x40ffffff, false));
         }
         sideMenuContainer.addView(updateLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44, Gravity.LEFT | Gravity.BOTTOM));
         updateLayout.setOnClickListener(v -> {
@@ -4133,6 +4133,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else if (requestCode == 2) {
             if (granted) {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted);
+            } else {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionDenied);
             }
         }
         if (actionBarLayout.fragmentsStack.size() != 0) {

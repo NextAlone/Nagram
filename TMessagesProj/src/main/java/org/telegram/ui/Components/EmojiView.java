@@ -3346,7 +3346,7 @@ public class EmojiView extends FrameLayout implements
                 TLRPC.TL_messages_stickerSet stickerSet = stickerSets.get(a);
                 TLRPC.Document document = stickerSet.documents.get(0);
                 TLObject thumb = FileLoader.getClosestPhotoSizeWithSize(stickerSet.set.thumbs, 90);
-                if (thumb == null) {
+                if (thumb == null ||  stickerSet.set.gifs) {
                     thumb = document;
                 }
                 stickersTab.addStickerTab(thumb, document, stickerSet).setContentDescription(stickerSet.set.title + ", " + LocaleController.getString("AccDescrStickerSet", R.string.AccDescrStickerSet));
