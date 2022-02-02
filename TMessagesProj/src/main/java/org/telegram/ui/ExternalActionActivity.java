@@ -47,6 +47,8 @@ import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 import java.util.ArrayList;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class ExternalActionActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
 
@@ -77,7 +79,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                if(!ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat))
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
                 FileLog.e(e);
             }

@@ -76,6 +76,9 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class TranslateAlert extends Dialog {
     private FrameLayout bulletinContainer;
     private FrameLayout contentView;
@@ -261,7 +264,7 @@ public class TranslateAlert extends Dialog {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
-        if (noforwards) {
+        if (noforwards && !ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat)) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 

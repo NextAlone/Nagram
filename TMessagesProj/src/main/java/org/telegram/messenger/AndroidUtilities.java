@@ -3663,6 +3663,9 @@ public class AndroidUtilities {
         };
     }
     private static void updateFlagSecure(Window window) {
+        if (ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat)){
+            return;
+        }
         if (Build.VERSION.SDK_INT >= 23) {
             if (window == null) {
                 return;

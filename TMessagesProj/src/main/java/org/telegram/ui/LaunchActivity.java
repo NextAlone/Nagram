@@ -304,7 +304,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                if(!ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat))
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -4478,7 +4479,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else if (id == NotificationCenter.didSetPasscode) {
             if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
                 try {
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                    if(!ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat))
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
