@@ -393,19 +393,19 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 cell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 int icon;
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == (MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS)) {
-                    icon = R.drawable.baseline_person_24;
+                    icon = R.drawable.menu_private;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0 && (filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) {
                     icon = R.drawable.menu_unread;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_CHANNELS) {
-                    icon = R.drawable.baseline_notifications_24;
+                    icon = R.drawable.menu_broadcast;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_GROUPS) {
-                    icon = R.drawable.baseline_group_24;
+                    icon = R.drawable.menu_groups;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_CONTACTS) {
-                    icon = R.drawable.baseline_contact_phone_24;
+                    icon = R.drawable.menu_contacts;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS) {
-                    icon = R.drawable.deproko_baseline_bots_24;
+                    icon = R.drawable.menu_bots;
                 } else {
-                    icon = R.drawable.baseline_folder_24;
+                    icon = R.drawable.menu_folders;
                 }
                 cell.setTextAndIcon(filter.name, icon);
             } else {

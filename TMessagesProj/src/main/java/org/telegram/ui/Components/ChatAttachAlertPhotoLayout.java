@@ -531,7 +531,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
         parentAlert.selectedMenuItem.addSubItem(group, LocaleController.getString("SendWithoutGrouping", R.string.SendWithoutGrouping));
         parentAlert.selectedMenuItem.addSubItem(compress, LocaleController.getString("SendWithoutCompression", R.string.SendWithoutCompression));
-        parentAlert.selectedMenuItem.addSubItem(open_in, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+        parentAlert.selectedMenuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
         gridView = new RecyclerListView(context, resourcesProvider) {
             @Override

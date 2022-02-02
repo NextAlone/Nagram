@@ -200,7 +200,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
         ActionBarMenuItem menuItem = menu.addItem(0, R.drawable.ic_ab_other);
         menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-        menuItem.addSubItem(1, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+        menuItem.addSubItem(1, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
         sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
@@ -489,12 +489,12 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                     } else if (num == 1) {
                         if (UserObject.isUserSelf(user)) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
                         } else {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
                         }
                     } else if (num == 2) {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                     }
                     itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 

@@ -459,7 +459,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		ActionBarMenu menu = actionBar.createMenu();
 		otherItem = menu.addItem(10, R.drawable.ic_ab_other);
 		otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-		otherItem.addSubItem(delete_all_calls, R.drawable.baseline_delete_sweep_24, LocaleController.getString("DeleteAllCalls", R.string.DeleteAllCalls));
+		otherItem.addSubItem(delete_all_calls, R.drawable.msg_delete, LocaleController.getString("DeleteAllCalls", R.string.DeleteAllCalls));
 
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -695,8 +695,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         actionMode.addView(selectedDialogsCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
         selectedDialogsCountTextView.setOnTouchListener((v, event) -> true);
 
-        actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
-    }
+		actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+	}
 
 	private boolean addOrRemoveSelectedDialog(ArrayList<TLRPC.Message> messages, CallCell cell) {
 		if (messages.isEmpty()) {

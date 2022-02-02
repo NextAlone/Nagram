@@ -1804,7 +1804,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return true;
                 }
                 items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
-                icons.add(R.drawable.baseline_stars_24);
+                icons.add(R.drawable.actions_addadmin);
                 actions.add(0);
             }
             boolean hasRemove = false;
@@ -1815,14 +1815,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 if (!isChannel) {
                     if (ChatObject.isChannel(currentChat) && !currentChat.gigagroup) {
                         items.add(LocaleController.getString("ChangePermissions", R.string.ChangePermissions));
-                        icons.add(R.drawable.baseline_block_24);
+                        icons.add(R.drawable.actions_permissions);
                         actions.add(1);
                     }
                     items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
                 } else {
                     items.add(LocaleController.getString("ChannelRemoveUser", R.string.ChannelRemoveUser));
                 }
-                icons.add(R.drawable.baseline_remove_circle_24);
+                icons.add(R.drawable.actions_remove_user);
                 actions.add(2);
                 hasRemove = true;
             }
@@ -1867,8 +1867,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         LocaleController.getString("ChannelEditPermissions", R.string.ChannelEditPermissions),
                         LocaleController.getString("ChannelDeleteFromList", R.string.ChannelDeleteFromList)};
                 icons = new int[]{
-                        R.drawable.baseline_block_24,
-                        R.drawable.baseline_delete_24};
+                        R.drawable.actions_permissions,
+                        R.drawable.chats_delete};
             } else if (type == TYPE_BANNED && ChatObject.canBlockUsers(currentChat)) {
                 if (resultOnly) {
                     return true;
@@ -1877,8 +1877,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         ChatObject.canAddUsers(currentChat) && peerId > 0 ? (isChannel ? LocaleController.getString("ChannelAddToChannel", R.string.ChannelAddToChannel) : LocaleController.getString("ChannelAddToGroup", R.string.ChannelAddToGroup)) : null,
                         LocaleController.getString("ChannelDeleteFromList", R.string.ChannelDeleteFromList)};
                 icons = new int[]{
-                        R.drawable.baseline_person_add_24,
-                        R.drawable.baseline_delete_24};
+                        R.drawable.actions_addmember2,
+                        R.drawable.chats_delete};
             } else if (type == TYPE_ADMIN && ChatObject.canAddAdmins(currentChat) && canEdit) {
                 if (resultOnly) {
                     return true;
@@ -1888,13 +1888,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             LocaleController.getString("EditAdminRights", R.string.EditAdminRights),
                             LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
                     icons = new int[]{
-                            R.drawable.baseline_stars_24,
-                            R.drawable.baseline_remove_circle_24};
+                            R.drawable.actions_addadmin,
+                            R.drawable.actions_remove_user};
                 } else {
                     items = new CharSequence[]{
                             LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
                     icons = new int[]{
-                            R.drawable.baseline_remove_circle_24};
+                            R.drawable.actions_remove_user};
                 }
             } else {
                 items = null;
@@ -3322,24 +3322,24 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     if (position == addNewRow) {
                         if (type == TYPE_KICKED) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                            actionCell.setText(LocaleController.getString("ChannelAddException", R.string.ChannelAddException), null, R.drawable.baseline_person_add_24, participantsStartRow != -1);
+                            actionCell.setText(LocaleController.getString("ChannelAddException", R.string.ChannelAddException), null, R.drawable.actions_addmember2, participantsStartRow != -1);
                         } else if (type == TYPE_BANNED) {
-                            actionCell.setText(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser), null, R.drawable.baseline_remove_circle_24, false);
+                            actionCell.setText(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser), null, R.drawable.actions_removed, false);
                         } else if (type == TYPE_ADMIN) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                             boolean showDivider = !(loadingUsers && !firstLoaded);
-                            actionCell.setText(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin), null, R.drawable.baseline_stars_24, showDivider);
+                            actionCell.setText(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin), null, R.drawable.add_admin, showDivider);
                         } else if (type == TYPE_USERS) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                             boolean showDivider = addNew2Row != -1 || (!(loadingUsers && !firstLoaded) && membersHeaderRow == -1 && !participants.isEmpty());
                             if (isChannel) {
-                                actionCell.setText(LocaleController.getString("AddSubscriber", R.string.AddSubscriber), null, R.drawable.baseline_person_add_24, showDivider);
+                                actionCell.setText(LocaleController.getString("AddSubscriber", R.string.AddSubscriber), null, R.drawable.actions_addmember2, showDivider);
                             } else {
-                                actionCell.setText(LocaleController.getString("AddMember", R.string.AddMember), null, R.drawable.baseline_person_add_24, showDivider);
+                                actionCell.setText(LocaleController.getString("AddMember", R.string.AddMember), null, R.drawable.actions_addmember2, showDivider);
                             }
                         }
                     } else if (position == recentActionsRow) {
-                        actionCell.setText(LocaleController.getString("EventLog", R.string.EventLog), null, R.drawable.baseline_content_copy_24, false);
+                        actionCell.setText(LocaleController.getString("EventLog", R.string.EventLog), null, R.drawable.group_log, false);
                     } else if (position == addNew2Row) {
                         actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                         boolean showDivider = !(loadingUsers && !firstLoaded) && membersHeaderRow == -1 && !participants.isEmpty();

@@ -186,7 +186,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
             BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-            builder.addItem(LocaleController.getString("BotShare",R.string.BotShare),R.drawable.baseline_send_24,false,(__) -> {
+            builder.addItem(LocaleController.getString("BotShare",R.string.BotShare),R.drawable.msg_share,false,(__) -> {
 
                 ShareUtil.shareText(getParentActivity(),"https://t.me/setlanguage/" + localeInfo.shortName.replace('_','-'));
 
@@ -196,11 +196,11 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
             if (!localeInfo.isBuiltIn()) {
 
-                builder.addItem(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle), R.drawable.baseline_delete_24, true, (__) -> {
+                builder.addItem(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle), R.drawable.msg_delete, true, (__) -> {
 
                     AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle),
-                            R.drawable.baseline_delete_24,
+                            R.drawable.msg_delete,
                             LocaleController.getString("Delete", R.string.Delete), true, () -> {
 
                                 if (LocaleController.getInstance().deleteLanguage(localeInfo, currentAccount)) {

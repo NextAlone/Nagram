@@ -7037,7 +7037,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 options.add(8);
             } else {
                 items.add(LocaleController.getString("VoipGroupOpenProfile", R.string.VoipGroupOpenProfile));
-                icons.add(R.drawable.baseline_person_24);
+                icons.add(R.drawable.msg_openprofile);
                 options.add(6);
             }
             if (!isAdmin && ChatObject.canBlockUsers(currentChat)) {
@@ -7062,7 +7062,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 options.add(8);
             } else {
                 items.add(LocaleController.getString("VoipGroupOpenChat", R.string.VoipGroupOpenChat));
-                icons.add(R.drawable.baseline_person_24);
+                icons.add(R.drawable.msg_msgbubble3);
                 options.add(6);
             }
         }
