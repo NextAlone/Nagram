@@ -265,16 +265,16 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (!UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             return;
         }
-        int contactsIcon = R.drawable.baseline_perm_contact_calendar_24;
-        int savedIcon = R.drawable.baseline_bookmark_24;
-        int settingsIcon = R.drawable.baseline_settings_24;
-        int callsIcon = R.drawable.baseline_call_24;
+        int contactsIcon = R.drawable.menu_contacts;
+        int savedIcon = R.drawable.menu_saved;
+        int settingsIcon = R.drawable.menu_settings;
+        int callsIcon = R.drawable.menu_calls;
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
         if (NekoConfig.useProxyItem.Bool() && (!NekoConfig.hideProxyByDefault.Bool() || SharedConfig.proxyEnabled)) {
-            items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.baseline_security_24, () -> SharedConfig.proxyEnabled, () -> {
+            items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.menu_policy, () -> SharedConfig.proxyEnabled, () -> {
                 SharedConfig.setProxyEnable(!SharedConfig.proxyEnabled);
                 return true;
             }));
@@ -285,7 +285,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             if (NekoXConfig.keepOnlineStatus) {
                 message += " (" + LocaleController.getString("Locked", R.string.Locked) + ")";
             }
-            items.add(new CheckItem(14, message, R.drawable.baseline_visibility_24, () -> online, () -> {
+            items.add(new CheckItem(14, message, R.drawable.msg_views, () -> online, () -> {
                 MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
                 controller.updateStatus(!online);
                 return true;

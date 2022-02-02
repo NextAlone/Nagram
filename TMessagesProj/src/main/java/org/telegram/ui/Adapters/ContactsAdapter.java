@@ -441,9 +441,9 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 if (section == 0) {
                     if (needPhonebook) {
                         if (position == 0) {
-                            textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.baseline_person_add_24, false);
+                            textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite, false);
                         } else if (position == 1) {
-                            textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", R.string.AddPeopleNearby), R.drawable.baseline_location_on_24, false);
+                            textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", R.string.AddPeopleNearby), R.drawable.menu_location, false);
                         }
                     } else if (isAdmin) {
                         if (isChannel) {
@@ -453,11 +453,11 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                         }
                     } else {
                         if (position == 0) {
-                            textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.baseline_group_24, false);
+                            textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_groups, false);
                         } else if (position == 1) {
-                            textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.baseline_security_24, false);
+                            textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret, false);
                         } else if (position == 2) {
-                            textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.baseline_bullhorn_24, false);
+                            textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast, false);
                         }
                     }
                 } else {

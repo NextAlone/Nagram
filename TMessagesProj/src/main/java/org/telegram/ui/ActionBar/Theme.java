@@ -8155,7 +8155,7 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            avatarDrawables[0] = resources.getDrawable(R.drawable.baseline_bookmark_24);
+            avatarDrawables[0] = resources.getDrawable(R.drawable.chats_saved);
             avatarDrawables[1] = resources.getDrawable(R.drawable.ghost);
             avatarDrawables[2] = resources.getDrawable(R.drawable.folders_private);
             avatarDrawables[3] = resources.getDrawable(R.drawable.folders_requests);
@@ -8629,7 +8629,7 @@ public class Theme {
                 chat_pollCheckDrawable[a] = resources.getDrawable(R.drawable.poll_right).mutate();
                 chat_pollCrossDrawable[a] = resources.getDrawable(R.drawable.poll_wrong).mutate();
                 chat_pollHintDrawable[a] = resources.getDrawable(R.drawable.smiles_panel_objects).mutate();
-                chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.baseline_help_24).mutate();
+                chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
             }
 
             calllog_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
@@ -8751,8 +8751,8 @@ public class Theme {
             chat_photoStatesDrawables[12][0] = resources.getDrawable(R.drawable.doc_big).mutate();
             chat_photoStatesDrawables[12][1] = resources.getDrawable(R.drawable.doc_big).mutate();
 
-            chat_contactDrawable[0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.baseline_person_24);
-            chat_contactDrawable[1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.baseline_person_24);
+            chat_contactDrawable[0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_contact);
+            chat_contactDrawable[1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_contact);
 
             chat_locationDrawable[0] = resources.getDrawable(R.drawable.msg_location).mutate();
             chat_locationDrawable[1] = resources.getDrawable(R.drawable.msg_location).mutate();

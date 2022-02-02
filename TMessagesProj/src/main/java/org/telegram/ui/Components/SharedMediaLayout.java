@@ -1487,7 +1487,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             gotoItem.setOnClickListener(v -> onActionBarItemClick(v, gotochat));
 
             forwardNoQuoteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardNoQuoteItem.setIcon(R.drawable.baseline_fast_forward_24);
+            forwardNoQuoteItem.setIcon(R.drawable.msg_forward_noquote);
             forwardNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
             forwardNoQuoteItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardNoQuoteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -1495,7 +1495,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             forwardNoQuoteItem.setOnClickListener(v -> onActionBarItemClick(v, forward_noquote));
 
             forwardItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardItem.setIcon(R.drawable.baseline_forward_24);
+            forwardItem.setIcon(R.drawable.msg_forward);
             forwardItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
             forwardItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -1505,7 +1505,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             updateForwardItem();
         }
         deleteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-        deleteItem.setIcon(R.drawable.baseline_delete_24);
+        deleteItem.setIcon(R.drawable.msg_delete);
         deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
         deleteItem.setDuplicateParentStateEnabled(false);
         actionModeLayout.addView(deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -4788,7 +4788,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 builder.addTitle(urlFinal);
                 builder.addItems(
                         new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                        new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
+                        new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.wallet_qr}, (which, text, __) -> {
                             if (which == 0 || which == 2) {
                                 if (which == 0) {
                                     openUrl(urlFinal);

@@ -557,7 +557,7 @@ public class CacheControlActivity extends BaseFragment {
     private void resetData() {
         BottomBuilder builder = new BottomBuilder(getParentActivity());
         builder.addTitle(LocaleController.getString("StorageResetInfo", R.string.StorageResetInfo));
-        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.baseline_delete_sweep_24, true, (i) -> {
+        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.msg_clear, true, (i) -> {
             if (getParentActivity() == null) {
                 return Unit.INSTANCE;
             }
@@ -590,7 +590,7 @@ public class CacheControlActivity extends BaseFragment {
     private void clearDatabase() {
         BottomBuilder builder = new BottomBuilder(getParentActivity());
         builder.addTitle(LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
-        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.baseline_delete_sweep_24, true, (i) -> {
+        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.msg_clear, true, (i) -> {
             if (getParentActivity() == null) {
                 return Unit.INSTANCE;
             }

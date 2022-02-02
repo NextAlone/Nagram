@@ -175,17 +175,17 @@ public class ContentPreviewViewer {
                 if (delegate != null) {
                     if (delegate.needSend() && !delegate.isInScheduleMode()) {
                         items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
-                        icons.add(R.drawable.deproko_baseline_send_24);
+                        icons.add(R.drawable.outline_send);
                         actions.add(0);
                     }
                     if (delegate.needSend() && !delegate.isInScheduleMode()) {
                         items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
-                        icons.add(R.drawable.baseline_notifications_off_24);
+                        icons.add(R.drawable.input_notify_off);
                         actions.add(100);
                     }
                     if (delegate.canSchedule()) {
                         items.add(LocaleController.getString("Schedule", R.string.Schedule));
-                        icons.add(R.drawable.baseline_timer_24);
+                        icons.add(R.drawable.msg_timer);
                         actions.add(3);
                     }
                     if (currentStickerSet != null && delegate.needOpen()) {
@@ -195,11 +195,11 @@ public class ContentPreviewViewer {
                     }
                     if (delegate.needRemove()) {
                         items.add(LocaleController.getString("ImportStickersRemoveMenu", R.string.ImportStickersRemoveMenu));
-                        icons.add(R.drawable.baseline_delete_24);
+                        icons.add(R.drawable.msg_delete);
                         actions.add(5);
                     }
                     items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
-                    icons.add(R.drawable.baseline_image_24);
+                    icons.add(R.drawable.msg_gallery);
                     actions.add(nkbtn_stickerdl);
                 }
                 if (!MessageObject.isMaskDocument(currentDocument) && (inFavs || MediaDataController.getInstance(currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(currentDocument))) {
@@ -209,7 +209,7 @@ public class ContentPreviewViewer {
                 }
                 if (isRecentSticker) {
                     items.add(LocaleController.getString("DeleteFromRecent", R.string.DeleteFromRecent));
-                    icons.add(R.drawable.baseline_delete_24);
+                    icons.add(R.drawable.msg_delete);
                     actions.add(4);
                 }
                 if (items.isEmpty()) {
@@ -289,17 +289,17 @@ public class ContentPreviewViewer {
 
                 if (delegate.needSend() && !delegate.isInScheduleMode()) {
                     items.add(LocaleController.getString("SendGifPreview", R.string.SendGifPreview));
-                    icons.add(R.drawable.deproko_baseline_send_24);
+                    icons.add(R.drawable.outline_send);
                     actions.add(0);
                 }
                 if (delegate.needSend() && !delegate.isInScheduleMode()) {
                     items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
-                    icons.add(R.drawable.baseline_notifications_off_24);
+                    icons.add(R.drawable.input_notify_off);
                     actions.add(100);
                 }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
-                    icons.add(R.drawable.baseline_timer_24);
+                    icons.add(R.drawable.msg_timer);
                     actions.add(3);
                 }
 
@@ -307,11 +307,11 @@ public class ContentPreviewViewer {
                 if (currentDocument != null) {
                     if (canDelete = MediaDataController.getInstance(currentAccount).hasRecentGif(currentDocument)) {
                         items.add(LocaleController.formatString("Delete", R.string.Delete));
-                        icons.add(R.drawable.baseline_delete_24);
+                        icons.add(R.drawable.msg_delete);
                         actions.add(1);
                     } else {
                         items.add(LocaleController.formatString("SaveToGIFs", R.string.SaveToGIFs));
-                        icons.add(R.drawable.deproko_baseline_gif_24);
+                        icons.add(R.drawable.outline_add_gif);
                         actions.add(2);
                     }
                 } else {

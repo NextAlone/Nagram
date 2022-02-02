@@ -436,7 +436,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     if (themeInfo.info.document != null) {
                         themeInfo.themeLoaded = false;
                         placeholderAlpha = 1.0f;
-                        loadingDrawable = getResources().getDrawable(R.drawable.baseline_palette_24).mutate();
+                        loadingDrawable = getResources().getDrawable(R.drawable.msg_theme).mutate();
                         Theme.setDrawableColor(loadingDrawable, loadingColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText7));
                         if (!fileExists) {
                             String name = FileLoader.getAttachFileName(themeInfo.info.document);
