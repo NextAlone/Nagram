@@ -1,5 +1,5 @@
 include ':TMessagesProj'
 include ':openpgp-api'
-include ':ss-rust'
-include ':ssr-libev'
+//include ':ss-rust'
+//include ':ssr-libev'
 //include ':relaybaton'
