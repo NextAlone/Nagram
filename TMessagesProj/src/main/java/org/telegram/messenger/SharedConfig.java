@@ -78,7 +78,6 @@ public class SharedConfig {
     public static boolean stickersReorderingHintUsed;
     public static boolean disableVoiceAudioEffects;
     private static int lastLocalId = -210000;
-    public static boolean drawSnowInChat;
 
     public static String storageCacheDir;
 
@@ -383,7 +382,6 @@ public class SharedConfig {
             mediaColumnsCount = preferences.getInt("mediaColumnsCount", 3);
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
-            drawSnowInChat = preferences.getBoolean("drawSnowInChat", BuildVars.DEBUG_VERSION);
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
@@ -714,14 +712,6 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableVoiceAudioEffects", disableVoiceAudioEffects);
-        editor.commit();
-    }
-
-    public static void toggleDrawSnowInChat() {
-        drawSnowInChat = !drawSnowInChat;
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("drawSnowInChat", drawSnowInChat);
         editor.commit();
     }
 
@@ -1206,8 +1196,7 @@ public class SharedConfig {
     }
 
     public static boolean canBlurChat() {
-//        return BuildVars.DEBUG_VERSION && getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH;
-        return true;
+        return BuildVars.DEBUG_VERSION && getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH;
     }
     public static boolean chatBlurEnabled() {
         return canBlurChat() && chatBlur;
