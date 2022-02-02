@@ -13221,6 +13221,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             File f = FileLoader.getPathToMessage(messageObject.messageOwner);
                             if (f.exists()) {
                                 canSave = true;
+                                sendSecretMessageRead(messageObject, true);
                             }
                         }
                         if (canSave) {
