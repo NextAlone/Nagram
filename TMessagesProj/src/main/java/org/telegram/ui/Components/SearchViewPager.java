@@ -313,7 +313,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
 
             gotoItem = actionMode.addItemWithWidth(gotoItemId, R.drawable.msg_message, AndroidUtilities.dp(54), LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
-            forwardItem = actionMode.addItemWithWidth(forwardItemId, R.drawable.baseline_forward_24, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward));
+            forwardItem = actionMode.addItemWithWidth(forwardItemId, R.drawable.forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward));
             deleteItem = actionMode.addItemWithWidth(deleteItemId, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete));
         }
         if (parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {

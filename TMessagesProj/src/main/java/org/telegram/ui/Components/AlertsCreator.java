@@ -803,11 +803,11 @@ public class AlertsCreator {
         };
 
         int[] icons = new int[]{
-                R.drawable.baseline_notifications_24,
-                R.drawable.baseline_notifications_paused_24,
-                R.drawable.baseline_notifications_paused_24,
-                R.drawable.baseline_settings_24,
-                R.drawable.baseline_notifications_off_24
+                R.drawable.notifications_on,
+                R.drawable.notifications_mute1h,
+                R.drawable.notifications_mute2d,
+                R.drawable.notifications_settings,
+                R.drawable.notifications_off
         };
 
         final LinearLayout linearLayout = new LinearLayout(parentFragment.getParentActivity());

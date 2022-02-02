@@ -1076,7 +1076,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         searchCalendarButton = new ImageView(context);
         searchCalendarButton.setScaleType(ImageView.ScaleType.CENTER);
-        searchCalendarButton.setImageResource(R.drawable.baseline_date_range_24);
+        searchCalendarButton.setImageResource(R.drawable.msg_calendar);
         searchCalendarButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.SRC_IN));
         searchContainer.addView(searchCalendarButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP));
         searchCalendarButton.setOnClickListener(view -> {
@@ -2189,7 +2189,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 builder.addTitle(urlFinal);
                                 builder.addItems(
                                         new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                                        new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
+                                        new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.wallet_qr}, (which, text, __) -> {
                                             if (which == 0 || which == 2) {
                                                 if (which == 0) {
                                                     Browser.openUrl(getParentActivity(), urlFinal);

@@ -1056,19 +1056,19 @@ public class PhonebookShareAlert extends BottomSheet {
                 int icon;
                 if (position >= phoneStartRow && position < phoneEndRow) {
                     item = phones.get(position - phoneStartRow);
-                    icon = R.drawable.baseline_call_24;
+                    icon = R.drawable.menu_calls;
                 } else {
                     item = other.get(position - vcardStartRow);
                     if (item.type == 1) {
-                        icon = R.drawable.baseline_alternate_email_24;
+                        icon = R.drawable.menu_mail;
                     } else if (item.type == 2) {
-                        icon = R.drawable.baseline_location_on_24;
+                        icon = R.drawable.menu_location;
                     } else if (item.type == 3) {
-                        icon = R.drawable.baseline_link_24;
+                        icon = R.drawable.msg_link;
                     } else if (item.type == 4) {
                         icon = R.drawable.profile_info;
                     } else if (item.type == 5) {
-                        icon = R.drawable.baseline_date_range_24;
+                        icon = R.drawable.menu_date;
                     } else if (item.type == 6) {
                         if ("ORG".equalsIgnoreCase(item.getRawType(true))) {
                             icon = R.drawable.menu_work;

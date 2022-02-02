@@ -170,7 +170,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, false);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), 0, 0, 0, 7));
         } else {
-            emojiIconDrawable.setIcon(R.drawable.baseline_emoticon_24, false);
+            emojiIconDrawable.setIcon(R.drawable.input_smile, false);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 0));
         }
         if (Build.VERSION.SDK_INT >= 21) {
@@ -415,7 +415,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiIconDrawable.setIcon(R.drawable.baseline_keyboard_24, true);
+                emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
             }
 
@@ -444,7 +444,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 if (currentStyle == STYLE_FRAGMENT) {
                       emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, true);
                 } else {
-                      emojiIconDrawable.setIcon(R.drawable.baseline_emoticon_24, true);
+                      emojiIconDrawable.setIcon(R.drawable.input_smile, true);
                 }
             }
             if (emojiView != null) {

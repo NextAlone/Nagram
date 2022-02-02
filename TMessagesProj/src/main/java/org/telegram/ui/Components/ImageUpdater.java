@@ -181,14 +181,14 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
         }
 
-        builder.addItem(LocaleController.getString("UploadImage", R.string.UploadImage), R.drawable.baseline_image_24, __ -> {
+        builder.addItem(LocaleController.getString("UploadImage", R.string.UploadImage), R.drawable.profile_photos, __ -> {
             openAttachMenu(onDismiss);
             return Unit.INSTANCE;
         });
 
         if (searchAvailable) {
 
-            builder.addItem(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), R.drawable.baseline_search_24, __ -> {
+            builder.addItem(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), R.drawable.menu_search, __ -> {
                 openSearch();
                 return Unit.INSTANCE;
             });
@@ -197,7 +197,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
         if (hasAvatar) {
 
-            builder.addItem(LocaleController.getString("DeletePhoto", R.string.DeletePhoto), R.drawable.baseline_delete_24, true, __ -> {
+            builder.addItem(LocaleController.getString("DeletePhoto", R.string.DeletePhoto), R.drawable.chats_delete, true, __ -> {
                 onDeleteAvatar.run();
                 return Unit.INSTANCE;
             });

@@ -1072,7 +1072,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     builder.addTitle(urlFinal);
                     builder.addItems(
                             new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                            new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
+                            new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.wallet_qr}, (which, text, __) -> {
                                 if (which == 0 || which == 2) {
                                     if (which == 0) {
                                         openUrl(urlFinal);

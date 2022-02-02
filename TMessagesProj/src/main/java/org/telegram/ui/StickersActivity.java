@@ -321,7 +321,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
 
-        otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
+        otherItem.addSubItem(menu_export, R.drawable.msg_download, LocaleController.getString("ExportStickers", R.string.ExportStickers));
         otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString("ImportStickersX", R.string.ImportStickersX));
 
         final ActionBarMenu actionMode = actionBar.createActionMode();
@@ -333,9 +333,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
         shareMenuItem = actionMode.addItemWithWidth(MENU_SHARE, R.drawable.msg_share, AndroidUtilities.dp(54));
-        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.baseline_file_download_24, AndroidUtilities.dp(54));
-        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.baseline_archive_24, AndroidUtilities.dp(54));
-        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.baseline_delete_24, AndroidUtilities.dp(54));
+        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.msg_download, AndroidUtilities.dp(54));
+        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, AndroidUtilities.dp(54));
+        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, AndroidUtilities.dp(54));
 
 
         listAdapter = new ListAdapter(context, MediaDataController.getInstance(currentAccount).getStickerSets(currentType));
@@ -1156,7 +1156,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                     LocaleController.getString("StickersHide", R.string.StickersHide),
                                     LocaleController.getString("StickersReorder", R.string.StickersReorder)
                             };
-                            icons = new int[]{R.drawable.baseline_archive_24, R.drawable.msg_reorder};
+                            icons = new int[]{R.drawable.msg_archive, R.drawable.msg_reorder};
                         } else {
                             if (NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                                 options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE, MENU_TOGGLE_PIN};
@@ -1171,12 +1171,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                                 LocaleController.getString("PinSticker", R.string.PinSticker)
                                 };
                                 icons = new int[]{
-                                        R.drawable.baseline_archive_24,
-                                        R.drawable.baseline_link_24,
+                                        R.drawable.msg_archive,
+                                        R.drawable.msg_link,
                                         R.drawable.msg_reorder,
-                                        R.drawable.baseline_forward_24,
-                                        R.drawable.baseline_delete_24,
-                                        R.drawable.deproko_baseline_pin_24
+                                        R.drawable.msg_share,
+                                        R.drawable.msg_delete,
+                                        R.drawable.msg_pin
                                 };
                             } else {
                                 options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE};
@@ -1188,11 +1188,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                         LocaleController.getString("StickersRemove", R.string.StickersRemove)
                                 };
                                 icons = new int[]{
-                                        R.drawable.baseline_archive_24,
-                                        R.drawable.baseline_link_24,
+                                        R.drawable.msg_archive,
+                                        R.drawable.msg_link,
                                         R.drawable.msg_reorder,
-                                        R.drawable.baseline_forward_24,
-                                        R.drawable.baseline_delete_24
+                                        R.drawable.msg_share,
+                                        R.drawable.msg_delete
                                 };
                             }
                         }

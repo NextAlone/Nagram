@@ -175,10 +175,10 @@ public class WebviewActivity extends BaseFragment {
             }
         });
         ActionBarMenu menu = actionBar.createMenu();
-        progressItem = menu.addItemWithWidth(share, R.drawable.baseline_share_24, AndroidUtilities.dp(54));
+        progressItem = menu.addItemWithWidth(share, R.drawable.share, AndroidUtilities.dp(54));
         if (type == TYPE_GAME) {
             ActionBarMenuItem menuItem = menu.addItem(0, R.drawable.ic_ab_other);
-            menuItem.addSubItem(open_in, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            menuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
             actionBar.setTitle(currentGame);
             actionBar.setSubtitle("@" + currentBot);

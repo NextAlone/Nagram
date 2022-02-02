@@ -537,7 +537,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 }
             });
             showAsListItem = menuItem.addSubItem(change_sort, R.drawable.msg_list, LocaleController.getString("ShowAsList", R.string.ShowAsList));
-            menuItem.addSubItem(open_in, R.drawable.baseline_open_in_browser_24, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            menuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
         }
 
         if (selectedAlbum == null) {
@@ -1097,12 +1097,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                         } else if (num == 1) {
                             if (UserObject.isUserSelf(user)) {
-                                itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+                                itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
                             } else {
-                                itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                                itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
                             }
                         } else if (num == 2) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                         }
                         itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 
@@ -1997,9 +1997,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 case 3: {
                     TextCell cell = (TextCell) holder.itemView;
                     if (position < recentSearches.size()) {
-                        cell.setTextAndIcon(recentSearches.get(position), R.drawable.baseline_schedule_24, false);
+                        cell.setTextAndIcon(recentSearches.get(position), R.drawable.menu_recent, false);
                     } else {
-                        cell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", R.string.ClearRecentHistory), R.drawable.baseline_delete_sweep_24, false);
+                        cell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", R.string.ClearRecentHistory), R.drawable.menu_clear_recent, false);
                     }
                     break;
                 }

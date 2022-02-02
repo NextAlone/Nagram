@@ -674,12 +674,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiIconDrawable.setIcon(R.drawable.baseline_keyboard_24, true);
+                emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
             }
         } else {
             if (emojiButton != null) {
-                emojiIconDrawable.setIcon(R.drawable.baseline_emoticon_24, true);
+                emojiIconDrawable.setIcon(R.drawable.input_smile, true);
             }
             if (sizeNotifierLayout != null) {
                 if (animated && SharedConfig.smoothKeyboard && show == 0 && emojiView != null) {

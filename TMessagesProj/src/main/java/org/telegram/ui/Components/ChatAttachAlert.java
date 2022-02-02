@@ -1896,12 +1896,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                 } else if (num == 1) {
                     if (UserObject.isUserSelf(user)) {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
                     } else {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
                     }
                 } else if (num == 2) {
-                    itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
+                    itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                 }
                 itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 
