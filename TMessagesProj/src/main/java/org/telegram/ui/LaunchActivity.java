@@ -4246,7 +4246,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", R.string.VoipNeedCameraPermission));
             }
         } else if (requestCode == 4) {
-            NekoXConfig.checkForceSystemPicker();
             if (!granted) {
                 showPermissionErrorAlert(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
             } else {

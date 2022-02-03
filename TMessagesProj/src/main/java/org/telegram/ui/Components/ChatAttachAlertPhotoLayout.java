@@ -628,8 +628,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     return;
                 } else if (noGalleryPermissions && position != 0) {
                     try {
-                        if (NekoXConfig.forceSystemPicker) {
-                            menu.onItemClick(open_in); // Use system photo picker
+                        if (position == adapter.itemsCount - 2) {
+                            menu.onItemClick(open_in); // NekoX: Use system photo picker
                         } else {
                             parentAlert.baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
                         }
@@ -3250,7 +3250,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 case 3: {
                     PhotoAttachPermissionCell cell = (PhotoAttachPermissionCell) holder.itemView;
                     cell.setItemSize(itemSize);
-                    cell.setType(needCamera && noCameraPermissions && position == 0 ? 0 : 1);
+                    int type = needCamera && noCameraPermissions && position == 0 ? 0 : 1;
+                    if (position == itemsCount - 2) type = 999;
+                    cell.setType(type);
                     break;
                 }
             }
@@ -3322,6 +3324,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
             if (noGalleryPermissions && this == adapter) {
                 count++;
+                count++; // NekoX: Additional Open In picker
             }
             count += cameraPhotos.size();
             if (selectedAlbumEntry != null) {

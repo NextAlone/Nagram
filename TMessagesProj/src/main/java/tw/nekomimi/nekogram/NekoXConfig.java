@@ -50,25 +50,11 @@ public class NekoXConfig {
     public static final int TITLE_TYPE_ICON = 1;
     public static final int TITLE_TYPE_MIX = 2;
 
-    public static boolean forceSystemPicker = false; // SDK23+ and no storage permission
-
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";
 
     public static boolean loadSystemEmojiFailed = false;
     private static Typeface systemEmojiTypeface;
 
-    static {
-        checkForceSystemPicker();
-    }
-
-    public static void checkForceSystemPicker() {
-        // TODO show alert?
-        // TODO not working: send photo (upstream bug)
-        if (Build.VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            forceSystemPicker = true;
-            BuildVars.NO_SCOPED_STORAGE = false;
-        }
-    }
 
     public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
 
