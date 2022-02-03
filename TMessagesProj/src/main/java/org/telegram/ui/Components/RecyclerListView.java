@@ -30,7 +30,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.SparseIntArray;
 import android.util.StateSet;
-import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
@@ -905,7 +904,7 @@ public class RecyclerListView extends RecyclerView {
     private class RecyclerListViewItemClickListener implements OnItemTouchListener {
 
         public RecyclerListViewItemClickListener(Context context) {
-            gestureDetector = new GestureDetectorFixDoubleTap(context, new GestureDetector.SimpleOnGestureListener() {
+            gestureDetector = new GestureDetectorFixDoubleTap(context, new GestureDetectorFixDoubleTap.OnGestureListener() {
                 private View doubleTapView;
 
                 @Override
@@ -915,7 +914,7 @@ public class RecyclerListView extends RecyclerView {
                             doubleTapView = currentChildView;
                         } else {
                             onPressItem(currentChildView, e);
-                            return true;
+                            return false;
                         }
                     }
                     return false;
@@ -1019,6 +1018,11 @@ public class RecyclerListView extends RecyclerView {
                 @Override
                 public boolean onDown(MotionEvent e) {
                     return false;
+                }
+
+                @Override
+                public boolean hasDoubleTap() {
+                    return onItemLongClickListenerExtended != null;
                 }
             });
             gestureDetector.setIsLongpressEnabled(false);
@@ -1953,6 +1957,7 @@ public class RecyclerListView extends RecyclerView {
             Theme.setMaskDrawableRad(selectorDrawable, position == 0 ? topBottomSelectorRadius : 0, position == getAdapter().getItemCount() - 2 ? topBottomSelectorRadius : 0);
         }
         selectorRect.set(sel.getLeft(), sel.getTop(), sel.getRight(), sel.getBottom() - bottomPadding);
+        selectorRect.offset((int) sel.getTranslationX(), (int) sel.getTranslationY());
 
         final boolean enabled = sel.isEnabled();
         if (isChildViewEnabled != enabled) {

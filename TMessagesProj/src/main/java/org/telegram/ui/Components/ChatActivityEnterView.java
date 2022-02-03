@@ -2371,6 +2371,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             botCommandsMenuButton.setOnClickListener(view -> {
                 boolean open = !botCommandsMenuButton.isOpened();
                 botCommandsMenuButton.setOpened(open);
+                try {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
                 if (open) {
                     botCommandsMenuContainer.show();
                 } else {
@@ -4052,11 +4055,11 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
 
     private boolean onSendLongClick(View view) {
-        if (parentFragment == null || isInScheduleMode()) {
+        if (isInScheduleMode()) {
             return false;
         }
-        TLRPC.Chat chat = parentFragment.getCurrentChat();
-        TLRPC.User user = parentFragment.getCurrentUser();
+
+        boolean self = parentFragment != null && UserObject.isUserSelf(parentFragment.getCurrentUser());
 
         if (sendPopupLayout == null) {
             sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity, resourcesProvider);
@@ -4085,50 +4088,35 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             });
             sendPopupLayout.setShownFromBotton(false);
 
-//            long chatId;
-//            if (chat != null) {
-//                chatId = chat.id;
-//            } else if (user != null) {
-//                chatId = user.id;
-//            } else {
-//                chatId = -1;
-//            }
-
-            int a = 0;
-
-            ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), a == 0, a == 1, resourcesProvider);
-
-            if (parentFragment.canScheduleMessage()) {
-                cell = new ActionBarMenuSubItem(getContext(), true, UserObject.isUserSelf(user) || slowModeTimer == 0 || isInScheduleMode());
-                if (UserObject.isUserSelf(user)) {
-                    cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+            boolean scheduleButtonValue = parentFragment != null && parentFragment.canScheduleMessage();
+            boolean sendWithoutSoundButtonValue = !(self || slowModeTimer > 0 && !isInScheduleMode());
+            if (scheduleButtonValue) {
+                ActionBarMenuSubItem scheduleButton = new ActionBarMenuSubItem(getContext(), true, !sendWithoutSoundButtonValue, resourcesProvider);
+                if (self) {
+                    scheduleButton.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
                 } else {
-                    cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                    scheduleButton.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
                 }
-                cell.setOnClickListener(v -> {
+                scheduleButton.setMinimumWidth(AndroidUtilities.dp(196));
+                scheduleButton.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
                     AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal, resourcesProvider);
                 });
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
+                sendPopupLayout.addView(scheduleButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             }
-
-            if (!UserObject.isUserSelf(user) && slowModeTimer == 0 && !isInScheduleMode()) {
-
-                cell = new ActionBarMenuSubItem(getContext(), parentFragment.canScheduleMessage(), true);
-                cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
-                cell.setOnClickListener(v -> {
+            if (sendWithoutSoundButtonValue) {
+                ActionBarMenuSubItem sendWithoutSoundButton = new ActionBarMenuSubItem(getContext(), !scheduleButtonValue, true, resourcesProvider);
+                sendWithoutSoundButton.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+                sendWithoutSoundButton.setMinimumWidth(AndroidUtilities.dp(196));
+                sendWithoutSoundButton.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
                     sendMessageInternal(false, 0);
                 });
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
+                sendPopupLayout.addView(sendWithoutSoundButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             }
 
             sendPopupLayout.setupRadialSelectors(getThemedColor(Theme.key_dialogButtonSelector));
@@ -4167,7 +4155,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
         sendPopupWindow.dimBehind();
         sendButton.invalidate();
         if (!NekoConfig.disableVibration.Bool()) {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            try {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception ignore) {}
         }
 
         return false;

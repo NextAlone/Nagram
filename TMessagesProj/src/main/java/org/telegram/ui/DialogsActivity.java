@@ -1850,6 +1850,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             getNotificationCenter().addObserver(this, NotificationCenter.fileLoaded);
             getNotificationCenter().addObserver(this, NotificationCenter.fileLoadFailed);
             getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
+            getNotificationCenter().addObserver(this, NotificationCenter.dialogsUnreadReactionsCounterChanged);
 
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.appUpdateAvailable);
@@ -1930,6 +1931,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.appUpdateAvailable);
         }
 
+        getNotificationCenter().removeObserver(this, NotificationCenter.dialogsUnreadReactionsCounterChanged);
         getNotificationCenter().removeObserver(this, NotificationCenter.onDatabaseMigration);
         getNotificationCenter().removeObserver(this, NotificationCenter.didClearDatabase);
         if (commentView != null) {
@@ -2646,7 +2648,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
             };
-            viewPage.listView.setItemAnimator(viewPage.dialogsItemAnimator);
+//            viewPage.listView.setItemAnimator(viewPage.dialogsItemAnimator);
             viewPage.listView.setVerticalScrollBarEnabled(true);
             viewPage.listView.setInstantClick(true);
             viewPage.layoutManager = new LinearLayoutManager(context) {
@@ -4827,11 +4829,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (!validateSlowModeDialog(dialogId)) {
                 return;
             }
-            if (!selectedDialogs.isEmpty()) {
+            if (!selectedDialogs.isEmpty() || (initialDialogsType == 3 && selectAlertString != null)) {
                 boolean checked = addOrRemoveSelectedDialog(dialogId, view);
                 if (adapter == searchViewPager.dialogsSearchAdapter) {
-                    actionBar.closeSearchField();
-                    findAndUpdateCheckBox(dialogId, checked);
+                     actionBar.closeSearchField();
+                     findAndUpdateCheckBox(dialogId, checked);
                 }
                 updateSelectedCount();
             } else {
@@ -4979,8 +4981,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (!validateSlowModeDialog(dialog.id)) {
                 return false;
             }
-            addOrRemoveSelectedDialog(dialog.id, view);
-            updateSelectedCount();
+            if (!(initialDialogsType == 3 && selectAlertString != null)) {
+                addOrRemoveSelectedDialog(dialog.id, view);
+                updateSelectedCount();
+            }
         } else {
             if (dialog instanceof TLRPC.TL_dialogFolder) {
                 if (!NekoConfig.disableVibration.Bool()) {
@@ -6392,10 +6396,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     getMessagesController().selectDialogFilter(getMessagesController().dialogFilters.get(viewPages[a].selectedType), viewPages[a].dialogsType == 8 ? 1 : 0);
                     viewPages[a].dialogsAdapter.notifyDataSetChanged();
                 } else if (viewPages[a].dialogsAdapter.isDataSetChanged() || args.length > 0) {
-                    viewPages[a].dialogsAdapter.notifyDataSetChanged();
+                    viewPages[a].dialogsAdapter.updateHasHints();
                     int newItemCount = viewPages[a].dialogsAdapter.getItemCount();
-                    if (newItemCount > oldItemCount && initialDialogsType != 11 && initialDialogsType != 12 && initialDialogsType != 13) {
-                        viewPages[a].recyclerItemsEnterAnimator.showItemsAnimated(oldItemCount);
+                    if (newItemCount == 1 && oldItemCount == 1 && viewPages[a].dialogsAdapter.getItemViewType(0) == 5) {
+                        if (viewPages[a].dialogsAdapter.lastDialogsEmptyType != viewPages[a].dialogsAdapter.dialogsEmptyType()) {
+                            viewPages[a].dialogsAdapter.notifyItemChanged(0);
+                        }
+                    } else {
+                        viewPages[a].dialogsAdapter.notifyDataSetChanged();
+                        if (newItemCount > oldItemCount && initialDialogsType != 11 && initialDialogsType != 12 && initialDialogsType != 13) {
+                            viewPages[a].recyclerItemsEnterAnimator.showItemsAnimated(oldItemCount);
+                        }
                     }
                 } else {
                     updateVisibleRows(MessagesController.UPDATE_MASK_NEW_MESSAGE);
@@ -6418,6 +6429,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE) {
                 filterTabsView.notifyTabCounterChanged(Integer.MAX_VALUE);
             }
+        } else if (id == NotificationCenter.dialogsUnreadReactionsCounterChanged) {
+            updateVisibleRows(0);
         } else if (id == NotificationCenter.emojiLoaded) {
             updateVisibleRows(0);
             if (filterTabsView != null) {

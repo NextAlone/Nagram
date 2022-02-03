@@ -552,7 +552,7 @@ public class AlertsCreator {
         return dialog;
     }
 
-    public static void showBlockReportSpamReplyAlert(ChatActivity fragment, MessageObject messageObject, long peerId, Theme.ResourcesProvider resourcesProvider) {
+    public static void showBlockReportSpamReplyAlert(ChatActivity fragment, MessageObject messageObject, long peerId, Theme.ResourcesProvider resourcesProvider, Runnable hideDim) {
         if (fragment == null || fragment.getParentActivity() == null || messageObject == null) {
             return;
         }
@@ -564,6 +564,12 @@ public class AlertsCreator {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
+        builder.setDimEnabled(hideDim == null);
+        builder.setOnPreDismissListener(di -> {
+            if (hideDim != null) {
+                hideDim.run();
+            }
+        });
 
         builder.setTitle(LocaleController.getString("BlockUser", R.string.BlockUser));
         if (user != null) {
@@ -2971,16 +2977,22 @@ public class AlertsCreator {
         });
     }
 
-    public static void createReportAlert(final Context context, final long dialog_id, final int messageId, final BaseFragment parentFragment) {
-        createReportAlert(context, dialog_id, messageId, parentFragment, null);
+    public static void createReportAlert(final Context context, final long dialog_id, final int messageId, final BaseFragment parentFragment, Runnable hideDim) {
+        createReportAlert(context, dialog_id, messageId, parentFragment, null, hideDim);
     }
 
-    public static void createReportAlert(final Context context, final long dialog_id, final int messageId, final BaseFragment parentFragment, Theme.ResourcesProvider resourcesProvider) {
+    public static void createReportAlert(final Context context, final long dialog_id, final int messageId, final BaseFragment parentFragment, Theme.ResourcesProvider resourcesProvider, Runnable hideDim) {
         if (context == null || parentFragment == null) {
             return;
         }
 
         BottomBuilder builder = new BottomBuilder(context);
+        builder.setDimBehind(hideDim == null);
+        builder.setOnPreDismissListener(di -> {
+            if (hideDim != null) {
+                hideDim.run();
+            }
+        });
         builder.addTitle(LocaleController.getString("ReportChat", R.string.ReportChat), true);
         String[] items;
         int[] icons;
@@ -4118,7 +4130,7 @@ public class AlertsCreator {
         void didPressedNewCard();
     }
 
-    public static void createDeleteMessagesAlert(BaseFragment fragment, TLRPC.User user, TLRPC.Chat chat, TLRPC.EncryptedChat encryptedChat, TLRPC.ChatFull chatInfo, long mergeDialogId, MessageObject selectedMessage, SparseArray<MessageObject>[] selectedMessages, MessageObject.GroupedMessages selectedGroup, boolean scheduled, int loadParticipant, Runnable onDelete, Theme.ResourcesProvider resourcesProvider) {
+    public static void createDeleteMessagesAlert(BaseFragment fragment, TLRPC.User user, TLRPC.Chat chat, TLRPC.EncryptedChat encryptedChat, TLRPC.ChatFull chatInfo, long mergeDialogId, MessageObject selectedMessage, SparseArray<MessageObject>[] selectedMessages, MessageObject.GroupedMessages selectedGroup, boolean scheduled, int loadParticipant, Runnable onDelete, Runnable hideDim, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || user == null && chat == null && encryptedChat == null) {
             return;
         }
@@ -4129,6 +4141,7 @@ public class AlertsCreator {
         int currentAccount = fragment.getCurrentAccount();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, resourcesProvider);
+        builder.setDimEnabled(hideDim == null);
         int count;
         if (selectedGroup != null) {
             count = selectedGroup.messages.size();
@@ -4268,7 +4281,7 @@ public class AlertsCreator {
                         } else if (error != null && "USER_NOT_PARTICIPANT".equals(error.text)) {
                             loadType = 0;
                         }
-                        createDeleteMessagesAlert(fragment, user, chat, encryptedChat, chatInfo, mergeDialogId, selectedMessage, selectedMessages, selectedGroup, scheduled, loadType, onDelete, resourcesProvider);
+                        createDeleteMessagesAlert(fragment, user, chat, encryptedChat, chatInfo, mergeDialogId, selectedMessage, selectedMessages, selectedGroup, scheduled, loadType, onDelete, hideDim, resourcesProvider);
                     }));
                     AndroidUtilities.runOnUIThread(() -> {
                         if (progressDialog[0] == null) {
@@ -4511,6 +4524,11 @@ public class AlertsCreator {
         }
 
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setOnPreDismissListener(di -> {
+            if (hideDim != null) {
+                hideDim.run();
+            }
+        });
         AlertDialog dialog = builder.create();
         fragment.showDialog(dialog);
         TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
