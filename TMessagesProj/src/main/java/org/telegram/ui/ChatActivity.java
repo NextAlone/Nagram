@@ -7267,7 +7267,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         bottomMessagesActionContainer.setVisibility(View.INVISIBLE);
         bottomMessagesActionContainer.setWillNotDraw(false);
         bottomMessagesActionContainer.setPadding(0, AndroidUtilities.dp(2), 0, 0);
-        // contentView.addView(bottomMessagesActionContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 51, Gravity.BOTTOM));
+        contentView.addView(bottomMessagesActionContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 51, Gravity.BOTTOM));
         bottomMessagesActionContainer.setOnTouchListener((v, event) -> true);
 
         chatActivityEnterView = new ChatActivityEnterView(getParentActivity(), contentView, this, true, themeDelegate) {
@@ -8353,7 +8353,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         replyButton.setTextColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon));
         replyButton.setCompoundDrawablePadding(AndroidUtilities.dp(7));
         replyButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        Drawable image = context.getResources().getDrawable(R.drawable.input_reply).mutate();
+        Drawable image = context.getResources().getDrawable(R.drawable.baseline_reply_24).mutate();
         image.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarActionModeDefaultIcon), PorterDuff.Mode.SRC_IN));
         replyButton.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         replyButton.setOnClickListener(v -> {
@@ -8384,7 +8384,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         forwardButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), 3));
         forwardButton.setTextColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon));
         forwardButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        image = context.getResources().getDrawable(R.drawable.input_forward).mutate();
+        image = context.getResources().getDrawable(R.drawable.baseline_forward_24).mutate();
         image.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarActionModeDefaultIcon), PorterDuff.Mode.SRC_IN));
         forwardButton.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         forwardButton.setOnClickListener(v -> {
@@ -22206,14 +22206,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (stickersPanel != null && stickersPanel.getVisibility() == View.VISIBLE) {
                 views.add(stickersPanel);
             }
-            actionBar.showActionMode(true, null, null, null, new boolean[]{false, true, true}, chatListView, translationY);
+            if (NekoConfig.showBottomActionsWhenSelecting.Bool())
+                actionBar.showActionMode(true, bottomMessagesActionContainer, null, views.toArray(new View[0]), new boolean[]{false, true, true}, chatListView, translationY);
+            else
+                actionBar.showActionMode(true, null, null, null, new boolean[]{false, true, true}, chatListView, translationY);
+
             if (getParentActivity() instanceof LaunchActivity) {
                 ((LaunchActivity) getParentActivity()).hideVisibleActionMode();
             }
         } else if (bottomOverlayChat.getVisibility() == View.VISIBLE) {
-            actionBar.showActionMode(true, null, null, null, new boolean[]{true}, chatListView, translationY);
+            if (NekoConfig.showBottomActionsWhenSelecting.Bool())
+                actionBar.showActionMode(true, bottomMessagesActionContainer, null, new View[]{bottomOverlayChat}, new boolean[]{true}, chatListView, translationY);
+            else
+                actionBar.showActionMode(true, null, null, null, new boolean[]{true}, chatListView, translationY);
         } else {
-            actionBar.showActionMode(true, null, null, null, null, chatListView, translationY);
+            if (NekoConfig.showBottomActionsWhenSelecting.Bool())
+                actionBar.showActionMode(true, bottomMessagesActionContainer, null, null, null, chatListView, translationY);
+            else
+                actionBar.showActionMode(true, null, null, null, null, chatListView, translationY);
         }
         if (scrimPopupWindow != null) {
             scrimPopupWindow.dismiss();
