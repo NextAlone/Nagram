@@ -3133,7 +3133,7 @@ public class MessageObject {
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) {
                     messageText = messageOwner.media.description;
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported) {
-                    messageText = LocaleController.getString("UnsupportedMedia", R.string.UnsupportedMedia).replace("https://telegram.org/update", "https://github.com/NekoX-Dev/NekoX");
+                    messageText = LocaleController.getString("UnsupportedMedia", R.string.UnsupportedMedia).replace("https://telegram.org/update", "https://t.me/nagram_channel");
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                     if (isSticker() || isAnimatedStickerDocument(getDocument(), true)) {
                         String sch = getStickerChar();
