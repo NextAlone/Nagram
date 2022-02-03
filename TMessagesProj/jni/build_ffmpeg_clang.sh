@@ -48,9 +48,9 @@ function build_one {
 	--enable-x86asm \
 	--cross-prefix=$CROSS_PREFIX \
 	--sysroot="${LLVM_PREFIX}/sysroot" \
-	--extra-cflags="-Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-cxxflags="-Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-ldflags="-Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
+	--extra-cflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-cxxflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-ldflags="${LIBS} -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
 	\
 	--enable-version3 \
 	--enable-gpl \
@@ -181,7 +181,7 @@ function build {
 				CPU=arm64-v8a
 				OPTIMIZE_CFLAGS=
 				PREFIX=./build/$CPU
-				LIBVPXPREFIX=../libvpx/build/$CPU
+				LIBVPXPREFIX=../libvpx/build/arm64-v8a
 				ADDITIONAL_CONFIGURE_FLAG="--enable-neon --enable-optimizations"
 				build_one
 			;;
@@ -212,8 +212,8 @@ function build {
 				BIN_MIDDLE=android
 				CPU=i686
 				OPTIMIZE_CFLAGS="-march=$CPU"
-				PREFIX=./build/$ARCH
-				LIBVPXPREFIX=../libvpx/build/$ARCH_NAME
+				PREFIX=./build/x86
+				LIBVPXPREFIX=../libvpx/build/x86
 				ADDITIONAL_CONFIGURE_FLAG="--disable-x86asm --disable-inline-asm --disable-asm"
 				build_one
 			;;

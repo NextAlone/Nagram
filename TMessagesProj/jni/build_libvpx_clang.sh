@@ -124,7 +124,7 @@ function build {
 				OPTIMIZE_CFLAGS="-O3 -march=x86-64 -mtune=intel -msse4.2 -mpopcnt -m64 -fPIC"
 				TARGET="x86_64-android-gcc"
 				PREFIX=./build/$CPU
-                CPU_DETECT="--enable-runtime-cpu-detect"
+        CPU_DETECT="--enable-runtime-cpu-detect"
 				build_one
 			;;
 			x86)
@@ -136,7 +136,7 @@ function build {
 				CPU=i686
 				OPTIMIZE_CFLAGS="-O3 -march=i686 -mtune=intel -msse3 -mfpmath=sse -m32 -fPIC"
 				TARGET="x86-android-gcc"
-				PREFIX=./build/$CPU
+				PREFIX=./build/x86
 				CPU_DETECT="--enable-runtime-cpu-detect"
 				build_one
 			;;
