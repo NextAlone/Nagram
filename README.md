@@ -190,6 +190,8 @@ Probably it's a good thing 😃
     * fixed issue #7
     * fixed issue with ffmpeg
       lib ([301601](https://github.com/nikitasius/Telegraher/commit/3016016c51ce8ce530bd7a9566c53e9fbb68ada2)
+    * blur & snow doesn't work cause TG devs are fucked it up
+        * if you had blur/snow enabled please disable it to avoid CPU usage
 * noshit_8.4.4_release2
     * added `delete` mark
         * when someone wiped messages OR history you will see it, just need to close/open an actual
