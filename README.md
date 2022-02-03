@@ -107,8 +107,10 @@ different)
           file during 1st open, so you need to open it again (just tap on it)
         * sometimes full media downloaded when preview generated, in such case open once file and it
           will wipe it from a user who sent it
-* SNOW & BLUR
-    * they are added back into debug menu (when you press version 2 times)
+* ~~SNOW & BLUR~~
+    * ~~they are added back into debug menu (when you press version 2 times)~~
+    * since 8.5.0 doesn't work cause TG devs are fuckedup this part (rendering)
+        * if you had enable snow/blur please disable them temporary in menu to avoid and CPU usage
 * You can DISABLE doubletap (=quick) reactions
     * open quick reactions
     * select already selected reaction one more time
@@ -162,19 +164,19 @@ It's very simple
 ### APKs & sha256
 
 * **sdk23** mean for android 6+, the other are working from 4.1+
-  * so if you have android 6 or higher, you should download **sdk23** version
+    * so if you have android 6 or higher, you should download **sdk23** version
 * arm64-v8a (new devices)
-    * `a5e2a859b45567ae008c433c9f133d1ada171d5180109261d454568abe9d0ee3`  [Telegraher.8.5.0r1.arm64-v8a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.arm64-v8a.apk)
-    * `c70865e2d2fbd384bbdcdc8a79d0b1be6eb67d2bb78c356b429e6ea26c75755f`  [Telegraher.8.5.0r1.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.arm64-v8a-sdk23.apk)
+    * `40e52887931c0cab292d3a0783ef6bd71214ef172aac6714ede464dad41b9617`  [Telegraher.8.5.0r1.arm64-v8a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.arm64-v8a.apk)
+    * `4962632d62ac5d87beafcc6e029fca166caa00d30a350f72e29dab24e77f5265`  [Telegraher.8.5.0r1.arm64-v8a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.arm64-v8a-sdk23.apk)
 * armeabi-v7a (old devices)
-    * `0b4e09203021f8d3d828f64c3fc3d58faf5f92567d8141292369ffb82fca068d`  [Telegraher.8.5.0r1.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.armeabi-v7a.apk)
-    * `8026de46a2e97bc51acaab5c3566b986ce3dba79f3cc4cc77e9b42866d0d9a5d`  [Telegraher.8.5.0r1.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.armeabi-v7a-sdk23.apk)
+    * `d43aaab47e769e48069c96cbd3d50e825a6a5e2fe08824904bdabd05ab25dbab`  [Telegraher.8.5.0r1.armeabi-v7a.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.armeabi-v7a.apk)
+    * `2a91b58f870b6104badb4c08636876eed1f46e57e5e6697b8cee9b68d35f2156`  [Telegraher.8.5.0r1.armeabi-v7a-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.armeabi-v7a-sdk23.apk)
 * PC x86, 32 bits (for an emulator for example)
-    * `24d740fcbd2533dfe80d4fd2fe521ca8f5ff488a3539ce94271c1a425d07c4c4`  [Telegraher.8.5.0r1.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86.apk)
-    * `4cdea7ef40e8fc43d3b14ee8b63543c3281583c52755e97c564edfc7676abd38`  [Telegraher.8.5.0r1.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86-sdk23.apk)
+    * `92baf38f31848e7d8191fe2c6da46e97f72bd572d620cd115dd81d37ab95df2d`  [Telegraher.8.5.0r1.x86.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86.apk)
+    * `276cafdd02c824c67ff801955070208baa6cda8a4824f4785877f3220f15d672`  [Telegraher.8.5.0r1.x86-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86-sdk23.apk)
 * PC x86, 64 bits (for 64 bits CPU)
-    * `a46bd83795a5fa976bb79a85722a207a221db408e3e1d79f7b7b17e56bea6f40`  [Telegraher.8.5.0r1.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86-64.apk)
-    * `962f36c7dd7e6469770ae780583b39f80f0e1efe3c83da3df4c31ebac09c43ab`  [Telegraher.8.5.0r1.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86-64-sdk23.apk)
+    * `dc7988ea2e57d659f3e1971c6921d1e5ea7733d65becb562246100d7418d769f`  [Telegraher.8.5.0r1.x86-64.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86-64.apk)
+    * `1228d11b572fb77666d49859918ced8671b9b9e8b078c42165b91d74fbc3a30f`  [Telegraher.8.5.0r1.x86-64-sdk23.apk](https://github.com/nikitasius/Telegraher/releases/download/noshit_8.5.0_release1/Telegraher.8.5.0r1.x86-64-sdk23.apk)
 
 ### Issues/Wishlist
 
@@ -183,6 +185,11 @@ Probably it's a good thing 😃
 
 ### Changes
 
+* noshit_8.5.0_release1
+    * updated to TG 8.5.0
+    * fixed issue #7
+    * fixed issue with ffmpeg
+      lib ([301601](https://github.com/nikitasius/Telegraher/commit/3016016c51ce8ce530bd7a9566c53e9fbb68ada2)
 * noshit_8.4.4_release2
     * added `delete` mark
         * when someone wiped messages OR history you will see it, just need to close/open an actual
