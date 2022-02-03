@@ -20,7 +20,6 @@
 package top.qwq2333.nullgram.utils
 
 import android.util.Log
-import org.telegram.messenger.AndroidUtilities
 
 const val TAG = "Nullgram"
 
@@ -90,7 +89,7 @@ fun w(msg: String, throwable: Throwable) {
  */
 fun e(msg: String, throwable: Throwable) {
     Log.e(TAG, msg, throwable)
-    AndroidUtilities.appCenterLog(throwable)
+    AppcenterUtils.trackCrashes(throwable)
 }
 
 /**
@@ -115,5 +114,5 @@ fun w(throwable: Throwable) {
  */
 fun e(throwable: Throwable) {
     Log.e(TAG, "", throwable)
-    AndroidUtilities.appCenterLog(throwable)
+    AppcenterUtils.trackCrashes(throwable)
 }

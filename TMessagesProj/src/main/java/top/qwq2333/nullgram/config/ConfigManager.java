@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.telegram.messenger.ApplicationLoader;
+import top.qwq2333.nullgram.utils.AppcenterUtils;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class ConfigManager {
@@ -143,7 +144,7 @@ public class ConfigManager {
     public static void putString(@NonNull String key, String value) {
         synchronized (preferences) {
             try {
-                if(value.equals("")){
+                if (value.equals("")) {
                     preferences.edit().remove(key).apply();
                 }
                 preferences.edit().putString(key, value).apply();
@@ -163,6 +164,10 @@ public class ConfigManager {
             try {
                 boolean originValue = preferences.getBoolean(key, false);
                 preferences.edit().putBoolean(key, !originValue).apply();
+                HashMap<String, String> map = new HashMap<>();
+                map.put("function", key);
+                map.put("status", Boolean.toString(!originValue));
+                AppcenterUtils.trackEvent("toogleBoolean", map);
             } catch (Throwable thr) {
                 LogUtilsKt.e(thr);
             }
@@ -174,8 +179,8 @@ public class ConfigManager {
      *
      * @param key key
      */
-    public static void deleteValue(@NonNull String key){
-        synchronized (preferences){
+    public static void deleteValue(@NonNull String key) {
+        synchronized (preferences) {
             try {
                 preferences.edit().remove(key).apply();
             } catch (Throwable thr) {

@@ -10,6 +10,7 @@ package org.telegram.messenger;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -22,24 +23,23 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
-
+import java.io.File;
+import java.util.HashMap;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
-
-import java.io.File;
-
-import androidx.multidex.MultiDex;
+import top.qwq2333.nullgram.utils.AppcenterUtils;
 
 public class ApplicationLoader extends Application {
 
@@ -66,8 +66,28 @@ public class ApplicationLoader extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
+        AppcenterUtils.start(this);
+        AppcenterUtils.trackEvent("App start");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            var am = getSystemService(ActivityManager.class);
+            var map = new HashMap<String, String>(1);
+            var reasons = am.getHistoricalProcessExitReasons(null, 0, 1);
+            if (reasons.size() == 1) {
+                map.put("description", reasons.get(0).getDescription());
+                map.put("importance", String.valueOf(reasons.get(0).getImportance()));
+                map.put("process", reasons.get(0).getProcessName());
+                map.put("reason", String.valueOf(reasons.get(0).getReason()));
+                map.put("status", String.valueOf(reasons.get(0).getStatus()));
+                AppcenterUtils.trackEvent("Last exit reasons", map);
+            }
+        }
+        HashMap<String, String> info = new HashMap<>();
+        info.put("OSversion", ""+ VERSION.SDK_INT);
+        info.put("versionName", BuildVars.BUILD_VERSION_STRING);
+        info.put("versionCode", "" + BuildConfig.VERSION_CODE);
+        AppcenterUtils.trackEvent("info",info);
     }
+
 
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
