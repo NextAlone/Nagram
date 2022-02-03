@@ -147,7 +147,7 @@ jobs:
         if: (matrix.flavor == 'x86' || matrix.flavor == 'x86_64') && steps.cache.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install yasm -y
-          ./run init libs libvpx_x86
+          ./run init libs libvpx
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
