@@ -44,7 +44,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LanguageDetector;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
@@ -1262,36 +1261,24 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     }
                     menu.getItem(2).setVisible(selectedView instanceof View);
                 }
-                if (LanguageDetector.hasSupport() && getSelectedText() != null) {
-                    LanguageDetector.detectLanguage(getSelectedText().toString(), lng -> {
-                        translateFromLanguage = lng;
-                        updateTranslateButton(menu);
-                    }, err -> {
-                        FileLog.e("mlkit: failed to detect language in selection");
-                        FileLog.e(err);
-                        translateFromLanguage = null;
-                        updateTranslateButton(menu);
-                    });
-                } else {
-                    translateFromLanguage = null;
-                    updateTranslateButton(menu);
-                }
+                // NekoX: Merge 8.5.0, remove due to removing LanguageDetector
                 return true;
             }
 
-            private String translateFromLanguage = null;
-            private void updateTranslateButton(Menu menu) {
-                String translateToLanguage = LocaleController.getInstance().getCurrentLocale().getLanguage();
-                menu.getItem(2).setVisible(
-                    onTranslateListener != null && (
-                        (
-                            translateFromLanguage != null &&
-                            (!translateFromLanguage.equals(translateToLanguage) || translateFromLanguage.equals("und")) &&
-                            !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(translateFromLanguage)
-                        ) || !LanguageDetector.hasSupport()
-                    )
-                );
-            }
+            // NekoX: Merge 8.5.0, remove due to removing LanguageDetector
+//            private String translateFromLanguage = null;
+//            private void updateTranslateButton(Menu menu) {
+//                String translateToLanguage = LocaleController.getInstance().getCurrentLocale().getLanguage();
+//                menu.getItem(2).setVisible(
+//                    onTranslateListener != null && (
+//                        (
+//                            translateFromLanguage != null &&
+//                            (!translateFromLanguage.equals(translateToLanguage) || translateFromLanguage.equals("und")) &&
+//                            !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(translateFromLanguage)
+//                        ) || !LanguageDetector.hasSupport()
+//                    )
+//                );
+//            }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {

@@ -2987,8 +2987,8 @@ public class AlertsCreator {
         }
 
         BottomBuilder builder = new BottomBuilder(context);
-        builder.setDimBehind(hideDim == null);
-        builder.setOnPreDismissListener(di -> {
+        builder.getBuilder().setDimBehind(hideDim == null);
+        builder.getBuilder().setOnPreDismissListener(di -> {
             if (hideDim != null) {
                 hideDim.run();
             }
