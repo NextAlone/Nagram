@@ -23,6 +23,8 @@ import org.telegram.ui.ActionBar.Theme;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -214,5 +216,18 @@ public class NekoXConfig {
             }
         }
         return color;
+    }
+
+    
+    public static void setChannelAlias(long channelID, String name) {
+        preferences.edit().putString(NekoConfig.channelAliasPrefix + channelID, name).apply();
+    }
+
+    public static void emptyChannelAlias(long channelID) {
+        preferences.edit().remove(NekoConfig.channelAliasPrefix + channelID).apply();
+    }
+
+    public static String getChannelAlias(long channelID) {
+        return preferences.getString(NekoConfig.channelAliasPrefix + channelID, null);
     }
 }

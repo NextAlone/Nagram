@@ -230,6 +230,10 @@ public class MessageObject {
     public boolean shouldDrawReactionsInLayout() {
         return getDialogId() < 0;
     }
+    
+    public boolean isSenderChannel() {
+        return messageOwner.from_id instanceof TLRPC.TL_peerChannel;
+    }
 
     public static class SendAnimationData {
         public float x;

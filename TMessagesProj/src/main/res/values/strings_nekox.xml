@@ -266,4 +266,10 @@
     <string name="showSeconds">Show timestamp in seconds</string>
     <string name="AppUpdateNekoX">Update Nekogram X</string>
     <string name="NekoXUpdateTranslationHint">Press to translate the change log</string>
+    <string name="Name">Name</string>
+    <string name="channelAlias">Channel Alias</string>
+    <string name="channelAliasDetails">Require label channel user enabled.</string>
+    <string name="setChannelAliasName">Set Alias</string>
+    <string name="labelChannelUser">Label Channel User</string>
+    <string name="labelChannelUserDetails">If message sender is Channel,it will label it as \"Channel\"</string>
 </resources>
