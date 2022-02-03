@@ -4,7 +4,7 @@
     <string name="AccDescrChatAttachEnterMenu">قائمة إدخال الدردشة</string>
     <string name="ChatAttachEnterMenuRecordVideo">تسجيل الفيديو</string>
     <string name="ChatAttachEnterMenuRecordAudio">تسجيل صوتي</string>
-    <string name="ChatAttachEnterMenuDisableLinkPreview">تعطيل معاينة الارتباط</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">تعطيل معاينة الرابط</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">تمكين معاينة الرابط</string>
     <string name="UseChatAttachEnterMenu">استخدم قائمة الإدخال</string>
     <string name="UseChatAttachEnterMenuNotice">قم بتغيير زر التسجيل إلى قائمة إدخال ، وأضف مفتاح معاينة الارتباط.</string>
@@ -270,4 +270,7 @@
     <string name="DisableInstantCamera">تعطيل الكاميرا الفورية</string>
     <string name="showSeconds">إظهار الطابع الزمني بالثواني</string>
     <string name="ShareMessages">مشاركة</string>
+    <string name="AppUpdateNekoX">تحديث Nekogram X</string>
+    <string name="AutoCheckUpdatePreview">معاينة (غير مستقر)</string>
+    <string name="NekoXUpdateTranslationHint">اضغط لترجمة سجل التغيير</string>
 </resources>

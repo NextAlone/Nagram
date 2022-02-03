@@ -124,4 +124,20 @@
     <string name="disableRemoteEmojiInteractions">Wyłącz zdalne interakcje emoji</string>
     <string name="enablePublicProxy">Publiczne Proxy NekoX</string>
     <string name="autoUpdateSubInfo">Aktualizuj serwery proxy automatycznie</string>
+    <string name="SaveToDownloadCount_other">Zapisywanie %1$d plików do pobranych</string>
+    <string name="NekoGeneralNotification">Powiadomienie</string>
+    <string name="disableNotificationBubbles">Wyłącz dymki w powiadomieniu</string>
+    <string name="doubleTapSendReactions">Wyślij reakcję po dwukrotnym dotknięciu (domyślne)</string>
+    <string name="doubleTapShowReactions">Pokaż reakcje tylko po dwukrotnym dotknięciu</string>
+    <string name="ReactionsDisabled">Wyłącz</string>
+    <string name="customSavePath">Ścieżka zapisu plików</string>
+    <string name="customSavePathHint">Puste = bezpośredni zapis</string>
+    <string name="reactions">Reakcje w menu</string>
+    <string name="hideSendAsChannel">Ukryj wyślij jako kanał</string>
+    <string name="showSpoilersDirectly">Pokaż wiadomości ukryte za spoilerem</string>
+    <string name="SaveToDownloadCount_one">Zapisywanie %1$d pliku do pobranych</string>
+    <string name="SaveToDownloadCount_two">Zapisywanie %1$d plików do pobranych</string>
+    <string name="SaveToDownloadCount_few">Zapisywanie %1$d plików do pobranych</string>
+    <string name="SaveToDownloadCount_many">Zapisywanie %1$d plików do pobranych</string>
+    <string name="SaveToDownloadCount_zero">Zapisywanie %1$d plików do pobranych</string>
 </resources>

@@ -133,4 +133,12 @@
     <string name="SaveToDownloadCount_zero">Salvando %1$d arquivos para downloads</string>
     <string name="SaveToDownloadCount_few">Salvando %1$d arquivos para downloads</string>
     <string name="SaveToDownloadCount_many">Salvando %1$d arquivos para downloads</string>
+    <string name="NekoGeneralNotification">Notificação</string>
+    <string name="disableNotificationBubbles">Desativar bolhas na notificação</string>
+    <string name="ReactionsDisabled">Desativar</string>
+    <string name="customSavePath">Caminho de Salvamento Personalizado</string>
+    <string name="customSavePathHint">Deixe em branco para salvar diretamente</string>
+    <string name="reactions">Reações no menu</string>
+    <string name="doubleTapShowReactions">Mostrar reações apenas ao tocar duas vezes</string>
+    <string name="doubleTapSendReactions">Enviar reação ao tocar duas vezes (padrão)</string>
 </resources>

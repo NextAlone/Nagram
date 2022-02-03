@@ -270,4 +270,7 @@
     <string name="DeleteDownloadedFileExternal">O arquivo externo é ignorado.</string>
     <string name="customPublicProxyIPNotice">Em algumas áreas, especificando o IP do proxy público CDN(p. ex. Cloudflare) pode acelerar o acesso.</string>
     <string name="ShareMessages">Compartilhar</string>
+    <string name="NekoXUpdateTranslationHint">Pressione para traduzir o histórico de alterações</string>
+    <string name="AutoCheckUpdatePreview">Preview (Instável)</string>
+    <string name="AppUpdateNekoX">Atualizar Nekogram X</string>
 </resources>

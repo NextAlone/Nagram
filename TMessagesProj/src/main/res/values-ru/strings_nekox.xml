@@ -268,4 +268,7 @@
     <string name="DisableInstantCamera">Выключить мгновенную камеру</string>
     <string name="rememberAllBackMessages">Запомнить все нажатые ответы</string>
     <string name="showSeconds">Показывать временную метку в секундах</string>
+    <string name="AppUpdateNekoX">Обновить Nekogram X</string>
+    <string name="AutoCheckUpdatePreview">Предварительный просмотр (нестабильный)</string>
+    <string name="NekoXUpdateTranslationHint">Нажмите, чтобы перевести журнал изменений</string>
 </resources>

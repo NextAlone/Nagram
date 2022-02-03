@@ -133,4 +133,12 @@
     <string name="SaveToDownloadCount_few">Сохранение %1$d файлов для загрузки</string>
     <string name="SaveToDownloadCount_many">Сохранение %1$d файлов для загрузки</string>
     <string name="SaveToDownloadCount_other">Сохранение %1$d файлов для загрузки</string>
+    <string name="NekoGeneralNotification">Уведомление</string>
+    <string name="disableNotificationBubbles">Отключить чаты-пузырьки в умедовлениях</string>
+    <string name="doubleTapSendReactions">Отправить реакцию при двойном нажатии (По умолчанию)</string>
+    <string name="doubleTapShowReactions">Показывать реакции только при двойном нажатии</string>
+    <string name="ReactionsDisabled">Отключить</string>
+    <string name="customSavePathHint">Оставьте пустым, чтобы сохранить напрямую</string>
+    <string name="reactions">Реакции в меню</string>
+    <string name="customSavePath">Пользовательский путь сохранения</string>
 </resources>

@@ -4,12 +4,12 @@
     <string name="AccDescrChatAttachEnterMenu">Меню вводу в чат</string>
     <string name="ChatAttachEnterMenuRecordVideo">Записати відео</string>
     <string name="ChatAttachEnterMenuRecordAudio">Записувати аудіо</string>
-    <string name="ChatAttachEnterMenuDisableLinkPreview">Вимкнути попередній перегляд посилання</string>
-    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути передогляд посилання</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Вимкнути передогляд посилань</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути передогляд посилань</string>
     <string name="UseChatAttachEnterMenu">Використовувати меню введення</string>
-    <string name="UseChatAttachEnterMenuNotice">Змініть кнопку запису на меню вводу і додайте перемикач попереднього перегляду посилань.</string>
+    <string name="UseChatAttachEnterMenuNotice">Змінити кнопку запису на меню вводу та додати перемикач передогляду посилань.</string>
     <string name="DisableLinkPreviewByDefault">Без передогляду посилань</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення, щоб сервер не знав, що посилання поширили в Telegram.</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Вимкнути запит передогляду посилання під час введення, щоб сервер не знав, що посилання поширили в Telegram.</string>
     <string name="CustomApi">Користувацький API</string>
     <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.
 \n
@@ -256,18 +256,21 @@
     <string name="repeatConfirmText">Точно повторити\?</string>
     <string name="DeleteDownloadedFileConfirm">Видалити цей файл із локального кешу\?</string>
     <string name="VersionUpdateTitle">Доступна нова версія</string>
-    <string name="VersionUpdateIgnore">Нехтувати</string>
+    <string name="VersionUpdateIgnore">Ігнорувати</string>
     <string name="VersionUpdateNoUpdate">Оновлень нема.</string>
-    <string name="AutoCheckUpdateOFF">ВИМК.</string>
+    <string name="AutoCheckUpdateOFF">Вимкнено</string>
     <string name="AutoCheckUpdateStable">Стабільна</string>
     <string name="VersionUpdateVariantNotMatch">Не вдається зіставити варіанти версій.
 \nБудь ласка, завантажте вручну з GitHub.</string>
-    <string name="VersionUpdateNotNow">Пізніше</string>
+    <string name="VersionUpdateNotNow">Не зараз</string>
     <string name="VersionUpdateConfirm">ОНОВИТИ</string>
-    <string name="AutoCheckUpdateSwitch">Самооновлення</string>
-    <string name="AutoCheckUpdateRc">Бета-версія</string>
+    <string name="AutoCheckUpdateSwitch">Автооновлення</string>
+    <string name="AutoCheckUpdateRc">Release Candidate</string>
     <string name="DeleteDownloadedFileExternal">Зовнішній файл пропущено.</string>
     <string name="hideSponsoredMessage">Ховати рекламні повідомлення</string>
     <string name="update_download_soucre">Оберіть джерело завантаження</string>
     <string name="rememberAllBackMessages">Пам\'ятати натиснені відповіді</string>
+    <string name="AutoCheckUpdatePreview">Передогляд (Нестабільно)</string>
+    <string name="NekoXUpdateTranslationHint">Натисніть щоб перекласти журнал змін</string>
+    <string name="AppUpdateNekoX">Оновити Nekogram X</string>
 </resources>
