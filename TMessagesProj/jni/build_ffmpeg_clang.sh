@@ -48,9 +48,9 @@ function build_one {
 	--enable-x86asm \
 	--cross-prefix=$CROSS_PREFIX \
 	--sysroot="${LLVM_PREFIX}/sysroot" \
-	--extra-cflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-cxxflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-ldflags="${LIBS} -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
+	--extra-cflags=" -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-cxxflags=" -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-ldflags=" -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
 	\
 	--enable-version3 \
 	--enable-gpl \
@@ -63,8 +63,6 @@ function build_one {
 	\
 	--disable-everything \
 	--disable-network \
-	--enable-libvpx \
-	--enable-decoder=libvpx_vp9 \
 	--disable-zlib \
 	--disable-avfilter \
 	--disable-avdevice \
@@ -74,8 +72,9 @@ function build_one {
 	--disable-ffplay \
 	--disable-ffprobe \
 	--disable-postproc \
-	--disable-avdevice \
 	\
+	--enable-libvpx \
+	--enable-decoder=libvpx_vp9 \
 	--enable-runtime-cpudetect \
 	--enable-pthreads \
 	--enable-avresample \
