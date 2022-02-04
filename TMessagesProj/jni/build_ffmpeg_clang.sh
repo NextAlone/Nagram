@@ -19,8 +19,8 @@ function build_one {
 	CXX=${CC_PREFIX}clang++
 	CROSS_PREFIX=${PREBUILT}/bin/${ARCH_NAME}-linux-${BIN_MIDDLE}-
 	
-	INCLUDES=" -I${LIBVPXPREFIX}/include"
-	LIBS=" -L${LIBVPXPREFIX}/lib"
+	INCLUDES=" -I./${LIBVPXPREFIX}/include"
+	LIBS=" -L./${LIBVPXPREFIX}/lib"
 
 	echo "Cleaning..."
 	rm -f config.h
@@ -48,9 +48,9 @@ function build_one {
 	--enable-x86asm \
 	--cross-prefix=$CROSS_PREFIX \
 	--sysroot="${LLVM_PREFIX}/sysroot" \
-	--extra-cflags=" -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-cxxflags=" -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
-	--extra-ldflags=" -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -fPIC" \
+	--extra-cflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-cxxflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
+	--extra-ldflags="${LIBS} -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -lc -lm -ldl -fPIC" \
 	\
 	--enable-version3 \
 	--enable-gpl \
@@ -164,7 +164,7 @@ function build {
 				BIN_MIDDLE=android
 				CPU=x86_64
 				PREFIX=./build/$CPU
-				LIBVPXPREFIX=../libvpx/build/$ARCH_NAME
+				LIBVPXPREFIX=../libvpx/build/x86_64
 				ADDITIONAL_CONFIGURE_FLAG="--disable-asm"
 				build_one
 			;;
@@ -197,7 +197,7 @@ function build {
 				OPTIMIZE_CFLAGS="-marm -march=$CPU"
 				PREFIX=./build/armeabi-v7a
 				LIBVPXPREFIX=../libvpx/build/armeabi-v7a
-				ADDITIONAL_CONFIGURE_FLAG=--enable-neon
+				ADDITIONAL_CONFIGURE_FLAG="--enable-neon"
 				build_one
 			;;
 			x86)

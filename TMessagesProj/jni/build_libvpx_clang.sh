@@ -39,7 +39,7 @@ function build_one {
 
 
 	./configure \
-	--extra-cflags="-isystem ${LLVM_PREFIX}/sysroot/usr/include/${ARCH_NAME}-linux-${BIN_MIDDLE} -isystem ${LLVM_PREFIX}/sysroot/usr/include" \
+	--extra-cflags="-isystem ${LLVM_PREFIX}/sysroot/usr/include/${ARCH_NAME}-linux-${BIN_MIDDLE} -isystem ${LLVM_PREFIX}/sysroot/usr/include ${OPTIMIZE_CFLAGS}" \
 	--libc="${LLVM_PREFIX}/sysroot" \
 	--prefix=${PREFIX} \
 	--target=${TARGET} \
@@ -171,7 +171,7 @@ function build {
 				CLANG_PREFIX=armv7a
 				BIN_MIDDLE=androideabi
 				CPU=armeabi-v7a
-				OPTIMIZE_CFLAGS="-Os -march=armv7-a -mfloat-abi=softfp -mfpu=neon -mtune=cortex-a8 -mthumb -D__thumb__"
+				OPTIMIZE_CFLAGS="-Os -D_LIBCPP_HAS_QUICK_EXIT -O3 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -mtune=cortex-a8 -mthumb -D__thumb__"
 				TARGET="armv7-android-gcc --enable-neon --disable-neon-asm"
 				PREFIX=./build/$CPU
 				CPU_DETECT="--disable-runtime-cpu-detect"
