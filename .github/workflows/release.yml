@@ -33,9 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+        run: git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v2
