@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "8.4.4"
-def verCode = 555
+def verName = "8.5.1-preview01"
+def verCode = 560
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim()
@@ -317,7 +317,6 @@ android {
         }
     }
 
-<<<<<<< HEAD
     tasks.all { task ->
         if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !(task.name.contains("Debug") || task.name.contains("Foss") || task.name.contains("Fdroid"))) {
             task.enabled = false
@@ -329,9 +328,6 @@ android {
             enabled = false
         }
     }
-=======
-    defaultConfig.versionCode = 2551
->>>>>>> official/master
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -339,30 +335,6 @@ android {
         }
     }
 
-<<<<<<< HEAD
-=======
-    variantFilter { variant ->
-        def names = variant.flavors*.name
-        if (variant.buildType.name != "release" && !names.contains("afat")) {
-            setIgnore(true)
-        }
-    }
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 30
-        versionName "8.5.1"
-
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
-
-        externalNativeBuild {
-            cmake {
-                version '3.10.2'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-16', "-j=16"
-            }
-        }
-    }
->>>>>>> official/master
 }
 
 def okHttpVersion = "5.0.0-alpha.2"
