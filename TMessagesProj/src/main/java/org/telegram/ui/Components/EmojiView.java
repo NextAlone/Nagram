@@ -76,6 +76,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -4081,7 +4082,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (svgThumb != null) {
                 svgThumb.overrideWidthAndHeight(512, 512);
             }
-            if (object == null) {
+            if (object == null || MessageObject.isVideoSticker(document)) {
                 object = document;
             }
 
@@ -4099,7 +4100,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (imageLocation == null) {
                 return;
             }
-            if (object instanceof TLRPC.Document && MessageObject.isAnimatedStickerDocument(document, true)) {
+            if (object instanceof TLRPC.Document && (MessageObject.isAnimatedStickerDocument(document, true) || MessageObject.isVideoSticker(document))) {
                 if (svgThumb != null) {
                     imageView.setImage(ImageLocation.getForDocument(document), "30_30", svgThumb, 0, set);
                 } else {
