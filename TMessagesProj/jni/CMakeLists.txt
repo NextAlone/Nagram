@@ -762,11 +762,6 @@ target_link_libraries(${NATIVE_LIB}
         OpenSLES
         cpufeatures)
 
-#if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
-#    target_link_libraries(${NATIVE_LIB}
-#            -Wl,--whole-archive vpxasm -Wl,--no-whole-archive
-#            c)
-#endif()
 
 include(AndroidNdkModules)
 android_ndk_import_module_cpufeatures()

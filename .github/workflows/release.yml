@@ -115,9 +115,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            TMessagesProj/jni/ffmpeg/build
-            TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh') }}
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-${{ matrix.flavor }}
       - name: Checkout Library
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -128,7 +127,8 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
+            TMessagesProj/jni/libvpx/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh') }}
       - name: BoringSSL Cache
         uses: actions/cache@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -393,6 +393,7 @@ jobs:
                 -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
                 -F document="@$apk" \
                 --silent --show-error --fail >/dev/null
+              sleep 1
             done
           }
           upload apks/NekoX-*-mini-*-release.apk
