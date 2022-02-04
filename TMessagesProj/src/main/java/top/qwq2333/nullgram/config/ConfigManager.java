@@ -19,10 +19,22 @@
 
 package top.qwq2333.nullgram.config;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import kotlin.text.StringsKt;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.messenger.ApplicationLoader;
 import top.qwq2333.nullgram.utils.AppcenterUtils;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
@@ -188,4 +200,157 @@ public class ConfigManager {
             }
         }
     }
+
+    /**
+     * 导出配置
+     *
+     * @return json格式的配置
+     */
+    @NonNull
+    public static String exportConfigurationToJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        ArrayList<String> userconfig = new ArrayList<>();
+        userconfig.add("saveIncomingPhotos");
+        userconfig.add("passcodeHash");
+        userconfig.add("passcodeType");
+        userconfig.add("passcodeHash");
+        userconfig.add("autoLockIn");
+        userconfig.add("useFingerprint");
+        SharedPreferenceToJSON("userconfing", json, userconfig::contains);
+
+        ArrayList<String> mainconfig = new ArrayList<>();
+        mainconfig.add("saveToGallery");
+        mainconfig.add("autoplayGifs");
+        mainconfig.add("autoplayVideo");
+        mainconfig.add("mapPreviewType");
+        mainconfig.add("raiseToSpeak");
+        mainconfig.add("customTabs");
+        mainconfig.add("directShare");
+        mainconfig.add("shuffleMusic");
+        mainconfig.add("playOrderReversed");
+        mainconfig.add("inappCamera");
+        mainconfig.add("repeatMode");
+        mainconfig.add("fontSize");
+        mainconfig.add("bubbleRadius");
+        mainconfig.add("ivFontSize");
+        mainconfig.add("allowBigEmoji");
+        mainconfig.add("streamMedia");
+        mainconfig.add("saveStreamMedia");
+        mainconfig.add("smoothKeyboard");
+        mainconfig.add("pauseMusicOnRecord");
+        mainconfig.add("streamAllVideo");
+        mainconfig.add("streamMkv");
+        mainconfig.add("suggestStickers");
+        mainconfig.add("sortContactsByName");
+        mainconfig.add("sortFilesByName");
+        mainconfig.add("noSoundHintShowed");
+        mainconfig.add("directShareHash");
+        mainconfig.add("useThreeLinesLayout");
+        mainconfig.add("archiveHidden");
+        mainconfig.add("distanceSystemType");
+        mainconfig.add("loopStickers");
+        mainconfig.add("keepMedia");
+        mainconfig.add("noStatusBar");
+        mainconfig.add("lastKeepMediaCheckTime");
+        mainconfig.add("searchMessagesAsListHintShows");
+        mainconfig.add("searchMessagesAsListUsed");
+        mainconfig.add("stickersReorderingHintUsed");
+        mainconfig.add("textSelectionHintShows");
+        mainconfig.add("scheduledOrNoSoundHintShows");
+        mainconfig.add("lockRecordAudioVideoHint");
+        mainconfig.add("disableVoiceAudioEffects");
+        mainconfig.add("chatSwipeAction");
+
+        mainconfig.add("theme");
+        mainconfig.add("selectedAutoNightType");
+        mainconfig.add("autoNightScheduleByLocation");
+        mainconfig.add("autoNightBrighnessThreshold");
+        mainconfig.add("autoNightDayStartTime");
+        mainconfig.add("autoNightDayEndTime");
+        mainconfig.add("autoNightSunriseTime");
+        mainconfig.add("autoNightCityName");
+        mainconfig.add("autoNightSunsetTime");
+        mainconfig.add("autoNightLocationLatitude3");
+        mainconfig.add("autoNightLocationLongitude3");
+        mainconfig.add("autoNightLastSunCheckDay");
+
+        mainconfig.add("lang_code");
+
+        SharedPreferenceToJSON("mainconfig", json, mainconfig::contains);
+        SharedPreferenceToJSON("themeconfig", json, null);
+        SharedPreferenceToJSON("globalConfig", json, null);
+        return json.toString();
+    }
+
+    /**
+     * 将SharePreference的数据转换成json
+     *
+     * @param sp     SharePreferences name
+     * @param object 传入的JsonObject将会被传入SharePreferences中的配置
+     * @param filter 过滤 只接收哪些key
+     * @throws JSONException Ignore 一般不会发生
+     */
+    private static void SharedPreferenceToJSON(@NonNull String sp, @NonNull JSONObject object,
+        @Nullable Function<String, Boolean> filter) throws JSONException {
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences(
+            sp, Activity.MODE_PRIVATE);
+        JSONObject jsonConfig = new JSONObject();
+        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
+            String key = entry.getKey();
+            if (filter != null && !filter.apply(key)) {
+                continue;
+            }
+            if (entry.getValue() instanceof Long) {
+                key = key + "_long";
+            } else if (entry.getValue() instanceof Float) {
+                key = key + "_float";
+            }
+            jsonConfig.put(key, entry.getValue());
+        }
+        object.put(sp, jsonConfig);
+    }
+
+    /**
+     * 导入配置
+     *
+     * @param configJson 待导入配置 格式为Json
+     * @throws JSONException 若传入配置不为json或者json不合法就抛出这个错误
+     */
+    @SuppressLint("ApplySharedPref")
+    public static void importSettings(@NonNull JsonObject configJson) throws JSONException {
+        for (Map.Entry<String, JsonElement> element : configJson.entrySet()) {
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences(
+                element.getKey(), Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            for (Map.Entry<String, JsonElement> config : ((JsonObject) element.getValue()).entrySet()) {
+                String key = config.getKey();
+                JsonPrimitive value = (JsonPrimitive) config.getValue();
+                if (value.isBoolean()) {
+                    editor.putBoolean(key, value.getAsBoolean());
+                } else if (value.isNumber()) {
+                    boolean isLong = false;
+                    boolean isFloat = false;
+                    if (key.endsWith("_long")) {
+                        key = StringsKt.substringBeforeLast(key, "_long", key);
+                        isLong = true;
+                    } else if (key.endsWith("_float")) {
+                        key = StringsKt.substringBeforeLast(key, "_float", key);
+                        isFloat = true;
+                    }
+                    if (isLong) {
+                        editor.putLong(key, value.getAsLong());
+                    } else if (isFloat) {
+                        editor.putFloat(key, value.getAsFloat());
+                    } else {
+                        editor.putInt(key, value.getAsInt());
+                    }
+                } else {
+                    editor.putString(key, value.getAsString());
+                }
+            }
+            editor.commit();
+        }
+
+    }
+
 }

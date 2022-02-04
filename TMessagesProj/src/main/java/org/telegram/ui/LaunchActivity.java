@@ -2010,6 +2010,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                         }
                                     } else if ((url.startsWith("tg:calllog") || url.startsWith("tg://calllog"))) {
                                         showCallLog = true;
+                                    } else if (url.startsWith("tg:user") || url.startsWith("tg://user")) {
+                                        try {
+                                            url = url.replace("tg:user", "tg://telegram.org").replace("tg://user", "tg://telegram.org");
+                                            data = Uri.parse(url);
+                                            int userId = Utilities.parseInt(data.getQueryParameter("id"));
+                                            if (userId != 0) {
+                                                push_user_id = userId;
+                                            }
+                                        } catch (Exception e) {
+                                            LogUtilsKt.e(e);
+                                        }
                                     } else if ((url.startsWith("tg:call") || url.startsWith("tg://call"))) {
                                         if (UserConfig.getInstance(currentAccount).isClientActivated()) {
                                             final String extraForceCall = "extra_force_call";

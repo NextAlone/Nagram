@@ -19,9 +19,14 @@
 
 package top.qwq2333.nullgram.utils
 
+import android.content.Context
 import android.widget.Toast
 import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import org.telegram.tgnet.TLRPC
+import org.telegram.ui.ActionBar.AlertDialog
+import top.qwq2333.nullgram.ui.BottomBuilder
 
 
 object AlertUtil {
@@ -44,5 +49,79 @@ object AlertUtil {
             Toast.LENGTH_LONG
         ).show()
     })
+
+    @JvmStatic
+    fun showSimpleAlert(ctx: Context?, error: Throwable) {
+
+        showSimpleAlert(ctx, null, error.message ?: error.javaClass.simpleName)
+
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun showSimpleAlert(
+        ctx: Context?,
+        text: String,
+        listener: ((AlertDialog.Builder) -> Unit)? = null
+    ) {
+
+        showSimpleAlert(ctx, null, text, listener)
+
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun showSimpleAlert(
+        ctx: Context?,
+        title: String?,
+        text: String,
+        listener: ((AlertDialog.Builder) -> Unit)? = null
+    ) = UIUtil.runOnUIThread(Runnable {
+
+        if (ctx == null) return@Runnable
+
+        val builder = AlertDialog.Builder(ctx)
+
+        builder.setTitle(title ?: LocaleController.getString("AppName", R.string.AppName))
+        builder.setMessage(text)
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
+
+            builder.dismissRunnable?.run()
+            listener?.invoke(builder)
+
+        }
+
+        builder.show()
+
+    })
+
+    @JvmStatic
+    @JvmOverloads
+    fun showConfirm(
+        ctx: Context,
+        title: String,
+        text: String? = null,
+        icon: Int,
+        button: String,
+        red: Boolean,
+        listener: Runnable
+    ) = UIUtil.runOnUIThread(Runnable {
+        val builder = BottomBuilder(ctx)
+
+        if (text != null) {
+            builder.addTitle(title, text)
+        } else {
+            builder.addTitle(title)
+        }
+
+        builder.addItem(button, icon, red) {
+            listener.run()
+        }
+        builder.addCancelItem()
+        builder.show()
+
+    })
+
 
 }

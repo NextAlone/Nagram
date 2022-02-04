@@ -19,25 +19,40 @@
 
 package top.qwq2333.nullgram.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.gson.JsonObject;
+import com.jakewharton.processphoenix.ProcessPhoenix;
+import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -46,15 +61,16 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.UpdateAppAlertDialog;
+import org.telegram.ui.DocumentSelectActivity;
 import org.telegram.ui.LaunchActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.helpers.UpdateHelper;
-import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.AlertUtil;
+import top.qwq2333.nullgram.utils.FileUtils;
+import top.qwq2333.nullgram.utils.JsonUtils;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.ShareUtil;
 
 @SuppressLint("NotifyDataSetChanged")
 public class MainSettingActivity extends BaseFragment {
@@ -88,19 +104,66 @@ public class MainSettingActivity extends BaseFragment {
         return true;
     }
 
+    private static final int backup_settings = 1;
+    private static final int import_settings = 2;
+
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setTitle(LocaleController.getString("NullSettings", R.string.NullSettings));
+        ActionBarMenu menu = actionBar.createMenu();
+        ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
+        otherMenu.addSubItem(backup_settings,
+            LocaleController.getString("BackupSettings", R.string.BackupSettings));
+        otherMenu.addSubItem(import_settings,
+            LocaleController.getString("ImportSettings", R.string.ImportSettings));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
+
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
                     finishFragment();
+                } else if (id == backup_settings) {
+                    backupSettings();
+                } else if (id == import_settings) {
+                    try {
+                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(
+                            Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                            getParentActivity().requestPermissions(
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                            return;
+                        }
+                    } catch (Throwable ignore) {
+                    }
+                    DocumentSelectActivity fragment = new DocumentSelectActivity(false);
+                    fragment.setMaxSelectedFiles(1);
+                    fragment.setAllowPhoto(false);
+                    fragment.setDelegate(
+                        new DocumentSelectActivity.DocumentSelectActivityDelegate() {
+                            @Override
+                            public void didSelectFiles(DocumentSelectActivity activity,
+                                ArrayList<String> files, String caption, boolean notify,
+                                int scheduleDate) {
+                                activity.finishFragment();
+                                importSettings(getParentActivity(), new File(files.get(0)));
+                            }
+
+                            @Override
+                            public void didSelectPhotos(
+                                ArrayList<SendMessagesHelper.SendingMediaInfo> photos,
+                                boolean notify, int scheduleDate) {
+                            }
+
+                            @Override
+                            public void startDocumentSelectActivity() {
+                            }
+                        });
+                    presentFragment(fragment);
                 }
             }
         });
@@ -322,5 +385,50 @@ public class MainSettingActivity extends BaseFragment {
         }
     }
 
+    private void backupSettings() {
 
+        try {
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(),
+                DateFormat.format("yyyyMMdd", System.currentTimeMillis())
+                    + "-nullgram-settings.json");
+            FileUtils.writeUtf8String(ConfigManager.exportConfigurationToJson(), cacheFile);
+            ShareUtil.shareFile(getParentActivity(), cacheFile);
+        } catch (JSONException e) {
+            AlertUtil.showSimpleAlert(getParentActivity(), e);
+        } catch (Exception e) {
+            LogUtilsKt.e(e);
+        }
+
+    }
+
+    public static void importSettings(Context context, File settingsFile) {
+
+        AlertUtil.showConfirm(context,
+            LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert),
+            R.drawable.baseline_security_24,
+            LocaleController.getString("Import", R.string.Import),
+            true,
+            () -> importSettingsConfirmed(context, settingsFile));
+
+    }
+
+    public static void importSettingsConfirmed(Context context, File settingsFile) {
+
+        try {
+            JsonObject configJson = JsonUtils.toJsonObject(FileUtils.readUtf8String(settingsFile));
+            ConfigManager.importSettings(configJson);
+
+            AlertDialog restart = new AlertDialog(context, 0);
+            restart.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            restart.setMessage(LocaleController.getString("RestartAppToTakeEffect",
+                R.string.RestartAppToTakeEffect));
+            restart.setPositiveButton(LocaleController.getString("OK", R.string.OK), (__, ___) -> {
+                ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
+            });
+            restart.show();
+        } catch (Exception e) {
+            AlertUtil.showSimpleAlert(context, e);
+        }
+
+    }
 }
