@@ -25,14 +25,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+        run: |
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
+            TMessagesProj/jni/libvpx/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -45,6 +48,8 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          sudo apt-get install yasm -y
+          ./run init libs libvpx
           ./run init libs ffmpeg
   boringssl:
     name: Native Build (BoringSSL)
@@ -94,6 +99,7 @@ jobs:
       - name: Fetch Status
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
@@ -112,7 +118,8 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
+            TMessagesProj/jni/libvpx/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh') }}
       - name: BoringSSL Cache
         uses: actions/cache@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -134,11 +141,6 @@ jobs:
         run: |
           cd TMessagesProj/jni
           ./patch_boringssl.sh
-      - name: Native Build (libvpx)
-        if: (matrix.flavor == 'x86' || matrix.flavor == 'x86_64') && steps.cache.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get install yasm -y
-          ./run init libs libvpx
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
