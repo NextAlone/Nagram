@@ -1,0 +1,17 @@
+Index: vpx_dsp/add_noise.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/vpx_dsp/add_noise.c b/vpx_dsp/add_noise.c
+--- a/vpx_dsp/add_noise.c	(revision 626ff35955c2c35b806b3e0ecf551a1a8611cdbf)
++++ b/vpx_dsp/add_noise.c	(date 1643957537362)
+@@ -18,6 +18,8 @@
+ #include "vpx_dsp/postproc.h"
+ #include "vpx_ports/mem.h"
+ 
++#define rand() ((int)lrand48())
++
+ void vpx_plane_add_noise_c(uint8_t *start, const int8_t *noise, int blackclamp,
+                            int whiteclamp, int width, int height, int pitch) {
+   int i, j;

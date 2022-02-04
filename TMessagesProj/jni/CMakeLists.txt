@@ -25,10 +25,6 @@ else()
     set(LINKER_FLAGS "${LINKER_FLAGS} -Wl,-exclude-libs,ALL -Wl,--gc-sections -Wl,--strip-all")
 endif()
 
-message("CFLAGS ${C_FLAGS}")
-message("CXX_FLAGS ${CXX_FLAGS}")
-
-
 if (${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a")
     enable_language(ASM)
 else()

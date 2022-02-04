@@ -26,8 +26,11 @@ function build_one {
 	export CPPFLAGS="${CFLAGS}"
 	export CXXFLAGS="${CFLAGS} -std=c++11"
 	export ASFLAGS="-D__ANDROID__"
-	export LDFLAGS="-L$${PLATFORM}/usr/lib"
+	export LDFLAGS="-L${PLATFORM}/usr/lib"
 
+  if [ "x86" = ${ARCH} ]; then
+    patch -p1 < ../patches/libvpx_x86_fix.patch
+  fi
 	echo "Cleaning..."
 	make clean || true
 
@@ -60,6 +63,10 @@ function build_one {
 	--disable-webm-io
 
 	make -j$COMPILATION_PROC_COUNT install
+
+  if [ "x86" = ${ARCH} ]; then
+    patch -p1 -R < ../patches/libvpx_x86_fix.patch
+  fi
 }
 
 function setCurrentPlatform {
@@ -115,6 +122,7 @@ function build {
 	for arg in "$@"; do
 		case "${arg}" in
 			x86_64)
+        ANDROID_API=21
 				ARCH=x86_64
 				ARCH_NAME=x86_64
 				PREBUILT_ARCH=x86_64
@@ -128,6 +136,7 @@ function build {
 				build_one
 			;;
 			x86)
+        ANDROID_API=21
 				ARCH=x86
 				ARCH_NAME=i686
 				PREBUILT_ARCH=x86
@@ -141,6 +150,7 @@ function build {
 				build_one
 			;;
 			arm64)
+        ANDROID_API=21
 				ARCH=arm64
 				ARCH_NAME=aarch64
 				PREBUILT_ARCH=aarch64
@@ -154,6 +164,7 @@ function build {
 				build_one
 			;;
 			arm)
+        ANDROID_API=21
 				ARCH=arm
 				ARCH_NAME=arm
 				PREBUILT_ARCH=arm
@@ -173,7 +184,7 @@ function build {
 }
 
 if (( $# == 0 )); then
-	build x86_64 x86 arm arm64
+	build  x86 x86_64 arm arm64
 else
 	build $@
 fi
