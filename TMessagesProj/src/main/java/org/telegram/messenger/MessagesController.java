@@ -4876,7 +4876,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private List<List<Integer>> sliceThatBitch(List<Integer> ids, int slice) {
-        if (ids == null || ids.isEmpty()) return null;
+        if (ids == null || ids.isEmpty()) return new ArrayList<>();
         List<List<Integer>> sliced = new ArrayList<>(ids.size() / slice + 1);
         int i = 0;
         for (i = 0; i < ids.size() / slice; i++) {
