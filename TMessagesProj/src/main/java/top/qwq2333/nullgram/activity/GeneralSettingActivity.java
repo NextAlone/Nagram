@@ -44,6 +44,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int generalRow;
     private int showBotAPIRow;
     private int hidePhoneRow;
+    private int showExactNumberRow;
     private int general2Row;
 
 
@@ -100,6 +101,12 @@ public class GeneralSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.hidePhone));
                 }
+            } else if (position == showExactNumberRow) {
+                ConfigManager.toggleBoolean(Defines.showExactNumber);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.showExactNumber));
+                }
             }
         });
 
@@ -114,6 +121,7 @@ public class GeneralSettingActivity extends BaseFragment {
         }
     }
 
+    @SuppressLint("Range")
     public String getFileName(Uri uri) {
         String result = null;
         try (Cursor cursor = getParentActivity().getContentResolver()
@@ -132,6 +140,7 @@ public class GeneralSettingActivity extends BaseFragment {
         generalRow = rowCount++;
         showBotAPIRow = rowCount++;
         hidePhoneRow = rowCount++;
+        showExactNumberRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -274,6 +283,10 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("hidePhone",
                             R.string.hidePhone), ConfigManager.getBooleanOrFalse(
                             Defines.hidePhone), true);
+                    } else if (position == showExactNumberRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("showExactNumber",
+                            R.string.showExactNumber), ConfigManager.getBooleanOrFalse(
+                            Defines.showExactNumber), true);
                     }
                     break;
                 }

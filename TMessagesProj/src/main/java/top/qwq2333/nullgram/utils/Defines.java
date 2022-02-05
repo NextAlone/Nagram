@@ -39,6 +39,7 @@ public class Defines {
     public static final String hidePhone = "hidePhone";
     public static final String disableJumpToNextChannel = "disableJumpToNextChannel";
     public static final String verifyLinkTip = "verifyLinkTip";
+    public static final String showExactNumber = "showExactNumber";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";
