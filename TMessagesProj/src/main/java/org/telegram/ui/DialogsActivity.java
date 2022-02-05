@@ -75,7 +75,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import org.telegram.messenger.AccountInstance;
@@ -173,9 +172,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
-import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.helpers.UpdateHelper;
-import top.qwq2333.nullgram.utils.UIUtil;
+import top.qwq2333.nullgram.utils.PrivacyUtils;
 import top.qwq2333.nullgram.utils.UpdateUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -3541,8 +3538,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             FilesMigrationService.checkBottomSheet(this);
         }
         updateMenuButton(false);
-        //TODO
-        // PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
+        PrivacyUtils.postCheckAll(getParentActivity(), currentAccount);
         if (new Random().nextInt(100) < 20)
             UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
         return fragmentView;

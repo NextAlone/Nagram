@@ -122,6 +122,13 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         currentAccount = account;
     }
 
+    public TwoStepVerificationActivity(int account, TLRPC.TL_account_password password) {
+        this(account);
+        currentPassword = password;
+        passwordEntered = currentPasswordHash != null && currentPasswordHash.length > 0 || !currentPassword.has_password;
+        initPasswordNewAlgo(currentPassword);
+    }
+
     public void setPassword(TLRPC.TL_account_password password) {
         currentPassword = password;
         passwordEntered = false;
