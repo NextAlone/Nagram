@@ -31,45 +31,48 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserObject;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class DrawerProfileCell extends FrameLayout {
 
-    private BackupImageView avatarImageView;
-    private TextView nameTextView;
-    private TextView phoneTextView;
-    private ImageView shadowView;
-    private ImageView arrowView;
-    private RLottieImageView darkThemeView;
-    private RLottieDrawable sunDrawable;
+    private final BackupImageView avatarImageView;
+    private final TextView nameTextView;
+    private final TextView phoneTextView;
+    private final ImageView shadowView;
+    private final ImageView arrowView;
+    private final RLottieImageView darkThemeView;
+    private final RLottieDrawable sunDrawable;
 
-    private Rect srcRect = new Rect();
-    private Rect destRect = new Rect();
-    private Paint paint = new Paint();
-    private Paint backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Rect srcRect = new Rect();
+    private final Rect destRect = new Rect();
+    private final Paint paint = new Paint();
+    private final Paint backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Integer currentColor;
     private Integer currentMoonColor;
     private SnowflakesEffect snowflakesEffect;
     private boolean accountsShown;
     private int darkThemeBackgroundColor;
     public static boolean switchingTheme;
+    private Bitmap lastBitmap;
+    private TLRPC.User user;
 
     public DrawerProfileCell(Context context) {
         super(context);
@@ -327,10 +330,17 @@ public class DrawerProfileCell extends FrameLayout {
         if (user == null) {
             return;
         }
+        this.user = user;
         accountsShown = accounts;
         setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
-        phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+        if (!ConfigManager.getBooleanOrFalse(Defines.hidePhone)) {
+            phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+        } else if (!TextUtils.isEmpty(user.username)) {
+            phoneTextView.setText("@" + user.username);
+        } else {
+            phoneTextView.setText(LocaleController.getString("MobileHidden", R.string.MobileHidden));
+        }
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setForUserOrChat(user, avatarDrawable);

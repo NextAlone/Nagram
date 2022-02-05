@@ -43,6 +43,7 @@ public class GeneralSettingActivity extends BaseFragment {
 
     private int generalRow;
     private int showBotAPIRow;
+    private int hidePhoneRow;
     private int general2Row;
 
 
@@ -93,9 +94,14 @@ public class GeneralSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
                 }
+            } else if (position == hidePhoneRow) {
+                ConfigManager.toggleBoolean(Defines.hidePhone);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.hidePhone));
+                }
             }
         });
-
 
         return fragmentView;
     }
@@ -125,6 +131,7 @@ public class GeneralSettingActivity extends BaseFragment {
 
         generalRow = rowCount++;
         showBotAPIRow = rowCount++;
+        hidePhoneRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -263,6 +270,10 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("showBotAPIID",
                             R.string.showBotAPIID), ConfigManager.getBooleanOrFalse(
                             Defines.showBotAPIID), true);
+                    } else if (position == hidePhoneRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("hidePhone",
+                            R.string.hidePhone), ConfigManager.getBooleanOrFalse(
+                            Defines.hidePhone), true);
                     }
                     break;
                 }

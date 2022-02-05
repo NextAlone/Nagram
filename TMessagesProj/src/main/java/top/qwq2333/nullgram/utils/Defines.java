@@ -20,8 +20,6 @@
 package top.qwq2333.nullgram.utils;
 
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * ConfigManager用到的Key都塞这 统一管理比较方便些
  */
@@ -38,6 +36,7 @@ public class Defines {
     public static final String codeSyntaxHighlight = "codeSyntaxHighlight";
     public static final String channelAlias = "aliasChannel"; // ignore typo
     public static final String channelAliasPrefix = "aliasChannelName_"; // ignore typo
+    public static String hidePhone = "hidePhone";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";
@@ -66,5 +65,4 @@ public class Defines {
         1645976613, // CI Channel
         1477185964  // Discussion Group
     };
-
 }
