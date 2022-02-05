@@ -50,6 +50,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int allowScreenshotOnNoForwardChatRow;
     private int labelChannelUserRow;
     private int displaySpoilerDirectlyRow;
+    private int disableJumpToNextChannelRow;
     private int chat2Row;
 
 
@@ -129,6 +130,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)
                     );
                 }
+            } else if (position == disableJumpToNextChannelRow) {
+                ConfigManager.toggleBoolean(Defines.disableJumpToNextChannel);
+                if (view instanceof TextCheckCell){
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel)
+                    );
+                }
             }
         });
 
@@ -166,6 +174,7 @@ public class ChatSettingActivity extends BaseFragment {
         allowScreenshotOnNoForwardChatRow = rowCount++;
         labelChannelUserRow = rowCount++;
         displaySpoilerDirectlyRow = rowCount++;
+        disableJumpToNextChannelRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -336,6 +345,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("displaySpoilerDirectly",
                                 R.string.displaySpoilerDirectly),
                             ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly),
+                            true);
+                    } else if (position == disableJumpToNextChannelRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("disableJumpToNextChannel",
+                                R.string.disableJumpToNextChannel),
+                            ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel),
                             true);
                     }
                     break;

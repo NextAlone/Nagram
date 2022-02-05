@@ -90,5 +90,7 @@
     <string name="hidePhone">Hide phone number</string>
     <string name="AppLinkNotVerifiedMessage">For Android 12 and newer, you need to manually add link to verified links in order to open t.me links in Nullgram</string>
     <string name="AppLinkNotVerifiedTitle">App links not verified</string>
+    <string name="showExactNumber">Show Exact Number</string>
+    <string name="disableJumpToNextChannel">Disable Jump to Next Channel</string>
 
 </resources>
