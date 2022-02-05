@@ -172,6 +172,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
+import top.qwq2333.nullgram.ui.AppLinkVerifyBottomSheet;
 import top.qwq2333.nullgram.utils.PrivacyUtils;
 import top.qwq2333.nullgram.utils.UpdateUtil;
 
@@ -3536,6 +3537,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             FilesMigrationService.checkBottomSheet(this);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AppLinkVerifyBottomSheet.checkBottomSheet(this);
         }
         updateMenuButton(false);
         PrivacyUtils.postCheckAll(getParentActivity(), currentAccount);
