@@ -36,6 +36,7 @@ public class ExteraConfig {
     public static boolean hideKeyboardOnScroll;
     public static boolean disableReactions;
     public static boolean disableGreetingSticker;
+    public static boolean disableJumpToNextChannel;
     public static boolean archiveOnPull;
     public static boolean dateOfForwardedMsg;
 
@@ -93,6 +94,7 @@ public class ExteraConfig {
             hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
             disableReactions = preferences.getBoolean("disableReactions", false);
+            disableJumpToNextChannel = preferences.getBoolean("disableJumpToNextChannel", false);
             disableGreetingSticker = preferences.getBoolean("disableGreetingSticker", false);
             archiveOnPull = preferences.getBoolean("archiveOnPull", true);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
@@ -247,6 +249,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableGreetingSticker", disableGreetingSticker);
+        editor.apply();
+    }
+
+    public static void toggleDisableJumpToNextChannel() {
+        disableJumpToNextChannel = !disableJumpToNextChannel;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableJumpToNextChannel", disableJumpToNextChannel);
         editor.apply();
     }
 

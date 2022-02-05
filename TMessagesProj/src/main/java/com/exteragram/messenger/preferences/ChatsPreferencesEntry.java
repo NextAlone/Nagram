@@ -61,6 +61,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int hideKeyboardOnScrollRow;
     private int disableReactionsRow;
     private int disableGreetingStickerRow;
+    private int disableJumpToNextChannelRow;
     private int archiveOnPullRow;
     private int dateOfForwardedMsgRow;
     private int chatDividerRow;
@@ -260,7 +261,14 @@ public class ChatsPreferencesEntry extends BaseFragment {
             } else if (position == disableGreetingStickerRow) {
                 ExteraConfig.toggleDisableGreetingSticker();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableGreetingSticker);
+                }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
+            } else if (position == disableJumpToNextChannelRow) {
+                ExteraConfig.toggleDisableJumpToNextChannel();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
                 }
 
                 parentLayout.rebuildAllFragmentViews(false, false);
@@ -316,6 +324,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         hideKeyboardOnScrollRow = rowCount++;
         disableReactionsRow = rowCount++;
         disableGreetingStickerRow = rowCount++;
+        disableJumpToNextChannelRow = rowCount++;
         archiveOnPullRow = rowCount++;
         dateOfForwardedMsgRow = rowCount++;
         chatDividerRow = rowCount++;
@@ -391,6 +400,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableReactions", R.string.DisableReactions), ExteraConfig.disableReactions, true);
                     } else if (position == disableGreetingStickerRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableGreetingSticker", R.string.DisableGreetingSticker), ExteraConfig.disableGreetingSticker, true);
+                    } else if (position == disableJumpToNextChannelRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableJumpToNextChannel", R.string.DisableJumpToNextChannel), ExteraConfig.disableJumpToNextChannel, true);
                     } else if (position == rearVideoMessagesRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), ExteraConfig.rearVideoMessages, true);
                     } else if (position == disableCameraRow) {
@@ -445,9 +456,9 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == hideSendAsChannelRow ||
                        position == hideKeyboardOnScrollRow || position == archiveOnPullRow || position == dateOfForwardedMsgRow ||
-                       position == disableReactionsRow || position == disableGreetingStickerRow || position == rearVideoMessagesRow || 
-                       position == disableCameraRow || position == disableProximityEventsRow || position == pauseOnMinimizeRow ||
-                       position == disablePlaybackRow) {
+                       position == disableReactionsRow || position == disableGreetingStickerRow || position = disableJumpToNextChannelRow ||
+                       position == rearVideoMessagesRow || position == disableCameraRow || position == disableProximityEventsRow ||
+                       position == pauseOnMinimizeRow || position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;
