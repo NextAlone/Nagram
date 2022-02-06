@@ -21538,11 +21538,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(OPTION_PIN);
                             icons.add(R.drawable.deproko_baseline_pin_24);
                         }
-                        if (selectedObject != null && selectedObject.contentType == 0 && (messageText != null && messageText.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) && MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
-                            items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
-                            options.add(29);
-                            icons.add(R.drawable.msg_translate);
-                        }
+//                        if (selectedObject != null && selectedObject.contentType == 0 && (messageText != null && messageText.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) && MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
+//                            items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
+//                            options.add(29);
+//                            icons.add(R.drawable.msg_translate);
+//                        }
                         if (message.canEditMessage(currentChat)) {
                             items.add(LocaleController.getString("Edit", R.string.Edit));
                             options.add(OPTION_EDIT);
@@ -21553,7 +21553,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            options.add(29);
 //                            icons.add(R.drawable.msg_translate);
 //                        }
-                                                if (NekoConfig.showReport.Bool())                         {
+                        if (NekoConfig.showReport.Bool()) {
                             if (selectedObject.contentType == 0 && !selectedObject.isMediaEmptyWebpage() && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
                                 items.add(LocaleController.getString("ReportChat", R.string.ReportChat));
                                 options.add(OPTION_REPORT_CHAT);
@@ -21948,11 +21948,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(13);
                             icons.add(R.drawable.deproko_baseline_pin_24);
                         }
-                        if (selectedObject != null && selectedObject.contentType == 0 && (messageText != null && messageText.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) && MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
-                            items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
-                            options.add(29);
-                            icons.add(R.drawable.msg_translate);
-                        }
+//                        if (selectedObject != null && selectedObject.contentType == 0 && (messageText != null && messageText.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) && MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
+//                            items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
+//                            options.add(29);
+//                            icons.add(R.drawable.msg_translate);
+//                        }
                         if (allowEdit) {
                             items.add(LocaleController.getString("Edit", R.string.Edit));
                             options.add(12);
