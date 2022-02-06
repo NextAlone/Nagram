@@ -42,6 +42,7 @@ public class Defines {
     public static final String verifyLinkTip = "verifyLinkTip";
     public static final String showExactNumber = "showExactNumber";
     public static final String disableTrendingSticker = "disableTrendingSticker";
+    public static final String disableQuickReaction = "disableQuickReaction";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";

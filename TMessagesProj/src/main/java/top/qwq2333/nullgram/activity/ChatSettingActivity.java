@@ -53,6 +53,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int disableJumpToNextChannelRow;
     private int disableGreetingStickerRow;
     private int disableTrendingStickerRow;
+    private int disableQuickReactionRow;
     private int chat2Row;
 
 
@@ -153,6 +154,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker)
                     );
                 }
+            } else if (position == disableQuickReactionRow) {
+                ConfigManager.toggleBoolean(Defines.disableQuickReaction);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction)
+                    );
+                }
             }
         });
 
@@ -193,6 +201,7 @@ public class ChatSettingActivity extends BaseFragment {
         disableJumpToNextChannelRow = rowCount++;
         disableGreetingStickerRow = rowCount++;
         disableTrendingStickerRow = rowCount++;
+        disableQuickReactionRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -381,6 +390,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("disableTrendingSticker",
                                 R.string.disableTrendingSticker),
                             ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker),
+                            true);
+                    } else if (position == disableQuickReactionRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("disableQuickReaction",
+                                R.string.disableQuickReaction),
+                            ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction),
                             true);
                     }
                     break;

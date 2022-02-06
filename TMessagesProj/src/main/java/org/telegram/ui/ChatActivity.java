@@ -1440,6 +1440,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override
         public boolean hasDoubleTap(View view, int position) {
+            if (ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction)) {
+                return false;
+            }
             TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(getMediaDataController().getDoubleTapReaction());
             if (reaction == null) {
                 return false;
