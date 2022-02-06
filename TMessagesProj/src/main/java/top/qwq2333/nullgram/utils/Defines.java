@@ -67,7 +67,8 @@ public class Defines {
         966253902,  // Developer
         1668888324, // Channel
         1578562490, // Developer Channel
-        1645976613, // CI Channel
+        1645976613, // Update Channel
+        1714986438, // CI Channel
         1477185964  // Discussion Group
     };
 }
