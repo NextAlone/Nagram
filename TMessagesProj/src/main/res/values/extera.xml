@@ -45,6 +45,7 @@
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>
     <string name="HideKeyboardOnScroll">Hide keyboard on scrolling</string>
     <string name="DisableReactions">Disable reactions</string>
+    <string name="DisableGreetingSticker">Disable greeting sticker</string>
     <string name="ArchiveOnPull">Open archive on pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
 

@@ -34,10 +34,10 @@ public class ExteraConfig {
 
     public static boolean hideSendAsChannel;
     public static boolean hideKeyboardOnScroll;
+    public static boolean disableReactions;
+    public static boolean disableGreetingSticker;
     public static boolean archiveOnPull;
     public static boolean dateOfForwardedMsg;
-
-    public static boolean disableReactions;
 
     public static boolean rearVideoMessages;
     public static boolean disableCamera;
@@ -92,10 +92,10 @@ public class ExteraConfig {
 
             hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
+            disableReactions = preferences.getBoolean("disableReactions", false);
+            disableGreetingSticker = preferences.getBoolean("disableGreetingSticker", false);
             archiveOnPull = preferences.getBoolean("archiveOnPull", true);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
-
-            disableReactions = preferences.getBoolean("disableReactions", false);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             disableCamera = preferences.getBoolean("disableCamera", false);
@@ -234,6 +234,22 @@ public class ExteraConfig {
         editor.apply();
     }
 
+    public static void toggleDisableReactions() {
+        disableReactions = !disableReactions;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableReactions", disableReactions);
+        editor.apply();
+    }
+
+    public static void toggleDisableGreetingSticker() {
+        disableGreetingSticker = !disableGreetingSticker;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableGreetingSticker", disableGreetingSticker);
+        editor.apply();
+    }
+
     public static void toggleArchiveOnPull() {
         archiveOnPull = !archiveOnPull;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
@@ -247,14 +263,6 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("dateOfForwardedMsg", dateOfForwardedMsg);
-        editor.apply();
-    }
-
-    public static void toggleDisableReactions() {
-        disableReactions = !disableReactions;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("disableReactions", disableReactions);
         editor.apply();
     }
 
