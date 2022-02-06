@@ -33,12 +33,24 @@ import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.util.SparseArray;
-
 import androidx.collection.LongSparseArray;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
@@ -58,21 +70,8 @@ import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.LaunchActivity;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -1212,7 +1211,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadFeaturedStickers(boolean cache, boolean force) {
-        if (loadingFeaturedStickers) {
+        if (ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker) || loadingFeaturedStickers) {
             return;
         }
         loadingFeaturedStickers = true;

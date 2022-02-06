@@ -52,6 +52,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int displaySpoilerDirectlyRow;
     private int disableJumpToNextChannelRow;
     private int disableGreetingStickerRow;
+    private int disableTrendingStickerRow;
     private int chat2Row;
 
 
@@ -117,7 +118,7 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat));
                 }
             } else if (position == labelChannelUserRow) {
-                if (!ConfigManager.getBooleanOrFalse(Defines.channelAlias)){
+                if (!ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
                     ConfigManager.toggleBoolean(Defines.labelChannelUser);
                     if (view instanceof TextCheckCell) {
                         ((TextCheckCell) view).setChecked(
@@ -126,23 +127,30 @@ public class ChatSettingActivity extends BaseFragment {
                 }
             } else if (position == displaySpoilerDirectlyRow) {
                 ConfigManager.toggleBoolean(Defines.displaySpoilerMsgDirectly);
-                if (view instanceof  TextCheckCell){
+                if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)
                     );
                 }
             } else if (position == disableJumpToNextChannelRow) {
                 ConfigManager.toggleBoolean(Defines.disableJumpToNextChannel);
-                if (view instanceof TextCheckCell){
+                if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel)
                     );
                 }
             } else if (position == disableGreetingStickerRow) {
                 ConfigManager.toggleBoolean(Defines.disableGreetingSticker);
-                if (view instanceof TextCheckCell){
+                if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker)
+                    );
+                }
+            } else if (position == disableTrendingStickerRow) {
+                ConfigManager.toggleBoolean(Defines.disableTrendingSticker);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker)
                     );
                 }
             }
@@ -184,6 +192,7 @@ public class ChatSettingActivity extends BaseFragment {
         displaySpoilerDirectlyRow = rowCount++;
         disableJumpToNextChannelRow = rowCount++;
         disableGreetingStickerRow = rowCount++;
+        disableTrendingStickerRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -339,8 +348,8 @@ public class ChatSettingActivity extends BaseFragment {
                             ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat),
                             true, true);
                     } else if (position == labelChannelUserRow) {
-                        if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)){
-                            textCell.setEnabled(false,null);
+                        if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
+                            textCell.setEnabled(false, null);
                         }
                         textCell.setTextAndValueAndCheck(
                             LocaleController.getString("labelChannelUser",
@@ -366,6 +375,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("disableGreetingSticker",
                                 R.string.disableGreetingSticker),
                             ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker),
+                            true);
+                    } else if (position == disableTrendingStickerRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("disableTrendingSticker",
+                                R.string.disableTrendingSticker),
+                            ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker),
                             true);
                     }
                     break;

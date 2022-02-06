@@ -81,7 +81,6 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -3238,7 +3237,7 @@ public class EmojiView extends FrameLayout implements
         if (trendingAdapter != null) {
             trendingAdapter.notifyDataSetChanged();
         }
-        if (!featured.isEmpty() && (featuredStickerSets.isEmpty() || preferences.getLong("featured_hidden", 0) == featured.get(0).set.id)) {
+        if (!ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker) && !featured.isEmpty() && (featuredStickerSets.isEmpty() || preferences.getLong("featured_hidden", 0) == featured.get(0).set.id)) {
             final int id = mediaDataController.getUnreadStickerSets().isEmpty() ? 2 : 3;
             final StickerTabView trendingStickersTabView = stickersTab.addStickerIconTab(id, stickerIcons[id]);
             trendingStickersTabView.textView.setText(LocaleController.getString("FeaturedStickersShort", R.string.FeaturedStickersShort));
@@ -3398,9 +3397,11 @@ public class EmojiView extends FrameLayout implements
             gifTabs.addIconTab(0, gifIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", R.string.RecentStickers));
         }
 
-        gifTrendingTabNum = gifTabsCount++;
-        gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", R.string.FeaturedGifs));
-
+        if(!ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker)) {
+            gifTrendingTabNum = gifTabsCount++;
+            gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(
+                LocaleController.getString("FeaturedGifs", R.string.FeaturedGifs));
+        }
         gifFirstEmojiTabNum = gifTabsCount;
         final int hPadding = AndroidUtilities.dp(13);
         final int vPadding = AndroidUtilities.dp(11);

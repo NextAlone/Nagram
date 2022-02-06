@@ -93,5 +93,6 @@
     <string name="showExactNumber">Show Exact Number</string>
     <string name="disableJumpToNextChannel">Disable Jump to Next Channel</string>
     <string name="disableGreetingSticker">Disable Greeting Sticker</string>
+    <string name="disableTrendingSticker">Disable Trending Sticker</string>
 
 </resources>
