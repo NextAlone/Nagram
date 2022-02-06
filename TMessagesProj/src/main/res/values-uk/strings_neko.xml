@@ -43,7 +43,7 @@
     <string name="Nya">Мяу!</string>
     <string name="SaveCacheToExternalFilesDir">Ізоляція сховища</string>
     <string name="SaveCacheToExternalFilesDirAbout">Збережіть папку \"Telegram\" у специфічному застосунку, щоб підтримувати зв\'язок спільного сховища.</string>
-    <string name="SensitiveDisableFiltering">Вимкнути чутливе фільтрування вмісту</string>
+    <string name="SensitiveDisableFiltering">Не фільтрувати делікатний вміст</string>
     <string name="SensitiveAbout">Показує конфіденційні медіа в публічних каналах на всіх ваших пристроях.</string>
     <string name="StickerSize">Розмір наліпки</string>
     <string name="StickerSizeDialogMessageBigOne">Великий</string>
@@ -140,4 +140,6 @@
     <string name="SaveToDownloadCount_one">Зберігання %1$d файлу до завантажень</string>
     <string name="SaveToDownloadCount_two">Зберігання %1$d файлів до завантажень</string>
     <string name="SaveToDownloadCount_few">Зберігання %1$d файлів до завантажень</string>
+    <string name="showBottomActionsWhenSelecting">Показати дії знизу при виділенні</string>
+    <string name="channelLabel">канал</string>
 </resources>

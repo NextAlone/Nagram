@@ -141,4 +141,6 @@
     <string name="reactions">Reações no menu</string>
     <string name="doubleTapShowReactions">Mostrar reações apenas ao tocar duas vezes</string>
     <string name="doubleTapSendReactions">Enviar reação ao tocar duas vezes (padrão)</string>
+    <string name="showBottomActionsWhenSelecting">Mostrar ações inferiores ao selecionar</string>
+    <string name="channelLabel">canal</string>
 </resources>

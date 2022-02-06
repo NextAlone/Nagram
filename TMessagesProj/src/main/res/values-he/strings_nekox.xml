@@ -273,4 +273,6 @@
     <string name="NekoXUpdateTranslationHint">לחיצה תתרגם את יומן השינויים</string>
     <string name="AutoCheckUpdatePreview">תצוגה מקדימה (לא יציב)</string>
     <string name="AppUpdateNekoX">עדכון Nekogram X</string>
+    <string name="Name">שם</string>
+    <string name="channelAlias">כינוי ערוץ</string>
 </resources>

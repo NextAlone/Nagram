@@ -273,4 +273,10 @@
     <string name="AutoCheckUpdatePreview">Передогляд (Нестабільно)</string>
     <string name="NekoXUpdateTranslationHint">Натисніть щоб перекласти журнал змін</string>
     <string name="AppUpdateNekoX">Оновити Nekogram X</string>
+    <string name="Name">Ім\'я</string>
+    <string name="channelAlias">Псевдонім каналу</string>
+    <string name="labelChannelUserDetails">Підписувати повідомлення з каналу відповідно</string>
+    <string name="setChannelAliasName">Вкажіть псевдонім</string>
+    <string name="labelChannelUser">Мітка користувача-каналу</string>
+    <string name="channelAliasDetails">Якщо ввімкнена мітка користувача-каналу.</string>
 </resources>
