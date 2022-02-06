@@ -698,15 +698,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             exportLoginTokenRequest.api_id = NekoXConfig.currentAppId();
             exportLoginTokenRequest.api_hash = NekoXConfig.currentAppHash();
             exportLoginTokenRequest.except_ids = new ArrayList<>();
-//            if (NekoXConfig.customApi == 0) {
-//                for (int a : SharedConfig.activeAccounts) {
-//                    UserConfig userConfig = UserConfig.getInstance(a);
-//                    if (!userConfig.isClientActivated()) {
-//                        continue;
-//                    }
-//                    exportLoginTokenRequest.except_ids.add(a);
-//                }
-//            }
+            for (int a : SharedConfig.activeAccounts) {
+                UserConfig userConfig = UserConfig.getInstance(a);
+                if (!userConfig.isClientActivated()) {
+                    continue;
+                }
+                exportLoginTokenRequest.except_ids.add(userConfig.clientUserId);
+            }
         }
 
         getNotificationCenter().addObserver(this, NotificationCenter.updateLoginToken);
@@ -1958,12 +1956,19 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             TLRPC.TL_help_getCountriesList req = new TLRPC.TL_help_getCountriesList();
             req.lang_code = "";
+            CountrySelectActivity.Country testNumber = codesMap.get("999");
+            String testNumberFormat = phoneFormatMap.get("999");
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 AndroidUtilities.runOnUIThread(() -> {
                     if (error == null) {
                         countriesArray.clear();
                         codesMap.clear();
                         phoneFormatMap.clear();
+                        if (testNumber != null) {
+                            countriesArray.add(testNumber);
+                            codesMap.put(testNumber.code, testNumber);
+                            phoneFormatMap.put(testNumber.code, testNumberFormat);
+                        }
                         TLRPC.TL_help_countriesList help_countriesList = (TLRPC.TL_help_countriesList) response;
                         for (int i = 0; i < help_countriesList.countries.size(); i++) {
                             TLRPC.TL_help_country c = help_countriesList.countries.get(i);
@@ -2055,11 +2060,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
-//            boolean isTestBakcend = getConnectionsManager().isTestBackend();
-//            if (isTestBakcend != testBackend) {
-//                getConnectionsManager().switchBackend(false);
-//                isTestBakcend = testBackend;
-//            }
+            boolean isTestPhone = codeField.getText().toString().equals("999");
+            if (isTestPhone) {
+                FileLog.w("Login with test numbers");
+                DataCenter.applyTestDataCenter(currentAccount);
+            } else {
+                    DataCenter.applyOfficalDataCanter(currentAccount);
+            }
             if (getParentActivity() instanceof LaunchActivity) {
                 for (int a : SharedConfig.activeAccounts) {
                     UserConfig userConfig = UserConfig.getInstance(a);
