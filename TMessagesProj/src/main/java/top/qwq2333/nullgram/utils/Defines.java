@@ -33,6 +33,7 @@ public class Defines {
     public static final String allowScreenshotOnNoForwardChat = "allowScreenshotOnNoForwardChat";
     public static final String labelChannelUser = "labelChannelUser";
     public static final String displaySpoilerMsgDirectly = "displaySpoilerMsgDirectly";
+    public static final String disableGreetingSticker = "disableGreetingSticker";
     public static final String codeSyntaxHighlight = "codeSyntaxHighlight";
     public static final String channelAlias = "aliasChannel"; // ignore typo
     public static final String channelAliasPrefix = "aliasChannelName_"; // ignore typo

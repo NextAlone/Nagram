@@ -178,7 +178,6 @@ import org.telegram.ui.Adapters.StickersAdapter;
 import org.telegram.ui.Cells.BotHelpCell;
 import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ChatActionCell;
-import org.telegram.ui.Cells.ChatActionCell.ThemeDelegate;
 import org.telegram.ui.Cells.ChatLoadingCell;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.ChatUnreadCell;
@@ -4120,7 +4119,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         emptyViewContainer.setOnTouchListener((v, event) -> true);
 
         int distance = getArguments().getInt("nearby_distance", -1);
-        if ((distance >= 0 || preloadedGreetingsSticker != null) && currentUser != null && !userBlocked) {
+        if (!ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker) && (distance >= 0 || preloadedGreetingsSticker != null) && currentUser != null && !userBlocked) {
             greetingsViewContainer = new ChatGreetingsView(context, currentUser, distance, currentAccount, preloadedGreetingsSticker, themeDelegate);
             greetingsViewContainer.setListener((sticker) -> {
                 animatingDocuments.put(sticker, 0);
@@ -4148,6 +4147,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else if (currentUser != null && currentUser.id != 777000 && currentUser.id != 429000 && currentUser.id != 4244000 && MessagesController.isSupportUser(currentUser)) {
                     emptyMessage = LocaleController.getString("GotAQuestion", R.string.GotAQuestion);
                 } else if (currentUser == null || currentUser.self || currentUser.deleted || userBlocked) {
+                    emptyMessage = LocaleController.getString("NoMessages", R.string.NoMessages);
+                } else if (ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker)){
                     emptyMessage = LocaleController.getString("NoMessages", R.string.NoMessages);
                 }
                 if (emptyMessage == null) {

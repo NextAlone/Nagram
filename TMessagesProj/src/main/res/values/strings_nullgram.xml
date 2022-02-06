@@ -92,5 +92,6 @@
     <string name="AppLinkNotVerifiedTitle">App links not verified</string>
     <string name="showExactNumber">Show Exact Number</string>
     <string name="disableJumpToNextChannel">Disable Jump to Next Channel</string>
+    <string name="disableGreetingSticker">Disable Greeting Sticker</string>
 
 </resources>
