@@ -146,4 +146,5 @@
     <string name="SelectAnIcon">Choose an icon</string>
     <string name="MutualContact">Mutual contact</string>
     <string name="MutualContactDescription">This contact is a mutual contact.</string>
+
 </resources>
