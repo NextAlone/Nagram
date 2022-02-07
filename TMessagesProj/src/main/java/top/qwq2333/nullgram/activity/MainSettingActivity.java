@@ -74,7 +74,6 @@ public class MainSettingActivity extends BaseFragment {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
-    private boolean checkingUpdate = false;
 
     private int rowCount;
 
@@ -198,11 +197,7 @@ public class MainSettingActivity extends BaseFragment {
             } else if (position == licenseRow) {
                 presentFragment(new LicenseActivity());
             } else if (position == updateRow) {
-                checkingUpdate = true;
-                listAdapter.notifyItemChanged(updateRow);
                 Browser.openUrl(context, "tg://update");
-                checkingUpdate = false;
-                listAdapter.notifyItemChanged(updateRow);
             }
         });
         listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {

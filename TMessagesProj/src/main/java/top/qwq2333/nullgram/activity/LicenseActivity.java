@@ -19,6 +19,7 @@
 
 package top.qwq2333.nullgram.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -108,6 +109,7 @@ public class LicenseActivity  extends BaseFragment  {
                 return position;
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 Notice notice = mNotices.get(position);
