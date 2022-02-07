@@ -32,6 +32,7 @@ jobs:
             TMessagesProj/build/intermediates/cmake
             TMessagesProj/build/intermediates/stripped_native_libs
             TMessagesProj/build/intermediates/cxx
+            ~/.cache/ccache
           key: jni-${{ hashFiles('TMessagesProj/jni/**') }}
       - name: Gradle cache
         uses: actions/cache@v2
@@ -45,6 +46,7 @@ jobs:
       - name: Debug Build
         run: |
           echo -e "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}\nRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}\nRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}">>local.properties
+          ccache -M 10G
           ./gradlew TMessagesProj:assembleRelease
           echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV

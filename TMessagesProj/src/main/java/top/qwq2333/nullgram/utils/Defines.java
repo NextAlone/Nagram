@@ -43,6 +43,7 @@ public class Defines {
     public static final String showExactNumber = "showExactNumber";
     public static final String disableTrendingSticker = "disableTrendingSticker";
     public static final String disableQuickReaction = "disableQuickReaction";
+    public static final String showHiddenSettings = "showHiddenSettings";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";

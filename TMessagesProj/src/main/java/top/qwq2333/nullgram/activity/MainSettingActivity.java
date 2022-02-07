@@ -23,7 +23,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.format.DateFormat;
@@ -36,12 +35,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonObject;
 import com.jakewharton.processphoenix.ProcessPhoenix;
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
+import org.json.JSONException;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -67,6 +63,7 @@ import org.telegram.ui.DocumentSelectActivity;
 import org.telegram.ui.LaunchActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.AlertUtil;
+import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.FileUtils;
 import top.qwq2333.nullgram.utils.JsonUtils;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
@@ -91,6 +88,7 @@ public class MainSettingActivity extends BaseFragment {
     private int channelRow;
     private int websiteRow;
     private int sourceCodeRow;
+    private int licenseRow;
     private int about2Row;
     private int updateRow;
 
@@ -197,6 +195,8 @@ public class MainSettingActivity extends BaseFragment {
                 Browser.openUrl(getParentActivity(), "https://qwq2333.top");
             } else if (position == sourceCodeRow) {
                 Browser.openUrl(getParentActivity(), "https://github.com/qwq233/Nullgram");
+            } else if (position == licenseRow) {
+                presentFragment(new LicenseActivity());
             } else if (position == updateRow) {
                 checkingUpdate = true;
                 listAdapter.notifyItemChanged(updateRow);
@@ -228,6 +228,7 @@ public class MainSettingActivity extends BaseFragment {
         channelRow = rowCount++;
         websiteRow = rowCount++;
         sourceCodeRow = rowCount++;
+        licenseRow = rowCount++;
         about2Row = rowCount++;
 
         updateRow = rowCount++;
@@ -293,7 +294,9 @@ public class MainSettingActivity extends BaseFragment {
                         textCell.setTextAndValue(
                             LocaleController.getString("ViewSourceCode", R.string.ViewSourceCode),
                             "GitHub", true);
-
+                    } else if (position == licenseRow) {
+                        textCell.setText(
+                            LocaleController.getString("OpenSource", R.string.OpenSource), true);
                     }
                     break;
                 }
@@ -312,9 +315,7 @@ public class MainSettingActivity extends BaseFragment {
                     if (position == updateRow) {
                         textCell.setTextAndValue(
                             LocaleController.getString("CheckUpdate", R.string.CheckUpdate),
-                            "Click Me",
-                            true);
-
+                            "Click Me", true);
                     }
                     break;
                 }
@@ -405,10 +406,8 @@ public class MainSettingActivity extends BaseFragment {
 
         AlertUtil.showConfirm(context,
             LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert),
-            R.drawable.baseline_security_24,
-            LocaleController.getString("Import", R.string.Import),
-            true,
-            () -> importSettingsConfirmed(context, settingsFile));
+            R.drawable.baseline_security_24, LocaleController.getString("Import", R.string.Import),
+            true, () -> importSettingsConfirmed(context, settingsFile));
 
     }
 
