@@ -142,5 +142,6 @@
     <string name="customSavePathHint">Leave blank to save directly</string>
     <string name="showBottomActionsWhenSelecting">Show bottom actions when selecting</string>
     <string name="channelLabel">channel</string>
+    <string name="SelectAnIcon">Choose an icon</string>
 
 </resources>
