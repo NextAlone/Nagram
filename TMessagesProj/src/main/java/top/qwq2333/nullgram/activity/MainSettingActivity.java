@@ -205,6 +205,22 @@ public class MainSettingActivity extends BaseFragment {
                 listAdapter.notifyItemChanged(updateRow);
             }
         });
+        listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {
+            private int pressCount = 0;
+
+            @Override
+            public boolean onItemClick(View view, int position) {
+                if (position == experimentRow) {
+                    pressCount++;
+                    if (pressCount >= 2) {
+                        ConfigManager.toggleBoolean(Defines.showHiddenSettings);
+                        AndroidUtilities.shakeView(view, 2, 0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         return fragmentView;
     }

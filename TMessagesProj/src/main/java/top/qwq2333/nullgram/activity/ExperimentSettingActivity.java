@@ -127,7 +127,9 @@ public class ExperimentSettingActivity extends BaseFragment {
         rowCount = 0;
 
         experimentRow = rowCount++;
-        blockSponsorAdsRow = rowCount++;
+        if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
+            blockSponsorAdsRow = rowCount++;
+        }
         syntaxHighlightRow = rowCount++;
         aliasChannelRow = rowCount++;
         experiment2Row = rowCount++;
