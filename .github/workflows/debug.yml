@@ -335,7 +335,7 @@ jobs:
             -X POST \
             -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
             -F document="@$apk" \
-            -F caption="${{ github.event.head_commit.message }}\n$GITHUB_SHA" \
+            -F caption="${{ github.event.head_commit.message }}%0A%0A$GITHUB_SHA" \
             --silent --show-error --fail >/dev/null
           pkill telegram-bot
 

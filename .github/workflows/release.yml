@@ -317,8 +317,8 @@ jobs:
               sleep 1
             done
           }
-          upload apks/Nagram-*-mini-*-release.apk
-          upload apks/Nagram-*-mini-*-releaseNoGcm.apk
+          upload apks/Nagram-*-mini-arm64-v8a-release.apk
+          upload apks/Nagram-*-mini-armeabi-v7a-release.apk
           pkill telegram-bot
   telegram-bot-api:
     name: Telegram Bot API
