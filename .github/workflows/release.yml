@@ -196,7 +196,6 @@ jobs:
       matrix:
         flavor:
           - MiniRelease
-          - MiniReleaseNoGcm
     steps:
       - name: Checkout
         uses: actions/checkout@v2
