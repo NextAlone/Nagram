@@ -4981,4 +4981,6 @@
     <string name="LastUpdateRecently">Last successfully checked just now.</string>
     <string name="NullgramPrivacyPolicyUrl">https://github.com/qwq233/Nullgram/wiki/Privacy-Policy</string>
     <string name="BlurInChat">Blur in chat</string>
+  <string name="confirmToSendMediaMessages">Confirm To Send Media Messages</string>
+    <string name="disableInstantCamera">Disable Instant Camera</string>
 </resources>

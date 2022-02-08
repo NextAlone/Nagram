@@ -45,6 +45,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int showBotAPIRow;
     private int hidePhoneRow;
     private int showExactNumberRow;
+    private int disableInstantCameraRow;
     private int general2Row;
 
 
@@ -107,6 +108,12 @@ public class GeneralSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.showExactNumber));
                 }
+            } else if (position == disableInstantCameraRow) {
+                ConfigManager.toggleBoolean(Defines.disableInstantCamera);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera));
+                }
             }
         });
 
@@ -141,6 +148,7 @@ public class GeneralSettingActivity extends BaseFragment {
         showBotAPIRow = rowCount++;
         hidePhoneRow = rowCount++;
         showExactNumberRow = rowCount++;
+        disableInstantCameraRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -287,6 +295,10 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("showExactNumber",
                             R.string.showExactNumber), ConfigManager.getBooleanOrFalse(
                             Defines.showExactNumber), true);
+                    } else if (position == disableInstantCameraRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("disableInstantCamera",
+                            R.string.disableInstantCamera), ConfigManager.getBooleanOrFalse(
+                            Defines.disableInstantCamera), true);
                     }
                     break;
                 }

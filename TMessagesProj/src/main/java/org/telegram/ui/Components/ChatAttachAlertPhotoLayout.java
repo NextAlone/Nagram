@@ -48,7 +48,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.Keep;
 import androidx.core.graphics.ColorUtils;
 import androidx.exifinterface.media.ExifInterface;
@@ -56,7 +55,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -87,12 +90,8 @@ import org.telegram.ui.Cells.PhotoAttachPermissionCell;
 import org.telegram.ui.Cells.PhotoAttachPhotoCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.PhotoViewer;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -679,6 +678,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 }
             } else {
                 if (SharedConfig.inappCamera) {
+                    if (ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera)) {
+                        showCamera();
+                    }
                     openCamera(true);
                 } else {
                     if (parentAlert.delegate != null) {
@@ -1637,10 +1639,15 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             }
         }
+        if (deviceHasGoodCamera && ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera)) {
+            // Clear cached bitmap
+            File file = new File(ApplicationLoader.getFilesDirFixed(), "cthumb.jpg");
+            if (file.exists()) file.delete();
+        }
         if ((old != deviceHasGoodCamera || old2 != noCameraPermissions) && adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if (parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.baseFragment != null && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened) {
+        if (parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.baseFragment != null && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened && !ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera)) {
             showCamera();
         }
     }
@@ -1929,7 +1936,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     private void saveLastCameraBitmap() {
-        if (!canSaveCameraPreview) {
+        if (!canSaveCameraPreview || ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera)) {
             return;
         }
         try {
