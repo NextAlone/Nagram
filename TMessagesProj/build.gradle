@@ -14,7 +14,7 @@ configurations.all {
     exclude group: 'androidx.recyclerview', module: 'recyclerview'
 }
 
-def isPreview = false
+def isPreview = true
 
 dependencies {
     implementation 'androidx.core:core:1.6.0'
