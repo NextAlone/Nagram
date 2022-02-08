@@ -54,6 +54,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int disableGreetingStickerRow;
     private int disableTrendingStickerRow;
     private int disableQuickReactionRow;
+    private int confirmToSendMediaMessagesRow;
     private int chat2Row;
 
 
@@ -161,6 +162,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction)
                     );
                 }
+            } else if (position == confirmToSendMediaMessagesRow) {
+                ConfigManager.toggleBoolean(Defines.confirmToSendMediaMessages);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages)
+                    );
+                }
             }
         });
 
@@ -202,6 +210,7 @@ public class ChatSettingActivity extends BaseFragment {
         disableGreetingStickerRow = rowCount++;
         disableTrendingStickerRow = rowCount++;
         disableQuickReactionRow = rowCount++;
+        confirmToSendMediaMessagesRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -396,6 +405,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("disableQuickReaction",
                                 R.string.disableQuickReaction),
                             ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction),
+                            true);
+                    } else if (position == confirmToSendMediaMessagesRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("confirmToSendMediaMessages",
+                                R.string.confirmToSendMediaMessages),
+                            ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages),
                             true);
                     }
                     break;

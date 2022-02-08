@@ -44,6 +44,7 @@ public class Defines {
     public static final String disableTrendingSticker = "disableTrendingSticker";
     public static final String disableQuickReaction = "disableQuickReaction";
     public static final String showHiddenSettings = "showHiddenSettings";
+    public static final String confirmToSendMediaMessages = "confirmToSendMediaMessages";
 
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";
