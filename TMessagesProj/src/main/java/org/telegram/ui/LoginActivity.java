@@ -131,6 +131,7 @@ import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment {
@@ -592,10 +593,11 @@ public class LoginActivity extends BaseFragment {
         qrItem = menu.addItem(qr_login, R.drawable.msg_qrcode);
         qrItem.setContentDescription(
             LocaleController.getString("QRLoginTitle", R.string.QRLoginTitle));
-        customApiItem = menu.addItem(menu_custom_api, R.drawable.menu_settings);
-        customApiItem.setContentDescription(
-            LocaleController.getString("customApi", R.string.customAPI));
-
+        if(ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)){
+            customApiItem = menu.addItem(menu_custom_api, R.drawable.menu_settings);
+            customApiItem.setContentDescription(
+                LocaleController.getString("customApi", R.string.customAPI));
+        }
         FrameLayout container = new FrameLayout(context) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -2333,6 +2335,9 @@ public class LoginActivity extends BaseFragment {
                     break;
 
             }
+            LogUtilsKt.i("customAPI:" + ConfigManager.getIntOrDefault(Defines.customAPI,Defines.disableCustomAPI));
+            LogUtilsKt.i("appID:" + appId);
+            LogUtilsKt.i("appHash:" + appHash);
             req.api_hash = appHash;
             req.api_id = appId;
             req.phone_number = phone;
