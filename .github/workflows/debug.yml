@@ -32,6 +32,8 @@ jobs:
             TMessagesProj/build/intermediates/cmake
             TMessagesProj/build/intermediates/stripped_native_libs
             TMessagesProj/build/intermediates/cxx
+            TMessagesProj/build/intermediates/merged_jni_libs
+            TMessagesProj/build/intermediates/merged_native_libs
             ~/.cache/ccache
           key: jni-${{ hashFiles('TMessagesProj/jni/**') }}
       - name: Gradle cache
