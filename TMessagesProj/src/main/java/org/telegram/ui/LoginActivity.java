@@ -60,12 +60,15 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.io.BufferedReader;
@@ -79,6 +82,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
+import kotlin.Unit;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -123,6 +128,9 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
 import org.telegram.ui.Components.VerticalPositionAutoAnimator;
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.ui.BottomBuilder;
+import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment {
@@ -156,6 +164,7 @@ public class LoginActivity extends BaseFragment {
     private AnimatorSet doneItemAnimation;
     private ActionBarMenuItem botItem;
     private ActionBarMenuItem qrItem;
+    private ActionBarMenuItem customApiItem;
     private AnimatorSet itemAnimation;
     private ContextProgressView doneProgressView;
     private ImageView floatingButtonIcon;
@@ -170,6 +179,8 @@ public class LoginActivity extends BaseFragment {
     private final static int done_button = 1;
     private final static int bot_login = 2;
     private final static int qr_login = 3;
+    private final static int menu_custom_api = 4;
+
 
     private boolean needRequestPermissions;
 
@@ -265,6 +276,7 @@ public class LoginActivity extends BaseFragment {
     public View createView(Context context) {
         actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(int id) {
                 if (id == done_button) {
@@ -399,6 +411,159 @@ public class LoginActivity extends BaseFragment {
                     }
                 } else if (id == qr_login) {
                     ((PhoneView) views[0]).exportLoginToken(true);
+                } else if (id == menu_custom_api && ConfigManager.getBooleanOrFalse(
+                    Defines.showHiddenSettings)) {
+                    AtomicInteger targetApi = new AtomicInteger(-1);
+
+                    BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                    EditText[] inputs = new EditText[2];
+
+                    builder.addTitle(LocaleController.getString("customAPI", R.string.customAPI),
+                        true,
+                        LocaleController.getString("useCustomApiNotice",
+                            R.string.useCustomApiNotice));
+
+                    builder.addRadioItem(
+                        LocaleController.getString("disableCustonAPI", R.string.disableCustonAPI),
+                        ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
+                            == Defines.disableCustomAPI, (cell) -> {
+                            targetApi.set(0);
+                            builder.doRadioCheck(cell);
+                            for (EditText input : inputs) {
+                                input.setVisibility(View.GONE);
+                            }
+                            return Unit.INSTANCE;
+                        });
+
+                    builder.addRadioItem(
+                        LocaleController.getString("useOfficialAPI", R.string.useOfficialAPI),
+                        ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
+                            == Defines.useTelegramAPI, (cell) -> {
+
+                            targetApi.set(1);
+
+                            builder.doRadioCheck(cell);
+
+                            for (EditText input : inputs) {
+                                input.setVisibility(View.GONE);
+                            }
+
+                            return Unit.INSTANCE;
+
+                        });
+
+                    builder.addRadioItem(
+                        LocaleController.getString("useCustomAPI", R.string.useCustomAPI),
+                        ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
+                            == Defines.useCustomAPI, (cell) -> {
+
+                            targetApi.set(3);
+
+                            builder.doRadioCheck(cell);
+
+                            for (EditText input : inputs) {
+                                input.setVisibility(View.VISIBLE);
+                            }
+
+                            return Unit.INSTANCE;
+
+                        });
+
+                    inputs[0] = builder.addEditText("App Id");
+                    inputs[0].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    if (ConfigManager.getIntOrDefault(Defines.customAppId, 0) != 0) {
+                        inputs[0].setText(
+                            ConfigManager.getIntOrDefault(Defines.customAppId, 0) + "");
+                    }
+                    inputs[0].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count,
+                            int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before,
+                            int count) {
+                            if (StrUtil.isBlank(s.toString())) {
+                                ConfigManager.putInt(Defines.customAppId, 0);
+                            } else if (!NumberUtil.isInteger(s.toString())) {
+                                inputs[0].setText("0");
+                            } else {
+                                ConfigManager.putInt(Defines.customAppId,
+                                    NumberUtil.parseInt(s.toString()));
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    inputs[1] = builder.addEditText("App Hash");
+                    inputs[1].setFilters(new InputFilter[]{
+                        new InputFilter.LengthFilter(Defines.telegramHash.length())});
+                    if (StrUtil.isNotBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
+                        inputs[1].setText(ConfigManager.getStringOrDefault(Defines.customAppHash, "It shouldn't be happened"));
+                    }
+                    inputs[1].addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count,
+                            int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before,
+                            int count) {
+                            ConfigManager.putString(Defines.customAppHash, s.toString());
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    if (ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI) <= Defines.useTelegramAPI) {
+
+                        for (EditText input : inputs) {
+                            input.setVisibility(View.GONE);
+                        }
+
+                    }
+
+                    builder.addCancelButton();
+
+                    builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
+
+                        int target = targetApi.get();
+
+                        if (target > 2) {
+
+                            if (ConfigManager.getIntOrDefault(Defines.customAppId, 0) == 0) {
+
+                                inputs[0].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[0]);
+
+                                return Unit.INSTANCE;
+
+                            } else if (StrUtil.isBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
+
+                                inputs[1].requestFocus();
+                                AndroidUtilities.showKeyboard(inputs[1]);
+
+                                return Unit.INSTANCE;
+
+                            }
+
+                        }
+
+                        ConfigManager.putInt(Defines.customAPI, target);
+
+                        return Unit.INSTANCE;
+
+                    });
+
+                    builder.show();
                 }
             }
         });
@@ -427,6 +592,9 @@ public class LoginActivity extends BaseFragment {
         qrItem = menu.addItem(qr_login, R.drawable.msg_qrcode);
         qrItem.setContentDescription(
             LocaleController.getString("QRLoginTitle", R.string.QRLoginTitle));
+        customApiItem = menu.addItem(menu_custom_api, R.drawable.menu_settings);
+        customApiItem.setContentDescription(
+            LocaleController.getString("customApi", R.string.customAPI));
 
         FrameLayout container = new FrameLayout(context) {
             @Override
@@ -998,7 +1166,7 @@ public class LoginActivity extends BaseFragment {
 
     private void showButton(boolean show, boolean animated) {
         int newVisibility = show ? View.VISIBLE : View.GONE;
-        if (botItem.getVisibility() == newVisibility || qrItem.getVisibility() == newVisibility) {
+        if (botItem.getVisibility() == newVisibility || qrItem.getVisibility() == newVisibility || customApiItem.getVisibility() == newVisibility) {
             return;
         }
         if (itemAnimation != null) {
@@ -1009,13 +1177,19 @@ public class LoginActivity extends BaseFragment {
             if (show) {
                 botItem.setVisibility(View.VISIBLE);
                 qrItem.setVisibility(View.VISIBLE);
+                if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
+                    customApiItem.setVisibility(View.VISIBLE);
+                }
                 itemAnimation.playTogether(
                     ObjectAnimator.ofFloat(botItem, View.SCALE_X, 1.0f),
                     ObjectAnimator.ofFloat(botItem, View.SCALE_Y, 1.0f),
                     ObjectAnimator.ofFloat(botItem, View.ALPHA, 1.0f),
                     ObjectAnimator.ofFloat(qrItem, View.SCALE_X, 1.0f),
                     ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 1.0f),
-                    ObjectAnimator.ofFloat(qrItem, View.ALPHA, 1.0f));
+                    ObjectAnimator.ofFloat(qrItem, View.ALPHA, 1.0f),
+                    ObjectAnimator.ofFloat(customApiItem, View.SCALE_X, 1.0f),
+                    ObjectAnimator.ofFloat(customApiItem, View.SCALE_Y, 1.0f),
+                    ObjectAnimator.ofFloat(customApiItem, View.ALPHA, 1.0f));
             } else {
                 itemAnimation.playTogether(
                     ObjectAnimator.ofFloat(botItem, View.SCALE_X, 0.1f),
@@ -1023,7 +1197,10 @@ public class LoginActivity extends BaseFragment {
                     ObjectAnimator.ofFloat(botItem, View.ALPHA, 0.0f),
                     ObjectAnimator.ofFloat(qrItem, View.SCALE_X, 0.1f),
                     ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 0.1f),
-                    ObjectAnimator.ofFloat(qrItem, View.ALPHA, 0.0f));
+                    ObjectAnimator.ofFloat(qrItem, View.ALPHA, 0.0f),
+                    ObjectAnimator.ofFloat(customApiItem, View.SCALE_X, 0.1f),
+                    ObjectAnimator.ofFloat(customApiItem, View.SCALE_Y, 0.1f),
+                    ObjectAnimator.ofFloat(customApiItem, View.ALPHA, 0.0f));
             }
             itemAnimation.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -1032,6 +1209,7 @@ public class LoginActivity extends BaseFragment {
                         if (!show) {
                             botItem.setVisibility(View.GONE);
                             qrItem.setVisibility(View.GONE);
+                            customApiItem.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -1055,6 +1233,12 @@ public class LoginActivity extends BaseFragment {
                 qrItem.setScaleX(1.0f);
                 qrItem.setScaleY(1.0f);
                 qrItem.setAlpha(1.0f);
+                if(ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)){
+                    customApiItem.setVisibility(View.VISIBLE);
+                    customApiItem.setScaleX(1.0f);
+                    customApiItem.setScaleY(1.0f);
+                    customApiItem.setAlpha(1.0f);
+                }
             } else {
                 botItem.setVisibility(View.GONE);
                 botItem.setScaleX(0.1f);
@@ -1064,6 +1248,10 @@ public class LoginActivity extends BaseFragment {
                 qrItem.setScaleX(0.1f);
                 qrItem.setScaleY(0.1f);
                 qrItem.setAlpha(0.0f);
+                customApiItem.setVisibility(View.GONE);
+                customApiItem.setScaleX(0.1f);
+                customApiItem.setScaleY(0.1f);
+                customApiItem.setAlpha(0.0f);
             }
         }
     }
@@ -2114,8 +2302,26 @@ public class LoginActivity extends BaseFragment {
 
             ConnectionsManager.getInstance(currentAccount).cleanup(false);
             final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
-            req.api_hash = BuildVars.APP_HASH;
-            req.api_id = BuildVars.APP_ID;
+            String appHash = BuildVars.APP_HASH;
+            int appId = BuildVars.APP_ID;
+            switch(ConfigManager.getIntOrDefault(Defines.customAPI,Defines.disableCustomAPI)){
+                case Defines.disableCustomAPI:
+                    appId = BuildVars.APP_ID;
+                    appHash = BuildVars.APP_HASH;
+                    break;
+                case Defines.useTelegramAPI:
+                    appId = Defines.telegramID;
+                    appHash = Defines.telegramHash;
+                    break;
+                case Defines.useCustomAPI:
+                    appId = ConfigManager.getIntOrDefault(Defines.customAppId, BuildVars.APP_ID);
+                    appHash = ConfigManager.getStringOrDefault(Defines.customAppHash,
+                        BuildVars.APP_HASH);
+                    break;
+
+            }
+            req.api_hash = appHash;
+            req.api_id = appId;
             req.phone_number = phone;
             req.settings = new TLRPC.TL_codeSettings();
             req.settings.allow_flashcall =

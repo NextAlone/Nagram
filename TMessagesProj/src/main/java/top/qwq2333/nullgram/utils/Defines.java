@@ -47,6 +47,16 @@ public class Defines {
     public static final String showHiddenSettings = "showHiddenSettings";
     public static final String confirmToSendMediaMessages = "confirmToSendMediaMessages";
 
+    // Custom API
+    public static final String customAPI = "customAPI";
+    public static final String customAppId = "customAppId";
+    public static final String customAppHash = "customAppHash";
+    public static final int disableCustomAPI = 0;
+    public static final int useTelegramAPI = 1;
+    public static final int useCustomAPI = 2;
+    public static final int telegramID = 4;
+    public static final String telegramHash = "014b35b6184100b085b0d0572f9b5103";
+
     // Menu Display
     public static final String showDeleteDownloadFiles = "showDeleteDownloadFiles";
     public static final String showNoQuoteForward = "showNoQuoteForward";

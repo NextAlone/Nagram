@@ -203,7 +203,9 @@ public class ChatSettingActivity extends BaseFragment {
         ignoreBlockedUserMessagesRow = rowCount++;
         hideGroupStickerRow = rowCount++;
         messageMenuRow = rowCount++;
-        allowScreenshotOnNoForwardChatRow = rowCount++;
+        if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
+            allowScreenshotOnNoForwardChatRow = rowCount++;
+        }
         labelChannelUserRow = rowCount++;
         displaySpoilerDirectlyRow = rowCount++;
         disableJumpToNextChannelRow = rowCount++;
