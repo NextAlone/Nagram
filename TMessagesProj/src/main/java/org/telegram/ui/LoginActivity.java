@@ -1965,12 +1965,10 @@ public class LoginActivity extends BaseFragment {
                 });
             }
 
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            if (newAccount) {
                 testBackendCheckBox = new CheckBoxCell(context, 2);
                 testBackendCheckBox.setText("Test Backend", "", testBackend, false);
-                addView(testBackendCheckBox,
-                    LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT,
-                        Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
+                addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
                 testBackendCheckBox.setOnClickListener(v -> {
                     if (getParentActivity() == null) {
                         return;
@@ -1978,6 +1976,11 @@ public class LoginActivity extends BaseFragment {
                     CheckBoxCell cell = (CheckBoxCell) v;
                     testBackend = !testBackend;
                     cell.setChecked(testBackend, true);
+                    if (testBackend) {
+                        BulletinFactory.of((FrameLayout) fragmentView, null).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("TestBackendOn", R.string.TestBackendOn)).show();
+                    } else {
+                        BulletinFactory.of((FrameLayout) fragmentView, null).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("TestBackendOff", R.string.TestBackendOff)).show();
+                    }
                 });
             }
 
@@ -2087,15 +2090,21 @@ public class LoginActivity extends BaseFragment {
                                 countriesArray.add(countryWithCode);
                                 codesMap.put(c.country_codes.get(k).country_code, countryWithCode);
                                 if (c.country_codes.get(k).patterns.size() > 0) {
-                                    phoneFormatMap.put(c.country_codes.get(k).country_code,
-                                        c.country_codes.get(k).patterns.get(0));
+                                    phoneFormatMap.put(c.country_codes.get(k).country_code, c.country_codes.get(k).patterns.get(0));
                                 }
                             }
                         }
+                        CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
+                        String test_code = "999";
+                        countryWithCode.name = "Test Number";
+                        countryWithCode.code = test_code;
+
+                        countriesArray.add(countryWithCode);
+                        codesMap.put(test_code, countryWithCode);
+                        phoneFormatMap.put(test_code, "XX X XXXX");
                     }
                 });
-            }, ConnectionsManager.RequestFlagWithoutLogin
-                | ConnectionsManager.RequestFlagFailOnServerErrors);
+            }, ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
         }
 
         public void selectCountry(CountrySelectActivity.Country country) {
@@ -2261,10 +2270,14 @@ public class LoginActivity extends BaseFragment {
                 onFieldError(phoneField);
                 return;
             }
-            String phone = PhoneFormat.stripExceptNumbers(
-                "" + codeField.getText() + phoneField.getText());
-            boolean isTestBakcend =
-                BuildVars.DEBUG_PRIVATE_VERSION && getConnectionsManager().isTestBackend();
+            String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
+            if (!testBackend && "999".equals(codeField.getText().toString())) {
+                testBackend = true;
+                if (testBackendCheckBox != null) {
+                    testBackendCheckBox.setChecked(true, true);
+                }
+            }
+            boolean isTestBakcend = getConnectionsManager().isTestBackend();
             if (isTestBakcend != testBackend) {
                 getConnectionsManager().switchBackend(false);
                 isTestBakcend = testBackend;
