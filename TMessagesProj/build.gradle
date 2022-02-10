@@ -331,7 +331,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Nagram-v" + versionName)
+            outputFileName = outputFileName.replace("TMessagesProj", "Nagram-v" + versionName + "(" + versionCode + ")")
         }
     }
 
