@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'com.github.triplet.play' version '3.7.0'
 }
 apply plugin: 'kotlin-android'
 
@@ -15,6 +16,21 @@ configurations.all {
 }
 
 def isPreview = true
+def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
+
+if (serviceAccountCredentialsFile.isFile()) {
+    setupPlay(isPreview)
+    play.serviceAccountCredentials = serviceAccountCredentialsFile
+} else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
+    setupPlay(isPreview)
+}
+
+void setupPlay(boolean beta) {
+    play {
+        track = beta ? "beta" : "production"
+        defaultToAppBundles = true
+    }
+}
 
 dependencies {
     implementation 'androidx.core:core:1.6.0'
