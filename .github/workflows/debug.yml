@@ -49,6 +49,9 @@ jobs:
         run: |
           echo -e "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}\nRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}\nRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}">>local.properties
           ccache -M 10G
+          cat > service_account_credentials.json << EOF
+          ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
+          EOF
           ./gradlew TMessagesProj:publishReleaseApk
           echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
