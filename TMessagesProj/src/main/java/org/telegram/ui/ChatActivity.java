@@ -2236,9 +2236,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     createDeleteMessagesAlert(null, null);
-                } else if (id == forward || id == forward_noquote) {
-                    noForwardQuote = id == forward_noquote;
-                    openForward(true, id == forward_noquote);
+                } else if (id == forward) {
+                    noForwardQuote = false;
+                    openForward(true, false);
+                } else if (id == forward_noquote) {
+                    noForwardQuote = true;
+                    openForward(true, true);
                 } else if (id == save_to) {
                     ArrayList<MessageObject> messageObjects = new ArrayList<>();
                     for (int a = 1; a >= 0; a--) {
@@ -3002,7 +3005,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     LocaleController.getString("Copy", R.string.Copy)));
             if (ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true)) {
                 actionModeViews.add(
-                    actionMode.addItemWithWidth(forward_noquote, R.drawable.msg_forward_noquote,
+                    actionMode.addItemWithWidth(forward_noquote, R.drawable.msg_noquote_forward,
                         AndroidUtilities.dp(54),
                         LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward)));
 
@@ -9856,8 +9859,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 fwdRestrictedTopHint.setText(str);
-                fwdRestrictedTopHint.showForView(
-                    actionBar.getActionMode().getItem(noquote ? forward_noquote : forward), true);
+                fwdRestrictedTopHint.showForView(actionBar.getActionMode().getItem(noquote ? forward_noquote : forward), true);
             } else {
                 if (fwdRestrictedBottomHint == null) {
                     SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
@@ -9904,6 +9906,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         fragment.setDelegate(ChatActivity.this);
         presentFragment(fragment);
     }
+
 
     private void showBottomOverlayProgress(boolean show, boolean animated) {
         if (show && bottomOverlayProgress.getTag() != null || !show && bottomOverlayProgress.getTag() == null) {
@@ -11823,6 +11826,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (forwardingMessages == null) {
                     forwardingMessages = new ForwardingMessagesParams(messageObjectsToForward, dialog_id);
                 }
+                if (noForwardQuote) {
+                    noForwardQuote = false;
+                    forwardingMessages.hideForwardSendersName = true;
+                }
                 if (foundWebPage != null) {
                     return;
                 }
@@ -13667,6 +13674,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ActionBarMenuItem starItem = actionBar.createActionMode().getItem(star);
                 ActionBarMenuItem editItem = actionBar.createActionMode().getItem(edit);
                 ActionBarMenuItem forwardItem = actionBar.createActionMode().getItem(forward);
+                ActionBarMenuItem forwardNoQuoteItem = actionBar.createActionMode().getItem(forward_noquote);
 
                 boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || hasSelectedNoforwardsMessage();
                 if (prevCantForwardCount == 0 && cantForwardMessagesCount != 0 || prevCantForwardCount != 0 && cantForwardMessagesCount == 0) {
@@ -13680,6 +13688,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             forwardItem.setBackground(null);
                         } else if (forwardItem.getBackground() == null) {
                             forwardItem.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), 5));
+                        }
+                    }
+                    if (forwardNoQuoteItem != null) {
+                        forwardNoQuoteItem.setEnabled(cantForwardMessagesCount == 0 || noforwards);
+                        animators.add(ObjectAnimator.ofFloat(forwardNoQuoteItem, View.ALPHA, cantForwardMessagesCount == 0 ? 1.0f : 0.5f));
+
+                        if (noforwards) {
+                            if (forwardNoQuoteItem.getBackground() != null) forwardNoQuoteItem.setBackground(null);
+                        } else if (forwardNoQuoteItem.getBackground() == null) {
+                            forwardNoQuoteItem.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), 5));
                         }
                     }
                     if (forwardButton != null) {
@@ -13709,6 +13727,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else if (forwardItem.getBackground() == null) {
                             forwardItem.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), 3));
                         }
+                    }
+                    if (forwardNoQuoteItem != null) {
+                        forwardNoQuoteItem.setEnabled(cantForwardMessagesCount == 0);
+                        forwardNoQuoteItem.setAlpha(cantForwardMessagesCount == 0 ? 1.0f : 0.5f);
                     }
                     if (forwardButton != null) {
                         forwardButton.setEnabled(cantForwardMessagesCount == 0 || noforwards);
@@ -21419,16 +21441,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.msg_unfave);
                             }
                         }
-                        if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
+                        if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16 && !noforwards) {
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(2);
                             icons.add(R.drawable.msg_forward);
                             if (ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward,
-                                true)) {
+                                true) && !UserObject.isUserSelf(currentUser)) {
                                 items.add(LocaleController.getString("NoQuoteForward",
                                     R.string.NoQuoteForward));
                                 options.add(95);
-                                icons.add(R.drawable.msg_forward_noquote);
+                                icons.add(R.drawable.msg_noquote_forward);
                             }
                             if (ConfigManager.getBooleanOrFalse(Defines.showSaveMessages)
                                 && !UserObject.isUserSelf(currentUser)) {
