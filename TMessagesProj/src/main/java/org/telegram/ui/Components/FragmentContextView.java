@@ -1050,6 +1050,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else if (fragment instanceof ChatActivity && ((ChatActivity) fragment).getGroupCall() != null && ((ChatActivity) fragment).getGroupCall().shouldShowPanel() && !GroupCallPip.isShowing() && !isPlayingVoice()) {
                 checkCall(true);
             } else {
+                checkCall(true);
                 checkPlayer(true);
                 updatePlaybackButton();
             }
@@ -1785,6 +1786,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else if (visible && (currentStyle == -1 || currentStyle == 4 || currentStyle == 3 || currentStyle == 1)) {
                 visible = false;
                 setVisibility(GONE);
+            }
+
+            if (create && fragment instanceof ChatActivity && ((ChatActivity) fragment).openedWithLivestream() && !GroupCallPip.isShowing()) {
+                BulletinFactory.of(fragment).createSimpleBulletin(R.raw.linkbroken, LocaleController.getString("InviteExpired", R.string.InviteExpired)).show();
             }
         } else {
             int newStyle;

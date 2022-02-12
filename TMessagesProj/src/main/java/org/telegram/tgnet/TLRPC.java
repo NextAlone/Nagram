@@ -14,6 +14,7 @@ import android.text.TextUtils;
 
 import org.osmdroid.util.TileSystemWebMercator;
 
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.Utilities;
@@ -24222,6 +24223,7 @@ public class TLRPC {
         public byte[] key;
         public byte[] iv;
         public ArrayList<DocumentAttribute> attributes = new ArrayList<>();
+        public String file_name_fixed; //custom
 
         public static Document TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             Document result = null;
@@ -24259,6 +24261,7 @@ public class TLRPC {
             }
             if (result != null) {
                 result.readParams(stream, exception);
+                result.file_name_fixed = FileLoader.getDocumentFileName(result);
             }
             return result;
         }

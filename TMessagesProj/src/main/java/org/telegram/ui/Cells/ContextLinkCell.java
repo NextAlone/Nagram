@@ -359,8 +359,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                                 linkImageView.setImage(ImageLocation.getForDocument(currentPhotoObject, documentAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
                             }
                         } else {
-                            linkImageView.setImage(ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
-                        }
+                            linkImageView.setImage(ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0); }
                     }
                 } else if (webFile != null) {
                     linkImageView.setImage(ImageLocation.getForWebFile(webFile), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, -1, ext, parentObject, 1);
@@ -580,9 +579,8 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (drawLinkImageView) {
-            linkImageView.onDetachedFromWindow();
-        }
+        linkImageView.onDetachedFromWindow();
+
         radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(currentAccount).removeLoadingFileObserver(this);
     }
@@ -590,10 +588,8 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (drawLinkImageView) {
-            if (linkImageView.onAttachedToWindow()) {
-                updateButtonState(false, false);
-            }
+        if (linkImageView.onAttachedToWindow()) {
+            updateButtonState(false, false);
         }
         radialProgress.onAttachedToWindow();
     }

@@ -56,6 +56,9 @@ import androidx.core.content.LocusIdCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import android.text.TextUtils;
+import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -733,6 +736,9 @@ public class NotificationsController extends BaseController {
                         break;
                     }
                     MessageObject oldMessage = sparseArray.get(messageObject.getId());
+                    if (oldMessage != null && oldMessage.isReactionPush) {
+                        oldMessage = null;
+                    }
                     if (oldMessage != null) {
                         updated = true;
                         sparseArray.put(messageObject.getId(), messageObject);
@@ -893,6 +899,11 @@ public class NotificationsController extends BaseController {
                         pushDialogsOverrideMention.put(originalDialogId, current == null ? 1 : current + 1);
                     }
                 }
+                if (messageObject.isReactionPush) {
+                    SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+                    sparseBooleanArray.put(mid, true);
+                    getMessagesController().checkUnreadReactions(dialogId, sparseBooleanArray);
+                }
             }
 
             if (added) {
@@ -935,9 +946,6 @@ public class NotificationsController extends BaseController {
                     boolean canAddValue;
                     if (notifyOverride == -1) {
                         canAddValue = isGlobalNotificationsEnabled(dialog_id, isChannel);
-                        /*if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                            FileLog.d("global notify settings for " + dialog_id + " = " + canAddValue);
-                        }*/
                     } else {
                         canAddValue = notifyOverride != 2;
                     }
@@ -3980,6 +3988,7 @@ public class NotificationsController extends BaseController {
             arrayList.add(messageObject);
         }
 
+
         LongSparseArray<Integer> oldIdsWear = new LongSparseArray<>();
         for (int i = 0; i < wearNotificationsIds.size(); i++) {
             oldIdsWear.put(wearNotificationsIds.keyAt(i), wearNotificationsIds.valueAt(i));
@@ -4044,7 +4053,13 @@ public class NotificationsController extends BaseController {
             }
 
             MessageObject lastMessageObject = messageObjects.get(0);
-            int maxDate = lastMessageObject.messageOwner.date;
+            int maxDate = 0;
+            for (int i = 0; i < messageObjects.size(); i++) {
+                if (maxDate < messageObjects.get(i).messageOwner.date) {
+                    maxDate = messageObjects.get(i).messageOwner.date;
+
+                }
+            }
             TLRPC.Chat chat = null;
             TLRPC.User user = null;
             boolean isChannel = false;
