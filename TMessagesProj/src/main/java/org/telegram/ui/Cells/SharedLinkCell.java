@@ -813,7 +813,9 @@ public class SharedLinkCell extends FrameLayout {
                     }
                     canvas.save();
                     canvas.clipPath(path, Region.Op.DIFFERENCE);
-                    if (pressedLink == a) canvas.drawPath(urlPath, Theme.linkSelectionPaint);
+                    if (pressedLink == a) {
+                        canvas.drawPath(urlPath, Theme.linkSelectionPaint);
+                    }
                     layout.draw(canvas);
                     canvas.restore();
 
@@ -824,7 +826,9 @@ public class SharedLinkCell extends FrameLayout {
                         spoilers.get(0).getRipplePath(path);
                     canvas.clipPath(path);
 
-                    if (pressedLink == a) canvas.drawPath(urlPath, Theme.linkSelectionPaint);
+                    if (pressedLink == a) {
+                        canvas.drawPath(urlPath, Theme.linkSelectionPaint);
+                    }
                     layout.draw(canvas);
                     canvas.restore();
 

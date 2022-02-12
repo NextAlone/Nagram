@@ -1179,9 +1179,9 @@ static inline void writeFrameToBitmap(JNIEnv *env, VideoInfo *info, jintArray da
         void *pixels;
         if (AndroidBitmap_lockPixels(env, bitmap, &pixels) >= 0) {
             if (info->sws_ctx == nullptr) {
-                if (info->frame->format > AV_PIX_FMT_NONE && info->frame->format < AV_PIX_FMT_NB && !info->frame->format == AV_PIX_FMT_YUVA420P) {
+                if (info->frame->format > AV_PIX_FMT_NONE && info->frame->format < AV_PIX_FMT_NB && info->frame->format != AV_PIX_FMT_YUVA420P) {
                     info->sws_ctx = sws_getContext(info->frame->width, info->frame->height, (AVPixelFormat) info->frame->format, bitmapWidth, bitmapHeight, AV_PIX_FMT_RGBA, SWS_BILINEAR, NULL, NULL, NULL);
-                } else if (info->video_dec_ctx->pix_fmt > AV_PIX_FMT_NONE && info->video_dec_ctx->pix_fmt < AV_PIX_FMT_NB && !info->frame->format == AV_PIX_FMT_YUVA420P) {
+                } else if (info->video_dec_ctx->pix_fmt > AV_PIX_FMT_NONE && info->video_dec_ctx->pix_fmt < AV_PIX_FMT_NB && info->frame->format != AV_PIX_FMT_YUVA420P) {
                     info->sws_ctx = sws_getContext(info->video_dec_ctx->width, info->video_dec_ctx->height, info->video_dec_ctx->pix_fmt, bitmapWidth, bitmapHeight, AV_PIX_FMT_RGBA, SWS_BILINEAR, NULL, NULL, NULL);
                 }
             }

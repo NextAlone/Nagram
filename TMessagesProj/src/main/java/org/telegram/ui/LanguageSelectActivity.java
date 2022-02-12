@@ -175,8 +175,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     return;
                 }
                 boolean search = listView.getAdapter() == searchListViewAdapter;
-                if (!search)
+                if (!search) {
                     position -= 2;
+                }
                 LocaleController.LocaleInfo localeInfo;
                 if (search) {
                     localeInfo = searchResult.get(position);
@@ -219,8 +220,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     return false;
                 }
                 boolean search = listView.getAdapter() == searchListViewAdapter;
-                if (!search)
-                    position--;
+                if (!search) {
+                    position -= 2;
+                }
                 LocaleController.LocaleInfo localeInfo;
                 if (search) {
                     localeInfo = searchResult.get(position);
