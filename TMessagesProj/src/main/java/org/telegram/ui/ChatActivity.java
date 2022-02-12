@@ -29601,7 +29601,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         if (selectedObject != null) {
-            MessageObject replyTo = isLongClick ? getThreadMessage() : selectedObject;
+            MessageObject replyTo = isLongClick ? selectedObject : getThreadMessage();
             if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
                 CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
                 if (caption == null) {
