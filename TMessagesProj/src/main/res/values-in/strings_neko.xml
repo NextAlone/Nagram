@@ -21,7 +21,7 @@
     <string name="AddToSavedMessages">Simpan pesan</string>
     <string name="CreateMention">Buat Sebutan</string>
     <string name="ForceTabletMode">Paksa moda tablet</string>
-    <string name="Prpr">Peropero</string>
+    <string name="Prpr">Prpr</string>
     <string name="TransparentStatusBar">Bilah status transparan</string>
     <string name="EnableResidentNotification">Menampilkan pemberitahuan lainnya</string>
     <string name="DisableResidentNotification">Sembunyikan pemberitahuan lainnya</string>
@@ -116,7 +116,7 @@
     <string name="useSystemDNS">Gunakan DNS sistem</string>
     <string name="HideTimeForSticker">Sembunyikan waktu untuk stiker</string>
     <string name="UseMediaStreamInVoip">Menggunakan Media Stream pada VoIP</string>
-    <string name="TakeGIFasVideo">Ambil GIF sebagai video</string>
+    <string name="TakeGIFasVideo">Ubah GIF Menjadi Video</string>
     <string name="DontSendGreetingSticker">Jangan kirim stiker sapaan</string>
     <string name="enablePublicProxy">Publik Proxy NekoX</string>
     <string name="autoUpdateSubInfo">Perbarui proxy otomatis</string>

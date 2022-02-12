@@ -270,4 +270,10 @@
     <string name="AppUpdateNekoX">Aktualizacja Nekogram X</string>
     <string name="NekoXUpdateTranslationHint">Naciśnij, aby przetłumaczyć dziennik zmian</string>
     <string name="AutoCheckUpdatePreview">Podgląd (niestabilne)</string>
+    <string name="Name">Nazwa</string>
+    <string name="channelAlias">Alias kanału</string>
+    <string name="channelAliasDetails">Wymagaj włączonego oznaczenia kanału użytkownika.</string>
+    <string name="setChannelAliasName">Ustaw alias kanału</string>
+    <string name="labelChannelUser">Oznaczenie kanału użytkownika</string>
+    <string name="labelChannelUserDetails">Jeśli nadawcą wiadomości jest kanał, zostanie on oznaczony jako \"Kanał\"</string>
 </resources>

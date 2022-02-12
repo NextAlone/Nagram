@@ -141,4 +141,6 @@
     <string name="ReactionsDisabled">تعطيل</string>
     <string name="doubleTapShowReactions">إظهار ردود الفعل عند النقر المزدوج فقط</string>
     <string name="customSavePath">مسار الحفظ المخصص</string>
+    <string name="showBottomActionsWhenSelecting">إظهار الإجراءات السفلية عند الاختيار</string>
+    <string name="channelLabel">قناة</string>
 </resources>

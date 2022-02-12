@@ -273,4 +273,10 @@
     <string name="AppUpdateNekoX">تحديث Nekogram X</string>
     <string name="AutoCheckUpdatePreview">معاينة (غير مستقر)</string>
     <string name="NekoXUpdateTranslationHint">اضغط لترجمة سجل التغيير</string>
+    <string name="Name">الاسم</string>
+    <string name="channelAlias">الاسم المستعار للقناة</string>
+    <string name="channelAliasDetails">طلب تمكين مستخدم قناة التسمية.</string>
+    <string name="setChannelAliasName">تعيين الاسم المستعار</string>
+    <string name="labelChannelUser">تسمية مستخدم القناة</string>
+    <string name="labelChannelUserDetails">إذا كان مرسل الرسالة هو القناة ، فسيتم تسميتها \"القناة\"</string>
 </resources>

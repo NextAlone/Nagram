@@ -52,7 +52,7 @@
     <string name="StickerSizeDialogName">Орфей ⌲</string>
     <string name="Experiment">Экспериментальные</string>
     <string name="UnlimitedFavoredStickers">Не лимитировать избранные стикеры</string>
-    <string name="UnlimitedFavoredStickersAbout">Добавляйте более 5 стикеров в избранное. Они не будут синхронизированы с другими устройствами.</string>
+    <string name="UnlimitedFavoredStickersAbout">Их синхронизация будет отключена.</string>
     <string name="MessageDetails">Сведения о сообщении</string>
     <string name="ExportAsJson">Экспорт в JSON</string>
     <string name="Translate">Перевести</string>
@@ -67,7 +67,7 @@
     <string name="DisablePhotoViewerSideAction">Не листать медиа тапом</string>
     <string name="BotToken">Токен</string>
     <string name="UnlimitedPinnedDialogs">Не лимитировать закрепленные диалоги</string>
-    <string name="UnlimitedPinnedDialogsAbout">Закрепляйте более 5 диалогов в общем списке чатов. Они не будут синхронизированы с другими устройствами.</string>
+    <string name="UnlimitedPinnedDialogsAbout">Их синхронизация будет отключена.</string>
     <string name="OpenArchiveOnPull">Открывать архив сразу</string>
     <string name="HideKeyboardOnChatScroll">Скрыть клавиатуру при прокрутке</string>
     <string name="UserRestrictionsSendStickers2">Отправка стикеров</string>
@@ -80,9 +80,9 @@
     <string name="TabTitleType">Показывать на вкладках</string>
     <string name="TabTitleTypeTip">Эмодзи синхронизируются с Telegram.</string>
     <string name="TabTitleTypeText">Названия</string>
-    <string name="TabTitleTypeIcon">Эмодзи</string>
-    <string name="TabTitleTypeMix">Названия и эмодзи</string>
-    <string name="ConfirmAVMessage">Подтверждение отправки видео/голосового сообщения</string>
+    <string name="TabTitleTypeIcon">Иконки</string>
+    <string name="TabTitleTypeMix">Названия и иконки</string>
+    <string name="ConfirmAVMessage">Подтверждать голосовые и видеосообщения</string>
     <string name="AskBeforeCalling">Подтверждение звонков</string>
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>
@@ -110,7 +110,7 @@
     <string name="ProviderMicrosoftTranslator">Microsoft</string>
     <string name="ProviderYouDao">YouDao (кит.)</string>
     <string name="pressTitleToOpenAllChats">Открывать вкладку «Все» удержанием заголовка</string>
-    <string name="disableSwipeToNextChannel">Отключить пролистывание к следующему каналу</string>
+    <string name="disableSwipeToNextChannel">Выключить свайп для перехода в следующий канал</string>
     <string name="maxRecentStickerCount">Максимальное количество недавних стикеров</string>
     <string name="customGroupVoipAudioBitrate">Битрейт аудиосигнала VoIP для группы</string>
     <string name="customDoH">Пользовательский DoH</string>
@@ -124,8 +124,8 @@
     <string name="disableRemoteEmojiInteractions">Отключить эффекты при нажатии на эмодзи</string>
     <string name="enablePublicProxy">Публичный прокси NekoX</string>
     <string name="autoUpdateSubInfo">Автоматическое обновление прокси-серверов</string>
-    <string name="hideSendAsChannel">Скрыть отправку как канал</string>
-    <string name="showSpoilersDirectly">Отображение сообщений спойлера напрямую</string>
+    <string name="hideSendAsChannel">Скрыть «Отправить от имени...»</string>
+    <string name="showSpoilersDirectly">Раскрывать спойлеры сразу</string>
     <string name="disableDoubleTabReactions">Отключение реакции на двойное нажатие</string>
     <string name="SaveToDownloadCount_zero">Сохранение %1$d файлов для загрузки</string>
     <string name="SaveToDownloadCount_one">Сохранение файла %1$d для загрузки</string>
@@ -138,7 +138,7 @@
     <string name="doubleTapSendReactions">Отправить реакцию при двойном нажатии (По умолчанию)</string>
     <string name="doubleTapShowReactions">Показывать реакции только при двойном нажатии</string>
     <string name="ReactionsDisabled">Отключить</string>
-    <string name="customSavePathHint">Оставьте пустым, чтобы сохранить напрямую</string>
+    <string name="customSavePathHint">Оставьте пустым, чтобы сохранять в Загрузки напрямую</string>
     <string name="reactions">Реакции в меню</string>
-    <string name="customSavePath">Пользовательский путь сохранения</string>
+    <string name="customSavePath">Папка в загрузках</string>
 </resources>
