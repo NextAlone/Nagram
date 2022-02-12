@@ -126,7 +126,6 @@ android {
                 arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-16", "-j=${Runtime.getRuntime().availableProcessors()}"
             }
         }
-
     }
 
     bundle {
@@ -172,7 +171,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_11
     }
 
     testOptions {
