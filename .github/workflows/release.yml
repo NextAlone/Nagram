@@ -279,7 +279,7 @@ jobs:
           curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
            -X POST \
            -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
-           -F text="==== ${{ github.event.inputs.tag }} ====" \
+           -F text="==== Release ====" \
            --silent --show-error --fail >/dev/null
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
