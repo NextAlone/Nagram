@@ -385,7 +385,7 @@ jobs:
       - name: Release
         run: |
           chmod +x telegram-bot-api-binary
-          ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
+          ./telegram-bot-api-binary --api-id=147667 --api-hash=32c9ee834b3766f931f3cbea6383fb8f --local 2>&1 > /dev/null &
           curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
            -X POST \
            -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
