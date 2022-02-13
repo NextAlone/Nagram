@@ -405,10 +405,10 @@ jobs:
             done
           }
 
-          upload apks/TeleTux-mini-*-release.apk
-          upload apks/TeleTux-mini-*-releaseNoGcm.apk
-          upload apks/TeleTux-full-*-release.apk
-          upload apks/TeleTux-full-*-releaseNoGcm.apk
+          upload apks/TeleTux-*-mini-*-release.apk
+          upload apks/TeleTux-*-mini-*-releaseNoGcm.apk
+          upload apks/TeleTux-*-full-*-release.apk
+          upload apks/TeleTux-*-full-*-releaseNoGcm.apk
           pkill telegram-bot
   play:
     name: Publish to Play Store
