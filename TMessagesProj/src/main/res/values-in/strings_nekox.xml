@@ -118,7 +118,7 @@
     <string name="VmessAlterId">Ubah ID</string>
     <string name="VmessSecurity">Keamanan</string>
     <string name="VmessNetwork">Jaringan</string>
-    <string name="VmessHeadType">Head Type</string>
+    <string name="VmessHeadType">Tipe awalan</string>
     <string name="VmessRequestHost">Meminta Keamanan Host / QUIC</string>
     <string name="VmessPath">Jalur / Kunci QUIC</string>
     <string name="VmessTls">Gunakan TLS</string>
@@ -251,4 +251,32 @@
     <string name="VersionUpdateVariantNotMatch">Gagal mencocokkan versi varian secara otomatis.
 \n Silakan unduh manual dari GitHub.</string>
     <string name="VersionUpdateTitle">Tersedia Versi Baru</string>
+    <string name="AutoCheckUpdatePreview">Pratinjau (Tidak stabil)</string>
+    <string name="rememberAllBackMessages">Ingat semua balasan yang diklik</string>
+    <string name="AppUpdateNekoX">Perbarui Nekogram X</string>
+    <string name="NekoXUpdateTranslationHint">Tekan untuk menterjemahkan log perubahan</string>
+    <string name="repeatConfirm">Tanya sebelum mengulang</string>
+    <string name="useCustomEmojiInvalid">Bukan zip emoji yang valid.</string>
+    <string name="update_download_soucre">PIlih sumber download</string>
+    <string name="repeatConfirmText">Apa anda yakin untuk mengulangi\?</string>
+    <string name="customPublicProxyIP">Atur IP dari proksi publik</string>
+    <string name="DeleteDownloadedFileConfirm">Hapus file ini dari cache lokal\?</string>
+    <string name="valuesLargeAvatarInDrawer">Bawaan Telegram
+\nAvatar sebagai background
+\nAvatar besar sebagai background</string>
+    <string name="DisableInstantCamera">Matikan kamera cepat</string>
+    <string name="unreadBadgeOnBackButton">Baca lencana di tombol kembali</string>
+    <string name="hideSponsoredMessage">Sembunyikan pesan sponsor</string>
+    <string name="DeleteDownloadedFileSucceed">Terhapus</string>
+    <string name="useCustomEmoji">Gunakan Emoji Khusus</string>
+    <string name="showSeconds">Perlihatkan waktu dalam satuan detik</string>
+    <string name="customPublicProxyIPNotice">Di beberapa area, IP spesifik dari proksi publik CDN (seperti. Cloudflare) bisa mempercepat akses.</string>
+    <string name="ShareMessages">Bagikan</string>
+    <string name="setChannelAliasName">Atur alias</string>
+    <string name="DeleteDownloadedFileExternal">File eksternal dilewatkan.</string>
+    <string name="labelChannelUser">Label pengguna Channel</string>
+    <string name="Name">Nama</string>
+    <string name="channelAlias">Alias saluran</string>
+    <string name="channelAliasDetails">Wajibkan pengguna saluran label diaktifkan.</string>
+    <string name="labelChannelUserDetails">jika pengirim pesan adalah channel, Itu akan ditandai sebagai \"Channel\"</string>
 </resources>

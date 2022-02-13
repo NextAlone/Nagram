@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -64,7 +63,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.EditTextAutoFill;
+import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class TwoStepVerificationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -272,45 +271,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         bottomButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM);
         bottomButton.setPadding(0, AndroidUtilities.dp(10), 0, 0);
         linearLayout2.addView(bottomButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, 40, 0, 40, 14));
-        bottomButton.setOnClickListener(v -> {
-            if (currentPassword.has_recovery) {
-                needShowProgress();
-                TLRPC.TL_auth_requestPasswordRecovery req = new TLRPC.TL_auth_requestPasswordRecovery();
-                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                    needHideProgress();
-                    if (error == null) {
-                        final TLRPC.TL_auth_passwordRecovery res = (TLRPC.TL_auth_passwordRecovery) response;
-                        currentPassword.email_unconfirmed_pattern = res.email_pattern;
-                        TwoStepVerificationSetupActivity fragment = new TwoStepVerificationSetupActivity(currentAccount, TwoStepVerificationSetupActivity.TYPE_EMAIL_RECOVERY, currentPassword);
-                        fragment.setCurrentPasswordParams(currentPasswordHash, currentSecretId, currentSecret, false);
-                        presentFragment(fragment);
-                    } else {
-                        if (error.text.startsWith("FLOOD_WAIT")) {
-                            int time = Utilities.parseInt(error.text);
-                            String timeString;
-                            if (time < 60) {
-                                timeString = LocaleController.formatPluralString("Seconds", time);
-                            } else {
-                                timeString = LocaleController.formatPluralString("Minutes", time / 60);
-                            }
-                            showAlertWithText(LocaleController.getString("TeleTux", R.string.TeleTux), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
-                        } else {
-                            showAlertWithText(LocaleController.getString("TeleTux", R.string.TeleTux), error.text);
-                        }
-                    }
-                }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
-            } else {
-                if (getParentActivity() == null) {
-                    return;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), (dialog, which) -> Browser.openUrl(getParentActivity(), "https://telegram.org/deactivate?phone=" + UserConfig.getInstance(currentAccount).getClientPhone()));
-                builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", R.string.RestorePasswordNoEmailTitle));
-                builder.setMessage(LocaleController.getString("RestorePasswordNoEmailText", R.string.RestorePasswordNoEmailText));
-                showDialog(builder.create());
-            }
-        });
+        bottomButton.setOnClickListener(v -> onPasswordForgot());
+
         cancelResetButton = new TextView(context);
         cancelResetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         cancelResetButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM);
@@ -585,8 +547,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         currentPassword = password;
     }
 
-    public void setDelegate(TwoStepVerificationActivityDelegate
-                                    twoStepVerificationActivityDelegate) {
+    public void setDelegate(TwoStepVerificationActivityDelegate twoStepVerificationActivityDelegate) {
         delegate = twoStepVerificationActivityDelegate;
     }
 
@@ -881,8 +842,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return null;
     }
 
-    private boolean checkSecretValues(byte[] passwordBytes, TLRPC.
-            TL_account_passwordSettings passwordSettings) {
+    private boolean checkSecretValues(byte[] passwordBytes, TLRPC.TL_account_passwordSettings passwordSettings) {
         if (passwordSettings.secure_settings != null) {
             currentSecret = passwordSettings.secure_settings.secure_secret;
             byte[] passwordHash;
@@ -1115,7 +1075,6 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             }
             return 0;
         }
-
     }
 
     @Override

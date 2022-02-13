@@ -125,4 +125,21 @@
     <string name="enablePublicProxy">המתווך הציבורי של NekoX</string>
     <string name="autoUpdateSubInfo">עדכון מתווכים אוטומטית</string>
     <string name="hideSendAsChannel">הסתרת שליחה כערוץ</string>
+    <string name="showSpoilersDirectly">הצגת הודעות ספויילר ישירות</string>
+    <string name="SaveToDownloadCount_zero">%1$d קבצים נשמרים להורדות</string>
+    <string name="disableNotificationBubbles">השבתת בועות בהתראה</string>
+    <string name="doubleTapSendReactions">שליחת תחושה בנגיעה כפולה (ברירת מחדל)</string>
+    <string name="ReactionsDisabled">השבתה</string>
+    <string name="customSavePath">נתיב שמירה משלך</string>
+    <string name="customSavePathHint">להשאיר ריק כדי לשמור ישירות</string>
+    <string name="NekoGeneralNotification">התראה</string>
+    <string name="doubleTapShowReactions">הצגת תחושות בנגיעה כפולה בלבד</string>
+    <string name="reactions">תחושות בתפריט</string>
+    <string name="SaveToDownloadCount_one">קובץ %1$d נשמר להורדות</string>
+    <string name="SaveToDownloadCount_two">%1$d קבצים נשמרים להורדות</string>
+    <string name="SaveToDownloadCount_few">%1$d קבצים נשמרים להורדות</string>
+    <string name="SaveToDownloadCount_many">%1$d קבצים נשמרים להורדות</string>
+    <string name="SaveToDownloadCount_other">%1$d קבצים נשמרים להורדות</string>
+    <string name="showBottomActionsWhenSelecting">להציג את הפעולות התחתונות בעת בחירה</string>
+    <string name="channelLabel">ערוץ</string>
 </resources>

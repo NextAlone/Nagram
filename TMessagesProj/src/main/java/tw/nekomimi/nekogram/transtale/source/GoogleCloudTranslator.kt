@@ -5,7 +5,7 @@ import cn.hutool.http.HttpUtil
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
 
 object GoogleCloudTranslator : Translator {
@@ -18,13 +18,13 @@ object GoogleCloudTranslator : Translator {
 
         }
 
-        if (StrUtil.isBlank(NekomuraConfig.googleCloudTranslateKey.String())) error("Missing Cloud Translate Key")
+        if (StrUtil.isBlank(NekoConfig.googleCloudTranslateKey.String())) error("Missing Cloud Translate Key")
 
         val response = HttpUtil.createPost("https://translation.googleapis.com/language/translate/v2")
                 .form("q", query)
                 .form("target", to)
                 .form("format", "text")
-                .form("key", NekomuraConfig.googleCloudTranslateKey.String())
+                .form("key", NekoConfig.googleCloudTranslateKey.String())
                 .apply {
                     if (from != "auto") form("source", from)
                 }.execute()

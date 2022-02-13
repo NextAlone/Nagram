@@ -1,10 +1,8 @@
 package tw.nekomimi.nekogram.parts
 
-import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.SharedConfig
 import org.telegram.tgnet.ConnectionsManager
-import tw.nekomimi.nkmr.NekomuraConfig
-import tw.nekomimi.nekogram.utils.UIUtil
+import tw.nekomimi.nekogram.NekoConfig
 import java.util.*
 
 object ProxySwitcher {
@@ -30,7 +28,7 @@ object ProxySwitcher {
     @JvmStatic
     fun didReceivedNotification(connectionState: Int) {
 
-        if (!NekomuraConfig.proxyAutoSwitch.Bool()) return
+        if (!NekoConfig.proxyAutoSwitch.Bool()) return
 
         currentConnectionState = connectionState
 

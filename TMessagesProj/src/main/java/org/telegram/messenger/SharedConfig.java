@@ -32,14 +32,12 @@ import org.dizitart.no2.objects.filters.ObjectFilters;
 import org.json.JSONArray;
 import org.json.JSONException;
 import androidx.annotation.IntDef;
-import androidx.core.content.pm.ShortcutManagerCompat;
 
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Components.SwipeGestureSettingsView;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -48,7 +46,6 @@ import java.net.Proxy;
 import java.util.Arrays;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -57,18 +54,17 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
-import tw.nekomimi.nekogram.ProxyManager;
-import tw.nekomimi.nekogram.ShadowsocksLoader;
-import tw.nekomimi.nekogram.ShadowsocksRLoader;
-import tw.nekomimi.nekogram.VmessLoader;
-import tw.nekomimi.nekogram.WsLoader;
-import tw.nekomimi.nekogram.sub.SubInfo;
-import tw.nekomimi.nekogram.sub.SubManager;
+import tw.nekomimi.nekogram.proxy.ProxyManager;
+import tw.nekomimi.nekogram.proxy.ShadowsocksLoader;
+import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader;
+import tw.nekomimi.nekogram.proxy.VmessLoader;
+import tw.nekomimi.nekogram.proxy.WsLoader;
+import tw.nekomimi.nekogram.proxy.SubInfo;
+import tw.nekomimi.nekogram.proxy.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
 import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
@@ -115,7 +111,6 @@ public class SharedConfig {
     public static boolean searchMessagesAsListUsed;
     public static boolean stickersReorderingHintUsed;
     public static boolean disableVoiceAudioEffects;
-    public static boolean drawSnowInChat;
     private static int lastLocalId = -210000;
 
     public static String storageCacheDir;
@@ -133,7 +128,7 @@ public class SharedConfig {
     public static boolean chatBubbles = Build.VERSION.SDK_INT >= 30;
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
-    public static boolean raiseToSpeak = true;
+    public static boolean raiseToSpeak = false;
     public static boolean customTabs = true;
     public static boolean directShare = true;
     public static boolean inappCamera = true;
@@ -145,6 +140,7 @@ public class SharedConfig {
     public static boolean saveStreamMedia = true;
     public static boolean smoothKeyboard = true;
     public static boolean pauseMusicOnRecord = true;
+    public static boolean chatBlur = true;
     public static boolean noiseSupression;
     public static boolean noStatusBar;
     public static boolean sortContactsByName;
@@ -1199,7 +1195,7 @@ public class SharedConfig {
             autoplayGifs = preferences.getBoolean("autoplay_gif", true);
             autoplayVideo = preferences.getBoolean("autoplay_video", true);
             mapPreviewType = preferences.getInt("mapPreviewType", 2);
-            raiseToSpeak = preferences.getBoolean("raise_to_speak", true);
+            raiseToSpeak = preferences.getBoolean("raise_to_speak", false);
             customTabs = preferences.getBoolean("custom_tabs", true);
             directShare = preferences.getBoolean("direct_share", true);
             shuffleMusic = preferences.getBoolean("shuffleMusic", false);
@@ -1216,6 +1212,7 @@ public class SharedConfig {
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             smoothKeyboard = preferences.getBoolean("smoothKeyboard2", true);
             pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
+            chatBlur = preferences.getBoolean("chatBlur", true);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
             suggestStickers = preferences.getInt("suggestStickers", 0);
@@ -1280,7 +1277,6 @@ public class SharedConfig {
             mediaColumnsCount = preferences.getInt("mediaColumnsCount", 3);
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
-            drawSnowInChat = preferences.getBoolean("drawSnowInChat", BuildVars.DEBUG_VERSION);
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
@@ -1349,41 +1345,21 @@ public class SharedConfig {
     }
 
     public static boolean isAppUpdateAvailable() {
-        if (pendingAppUpdate == null || pendingAppUpdate.document == null || !AndroidUtilities.isStandaloneApp()) {
+        if (pendingAppUpdate == null || pendingAppUpdate.document == null) {
             return false;
         }
-        int currentVersion;
-        try {
-            PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            currentVersion = pInfo.versionCode;
-        } catch (Exception e) {
-            FileLog.e(e);
-            currentVersion = BuildVars.BUILD_VERSION;
-        }
-        return pendingAppUpdateBuildVersion == currentVersion;
+        return pendingAppUpdateBuildVersion == BuildVars.BUILD_VERSION;
     }
 
     public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
-        String updateVersionString = null;
-        int versionCode = 0;
-        try {
-            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            versionCode = packageInfo.versionCode;
-            updateVersionString = packageInfo.versionName;
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        if (versionCode == 0) {
-            versionCode = BuildVars.BUILD_VERSION;
-        }
-        if (updateVersionString == null) {
-            updateVersionString = BuildVars.BUILD_VERSION_STRING;
-        }
-        if (update.version == null || updateVersionString.compareTo(update.version) >= 0) {
+        if (update == null) {
+            pendingAppUpdate = null;
+            pendingAppUpdateBuildVersion = 0;
+            saveConfig();
             return false;
         }
         pendingAppUpdate = update;
-        pendingAppUpdateBuildVersion = versionCode;
+        pendingAppUpdateBuildVersion = BuildConfig.VERSION_CODE;
         saveConfig();
         return true;
     }
@@ -1618,14 +1594,6 @@ public class SharedConfig {
         editor.commit();
     }
 
-    public static void toggleDrawSnowInChat() {
-        drawSnowInChat = !drawSnowInChat;
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("drawSnowInChat", drawSnowInChat);
-        editor.commit();
-    }
-
     public static void toggleNoiseSupression() {
         noiseSupression = !noiseSupression;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
@@ -1848,6 +1816,14 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("pauseMusicOnRecord", pauseMusicOnRecord);
+        editor.commit();
+    }
+
+    public static void toggleChatBlur() {
+        chatBlur = !chatBlur;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("chatBlur", chatBlur);
         editor.commit();
     }
 
@@ -2327,5 +2303,12 @@ public class SharedConfig {
     public static void setDontAskManageStorage(boolean b) {
         dontAskManageStorage = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("dontAskManageStorage", dontAskManageStorage).apply();
+    }
+
+    public static boolean canBlurChat() {
+        return BuildVars.DEBUG_VERSION && getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH;
+    }
+    public static boolean chatBlurEnabled() {
+        return canBlurChat() && chatBlur;
     }
 }

@@ -126,7 +126,7 @@ public class MessageSeenView extends FrameLayout {
                 } else {
                     if (ChatObject.isChannel(chat)) {
                         TLRPC.TL_channels_getParticipants usersReq = new TLRPC.TL_channels_getParticipants();
-                        usersReq.limit = 50;
+                        usersReq.limit = MessagesController.getInstance(currentAccount).chatReadMarkSizeThreshold;
                         usersReq.offset = 0;
                         usersReq.filter = new TLRPC.TL_channelParticipantsRecent();
                         usersReq.channel = MessagesController.getInstance(currentAccount).getInputChannel(chat.id);
@@ -169,7 +169,7 @@ public class MessageSeenView extends FrameLayout {
                 updateView();
             }
         }));
-        setBackground(Theme.createRadSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), AndroidUtilities.dp(4), AndroidUtilities.dp(4)));
+        setBackground(Theme.createRadSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 6, 0));
         setEnabled(false);
     }
 
@@ -185,6 +185,10 @@ public class MessageSeenView extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        View parent = (View) getParent();
+        if (parent != null && parent.getWidth() > 0) {
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(parent.getWidth(), MeasureSpec.EXACTLY);
+        }
         if (flickerLoadingView.getVisibility() == View.VISIBLE) {
             ignoreLayout = true;
             flickerLoadingView.setVisibility(View.GONE);
@@ -220,7 +224,7 @@ public class MessageSeenView extends FrameLayout {
             titleView.setText(ContactsController.formatName(users.get(0).first_name, users.get(0).last_name));
         } else {
             if (peerIds.size() == 0) {
-                titleView.setText(LocaleController.getString(LocaleController.getString("NobodyViewed", R.string.NobodyViewed)));
+                titleView.setText(LocaleController.getString("NobodyViewed", R.string.NobodyViewed));
             } else {
                 titleView.setText(LocaleController.formatPluralString(isVoice ? "MessagePlayed" : "MessageSeen", peerIds.size()));
             }

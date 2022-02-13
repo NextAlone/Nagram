@@ -210,9 +210,9 @@
     <string name="AcceptSecretChat">Zaakceptuj nowy sekretny czat</string>
     <string name="TabletMode">Tryb tabletu</string>
     <string name="TabletModeDefault">Zależy od urządzenia</string>
-    <string name="AutoCheckUpdateRc">Wersja Release Candidate</string>
+    <string name="AutoCheckUpdateRc">Wersja RC</string>
     <string name="AutoCheckUpdateStable">Stabilna</string>
-    <string name="AutoCheckUpdateSwitch">Automatyczna aktualizacja</string>
+    <string name="AutoCheckUpdateSwitch">Auto. aktualizacja</string>
     <string name="AutoCheckUpdateOFF">WYŁĄCZONE</string>
     <string name="VersionUpdateNoUpdate">Brak aktualizacji.</string>
     <string name="VersionUpdateNotNow">Nie teraz</string>
@@ -267,4 +267,7 @@
 \nDuży awatar jako tło</string>
     <string name="ShareMessages">Udostępnij</string>
     <string name="unreadBadgeOnBackButton">Licznik nieprzeczytanych na przycisku \"Wstecz\"</string>
+    <string name="AppUpdateNekoX">Aktualizacja Nekogram X</string>
+    <string name="NekoXUpdateTranslationHint">Naciśnij, aby przetłumaczyć dziennik zmian</string>
+    <string name="AutoCheckUpdatePreview">Podgląd (niestabilne)</string>
 </resources>

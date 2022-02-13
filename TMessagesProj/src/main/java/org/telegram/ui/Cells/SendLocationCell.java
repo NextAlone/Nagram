@@ -38,6 +38,7 @@ public class SendLocationCell extends FrameLayout {
     private ImageView imageView;
     private long dialogId;
     private RectF rect;
+    private boolean live;
     private final Theme.ResourcesProvider resourcesProvider;
 
     private Runnable invalidateRunnable = new Runnable() {
@@ -52,6 +53,7 @@ public class SendLocationCell extends FrameLayout {
     public SendLocationCell(Context context, boolean live, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.resourcesProvider = resourcesProvider;
+        this.live = live;
 
         imageView = new ImageView(context);
 
@@ -103,7 +105,9 @@ public class SendLocationCell extends FrameLayout {
             accurateTextView.setAlpha(value ? 1.0f : 0.5f);
             imageView.setAlpha(value ? 1.0f : 0.5f);
         }
-        checkText();
+        if (live) {
+            checkText();
+        }
     }
 
     @Override
@@ -132,7 +136,9 @@ public class SendLocationCell extends FrameLayout {
 
     public void setDialogId(long did) {
         dialogId = did;
-        checkText();
+        if (live) {
+            checkText();
+        }
     }
 
     private void checkText() {

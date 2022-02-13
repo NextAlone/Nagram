@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "8.4.2-preview01"
-def verCode = 520
+def verName = "8.5.2-rc01"
+def verCode = 575
 
 if (System.getenv("DEBUG_BUILD") == "true") {
-    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1")
+    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim()
 }
 
-def officialVer = "8.4.2"
-def officialCode = 2526
+def officialVer = "8.5.2"
+def officialCode = 2563
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -331,7 +331,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "TeleTux")
+            outputFileName = outputFileName.replace("TMessagesProj", "TeleTux-v" + versionName)
         }
     }
 

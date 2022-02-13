@@ -25,7 +25,7 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 @SuppressLint("ViewConstructor")
 public class StickerSizePreviewMessagesCell extends LinearLayout {
@@ -94,7 +94,7 @@ public class StickerSizePreviewMessagesCell extends LinearLayout {
 
 
         message = new TLRPC.TL_message();
-        message.message = NekomuraConfig.stickerSize.Float() < 9 ? LocaleController.getString("StickerSizeDialogMessageSmallOne", R.string.StickerSizeDialogMessageSmallOne) : LocaleController.getString("StickerSizeDialogMessageBigOne", R.string.StickerSizeDialogMessageBigOne);
+        message.message = NekoConfig.stickerSize.Float() < 9 ? LocaleController.getString("StickerSizeDialogMessageSmallOne", R.string.StickerSizeDialogMessageSmallOne) : LocaleController.getString("StickerSizeDialogMessageBigOne", R.string.StickerSizeDialogMessageBigOne);
         message.date = date + 1270;
         message.dialog_id = -1;
         message.flags = 259;
@@ -124,7 +124,7 @@ public class StickerSizePreviewMessagesCell extends LinearLayout {
         super.invalidate();
         for (int a = 0; a < cells.length; a++) {
             if (a == 1) {
-                messageObjects[a].messageOwner.message = NekomuraConfig.stickerSize.Float() < 9 ? LocaleController.getString("StickerSizeDialogMessageSmallOne", R.string.StickerSizeDialogMessageSmallOne) : LocaleController.getString("StickerSizeDialogMessageBigOne", R.string.StickerSizeDialogMessageBigOne);
+                messageObjects[a].messageOwner.message = NekoConfig.stickerSize.Float() < 9 ? LocaleController.getString("StickerSizeDialogMessageSmallOne", R.string.StickerSizeDialogMessageSmallOne) : LocaleController.getString("StickerSizeDialogMessageBigOne", R.string.StickerSizeDialogMessageBigOne);
                 messageObjects[a].applyNewText();
                 messageObjects[a].resetLayout();
             }

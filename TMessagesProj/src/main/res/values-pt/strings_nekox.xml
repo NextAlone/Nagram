@@ -244,4 +244,26 @@
     <string name="SubscriptionUrls">URLs</string>
     <string name="VmessAlterId">Alterar ID</string>
     <string name="VmessUserId">ID de usuário</string>
+    <string name="DisableInstantCamera">Desativar câmara instantânea</string>
+    <string name="showSeconds">Mostrar carimbo de data/hora em segundos</string>
+    <string name="ProxyTypeVmess">Proxy de VMesas</string>
+    <string name="Win32ExecutableFiles">Ficheiros executáveis Win32</string>
+    <string name="AppLinkFDroid">F-Droid</string>
+    <string name="unreadBadgeOnBackButton">Selo de não lido no botão de voltar</string>
+    <string name="ShareMessages">Compartilhar</string>
+    <string name="DeleteDownloadedFileConfirm">Excluir este ficheiro do cache local\?</string>
+    <string name="DeleteDownloadedFileSucceed">Excluído</string>
+    <string name="DeleteDownloadedFileExternal">O ficheiro externo é ignorado.</string>
+    <string name="repeatConfirmText">Tem certeza que quer repetir\?</string>
+    <string name="customPublicProxyIP">Definir IP do proxy público</string>
+    <string name="customPublicProxyIPNotice">Em algumas áreas, especificando o IP do proxy público CDN(p. ex. Cloudflare) pode acelerar o acesso.</string>
+    <string name="update_download_soucre">Selecione a fonte do download</string>
+    <string name="useCustomEmoji">Usar Emoji Personalizado</string>
+    <string name="useCustomEmojiInvalid">Zip de emojis inválido.</string>
+    <string name="repeatConfirm">Pergunte antes de repetir</string>
+    <string name="valuesLargeAvatarInDrawer">Padrão do Telegram
+\nAvatar de fundo
+\nAvatar grande de fundo</string>
+    <string name="hideSponsoredMessage">Ocultar mensagens patrocinadas</string>
+    <string name="rememberAllBackMessages">Lembrar de todas as respostas clicadas</string>
 </resources>

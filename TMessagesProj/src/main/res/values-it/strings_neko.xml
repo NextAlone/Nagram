@@ -124,4 +124,13 @@
     <string name="hideGroupSticker">Nascondi sticker gruppo</string>
     <string name="autoUpdateSubInfo">Aggiorna proxy automaticamente</string>
     <string name="enablePublicProxy">Proxy Pubblico NekoX</string>
+    <string name="hideSendAsChannel">Nascondi invia come canale</string>
+    <string name="showSpoilersDirectly">Visualizza direttamente i messaggi Spoiler</string>
+    <string name="disableDoubleTabReactions">Disabilita le reazioni al doppio tocco</string>
+    <string name="SaveToDownloadCount_zero">Salvataggio di %1$d file nei download</string>
+    <string name="SaveToDownloadCount_one">Salvataggio di %1$d file nei download</string>
+    <string name="SaveToDownloadCount_two">Salvataggio di %1$d file nei download</string>
+    <string name="SaveToDownloadCount_few">Salvataggio di %1$d file nei download</string>
+    <string name="SaveToDownloadCount_many">Salvataggio di %1$d file nei download</string>
+    <string name="SaveToDownloadCount_other">Salvataggio di %1$d file nei download</string>
 </resources>

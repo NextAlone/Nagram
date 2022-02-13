@@ -1,246 +1,216 @@
 package tw.nekomimi.nekogram;
 
-import static org.telegram.ui.Components.BlockingUpdateView.checkApkInstallPermissions;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.util.Base64;
-import android.widget.Toast;
-
-import androidx.core.content.FileProvider;
-
-import com.google.gson.Gson;
-
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
-import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
+import org.webrtc.EglBase;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nkmr.NekomuraUtil;
-import tw.nekomimi.nkmr.cells.NekomuraTGSelectBox;
 
 //TODO use UpdateAppAlertDialog / BlockingUpdateView?
 
 public class InternalUpdater {
-    private static final String API_URL_RELEASE = "https://api.github.com/repos/TeleTux/TeleTux/releases?per_page=10";
 
-    private static class ReleaseMetadata {
-        String name;
-        String body;
-        String published_at;
-        String html_url;
-        ApkMetadata[] assets;
-    }
+    static final int UPDATE_METADATA_START_FROM = 0;
+    static final int MAX_READ_COUNT = 20;
+    static final long CHANNEL_METADATA_ID = 1359638116;
+    static final String CHANNEL_METADATA_NAME = "nekox_update_metadata";
+    static final long CHANNEL_APKS_ID = 1137038259;
+    static final String CHANNEL_APKS_NAME = "NekoXApks";
 
-    private static class ApkMetadata {
-        String name;
-        String browser_download_url;
-    }
-
-    private static class GithubApiContents {
-        String content;
-    }
-
-    // as a base64 encoded json
-    private static class NekoXReleaseNote {
-        NekoXAPK[] apks;
-    }
-
-    private static class NekoXAPK {
-        String name;
-        String sha1;
-        String[] urls;  // https://t.me/xxx or bdex://xxx, bdex removed
-    }
-
-    private static ApkMetadata matchBuild(ApkMetadata[] apks) {
-        String target = BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + BuildConfig.BUILD_TYPE + ".apk";
-        FileLog.e(target);
-        for (ApkMetadata apk : apks) {
-            if (apk.name.contains(target))
-                return apk;
-        }
-        return null;
-    }
-
-    public static void checkUpdate(Context ctx, boolean isAutoCheck) {
-        if (BuildVars.isFdroid)
-            return;
-
-        //cleanup
-        File f = new File(ApplicationLoader.getDataDirFixed(), "cache/new.apk");
-        if (f.exists()) f.delete();
-
-        try {
-            NekoXConfig.setNextUpdateCheck(System.currentTimeMillis() / 1000 + 24 * 3600);
-
-            //TODO update URL when api.github.com get banned.
-            String ret = HttpRequest.get(API_URL_RELEASE).header("accept", "application/vnd.github.v3+json").execute().body();
-            ReleaseMetadata[] releases = new Gson().fromJson(ret, ReleaseMetadata[].class);
-            ReleaseMetadata release = null;
-
-            // Not now.
-            String releaseChannel = "stable";
-            switch (NekoXConfig.autoUpdateReleaseChannel) {
-                case 2:
-                    releaseChannel = "rc";
-                    break;
-                case 3:
-                    releaseChannel = "preview";
-                    break;
+    static void retrieveUpdateMetadata(retrieveUpdateMetadataCallback callback) {
+        final int localVersionCode = BuildVars.BUILD_VERSION;
+        AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
+        TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
+        req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_METADATA_ID);
+        req.offset_id = 0;
+        req.limit = MAX_READ_COUNT;
+        Runnable sendReq = () -> accountInstance.getConnectionsManager().sendRequest(req, (response, error) -> {
+            if (error != null) {
+                FileLog.e("Error when retrieving update metadata from channel " + error);
+                callback.apply(null, true);
+                return;
             }
-
-            for (ReleaseMetadata rel : releases) {
-                if (rel.name.equals("v" + BuildConfig.VERSION_NAME))
-                    break;
-                if (rel.name.contains("rc") && NekoXConfig.autoUpdateReleaseChannel < 2 || rel.name.contains("preview") && NekoXConfig.autoUpdateReleaseChannel < 3)
+            TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+            List<UpdateMetadata> metas = new ArrayList<>();
+            for (TLRPC.Message message : res.messages) {
+                if (!(message instanceof TLRPC.TL_message)) continue;
+                if (!message.message.startsWith("v")) continue;
+                String[] split = message.message.split(",");
+                if (split.length < 4) continue;
+                UpdateMetadata metaData = new UpdateMetadata(message.id, split);
+                metas.add(metaData);
+            }
+            Collections.sort(metas, (o1, o2) -> o2.versionCode - o1.versionCode); // versionCode Desc
+            UpdateMetadata found = null;
+            for (UpdateMetadata metaData : metas) {
+                if (metaData.versionCode <= localVersionCode) break;
+                if (NekoXConfig.autoUpdateReleaseChannel < 3 && metaData.versionName.contains("preview"))
                     continue;
-                release = rel;
+                if (NekoXConfig.autoUpdateReleaseChannel < 2 && metaData.versionName.contains("rc"))
+                    continue;
+                found = metaData;
                 break;
             }
-            if (release == null) {
-                FileLog.d("no update");
-                if (!isAutoCheck)
-                    AndroidUtilities.runOnUIThread(() -> Toast.makeText(ctx, LocaleController.getString("VersionUpdateNoUpdate", R.string.VersionUpdateNoUpdate), Toast.LENGTH_SHORT).show());
-                return;
-            } else if (release.name.equals(NekoXConfig.ignoredUpdateTag) && isAutoCheck) {
-                FileLog.d("ignored tag " + release.name);
-                return;
-            }
-
-            // match release apk urls
-            final ApkMetadata apk = matchBuild(release.assets);
-
-            // match apk urls. these can be empty.
-            String urlChannel = "";
-            String sha1 = "";
-            try {
-                final String newBody = HttpUtil.get("https://api.github.com/repos/NekoX-Dev/updates/contents/" + release.name + ".txt?ref=main");
-                final GithubApiContents releaseNoteApi = new Gson().fromJson(newBody, GithubApiContents.class);
-                final String releaseNoteString = new String(Base64.decode(releaseNoteApi.content, Base64.DEFAULT));
-                final byte[] gzipped = Base64.decode(NekomuraUtil.getSubString(releaseNoteString, "#NekoXStart#", "#NekoXEnd#"), Base64.NO_PADDING);
-                final NekoXReleaseNote nekoXReleaseNote = new Gson().fromJson(new String(NekomuraUtil.uncompress(gzipped)), NekoXReleaseNote.class);
-
-                if (nekoXReleaseNote != null && nekoXReleaseNote.apks != null) {
-                    for (NekoXAPK napk : nekoXReleaseNote.apks) {
-                        if (napk.name.equals(apk.name)) {
-                            sha1 = napk.sha1;
-                            for (String url : napk.urls) {
-                                if (url.startsWith("https://t.me/")) urlChannel = url;
-                            }
-                            break;
-                        }
+            if (found != null) {
+                for (TLRPC.Message message : res.messages) {
+                    if (!(message instanceof TLRPC.TL_message)) continue;
+                    if (message.id == found.UpdateLogMessageID) {
+                        found.updateLog = message.message;
+                        found.updateLogEntities = message.entities;
+                        break;
                     }
                 }
-            } catch (Exception ignored) {
             }
-
-            String finalsha1 = sha1;
-            String finalUrlChannel = urlChannel;
-            ReleaseMetadata finalRelease = release;
-
-            AndroidUtilities.runOnUIThread(() -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setTitle(LocaleController.getString("VersionUpdateTitle", R.string.VersionUpdateTitle));
-
-                String message = null;
-                try {
-                    message = finalRelease.name + "   " + LocaleController.formatDateChat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(finalRelease.published_at).getTime() / 1000) + "\n\n";
-                } catch (Exception e) {
-                    FileLog.e(e);
+            if (found == null) {
+                FileLog.d("Cannot find Update Metadata");
+                callback.apply(null, false);
+                return;
+            }
+            FileLog.w("Found Update Metadata " + found.versionName + " " + found.versionCode);
+            callback.apply(found, false);
+        });
+        if (req.peer.access_hash != 0) sendReq.run();
+        else {
+            TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
+            resolve.username = CHANNEL_METADATA_NAME;
+            accountInstance.getConnectionsManager().sendRequest(resolve, (response1, error1) -> {
+                if (error1 != null) {
+                    FileLog.e("Error when checking update, unable to resolve metadata channel " + error1.text);
+                    callback.apply(null, true);
+                    return;
                 }
-                if (apk == null)
-                    message += LocaleController.getString("VersionUpdateVariantNotMatch", R.string.VersionUpdateVariantNotMatch);
-                else
-                    message += apk.name.replace(".apk", "");
-                builder.setMessage(message);
-
-                builder.setPositiveButton(LocaleController.getString("VersionUpdateConfirm", R.string.VersionUpdateConfirm), (dialog, which) -> {
-                    showSelectDownloadSource(ctx, apk != null ? apk.name : finalRelease.name,
-                            apk != null ? apk.browser_download_url : finalRelease.html_url,
-                            finalUrlChannel, finalsha1);
-                });
-                builder.setNeutralButton(LocaleController.getString("VersionUpdateIgnore", R.string.VersionUpdateIgnore), (dialog, which) -> NekoXConfig.setIgnoredUpdateTag(finalRelease.name));
-                builder.setNegativeButton(LocaleController.getString("VersionUpdateNotNow", R.string.VersionUpdateNotNow), (dialog, which) -> NekoXConfig.setNextUpdateCheck(System.currentTimeMillis() / 1000 + 3 * 24 * 3600));
-                builder.show();
+                if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
+                    FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected responseType " + response1.getClass().getName());
+                    callback.apply(null, true);
+                    return;
+                }
+                TLRPC.TL_contacts_resolvedPeer resolvedPeer = (TLRPC.TL_contacts_resolvedPeer) response1;
+                accountInstance.getMessagesController().putUsers(resolvedPeer.users, false);
+                accountInstance.getMessagesController().putChats(resolvedPeer.chats, false);
+                accountInstance.getMessagesStorage().putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false, true);
+                if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
+                    FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
+                    callback.apply(null, true);
+                    return;
+                }
+                req.peer = new TLRPC.TL_inputPeerChannel();
+                req.peer.channel_id = resolvedPeer.chats.get(0).id;
+                req.peer.access_hash = resolvedPeer.chats.get(0).access_hash;
+                sendReq.run();
             });
-        } catch (Exception e) {
-            FileLog.e(e);
-            if (!isAutoCheck)
-                AndroidUtilities.runOnUIThread(() -> Toast.makeText(ctx, "An exception occurred during checking updates.", Toast.LENGTH_SHORT).show());
         }
     }
 
-    public static void showSelectDownloadSource(Context ctx, String title, String browser_download_url, String urlChannel, String sha1) {
-        CellGroup nkmrCells = new CellGroup(null);
+    public static void checkUpdate(checkUpdateCallback callback) {
+        AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
+        retrieveUpdateMetadata((metadata, err) -> {
+            if (metadata == null) {
+                callback.apply(null, err);
+                return;
+            }
+            TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
+            req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_APKS_ID);
+            req.min_id = metadata.apkChannelMessageID;
+            req.limit = MAX_READ_COUNT;
 
-        nkmrCells.callBackSettingsChanged = ((k, v) -> {
-            int source = NekomuraConfig.update_download_soucre.Int();
-            switch (source) {
-                case 0:
-                    Browser.openUrl(ctx, browser_download_url);
-                    break;
-                case 1:
-                    Browser.openUrl(ctx, urlChannel);
-                    break;
+            Runnable sendReq = () -> accountInstance.getConnectionsManager().sendRequest(req, (response, error) -> {
+                if (error != null) {
+                    FileLog.e("Error when getting update document " + error.text);
+                    callback.apply(null, true);
+                    return;
+                }
+                TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                FileLog.d("Retrieve update messages, size:" + res.messages.size());
+                final String target = metadata.versionName + "-" + BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + ("debug".equals(BuildConfig.BUILD_TYPE) ? "release" : BuildConfig.BUILD_TYPE) + ".apk";
+                for (int i = 0; i < res.messages.size(); i++) {
+                    if (res.messages.get(i).media == null) continue;
+
+                    TLRPC.Document apkDocument = res.messages.get(i).media.document;
+                    String fileName = apkDocument.attributes.size() == 0 ? "" : apkDocument.attributes.get(0).file_name;
+                    if (!fileName.contains(target))
+                        continue;
+                    TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
+                    update.version = metadata.versionName;
+                    update.document = apkDocument;
+                    update.can_not_skip = false;
+                    update.flags |= 2;
+                    if (metadata.updateLog != null) {
+                        update.text = metadata.updateLog;
+                        update.entities = metadata.updateLogEntities;
+                    }
+                    callback.apply(update, false);
+                    return;
+                }
+                callback.apply(null, false);
+            });
+            if (req.peer.access_hash != 0) sendReq.run();
+            else {
+                TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
+                resolve.username = CHANNEL_APKS_NAME;
+                accountInstance.getConnectionsManager().sendRequest(resolve, (response1, error1) -> {
+                    if (error1 != null) {
+                        FileLog.e("Error when checking update, unable to resolve metadata channel " + error1);
+                        callback.apply(null, true);
+                        return;
+                    }
+                    if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
+                        FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected responseType " + response1.getClass().getName());
+                        callback.apply(null, true);
+                        return;
+                    }
+                    TLRPC.TL_contacts_resolvedPeer resolvedPeer = (TLRPC.TL_contacts_resolvedPeer) response1;
+                    accountInstance.getMessagesController().putUsers(resolvedPeer.users, false);
+                    accountInstance.getMessagesController().putChats(resolvedPeer.chats, false);
+                    accountInstance.getMessagesStorage().putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false, true);
+                    if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
+                        FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
+                        callback.apply(null, true);
+                        return;
+                    }
+                    req.peer = new TLRPC.TL_inputPeerChannel();
+                    req.peer.channel_id = resolvedPeer.chats.get(0).id;
+                    req.peer.access_hash = resolvedPeer.chats.get(0).access_hash;
+                    sendReq.run();
+                });
             }
         });
 
-        ArrayList<String> sources = new ArrayList<>();
-        sources.add("Github Release"); // base of Current
-        if (!urlChannel.isEmpty()) sources.add("Telegram Channel");
 
-        String[] sources_ = new String[sources.size()];
-        sources.toArray(sources_);
-
-        NekomuraTGSelectBox sb = new NekomuraTGSelectBox(null, NekomuraConfig.update_download_soucre, sources_, null);
-        nkmrCells.appendCell(sb); // new
-        sb.onClickWithDialog(ctx);
     }
 
-    public static boolean openApkInstall(Activity activity, File f) {
-        if (!checkApkInstallPermissions(activity)) {
-            return false;
-        }
+    public interface retrieveUpdateMetadataCallback {
+        void apply(UpdateMetadata metadata, boolean error);
+    }
 
-        boolean exists = false;
-        try {
-            if (exists = f.exists()) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    public interface checkUpdateCallback {
+        void apply(TLRPC.TL_help_appUpdate resp, boolean error);
+    }
 
-                if (Build.VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".provider", f), "application/vnd.android.package-archive");
-                } else {
-                    intent.setDataAndType(Uri.fromFile(f), "application/vnd.android.package-archive");
-                }
-                try {
-                    activity.startActivityForResult(intent, 500);
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
+    static class UpdateMetadata {
+        int messageID;
+        String versionName;
+        int versionCode;
+        int apkChannelMessageID;
+        int UpdateLogMessageID;
+        String updateLog = null;
+        ArrayList<TLRPC.MessageEntity> updateLogEntities = null;
+
+        UpdateMetadata(int messageID, String[] split) {
+            this.messageID = messageID;
+            versionName = split[0];
+            versionCode = Integer.parseInt(split[1]);
+            apkChannelMessageID = Integer.parseInt(split[2]);
+            UpdateLogMessageID = Integer.parseInt(split[3]);
         }
-        return exists;
     }
 
 }

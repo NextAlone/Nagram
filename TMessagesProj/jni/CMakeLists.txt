@@ -12,6 +12,7 @@ ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavcodec.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavresample.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavutil.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libswresample.a,
+${CMAKE_HOME_DIRECTORY}/libvpx/build/${ANDROID_ABI}/lib/libvpx.a,
 ${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/ssl/libssl.a,
 ${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/crypto/libcrypto.a")
 
@@ -23,10 +24,6 @@ else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -Os -DNDEBUG")
     set(LINKER_FLAGS "${LINKER_FLAGS} -Wl,-exclude-libs,ALL -Wl,--gc-sections -Wl,--strip-all")
 endif()
-
-message("CFLAGS ${C_FLAGS}")
-message("CXX_FLAGS ${CXX_FLAGS}")
-
 
 if (${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a")
     enable_language(ASM)
@@ -57,6 +54,10 @@ set_target_properties(crypto PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY
 
 add_library(ssl STATIC IMPORTED)
 set_target_properties(ssl PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/ssl/libssl.a)
+
+add_library(libvpx STATIC IMPORTED)
+set_target_properties(libvpx PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/libvpx/build/${ANDROID_ABI}/lib/libvpx.a)
+
 
 #tgnet
 add_library(mozjpeg STATIC
@@ -461,7 +462,7 @@ target_compile_definitions(sqlite PUBLIC
 #voip
 include(${CMAKE_HOME_DIRECTORY}/voip/CMakeLists.txt)
 
-set(NATIVE_LIB "tmessages.40")
+set(NATIVE_LIB "tmessages.41")
 
 #tmessages
 add_library(${NATIVE_LIB} SHARED
@@ -721,6 +722,7 @@ target_include_directories(${NATIVE_LIB} PUBLIC
         third_party/libyuv/include
         boringssl/include
         ffmpeg/build/${ANDROID_ABI}/include
+        libvpx/build/${ANDROID_ABI}/include
         emoji
         exoplayer/include
         exoplayer/libFLAC/include
@@ -747,6 +749,7 @@ target_link_libraries(${NATIVE_LIB}
         avcodec
         avresample
         swresample
+        libvpx
         avutil
         ssl
         crypto
@@ -759,16 +762,6 @@ target_link_libraries(${NATIVE_LIB}
         OpenSLES
         cpufeatures)
 
-if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
-    target_link_libraries(${NATIVE_LIB}
-            libvpx_yasm -Wl,--no-whole-archive)
-endif ()
-
-#if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
-#    target_link_libraries(${NATIVE_LIB}
-#            -Wl,--whole-archive vpxasm -Wl,--no-whole-archive
-#            c)
-#endif()
 
 include(AndroidNdkModules)
 android_ndk_import_module_cpufeatures()

@@ -27,6 +27,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.widget.ScrollerCompat;
 
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -39,6 +40,8 @@ import android.widget.ScrollView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
+
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;

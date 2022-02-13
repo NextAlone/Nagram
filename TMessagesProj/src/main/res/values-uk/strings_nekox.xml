@@ -4,12 +4,12 @@
     <string name="AccDescrChatAttachEnterMenu">Меню вводу в чат</string>
     <string name="ChatAttachEnterMenuRecordVideo">Записати відео</string>
     <string name="ChatAttachEnterMenuRecordAudio">Записувати аудіо</string>
-    <string name="ChatAttachEnterMenuDisableLinkPreview">Вимкнути попередній перегляд посилання</string>
-    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути передогляд посилання</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Вимкнути передогляд посилань</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Увімкнути передогляд посилань</string>
     <string name="UseChatAttachEnterMenu">Використовувати меню введення</string>
-    <string name="UseChatAttachEnterMenuNotice">Змініть кнопку запису на меню вводу і додайте перемикач попереднього перегляду посилань.</string>
-    <string name="DisableLinkPreviewByDefault">Відключити передогляд посилань за замовчуванням</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Вимкніть запит попереднього перегляду посилання під час введення за замовчуванням, щоб запобігти знанню сервера про те, що посилання передається через Telegram.</string>
+    <string name="UseChatAttachEnterMenuNotice">Змінити кнопку запису на меню вводу та додати перемикач передогляду посилань.</string>
+    <string name="DisableLinkPreviewByDefault">Без передогляду посилань</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Вимкнути запит передогляду посилання під час введення, щоб сервер не знав, що посилання поширили в Telegram.</string>
     <string name="CustomApi">Користувацький API</string>
     <string name="UseCustomApiNotice">Увійдіть, використовуючи користувацький APi, якщо ви не в змозі зареєструватися або увійти в систему, це може допомогти.
 \n
@@ -214,7 +214,7 @@
     <string name="TextOrigin">Походження</string>
     <string name="TextReplace">Заміняти</string>
     <string name="ReplaceRegex">Використовуйте регулярний вираз</string>
-    <string name="DisableTrending">Вимкнути тенденцію</string>
+    <string name="DisableTrending">Сховати популярні наліпки</string>
     <string name="HideDeviceInfo">Сховати модель пристрою</string>
     <string name="HideDeviceInfoOff">Модель пристрою буде завантажена вдруге, коли програма запуститься після входу в систему.</string>
     <string name="HideDeviceInfoOn">Ви можете змінити це в налаштуваннях пізніше.</string>
@@ -232,7 +232,7 @@
     <string name="AddProxyWs">Додати WebSocket проксі</string>
     <string name="DisplayPersianCalendarByLatin">Показувати перський календар латиницею</string>
     <string name="UsePersiancalendarInfo">Показувати дату у форматі Solar Hijri (перський календар)</string>
-    <string name="UsePersiancalendar">Використовувати персидський календар</string>
+    <string name="UsePersiancalendar">Перський календар</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="SetPinnedSuffix">(Закріплено)</string>
     <string name="UnpinSticker">Прибрати закріплення</string>
@@ -240,4 +240,43 @@
     <string name="ArchiveFiles">Архіви</string>
     <string name="Win32ExecutableFiles">Файли запуску Windows</string>
     <string name="AutoDownload">Автозавантаження</string>
+    <string name="showSeconds">Секунди в часових мітках</string>
+    <string name="customPublicProxyIP">Вказати IP загальнодоступного проксі</string>
+    <string name="DisableInstantCamera">Вимкнути миттєву камеру</string>
+    <string name="unreadBadgeOnBackButton">Кількість непрочитаних на кнопці Назад</string>
+    <string name="useCustomEmoji">Власні емодзі</string>
+    <string name="DeleteDownloadedFileSucceed">Видалено</string>
+    <string name="repeatConfirm">Перепитувати щодо повтору</string>
+    <string name="ShareMessages">Поширити</string>
+    <string name="useCustomEmojiInvalid">Хибний zip емодзі.</string>
+    <string name="valuesLargeAvatarInDrawer">Типово
+\nАватар як тло
+\nВеликий аватар як тло</string>
+    <string name="customPublicProxyIPNotice">У деяких регіонах вказання адреси загальнодоступного CDN-проксі (як-от Cloudflare) може прискорити доступ.</string>
+    <string name="repeatConfirmText">Точно повторити\?</string>
+    <string name="DeleteDownloadedFileConfirm">Видалити цей файл із локального кешу\?</string>
+    <string name="VersionUpdateTitle">Доступна нова версія</string>
+    <string name="VersionUpdateIgnore">Ігнорувати</string>
+    <string name="VersionUpdateNoUpdate">Оновлень нема.</string>
+    <string name="AutoCheckUpdateOFF">Вимкнено</string>
+    <string name="AutoCheckUpdateStable">Стабільна</string>
+    <string name="VersionUpdateVariantNotMatch">Не вдається зіставити варіанти версій.
+\nБудь ласка, завантажте вручну з GitHub.</string>
+    <string name="VersionUpdateNotNow">Не зараз</string>
+    <string name="VersionUpdateConfirm">ОНОВИТИ</string>
+    <string name="AutoCheckUpdateSwitch">Автооновлення</string>
+    <string name="AutoCheckUpdateRc">Release Candidate</string>
+    <string name="DeleteDownloadedFileExternal">Зовнішній файл пропущено.</string>
+    <string name="hideSponsoredMessage">Ховати рекламні повідомлення</string>
+    <string name="update_download_soucre">Оберіть джерело завантаження</string>
+    <string name="rememberAllBackMessages">Пам\'ятати натиснені відповіді</string>
+    <string name="AutoCheckUpdatePreview">Передогляд (Нестабільно)</string>
+    <string name="NekoXUpdateTranslationHint">Натисніть щоб перекласти журнал змін</string>
+    <string name="AppUpdateNekoX">Оновити Nekogram X</string>
+    <string name="Name">Ім\'я</string>
+    <string name="channelAlias">Псевдонім каналу</string>
+    <string name="labelChannelUserDetails">Підписувати повідомлення з каналу відповідно</string>
+    <string name="setChannelAliasName">Вкажіть псевдонім</string>
+    <string name="labelChannelUser">Мітка користувача-каналу</string>
+    <string name="channelAliasDetails">Якщо ввімкнена мітка користувача-каналу.</string>
 </resources>

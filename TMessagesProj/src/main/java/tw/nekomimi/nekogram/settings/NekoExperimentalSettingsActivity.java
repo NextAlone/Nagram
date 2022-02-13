@@ -8,9 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.ParcelFileDescriptor;
-import android.os.Parcelable;
-import android.provider.DocumentsContract;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +49,13 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import kotlin.Unit;
 
-import tw.nekomimi.nekogram.PopupBuilder;
+import tw.nekomimi.nekogram.ui.PopupBuilder;
+import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nkmr.CellGroup;
-import tw.nekomimi.nkmr.NekomuraUtil;
-import tw.nekomimi.nkmr.cells.AbstractCell;
-import tw.nekomimi.nkmr.cells.*;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.config.CellGroup;
+import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
+import tw.nekomimi.nekogram.config.cell.*;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseFragment {
@@ -72,21 +69,23 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
     private final CellGroup cellGroup = new CellGroup(this);
 
-    private final AbstractCell header1 = cellGroup.appendCell(new NekomuraTGHeader(LocaleController.getString("Experiment")));
-    private final AbstractCell useSystemEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useSystemEmoji));
-    private final AbstractCell useCustomEmojiRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useCustomEmoji));
-    private final AbstractCell smoothKeyboardRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.smoothKeyboard));
-    private final AbstractCell increaseVoiceMessageQualityRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.increaseVoiceMessageQuality));
-    private final AbstractCell mediaPreviewRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.mediaPreview));
-    private final AbstractCell proxyAutoSwitchRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.proxyAutoSwitch));
-    private final AbstractCell disableFilteringRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
-    //    private final NekomuraTGCell ignoreContentRestrictionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekomuraConfig.ignoreContentRestrictions, LocaleController.getString("IgnoreContentRestrictionsNotice")));
-    private final AbstractCell unlimitedFavedStickersRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
-    private final AbstractCell unlimitedPinnedDialogsRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
-    private final AbstractCell enableStickerPinRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
-    private final AbstractCell useMediaStreamInVoipRow = cellGroup.appendCell(new NekomuraTGTextCheck(NekomuraConfig.useMediaStreamInVoip));
-    private final AbstractCell customAudioBitrateRow = cellGroup.appendCell(new NekomuraTGCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractCell divider0 = cellGroup.appendCell(new NekomuraTGDivider());
+    private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Experiment")));
+    private final AbstractConfigCell useSystemEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useSystemEmoji));
+    private final AbstractConfigCell useCustomEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useCustomEmoji));
+    private final AbstractConfigCell channelAliasRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.channelAlias));
+
+    private final AbstractConfigCell smoothKeyboardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.smoothKeyboard));
+    private final AbstractConfigCell increaseVoiceMessageQualityRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.increaseVoiceMessageQuality));
+    private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
+    private final AbstractConfigCell proxyAutoSwitchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.proxyAutoSwitch));
+    private final AbstractConfigCell disableFilteringRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
+    //    private final NekomuraTGCell ignoreContentRestrictionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekoConfig.ignoreContentRestrictions, LocaleController.getString("IgnoreContentRestrictionsNotice")));
+    private final AbstractConfigCell unlimitedFavedStickersRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unlimitedFavedStickers, LocaleController.getString("UnlimitedFavoredStickersAbout")));
+    private final AbstractConfigCell unlimitedPinnedDialogsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unlimitedPinnedDialogs, LocaleController.getString("UnlimitedPinnedDialogsAbout")));
+    private final AbstractConfigCell enableStickerPinRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
+    private final AbstractConfigCell useMediaStreamInVoipRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useMediaStreamInVoip));
+    private final AbstractConfigCell customAudioBitrateRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;
 
@@ -131,22 +130,22 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
-            AbstractCell a = cellGroup.rows.get(position);
-            if (a instanceof NekomuraTGTextCheck) {
-                ((NekomuraTGTextCheck) a).onClick((TextCheckCell) view);
-            } else if (a instanceof NekomuraTGSelectBox) {
-                ((NekomuraTGSelectBox) a).onClick(view);
-            } else if (a instanceof NekomuraTGTextInput) {
-                ((NekomuraTGTextInput) a).onClick();
-            } else if (a instanceof NekomuraTGTextDetail) {
-                RecyclerListView.OnItemClickListener o = ((NekomuraTGTextDetail) a).onItemClickListener;
+            AbstractConfigCell a = cellGroup.rows.get(position);
+            if (a instanceof ConfigCellTextCheck) {
+                ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
+            } else if (a instanceof ConfigCellSelectBox) {
+                ((ConfigCellSelectBox) a).onClick(view);
+            } else if (a instanceof ConfigCellTextInput) {
+                ((ConfigCellTextInput) a).onClick();
+            } else if (a instanceof ConfigCellTextDetail) {
+                RecyclerListView.OnItemClickListener o = ((ConfigCellTextDetail) a).onItemClickListener;
                 if (o != null) {
                     try {
                         o.onItemClick(view, position);
                     } catch (Exception e) {
                     }
                 }
-            } else if (a instanceof NekomuraTGCustom) { // Custom onclick
+            } else if (a instanceof ConfigCellCustom) { // Custom onclick
                 if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
                     sensitiveEnabled = !sensitiveEnabled;
                     TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
@@ -175,22 +174,22 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     }, (i, __) -> {
                         switch (i) {
                             case 0:
-                                NekomuraConfig.customAudioBitrate.setConfigInt(32);
+                                NekoConfig.customAudioBitrate.setConfigInt(32);
                                 break;
                             case 1:
-                                NekomuraConfig.customAudioBitrate.setConfigInt(64);
+                                NekoConfig.customAudioBitrate.setConfigInt(64);
                                 break;
                             case 2:
-                                NekomuraConfig.customAudioBitrate.setConfigInt(128);
+                                NekoConfig.customAudioBitrate.setConfigInt(128);
                                 break;
                             case 3:
-                                NekomuraConfig.customAudioBitrate.setConfigInt(192);
+                                NekoConfig.customAudioBitrate.setConfigInt(192);
                                 break;
                             case 4:
-                                NekomuraConfig.customAudioBitrate.setConfigInt(256);
+                                NekoConfig.customAudioBitrate.setConfigInt(256);
                                 break;
                             case 5:
-                                NekomuraConfig.customAudioBitrate.setConfigInt(320);
+                                NekoConfig.customAudioBitrate.setConfigInt(320);
                                 break;
                         }
                         listAdapter.notifyItemChanged(position);
@@ -203,7 +202,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         // Cells: Set OnSettingChanged Callbacks
         cellGroup.callBackSettingsChanged = (key, newValue) -> {
-            if (key.equals(NekomuraConfig.smoothKeyboard.getKey())) {
+            if (key.equals(NekoConfig.smoothKeyboard.getKey())) {
                 SharedConfig.setSmoothKeyboard((boolean) newValue);
                 if (SharedConfig.smoothKeyboard && getParentActivity() != null) {
                     getParentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -212,23 +211,23 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (key.equals(NekomuraConfig.mediaPreview.getKey())) {
+            } else if (key.equals(NekoConfig.mediaPreview.getKey())) {
                 if ((boolean) newValue) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (key.equals(NekomuraConfig.enableStickerPin.getKey())) {
+            } else if (key.equals(NekoConfig.enableStickerPin.getKey())) {
                 if ((boolean) newValue) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
                 }
-            } else if (key.equals(NekomuraConfig.useCustomEmoji.getKey())) {
+            } else if (key.equals(NekoConfig.useCustomEmoji.getKey())) {
                 // Check
                 if (!(boolean) newValue) {
                     tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
                     return;
                 }
-                NekomuraConfig.useCustomEmoji.setConfigBool(false);
+                NekoConfig.useCustomEmoji.setConfigBool(false);
 
                 // Open picker
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -263,7 +262,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 //dirs
                 File dir = new File(ApplicationLoader.applicationContext.getFilesDir(), "custom_emoji");
                 if (dir.exists()) {
-                    NekomuraUtil.deleteDirectory(dir);
+                    FileUtil.deleteDirectory(dir);
                 }
                 dir.mkdir();
 
@@ -275,10 +274,10 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                     throw new Exception(LocaleController.getString("useCustomEmojiInvalid"));
                 }
 
-                NekomuraConfig.useCustomEmoji.setConfigBool(true);
+                NekoConfig.useCustomEmoji.setConfigBool(true);
             } catch (Exception e) {
                 FileLog.e(e);
-                NekomuraConfig.useCustomEmoji.setConfigBool(false);
+                NekoConfig.useCustomEmoji.setConfigBool(false);
                 Toast.makeText(ApplicationLoader.applicationContext, "Failed: " + e.toString(), Toast.LENGTH_LONG).show();
             }
             tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
@@ -403,7 +402,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            AbstractCell a = cellGroup.rows.get(position);
+            AbstractConfigCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.isEnabled();
             }
@@ -412,7 +411,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            AbstractCell a = cellGroup.rows.get(position);
+            AbstractConfigCell a = cellGroup.rows.get(position);
             if (a != null) {
                 return a.getType();
             }
@@ -421,9 +420,9 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            AbstractCell a = cellGroup.rows.get(position);
+            AbstractConfigCell a = cellGroup.rows.get(position);
             if (a != null) {
-                if (a instanceof NekomuraTGCustom) {
+                if (a instanceof ConfigCellCustom) {
                     // Custom binds
                     if (holder.itemView instanceof TextCheckCell) {
                         TextCheckCell textCell = (TextCheckCell) holder.itemView;
@@ -436,8 +435,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                         TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                         if (position == cellGroup.rows.indexOf(customAudioBitrateRow)) {
-                            String value = String.valueOf(NekomuraConfig.customAudioBitrate.Int()) + "kbps";
-                            if (NekomuraConfig.customAudioBitrate.Int() == 32)
+                            String value = String.valueOf(NekoConfig.customAudioBitrate.Int()) + "kbps";
+                            if (NekoConfig.customAudioBitrate.Int() == 32)
                                 value += " (" + LocaleController.getString("Default", R.string.Default) + ")";
                             textCell.setTextAndValue(LocaleController.getString("customGroupVoipAudioBitrate", R.string.customGroupVoipAudioBitrate), value, false);
                         }

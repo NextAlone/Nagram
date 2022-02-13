@@ -35,6 +35,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.Emoji;
@@ -57,15 +58,13 @@ import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.StickerCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.ChatAvatarContainer;
-import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ContentPreviewViewer {
 
@@ -264,7 +263,7 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                if (!NekomuraConfig.disableVibration.Bool()) {
+                if (!NekoConfig.disableVibration.Bool()) {
                     containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
                 if (delegate != null && delegate.needRemove()) {
@@ -358,7 +357,7 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                if (!NekomuraConfig.disableVibration.Bool()) {
+                if (!NekoConfig.disableVibration.Bool()) {
                     containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 }
                 if (canDelete) {
@@ -662,7 +661,7 @@ public class ContentPreviewViewer {
     public void setParentActivity(Activity activity) {
         currentAccount = UserConfig.selectedAccount;
         centerImage.setCurrentAccount(currentAccount);
-        centerImage.setLayerNum(7);
+        centerImage.setLayerNum(Integer.MAX_VALUE);
         if (parentActivity == activity) {
             return;
         }
@@ -681,7 +680,19 @@ public class ContentPreviewViewer {
             });
         }
 
-        containerView = new FrameLayoutDrawer(activity);
+        containerView = new FrameLayoutDrawer(activity) {
+            @Override
+            protected void onAttachedToWindow() {
+                super.onAttachedToWindow();
+                centerImage.onAttachedToWindow();
+            }
+
+            @Override
+            protected void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                centerImage.onDetachedFromWindow();
+            }
+        };
         containerView.setFocusable(false);
         windowView.addView(containerView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         containerView.setOnTouchListener((v, event) -> {
@@ -751,7 +762,11 @@ public class ContentPreviewViewer {
                 }
                 currentStickerSet = newSet;
                 TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-                centerImage.setImage(ImageLocation.getForDocument(document), null, ImageLocation.getForDocument(thumb, document), null, "webp", currentStickerSet, 1);
+                if (MessageObject.isVideoStickerDocument(document)) {
+                    centerImage.setImage(ImageLocation.getForDocument(document), null, ImageLocation.getForDocument(thumb, document), null, null,  0, "webp", currentStickerSet, 1);
+                } else {
+                    centerImage.setImage(ImageLocation.getForDocument(document), null, ImageLocation.getForDocument(thumb, document), null, "webp", currentStickerSet, 1);
+                }
                 for (int a = 0; a < document.attributes.size(); a++) {
                     TLRPC.DocumentAttribute attribute = document.attributes.get(a);
                     if (attribute instanceof TLRPC.TL_documentAttributeSticker) {

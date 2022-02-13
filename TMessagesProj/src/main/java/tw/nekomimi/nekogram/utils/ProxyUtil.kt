@@ -43,9 +43,9 @@ import org.json.JSONException
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
 import org.yaml.snakeyaml.Yaml
-import tw.nekomimi.nekogram.BottomBuilder
-import tw.nekomimi.nekogram.ShadowsocksLoader
-import tw.nekomimi.nekogram.ShadowsocksRLoader
+import tw.nekomimi.nekogram.ui.BottomBuilder
+import tw.nekomimi.nekogram.proxy.ShadowsocksLoader
+import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader
 import tw.nekomimi.nekogram.utils.AlertUtil.showToast
 import java.io.File
 import java.net.NetworkInterface
@@ -117,7 +117,8 @@ object ProxyUtil {
                                 opts.putAll(proxy["plugin-opts"] as Map<String, String?>)
                                 pluginStr = opts.toString(false)
                             }
-                            proxies.add(ShadowsocksLoader.Bean(
+                            proxies.add(
+                                ShadowsocksLoader.Bean(
                                     proxy["server"] as String,
                                     proxy["port"] as Int,
                                     proxy["password"] as String,

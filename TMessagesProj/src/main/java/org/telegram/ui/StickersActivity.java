@@ -92,9 +92,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nekogram.PinnedStickerHelper;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
@@ -162,7 +162,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (source.getItemViewType() != target.getItemViewType()) {
                 return false;
             }
-            if (NekomuraConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+            if (NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                 int from = source.getAdapterPosition();
                 int to = target.getAdapterPosition();
                 if (from < stickersStartRow + listAdapter.pinnedStickersCount) {
@@ -633,7 +633,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
         final List<TLRPC.TL_messages_stickerSet> newList = mediaDataController.getStickerSets(currentType);
 
-        if (MediaDataController.TYPE_IMAGE == currentType && NekomuraConfig.enableStickerPin.Bool()) {
+        if (MediaDataController.TYPE_IMAGE == currentType && NekoConfig.enableStickerPin.Bool()) {
             PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(newList);
         }
 
@@ -787,7 +787,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         public ListAdapter(Context context, List<TLRPC.TL_messages_stickerSet> stickerSets) {
             mContext = context;
             List<TLRPC.TL_messages_stickerSet> temp = new ArrayList<>(stickerSets);
-            if (MediaDataController.TYPE_IMAGE == currentType && NekomuraConfig.enableStickerPin.Bool()) {
+            if (MediaDataController.TYPE_IMAGE == currentType && NekoConfig.enableStickerPin.Bool()) {
                 if (PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(stickerSets)) {
                     // Sync is needed
 //                    AndroidUtilities.runOnUIThread(() -> {
@@ -803,7 +803,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         public void setStickerSets(List<TLRPC.TL_messages_stickerSet> stickerSets) {
             this.stickerSets.clear();
-//            if (MediaDataController.TYPE_IMAGE == currentType && NekomuraConfig.enableStickerPin.Bool()) {
+//            if (MediaDataController.TYPE_IMAGE == currentType && NekoConfig.enableStickerPin.Bool()) {
 //                pinnedStickersCount = PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(stickerSets);
 //            }
             this.stickerSets.addAll(stickerSets);
@@ -949,14 +949,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         private void processSelectionOption(int which, TLRPC.TL_messages_stickerSet stickerSet) {
             if (which == MENU_ARCHIVE) {
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), stickerSet, !stickerSet.set.archived ? 1 : 2, StickersActivity.this, true, true);
-                if (NekomuraConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+                if (NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                     // Sticker will be removed from local list in toggleStickerSet
                     pinnedStickersCount--;
                     setStickerSetCellPinnedMarkVisibility(stickerSet.set.id, false);
                 }
             } else if (which == MENU_DELETE) {
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), stickerSet, 0, StickersActivity.this, true, true);
-                if (NekomuraConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+                if (NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                     pinnedStickersCount--;
                     setStickerSetCellPinnedMarkVisibility(stickerSet.set.id, false);
                 }
@@ -983,7 +983,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 if (index >= 0) {
                     listAdapter.toggleSelected(stickersStartRow + index);
                 }
-            } else if (which == MENU_TOGGLE_PIN && NekomuraConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+            } else if (which == MENU_TOGGLE_PIN && NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                 final PinnedStickerHelper ins = PinnedStickerHelper.getInstance(currentAccount);
                 final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
                 if (ins.isPinned(stickerSet.set.id)) {
@@ -1158,7 +1158,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                             };
                             icons = new int[]{R.drawable.baseline_archive_24, R.drawable.msg_reorder};
                         } else {
-                            if (NekomuraConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+                            if (NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                                 options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE, MENU_TOGGLE_PIN};
                                 items = new CharSequence[]{
                                         LocaleController.getString("StickersHide", R.string.StickersHide),

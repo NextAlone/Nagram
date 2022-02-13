@@ -14,7 +14,6 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC;
@@ -22,7 +21,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.Locale;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ChatGreetingsView extends LinearLayout {
 
@@ -87,7 +86,7 @@ public class ChatGreetingsView extends LinearLayout {
             stickerToSendView.setImage(ImageLocation.getForDocument(sticker), createFilter(sticker), ImageLocation.getForDocument(thumb, sticker), null, 0, sticker);
         }
         stickerToSendView.setOnClickListener(v -> {
-            if (NekomuraConfig.dontSendGreetingSticker.Bool())
+            if (NekoConfig.dontSendGreetingSticker.Bool())
                 return;
             if (listener != null) {
                 listener.onGreetings(sticker);

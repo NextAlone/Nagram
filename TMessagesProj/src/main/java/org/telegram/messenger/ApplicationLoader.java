@@ -21,6 +21,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
@@ -29,7 +31,9 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import androidx.core.app.NotificationManagerCompat;
+import androidx.annotation.NonNull;
+import androidx.multidex.MultiDex;
+
 import androidx.multidex.MultiDex;
 
 import org.telegram.messenger.voip.VideoCapturerDevice;
@@ -42,13 +46,10 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 import tw.nekomimi.nekogram.ExternalGcm;
-import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -63,6 +64,8 @@ public class ApplicationLoader extends Application {
 
     private static ConnectivityManager connectivityManager;
     private static volatile boolean applicationInited = false;
+    private static long lastNetworkCheckTypeTime;
+    private static int lastKnownNetworkType = -1;
 
     public static long startTime;
 
@@ -352,8 +355,6 @@ public class ApplicationLoader extends Application {
 
         // Since static init is thread-safe, no lock is needed there.
         Utilities.stageQueue.postRunnable(() -> {
-            NekoXConfig.preferences.contains("qwq");
-
             //SignturesKt.checkMT(this);
         });
 
@@ -462,6 +463,20 @@ public class ApplicationLoader extends Application {
                     connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
                 }
                 currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+                        @Override
+                        public void onAvailable(@NonNull Network network) {
+                            lastKnownNetworkType = -1;
+                        }
+
+                        @Override
+                        public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
+                            super.onCapabilitiesChanged(network, networkCapabilities);
+                            lastKnownNetworkType = -1;
+                        }
+                    });
+                }
             } catch (Throwable ignore) {
 
             }
@@ -531,11 +546,16 @@ public class ApplicationLoader extends Application {
                 return StatsController.TYPE_MOBILE;
             }
             if (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || currentNetworkInfo.getType() == ConnectivityManager.TYPE_ETHERNET) {
-                if (connectivityManager.isActiveNetworkMetered()) {
-                    return StatsController.TYPE_MOBILE;
-                } else {
-                    return StatsController.TYPE_WIFI;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && (lastKnownNetworkType == StatsController.TYPE_MOBILE || lastKnownNetworkType == StatsController.TYPE_WIFI) && System.currentTimeMillis() - lastNetworkCheckTypeTime < 5000) {
+                    return lastKnownNetworkType;
                 }
+                if (connectivityManager.isActiveNetworkMetered()) {
+                    lastKnownNetworkType = StatsController.TYPE_MOBILE;
+                } else {
+                    lastKnownNetworkType = StatsController.TYPE_WIFI;
+                }
+                lastNetworkCheckTypeTime = System.currentTimeMillis();
+                return lastKnownNetworkType;
             }
             if (currentNetworkInfo.isRoaming()) {
                 return StatsController.TYPE_ROAMING;

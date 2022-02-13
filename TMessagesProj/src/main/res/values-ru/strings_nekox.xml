@@ -20,7 +20,7 @@
     <string name="CustomApiInput">Ввести вручную</string>
     <string name="CheckUpdate">Проверить обновления</string>
     <string name="SwitchVersion">Все версии на Github</string>
-    <string name="NoUpdate">Обновлений не найдено</string>
+    <string name="NoUpdate">Обновление не найдено</string>
     <string name="UpdateAvailable">Доступно обновление</string>
     <string name="UpdateUpdate">Обновить</string>
     <string name="UpdateLater">Позже</string>
@@ -49,7 +49,7 @@
     <string name="More">Ещё</string>
     <string name="TeleTuxUpdatesChannel">Канал обновлений TeleTux</string>
     <string name="ShowIdAndDc">Отображать ID и DC в профиле</string>
-    <string name="UseDefaultTheme">Классическая тема Telegram</string>
+    <string name="UseDefaultTheme">Использовать тему по умолчанию *</string>
     <string name="NightMode">Ночной режим</string>
     <string name="PrivacyNotice">Предупреждение</string>
     <string name="PrivacyNoticePhoneVisible">Ваш номер телефона виден всем. Мы рекомендуем отключить это для повышения конфиденциальности.</string>
@@ -116,19 +116,19 @@
     <string name="ProxyInfoVmess">Настройки Vmess-прокси</string>
     <string name="VmessUserId">User Id</string>
     <string name="VmessAlterId">Alter Id</string>
-    <string name="VmessSecurity">Security</string>
-    <string name="VmessNetwork">Network</string>
+    <string name="VmessSecurity">Безопасность</string>
+    <string name="VmessNetwork">Сеть</string>
     <string name="VmessHeadType">Head Type</string>
     <string name="VmessRequestHost">Request Host / QUIC Security</string>
     <string name="VmessPath">Path / QUIC Key</string>
     <string name="VmessTls">Использовать TLS</string>
     <string name="ProxyInfoSS">Настройки Shadowsocks-прокси</string>
-    <string name="SSPassword">Password</string>
-    <string name="SSMethod">Encrypt Method</string>
-    <string name="SSPlugin">Plugin</string>
-    <string name="SSPluginOpts">Plugin Configuration</string>
+    <string name="SSPassword">Пароль</string>
+    <string name="SSMethod">Метод шифрования</string>
+    <string name="SSPlugin">Плагин</string>
+    <string name="SSPluginOpts">Конфигурация плагина</string>
     <string name="ProxyInfoSSR">Настройки ShadowsocksR-прокси</string>
-    <string name="SSRProtocol">Protocol</string>
+    <string name="SSRProtocol">Протокол</string>
     <string name="SSRProtocolParams">Параметры протокола</string>
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Параметры Obfs</string>
@@ -268,4 +268,7 @@
     <string name="DisableInstantCamera">Выключить мгновенную камеру</string>
     <string name="rememberAllBackMessages">Запомнить все нажатые ответы</string>
     <string name="showSeconds">Показывать временную метку в секундах</string>
+    <string name="AppUpdateNekoX">Обновить Nekogram X</string>
+    <string name="AutoCheckUpdatePreview">Предварительный просмотр (нестабильный)</string>
+    <string name="NekoXUpdateTranslationHint">Нажмите, чтобы перевести журнал изменений</string>
 </resources>

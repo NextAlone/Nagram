@@ -39,7 +39,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
@@ -59,7 +58,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ContextLinkCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
 
@@ -267,7 +266,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                 if (inlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaVenue || inlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaGeo) {
                     double lat = inlineResult.send_message.geo.lat;
                     double lon = inlineResult.send_message.geo._long;
-                    if (NekomuraConfig.mapPreviewProvider.Int() == 0) {
+                    if (NekoConfig.mapPreviewProvider.Int() == 0) {
                         webFile = WebFile.createWithGeoPoint(inlineResult.send_message.geo, 72, 72, 15, Math.min(2, (int) Math.ceil(AndroidUtilities.density)));
                     } else {
                         urlLocation = AndroidUtilities.formapMapUrl(false, lat, lon, 72, 72, true, 15);
@@ -360,8 +359,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                                 linkImageView.setImage(ImageLocation.getForDocument(currentPhotoObject, documentAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
                             }
                         } else {
-                            linkImageView.setImage(ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
-                        }
+                            linkImageView.setImage(ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0); }
                     }
                 } else if (webFile != null) {
                     linkImageView.setImage(ImageLocation.getForWebFile(webFile), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, -1, ext, parentObject, 1);
@@ -581,9 +579,8 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (drawLinkImageView) {
-            linkImageView.onDetachedFromWindow();
-        }
+        linkImageView.onDetachedFromWindow();
+
         radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(currentAccount).removeLoadingFileObserver(this);
     }
@@ -591,10 +588,8 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (drawLinkImageView) {
-            if (linkImageView.onAttachedToWindow()) {
-                updateButtonState(false, false);
-            }
+        if (linkImageView.onAttachedToWindow()) {
+            updateButtonState(false, false);
         }
         radialProgress.onAttachedToWindow();
     }

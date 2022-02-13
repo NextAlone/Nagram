@@ -50,9 +50,9 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
-import tw.nekomimi.nekogram.MessageHelper;
+import tw.nekomimi.nekogram.ui.MessageHelper;
 
 public abstract class BaseFragment {
 
@@ -191,7 +191,7 @@ public abstract class BaseFragment {
     public void setParentFragment(BaseFragment fragment) {
         setParentLayout(fragment.parentLayout);
         fragmentView = createView(parentLayout.getContext());
-        if (NekomuraConfig.disableVibration.Bool()) {
+        if (NekoConfig.disableVibration.Bool()) {
             VibrateUtil.disableHapticFeedback(fragmentView);
         }
     }

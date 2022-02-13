@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.TypedValue;
@@ -24,6 +26,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -47,7 +50,7 @@ public class ReactedUsersListView extends FrameLayout {
 
     private FlickerLoadingView loadingView;
 
-    private List<TLRPC.TL_messageUserReaction> userReactions = new ArrayList<>();
+    private List<TLRPC.TL_messagePeerReaction> userReactions = new ArrayList<>();
     private LongSparseArray<TLRPC.User> users = new LongSparseArray<>();
     private String offset;
     private boolean isLoading, isLoaded, canLoadMore = true;
@@ -75,6 +78,9 @@ public class ReactedUsersListView extends FrameLayout {
             listView.setPadding(0, 0, 0, AndroidUtilities.dp(8));
             listView.setClipToPadding(false);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            listView.setVerticalScrollbarThumbDrawable(new ColorDrawable(Theme.getColor(Theme.key_listSelector)));
+        }
         listView.setAdapter(adapter = new RecyclerView.Adapter() {
             @NonNull
             @Override
@@ -95,7 +101,7 @@ public class ReactedUsersListView extends FrameLayout {
         });
         listView.setOnItemClickListener((view, position) -> {
             if (onProfileSelectedListener != null)
-                onProfileSelectedListener.onProfileSelected(this, userReactions.get(position).user_id);
+                onProfileSelectedListener.onProfileSelected(this, MessageObject.getPeerId(userReactions.get(position).peer_id));
         });
         listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -118,13 +124,14 @@ public class ReactedUsersListView extends FrameLayout {
 
     @SuppressLint("NotifyDataSetChanged")
     public ReactedUsersListView setSeenUsers(List<TLRPC.User> users) {
-        List<TLRPC.TL_messageUserReaction> nr = new ArrayList<>(users.size());
+        List<TLRPC.TL_messagePeerReaction> nr = new ArrayList<>(users.size());
         for (TLRPC.User u : users) {
             if (this.users.get(u.id) != null) continue;
             this.users.put(u.id, u);
-            TLRPC.TL_messageUserReaction r = new TLRPC.TL_messageUserReaction();
+            TLRPC.TL_messagePeerReaction r = new TLRPC.TL_messagePeerReaction();
             r.reaction = null;
-            r.user_id = u.id;
+            r.peer_id = new TLRPC.TL_peerUser();
+            r.peer_id.user_id = u.id;
             nr.add(r);
         }
         if (userReactions.isEmpty())
@@ -163,19 +170,21 @@ public class ReactedUsersListView extends FrameLayout {
                 TLRPC.TL_messages_messageReactionsList l = (TLRPC.TL_messages_messageReactionsList) response;
 
                 for (TLRPC.User u : l.users) {
+                    MessagesController.getInstance(currentAccount).putUser(u, false);
                     users.put(u.id, u);
                 }
 
                 // It's safer to create a new list to prevent inconsistency
                 int prev = userReactions.size();
-                List<TLRPC.TL_messageUserReaction> newReactions = new ArrayList<>(userReactions.size() + l.reactions.size());
+                List<TLRPC.TL_messagePeerReaction> newReactions = new ArrayList<>(userReactions.size() + l.reactions.size());
                 newReactions.addAll(userReactions);
                 newReactions.addAll(l.reactions);
 
-                if (onlySeenNow)
+                if (onlySeenNow) {
                     Collections.sort(newReactions, (o1, o2) -> Integer.compare(o1.reaction != null ? 1 : 0, o2.reaction != null ? 1 : 0));
+                }
 
-                AndroidUtilities.runOnUIThread(()->{
+                AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).doOnIdle(() -> {
                     userReactions = newReactions;
                     if (onlySeenNow) {
                         onlySeenNow = false;
@@ -206,7 +215,7 @@ public class ReactedUsersListView extends FrameLayout {
                     if (offset == null)
                         canLoadMore = false;
                     isLoading = false;
-                });
+                }));
             } else isLoading = false;
         }, ConnectionsManager.RequestFlagInvokeAfter);
     }
@@ -247,7 +256,7 @@ public class ReactedUsersListView extends FrameLayout {
             titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             titleView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
             titleView.setEllipsize(TextUtils.TruncateAt.END);
-            addView(titleView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 65, 0, 44, 0));
+            addView(titleView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 58, 0, 44, 0));
 
             reactView = new BackupImageView(context);
             addView(reactView, LayoutHelper.createFrameRelatively(24, 24, Gravity.END | Gravity.CENTER_VERTICAL, 0, 0, 12, 0));
@@ -257,8 +266,8 @@ public class ReactedUsersListView extends FrameLayout {
             addView(overlaySelectorView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         }
 
-        void setUserReaction(TLRPC.TL_messageUserReaction reaction) {
-            TLRPC.User u = users.get(reaction.user_id);
+        void setUserReaction(TLRPC.TL_messagePeerReaction reaction) {
+            TLRPC.User u = users.get(MessageObject.getPeerId(reaction.peer_id));
             avatarDrawable.setInfo(u);
             titleView.setText(UserObject.getUserName(u));
             avatarView.setImage(ImageLocation.getForUser(u, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, u);
@@ -268,7 +277,11 @@ public class ReactedUsersListView extends FrameLayout {
                 if (r != null) {
                     SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(r.static_icon.thumbs, Theme.key_windowBackgroundGray, 1.0f);
                     reactView.setImage(ImageLocation.getForDocument(r.static_icon), "50_50", "webp", svgThumb, r);
+                } else {
+                    reactView.setImageDrawable(null);
                 }
+            } else {
+                reactView.setImageDrawable(null);
             }
         }
 

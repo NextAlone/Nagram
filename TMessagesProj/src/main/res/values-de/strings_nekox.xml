@@ -164,7 +164,7 @@
     <string name="DisableDeveloperMode">Entwicklermodus deaktivieren</string>
     <string name="DeveloperSettings">Entwickleroptionen</string>
     <string name="LoginSettings">Anmeldeeinstellungen</string>
-    <string name="TeleTuxFaq">TeleTux FAQ</string>
+    <string name="NekoXFaq">häufige Fragen zu TeleTux</string>
     <string name="TransSite">Plattform übersetzen</string>
     <string name="OpenKayChain">OpenPGP-Client</string>
     <string name="OpenPGPApp">OpenPGP-Anbieter</string>
@@ -233,4 +233,41 @@
     <string name="ProxyInfoWS">WebSocket-Relay Einstellungen</string>
     <string name="AutoLockImmediately">Sofort</string>
     <string name="WsPayload">WebSocket-Payload</string>
+    <string name="BackupSettings">Sicherungseinstellungen</string>
+    <string name="AutoCheckUpdateOFF">AUS</string>
+    <string name="UsePersiancalendarInfo">Datum auf Basis des Hijri-Sonnenkalenders anzeigen</string>
+    <string name="AutoCheckUpdateStable">Stabil</string>
+    <string name="VersionUpdateTitle">Neue Version verfügbar</string>
+    <string name="repeatConfirmText">Sicher wiederholen\?</string>
+    <string name="VersionUpdateVariantNotMatch">Versionsvarianten werden nicht automatisch abgeglichen.
+\nBitte manuell von GitHub herunterladen.</string>
+    <string name="useCustomEmoji">Benutze angepasste Emojis</string>
+    <string name="DisableInstantCamera">Deaktiviere Sofortkamera</string>
+    <string name="showSeconds">Zeige Zeitstempel in Sekunden an</string>
+    <string name="DeleteDownloadedFileExternal">Externe Datei wurde übersprungen.</string>
+    <string name="rememberAllBackMessages">Erinnere alle geklickten Antworten</string>
+    <string name="useCustomEmojiInvalid">Kein gültiges Emoji-Zip.</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram Standard
+\nAvatar als Hintergrund
+\nGroßer Avatar als Hintergrund</string>
+    <string name="hideSponsoredMessage">Verstecke gesponserte Nachrichten</string>
+    <string name="repeatConfirm">Vor dem Wiederholen Fragen</string>
+    <string name="DisplayPersianCalendarByLatin">Lateinische Schriftzeichen für persischen Kalender nutzen</string>
+    <string name="ImportSettings">Einstellungen importieren</string>
+    <string name="VersionUpdateConfirm">AKTUALISIERUNG</string>
+    <string name="EnableStickerPinTip">Diese Funktion befindet sich immer noch in der Entwicklung, die Synchronisierung mit der Cloud funktioniert möglicherweise nicht wie erwartet.</string>
+    <string name="ImportSettingsAlert">Bist du sicher, dass du die Einstellungen überschreiben möchtest\? Einstellungen von unbekannten Quellen könnten den Sicherheitscode (pin) überschreiben und die App sperren.</string>
+    <string name="nekoXPaymentRemovedToast">Die Zahlungsfunktion wurde entfernt.</string>
+    <string name="AutoCheckUpdateRc">Veröffentlichungskandidat</string>
+    <string name="VersionUpdateIgnore">Ignorieren</string>
+    <string name="unreadBadgeOnBackButton">Ungelesen-Kennzeichnung auf der Zurück-Schaltfläche</string>
+    <string name="VersionUpdateNotNow">Nicht jetzt</string>
+    <string name="VersionUpdateNoUpdate">Keine Aktualisierung.</string>
+    <string name="AutoCheckUpdateSwitch">Automatische Aktualisierung</string>
+    <string name="customPublicProxyIP">IP einstellen für öffentliches Proxy</string>
+    <string name="DeleteDownloadedFileConfirm">Diese Datei aus dem lokalen Speicher (cache) löschen\?</string>
+    <string name="customPublicProxyIPNotice">In manchen Gegenden kann das Einstellen eines öffentlichen Proxy-CDNs (z.B. Cloudflare) die Geschwindigkeit erhöhen.</string>
+    <string name="DeleteDownloadedFileSucceed">Gelöscht</string>
+    <string name="update_download_soucre">Wähle die Quelle zum Herunterladen aus</string>
+    <string name="Win32ExecutableFiles">Ausführbare Win32-Dateien</string>
 </resources>

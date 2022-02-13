@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class SpoilersTextView extends TextView {
     private SpoilersClickDetector clickDetector;
     private List<SpoilerEffect> spoilers = new ArrayList<>();
@@ -53,7 +55,7 @@ public class SpoilersTextView extends TextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        isSpoilersRevealed = false;
+        isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool();
         super.setText(text, type);
     }
 

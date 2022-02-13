@@ -125,4 +125,20 @@
     <string name="enablePublicProxy">وكيل NekoX العام</string>
     <string name="autoUpdateSubInfo">تحديث الوكلاء تلقائيًا</string>
     <string name="hideSendAsChannel">إخفاء الإرسال كقناة</string>
+    <string name="disableDoubleTabReactions">تعطيل تفاعلات النقر المزدوج</string>
+    <string name="SaveToDownloadCount_zero">حفظ ملف %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_few">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_other">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_two">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="showSpoilersDirectly">عرض رسائل مباشرة لحرق المحتوى</string>
+    <string name="SaveToDownloadCount_one">حفظ ملف %1$d إلى التنزيلات</string>
+    <string name="SaveToDownloadCount_many">حفظ ملفات %1$d إلى التنزيلات</string>
+    <string name="NekoGeneralNotification">الاشعار</string>
+    <string name="disableNotificationBubbles">تعطيل الفقاعات في الإشعارات</string>
+    <string name="doubleTapSendReactions">إرسال رد عند النقر المزدوج (افتراضي)</string>
+    <string name="customSavePathHint">اتركه فارغا للحفظ مباشرة</string>
+    <string name="reactions">ردود الفعل في القائمة</string>
+    <string name="ReactionsDisabled">تعطيل</string>
+    <string name="doubleTapShowReactions">إظهار ردود الفعل عند النقر المزدوج فقط</string>
+    <string name="customSavePath">مسار الحفظ المخصص</string>
 </resources>

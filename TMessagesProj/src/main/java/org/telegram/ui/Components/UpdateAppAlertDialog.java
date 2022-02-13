@@ -32,6 +32,7 @@ import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import tw.nekomimi.nekogram.parts.DialogTransKt;
 
 public class UpdateAppAlertDialog extends BottomSheet {
 
@@ -252,7 +253,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
         textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setText(LocaleController.getString("AppUpdate", R.string.AppUpdate));
+        textView.setText(LocaleController.getString("AppUpdateNekoX", R.string.AppUpdateNekoX));
         linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 23, 16, 23, 0));
 
         TextView messageTextView = new TextView(getContext());
@@ -262,7 +263,16 @@ public class UpdateAppAlertDialog extends BottomSheet {
         messageTextView.setLinkTextColor(Theme.getColor(Theme.key_dialogTextLink));
         messageTextView.setText(LocaleController.formatString("AppUpdateVersionAndSize", R.string.AppUpdateVersionAndSize, appUpdate.version, AndroidUtilities.formatFileSize(appUpdate.document.size)));
         messageTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-        linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 23, 0, 23, 5));
+        linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 23, 5, 23, 5));
+
+        TextView translationHintTextView = new TextView(getContext());
+        translationHintTextView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+        translationHintTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        translationHintTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+        translationHintTextView.setLinkTextColor(Theme.getColor(Theme.key_dialogTextLink));
+        translationHintTextView.setText(LocaleController.getString("NekoXUpdateTranslationHint", R.string.NekoXUpdateTranslationHint));
+        translationHintTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+        linearLayout.addView(translationHintTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 23, 0, 23, 5));
 
         TextView changelogTextView = new TextView(getContext());
         changelogTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -277,6 +287,11 @@ public class UpdateAppAlertDialog extends BottomSheet {
             changelogTextView.setText(builder);
         }
         changelogTextView.setGravity(Gravity.LEFT | Gravity.TOP);
+        changelogTextView.setOnLongClickListener(v -> {
+            if (TextUtils.isEmpty(appUpdate.text)) return false;
+            DialogTransKt.startTrans(v.getContext(), appUpdate.text);
+            return true;
+        });
         linearLayout.addView(changelogTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 23, 15, 23, 0));
 
         FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(LayoutHelper.MATCH_PARENT, AndroidUtilities.getShadowHeight(), Gravity.BOTTOM | Gravity.LEFT);

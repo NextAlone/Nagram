@@ -72,6 +72,7 @@ public class CounterView extends View {
         private final static int ANIMATION_TYPE_IN = 0;
         private final static int ANIMATION_TYPE_OUT = 1;
         private final static int ANIMATION_TYPE_REPLACE = 2;
+        public boolean shortFormat;
 
         int animationType = -1;
 
@@ -180,14 +181,14 @@ public class CounterView extends View {
                     }
                     return;
                 }
-                String newStr = String.valueOf(count);
+                String newStr = getStringOfCCount(count);
                 countWidth = Math.max(AndroidUtilities.dp(12), (int) Math.ceil(textPaint.measureText(newStr)));
                 countLayout = new StaticLayout(newStr, textPaint, countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 if (parent != null) {
                     parent.invalidate();
                 }
             }
-            String newStr = String.valueOf(count);
+            String newStr = getStringOfCCount(count);
 
             if (animated) {
                 if (countAnimator != null) {
@@ -204,7 +205,6 @@ public class CounterView extends View {
                 countAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        animationType = -1;
                         countChangeProgress = 1f;
                         countOldLayout = null;
                         countAnimationStableLayout = null;
@@ -215,6 +215,7 @@ public class CounterView extends View {
                             }
                             parent.invalidate();
                         }
+                        animationType = -1;
                     }
                 });
                 if (currentCount <= 0) {
@@ -231,7 +232,7 @@ public class CounterView extends View {
                     countAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                 }
                 if (countLayout != null) {
-                    String oldStr = String.valueOf(currentCount);
+                    String oldStr = getStringOfCCount(currentCount);
 
                     if (oldStr.length() == newStr.length()) {
                         SpannableStringBuilder oldSpannableStr = new SpannableStringBuilder(oldStr);
@@ -267,6 +268,13 @@ public class CounterView extends View {
             if (parent != null) {
                 parent.invalidate();
             }
+        }
+
+        private String getStringOfCCount(int count) {
+            if (shortFormat) {
+                return AndroidUtilities.formatWholeNumber(count, 0);
+            }
+            return String.valueOf(count);
         }
 
         public void draw(Canvas canvas) {
@@ -427,5 +435,21 @@ public class CounterView extends View {
             Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
             return color != null ? color : Theme.getColor(key);
         }
+    }
+
+    public float getEnterProgress() {
+        if (counterDrawable.countChangeProgress != 1f && (counterDrawable.animationType == CounterDrawable.ANIMATION_TYPE_IN || counterDrawable.animationType == CounterDrawable.ANIMATION_TYPE_OUT)) {
+            if (counterDrawable.animationType == CounterDrawable.ANIMATION_TYPE_IN) {
+                return counterDrawable.countChangeProgress;
+            } else {
+                return 1f - counterDrawable.countChangeProgress;
+            }
+        } else {
+            return counterDrawable.currentCount == 0 ? 0 : 1f;
+        }
+    }
+
+    public boolean isInOutAnimation() {
+        return counterDrawable.animationType == CounterDrawable.ANIMATION_TYPE_IN || counterDrawable.animationType == CounterDrawable.ANIMATION_TYPE_OUT;
     }
 }

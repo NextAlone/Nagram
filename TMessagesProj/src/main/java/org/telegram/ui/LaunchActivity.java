@@ -22,7 +22,11 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Shader;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -36,13 +40,16 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.TypedValue;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -55,7 +62,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -94,6 +100,7 @@ import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPPendingCall;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -114,11 +121,13 @@ import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MediaActionDrawable;
 import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.PhonebookShareAlert;
 import org.telegram.ui.Components.PipRoundVideoView;
@@ -131,10 +140,10 @@ import org.telegram.ui.Components.SideMenultItemAnimator;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickerSetBulletinLayout;
 import org.telegram.ui.Components.StickersAlert;
-import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 
@@ -151,24 +160,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.InternalUpdater;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
-import tw.nekomimi.nekogram.sub.SubInfo;
-import tw.nekomimi.nekogram.sub.SubManager;
+import tw.nekomimi.nekogram.proxy.SubInfo;
+import tw.nekomimi.nekogram.proxy.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
@@ -916,7 +922,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
             ExternalGcm.checkUpdate(this);
 
-            if (NekomuraConfig.autoUpdateSubInfo.Bool()) for (SubInfo subInfo : SubManager.getSubList().find()) {
+            if (NekoConfig.autoUpdateSubInfo.Bool()) for (SubInfo subInfo : SubManager.getSubList().find()) {
 
                 if (subInfo == null || !subInfo.enable) continue;
 
@@ -1638,6 +1644,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         String phone = null;
                         String game = null;
                         String voicechat = null;
+                        String livestream = null;
                         String phoneHash = null;
                         String lang = null;
                         String theme = null;
@@ -1827,6 +1834,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                 botChat = data.getQueryParameter("startgroup");
                                                 game = data.getQueryParameter("game");
                                                 voicechat = data.getQueryParameter("voicechat");
+                                                livestream = data.getQueryParameter("livestream");
                                                 threadId = Utilities.parseInt(data.getQueryParameter("thread"));
                                                 if (threadId == 0) {
                                                     threadId = null;
@@ -1864,6 +1872,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                             botChat = data.getQueryParameter("startgroup");
                                             game = data.getQueryParameter("game");
                                             voicechat = data.getQueryParameter("voicechat");
+                                            livestream = data.getQueryParameter("livestream");
                                             messageId = Utilities.parseInt(data.getQueryParameter("post"));
                                             if (messageId == 0) {
                                                 messageId = null;
@@ -2091,6 +2100,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                         } catch (Exception e) {
                                             FileLog.e(e);
                                         }
+                                    } else if (url.startsWith("tg:upgrade") || url.startsWith("tg://upgrade") || url.startsWith("tg:update") || url.startsWith("tg://update")) {
+                                        checkAppUpdate(true);
                                     } else if ((url.startsWith("tg:search") || url.startsWith("tg://search"))) {
                                         url = url.replace("tg:search", "tg://telegram.org").replace("tg://search", "tg://telegram.org");
                                         data = Uri.parse(url);
@@ -2177,7 +2188,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 if (message != null && message.startsWith("@")) {
                                     message = " " + message;
                                 }
-                                runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, theme, voicechat, internal ? 3 : 0, videoTimestamp);
+                                runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, theme, voicechat, livestream, internal ? 3 : 0, videoTimestamp);
                             } else {
                                 try (Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null)) {
                                     if (cursor != null) {
@@ -2852,6 +2863,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 final TLRPC.TL_wallPaper wallPaper,
                                 final String theme,
                                 final String voicechat,
+                                final String livestream,
                                 final int state,
                                 final int videoTimestamp) {
         if (state == 0 && UserConfig.getActivatedAccountsCount() >= 2) {
@@ -2859,7 +2871,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (account != intentAccount) {
                     switchToAccount(account, true);
                 }
-                runLinkRequest(account, username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, theme, voicechat, 1, videoTimestamp);
+                runLinkRequest(account, username, group, sticker, botUser, botChat, message, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, theme, voicechat, livestream, 1, videoTimestamp);
             }).show();
             return;
         } else if (code != null) {
@@ -2928,7 +2940,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (!LaunchActivity.this.isFinishing()) {
                     boolean hideProgressDialog = true;
                     final TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
-                    if (error == null && actionBarLayout != null && (game == null && voicechat == null || game != null && !res.users.isEmpty() || voicechat != null && !res.chats.isEmpty())) {
+                    if (error == null && actionBarLayout != null && (game == null && voicechat == null || game != null && !res.users.isEmpty() || voicechat != null && !res.chats.isEmpty() || livestream != null && !res.chats.isEmpty())) {
                         MessagesController.getInstance(intentAccount).putUsers(res.users, false);
                         MessagesController.getInstance(intentAccount).putChats(res.chats, false);
                         MessagesStorage.getInstance(intentAccount).putUsersAndChats(res.users, res.chats, false, true);
@@ -3040,6 +3052,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             }
                             if (voicechat != null) {
                                 args.putString("voicechat", voicechat);
+                            }
+                            if (livestream != null) {
+                                args.putString("livestream", livestream);
                             }
                             if (videoTimestamp >= 0) {
                                 args.putInt("video_timestamp", videoTimestamp);
@@ -3658,6 +3673,212 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         return foundContacts;
     }
 
+    private void createUpdateUI() {
+        if (sideMenuContainer == null) {
+            return;
+        }
+        updateLayout = new FrameLayout(this) {
+
+            private Paint paint = new Paint();
+            private Matrix matrix = new Matrix();
+            private LinearGradient updateGradient;
+            private int lastGradientWidth;
+
+            @Override
+            public void draw(Canvas canvas) {
+                if (updateGradient != null) {
+                    paint.setColor(0xffffffff);
+                    paint.setShader(updateGradient);
+                    updateGradient.setLocalMatrix(matrix);
+                    canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+                    updateLayoutIcon.setBackgroundGradientDrawable(updateGradient);
+                    updateLayoutIcon.draw(canvas);
+                }
+                super.draw(canvas);
+            }
+
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                int width = MeasureSpec.getSize(widthMeasureSpec);
+                if (lastGradientWidth != width) {
+                    updateGradient = new LinearGradient(0, 0, width, 0, new int[]{0xff69BF72, 0xff53B3AD}, new float[]{0.0f, 1.0f}, Shader.TileMode.CLAMP);
+                    lastGradientWidth = width;
+                }
+            }
+        };
+        updateLayout.setWillNotDraw(false);
+        updateLayout.setVisibility(View.INVISIBLE);
+        updateLayout.setTranslationY(AndroidUtilities.dp(44));
+        if (Build.VERSION.SDK_INT >= 21) {
+            updateLayout.setBackground(Theme.getSelectorDrawable(0x40ffffff, false));
+        }
+        sideMenuContainer.addView(updateLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44, Gravity.LEFT | Gravity.BOTTOM));
+        updateLayout.setOnClickListener(v -> {
+            if (!SharedConfig.isAppUpdateAvailable()) {
+                return;
+            }
+            if (updateLayoutIcon.getIcon() == MediaActionDrawable.ICON_DOWNLOAD) {
+                FileLoader.getInstance(currentAccount).loadFile(SharedConfig.pendingAppUpdate.document, "update", 1, 1);
+                updateAppUpdateViews(true);
+            } else if (updateLayoutIcon.getIcon() == MediaActionDrawable.ICON_CANCEL) {
+                FileLoader.getInstance(currentAccount).cancelLoadFile(SharedConfig.pendingAppUpdate.document);
+                updateAppUpdateViews(true);
+            } else {
+                AndroidUtilities.openForView(SharedConfig.pendingAppUpdate.document, true, this);
+            }
+        });
+        updateLayoutIcon = new RadialProgress2(updateLayout);
+        updateLayoutIcon.setColors(0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
+        updateLayoutIcon.setProgressRect(AndroidUtilities.dp(22), AndroidUtilities.dp(11), AndroidUtilities.dp(22 + 22), AndroidUtilities.dp(11 + 22));
+        updateLayoutIcon.setCircleRadius(AndroidUtilities.dp(11));
+        updateLayoutIcon.setAsMini();
+
+        updateTextView = new SimpleTextView(this);
+        updateTextView.setTextSize(15);
+        updateTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        updateTextView.setText(LocaleController.getString("AppUpdate", R.string.AppUpdate));
+        updateTextView.setTextColor(0xffffffff);
+        updateTextView.setGravity(Gravity.LEFT);
+        updateLayout.addView(updateTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 74, 0, 0, 0));
+
+        updateSizeTextView = new TextView(this);
+        updateSizeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        updateSizeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        updateSizeTextView.setGravity(Gravity.RIGHT);
+        updateSizeTextView.setTextColor(0xffffffff);
+        updateLayout.addView(updateSizeTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT, 0, 0, 17, 0));
+    }
+
+    private void updateAppUpdateViews(boolean animated) {
+        if (sideMenuContainer == null) {
+            return;
+        }
+        if (SharedConfig.isAppUpdateAvailable()) {
+            View prevUpdateLayout = updateLayout;
+            createUpdateUI();
+            updateSizeTextView.setText(AndroidUtilities.formatFileSize(SharedConfig.pendingAppUpdate.document.size));
+            String fileName = FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document);
+            File path = FileLoader.getPathToAttach(SharedConfig.pendingAppUpdate.document, true);
+            boolean showSize;
+            if (path.exists()) {
+                updateLayoutIcon.setIcon(MediaActionDrawable.ICON_UPDATE, true, false);
+                updateTextView.setText(LocaleController.getString("AppUpdateNow", R.string.AppUpdateNow));
+                showSize = false;
+            } else {
+                if (FileLoader.getInstance(currentAccount).isLoadingFile(fileName)) {
+                    updateLayoutIcon.setIcon(MediaActionDrawable.ICON_CANCEL, true, false);
+                    updateLayoutIcon.setProgress(0, false);
+                    Float p = ImageLoader.getInstance().getFileProgress(fileName);
+                    updateTextView.setText(LocaleController.formatString("AppUpdateDownloading", R.string.AppUpdateDownloading, (int) ((p != null ? p : 0.0f) * 100)));
+                    showSize = false;
+                } else {
+                    updateLayoutIcon.setIcon(MediaActionDrawable.ICON_DOWNLOAD, true, false);
+                    updateTextView.setText(LocaleController.getString("AppUpdate", R.string.AppUpdate));
+                    showSize = true;
+                }
+            }
+            if (showSize) {
+                if (updateSizeTextView.getTag() != null) {
+                    if (animated) {
+                        updateSizeTextView.setTag(null);
+                        updateSizeTextView.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(180).start();
+                    } else {
+                        updateSizeTextView.setAlpha(1.0f);
+                        updateSizeTextView.setScaleX(1.0f);
+                        updateSizeTextView.setScaleY(1.0f);
+                    }
+                }
+            } else {
+                if (updateSizeTextView.getTag() == null) {
+                    if (animated) {
+                        updateSizeTextView.setTag(1);
+                        updateSizeTextView.animate().alpha(0.0f).scaleX(0.0f).scaleY(0.0f).setDuration(180).start();
+                    } else {
+                        updateSizeTextView.setAlpha(0.0f);
+                        updateSizeTextView.setScaleX(0.0f);
+                        updateSizeTextView.setScaleY(0.0f);
+                    }
+                }
+            }
+            if (updateLayout.getTag() != null) {
+                return;
+            }
+            updateLayout.setVisibility(View.VISIBLE);
+            updateLayout.setTag(1);
+            if (animated) {
+                updateLayout.animate().translationY(0).setInterpolator(CubicBezierInterpolator.EASE_OUT).setListener(null).setDuration(180).withEndAction(() -> {
+                    if (prevUpdateLayout != null) {
+                        ViewGroup parent = (ViewGroup) prevUpdateLayout.getParent();
+                        parent.removeView(prevUpdateLayout);
+                    }
+                }).start();
+            } else {
+                updateLayout.setTranslationY(0);
+                if (prevUpdateLayout != null) {
+                    ViewGroup parent = (ViewGroup) prevUpdateLayout.getParent();
+                    parent.removeView(prevUpdateLayout);
+                }
+            }
+            sideMenu.setPadding(0, 0, 0, AndroidUtilities.dp(44));
+        } else {
+            if (updateLayout == null || updateLayout.getTag() == null) {
+                return;
+            }
+            updateLayout.setTag(null);
+            if (animated) {
+                updateLayout.animate().translationY(AndroidUtilities.dp(44)).setInterpolator(CubicBezierInterpolator.EASE_OUT).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (updateLayout.getTag() == null) {
+                            updateLayout.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }).setDuration(180).start();
+            } else {
+                updateLayout.setTranslationY(AndroidUtilities.dp(44));
+                updateLayout.setVisibility(View.INVISIBLE);
+            }
+            sideMenu.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    public void checkAppUpdate(boolean force) {
+        if (BuildVars.isFdroid || BuildVars.isPlay) return;
+        if (NekoXConfig.autoUpdateReleaseChannel == 0) return;
+        if (!force && System.currentTimeMillis() < SharedConfig.lastUpdateCheckTime + 1000L * 60 * 60) return;
+        SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
+        SharedConfig.saveConfig();
+        FileLog.d("checking update");
+
+        final int accountNum = currentAccount;
+        InternalUpdater.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (res != null) {
+                SharedConfig.setNewAppVersionAvailable(res);
+                if (res.can_not_skip) {
+                    showUpdateActivity(accountNum, res, false);
+                } else {
+                    drawerLayoutAdapter.notifyDataSetChanged();
+                    try {
+                        (new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum)).show();
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+            } else {
+                if (force) {
+                    if (error)
+                        Toast.makeText(LaunchActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(LaunchActivity.this, LocaleController.getString("VersionUpdateNoUpdate", R.string.VersionUpdateNoUpdate), Toast.LENGTH_SHORT).show();
+                }
+                SharedConfig.setNewAppVersionAvailable(null);
+                drawerLayoutAdapter.notifyDataSetChanged();
+            }
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+        }));
+    }
+
     public AlertDialog showAlertDialog(AlertDialog.Builder builder) {
         try {
             if (visibleDialog != null) {
@@ -3826,11 +4047,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     final long did = dids.get(i);
 
                     AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
+                    boolean photosEditorOpened = false;
                     if (fragment != null) {
                         actionBarLayout.presentFragment(fragment, dialogsFragment != null, dialogsFragment == null, true, false);
                         if (videoPath != null) {
                             fragment.openVideoEditor(videoPath, sendingText);
                             sendingText = null;
+                        } else if (photoPathsArray != null && photoPathsArray.size() > 0) {
+                            photosEditorOpened = fragment.openPhotosEditor(photoPathsArray, message == null || message.length() == 0 ? sendingText : message);
+                            if (photosEditorOpened) {
+                                sendingText = null;
+                            }
                         }
                     } else {
                         if (videoPath != null) {
@@ -3843,7 +4070,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             SendMessagesHelper.prepareSendingDocuments(accountInstance, arrayList, arrayList, null, captionToSend, null, did, null, null, null, null, true, 0);
                         }
                     }
-                    if (photoPathsArray != null) {
+                    if (photoPathsArray != null && !photosEditorOpened) {
                         if (sendingText != null && sendingText.length() <= 1024 && photoPathsArray.size() == 1) {
                             photoPathsArray.get(0).caption = sendingText;
                             sendingText = null;
@@ -4045,7 +4272,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", R.string.VoipNeedCameraPermission));
             }
         } else if (requestCode == 4) {
-            NekoConfig.checkForceSystemPicker();
             if (!granted) {
                 showPermissionErrorAlert(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
             } else {
@@ -4085,6 +4311,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else if (requestCode == 2) {
             if (granted) {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted);
+            } else {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionDenied);
             }
         }
         if (actionBarLayout.fragmentsStack.size() != 0) {
@@ -4288,6 +4516,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         } else if (SharedConfig.pendingAppUpdate != null && SharedConfig.pendingAppUpdate.can_not_skip) {
             showUpdateActivity(UserConfig.selectedAccount, SharedConfig.pendingAppUpdate, true);
         }
+        checkAppUpdate(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ApplicationLoader.canDrawOverlays = Settings.canDrawOverlays(this);
@@ -4603,6 +4832,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (SharedConfig.isAppUpdateAvailable()) {
                 String name = FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document);
                 if (name.equals(path)) {
+                    updateAppUpdateViews(true);
                 }
             }
             if (loadingThemeFileName != null) {
@@ -4673,6 +4903,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (SharedConfig.isAppUpdateAvailable()) {
                 String name = FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document);
                 if (name.equals(path)) {
+                    updateAppUpdateViews(true);
                 }
             }
         } else if (id == NotificationCenter.screenStateChanged) {
@@ -4747,6 +4978,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         } else if (id == NotificationCenter.appUpdateAvailable) {
+            updateAppUpdateViews(mainFragmentsStack.size() == 1);
         }
     }
 

@@ -251,4 +251,7 @@
     <string name="VersionUpdateVariantNotMatch">Sürüm çeşitleri otomatik olarak eşleşmiyor.
 \nLütfen GitHub\'dan elle indirin.</string>
     <string name="VersionUpdateTitle">Yeni Sürüm Var</string>
+    <string name="AutoCheckUpdatePreview">Önizleme (Kararsız)</string>
+    <string name="ShareMessages">Paylaş</string>
+    <string name="unreadBadgeOnBackButton">Geri düğmesinde okunmamış rozeti</string>
 </resources>

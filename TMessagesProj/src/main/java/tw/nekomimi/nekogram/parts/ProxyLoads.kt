@@ -7,8 +7,8 @@ import kotlinx.coroutines.*
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.DnsFactory
 import tw.nekomimi.nekogram.utils.ProxyUtil.parseProxies
-import tw.nekomimi.nkmr.NekomuraConfig
-import tw.nekomimi.nkmr.NekomuraUtil
+import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.utils.StrUtil
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
@@ -16,13 +16,13 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Exception>): List<String> {
-    if (!NekomuraConfig.enablePublicProxy.Bool())
+    if (!NekoConfig.enablePublicProxy.Bool())
         return emptyList()
     // Try DoH first ( github.com is often blocked
     try {
         var content = DnsFactory.getTxts("nachonekodayo.sekai.icu").joinToString()
 
-        val proxiesString = NekomuraUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
+        val proxiesString = StrUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
         if (proxiesString.equals(content)) {
             throw Exception("DoH get public proxy: Not found")
         }

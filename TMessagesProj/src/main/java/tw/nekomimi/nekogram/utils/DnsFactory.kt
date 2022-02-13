@@ -1,8 +1,5 @@
 package tw.nekomimi.nekogram.utils
 
-import android.util.Log
-import cn.hutool.http.Header
-import cn.hutool.http.HttpUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,9 +11,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.telegram.messenger.FileLog
 import org.telegram.tgnet.ConnectionsManager
 import org.xbill.DNS.*
-import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nekogram.NekoConfig
 import java.net.InetAddress
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
@@ -24,7 +20,8 @@ import kotlin.coroutines.suspendCoroutine
 
 object DnsFactory {
 
-    fun providers() = if (NekomuraConfig.customDoH.String().isNotBlank()) arrayOf(NekomuraConfig.customDoH.String())
+    fun providers() = if (NekoConfig.customDoH.String().isNotBlank()) arrayOf(
+        NekoConfig.customDoH.String())
     else arrayOf(
             // behaviour: try all concurrently and stop when the first result returns.
             "https://1.1.1.1/dns-query",
@@ -55,7 +52,7 @@ object DnsFactory {
     @JvmOverloads
     fun lookup(domain: String, fallback: Boolean = false): List<InetAddress> {
 
-        if (!NekomuraConfig.useSystemDNS.Bool()) {
+        if (!NekoConfig.useSystemDNS.Bool()) {
 
             FileLog.d("Lookup $domain")
 
@@ -64,7 +61,7 @@ object DnsFactory {
             val noFallback = !ConnectionsManager.hasIpv4 || !ConnectionsManager.hasIpv6
             val type = if (noFallback) {
                 if (ConnectionsManager.hasIpv4) Type.A else Type.AAAA
-            } else if (NekomuraConfig.useIPv6.Bool() xor !fallback) Type.A else Type.AAAA
+            } else if (NekoConfig.useIPv6.Bool() xor !fallback) Type.A else Type.AAAA
 
             val dc = DClass.IN
             val name = Name.fromConstantString("$domain.")

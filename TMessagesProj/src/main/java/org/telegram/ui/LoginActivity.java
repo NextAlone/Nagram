@@ -134,9 +134,9 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.DataCenter;
-import tw.nekomimi.nekogram.EditTextAutoFill;
+import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -293,7 +293,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     private int menu_other = 5;
-    private int menu_custom_api = 6;
+//    private int menu_custom_api = 6;
     private int menu_custom_dc = 7;
     private int menu_qr_login = 8;
 
@@ -409,153 +409,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             editText.setLayoutParams(layoutParams);
                         }
                     }
-                } else if (id == menu_custom_api) {
-
-                    AtomicInteger targetApi = new AtomicInteger(-1);
-
-                    BottomBuilder builder = new BottomBuilder(getParentActivity());
-
-                    EditText[] inputs = new EditText[2];
-
-                    builder.addTitle(LocaleController.getString("CustomApi", R.string.CustomApi),
-                            true,
-                            LocaleController.getString("UseCustomApiNotice", R.string.UseCustomApiNotice));
-
-                    builder.addRadioItem(LocaleController.getString("CustomApiNo", R.string.CustomApiNo), NekoXConfig.customApi == 0, (cell) -> {
-
-                        targetApi.set(0);
-
-                        builder.doRadioCheck(cell);
-
-                        for (EditText input : inputs) input.setVisibility(View.GONE);
-
-                        return Unit.INSTANCE;
-
-                    });
-
-                    builder.addRadioItem(LocaleController.getString("CustomApiOfficial", R.string.CustomApiOfficial), NekoXConfig.customApi == 1, (cell) -> {
-
-                        targetApi.set(1);
-
-                        builder.doRadioCheck(cell);
-
-                        for (EditText input : inputs) input.setVisibility(View.GONE);
-
-                        return Unit.INSTANCE;
-
-                    });
-
-                    builder.addRadioItem(LocaleController.getString("CustomApiTGX", R.string.CustomApiTGX), NekoXConfig.customApi == 2, (cell) -> {
-
-                        targetApi.set(2);
-
-                        builder.doRadioCheck(cell);
-
-                        for (EditText input : inputs) input.setVisibility(View.GONE);
-
-                        return Unit.INSTANCE;
-
-                    });
-
-                    builder.addRadioItem(LocaleController.getString("CustomApiInput", R.string.CustomApiInput), NekoXConfig.customApi > 2, (cell) -> {
-
-                        targetApi.set(3);
-
-                        builder.doRadioCheck(cell);
-
-                        for (EditText input : inputs) input.setVisibility(View.VISIBLE);
-
-                        return Unit.INSTANCE;
-
-                    });
-
-                    inputs[0] = builder.addEditText("App Id");
-                    inputs[0].setInputType(InputType.TYPE_CLASS_NUMBER);
-                    if (NekoXConfig.customAppId != 0) {
-                        inputs[0].setText(NekoXConfig.customAppId + "");
-                    }
-                    inputs[0].addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (StrUtil.isBlank(s.toString())) {
-                                NekoXConfig.customAppId = 0;
-                            } else if (!NumberUtil.isInteger(s.toString())) {
-                                inputs[0].setText("0");
-                            } else {
-                                NekoXConfig.customAppId = NumberUtil.parseInt(s.toString());
-                            }
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-
-                    inputs[1] = builder.addEditText("App Hash");
-                    inputs[1].setFilters(new InputFilter[]{new InputFilter.LengthFilter(BuildVars.OFFICAL_APP_HASH.length())});
-                    if (StrUtil.isNotBlank(NekoXConfig.customAppHash)) {
-                        inputs[1].setText(NekoXConfig.customAppHash);
-                    }
-                    inputs[1].addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            NekoXConfig.customAppHash = s.toString();
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-
-                    if (NekoXConfig.customApi <= 2) {
-
-                        for (EditText input : inputs) input.setVisibility(View.GONE);
-
-                    }
-
-                    builder.addCancelButton();
-
-                    builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
-
-                        int target = targetApi.get();
-
-                        if (target > 2) {
-
-                            if (NekoXConfig.customAppId == 0) {
-
-                                inputs[0].requestFocus();
-                                AndroidUtilities.showKeyboard(inputs[0]);
-
-                                return Unit.INSTANCE;
-
-                            } else if (StrUtil.isBlank(NekoXConfig.customAppHash)) {
-
-                                inputs[1].requestFocus();
-                                AndroidUtilities.showKeyboard(inputs[1]);
-
-                                return Unit.INSTANCE;
-
-                            }
-
-                        }
-
-                        NekoXConfig.customApi = target;
-                        NekoXConfig.saveCustomApi();
-
-                        return Unit.INSTANCE;
-
-                    });
-
-                    builder.show();
-
                 } else if (id == menu_custom_dc) {
 
                     AtomicInteger targetDc = new AtomicInteger(-1);
@@ -645,7 +498,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         otherItem.addSubItem(4, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
         otherItem.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin));
-        otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
+//        otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
         otherItem.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
         actionBar.setAllowOverlayTitle(true);
@@ -845,15 +698,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             exportLoginTokenRequest.api_id = NekoXConfig.currentAppId();
             exportLoginTokenRequest.api_hash = NekoXConfig.currentAppHash();
             exportLoginTokenRequest.except_ids = new ArrayList<>();
-//            if (NekoXConfig.customApi == 0) {
-//                for (int a : SharedConfig.activeAccounts) {
-//                    UserConfig userConfig = UserConfig.getInstance(a);
-//                    if (!userConfig.isClientActivated()) {
-//                        continue;
-//                    }
-//                    exportLoginTokenRequest.except_ids.add(a);
-//                }
-//            }
+            for (int a : SharedConfig.activeAccounts) {
+                UserConfig userConfig = UserConfig.getInstance(a);
+                if (!userConfig.isClientActivated()) {
+                    continue;
+                }
+                exportLoginTokenRequest.except_ids.add(userConfig.clientUserId);
+            }
         }
 
         getNotificationCenter().addObserver(this, NotificationCenter.updateLoginToken);
@@ -2105,12 +1956,19 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             TLRPC.TL_help_getCountriesList req = new TLRPC.TL_help_getCountriesList();
             req.lang_code = "";
+            CountrySelectActivity.Country testNumber = codesMap.get("999");
+            String testNumberFormat = phoneFormatMap.get("999");
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 AndroidUtilities.runOnUIThread(() -> {
                     if (error == null) {
                         countriesArray.clear();
                         codesMap.clear();
                         phoneFormatMap.clear();
+                        if (testNumber != null) {
+                            countriesArray.add(testNumber);
+                            codesMap.put(testNumber.code, testNumber);
+                            phoneFormatMap.put(testNumber.code, testNumberFormat);
+                        }
                         TLRPC.TL_help_countriesList help_countriesList = (TLRPC.TL_help_countriesList) response;
                         for (int i = 0; i < help_countriesList.countries.size(); i++) {
                             TLRPC.TL_help_country c = help_countriesList.countries.get(i);
@@ -2202,11 +2060,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
-//            boolean isTestBakcend = getConnectionsManager().isTestBackend();
-//            if (isTestBakcend != testBackend) {
-//                getConnectionsManager().switchBackend(false);
-//                isTestBakcend = testBackend;
-//            }
+            boolean isTestPhone = codeField.getText().toString().equals("999");
+            if (isTestPhone) {
+                FileLog.w("Login with test numbers");
+                DataCenter.applyTestDataCenter(currentAccount);
+            } else {
+                    DataCenter.applyOfficalDataCanter(currentAccount);
+            }
             if (getParentActivity() instanceof LaunchActivity) {
                 for (int a : SharedConfig.activeAccounts) {
                     UserConfig userConfig = UserConfig.getInstance(a);

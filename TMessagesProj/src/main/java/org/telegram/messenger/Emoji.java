@@ -24,7 +24,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,12 +35,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import tw.nekomimi.nekogram.EmojiProvider;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class Emoji {
 
@@ -134,7 +131,7 @@ public class Emoji {
             try {
                 InputStream is;
                 String entry = "emoji/" + String.format(Locale.US, "%d_%d.png", page, page2);
-                if (NekomuraConfig.useCustomEmoji.Bool()) {
+                if (NekoConfig.useCustomEmoji.Bool()) {
                     entry = "custom_emoji/" + entry;
                     is = new FileInputStream(new File(ApplicationLoader.applicationContext.getFilesDir(), entry));
                 } else {
@@ -289,7 +286,7 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (!NekomuraConfig.useSystemEmoji.Bool() && EmojiProvider.containsEmoji) {
+            if (!NekoConfig.useSystemEmoji.Bool() && EmojiProvider.containsEmoji) {
                 if (!isLoaded()) {
                     loadEmoji(info.page, info.page2);
                     canvas.drawRect(getBounds(), placeholderPaint);
@@ -301,14 +298,14 @@ public class Emoji {
 
             String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
 
-            if (!NekomuraConfig.useSystemEmoji.Bool() && EmojiProvider.isFont) {
+            if (!NekoConfig.useSystemEmoji.Bool() && EmojiProvider.isFont) {
                 try {
                     textPaint.setTypeface(EmojiProvider.getFont());
                 } catch (RuntimeException ignored) {
                 }
-            } else if (NekomuraConfig.useSystemEmoji.Bool()) {
+            } else if (NekoConfig.useSystemEmoji.Bool()) {
                 try {
-                    textPaint.setTypeface(NekoConfig.getSystemEmojiTypeface());
+                    textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
                 } catch (RuntimeException ignored) {
                 }
             }
@@ -333,7 +330,7 @@ public class Emoji {
         }
 
         public boolean isLoaded() {
-            if (!EmojiProvider.containsEmoji || NekomuraConfig.useSystemEmoji.Bool()) {
+            if (!EmojiProvider.containsEmoji || NekoConfig.useSystemEmoji.Bool()) {
                 return true;
             }
             return emojiBmp[info.page][info.page2] != null;

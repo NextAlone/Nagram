@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -64,7 +65,6 @@ import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -95,6 +95,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.internal.telephony.ITelephony;
+
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
@@ -143,6 +144,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -153,8 +155,8 @@ import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
@@ -205,6 +207,7 @@ public class AndroidUtilities {
     private static RectF bitmapRect;
 
     public static final RectF rectTmp = new RectF();
+    public static final Rect rectTmp2 = new Rect();
 
     public static Pattern WEB_URL = null;
     public static Pattern BAD_CHARS_PATTERN = null;
@@ -397,8 +400,8 @@ public class AndroidUtilities {
         if (context instanceof Activity) {
             return (Activity) context;
         }
-        if (context instanceof ContextThemeWrapper) {
-            return findActivity(((ContextThemeWrapper) context).getBaseContext());
+        if (context instanceof ContextWrapper) {
+            return findActivity(((ContextWrapper) context).getBaseContext());
         }
         return null;
     }
@@ -799,7 +802,7 @@ public class AndroidUtilities {
             writer.flush();
             writer.close();
         } catch (Throwable e) {
-            FileLog.e(e);
+            FileLog.e(e, false);
         }
     }
 
@@ -1361,7 +1364,7 @@ public class AndroidUtilities {
 
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
-            if (NekomuraConfig.typeface.Bool() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (NekoConfig.typeface.Bool() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (assetPath.contains("medium") && assetPath.contains("italic")) {
                     return Typeface.create("sans-serif-medium", Typeface.ITALIC);
                 }
@@ -1713,7 +1716,7 @@ public class AndroidUtilities {
                 provider = 1;
             }
         } else {
-            if (NekomuraConfig.mapPreviewProvider.Int() == 1) {
+            if (NekoConfig.mapPreviewProvider.Int() == 1) {
                 provider = 1;
             }
         }
@@ -1799,7 +1802,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isTablet() {
-        if (isTablet == null) switch (NekomuraConfig.tabletMode.Int()) {
+        if (isTablet == null) switch (NekoConfig.tabletMode.Int()) {
             case 0:
                 isTablet = ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
                 break;
@@ -4211,6 +4214,41 @@ public class AndroidUtilities {
         }
     }
 
+    private static final HashMap<Window, ArrayList<Long>> flagSecureReasons = new HashMap<>();
+    // Sets FLAG_SECURE to true, until it gets unregistered (when returned callback is run)
+    // Useful for having multiple reasons to have this flag on.
+    public static Runnable registerFlagSecure(Window window) {
+        final long reasonId = (long) (Math.random() * 999999999);
+        final ArrayList<Long> reasonIds;
+        if (flagSecureReasons.containsKey(window)) {
+            reasonIds = flagSecureReasons.get(window);
+        } else {
+            reasonIds = new ArrayList<>();
+            flagSecureReasons.put(window, reasonIds);
+        }
+        reasonIds.add(reasonId);
+        updateFlagSecure(window);
+        return () -> {
+            reasonIds.remove(reasonId);
+            updateFlagSecure(window);
+        };
+    }
+    private static void updateFlagSecure(Window window) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (window == null) {
+                return;
+            }
+            final boolean value = flagSecureReasons.containsKey(window) && flagSecureReasons.get(window).size() > 0;
+            try {
+                if (value) {
+                    window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                } else {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+            } catch (Exception ignore) {}
+        }
+    }
+
     public static void openSharing(BaseFragment fragment, String url) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
@@ -4288,14 +4326,14 @@ public class AndroidUtilities {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final View decorView = window.getDecorView();
             int flags = decorView.getSystemUiVisibility();
-            if (!SharedConfig.noStatusBar && NekomuraConfig.transparentStatusBar.Bool()) {
+            if (!SharedConfig.noStatusBar && NekoConfig.transparentStatusBar.Bool()) {
                 window.setStatusBarColor(Color.TRANSPARENT);
             }
             if (enable) {
                 if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) == 0) {
                     flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
-                    if (!SharedConfig.noStatusBar && !NekomuraConfig.transparentStatusBar.Bool()) {
+                    if (!SharedConfig.noStatusBar && !NekoConfig.transparentStatusBar.Bool()) {
                         window.setStatusBarColor(0x0f000000);
                     }
                 }
@@ -4303,7 +4341,7 @@ public class AndroidUtilities {
                 if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) != 0) {
                     flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
-                    if (!SharedConfig.noStatusBar && !NekomuraConfig.transparentStatusBar.Bool()) {
+                    if (!SharedConfig.noStatusBar && !NekoConfig.transparentStatusBar.Bool()) {
                         window.setStatusBarColor(0x33000000);
                     }
                 }

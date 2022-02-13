@@ -22,7 +22,7 @@
     <string name="ProxyAutoSwitch">代理自動切換</string>
     <string name="LinkedGroupChat">關聯組</string>
     <string name="LinkedChannelChat">關聯頻道</string>
-    <string name="DevModeTitle">**您的電報帳戶可能被禁止**</string>
+    <string name="DevModeTitle">**你個telegram帳號可能被封鎖**</string>
     <string name="DevModeNotice">對於開發者功能的任何不當使用，我們概不負責。</string>
     <string name="TapToDisable">點擊以禁用。您不需要這些。</string>
     <string name="PlaceHolder">佔位符-請禁用</string>
@@ -103,7 +103,7 @@
     <string name="ShareProxy">分享代理</string>
     <string name="ProxyDelete">刪除代理</string>
     <string name="ProxyInfoVmess">Vmess 代理設定</string>
-    <string name="VmessUserId">用戶ID</string>
+    <string name="VmessUserId">使用者ID</string>
     <string name="VmessAlterId">額外ID</string>
     <string name="VmessSecurity">加密方式</string>
     <string name="VmessNetwork">傳輸協議</string>
@@ -159,7 +159,7 @@
     <string name="TeleTuxFaq">TeleTux 常見問題</string>
     <string name="TransSite">翻譯平台</string>
     <string name="OpenKayChain">OpenPGP 客戶端</string>
-    <string name="OpenPGPApp">OpenPGP 提供应用</string>
+    <string name="OpenPGPApp">OpenPGP 客戶端</string>
     <string name="OpenPGPKey">PGP 密鑰</string>
     <string name="None">無</string>
     <string name="Sign">簽名</string>
@@ -170,4 +170,29 @@
     <string name="ShareMyKey">分享我的公鑰</string>
     <string name="DisableVibration">禁用振動</string>
     <string name="CCNo">無</string>
+    <string name="AccDescrChatAttachEnterMenu">聊天輸入選單</string>
+    <string name="QRLoginNotice">此 二維碼/連結 允許某人登入到您的 Telegram 帳戶, 這是您自己的操作嗎？</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">禁用連結預覽</string>
+    <string name="TrojanSNI">SNI (可選)</string>
+    <string name="AddProxyTrojan">新增 Trojan 代理</string>
+    <string name="ProxyInfoTrojan">Trojan 代理設定</string>
+    <string name="UnpinMessageX">解除訊息置頂</string>
+    <string name="ImportPxy">匯入</string>
+    <string name="ShareMessages">分享</string>
+    <string name="QRLoginConfirm">確認登入</string>
+    <string name="IgnoreContentRestrictionsNotice">忽略本地訊息的過濾。</string>
+    <string name="UseChatAttachEnterMenu">使用輸入選單</string>
+    <string name="DisableLinkPreviewByDefault">預設禁用連結預覽</string>
+    <string name="ImportLogin">二維碼登入</string>
+    <string name="IgnoreContentRestrictions">忽略內容限制</string>
+    <string name="SendCommentAfterForward">轉發後傳送評論</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">啟用連結預覽</string>
+    <string name="UnpinMessagesAll">解除置頂所有訊息</string>
+    <string name="ChatAttachEnterMenuRecordVideo">拍片</string>
+    <string name="ChatAttachEnterMenuRecordAudio">錄音</string>
+    <string name="DisableLinkPreviewByDefaultNotice">預設情況下, 在輸入過程中禁用連結預覽請求，以防止伺服器知道該連結在 Telegram 被分享。</string>
+    <string name="UseChatAttachEnterMenuNotice">將錄製按鈕轉做輸入選單，再加多個連結預覽開關。</string>
+    <string name="MinApi23Required">抱歉，您至少需要 Android 6 (API23)。</string>
+    <string name="DismissForYourself">暫時對自己隱藏</string>
+    <string name="StorageReset">清理儲存空間</string>
 </resources>

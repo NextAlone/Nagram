@@ -1,11 +1,10 @@
 package tw.nekomimi.nekogram.parts
 
 import kotlinx.coroutines.*
-import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MessageObject
 import org.telegram.tgnet.TLRPC
 import org.telegram.ui.ChatActivity
-import tw.nekomimi.nkmr.NekomuraConfig
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.transtale.code2Locale
@@ -86,7 +85,7 @@ fun ChatActivity.translateMessages2(target: Locale) = translateMessages(target)
 @JvmName("translateMessages")
 fun ChatActivity.translateMessages3(messages: List<MessageObject>) = translateMessages(messages = messages)
 
-fun ChatActivity.translateMessages(target: Locale = NekomuraConfig.translateToLang.String().code2Locale
+fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.String().code2Locale
                                    , messages: List<MessageObject> = messageForTranslate?.let { listOf(it) }
         ?: selectedObjectGroup?.messages
         ?: emptyList()) {

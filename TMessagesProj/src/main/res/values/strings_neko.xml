@@ -125,5 +125,22 @@
     <string name="enablePublicProxy">NekoX Public Proxy</string>
     <string name="autoUpdateSubInfo">Update proxies automatically</string>
     <string name="hideSendAsChannel">Hide send as channel</string>
+    <string name="showSpoilersDirectly">Display Spoiler messages directly</string>
+    <string name="SaveToDownloadCount_zero">Saving %1$d files to downloads</string>
+    <string name="SaveToDownloadCount_one">Saving %1$d file to downloads</string>
+    <string name="SaveToDownloadCount_two">Saving %1$d files to downloads</string>
+    <string name="SaveToDownloadCount_few">Saving %1$d files to downloads</string>
+    <string name="SaveToDownloadCount_many">Saving %1$d files to downloads</string>
+    <string name="SaveToDownloadCount_other">Saving %1$d files to downloads</string>
+    <string name="NekoGeneralNotification">Notification</string>
+    <string name="disableNotificationBubbles">Disable Bubbles in notification</string>
+    <string name="reactions">Reactions in menu</string>
+    <string name="doubleTapSendReactions">Send Reaction when double tap (Default)</string>
+    <string name="doubleTapShowReactions">Show reactions when double tap only</string>
+    <string name="ReactionsDisabled">Disable</string>
+    <string name="customSavePath">Custom Save Path</string>
+    <string name="customSavePathHint">Leave blank to save directly</string>
+    <string name="showBottomActionsWhenSelecting">Show bottom actions when selecting</string>
+    <string name="channelLabel">channel</string>
 
 </resources>

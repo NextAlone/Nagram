@@ -21,7 +21,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -45,7 +44,6 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 
 
 import androidx.collection.LongSparseArray;
@@ -60,12 +58,11 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 
-import org.json.JSONArray;
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BubbleActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PopupNotificationActivity;
@@ -78,8 +75,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class NotificationsController extends BaseController {
 
@@ -739,6 +736,9 @@ public class NotificationsController extends BaseController {
                         break;
                     }
                     MessageObject oldMessage = sparseArray.get(messageObject.getId());
+                    if (oldMessage != null && oldMessage.isReactionPush) {
+                        oldMessage = null;
+                    }
                     if (oldMessage != null) {
                         updated = true;
                         sparseArray.put(messageObject.getId(), messageObject);
@@ -784,7 +784,7 @@ public class NotificationsController extends BaseController {
                         messageObject.messageOwner.silent && (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined))) {
                     continue;
                 }
-                if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
 
@@ -899,6 +899,11 @@ public class NotificationsController extends BaseController {
                         pushDialogsOverrideMention.put(originalDialogId, current == null ? 1 : current + 1);
                     }
                 }
+                if (messageObject.isReactionPush) {
+                    SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+                    sparseBooleanArray.put(mid, true);
+                    getMessagesController().checkUnreadReactions(dialogId, sparseBooleanArray);
+                }
             }
 
             if (added) {
@@ -941,9 +946,6 @@ public class NotificationsController extends BaseController {
                     boolean canAddValue;
                     if (notifyOverride == -1) {
                         canAddValue = isGlobalNotificationsEnabled(dialog_id, isChannel);
-                        /*if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                            FileLog.d("global notify settings for " + dialog_id + " = " + canAddValue);
-                        }*/
                     } else {
                         canAddValue = notifyOverride != 2;
                     }
@@ -1921,6 +1923,8 @@ public class NotificationsController extends BaseController {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder(text);
+        if (NekoConfig.showSpoilersDirectly.Bool())
+            return stringBuilder.toString();
         for (int i = 0; i < messageObject.messageOwner.entities.size(); i++) {
             if (messageObject.messageOwner.entities.get(i) instanceof TLRPC.TL_messageEntitySpoiler) {
                 TLRPC.TL_messageEntitySpoiler spoiler = (TLRPC.TL_messageEntitySpoiler) messageObject.messageOwner.entities.get(i);
@@ -2967,14 +2971,16 @@ public class NotificationsController extends BaseController {
             } else {
                 icon = IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_group);
             }
-            NotificationCompat.BubbleMetadata.Builder bubbleBuilder =
-                    new NotificationCompat.BubbleMetadata.Builder(
-                            PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT),
-                            icon);
-            bubbleBuilder.setSuppressNotification(openedDialogId == did);
-            bubbleBuilder.setAutoExpandBubble(false);
-            bubbleBuilder.setDesiredHeight(AndroidUtilities.dp(640));
-            builder.setBubbleMetadata(bubbleBuilder.build());
+            if (!NekoConfig.disableNotificationBubbles.Bool()) {
+                NotificationCompat.BubbleMetadata.Builder bubbleBuilder =
+                        new NotificationCompat.BubbleMetadata.Builder(
+                                PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT),
+                                icon);
+                bubbleBuilder.setSuppressNotification(openedDialogId == did);
+                bubbleBuilder.setAutoExpandBubble(false);
+                bubbleBuilder.setDesiredHeight(AndroidUtilities.dp(640));
+                builder.setBubbleMetadata(bubbleBuilder.build());
+            }
             return id;
         } catch (Exception e) {
             FileLog.e(e);
@@ -3746,7 +3752,7 @@ public class NotificationsController extends BaseController {
                     .setGroupSummary(true)
                     .setShowWhen(true)
                     .setWhen(((long) lastMessageObject.messageOwner.date) * 1000)
-                    .setColor(NekoConfig.getNotificationColor());
+                    .setColor(NekoXConfig.getNotificationColor());
 
             long[] vibrationPattern = null;
             Uri sound = null;
@@ -3982,6 +3988,7 @@ public class NotificationsController extends BaseController {
             arrayList.add(messageObject);
         }
 
+
         LongSparseArray<Integer> oldIdsWear = new LongSparseArray<>();
         for (int i = 0; i < wearNotificationsIds.size(); i++) {
             oldIdsWear.put(wearNotificationsIds.keyAt(i), wearNotificationsIds.valueAt(i));
@@ -4046,7 +4053,13 @@ public class NotificationsController extends BaseController {
             }
 
             MessageObject lastMessageObject = messageObjects.get(0);
-            int maxDate = lastMessageObject.messageOwner.date;
+            int maxDate = 0;
+            for (int i = 0; i < messageObjects.size(); i++) {
+                if (maxDate < messageObjects.get(i).messageOwner.date) {
+                    maxDate = messageObjects.get(i).messageOwner.date;
+
+                }
+            }
             TLRPC.Chat chat = null;
             TLRPC.User user = null;
             boolean isChannel = false;
@@ -4238,7 +4251,7 @@ public class NotificationsController extends BaseController {
             int rowsMid = 0;
             for (int a = messageObjects.size() - 1; a >= 0; a--) {
                 MessageObject messageObject = messageObjects.get(a);
-                if (NekomuraConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
                 String message = getShortStringForMessage(messageObject, senderName, preview);
@@ -4454,7 +4467,7 @@ public class NotificationsController extends BaseController {
                     .setContentText(text.toString())
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
-                    .setColor(NekoConfig.getNotificationColor())
+                    .setColor(NekoXConfig.getNotificationColor())
                     .setGroupSummary(false)
                     .setWhen(date)
                     .setShowWhen(true)

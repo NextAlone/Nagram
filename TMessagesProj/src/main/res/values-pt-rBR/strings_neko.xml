@@ -125,4 +125,22 @@
     <string name="enablePublicProxy">Proxy Público do NekoX</string>
     <string name="autoUpdateSubInfo">Atualizar proxies automaticamente</string>
     <string name="hideSendAsChannel">Ocultar enviar como canal</string>
+    <string name="disableDoubleTabReactions">Desativar reações de toque duplo</string>
+    <string name="SaveToDownloadCount_other">Salvando %1$d arquivos para downloads</string>
+    <string name="showSpoilersDirectly">Exibir mensagens de spoiler diretamente</string>
+    <string name="SaveToDownloadCount_one">Salvando %1$d arquivo para downloads</string>
+    <string name="SaveToDownloadCount_two">Salvando %1$d arquivos para downloads</string>
+    <string name="SaveToDownloadCount_zero">Salvando %1$d arquivos para downloads</string>
+    <string name="SaveToDownloadCount_few">Salvando %1$d arquivos para downloads</string>
+    <string name="SaveToDownloadCount_many">Salvando %1$d arquivos para downloads</string>
+    <string name="NekoGeneralNotification">Notificação</string>
+    <string name="disableNotificationBubbles">Desativar bolhas na notificação</string>
+    <string name="ReactionsDisabled">Desativar</string>
+    <string name="customSavePath">Caminho de Salvamento Personalizado</string>
+    <string name="customSavePathHint">Deixe em branco para salvar diretamente</string>
+    <string name="reactions">Reações no menu</string>
+    <string name="doubleTapShowReactions">Mostrar reações apenas ao tocar duas vezes</string>
+    <string name="doubleTapSendReactions">Enviar reação ao tocar duas vezes (padrão)</string>
+    <string name="showBottomActionsWhenSelecting">Mostrar ações inferiores ao selecionar</string>
+    <string name="channelLabel">canal</string>
 </resources>

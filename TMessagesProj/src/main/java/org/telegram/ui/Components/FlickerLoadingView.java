@@ -223,7 +223,7 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        } else if (getViewType() == 3) {
+        } else if (getViewType() == FILES_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
                 rectF.set(AndroidUtilities.dp(12), h + AndroidUtilities.dp(8), AndroidUtilities.dp(52), h + AndroidUtilities.dp(48));
@@ -250,7 +250,7 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        } else if (getViewType() == 4) {
+        } else if (getViewType() == AUDIO_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
                 int radius = AndroidUtilities.dp(44) >> 1;
@@ -505,10 +505,10 @@ public class FlickerLoadingView extends View {
         } else if (getViewType() == REACTED_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
-                int r = AndroidUtilities.dp(16);
-                canvas.drawCircle(checkRtl(paddingLeft + AndroidUtilities.dp(13) + r), h + AndroidUtilities.dp(24), r, paint);
+                int r = AndroidUtilities.dp(18);
+                canvas.drawCircle(checkRtl(paddingLeft + AndroidUtilities.dp(8) + r), h + AndroidUtilities.dp(24), r, paint);
 
-                rectF.set(paddingLeft + AndroidUtilities.dp(53), h + AndroidUtilities.dp(20), getWidth() - AndroidUtilities.dp(53), h + AndroidUtilities.dp(28));
+                rectF.set(paddingLeft + AndroidUtilities.dp(58), h + AndroidUtilities.dp(20), getWidth() - AndroidUtilities.dp(53), h + AndroidUtilities.dp(28));
                 checkRtl(rectF);
                 canvas.drawRoundRect(rectF, AndroidUtilities.dp(8), AndroidUtilities.dp(8), paint);
 
@@ -608,11 +608,11 @@ public class FlickerLoadingView extends View {
         } else if (getViewType() == PHOTOS_TYPE) {
             int photoWidth = (width - (AndroidUtilities.dp(2) * (getColumnsCount() - 1))) / getColumnsCount();
             return photoWidth + AndroidUtilities.dp(2);
-        } else if (getViewType() == 3) {
+        } else if (getViewType() == FILES_TYPE) {
             return AndroidUtilities.dp(56);
-        } else if (getViewType() == 4) {
+        } else if (getViewType() == AUDIO_TYPE) {
             return AndroidUtilities.dp(56);
-        } else if (getViewType() == 5) {
+        } else if (getViewType() == LINKS_TYPE) {
             return AndroidUtilities.dp(80);
         } else if (getViewType() == USERS_TYPE) {
             return AndroidUtilities.dp(64);

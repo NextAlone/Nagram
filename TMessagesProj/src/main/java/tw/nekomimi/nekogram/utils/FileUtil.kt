@@ -11,6 +11,17 @@ import java.util.zip.ZipFile
 object FileUtil {
 
     @JvmStatic
+    fun deleteDirectory(directoryToBeDeleted: File): Boolean {
+        val allContents = directoryToBeDeleted.listFiles()
+        if (allContents != null) {
+            for (file in allContents) {
+                deleteDirectory(file)
+            }
+        }
+        return directoryToBeDeleted.delete()
+    }
+
+    @JvmStatic
     fun initDir(dir: File) {
 
         var parentDir: File? = dir

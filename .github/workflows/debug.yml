@@ -25,14 +25,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+        run: |
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
+            TMessagesProj/jni/libvpx/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -45,6 +48,8 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          sudo apt-get install yasm -y
+          ./run init libs libvpx
           ./run init libs ffmpeg
   boringssl:
     name: Native Build (BoringSSL)
@@ -94,6 +99,7 @@ jobs:
       - name: Fetch Status
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
@@ -112,7 +118,8 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-          key: ${{ hashFiles('ffmpeg_status', 'TMessagesProj/jni/*_ffmpeg.sh') }}
+            TMessagesProj/jni/libvpx/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh') }}
       - name: BoringSSL Cache
         uses: actions/cache@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -134,11 +141,6 @@ jobs:
         run: |
           cd TMessagesProj/jni
           ./patch_boringssl.sh
-      - name: Native Build (libvpx)
-        if: (matrix.flavor == 'x86' || matrix.flavor == 'x86_64') && steps.cache.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get install yasm -y
-          ./run init libs libvpx_x86
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -402,13 +404,13 @@ jobs:
       - name: Send Build
         run: |
           chmod +x telegram-bot-api-binary
-          ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 2>&1 > /dev/null &
+          ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
           apk=$(find TMessagesProj/build/outputs/apk/mini/release -name '*arm64-v8a*.apk' | head -n 1)
           curl http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendDocument \
             -X POST \
             -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
             -F document="@$apk" \
-            -F caption="$GITHUB_SHA" \
+            -F caption="${{ github.event.head_commit.message }}\n$GITHUB_SHA" \
             --silent --show-error --fail >/dev/null
           pkill telegram-bot
 

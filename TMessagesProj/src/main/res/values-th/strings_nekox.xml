@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ChatAttachEnterMenuRecordVideo">บันทึกวีดีโอ</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">ปิดใช้งานการแสดงตัวอย่างลิงก์</string>
+    <string name="DisableLinkPreviewByDefault">ปิดใช้งานการแสดงตัวอย่างลิงก์โดยค่าเริ่มต้น</string>
+    <string name="CustomApi">API ที่กำหนดเอง</string>
+    <string name="UseChatAttachEnterMenuNotice">เปลี่ยนปุ่มบันทึกเป็นเมนูป้อนข้อมูล และเพิ่มสวิตช์แสดงตัวอย่างลิงก์</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
+    <string name="CustomApiTGX">Telegram Android X</string>
+    <string name="CustomApiInput">ป้อนข้อมูลด้วยตนเอง</string>
+    <string name="SwitchVersion">เปลี่ยนเวอร์ชัน</string>
+    <string name="NoUpdate">ไม่พบการอัปเดต</string>
+    <string name="UpdateAvailable">พบการอัพเดทใหม่</string>
+    <string name="UpdateUpdate">อัพเดท</string>
+    <string name="UpdateLater">ภายหลัง</string>
+    <string name="Ignore">ไม่สนใจ</string>
+    <string name="UpdateDownloaded">การอัปเดตเพิ่งได้รับการดาวน์โหลด</string>
+    <string name="LinkedGroupChat">กลุ่มที่เชื่อมโยง</string>
+    <string name="TapToDisable">แตะเพื่อปิดใช้งาน คุณไม่ต้องการสิ่งเหล่านี้</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
+    <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
+    <string name="Locked">ล็อค</string>
+    <string name="AccDescrChatAttachEnterMenu">ตั้งค่าการแชต</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">เปิดใช้งานการแสดงตัวอย่างลิงก์</string>
+    <string name="ChatAttachEnterMenuRecordAudio">บันทึกเสียง</string>
+    <string name="UseChatAttachEnterMenu">ใช้เมนูป้อนข้อมูล</string>
+    <string name="Install">ติดตั้ง</string>
+    <string name="DisableLinkPreviewByDefaultNotice">ปิดใช้งานคำขอแสดงตัวอย่างลิงก์ในระหว่างการป้อนข้อมูลโดยค่าเริ่มต้น เพื่อป้องกันไม่ให้เซิร์ฟเวอร์รู้ว่าลิงก์นั้นแชร์ผ่าน Telegram</string>
+    <string name="CustomApiNo">ไม่ใช้ API ที่กำหนดเอง</string>
+    <string name="DownloadFailed">ดาวน์โหลดล้มเหลว</string>
+    <string name="LinkedChannelChat">ช่องที่เชื่อมโยง</string>
+    <string name="CheckUpdate">ตรวจสอบเวอร์ชั่นใหม่</string>
+    <string name="DevModeTitle">**บัญชีเทเลแกรมของคุณ อาจถูกแบน**</string>
+    <string name="DevModeNotice">แตะเพื่อปิดใช้งาน คุณไม่ต้องการสิ่งเหล่านี้</string>
+    <string name="ChangeTranslateProvider">เปลี่ยนผู้ให้บริการ</string>
+    <string name="GoogleCloudTransKeyNotice">หากคุณตั้งค่า Google Cloud Trans Key ระบบจะเรียก API การแปลบนคลาวด์แทนการส่งแบบฟอร์มปลอมไปยังเวอร์ชันเว็บเมื่อทำการแปล (เร็วกว่า เสถียรกว่า และประหยัดทราฟฟิก)</string>
+</resources>

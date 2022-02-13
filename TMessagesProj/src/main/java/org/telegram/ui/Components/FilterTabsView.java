@@ -56,8 +56,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class FilterTabsView extends FrameLayout {
 
@@ -984,7 +984,7 @@ public class FilterTabsView extends FrameLayout {
             delegate.onPageSelected(id, scrollingForward);
         }
         scrollToChild(position);
-        if (NekomuraConfig.hideAllTab.Bool() && showAllChatsTab && id != Integer.MAX_VALUE)
+        if (NekoConfig.hideAllTab.Bool() && showAllChatsTab && id != Integer.MAX_VALUE)
             toggleAllTabs(false);
     }
 
@@ -1295,7 +1295,7 @@ public class FilterTabsView extends FrameLayout {
             manualScrollingToId = -1;
             currentPosition = position;
             selectedTabId = id;
-            if (NekomuraConfig.hideAllTab.Bool() && showAllChatsTab)
+            if (NekoConfig.hideAllTab.Bool() && showAllChatsTab)
                 toggleAllTabs(false);
         }
     }
@@ -1517,7 +1517,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (!isEditing || ((showAllChatsTab && viewHolder.getAdapterPosition() == 0) && !NekomuraConfig.pressTitleToOpenAllChats.Bool())) {
+            if (!isEditing || ((showAllChatsTab && viewHolder.getAdapterPosition() == 0) && !NekoConfig.pressTitleToOpenAllChats.Bool())) {
                 return makeMovementFlags(0, 0);
             }
             return makeMovementFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
@@ -1559,7 +1559,7 @@ public class FilterTabsView extends FrameLayout {
         return listView;
     }
 
-    public boolean showAllChatsTab = !NekomuraConfig.hideAllTab.Bool();
+    public boolean showAllChatsTab = !NekoConfig.hideAllTab.Bool();
 
     public void toggleAllTabs(boolean show) {
         if (show == showAllChatsTab)
@@ -1571,14 +1571,14 @@ public class FilterTabsView extends FrameLayout {
         ArrayList<MessagesController.DialogFilter> filters = AccountInstance.getInstance(UserConfig.selectedAccount).getMessagesController().dialogFilters;
         for (int a = 0, N = filters.size(); a < N; a++) {
             MessagesController.DialogFilter dialogFilter = filters.get(a);
-            switch (NekomuraConfig.tabsTitleType.Int()) {
-                case NekoConfig.TITLE_TYPE_TEXT:
+            switch (NekoConfig.tabsTitleType.Int()) {
+                case NekoXConfig.TITLE_TYPE_TEXT:
                     addTab(a, filters.get(a).localId, dialogFilter.name);
                     break;
-                case NekoConfig.TITLE_TYPE_ICON:
+                case NekoXConfig.TITLE_TYPE_ICON:
                     addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
                     break;
-                case NekoConfig.TITLE_TYPE_MIX:
+                case NekoXConfig.TITLE_TYPE_MIX:
                     addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name);
                     break;
             }

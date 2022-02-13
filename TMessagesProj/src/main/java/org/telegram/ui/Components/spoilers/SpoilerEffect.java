@@ -54,6 +54,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class SpoilerEffect extends Drawable {
     public final static int MAX_PARTICLES_PER_ENTITY = measureMaxParticlesCount();
     public final static int PARTICLES_PER_CHARACTER = measureParticlesPerCharacter();
@@ -590,6 +592,7 @@ public class SpoilerEffect extends Drawable {
      * @param spoilers     Spoilers list to populate
      */
     public static void addSpoilers(@Nullable View v, Layout textLayout, @Nullable Stack<SpoilerEffect> spoilersPool, List<SpoilerEffect> spoilers) {
+        if (NekoConfig.showSpoilersDirectly.Bool()) return;
         if (textLayout.getText() instanceof Spannable){
             addSpoilers(v, textLayout, (Spannable) textLayout.getText(), spoilersPool, spoilers);
         }
@@ -712,6 +715,7 @@ public class SpoilerEffect extends Drawable {
     public static void renderWithRipple(View v, boolean invalidateSpoilersParent, int spoilersColor, int verticalOffset, AtomicReference<Layout> patchedLayoutRef, Layout textLayout, List<SpoilerEffect> spoilers, Canvas canvas) {
         if (spoilers.isEmpty()) {
             textLayout.draw(canvas);
+            return;
         }
         Layout pl = patchedLayoutRef.get();
 
@@ -748,8 +752,9 @@ public class SpoilerEffect extends Drawable {
                         .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                         .setLineSpacing(textLayout.getSpacingAdd(), textLayout.getSpacingMultiplier())
                         .build();
-            } else
+            } else {
                 layout = new StaticLayout(sb, textLayout.getPaint(), textLayout.getWidth(), textLayout.getAlignment(), textLayout.getSpacingMultiplier(), textLayout.getSpacingAdd(), false);
+            }
             patchedLayoutRef.set(pl = layout);
         }
 

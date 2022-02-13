@@ -32,6 +32,7 @@ public class TextDetailCell extends FrameLayout {
 
     private final TextView textView;
     private final TextView valueTextView;
+    private final TextView showMoreTextView = null;
     private final ImageView imageView;
     private boolean needDivider;
     private boolean contentDescriptionValueFirst;
@@ -69,7 +70,10 @@ public class TextDetailCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        super.onMeasure(
+            MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY)
+        );
     }
 
     public void setTextAndValue(String text, String value, boolean divider) {
@@ -119,7 +123,11 @@ public class TextDetailCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, Theme.dividerPaint);
+            canvas.drawLine(
+                0, getMeasuredHeight() - 1, getMeasuredWidth(),
+                getMeasuredHeight() - 1,
+                Theme.dividerPaint
+            );
         }
     }
 

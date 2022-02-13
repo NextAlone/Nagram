@@ -41,7 +41,6 @@ import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import org.checkerframework.checker.units.qual.A;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -51,12 +50,12 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nkmr.NekomuraConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ActionBar extends FrameLayout {
 
@@ -264,11 +263,11 @@ public class ActionBar extends FrameLayout {
                     }
                 }
             }
-            if (NekomuraConfig.actionBarDecoration.Int() == 2) {
+            if (NekoConfig.actionBarDecoration.Int() == 2) {
                 if (fireworksEffect == null) {
                     fireworksEffect = new FireworksEffect();
                 }
-            } else if (NekomuraConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
+            } else if (NekoConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
                 if (snowflakesEffect == null) {
                     snowflakesEffect = new SnowflakesEffect(0);
                 }
@@ -506,7 +505,36 @@ public class ActionBar extends FrameLayout {
         actionMode = new ActionBarMenu(getContext(), this) {
             @Override
             public void setBackgroundColor(int color) {
-                super.setBackgroundColor(actionModeColor = color);
+                actionModeColor = color;
+                if (!blurredBackground) {
+                    super.setBackgroundColor(actionModeColor);
+                }
+            }
+
+            @Override
+            protected void dispatchDraw(Canvas canvas) {
+                if (blurredBackground) {
+                    rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                    blurScrimPaint.setColor(actionModeColor);
+                    contentView.drawBlur(canvas, 0, rectTmp, blurScrimPaint, true);
+                }
+                super.dispatchDraw(canvas);
+            }
+
+            @Override
+            protected void onAttachedToWindow() {
+                super.onAttachedToWindow();
+                if (contentView != null) {
+                    contentView.blurBehindViews.add(this);
+                }
+            }
+
+            @Override
+            protected void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                if (contentView != null) {
+                    contentView.blurBehindViews.remove(this);
+                }
             }
         };
         actionMode.isActionMode = true;
@@ -522,17 +550,17 @@ public class ActionBar extends FrameLayout {
         actionMode.setLayoutParams(layoutParams);
         actionMode.setVisibility(INVISIBLE);
 
-        if (occupyStatusBar && needTop && actionModeTop == null) {
-            actionModeTop = new View(getContext());
-            actionModeTop.setBackgroundColor(getThemedColor(Theme.key_actionBarActionModeDefaultTop));
-            addView(actionModeTop);
-            layoutParams = (FrameLayout.LayoutParams) actionModeTop.getLayoutParams();
-            layoutParams.height = AndroidUtilities.statusBarHeight;
-            layoutParams.width = LayoutHelper.MATCH_PARENT;
-            layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-            actionModeTop.setLayoutParams(layoutParams);
-            actionModeTop.setVisibility(INVISIBLE);
-        }
+//        if (occupyStatusBar && needTop && actionModeTop == null && !blurredBackground) {
+//            actionModeTop = new View(getContext());
+//            actionModeTop.setBackgroundColor(getThemedColor(Theme.key_actionBarActionModeDefaultTop));
+//            addView(actionModeTop);
+//            layoutParams = (FrameLayout.LayoutParams) actionModeTop.getLayoutParams();
+//            layoutParams.height = AndroidUtilities.statusBarHeight;
+//            layoutParams.width = LayoutHelper.MATCH_PARENT;
+//            layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+//            actionModeTop.setLayoutParams(layoutParams);
+//            actionModeTop.setVisibility(INVISIBLE);
+//        }
 
         return actionMode;
     }
@@ -1537,7 +1565,29 @@ public class ActionBar extends FrameLayout {
         return color != null ? color : Theme.getColor(key);
     }
 
-    //Nekomura
+    SizeNotifierFrameLayout contentView;
+    boolean blurredBackground;
+
+    public void setDrawBlurBackground(SizeNotifierFrameLayout contentView) {
+        blurredBackground = true;
+        this.contentView = contentView;
+        contentView.blurBehindViews.add(this);
+        setBackground(null);
+    }
+
+    Paint blurScrimPaint = new Paint();
+    Rect rectTmp = new Rect();
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        if (blurredBackground) {
+            rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            blurScrimPaint.setColor(actionBarColor);
+            contentView.drawBlur(canvas, 0, rectTmp, blurScrimPaint, true);
+        }
+        super.dispatchDraw(canvas);
+    }
+
+    // NekoX Changes
 
     private StaticLayout countLayout;
 
@@ -1582,7 +1632,7 @@ public class ActionBar extends FrameLayout {
     }
 
     public void unreadBadgeSetCount(int count) {
-        if (backButtonImageView != null && NekomuraConfig.unreadBadgeOnBackButton.Bool()) {
+        if (backButtonImageView != null && NekoConfig.unreadBadgeOnBackButton.Bool()) {
             backButtonImageView.setUnread(count);
         }
     }

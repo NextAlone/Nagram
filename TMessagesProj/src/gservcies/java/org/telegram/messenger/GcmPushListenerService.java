@@ -12,6 +12,8 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.collection.LongSparseArray;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -1068,6 +1070,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     messageOwner.from_scheduled = scheduled;
 
                                     MessageObject messageObject = new MessageObject(currentAccount, messageOwner, messageText, name, userName, localMessage, channel, supergroup, edited);
+                                    messageObject.isReactionPush = loc_key.startsWith("REACT_") || loc_key.startsWith("CHAT_REACT_");
                                     ArrayList<MessageObject> arrayList = new ArrayList<>();
                                     arrayList.add(messageObject);
                                     canRelease = false;
@@ -1107,7 +1110,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         }
     }
 
-    private String getReactedText(String loc_key, String[] args) {
+    private String getReactedText(String loc_key, Object[] args) {
         switch (loc_key) {
             case "REACT_TEXT": {
                 return LocaleController.formatString("PushReactText", R.string.PushReactText, args);

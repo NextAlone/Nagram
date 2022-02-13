@@ -91,21 +91,21 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import okhttp3.HttpUrl;
-import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nekogram.ShadowsocksRSettingsActivity;
-import tw.nekomimi.nekogram.ShadowsocksSettingsActivity;
-import tw.nekomimi.nekogram.SubSettingsActivity;
-import tw.nekomimi.nekogram.TrojanSettingsActivity;
-import tw.nekomimi.nekogram.VmessSettingsActivity;
-import tw.nekomimi.nekogram.WsSettingsActivity;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.proxy.ShadowsocksRSettingsActivity;
+import tw.nekomimi.nekogram.proxy.ShadowsocksSettingsActivity;
+import tw.nekomimi.nekogram.proxy.SubSettingsActivity;
+import tw.nekomimi.nekogram.proxy.TrojanSettingsActivity;
+import tw.nekomimi.nekogram.proxy.VmessSettingsActivity;
+import tw.nekomimi.nekogram.proxy.WsSettingsActivity;
 import tw.nekomimi.nekogram.parts.ProxyChecksKt;
-import tw.nekomimi.nekogram.sub.SubInfo;
-import tw.nekomimi.nekogram.sub.SubManager;
+import tw.nekomimi.nekogram.proxy.SubInfo;
+import tw.nekomimi.nekogram.proxy.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -685,7 +685,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                 updateRows(true);
             } else if (position == enablePublicProxyRow) {
-                final boolean enabled = NekomuraConfig.enablePublicProxy.toggleConfigBool();
+                final boolean enabled = NekoConfig.enablePublicProxy.toggleConfigBool();
                 TextCheckCell cell = (TextCheckCell) view;
                 cell.setChecked(enabled);
                 UIUtil.runOnIoDispatcher(() -> {
@@ -1178,7 +1178,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     } else if (position == callsRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("UseProxyForCalls", R.string.UseProxyForCalls), useProxyForCalls, false);
                     } else if (position == enablePublicProxyRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("enablePublicProxy", R.string.enablePublicProxy), NekomuraConfig.enablePublicProxy.Bool(), false);
+                        checkCell.setTextAndCheck(LocaleController.getString("enablePublicProxy", R.string.enablePublicProxy), NekoConfig.enablePublicProxy.Bool(), false);
                     }
                     break;
                 }
@@ -1213,7 +1213,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 } else if (position == callsRow) {
                     checkCell.setChecked(useProxyForCalls);
                 } else if (position == enablePublicProxyRow) {
-                    checkCell.setChecked(NekomuraConfig.enablePublicProxy.Bool());
+                    checkCell.setChecked(NekoConfig.enablePublicProxy.Bool());
                 }
             } else {
                 super.onBindViewHolder(holder, position, payloads);
@@ -1231,7 +1231,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 } else if (position == callsRow) {
                     checkCell.setChecked(useProxyForCalls);
                 } else if (position == enablePublicProxyRow) {
-                    checkCell.setChecked(NekomuraConfig.enablePublicProxy.Bool());
+                    checkCell.setChecked(NekoConfig.enablePublicProxy.Bool());
                 }
             }
         }

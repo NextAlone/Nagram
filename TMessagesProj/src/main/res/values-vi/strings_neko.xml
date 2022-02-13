@@ -124,4 +124,20 @@
     <string name="hideGroupSticker">Ẩn hình dán nhóm</string>
     <string name="enablePublicProxy">NekoX Public Proxy</string>
     <string name="autoUpdateSubInfo">Cập nhật proxy tự động</string>
+    <string name="hideSendAsChannel">Ẩn gửi với tư cách kênh</string>
+    <string name="NekoGeneralNotification">Thông báo</string>
+    <string name="disableNotificationBubbles">Tắt Bong bóng ở thông báo</string>
+    <string name="doubleTapSendReactions">Gửi Phản ứng khi nhấn đúp (Mặc định)</string>
+    <string name="ReactionsDisabled">Tắt</string>
+    <string name="customSavePath">Đường dẫn lưu tùy chỉnh</string>
+    <string name="customSavePathHint">Để trống để lưu trực tiếp</string>
+    <string name="doubleTapShowReactions">Chỉ hiện phản ứng khi nhấn đúp</string>
+    <string name="reactions">Phản ứng trong menu</string>
+    <string name="SaveToDownloadCount_two">Đang lưu %1$d tệp vào tải xuống</string>
+    <string name="SaveToDownloadCount_few">Đang lưu %1$d tệp vào tải xuống</string>
+    <string name="SaveToDownloadCount_many">Đang lưu %1$d tệp vào tải xuống</string>
+    <string name="SaveToDownloadCount_other">Đang lưu %1$d tệp vào tải xuống</string>
+    <string name="showSpoilersDirectly">Hiện tin nhắn Spoiler trực tiếp</string>
+    <string name="SaveToDownloadCount_zero">Đang lưu %1$d tệp vào tải xuống</string>
+    <string name="SaveToDownloadCount_one">Đang lưu %1$d tệp vào tải xuống</string>
 </resources>

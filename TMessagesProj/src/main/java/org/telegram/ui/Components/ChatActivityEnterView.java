@@ -162,8 +162,8 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
-import tw.nekomimi.nekogram.BottomBuilder;
-import tw.nekomimi.nkmr.NekomuraConfig;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.cc.CCConverter;
 import tw.nekomimi.nekogram.cc.CCTarget;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
@@ -172,10 +172,10 @@ import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
-import tw.nekomimi.nkmr.NekomuraConfig;
+
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
+public class ChatActivityEnterView extends ChatBlurredFrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
     public interface ChatActivityEnterViewDelegate {
         default void beforeMessageSend(CharSequence message, boolean notify, int scheduleDate) {
@@ -517,7 +517,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private MessageObject replyingMessageObject;
     private MessageObject botMessageObject;
     private TLRPC.WebPage messageWebPage;
-    private boolean messageWebPageSearch = !NekomuraConfig.disableLinkPreviewByDefault.Bool();
+    private boolean messageWebPageSearch = !NekoConfig.disableLinkPreviewByDefault.Bool();
     private ChatActivityEnterViewDelegate delegate;
     private TrendingStickersAlert trendingStickersAlert;
 
@@ -1716,8 +1716,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     @SuppressLint("ClickableViewAccessibility")
     public ChatActivityEnterView(Activity context, SizeNotifierFrameLayout parent, ChatActivity fragment, final boolean isChat, Theme.ResourcesProvider resourcesProvider) {
-        super(context);
+        super(context, fragment);
         this.resourcesProvider = resourcesProvider;
+        this.backgroundColor = getThemedColor(Theme.key_chat_messagePanelBackground);
+        this.drawBlur = false;
 
         smoothKeyboard = isChat && SharedConfig.smoothKeyboard && !AndroidUtilities.isInMultiwindow && (fragment == null || !fragment.isInBubbleMode());
         dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -2001,7 +2003,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             private void editPhoto(Uri uri, String mime) {
-                final File file = AndroidUtilities.generatePicturePath(fragment.isSecretChat(), MimeTypeMap.getSingleton().getExtensionFromMimeType(mime));
+                final File file = AndroidUtilities.generatePicturePath(fragment != null && fragment.isSecretChat(), MimeTypeMap.getSingleton().getExtensionFromMimeType(mime));
                 Utilities.globalQueue.postRunnable(() -> {
                     try {
                         InputStream in = context.getContentResolver().openInputStream(uri);
@@ -2369,6 +2371,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             botCommandsMenuButton.setOnClickListener(view -> {
                 boolean open = !botCommandsMenuButton.isOpened();
                 botCommandsMenuButton.setOpened(open);
+                try {
+                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
                 if (open) {
                     botCommandsMenuContainer.show();
                 } else {
@@ -3048,7 +3053,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         senderSelectView.setVisibility(GONE);
         frameLayout.addView(senderSelectView, LayoutHelper.createFrame(32, 32, Gravity.BOTTOM | Gravity.LEFT, 10, 8, 10, 8));
 
-        recordedAudioPanel = new FrameLayout(context);
+        recordedAudioPanel = new FrameLayout(context) {
+            @Override
+            public void setVisibility(int visibility) {
+                super.setVisibility(visibility);
+                updateSendAsButton();
+            }
+        };
         recordedAudioPanel.setVisibility(audioToSend == null ? GONE : VISIBLE);
         recordedAudioPanel.setFocusable(true);
         recordedAudioPanel.setFocusableInTouchMode(true);
@@ -3198,7 +3209,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         audioVideoButtonContainer = new FrameLayout(context);
         audioVideoButtonContainer.setSoundEffectsEnabled(false);
         sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(48, 48));
-        if (NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+        if (NekoConfig.useChatAttachMediaMenu.Bool()) {
             audioVideoButtonContainer.setOnClickListener(v -> {
                 if (recordCircle.isSendButtonVisible()) {
                     if (!hasRecordVideo || calledRecordRunnable) {
@@ -3301,7 +3312,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             AndroidUtilities.cancelRunOnUIThread(recordAudioVideoRunnable);
                             delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
                             setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
-                            if (!NekomuraConfig.disableVibration.Bool()) {
+                            if (!NekoConfig.disableVibration.Bool()) {
                                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                             }
                             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
@@ -3309,21 +3320,21 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             startedDraggingX = -1;
                             if (hasRecordVideo && videoSendButton.getTag() != null) {
                                 CameraController.getInstance().cancelOnInitRunnable(onFinishInitCameraRunnable);
-                                delegate.needStartRecordVideo(NekomuraConfig.confirmAVMessage.Bool() ? 3 : 1, true, 0);
+                                delegate.needStartRecordVideo(NekoConfig.confirmAVMessage.Bool() ? 3 : 1, true, 0);
                             } else {
-                                if (!NekomuraConfig.confirmAVMessage.Bool()) {
+                                if (!NekoConfig.confirmAVMessage.Bool()) {
                                     if (recordingAudioVideo && isInScheduleMode()) {
                                         AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0), resourcesProvider);
                                     }
                                 }
                                 delegate.needStartRecordAudio(0);
-                                if (!NekomuraConfig.confirmAVMessage.Bool()) {
+                                if (!NekoConfig.confirmAVMessage.Bool()) {
                                     MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
                                 } else {
                                     MediaController.getInstance().stopRecording(2, true, 0);
                                 }
                             }
-                            if (!NekomuraConfig.confirmAVMessage.Bool()) {
+                            if (!NekoConfig.confirmAVMessage.Bool()) {
                                 recordingAudioVideo = false;
                                 messageTransitionIsRunning = false;
                                 AndroidUtilities.runOnUIThread(moveToSendStateRunnable = () -> {
@@ -3388,13 +3399,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         audioSendButton = new ImageView(context);
         audioSendButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         audioSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
-        audioSendButton.setImageResource(!NekomuraConfig.useChatAttachMediaMenu.Bool() ? R.drawable.baseline_mic_24 : R.drawable.ic_ab_other);
+        audioSendButton.setImageResource(!NekoConfig.useChatAttachMediaMenu.Bool() ? R.drawable.baseline_mic_24 : R.drawable.ic_ab_other);
         audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
-        audioSendButton.setContentDescription(!NekomuraConfig.useChatAttachMediaMenu.Bool() ?
+        audioSendButton.setContentDescription(!NekoConfig.useChatAttachMediaMenu.Bool() ?
                 LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage) :
                 LocaleController.getString("AccDescrChatAttachEnterMenu", R.string.AccDescrChatAttachEnterMenu));
 
-        if (Build.VERSION.SDK_INT >= 21 && NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+        if (Build.VERSION.SDK_INT >= 21 && NekoConfig.useChatAttachMediaMenu.Bool()) {
             audioSendButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
         }
 
@@ -3691,7 +3702,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void startLockTransition(boolean animate) {
         AnimatorSet animatorSet = new AnimatorSet();
-        if (!NekomuraConfig.disableVibration.Bool() && animate) {
+        if (!NekoConfig.disableVibration.Bool() && animate) {
             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
 
@@ -3758,7 +3769,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         Theme.chat_composeShadowDrawable.setBounds(0, top, getMeasuredWidth(), bottom);
         Theme.chat_composeShadowDrawable.draw(canvas);
         backgroundPaint.setColor(getThemedColor(Theme.key_chat_messagePanelBackground));
-        canvas.drawRect(0, bottom, getWidth(), getHeight(), backgroundPaint);
+        if (SharedConfig.chatBlurEnabled() && chatActivity != null) {
+            AndroidUtilities.rectTmp2.set(0, bottom, getWidth(), getHeight());
+            chatActivity.contentView.drawBlur(canvas, getY(), AndroidUtilities.rectTmp2, backgroundPaint, false);
+        } else {
+            canvas.drawRect(0, bottom, getWidth(), getHeight(), backgroundPaint);
+        }
     }
 
     @Override
@@ -3820,7 +3836,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 recordAudioVideoRunnable.run();
                 delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
                 setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
-                if (!NekomuraConfig.disableVibration.Bool()) {
+                if (!NekoConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
                 recordCircle.sendButtonVisible = true;
@@ -3852,7 +3868,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     recordAudioVideoRunnable.run();
                     delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
                     setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
-                    if (!NekomuraConfig.disableVibration.Bool()) {
+                    if (!NekoConfig.disableVibration.Bool()) {
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                     }
                     recordCircle.sendButtonVisible = true;
@@ -3867,7 +3883,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         } else {
 
-            if (StrUtil.isNotBlank(NekomuraConfig.openPGPApp.String())) {
+            if (StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
 
                 cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
                 cell.setOnClickListener(v -> {
@@ -3907,7 +3923,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                     menuPopupWindow.dismiss();
                 }
-                translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekomuraConfig.translateInputLang.String())));
+                translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
             });
             ActionBarMenuSubItem finalCell = cell;
             cell.setOnLongClickListener(v -> {
@@ -3928,7 +3944,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             cell.setTextAndIcon(LocaleController.getString("Translate", R.string.OpenCC), R.drawable.ic_translate);
             ActionBarMenuSubItem finalCell1 = cell;
             cell.setOnClickListener(v -> {
-                String ccTarget = TranslateDb.getChatCCTarget(chatId, NekomuraConfig.ccInputLang.String());
+                String ccTarget = TranslateDb.getChatCCTarget(chatId, NekoConfig.ccInputLang.String());
                 if (ccTarget == null || StringsKt.isBlank(ccTarget)) {
                     Translator.showCCTargetSelect(finalCell1, (target) -> {
                         if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
@@ -4039,11 +4055,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
 
     private boolean onSendLongClick(View view) {
-        if (parentFragment == null || isInScheduleMode()) {
+        if (isInScheduleMode()) {
             return false;
         }
-        TLRPC.Chat chat = parentFragment.getCurrentChat();
-        TLRPC.User user = parentFragment.getCurrentUser();
+
+        boolean self = parentFragment != null && UserObject.isUserSelf(parentFragment.getCurrentUser());
 
         if (sendPopupLayout == null) {
             sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity, resourcesProvider);
@@ -4072,50 +4088,35 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
             sendPopupLayout.setShownFromBotton(false);
 
-//            long chatId;
-//            if (chat != null) {
-//                chatId = chat.id;
-//            } else if (user != null) {
-//                chatId = user.id;
-//            } else {
-//                chatId = -1;
-//            }
-
-            int a = 0;
-
-            ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), a == 0, a == 1, resourcesProvider);
-
-            if (parentFragment.canScheduleMessage()) {
-                cell = new ActionBarMenuSubItem(getContext(), true, UserObject.isUserSelf(user) || slowModeTimer == 0 || isInScheduleMode());
-                if (UserObject.isUserSelf(user)) {
-                    cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+            boolean scheduleButtonValue = parentFragment != null && parentFragment.canScheduleMessage();
+            boolean sendWithoutSoundButtonValue = !(self || slowModeTimer > 0 && !isInScheduleMode());
+            if (scheduleButtonValue) {
+                ActionBarMenuSubItem scheduleButton = new ActionBarMenuSubItem(getContext(), true, !sendWithoutSoundButtonValue, resourcesProvider);
+                if (self) {
+                    scheduleButton.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
                 } else {
-                    cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                    scheduleButton.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
                 }
-                cell.setOnClickListener(v -> {
+                scheduleButton.setMinimumWidth(AndroidUtilities.dp(196));
+                scheduleButton.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
                     AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), this::sendMessageInternal, resourcesProvider);
                 });
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
+                sendPopupLayout.addView(scheduleButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             }
-
-            if (!UserObject.isUserSelf(user) && slowModeTimer == 0 && !isInScheduleMode()) {
-
-                cell = new ActionBarMenuSubItem(getContext(), parentFragment.canScheduleMessage(), true);
-                cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
-                cell.setOnClickListener(v -> {
+            if (sendWithoutSoundButtonValue) {
+                ActionBarMenuSubItem sendWithoutSoundButton = new ActionBarMenuSubItem(getContext(), !scheduleButtonValue, true, resourcesProvider);
+                sendWithoutSoundButton.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
+                sendWithoutSoundButton.setMinimumWidth(AndroidUtilities.dp(196));
+                sendWithoutSoundButton.setOnClickListener(v -> {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                         sendPopupWindow.dismiss();
                     }
                     sendMessageInternal(false, 0);
                 });
-                cell.setMinimumWidth(AndroidUtilities.dp(196));
-                sendPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
-
+                sendPopupLayout.addView(sendWithoutSoundButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             }
 
             sendPopupLayout.setupRadialSelectors(getThemedColor(Theme.key_dialogButtonSelector));
@@ -4153,8 +4154,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - sendPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8), y);
         sendPopupWindow.dimBehind();
         sendButton.invalidate();
-        if (!NekomuraConfig.disableVibration.Bool()) {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        if (!NekoConfig.disableVibration.Bool()) {
+            try {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception ignore) {}
         }
 
         return false;
@@ -4164,8 +4167,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         Intent intent = new Intent();
 
-        if (NekomuraConfig.openPGPKeyId.Long() != 0L && save)
-            intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NekomuraConfig.openPGPKeyId.Long());
+        if (NekoConfig.openPGPKeyId.Long() != 0L && save)
+            intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NekoConfig.openPGPKeyId.Long());
 
         signComment(intent, save);
 
@@ -4181,7 +4184,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                     long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0L);
 
-                    if (save) NekomuraConfig.openPGPKeyId.setConfigLong(keyId);
+                    if (save) NekoConfig.openPGPKeyId.setConfigLong(keyId);
 
                     signComment(result, save);
 
@@ -4223,7 +4226,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
                     if (error == null) return;
                     if (error.getMessage() != null && error.getMessage().contains("not found") && save) {
-                        NekomuraConfig.openPGPKeyId.setConfigLong(0L);
+                        NekoConfig.openPGPKeyId.setConfigLong(0L);
                         signComment(new Intent(), true);
                     } else {
                         AlertUtil.showToast(error.toString());
@@ -4381,7 +4384,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (videoSendButton == null) {
             return;
         }
-        if (NekomuraConfig.useChatAttachMediaMenu.Bool()) visible = animated = false;
+        if (NekoConfig.useChatAttachMediaMenu.Bool()) visible = animated = false;
 
         videoSendButton.setTag(visible ? 1 : null);
 
@@ -5200,7 +5203,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         videoToSendMessageObject = null;
         videoTimelineView.destroy();
 
-        if (videoSendButton != null && isInVideoMode() && !NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+        if (videoSendButton != null && isInVideoMode() && !NekoConfig.useChatAttachMediaMenu.Bool()) {
             videoSendButton.setVisibility(View.VISIBLE);
         } else if (audioSendButton != null) {
             audioSendButton.setVisibility(View.VISIBLE);
@@ -5288,7 +5291,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             AnimatorSet attachIconAnimator = null;
             AnimatorSet botIconAnimator = null;
-            if (attachButton != null && NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+            if (attachButton != null && NekoConfig.useChatAttachMediaMenu.Bool()) {
                 checkAttachButton(false, 150);
                 if (!attachButton.isShown()) {
                     attachButton.setAlpha(0f);
@@ -5385,7 +5388,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             recordPannelAnimation.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    recordedAudioPanel.setVisibility(GONE);
                     recordedAudioSeekBar.setAlpha(1f);
                     recordedAudioSeekBar.setTranslationX(0);
                     recordedAudioPlayButton.setAlpha(1f);
@@ -5399,6 +5401,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     messageEditText.setAlpha(1f);
                     messageEditText.setTranslationX(0);
                     messageEditText.requestFocus();
+                    recordedAudioPanel.setVisibility(GONE);
 
                 }
             });
@@ -5631,7 +5634,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
 
                     if (attachLayout != null) {
-                        if (!NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+                        if (!NekoConfig.useChatAttachMediaMenu.Bool()) {
                             runningAnimation2 = new AnimatorSet();
                             ArrayList<Animator> animators = new ArrayList<>();
                             animators.add(ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 0.0f));
@@ -5686,7 +5689,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         runningAnimation = new AnimatorSet();
 
                         ArrayList<Animator> animators = new ArrayList<>();
-                        if (NekomuraConfig.useChatAttachMediaMenu.Bool() && botButton.getVisibility() == VISIBLE) {
+                        if (NekoConfig.useChatAttachMediaMenu.Bool() && botButton.getVisibility() == VISIBLE) {
                             animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 0.1f));
                             animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 0.1f));
                             animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 0.0f));
@@ -5766,7 +5769,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             expandStickersButton.setVisibility(GONE);
                         }
                         if (attachLayout != null) {
-                            if (!NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+                            if (!NekoConfig.useChatAttachMediaMenu.Bool()) {
                                 attachLayout.setVisibility(GONE);
                                 if (delegate != null && getVisibility() == VISIBLE) {
                                     delegate.onAttachButtonHidden();
@@ -5818,7 +5821,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                     if (attachLayout != null) {
 
-                        if (!NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+                        if (!NekoConfig.useChatAttachMediaMenu.Bool()) {
                             runningAnimation2 = new AnimatorSet();
                             ArrayList<Animator> animators = new ArrayList<>();
                             animators.add(ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 0.0f));
@@ -5872,7 +5875,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     runningAnimation = new AnimatorSet();
 
                     ArrayList<Animator> animators = new ArrayList<>();
-                    if (NekomuraConfig.useChatAttachMediaMenu.Bool() && botButton.getVisibility() == VISIBLE) {
+                    if (NekoConfig.useChatAttachMediaMenu.Bool() && botButton.getVisibility() == VISIBLE) {
                         animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 0.1f));
                         animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 0.1f));
                         animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 0.0f));
@@ -5921,7 +5924,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(runningAnimation)) {
-                                if (NekomuraConfig.useChatAttachMediaMenu.Bool() && botButton != null) {
+                                if (NekoConfig.useChatAttachMediaMenu.Bool() && botButton != null) {
                                     botButton.setVisibility(View.GONE);
                                     updateFieldRight(1);
                                 }
@@ -5985,7 +5988,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         expandStickersButton.setVisibility(GONE);
                     }
                     if (attachLayout != null) {
-                        if (!NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+                        if (!NekoConfig.useChatAttachMediaMenu.Bool()) {
                             attachLayout.setVisibility(GONE);
                             if (delegate != null && getVisibility() == VISIBLE) {
                                 delegate.onAttachButtonHidden();
@@ -6205,7 +6208,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             scheduledButton.setTranslationX(0);
                         }
                     }
-                    if (NekomuraConfig.useChatAttachMediaMenu.Bool() && checkBotButton()) {
+                    if (NekoConfig.useChatAttachMediaMenu.Bool() && checkBotButton()) {
                         animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f));
                         animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f));
                         animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 1f));
@@ -6218,7 +6221,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             if (animation.equals(runningAnimation2)) {
                                 runningAnimation2 = null;
                             }
-                            if (NekomuraConfig.useChatAttachMediaMenu.Bool() && checkBotButton()) {
+                            if (NekoConfig.useChatAttachMediaMenu.Bool() && checkBotButton()) {
                                 updateBotButton(true);
                                 updateFieldRight(1);
                             }
@@ -6399,7 +6402,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         recordCircle.voiceEnterTransitionInProgress = false;
 
-        boolean isVid = isInVideoMode() && !NekomuraConfig.useChatAttachMediaMenu.Bool();
+        boolean isVid = isInVideoMode() && !NekoConfig.useChatAttachMediaMenu.Bool();
 
         if (recordingAudioVideo) {
             if (recordInterfaceState == 1) {
@@ -6844,7 +6847,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     audioVideoButtonContainer.setScaleY(0);
 
                     if (attachButton != null) {
-                        if (NekomuraConfig.useChatAttachMediaMenu.Bool()) {
+                        if (NekoConfig.useChatAttachMediaMenu.Bool()) {
                             checkAttachButton(false, 150);
                         } else if (attachButton.getVisibility() == View.VISIBLE) {
                             attachButton.setScaleX(0);
@@ -7329,6 +7332,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return audioVideoButtonContainer;
     }
 
+    public View getEmojiButton() {
+        return emojiButton[0];
+    }
+
     public EmojiView getEmojiView() {
         return emojiView;
     }
@@ -7606,10 +7613,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void updateSendAsButton() {
-        if (parentFragment == null) {
+        if (parentFragment == null || delegate == null) {
             return;
         }
-        if (NekomuraConfig.hideSendAsChannel.Bool())
+        if (NekoConfig.hideSendAsChannel.Bool())
             return;
         TLRPC.ChatFull full = parentFragment.getMessagesController().getChatFull(-dialog_id);
         TLRPC.Peer defPeer = full != null ? full.default_send_as : null;
@@ -7626,7 +7633,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         }
         boolean wasVisible = senderSelectView.getVisibility() == View.VISIBLE;
-        boolean isVisible = delegate.getSendAsPeers() != null && defPeer != null && delegate.getSendAsPeers().peers.size() > 1 && !isEditingMessage() && !isRecordingAudioVideo();
+        boolean isVisible = delegate.getSendAsPeers() != null && defPeer != null && delegate.getSendAsPeers().peers.size() > 1 && !isEditingMessage() && !isRecordingAudioVideo() && recordedAudioPanel.getVisibility() != View.VISIBLE;
         int pad = AndroidUtilities.dp(2);
         MarginLayoutParams params = (MarginLayoutParams) senderSelectView.getLayoutParams();
         float sA = isVisible ? 0 : 1;
@@ -7643,6 +7650,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             if (parentFragment.getOtherSameChatsDiff() == 0 && parentFragment.fragmentOpened) {
                 ValueAnimator anim = ValueAnimator.ofFloat(0, 1).setDuration(150);
+                senderSelectView.setTranslationX(sX);
+                messageEditText.setTranslationX(senderSelectView.getTranslationX());
                 anim.addUpdateListener(animation -> {
                     float val = (float) animation.getAnimatedValue();
 
