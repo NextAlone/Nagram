@@ -19759,7 +19759,7 @@ public class TLRPC {
         public ArrayList<TL_restrictionReason> restriction_reason = new ArrayList<>();
 
         public boolean verifiedExtended() {
-            return verified || ArrayUtil.contains(NekoXConfig.maindevelopers, id) && NekoXConfig.isDeveloper());
+            return verified || (ArrayUtil.contains(NekoXConfig.maindevelopers, id) && NekoXConfig.isDeveloper());
         }
 
 		public static User TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
