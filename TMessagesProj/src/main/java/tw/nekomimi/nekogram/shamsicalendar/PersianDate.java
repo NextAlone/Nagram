@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nkmr.NekomuraConfig;
 
 public class PersianDate {
 
@@ -71,7 +70,7 @@ public class PersianDate {
     this.changeTime();
   }
 
-  public static boolean displayPersianCalendarByLatin = NekomuraConfig.displayPersianCalendarByLatin.Bool();
+  public static boolean displayPersianCalendarByLatin = NekoConfig.displayPersianCalendarByLatin.Bool();
   
   /**
    * ---- Don not change---

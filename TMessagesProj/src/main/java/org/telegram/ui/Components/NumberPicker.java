@@ -44,7 +44,7 @@ import org.telegram.ui.ActionBar.Theme;
 import java.util.Locale;
 import tw.nekomimi.nekogram.NekoConfig;
 import org.telegram.messenger.LocaleController;
-import tw.nekomimi.nkmr.NekomuraConfig;
+
 
 public class NumberPicker extends LinearLayout {
 
@@ -112,7 +112,7 @@ public class NumberPicker extends LinearLayout {
     private final Theme.ResourcesProvider resourcesProvider;
 
     private boolean drawDividers = true;
-    public static boolean usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool();
+    public static boolean usePersianCalendar = NekoConfig.usePersianCalendar.Bool();
 
     public interface OnValueChangeListener {
         void onValueChange(NumberPicker picker, int oldVal, int newVal);

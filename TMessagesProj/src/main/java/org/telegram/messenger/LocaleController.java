@@ -105,8 +105,8 @@ public class LocaleController {
     private HashMap<String, String> translitChars;
     private HashMap<String, String> ruTranslitChars;
 
-    public static boolean usePersianCalendar = NekomuraConfig.usePersianCalendar.Bool(); // need restart
-    public static boolean displayPersianCalendarByLatin = NekomuraConfig.displayPersianCalendarByLatin.Bool();
+    public static boolean usePersianCalendar = NekoConfig.usePersianCalendar.Bool(); // need restart
+    public static boolean displayPersianCalendarByLatin = NekoConfig.displayPersianCalendarByLatin.Bool();
 
     private class TimeZoneChangedReceiver extends BroadcastReceiver {
         @Override

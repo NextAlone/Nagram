@@ -233,7 +233,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public static boolean checkApkInstallPermissions(final Context context) {
         if (Build.VERSION.SDK_INT >= 26 && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
+            builder.setTitle(LocaleController.getString("TeleTux", R.string.NekoX));
             builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
             builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialogInterface, i) -> {
                 try {
