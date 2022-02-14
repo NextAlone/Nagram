@@ -39,7 +39,7 @@ It gives us `telegram` -> `master` -> `master_8.3.1` -> `noshit_8.3.1`
 So **all the code changes** are in `noshit_8.3.1` (when this project started, actual version is
 different)
 
-### Detailed summary / noshit_8.4.3
+### Detailed summary / noshit_8.5.2
 
 * DISABLED ADS
     * YES!!1
@@ -146,7 +146,7 @@ It's very simple
 * build it
     * you can use official guide `https://core.telegram.org/reproducible-builds`
         * open the folder with the repo
-        * git checkout lastest **noshit** branch (`git checkout remotes/origin/noshit_8.4.4` for
+        * git checkout lastest **noshit** branch (`git checkout remotes/origin/noshit_8.5.2` for
           example)
         * run `docker build -t telegram-build .`
         * run `docker run --rm -v "$PWD":/home/source telegram-build`
