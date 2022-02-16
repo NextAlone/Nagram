@@ -10540,7 +10540,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (NekoConfig.channelAlias.Bool()) {
                     String aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
                     if (aliasName != null) {
-                        adminString = aliasName + " | " + channelStr;
+                        adminString = aliasName + " ★";
                     } else {
                         adminString = channelStr;
                     }
