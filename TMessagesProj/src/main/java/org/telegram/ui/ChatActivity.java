@@ -753,7 +753,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         destroyTextureView();
     };
 
-    private static boolean noForwardQuote;
+    public static boolean noForwardQuote;
     private TLRPC.ChatParticipant selectedParticipant;
 
     private Paint scrimPaint;

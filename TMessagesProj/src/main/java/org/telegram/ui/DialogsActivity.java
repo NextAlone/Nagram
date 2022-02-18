@@ -7230,7 +7230,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         ActionBarMenuSubItem sendWithoutSound = new ActionBarMenuSubItem(parentActivity, true, true, resourcesProvider);
         sendWithoutSound.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
         sendWithoutSound.setMinimumWidth(AndroidUtilities.dp(196));
-        sendPopupLayout2.addView(sendWithoutSound, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
         sendWithoutSound.setOnClickListener(v -> {
             if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                 sendPopupWindow.dismiss();
@@ -7241,6 +7240,32 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             delegate.didSelectDialogs(DialogsActivity.this, selectedDialogs, commentView.getFieldText(), false);
         });
+
+        ActionBarMenuSubItem showSendersNameView = new ActionBarMenuSubItem(parentActivity, true, true, false, resourcesProvider);
+        showSendersNameView.setTextAndIcon(LocaleController.getString("ShowSendersName", R.string.ShowSendersName), 0);
+        showSendersNameView.setChecked(!ChatActivity.noForwardQuote);
+
+        ActionBarMenuSubItem hideSendersNameView = new ActionBarMenuSubItem(parentActivity, true, false, true, resourcesProvider);
+        hideSendersNameView.setTextAndIcon(LocaleController.getString("HideSendersName", R.string.HideSendersName), 0);
+        hideSendersNameView.setChecked(ChatActivity.noForwardQuote);
+        showSendersNameView.setOnClickListener(e -> {
+            if (ChatActivity.noForwardQuote) {
+                ChatActivity.noForwardQuote = false;
+                showSendersNameView.setChecked(true);
+                hideSendersNameView.setChecked(false);
+            }
+        });
+        hideSendersNameView.setOnClickListener(e -> {
+            if (!ChatActivity.noForwardQuote) {
+                ChatActivity.noForwardQuote = true;
+                showSendersNameView.setChecked(false);
+                hideSendersNameView.setChecked(true);
+            }
+        });
+
+        sendPopupLayout2.addView(showSendersNameView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+        sendPopupLayout2.addView(hideSendersNameView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+        sendPopupLayout2.addView(sendWithoutSound, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
 
         layout.addView(sendPopupLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
