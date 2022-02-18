@@ -5170,6 +5170,8 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
 
             attachButton.setOnClickListener(this::onMenuClick);
             attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrChatAttachEnterMenu));
+            if (delegate != null)
+                delegate.onAttachButtonHidden();
 
         } else {
             attachButton.setTag(2);
