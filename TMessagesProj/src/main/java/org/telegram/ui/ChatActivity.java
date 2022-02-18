@@ -29352,7 +29352,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages) {
-        if (selectedObject != null && (isLongClick || isThreadChat()) && selectedObject.replyMessageObject != null) {
+        if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || isThreadChat())) {
             // If selected message contains `replyTo`:
             // When longClick it will reply to the `replyMessage` of selectedMessage
             // When not LongClick but in a threadchat: reply to the Thread
@@ -29366,7 +29366,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     SendMessagesHelper.getInstance(currentAccount)
                             .sendMessage(caption.toString(), dialog_id, replyTo,
                                     getThreadMessage(), null,
-                                    false, null, null, null,
+                                    false, selectedObject.messageOwner.entities, null, null,
                                     true, 0, null);
                 }
             } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
