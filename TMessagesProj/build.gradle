@@ -79,7 +79,7 @@ dependencies {
 
 ext.abiCodes = ['armeabi-v7a':1, 'arm64-v8a':5, x86:2, x86_64:6, 'universal':0]
 
-def officialVersionName = "8.5.2"
+def officialVersionName = "8.5.4"
 
 android {
     compileSdkVersion 31
@@ -156,7 +156,7 @@ android {
     }
     /* DO NOT MODIFY THIS LINE
     OTHERWISE YOU WILL GET ANNOYED MERGE CONFLICT
-    defaultConfig.versionCode = 2551
+    defaultConfig.versionCode = 2566
     */
 
     applicationVariants.all { variant ->

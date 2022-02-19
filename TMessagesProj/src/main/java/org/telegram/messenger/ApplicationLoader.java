@@ -44,6 +44,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 import top.qwq2333.nullgram.utils.AppcenterUtils;
 
+
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")

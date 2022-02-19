@@ -57,7 +57,9 @@ object Common {
             }
             repo.close()
             println("commit Count: $commitCount")
-            return 1645200000 + commitCount
+            val targetVersionCode = commitCount + 1645200000
+            println("target versionCode: $targetVersionCode")
+            return targetVersionCode
         } else {
             println("WARN: .git/HEAD does NOT exist")
             return 1
