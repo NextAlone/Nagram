@@ -396,6 +396,8 @@ android {
         versionName = versionName + "." + additional_build
         buildConfigField 'int', 'ADDITIONAL_BUILD_NUMBER', additional_build
 
+        buildConfigField 'boolean', 'SKIP_DNS_RESOLVER', (fdroid ? 'true' : 'false')
+
         externalNativeBuild {
             cmake {
                 version '3.10.2'
