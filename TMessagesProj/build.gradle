@@ -178,7 +178,7 @@ android {
         }
 
 
-        versionCode =  Common.getTimestamp()
+        versionCode = Common.getBuildVersionCode(rootProject)
 
         externalNativeBuild {
             cmake {
