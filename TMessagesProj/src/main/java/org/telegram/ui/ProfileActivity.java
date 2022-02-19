@@ -50,7 +50,6 @@ import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -96,9 +95,9 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import kotlin.Unit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import kotlin.Unit;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -131,7 +130,6 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
@@ -4510,38 +4508,29 @@ public class ProfileActivity extends BaseFragment implements
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy),
-                    LocaleController.getString("TranslateMessage", R.string.TranslateMessage)},
-                (dialogInterface, i) -> {
-                    try {
-                        String about;
-                        if (position == locationRow) {
-                            about = chatInfo != null
-                                && chatInfo.location instanceof TLRPC.TL_channelLocation
-                                ? ((TLRPC.TL_channelLocation) chatInfo.location).address
-                                : null;
-                        } else if (position == channelInfoRow) {
-                            about = chatInfo != null ? chatInfo.about : null;
-                        } else {
-                            about = userInfo != null ? userInfo.about : null;
-                        }
-                        if (TextUtils.isEmpty(about)) {
-                            return;
-                        }
-                        AndroidUtilities.addToClipboard(about);
-                        if (position == bioRow) {
-                            BulletinFactory.of(this).createCopyBulletin(
-                                    LocaleController.getString("BioCopied", R.string.BioCopied))
-                                .show();
-                        } else {
-                            BulletinFactory.of(this).createCopyBulletin(
-                                LocaleController.getString("TextCopied",
-                                    R.string.TextCopied)).show();
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+                try {
+                    String about;
+                    if (position == locationRow) {
+                        about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
+                    } else if (position == channelInfoRow) {
+                        about = chatInfo != null ? chatInfo.about : null;
+                    } else {
+                        about = userInfo != null ? userInfo.about : null;
                     }
-                });
+                    if (TextUtils.isEmpty(about)) {
+                        return;
+                    }
+                    AndroidUtilities.addToClipboard(about);
+                    if (position == bioRow) {
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("BioCopied", R.string.BioCopied)).show();
+                    } else {
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            });
             showDialog(builder.create());
             return !(view instanceof AboutLinkCell);
         }
