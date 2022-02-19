@@ -7,7 +7,7 @@ def verName = "8.5.4"
 def verCode = 581
 
 if (System.getenv("DEBUG_BUILD") == "true") {
-    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim()
+    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:%h -n 1").trim()
 }
 
 def officialVer = "8.5.4"
