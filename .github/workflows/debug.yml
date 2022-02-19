@@ -56,12 +56,12 @@ jobs:
           cat > service_account_credentials.json << EOF
           ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
           EOF
-          ./gradlew TMessagesProj:assembleRelease
-          ccache -s
           ccache -zp
           ccache -o max_size=10G
           ccache -o hash_dir=false
           ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
+          ./gradlew TMessagesProj:assembleRelease
+          ccache -s
           echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_X86=$(find TMessagesProj/build/outputs/apk -name '*x86.apk')" >> $GITHUB_ENV
