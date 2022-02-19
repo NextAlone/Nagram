@@ -38,7 +38,7 @@ jobs:
             TMessagesProj/build/intermediates/merged_native_libs
             ~/.cache/ccache
             ~/.ccache
-          key: jni-${{ hashFiles('TMessagesProj/jni/**') }}
+          key: native-cache
       - name: Gradle cache
         uses: actions/cache@v2
         with:
