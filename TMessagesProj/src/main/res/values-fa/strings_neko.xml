@@ -133,4 +133,14 @@
     <string name="SaveToDownloadCount_one">در حال ذخیره %1$d فایل در دانلودها</string>
     <string name="SaveToDownloadCount_other">در حال ذخیره %1$d فایل در دانلودها</string>
     <string name="SaveToDownloadCount_many">در حال ذخیره %1$d فایل در دانلودها</string>
+    <string name="doubleTapShowReactions">فقط نمایش واکنش‌ها با دوبار ضربه</string>
+    <string name="NekoGeneralNotification">اعلان</string>
+    <string name="disableNotificationBubbles">غیرفعال کردن حباب‌ها در اعلان</string>
+    <string name="doubleTapSendReactions">ارسال واکنش با دوبار ضربه (پیش‌فرض)</string>
+    <string name="ReactionsDisabled">غیرفعال کردن</string>
+    <string name="customSavePath">مسیر ذخیره سفارشی</string>
+    <string name="customSavePathHint">خالی بگذارید تا مستقیما ذخیره شود</string>
+    <string name="reactions">واکنش‌ها در منو</string>
+    <string name="showBottomActionsWhenSelecting">نمایش اقدامات در پایین هنگام انتخاب</string>
+    <string name="channelLabel">کانال</string>
 </resources>

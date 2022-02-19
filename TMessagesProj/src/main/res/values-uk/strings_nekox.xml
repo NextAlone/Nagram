@@ -80,7 +80,7 @@
     <string name="FilterNameUnreadDescription">Лише непрочитані повідомлення</string>
     <string name="FilterNameUnmutedAndUnread">Заблоковано &amp; Непрочитане</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Лише непрочитані повідомлення із неігнорованих чатів</string>
-    <string name="IgnoreMutedCount">Ігнорувати заглушену кількість непрочитаних повідомлень у вкладці папки</string>
+    <string name="IgnoreMutedCount">Не лічити заглушених непрочитаних у вкладці теки</string>
     <string name="DialogsSettings">Налаштування діалогів</string>
     <string name="SortMenu">Діалогові параметри сортування</string>
     <string name="SortByUnread">Сортувати за непрочитаними</string>
@@ -94,7 +94,7 @@
     <string name="DisableSystemAccount">Вимкнути системний обліковий запис</string>
     <string name="FilterMenu">Меню фільтру діалогів</string>
     <string name="DisableProxyWhenVpnEnabled">Вимкнути проксі, коли ввімкнено VPN</string>
-    <string name="UseProxyItem">Використовувати значення проксі-сервера в бічній панелі замість кнопки</string>
+    <string name="UseProxyItem">Кнопка проксі в бічній панелі, не в заголовку</string>
     <string name="HideProxyByDefault">Приховати налаштування проксі за замовчуванням</string>
     <string name="SkipOpenLinkConfirm">Підтвердити відкриття посилання</string>
     <string name="DeleteAllInChat">Видалити все у чаті</string>
@@ -182,7 +182,7 @@
     <string name="PGPImport">Імпортувати відкритий ключ</string>
     <string name="PGPImportPrivate">Імпорт приватного ключа</string>
     <string name="ShareMyKey">Поділіться моїм публічним ключем</string>
-    <string name="DisableVibration">Вібрація вимкнено</string>
+    <string name="DisableVibration">Вимкнути вібрацію</string>
     <string name="IgnoreContentRestrictions">Ігнорувати обмеження на контент</string>
     <string name="IgnoreContentRestrictionsNotice">Локально ігнорує обмеження Android щодо повідомлень.</string>
     <string name="SendCommentAfterForward">Відправити коментар після перенаправлення</string>

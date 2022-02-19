@@ -20,7 +20,7 @@
     <string name="CustomApiInput">Ввести вручную</string>
     <string name="CheckUpdate">Проверить обновления</string>
     <string name="SwitchVersion">Все версии на Github</string>
-    <string name="NoUpdate">Обновление не найдено</string>
+    <string name="NoUpdate">Обновлений не найдено</string>
     <string name="UpdateAvailable">Доступно обновление</string>
     <string name="UpdateUpdate">Обновить</string>
     <string name="UpdateLater">Позже</string>
@@ -265,10 +265,16 @@
     <string name="unreadBadgeOnBackButton">Счетчик непрочтённых рядом с кнопкой «Назад»</string>
     <string name="useCustomEmojiInvalid">С zip-архивом эмодзи что-то не так.</string>
     <string name="DeleteDownloadedFileSucceed">Удалено</string>
-    <string name="DisableInstantCamera">Выключить мгновенную камеру</string>
+    <string name="DisableInstantCamera">Скрыть превью с камеры в панели «Прикрепить»</string>
     <string name="rememberAllBackMessages">Запомнить все нажатые ответы</string>
-    <string name="showSeconds">Показывать временную метку в секундах</string>
+    <string name="showSeconds">Время с секундами</string>
     <string name="AppUpdateNekoX">Обновить Nekogram X</string>
-    <string name="AutoCheckUpdatePreview">Предварительный просмотр (нестабильный)</string>
+    <string name="AutoCheckUpdatePreview">Preview (предварительные сборки)</string>
     <string name="NekoXUpdateTranslationHint">Нажмите, чтобы перевести журнал изменений</string>
+    <string name="Name">Имя</string>
+    <string name="channelAlias">Свои лычки для сообщений от каналов</string>
+    <string name="channelAliasDetails">Сначала включите \"Помечать сообщения от каналов\".</string>
+    <string name="setChannelAliasName">Добавить лычку</string>
+    <string name="labelChannelUser">Помечать сообщения от каналов</string>
+    <string name="labelChannelUserDetails">Сообщения от имени каналов будут помечаться «лычка | канал»</string>
 </resources>

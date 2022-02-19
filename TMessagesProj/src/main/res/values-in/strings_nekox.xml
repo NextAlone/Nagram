@@ -42,7 +42,7 @@
     <string name="AllowFlashCall">Izinkan panggilan cepat</string>
     <string name="ChangeTranslateProvider">Ubah Penyedia</string>
     <string name="ProviderYandexTranslate">Penerjemah.Yandex</string>
-    <string name="GoogleCloudTransKey">Google Cloud Translate Key</string>
+    <string name="GoogleCloudTransKey">Token Google Cloud Translate</string>
     <string name="GoogleCloudTransKeyNotice">Jika Anda menyiapkan Google Cloud Trans Key, API terjemahan Cloud akan dipanggil, guna mengirimkan formulir palsu ke versi web saat menerjemahkan (lebih cepat, stabil, dan menghemat lalu lintas).</string>
     <string name="TransToLang">Tujuan bahasa yang ingin di terjemahkan</string>
     <string name="TransInputToLang">Asal bahasa yang ingin di terjemahkan</string>
@@ -197,7 +197,7 @@
     <string name="FCTitle">Tentang pembaruan aplikasi</string>
     <string name="FCInfo">Ikuti kanal pengumuman dan pembaruan kami\?</string>
     <string name="CCTitle">OpenCC (Konversi Cina)</string>
-    <string name="CCTarget">Target</string>
+    <string name="CCTarget">Tujuan</string>
     <string name="CCNo">Kosong</string>
     <string name="CCTC">Cina tradisional</string>
     <string name="CCHK">China Aksara Tradisional (Hong Kong)</string>

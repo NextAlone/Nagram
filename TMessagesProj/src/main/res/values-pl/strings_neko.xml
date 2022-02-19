@@ -140,4 +140,6 @@
     <string name="SaveToDownloadCount_few">Zapisywanie %1$d plików do pobranych</string>
     <string name="SaveToDownloadCount_many">Zapisywanie %1$d plików do pobranych</string>
     <string name="SaveToDownloadCount_zero">Zapisywanie %1$d plików do pobranych</string>
+    <string name="showBottomActionsWhenSelecting">Pokaż działania u dołu podczas wybierania</string>
+    <string name="channelLabel">kanał</string>
 </resources>

@@ -1081,6 +1081,9 @@ JNIEXPORT jint Java_org_telegram_messenger_Utilities_saveProgressiveJpeg(JNIEnv 
         return 0;
     }
     const char *pathStr = env->GetStringUTFChars(path, 0);
+    if (pathStr == NULL) {
+        return 0;
+    }
     std::string filePath = std::string(pathStr);
     if (pathStr != 0) {
         env->ReleaseStringUTFChars(path, pathStr);
