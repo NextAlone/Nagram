@@ -1805,8 +1805,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                 }
                                             } else if (path.startsWith("@id")) {
                                                 try {
-
-                                                    int userId = Utilities.parseInt(StringsKt.substringAfter(path, "@id", "0"));
+                                                    long userId = Utilities.parseLong(StringsKt.substringAfter(path, "@id", "0"));
                                                     if (userId != 0) {
                                                         push_user_id = userId;
                                                     }
@@ -2093,7 +2092,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                         try {
                                             url = url.replace("tg:user", "tg://telegram.org").replace("tg://user", "tg://telegram.org");
                                             data = Uri.parse(url);
-                                            int userId = Utilities.parseInt(data.getQueryParameter("id"));
+                                            long userId = Utilities.parseLong(data.getQueryParameter("id"));
                                             if (userId != 0) {
                                                 push_user_id = userId;
                                             }
