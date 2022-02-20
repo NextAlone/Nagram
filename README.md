@@ -51,7 +51,6 @@ NekoX is an **free and open source** third-party Telegram client, based on Teleg
 - OpenKeychain client (sign / verify / decrypt / import)
 - Google Cloud Translate / Yandex.Translate support
 - Custom cache directory (supports external storage)
-- Custom app ID and Hash (optional NekoX / Android / Android X or Manual input)
 - Custom server (official, test DC)
 - Keep the original file name when downloading files
 - View the data center you belong to when you don't have an avatar
@@ -115,24 +114,14 @@ rustup default $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
 rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
 ```
 
-This step can be skipped if you want to build a `mini` release.
-
 4. Build native dependencies: `./run init libs`
-5. Build external libraries and native code: 
-
-For full release:
+5. Build external libraries and native code:
 
 `./run libs update`
 
-For mini release:
-```
-./run libs v2ray
-./run libs native # libtmessages.so
-```
- 
-9. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
-10. Replace TMessagesProj/google-services.json if you want fcm to work.
-11. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
+6. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
+7. Replace TMessagesProj/google-services.json if you want fcm to work.
+8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
 
 `./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 
