@@ -4982,4 +4982,5 @@
     <string name="BlurInChat">Blur in chat</string>
     <string name="ReadAllReactions">Read all reactions</string>
     <string name="ReadAllMentions">Read all mentions</string>
+    <string name="notAllowedWhenChannelAliasIsEnabled">You cannot disable it when Channel Alias is enabled!</string>
 </resources>

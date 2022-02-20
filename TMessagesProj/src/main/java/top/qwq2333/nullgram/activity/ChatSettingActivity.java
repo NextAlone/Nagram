@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import kotlin.Unit;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.PopupBuilder;
+import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -136,6 +137,9 @@ public class ChatSettingActivity extends BaseFragment {
                         ((TextCheckCell) view).setChecked(
                             ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
                     }
+                } else {
+                    AndroidUtilities.shakeView(view, 2, 0);
+                    AlertUtil.showToast(LocaleController.getString("notAllowedWhenChannelAliasIsEnabled", R.string.notAllowedWhenChannelAliasIsEnabled));
                 }
             } else if (position == displaySpoilerDirectlyRow) {
                 ConfigManager.toggleBoolean(Defines.displaySpoilerMsgDirectly);
@@ -369,7 +373,7 @@ public class ChatSettingActivity extends BaseFragment {
                     if (position == messageMenuRow) {
                         textCell.setText(
                             LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
-                    } else if (position == maxRecentStickerRow){
+                    } else if (position == maxRecentStickerRow) {
                         textCell.setText(
                             LocaleController.getString("maxRecentSticker", R.string.maxRecentSticker), false);
 
