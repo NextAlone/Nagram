@@ -47,6 +47,7 @@ public class Defines {
     public static final String showHiddenSettings = "showHiddenSettings";
     public static final String confirmToSendMediaMessages = "confirmToSendMediaMessages";
     public static final String disableUndo = "disableUndo";
+    public static final String skipOpenLinkConfirm = "skipOpenLinkConfirm";
 
     // Custom API
     public static final String customAPI = "customAPI";

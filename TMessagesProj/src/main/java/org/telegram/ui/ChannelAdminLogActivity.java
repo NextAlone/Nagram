@@ -118,6 +118,9 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class ChannelAdminLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     protected TLRPC.Chat currentChat;
@@ -1969,7 +1972,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public void showOpenUrlAlert(final String url, boolean ask) {
-        if (Browser.isInternalUrl(url, null) || !ask) {
+        if (Browser.isInternalUrl(url, null) || !ask || ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm)) {
             Browser.openUrl(getParentActivity(), url, true);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());

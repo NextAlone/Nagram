@@ -51,6 +51,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int showExactNumberRow;
     private int disableInstantCameraRow;
     private int disableUndoRow;
+    private int skipOpenLinkConfirmRow;
     private int general2Row;
 
 
@@ -125,6 +126,12 @@ public class GeneralSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.disableUndo));
                 }
+            } else if (position == skipOpenLinkConfirmRow) {
+                ConfigManager.toggleBoolean(Defines.skipOpenLinkConfirm);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm));
+                }
             }
         });
 
@@ -161,6 +168,7 @@ public class GeneralSettingActivity extends BaseFragment {
         showExactNumberRow = rowCount++;
         disableInstantCameraRow = rowCount++;
         disableUndoRow = rowCount++;
+        skipOpenLinkConfirmRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -315,6 +323,10 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("disableUndo",
                             R.string.disableUndo), ConfigManager.getBooleanOrFalse(
                             Defines.disableUndo), true);
+                    } else if (position == skipOpenLinkConfirmRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("skipOpenLinkConfirm",
+                            R.string.skipOpenLinkConfirm), ConfigManager.getBooleanOrFalse(
+                            Defines.skipOpenLinkConfirm), true);
                     }
                     break;
                 }
