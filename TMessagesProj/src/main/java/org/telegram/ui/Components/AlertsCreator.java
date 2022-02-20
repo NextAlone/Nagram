@@ -987,6 +987,11 @@ public class AlertsCreator {
         showOpenUrlAlert(fragment, url, punycode, true, ask, resourcesProvider);
     }
 
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask) {
+        showOpenUrlAlert(fragment, url, punycode, tryTelegraph, ask, null);
+    }
+
+
     public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
