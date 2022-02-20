@@ -8,11 +8,12 @@ import android.provider.OpenableColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -30,6 +31,9 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+
+import java.util.ArrayList;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
 
@@ -46,6 +50,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int hidePhoneRow;
     private int showExactNumberRow;
     private int disableInstantCameraRow;
+    private int disableUndoRow;
     private int general2Row;
 
 
@@ -114,6 +119,12 @@ public class GeneralSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera));
                 }
+            } else if (position == disableUndoRow) {
+                ConfigManager.toggleBoolean(Defines.disableUndo);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.disableUndo));
+                }
             }
         });
 
@@ -149,6 +160,7 @@ public class GeneralSettingActivity extends BaseFragment {
         hidePhoneRow = rowCount++;
         showExactNumberRow = rowCount++;
         disableInstantCameraRow = rowCount++;
+        disableUndoRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -299,6 +311,10 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("disableInstantCamera",
                             R.string.disableInstantCamera), ConfigManager.getBooleanOrFalse(
                             Defines.disableInstantCamera), true);
+                    } else if (position == disableUndoRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("disableUndo",
+                            R.string.disableUndo), ConfigManager.getBooleanOrFalse(
+                            Defines.disableUndo), true);
                     }
                     break;
                 }

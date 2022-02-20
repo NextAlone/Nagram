@@ -58,6 +58,9 @@ import org.telegram.ui.PaymentFormActivity;
 
 import java.util.ArrayList;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 @SuppressWarnings("FieldCanBeLocal")
 public class UndoView extends FrameLayout {
 
@@ -446,6 +449,12 @@ public class UndoView extends FrameLayout {
         currentAction = action;
         timeLeft = 5000;
         currentInfoObject = infoObject;
+
+        if (ConfigManager.getBooleanOrFalse(Defines.disableUndo) && !isTooltipAction()) {
+            if (actionRunnable != null) actionRunnable.run();
+            return;
+        }
+
         lastUpdateTime = SystemClock.elapsedRealtime();
         undoTextView.setText(LocaleController.getString("Undo", R.string.Undo).toUpperCase());
         undoImageView.setVisibility(VISIBLE);

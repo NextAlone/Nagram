@@ -46,6 +46,7 @@ public class Defines {
     public static final String disableInstantCamera = "disableInstantCamera";
     public static final String showHiddenSettings = "showHiddenSettings";
     public static final String confirmToSendMediaMessages = "confirmToSendMediaMessages";
+    public static final String disableUndo = "disableUndo";
 
     // Custom API
     public static final String customAPI = "customAPI";
