@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -32,7 +33,15 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import kotlin.Unit;
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.ui.PopupBuilder;
 import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -55,6 +64,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int disableTrendingStickerRow;
     private int disableQuickReactionRow;
     private int confirmToSendMediaMessagesRow;
+    private int maxRecentStickerRow;
     private int chat2Row;
 
 
@@ -169,6 +179,19 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages)
                     );
                 }
+            } else if (position == maxRecentStickerRow) {
+                final int[] counts = {20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
+                List<String> types = Arrays.stream(counts)
+                    .filter(i -> i <= getMessagesController().maxRecentStickersCount)
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.toList());
+                PopupBuilder builder = new PopupBuilder(view);
+                builder.setItems(types, (i, str) -> {
+                    ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(str.toString()));
+                    listAdapter.notifyItemChanged(maxRecentStickerRow);
+                    return Unit.INSTANCE;
+                });
+                builder.show();
             }
         });
 
@@ -213,6 +236,7 @@ public class ChatSettingActivity extends BaseFragment {
         disableTrendingStickerRow = rowCount++;
         disableQuickReactionRow = rowCount++;
         confirmToSendMediaMessagesRow = rowCount++;
+        maxRecentStickerRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -345,6 +369,10 @@ public class ChatSettingActivity extends BaseFragment {
                     if (position == messageMenuRow) {
                         textCell.setText(
                             LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
+                    } else if (position == maxRecentStickerRow){
+                        textCell.setText(
+                            LocaleController.getString("maxRecentSticker", R.string.maxRecentSticker), false);
+
                     }
                     break;
                 }
@@ -482,7 +510,7 @@ public class ChatSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == chat2Row) {
                 return 1;
-            } else if (position == messageMenuRow) {
+            } else if (position == messageMenuRow || position == maxRecentStickerRow) {
                 return 2;
             } else if (position == chatRow) {
                 return 4;

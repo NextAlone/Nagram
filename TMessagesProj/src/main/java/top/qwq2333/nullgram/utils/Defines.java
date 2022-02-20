@@ -48,6 +48,7 @@ public class Defines {
     public static final String confirmToSendMediaMessages = "confirmToSendMediaMessages";
     public static final String disableUndo = "disableUndo";
     public static final String skipOpenLinkConfirm = "skipOpenLinkConfirm";
+    public static final String maxRecentSticker = "maxRecentSticker";
 
     // Custom API
     public static final String customAPI = "customAPI";

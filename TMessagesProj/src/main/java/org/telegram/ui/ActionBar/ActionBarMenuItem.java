@@ -1849,4 +1849,26 @@ public class ActionBarMenuItem extends FrameLayout {
             return color != null ? color : Theme.getColor(key);
         }
     }
+
+    private View anchor;
+
+    public View getAnchor() {
+        return anchor;
+    }
+
+    public void setAnchor(View anchor) {
+        this.anchor = anchor;
+    }
+
+    public boolean isShowOnTop() {
+        return showOnTop;
+    }
+
+    public void setShowOnTop(boolean showOnTop) {
+        this.showOnTop = showOnTop;
+    }
+
+    private boolean showOnTop;
+
+
 }
