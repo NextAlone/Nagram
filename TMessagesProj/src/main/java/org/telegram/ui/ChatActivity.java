@@ -2362,6 +2362,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     StringBuilder str = new StringBuilder();
                     ArrayList<Integer> toDeleteMessagesIds = new ArrayList<>();
                     MessageObject replyTo = getThreadMessage();
+                    ArrayList<Character> suffice_en = new ArrayList(Arrays.asList(',', '.', '!', '?', ':', ';', '(', ')'));
+                    ArrayList<Character> suffice_zh = new ArrayList(Arrays.asList('，', '。', '！', '？', '：', '；', '（', '）'));
                     for (int a = 1; a >= 0; a--) {
                         ArrayList<Integer> ids = new ArrayList<>();
                         for (int b = 0; b < selectedMessagesCanCopyIds[a].size(); b++) {
@@ -2379,7 +2381,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 replyTo = messageObject.replyMessageObject;
                             }
                             if (str.length() != 0) {
-                                str.append("  ");
+                                if (!suffice_en.contains(str.charAt(str.length() - 1)) && !suffice_zh.contains(str.charAt(str.length() - 1))) {
+                                    // add comma refer to language
+                                    if (LocaleController.getInstance().getCurrentLocale().getLanguage().equals("zh")) {
+                                        str.append('，');
+                                    } else {
+                                        str.append(',');
+                                    }
+                                }
                             }
                             str.append(messageObject.messageText);
                             if (messageObject.getSenderId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
