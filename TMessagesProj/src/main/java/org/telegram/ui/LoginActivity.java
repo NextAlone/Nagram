@@ -67,23 +67,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
+
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicInteger;
-import kotlin.Unit;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -128,6 +115,23 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
 import org.telegram.ui.Components.VerticalPositionAutoAnimator;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.utils.Defines;
@@ -593,11 +597,9 @@ public class LoginActivity extends BaseFragment {
         qrItem = menu.addItem(qr_login, R.drawable.msg_qrcode);
         qrItem.setContentDescription(
             LocaleController.getString("QRLoginTitle", R.string.QRLoginTitle));
-        if(ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)){
-            customApiItem = menu.addItem(menu_custom_api, R.drawable.menu_settings);
-            customApiItem.setContentDescription(
-                LocaleController.getString("customApi", R.string.customAPI));
-        }
+        customApiItem = menu.addItem(menu_custom_api, R.drawable.menu_settings);
+        customApiItem.setContentDescription(
+            LocaleController.getString("customApi", R.string.customAPI));
         FrameLayout container = new FrameLayout(context) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
