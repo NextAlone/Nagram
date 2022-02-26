@@ -12,11 +12,11 @@ public class PatternImpl implements Prism4j.Pattern {
     private final Prism4j.Grammar inside;
 
     public PatternImpl(
-            @NonNull java.util.regex.Pattern regex,
-            boolean lookbehind,
-            boolean greedy,
-            @Nullable String alias,
-            @Nullable Prism4j.Grammar inside) {
+        @NonNull java.util.regex.Pattern regex,
+        boolean lookbehind,
+        boolean greedy,
+        @Nullable String alias,
+        @Nullable Prism4j.Grammar inside) {
         this.regex = regex;
         this.lookbehind = lookbehind;
         this.greedy = greedy;

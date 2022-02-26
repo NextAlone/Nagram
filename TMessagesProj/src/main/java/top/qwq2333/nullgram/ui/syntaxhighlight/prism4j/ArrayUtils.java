@@ -12,8 +12,8 @@ abstract class ArrayUtils {
     @NonNull
     static <T> List<T> toList(T... args) {
         final int length = args != null
-                ? args.length
-                : 0;
+            ? args.length
+            : 0;
         final List<T> list = new ArrayList<>(length);
         if (length > 0) {
             Collections.addAll(list, args);

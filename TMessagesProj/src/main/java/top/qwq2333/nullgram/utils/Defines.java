@@ -88,4 +88,36 @@ public class Defines {
         1714986438, // CI Channel
         1477185964  // Discussion Group
     };
+    /**
+     * 数组中元素未找到的下标，值为-1
+     */
+    public static final int indexNotFound = -1;
+    /**
+     * 数组中是否包含元素
+     *
+     * @param array 数组
+     * @param value 被检查的元素
+     * @return 是否包含
+     */
+    public static boolean contains(long[] array, long value) {
+        return indexOf(array, value) > indexNotFound;
+    }
+
+    /**
+     * 返回数组中指定元素所在位置，未找到返回{@link #indexNotFound}
+     *
+     * @param array 数组
+     * @param value 被检查的元素
+     * @return 数组中指定元素所在位置，未找到返回{@link #indexNotFound}
+     */
+    public static int indexOf(long[] array, long value) {
+        if (null != array) {
+            for (int i = 0; i < array.length; i++) {
+                if (value == array[i]) {
+                    return i;
+                }
+            }
+        }
+        return indexNotFound;
+    }
 }

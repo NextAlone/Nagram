@@ -21,37 +21,37 @@ public abstract class Prism_css {
     public static Prism4j.Grammar create(@NonNull Prism4j prism4j) {
 
         final Prism4j.Grammar grammar = grammar(
-                "css",
-                token("comment", pattern(compile("\\/\\*[\\s\\S]*?\\*\\/"))),
-                token(
-                        "atrule",
-                        pattern(
-                                compile("@[\\w-]+?.*?(?:;|(?=\\s*\\{))", CASE_INSENSITIVE),
-                                false,
-                                false,
-                                null,
-                                grammar(
-                                        "inside",
-                                        token("rule", pattern(compile("@[\\w-]+")))
-                                )
-                        )
-                ),
-                token(
-                        "url",
-                        pattern(compile("url\\((?:([\"'])(?:\\\\(?:\\r\\n|[\\s\\S])|(?!\\1)[^\\\\\\r\\n])*\\1|.*?)\\)", CASE_INSENSITIVE))
-                ),
-                token("selector", pattern(compile("[^{}\\s][^{};]*?(?=\\s*\\{)"))),
-                token(
-                        "string",
-                        pattern(compile("(\"|')(?:\\\\(?:\\r\\n|[\\s\\S])|(?!\\1)[^\\\\\\r\\n])*\\1"), false, true)
-                ),
-                token(
-                        "property",
-                        pattern(compile("[-_a-z\\xA0-\\uFFFF][-\\w\\xA0-\\uFFFF]*(?=\\s*:)", CASE_INSENSITIVE))
-                ),
-                token("important", pattern(compile("\\B!important\\b", CASE_INSENSITIVE))),
-                token("function", pattern(compile("[-a-z0-9]+(?=\\()", CASE_INSENSITIVE))),
-                token("punctuation", pattern(compile("[(){};:]")))
+            "css",
+            token("comment", pattern(compile("\\/\\*[\\s\\S]*?\\*\\/"))),
+            token(
+                "atrule",
+                pattern(
+                    compile("@[\\w-]+?.*?(?:;|(?=\\s*\\{))", CASE_INSENSITIVE),
+                    false,
+                    false,
+                    null,
+                    grammar(
+                        "inside",
+                        token("rule", pattern(compile("@[\\w-]+")))
+                    )
+                )
+            ),
+            token(
+                "url",
+                pattern(compile("url\\((?:([\"'])(?:\\\\(?:\\r\\n|[\\s\\S])|(?!\\1)[^\\\\\\r\\n])*\\1|.*?)\\)", CASE_INSENSITIVE))
+            ),
+            token("selector", pattern(compile("[^{}\\s][^{};]*?(?=\\s*\\{)"))),
+            token(
+                "string",
+                pattern(compile("(\"|')(?:\\\\(?:\\r\\n|[\\s\\S])|(?!\\1)[^\\\\\\r\\n])*\\1"), false, true)
+            ),
+            token(
+                "property",
+                pattern(compile("[-_a-z\\xA0-\\uFFFF][-\\w\\xA0-\\uFFFF]*(?=\\s*:)", CASE_INSENSITIVE))
+            ),
+            token("important", pattern(compile("\\B!important\\b", CASE_INSENSITIVE))),
+            token("function", pattern(compile("[-a-z0-9]+(?=\\()", CASE_INSENSITIVE))),
+            token("punctuation", pattern(compile("[(){};:]")))
         );
 
         // can we maybe add some helper to specify simplified location?
@@ -70,16 +70,16 @@ public abstract class Prism_css {
         final Prism4j.Grammar markup = prism4j.grammar("markup");
         if (markup != null) {
             GrammarUtils.insertBeforeToken(markup, "tag",
-                    token(
-                            "style",
-                            pattern(
-                                    compile("(<style[\\s\\S]*?>)[\\s\\S]*?(?=<\\/style>)", CASE_INSENSITIVE),
-                                    true,
-                                    true,
-                                    "language-css",
-                                    grammar
-                            )
+                token(
+                    "style",
+                    pattern(
+                        compile("(<style[\\s\\S]*?>)[\\s\\S]*?(?=<\\/style>)", CASE_INSENSITIVE),
+                        true,
+                        true,
+                        "language-css",
+                        grammar
                     )
+                )
             );
 
             // important thing here is to clone found grammar
@@ -99,40 +99,40 @@ public abstract class Prism_css {
             }
 
             GrammarUtils.insertBeforeToken(markup, "tag/attr-value",
-                    token(
-                            "style-attr",
-                            pattern(
-                                    compile("\\s*style=(\"|')(?:\\\\[\\s\\S]|(?!\\1)[^\\\\])*\\1", CASE_INSENSITIVE),
+                token(
+                    "style-attr",
+                    pattern(
+                        compile("\\s*style=(\"|')(?:\\\\[\\s\\S]|(?!\\1)[^\\\\])*\\1", CASE_INSENSITIVE),
+                        false,
+                        false,
+                        "language-css",
+                        grammar(
+                            "inside",
+                            token(
+                                "attr-name",
+                                pattern(
+                                    compile("^\\s*style", CASE_INSENSITIVE),
                                     false,
                                     false,
-                                    "language-css",
-                                    grammar(
-                                            "inside",
-                                            token(
-                                                    "attr-name",
-                                                    pattern(
-                                                            compile("^\\s*style", CASE_INSENSITIVE),
-                                                            false,
-                                                            false,
-                                                            null,
-                                                            markupTagInside
-                                                    )
-                                            ),
-                                            token("punctuation", pattern(compile("^\\s*=\\s*['\"]|['\"]\\s*$"))),
-                                            token(
-                                                    "attr-value",
-                                                    pattern(
-                                                            compile(".+", CASE_INSENSITIVE),
-                                                            false,
-                                                            false,
-                                                            null,
-                                                            grammar
-                                                    )
-                                            )
-
-                                    )
+                                    null,
+                                    markupTagInside
+                                )
+                            ),
+                            token("punctuation", pattern(compile("^\\s*=\\s*['\"]|['\"]\\s*$"))),
+                            token(
+                                "attr-value",
+                                pattern(
+                                    compile(".+", CASE_INSENSITIVE),
+                                    false,
+                                    false,
+                                    null,
+                                    grammar
+                                )
                             )
+
+                        )
                     )
+                )
             );
         }
 

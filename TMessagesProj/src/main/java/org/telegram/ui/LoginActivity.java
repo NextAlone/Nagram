@@ -129,13 +129,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.NumberUtils;
+import top.qwq2333.nullgram.utils.StringUtils;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment {
@@ -490,13 +490,13 @@ public class LoginActivity extends BaseFragment {
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before,
                             int count) {
-                            if (StrUtil.isBlank(s.toString())) {
+                            if (StringUtils.isBlank(s.toString())) {
                                 ConfigManager.putInt(Defines.customAppId, 0);
-                            } else if (!NumberUtil.isInteger(s.toString())) {
+                            } else if (!NumberUtils.isInteger(s.toString())) {
                                 inputs[0].setText("0");
                             } else {
                                 ConfigManager.putInt(Defines.customAppId,
-                                    NumberUtil.parseInt(s.toString()));
+                                    NumberUtils.parseInt(s.toString()));
                             }
                         }
 
@@ -508,7 +508,7 @@ public class LoginActivity extends BaseFragment {
                     inputs[1] = builder.addEditText("App Hash");
                     inputs[1].setFilters(new InputFilter[]{
                         new InputFilter.LengthFilter(Defines.telegramHash.length())});
-                    if (StrUtil.isNotBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
+                    if (!StringUtils.isBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
                         inputs[1].setText(ConfigManager.getStringOrDefault(Defines.customAppHash, "It shouldn't be happened"));
                     }
                     inputs[1].addTextChangedListener(new TextWatcher() {
@@ -551,7 +551,7 @@ public class LoginActivity extends BaseFragment {
 
                                 return Unit.INSTANCE;
 
-                            } else if (StrUtil.isBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
+                            } else if (StringUtils.isBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
 
                                 inputs[1].requestFocus();
                                 AndroidUtilities.showKeyboard(inputs[1]);

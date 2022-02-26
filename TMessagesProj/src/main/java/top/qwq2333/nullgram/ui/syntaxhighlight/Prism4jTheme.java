@@ -35,10 +35,10 @@ public interface Prism4jTheme {
     int textColor();
 
     void apply(
-            @NonNull String language,
-            @NonNull Prism4j.Syntax syntax,
-            @NonNull Spannable spannable,
-            int start,
-            int end
+        @NonNull String language,
+        @NonNull Prism4j.Syntax syntax,
+        @NonNull Spannable spannable,
+        int start,
+        int end
     );
 }

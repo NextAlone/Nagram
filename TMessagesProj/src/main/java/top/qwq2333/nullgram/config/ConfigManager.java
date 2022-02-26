@@ -22,20 +22,24 @@ package top.qwq2333.nullgram.config;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import kotlin.text.StringsKt;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.ApplicationLoader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import kotlin.text.StringsKt;
 import top.qwq2333.nullgram.utils.AppcenterUtils;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
 
@@ -291,7 +295,7 @@ public class ConfigManager {
      * @throws JSONException Ignore 一般不会发生
      */
     private static void SharedPreferenceToJSON(@NonNull String sp, @NonNull JSONObject object,
-        @Nullable Function<String, Boolean> filter) throws JSONException {
+                                               @Nullable Function<String, Boolean> filter) throws JSONException {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences(
             sp, Activity.MODE_PRIVATE);
         JSONObject jsonConfig = new JSONObject();

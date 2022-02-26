@@ -29,14 +29,15 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.JsonObject;
 import com.jakewharton.processphoenix.ProcessPhoenix;
-import java.io.File;
-import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -61,6 +62,10 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DocumentSelectActivity;
 import org.telegram.ui.LaunchActivity;
+
+import java.io.File;
+import java.util.ArrayList;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
@@ -144,8 +149,8 @@ public class MainSettingActivity extends BaseFragment {
                         new DocumentSelectActivity.DocumentSelectActivityDelegate() {
                             @Override
                             public void didSelectFiles(DocumentSelectActivity activity,
-                                ArrayList<String> files, String caption, boolean notify,
-                                int scheduleDate) {
+                                                       ArrayList<String> files, String caption, boolean notify,
+                                                       int scheduleDate) {
                                 activity.finishFragment();
                                 importSettings(getParentActivity(), new File(files.get(0)));
                             }

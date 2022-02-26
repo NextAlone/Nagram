@@ -19,43 +19,43 @@ public class Prism_kotlin {
     public static Prism4j.Grammar create(@NonNull Prism4j prism4j) {
 
         final Prism4j.Grammar kotlin = GrammarUtils.extend(
-                GrammarUtils.require(prism4j, "clike"),
-                "kotlin",
-                new GrammarUtils.TokenFilter() {
-                    @Override
-                    public boolean test(@NonNull Prism4j.Token token) {
-                        return !"class-name".equals(token.name());
-                    }
-                },
-                token(
-                        "keyword",
-                        pattern(compile("(^|[^.])\\b(?:abstract|actual|annotation|as|break|by|catch|class|companion|const|constructor|continue|crossinline|data|do|dynamic|else|enum|expect|external|final|finally|for|fun|get|if|import|in|infix|init|inline|inner|interface|internal|is|lateinit|noinline|null|object|open|operator|out|override|package|private|protected|public|reified|return|sealed|set|super|suspend|tailrec|this|throw|to|try|typealias|val|var|vararg|when|where|while)\\b"), true)
-                ),
-                token(
-                        "function",
-                        pattern(compile("\\w+(?=\\s*\\()")),
-                        pattern(compile("(\\.)\\w+(?=\\s*\\{)"), true)
-                ),
-                token(
-                        "number",
-                        pattern(compile("\\b(?:0[xX][\\da-fA-F]+(?:_[\\da-fA-F]+)*|0[bB][01]+(?:_[01]+)*|\\d+(?:_\\d+)*(?:\\.\\d+(?:_\\d+)*)?(?:[eE][+-]?\\d+(?:_\\d+)*)?[fFL]?)\\b"))
-                ),
-                token(
-                        "operator",
-                        pattern(compile("\\+[+=]?|-[-=>]?|==?=?|!(?:!|==?)?|[\\/*%<>]=?|[?:]:?|\\.\\.|&&|\\|\\||\\b(?:and|inv|or|shl|shr|ushr|xor)\\b"))
-                )
+            GrammarUtils.require(prism4j, "clike"),
+            "kotlin",
+            new GrammarUtils.TokenFilter() {
+                @Override
+                public boolean test(@NonNull Prism4j.Token token) {
+                    return !"class-name".equals(token.name());
+                }
+            },
+            token(
+                "keyword",
+                pattern(compile("(^|[^.])\\b(?:abstract|actual|annotation|as|break|by|catch|class|companion|const|constructor|continue|crossinline|data|do|dynamic|else|enum|expect|external|final|finally|for|fun|get|if|import|in|infix|init|inline|inner|interface|internal|is|lateinit|noinline|null|object|open|operator|out|override|package|private|protected|public|reified|return|sealed|set|super|suspend|tailrec|this|throw|to|try|typealias|val|var|vararg|when|where|while)\\b"), true)
+            ),
+            token(
+                "function",
+                pattern(compile("\\w+(?=\\s*\\()")),
+                pattern(compile("(\\.)\\w+(?=\\s*\\{)"), true)
+            ),
+            token(
+                "number",
+                pattern(compile("\\b(?:0[xX][\\da-fA-F]+(?:_[\\da-fA-F]+)*|0[bB][01]+(?:_[01]+)*|\\d+(?:_\\d+)*(?:\\.\\d+(?:_\\d+)*)?(?:[eE][+-]?\\d+(?:_\\d+)*)?[fFL]?)\\b"))
+            ),
+            token(
+                "operator",
+                pattern(compile("\\+[+=]?|-[-=>]?|==?=?|!(?:!|==?)?|[\\/*%<>]=?|[?:]:?|\\.\\.|&&|\\|\\||\\b(?:and|inv|or|shl|shr|ushr|xor)\\b"))
+            )
         );
 
         GrammarUtils.insertBeforeToken(kotlin, "string",
-                token("raw-string", pattern(compile("(\"\"\"|''')[\\s\\S]*?\\1"), false, false, "string"))
+            token("raw-string", pattern(compile("(\"\"\"|''')[\\s\\S]*?\\1"), false, false, "string"))
         );
 
         GrammarUtils.insertBeforeToken(kotlin, "keyword",
-                token("annotation", pattern(compile("\\B@(?:\\w+:)?(?:[A-Z]\\w*|\\[[^\\]]+\\])"), false, false, "builtin"))
+            token("annotation", pattern(compile("\\B@(?:\\w+:)?(?:[A-Z]\\w*|\\[[^\\]]+\\])"), false, false, "builtin"))
         );
 
         GrammarUtils.insertBeforeToken(kotlin, "function",
-                token("label", pattern(compile("\\w+@|@\\w+"), false, false, "symbol"))
+            token("label", pattern(compile("\\w+@|@\\w+"), false, false, "symbol"))
         );
 
         // this grammar has 1 token: interpolation, which has 2 patterns
@@ -72,11 +72,11 @@ public class Prism_kotlin {
             tokens.addAll(kotlin.tokens());
 
             interpolationInside = grammar(
-                    "inside",
-                    token("interpolation",
-                            pattern(compile("\\$\\{[^}]+\\}"), false, false, null, grammar("inside", tokens)),
-                            pattern(compile("\\$\\w+"), false, false, "variable")
-                    )
+                "inside",
+                token("interpolation",
+                    pattern(compile("\\$\\{[^}]+\\}"), false, false, null, grammar("inside", tokens)),
+                    pattern(compile("\\$\\w+"), false, false, "variable")
+                )
             );
         }
 
@@ -84,17 +84,17 @@ public class Prism_kotlin {
         final Prism4j.Token rawString = GrammarUtils.findToken(kotlin, "raw-string");
 
         if (string != null
-                && rawString != null) {
+            && rawString != null) {
 
             final Prism4j.Pattern stringPattern = string.patterns().get(0);
             final Prism4j.Pattern rawStringPattern = rawString.patterns().get(0);
 
             string.patterns().add(
-                    pattern(stringPattern.regex(), stringPattern.lookbehind(), stringPattern.greedy(), stringPattern.alias(), interpolationInside)
+                pattern(stringPattern.regex(), stringPattern.lookbehind(), stringPattern.greedy(), stringPattern.alias(), interpolationInside)
             );
 
             rawString.patterns().add(
-                    pattern(rawStringPattern.regex(), rawStringPattern.lookbehind(), rawStringPattern.greedy(), rawStringPattern.alias(), interpolationInside)
+                pattern(rawStringPattern.regex(), rawStringPattern.lookbehind(), rawStringPattern.greedy(), rawStringPattern.alias(), interpolationInside)
             );
 
             string.patterns().remove(0);
@@ -102,7 +102,7 @@ public class Prism_kotlin {
 
         } else {
             throw new RuntimeException("Unexpected state, cannot find `string` and/or `raw-string` tokens " +
-                    "inside kotlin grammar");
+                "inside kotlin grammar");
         }
 
         return kotlin;

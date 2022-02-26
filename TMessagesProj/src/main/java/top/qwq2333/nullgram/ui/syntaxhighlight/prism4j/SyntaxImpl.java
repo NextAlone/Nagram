@@ -15,12 +15,12 @@ public class SyntaxImpl implements Prism4j.Syntax {
     private final boolean tokenized;
 
     public SyntaxImpl(
-            @NonNull String type,
-            @NonNull List<? extends Prism4j.Node> children,
-            @Nullable String alias,
-            @NonNull String matchedString,
-            boolean greedy,
-            boolean tokenized) {
+        @NonNull String type,
+        @NonNull List<? extends Prism4j.Node> children,
+        @Nullable String alias,
+        @NonNull String matchedString,
+        boolean greedy,
+        boolean tokenized) {
         this.type = type;
         this.children = children;
         this.alias = alias;
@@ -76,12 +76,12 @@ public class SyntaxImpl implements Prism4j.Syntax {
     @Override
     public String toString() {
         return "SyntaxImpl{" +
-                "type='" + type + '\'' +
-                ", children=" + children +
-                ", alias='" + alias + '\'' +
-                ", matchedString='" + matchedString + '\'' +
-                ", greedy=" + greedy +
-                ", tokenized=" + tokenized +
-                '}';
+            "type='" + type + '\'' +
+            ", children=" + children +
+            ", alias='" + alias + '\'' +
+            ", matchedString='" + matchedString + '\'' +
+            ", greedy=" + greedy +
+            ", tokenized=" + tokenized +
+            '}';
     }
 }

@@ -63,22 +63,22 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
 
         Color color = colorHashMap.get(type);
         if (color == null
-                && alias != null) {
+            && alias != null) {
             color = colorHashMap.get(alias);
         }
 
         return color != null
-                ? color.color
-                : 0;
+            ? color.color
+            : 0;
     }
 
     @Override
     public void apply(
-            @NonNull String language,
-            @NonNull Prism4j.Syntax syntax,
-            @NonNull Spannable spannable,
-            int start,
-            int end) {
+        @NonNull String language,
+        @NonNull Prism4j.Syntax syntax,
+        @NonNull Spannable spannable,
+        int start,
+        int end) {
 
         final String type = syntax.type();
         final String alias = syntax.alias();
@@ -91,13 +91,13 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
 
     @SuppressWarnings("unused")
     protected void applyColor(
-            @NonNull String language,
-            @NonNull String type,
-            @Nullable String alias,
-            @ColorInt int color,
-            @NonNull Spannable spannable,
-            int start,
-            int end) {
+        @NonNull String language,
+        @NonNull String type,
+        @Nullable String alias,
+        @ColorInt int color,
+        @NonNull Spannable spannable,
+        int start,
+        int end) {
         spannable.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
@@ -126,9 +126,9 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
 
         @NonNull
         protected ColorHashMap add(
-                @ColorInt int color,
-                @NonNull String name1,
-                @NonNull String name2) {
+            @ColorInt int color,
+            @NonNull String name1,
+            @NonNull String name2) {
             final Color c = Color.of(color);
             put(name1, c);
             put(name2, c);
@@ -137,10 +137,10 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
 
         @NonNull
         protected ColorHashMap add(
-                @ColorInt int color,
-                @NonNull String name1,
-                @NonNull String name2,
-                @NonNull String name3) {
+            @ColorInt int color,
+            @NonNull String name1,
+            @NonNull String name2,
+            @NonNull String name3) {
             final Color c = Color.of(color);
             put(name1, c);
             put(name2, c);

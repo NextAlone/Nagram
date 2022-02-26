@@ -146,28 +146,28 @@ public class Prism4j {
 
     @NonNull
     public static Pattern pattern(
-            @NonNull java.util.regex.Pattern regex,
-            boolean lookbehind,
-            boolean greedy) {
+        @NonNull java.util.regex.Pattern regex,
+        boolean lookbehind,
+        boolean greedy) {
         return new PatternImpl(regex, lookbehind, greedy, null, null);
     }
 
     @NonNull
     public static Pattern pattern(
-            @NonNull java.util.regex.Pattern regex,
-            boolean lookbehind,
-            boolean greedy,
-            @Nullable String alias) {
+        @NonNull java.util.regex.Pattern regex,
+        boolean lookbehind,
+        boolean greedy,
+        @Nullable String alias) {
         return new PatternImpl(regex, lookbehind, greedy, alias, null);
     }
 
     @NonNull
     public static Pattern pattern(
-            @NonNull java.util.regex.Pattern regex,
-            boolean lookbehind,
-            boolean greedy,
-            @Nullable String alias,
-            @Nullable Grammar inside) {
+        @NonNull java.util.regex.Pattern regex,
+        boolean lookbehind,
+        boolean greedy,
+        @Nullable String alias,
+        @Nullable Grammar inside) {
         return new PatternImpl(regex, lookbehind, greedy, alias, inside);
     }
 
@@ -194,13 +194,13 @@ public class Prism4j {
     }
 
     private void matchGrammar(
-            @NonNull String text,
-            @NonNull List<Node> entries,
-            @NonNull Grammar grammar,
-            int index,
-            int startPosition,
-            boolean oneShot,
-            @Nullable Token target
+        @NonNull String text,
+        @NonNull List<Node> entries,
+        @NonNull Grammar grammar,
+        int index,
+        int startPosition,
+        boolean oneShot,
+        @Nullable Token target
     ) {
 
         final int textLength = text.length();
@@ -224,9 +224,9 @@ public class Prism4j {
 
                     if (entries.size() > textLength) {
                         throw new RuntimeException("Prism4j internal error. Number of entry nodes " +
-                                "is greater that the text length.\n" +
-                                "Nodes: " + entries + "\n" +
-                                "Text: " + text);
+                            "is greater that the text length.\n" +
+                            "Nodes: " + entries + "\n" +
+                            "Text: " + text);
                     }
 
                     final Node node = entries.get(i);
@@ -329,12 +329,12 @@ public class Prism4j {
                     }
 
                     entries.add(i2++, new SyntaxImpl(
-                            token.name(),
-                            tokenEntries,
-                            pattern.alias(),
-                            match,
-                            greedy,
-                            hasInside
+                        token.name(),
+                        tokenEntries,
+                        pattern.alias(),
+                        match,
+                        greedy,
+                        hasInside
                     ));
 
                     // important thing here (famous off-by one error) to check against full length (not `length - 1`)

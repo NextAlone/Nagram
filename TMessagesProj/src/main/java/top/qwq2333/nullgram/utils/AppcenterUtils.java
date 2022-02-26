@@ -20,18 +20,14 @@
 package top.qwq2333.nullgram.utils;
 
 import android.app.Application;
-import android.os.Build;
-import android.os.Build.VERSION;
-import androidx.annotation.NonNull;
+
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
-import java.util.HashMap;
-import org.telegram.messenger.AccountInstance;
-import org.telegram.messenger.BuildConfig;
+
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.UserConfig;
-import top.qwq2333.nullgram.config.ConfigManager;
+
+import java.util.HashMap;
 
 public class AppcenterUtils {
 
@@ -49,7 +45,7 @@ public class AppcenterUtils {
         Analytics.trackEvent(event, map);
     }
 
-    public static void trackCrashes(Throwable thr){
+    public static void trackCrashes(Throwable thr) {
         Crashes.trackError(thr);
     }
 

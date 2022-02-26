@@ -31,14 +31,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ContactsController;
@@ -64,6 +62,11 @@ import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ProfileActivity;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
 public class MessageDetailActivity extends BaseFragment implements
@@ -161,7 +164,7 @@ public class MessageDetailActivity extends BaseFragment implements
             && messageObject.messageOwner.media.document != null) {
             if (TextUtils.isEmpty(messageObject.messageOwner.media.document.file_name)) {
                 for (int a = 0; a < messageObject.messageOwner.media.document.attributes.size();
-                    a++) {
+                     a++) {
                     if (messageObject.messageOwner.media.document.attributes.get(
                         a) instanceof TLRPC.TL_documentAttributeFilename) {
                         fileName = messageObject.messageOwner.media.document.attributes.get(
@@ -554,11 +557,11 @@ public class MessageDetailActivity extends BaseFragment implements
                             messageObject.scheduled ? "Scheduled date" : "Date",
                             messageObject.messageOwner.date == 0x7ffffffe ? "When online"
                                 : LocaleController.formatString("formatDateAtTime",
-                                    R.string.formatDateAtTime,
-                                    LocaleController.getInstance().formatterYear.format(
-                                        new Date(date)),
-                                    LocaleController.getInstance().formatterDayWithSeconds.format(
-                                        new Date(date))), divider);
+                                R.string.formatDateAtTime,
+                                LocaleController.getInstance().formatterYear.format(
+                                    new Date(date)),
+                                LocaleController.getInstance().formatterDayWithSeconds.format(
+                                    new Date(date))), divider);
                     } else if (position == editedRow) {
                         long date = (long) messageObject.messageOwner.edit_date * 1000;
                         textCell.setTextAndValue("Edited",

@@ -42,13 +42,18 @@ object UpdateUtil {
         val messagesStorage = MessagesStorage.getInstance(currentAccount)
         val updateChannel = messagesCollector.getUserOrChat(channelUsername)
 
-        if (updateChannel is TLRPC.Chat) checkFollowChannel(ctx, currentAccount, updateChannel) else {
+        if (updateChannel is TLRPC.Chat) checkFollowChannel(
+            ctx,
+            currentAccount,
+            updateChannel
+        ) else {
             connectionsManager.sendRequest(TLRPC.TL_contacts_resolveUsername().apply {
                 username = channelUsername
             }) { response: TLObject?, error: TLRPC.TL_error? ->
                 if (error == null) {
                     val res = response as TLRPC.TL_contacts_resolvedPeer
-                    val chat = res.chats.find { it.username == channelUsername } ?: return@sendRequest
+                    val chat =
+                        res.chats.find { it.username == channelUsername } ?: return@sendRequest
                     messagesCollector.putChats(res.chats, false)
                     messagesStorage.putUsersAndChats(res.users, res.chats, false, true)
                     checkFollowChannel(ctx, currentAccount, chat)
@@ -78,20 +83,38 @@ object UpdateUtil {
             builder.setTitle(LocaleController.getString("FCTitle", R.string.FCTitle))
             builder.setMessage(LocaleController.getString("FCInfo", R.string.FCInfo))
 
-            builder.setPositiveButton(LocaleController.getString("ChannelJoin", R.string.ChannelJoin)) { _, _ ->
-                messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
+            builder.setPositiveButton(
+                LocaleController.getString(
+                    "ChannelJoin",
+                    R.string.ChannelJoin
+                )
+            ) { _, _ ->
+                messagesCollector.addUserToChat(
+                    channel.id,
+                    userConfig.currentUser,
+                    0,
+                    null,
+                    null,
+                    null
+                )
                 Browser.openUrl(ctx, "https://t.me/$channelUsername")
             }
 
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
 
-            builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
-                ConfigManager.putBoolean(Defines.updateChannelSkip,true);
+            builder.setNeutralButton(
+                LocaleController.getString(
+                    "DoNotRemindAgain",
+                    R.string.DoNotRemindAgain
+                )
+            ) { _, _ ->
+                ConfigManager.putBoolean(Defines.updateChannelSkip, true);
             }
 
             try {
                 builder.show()
-            } catch (ignored: Exception) {}
+            } catch (ignored: Exception) {
+            }
 
         }
 

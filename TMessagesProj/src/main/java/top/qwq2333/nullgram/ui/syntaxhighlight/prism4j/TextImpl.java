@@ -29,7 +29,7 @@ public class TextImpl implements Prism4j.Text {
     @Override
     public String toString() {
         return "TextImpl{" +
-                "literal='" + literal + '\'' +
-                '}';
+            "literal='" + literal + '\'' +
+            '}';
     }
 }

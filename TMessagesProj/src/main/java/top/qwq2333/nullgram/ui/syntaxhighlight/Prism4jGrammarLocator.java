@@ -60,19 +60,19 @@ public class Prism4jGrammarLocator implements GrammarLocator {
 
     @SuppressWarnings("ConstantConditions")
     private static final Prism4j.Grammar NULL =
-            new Prism4j.Grammar() {
-                @NonNull
-                @Override
-                public String name() {
-                    return null;
-                }
+        new Prism4j.Grammar() {
+            @NonNull
+            @Override
+            public String name() {
+                return null;
+            }
 
-                @NonNull
-                @Override
-                public List<Prism4j.Token> tokens() {
-                    return null;
-                }
-            };
+            @NonNull
+            @Override
+            public List<Prism4j.Token> tokens() {
+                return null;
+            }
+        };
 
     private final Map<String, Prism4j.Grammar> cache = new HashMap<>(3);
 

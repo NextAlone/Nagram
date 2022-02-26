@@ -41,11 +41,11 @@ abstract class ToString {
     private static void toString(@NonNull StringBuilder builder, @NonNull Cache cache, @NonNull Prism4j.Grammar grammar) {
 
         builder
-                .append("Grammar{id=0x")
-                .append(Integer.toHexString(System.identityHashCode(grammar)))
-                .append(",name=\"")
-                .append(grammar.name())
-                .append('\"');
+            .append("Grammar{id=0x")
+            .append(Integer.toHexString(System.identityHashCode(grammar)))
+            .append(",name=\"")
+            .append(grammar.name())
+            .append('\"');
 
         if (cache.visited(grammar)) {
             builder.append(",[...]");
@@ -70,11 +70,11 @@ abstract class ToString {
     private static void toString(@NonNull StringBuilder builder, @NonNull Cache cache, @NonNull Prism4j.Token token) {
 
         builder
-                .append("Token{id=0x")
-                .append(Integer.toHexString(System.identityHashCode(token)))
-                .append(",name=\"")
-                .append(token.name())
-                .append('\"');
+            .append("Token{id=0x")
+            .append(Integer.toHexString(System.identityHashCode(token)))
+            .append(",name=\"")
+            .append(token.name())
+            .append('\"');
 
         if (cache.visited(token)) {
             builder.append(",[...]");
@@ -98,8 +98,8 @@ abstract class ToString {
     private static void toString(@NonNull StringBuilder builder, @NonNull Cache cache, @NonNull Prism4j.Pattern pattern) {
 
         builder
-                .append("Pattern{id=0x")
-                .append(Integer.toHexString(System.identityHashCode(pattern)));
+            .append("Pattern{id=0x")
+            .append(Integer.toHexString(System.identityHashCode(pattern)));
 
         if (cache.visited(pattern)) {
             builder.append(",[...]");

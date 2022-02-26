@@ -29,8 +29,8 @@ public class Prism4jSyntaxHighlight {
 
     @NonNull
     public static Prism4jSyntaxHighlight create(
-            @NonNull Prism4j prism4j,
-            @NonNull Prism4jTheme theme) {
+        @NonNull Prism4j prism4j,
+        @NonNull Prism4jTheme theme) {
         return new Prism4jSyntaxHighlight(prism4j, theme);
     }
 
@@ -38,8 +38,8 @@ public class Prism4jSyntaxHighlight {
     private final Prism4jTheme theme;
 
     protected Prism4jSyntaxHighlight(
-            @NonNull Prism4j prism4j,
-            @NonNull Prism4jTheme theme) {
+        @NonNull Prism4j prism4j,
+        @NonNull Prism4jTheme theme) {
         this.prism4j = prism4j;
         this.theme = theme;
     }

@@ -61,25 +61,25 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
     @Override
     protected ColorHashMap init() {
         return new ColorHashMap()
-                .add(0xFF708090, "comment", "prolog", "doctype", "cdata")
-                .add(0xFF999999, "punctuation")
-                .add(0xFF990055, "property", "tag", "boolean", "number", "constant", "symbol", "deleted")
-                .add(0xFF669900, "selector", "attr-name", "string", "char", "builtin", "inserted")
-                .add(0xFF9a6e3a, "operator", "entity", "url")
-                .add(0xFF0077aa, "atrule", "attr-value", "keyword")
-                .add(0xFFDD4A68, "function", "class-name")
-                .add(0xFFee9900, "regex", "important", "variable");
+            .add(0xFF708090, "comment", "prolog", "doctype", "cdata")
+            .add(0xFF999999, "punctuation")
+            .add(0xFF990055, "property", "tag", "boolean", "number", "constant", "symbol", "deleted")
+            .add(0xFF669900, "selector", "attr-name", "string", "char", "builtin", "inserted")
+            .add(0xFF9a6e3a, "operator", "entity", "url")
+            .add(0xFF0077aa, "atrule", "attr-value", "keyword")
+            .add(0xFFDD4A68, "function", "class-name")
+            .add(0xFFee9900, "regex", "important", "variable");
     }
 
     @Override
     protected void applyColor(
-            @NonNull String language,
-            @NonNull String type,
-            @Nullable String alias,
-            @ColorInt int color,
-            @NonNull Spannable spannable,
-            int start,
-            int end) {
+        @NonNull String language,
+        @NonNull String type,
+        @Nullable String alias,
+        @ColorInt int color,
+        @NonNull Spannable spannable,
+        int start,
+        int end) {
 
         if ("css".equals(language) && isOfType("string", type, alias)) {
             super.applyColor(language, type, alias, 0xFF9a6e3a, spannable, start, end);
@@ -94,7 +94,7 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
         super.applyColor(language, type, alias, color, spannable, start, end);
 
         if (isOfType("important", type, alias)
-                || isOfType("bold", type, alias)) {
+            || isOfType("bold", type, alias)) {
             var run = new TextStyleSpan.TextStyleRun();
             run.flags |= TextStyleSpan.FLAG_STYLE_BOLD;
             spannable.setSpan(new TextStyleSpan(run), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

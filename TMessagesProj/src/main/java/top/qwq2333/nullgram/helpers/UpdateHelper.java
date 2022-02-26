@@ -1,37 +1,18 @@
 package top.qwq2333.nullgram.helpers;
 
-import android.content.Context;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import cn.hutool.http.HttpRequest;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildConfig;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
-import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.ActionBar.AlertDialog;
-import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.APKUtils;
-import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.BuildConfig;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
-import org.webrtc.EglBase;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
+
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.APKUtils;
+import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class UpdateHelper {
 
@@ -86,7 +67,7 @@ public class UpdateHelper {
                     }
                     if (releaseChannel < Defines.ciChannel && metaData.versionName.contains(
                         "preview")) {
-                        LogUtilsKt.i("Current Release Channe"+ConfigManager.getIntOrDefault(Defines.updateChannel,-1));
+                        LogUtilsKt.i("Current Release Channe" + ConfigManager.getIntOrDefault(Defines.updateChannel, -1));
                         LogUtilsKt.i("Found preview metaData, but ignore.");
                         continue;
                     }

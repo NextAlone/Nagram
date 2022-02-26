@@ -1,8 +1,9 @@
 package top.qwq2333.nullgram.utils
 
-import cn.hutool.core.io.IoUtil
 import org.telegram.messenger.ApplicationLoader
 import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
 object FileUtils {
 
@@ -90,12 +91,24 @@ object FileUtils {
 
         val assets = ApplicationLoader.applicationContext.assets
 
-        saveTo.outputStream().use {
-
-            IoUtil.copy(assets.open(path), it)
-
+        try {
+            saveTo.outputStream().use {
+                copy(assets.open(path), it)
+            }
+        } catch (thr: Throwable) {
+            // Ignore
         }
 
+
+    }
+
+    @JvmStatic
+    fun copy(source: InputStream, target: OutputStream) {
+        val buf = ByteArray(8192)
+        var length: Int
+        while (source.read(buf).also { length = it } > 0) {
+            target.write(buf, 0, length)
+        }
     }
 
 }

@@ -116,11 +116,11 @@ abstract class Cloner {
             final Prism4j.Grammar inside = pattern.inside();
 
             clone = new PatternImpl(
-                    pattern.regex(),
-                    pattern.lookbehind(),
-                    pattern.greedy(),
-                    pattern.alias(),
-                    inside != null ? clone(context, inside) : null
+                pattern.regex(),
+                pattern.lookbehind(),
+                pattern.greedy(),
+                pattern.alias(),
+                inside != null ? clone(context, inside) : null
             );
 
             context.save(pattern, clone);

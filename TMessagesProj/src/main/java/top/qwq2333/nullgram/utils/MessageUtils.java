@@ -29,9 +29,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.ChatObject;
@@ -53,6 +51,10 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 
 public class MessageUtils extends BaseController {
@@ -80,7 +82,7 @@ public class MessageUtils extends BaseController {
     }
 
     public MessageObject getMessageForRepeat(MessageObject selectedObject,
-        MessageObject.GroupedMessages selectedObjectGroup) {
+                                             MessageObject.GroupedMessages selectedObjectGroup) {
         MessageObject messageObject = null;
         if (selectedObjectGroup != null && !selectedObjectGroup.isDocuments) {
             messageObject = getTargetMessageObjectFromGroup(selectedObjectGroup);
@@ -105,7 +107,7 @@ public class MessageUtils extends BaseController {
     }
 
     public void createDeleteHistoryAlert(BaseFragment fragment, TLRPC.Chat chat, long mergeDialogId,
-        Theme.ResourcesProvider resourcesProvider) {
+                                         Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null || chat == null) {
             return;
         }
@@ -208,12 +210,12 @@ public class MessageUtils extends BaseController {
     }
 
     public void deleteUserChannelHistoryWithSearch(BaseFragment fragment, final long dialogId,
-        final long mergeDialogId) {
+                                                   final long mergeDialogId) {
         deleteUserChannelHistoryWithSearch(fragment, dialogId, mergeDialogId, 0, -1);
     }
 
     public void deleteUserChannelHistoryWithSearch(BaseFragment fragment, final long dialogId,
-        final long mergeDialogId, final int offsetId, int lastSize) {
+                                                   final long mergeDialogId, final int offsetId, int lastSize) {
         final TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
         req.peer = getMessagesController().getInputPeer(dialogId);
         if (req.peer == null) {
@@ -262,7 +264,7 @@ public class MessageUtils extends BaseController {
     }
 
     public void saveStickerToGallery(Activity activity, MessageObject messageObject,
-        Runnable callback) {
+                                     Runnable callback) {
         String path = messageObject.messageOwner.attachPath;
         if (!TextUtils.isEmpty(path)) {
             File temp = new File(path);
@@ -288,7 +290,7 @@ public class MessageUtils extends BaseController {
     }
 
     public static void saveStickerToGallery(Activity activity, TLRPC.Document document,
-        Runnable callback) {
+                                            Runnable callback) {
         String path = FileLoader.getPathToAttach(document, true).toString();
         File temp = new File(path);
         if (!temp.exists()) {

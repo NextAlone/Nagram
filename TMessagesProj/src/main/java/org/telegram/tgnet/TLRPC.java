@@ -11,7 +11,6 @@ package org.telegram.tgnet;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.text.TextUtils;
-import cn.hutool.core.util.ArrayUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19752,7 +19751,7 @@ public class TLRPC {
         public ArrayList<TL_restrictionReason> restriction_reason = new ArrayList<>();
 
         public boolean verifiedExtended() {
-            return verified || ArrayUtil.contains(Defines.officialID, id);
+            return verified || Defines.contains(Defines.officialID, id);
         }
 
         public static User TLdeserialize(AbstractSerializedData stream, int constructor,
@@ -38213,7 +38212,7 @@ public class TLRPC {
 
 
         public boolean verifiedExtended() {
-            return verified || ArrayUtil.contains(Defines.officialID, id);
+            return verified || Defines.contains(Defines.officialID, id);
         }
 
         public static Chat TLdeserialize(AbstractSerializedData stream, int constructor,

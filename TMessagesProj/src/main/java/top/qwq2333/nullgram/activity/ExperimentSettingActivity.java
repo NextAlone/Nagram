@@ -5,11 +5,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -27,6 +28,9 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+
+import java.util.ArrayList;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
 
@@ -100,8 +104,8 @@ public class ExperimentSettingActivity extends BaseFragment {
                 }
             } else if (position == aliasChannelRow) {
                 boolean currentStatus = ConfigManager.getBooleanOrFalse(Defines.channelAlias);
-                if (!currentStatus && !ConfigManager.getBooleanOrFalse(Defines.labelChannelUser)){
-                    ConfigManager.putBoolean(Defines.labelChannelUser,true);
+                if (!currentStatus && !ConfigManager.getBooleanOrFalse(Defines.labelChannelUser)) {
+                    ConfigManager.putBoolean(Defines.labelChannelUser, true);
                 }
                 ConfigManager.toggleBoolean(Defines.channelAlias);
                 if (view instanceof TextCheckCell) {

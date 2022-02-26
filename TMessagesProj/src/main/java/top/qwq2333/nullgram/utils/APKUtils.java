@@ -19,10 +19,11 @@
 
 package top.qwq2333.nullgram.utils;
 
+import org.telegram.messenger.ApplicationLoader;
+
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import org.telegram.messenger.ApplicationLoader;
 
 public class APKUtils {
 

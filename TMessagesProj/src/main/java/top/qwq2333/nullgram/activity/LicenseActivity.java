@@ -29,15 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import de.psdev.licensesdialog.LicensesDialog;
-import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
-import de.psdev.licensesdialog.licenses.GnuGeneralPublicLicense20;
-import de.psdev.licensesdialog.licenses.License;
-import de.psdev.licensesdialog.model.Notice;
-import de.psdev.licensesdialog.model.Notices;
-import io.noties.markwon.Markwon;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -54,7 +46,18 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 
-public class LicenseActivity  extends BaseFragment  {
+import java.util.ArrayList;
+import java.util.List;
+
+import de.psdev.licensesdialog.LicensesDialog;
+import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
+import de.psdev.licensesdialog.licenses.GnuGeneralPublicLicense20;
+import de.psdev.licensesdialog.licenses.License;
+import de.psdev.licensesdialog.model.Notice;
+import de.psdev.licensesdialog.model.Notices;
+import io.noties.markwon.Markwon;
+
+public class LicenseActivity extends BaseFragment {
     private final Notices notices = new Notices();
     private ListView listView;
 
@@ -86,8 +89,8 @@ public class LicenseActivity  extends BaseFragment  {
             new GnuGeneralPublicLicense20());
         Notice genuine = new Notice("Genuine",
             "https://github.com/brevent/genuine",
-        "Copyright brevent",
-        new CCBYNCSA40());
+            "Copyright brevent",
+            new CCBYNCSA40());
         notices.addNotice(markwon);
         notices.addNotice(nekogram);
         notices.addNotice(nekox);
@@ -255,30 +258,30 @@ public class LicenseActivity  extends BaseFragment  {
 
     private class CCBYNCSA40 extends License {
 
-            @Override
-            public String getName() {
-                return "Cretive Common Attribution-NonCommercial-ShareAlike 4.0 International";
-            }
+        @Override
+        public String getName() {
+            return "Cretive Common Attribution-NonCommercial-ShareAlike 4.0 International";
+        }
 
-            @Override
-            public String readSummaryTextFromResources(final Context context) {
-                return getContent(context, R.raw.cc_by_nc_sa_40_summary);
-            }
+        @Override
+        public String readSummaryTextFromResources(final Context context) {
+            return getContent(context, R.raw.cc_by_nc_sa_40_summary);
+        }
 
-            @Override
-            public String readFullTextFromResources(final Context context) {
-                return getContent(context, R.raw.cc_by_nc_sa_40_full);
-            }
+        @Override
+        public String readFullTextFromResources(final Context context) {
+            return getContent(context, R.raw.cc_by_nc_sa_40_full);
+        }
 
-            @Override
-            public String getVersion() {
-                return "4.0";
-            }
+        @Override
+        public String getVersion() {
+            return "4.0";
+        }
 
-            @Override
-            public String getUrl() {
-                return "https://creativecommons.org/licenses/by-nc-sa/4.0/";
-            }
+        @Override
+        public String getUrl() {
+            return "https://creativecommons.org/licenses/by-nc-sa/4.0/";
+        }
     }
 
 

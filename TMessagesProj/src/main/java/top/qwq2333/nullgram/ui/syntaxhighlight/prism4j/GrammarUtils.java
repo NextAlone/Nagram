@@ -72,13 +72,13 @@ public abstract class GrammarUtils {
 
     // won't work if there are multiple patterns provided for a token (each with inside grammar)
     public static void insertBeforeToken(
-            @NonNull Prism4j.Grammar grammar,
-            @NonNull String path,
-            Prism4j.Token... tokens
+        @NonNull Prism4j.Grammar grammar,
+        @NonNull String path,
+        Prism4j.Token... tokens
     ) {
 
         if (tokens == null
-                || tokens.length == 0) {
+            || tokens.length == 0) {
             return;
         }
 
@@ -88,10 +88,10 @@ public abstract class GrammarUtils {
     }
 
     private static void insertBeforeToken(
-            @NonNull Prism4j.Grammar grammar,
-            @NonNull String[] parts,
-            int index,
-            @NonNull Prism4j.Token[] tokens) {
+        @NonNull Prism4j.Grammar grammar,
+        @NonNull String[] parts,
+        int index,
+        @NonNull Prism4j.Token[] tokens) {
 
         final String part = parts[index];
         final boolean last = index == parts.length - 1;
@@ -142,9 +142,9 @@ public abstract class GrammarUtils {
     }
 
     private static void insertTokensAt(
-            int start,
-            @NonNull List<Prism4j.Token> grammarTokens,
-            @NonNull Prism4j.Token[] tokens
+        int start,
+        @NonNull List<Prism4j.Token> grammarTokens,
+        @NonNull Prism4j.Token[] tokens
     ) {
         for (int i = 0, length = tokens.length; i < length; i++) {
             grammarTokens.add(start + i, tokens[i]);
@@ -168,15 +168,15 @@ public abstract class GrammarUtils {
 
     @NonNull
     public static Prism4j.Grammar extend(
-            @NonNull Prism4j.Grammar grammar,
-            @NonNull String name,
-            Prism4j.Token... tokens) {
+        @NonNull Prism4j.Grammar grammar,
+        @NonNull String name,
+        Prism4j.Token... tokens) {
 
         // we clone the whole grammar, but override top-most tokens that are passed here
 
         final int size = tokens != null
-                ? tokens.length
-                : 0;
+            ? tokens.length
+            : 0;
 
         if (size == 0) {
             return new GrammarImpl(name, clone(grammar).tokens());
@@ -206,14 +206,14 @@ public abstract class GrammarUtils {
 
     @NonNull
     public static Prism4j.Grammar extend(
-            @NonNull Prism4j.Grammar grammar,
-            @NonNull String name,
-            @NonNull TokenFilter filter,
-            Prism4j.Token... tokens) {
+        @NonNull Prism4j.Grammar grammar,
+        @NonNull String name,
+        @NonNull TokenFilter filter,
+        Prism4j.Token... tokens) {
 
         final int size = tokens != null
-                ? tokens.length
-                : 0;
+            ? tokens.length
+            : 0;
 
         final Map<String, Prism4j.Token> overrides;
         if (size == 0) {

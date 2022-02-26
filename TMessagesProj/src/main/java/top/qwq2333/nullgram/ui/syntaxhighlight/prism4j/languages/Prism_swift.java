@@ -19,32 +19,32 @@ public class Prism_swift {
     public static Prism4j.Grammar create(@NonNull Prism4j prism4j) {
 
         final Prism4j.Grammar swift = GrammarUtils.extend(
-                GrammarUtils.require(prism4j, "clike"),
-                "swift",
-                token("string", pattern(
-                        compile("(\"|')(\\\\(?:\\((?:[^()]|\\([^)]+\\))+\\)|\\r\\n|[\\s\\S])|(?!\\1)[^\\\\\\r\\n])*\\1"),
+            GrammarUtils.require(prism4j, "clike"),
+            "swift",
+            token("string", pattern(
+                compile("(\"|')(\\\\(?:\\((?:[^()]|\\([^)]+\\))+\\)|\\r\\n|[\\s\\S])|(?!\\1)[^\\\\\\r\\n])*\\1"),
+                false,
+                true,
+                null,
+                grammar("inside", token("interpolation", pattern(
+                    compile("\\\\\\((?:[^()]|\\([^)]+\\))+\\)"),
+                    false,
+                    false,
+                    null,
+                    grammar("inside", token("delimiter", pattern(
+                        compile("^\\\\\\(|\\)$"),
                         false,
-                        true,
-                        null,
-                        grammar("inside", token("interpolation", pattern(
-                                compile("\\\\\\((?:[^()]|\\([^)]+\\))+\\)"),
-                                false,
-                                false,
-                                null,
-                                grammar("inside", token("delimiter", pattern(
-                                        compile("^\\\\\\(|\\)$"),
-                                        false,
-                                        false,
-                                        "variable"
-                                )))
-                        )))
-                )),
-                token("keyword", pattern(
-                        compile("\\b(?:as|associativity|break|case|catch|class|continue|convenience|default|defer|deinit|didSet|do|dynamic(?:Type)?|else|enum|extension|fallthrough|final|for|func|get|guard|if|import|in|infix|init|inout|internal|is|lazy|left|let|mutating|new|none|nonmutating|operator|optional|override|postfix|precedence|prefix|private|protocol|public|repeat|required|rethrows|return|right|safe|self|Self|set|static|struct|subscript|super|switch|throws?|try|Type|typealias|unowned|unsafe|var|weak|where|while|willSet|__(?:COLUMN__|FILE__|FUNCTION__|LINE__))\\b")
-                )),
-                token("number", pattern(
-                        compile("\\b(?:[\\d_]+(?:\\.[\\de_]+)?|0x[a-f0-9_]+(?:\\.[a-f0-9p_]+)?|0b[01_]+|0o[0-7_]+)\\b", CASE_INSENSITIVE)
-                ))
+                        false,
+                        "variable"
+                    )))
+                )))
+            )),
+            token("keyword", pattern(
+                compile("\\b(?:as|associativity|break|case|catch|class|continue|convenience|default|defer|deinit|didSet|do|dynamic(?:Type)?|else|enum|extension|fallthrough|final|for|func|get|guard|if|import|in|infix|init|inout|internal|is|lazy|left|let|mutating|new|none|nonmutating|operator|optional|override|postfix|precedence|prefix|private|protocol|public|repeat|required|rethrows|return|right|safe|self|Self|set|static|struct|subscript|super|switch|throws?|try|Type|typealias|unowned|unsafe|var|weak|where|while|willSet|__(?:COLUMN__|FILE__|FUNCTION__|LINE__))\\b")
+            )),
+            token("number", pattern(
+                compile("\\b(?:[\\d_]+(?:\\.[\\de_]+)?|0x[a-f0-9_]+(?:\\.[a-f0-9p_]+)?|0b[01_]+|0o[0-7_]+)\\b", CASE_INSENSITIVE)
+            ))
         );
 
         final List<Prism4j.Token> tokens = swift.tokens();
@@ -55,8 +55,8 @@ public class Prism_swift {
 
         final Prism4j.Token interpolationToken = GrammarUtils.findToken(swift, "string/interpolation");
         final Prism4j.Grammar interpolationGrammar = interpolationToken != null
-                ? GrammarUtils.findFirstInsideGrammar(interpolationToken)
-                : null;
+            ? GrammarUtils.findFirstInsideGrammar(interpolationToken)
+            : null;
         if (interpolationGrammar != null) {
             interpolationGrammar.tokens().addAll(swift.tokens());
         }

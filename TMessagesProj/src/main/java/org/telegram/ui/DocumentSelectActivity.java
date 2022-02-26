@@ -33,7 +33,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,7 +50,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -94,12 +92,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import cn.hutool.core.collection.CollectionUtil;
-import kotlin.Unit;
 import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class DocumentSelectActivity extends BaseFragment {
@@ -107,10 +101,10 @@ public class DocumentSelectActivity extends BaseFragment {
     public interface DocumentSelectActivityDelegate {
 
         void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files,
-            String caption, boolean notify, int scheduleDate);
+                            String caption, boolean notify, int scheduleDate);
 
         void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify,
-            int scheduleDate);
+                             int scheduleDate);
 
         void startDocumentSelectActivity();
 
@@ -570,7 +564,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
                         @Override
                         public void actionButtonPressed(boolean canceled, boolean notify,
-                            int scheduleDate) {
+                                                        int scheduleDate) {
                             removeSelfFromStack();
                             if (!canceled) {
                                 sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify,
@@ -1066,7 +1060,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     private void sendSelectedPhotos(HashMap<Object, Object> photos, ArrayList<Object> order,
-        boolean notify, int scheduleDate) {
+                                    boolean notify, int scheduleDate) {
         if (photos.isEmpty() || delegate == null || sendPressed) {
             return;
         }
@@ -1765,78 +1759,62 @@ public class DocumentSelectActivity extends BaseFragment {
 
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        return CollectionUtil.toList(
-            new ThemeDescription(sizeNotifierFrameLayout, ThemeDescription.FLAG_BACKGROUND, null,
-                null, null, null, Theme.key_dialogBackground),
+        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
 
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_dialogBackground),
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null,
-                null, Theme.key_dialogTextBlack),
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null,
-                null, Theme.key_dialogTextBlack),
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null,
-                null, null, Theme.key_dialogButtonSelector),
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null,
-                Theme.key_dialogTextBlack),
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null,
-                null, null, Theme.key_chat_messagePanelHint),
-            new ThemeDescription(searchItem.getSearchField(), ThemeDescription.FLAG_CURSORCOLOR,
-                null, null, null, null, Theme.key_dialogTextBlack),
+        themeDescriptions.add(new ThemeDescription(sizeNotifierFrameLayout, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_dialogBackground));
 
-            new ThemeDescription(emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null,
-                null, Theme.key_dialogEmptyImage),
-            new ThemeDescription(emptyTitleTextView, ThemeDescription.FLAG_IMAGECOLOR, null, null,
-                null, null, Theme.key_dialogEmptyText),
-            new ThemeDescription(emptySubtitleTextView, ThemeDescription.FLAG_IMAGECOLOR, null,
-                null, null, null, Theme.key_dialogEmptyText),
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_dialogBackground));
 
-            new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null,
-                null, Theme.key_dialogBackground),
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_dialogTextBlack));
 
-            new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER,
-                new Class[]{ShadowSectionCell.class}, null, null, null,
-                Theme.key_windowBackgroundGrayShadow),
-            new ThemeDescription(listView,
-                ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR,
-                new Class[]{ShadowSectionCell.class}, null, null, null,
-                Theme.key_windowBackgroundGray),
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_dialogTextBlack));
 
-            new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null,
-                Theme.key_listSelector),
-            new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null,
-                null, Theme.key_divider),
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_dialogButtonSelector));
 
-            new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR,
-                new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, null, null,
-                null, Theme.key_windowBackgroundWhiteBlackText),
-            new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR,
-                new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, null, null,
-                null, Theme.key_windowBackgroundWhiteGrayText3),
-            new ThemeDescription(listView, ThemeDescription.FLAG_CHECKBOX,
-                new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null,
-                Theme.key_checkbox),
-            new ThemeDescription(listView, ThemeDescription.FLAG_CHECKBOXCHECK,
-                new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null,
-                Theme.key_checkboxCheck),
-            new ThemeDescription(listView, ThemeDescription.FLAG_IMAGECOLOR,
-                new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null,
-                null, Theme.key_files_folderIcon),
-            new ThemeDescription(listView,
-                ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER,
-                new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null,
-                null, Theme.key_files_folderIconBackground),
-            new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR,
-                new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null,
-                null, Theme.key_files_iconText),
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_dialogTextBlack));
 
-            new ThemeDescription(writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null,
-                null, Theme.key_dialogFloatingIcon),
-            new ThemeDescription(writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null,
-                null, null, Theme.key_dialogFloatingButton),
-            new ThemeDescription(writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER
-                | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null,
-                Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed
-                    : Theme.key_dialogFloatingButton));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_chat_messagePanelHint));
+
+        themeDescriptions.add(new ThemeDescription(searchItem.getSearchField(), ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, Theme.key_dialogTextBlack));
+
+
+        themeDescriptions.add(new ThemeDescription(emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_dialogEmptyImage));
+
+        themeDescriptions.add(new ThemeDescription(emptyTitleTextView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_dialogEmptyText));
+
+        themeDescriptions.add(new ThemeDescription(emptySubtitleTextView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_dialogEmptyText));
+
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_dialogBackground));
+
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGray));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
+
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_checkbox));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_checkboxCheck));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, Theme.key_files_folderIcon));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, Theme.key_files_folderIconBackground));
+
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null, null, Theme.key_files_iconText));
+
+        themeDescriptions.add(new ThemeDescription(writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_dialogFloatingIcon));
+
+        themeDescriptions.add(new ThemeDescription(writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_dialogFloatingButton));
+
+        themeDescriptions.add(new ThemeDescription(writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
+        return themeDescriptions;
     }
 }

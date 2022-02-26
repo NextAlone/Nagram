@@ -32,8 +32,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TextStyleSpan;
 
 import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.ui.syntaxhighlight.prism4j.Prism4j;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class SyntaxHighlight {
 
