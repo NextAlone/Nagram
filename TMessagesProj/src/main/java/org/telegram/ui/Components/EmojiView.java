@@ -3810,7 +3810,7 @@ public class EmojiView extends FrameLayout implements
                     }
                 }
             }
-            recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 20))));
+            recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30))));
             if (previousCount != recentStickers.size() || previousCount2 != favouriteStickers.size()) {
                 updateStickerTabs();
             }

@@ -434,7 +434,7 @@ public class MediaDataController extends BaseController {
 
     public ArrayList<TLRPC.Document> getRecentStickers(int type, int padding) {
         ArrayList<TLRPC.Document> arrayList = recentStickers[type];
-        return new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 20) + padding)));
+        return new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30) + padding)));
     }
 
     public ArrayList<TLRPC.Document> getRecentStickersNoCopy(int type) {

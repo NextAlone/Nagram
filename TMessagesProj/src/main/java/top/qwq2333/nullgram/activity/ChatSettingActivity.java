@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -31,19 +34,16 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import kotlin.Unit;
 import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.ui.PopupBuilder;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.NumberUtils;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ChatSettingActivity extends BaseFragment {
@@ -184,18 +184,7 @@ public class ChatSettingActivity extends BaseFragment {
                     );
                 }
             } else if (position == maxRecentStickerRow) {
-                final int[] counts = {20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
-                List<String> types = Arrays.stream(counts)
-                    .filter(i -> i <= getMessagesController().maxRecentStickersCount)
-                    .mapToObj(String::valueOf)
-                    .collect(Collectors.toList());
-                PopupBuilder builder = new PopupBuilder(view);
-                builder.setItems(types, (i, str) -> {
-                    ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(str.toString()));
-                    listAdapter.notifyItemChanged(maxRecentStickerRow);
-                    return Unit.INSTANCE;
-                });
-                builder.show();
+                setMaxRecentSticker(view);
             }
         });
 
@@ -374,8 +363,7 @@ public class ChatSettingActivity extends BaseFragment {
                         textCell.setText(
                             LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
                     } else if (position == maxRecentStickerRow) {
-                        textCell.setText(
-                            LocaleController.getString("maxRecentSticker", R.string.maxRecentSticker), false);
+                        textCell.setTextAndValue(LocaleController.getString("maxRecentSticker", R.string.maxRecentSticker), String.valueOf(ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30)), true);
 
                     }
                     break;
@@ -630,5 +618,69 @@ public class ChatSettingActivity extends BaseFragment {
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.setView(linearLayout);
         showDialog(builder.create());
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setMaxRecentSticker(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("setMaxRecentSticker", R.string.setMaxRecentSticker));
+
+        final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec,
+                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setHintText(
+            LocaleController.getString("Number", R.string.Number));
+        editText.setText(ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30) + "");
+        editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        editText.setSingleLine(true);
+        editText.setFocusable(true);
+        editText.setTransformHintToHeader(true);
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
+            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
+            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        builder.setView(editText);
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
+            (dialogInterface, i) -> {
+                if (editText.getText().toString().trim().equals("")) {
+                    ConfigManager.putInt(Defines.maxRecentSticker, 20);
+                } else {
+                    if (!NumberUtils.isInteger(editText.getText().toString())) {
+                        AndroidUtilities.shakeView(view, 2, 0);
+                        AlertUtil.showToast("You must input a number!");
+                    } else {
+                        final int targetNum = Integer.parseInt(editText.getText().toString().trim());
+                        if (targetNum > 150 || targetNum < 20)
+                            AlertUtil.showToast("Number should be >20 and 150<");
+                        else
+                            ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(editText.getText().toString()));
+                    }
+                }
+            });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.show().setOnShowListener(dialog -> {
+            editText.requestFocus();
+            AndroidUtilities.showKeyboard(editText);
+        });
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            editText.setLayoutParams(layoutParams);
+        }
+        editText.setSelection(0, editText.getText().length());
     }
 }
