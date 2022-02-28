@@ -23,9 +23,6 @@ jobs:
           permission: "write"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: "Modify modules"
-        run: |
-          sed -i 's/\/\///g' settings.gradle
   ffmpeg:
     name: Native Build (FFmpeg)
     runs-on: ubuntu-latest
@@ -360,25 +357,22 @@ jobs:
            -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
            -F text="==== Release ====" \
            --silent --show-error --fail >/dev/null
-          mkdir apks
-          find artifacts -name "*.apk" -exec cp {} apks \;
-          function upload() {
-            for apk in $@; do
-              echo ">> Uploading $apk"
-              curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
-                -X POST \
-                -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
-                -F document="@$apk" \
-                --retry 5 \
-                --retry-delay 5 \
-                --silent --show-error --fail >/dev/null
-              sleep 1
-            done
-          }
-          upload apks/NekoX-*-mini-arm64-v8a-release.apk
-          upload apks/NekoX-*-mini-armeabi-v7a-release.apk
-          upload apks/NekoX-*-full-arm64-v8a-release.apk
-          upload apks/NekoX-*-full-armeabi-v7a-release.apk
+
+          # send media group via telegram bot api
+          export mini64=$(find artifacts -name "*mini-arm64-v8a-release.apk")
+          export mini32=$(find artifacts -name "*mini-armeabi-v7a-release.apk")
+          export full64=$(find artifacts -name "*full-arm64-v8a-release.apk")
+          export full32=$(find artifacts -name "*full-armeabi-v7a-release.apk")
+
+          curl -v "http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN  }}/sendMediaGroup?chat_id=${{ secrets.TELEGRAM_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini32%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull32%22%7D%5D" \
+            -F mini64="@$mini64" \
+            -F mini32="@$mini32" \
+            -F full64="@$full64" \
+            -F full32="@$full32" \
+            --retry 5 \
+            --retry-delay 5 \
+            --silent --show-error --fail >/dev/null
+
           pkill telegram-bot
   telegram-bot-api:
     name: Telegram Bot API
