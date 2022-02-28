@@ -23,6 +23,9 @@ jobs:
           permission: "write"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Modify modules"
+        run: |
+          sed -i 's/\/\///g' settings.gradle
   ffmpeg:
     name: Native Build (FFmpeg)
     runs-on: ubuntu-latest
@@ -184,15 +187,77 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run libs v2ray
+  shadowsocks:
+    name: Native Build (Shadowsocks)
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Fetch Status
+        run: git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
+      - name: Shadowsocks Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/ss-rust-release.aar
+          key: ${{ hashFiles('shadowsocks_status') }}
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Install NDK
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+      - name: Install Rust
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./run init action shadowsocks
+      - name: Native Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./run libs shadowsocks
+  shadowsocksr:
+    name: Native Build (ShadowsocksR)
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Fetch Status
+        run: git submodule status 'ssr-libev/*' > shadowsocksr_status
+      - name: ShadowsocksR Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/ssr-libev-release.aar
+          key: ${{ hashFiles('shadowsocksr_status') }}
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Install NDK
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+      - name: Native Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./run libs ssr
   build:
     name: Gradle Build
     runs-on: ubuntu-latest
     needs:
       - native
       - v2ray
+      - shadowsocks
+      - shadowsocksr
     strategy:
       matrix:
         flavor:
+          - FullRelease
           - MiniRelease
     steps:
       - name: Checkout
@@ -203,6 +268,8 @@ jobs:
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
+          git submodule status 'ssr-libev/*' > shadowsocksr_status
           git submodule status v2ray > v2ray_status
       - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v2
@@ -234,6 +301,18 @@ jobs:
           path: |
             TMessagesProj/libs/libv2ray.aar
           key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
+      - name: Shadowsocks Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/ss-rust-release.aar
+          key: ${{ hashFiles('shadowsocks_status') }}
+      - name: ShadowsocksR Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/ssr-libev-release.aar
+          key: ${{ hashFiles('shadowsocksr_status') }}
       - name: Fix Gradle Memoery
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
@@ -296,8 +375,10 @@ jobs:
               sleep 1
             done
           }
-          upload apks/Nagram-*-mini-arm64-v8a-release.apk
-          upload apks/Nagram-*-mini-armeabi-v7a-release.apk
+          upload apks/NekoX-*-mini-arm64-v8a-release.apk
+          upload apks/NekoX-*-mini-armeabi-v7a-release.apk
+          upload apks/NekoX-*-full-arm64-v8a-release.apk
+          upload apks/NekoX-*-full-armeabi-v7a-release.apk
           pkill telegram-bot
   telegram-bot-api:
     name: Telegram Bot API
