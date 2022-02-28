@@ -1,17 +1,14 @@
 package tw.nekomimi.nekogram;
 
-import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
-import android.os.Build;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -23,8 +20,6 @@ import org.telegram.ui.ActionBar.Theme;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -137,8 +132,7 @@ public class NekoXConfig {
     public static boolean isDeveloper() {
         if (hasDeveloper != null)
             return hasDeveloper;
-        hasDeveloper = false;
-        if (BuildVars.DEBUG_VERSION) hasDeveloper = true;
+        hasDeveloper = true; // BuildVars.DEBUG_VERSION;
         for (int acc : SharedConfig.activeAccounts) {
             long myId = UserConfig.getInstance(acc).clientUserId;
             if (ArrayUtil.contains(NekoXConfig.developers, myId)) {

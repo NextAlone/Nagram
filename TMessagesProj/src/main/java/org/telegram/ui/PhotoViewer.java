@@ -12357,8 +12357,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
             }
             if (chatActivity != null && chatActivity.getCurrentEncryptedChat() != null ||
-                    avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwardsForced(-avatarsDialogId) ||
-                    messageObject != null && (MessagesController.getInstance(currentAccount).isChatNoForwardsForced(messageObject.getChatId()) || (messageObject.messageOwner != null && messageObject.messageOwner.noforwards))) {
+                    avatarsDialogId != 0 && MessagesController.getInstance(currentAccount).isChatNoForwardsWithOverride(-avatarsDialogId) ||
+                    messageObject != null && (MessagesController.getInstance(currentAccount).isChatNoForwardsWithOverride(messageObject.getChatId()) || (messageObject.messageOwner != null && messageObject.messageOwner.noforwards))) {
                 if (!NekoXConfig.disableFlagSecure)
                     windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
             } else {
