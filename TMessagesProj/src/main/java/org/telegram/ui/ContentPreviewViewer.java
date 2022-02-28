@@ -65,6 +65,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.MessageHelper;
 
 public class ContentPreviewViewer {
 
@@ -120,6 +121,8 @@ public class ContentPreviewViewer {
     private final static int CONTENT_TYPE_NONE = -1;
     private final static int CONTENT_TYPE_STICKER = 0;
     private final static int CONTENT_TYPE_GIF = 1;
+
+    private final static int nkbtn_stickerdl = 110;
 
     private static TextPaint textPaint;
 
@@ -197,7 +200,7 @@ public class ContentPreviewViewer {
                     }
                     items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                     icons.add(R.drawable.baseline_image_24);
-                    actions.add(110);
+                    actions.add(nkbtn_stickerdl);
                 }
                 if (!MessageObject.isMaskDocument(currentDocument) && (inFavs || MediaDataController.getInstance(currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(currentDocument))) {
                     items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
@@ -240,20 +243,9 @@ public class ContentPreviewViewer {
                         MediaDataController.getInstance(currentAccount).addRecentSticker(MediaDataController.TYPE_IMAGE, parentObject, currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                     } else if (actions.get(which) == 5) {
                         delegate.remove(importingSticker);
-                    } else if (actions.get(which) == 110) {
+                    } else if (actions.get(which) == nkbtn_stickerdl) {
                         // save to gallery
-                        String path = FileLoader.getPathToAttach(currentDocument, true).toString();
-                        if (!TextUtils.isEmpty(path)) {
-                            try {
-                                Bitmap image = BitmapFactory.decodeFile(path);
-                                FileOutputStream stream = new FileOutputStream(path + ".png");
-                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                stream.close();
-                                MediaController.saveFile(path + ".png", parentActivity, 0, null, null);
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        }
+                        MessageHelper.getInstance(currentAccount).saveStickerToGallery(parentActivity, currentDocument);
                     }
                 });
                 builder.setDimBehind(false);

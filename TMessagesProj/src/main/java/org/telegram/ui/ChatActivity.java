@@ -290,6 +290,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
+import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -23131,38 +23132,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         MediaController.saveFile(path, getParentActivity(), messageObject.isVideo() ? 1 : 0, null, null);
     }
 
-    private void saveStickerToGallery(MessageObject messageObject) {
-
-        String path = messageObject.messageOwner.attachPath;
-        if (!TextUtils.isEmpty(path)) {
-            File temp = new File(path);
-            if (!temp.exists()) {
-                path = null;
-            }
-        }
-        if (TextUtils.isEmpty(path)) {
-            path = FileLoader.getPathToMessage(messageObject.messageOwner).toString();
-            File temp = new File(path);
-            if (!temp.exists()) {
-                path = null;
-            }
-        }
-        if (TextUtils.isEmpty(path)) {
-            path = FileLoader.getPathToAttach(messageObject.getDocument(), true).toString();
-        }
-        if (!TextUtils.isEmpty(path)) {
-            try {
-                Bitmap image = BitmapFactory.decodeFile(path);
-                FileOutputStream stream = new FileOutputStream(path + ".png");
-                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                stream.close();
-                MediaController.saveFile(path + ".png", getParentActivity(), 0, null, null);
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
-    }
-
     public MessageObject getMessageForTranslate() {
         MessageObject messageObject = null;
         if (selectedObjectGroup != null && !selectedObjectGroup.isDocuments) {
@@ -29197,7 +29166,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectedObjectToEditCaption = null;
                     return;
                 }
-                saveStickerToGallery(selectedObject);
+                getMessageHelper().saveStickerToGallery(getParentActivity(), selectedObject);
                 break;
             }
             case nkbtn_translate: {
