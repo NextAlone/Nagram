@@ -3116,7 +3116,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeOtherItem.addSubItem(forward, R.drawable.msg_forward, LocaleController.getString("Forward", R.string.Forward));
         }
 
-        boolean noforward = getMessagesController().isChatNoForwardsForced(currentChat);
+        boolean noforward = getMessagesController().isChatNoForwardsWithOverride(currentChat);
 
         if (currentEncryptedChat == null || !noforward) {
             actionModeOtherItem.addSubItem(nkbtn_forward_noquote, R.drawable.msg_forward_noquote, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
@@ -13915,9 +13915,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else {
                         canForwardMessagesCount--;
                     }
-                    if (messageObject.isMusic() && !noforwardsForced) {
+                    if (messageObject.isMusic() && !noforwards) {
                         canSaveMusicCount--;
-                    } else if (messageObject.isDocument() && !noforwardsForced) {
+                    } else if (messageObject.isDocument() && !noforwards) {
                         canSaveDocumentsCount--;
                     } else {
                         cantSaveMessagesCount--;
@@ -13946,16 +13946,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (!messageObject.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat)) {
                         cantDeleteMessagesCount++;
                     }
-                    boolean noforwards = getMessagesController().isChatNoForwards(currentChat);
-                    boolean noforwardsForced = getMessagesController().isChatNoForwardsForced(currentChat);
+                    boolean noforwards = getMessagesController().isChatNoForwardsWithOverride(currentChat);
                     if (chatMode == MODE_SCHEDULED || !messageObject.canForwardMessage() || noforwards) {
                         cantForwardMessagesCount++;
                     } else {
                         canForwardMessagesCount++;
                     }
-                    if (messageObject.isMusic() && !noforwardsForced) {
+                    if (messageObject.isMusic() && !noforwards) {
                         canSaveMusicCount++;
-                    } else if (messageObject.isDocument() && !noforwardsForced) {
+                    } else if (messageObject.isDocument() && !noforwards) {
                         canSaveDocumentsCount++;
                     } else {
                         cantSaveMessagesCount++;
@@ -21905,7 +21904,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
                             options.add(5);
                             icons.add(R.drawable.msg_language);
-                            if (!noforwardsForced) {
+                            if (!noforwards) {
                                 items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                 options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                                 icons.add(R.drawable.msg_download);
@@ -22036,7 +22035,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         if (chatMode != MODE_SCHEDULED) {
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages.Bool()) {
-                                if (!noforwardForced) {
+                                if (!noforwardOverride) {
                                     items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
                                     options.add(nkbtn_savemessage);
                                     icons.add(R.drawable.menu_saved);
@@ -22044,7 +22043,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforwardForced) {
+                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforwardOverride) {
                                 items.add(LocaleController.getString("Repeat", R.string.Repeat));
                                 options.add(nkbtn_repeat);
                                 icons.add(R.drawable.msg_repeat);
