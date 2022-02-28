@@ -133,4 +133,14 @@
     <string name="SaveToDownloadCount_other">正在保存%1$d个文件到下载</string>
     <string name="SaveToDownloadCount_few">正在保存%1$d个文件到下载</string>
     <string name="SaveToDownloadCount_many">正在保存%1$d个文件到下载</string>
+    <string name="NekoGeneralNotification">通知</string>
+    <string name="disableNotificationBubbles">禁用通知气泡</string>
+    <string name="reactions">菜单回应</string>
+    <string name="doubleTapSendReactions">双击消息发送表情回应（默认）</string>
+    <string name="ReactionsDisabled">禁用</string>
+    <string name="customSavePath">自定义保存路径</string>
+    <string name="customSavePathHint">留空则保存至上层目录</string>
+    <string name="doubleTapShowReactions">双击消息打开表情回应菜单</string>
+    <string name="showBottomActionsWhenSelecting">长按选中消息时，显示底部操作按钮</string>
+    <string name="channelLabel">频道身份</string>
 </resources>
