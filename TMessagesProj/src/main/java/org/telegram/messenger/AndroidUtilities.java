@@ -4230,6 +4230,7 @@ public class AndroidUtilities {
     // Sets FLAG_SECURE to true, until it gets unregistered (when returned callback is run)
     // Useful for having multiple reasons to have this flag on.
     public static Runnable registerFlagSecure(Window window) {
+        if (NekoXConfig.disableFlagSecure) return () -> {};
         final long reasonId = (long) (Math.random() * 999999999);
         final ArrayList<Long> reasonIds;
         if (flagSecureReasons.containsKey(window)) {
@@ -4252,7 +4253,7 @@ public class AndroidUtilities {
             }
             final boolean value = flagSecureReasons.containsKey(window) && flagSecureReasons.get(window).size() > 0;
             try {
-                if (value) {
+                if (value && !NekoXConfig.disableFlagSecure) {
                     window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 } else {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);

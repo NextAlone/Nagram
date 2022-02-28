@@ -5888,7 +5888,7 @@ public class MessageObject {
     }
 
     public boolean canForwardMessage() {
-        return NekoXConfig.disableFlagSecure || !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16 && !isSponsored() && !messageOwner.noforwards;
+        return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16 && !isSponsored() && !messageOwner.noforwards;
     }
 
     public boolean canEditMedia() {
