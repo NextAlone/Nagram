@@ -87,18 +87,16 @@ Consider using a Linux VM or dual booting.**
 
 0. Checkout all submodules
 ```
-git submodule init
-git submodule update
+git submodule update --init --recursive
 ```
 
 1. Install Android SDK and NDK (default location is $HOME/Android/SDK, otherwise you need to specify $ANDROID_HOME for it)
 
 It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.
 
-2. Install golang ( 1.16 ).
+2. Install golang and yasm
 ```shell
-# debian sid
-apt install -y golang-1.16
+apt install -y golang-1.16 yasm
 ```
 
 3. Install Rust and its stdlib for Android ABIs, and add environment variables for it.
@@ -115,10 +113,7 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 ```
 
 4. Build native dependencies: `./run init libs`
-5. Build external libraries and native code:
-
-`./run libs update`
-
+5. Build external libraries and native code: `./run libs update`
 6. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
 7. Replace TMessagesProj/google-services.json if you want fcm to work.
 8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
