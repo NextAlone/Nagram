@@ -392,6 +392,8 @@ jobs:
                 -X POST \
                 -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
                 -F document="@$apk" \
+                --retry 5 \
+                --retry-delay 5 \
                 --silent --show-error --fail >/dev/null
               sleep 1
             done
