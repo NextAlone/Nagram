@@ -128,6 +128,29 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 
 `./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
 
+## Compilation with GitHub Actions
+
+1. Change the package name, API ID
+
+2. Generate your signing keystore
+
+3. Fill GitHub Actions Secrets like below:
+
+   B64_SIGNING_KEY: `base64 --encode <your_keystore_file>`
+
+   KEYSTORE_PASS:
+   ```
+
+```
+
+   These codes are used to decode the signing key and keypass from secrets:
+
+```shell
+  echo "${{ secrets.B64_SIGNING_KEY }}" | base64 --decode - > TMessagesProj/luvletter2333.jks
+  echo "${{ secrets.KEYSTORE_PASS }}" > TMessagesProj/priv-signing.properties
+  sha256sum TMessagesProj/luvletter2333.jks
+```
+
 ## FAQ
 
 #### What is the differences between NekoX and Nekogram?
