@@ -91,6 +91,64 @@ jobs:
         with:
           name: Nullgram-x86
           path: ${{ env.APK_FILE_X86 }}
+  
+  play-build:
+    name: Gradle Build (play store)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: Prepare Java 16
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+          java-package: jdk
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+        
+      - name: Native Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/.cxx
+            TMessagesProj/build/intermediates/cmake
+            TMessagesProj/build/intermediates/stripped_native_libs
+            TMessagesProj/build/intermediates/cxx
+            TMessagesProj/build/intermediates/merged_jni_libs
+            TMessagesProj/build/intermediates/merged_native_libs
+            ~/.cache/ccache
+            ~/.ccache
+          key: native-cache
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - name: Prepare Environment
+        run: |
+          sudo apt-get install bison gcc make curl ninja-build ccache -y
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+
+      - name: Debug Build
+        run: |
+          echo -e "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}\nRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}\nRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}">>local.properties
+          cat > service_account_credentials.json << EOF
+          ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
+          EOF
+          ccache -zp
+          ccache -o max_size=10G
+          ccache -o hash_dir=false
+          ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
+          ./gradlew :TMessagesProj:publishReleaseBundle
+          ccache -s
+          echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
+          echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
+          echo "APK_FILE_X86=$(find TMessagesProj/build/outputs/apk -name '*x86.apk')" >> $GITHUB_ENV
+          echo "APK_FILE_X64=$(find TMessagesProj/build/outputs/apk -name '*x86_64*.apk')" >> $GITHUB_ENV
+
 
           
   upload:
