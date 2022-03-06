@@ -18,7 +18,7 @@ In the name of Nullgram, the purpose is to express that there is no such bad thi
 ### I want to add new feature
 Great!
 
-Make sure you fully understand [the Development Document](.github/CONTRIBUTION.md).
+Make sure you fully understand [the Development Document](.github/CONTRIBUTING.md).
 If you haven't read it.**THEN GO READ IT.**
 
 Then just create a new pull request and I should be review in a couple of days.
